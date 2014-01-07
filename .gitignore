@@ -4,3 +4,17 @@
 *.jar
 *.war
 *.ear
+
+#maven
+target/
+
+#eclipse
+.project
+.classpath
+.settings/
+
+#temp
+*~
+
+#git
+*.orig
