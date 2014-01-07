@@ -874,12 +874,12 @@
 
 
 		<!-- providers -->
-		<module>komea-sample-provider</module>
-		<module>komea-rss-provider</module>
-		<module>komea-gitprovider</module>
-		<module>komea-svn-provider</module>
-		<module>komea-jenkins-provider</module>
-		<module>komea-sonar-provider</module>
+		<module>providers/komea-sample-provider</module>
+		<module>providers/komea-rss-provider</module>
+		<module>providers/komea-gitprovider</module>
+		<module>providers/komea-svn-provider</module>
+		<module>providers/komea-jenkins-provider</module>
+		<module>providers/komea-sonar-provider</module>
 	</modules>
 
 
