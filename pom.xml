@@ -89,7 +89,7 @@
 
 
 
-		
+
 		<!-- time -->
 
 		<dependency>
@@ -393,10 +393,10 @@
 				<artifactId>gwt-charts</artifactId>
 				<version>${gwt.charts.version}</version>
 			</dependency>
-			
 
 
-			
+
+
 			<!-- time -->
 
 			<dependency>
@@ -847,15 +847,15 @@
 		<!-- core -->
 		<module>komea-utils</module>
 		<module>komea-database-model</module>
+		<module>komea-alert-api</module>
 		<module>komea-dao</module>
 		<module>komea-service-api</module>
 		<module>komea-service</module>
-		<module>komea-software</module>
 		<module>komea-admin-webgui</module>
 
 
 		<!-- alert system -->
-		<module>komea-alert-api</module>
+
 		<module>komea-standard-metrics</module>
 		<module>komea-esper</module>
 

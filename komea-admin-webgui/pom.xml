@@ -118,11 +118,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.komea</groupId>
-			<artifactId>komea-software</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.komea</groupId>
 			<artifactId>komea-esper</artifactId>
 			<version>${project.version}</version>
 		</dependency>
