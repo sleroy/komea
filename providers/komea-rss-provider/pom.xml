@@ -8,6 +8,7 @@
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	
+	<groupId>org.komea.providers</groupId>
 	<artifactId>komea-rss-provider</artifactId>
 	<name>Komea : RSS Provider</name>
 	<description>Komea : RSS Provider</description>

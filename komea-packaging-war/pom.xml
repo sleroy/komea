@@ -77,7 +77,7 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.komea</groupId>
+			<groupId>org.komea.providers</groupId>
 			<artifactId>komea-rss-provider</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -87,13 +87,13 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.komea</groupId>
+			<groupId>org.komea.providers</groupId>
 			<artifactId>komea-sample-provider</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.komea</groupId>
-			<artifactId>komea-gitprovider</artifactId>
+			<groupId>org.komea.providers</groupId>
+			<artifactId>komea-git-provider</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

@@ -8,7 +8,8 @@
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>komea-gitprovider</artifactId>
+	<groupId>org.komea.providers</groupId>
+	<artifactId>komea-git-provider</artifactId>
 	<name>Komea : GIT Provider</name>
 	<description>Komea : GIT Provider</description>
 

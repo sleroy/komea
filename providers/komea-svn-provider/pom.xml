@@ -8,6 +8,7 @@
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	
+	<groupId>org.komea.providers</groupId>
 	<artifactId>komea-svn-provider</artifactId>
 	<name>Komea : SVN provider</name>
 	<description>This module contains the SVN provider for Komea.</description>
