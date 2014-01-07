@@ -9,10 +9,10 @@
 	</parent>
 
 
-	<artifactId>komea-webgui</artifactId>
+	<artifactId>komea-admin-webgui</artifactId>
 
-	<name>Komea : WebGUI</name>
-	<description>Komea Web GUI provides all required html/dynamic templates and spring MVC and Controllers and GWT to produce the static layout around GWT Widgets.</description>
+	<name>Komea : admin WebGUI</name>
+	<description>Komea admin Web GUI provides all required html/dynamic templates and spring MVC and Controllers.</description>
 
 
 
@@ -113,11 +113,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.komea</groupId>
-			<artifactId>komea-h2database</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.komea</groupId>
 			<artifactId>komea-gitprovider</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -132,19 +127,6 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.komea</groupId>
-			<artifactId>komea-dao</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-servlet</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-user</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
@@ -157,15 +139,6 @@
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 			<classifier>sources</classifier>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.gwt-charts</groupId>
-			<artifactId>gwt-charts</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.moxieapps.gwt</groupId>
-			<artifactId>org.moxieapps.gwt.highcharts</artifactId>
-			<version>1.6.0</version>
 		</dependency>
 	</dependencies>
 

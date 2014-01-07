@@ -67,14 +67,9 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.komea</groupId>
-			<artifactId>komea-webgui</artifactId>
+			<artifactId>komea-admin-webgui</artifactId>
 			<version>${project.version}</version>
 			<type>war</type>
-		</dependency>
-		<dependency>
-			<groupId>org.komea</groupId>
-			<artifactId>komea-h2database</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.komea</groupId>

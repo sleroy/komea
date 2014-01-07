@@ -24,12 +24,6 @@
 			<artifactId>komea-software</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.komea</groupId>
-			<artifactId>komea-testspring</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
 
 		<dependency>
 			<groupId>org.komea</groupId>
