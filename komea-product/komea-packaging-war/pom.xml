@@ -1,0 +1,99 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+
+	<parent>
+		<groupId>org.komea.product</groupId>
+		<artifactId>komea-product</artifactId>
+		<version>1.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>komea-packaging-war</artifactId>
+	<name>Komea : War Archive</name>
+	<description>Komea : War archive build</description>
+	<packaging>war</packaging>
+
+
+
+	<properties>
+		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+	</properties>
+
+	<build>
+
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.1.0.M0</version>
+				<configuration>
+					<webAppConfig>
+						<allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
+						<resourceBases>
+							<resourceBase>src/main/webapp</resourceBase>
+							<resourceBase>${webappDirectory}</resourceBase>
+						</resourceBases>
+					</webAppConfig>
+				</configuration>
+			</plugin>
+
+
+			<!-- Copy static web files before executing gwt:run -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>exploded</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<webappDirectory>${webappDirectory}</webappDirectory>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- stackoverflow.com/questions/7897114/how-to-assemble-multimodule-maven-project-into-one-war -->
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>komea-admin-webgui</artifactId>
+			<version>${project.version}</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>komea-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.komea.providers</groupId>
+			<artifactId>komea-rss-provider</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.komea.providers</groupId>
+			<artifactId>komea-standard-metrics-provider</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.komea.providers</groupId>
+			<artifactId>komea-sample-provider</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.komea.providers</groupId>
+			<artifactId>komea-git-provider</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

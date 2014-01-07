@@ -3,9 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+
 	<groupId>org.komea</groupId>
 	<artifactId>komea</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
+	
 	<packaging>pom</packaging>
 
 	<name>Komea</name>
@@ -842,44 +844,13 @@
 		<h2.connector.version>1.3.174</h2.connector.version>
 		<guava.version>14.0.1</guava.version>
 	</properties>
+	
+	
 	<modules>
 
-		<!-- core -->
-		<module>komea-utils</module>
-		<module>komea-database-model</module>
-		<module>komea-alert-api</module>
-		<module>komea-dao</module>
-		<module>komea-service-api</module>
-		<module>komea-service</module>
-		<module>komea-admin-webgui</module>
-
-
-		<!-- alert system -->
-
-		<module>komea-standard-metrics</module>
-		<module>komea-esper</module>
-
-		<!-- rest api -->
-		<module>komea-rest-api</module>
-		<module>komea-rest-client</module>
-
-
-		<!-- packaging -->
-		<module>komea-packaging-war</module>
-
-
-		<!-- test -->
-		<module>komea-testspring</module>
-		<module>komea-integration-tests</module>
-
-
-		<!-- providers -->
-		<module>providers/komea-sample-provider</module>
-		<module>providers/komea-rss-provider</module>
-		<module>providers/komea-git-provider</module>
-		<module>providers/komea-svn-provider</module>
-		<module>providers/komea-jenkins-provider</module>
-		<module>providers/komea-sonar-provider</module>
+		<module>komea-providers</module>
+		<module>komea-product</module>
+		<module>komea-plugins</module>
 	</modules>
 
 

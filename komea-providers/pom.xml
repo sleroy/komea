@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.komea</groupId>
+		<artifactId>komea</artifactId>
+		<version>1.0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.komea.providers</groupId>
+	<artifactId>komea-providers</artifactId>
+	<packaging>pom</packaging>
+	<name>Komea : provider container</name>
+
+	<modules>
+		<module>komea-git-provider</module>
+		<module>komea-rss-provider</module>
+		<module>komea-sample-provider</module>
+		<module>komea-svn-provider</module>
+		<module>komea-standard-metrics-provider</module>
+	</modules>
+
+</project>

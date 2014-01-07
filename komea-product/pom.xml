@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>org.komea</groupId>
+		<artifactId>komea</artifactId>
+		<version>1.0.1-SNAPSHOT</version>
+	</parent>
+	
+	<groupId>org.komea.product</groupId>
+	<artifactId>komea-product</artifactId>
+	<packaging>pom</packaging>
+	<name>Komea : product projects</name>
+	<description>This project contaoin the core projects of komea</description>
+
+
+	<modules>
+		<!-- core -->
+		<module>komea-utils</module>
+		<module>komea-database-model</module>
+		<module>komea-alert-api</module>
+		<module>komea-dao</module>
+		<module>komea-service-api</module>
+		<module>komea-service</module>
+		<module>komea-admin-webgui</module>
+
+
+		<!-- rest api -->
+		<module>komea-rest-api</module>
+		<module>komea-rest-client</module>
+
+
+		<!-- packaging -->
+		<module>komea-packaging-war</module>
+
+
+		<!-- test -->
+		<module>komea-testspring</module>
+		<module>komea-integration-tests</module>
+	</modules>
+</project>

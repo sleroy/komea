@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.komea.plugins</groupId>
+		<artifactId>komea-plugins</artifactId>
+		<version>1.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>komea-sonar-plugin</artifactId>
+	<!-- <packaging>sonar-plugin</packaging> -->
+	<name>Komea : sonar plugin</name>
+	<description>Komea Sonar plugin</description>
+
+	<properties>
+		<sonar.version>3.0</sonar.version>
+	</properties>
+
+
+	<developers>
+		<developer>
+			<id>scarreau</id>
+			<name>Sebastien Carreau</name>
+			<email>sebastien.carreau@tocea.com</email>
+			<organization>Tocea</organization>
+			<organizationUrl>www.tocea.com</organizationUrl>
+		</developer>
+	</developers>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.codehaus.sonar</groupId>
+			<artifactId>sonar-plugin-api</artifactId>
+			<version>${sonar.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.komea.product</groupId>
+			<artifactId>komea-rest-client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<!-- <plugin> -->
+			<!-- <groupId>org.codehaus.sonar</groupId> -->
+			<!-- <artifactId>sonar-packaging-maven-plugin</artifactId> -->
+			<!-- <version>1.9</version> -->
+			<!-- <extensions>true</extensions> -->
+			<!-- <configuration> -->
+			<!-- <pluginClass>TODO</pluginClass> -->
+			<!-- </configuration> -->
+			<!-- </plugin> -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
