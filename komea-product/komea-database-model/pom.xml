@@ -36,16 +36,6 @@
 
 
 
-		
-
-		<dependency>
-			<groupId>org.komea.product</groupId>
-			<artifactId>komea-alert-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-
-
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>komea-utils</artifactId>
