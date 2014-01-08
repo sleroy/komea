@@ -11,8 +11,9 @@
 	<groupId>org.komea.product</groupId>
 	<artifactId>komea-product</artifactId>
 	<packaging>pom</packaging>
+	
 	<name>Komea : product projects</name>
-	<description>This project contaoin the core projects of komea</description>
+	<description>This project contain the core projects of komea</description>
 
 
 	<modules>
