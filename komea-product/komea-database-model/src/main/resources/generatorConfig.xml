@@ -59,9 +59,6 @@
         <table tableName="KOM_PVDS" domainObjectName="ProviderSetting" >
             <property name="useActualColumnNames" value="true" />
         </table>
-        <table tableName="KOM_HAS_PE_EVT" domainObjectName="HasPersonEventType" >
-            <property name="useActualColumnNames" value="true" />
-        </table>
         <table tableName="KOM_HAS_PROJ_TAG" domainObjectName="HasProjectTag" >
             <property name="useActualColumnNames" value="true" />
         </table>
