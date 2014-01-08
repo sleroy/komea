@@ -1,34 +1,31 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
+	
 	<parent>
-		<groupId>org.komea.providers</groupId>
-		<artifactId>komea-providers</artifactId>
+		<groupId>org.komea.plugins</groupId>
+		<artifactId>komea-plugins</artifactId>
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
-
-	<artifactId>komea-git-provider</artifactId>
-
-	<name>Komea : GIT Provider</name>
-	<description>Komea : GIT Provider</description>
+	
+	<artifactId>komea-svn-plugin</artifactId>
+	<name>Komea : SVN plugin</name>
+	<description>This module contains the SVN plugin for Komea.</description>
 
 	<dependencies>
-		<!-- JGIT -->
-
-		<dependency>
-			<groupId>org.eclipse.jgit</groupId>
-			<artifactId>org.eclipse.jgit</artifactId>
-			<version>2.3.1.201302201838-r</version>
-		</dependency>
-
 
 		<dependency>
 			<groupId>org.komea.product</groupId>
 			<artifactId>komea-service</artifactId>
 			<version>${project.version}</version>
-
 		</dependency>
+
+		<dependency>
+			<groupId>org.tmatesoft.svnkit</groupId>
+			<artifactId>svnkit</artifactId>
+			<version>1.7.8</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.komea.product</groupId>
@@ -37,5 +34,4 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 </project>

@@ -1,30 +1,41 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
-		<groupId>org.komea.providers</groupId>
-		<artifactId>komea-providers</artifactId>
+		<groupId>org.komea.plugins</groupId>
+		<artifactId>komea-plugins</artifactId>
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
-	
-	<artifactId>komea-standard-metrics-provider</artifactId>
-	<name>Komea : Standard metrics</name>
-	<description>Komea standard metrics</description>
 
+	<artifactId>komea-git-plugin</artifactId>
+
+	<name>Komea : GIT plugin</name>
+	<description>Komea GIT plugin</description>
 
 	<dependencies>
+		<!-- JGIT -->
+
+		<dependency>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
+			<version>2.3.1.201302201838-r</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.komea.product</groupId>
 			<artifactId>komea-service</artifactId>
 			<version>${project.version}</version>
+
 		</dependency>
+
 		<dependency>
 			<groupId>org.komea.product</groupId>
 			<artifactId>komea-testspring</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
+
 </project>

@@ -10,10 +10,10 @@
 	</parent>
 
 	<groupId>org.jenkins-ci.plugins</groupId>
-	<artifactId>komea-jenkins-plugins</artifactId>
+	<artifactId>komea-jenkins-provider</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
 	<packaging>hpi</packaging>
-	<name>Komea : Jenkins plugin</name>
+	<name>Komea : Jenkins provider</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -76,23 +76,23 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.komea.providers</groupId>
-			<artifactId>komea-rss-provider</artifactId>
+			<groupId>org.komea.plugins</groupId>
+			<artifactId>komea-rss-plugin</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.komea.providers</groupId>
-			<artifactId>komea-standard-metrics-provider</artifactId>
+			<groupId>org.komea.plugins</groupId>
+			<artifactId>komea-standard-metrics-plugin</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.komea.providers</groupId>
-			<artifactId>komea-sample-provider</artifactId>
+			<groupId>org.komea.plugins</groupId>
+			<artifactId>komea-sample-plugin</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.komea.providers</groupId>
-			<artifactId>komea-git-provider</artifactId>
+			<groupId>org.komea.plugins</groupId>
+			<artifactId>komea-git-plugin</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

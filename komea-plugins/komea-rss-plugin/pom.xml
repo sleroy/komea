@@ -3,14 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.komea.providers</groupId>
-		<artifactId>komea-providers</artifactId>
+		<groupId>org.komea.plugins</groupId>
+		<artifactId>komea-plugins</artifactId>
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>komea-rss-provider</artifactId>
-	<name>Komea : RSS Provider</name>
-	<description>Komea : RSS Provider</description>
+	<artifactId>komea-rss-plugin</artifactId>
+	<name>Komea : RSS plugin</name>
+	<description>Komea RSS plugin</description>
 
 	<dependencies>
 		<dependency>

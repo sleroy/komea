@@ -14,11 +14,8 @@
 	<name>Komea : provider container</name>
 
 	<modules>
-		<module>komea-git-provider</module>
-		<module>komea-rss-provider</module>
-		<module>komea-sample-provider</module>
-		<module>komea-svn-provider</module>
-		<module>komea-standard-metrics-provider</module>
+		<module>komea-jenkins-provider</module>
+		<module>komea-sonar-provider</module>
 	</modules>
 
 </project>

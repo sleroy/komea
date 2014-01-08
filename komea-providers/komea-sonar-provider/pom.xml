@@ -4,15 +4,15 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.komea.plugins</groupId>
-		<artifactId>komea-plugins</artifactId>
+		<groupId>org.komea.providers</groupId>
+		<artifactId>komea-providers</artifactId>
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>komea-sonar-plugin</artifactId>
+	<artifactId>komea-sonar-provider</artifactId>
 	<!-- <packaging>sonar-plugin</packaging> -->
-	<name>Komea : sonar plugin</name>
-	<description>Komea Sonar plugin</description>
+	<name>Komea : sonar provider</name>
+	<description>Komea Sonar provider</description>
 
 	<properties>
 		<sonar.version>3.0</sonar.version>

@@ -15,8 +15,11 @@
 	<description>contains komea plugins</description>
 
 	<modules>
-		<module>komea-jenkins-plugins</module>
-		<module>komea-sonar-plugins</module>
+		<module>komea-git-plugin</module>
+		<module>komea-rss-plugin</module>
+		<module>komea-sample-plugin</module>
+		<module>komea-standard-metrics-plugin</module>
+		<module>komea-svn-plugin</module>
 	</modules>
 	
 </project>
