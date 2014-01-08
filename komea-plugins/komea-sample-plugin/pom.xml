@@ -10,7 +10,7 @@
 
 	<artifactId>komea-sample-plugin</artifactId>
 	<description>Demo Sample plugin : It provides basic random alerts</description>
-	<name>komea : Sample Provider</name>
+	<name>komea : Sample plugin</name>
 
 	<dependencies>
 
