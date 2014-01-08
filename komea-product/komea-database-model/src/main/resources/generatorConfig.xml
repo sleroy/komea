@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <context id="komea" targetRuntime="MyBatis3">
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/komea" userId="root" password="root"/>
+
+        <javaModelGenerator targetPackage="org.komea.product.database.model" targetProject="MAVEN"/>
+
+        <sqlMapGenerator targetPackage="org.komea.product.database.sqlmap"  targetProject="MAVEN"/>
+
+        <javaClientGenerator type="XMLMAPPER" targetPackage="org.komea.product.database.dao"  targetProject="MAVEN"/>
+
+        <table tableName="KOM_CUSTOMER" domainObjectName="Customer" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_PROJ" domainObjectName="Project" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_GRK" domainObjectName="GroupKind" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_PEGR" domainObjectName="PersonGroup" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_PERO" domainObjectName="PersonRole" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_PE" domainObjectName="Person" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_PVD" domainObjectName="Provider" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_KPI" domainObjectName="Kpi" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_MSR" domainObjectName="Measure" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_KPIA" domainObjectName="KpiAlertType" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_LINK" domainObjectName="Link" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_EVT" domainObjectName="EventType" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_SETTING" domainObjectName="Setting" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_TAG" domainObjectName="Tag" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_HAS_PROJ_PE" domainObjectName="HasProjectPerson" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_PVDS" domainObjectName="ProviderSetting" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_HAS_PE_EVT" domainObjectName="HasPersonEventType" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_HAS_PROJ_TAG" domainObjectName="HasProjectTag" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_HAS_PROJ_KPIA" domainObjectName="HasProjectKpiAlertType" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_HAS_KPIA_PEGR" domainObjectName="HasPersonGroupKpiAlertType" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="KOM_HAS_KPIA_PE" domainObjectName="HasPersonKpiAlertType" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+    </context>
+</generatorConfiguration>
