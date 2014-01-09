@@ -11,9 +11,13 @@
 	<groupId>org.komea.product</groupId>
 	<artifactId>komea-product</artifactId>
 	<packaging>pom</packaging>
-	
-	<name>Komea : product projects</name>
-	<description>This project contain the core projects of komea</description>
+
+	<url>https://github.com/sleroy/komea</url>
+        <inceptionYear>2014</inceptionYear>
+        
+        
+	<name>Komea : Web Application Product</name>
+	<description>This project contain the core projects of komea to build the war application. </description>
 
 
 	<modules>
