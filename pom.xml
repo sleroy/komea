@@ -15,6 +15,19 @@
 	KPI / Objectives / Measure / Effort / Application : Software to measure and produces KPI from CI systems
 	</description>
 
+	<inceptionYear>2014</inceptionYear>
+	<developers>
+		<developer>
+			<id>sleroy</id>
+			<name>Sylvain Leroy</name>
+			<email>sleroy0@gmail.com</email>			
+			<roles>
+				<role>founder</role>
+			</roles>
+			<organizationUrl>www.tocea.com</organizationUrl>
+		</developer>
+	</developers>
+
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,6 +37,8 @@
 		<javadoc.skip>true</javadoc.skip>
 
 		<!-- Versions of artifacts -->
+		<mybatis.version>3.2.3</mybatis.version>
+		<mybatis.spring.version>1.2.1</mybatis.spring.version>
 
 		<javax.validation.version>1.0.0.GA</javax.validation.version>
 		<gwt.charts.version>0.9.9</gwt.charts.version>
@@ -829,8 +844,6 @@
 
 	</dependencyManagement>
 
-		<mybatis.version>3.2.3</mybatis.version>
-		<mybatis.spring.version>1.2.1</mybatis.spring.version>
 
 	<modules>
 

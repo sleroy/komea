@@ -10,27 +10,24 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration("classpath:/spring/applicationContext-test.xml")
 public class ProjectDAOTest {
 
-	
 	@Autowired
 	private ProjectMapper projectDAO;
-	
-	
+
 	@Test
 	public void test() {
-		Project project = new Project();
+		final Project project = new Project();
 		project.setName("projet1");
-		ProjectCriteria example = new ProjectCriteria();
+		final ProjectCriteria example = new ProjectCriteria();
 		example.createCriteria().andNameEqualTo("projet1");
 		Assert.assertTrue(projectDAO.selectByExample(example).isEmpty());
-		
+
 		projectDAO.insert(project);
-		
+
 		Assert.assertFalse(projectDAO.selectByExample(example).isEmpty());
 	}
 
