@@ -1,0 +1,20 @@
+
+    /**
+     * This method was generated.
+     * This method returns the value of the database column $fullColumn
+     *
+     * @return the value of $fullColumn
+     */
+    public $fullEnum get$enumEnum() {
+        return $fullEnum.values()[$column];
+    }
+
+    /**
+     * This method was generated.
+     * This method sets the value of the database column $fullColumn
+     *
+     * @param $enumName the value for $fullColumn
+     */
+    public void set$enum($fullEnum $enumName) {
+        this.$column = $enumName.ordinal();
+    }
