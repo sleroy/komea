@@ -3,12 +3,19 @@
 
 <generatorConfiguration>
     <context id="komea" targetRuntime="MyBatis3">
+
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+        <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin" >
+            <property name="searchString" value="Example$" />
+            <property name="replaceString" value="Criteria" />
+        </plugin>
+
         <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/komea" userId="root" password="root"/>
 
-        <javaModelGenerator targetPackage="org.komea.product.database.model" targetProject="MAVEN"/>
-
+        <javaModelGenerator targetPackage="org.komea.product.database.model" targetProject="MAVEN" >
+            <property name="constructorBased" value="true" />
+        </javaModelGenerator>
         <sqlMapGenerator targetPackage="org.komea.product.database.sqlmap"  targetProject="MAVEN"/>
-
         <javaClientGenerator type="XMLMAPPER" targetPackage="org.komea.product.database.dao"  targetProject="MAVEN"/>
 
         <table tableName="KOM_CUSTOMER" domainObjectName="Customer" >
