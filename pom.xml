@@ -267,7 +267,7 @@
 		<profile>
 			<id>embedded</id>
 			<properties>
-				<hibernate.bdd>embeded</hibernate.bdd>
+				<jdbc.bdd.type>h2</jdbc.bdd.type>
 			</properties>
 			<dependencies>
 				<dependency>
@@ -282,7 +282,7 @@
 		<profile>
 			<id>mysql</id>
 			<properties>
-				<hibernate.bdd>mysql</hibernate.bdd>
+				<jdbc.bdd.type>mysql</jdbc.bdd.type>
 			</properties>
 			<dependencies>
 				<dependency>
