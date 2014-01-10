@@ -22,21 +22,28 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/model/*.java</include>
+                    <include>**/enums/*.java</include>
+                </includes>
+            </resource>
         </resources>
     </build>
 
 
     <dependencies>
 
-		<dependency>
-			<groupId>org.mybatis</groupId>
-			<artifactId>mybatis</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.mybatis</groupId>
-			<artifactId>mybatis-spring</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+        </dependency>
 
 
 
@@ -49,9 +56,9 @@
 
 
 
-	</dependencies>
+    </dependencies>
 
-	<profiles>
+    <profiles>
         <profile>
             <id>mybatis</id>
             <build>
