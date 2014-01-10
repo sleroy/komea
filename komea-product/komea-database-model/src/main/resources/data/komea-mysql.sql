@@ -22,16 +22,16 @@ CREATE TABLE IF NOT EXISTS `komea`.`KOM_PROJ` (
   `id` INT NOT NULL,
   `key` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
-  `description` TEXT NULL,
-  `idCustomer` INT NOT NULL,
+  `description` VARCHAR(2048) NULL,
+  `idCustomer` INT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `key_UNIQUE` (`key` ASC),
   INDEX `fk_Project_Customer1_idx` (`idCustomer` ASC),
   CONSTRAINT `fk_Project_Customer1`
     FOREIGN KEY (`idCustomer`)
     REFERENCES `komea`.`KOM_CUSTOMER` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -52,9 +52,9 @@ CREATE TABLE IF NOT EXISTS `komea`.`KOM_PEGR` (
   `id` INT NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `key` VARCHAR(255) NOT NULL,
-  `description` TEXT NULL,
+  `description` VARCHAR(2048) NULL,
   `idPersonGroupParent` INT NULL,
-  `idGroupKind` INT NOT NULL,
+  `idGroupKind` INT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `key_UNIQUE` (`key` ASC),
   INDEX `fk_UserGroup_UserGroup1_idx` (`idPersonGroupParent` ASC),
@@ -89,7 +89,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `komea`.`KOM_PE` (
   `id` INT NOT NULL,
   `idPersonGroup` INT NULL,
-  `idPersonRole` INT NOT NULL,
+  `idPersonRole` INT NULL,
   `firstName` VARCHAR(255) NOT NULL,
   `lastName` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`KOM_KPI` (
   `id` INT NOT NULL,
   `key` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
-  `description` TEXT NULL,
+  `description` VARCHAR(2048) NULL,
   `idProvider` INT NOT NULL,
   `minValue` DOUBLE NULL,
   `maxValue` DOUBLE NULL,
@@ -156,19 +156,19 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `komea`.`KOM_MSR` (
   `id` INT NOT NULL,
-  `idMetric` INT NOT NULL,
+  `idKpi` INT NOT NULL,
   `date` DATE NOT NULL,
   `idPersonGroup` INT NULL,
   `idPerson` INT NULL,
   `idProject` INT NULL,
   `value` DOUBLE NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Measure_Metric1_idx` (`idMetric` ASC),
+  INDEX `fk_Measure_Metric1_idx` (`idKpi` ASC),
   INDEX `fk_Measure_UserGroup1_idx` (`idPersonGroup` ASC),
   INDEX `fk_Measure_User1_idx` (`idPerson` ASC),
   INDEX `fk_Measure_Project1_idx` (`idProject` ASC),
   CONSTRAINT `fk_Measure_Metric1`
-    FOREIGN KEY (`idMetric`)
+    FOREIGN KEY (`idKpi`)
     REFERENCES `komea`.`KOM_KPI` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
@@ -198,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`KOM_KPIA` (
   `idKpi` INT NOT NULL,
   `key` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
-  `description` TEXT NULL,
+  `description` VARCHAR(2048) NULL,
   `severity` INT NOT NULL,
   `value` DOUBLE NOT NULL,
   `averageSince` DATE NULL,
@@ -243,7 +243,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`KOM_EVT` (
   `name` VARCHAR(255) NOT NULL,
   `severity` INT NOT NULL,
   `enabled` TINYINT(1) NOT NULL,
-  `description` TEXT NULL,
+  `description` VARCHAR(2048) NULL,
   `category` VARCHAR(255) NOT NULL,
   `entityType` INT NOT NULL,
   PRIMARY KEY (`id`),
