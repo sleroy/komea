@@ -44,9 +44,8 @@
 
 	<bean
 		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
-	
-	<tx:annotation-driven transaction-manager="transactionManager"
-		proxy-target-class="true" />
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
 
 
 	<mybatis:scan base-package="org.komea.product.database" />
@@ -67,7 +66,10 @@
 
 
 
-
+	<jdbc:initialize-database data-source="dataSource"
+		enabled="true" ignore-failures="NONE">
+		<jdbc:script location="classpath:data/komea-h2.sql" />
+	</jdbc:initialize-database>
 
 
 

@@ -1,223 +1,406 @@
-SET MODE MySQL;
-CREATE USER IF NOT EXISTS SA SALT '8768e4c442a59d9a' HASH '489ecd34d0cff4903716359b85d2d1e6b28527f51db6644e475829cea49483bb' ADMIN;
-CREATE SCHEMA IF NOT EXISTS "komea" AUTHORIZATION SA;
-CREATE SEQUENCE "komea".SYSTEM_SEQUENCE_18A2C734_3ED5_461E_8055_72279B0C315A START WITH 1 BELONGS_TO_TABLE;
-CREATE SEQUENCE "komea".SYSTEM_SEQUENCE_001688BF_C517_4864_B207_E50FD243D8DA START WITH 1 BELONGS_TO_TABLE;
-CREATE SEQUENCE "komea".SYSTEM_SEQUENCE_166D6E9F_2EAC_47D5_8514_00B96262D2CC START WITH 1 BELONGS_TO_TABLE;
-CREATE SEQUENCE "komea".SYSTEM_SEQUENCE_80C3B544_AD56_4AF0_B376_962116499134 START WITH 1 BELONGS_TO_TABLE;
-CREATE SEQUENCE "komea".SYSTEM_SEQUENCE_8EFB4EB0_A0AB_4C60_A1CC_166071824DCB START WITH 1 BELONGS_TO_TABLE;
-CREATE CACHED TABLE "komea"."schema_version"(
-    "version_rank" INT NOT NULL,
-    "installed_rank" INT NOT NULL,
-    "version" VARCHAR(50) NOT NULL,
-    "description" VARCHAR(200) NOT NULL,
-    "type" VARCHAR(20) NOT NULL,
-    "script" VARCHAR(1000) NOT NULL,
-    "checksum" INT,
-    "installed_by" VARCHAR(100) NOT NULL,
-    "installed_on" TIMESTAMP DEFAULT CURRENT_TIMESTAMP() NOT NULL,
-    "execution_time" INT NOT NULL,
-    "success" BOOLEAN NOT NULL
-);
-ALTER TABLE "komea"."schema_version" ADD CONSTRAINT "komea"."schema_version_pk" PRIMARY KEY("version");
--- 2 +/- SELECT COUNT(*) FROM "komea"."schema_version";
-INSERT INTO "komea"."schema_version"("version_rank", "installed_rank", "version", "description", "type", "script", "checksum", "installed_by", "installed_on", "execution_time", "success") VALUES
-(1, 1, '0', '<< Flyway Schema Creation >>', 'SCHEMA', '"komea"', NULL, 'SA', TIMESTAMP '2014-01-09 12:57:18.892', 0, TRUE),
-(2, 2, '1', 'komea-mysql', 'SQL', 'V1__komea-mysql.sql', -1775960328, 'SA', TIMESTAMP '2014-01-09 12:57:19.14', 201, TRUE);
-CREATE INDEX "komea"."schema_version_vr_idx" ON "komea"."schema_version"("version_rank");
-CREATE INDEX "komea"."schema_version_ir_idx" ON "komea"."schema_version"("installed_rank");
-CREATE INDEX "komea"."schema_version_s_idx" ON "komea"."schema_version"("success");
-CREATE CACHED TABLE "komea".KOM_CUSTOMER(
-    IDCUSTOMER INT NOT NULL,
-    NAME VARCHAR(255) NOT NULL
-);
-ALTER TABLE "komea".KOM_CUSTOMER ADD CONSTRAINT "komea".CONSTRAINT_5 PRIMARY KEY(IDCUSTOMER);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_CUSTOMER;
-CREATE CACHED TABLE "komea".KOM_PROJ(
-    IDPROJECT INT NOT NULL,
-    KEY VARCHAR(255) NOT NULL,
-    NAME VARCHAR(255) NOT NULL,
-    DESCRIPTION TEXT,
-    IDCUSTOMER INT NOT NULL
-);
-ALTER TABLE "komea".KOM_PROJ ADD CONSTRAINT "komea".CONSTRAINT_4 PRIMARY KEY(IDPROJECT);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_PROJ;
-CREATE CACHED TABLE "komea".KOM_GRK(
-    IDGROUPKIND INT NOT NULL,
-    NAME VARCHAR(255) NOT NULL
-);
-ALTER TABLE "komea".KOM_GRK ADD CONSTRAINT "komea".CONSTRAINT_A PRIMARY KEY(IDGROUPKIND);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_GRK;
-CREATE CACHED TABLE "komea".KOM_PEGR(
-    IDPERSONGROUP INT DEFAULT (NEXT VALUE FOR "komea".SYSTEM_SEQUENCE_80C3B544_AD56_4AF0_B376_962116499134) NOT NULL NULL_TO_DEFAULT SEQUENCE "komea".SYSTEM_SEQUENCE_80C3B544_AD56_4AF0_B376_962116499134,
-    NAME VARCHAR(255) NOT NULL,
-    KEY VARCHAR(255) NOT NULL,
-    DESCRIPTION TEXT,
-    IDPERSONGROUPPARENT INT,
-    IDGROUPKIND INT NOT NULL
-);
-ALTER TABLE "komea".KOM_PEGR ADD CONSTRAINT "komea".CONSTRAINT_4A PRIMARY KEY(IDPERSONGROUP);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_PEGR;
-CREATE CACHED TABLE "komea".KOM_PERO(
-    IDPERSONROLE INT NOT NULL,
-    NAME VARCHAR(255) NOT NULL
-);
-ALTER TABLE "komea".KOM_PERO ADD CONSTRAINT "komea".CONSTRAINT_4AC PRIMARY KEY(IDPERSONROLE);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_PERO;
-CREATE CACHED TABLE "komea".KOM_PE(
-    IDPERSON INT DEFAULT (NEXT VALUE FOR "komea".SYSTEM_SEQUENCE_8EFB4EB0_A0AB_4C60_A1CC_166071824DCB) NOT NULL NULL_TO_DEFAULT SEQUENCE "komea".SYSTEM_SEQUENCE_8EFB4EB0_A0AB_4C60_A1CC_166071824DCB,
-    IDPERSONGROUP INT,
-    IDPERSONROLE INT NOT NULL,
-    FIRSTNAME VARCHAR(255) NOT NULL,
-    LASTNAME VARCHAR(255) NOT NULL,
-    EMAIL VARCHAR(255) NOT NULL,
-    LOGIN VARCHAR(255) NOT NULL
-);
-ALTER TABLE "komea".KOM_PE ADD CONSTRAINT "komea".CONSTRAINT_8 PRIMARY KEY(IDPERSON);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_PE;
-CREATE CACHED TABLE "komea".KOM_PVD(
-    IDPROVIDER INT DEFAULT (NEXT VALUE FOR "komea".SYSTEM_SEQUENCE_001688BF_C517_4864_B207_E50FD243D8DA) NOT NULL NULL_TO_DEFAULT SEQUENCE "komea".SYSTEM_SEQUENCE_001688BF_C517_4864_B207_E50FD243D8DA,
-    KEY VARCHAR(255) NOT NULL,
-    NAME VARCHAR(255) NOT NULL,
-    ICON VARCHAR(255) NOT NULL,
-    URL VARCHAR(255) NOT NULL
-);
-ALTER TABLE "komea".KOM_PVD ADD CONSTRAINT "komea".CONSTRAINT_AA PRIMARY KEY(IDPROVIDER);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_PVD;
-CREATE CACHED TABLE "komea".KOM_KPI(
-    IDKPI INT NOT NULL,
-    KEY VARCHAR(255) NOT NULL,
-    NAME VARCHAR(255) NOT NULL,
-    DESCRIPTION TEXT,
-    IDPROVIDER INT NOT NULL,
-    MINVALUE DOUBLE,
-    MAXVALUE DOUBLE,
-    BIGGERBETTER INT NOT NULL,
-    VALUETYPE INT NOT NULL,
-    ENTITYTYPE INT NOT NULL,
-    ESPERREQUEST TEXT
-);
-ALTER TABLE "komea".KOM_KPI ADD CONSTRAINT "komea".CONSTRAINT_AAB PRIMARY KEY(IDKPI);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_KPI;
-CREATE CACHED TABLE "komea".KOM_MSR(
-    IDMEASURE INT DEFAULT (NEXT VALUE FOR "komea".SYSTEM_SEQUENCE_166D6E9F_2EAC_47D5_8514_00B96262D2CC) NOT NULL NULL_TO_DEFAULT SEQUENCE "komea".SYSTEM_SEQUENCE_166D6E9F_2EAC_47D5_8514_00B96262D2CC,
-    IDMETRIC INT NOT NULL,
-    DATE DATE NOT NULL,
-    IDPERSONGROUP INT,
-    IDPERSON INT,
-    IDPROJECT INT,
-    VALUE DOUBLE NOT NULL
-);
-ALTER TABLE "komea".KOM_MSR ADD CONSTRAINT "komea".CONSTRAINT_AABA PRIMARY KEY(IDMEASURE);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_MSR;
-CREATE CACHED TABLE "komea".KOM_KPIA(
-    IDKPIALERTTYPE INT DEFAULT (NEXT VALUE FOR "komea".SYSTEM_SEQUENCE_18A2C734_3ED5_461E_8055_72279B0C315A) NOT NULL NULL_TO_DEFAULT SEQUENCE "komea".SYSTEM_SEQUENCE_18A2C734_3ED5_461E_8055_72279B0C315A,
-    IDKPI INT NOT NULL,
-    KEY VARCHAR(255) NOT NULL,
-    NAME VARCHAR(255) NOT NULL,
-    DESCRIPTION TEXT,
-    SEVERITY INT NOT NULL,
-    VALUE DOUBLE NOT NULL,
-    AVERAGESINCE DATE,
-    OPERATOR INT NOT NULL,
-    ENABLED TINYINT NOT NULL
-);
-ALTER TABLE "komea".KOM_KPIA ADD CONSTRAINT "komea".CONSTRAINT_4AC7 PRIMARY KEY(IDKPIALERTTYPE);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_KPIA;
-CREATE CACHED TABLE "komea".KOM_LINK(
-    IDLINK INT NOT NULL,
-    NAME VARCHAR(255) NOT NULL,
-    URL VARCHAR(255) NOT NULL,
-    IDPROJECT INT NOT NULL
-);
-ALTER TABLE "komea".KOM_LINK ADD CONSTRAINT "komea".CONSTRAINT_4AC7F PRIMARY KEY(IDLINK);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_LINK;
-CREATE CACHED TABLE "komea".KOM_EVT(
-    IDEVENTTYPE INT NOT NULL,
-    IDPROVIDER INT NOT NULL,
-    KEY VARCHAR(255) NOT NULL,
-    NAME VARCHAR(255) NOT NULL,
-    SEVERITY INT NOT NULL,
-    ENABLED TINYINT NOT NULL,
-    DESCRIPTION TEXT,
-    CATEGORY VARCHAR(255) NOT NULL,
-    ENTITYTYPE INT NOT NULL
-);
-ALTER TABLE "komea".KOM_EVT ADD CONSTRAINT "komea".CONSTRAINT_AAB8 PRIMARY KEY(IDEVENTTYPE);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_EVT;
-CREATE CACHED TABLE "komea".KOM_SETTING(
-    IDSETTING INT NOT NULL,
-    KEY VARCHAR(255) NOT NULL,
-    VALUE VARCHAR(255) NOT NULL
-);
-ALTER TABLE "komea".KOM_SETTING ADD CONSTRAINT "komea".CONSTRAINT_C PRIMARY KEY(IDSETTING);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_SETTING;
-CREATE CACHED TABLE "komea".KOM_TAG(
-    IDTAG INT NOT NULL,
-    NAME VARCHAR(255) NOT NULL
-);
-ALTER TABLE "komea".KOM_TAG ADD CONSTRAINT "komea".CONSTRAINT_AABB PRIMARY KEY(IDTAG);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_TAG;
-CREATE CACHED TABLE "komea".KOM_HAS_PROJ_PE(
-    IDPROJECT INT NOT NULL,
-    IDPERSON INT NOT NULL
-);
-ALTER TABLE "komea".KOM_HAS_PROJ_PE ADD CONSTRAINT "komea".CONSTRAINT_3 PRIMARY KEY(IDPROJECT, IDPERSON);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_HAS_PROJ_PE;
-CREATE CACHED TABLE "komea".KOM_PVDS(
-    IDPROVIDERSETTING INT NOT NULL,
-    KEY VARCHAR(255) NOT NULL,
-    VALUE VARCHAR(255) NOT NULL,
-    IDPROVIDER INT NOT NULL
-);
-ALTER TABLE "komea".KOM_PVDS ADD CONSTRAINT "komea".CONSTRAINT_4AC9 PRIMARY KEY(IDPROVIDERSETTING);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_PVDS;
-CREATE CACHED TABLE "komea".KOM_HAS_PROJ_TAG(
-    IDPROJECT INT NOT NULL,
-    IDTAG INT NOT NULL
-);
-ALTER TABLE "komea".KOM_HAS_PROJ_TAG ADD CONSTRAINT "komea".CONSTRAINT_6 PRIMARY KEY(IDPROJECT, IDTAG);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_HAS_PROJ_TAG;
-CREATE CACHED TABLE "komea".KOM_HAS_PROJ_KPIA(
-    IIDPROJECT INT NOT NULL,
-    IDKPIALERTTYPE INT NOT NULL
-);
-ALTER TABLE "komea".KOM_HAS_PROJ_KPIA ADD CONSTRAINT "komea".CONSTRAINT_7 PRIMARY KEY(IIDPROJECT, IDKPIALERTTYPE);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_HAS_PROJ_KPIA;
-CREATE CACHED TABLE "komea".KOM_HAS_KPIA_PEGR(
-    IDKPIALERTTYPE INT NOT NULL,
-    IDPERSONGROUP INT NOT NULL
-);
-ALTER TABLE "komea".KOM_HAS_KPIA_PEGR ADD CONSTRAINT "komea".CONSTRAINT_7C PRIMARY KEY(IDKPIALERTTYPE, IDPERSONGROUP);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_HAS_KPIA_PEGR;
-CREATE CACHED TABLE "komea".KOM_HAS_KPIA_PE(
-    IDKPIALERTTYPE INT NOT NULL,
-    IDPERSON INT NOT NULL
-);
-ALTER TABLE "komea".KOM_HAS_KPIA_PE ADD CONSTRAINT "komea".CONSTRAINT_30 PRIMARY KEY(IDKPIALERTTYPE, IDPERSON);
--- 0 +/- SELECT COUNT(*) FROM "komea".KOM_HAS_KPIA_PE;
-ALTER TABLE "komea".KOM_PROJ ADD CONSTRAINT "komea".KEY_UNIQUE UNIQUE(KEY);
-ALTER TABLE "komea".KOM_HAS_KPIA_PE ADD CONSTRAINT "komea".FK_KOM_KPIA_HAS_KOM_PE_KOM_KPIA1 FOREIGN KEY(IDKPIALERTTYPE) REFERENCES "komea".KOM_KPIA(IDKPIALERTTYPE) NOCHECK;
-ALTER TABLE "komea".KOM_KPI ADD CONSTRAINT "komea".FK_METRIC_PLUGIN1 FOREIGN KEY(IDPROVIDER) REFERENCES "komea".KOM_PVD(IDPROVIDER) NOCHECK;
-ALTER TABLE "komea".KOM_PEGR ADD CONSTRAINT "komea".FK_USERGROUP_USERGROUP1 FOREIGN KEY(IDPERSONGROUPPARENT) REFERENCES "komea".KOM_PEGR(IDPERSONGROUP) NOCHECK;
-ALTER TABLE "komea".KOM_KPIA ADD CONSTRAINT "komea".FK_METRICALERT_METRIC1 FOREIGN KEY(IDKPI) REFERENCES "komea".KOM_KPI(IDKPI) NOCHECK;
-ALTER TABLE "komea".KOM_MSR ADD CONSTRAINT "komea".FK_MEASURE_USER1 FOREIGN KEY(IDPERSON) REFERENCES "komea".KOM_PE(IDPERSON) NOCHECK;
-ALTER TABLE "komea".KOM_EVT ADD CONSTRAINT "komea".FK_EVENT_PLUGIN1 FOREIGN KEY(IDPROVIDER) REFERENCES "komea".KOM_PVD(IDPROVIDER) NOCHECK;
-ALTER TABLE "komea".KOM_HAS_PROJ_TAG ADD CONSTRAINT "komea".FK_PROJECT_HAS_TAG_PROJECT1 FOREIGN KEY(IDPROJECT) REFERENCES "komea".KOM_PROJ(IDPROJECT) NOCHECK;
-ALTER TABLE "komea".KOM_PE ADD CONSTRAINT "komea".FK_USER_USERROLE1 FOREIGN KEY(IDPERSONROLE) REFERENCES "komea".KOM_PERO(IDPERSONROLE) NOCHECK;
-ALTER TABLE "komea".KOM_PVDS ADD CONSTRAINT "komea".FK_PROVIDERSETTING_PROVIDER1 FOREIGN KEY(IDPROVIDER) REFERENCES "komea".KOM_PVD(IDPROVIDER) NOCHECK;
-ALTER TABLE "komea".KOM_LINK ADD CONSTRAINT "komea".FK_TAG_PROJECT FOREIGN KEY(IDPROJECT) REFERENCES "komea".KOM_PROJ(IDPROJECT) NOCHECK;
-ALTER TABLE "komea".KOM_HAS_PROJ_KPIA ADD CONSTRAINT "komea".FK_KOM_PROJ_HAS_KOM_KPIA_KOM_PROJ1 FOREIGN KEY(IIDPROJECT) REFERENCES "komea".KOM_PROJ(IDPROJECT) NOCHECK;
-ALTER TABLE "komea".KOM_HAS_PROJ_TAG ADD CONSTRAINT "komea".FK_PROJECT_HAS_TAG_TAG1 FOREIGN KEY(IDTAG) REFERENCES "komea".KOM_TAG(IDTAG) NOCHECK;
-ALTER TABLE "komea".KOM_HAS_PROJ_PE ADD CONSTRAINT "komea".FK_PROJECT_HAS_USER_PROJECT1 FOREIGN KEY(IDPROJECT) REFERENCES "komea".KOM_PROJ(IDPROJECT) NOCHECK;
-ALTER TABLE "komea".KOM_MSR ADD CONSTRAINT "komea".FK_MEASURE_METRIC1 FOREIGN KEY(IDMETRIC) REFERENCES "komea".KOM_KPI(IDKPI) NOCHECK;
-ALTER TABLE "komea".KOM_MSR ADD CONSTRAINT "komea".FK_MEASURE_USERGROUP1 FOREIGN KEY(IDPERSONGROUP) REFERENCES "komea".KOM_PEGR(IDPERSONGROUP) NOCHECK;
-ALTER TABLE "komea".KOM_PE ADD CONSTRAINT "komea".FK_USER_USERGROUP1 FOREIGN KEY(IDPERSONGROUP) REFERENCES "komea".KOM_PEGR(IDPERSONGROUP) NOCHECK;
-ALTER TABLE "komea".KOM_HAS_KPIA_PE ADD CONSTRAINT "komea".FK_KOM_KPIA_HAS_KOM_PE_KOM_PE1 FOREIGN KEY(IDPERSON) REFERENCES "komea".KOM_PE(IDPERSON) NOCHECK;
-ALTER TABLE "komea".KOM_PROJ ADD CONSTRAINT "komea".FK_PROJECT_CUSTOMER1 FOREIGN KEY(IDCUSTOMER) REFERENCES "komea".KOM_CUSTOMER(IDCUSTOMER) NOCHECK;
-ALTER TABLE "komea".KOM_MSR ADD CONSTRAINT "komea".FK_MEASURE_PROJECT1 FOREIGN KEY(IDPROJECT) REFERENCES "komea".KOM_PROJ(IDPROJECT) NOCHECK;
-ALTER TABLE "komea".KOM_HAS_KPIA_PEGR ADD CONSTRAINT "komea".FK_KOM_KPIA_HAS_KOM_PEGR_KOM_PEGR1 FOREIGN KEY(IDPERSONGROUP) REFERENCES "komea".KOM_PEGR(IDPERSONGROUP) NOCHECK;
-ALTER TABLE "komea".KOM_HAS_PROJ_KPIA ADD CONSTRAINT "komea".FK_KOM_PROJ_HAS_KOM_KPIA_KOM_KPIA1 FOREIGN KEY(IDKPIALERTTYPE) REFERENCES "komea".KOM_KPIA(IDKPIALERTTYPE) NOCHECK;
-ALTER TABLE "komea".KOM_HAS_KPIA_PEGR ADD CONSTRAINT "komea".FK_KOM_KPIA_HAS_KOM_PEGR_KOM_KPIA1 FOREIGN KEY(IDKPIALERTTYPE) REFERENCES "komea".KOM_KPIA(IDKPIALERTTYPE) NOCHECK;
-ALTER TABLE "komea".KOM_PEGR ADD CONSTRAINT "komea".FK_PERSON_GROUP_GROUP_KIND1 FOREIGN KEY(IDGROUPKIND) REFERENCES "komea".KOM_GRK(IDGROUPKIND) NOCHECK;
-ALTER TABLE "komea".KOM_HAS_PROJ_PE ADD CONSTRAINT "komea".FK_PROJECT_HAS_USER_USER1 FOREIGN KEY(IDPERSON) REFERENCES "komea".KOM_PE(IDPERSON) NOCHECK;
+CREATE SCHEMA IF NOT EXISTS "komea";
+
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_CUSTOMER`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_CUSTOMER` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_PROJ`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_PROJ` (
+  `id` INT NOT NULL,
+  `key` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `description` TEXT NULL,
+  `idCustomer` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `key_UNIQUE` (`key` ASC),
+  INDEX `fk_Project_Customer1_idx` (`idCustomer` ASC),
+  CONSTRAINT `fk_Project_Customer1`
+    FOREIGN KEY (`idCustomer`)
+    REFERENCES `komea`.`KOM_CUSTOMER` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_GRK`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_GRK` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_PEGR`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_PEGR` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `key` VARCHAR(255) NOT NULL,
+  `description` TEXT NULL,
+  `idPersonGroupParent` INT NULL,
+  `idGroupKind` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `key_UNIQUE` (`key` ASC),
+  INDEX `fk_UserGroup_UserGroup1_idx` (`idPersonGroupParent` ASC),
+  INDEX `fk_Person_Group_Group_Kind1_idx` (`idGroupKind` ASC),
+  CONSTRAINT `fk_UserGroup_UserGroup1`
+    FOREIGN KEY (`idPersonGroupParent`)
+    REFERENCES `komea`.`KOM_PEGR` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Person_Group_Group_Kind1`
+    FOREIGN KEY (`idGroupKind`)
+    REFERENCES `komea`.`KOM_GRK` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_PERO`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_PERO` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_PE`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_PE` (
+  `id` INT NOT NULL,
+  `idPersonGroup` INT NULL,
+  `idPersonRole` INT NOT NULL,
+  `firstName` VARCHAR(255) NOT NULL,
+  `lastName` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `login` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_User_UserGroup1_idx` (`idPersonGroup` ASC),
+  INDEX `fk_User_UserRole1_idx` (`idPersonRole` ASC),
+  UNIQUE INDEX `Personcol_UNIQUE` (`login` ASC),
+  CONSTRAINT `fk_User_UserGroup1`
+    FOREIGN KEY (`idPersonGroup`)
+    REFERENCES `komea`.`KOM_PEGR` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_User_UserRole1`
+    FOREIGN KEY (`idPersonRole`)
+    REFERENCES `komea`.`KOM_PERO` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_PVD`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_PVD` (
+  `id` INT NOT NULL,
+  `key` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `icon` VARCHAR(255) NOT NULL,
+  `url` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `name_UNIQUE` (`key` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_KPI`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_KPI` (
+  `id` INT NOT NULL,
+  `key` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `description` TEXT NULL,
+  `idProvider` INT NOT NULL,
+  `minValue` DOUBLE NULL,
+  `maxValue` DOUBLE NULL,
+  `valueDirection` INT NOT NULL,
+  `valueType` INT NOT NULL,
+  `entityType` INT NOT NULL,
+  `esperRequest` TEXT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `key_UNIQUE` (`key` ASC),
+  INDEX `fk_Metric_Plugin1_idx` (`idProvider` ASC),
+  CONSTRAINT `fk_Metric_Plugin1`
+    FOREIGN KEY (`idProvider`)
+    REFERENCES `komea`.`KOM_PVD` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_MSR`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_MSR` (
+  `id` INT NOT NULL,
+  `idMetric` INT NOT NULL,
+  `date` DATE NOT NULL,
+  `idPersonGroup` INT NULL,
+  `idPerson` INT NULL,
+  `idProject` INT NULL,
+  `value` DOUBLE NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_Measure_Metric1_idx` (`idMetric` ASC),
+  INDEX `fk_Measure_UserGroup1_idx` (`idPersonGroup` ASC),
+  INDEX `fk_Measure_User1_idx` (`idPerson` ASC),
+  INDEX `fk_Measure_Project1_idx` (`idProject` ASC),
+  CONSTRAINT `fk_Measure_Metric1`
+    FOREIGN KEY (`idMetric`)
+    REFERENCES `komea`.`KOM_KPI` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Measure_UserGroup1`
+    FOREIGN KEY (`idPersonGroup`)
+    REFERENCES `komea`.`KOM_PEGR` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Measure_User1`
+    FOREIGN KEY (`idPerson`)
+    REFERENCES `komea`.`KOM_PE` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Measure_Project1`
+    FOREIGN KEY (`idProject`)
+    REFERENCES `komea`.`KOM_PROJ` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_KPIA`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_KPIA` (
+  `id` INT NOT NULL,
+  `idKpi` INT NOT NULL,
+  `key` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `description` TEXT NULL,
+  `severity` INT NOT NULL,
+  `value` DOUBLE NOT NULL,
+  `averageSince` DATE NULL,
+  `operator` INT NOT NULL,
+  `enabled` TINYINT(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_MetricAlert_Metric1_idx` (`idKpi` ASC),
+  UNIQUE INDEX `key_UNIQUE` (`key` ASC),
+  CONSTRAINT `fk_MetricAlert_Metric1`
+    FOREIGN KEY (`idKpi`)
+    REFERENCES `komea`.`KOM_KPI` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_LINK`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_LINK` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `url` VARCHAR(255) NOT NULL,
+  `idProject` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_Tag_Project_idx` (`idProject` ASC),
+  CONSTRAINT `fk_Tag_Project`
+    FOREIGN KEY (`idProject`)
+    REFERENCES `komea`.`KOM_PROJ` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_EVT`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_EVT` (
+  `id` INT NOT NULL,
+  `idProvider` INT NOT NULL,
+  `key` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `severity` INT NOT NULL,
+  `enabled` TINYINT(1) NOT NULL,
+  `description` TEXT NULL,
+  `category` VARCHAR(255) NOT NULL,
+  `entityType` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_Event_Plugin1_idx` (`idProvider` ASC),
+  UNIQUE INDEX `key_UNIQUE` (`key` ASC),
+  CONSTRAINT `fk_Event_Plugin1`
+    FOREIGN KEY (`idProvider`)
+    REFERENCES `komea`.`KOM_PVD` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_SETTING`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_SETTING` (
+  `id` INT NOT NULL,
+  `key` VARCHAR(255) NOT NULL,
+  `value` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `key_UNIQUE` (`key` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_TAG`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_TAG` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_HAS_PROJ_PE`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_HAS_PROJ_PE` (
+  `idProject` INT NOT NULL,
+  `idPerson` INT NOT NULL,
+  PRIMARY KEY (`idProject`, `idPerson`),
+  INDEX `fk_Project_has_User_User1_idx` (`idPerson` ASC),
+  INDEX `fk_Project_has_User_Project1_idx` (`idProject` ASC),
+  CONSTRAINT `fk_Project_has_User_Project1`
+    FOREIGN KEY (`idProject`)
+    REFERENCES `komea`.`KOM_PROJ` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Project_has_User_User1`
+    FOREIGN KEY (`idPerson`)
+    REFERENCES `komea`.`KOM_PE` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_PVDS`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_PVDS` (
+  `id` INT NOT NULL,
+  `key` VARCHAR(255) NOT NULL,
+  `value` VARCHAR(255) NOT NULL,
+  `idProvider` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `key_UNIQUE` (`key` ASC),
+  INDEX `fk_ProviderSetting_Provider1_idx` (`idProvider` ASC),
+  CONSTRAINT `fk_ProviderSetting_Provider1`
+    FOREIGN KEY (`idProvider`)
+    REFERENCES `komea`.`KOM_PVD` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_HAS_PROJ_TAG`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_HAS_PROJ_TAG` (
+  `idProject` INT NOT NULL,
+  `idTag` INT NOT NULL,
+  PRIMARY KEY (`idProject`, `idTag`),
+  INDEX `fk_Project_has_Tag_Tag1_idx` (`idTag` ASC),
+  INDEX `fk_Project_has_Tag_Project1_idx` (`idProject` ASC),
+  CONSTRAINT `fk_Project_has_Tag_Project1`
+    FOREIGN KEY (`idProject`)
+    REFERENCES `komea`.`KOM_PROJ` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Project_has_Tag_Tag1`
+    FOREIGN KEY (`idTag`)
+    REFERENCES `komea`.`KOM_TAG` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_HAS_PROJ_KPIA`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_HAS_PROJ_KPIA` (
+  `idProject` INT NOT NULL,
+  `idKpiAlertType` INT NOT NULL,
+  PRIMARY KEY (`idProject`, `idKpiAlertType`),
+  INDEX `fk_KOM_PROJ_has_KOM_KPIA_KOM_KPIA1_idx` (`idKpiAlertType` ASC),
+  INDEX `fk_KOM_PROJ_has_KOM_KPIA_KOM_PROJ1_idx` (`idProject` ASC),
+  CONSTRAINT `fk_KOM_PROJ_has_KOM_KPIA_KOM_PROJ1`
+    FOREIGN KEY (`idProject`)
+    REFERENCES `komea`.`KOM_PROJ` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_KOM_PROJ_has_KOM_KPIA_KOM_KPIA1`
+    FOREIGN KEY (`idKpiAlertType`)
+    REFERENCES `komea`.`KOM_KPIA` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_HAS_KPIA_PEGR`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_HAS_KPIA_PEGR` (
+  `idKpiAlertType` INT NOT NULL,
+  `idPersonGroup` INT NOT NULL,
+  PRIMARY KEY (`idKpiAlertType`, `idPersonGroup`),
+  INDEX `fk_KOM_KPIA_has_KOM_PEGR_KOM_PEGR1_idx` (`idPersonGroup` ASC),
+  INDEX `fk_KOM_KPIA_has_KOM_PEGR_KOM_KPIA1_idx` (`idKpiAlertType` ASC),
+  CONSTRAINT `fk_KOM_KPIA_has_KOM_PEGR_KOM_KPIA1`
+    FOREIGN KEY (`idKpiAlertType`)
+    REFERENCES `komea`.`KOM_KPIA` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_KOM_KPIA_has_KOM_PEGR_KOM_PEGR1`
+    FOREIGN KEY (`idPersonGroup`)
+    REFERENCES `komea`.`KOM_PEGR` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`KOM_HAS_KPIA_PE`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`KOM_HAS_KPIA_PE` (
+  `idKpiAlertType` INT NOT NULL,
+  `idPerson` INT NOT NULL,
+  PRIMARY KEY (`idKpiAlertType`, `idPerson`),
+  INDEX `fk_KOM_KPIA_has_KOM_PE_KOM_PE1_idx` (`idPerson` ASC),
+  INDEX `fk_KOM_KPIA_has_KOM_PE_KOM_KPIA1_idx` (`idKpiAlertType` ASC),
+  CONSTRAINT `fk_KOM_KPIA_has_KOM_PE_KOM_KPIA1`
+    FOREIGN KEY (`idKpiAlertType`)
+    REFERENCES `komea`.`KOM_KPIA` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_KOM_KPIA_has_KOM_PE_KOM_PE1`
+    FOREIGN KEY (`idPerson`)
+    REFERENCES `komea`.`KOM_PE` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
