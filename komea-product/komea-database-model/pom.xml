@@ -25,8 +25,9 @@
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
-                    <include>**/model/*.java</include>
                     <include>**/enums/*.java</include>
+                    <include>**/model/*.java</include>
+                    <include>**/dto/*.java</include>
                 </includes>
             </resource>
         </resources>

@@ -3,4 +3,5 @@
     <inherits name='com.google.gwt.user.User' />
     <source path='enums' />
     <source path='model' />
+    <source path='dto' />
 </module>
