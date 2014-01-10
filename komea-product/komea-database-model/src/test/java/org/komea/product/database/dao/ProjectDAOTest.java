@@ -57,6 +57,7 @@ public class ProjectDAOTest {
 		projectDAO.insert(project);
 
 		Assert.assertFalse(projectDAO.selectByExample(request).isEmpty());
+		Assert.assertEquals(1,projectDAO.selectByExample(request).size());
 	}
 
 }

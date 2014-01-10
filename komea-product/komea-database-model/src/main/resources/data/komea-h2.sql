@@ -1,6 +1,3 @@
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 
 -- -----------------------------------------------------
@@ -10,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `KOM_CUSTOMER` (
   `id` INT NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+;
 
 
 -- -----------------------------------------------------
@@ -22,9 +19,8 @@ CREATE TABLE IF NOT EXISTS `KOM_PROJ` (
   `name` VARCHAR(255) NOT NULL,
   `description` VARCHAR(2048) NULL,
   `idCustomer` INT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `key_UNIQUE` (`key` ASC))
-ENGINE = InnoDB;
+  PRIMARY KEY (`id`))
+;
 
 
 -- -----------------------------------------------------
@@ -34,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `KOM_GRK` (
   `id` INT NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+;
 
 
 -- -----------------------------------------------------
@@ -47,9 +43,8 @@ CREATE TABLE IF NOT EXISTS `KOM_PEGR` (
   `description` VARCHAR(2048) NULL,
   `idPersonGroupParent` INT NULL,
   `idGroupKind` INT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `key_UNIQUE` (`key` ASC))
-ENGINE = InnoDB;
+  PRIMARY KEY (`id`))
+;
 
 
 -- -----------------------------------------------------
@@ -58,9 +53,8 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `KOM_PERO` (
   `id` INT NOT NULL,
   `name` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC))
-ENGINE = InnoDB;
+  PRIMARY KEY (`id`))
+;
 
 
 -- -----------------------------------------------------
@@ -74,9 +68,8 @@ CREATE TABLE IF NOT EXISTS `KOM_PE` (
   `lastName` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `login` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `Personcol_UNIQUE` (`login` ASC))
-ENGINE = InnoDB;
+  PRIMARY KEY (`id`))
+;
 
 
 -- -----------------------------------------------------
@@ -88,9 +81,8 @@ CREATE TABLE IF NOT EXISTS `KOM_PVD` (
   `name` VARCHAR(255) NOT NULL,
   `icon` VARCHAR(255) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `name_UNIQUE` (`key` ASC))
-ENGINE = InnoDB;
+  PRIMARY KEY (`id`))
+;
 
 
 -- -----------------------------------------------------
@@ -108,9 +100,8 @@ CREATE TABLE IF NOT EXISTS `KOM_KPI` (
   `valueType` INT NOT NULL,
   `entityType` INT NOT NULL,
   `esperRequest` TEXT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `key_UNIQUE` (`key` ASC))
-ENGINE = InnoDB;
+  PRIMARY KEY (`id`))
+;
 
 
 -- -----------------------------------------------------
@@ -125,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `KOM_MSR` (
   `idProject` INT NULL,
   `value` DOUBLE NOT NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+;
 
 
 -- -----------------------------------------------------
@@ -142,9 +133,8 @@ CREATE TABLE IF NOT EXISTS `KOM_KPIA` (
   `averageSince` DATE NULL,
   `operator` INT NOT NULL,
   `enabled` TINYINT(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `key_UNIQUE` (`key` ASC))
-ENGINE = InnoDB;
+  PRIMARY KEY (`id`))
+;
 
 
 -- -----------------------------------------------------
@@ -156,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `KOM_LINK` (
   `url` VARCHAR(255) NOT NULL,
   `idProject` INT NOT NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+;
 
 
 -- -----------------------------------------------------
@@ -172,9 +162,8 @@ CREATE TABLE IF NOT EXISTS `KOM_EVT` (
   `description` VARCHAR(2048) NULL,
   `category` VARCHAR(255) NOT NULL,
   `entityType` INT NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `key_UNIQUE` (`key` ASC))
-ENGINE = InnoDB;
+  PRIMARY KEY (`id`))
+;
 
 
 -- -----------------------------------------------------
@@ -184,9 +173,8 @@ CREATE TABLE IF NOT EXISTS `KOM_SETTING` (
   `id` INT NOT NULL,
   `key` VARCHAR(255) NOT NULL,
   `value` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `key_UNIQUE` (`key` ASC))
-ENGINE = InnoDB;
+  PRIMARY KEY (`id`))
+;
 
 
 -- -----------------------------------------------------
@@ -196,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `KOM_TAG` (
   `id` INT NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+;
 
 
 -- -----------------------------------------------------
@@ -206,7 +194,7 @@ CREATE TABLE IF NOT EXISTS `KOM_HAS_PROJ_PE` (
   `idProject` INT NOT NULL,
   `idPerson` INT NOT NULL,
   PRIMARY KEY (`idProject`, `idPerson`))
-ENGINE = InnoDB;
+;
 
 
 -- -----------------------------------------------------
@@ -217,9 +205,8 @@ CREATE TABLE IF NOT EXISTS `KOM_PVDS` (
   `key` VARCHAR(255) NOT NULL,
   `value` VARCHAR(255) NOT NULL,
   `idProvider` INT NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `key_UNIQUE` (`key` ASC))
-ENGINE = InnoDB;
+  PRIMARY KEY (`id`))
+;
 
 
 -- -----------------------------------------------------
@@ -229,7 +216,7 @@ CREATE TABLE IF NOT EXISTS `KOM_HAS_PROJ_TAG` (
   `idProject` INT NOT NULL,
   `idTag` INT NOT NULL,
   PRIMARY KEY (`idProject`, `idTag`))
-ENGINE = InnoDB;
+;
 
 
 -- -----------------------------------------------------
@@ -239,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `KOM_HAS_PROJ_KPIA` (
   `idProject` INT NOT NULL,
   `idKpiAlertType` INT NOT NULL,
   PRIMARY KEY (`idProject`, `idKpiAlertType`))
-ENGINE = InnoDB;
+;
 
 
 -- -----------------------------------------------------
@@ -249,7 +236,7 @@ CREATE TABLE IF NOT EXISTS `KOM_HAS_KPIA_PEGR` (
   `idKpiAlertType` INT NOT NULL,
   `idPersonGroup` INT NOT NULL,
   PRIMARY KEY (`idKpiAlertType`, `idPersonGroup`))
-ENGINE = InnoDB;
+;
 
 
 -- -----------------------------------------------------
@@ -259,9 +246,5 @@ CREATE TABLE IF NOT EXISTS `KOM_HAS_KPIA_PE` (
   `idKpiAlertType` INT NOT NULL,
   `idPerson` INT NOT NULL,
   PRIMARY KEY (`idKpiAlertType`, `idPerson`))
-ENGINE = InnoDB;
+;
 
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

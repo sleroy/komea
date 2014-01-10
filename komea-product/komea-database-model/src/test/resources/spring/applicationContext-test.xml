@@ -68,7 +68,7 @@
 
         <jdbc:initialize-database data-source="dataSource"
                 enabled="true" ignore-failures="NONE">
-                <jdbc:script location="classpath:data/komea-h2.sql" />
+                <jdbc:script location="classpath:/data/komea-h2.sql" />
         </jdbc:initialize-database>
 
 
