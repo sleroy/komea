@@ -22,6 +22,20 @@
 		</license>
 	</licenses>
 
+
+	<distributionManagement>
+		<repository>
+			<id>nexus</id>
+			<name>nexus release</name>
+			<url>http://zeus:8080/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>nexus</id>
+			<name>nexus snapshots</name>
+			<url>http://zeus:8080/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<build>
 		<plugins>
 			<plugin>
