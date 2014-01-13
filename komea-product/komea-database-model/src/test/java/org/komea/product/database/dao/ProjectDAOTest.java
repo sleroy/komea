@@ -7,17 +7,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.database.model.Customer;
 import org.komea.product.database.model.CustomerCriteria;
-import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Project;
 import org.komea.product.database.model.ProjectCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration("classpath:/spring/applicationContext-test.xml")
+@ContextConfiguration("classpath*:/spring/applicationContext-test.xml")
+@TransactionConfiguration(defaultRollback=true)
 public class ProjectDAOTest {
 
 	@Autowired
@@ -29,6 +31,7 @@ public class ProjectDAOTest {
 
 
 	@Test
+	@Transactional
 	public void test() {
 
 		ProjectCriteria request = new ProjectCriteria();
