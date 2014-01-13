@@ -311,6 +311,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pvds` (
   `providerSettingKey` VARCHAR(255) NOT NULL,
   `value` VARCHAR(255) NOT NULL,
   `idProvider` INT NOT NULL,
+  `type` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `key_UNIQUE` (`providerSettingKey` ASC),
   INDEX `fk_ProviderSetting_Provider1_idx` (`idProvider` ASC),
