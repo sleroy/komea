@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pegr` (
   `description` VARCHAR(2048) NULL,
   `idPersonGroupParent` INT NULL,
   `idGroupKind` INT NULL,
+  `depth` INT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `key_UNIQUE` (`personGroupKey` ASC),
   INDEX `fk_UserGroup_UserGroup1_idx` (`idPersonGroupParent` ASC),
@@ -403,6 +404,28 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_kpia_pe` (
   CONSTRAINT `fk_KOM_KPIA_has_KOM_PE_KOM_PE1`
     FOREIGN KEY (`idPerson`)
     REFERENCES `komea`.`kom_pe` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`kom_has_proj_pegr`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_pegr` (
+  `idProject` INT NOT NULL,
+  `idPersonGroup` INT NOT NULL,
+  PRIMARY KEY (`idProject`, `idPersonGroup`),
+  INDEX `fk_kom_proj_has_kom_pegr_kom_pegr1_idx` (`idPersonGroup` ASC),
+  INDEX `fk_kom_proj_has_kom_pegr_kom_proj1_idx` (`idProject` ASC),
+  CONSTRAINT `fk_kom_proj_has_kom_pegr_kom_proj1`
+    FOREIGN KEY (`idProject`)
+    REFERENCES `komea`.`kom_proj` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_kom_proj_has_kom_pegr_kom_pegr1`
+    FOREIGN KEY (`idPersonGroup`)
+    REFERENCES `komea`.`kom_pegr` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
