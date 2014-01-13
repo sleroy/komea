@@ -265,6 +265,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_setting` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `settingKey` VARCHAR(255) NOT NULL,
   `value` VARCHAR(255) NOT NULL,
+  `className` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `key_UNIQUE` (`settingKey` ASC))
 ENGINE = InnoDB;
