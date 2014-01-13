@@ -1,5 +1,6 @@
 
 
+
 -- -----------------------------------------------------
 -- Table `komea`.`kom_customer`
 -- -----------------------------------------------------
@@ -48,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pegr` (
   `description` VARCHAR(2048) NULL,
   `idPersonGroupParent` INT NULL,
   `idGroupKind` INT NULL,
+  `depth` INT NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_UserGroup_UserGroup1`
     FOREIGN KEY (`idPersonGroupParent`)
@@ -106,7 +108,8 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pvd` (
   `name` VARCHAR(255) NOT NULL,
   `icon` VARCHAR(255) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`));
+  PRIMARY KEY (`id`))
+;
 
 
 -- -----------------------------------------------------
@@ -367,4 +370,23 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_kpia_pe` (
     ON UPDATE NO ACTION)
 ;
 
+
+-- -----------------------------------------------------
+-- Table `komea`.`kom_has_proj_pegr`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_pegr` (
+  `idProject` INT NOT NULL,
+  `idPersonGroup` INT NOT NULL,
+  PRIMARY KEY (`idProject`, `idPersonGroup`),
+  CONSTRAINT `fk_kom_proj_has_kom_pegr_kom_proj1`
+    FOREIGN KEY (`idProject`)
+    REFERENCES `komea`.`kom_proj` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_kom_proj_has_kom_pegr_kom_pegr1`
+    FOREIGN KEY (`idPersonGroup`)
+    REFERENCES `komea`.`kom_pegr` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+;
 

@@ -7,7 +7,7 @@
 		<artifactId>komea-product</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
-	
+
 	<artifactId>komea-testspring</artifactId>
 	<name>Komea : Spring test configuration files</name>
 	<description>Komea : Configuration files to use in tests. Provides required spring test files.</description>
@@ -15,8 +15,12 @@
 
 
 	<build>
-		<plugins>
-		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 	</build>
 
 	<dependencies>
