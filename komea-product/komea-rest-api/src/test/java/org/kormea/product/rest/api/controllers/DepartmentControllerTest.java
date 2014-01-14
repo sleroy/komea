@@ -2,17 +2,11 @@
 package org.kormea.product.rest.api.controllers;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.product.database.dto.ProviderDto;
-import org.komea.product.database.model.EventType;
-import org.komea.product.database.model.Provider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -26,7 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration("classpath:/spring/applicationContext-test.xml")
-public class ProvidersControllerTest
+public class DepartmentControllerTest
 {
     
     @Autowired
@@ -39,26 +33,13 @@ public class ProvidersControllerTest
     
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
+    //
     
     @Test
-    public void testGetProject() throws Exception {
+    public void testAllTeams() throws Exception {
     
-        Provider provider = new Provider(1, "UN", "MyProvider", "file://", "http://");
-        
-        EventType eventType = new EventType(2, 1, "EventUN", "MyEvent", 3, true, "a description", "a catogeory", 1);
-        
-        List<EventType> eventTypes = new ArrayList<EventType>();
-        eventTypes.add(eventType);
-        ProviderDto dto = new ProviderDto(provider, eventTypes);
-        
-        String jsonString = IntegrationTestUtil.convertObjectToJSON(dto);
-        System.out.println(jsonString);
-        
-        // String jsonString = "";
-        ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/providers/register")
-                .contentType(MediaType.APPLICATION_JSON).content(jsonString));
-        
+        ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.get("/departments/all"));
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
+        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(0)));
     }
-    //
 }

@@ -12,15 +12,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping(value = "/providers")
-public class ProvidersControler
+public class ProvidersController
 {
     
-    Logger LOGGER = LoggerFactory.getLogger(ProvidersControler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProvidersController.class);
     
+    /**
+     * This method register an external provider into komea.
+     * After this, providers can use komea to send alert
+     * 
+     * @param _provider
+     */
     @RequestMapping(method = RequestMethod.POST, value = "/register")
     public void registerProvider(@RequestBody final ProviderDto _provider) {
     
-        this.LOGGER.debug("call rest method §providers/register to register provider {}", _provider.getProvider().getProviderKey());
+        LOGGER.debug("call rest method /providers/register to register provider {}", _provider.getProvider().getProviderKey());
         // TODO
     }
+    
 }

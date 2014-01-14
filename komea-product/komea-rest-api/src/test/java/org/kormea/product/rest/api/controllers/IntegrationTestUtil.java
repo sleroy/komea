@@ -3,6 +3,7 @@ package org.kormea.product.rest.api.controllers;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +12,7 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.komea.product.database.model.PersonGroup;
 
 public class IntegrationTestUtil
 {
@@ -47,6 +49,22 @@ public class IntegrationTestUtil
         final ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(object);
         
+    }
+    
+    public static void main(final String[] args) {
+    
+        try {
+            System.out.println(convertObjectToJSON(new ArrayList<PersonGroup>()));
+        } catch (JsonGenerationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     
 }
