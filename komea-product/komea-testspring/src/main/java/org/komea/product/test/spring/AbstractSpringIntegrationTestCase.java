@@ -20,13 +20,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations = {
-        "classpath:/webapp/WEB-INF/applicationContext.xml",
-        "classpath:/webapp/WEB-INF/webapplicationContext.xml" })
+    "classpath:/spring/*-context-test.xml" })
 public abstract class AbstractSpringIntegrationTestCase
 {
     
     
-    private final Logger LOGGER = Logger.getLogger(getClass());
+    protected final Logger LOGGER = Logger.getLogger(getClass());
     
     
 }

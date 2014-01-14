@@ -58,12 +58,7 @@
 	<!-- -->
 
 
-	<!-- Activates various annotations to be detected in bean classes: Spring's 
-		@Required and @Autowired, as well as JSR 250's @PostConstruct,@PreDestroy 
-		and @Resource (if available) and JPA's @PersistenceContext & @PersistenceUnit. -->
-	<context:annotation-config />
 	<context:component-scan base-package="org.komea.product" />
-
 
 
 	<!-- spring-mvc -->
