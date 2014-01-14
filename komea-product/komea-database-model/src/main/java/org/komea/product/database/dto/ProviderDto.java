@@ -6,6 +6,9 @@ package org.komea.product.database.dto;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
 
@@ -18,7 +21,9 @@ public class ProviderDto implements Serializable
     private static final long serialVersionUID = 1L;
     
     private Provider          provider;
+    @NotEmpty
     private List<EventType>   eventTypes;
+    @NotNull
     private List<PropertyDTO> properties;
     
     
@@ -38,6 +43,24 @@ public class ProviderDto implements Serializable
     }
     
     
+    /**
+     * @param _provider
+     * @param _eventTypes
+     * @param _properties
+     */
+    public ProviderDto(
+            final Provider _provider,
+            final List<EventType> _eventTypes,
+            final List<PropertyDTO> _properties) {
+    
+    
+        super();
+        provider = _provider;
+        eventTypes = _eventTypes;
+        properties = _properties;
+    }
+    
+    
     public List<EventType> getEventTypes() {
     
     
@@ -52,6 +75,7 @@ public class ProviderDto implements Serializable
     }
     
     
+    @NotNull
     public Provider getProvider() {
     
     

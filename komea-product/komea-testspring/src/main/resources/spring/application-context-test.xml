@@ -19,7 +19,7 @@
 	<!-- - Tous les controllers sont automatiquement détectés grâce à l'annotation 
 		@Controller. - On définit ici dans quel package le post processor doit chercher 
 		ces beans annotés. -->
-	<context:component-scan base-package="org.komea.product" />
+	<context:component-scan base-package="org.komea.product.backend" />
 
 
 

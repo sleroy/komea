@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:include="layout :: tocea-head"></head>
+    <body>
+        <header class="tocea-header" th:include="layout :: tocea-header"></header>
+        <div class="tocea-content">
+            <div class="alert alert-danger" th:if="${error}" th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
+                Invalid credentials : please check your login and your password.<br></br>
+                Reason: <span th:text="${errorMsg}">Wrong input!</span>
+            </div>
+            <div  th:include="layout :: tocea-signin"></div>
+        </div>
+        <footer class="tocea-footer" th:include="layout :: tocea-footer"></footer>
+    </body>
+</html>

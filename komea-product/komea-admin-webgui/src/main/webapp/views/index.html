@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:include="layout :: tocea-head"></head>
+    <body>
+        <header class="tocea-header" th:include="layout :: tocea-header"></header>
+        <div class="tocea-content">
+            <table class="table table-condensed table-hover">
+                <thead>
+                    <tr>
+                        <th class="span1">Provider</th>
+                        <th class="span2">Project</th>
+                        <th class="span2">Criticity</th>
+                        <th class="span9">Message</th>
+                        <th class="span2">When</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="sb : ${alerts}">
+                        <td><img src="http://dummyimage.com/16/ff00ff/000000.png" th:src="@{${sb.icon}}" width="16" height="16"></img> <a href=""><i class="icon-star-empty"></i></a></td>
+                        <td><strong th:text="${sb.getProject()}">John Doe</strong></td>
+                        <td><span class="label pull-right" th:text="${sb.getCriticity()}">Notifications</span></td>
+                        <td><strong th:text="${sb.message}">Message body goes here</strong></td>
+                        <td><strong th:text="${sb.getPrettyTime()}">11:23 PM</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <footer class="tocea-footer" th:include="layout :: tocea-footer"></footer>
+        <script type="text/javascript">
+            var element = document.getElementById("home-nav");
+            element.className = element.className + " active";
+        </script>
+    </body>
+</html>

@@ -8,7 +8,6 @@ import org.komea.product.database.enums.Severity;
 import org.komea.product.plugin.api.EventTypeDef;
 import org.komea.product.plugin.api.IResourceProxy;
 import org.komea.product.plugin.api.IUpdateAction;
-import org.komea.product.plugin.api.Icon;
 import org.komea.product.plugin.api.Property;
 import org.komea.product.plugin.api.ProviderPlugin;
 import org.komea.product.plugin.api.ProviderResource;
@@ -16,32 +15,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 
-@ProviderPlugin(key = "SAMPLE_PROVIDER_PLUGIN", name = "Sample provider plugin", icon = @Icon(
-        uri = "/truc.gif",
-        classpath = true), properties = {
-        @Property(key = "cronFrequency", value = "@hourly", type = String.class),
-        @Property(key = "disabled", value = "false", type = Boolean.class) }, eventTypes = {
-        @EventTypeDef(
-                category = "BUILD",
-                description = "Event to notify a build is started",
-                key = "BUILD_STARTED",
-                name = "Build started",
-                entityType = EntityType.PROJECT,
-                severity = Severity.INFO),
-        @EventTypeDef(
-                category = "BUILD",
-                description = "Event to notify a build is finished with success",
-                key = "BUILD_FINISHED",
-                name = "Build finished",
-                entityType = EntityType.PROJECT,
-                severity = Severity.INFO),
-        @EventTypeDef(
-                category = "BUILD",
-                description = "Event to notify a build is finished with failure",
-                key = "BUILD_FAILURE",
-                name = "Build failure",
-                entityType = EntityType.PROJECT,
-                severity = Severity.MAJOR) })
+@ProviderPlugin(
+        key = "SAMPLE_PROVIDER_PLUGIN",
+        name = "Sample provider plugin",
+        icon = "/truc.gif",
+        properties = {
+                @Property(key = "cronFrequency", value = "@hourly", type = String.class),
+                @Property(key = "disabled", value = "false", type = Boolean.class) },
+        eventTypes = {
+                @EventTypeDef(
+                        category = "BUILD",
+                        description = "Event to notify a build is started",
+                        key = "BUILD_STARTED",
+                        name = "Build started",
+                        entityType = EntityType.PROJECT,
+                        severity = Severity.INFO),
+                @EventTypeDef(
+                        category = "BUILD",
+                        description = "Event to notify a build is finished with success",
+                        key = "BUILD_FINISHED",
+                        name = "Build finished",
+                        entityType = EntityType.PROJECT,
+                        severity = Severity.INFO),
+                @EventTypeDef(
+                        category = "BUILD",
+                        description = "Event to notify a build is finished with failure",
+                        key = "BUILD_FAILURE",
+                        name = "Build failure",
+                        entityType = EntityType.PROJECT,
+                        severity = Severity.MAJOR) })
 public class SampleProviderBean
 {
     

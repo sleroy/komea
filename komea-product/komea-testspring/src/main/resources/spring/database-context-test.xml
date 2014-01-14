@@ -65,6 +65,9 @@
 	<mvc:annotation-driven />
 
 
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 
-
+	<bean
+		class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor" />
 </beans>

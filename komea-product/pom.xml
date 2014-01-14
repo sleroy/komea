@@ -59,6 +59,7 @@
 		<dependency>
 			<artifactId>junit</artifactId>
 			<groupId>junit</groupId>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- SPRING FRAMEWORK -->

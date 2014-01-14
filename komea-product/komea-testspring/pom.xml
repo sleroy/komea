@@ -36,6 +36,17 @@
 			<artifactId>hamcrest-all</artifactId>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-mock</artifactId>
+			<version>${org.springframework.mock.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<artifactId>junit</artifactId>
+			<groupId>junit</groupId>
+			<scope>compile</scope>
+		</dependency>
 
 	</dependencies>
 
