@@ -22,6 +22,12 @@
 	</properties>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/webapp</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 
 		<plugins>
 			<plugin>
@@ -64,36 +70,41 @@
 	<!-- stackoverflow.com/questions/7897114/how-to-assemble-multimodule-maven-project-into-one-war -->
 
 	<dependencies>
+		<!-- <dependency> -->
+		<!-- <groupId>${project.groupId}</groupId> -->
+		<!-- <artifactId>komea-admin-webgui</artifactId> -->
+		<!-- <version>${project.version}</version> -->
+		<!-- <type>war</type> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>komea-admin-webgui</artifactId>
+			<artifactId>komea-rest-api</artifactId>
 			<version>${project.version}</version>
-			<type>war</type>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>komea-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.komea.plugins</groupId>
-			<artifactId>komea-rss-plugin</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.komea.plugins</groupId>
-			<artifactId>komea-standard-metrics-plugin</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.komea.plugins</groupId>
-			<artifactId>komea-sample-plugin</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.komea.plugins</groupId>
-			<artifactId>komea-git-plugin</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.komea.plugins</groupId> -->
+		<!-- <artifactId>komea-rss-plugin</artifactId> -->
+		<!-- <version>${project.version}</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.komea.plugins</groupId> -->
+		<!-- <artifactId>komea-standard-metrics-plugin</artifactId> -->
+		<!-- <version>${project.version}</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.komea.plugins</groupId> -->
+		<!-- <artifactId>komea-sample-plugin</artifactId> -->
+		<!-- <version>${project.version}</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.komea.plugins</groupId> -->
+		<!-- <artifactId>komea-git-plugin</artifactId> -->
+		<!-- <version>${project.version}</version> -->
+		<!-- </dependency> -->
 	</dependencies>
 </project>
