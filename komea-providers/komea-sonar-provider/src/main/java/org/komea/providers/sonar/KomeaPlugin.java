@@ -43,13 +43,13 @@ public class KomeaPlugin extends SonarPlugin {
     public static final String PROJECT_KEY = "komea.project";
     public static final String EVENT_ANALYSIS_STARTED_KEY = "SONARQUBE_ANALYSIS_STARTED";
     public static final EventType EVENT_ANALYSIS_STARTED = createEventType(
-            EVENT_ANALYSIS_STARTED_KEY, "Sonar analysis started", "", Severity.INFO);
+            EVENT_ANALYSIS_STARTED_KEY, "SonarQube analysis started", "", Severity.INFO);
     public static final String EVENT_ANALYSIS_ENDED_KEY = "SONARQUBE_ANALYSIS_ENDED";
     public static final EventType EVENT_ANALYSIS_ENDED = createEventType(
-            EVENT_ANALYSIS_ENDED_KEY, "Sonar analysis ended", "", Severity.INFO);
-    public static final String EVENT_ANALYSIS_DURATION_KEY = "SONARQUBE_ANALYSIS_ENDED";
+            EVENT_ANALYSIS_ENDED_KEY, "SonarQube analysis ended", "", Severity.INFO);
+    public static final String EVENT_ANALYSIS_DURATION_KEY = "SONARQUBE_ANALYSIS_DURATION";
     public static final EventType EVENT_ANALYSIS_DURATION = createEventType(
-            EVENT_ANALYSIS_DURATION_KEY, "Sonar analysis duration", "", Severity.INFO);
+            EVENT_ANALYSIS_DURATION_KEY, "SonarQube analysis duration", "", Severity.INFO);
     public static final List<EventType> EVENT_TYPES = Arrays.asList(
             EVENT_ANALYSIS_STARTED, EVENT_ANALYSIS_ENDED, EVENT_ANALYSIS_DURATION);
 
@@ -64,7 +64,8 @@ public class KomeaPlugin extends SonarPlugin {
 
     public static EventType createEventType(final Metric metric) {
         return createEventType("SONARQUBE_MEASURE_" + metric.getKey(),
-                metric.getName(), metric.getDescription(), Severity.INFO);
+                "SonarQube measure '" + metric.getName() + "'",
+                metric.getDescription(), Severity.INFO);
     }
 
     public static EventType createEventType(final String key, final String name,
