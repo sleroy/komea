@@ -43,7 +43,7 @@ public class ProjectDAOTest
     @Transactional
     @DatabaseSetup("database.xml")
     @ExpectedDatabase(value = "addCustomer.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
-    public void test() {
+    public void testInsertProject() {
     
         ProjectCriteria request = new ProjectCriteria();
         request.createCriteria().andNameEqualTo("projet1");
