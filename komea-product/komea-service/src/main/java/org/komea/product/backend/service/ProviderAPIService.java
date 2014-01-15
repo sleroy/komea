@@ -10,7 +10,6 @@ import org.komea.product.backend.exceptions.InvalidProviderDescriptionException;
 import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
-import org.komea.product.backend.service.IProviderAPIService;
 import org.komea.product.database.dto.PropertyDTO;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.model.EventType;
@@ -37,7 +36,8 @@ public class ProviderAPIService implements IProviderAPIService
     }
     
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.service.IProviderAPIService#loadEvents(org.komea.product.backend.plugin.api.ProviderPlugin)
      */
     @Override
@@ -52,7 +52,8 @@ public class ProviderAPIService implements IProviderAPIService
     }
     
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.service.IProviderAPIService#loadProperties(org.komea.product.backend.plugin.api.ProviderPlugin)
      */
     @Override
@@ -73,8 +74,10 @@ public class ProviderAPIService implements IProviderAPIService
     }
     
     
-    /* (non-Javadoc)
-     * @see org.komea.product.plugins.service.IProviderAPIService#loadProviderDescription(org.komea.product.backend.plugin.api.ProviderPlugin)
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.komea.product.plugins.service.IProviderAPIService#loadProviderDescription(org.komea.product.backend.plugin.api.ProviderPlugin)
      */
     @Override
     public Provider loadProviderDescription(final ProviderPlugin providerAnnotation) {
@@ -89,7 +92,8 @@ public class ProviderAPIService implements IProviderAPIService
     }
     
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.service.IProviderAPIService#loadProviderDTO(java.lang.Object)
      */
     @Override
@@ -111,7 +115,8 @@ public class ProviderAPIService implements IProviderAPIService
     }
     
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.service.IProviderAPIService#newEventType(org.komea.product.backend.plugin.api.EventTypeDef)
      */
     @Override
@@ -122,10 +127,10 @@ public class ProviderAPIService implements IProviderAPIService
         eventType.setCategory(_eventTypeDef.category());
         eventType.setDescription(_eventTypeDef.description());
         eventType.setEnabled(_eventTypeDef.enabled());
-        eventType.setEntityType(_eventTypeDef.entityType());
+        eventType.setEntityTypeEnum(_eventTypeDef.entityType());
         eventType.setEventKey(_eventTypeDef.key());
         eventType.setName(_eventTypeDef.name());
-        eventType.setSeverity(_eventTypeDef.severity());
+        eventType.setSeverityEnum(_eventTypeDef.severity());
         return eventType;
     }
 }

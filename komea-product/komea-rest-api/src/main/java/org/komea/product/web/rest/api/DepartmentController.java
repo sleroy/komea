@@ -1,5 +1,6 @@
 
-package org.kormea.product.rest.api.controllers;
+package org.komea.product.web.rest.api;
+
 
 
 import java.util.ArrayList;
@@ -11,23 +12,31 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+
 
 @Controller
-@RequestMapping(value = "/teams")
-public class TeamsController
+@RequestMapping(value = "/departments")
+public class DepartmentController
 {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(TeamsController.class);
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(DepartmentController.class);
+    
+    
     
     /**
-     * This method return the team list
+     * This method return the departments list
      * 
-     * @return the team list
+     * @return the departments list
      */
     @RequestMapping(method = RequestMethod.GET, value = "/all")
+    @ResponseBody
     public List<PersonGroup> allTeams() {
     
-        LOGGER.debug("call rest method /teams/all/");
+    
+        LOGGER.debug("call rest method /departments/all/");
         // TODO
         return new ArrayList<PersonGroup>();
     }

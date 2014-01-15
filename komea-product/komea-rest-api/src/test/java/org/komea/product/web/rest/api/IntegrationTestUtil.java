@@ -1,5 +1,5 @@
 
-package org.kormea.product.rest.api.controllers;
+package org.komea.product.web.rest.api;
 
 
 import java.io.IOException;

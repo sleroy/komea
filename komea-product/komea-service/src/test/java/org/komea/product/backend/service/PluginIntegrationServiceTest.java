@@ -15,9 +15,6 @@ import javax.validation.Validation;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.product.backend.service.IEventTypeService;
-import org.komea.product.backend.service.IProviderAPIService;
-import org.komea.product.backend.service.ISettingService;
 import org.komea.product.database.dao.ProviderMapper;
 import org.komea.product.database.dto.PropertyDTO;
 import org.komea.product.database.dto.ProviderDto;
@@ -83,11 +80,11 @@ public class PluginIntegrationServiceTest
         eventType.setCategory(Category.BUILD.name());
         eventType.setDescription("eventDesc");
         eventType.setEnabled(true);
-        eventType.setEntityType(EntityType.PERSON);
+        eventType.setEntityTypeEnum(EntityType.PERSON);
         eventType.setEventKey("EVENT_KEY");
         eventType.setIdProvider(0);
         eventType.setName("eventName");
-        eventType.setSeverity(Severity.MINOR);
+        eventType.setSeverityEnum(Severity.MINOR);
         eventTypes.add(eventType);
         // Execution of the registration
         final ProviderDto providerDTO = new ProviderDto(provider, eventTypes);
