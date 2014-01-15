@@ -14,7 +14,7 @@
 	</typeAliases>
 
 	<mappers>
-		<mapper resource="org/komea/product/database/sqlmap/CustomerMapper.xml" />
+		<!-- <mapper resource="org/komea/product/database/sqlmap/CustomerMapper.xml" />
 		<mapper resource="org/komea/product/database/sqlmap/EventTypeMapper.xml" />
 		<mapper resource="org/komea/product/database/sqlmap/GroupKindMapper.xml" />
 		<mapper resource="org/komea/product/database/sqlmap/HasPersonGroupKpiAlertTypeMapper.xml" />
@@ -34,7 +34,7 @@
 		<mapper resource="org/komea/product/database/sqlmap/ProviderMapper.xml" />
 		<mapper resource="org/komea/product/database/sqlmap/ProviderSettingMapper.xml" />
 		<mapper resource="org/komea/product/database/sqlmap/SettingMapper.xml" />
-		<mapper resource="org/komea/product/database/sqlmap/TagMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/TagMapper.xml" /> -->
 	</mappers>
 
 

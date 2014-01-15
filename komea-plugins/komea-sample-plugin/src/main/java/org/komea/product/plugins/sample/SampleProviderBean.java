@@ -3,14 +3,14 @@ package org.komea.product.plugins.sample;
 
 
 
+import org.komea.product.backend.plugin.api.EventTypeDef;
+import org.komea.product.backend.plugin.api.IResourceProxy;
+import org.komea.product.backend.plugin.api.IUpdateAction;
+import org.komea.product.backend.plugin.api.Property;
+import org.komea.product.backend.plugin.api.ProviderPlugin;
+import org.komea.product.backend.plugin.api.ProviderResource;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.Severity;
-import org.komea.product.plugin.api.EventTypeDef;
-import org.komea.product.plugin.api.IResourceProxy;
-import org.komea.product.plugin.api.IUpdateAction;
-import org.komea.product.plugin.api.Property;
-import org.komea.product.plugin.api.ProviderPlugin;
-import org.komea.product.plugin.api.ProviderResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 

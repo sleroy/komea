@@ -22,12 +22,6 @@
         <dependencies>
         
 
-		<!-- ESPER -->
-		<dependency>
-			<groupId>com.espertech</groupId>
-			<artifactId>esper</artifactId>
-		</dependency>
-		
 				<!-- COMMON UTILS -->
 
 		<dependency>

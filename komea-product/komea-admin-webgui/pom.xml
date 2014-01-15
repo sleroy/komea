@@ -71,6 +71,15 @@
 						</resourceBases>
 					</webAppConfig>
 				</configuration>
+<!--				<dependencies>
+					<dependency>
+						<groupId>${project.groupId}</groupId>
+						<artifactId>komea-service</artifactId>
+						<version>${project.version}</version>
+						<scope>compile</scope>
+					</dependency>
+				</dependencies>
+				-->
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -96,6 +105,15 @@
 			<artifactId>komea-service-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>komea-service</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>komea-rest-api</artifactId>

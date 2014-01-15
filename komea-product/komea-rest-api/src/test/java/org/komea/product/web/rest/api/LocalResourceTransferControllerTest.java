@@ -11,8 +11,7 @@ import java.io.FileInputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
-import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
-import org.komea.product.web.rest.api.LocalResourceTransferController;
+import org.komea.product.test.spring.AbstractSpringWebIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,7 +20,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 
 
-public class LocalResourceTransferControllerTest extends AbstractSpringIntegrationTestCase
+public class LocalResourceTransferControllerTest extends AbstractSpringWebIntegrationTestCase
 {
     
     

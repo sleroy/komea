@@ -12,9 +12,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration()
-@ContextConfiguration(locations = {
-        "classpath:/spring/*-context.xml", "classpath:/spring/dispatcher-servlet.xml" })
+@WebAppConfiguration
+@ContextConfiguration(
+        locations = {
+                "classpath:/spring/*-context.xml",
+                "file:///home/sleroy/git/komea/komea-product/komea-admin-webgui/src/main/webapp/WEB-INF/dispatcher-servlet.xml" })
 public class SpringConfigurationLoadingIT
 {
     
