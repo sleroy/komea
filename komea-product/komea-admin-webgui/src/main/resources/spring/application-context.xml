@@ -14,12 +14,6 @@
 
 	<cache:annotation-driven />
 
-	<!-- - Tous les controllers sont automatiquement détectés grâce à l'annotation 
-		@Controller. - On définit ici dans quel package le post processor doit chercher 
-		ces beans annotés. -->
-
-
-
 	<tasks:annotation-driven />
 
 	<!-- generic cache manager -->

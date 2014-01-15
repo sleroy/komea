@@ -5,6 +5,8 @@ package org.komea.product.web.rest.api;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -59,6 +61,9 @@ public class LocalResourceTransferController
     
     
         LOGGER.debug("Requesting resource {}", name);
+        final Enumeration<URL> resourceAsStream =
+                Thread.currentThread().getContextClassLoader().getResources(name + ".png");
+        if (!resourceAsStream.hasMoreElements()) { return new byte[0]; }
         
         final InputStream resourceStream =
                 Thread.currentThread().getContextClassLoader().getResourceAsStream(name + ".png");
