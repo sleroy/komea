@@ -13,8 +13,29 @@
 	<typeAliases>
 	</typeAliases>
 
-
-
+	<mappers>
+		<!-- <mapper resource="org/komea/product/database/sqlmap/CustomerMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/EventTypeMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/GroupKindMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/HasPersonGroupKpiAlertTypeMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/HasPersonKpiAlertTypeMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/HasProjectKpiAlertTypeMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/HasProjectPersonGroupMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/HasProjectPersonMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/HasProjectTagMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/KpiAlertTypeMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/KpiMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/LinkMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/MeasureMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/PersonGroupMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/PersonMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/PersonRoleMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/ProjectMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/ProviderMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/ProviderSettingMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/SettingMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/TagMapper.xml" /> -->
+	</mappers>
 
 
 </configuration>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:include="layout :: tocea-head"></head>
+    <body>
+        <header class="tocea-header" th:include="layout :: tocea-header"></header>
+        <div class="tocea-content">
+            <h1>Manage your teams</h1>
+            <table
+                class="table table-condensed table-hover table-striped table-bordered">
+                <caption>List of Teams</caption>
+                <thead>
+                    <tr>
+                        <th>Team name</th>
+                        <th>Department</th>
+                        <th>Accross-activities</th>
+                        <th>Users associated</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="dep : ${teams}">
+                        <td><a href="edit" th:href="@{'/admin/teams/' + ${dep.id}}"
+                               th:text="${dep.name}">Team</a></td>
+                        <td
+                            th:text="${dep.department} ? ${dep.department.name} : 'no department'"></td>
+                        <td th:text="${dep.accross}"></td>
+                        <td>
+                            <table th:substituteby="layout :: usertable"
+                                   class="table table-condensed table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>sleroy</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td><a href="delete"
+                               th:href="@{'/admin/teams/delete/' + ${dep.id}}">delete</a> <a
+                               href="edit" th:href="@{'/admin/teams/' + ${dep.id}}">edit</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <a href="edit" th:href="@{'/admin/teams/'}">Add a new team</a>
+            <div class="container">
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="span4">
+                            <div class="area">
+                                <form class="form-horizontal" th:object="${currentTeam}"
+                                      th:action="@{/admin/teams/save}" method="POST">
+                                    <div class="heading">
+                                        <h4 class="form-heading">Add/Edit an team</h4>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="departmentName">Team
+                                            Name</label>
+                                        <div class="controls">
+                                            <input type="hidden" th:field="*{id}" /> <input type="text"
+                                                                                            th:field="*{name}" />
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="accrossEntity">Accross-entity</label>
+                                        <div class="controls">
+                                            <input type="checkbox" th:field="*{accross}" />
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <button type="submit" class="btn btn-success">Edit/Add</button>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                        <div class="span4">
+                            <div class="area"
+                                 th:if="${currentTeam != NULL} and ${newDep == NULL}">
+                                <div class="heading">
+                                    <h4 class="form-heading">Associate users</h4>
+
+                                </div>
+                                <table
+                                    class="table table-condensed table-striped table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Users</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="dep : ${users}">
+                                            <td th:text="${dep.userName}"></td>
+                                            <td th:text="${dep.firstName} + ' ' +${dep.lastName}"></td>
+                                            <td><a href="/admin/teams/attach_user/"
+                                                   th:href="@{/admin/teams/attach_user(ref=${currentTeam.id},id=${dep.id})}">attach</a>
+                                                <a href="/admin/teams/detach_user/"
+                                                   th:href="@{/admin/teams/detach_user(ref=${currentTeam.id},id=${dep.id})}">detach</a>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="tocea-footer" th:include="layout :: tocea-footer"></footer>
+    </body>
+</html>

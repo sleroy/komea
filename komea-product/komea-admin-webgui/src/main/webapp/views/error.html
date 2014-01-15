@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:include="layout :: tocea-head"></head>
+    <body>
+        <header class="tocea-header" th:include="layout :: tocea-header"></header>
+        <div class="tocea-content">
+            If you arrived on this page, something wrong happened.
+            <h1 th:text="${errorCode}">Error code : 500</h1>
+            <p th:text="${errorMessage}">java.lang.NullPointerException</p>
+            <p th:text="${requestURI}">URI Requested</p>
+        </div>
+        <footer class="tocea-footer" th:include="layout :: tocea-footer"></footer>
+    </body>
+</html>
+

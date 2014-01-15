@@ -6,7 +6,7 @@
 		<artifactId>komea-product</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
-	
+
 	<artifactId>komea-service</artifactId>
 	<name>Komea : Service layer</name>
 	<description>Layer to dialog with external layers as REST UI and GUI. It uses the sotware layer for all business operations. Mainly the responsibility of this layer is to convert entities in DTO</description>
@@ -27,6 +27,12 @@
 			<scope>test</scope>
 		</dependency>
 
+
+		<!-- ESPER -->
+		<dependency>
+			<groupId>com.espertech</groupId>
+			<artifactId>esper</artifactId>
+		</dependency>
 
 	</dependencies>
 </project>
