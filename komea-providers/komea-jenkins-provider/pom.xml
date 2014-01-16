@@ -5,10 +5,10 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>1.542</version>
+        <version>1.509.4</version>
     </parent>
 
-    <groupId>org.jenkins-ci.plugins</groupId>
+    <groupId>org.komea.providers</groupId>
     <artifactId>komea-jenkins-provider</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>hpi</packaging>
@@ -52,12 +52,12 @@
             <groupId>org.komea.product</groupId>
             <artifactId>komea-rest-client</artifactId>
             <version>${project.version}</version>
-            <exclusions>
+            <!--            <exclusions>
                 <exclusion>
-                    <artifactId>xstream</artifactId>
-                    <groupId>com.thoughtworks.xstream</groupId>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
                 </exclusion>
-            </exclusions>
+            </exclusions>-->
         </dependency>
     </dependencies>
 
