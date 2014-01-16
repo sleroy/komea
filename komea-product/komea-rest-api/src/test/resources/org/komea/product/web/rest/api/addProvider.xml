@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<kom_pvd id="1" providerType="1" name="MyProvider" icon="file://"
+		url="http://" />
+	<kom_evt id="1" idProvider="1" eventKey="EventUN" name="MyEvent"
+		description="a description" severity="3" enabled="1" category="a catogeory"
+		entityType="1" />
+</dataset>
