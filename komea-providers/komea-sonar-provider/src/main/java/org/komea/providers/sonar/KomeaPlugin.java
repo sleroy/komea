@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.EventCategory;
-import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
@@ -56,7 +55,7 @@ public class KomeaPlugin extends SonarPlugin {
 
     public static Provider getProvider(final String serverUrl) {
         final Provider provider = new Provider();
-        provider.setProviderTypeEnum(ProviderType.SONARQUBE);
+        provider.setProviderKey("SONARQUBE");
         provider.setName("SonarQube");
         provider.setUrl(serverUrl);
         provider.setIcon(serverUrl + "/static/komea/sonarqube_logo.png");
