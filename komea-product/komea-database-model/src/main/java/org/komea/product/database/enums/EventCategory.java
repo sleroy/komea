@@ -1,6 +1,8 @@
+
 package org.komea.product.database.enums;
 
-public enum EventCategory {
 
-    QUALITY, BUILD
+
+public enum EventCategory {
+    SCM, BUILD, BUGTRACKER, PROJECT, TIME, QUALITY
 }

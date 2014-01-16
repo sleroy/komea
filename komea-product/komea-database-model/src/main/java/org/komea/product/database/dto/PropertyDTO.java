@@ -17,6 +17,9 @@ public class PropertyDTO
     private String type;
     
     
+    private String description;
+    
+    
     
     public PropertyDTO() {
     
@@ -40,6 +43,13 @@ public class PropertyDTO
     }
     
     
+    public String getDescription() {
+    
+    
+        return description;
+    }
+    
+    
     public String getKey() {
     
     
@@ -58,6 +68,13 @@ public class PropertyDTO
     
     
         return value;
+    }
+    
+    
+    public void setDescription(final String _description) {
+    
+    
+        description = _description;
     }
     
     

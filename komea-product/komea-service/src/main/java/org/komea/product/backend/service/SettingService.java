@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.komea.product.backend.exceptions.DAOException;
-import org.komea.product.backend.service.ISettingService;
 import org.komea.product.database.dao.SettingMapper;
 import org.komea.product.database.model.Setting;
 import org.komea.product.database.model.SettingCriteria;
@@ -38,12 +37,13 @@ public class SettingService implements ISettingService
     public Setting getOrCreate(@NotBlank
     final String _key, @NotNull
     final String _value, final @NotBlank
-    String _typeName) {
+    String _typeName, @NotBlank
+    final String _description) {
     
     
         final List<Setting> selectByExample =
                 settingDAO.selectByExample(newSelectOnNameCriteria(_key));
-        if (selectByExample.isEmpty()) { return newSetting(_key, _value, _typeName); }
+        if (selectByExample.isEmpty()) { return newSetting(_key, _value, _typeName, _description); }
         if (selectByExample.size() > 1) { throw new DAOException(
                 "The setting table should not contain two setting with the same key."); }
         return selectByExample.get(0);
@@ -73,10 +73,10 @@ public class SettingService implements ISettingService
     public Setting newSetting(@NotBlank
     final String _key, @NotNull
     final String _value, @NotBlank
-    final String _typeName) {
+    final String _typeName, final String _description) {
     
     
-        final Setting setting = new Setting(null, _key, _value, _typeName);
+        final Setting setting = new Setting(null, _key, _value, _typeName, _description);
         settingDAO.insert(setting);
         return setting;
     }

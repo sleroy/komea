@@ -86,8 +86,9 @@ public class ProviderAPIService implements IProviderAPIService
         final Provider provider = new Provider();
         provider.setIcon(providerAnnotation.icon());
         provider.setName(providerAnnotation.name());
-        provider.setProviderKey(providerAnnotation.key());
         provider.setUrl(providerAnnotation.url());
+        provider.setProviderTypeEnum(providerAnnotation.type());
+        
         return provider;
     }
     

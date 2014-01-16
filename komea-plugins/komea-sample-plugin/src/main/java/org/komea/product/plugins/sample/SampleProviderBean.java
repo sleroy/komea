@@ -10,13 +10,14 @@ import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.plugin.api.ProviderResource;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
 
 @ProviderPlugin(
-        key = "SAMPLE_PROVIDER_PLUGIN",
+        type = ProviderType.OTHER,
         name = "Sample provider plugin",
         icon = "/truc.gif",
         properties = {
