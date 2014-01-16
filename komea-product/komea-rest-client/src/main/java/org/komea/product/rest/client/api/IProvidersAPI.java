@@ -1,5 +1,5 @@
 
-package com.tocea.product.rest.client.api;
+package org.komea.product.rest.client.api;
 
 
 

@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
 
@@ -21,9 +20,9 @@ public class ProviderDto implements Serializable
     private static final long serialVersionUID = 1L;
     
     private Provider          provider;
-    @NotEmpty
+    
     private List<EventType>   eventTypes;
-    @NotNull
+    
     private List<PropertyDTO> properties;
     
     

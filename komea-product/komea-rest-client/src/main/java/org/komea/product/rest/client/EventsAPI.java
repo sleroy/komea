@@ -1,5 +1,5 @@
 
-package com.tocea.product.rest.client;
+package org.komea.product.rest.client;
 
 
 import java.net.ConnectException;
@@ -7,8 +7,7 @@ import java.util.List;
 
 import org.komea.product.database.dto.EventDto;
 import org.komea.product.database.dto.SearchEventsDto;
-
-import com.tocea.product.rest.client.api.IEventsAPI;
+import org.komea.product.rest.client.api.IEventsAPI;
 
 class EventsAPI extends AbstractRestCientAPI implements IEventsAPI
 {

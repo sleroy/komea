@@ -1,12 +1,12 @@
 
-package com.tocea.product.rest.client;
+package org.komea.product.rest.client;
 
 
 import java.net.ConnectException;
 import java.net.URISyntaxException;
 
-import com.tocea.product.rest.client.api.IEventsAPI;
-import com.tocea.product.rest.client.api.IProvidersAPI;
+import org.komea.product.rest.client.api.IEventsAPI;
+import org.komea.product.rest.client.api.IProvidersAPI;
 
 /**
  * Komea factory to create rest api client objects

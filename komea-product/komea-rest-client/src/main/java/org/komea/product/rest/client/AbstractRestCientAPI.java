@@ -1,5 +1,5 @@
 
-package com.tocea.product.rest.client;
+package org.komea.product.rest.client;
 
 
 import java.net.ConnectException;
@@ -11,7 +11,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
-import com.tocea.product.rest.client.api.IRestClientAPI;
+import org.komea.product.rest.client.api.IRestClientAPI;
 
 abstract class AbstractRestCientAPI implements IRestClientAPI
 {
