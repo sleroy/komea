@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <context id="komea" targetRuntime="MyBatis3">
+
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+        <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin" >
+            <property name="searchString" value="Example$" />
+            <property name="replaceString" value="Criteria" />
+        </plugin>
+        <plugin type="org.mybatis.generator.plugins.JSR303Plugin" />
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/komea" userId="root" password="root"/>
+
+        <javaModelGenerator targetPackage="org.komea.product.database.model" targetProject="${basedir}/../komea-dto/src/main/java">
+            <property name="constructorBased" value="true" />
+        </javaModelGenerator>
+        <sqlMapGenerator targetPackage="org.komea.product.database.sqlmap" targetProject="${basedir}/../komea-dao/src/main/resources"/>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="org.komea.product.database.dao" targetProject="${basedir}/../komea-dao/src/main/java"/>
+
+        <table tableName="kom_customer" domainObjectName="Customer" >
+            <property name="useActualColumnNames" value="true" /> 
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+        </table>
+        <table tableName="kom_proj" domainObjectName="Project" >
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+        </table>
+        <table tableName="kom_grk" domainObjectName="GroupKind" >
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+        </table>
+        <table tableName="kom_pegr" domainObjectName="PersonGroup" >
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+        </table>
+        <table tableName="kom_pero" domainObjectName="PersonRole" >
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+        </table>
+        <table tableName="kom_pe" domainObjectName="Person" >
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+        </table>
+        <table tableName="kom_pvd" domainObjectName="Provider" >
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+            <columnOverride column="providerType" typeHandler="EnumOrdinalTypeHandler"
+                            javaType="org.komea.product.database.enums.ProviderType" />
+        </table>
+        <table tableName="kom_kpi" domainObjectName="Kpi" >
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+            <columnOverride column="entityType" typeHandler="EnumOrdinalTypeHandler"
+                            javaType="org.komea.product.database.enums.EntityType" />
+            <columnOverride column="valueDirection" typeHandler="EnumOrdinalTypeHandler"
+                            javaType="org.komea.product.database.enums.ValueDirection" />
+            <columnOverride column="valueType" typeHandler="EnumOrdinalTypeHandler"
+                            javaType="org.komea.product.database.enums.ValueType" />
+        </table>
+        <table tableName="kom_msr" domainObjectName="Measure" >
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+        </table>
+        <table tableName="kom_kpia" domainObjectName="KpiAlertType" >
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+            <columnOverride column="operator" typeHandler="EnumOrdinalTypeHandler"
+                            javaType="org.komea.product.database.enums.Operator" />
+            <columnOverride column="severity" typeHandler="EnumOrdinalTypeHandler"
+                            javaType="org.komea.product.database.enums.Severity" />
+        </table>
+        <table tableName="kom_link" domainObjectName="Link" >
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+        </table>
+        <table tableName="kom_evt" domainObjectName="EventType" >
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+            <columnOverride column="entityType" typeHandler="EnumOrdinalTypeHandler"
+                            javaType="org.komea.product.database.enums.EntityType" />
+            <columnOverride column="severity" typeHandler="EnumOrdinalTypeHandler"
+                            javaType="org.komea.product.database.enums.Severity" />
+        </table>
+        <table tableName="kom_setting" domainObjectName="Setting" >
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+        </table>
+        <table tableName="kom_tag" domainObjectName="Tag" >
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+        </table>
+        <table tableName="kom_pvds" domainObjectName="ProviderSetting" >
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+        </table>
+        <table tableName="kom_has_proj_pe" domainObjectName="HasProjectPerson" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="kom_has_proj_tag" domainObjectName="HasProjectTag" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="kom_has_proj_kpia" domainObjectName="HasProjectKpiAlertType" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="kom_has_proj_pegr" domainObjectName="HasProjectPersonGroup" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="kom_has_kpia_pegr" domainObjectName="HasPersonGroupKpiAlertType" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="kom_has_kpia_pe" domainObjectName="HasPersonKpiAlertType" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+    </context>
+</generatorConfiguration>

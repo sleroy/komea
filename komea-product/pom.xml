@@ -67,7 +67,8 @@
 	<modules>
 		<!-- core -->
 		<module>komea-utils</module>
-		<module>komea-database-model</module>
+		<module>komea-dto</module>
+		<module>komea-dao</module>
 		<module>komea-service-api</module>
 		<module>komea-service</module>
 		<module>komea-admin-webgui</module>
