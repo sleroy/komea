@@ -1,34 +1,97 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-    <head th:include="layout :: tocea-head"></head>
-    <body>
-        <header class="tocea-header" th:include="layout :: tocea-header"></header>
-        <div class="tocea-content">
-            <table class="table table-condensed table-hover">
-                <thead>
-                    <tr>
-                        <th class="span1">Provider</th>
-                        <th class="span2">Project</th>
-                        <th class="span2">Criticity</th>
-                        <th class="span9">Message</th>
-                        <th class="span2">When</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="sb : ${alerts}">
-                        <td><img src="http://dummyimage.com/16/ff00ff/000000.png" th:src="@{${sb.icon}}" width="16" height="16"></img> <a href=""><i class="icon-star-empty"></i></a></td>
-                        <td><strong th:text="${sb.getProject()}">John Doe</strong></td>
-                        <td><span class="label pull-right" th:text="${sb.getCriticity()}">Notifications</span></td>
-                        <td><strong th:text="${sb.message}">Message body goes here</strong></td>
-                        <td><strong th:text="${sb.getPrettyTime()}">11:23 PM</strong></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <footer class="tocea-footer" th:include="layout :: tocea-footer"></footer>
-        <script type="text/javascript">
-            var element = document.getElementById("home-nav");
-            element.className = element.className + " active";
-        </script>
-    </body>
+<head th:fragment="tocea-head">
+<meta charset="utf-8"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+<meta content="" name="description"></meta>
+<meta content="" name="author"></meta>
+<title>Komea Administration</title>
+<link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
+<link rel="stylesheet" href="../static/css/style.css" type="text/css"></link>
+</head>
+<body>
+
+	<header class="tocea-header" th:fragment="tocea-header">
+		<nav class="navbar navbar-inverse" role="navigation">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+					<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Komea Administration</a>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li id="home-nav"><a href="/"><span class="glyphicon glyphicon-home"></span>Home</a></li>
+					<li id="events-nav"><a href="/events"><span class="glyphicon glyphicon-list"></span>Activity</a></li>
+					<li id="metrics-nav"><a href="/metrics"><span class="glyphicon glyphicon-signal"></span>Analytics</a></li>
+					<li id="analytics-nav"><a href="/analytics"><span class="glyphicon glyphicon-th"></span>Comparison</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right" sec:authorize="not hasRole('ROLE_USER')">
+					<li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
+						<div class="dropdown-menu" style="padding: 10px;">
+							<div th:fragment="tocea-signin">
+								<form method="POST" th:action="@{/j_spring_security_check}">
+									Login<br></br> <input style="margin-bottom: 20px; width: 200px;" type="text" id="username" name="j_username"></input><br></br> Password<br></br> <input style="margin-bottom: 20px; width: 200px;" type="password" id="password" name="j_password"></input><br></br> <input style="float: left; margin-right: 10px;" type="checkbox" name="remember-me" id="remember-me" value="1"></input> <label for="user_remember_me">Remember me</label> <input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Sign In" style="width: 150px;"></input>
+								</form>
+							</div>
+						</div></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right" sec:authorize="hasRole('ROLE_USER')">
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>Welcome, User <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="/admin/user_preferences"><i class="glyphicon glyphicon-cog"></i> Preferences</a></li>
+							<li><a href="/help/support"><i class="glyphicon glyphicon-envelope"></i>Contact Support</a></li>
+							<li class="divider"></li>
+							<li><a href="/j_spring_security_logout"><i class="glyphicon glyphicon-off"></i> Logout</a></li>
+						</ul></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right" sec:authorize="hasRole('ROLE_ADMIN')">
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-wrench"></i>Administration <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="/admin/users"><i class="glyphicon glyphicon-user"></i>Users</a></li>
+							<li><a href="/admin/teams"><i class="glyphicon glyphicon-cog"></i>Teams</a></li>
+							<li><a href="/admin/departments"><i class="glyphicon glyphicon-cog"></i>Departments</a></li>
+							<li class="divider"></li>
+							<li><a href="/admin/metrics"><i class="glyphicon glyphicon-signal"></i>Metrics</a></li>
+							<li><a href="/admin/triggers"><i class="glyphicon glyphicon-random"></i>Triggers</a></li>
+							<li><a href="/admin/predef"><i class="glyphicon glyphicon-upload"></i>Predefined actions</a></li>
+							<li class="divider"></li>
+							<li><a href="/admin/settings"><i class="glyphicon glyphicon-wrench"></i>Installation</a></li>
+						</ul></li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+	<div class="container">
+		<table class="table table-condensed table-hover">
+			<thead>
+				<tr>
+					<th class="span1">Provider</th>
+					<th class="span2">Project</th>
+					<th class="span2">Criticity</th>
+					<th class="span9">Message</th>
+					<th class="span2">When</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="sb : ${alerts}">
+					<td><img src="http://dummyimage.com/16/ff00ff/000000.png" th:src="@{${sb.icon}}" width="16" height="16"></img> <a href=""><i class="icon-star-empty"></i></a></td>
+					<td><strong th:text="${sb.getProject()}">John Doe</strong></td>
+					<td><span class="label pull-right" th:text="${sb.getCriticity()}">Notifications</span></td>
+					<td><strong th:text="${sb.message}">Message body goes here</strong></td>
+					<td><strong th:text="${sb.getPrettyTime()}">11:23 PM</strong></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer class="tocea-footer" th:fragment="tocea-footer">
+		<p>&copy; Tocea 2013-2014</p>
+		<script src="../static/js/jquery.js"></script>
+		<script src="../static/bootstrap/js/bootstrap.min.js"></script>
+	</footer>
+	<script type="text/javascript">
+		var element = document.getElementById("home-nav");
+		element.className = element.className + " active";
+	</script>
+</body>
 </html>
