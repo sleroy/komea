@@ -12,6 +12,8 @@
 
 
 
+	<import resource="security-servlet.xml" />
+
 	<cache:annotation-driven />
 
 	<tasks:annotation-driven />

@@ -9,17 +9,17 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 			    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
-	<import resource="security-servlet.xml" /> 
 	
+
 	<import resource="thymeleaf-servlet.xml" />
 
 	<mvc:annotation-driven>
 	</mvc:annotation-driven>
 
-	<mvc:resources mapping="/static/**" location="/static/" />
+	<!-- <mvc:resources mapping="/static/**" location="/static/" /> -->
 
 
-	<context:component-scan base-package="org.komea.product.web" />
+	<context:component-scan base-package="org.komea.product.web.admin" />
 
 
 
@@ -27,5 +27,13 @@
 	<context:annotation-config></context:annotation-config>
 
 
+	<bean
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key=".lang.Throwable">/p/error.html</prop>
+			</props>
+		</property>
+	</bean>
 
 </beans>
