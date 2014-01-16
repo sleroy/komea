@@ -2,12 +2,12 @@
 package org.komea.product.backend.service;
 
 
-
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.validation.Valid;
 
+import org.komea.product.backend.exceptions.AlreadyExistingProviderException;
 import org.komea.product.backend.exceptions.InvalidProviderDescriptionException;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.database.dao.ProviderMapper;
@@ -25,8 +25,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 /**
  * This service registers providers loaded at the startup of Komea.
  * 
@@ -35,7 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PluginIntegrationService implements IPluginIntegrationService, ApplicationContextAware
 {
-    
     
     @Autowired
     private ApplicationContext  context;
@@ -48,22 +45,16 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     @Autowired
     private IProviderAPIService providerAPIService;
     
-    
     @Autowired
     private ISettingService     settingsService;
-    
     
     @Autowired
     private IEventTypeService   eventTypeService;
     
-    
-    
     public PluginIntegrationService() {
-    
     
         super();
     }
-    
     
     /**
      * Tests if a provider is existing.
@@ -74,46 +65,34 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
      */
     public boolean existSelectedProvider(final ProviderCriteria criteria) {
     
-    
         final int existingProvider = providerMapper.countByExample(criteria);
         return existingProvider > 0;
     }
     
-    
     public ApplicationContext getContext() {
-    
     
         return context;
     }
     
-    
     public IEventTypeService getEventTypeService() {
-    
     
         return eventTypeService;
     }
     
-    
     public IProviderAPIService getProviderAPIService() {
-    
     
         return providerAPIService;
     }
     
-    
     public ProviderMapper getProviderMapper() {
-    
     
         return providerMapper;
     }
     
-    
     public ISettingService getSettingsService() {
-    
     
         return settingsService;
     }
-    
     
     /*
      * (non-Javadoc)
@@ -121,19 +100,22 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
      */
     @Override
     @Transactional
-    public void registerProvider(@Valid
-    final ProviderDto _providerDTO) {
-    
+    public void registerProvider(@Valid final ProviderDto _providerDTO) {
     
         final Provider provider = _providerDTO.getProvider();
         LOGGER.info("Registering provider {}", provider.getName());
-        if (provider.getId() != null) { throw new InvalidProviderDescriptionException(
-                "Producer DTO should not register primary key"); }
+        final ProviderCriteria criteria = new ProviderCriteria();
+        criteria.createCriteria().andUrlEqualTo(provider.getUrl());
+        if (existSelectedProvider(criteria)) {
+            throw new AlreadyExistingProviderException(_providerDTO);
+        }
+        if (provider.getId() != null) {
+            throw new InvalidProviderDescriptionException("Producer DTO should not register primary key");
+        }
         providerMapper.insert(provider);
         // Properties
         for (final PropertyDTO property : _providerDTO.getProperties()) {
-            settingsService.getOrCreate(property.getKey(), property.getValue(), property.getType(),
-                    property.getDescription());
+            settingsService.getOrCreate(property.getKey(), property.getValue(), property.getType(), property.getDescription());
         }
         
         // Alertes
@@ -142,29 +124,22 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
         }
     }
     
-    
     @Override
-    public void setApplicationContext(final ApplicationContext _applicationContext)
-            throws BeansException {
-    
+    public void setApplicationContext(final ApplicationContext _applicationContext) throws BeansException {
     
         context = _applicationContext;
         
-        
         LOGGER.info("Initializing the plugin loader");
-        final Map<String, Object> providerPluginBeansMap =
-                context.getBeansWithAnnotation(ProviderPlugin.class);
+        final Map<String, Object> providerPluginBeansMap = context.getBeansWithAnnotation(ProviderPlugin.class);
         LOGGER.info("Found {} plugins", providerPluginBeansMap.size());
         
         for (final Entry<String, Object> providerDesc : providerPluginBeansMap.entrySet()) {
             LOGGER.debug("With bean {}", providerDesc.getKey());
             try {
-                final ProviderDto loadProviderDTO =
-                        providerAPIService.loadProviderDTO(providerDesc.getValue());
+                final ProviderDto loadProviderDTO = providerAPIService.loadProviderDTO(providerDesc.getValue());
                 registerProvider(loadProviderDTO);
             } catch (final Exception e) {
-                LOGGER.error("Cannot load the provider with bean {}, has failed : ",
-                        providerDesc.getKey(), e);
+                LOGGER.error("Cannot load the provider with bean {}, has failed : ", providerDesc.getKey(), e);
             }
         }
         
@@ -172,40 +147,29 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
         
     }
     
-    
     public void setContext(final ApplicationContext _context) {
-    
     
         context = _context;
     }
     
-    
     public void setEventTypeService(final IEventTypeService _eventTypeService) {
-    
     
         eventTypeService = _eventTypeService;
     }
     
-    
     public void setProviderAPIService(final IProviderAPIService _providerAPIService) {
-    
     
         providerAPIService = _providerAPIService;
     }
     
-    
     public void setProviderMapper(final ProviderMapper _providerMapper) {
-    
     
         providerMapper = _providerMapper;
     }
     
-    
     public void setSettingsService(final ISettingService _settingsService) {
-    
     
         settingsService = _settingsService;
     }
-    
     
 }

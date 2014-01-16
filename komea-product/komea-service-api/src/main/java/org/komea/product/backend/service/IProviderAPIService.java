@@ -2,7 +2,6 @@
 package org.komea.product.backend.service;
 
 
-
 import java.util.List;
 
 import org.komea.product.backend.plugin.api.EventTypeDef;
@@ -12,11 +11,8 @@ import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
 
-
-
 public interface IProviderAPIService
 {
-    
     
     /**
      * Load the event types from the annotation.
@@ -24,8 +20,7 @@ public interface IProviderAPIService
      * @param _providerAnnotation
      * @return
      */
-    public abstract List<EventType> loadEvents(ProviderPlugin _providerAnnotation);
-    
+    List<EventType> loadEvents(ProviderPlugin _providerAnnotation);
     
     /**
      * Load properties from provider annotation.
@@ -34,8 +29,7 @@ public interface IProviderAPIService
      *            the provider annotation.
      * @return
      */
-    public abstract List<PropertyDTO> loadProperties(ProviderPlugin providerAnnotation);
-    
+    List<PropertyDTO> loadProperties(ProviderPlugin providerAnnotation);
     
     /**
      * Loads the provider description.
@@ -44,8 +38,7 @@ public interface IProviderAPIService
      *            the provider annotation
      * @return the provider description.
      */
-    public abstract Provider loadProviderDescription(ProviderPlugin providerAnnotation);
-    
+    Provider loadProviderDescription(ProviderPlugin providerAnnotation);
     
     /**
      * Loads the description from the bean.
@@ -53,8 +46,7 @@ public interface IProviderAPIService
      * @param providerBean
      * @return
      */
-    public abstract ProviderDto loadProviderDTO(Object providerBean);
-    
+    ProviderDto loadProviderDTO(Object providerBean);
     
     /**
      * Factory : to build a new event type.
@@ -63,6 +55,6 @@ public interface IProviderAPIService
      *            the event type definition.
      * @return the new event type.
      */
-    public abstract EventType newEventType(EventTypeDef _eventTypeDef);
+    EventType newEventType(EventTypeDef _eventTypeDef);
     
 }

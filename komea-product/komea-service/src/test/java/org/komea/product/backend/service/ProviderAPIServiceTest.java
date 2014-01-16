@@ -2,7 +2,6 @@
 package org.komea.product.backend.service;
 
 
-
 import java.io.Serializable;
 
 import org.junit.Assert;
@@ -21,83 +20,45 @@ import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
-
 public class ProviderAPIServiceTest
 {
     
-    
-    @ProviderPlugin(
-            type = ProviderType.OTHER,
-            name = "Sample provider plugin",
-            icon = "/local_resources/pics/truc",
-            properties = {
-                    @Property(key = "cronFrequency", value = "@hourly", type = String.class),
-                    @Property(key = "disabled", value = "false", type = Boolean.class) },
-            eventTypes = {
-                    @EventTypeDef(
-                            category = "BUILD",
-                            description = "Event to notify a build is started",
-                            key = "BUILD_STARTED",
-                            name = "Build started",
-                            entityType = EntityType.PROJECT,
-                            severity = Severity.INFO),
-                    @EventTypeDef(
-                            category = "BUILD",
-                            description = "Event to notify a build is finished with success",
-                            key = "BUILD_FINISHED",
-                            name = "Build finished",
-                            entityType = EntityType.PROJECT,
-                            severity = Severity.INFO),
-                    @EventTypeDef(
-                            category = "BUILD",
-                            description = "Event to notify a build is finished with failure",
-                            key = "BUILD_FAILURE",
-                            name = "Build failure",
-                            entityType = EntityType.PROJECT,
-                            severity = Severity.MAJOR) })
+    @ProviderPlugin(type = ProviderType.OTHER, name = "Sample provider plugin", icon = "/local_resources/pics/truc", url = "http://", properties = {
+            @Property(key = "cronFrequency", value = "@hourly", type = String.class),
+            @Property(key = "disabled", value = "false", type = Boolean.class) }, eventTypes = {
+            @EventTypeDef(category = "BUILD", description = "Event to notify a build is started", key = "BUILD_STARTED", name = "Build started", entityType = EntityType.PROJECT, severity = Severity.INFO),
+            @EventTypeDef(category = "BUILD", description = "Event to notify a build is finished with success", key = "BUILD_FINISHED", name = "Build finished", entityType = EntityType.PROJECT, severity = Severity.INFO),
+            @EventTypeDef(category = "BUILD", description = "Event to notify a build is finished with failure", key = "BUILD_FAILURE", name = "Build failure", entityType = EntityType.PROJECT, severity = Severity.MAJOR) })
     public class SampleProviderBean
     {
-        
         
         @EventTypeDef()
         private org.komea.product.database.model.EventType BUILD_FAILURE;
         
-        
         @ProviderResource
         private IResourceProxy<SampleProviderConfig>       config;
         
-        
-        
         public SampleProviderBean() {
-        
         
             super();
             
         }
         
-        
         public org.komea.product.database.model.EventType getBUILD_FAILURE() {
-        
         
             return BUILD_FAILURE;
         }
         
-        
         @Autowired
         public void init() {
         
-        
             final SampleProviderConfig sampleProviderConfig = config.get();
-            
             
             config.update(new IUpdateAction<SampleProviderConfig>()
             {
                 
-                
                 @Override
                 public void update(final SampleProviderConfig _object) {
-                
                 
                     _object.setIteration(12);
                     
@@ -107,42 +68,29 @@ public class ProviderAPIServiceTest
             
         }
         
-        
         public void setBUILD_FAILURE(final org.komea.product.database.model.EventType _bUILD_FAILURE) {
-        
         
             BUILD_FAILURE = _bUILD_FAILURE;
         }
         
     }
     
-    
-    
     public class SampleProviderConfig implements Serializable
     {
         
-        
         private int iteration;
         
-        
-        
         public int getIteration() {
-        
         
             return iteration;
         }
         
-        
         public void setIteration(final int _iteration) {
-        
         
             iteration = _iteration;
         }
         
-        
     }
-    
-    
     
     /**
      * Tests to check all informations are collected from a provider bean.
@@ -150,10 +98,8 @@ public class ProviderAPIServiceTest
     @Test
     public final void testLoad() {
     
-    
         final IProviderAPIService providerAPIService = new ProviderAPIService();
-        final ProviderDto providerDTO =
-                providerAPIService.loadProviderDTO(new SampleProviderBean());
+        final ProviderDto providerDTO = providerAPIService.loadProviderDTO(new SampleProviderBean());
         Assert.assertEquals(providerDTO.getProvider().getName(), "Sample provider plugin");
         Assert.assertNotNull(providerDTO.getProvider().getIcon(), "/local_resources/pics/truc");
         Assert.assertEquals(providerDTO.getProvider().getProviderTypeEnum(), ProviderType.OTHER);
@@ -170,17 +116,14 @@ public class ProviderAPIServiceTest
         
     }
     
-    
     /**
      * Tests to check failure case.
      */
     @Test(expected = InvalidProviderDescriptionException.class)
     public final void testLoadFail() {
     
-    
         final IProviderAPIService providerAPIService = new ProviderAPIService();
         final ProviderDto providerDTO = providerAPIService.loadProviderDTO(new Object());
-        
         
     }
 }

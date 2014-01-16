@@ -104,12 +104,11 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pe` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `komea`.`kom_pvd` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `providerKey` VARCHAR(255) NOT NULL,
+  `providerType` INT NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `icon` VARCHAR(255) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`))
-;
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -240,6 +239,8 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_setting` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `settingKey` VARCHAR(255) NOT NULL,
   `value` VARCHAR(255) NOT NULL,
+  `type` VARCHAR(255) NOT NULL,
+  `description` VARCHAR(2048) NULL,
   PRIMARY KEY (`id`))
 ;
 
@@ -282,6 +283,8 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pvds` (
   `providerSettingKey` VARCHAR(255) NOT NULL,
   `value` VARCHAR(255) NOT NULL,
   `idProvider` INT NOT NULL,
+  `type` VARCHAR(255) NOT NULL,
+  `description` VARCHAR(2048) NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_ProviderSetting_Provider1`
     FOREIGN KEY (`idProvider`)
