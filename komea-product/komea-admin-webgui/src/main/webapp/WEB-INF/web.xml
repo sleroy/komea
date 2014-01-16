@@ -9,7 +9,7 @@
 	<servlet>
 		<servlet-name>dispatcher</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		
+
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>WEB-INF/dispatcher-servlet.xml</param-value>
@@ -20,11 +20,11 @@
 		<servlet-name>dispatcher</servlet-name>
 		<url-pattern>/p/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>rest</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		
+
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>WEB-INF/rest-servlet.xml</param-value>
@@ -35,8 +35,8 @@
 		<servlet-name>rest</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
-	
-	
+
+
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:/spring/*-context.xml</param-value>
@@ -44,30 +44,46 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-	
-	
-	
-	
-	
-	<!-- <filter> <filter-name>springSecurityFilterChain</filter-name> <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class> 
-		</filter> <filter-mapping> <filter-name>springSecurityFilterChain</filter-name> 
-		<url-pattern>/*</url-pattern> </filter-mapping> -->
+
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/static/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/views/*</url-pattern>
+	</servlet-mapping>
+
+
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/p/*</url-pattern>
+	</filter-mapping>
+
 	<session-config>
 		<session-timeout>300</session-timeout>
 	</session-config>
 	<welcome-file-list>
-		<welcome-file>/</welcome-file>
+		<welcome-file>/index.jsp</welcome-file>
 	</welcome-file-list>
 	<error-page>
 		<exception-type>java.lang.Throwable</exception-type>
-		<location>/error.html</location>
+		<location>/p/error.html</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
-		<location>/error.html</location>
+		<location>/p/error.html</location>
 	</error-page>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/error.html</location>
+		<location>/p/error.html</location>
 	</error-page>
 </web-app>

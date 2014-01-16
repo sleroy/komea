@@ -1,139 +1,32 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<groupId>org.komea</groupId>
 		<artifactId>komea</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
-	
+
 	<groupId>org.komea.product</groupId>
 	<artifactId>komea-product</artifactId>
 	<packaging>pom</packaging>
 
 	<url>https://github.com/sleroy/komea</url>
-        <inceptionYear>2014</inceptionYear>
-        
-        
+	<inceptionYear>2014</inceptionYear>
+
+
 	<name>Komea : Web Application Product</name>
 	<description>This project contain the core projects of komea to build the war application. </description>
 
-        <dependencies>
-        
+	<dependencies>
 
-				<!-- COMMON UTILS -->
 
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-net</groupId>
-			<artifactId>commons-net</artifactId>
-		</dependency>
-		
-		
-		<!-- time -->
-
-		<dependency>
-			<groupId>org.ocpsoft.prettytime</groupId>
-			<artifactId>prettytime</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-		</dependency>
 
 		<dependency>
 			<artifactId>junit</artifactId>
 			<groupId>junit</groupId>
 			<scope>test</scope>
-		</dependency>
-
-		<!-- SPRING FRAMEWORK -->
-
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<scope>provided</scope>
-
-		</dependency>
-
-		<!-- THYMELEAF -->
-		<dependency>
-			<groupId>org.thymeleaf.extras</groupId>
-			<artifactId>thymeleaf-extras-springsecurity3</artifactId>
-		</dependency>
-		<dependency>
-			<artifactId>thymeleaf-spring3</artifactId>
-			<groupId>org.thymeleaf</groupId>
-		</dependency>
-
-
-
-
-
-		<!-- Spring Security -->
-
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-taglibs</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-config</artifactId>
-		</dependency>
-
-		<!-- Spring Framework -->
-
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-		</dependency>
-
-
-
-
-		<!-- Spring Data JPA -->
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-mock</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-oxm</artifactId>
-		</dependency>
-
-
-
-		<!-- JSON -->
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
 		</dependency>
 
 	</dependencies>

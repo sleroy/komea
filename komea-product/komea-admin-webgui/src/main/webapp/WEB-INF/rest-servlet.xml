@@ -13,7 +13,7 @@
 	<mvc:annotation-driven>
 	</mvc:annotation-driven>
 
-	<mvc:resources mapping="/static/**" location="/static/" />
+	<!-- <mvc:resources mapping="/static/**" location="/static/" /> -->
 
 
 	<context:component-scan base-package="org.komea.product.web.rest.api" />
