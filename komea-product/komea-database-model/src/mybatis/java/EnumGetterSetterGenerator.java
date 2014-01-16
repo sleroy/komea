@@ -16,6 +16,7 @@ public class EnumGetterSetterGenerator {
 
         String[][] data = new String[][]{
             // CLASS, ENUM, TABLE, COLUMN
+            {"Provider", "ProviderType", "kom_pvd", "providerType"},
             {"KpiAlertType", "Operator", "kom_kpia", "operator"},
             {"KpiAlertType", "Severity", "kom_kpia", "severity"},
             {"EventType", "Severity", "kom_evt", "severity"},

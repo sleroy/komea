@@ -117,12 +117,12 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `komea`.`kom_pvd` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `providerKey` VARCHAR(255) NOT NULL,
+  `providerType` INT NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `icon` VARCHAR(255) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `name_UNIQUE` (`providerKey` ASC))
+  UNIQUE INDEX `url_UNIQUE` (`url` ASC))
 ENGINE = InnoDB;
 
 
@@ -266,6 +266,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_setting` (
   `settingKey` VARCHAR(255) NOT NULL,
   `value` VARCHAR(255) NOT NULL,
   `type` VARCHAR(255) NOT NULL,
+  `description` VARCHAR(2048) NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `key_UNIQUE` (`settingKey` ASC))
 ENGINE = InnoDB;
@@ -312,6 +313,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pvds` (
   `value` VARCHAR(255) NOT NULL,
   `idProvider` INT NOT NULL,
   `type` VARCHAR(255) NOT NULL,
+  `description` VARCHAR(2048) NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `key_UNIQUE` (`providerSettingKey` ASC),
   INDEX `fk_ProviderSetting_Provider1_idx` (`idProvider` ASC),
