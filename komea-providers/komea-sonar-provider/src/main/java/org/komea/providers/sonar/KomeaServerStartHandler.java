@@ -1,13 +1,14 @@
 package org.komea.providers.sonar;
 
-import com.tocea.product.rest.client.RestClientFactory;
-import com.tocea.product.rest.client.api.IProvidersAPI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
+import org.komea.product.rest.client.RestClientFactory;
+import org.komea.product.rest.client.api.IProvidersAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.config.Settings;

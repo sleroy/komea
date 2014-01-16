@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 
 import javax.validation.Valid;
 
-import org.komea.product.backend.exceptions.AlreadyExistingProviderException;
 import org.komea.product.backend.exceptions.InvalidProviderDescriptionException;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.database.dao.ProviderMapper;
@@ -128,16 +127,13 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     
         final Provider provider = _providerDTO.getProvider();
         LOGGER.info("Registering provider {}", provider.getName());
-        final ProviderCriteria criteria = new ProviderCriteria();
-        criteria.createCriteria().andNameEqualTo(provider.getProviderKey());
-        if (existSelectedProvider(criteria)) { throw new AlreadyExistingProviderException(
-                _providerDTO); }
         if (provider.getId() != null) { throw new InvalidProviderDescriptionException(
                 "Producer DTO should not register primary key"); }
         providerMapper.insert(provider);
         // Properties
         for (final PropertyDTO property : _providerDTO.getProperties()) {
-            settingsService.getOrCreate(property.getKey(), property.getValue(), property.getType());
+            settingsService.getOrCreate(property.getKey(), property.getValue(), property.getType(),
+                    property.getDescription());
         }
         
         // Alertes

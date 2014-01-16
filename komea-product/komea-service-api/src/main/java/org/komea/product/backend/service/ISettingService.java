@@ -23,7 +23,7 @@ public interface ISettingService
      *            the type name.
      * @return
      */
-    public Setting getOrCreate(String _key, String _value, String _typeName);
+    public Setting getOrCreate(String _key, String _value, String _typeName, String _description);
     
     
     /**
@@ -46,6 +46,6 @@ public interface ISettingService
      *            the type nmae
      * @return the setting.
      */
-    public Setting newSetting(String _key, String _value, String _typeName);
+    public Setting newSetting(String _key, String _value, String _typeName, String _description);
     
 }

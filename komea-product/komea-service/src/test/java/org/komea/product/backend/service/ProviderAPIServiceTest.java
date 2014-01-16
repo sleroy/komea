@@ -14,10 +14,10 @@ import org.komea.product.backend.plugin.api.IUpdateAction;
 import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.plugin.api.ProviderResource;
-import org.komea.product.backend.service.IProviderAPIService;
 import org.komea.product.database.dto.PropertyDTO;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,7 +28,7 @@ public class ProviderAPIServiceTest
     
     
     @ProviderPlugin(
-            key = "SAMPLE_PROVIDER_PLUGIN",
+            type = ProviderType.OTHER,
             name = "Sample provider plugin",
             icon = "/local_resources/pics/truc",
             properties = {
@@ -156,7 +156,7 @@ public class ProviderAPIServiceTest
                 providerAPIService.loadProviderDTO(new SampleProviderBean());
         Assert.assertEquals(providerDTO.getProvider().getName(), "Sample provider plugin");
         Assert.assertNotNull(providerDTO.getProvider().getIcon(), "/local_resources/pics/truc");
-        Assert.assertEquals(providerDTO.getProvider().getProviderKey(), "SAMPLE_PROVIDER_PLUGIN");
+        Assert.assertEquals(providerDTO.getProvider().getProviderTypeEnum(), ProviderType.OTHER);
         Assert.assertEquals(2, providerDTO.getProperties().size());
         final PropertyDTO propertyDTO1 = providerDTO.getProperties().get(0);
         Assert.assertEquals("cronFrequency", propertyDTO1.getKey());

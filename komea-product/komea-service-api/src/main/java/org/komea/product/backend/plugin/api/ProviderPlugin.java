@@ -9,6 +9,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.komea.product.database.enums.ProviderType;
 import org.springframework.stereotype.Component;
 
 
@@ -39,14 +40,6 @@ public @interface ProviderPlugin {
     
     
     /**
-     * Defines the key identifying the plugin
-     * 
-     * @return
-     */
-    String key();
-    
-    
-    /**
      * Defines the plugin's name
      * 
      * @return the plugin's name
@@ -55,6 +48,9 @@ public @interface ProviderPlugin {
     
     
     Property[] properties();
+    
+    
+    ProviderType type();
     
     
     /**

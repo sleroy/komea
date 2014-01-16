@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.product.database.dto.ProviderDto;
+import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
 import org.komea.product.test.spring.AbstractSpringWebIntegrationTestCase;
@@ -46,7 +47,8 @@ public class ProvidersControllerTest extends AbstractSpringWebIntegrationTestCas
     public void testGetProject() throws Exception {
     
     
-        final Provider provider = new Provider(1, "UN", "MyProvider", "file://", "http://");
+        final Provider provider =
+                new Provider(1, ProviderType.BUGZILLA.ordinal(), "MyProvider", "file://", "http://");
         
         final EventType eventType =
                 new EventType(2, 1, "EventUN", "MyEvent", 3, true, "a description", "a catogeory",

@@ -38,7 +38,7 @@ public class ProvidersController
     
     
         LOGGER.debug("call rest method /providers/register to register provider {}", _provider
-                .getProvider().getProviderKey());
+                .getProvider().getName());
         // TODO
     }
     

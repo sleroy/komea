@@ -1,16 +1,17 @@
 package org.komea.providers.sonar;
 
-import com.tocea.product.rest.client.RestClientFactory;
-import com.tocea.product.rest.client.api.IEventsAPI;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.komea.product.database.dto.EventDto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
+import org.komea.product.rest.client.RestClientFactory;
+import org.komea.product.rest.client.api.IEventsAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Decorator;
