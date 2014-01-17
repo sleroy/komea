@@ -33,3 +33,8 @@ body {
 .error-actions .btn {
 	margin-right: 10px;
 }
+
+#gni {
+	width: 120px;
+	margin-bottom: 10px;
+}

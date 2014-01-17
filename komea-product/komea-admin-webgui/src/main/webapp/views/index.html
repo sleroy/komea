@@ -62,8 +62,40 @@
 		</nav>
 	</header>
 	<div class="container">
-	
-	
+		<div class="row">
+			<div class="col-md-9">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<span class="glyphicon glyphicon-bookmark"></span> Quick Shortcuts
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-xs-6 col-md-6">
+								<a th:href="@{/p/infos}" class="btn btn-danger btn-lg" role="button" id="gni"><span class="glyphicon glyphicon-list-alt"></span> <br />Informations</a> <a th:href="@{/p/projects}" class="btn btn-warning btn-lg" role="button" id="gni"><span class="glyphicon glyphicon-bookmark"></span> <br />Projects</a> <a id="gni" th:href="@{/p/teams}" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-signal"></span> <br />Team</a> <a id="gni" th:href="@{/p/departments}" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-comment"></span> <br />Departments</a> <a id="gni" th:href="@{/p/users}" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-comment"></span> <br />Users</a> <a id="gni" th:href="@{/p/customers}" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-comment"></span> <br />Customers</a> <a id="gni" th:href="@{/p/alerts}" class="btn btn-primary btn-lg" role="button"><span
+									class="glyphicon glyphicon-comment"
+								></span> <br />Alerts</a> <a id="gni" th:href="@{/p/kpis}" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-comment"></span> <br />KPIs</a>
+							</div>
+							<div class="col-xs-6 col-md-6">
+								<a  id="gni" th:href="@{/p/settings}" class="btn btn-success btn-lg" role="button"><span class="glyphicon glyphicon-user"></span> <br />Settings</a> 
+								<a  id="gni" th:href="@{/p/ldap}" class="btn btn-info btn-lg" role="button"><span class="glyphicon glyphicon-file"></span> <br />LDAP</a> 
+								<a   id="gni" th:href="@{/p/plugins}" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-picture"></span> <br />Plugins</a> 
+								<a   id="gni" th:href="@{/p/apialerts}" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-tag"></span> <br />API Alerts</a>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<a  href="http://www.jquery2dotnet.com/" class="btn btn-info btn-lg btn-block" role="button"><span class="glyphicon glyphicon-globe"></span> View Log</a>
+							</div>
+							<div class="col-xs-6">
+								<a  href="https://github.com/sleroy/komea" class="btn btn-success btn-lg btn-block" role="button"><span class="glyphicon glyphicon-globe"></span> Go on Github</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 	<footer class="tocea-footer" th:include="layout :: tocea-footer">
 		<p>&copy; Tocea 2013-2014</p>

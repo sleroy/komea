@@ -23,19 +23,19 @@
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
 						<li id="home-nav"><a href="/"><span class="glyphicon glyphicon-home"></span>Home</a></li>
-						<li id="metrics-nav" sec:authorize="hasRole('ROLE_USER')"><a href="/infos"><span class="glyphicon glyphicon-signal"></span>Informations</a></li>
+						<li id="metrics-nav" sec:authorize="hasRole('ROLE_USER')"><a th:href="@{/p/infos}"><span class="glyphicon glyphicon-signal"></span>Informations</a></li>
 					</ul>
 					<ul class="nav navbar-nav" sec:authorize="hasRole('ROLE_USER')">
 						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-list-alt"></i>Manage Data <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a th:href="@{~/projects}"><i class="glyphicon glyphicon-book"></i>Manage Projects</a></li>
-								<li><a th:href="@{~/teams}"><i class="glyphicon glyphicon-cog"></i>Manage Teams</a></li>
-								<li><a th:href="@{~/departments}"><i class="glyphicon glyphicon-cog"></i>Manage Departments</a></li>
-								<li><a th:href="@{~/departments}"><i class="glyphicon glyphicon-cog"></i>Manage Customers</a></li>
-								<li><a th:href="@{~/departments}"><i class="glyphicon glyphicon-user"></i>Manage Users</a></li>
+								<li><a th:href="@{/p/projects}"><i class="glyphicon glyphicon-book"></i>Manage Projects</a></li>
+								<li><a th:href="@{/p/teams}"><i class="glyphicon glyphicon-cog"></i>Manage Teams</a></li>
+								<li><a th:href="@{/p/departments}"><i class="glyphicon glyphicon-cog"></i>Manage Departments</a></li>
+								<li><a th:href="@{/p/customers}"><i class="glyphicon glyphicon-cog"></i>Manage Customers</a></li>
+								<li><a th:href="@{/p/users}"><i class="glyphicon glyphicon-user"></i>Manage Users</a></li>
 								<li class="divider"></li>
-								<li><a th:href="@{~/alerts}"><i class="glyphicon glyphicon-check"></i>Manage Alerts</a></li>
-								<li><a th:href="@{~/kpis}"><i class="glyphicon glyphicon-signal"></i>Manage KPI</a></li>
+								<li><a th:href="@{/p/alerts}"><i class="glyphicon glyphicon-check"></i>Manage Alerts</a></li>
+								<li><a th:href="@{/p/kpis}"><i class="glyphicon glyphicon-signal"></i>Manage KPI</a></li>
 							</ul></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right" sec:authorize="not hasRole('ROLE_USER')">
@@ -60,7 +60,7 @@
 								<li><a th:href="@{/settings}"><i class="glyphicon glyphicon-cog"></i>Settings</a></li>
 								<li><a th:href="@{/ldap}"><i class="glyphicon glyphicon-user"></i>Configure LDAP</a></li>
 								<li><a th:href="@{/apialerts}"><i class="glyphicon glyphicon-warning-sign"></i>API Alerts</a></li>
-								<li><a th:href="@{/plugins}"><i class="glyphicon glyphicon-wrench"></i>Plugins</a></li>
+								<li><a th:href="@{/plugins}"><i class="glyphicon glyphicon-wrench"></i>Configure Plugins</a></li>
 								<li class="divider"></li>
 								<li><a th:href="@{/viewlog}"><i class="glyphicon "></i>View log</a></li>
 								

@@ -7,20 +7,24 @@
 	<settings>
 		<setting name="defaultExecutorType" value="REUSE" />
 		<setting name="logImpl" value="LOG4J" />
-		
+
 	</settings>
 
 	<typeAliases>
 	</typeAliases>
 
 	<mappers>
-		<!-- <mapper resource="org/komea/product/database/sqlmap/CustomerMapper.xml" />
+		<mapper resource="org/komea/product/database/sqlmap/CustomerMapper.xml" />
 		<mapper resource="org/komea/product/database/sqlmap/EventTypeMapper.xml" />
 		<mapper resource="org/komea/product/database/sqlmap/GroupKindMapper.xml" />
-		<mapper resource="org/komea/product/database/sqlmap/HasPersonGroupKpiAlertTypeMapper.xml" />
-		<mapper resource="org/komea/product/database/sqlmap/HasPersonKpiAlertTypeMapper.xml" />
-		<mapper resource="org/komea/product/database/sqlmap/HasProjectKpiAlertTypeMapper.xml" />
-		<mapper resource="org/komea/product/database/sqlmap/HasProjectPersonGroupMapper.xml" />
+		<mapper
+			resource="org/komea/product/database/sqlmap/HasPersonGroupKpiAlertTypeMapper.xml" />
+		<mapper
+			resource="org/komea/product/database/sqlmap/HasPersonKpiAlertTypeMapper.xml" />
+		<mapper
+			resource="org/komea/product/database/sqlmap/HasProjectKpiAlertTypeMapper.xml" />
+		<mapper
+			resource="org/komea/product/database/sqlmap/HasProjectPersonGroupMapper.xml" />
 		<mapper resource="org/komea/product/database/sqlmap/HasProjectPersonMapper.xml" />
 		<mapper resource="org/komea/product/database/sqlmap/HasProjectTagMapper.xml" />
 		<mapper resource="org/komea/product/database/sqlmap/KpiAlertTypeMapper.xml" />
@@ -34,7 +38,7 @@
 		<mapper resource="org/komea/product/database/sqlmap/ProviderMapper.xml" />
 		<mapper resource="org/komea/product/database/sqlmap/ProviderSettingMapper.xml" />
 		<mapper resource="org/komea/product/database/sqlmap/SettingMapper.xml" />
-		<mapper resource="org/komea/product/database/sqlmap/TagMapper.xml" /> -->
+		<mapper resource="org/komea/product/database/sqlmap/TagMapper.xml" />
 	</mappers>
 
 
