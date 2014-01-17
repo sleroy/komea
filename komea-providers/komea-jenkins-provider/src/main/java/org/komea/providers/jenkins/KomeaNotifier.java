@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
+import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
@@ -43,7 +44,8 @@ public class KomeaNotifier extends Notifier implements Serializable {
             this.projectKey = null;
         }
         this.branch = branch;
-        this.provider = KomeaComputerListener.getProvider("TODO");
+        final String jenkinsUrl = Jenkins.getInstance().getRootUrl();
+        this.provider = KomeaComputerListener.getProvider(jenkinsUrl);
     }
 
     private String getServerUrl() {
@@ -193,7 +195,7 @@ public class KomeaNotifier extends Notifier implements Serializable {
 
         @Override
         public String getDisplayName() {
-            return "CI FLow Notifier";
+            return "Komea Notifier";
         }
         private String serverUrl;
 
