@@ -2,6 +2,7 @@
 package org.komea.product.backend.service;
 
 
+
 import java.util.List;
 
 import org.komea.product.backend.plugin.api.EventTypeDef;
@@ -11,8 +12,11 @@ import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
 
+
+
 public interface IProviderDTOConvertorService
 {
+    
     
     /**
      * Load the event types from the annotation.
@@ -21,6 +25,7 @@ public interface IProviderDTOConvertorService
      * @return
      */
     List<EventType> loadEvents(ProviderPlugin _providerAnnotation);
+    
     
     /**
      * Load properties from provider annotation.
@@ -31,6 +36,7 @@ public interface IProviderDTOConvertorService
      */
     List<PropertyDTO> loadProperties(ProviderPlugin providerAnnotation);
     
+    
     /**
      * Loads the provider description.
      * 
@@ -40,13 +46,15 @@ public interface IProviderDTOConvertorService
      */
     Provider loadProviderDescription(ProviderPlugin providerAnnotation);
     
+    
     /**
      * Loads the description from the bean.
      * 
      * @param providerBean
      * @return
      */
-    ProviderDto loadProviderDTO(Object providerBean);
+    ProviderDto loadProviderDTO(final ProviderPlugin providerAnnotation);
+    
     
     /**
      * Factory : to build a new event type.

@@ -6,7 +6,6 @@ package org.komea.product.backend.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.komea.product.backend.exceptions.InvalidProviderDescriptionException;
 import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
@@ -14,7 +13,6 @@ import org.komea.product.database.dto.PropertyDTO;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;
 
 
@@ -97,14 +95,9 @@ public class ProviderDTOConvertorService implements IProviderDTOConvertorService
      * @see org.komea.product.plugins.service.IProviderAPIService#loadProviderDTO(java.lang.Object)
      */
     @Override
-    public ProviderDto loadProviderDTO(final Object providerBean) {
+    public ProviderDto loadProviderDTO(final ProviderPlugin providerAnnotation) {
     
     
-        if (!AnnotationUtils.isAnnotationDeclaredLocally(ProviderPlugin.class,
-                providerBean.getClass())) { throw new InvalidProviderDescriptionException(
-                "@Provider annotation should be declared locally."); }
-        final ProviderPlugin providerAnnotation =
-                AnnotationUtils.findAnnotation(providerBean.getClass(), ProviderPlugin.class);
         final ProviderDto providerdto = new ProviderDto();
         final Provider provider = loadProviderDescription(providerAnnotation);
         providerdto.setProvider(provider);

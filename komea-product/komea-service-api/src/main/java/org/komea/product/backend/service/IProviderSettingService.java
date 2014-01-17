@@ -56,20 +56,14 @@ public interface IProviderSettingService
     
     
     /**
-     * Builds a new criteria that select on name.
-     * 
-     * @param _key
-     * @return
-     */
-    public ProviderSettingCriteria newSelectOnNameCriteria(String _key);
-    
-    
-    /**
      * UPdates a setting
      * 
      * @param _providerSetting
      *            the provider setting.
      */
     public void update(ProviderSetting _providerSetting);
+    
+    
+    ProviderSettingCriteria newSelectOnNameCriteria(int _providerID, String _key);
     
 }
