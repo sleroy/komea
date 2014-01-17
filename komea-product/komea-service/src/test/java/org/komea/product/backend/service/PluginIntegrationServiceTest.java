@@ -26,7 +26,9 @@ import org.komea.product.database.model.Provider;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 import org.springframework.context.ApplicationContext;
 
 
@@ -50,6 +52,8 @@ public class PluginIntegrationServiceTest
     
     @Mock
     private ISettingService              settingService;
+    @Mock
+    private IProviderSettingService      providersettingService;
     
     
     
@@ -60,12 +64,8 @@ public class PluginIntegrationServiceTest
     public void testRegisterProvider() {
     
     
-        final PluginIntegrationService pluginService = new PluginIntegrationService();
-        pluginService.setContext(appContextMock);
-        pluginService.setProviderMapper(providerMapperMock);
-        pluginService.setProviderAPIService(providerAPIService);
-        pluginService.setEventTypeService(eventTypeService);
-        pluginService.setSettingsService(settingService);
+        final PluginIntegrationService pluginService = initPluginIntegrationService();
+        
         final Provider provider = new Provider();
         provider.setIcon("icon.gif");
         provider.setName("name");
@@ -88,6 +88,19 @@ public class PluginIntegrationServiceTest
         final ArrayList<PropertyDTO> properties = new ArrayList<PropertyDTO>();
         properties.add(new PropertyDTO("testProp", "value", "java.lang.String", "test prop"));
         providerDTO.setProperties(properties);
+        // / Update ID from provider pojo
+        Mockito.when(providerMapperMock.insert(provider)).then(new Answer()
+        {
+            
+            
+            @Override
+            public Object answer(final InvocationOnMock _invocation) throws Throwable {
+            
+            
+                provider.setId(1);
+                return null;
+            }
+        });
         
         // Validation of the DTO
         final Set<ConstraintViolation<ProviderDto>> constraintViolationException =
@@ -99,8 +112,9 @@ public class PluginIntegrationServiceTest
         }
         pluginService.registerProvider(providerDTO);
         
-        Mockito.verify(settingService, Mockito.times(1)).create(Matchers.anyString(),
-                Matchers.anyString(), Matchers.anyString(), Matchers.anyString());
+        Mockito.verify(providersettingService, Mockito.times(1)).create(Matchers.anyInt(),
+                Matchers.anyString(), Matchers.anyString(), Matchers.anyString(),
+                Matchers.anyString());
         Mockito.verify(eventTypeService, Mockito.times(1)).registerEvent(
                 Matchers.any(Provider.class), Matchers.any(EventType.class));
         
@@ -114,11 +128,7 @@ public class PluginIntegrationServiceTest
     public void testRegisterWrongProvider() {
     
     
-        final PluginIntegrationService pluginService = new PluginIntegrationService();
-        
-        pluginService.setContext(appContextMock);
-        pluginService.setProviderMapper(providerMapperMock);
-        pluginService.setProviderAPIService(providerAPIService);
+        final PluginIntegrationService pluginService = initPluginIntegrationService();
         final Provider provider = new Provider();
         
         provider.setName(null);
@@ -141,6 +151,20 @@ public class PluginIntegrationServiceTest
         }
         Assert.assertFalse("Provider should not be valid", validate2.isEmpty());
         
+    }
+    
+    
+    private PluginIntegrationService initPluginIntegrationService() {
+    
+    
+        final PluginIntegrationService pluginService = new PluginIntegrationService();
+        pluginService.setContext(appContextMock);
+        pluginService.setProviderMapper(providerMapperMock);
+        pluginService.setProviderAPIService(providerAPIService);
+        pluginService.setEventTypeService(eventTypeService);
+        pluginService.setSettingsService(settingService);
+        pluginService.setProviderSettingsService(providersettingService);
+        return pluginService;
     }
     
 }

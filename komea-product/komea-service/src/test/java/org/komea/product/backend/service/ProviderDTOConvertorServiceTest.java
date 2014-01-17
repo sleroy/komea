@@ -163,11 +163,11 @@ public class ProviderDTOConvertorServiceTest
         Assert.assertEquals(providerDTO.getProvider().getProviderType(), ProviderType.OTHER);
         Assert.assertEquals(2, providerDTO.getProperties().size());
         final PropertyDTO propertyDTO1 = providerDTO.getProperties().get(0);
-        Assert.assertEquals("cronFrequency", propertyDTO1.getKey());
+        Assert.assertEquals("sample_cronFrequency", propertyDTO1.getKey());
         Assert.assertEquals("@hourly", propertyDTO1.getValue());
         Assert.assertEquals("java.lang.String", propertyDTO1.getType());
         final PropertyDTO propertyDTO2 = providerDTO.getProperties().get(1);
-        Assert.assertEquals("disabled", propertyDTO2.getKey());
+        Assert.assertEquals("sample_disabled", propertyDTO2.getKey());
         Assert.assertEquals("false", propertyDTO2.getValue());
         Assert.assertEquals("java.lang.Boolean", propertyDTO2.getType());
         Assert.assertEquals(3, providerDTO.getEventTypes().size());
