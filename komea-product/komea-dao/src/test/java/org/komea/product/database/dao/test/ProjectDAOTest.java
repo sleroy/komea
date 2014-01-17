@@ -2,6 +2,7 @@
 package org.komea.product.database.dao.test;
 
 
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,14 +25,18 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
+
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/spring/*-context-test.xml")
 @TransactionConfiguration(defaultRollback = true)
 @TestExecutionListeners({
-        DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class })
 public class ProjectDAOTest
 {
+    
     
     @Autowired
     private ProjectMapper  projectDAO;
@@ -39,11 +44,14 @@ public class ProjectDAOTest
     @Autowired
     private CustomerMapper customerDAO;
     
+    
+    
     @Test
     @Transactional
     @DatabaseSetup("database.xml")
     @ExpectedDatabase(value = "addCustomer.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void testInsertProject() {
+    
     
         final ProjectCriteria request = new ProjectCriteria();
         request.createCriteria().andNameEqualTo("projet1");

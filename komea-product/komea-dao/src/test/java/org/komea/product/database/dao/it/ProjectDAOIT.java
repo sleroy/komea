@@ -2,6 +2,7 @@
 package org.komea.product.database.dao.it;
 
 
+
 import java.util.List;
 
 import org.junit.Assert;
@@ -19,11 +20,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/spring/*-context-test.xml")
 @TransactionConfiguration(defaultRollback = true)
 public class ProjectDAOIT
 {
+    
     
     @Autowired
     private ProjectMapper  projectDAO;
@@ -31,9 +35,12 @@ public class ProjectDAOIT
     @Autowired
     private CustomerMapper customerDAO;
     
+    
+    
     @Test
     @Transactional
     public void test() {
+    
     
         final ProjectCriteria request = new ProjectCriteria();
         request.createCriteria().andNameEqualTo("projet1");
