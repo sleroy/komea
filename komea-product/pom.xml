@@ -68,6 +68,7 @@
 		<!-- core -->
 		<module>komea-utils</module>
 		<module>komea-dto</module>
+		<module>komea-testspring</module>
 		<module>komea-dao</module>
 		<module>komea-service-api</module>
 		<module>komea-service</module>
@@ -84,7 +85,6 @@
 
 
 		<!-- test -->
-		<module>komea-testspring</module>
 		<module>komea-integration-tests</module>
 	</modules>
 </project>
