@@ -1,11 +1,7 @@
-
 package org.komea.product.web.admin.views;
 
-
-
 import java.io.IOException;
-
-import org.komea.product.database.dao.SettingMapper;
+import org.komea.product.database.dao.SettingDao;
 import org.komea.product.database.model.SettingCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,42 +11,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-
-
 /**
- * This controller offers the possibility to access to some kind of ressources stored in the classpath (pictures).
- * 
+ * This controller offers the possibility to access to some kind of ressources
+ * stored in the classpath (pictures).
+ *
  * @author sleroy
  */
 @Controller
-public class SettingsView
-{
-    
-    
+public class SettingsView {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(SettingsView.class);
-    
-    
+
     @Autowired
-    private SettingMapper       settings;
-    
-    
-    
+    private SettingDao settings;
+
     /**
      * Returns the ressource given a name / relative path.
-     * 
-     * @param _response
-     *            the http response
-     * @param name
-     *            the relative path / name of the resource
+     *
+     * @param _response the http response
+     * @param name the relative path / name of the resource
      * @return the resource data
      * @throws IOException
      */
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
     public ModelAndView requestPicture() throws IOException {
-    
-    
+
         final ModelAndView modelAndView = new ModelAndView("settings");
-        modelAndView.addObject("settings", settings.selectByExample(new SettingCriteria()));
+        modelAndView.addObject("settings", settings.selectByCriteria(new SettingCriteria()));
         return modelAndView;
     }
 }

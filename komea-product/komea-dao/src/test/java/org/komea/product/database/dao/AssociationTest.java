@@ -6,16 +6,16 @@ import org.mockito.Mockito;
 
 public class AssociationTest {
 
-	public AssociationTest() {
-		super();
-	}
+    public AssociationTest() {
+        super();
+    }
 
-	@Test
-	public void testAssociation() {
-		final MeasureMapper measureMapper = Mockito.mock(MeasureMapper.class);
+    @Test
+    public void testAssociation() {
+        final MeasureDao measureDao = Mockito.mock(MeasureDao.class);
 
-		final Measure measure = new Measure();
+        final Measure measure = new Measure();
 
-	}
+    }
 
 }

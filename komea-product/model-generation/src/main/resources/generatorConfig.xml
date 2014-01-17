@@ -5,11 +5,10 @@
     <context id="komea" targetRuntime="MyBatis3">
 
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
-        <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin" >
-            <property name="searchString" value="Example$" />
-            <property name="replaceString" value="Criteria" />
+        <plugin type="org.mybatis.generator.plugins.JSR303Plugin" >
+            <property name="replaceExample" value="Criteria" />
+            <property name="replaceMapper" value="Dao" />
         </plugin>
-        <plugin type="org.mybatis.generator.plugins.JSR303Plugin" />
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/komea" userId="root" password="root"/>
 
