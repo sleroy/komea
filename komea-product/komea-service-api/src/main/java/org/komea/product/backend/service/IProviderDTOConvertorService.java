@@ -11,7 +11,7 @@ import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
 
-public interface IProviderAPIService
+public interface IProviderDTOConvertorService
 {
     
     /**

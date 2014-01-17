@@ -1,0 +1,75 @@
+
+package org.komea.product.backend.service;
+
+
+
+import java.util.List;
+
+import org.komea.product.database.model.ProviderSetting;
+import org.komea.product.database.model.ProviderSettingCriteria;
+
+
+
+public interface IProviderSettingService
+{
+    
+    
+    /**
+     * Create a setting, if the setting is existing, the creation is simply ignored.
+     * 
+     * @param _key
+     *            the key
+     * @param _value
+     *            the value
+     * @param _typeName
+     *            the type name.
+     * @param _description
+     *            the description
+     * @return the Settings instance
+     */
+    public ProviderSetting create(
+            int _providerID,
+            String _key,
+            String _value,
+            String _typeName,
+            String _description);
+    
+    
+    /**
+     * Returns the list of settings for a provider
+     * 
+     * @param _providerID
+     *            the provider
+     * @return the list of settings.
+     */
+    public List<ProviderSetting> getSettings();
+    
+    
+    /**
+     * Returns the list of settings for a provider
+     * 
+     * @param _providerID
+     *            the provider
+     * @return the list of settings.
+     */
+    public List<ProviderSetting> getSettings(int _providerID);
+    
+    
+    /**
+     * Builds a new criteria that select on name.
+     * 
+     * @param _key
+     * @return
+     */
+    public ProviderSettingCriteria newSelectOnNameCriteria(String _key);
+    
+    
+    /**
+     * UPdates a setting
+     * 
+     * @param _providerSetting
+     *            the provider setting.
+     */
+    public void update(ProviderSetting _providerSetting);
+    
+}

@@ -2,14 +2,20 @@
 package org.komea.product.backend.service;
 
 
+
+import java.util.List;
+
 import org.komea.product.database.model.Setting;
 import org.komea.product.database.model.SettingCriteria;
+
+
 
 public interface ISettingService
 {
     
+    
     /**
-     * Get or create a setting
+     * Create a setting, if the setting is existing, the creation is simply ignored.
      * 
      * @param _key
      *            the key
@@ -21,7 +27,18 @@ public interface ISettingService
      *            the description
      * @return the Settings instance
      */
-    public Setting getOrCreate(String _key, String _value, String _typeName, String _description);
+    public Setting create(String _key, String _value, String _typeName, String _description);
+    
+    
+    /**
+     * Returns the list of settings for a provider
+     * 
+     * @param _providerID
+     *            the provider
+     * @return the list of settings.
+     */
+    public List<Setting> getSettings();
+    
     
     /**
      * Builds a new criteria that select on name.
@@ -31,19 +48,13 @@ public interface ISettingService
      */
     public SettingCriteria newSelectOnNameCriteria(String _key);
     
+    
     /**
-     * Creates an inserts a new setting in the database.
+     * Update a setting
      * 
-     * @param _key
-     *            the key
-     * @param _value
-     *            the value
-     * @param _typeName
-     *            the type name
-     * @param _description
-     *            the description
-     * @return the setting.
+     * @param _setting
+     *            the setting to update
      */
-    public Setting newSetting(String _key, String _value, String _typeName, String _description);
+    public void update(Setting _setting);
     
 }

@@ -26,6 +26,19 @@ import org.springframework.stereotype.Component;
 public @interface Property {
     
     
+    /**
+     * Provides a description of the property
+     * 
+     * @return the description.
+     */
+    String description();
+    
+    
+    /**
+     * Provides the property key.
+     * 
+     * @return
+     */
     String key();
     
     

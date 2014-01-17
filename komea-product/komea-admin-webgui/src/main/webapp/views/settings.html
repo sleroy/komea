@@ -12,29 +12,40 @@
 <body>
 	<header class="tocea-header" th:include="layout :: tocea-header"> </header>
 	<div class="container">
-		<form class="well span8">
-		<div class="container">
-	<div class="row">
-        <div class="span12">
-    		<table class="table table-condensed table-hover">
-    			<thead>
-    				<tr>
-    					<th>Property Key</th>
-    					<th>Property Value</th>
-    				</tr>
-    			</thead>
-    			<tbody>
-    				<tr th:each="setting : ${settings}">
-    					<td th:text="${setting.settingKey}">key</td>
-    					<td th:text="${setting.value}">value</td>
-    					
-    				</tr>
-    			</tbody>
-    		</table>
-    	</div>
-	</div>
-</div>
-		</form>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<span class="glyphicon glyphicon-wrench"></span> Manage settings of Komea
+			</div>
+			<div class="panel-body">
+				<form class="form-group">
+					<div class="container">
+						<div class="row">
+							<div class="span12">
+								<table class="table table-condensed table-hover table-striped table-bordered table-condensed">
+									<thead>
+										<tr>
+											<th>Property Key</th>
+											<th>Property Value</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Log file path</td>
+											<th><input class="form-control input-sm" type="text" id="test" value="/var/log.log"></input></th>
+										</tr>
+										<tr th:each="setting : ${settings}">
+											<td th:text="${setting.description}">key</td>
+											<td th:text="${setting.value}">value</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<input type="submit" value="Update properties">
+				</form>
+			</div>
+		</div>
 	</div>
 	<footer class="tocea-footer" th:include="layout :: tocea-footer">
 		<p>&copy; Tocea 2013-2014</p>

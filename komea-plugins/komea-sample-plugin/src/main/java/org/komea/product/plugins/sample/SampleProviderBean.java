@@ -21,9 +21,16 @@ import org.springframework.beans.factory.annotation.Autowired;
         name = "Sample provider plugin",
         icon = "/truc.gif",
         properties = {
-                @Property(key = "cronFrequency", value = "@hourly", type = String.class),
-                @Property(key = "disabled", value = "false", type = Boolean.class) },
-        eventTypes = {
+                @Property(
+                        key = "sample_cronFrequency",
+                        value = "@hourly",
+                        type = String.class,
+                        description = "Sets the frequency"),
+                @Property(
+                        key = "sample_disabled",
+                        value = "false",
+                        type = Boolean.class,
+                        description = "DIsabled") }, eventTypes = {
                 @EventTypeDef(
                         category = "BUILD",
                         description = "Event to notify a build is started",
