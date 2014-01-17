@@ -1,8 +1,9 @@
+
 package org.komea.product.web.rest.api;
+
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.test.spring.AbstractSpringWebIntegrationTestCase;
@@ -15,27 +16,26 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
-public class DepartmentControllerTest extends AbstractSpringWebIntegrationTestCase {
-
+public class DepartmentControllerTest extends AbstractSpringWebIntegrationTestCase
+{
+    
     @Autowired
     private WebApplicationContext context;
-
-    private MockMvc mockMvc;
-
+    
+    private MockMvc               mockMvc;
+    
     @Before
     public void setUp() {
-
+    
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
-
+    
     //
     @Test
     public void testAllTeams() throws Exception {
-
-        final ResultActions httpRequest
-                = mockMvc.perform(MockMvcRequestBuilders.get("/departments/all"));
+    
+        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.get("/departments/all"));
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
         httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(0)));
     }

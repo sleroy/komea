@@ -1,12 +1,11 @@
+
 package org.komea.product.web.rest.api;
 
-import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.ExpectedDatabase;
-import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.database.dto.ProviderDto;
@@ -30,46 +29,51 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@Ignore
+import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations = {
-    "classpath:/spring/*-context-test.xml", "classpath:/spring/*-servlet-test.xml",})
+        "classpath:/spring/*-context-test.xml", "classpath:/spring/*-servlet-test.xml", })
 @TestExecutionListeners({
-    DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
-    TransactionDbUnitTestExecutionListener.class})
-public class ProvidersControllerTest {
-
+        DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
+        TransactionDbUnitTestExecutionListener.class })
+public class ProvidersControllerTest
+{
+    
     @Autowired
     private WebApplicationContext context;
-
-    private MockMvc mockMvc;
-
+    
+    private MockMvc               mockMvc;
+    
     @Before
     public void setUp() {
-
+    
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
-
+    
     @Test
     @ExpectedDatabase(value = "addProvider.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void testRegisterProvider() throws Exception {
-
+    
         final Provider provider = new Provider(null, ProviderType.JENKINS, "MyProvider", "file://", "http://");
-
-        final EventType eventType = new EventType(null, 1, "EventUN", "MyEvent", Severity.CRITICAL, true, "a description", "a catogeory", EntityType.PERSON);
-
+        
+        final EventType eventType = new EventType(null, 1, "EventUN", "MyEvent", Severity.CRITICAL, true, "a description", "a catogeory",
+                EntityType.PERSON);
+        
         final List<EventType> eventTypes = new ArrayList<EventType>();
         eventTypes.add(eventType);
         final ProviderDto dto = new ProviderDto(provider, eventTypes);
-
+        
         final String jsonString = IntegrationTestUtil.convertObjectToJSON(dto);
         System.out.println(jsonString);
-
+        
         // String jsonString = "";
         final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/providers/register")
                 .contentType(MediaType.APPLICATION_JSON).content(jsonString));
-
+        
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
     }
     //

@@ -1,6 +1,5 @@
 
 
-
 -- -----------------------------------------------------
 -- Table `komea`.`kom_customer`
 -- -----------------------------------------------------
@@ -108,7 +107,8 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pvd` (
   `name` VARCHAR(255) NOT NULL,
   `icon` VARCHAR(255) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`));
+  PRIMARY KEY (`id`))
+;
 
 
 -- -----------------------------------------------------
@@ -392,4 +392,5 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_pegr` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ;
+
 
