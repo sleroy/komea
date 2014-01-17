@@ -3,8 +3,10 @@ package org.komea.product.rest.client;
 import java.net.ConnectException;
 import java.net.URISyntaxException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class RestClientFactoryTest {
 
     @Before
