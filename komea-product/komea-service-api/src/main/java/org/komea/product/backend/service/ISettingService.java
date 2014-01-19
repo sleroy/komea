@@ -5,6 +5,7 @@ package org.komea.product.backend.service;
 
 import java.util.List;
 
+import org.komea.product.database.dao.SettingMapper;
 import org.komea.product.database.model.Setting;
 import org.komea.product.database.model.SettingCriteria;
 
@@ -56,5 +57,20 @@ public interface ISettingService
      *            the setting to update
      */
     public void update(Setting _setting);
+    
+    
+    /**
+     * Try to updates a setting with a value, controls the results.
+     * 
+     * @param _setting
+     *            the setting
+     * @param _value
+     *            the value
+     * @return true if the value is updated.
+     */
+    public boolean updateValue(Setting _setting, String _value);
+    
+    
+    SettingMapper getSettingDAO();
     
 }

@@ -63,6 +63,14 @@ public class SettingService implements ISettingService
     
     
     @Override
+    public SettingMapper getSettingDAO() {
+    
+    
+        return settingDAO;
+    }
+    
+    
+    @Override
     public List<Setting> getSettings() {
     
     
@@ -85,12 +93,40 @@ public class SettingService implements ISettingService
     }
     
     
+    public void setSettingDAO(final SettingMapper _settingDAO) {
+    
+    
+        settingDAO = _settingDAO;
+    }
+    
+    
     @Override
     public void update(final Setting _setting) {
     
     
+        LOGGER.debug("Updated setting {}", _setting);
         settingDAO.updateByPrimaryKey(_setting);
         
+    }
+    
+    
+    @Override
+    public boolean updateValue(final Setting _setting, final String _value) {
+    
+    
+        try {
+            final Class<?> loadClass =
+                    Thread.currentThread().getContextClassLoader().loadClass(_setting.getType());
+            loadClass.getConstructor(String.class).newInstance(_value);
+        } catch (final Exception e) {
+            LOGGER.error("Validation has failed for the setting "
+                    + _setting + " and value " + _value, e);
+            return false;
+        }
+        _setting.setValue(_value);
+        
+        update(_setting);
+        return true;
     }
     
     
