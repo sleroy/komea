@@ -71,7 +71,7 @@ public interface IProviderSettingService
      */
     public <T> T getSettingValue(String _key);
     
-<<<<<<< HEAD
+
     /**
      * Returns the setting
      * @param <T> the type of provider
@@ -79,9 +79,9 @@ public interface IProviderSettingService
      * @return  the value if found
      */
     public ProviderSetting getSetting(String _key);
-=======
+
     
-    ProviderSettingCriteria newSelectOnNameCriteria(int _providerID, String _key);
+    public ProviderSettingCriteria newSelectOnNameCriteria(int _providerID, String _key);
     
->>>>>>> b2d0aa1bcdbe535efccaa76bd4b44083ae4b5ffa
+
 }

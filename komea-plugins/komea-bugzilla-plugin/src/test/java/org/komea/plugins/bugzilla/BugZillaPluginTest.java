@@ -5,15 +5,11 @@
  */
 package org.komea.plugins.bugzilla;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.komea.backend.plugins.bugzilla.BugZillaCheckerBean;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaConfiguration;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.stubbing.Answer;
 
 /**
  *
@@ -22,8 +18,8 @@ import org.mockito.stubbing.Answer;
 //@RunWith(SpringJUnit4ClassRunner.class)
 public class BugZillaPluginTest extends AbstractSpringIntegrationTestCase {
 
-    @Mock
-    private IBugZillaConfiguration conf;
+//    @Mock
+//    private IBugZillaConfiguration conf;
 
  
 
