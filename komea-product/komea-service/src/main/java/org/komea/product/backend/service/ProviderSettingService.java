@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.komea.product.backend.exceptions.DAOException;
-import org.komea.product.database.dao.ProviderSettingMapper;
+import org.komea.product.database.dao.ProviderSettingDao;
 import org.komea.product.database.model.ProviderSetting;
 import org.komea.product.database.model.ProviderSettingCriteria;
 import org.slf4j.Logger;
@@ -27,10 +27,10 @@ public class ProviderSettingService implements IProviderSettingService
     
     
     @Autowired
-    private ProviderSettingMapper settingDAO;
+    private ProviderSettingDao  settingDAO;
     
     
-    private static final Logger   LOGGER = LoggerFactory.getLogger(ProviderSettingService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProviderSettingService.class);
     
     
     
@@ -45,13 +45,13 @@ public class ProviderSettingService implements IProviderSettingService
     
         LOGGER.info("Creating provider setting {} with value {}", _key, _value);
         
-        final List<ProviderSetting> selectByExample =
-                settingDAO.selectByExample(newSelectOnNameCriteria(_providerID, _key));
-        if (selectByExample.isEmpty()) { return newSetting(_key, _value, _typeName, _description,
+        final List<ProviderSetting> selectByCriteria =
+                settingDAO.selectByCriteria(newSelectOnNameCriteria(_providerID, _key));
+        if (selectByCriteria.isEmpty()) { return newSetting(_key, _value, _typeName, _description,
                 _providerID); }
-        if (selectByExample.size() > 1) { throw new DAOException(
+        if (selectByCriteria.size() > 1) { throw new DAOException(
                 "The setting table should not contain two setting with the same key."); }
-        return selectByExample.get(0);
+        return selectByCriteria.get(0);
     }
     
     
@@ -59,7 +59,7 @@ public class ProviderSettingService implements IProviderSettingService
     public List<ProviderSetting> getSettings() {
     
     
-        return settingDAO.selectByExample(new ProviderSettingCriteria());
+        return settingDAO.selectByCriteria(new ProviderSettingCriteria());
     }
     
     
@@ -69,7 +69,7 @@ public class ProviderSettingService implements IProviderSettingService
     
         final ProviderSettingCriteria providerSettingCriteria = new ProviderSettingCriteria();
         providerSettingCriteria.createCriteria().andIdProviderEqualTo(_providerID);
-        return settingDAO.selectByExample(providerSettingCriteria);
+        return settingDAO.selectByCriteria(providerSettingCriteria);
     }
     
     

@@ -5,7 +5,7 @@ package org.komea.product.backend.service;
 
 import java.util.List;
 
-import org.komea.product.database.dao.SettingMapper;
+import org.komea.product.database.dao.SettingDao;
 import org.komea.product.database.model.Setting;
 import org.komea.product.database.model.SettingCriteria;
 
@@ -71,6 +71,6 @@ public interface ISettingService
     public boolean updateValue(Setting _setting, String _value);
     
     
-    SettingMapper getSettingDAO();
+    SettingDao getSettingDAO();
     
 }

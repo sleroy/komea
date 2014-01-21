@@ -5,7 +5,7 @@ package org.komea.product.web.rest.api;
 
 import java.util.List;
 
-import org.komea.product.database.dao.ProjectMapper;
+import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.model.Project;
 import org.komea.product.database.model.ProjectCriteria;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class ProjectsController
     private static final Logger LOGGER = LoggerFactory.getLogger(ProjectsController.class);
     
     @Autowired
-    private ProjectMapper       projectDAO;
+    private ProjectDao          projectDAO;
     
     
     
@@ -42,7 +42,7 @@ public class ProjectsController
     
     
         LOGGER.debug("call rest method /projects/all/");
-        return projectDAO.selectByExample(new ProjectCriteria());
+        return projectDAO.selectByCriteria(new ProjectCriteria());
     }
     
 }

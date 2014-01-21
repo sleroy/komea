@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.komea.product.backend.exceptions.DAOException;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
-import org.komea.product.database.dao.SettingMapper;
+import org.komea.product.database.dao.SettingDao;
 import org.komea.product.database.model.Setting;
 import org.komea.product.database.model.SettingCriteria;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ public class SettingService implements ISettingService
     
     
     @Autowired
-    private SettingMapper       settingDAO;
+    private SettingDao          settingDAO;
     
     private static final Logger LOGGER = LoggerFactory.getLogger(ProviderSettingService.class);
     
@@ -53,17 +53,17 @@ public class SettingService implements ISettingService
     
         LOGGER.info("Creating Komea setting {} with value {}", _key, _value);
         
-        final List<Setting> selectByExample =
-                settingDAO.selectByExample(newSelectOnNameCriteria(_key));
-        if (selectByExample.isEmpty()) { return newSetting(_key, _value, _typeName, _description); }
-        if (selectByExample.size() > 1) { throw new DAOException(
+        final List<Setting> selectByCriteria =
+                settingDAO.selectByCriteria(newSelectOnNameCriteria(_key));
+        if (selectByCriteria.isEmpty()) { return newSetting(_key, _value, _typeName, _description); }
+        if (selectByCriteria.size() > 1) { throw new DAOException(
                 "The setting table should not contain two setting with the same key."); }
-        return selectByExample.get(0);
+        return selectByCriteria.get(0);
     }
     
     
     @Override
-    public SettingMapper getSettingDAO() {
+    public SettingDao getSettingDAO() {
     
     
         return settingDAO;
@@ -74,7 +74,7 @@ public class SettingService implements ISettingService
     public List<Setting> getSettings() {
     
     
-        return settingDAO.selectByExample(new SettingCriteria());
+        return settingDAO.selectByCriteria(new SettingCriteria());
     }
     
     
@@ -93,7 +93,7 @@ public class SettingService implements ISettingService
     }
     
     
-    public void setSettingDAO(final SettingMapper _settingDAO) {
+    public void setSettingDAO(final SettingDao _settingDAO) {
     
     
         settingDAO = _settingDAO;

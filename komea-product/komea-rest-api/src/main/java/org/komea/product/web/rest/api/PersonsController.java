@@ -5,7 +5,7 @@ package org.komea.product.web.rest.api;
 
 import java.util.List;
 
-import org.komea.product.database.dao.PersonMapper;
+import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonCriteria;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class PersonsController
     private static final Logger LOGGER = LoggerFactory.getLogger(PersonsController.class);
     
     @Autowired
-    private PersonMapper        personDAO;
+    private PersonDao           personDAO;
     
     
     
@@ -42,7 +42,7 @@ public class PersonsController
     
     
         LOGGER.debug("call rest method /persons/all/");
-        return personDAO.selectByExample(new PersonCriteria());
+        return personDAO.selectByCriteria(new PersonCriteria());
     }
     
 }

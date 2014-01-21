@@ -15,7 +15,7 @@ import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.utils.SpringUtils;
-import org.komea.product.database.dao.ProviderMapper;
+import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.dto.PropertyDTO;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.model.EventType;
@@ -48,7 +48,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     private static final Logger          LOGGER = LoggerFactory.getLogger("plugin-loader");
     
     @Autowired
-    private ProviderMapper               providerMapper;
+    private ProviderDao                  providerMapper;
     
     @Autowired
     private IProviderDTOConvertorService providerAPIService;
@@ -82,7 +82,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     public boolean existSelectedProvider(final ProviderCriteria criteria) {
     
     
-        final int existingProvider = providerMapper.countByExample(criteria);
+        final int existingProvider = providerMapper.countByCriteria(criteria);
         return existingProvider > 0;
     }
     
@@ -108,7 +108,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
-    public ProviderMapper getProviderMapper() {
+    public ProviderDao getProviderMapper() {
     
     
         return providerMapper;
@@ -232,7 +232,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
-    public void setProviderMapper(final ProviderMapper _providerMapper) {
+    public void setProviderMapper(final ProviderDao _providerMapper) {
     
     
         providerMapper = _providerMapper;
