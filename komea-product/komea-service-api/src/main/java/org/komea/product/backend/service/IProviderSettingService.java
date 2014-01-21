@@ -71,5 +71,20 @@ public interface IProviderSettingService
      *            the provider setting.
      */
     public void update(ProviderSetting _providerSetting);
+
+    /**
+     * Returns the setting
+     * @param <T> the type of provider
+     * @param _key the setting key
+     * @return  the value if found
+     */
+    public <T> T getSettingValue(String _key);
     
+    /**
+     * Returns the setting
+     * @param <T> the type of provider
+     * @param _key the setting key
+     * @return  the value if found
+     */
+    public ProviderSetting getSetting(String _key);
 }

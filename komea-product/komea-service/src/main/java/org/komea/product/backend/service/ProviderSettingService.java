@@ -1,6 +1,7 @@
 package org.komea.product.backend.service;
 
 import java.util.List;
+import java.util.logging.Level;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 import org.komea.product.backend.exceptions.DAOException;
@@ -93,5 +94,27 @@ public class ProviderSettingService implements IProviderSettingService {
                 = new ProviderSetting(null, _key, _value, _providerID, _typeName, _description);
         settingDAO.insert(setting);
         return setting;
+    }
+
+    @Override
+    public <T> T getSettingValue(String _key) {
+        ProviderSetting setting = getSetting(_key);
+        if (setting != null) {
+            try {
+                return (T) Thread.currentThread().getContextClassLoader().loadClass(setting.getType()).getConstructor(String.class).newInstance(setting.getValue());
+            } catch (Exception ex) {
+                java.util.logging.Logger.getLogger(ProviderSettingService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public ProviderSetting getSetting(String _key) {
+        final ProviderSettingCriteria providerSettingCriteria = new ProviderSettingCriteria();
+        providerSettingCriteria.createCriteria().andProviderSettingKeyEqualTo(_key);
+        final List<ProviderSetting> selectByCriteria = settingDAO.selectByCriteria(providerSettingCriteria);
+        if (selectByCriteria.isEmpty()) return null;
+    return  selectByCriteria.get(0);
     }
 }
