@@ -3,7 +3,6 @@ package org.komea.providers.sonar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.komea.product.database.dto.EventDto;
 import org.komea.product.database.model.Provider;
 import org.komea.product.rest.client.RestClientFactory;
@@ -81,7 +80,7 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
         properties.put("date", String.valueOf(start));
         properties.put("project", projectKey);
         return new EventDto(KomeaPlugin.EVENT_ANALYSIS_STARTED, provider,
-                message, properties, projectKey);
+                message, properties, projectKey, new Date());
     }
 
     private EventDto createDurationEvent(final String projectKey, final long start, final long end) {
@@ -93,7 +92,7 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
         properties.put("duration", String.valueOf(duration));
         properties.put("project", projectKey);
         return new EventDto(KomeaPlugin.EVENT_ANALYSIS_DURATION, provider,
-                message, properties, projectKey);
+                message, properties, projectKey, new Date());
     }
 
     private EventDto createEndEvent(final String projectKey, final long end) {
@@ -102,7 +101,7 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
         properties.put("date", String.valueOf(end));
         properties.put("project", projectKey);
         return new EventDto(KomeaPlugin.EVENT_ANALYSIS_ENDED, provider,
-                message, properties, projectKey);
+                message, properties, projectKey, new Date());
     }
 
 }

@@ -1,41 +1,41 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="tocea-head">
-<meta charset="utf-8"></meta>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
-<meta content="" name="description"></meta>
-<meta content="" name="author"></meta>
-<title>Komea Administration</title>
-<link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
-<link rel="stylesheet" href="../static/css/style.css" type="text/css"></link>
-</head>
+<head th:include="layout :: tocea-head"></head>
 <body>
-	<header class="tocea-header" th:include="layout :: tocea-header"> </header>
+	<header class="tocea-header" th:include="layout :: tocea-header"></header>
 	<div class="container">
+		<div class="alert alert-success" th:if="${saved != null and errors.isEmpty()}">
+			<label>Preferences has been saved!</label>
+		</div>
+		<div class="alert alert-success" th:if="${saved != null and !errors.isEmpty()}">
+			<label>Preferences has been saved but some properties could not be updated</label>
+			<ul>
+				<li th:each="err : ${errors}" th:text="${err}"></li>
+			</ul>
+		</div>
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<span class="glyphicon glyphicon-wrench"></span> Manage settings of Komea
 			</div>
 			<div class="panel-body">
-				<form class="form-group">
+				<form class="form-group" th:object="${settings}" th:action="@{/p/settings/save}" action="#" method="POST">
 					<div class="container">
 						<div class="row">
 							<div class="span12">
 								<table class="table table-condensed table-hover table-striped table-bordered table-condensed">
 									<thead>
 										<tr>
-											<th>Property Key</th>
+											<th>Property Description</th>
 											<th>Property Value</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td>Log file path</td>
-											<th><input class="form-control input-sm" type="text" id="test" value="/var/log.log"></input></th>
-										</tr>
-										<tr th:each="setting : ${settings}">
-											<td th:text="${setting.description}">key</td>
-											<td th:text="${setting.value}">value</td>
+										<tr th:each="setting : ${settingslist}">
+											<td><p th:text="${setting.description}">Log file path</p>
+												<p>
+													<em th:text="${setting.settingKey}">key</em>
+												</p></td>
+											<th><input class="form-control input-sm" type="text" th:name="'properties[' + ${setting.id} +']'" th:value="${setting.value}"></input></th>
 										</tr>
 									</tbody>
 								</table>

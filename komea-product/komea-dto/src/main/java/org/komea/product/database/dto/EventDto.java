@@ -1,6 +1,7 @@
 package org.komea.product.database.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Map;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
@@ -14,16 +15,26 @@ public class EventDto implements Serializable {
     private String message;
     private Map<String, String> properties;
     private String entityName;
+    private Date date;
 
-    public EventDto(EventType eventType, Provider provider, String message, Map<String, String> properties, String entityName) {
+    public EventDto(EventType eventType, Provider provider, String message, Map<String, String> properties, String entityName, Date date) {
         this.eventType = eventType;
         this.provider = provider;
         this.message = message;
         this.properties = properties;
         this.entityName = entityName;
+        this.date = date;
     }
 
     public EventDto() {
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public EventType getEventType() {

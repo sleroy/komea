@@ -3,12 +3,14 @@ package org.komea.product.web.rest.api;
 
 
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.model.Person;
+import org.komea.product.database.model.PersonCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,6 +26,9 @@ public class PersonsController
     
     private static final Logger LOGGER = LoggerFactory.getLogger(PersonsController.class);
     
+    @Autowired
+    private PersonDao           personDAO;
+    
     
     
     /**
@@ -37,8 +42,7 @@ public class PersonsController
     
     
         LOGGER.debug("call rest method /persons/all/");
-        // TODO
-        return new ArrayList<Person>();
+        return personDAO.selectByCriteria(new PersonCriteria());
     }
     
 }

@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.komea.product.database.dto.EventDto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
@@ -93,7 +92,7 @@ public class KomeaDecorator implements Decorator {
         properties.put("value", value.toString());
         properties.put("project", komeaProjectKey);
         properties.put("date", String.valueOf(new Date().getTime()));
-        return new EventDto(eventType, provider, message, properties, komeaProjectKey);
+        return new EventDto(eventType, provider, message, properties, komeaProjectKey, new Date());
     }
 
     private Double getValue(final Metric metric, final DecoratorContext context) {

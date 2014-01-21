@@ -7,7 +7,6 @@ import java.io.Serializable;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.komea.product.backend.exceptions.InvalidProviderDescriptionException;
 import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.IResourceProxy;
 import org.komea.product.backend.plugin.api.IUpdateAction;
@@ -20,6 +19,7 @@ import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.AnnotationUtils;
 
 
 
@@ -157,7 +157,8 @@ public class ProviderDTOConvertorServiceTest
     
         final IProviderDTOConvertorService providerAPIService = new ProviderDTOConvertorService();
         final ProviderDto providerDTO =
-                providerAPIService.loadProviderDTO(new SampleProviderBean());
+                providerAPIService.loadProviderDTO(AnnotationUtils.findAnnotation(
+                        SampleProviderBean.class, ProviderPlugin.class));
         Assert.assertEquals(providerDTO.getProvider().getName(), "Sample provider plugin");
         Assert.assertNotNull(providerDTO.getProvider().getIcon(), "/local_resources/pics/truc");
         Assert.assertEquals(providerDTO.getProvider().getProviderType(), ProviderType.OTHER);
@@ -175,15 +176,4 @@ public class ProviderDTOConvertorServiceTest
     }
     
     
-    /**
-     * Tests to check failure case.
-     */
-    @Test(expected = InvalidProviderDescriptionException.class)
-    public final void testLoadFail() {
-    
-    
-        final IProviderDTOConvertorService providerAPIService = new ProviderDTOConvertorService();
-        final ProviderDto providerDTO = providerAPIService.loadProviderDTO(new Object());
-        
-    }
 }
