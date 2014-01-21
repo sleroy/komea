@@ -3,6 +3,7 @@ package org.komea.product.backend.service;
 
 
 
+import java.io.File;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -11,6 +12,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.komea.product.backend.exceptions.DAOException;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
+import org.komea.product.backend.service.proxy.SettingProxy;
+import org.komea.product.backend.utils.CollectionUtils;
 import org.komea.product.database.dao.SettingDao;
 import org.komea.product.database.model.Setting;
 import org.komea.product.database.model.SettingCriteria;
@@ -24,11 +27,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-@Properties(@Property(
-        key = "logfile_path",
-        description = "Specify the path to access logs",
-        type = String.class,
-        value = "komea.log"))
+@Properties({
+        @Property(
+                key = "logfile_path",
+                description = "Specify the path to access logs",
+                type = String.class,
+                value = "komea.log"),
+        @Property(
+                key = "storage_path",
+                description = "Path to store informations of the plugins",
+                type = File.class,
+                value = "komea") })
 public class SettingService implements ISettingService
 {
     
@@ -59,6 +68,27 @@ public class SettingService implements ISettingService
         if (selectByCriteria.size() > 1) { throw new DAOException(
                 "The setting table should not contain two setting with the same key."); }
         return selectByCriteria.get(0);
+    }
+    
+    
+    @Override
+    public <T> ISettingProxy<T> getProxy(final Integer _key) {
+    
+    
+        return new SettingProxy<T>(settingDAO, _key);
+    }
+    
+    
+    @Override
+    public <T> ISettingProxy<T> getProxy(final String _key) {
+    
+    
+        final SettingCriteria criteria = new SettingCriteria();
+        criteria.createCriteria().andSettingKeyEqualTo(_key);
+        final List<Setting> selectSettingsByCriteria = settingDAO.selectByCriteria(criteria);
+        final Setting settingFound = CollectionUtils.singleOrNull(selectSettingsByCriteria);
+        if (settingFound == null) { return null; }
+        return new SettingProxy<T>(settingDAO, settingFound.getId());
     }
     
     
@@ -107,26 +137,6 @@ public class SettingService implements ISettingService
         LOGGER.debug("Updated setting {}", _setting);
         settingDAO.updateByPrimaryKey(_setting);
         
-    }
-    
-    
-    @Override
-    public boolean updateValue(final Setting _setting, final String _value) {
-    
-    
-        try {
-            final Class<?> loadClass =
-                    Thread.currentThread().getContextClassLoader().loadClass(_setting.getType());
-            loadClass.getConstructor(String.class).newInstance(_value);
-        } catch (final Exception e) {
-            LOGGER.error("Validation has failed for the setting "
-                    + _setting + " and value " + _value, e);
-            return false;
-        }
-        _setting.setValue(_value);
-        
-        update(_setting);
-        return true;
     }
     
     

@@ -32,6 +32,16 @@ public interface ISettingService
     
     
     /**
+     * Return the proxy
+     * 
+     * @param _key
+     *            the key
+     * @return the proxy
+     */
+    public <T> ISettingProxy<T> getProxy(Integer _key);
+    
+    
+    /**
      * Returns the list of settings for a provider
      * 
      * @param _providerID
@@ -62,13 +72,11 @@ public interface ISettingService
     /**
      * Returns a provider proxy
      * 
-     * @param _providerID
-     *            the provider ID
      * @param _key
      *            the key
      * @return the provider setting
      */
-    <T> ISettingProxy<T> getProxy(int _providerID, String _key);
+    <T> ISettingProxy<T> getProxy(String _key);
     
     
     SettingDao getSettingDAO();

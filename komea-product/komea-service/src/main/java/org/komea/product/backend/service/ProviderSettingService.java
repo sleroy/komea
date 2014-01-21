@@ -4,23 +4,25 @@ package org.komea.product.backend.service;
 
 
 import java.util.List;
-import java.util.logging.Level;
+
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.komea.product.backend.exceptions.DAOException;
+import org.komea.product.backend.service.proxy.ProviderSettingProxy;
+import org.komea.product.backend.utils.CollectionUtils;
 import org.komea.product.database.dao.ProviderSettingDao;
 import org.komea.product.database.model.ProviderSetting;
 import org.komea.product.database.model.ProviderSettingCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 
 
-@Service
+@Repository
 @Transactional
 public class ProviderSettingService implements IProviderSettingService
 {
@@ -45,8 +47,10 @@ public class ProviderSettingService implements IProviderSettingService
     
         LOGGER.info("Creating provider setting {} with value {}", _key, _value);
         
-        final List<ProviderSetting> selectByCriteria =
-                settingDAO.selectByCriteria(newSelectOnNameCriteria(_providerID, _key));
+        final ProviderSettingCriteria settingCriteria = new ProviderSettingCriteria();
+        settingCriteria.createCriteria().andProviderSettingKeyEqualTo(_key)
+                .andIdProviderEqualTo(_providerID);
+        final List<ProviderSetting> selectByCriteria = settingDAO.selectByCriteria(settingCriteria);
         if (selectByCriteria.isEmpty()) { return newSetting(_key, _value, _typeName, _description,
                 _providerID); }
         if (selectByCriteria.size() > 1) { throw new DAOException(
@@ -59,7 +63,13 @@ public class ProviderSettingService implements IProviderSettingService
     public <T> ISettingProxy<T> getProxy(final int _providerID, final String _key) {
     
     
-        return new ProviderSettingProxy(settingDAO, _providerID, _key);
+        final ProviderSettingCriteria criteria = new ProviderSettingCriteria();
+        criteria.createCriteria().andIdProviderEqualTo(_providerID)
+                .andProviderSettingKeyEqualTo(_key);
+        final List<ProviderSetting> selectByCriteria = settingDAO.selectByCriteria(criteria);
+        final ProviderSetting providerSetting = CollectionUtils.singleOrNull(selectByCriteria);
+        if (providerSetting == null) { return null; }
+        return new ProviderSettingProxy<T>(settingDAO, providerSetting.getId());
     }
     
     
@@ -105,27 +115,5 @@ public class ProviderSettingService implements IProviderSettingService
                 new ProviderSetting(null, _key, _value, _providerID, _typeName, _description);
         settingDAO.insert(setting);
         return setting;
-    }
-
-    @Override
-    public <T> T getSettingValue(String _key) {
-        ProviderSetting setting = getSetting(_key);
-        if (setting != null) {
-            try {
-                return (T) Thread.currentThread().getContextClassLoader().loadClass(setting.getType()).getConstructor(String.class).newInstance(setting.getValue());
-            } catch (Exception ex) {
-                java.util.logging.Logger.getLogger(ProviderSettingService.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public ProviderSetting getSetting(String _key) {
-        final ProviderSettingCriteria providerSettingCriteria = new ProviderSettingCriteria();
-        providerSettingCriteria.createCriteria().andProviderSettingKeyEqualTo(_key);
-        final List<ProviderSetting> selectByCriteria = settingDAO.selectByCriteria(providerSettingCriteria);
-        if (selectByCriteria.isEmpty()) return null;
-    return  selectByCriteria.get(0);
     }
 }

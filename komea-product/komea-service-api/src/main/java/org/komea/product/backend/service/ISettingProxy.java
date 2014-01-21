@@ -21,15 +21,32 @@ public interface ISettingProxy<T>
     
     
     /**
-     * Returns the provider setting key.
+     * Returns the setting.
      * 
-     * @return the key
+     * @return the setting.
      */
-    String getKey();
+    Object getSetting();
+    
+    
+    /**
+     * Returns the String value
+     * 
+     * @return the String value.
+     */
+    String getStringValue();
     
     
     /**
      * Sets the value
+     * 
+     * @param _value
+     *            the value
+     */
+    void setValue(String _value);
+    
+    
+    /**
+     * Sets the value (converted with toString() method)
      * 
      * @param _value
      *            the value

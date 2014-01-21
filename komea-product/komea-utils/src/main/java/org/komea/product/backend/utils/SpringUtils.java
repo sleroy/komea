@@ -31,6 +31,27 @@ public class SpringUtils
     }
     
     
+    /**
+     * This method performs th ecreation of an object of the type with the given value.
+     * 
+     * @param _typeName
+     *            the type name
+     * @param _value
+     *            the value
+     * @return the new object
+     */
+    public static <T> T reifySetting(final String _typeName, final String _value) {
+    
+    
+        try {
+            return (T) Thread.currentThread().getContextClassLoader().loadClass(_typeName)
+                    .getConstructor(String.class).newInstance(_value);
+        } catch (final Exception e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+    
+    
     public SpringUtils() {
     
     

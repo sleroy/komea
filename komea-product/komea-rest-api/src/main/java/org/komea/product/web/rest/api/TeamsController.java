@@ -6,6 +6,7 @@ package org.komea.product.web.rest.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.model.PersonGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ public class TeamsController
     private static final Logger LOGGER = LoggerFactory.getLogger(TeamsController.class);
     
     @Autowired
-    private PersonGroup         groupDAO;
+    private PersonGroupDao      groupDAO;
     
     
     
@@ -46,14 +47,14 @@ public class TeamsController
     }
     
     
-    public PersonGroup getGroupDAO() {
+    public PersonGroupDao getGroupDAO() {
     
     
         return groupDAO;
     }
     
     
-    public void setGroupDAO(final PersonGroup _groupDAO) {
+    public void setGroupDAO(final PersonGroupDao _groupDAO) {
     
     
         groupDAO = _groupDAO;

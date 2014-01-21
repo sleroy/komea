@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.komea.product.backend.service.ISettingProxy;
 import org.komea.product.backend.service.ISettingService;
-import org.komea.product.database.model.Setting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,11 +92,12 @@ public class SettingsView
         final List<String> errors = new ArrayList<String>();
         for (final Entry<Integer, String> entry : _dto.getProperties().entrySet()) {
             LOGGER.info("Entry {} {}", entry.getKey(), entry.getValue());
-            final Setting selectByPrimaryKey =
-                    settings.getSettingDAO().selectByPrimaryKey(entry.getKey());
-            if (!settings.updateValue(selectByPrimaryKey, entry.getValue())) {
+            final ISettingProxy<Object> selectByPrimaryKey = settings.getProxy(entry.getKey());
+            try {
+                selectByPrimaryKey.setValue(entry.getValue());
+            } catch (final Exception e) {
                 errors.add("Could not save the property "
-                        + selectByPrimaryKey.getSettingKey() + "  : validation has failed");
+                        + selectByPrimaryKey.getSetting() + "  : validation has failed");
             }
             
         }

@@ -6,7 +6,6 @@ package org.komea.product.backend.service;
 import java.util.List;
 
 import org.komea.product.database.model.ProviderSetting;
-import org.komea.product.database.model.ProviderSettingCriteria;
 
 
 
@@ -76,5 +75,4 @@ public interface IProviderSettingService
     <T> ISettingProxy<T> getProxy(int _providerID, String _key);
     
     
-    ProviderSettingCriteria newSelectOnNameCriteria(int _providerID, String _key);
 }
