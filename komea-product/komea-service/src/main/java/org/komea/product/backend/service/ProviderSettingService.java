@@ -56,6 +56,14 @@ public class ProviderSettingService implements IProviderSettingService
     
     
     @Override
+    public <T> ISettingProxy<T> getProxy(final int _providerID, final String _key) {
+    
+    
+        return new ProviderSettingProxy(settingDAO, _providerID, _key);
+    }
+    
+    
+    @Override
     public List<ProviderSetting> getSettings() {
     
     
@@ -70,23 +78,6 @@ public class ProviderSettingService implements IProviderSettingService
         final ProviderSettingCriteria providerSettingCriteria = new ProviderSettingCriteria();
         providerSettingCriteria.createCriteria().andIdProviderEqualTo(_providerID);
         return settingDAO.selectByCriteria(providerSettingCriteria);
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.settings.service.ISettingService#newSelectOnNameCriteria(java.lang.String)
-     */
-    @Override
-    public ProviderSettingCriteria newSelectOnNameCriteria(final int _providerID, @NotBlank
-    final String _key) {
-    
-    
-        final ProviderSettingCriteria settingCriteria = new ProviderSettingCriteria();
-        settingCriteria.createCriteria().andProviderSettingKeyEqualTo(_key)
-                .andIdProviderEqualTo(_providerID);
-        
-        return settingCriteria;
     }
     
     
