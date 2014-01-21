@@ -60,15 +60,15 @@ public interface ISettingService
     
     
     /**
-     * Try to updates a setting with a value, controls the results.
+     * Returns a provider proxy
      * 
-     * @param _setting
-     *            the setting
-     * @param _value
-     *            the value
-     * @return true if the value is updated.
+     * @param _providerID
+     *            the provider ID
+     * @param _key
+     *            the key
+     * @return the provider setting
      */
-    public boolean updateValue(Setting _setting, String _value);
+    <T> ISettingProxy<T> getProxy(int _providerID, String _key);
     
     
     SettingDao getSettingDAO();

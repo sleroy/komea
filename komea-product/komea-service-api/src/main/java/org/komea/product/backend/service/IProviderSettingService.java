@@ -62,26 +62,19 @@ public interface IProviderSettingService
      *            the provider setting.
      */
     public void update(ProviderSetting _providerSetting);
-
+    
+    
     /**
-     * Returns the setting
-     * @param <T> the type of provider
-     * @param _key the setting key
-     * @return  the value if found
+     * Returns a provider proxy
+     * 
+     * @param _providerID
+     *            the provider ID
+     * @param _key
+     *            the key
+     * @return the provider setting
      */
-    public <T> T getSettingValue(String _key);
+    <T> ISettingProxy<T> getProxy(int _providerID, String _key);
     
-
-    /**
-     * Returns the setting
-     * @param <T> the type of provider
-     * @param _key the setting key
-     * @return  the value if found
-     */
-    public ProviderSetting getSetting(String _key);
-
     
-    public ProviderSettingCriteria newSelectOnNameCriteria(int _providerID, String _key);
-    
-
+    ProviderSettingCriteria newSelectOnNameCriteria(int _providerID, String _key);
 }
