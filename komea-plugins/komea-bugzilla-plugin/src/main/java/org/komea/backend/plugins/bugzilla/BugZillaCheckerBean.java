@@ -44,7 +44,7 @@ public class BugZillaCheckerBean
     @Scheduled(fixedDelay = 10)
     public void checkServers() {
 //        Integer warn = providerSettings.getSettingValue("bugzilla_reminder_warning");
-        Integer warn = (Integer)providerSettings.getProxy(2, "bugzilla_reminder_warning").get();
+        Integer warn = 10;
         for (IBugZillaServerConfiguration conf : bugZillaConfiguration.getServers()) {
             IBugZillaServerProxy bugZillaService = conf.openProxy();
             List<String> projectNames = bugZillaService.getListProjects();

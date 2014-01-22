@@ -20,7 +20,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations = {
-        "classpath:/spring/*-context-test.xml", "classpath:/spring/*-servlet-test.xml", })
+        "classpath*:/spring/*-context-test.xml", "classpath*:/spring/*-servlet-test.xml", })
 public abstract class AbstractSpringWebIntegrationTestCase
 {
     
