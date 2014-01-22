@@ -4,7 +4,6 @@ package org.komea.product.backend.service;
 
 
 import java.io.InputStream;
-import java.io.OutputStream;
 
 
 
@@ -13,7 +12,7 @@ import java.io.OutputStream;
  * 
  * @author sleroy
  */
-public interface IFileSystemService
+public interface IPluginFileSystem
 {
     
     
@@ -42,8 +41,8 @@ public interface IFileSystemService
      * 
      * @param _resourceName
      *            the resource name
-     * @param _outputStream
-     *            the output stream.
+     * @param _inputStream
+     *            the input stream.
      */
-    public void store(String _resourceName, OutputStream _outputStream);
+    public void store(String _resourceName, InputStream _inputStream);
 }

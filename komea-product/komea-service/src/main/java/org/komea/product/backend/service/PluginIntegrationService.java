@@ -226,6 +226,14 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
             }
         }
         
+        /**
+         * Injection de settings
+         */
+        for (final String beanName : context.getBeanDefinitionNames()) {
+            final Object bean = context.getBean(beanName);
+            injectSettings(bean);
+            
+        }
     }
     
     

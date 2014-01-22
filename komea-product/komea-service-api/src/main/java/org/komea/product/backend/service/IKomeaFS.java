@@ -19,5 +19,5 @@ public interface IKomeaFS
      *            the file system name;
      * @return the file system service.
      */
-    IFileSystemService getFileSystem(String _fileSystemName);
+    IPluginFileSystem getFileSystem(String _fileSystemName);
 }

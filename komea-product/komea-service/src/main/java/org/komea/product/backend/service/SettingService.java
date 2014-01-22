@@ -3,7 +3,6 @@ package org.komea.product.backend.service;
 
 
 
-import java.io.File;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -21,23 +20,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 
+@Properties(@Property(
+        key = "logfile_path",
+        description = "Specify the path to access logs",
+        type = String.class,
+        value = "komea.log"))
 @Service
-@Transactional
-@Properties({
-        @Property(
-                key = "logfile_path",
-                description = "Specify the path to access logs",
-                type = String.class,
-                value = "komea.log"),
-        @Property(
-                key = "storage_path",
-                description = "Path to store informations of the plugins",
-                type = File.class,
-                value = "komea") })
 public class SettingService implements ISettingService
 {
     
