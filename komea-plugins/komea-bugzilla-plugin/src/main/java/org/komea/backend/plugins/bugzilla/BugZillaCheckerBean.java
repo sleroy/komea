@@ -43,14 +43,13 @@ public class BugZillaCheckerBean
     
     @Scheduled(fixedDelay = 10)
     public void checkServers() {
-    
-    
-        final Integer warn = 30;
-        for (final IBugZillaServerConfiguration conf : bugZillaConfiguration.getServers()) {
-            final IBugZillaServerProxy bugZillaService = conf.openProxy();
-            final List<String> projectNames = bugZillaService.getListProjects();
-            for (final String project : projectNames) {
-                final int bug = bugZillaService.getListBugs(project).size();
+//        Integer warn = providerSettings.getSettingValue("bugzilla_reminder_warning");
+        Integer warn = (Integer)providerSettings.getProxy(2, "bugzilla_reminder_warning").get();
+        for (IBugZillaServerConfiguration conf : bugZillaConfiguration.getServers()) {
+            IBugZillaServerProxy bugZillaService = conf.openProxy();
+            List<String> projectNames = bugZillaService.getListProjects();
+            for (String project : projectNames) {
+                 int bug = bugZillaService.getListBugs(project).size();
                 alertService.sendEvent(alertFactory.newTotalBugs(bug, project));
                 alertService.sendEvent(alertFactory.newUnconfirmedBugs(
                         bugZillaService.getListBugs(project, BugZillaStatus.UNCONFIRMED).size(),

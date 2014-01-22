@@ -15,6 +15,36 @@
     <name>Komea : plugins projects</name>
     <description>contains komea plugins</description>
 
+	<profiles>
+		<profile>
+			<id>embedded</id>
+			<properties>
+				<jdbc.bdd.type>h2</jdbc.bdd.type>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+				</dependency>
+			</dependencies>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>mysql</id>
+			<properties>
+				<jdbc.bdd.type>mysql</jdbc.bdd.type>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>mysql</groupId>
+					<artifactId>mysql-connector-java</artifactId>
+				</dependency>
+			</dependencies>
+		</profile>
+
+	</profiles>
     <modules>
         <module>komea-git-plugin</module>
         <module>komea-rss-plugin</module>

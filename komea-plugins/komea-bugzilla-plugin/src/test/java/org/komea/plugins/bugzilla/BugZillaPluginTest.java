@@ -25,6 +25,7 @@ public class BugZillaPluginTest extends AbstractSpringIntegrationTestCase {
 
     @Test
     public void testPlugin() {
+         System.out.println("fin du test");
 //        Mockito.when(conf.getServers()).then(new Answer<List<I>)
         BugZillaCheckerBean bbean = new BugZillaCheckerBean();
         bbean.checkServers();
