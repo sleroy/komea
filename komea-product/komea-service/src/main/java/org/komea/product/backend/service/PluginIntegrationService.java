@@ -192,7 +192,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     
     
         context = _applicationContext;
-        
+        LOGGER.info("-----------------------------------------------------------------------");
         LOGGER.info("Initializing the plugin loader");
         
         final Map<String, Object> providerPluginBeansMap =
@@ -234,6 +234,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
             injectSettings(bean);
             
         }
+        LOGGER.info("-----------------------------------------------------------------------");
     }
     
     
