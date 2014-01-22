@@ -92,9 +92,13 @@ public class PluginIntegrationServiceTest
         final PluginIntegrationService initPluginIntegrationService =
                 initPluginIntegrationService();
         final BeanWithInjection beanWithInjection = new BeanWithInjection();
+        final ISettingProxy mock = Mockito.mock(ISettingProxy.class);
+        
+        Mockito.when(settingService.getProxy(Matchers.anyString())).thenReturn(mock);
+        
         // Add missing mocking
         initPluginIntegrationService.injectSettings(beanWithInjection);
-        Assert.assertNotNull(beanWithInjection.getStorage_path());
+        Assert.assertEquals(beanWithInjection.getStorage_path(), mock);
         
     }
     

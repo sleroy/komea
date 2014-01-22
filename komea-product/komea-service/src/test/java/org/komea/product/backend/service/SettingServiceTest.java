@@ -6,8 +6,6 @@ package org.komea.product.backend.service;
 
 
 
-import static org.junit.Assert.fail;
-
 import org.junit.Test;
 import org.komea.product.database.dao.SettingDao;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
@@ -40,81 +38,81 @@ public class SettingServiceTest extends AbstractSpringIntegrationTestCase
         
     }
     
-    
-    /**
-     * Test method for {@link org.komea.product.backend.service.SettingService#getProxy(java.lang.Integer)}.
-     */
-    @Test
-    public final void testGetProxyInteger() {
-    
-    
-        fail("Not yet implemented"); // TODO
-    }
-    
-    
-    /**
-     * Test method for {@link org.komea.product.backend.service.SettingService#getProxy(java.lang.String)}.
-     */
-    @Test
-    public final void testGetProxyString() {
-    
-    
-        fail("Not yet implemented"); // TODO
-    }
-    
-    
-    /**
-     * Test method for {@link org.komea.product.backend.service.SettingService#getSettingDAO()}.
-     */
-    @Test
-    public final void testGetSettingDAO() {
-    
-    
-        fail("Not yet implemented"); // TODO
-    }
-    
-    
-    /**
-     * Test method for {@link org.komea.product.backend.service.SettingService#getSettings()}.
-     */
-    @Test
-    public final void testGetSettings() {
-    
-    
-        fail("Not yet implemented"); // TODO
-    }
-    
-    
-    /**
-     * Test method for {@link org.komea.product.backend.service.SettingService#newSelectOnNameCriteria(java.lang.String)}.
-     */
-    @Test
-    public final void testNewSelectOnNameCriteria() {
-    
-    
-        fail("Not yet implemented"); // TODO
-    }
-    
-    
-    /**
-     * Test method for {@link org.komea.product.backend.service.SettingService#setSettingDAO(org.komea.product.database.dao.SettingDao)}.
-     */
-    @Test
-    public final void testSetSettingDAO() {
-    
-    
-        fail("Not yet implemented"); // TODO
-    }
-    
-    
-    /**
-     * Test method for {@link org.komea.product.backend.service.SettingService#update(org.komea.product.database.model.Setting)}.
-     */
-    @Test
-    public final void testUpdate() {
-    
-    
-        fail("Not yet implemented"); // TODO
-    }
+    //
+    // /**
+    // * Test method for {@link org.komea.product.backend.service.SettingService#getProxy(java.lang.Integer)}.
+    // */
+    // @Test
+    // public final void testGetProxyInteger() {
+    //
+    //
+    // fail("Not yet implemented"); // TODO
+    // }
+    //
+    //
+    // /**
+    // * Test method for {@link org.komea.product.backend.service.SettingService#getProxy(java.lang.String)}.
+    // */
+    // @Test
+    // public final void testGetProxyString() {
+    //
+    //
+    // fail("Not yet implemented"); // TODO
+    // }
+    //
+    //
+    // /**
+    // * Test method for {@link org.komea.product.backend.service.SettingService#getSettingDAO()}.
+    // */
+    // @Test
+    // public final void testGetSettingDAO() {
+    //
+    //
+    // fail("Not yet implemented"); // TODO
+    // }
+    //
+    //
+    // /**
+    // * Test method for {@link org.komea.product.backend.service.SettingService#getSettings()}.
+    // */
+    // @Test
+    // public final void testGetSettings() {
+    //
+    //
+    // fail("Not yet implemented"); // TODO
+    // }
+    //
+    //
+    // /**
+    // * Test method for {@link org.komea.product.backend.service.SettingService#newSelectOnNameCriteria(java.lang.String)}.
+    // */
+    // @Test
+    // public final void testNewSelectOnNameCriteria() {
+    //
+    //
+    // fail("Not yet implemented"); // TODO
+    // }
+    //
+    //
+    // /**
+    // * Test method for {@link org.komea.product.backend.service.SettingService#setSettingDAO(org.komea.product.database.dao.SettingDao)}.
+    // */
+    // @Test
+    // public final void testSetSettingDAO() {
+    //
+    //
+    // fail("Not yet implemented"); // TODO
+    // }
+    //
+    //
+    // /**
+    // * Test method for {@link org.komea.product.backend.service.SettingService#update(org.komea.product.database.model.Setting)}.
+    // */
+    // @Test
+    // public final void testUpdate() {
+    //
+    //
+    // fail("Not yet implemented"); // TODO
+    // }
     
 }

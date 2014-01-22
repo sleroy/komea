@@ -132,7 +132,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     /**
      * Injects settings fields
      */
-    @Autowired
+    
     public void injectSettings(final Object _bean) {
     
     
@@ -144,8 +144,6 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
                     && descriptor.getReadMethod().isAnnotationPresent(InjectSetting.class)) {
                 LOGGER.info("Weaving setting proxy on property descriptor {} of bean {}",
                         descriptor, _bean.getClass());
-                final InjectSetting annotation =
-                        descriptor.getReadMethod().getAnnotation(InjectSetting.class);
                 final Method writeMethod = descriptor.getWriteMethod();
                 try {
                     writeMethod.invoke(_bean, settingsService.getProxy(descriptor.getName()));
