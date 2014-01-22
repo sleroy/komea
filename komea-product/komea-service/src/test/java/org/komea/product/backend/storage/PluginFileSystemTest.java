@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.backend.service;
+package org.komea.product.backend.storage;
 
 
 
@@ -15,6 +15,7 @@ import java.io.StringBufferInputStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.komea.product.backend.storage.PluginFileSystem;
 
 
 
@@ -26,7 +27,7 @@ public class PluginFileSystemTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.PluginFileSystem#FileSystemService(java.io.File)}.
+     * Test method for {@link org.komea.product.backend.storage.PluginFileSystem#FileSystemService(java.io.File)}.
      */
     @Test
     public final void testFileSystemServiceExist() {
@@ -40,7 +41,7 @@ public class PluginFileSystemTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.PluginFileSystem#FileSystemService(java.io.File)}.
+     * Test method for {@link org.komea.product.backend.storage.PluginFileSystem#FileSystemService(java.io.File)}.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFileSystemServiceFail() {
@@ -54,7 +55,7 @@ public class PluginFileSystemTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.PluginFileSystem#FileSystemService(java.io.File)}.
+     * Test method for {@link org.komea.product.backend.storage.PluginFileSystem#FileSystemService(java.io.File)}.
      * 
      * @throws IOException
      * @throws FileNotFoundException
@@ -74,7 +75,7 @@ public class PluginFileSystemTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.PluginFileSystem#FileSystemService(java.io.File)}.
+     * Test method for {@link org.komea.product.backend.storage.PluginFileSystem#FileSystemService(java.io.File)}.
      * 
      * @throws IOException
      * @throws FileNotFoundException

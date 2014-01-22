@@ -1,5 +1,5 @@
 
-package org.komea.product.backend.service;
+package org.komea.product.backend.storage;
 
 
 
@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.komea.product.backend.service.IPluginFileSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -8,6 +8,7 @@ import java.io.File;
 import org.komea.product.backend.plugin.api.InjectSetting;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
+import org.komea.product.backend.storage.PluginFileSystem;
 import org.springframework.stereotype.Service;
 
 
