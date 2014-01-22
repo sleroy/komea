@@ -4,15 +4,10 @@ package org.komea.product.plugins.sample;
 
 
 import org.komea.product.backend.plugin.api.EventTypeDef;
-import org.komea.product.backend.plugin.api.IResourceProxy;
-import org.komea.product.backend.plugin.api.IUpdateAction;
-import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
-import org.komea.product.backend.plugin.api.ProviderResource;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 
@@ -20,17 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
         type = ProviderType.OTHER,
         name = "Sample provider plugin",
         icon = "/truc.gif",
-        properties = {
-                @Property(
-                        key = "sample_cronFrequency",
-                        value = "@hourly",
-                        type = String.class,
-                        description = "Sets the frequency"),
-                @Property(
-                        key = "sample_disabled",
-                        value = "false",
-                        type = Boolean.class,
-                        description = "DIsabled") }, eventTypes = {
+        eventTypes = {
                 @EventTypeDef(
                         category = "BUILD",
                         description = "Event to notify a build is started",
@@ -60,10 +45,6 @@ public class SampleProviderBean
     private org.komea.product.database.model.EventType BUILD_FAILURE;
     
     
-    @ProviderResource
-    private IResourceProxy<SampleProviderConfig>       config;
-    
-    
     
     public SampleProviderBean() {
     
@@ -77,30 +58,6 @@ public class SampleProviderBean
     
     
         return BUILD_FAILURE;
-    }
-    
-    
-    @Autowired
-    public void init() {
-    
-    
-        final SampleProviderConfig sampleProviderConfig = config.get();
-        
-        
-        config.update(new IUpdateAction<SampleProviderConfig>()
-        {
-            
-            
-            @Override
-            public void update(final SampleProviderConfig _object) {
-            
-            
-                _object.setIteration(12);
-                
-            }
-            
-        });
-        
     }
     
     

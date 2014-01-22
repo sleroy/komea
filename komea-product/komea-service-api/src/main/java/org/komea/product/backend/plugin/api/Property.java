@@ -31,7 +31,7 @@ public @interface Property {
      * 
      * @return the description.
      */
-    String description();
+    String description() default "";
     
     
     /**

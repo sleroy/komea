@@ -2,6 +2,7 @@
 package org.komea.product.backend.plugin.api;
 
 
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,6 +11,8 @@ import java.lang.annotation.Target;
 
 import org.komea.product.database.enums.ProviderType;
 import org.springframework.stereotype.Component;
+
+
 
 /**
  * This interface defines a spring component defining a plugin (internal
@@ -24,7 +27,9 @@ import org.springframework.stereotype.Component;
     ElementType.TYPE })
 public @interface ProviderPlugin {
     
+    
     EventTypeDef[] eventTypes();
+    
     
     /**
      * Defines the path to obtain the icon of the plugin
@@ -33,6 +38,7 @@ public @interface ProviderPlugin {
      */
     String icon();
     
+    
     /**
      * Defines the plugin's name
      * 
@@ -40,7 +46,6 @@ public @interface ProviderPlugin {
      */
     String name();
     
-    Property[] properties();
     
     /**
      * Define the type of provider (SONAR? JENKINS...)
@@ -48,6 +53,7 @@ public @interface ProviderPlugin {
      * @return the provider type
      */
     ProviderType type();
+    
     
     /**
      * Defines the URL to access to the server

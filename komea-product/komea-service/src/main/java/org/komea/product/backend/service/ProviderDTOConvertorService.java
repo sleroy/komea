@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.komea.product.backend.plugin.api.EventTypeDef;
-import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
-import org.komea.product.database.dto.PropertyDTO;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
@@ -52,27 +50,6 @@ public class ProviderDTOConvertorService implements IProviderDTOConvertorService
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.service.IProviderAPIService#loadProperties(org.komea.product.backend.plugin.api.ProviderPlugin)
-     */
-    @Override
-    public List<PropertyDTO> loadProperties(final ProviderPlugin providerAnnotation) {
-    
-    
-        final Property[] properties = providerAnnotation.properties();
-        final List<PropertyDTO> propertyList = new ArrayList<PropertyDTO>(properties.length);
-        if (properties != null) {
-            for (final Property property : properties) {
-                propertyList.add(new PropertyDTO(property.key(), property.value(), property.type()
-                        .getName(), property.description()));
-            }
-        }
-        return propertyList;
-        
-    }
-    
-    
-    /*
-     * (non-Javadoc)
      * @see
      * org.komea.product.plugins.service.IProviderAPIService#loadProviderDescription(org.komea.product.backend.plugin.api.ProviderPlugin)
      */
@@ -101,7 +78,6 @@ public class ProviderDTOConvertorService implements IProviderDTOConvertorService
         final ProviderDto providerdto = new ProviderDto();
         final Provider provider = loadProviderDescription(providerAnnotation);
         providerdto.setProvider(provider);
-        providerdto.setProperties(loadProperties(providerAnnotation));
         providerdto.setEventTypes(loadEvents(providerAnnotation));
         
         return providerdto;

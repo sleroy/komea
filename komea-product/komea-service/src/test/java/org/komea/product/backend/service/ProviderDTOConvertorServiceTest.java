@@ -8,17 +8,11 @@ import java.io.Serializable;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.plugin.api.EventTypeDef;
-import org.komea.product.backend.plugin.api.IResourceProxy;
-import org.komea.product.backend.plugin.api.IUpdateAction;
-import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
-import org.komea.product.backend.plugin.api.ProviderResource;
-import org.komea.product.database.dto.PropertyDTO;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 
 
@@ -32,17 +26,7 @@ public class ProviderDTOConvertorServiceTest
             name = "Sample provider plugin",
             icon = "/local_resources/pics/truc",
             url = "http://",
-            properties = {
-                    @Property(
-                            key = "sample_cronFrequency",
-                            value = "@hourly",
-                            type = String.class,
-                            description = "cron Frequency"),
-                    @Property(
-                            key = "sample_disabled",
-                            value = "false",
-                            type = Boolean.class,
-                            description = "Plugin disabled") }, eventTypes = {
+            eventTypes = {
                     @EventTypeDef(
                             category = "BUILD",
                             description = "Event to notify a build is started",
@@ -71,9 +55,6 @@ public class ProviderDTOConvertorServiceTest
         @EventTypeDef()
         private org.komea.product.database.model.EventType BUILD_FAILURE;
         
-        @ProviderResource
-        private IResourceProxy<SampleProviderConfig>       config;
-        
         
         
         public SampleProviderBean() {
@@ -88,29 +69,6 @@ public class ProviderDTOConvertorServiceTest
         
         
             return BUILD_FAILURE;
-        }
-        
-        
-        @Autowired
-        public void init() {
-        
-        
-            final SampleProviderConfig sampleProviderConfig = config.get();
-            
-            config.update(new IUpdateAction<SampleProviderConfig>()
-            {
-                
-                
-                @Override
-                public void update(final SampleProviderConfig _object) {
-                
-                
-                    _object.setIteration(12);
-                    
-                }
-                
-            });
-            
         }
         
         
@@ -131,19 +89,6 @@ public class ProviderDTOConvertorServiceTest
         private int iteration;
         
         
-        
-        public int getIteration() {
-        
-        
-            return iteration;
-        }
-        
-        
-        public void setIteration(final int _iteration) {
-        
-        
-            iteration = _iteration;
-        }
     }
     
     
@@ -162,16 +107,7 @@ public class ProviderDTOConvertorServiceTest
         Assert.assertEquals(providerDTO.getProvider().getName(), "Sample provider plugin");
         Assert.assertNotNull(providerDTO.getProvider().getIcon(), "/local_resources/pics/truc");
         Assert.assertEquals(providerDTO.getProvider().getProviderType(), ProviderType.OTHER);
-        Assert.assertEquals(2, providerDTO.getProperties().size());
-        final PropertyDTO propertyDTO1 = providerDTO.getProperties().get(0);
-        Assert.assertEquals("sample_cronFrequency", propertyDTO1.getKey());
-        Assert.assertEquals("@hourly", propertyDTO1.getValue());
-        Assert.assertEquals("java.lang.String", propertyDTO1.getType());
-        final PropertyDTO propertyDTO2 = providerDTO.getProperties().get(1);
-        Assert.assertEquals("sample_disabled", propertyDTO2.getKey());
-        Assert.assertEquals("false", propertyDTO2.getValue());
-        Assert.assertEquals("java.lang.Boolean", propertyDTO2.getType());
-        Assert.assertEquals(3, providerDTO.getEventTypes().size());
+        
         
     }
     

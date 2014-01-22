@@ -3,6 +3,8 @@ package org.komea.product.backend.service;
 
 
 
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -11,18 +13,19 @@ import javax.validation.Valid;
 
 import org.komea.product.backend.exceptions.AlreadyExistingProviderException;
 import org.komea.product.backend.exceptions.InvalidProviderDescriptionException;
+import org.komea.product.backend.plugin.api.InjectSetting;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.utils.SpringUtils;
 import org.komea.product.database.dao.ProviderDao;
-import org.komea.product.database.dto.PropertyDTO;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
 import org.komea.product.database.model.ProviderCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -56,9 +59,6 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     @Autowired
     private ISettingService              settingsService;
     
-    
-    @Autowired
-    private IProviderSettingService      providerSettingsService;
     
     @Autowired
     private IEventTypeService            eventTypeService;
@@ -115,13 +115,6 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
-    public IProviderSettingService getProviderSettingsService() {
-    
-    
-        return providerSettingsService;
-    }
-    
-    
     public ISettingService getSettingsService() {
     
     
@@ -133,6 +126,38 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     public void init() {
     
     
+    }
+    
+    
+    /**
+     * Injects settings fields
+     */
+    @Autowired
+    public void injectSettings(final Object _bean) {
+    
+    
+        final PropertyDescriptor[] propertyDescriptors =
+                BeanUtils.getPropertyDescriptors(_bean.getClass());
+        
+        for (final PropertyDescriptor descriptor : propertyDescriptors) {
+            if (descriptor.getReadMethod() != null
+                    && descriptor.getReadMethod().isAnnotationPresent(InjectSetting.class)) {
+                LOGGER.info("Weaving setting proxy on property descriptor {} of bean {}",
+                        descriptor, _bean.getClass());
+                final InjectSetting annotation =
+                        descriptor.getReadMethod().getAnnotation(InjectSetting.class);
+                final Method writeMethod = descriptor.getWriteMethod();
+                try {
+                    writeMethod.invoke(_bean, settingsService.getProxy(descriptor.getName()));
+                    
+                } catch (final Exception e) {
+                    throw new IllegalArgumentException(e);
+                }
+                
+            }
+            
+        }
+        
     }
     
     
@@ -155,11 +180,6 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
         if (provider.getId() != null) { throw new InvalidProviderDescriptionException(
                 "Producer DTO should not register primary key"); }
         providerMapper.insert(provider);
-        // Properties
-        for (final PropertyDTO property : _providerDTO.getProperties()) {
-            providerSettingsService.create(provider.getId(), property.getKey(),
-                    property.getValue(), property.getType(), property.getDescription());
-        }
         
         // Alertes
         for (final EventType eventType : _providerDTO.getEventTypes()) {
@@ -236,13 +256,6 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     
     
         providerMapper = _providerMapper;
-    }
-    
-    
-    public void setProviderSettingsService(final IProviderSettingService _providerSettingsService) {
-    
-    
-        providerSettingsService = _providerSettingsService;
     }
     
     

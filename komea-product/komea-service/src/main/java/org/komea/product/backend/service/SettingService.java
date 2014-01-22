@@ -45,7 +45,7 @@ public class SettingService implements ISettingService
     @Autowired
     private SettingDao          settingDAO;
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProviderSettingService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SettingService.class);
     
     
     

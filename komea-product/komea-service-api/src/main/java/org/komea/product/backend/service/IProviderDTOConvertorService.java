@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
-import org.komea.product.database.dto.PropertyDTO;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
@@ -25,16 +24,6 @@ public interface IProviderDTOConvertorService
      * @return
      */
     List<EventType> loadEvents(ProviderPlugin _providerAnnotation);
-    
-    
-    /**
-     * Load properties from provider annotation.
-     * 
-     * @param providerAnnotation
-     *            the provider annotation.
-     * @return
-     */
-    List<PropertyDTO> loadProperties(ProviderPlugin providerAnnotation);
     
     
     /**
