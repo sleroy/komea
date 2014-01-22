@@ -34,12 +34,7 @@
          <dependency>
             <groupId>org.komea.product</groupId>
             <artifactId>komea-testspring</artifactId>            
-<<<<<<< HEAD
-            <version>1.0.0-SNAPSHOT</version>
-            <scope>test</scope>
-=======
             <version>1.0.1-SNAPSHOT</version>
->>>>>>> 7b06049f6adbb4179ff717a9cb9ed63ee8b61b5b
         </dependency>
         <dependency>
             <groupId>org.komea.product</groupId>
