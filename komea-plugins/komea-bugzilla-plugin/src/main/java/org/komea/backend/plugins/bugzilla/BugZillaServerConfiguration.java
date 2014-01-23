@@ -30,7 +30,6 @@ public class BugZillaServerConfiguration implements IBugZillaServerConfiguration
     public IBugZillaServerProxy openProxy() {
         if (this.serverController == null) {
             J2BugZillaServerProxy servProx = new J2BugZillaServerProxy(address, login, mdp);
-            servProx.connexion();
             this.serverController = servProx;
         }
         return serverController;

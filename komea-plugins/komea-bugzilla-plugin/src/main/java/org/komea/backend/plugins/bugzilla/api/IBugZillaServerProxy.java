@@ -23,17 +23,17 @@ public interface IBugZillaServerProxy {
     public List<String> getListProjects();
 
     /**
-     *
+     * get list of bugs in  bugzilla server
      * @param Project
      * @return
      */
     public List<BugzillaBug> getListBugs(String Project);
 
     /**
-     *
+     * get spécific bug in list préviously get in bugzilla server
      * @param Project
      * @param status
      * @return
      */
-    public List<BugzillaBug> getListBugs(String Project, BugZillaStatus... status);
+    public List<BugzillaBug> getFilterBugs(String Project, BugZillaStatus... status);
 }
