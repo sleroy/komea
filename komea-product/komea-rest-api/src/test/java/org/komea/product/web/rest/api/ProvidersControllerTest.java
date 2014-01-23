@@ -2,6 +2,7 @@
 package org.komea.product.web.rest.api;
 
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,35 +34,47 @@ import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
+
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations = {
-        "classpath*:/spring/*-context-test.xml", "classpath*:/spring/*-servlet-test.xml", })
+        "classpath*:/spring/application-context-test.xml",
+        "classpath*:/spring/dispatcher-servlet-test.xml", })
 @TestExecutionListeners({
-        DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class })
 public class ProvidersControllerTest
 {
+    
     
     @Autowired
     private WebApplicationContext context;
     
     private MockMvc               mockMvc;
     
+    
+    
     @Before
     public void setUp() {
     
+    
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
+    
     
     @Test
     @ExpectedDatabase(value = "addProvider.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void testRegisterProvider() throws Exception {
     
-        final Provider provider = new Provider(null, ProviderType.JENKINS, "MyProvider", "file://", "http://");
+    
+        final Provider provider =
+                new Provider(null, ProviderType.JENKINS, "MyProvider", "file://", "http://");
         
-        final EventType eventType = new EventType(null, 1, "EventUN", "MyEvent", Severity.CRITICAL, true, "a description", "a catogeory",
-                EntityType.PERSON);
+        final EventType eventType =
+                new EventType(null, 1, "EventUN", "MyEvent", Severity.CRITICAL, true,
+                        "a description", "a catogeory", EntityType.PERSON);
         
         final List<EventType> eventTypes = new ArrayList<EventType>();
         eventTypes.add(eventType);
@@ -71,8 +84,9 @@ public class ProvidersControllerTest
         System.out.println(jsonString);
         
         // String jsonString = "";
-        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/providers/register")
-                .contentType(MediaType.APPLICATION_JSON).content(jsonString));
+        final ResultActions httpRequest =
+                mockMvc.perform(MockMvcRequestBuilders.post("/providers/register")
+                        .contentType(MediaType.APPLICATION_JSON).content(jsonString));
         
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
     }
