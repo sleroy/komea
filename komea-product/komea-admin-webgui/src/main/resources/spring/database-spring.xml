@@ -24,8 +24,8 @@
 
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<!-- <property name="mapperLocations"
-			value="classpath*:org/komea/product/database/sqlmap/*.xml" /> -->
+		<!-- <property name="mapperLocations" value="classpath*:org/komea/product/database/sqlmap/*.xml" 
+			/> -->
 		<property name="configLocation" value="classpath:/data/mybatis-conf.xml" />
 	</bean>
 	<bean id="transactionManager"
@@ -51,11 +51,6 @@
 
 	<mybatis:scan base-package="org.komea.product.database.dao" />
 
-
-	<jdbc:initialize-database data-source="dataSource"
-		enabled="${jdbc.initialize.script.enable}" ignore-failures="NONE">
-		<jdbc:script location="classpath:/data/komea-h2.sql" />
-	</jdbc:initialize-database>
 
 	<bean id="validator"
 		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
