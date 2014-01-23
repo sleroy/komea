@@ -126,10 +126,24 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-	
 
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-spring</artifactId>
+			<version>6.12.0</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket</artifactId>
+			<version>6.12.0</version>
+			<type>pom</type>
+		</dependency>
 
 	</dependencies>
+
+
 
 	<packaging>war</packaging>
 </project>
