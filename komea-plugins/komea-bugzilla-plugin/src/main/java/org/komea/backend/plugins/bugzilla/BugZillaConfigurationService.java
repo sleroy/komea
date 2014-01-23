@@ -11,6 +11,8 @@ package org.komea.backend.plugins.bugzilla;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.komea.backend.plugins.bugzilla.api.IBugZillaConfiguration;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration;
 import org.springframework.stereotype.Service;
@@ -25,22 +27,6 @@ public class BugZillaConfigurationService implements IBugZillaConfiguration
 {
     
     
-    public static List<IBugZillaServerConfiguration> constantServer() {
-    
-    
-        final List<IBugZillaServerConfiguration> serveurConfiguration =
-                new ArrayList<IBugZillaServerConfiguration>();
-        
-        final IBugZillaServerConfiguration server1 =
-                new BugZillaServerConfiguration("https://bugzilla.mozilla.org/",
-                        "darckloulou-face4@yahoo.fr", "0351Darkra");
-        serveurConfiguration.add(server1);
-        
-        return serveurConfiguration;
-    }
-    
-    
-    
     private List<IBugZillaServerConfiguration> servers = null;
     
     
@@ -49,9 +35,20 @@ public class BugZillaConfigurationService implements IBugZillaConfiguration
     public List<IBugZillaServerConfiguration> getServers() {
     
     
-        if (servers == null) {
-            servers = constantServer();
-        }
         return servers;
+    }
+    
+    
+    @PostConstruct
+    public void initSampleData() {
+    
+    
+        servers = new ArrayList<IBugZillaServerConfiguration>();
+        
+        final IBugZillaServerConfiguration server1 =
+                new BugZillaServerConfiguration("https://bugzilla.mozilla.org/",
+                        "darckloulou-face4@yahoo.fr", "0351Darkra");
+        servers.add(server1);
+        
     }
 }

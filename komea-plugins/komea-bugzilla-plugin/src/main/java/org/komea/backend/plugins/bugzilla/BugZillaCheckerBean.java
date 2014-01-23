@@ -108,4 +108,32 @@ public class BugZillaCheckerBean
     
         this.alertService = alertService;
     }
+
+
+    public IBugZillaConfiguration getBugZillaConfiguration() {
+    
+    
+        return bugZillaConfiguration;
+    }
+
+
+    public void setBugZillaConfiguration(IBugZillaConfiguration _bugZillaConfiguration) {
+    
+    
+        bugZillaConfiguration = _bugZillaConfiguration;
+    }
+
+
+    public IBugZillaAlertFactory getAlertFactory() {
+    
+    
+        return alertFactory;
+    }
+
+
+    public void setAlertFactory(IBugZillaAlertFactory _alertFactory) {
+    
+    
+        alertFactory = _alertFactory;
+    }
 }
