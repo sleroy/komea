@@ -1,63 +1,60 @@
 <!DOCTYPE html>
-<html xmlns:wicket="http://wicket.apache.org">
-	<head>
-		<meta charset="utf-8" />
-		<title>Apache Wicket Quickstart</title>
-		<link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold' rel='stylesheet' type='text/css' />
-		<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
-	</head>
-	<body>
-		<div id="hd">
-			<div id="logo">
-				<img src="logo.png" width="50px" height="50px" alt="Wicket Logo" />
-				<h1>Apache Wicket</h1>
+<html xmlns:wicket="http://wicket.apache.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+<meta content="Komea administration site" name="description"></meta>
+<meta content="Komea" name="author"></meta>
+<title>Komea Administration</title>
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
+<link rel="stylesheet" href="/static/css/style.css" type="text/css"></link>
+<link rel="stylesheet" type="text/css" href="/static/js/ui/themes/base/jquery-ui.css" />
+</head>
+<body>
+	<wicket:extend>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-9">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+								<span class="glyphicon glyphicon-bookmark"></span> Quick Shortcuts
+							</h3>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-xs-6 col-md-6">
+									<a href="/p/infos" class="btn btn-danger btn-lg" role="button" id="gni"><span class="glyphicon glyphicon-list-alt"></span> <br />Informations</a> <a href="/p/projects" class="btn btn-warning btn-lg" role="button" id="gni"><span class="glyphicon glyphicon-bookmark"></span> <br />Projects</a> <a id="gni" href="/p/teams" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-comment"></span> <br />Team</a> <a id="gni" href="/p/usergroups" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-signal"></span> <br />User groups</a> <a id="gni" href="/p/departments" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-comment"></span> <br />Departments</a> <a id="gni" href="/p/users" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-comment"></span> <br />Users</a> <a id="gni" href="/p/customers" class="btn btn-primary btn-lg" role="button"><span
+										class="glyphicon glyphicon-comment"
+									></span> <br />Customers</a> <a id="gni" href="/p/alerts" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-comment"></span> <br />Alerts</a> <a id="gni" href="/p/kpis" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-comment"></span> <br />KPIs</a>
+								</div>
+								<div class="col-xs-6 col-md-6">
+									<a id="gni" href="/p/settings" class="btn btn-success btn-lg" role="button"><span class="glyphicon glyphicon-user"></span> <br />Settings</a> <a id="gni" href="/p/ldap" class="btn btn-info btn-lg" role="button"><span class="glyphicon glyphicon-file"></span> <br />LDAP</a> <a id="gni" href="/p/plugins" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-picture"></span> <br />Plugins</a> <a id="gni" href="/p/apialerts" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-tag"></span> <br />API Alerts</a>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6">
+									<a href="/p/logs" class="btn btn-info btn-lg btn-block" role="button"><span class="glyphicon glyphicon-globe"></span> View Log</a>
+								</div>
+								<div class="col-xs-6">
+									<a href="https://github.com/sleroy/komea" class="btn btn-success btn-lg btn-block" role="button"><span class="glyphicon glyphicon-globe"></span> Go on Github</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div id="bd">
-			<h2>Congratulations!</h2>
-			<p>
-				Your quick start works! This project is especially useful to
-                start developing your Wicket application or to create a test
-                case for a bug report.
-			</p>
-			<h3>Get started</h3>
-			<p>
-				You can even <a href="https://localhost:8443">switch to HTTPS</a>!
-			</p> 
-			<p>
-				From here you can start hacking away at your application and
-                wow your clients:
-			</p>
-			<ul>
-				<li>work through <a href="http://wicket.apache.org/learn/examples" target="_blank" title="Hello world and friends">some examples</a></li>
-				<li>read <a href="http://wicket.apache.org/learn/books" target="_blank" title="Books about Wicket in English, German and Japanese">some books</a></li>
-				<li>find <a href="http://wicket.apache.org/learn/projects" target="_blank" title="Additional projects, components and libraries">additional components, projects and libraries</a></li>
-			</ul>
-			<h3>Get help</h3>
-			<p>
-				We are here to help!
-			</p>
-			<ul>
-				<li>join us on IRC on <a href="irc:%23%23wicket@irc.freenode.net">&#35;&#35;wicket@irc.freenode.net</a></li>
-				<li><a href="http://wicket-users.markmail.org/" target="_blank" title="Search the mailing list archives">search</a> our mailing list archives</li>
-				<li>ask a question on the <a href="http://wicket.apache.org/help/email.html">users list</a></li>
-			</ul>
-			<h3>Reporting a bug</h3>
-			<p>
-				Help us help you:
-			</p>
-			<ol>
-				<li>reproduce the bug with the <strong>least</strong> amount of code</li>
-				<li>create a unit test that shows the bug</li>
-				<li>fix the bug and create a patch</li>
-				<li>attach the result of step 1, 2 or 3 to a <a href="https://issues.apache.org/jira/browse/WICKET" target="_blank">JIRA issue</a></li>
-				<li>profit!</li>
-			</ol>
-			<p>
-				Please mention the correct Wicket version: <wicket:container wicket:id="version">1.5-SNAPSHOT</wicket:container>.
-			</p>
-		</div>
-		<div id="ft">
-		</div>
-	</body>
+		<form wicket:id="form">
+			<input type="submit" value="click me to submit the form and display a message" />
+		</form>
+		<span wicket:id="feedback">feedbackmessages will be put here</span>
+		<div id="ft"></div>
+	</wicket:extend>
+	<footer class="tocea-footer">
+		<p>&copy; Komea.org</p>
+		<script src="/static/js/ui/jquery.js"></script>
+		<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+	</footer>
+</body>
 </html>

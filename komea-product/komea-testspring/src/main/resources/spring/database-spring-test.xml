@@ -54,7 +54,7 @@
 
 	<jdbc:initialize-database data-source="dataSource"
 		enabled="${jdbc.initialize.script.enable}" ignore-failures="NONE">
-		<jdbc:script location="classpath:/data/komea-h2.sql" />
+		<jdbc:script location="${database_sqlfile}" />
 	</jdbc:initialize-database>
 
 	<bean id="validator"

@@ -12,7 +12,7 @@
 
 
 
-	<import resource="database-spring.xml"></import>
+	<import resource="database-spring.xml" />
 
 
 	<import resource="security-spring.xml" />
@@ -36,10 +36,10 @@
 
 	</bean>
 
-	<context:component-scan base-package="org.komea.product.backend">
-
-	</context:component-scan>
+	<context:component-scan base-package="org.komea.product.backend" />
 
 
-	<context:annotation-config></context:annotation-config>
+
+
+	<context:annotation-config />
 </beans>

@@ -43,6 +43,11 @@
 	</bean>
 
 
+	<jdbc:initialize-database data-source="dataSource"
+		enabled="${jdbc.initialize.script.enable}" ignore-failures="NONE">
+		<jdbc:script location="${database_sqlfile}" />
+	</jdbc:initialize-database>
+	
 	<bean
 		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 
