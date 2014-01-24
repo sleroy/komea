@@ -8,6 +8,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.settings.IExceptionSettings;
 import org.apache.wicket.settings.IExceptionSettings.ThreadDumpStrategy;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.komea.product.wicket.admin.SettingsPage;
 
 
 
