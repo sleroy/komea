@@ -8,6 +8,7 @@
 #maven
 target/
 *.versionsBackup
+komea.log
 
 #eclipse
 .project
@@ -19,3 +20,4 @@ target/
 
 #git
 *.orig
+
