@@ -1,5 +1,5 @@
 
-package org.komea.product.wicket.admin;
+package org.komea.product.wicket.settings;
 
 
 

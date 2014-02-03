@@ -36,7 +36,7 @@ public class EsperXmlImportationBean
     
     
     @Autowired
-    private IAlertService            engine;
+    private IAlertPushService            engine;
     
     @Autowired
     private IEsperEngine          esperEngine;

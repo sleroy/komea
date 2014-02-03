@@ -40,5 +40,12 @@
 			<version>1.2.2</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.jodd</groupId>
+			<artifactId>jodd-bean</artifactId>
+			<version>3.4.10</version>
+		</dependency>
+
+
 	</dependencies>
 </project>

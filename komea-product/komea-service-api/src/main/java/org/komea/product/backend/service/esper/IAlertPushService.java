@@ -11,22 +11,12 @@ import org.komea.product.database.alert.IAlert;
 
 
 /**
- * This interface defines the bean that manage the esper engine.
+ * This interface defines the methods to push alerts.
  * 
  * @author sleroy
  */
-public interface IAlertService
+public interface IAlertPushService
 {
-    
-    
-    /**
-     * Tests if a epl query is existing.
-     * 
-     * @param _metricKey
-     *            the metric key.
-     * @return the key.
-     */
-    boolean existEPL(String _metricKey);
     
     
     /**

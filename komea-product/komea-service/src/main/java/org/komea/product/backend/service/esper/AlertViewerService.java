@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class EsperAlertSnapshotService implements IEsperAlertSnapshotService
+public class AlertViewerService implements IAlertViewerService
 {
     
     
-    public EsperAlertSnapshotService() {
+    public AlertViewerService() {
     
     
         super();

@@ -9,7 +9,7 @@ import org.komea.product.database.alert.IAlert;
 
 
 
-public interface IEsperAlertSnapshotService
+public interface IAlertViewerService
 {
     
     

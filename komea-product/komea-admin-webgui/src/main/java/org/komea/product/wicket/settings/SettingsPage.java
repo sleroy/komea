@@ -1,5 +1,5 @@
 
-package org.komea.product.wicket.admin;
+package org.komea.product.wicket.settings;
 
 
 
@@ -37,14 +37,11 @@ public class SettingsPage extends LayoutPage
         // method loadPersons is defined elsewhere
         final List<Setting> settings = service.getSettings();
         // Build DTO
+        
         final SettingsDTO settingsDTO = new SettingsDTO();
         settingsDTO.setSettings(settings);
-        
-        
         add(new SettingForm(getService(), "form", new CompoundPropertyModel<SettingsDTO>(
                 settingsDTO)));
-        
-        
     }
     
     
