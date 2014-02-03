@@ -122,10 +122,10 @@ public class BugZillaPluginTest extends AbstractSpringIntegrationTestCase {
         Mockito.when(bzfact.newConnector(idServer)).thenReturn(j2connector);
 
         bbean.checkServers();
-        Mockito.verify(mockAlertService, Mockito.times(15)).sendEvent(forClass.capture());
+        Mockito.verify(mockAlertService, Mockito.times(17)).sendEvent(forClass.capture());
         System.out.println("forClass" + forClass.getAllValues());
         bbean.checkServers();
-         Mockito.verify(mockAlertService, Mockito.times(30)).sendEvent(forClass.capture());
+         Mockito.verify(mockAlertService, Mockito.times(34)).sendEvent(forClass.capture());
         System.out.println("Fin du test");
 
     }
