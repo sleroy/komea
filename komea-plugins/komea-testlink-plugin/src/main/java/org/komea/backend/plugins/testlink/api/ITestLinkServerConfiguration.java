@@ -4,19 +4,17 @@
  * and open the template in the editor.
  */
 
-package org.komea.backend.plugins.bugzilla.api;
-
-import java.util.List;
+package org.komea.backend.plugins.testlink.api;
 
 /**
  *
  * @author rgalerme
  */
-public interface IBugZillaConfiguration {
+public interface ITestLinkServerConfiguration {
     
-    /**
+       /**
      *
      * @return
      */
-    public List<IBugZillaServerConfiguration> getServers();
+    public ITestLinkServerProxy openProxy();
 }

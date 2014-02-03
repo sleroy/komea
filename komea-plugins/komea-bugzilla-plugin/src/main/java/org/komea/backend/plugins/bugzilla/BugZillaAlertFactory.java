@@ -183,4 +183,18 @@ public class BugZillaAlertFactory implements IBugZillaAlertFactory {
 
         return alert;
     }
+
+    @Override
+    public IAlert newStatusBug(long _alert, String _project, String _status) {
+           Alert alert = new Alert();
+        alert.setProvider("BUGZILLA");
+        alert.setMessage("Total number of "+_status+"  bugs in BugZilla Project");
+        alert.setCategory("BUGTRACKER");
+        alert.setValue(_alert);
+        alert.setFullMessage(alert.getMessage());
+        alert.setProject(_project);
+        alert.setCriticity(Criticity.INFO);
+        alert.setDate(new Date());
+        return alert;
+    }
 }

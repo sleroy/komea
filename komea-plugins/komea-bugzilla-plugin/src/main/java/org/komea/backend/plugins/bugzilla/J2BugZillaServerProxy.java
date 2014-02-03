@@ -14,8 +14,11 @@ import com.j2bugzilla.rpc.BugSearch;
 import com.j2bugzilla.rpc.GetAccessibleProducts;
 import com.j2bugzilla.rpc.GetProduct;
 import com.j2bugzilla.rpc.LogIn;
+import com.j2bugzilla.rpc.LogOut;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy;
@@ -26,20 +29,14 @@ import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy;
  */
 public class J2BugZillaServerProxy implements IBugZillaServerProxy {
 
-    private BugzillaConnector conn=null;
-    private final String address;
-    private final String login;
-    private final String mdp;
+    private BugzillaConnector conn;
 
-    public J2BugZillaServerProxy(String address, String login, String mdp) {
-        this.address = address;
-        this.login = login;
-        this.mdp = mdp;
+    public J2BugZillaServerProxy(BugzillaConnector conn) {
+        this.conn = conn;
     }
 
     @Override
     public List<String> getListProjects() {
-        checkConnexion();
         List<Product> products = getProduct();
         List<String> projects = new ArrayList<String>();
         for (Product product : products) {
@@ -50,29 +47,30 @@ public class J2BugZillaServerProxy implements IBugZillaServerProxy {
 
     @Override
     public List<BugzillaBug> getListBugs(String Project) {
-        checkConnexion();
-       List<BugzillaBug> bugZillaBugs = new ArrayList<BugzillaBug>();
+
+        List<BugzillaBug> bugZillaBugs = new ArrayList<BugzillaBug>();
         try {
             BugSearch search = new BugSearch(new BugSearch.SearchQuery(BugSearch.SearchLimiter.PRODUCT, Project));
 //            GetBug search = new GetBug(445296);
             conn.executeMethod(search);
-            
+
             List<Bug> searchResults = search.getSearchResults();
             for (Bug bug : searchResults) {
-
-                bugZillaBugs.add(new BugzillaBug(bug.getID(), bug.getStatus()));
+                Map<Object, Object> parameterMap = bug.getParameterMap();
+                Boolean isOpen = (Boolean) parameterMap.get("is_open");
+                Date dateCreation = (Date) parameterMap.get("creation_time");
+                String assign = (String) parameterMap.get("assigned_to");
+                boolean is_assign = true;
+                if ("".equals(assign)) {
+                    is_assign = false;
+                }
+                bugZillaBugs.add(new BugzillaBug(bug.getID(), bug.getStatus(), isOpen.booleanValue(), dateCreation, is_assign));
             }
 
         } catch (BugzillaException ex) {
             Logger.getLogger(J2BugZillaServerProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
         return bugZillaBugs;
-    }
-
-    @Override
-    public List<BugzillaBug> getFilterBugs(String Project, BugZillaStatus... status) {
-        checkConnexion();
-        return null;
     }
 
     private List<Product> getProduct() {
@@ -95,26 +93,12 @@ public class J2BugZillaServerProxy implements IBugZillaServerProxy {
         return products;
     }
 
-    private void checkConnexion()
-    {
-        if(this.conn == null)
-        {
-        connexion();
-        }
-    }
-    
-    private void connexion() {
+    @Override
+    public void close() {
         try {
-            conn = new BugzillaConnector();
-            conn.connectTo(address);
-            LogIn logIn = new LogIn(login, mdp);
-            try {
-                conn.executeMethod(logIn);
-            } catch (BugzillaException ex) {
-                Logger.getLogger(BugZillaServerConfiguration.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } catch (ConnectionException ex) {
-            Logger.getLogger(BugZillaServerConfiguration.class.getName()).log(Level.SEVERE, null, ex);
+            conn.executeMethod(new LogOut());
+        } catch (BugzillaException ex) {
+            Logger.getLogger(J2BugZillaServerProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

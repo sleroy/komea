@@ -5,8 +5,10 @@
  */
 package org.komea.backend.plugins.bugzilla;
 
+import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxyFactory;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -14,29 +16,31 @@ import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy;
  */
 public class BugZillaServerConfiguration implements IBugZillaServerConfiguration {
 
-    private String address;
-    private String login;
-    private String mdp;
+    private final BugZillaServer server;
 
     private IBugZillaServerProxy serverController;
 
-    public BugZillaServerConfiguration(String address, String login, String mdp) {
-        this.address = address;
-        this.login = login;
-        this.mdp = mdp;
+    private final IBugZillaServerProxyFactory serverProxyFactory;
+
+    public BugZillaServerConfiguration(BugZillaServer server, IBugZillaServerProxyFactory serverProxyFactory) {
+
+        this.server = server;
+        this.serverProxyFactory = serverProxyFactory;
     }
 
     @Override
     public IBugZillaServerProxy openProxy() {
         if (this.serverController == null) {
-            J2BugZillaServerProxy servProx = new J2BugZillaServerProxy(address, login, mdp);
-            this.serverController = servProx;
+            return serverProxyFactory.newConnector(this.server);
         }
         return serverController;
     }
 
-    private void init() {
-
+    @Override
+    public BugZillaContext getBugZillaContext() {
+        return this.server.getContext();
     }
+
+
 
 }

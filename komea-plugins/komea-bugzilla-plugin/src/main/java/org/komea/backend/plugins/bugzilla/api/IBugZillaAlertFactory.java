@@ -13,6 +13,9 @@ import org.komea.product.database.alert.IAlert;
  */
 public interface IBugZillaAlertFactory {
 
+    
+    public IAlert newStatusBug(long _alert, String _project, String _status);
+    
     /**
      *
      * @param _alert
