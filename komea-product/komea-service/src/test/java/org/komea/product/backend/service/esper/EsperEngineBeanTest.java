@@ -103,7 +103,7 @@ public class EsperEngineBeanTest
         Assert.assertFalse(esperEngine.existEPL("demo"));
         final EPStatement epl = esperEngine.createEPL("demo", "select * from Alert");
         Assert.assertNotNull(epl);
-        Assert.assertTrue(esperEngine.getStatementNames().length == 1);
+        Assert.assertEquals(2, esperEngine.getStatementNames().length);
     }
     
     

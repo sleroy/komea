@@ -125,6 +125,30 @@ public class EPStatementResult
     
     
     /**
+     * This method should be use with great care, the statement must always returns a value.
+     * 
+     * @return
+     */
+    public <T> T singleResult() {
+    
+    
+        T res = null;
+        SafeIterator<EventBean> safeIterator = null;
+        try {
+            safeIterator = statement.safeIterator();
+            if (safeIterator.hasNext()) {
+                final EventBean next = safeIterator.next();
+                res = (T) ((Map) next.getUnderlying()).values().iterator().next();
+            }
+            
+        } finally {
+            safeIterator.close();
+        }
+        return res;
+    }
+    
+    
+    /**
      * Returns a single result from the EP Statement
      * 
      * @param _propertyName

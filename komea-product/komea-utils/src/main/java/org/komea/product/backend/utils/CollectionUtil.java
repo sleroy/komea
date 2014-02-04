@@ -7,7 +7,7 @@ import java.util.List;
 
 
 
-public class CollectionUtils
+public class CollectionUtil
 {
     
     

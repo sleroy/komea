@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.komea.product.backend.service.business.ISettingProxy;
 import org.mockito.Mockito;
 
 

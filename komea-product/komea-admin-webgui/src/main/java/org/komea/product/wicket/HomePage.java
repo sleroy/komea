@@ -39,7 +39,7 @@ public class HomePage extends LayoutPage
                 info("the form was submitted!");
             }
         });
-        // TODO Add your page's components here
+        
         
     }
 }

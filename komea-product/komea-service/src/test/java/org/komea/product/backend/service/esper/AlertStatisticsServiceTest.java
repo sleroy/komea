@@ -13,51 +13,47 @@ import org.junit.Test;
 import org.komea.product.database.alert.Alert;
 import org.komea.product.database.alert.AlertBuilder;
 import org.komea.product.service.dto.AlertTypeStatistic;
+import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 
 /**
  * @author sleroy
  */
-public class AlertStatisticsServiceTest
+public class AlertStatisticsServiceTest extends AbstractSpringIntegrationTestCase
 {
     
     
+    @Autowired
+    private AlertStatisticsService alertStats;
+    
+    @Autowired
+    private EsperEngineBean        esperEngine;
+    
+    
+    
     /**
-     * Test method for {@link org.komea.product.backend.service.esper.AlertStatisticsService#getReceivedAlertTypesIn24Hours()}.
+     * Test method for {@link org.komea.product.backend.service.esper.AlertStatisticsService#getReceivedAlertTypesIn24LastHours()}.
      */
     @Test
-    public final void testGetReceivedAlertTypesIn24Hours() {
+    public final void testGetReceivedAlertTypesIn24LastHours() {
     
     
-        final EsperEngineBean esperEngineBean = new EsperEngineBean();
-        esperEngineBean.init();
-        
-        final EsperQueryServiceBean esperQueryService = new EsperQueryServiceBean();
-        esperQueryService.setEsperEngineService(esperEngineBean);
-        
-        
-        final AlertStatisticsService alertStatisticsService = new AlertStatisticsService();
-        alertStatisticsService.setQueryService(esperQueryService);
-        alertStatisticsService.setEsperEngine(esperEngineBean);
-        
-        alertStatisticsService.init();
-        
         final Alert alert =
                 AlertBuilder.newAlert().type("TYPE1").provided("JENKINS").category("SCM")
                         .getAlert();
-        esperEngineBean.sendAlert(alert);
-        esperEngineBean.sendAlert(alert);
-        esperEngineBean.sendAlert(alert);
-        esperEngineBean.sendAlert(alert);
+        esperEngine.sendAlert(alert);
+        esperEngine.sendAlert(alert);
+        esperEngine.sendAlert(alert);
+        esperEngine.sendAlert(alert);
         
         final List<AlertTypeStatistic> receivedAlertTypesIn24Hours =
-                alertStatisticsService.getReceivedAlertTypesIn24Hours();
+                alertStats.getReceivedAlertTypesIn24LastHours();
         final AlertTypeStatistic alertTypeStatistic = receivedAlertTypesIn24Hours.get(0);
         Assert.assertEquals(4L, alertTypeStatistic.getNumber());
         Assert.assertEquals("JENKINS", alertTypeStatistic.getProvider());
         System.out.println(receivedAlertTypesIn24Hours);
         
     }
-    
 }

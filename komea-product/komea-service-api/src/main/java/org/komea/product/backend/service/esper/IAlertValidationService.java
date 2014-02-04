@@ -11,6 +11,6 @@ public interface IAlertValidationService
 {
     
     
-    public abstract void validate(IAlert _alert);
+    public void validate(IAlert _alert);
     
 }

@@ -9,6 +9,7 @@ import org.apache.wicket.settings.IExceptionSettings;
 import org.apache.wicket.settings.IExceptionSettings.ThreadDumpStrategy;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.komea.product.wicket.settings.SettingsPage;
+import org.komea.product.wicket.statistics.StatPage;
 
 
 
@@ -41,6 +42,8 @@ public class WicketApplication extends WebApplication
     
     
         super.init();
+        
+        
         getComponentInstantiationListeners().add(new SpringComponentInjector(this));
         // don't throw exceptions for missing translations
         getResourceSettings().setThrowExceptionOnMissingResource(false);
@@ -52,6 +55,7 @@ public class WicketApplication extends WebApplication
         getMarkupSettings().setStripWicketTags(true);
         // page mounts / SEO
         mountPage("/settings", SettingsPage.class);
+        mountPage("/stats", StatPage.class);
         mountPage("/auth/login", LoginPage.class);
         mountPage("/auth/accessdenied", UnauthorizedPage.class);
         getExceptionSettings().setThreadDumpStrategy(ThreadDumpStrategy.ALL_THREADS);

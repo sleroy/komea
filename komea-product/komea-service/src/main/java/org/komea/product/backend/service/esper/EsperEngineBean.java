@@ -12,6 +12,7 @@ import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.listeners.EPServiceStateListener1;
 import org.komea.product.backend.esper.listeners.EPStatementStateListener1;
 import org.komea.product.backend.esper.reactor.EsperDebugReactorListener;
+import org.komea.product.backend.exceptions.EsperStatementNotFoundException;
 import org.komea.product.database.alert.Alert;
 import org.komea.product.database.alert.IAlert;
 import org.komea.product.database.alert.enums.Criticity;
@@ -54,14 +55,35 @@ public final class EsperEngineBean implements IEsperEngine
     
     
     @Override
-    public EPStatement createEPL(final String _name, final String _query) {
+    public EPStatement createEPL(final String _eplQuery, final String _eplQueryName) {
     
     
-        LOGGER.info("Creation of a new EPL Statement {}->{}", _name, _query);
-        final EPStatement createEPL = esperEngine.getEPAdministrator().createEPL(_query, _name);
+        LOGGER.info("Creation of a new EPL Statement {}->{}", _eplQuery, _eplQueryName);
+        final EPStatement createEPL =
+                esperEngine.getEPAdministrator().createEPL(_eplQuery, _eplQueryName);
         return createEPL;
     }
     
+    
+    @Override
+    public void createOrUpdateEPL(final String _query, final String _statementName) {
+    
+    
+        LOGGER.info("Registering an esper query {} : {}", _query, _statementName);
+        if (existEPL(_query)) {
+            LOGGER.info("--> Replacing an esper query {} : {}", _query, _statementName);
+            createEPL(_query, _statementName);
+            return;
+        }
+        LOGGER.info("--> Creating a new esper query {} : {}", _query, _statementName);
+        createEPL(_query, _statementName);
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see com.tocea.scertify.ci.flow.bean.IEsperEngine#getEsperEngine()
+     */
     
     @Override
     public boolean existEPL(final String _metricKey) {
@@ -70,11 +92,6 @@ public final class EsperEngineBean implements IEsperEngine
         return esperEngine.getEPAdministrator().getStatement(_metricKey) != null;
     }
     
-    
-    /*
-     * (non-Javadoc)
-     * @see com.tocea.scertify.ci.flow.bean.IEsperEngine#getEsperEngine()
-     */
     
     @Override
     public EPServiceProvider getEsper() {
@@ -99,6 +116,16 @@ public final class EsperEngineBean implements IEsperEngine
     
     
         return esperEngine.getEPAdministrator().getStatementNames();
+    }
+    
+    
+    @Override
+    public EPStatement getStatementOrFail(final String _measureName) {
+    
+    
+        final EPStatement statement = getStatement(_measureName);
+        if (statement == null) { throw new EsperStatementNotFoundException(_measureName); }
+        return statement;
     }
     
     
@@ -156,5 +183,4 @@ public final class EsperEngineBean implements IEsperEngine
         esperEngine = null;
         
     }
-    
 }

@@ -13,5 +13,13 @@ public interface IAlertStatisticsService
 {
     
     
-    public List<AlertTypeStatistic> getReceivedAlertTypesIn24Hours();
+    public List<AlertTypeStatistic> getReceivedAlertTypesIn24LastHours();
+    
+    
+    /**
+     * Returns the number of received alerts in the 24 last hours.
+     * 
+     * @return
+     */
+    long getReceivedAlertsIn24LastHours();
 }

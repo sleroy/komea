@@ -168,12 +168,24 @@
 			<type>pom</type>
 		</dependency>
 
+
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-bootstrap</artifactId>
+			<version>0.15</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui</artifactId>
 			<version>6.13.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.googlecode.wicked-charts</groupId>
+			<artifactId>wicked-charts-wicket6</artifactId>
+			<version>1.5.0</version>
+		</dependency>
 	</dependencies>
 
 

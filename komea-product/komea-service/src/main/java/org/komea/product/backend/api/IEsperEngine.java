@@ -45,7 +45,26 @@ public interface IEsperEngine
     EPStatement getStatement(String _statementName);
     
     
+    /**
+     * Returns the list of statement names.
+     * 
+     * @return the statement names.
+     */
     String[] getStatementNames();
+    
+    
+    EPStatement getStatementOrFail(String _measureName);
+    
+    
+    /**
+     * Registers a esper query.
+     * 
+     * @param _query
+     *            the query.
+     * @param _statementName
+     *            the statement name.
+     */
+    void createOrUpdateEPL(String _query, String _statementName);
     
     
     /**
@@ -54,6 +73,5 @@ public interface IEsperEngine
      * @param _alert
      */
     void sendAlert(IAlert _alert);
-    
     
 }

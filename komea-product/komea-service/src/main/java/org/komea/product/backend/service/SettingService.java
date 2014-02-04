@@ -11,8 +11,9 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.komea.product.backend.exceptions.DAOException;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
+import org.komea.product.backend.service.business.ISettingProxy;
 import org.komea.product.backend.service.proxy.SettingProxy;
-import org.komea.product.backend.utils.CollectionUtils;
+import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.SettingDao;
 import org.komea.product.database.model.Setting;
 import org.komea.product.database.model.SettingCriteria;
@@ -77,7 +78,7 @@ public class SettingService implements ISettingService
         final SettingCriteria criteria = new SettingCriteria();
         criteria.createCriteria().andSettingKeyEqualTo(_key);
         final List<Setting> selectSettingsByCriteria = settingDAO.selectByCriteria(criteria);
-        final Setting settingFound = CollectionUtils.singleOrNull(selectSettingsByCriteria);
+        final Setting settingFound = CollectionUtil.singleOrNull(selectSettingsByCriteria);
         if (settingFound == null) { return null; }
         return new SettingProxy<T>(settingDAO, settingFound.getId());
     }
