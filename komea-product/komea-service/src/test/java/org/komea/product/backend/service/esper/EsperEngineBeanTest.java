@@ -62,7 +62,7 @@ public class EsperEngineBeanTest
     public final void testCreateEPL() {
     
     
-        final EPStatement epl = esperEngine.createEPL("demo", "select * from Alert");
+        final EPStatement epl = esperEngine.createEPL("select * from Alert", "demo");
         Assert.assertNotNull(epl);
         Assert.assertTrue(esperEngine.existEPL("demo"));
     }
@@ -76,7 +76,7 @@ public class EsperEngineBeanTest
     
     
         Assert.assertFalse(esperEngine.existEPL("demo"));
-        final EPStatement epl = esperEngine.createEPL("demo", "select * from Alert");
+        final EPStatement epl = esperEngine.createEPL("select * from Alert", "demo");
         Assert.assertNotNull(epl);
         Assert.assertTrue(esperEngine.existEPL("demo"));
     }
@@ -101,7 +101,7 @@ public class EsperEngineBeanTest
     
     
         Assert.assertFalse(esperEngine.existEPL("demo"));
-        final EPStatement epl = esperEngine.createEPL("demo", "select * from Alert");
+        final EPStatement epl = esperEngine.createEPL("select * from Alert", "demo");
         Assert.assertNotNull(epl);
         Assert.assertEquals(2, esperEngine.getStatementNames().length);
     }

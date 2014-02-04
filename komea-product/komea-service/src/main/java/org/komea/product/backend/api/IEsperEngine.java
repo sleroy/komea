@@ -23,7 +23,18 @@ public interface IEsperEngine
      *            the statement query.
      * @return the esper compiled statement.
      */
-    EPStatement createEPL(String _name, String _query);
+    EPStatement createEPL(String _query, String _name);
+    
+    
+    /**
+     * Registers a esper query.
+     * 
+     * @param _query
+     *            the query.
+     * @param _statementName
+     *            the statement name.
+     */
+    void createOrUpdateEPL(String _query, String _statementName);
     
     
     boolean existEPL(String _metricKey);
@@ -53,18 +64,14 @@ public interface IEsperEngine
     String[] getStatementNames();
     
     
-    EPStatement getStatementOrFail(String _measureName);
-    
-    
     /**
-     * Registers a esper query.
+     * Returns the statement or throws an exception.
      * 
-     * @param _query
-     *            the query.
-     * @param _statementName
-     *            the statement name.
+     * @param _statement
+     *            the statement name
+     * @return the esper statement
      */
-    void createOrUpdateEPL(String _query, String _statementName);
+    EPStatement getStatementOrFail(String _statement);
     
     
     /**
