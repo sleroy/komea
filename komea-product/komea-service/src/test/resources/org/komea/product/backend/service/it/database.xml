@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <kom_pero id="1" name="tocea" />
+	<kom_pe id="1" idPersonRole="1" firstName="jeremie"  lastName="Guidoux" login="jguidoux" email="jeremie.guidoux@tocea.com"/>
+	<kom_pe id="2" idPersonRole="1" firstName="sylvain"  lastName="Leroy" login="sleroy" email="sylvain.leroy@tocea.com@tocea.com"/>
+</dataset>

@@ -25,7 +25,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 @TestExecutionListeners({
         DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class })
-public class DepartmentControllerTest extends AbstractSpringWebIntegrationTestCase
+public class PersonControllerTest extends AbstractSpringWebIntegrationTestCase
 {
     
     @Autowired
@@ -42,12 +42,13 @@ public class DepartmentControllerTest extends AbstractSpringWebIntegrationTestCa
     //
     @Test
     @DatabaseSetup("database.xml")
-    public void testAllDepartments() throws Exception {
+    public void testAllPersons() throws Exception {
     
-        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.get("/departments/all"));
+        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.get("/persons/all"));
         
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)));
-        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.equalToIgnoringCase("devs")));
+        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(2)));
+        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[0].login", Matchers.equalToIgnoringCase("jguidoux")));
+        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[1].login", Matchers.equalToIgnoringCase("sleroy")));
     }
 }

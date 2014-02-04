@@ -2,7 +2,6 @@
 package org.komea.product.database.dao.it;
 
 
-
 import java.util.List;
 
 import org.junit.Assert;
@@ -17,11 +16,8 @@ import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 public class ProjectDAOIT extends AbstractSpringIntegrationTestCase
 {
-    
     
     @Autowired
     private ProjectDao  projectDAO;
@@ -29,12 +25,9 @@ public class ProjectDAOIT extends AbstractSpringIntegrationTestCase
     @Autowired
     private CustomerDao customerDAO;
     
-    
-    
     @Test
     @Transactional
     public void test() {
-    
     
         final ProjectCriteria request = new ProjectCriteria();
         request.createCriteria().andNameEqualTo("projet1");
@@ -48,7 +41,7 @@ public class ProjectDAOIT extends AbstractSpringIntegrationTestCase
         // request2.createCriteria();
         final List<Customer> customers = customerDAO.selectByCriteria(request2);
         
-        System.out.println("client id = " + jguidoux.getId());
+        // System.out.println("client id = " + jguidoux.getId());
         final Project project = new Project();
         project.setProjectKey("TEST1");
         project.setName("projet1");

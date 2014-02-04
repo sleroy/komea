@@ -21,7 +21,10 @@
 		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 	</properties>
 
+
 	<build>
+	
+	
 		<resources>
 			<resource>
 				<directory>src/main/webapp</directory>
@@ -30,6 +33,7 @@
 		</resources>
 
 		<plugins>
+		
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
