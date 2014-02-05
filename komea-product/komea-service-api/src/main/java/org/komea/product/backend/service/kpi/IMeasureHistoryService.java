@@ -11,7 +11,7 @@ import org.komea.product.database.model.Measure;
 
 
 
-public interface IMeasureService
+public interface IMeasureHistoryService
 {
     
     
@@ -34,6 +34,16 @@ public interface IMeasureService
      *            the measure
      */
     public void storeMeasure(Measure _measure);
+    
+    
+    /**
+     * Builds an history purge action from a kpi.
+     * 
+     * @param _kpi
+     *            the kpi
+     * @return the history purge action.
+     */
+    IHistoryPurgeAction buildHistoryPurgeAction(Kpi _kpi);
     
     
     /**

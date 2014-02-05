@@ -38,20 +38,20 @@ public final class KPIService implements IKPIService
     
     
     @Autowired
-    private IMeasureService      measureService;
+    private IMeasureHistoryService measureService;
     
     
     @Autowired
-    private IEsperEngine         esperEngine;
+    private IEsperEngine           esperEngine;
     
     @Autowired
-    private KpiDao               kpiDAO;
+    private KpiDao                 kpiDAO;
     
     @Autowired
-    private ICronRegistryService cronRegistry;
+    private ICronRegistryService   cronRegistry;
     
     
-    private static final Logger  LOGGER = LoggerFactory.getLogger(KPIService.class);
+    private static final Logger    LOGGER = LoggerFactory.getLogger(KPIService.class);
     
     
     
@@ -161,7 +161,7 @@ public final class KPIService implements IKPIService
     
     
     @Override
-    public List<Kpi> getListOfKpisOfEntity(final IEntity _entity) {
+    public List<Kpi> getListOfKpisForEntity(final IEntity _entity) {
     
     
         final List<Kpi> kpis = new ArrayList<Kpi>();
@@ -181,7 +181,7 @@ public final class KPIService implements IKPIService
     /**
      * @return the measureService
      */
-    public final IMeasureService getMeasureService() {
+    public final IMeasureHistoryService getMeasureService() {
     
     
         return measureService;
@@ -239,7 +239,7 @@ public final class KPIService implements IKPIService
      * @param _measureService
      *            the measureService to set
      */
-    public final void setMeasureService(final IMeasureService _measureService) {
+    public final void setMeasureService(final IMeasureHistoryService _measureService) {
     
     
         measureService = _measureService;
@@ -269,6 +269,8 @@ public final class KPIService implements IKPIService
         measure.setValue(measureService.findMeasure(_kpiName.computeKPIEsperKey(_entity))
                 .getDoubleValue());
         measureService.storeMeasure(measure);
+        final int purgeHistory = measureService.buildHistoryPurgeAction(_kpiName).purgeHistory();
+        LOGGER.debug("Purge history : {} items", purgeHistory);
         
     }
     
@@ -278,7 +280,7 @@ public final class KPIService implements IKPIService
     
     
         LOGGER.info("Updating / Refreshing Kpi statements of entity {}", _entity);
-        final List<Kpi> listOfKpisOfEntity = getListOfKpisOfEntity(_entity);
+        final List<Kpi> listOfKpisOfEntity = getListOfKpisForEntity(_entity);
         
         LOGGER.info("EntityWithKPI {} has {} kpi", _entity, listOfKpisOfEntity.size());
         for (final Kpi kpi : listOfKpisOfEntity) {

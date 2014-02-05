@@ -69,7 +69,7 @@ public class KPIServiceTest
                 Mockito.mock(EPStatement.class, Mockito.withSettings().verboseLogging());
         
         
-        final MeasureService measureService = new MeasureService();
+        final MeasureHistoryService measureService = new MeasureHistoryService();
         measureService.setEsperEngine(esperEngine);
         measureService.setMeasureDAO(measureDAOMock);
         
@@ -144,7 +144,7 @@ public class KPIServiceTest
                     Mockito.mock(EPStatement.class, Mockito.withSettings().verboseLogging());
             
             
-            final MeasureService measureService = new MeasureService();
+            final MeasureHistoryService measureService = new MeasureHistoryService();
             measureService.setEsperEngine(esperEngine);
             measureService.setMeasureDAO(measureDAOMock);
             

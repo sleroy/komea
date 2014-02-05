@@ -20,8 +20,13 @@ import org.springframework.stereotype.Service;
 
 
 
+/**
+ * This interface provides the functions needed to manipulate the history
+ * 
+ * @author sleroy
+ */
 @Service
-public class MeasureService implements IMeasureService
+public class MeasureHistoryService implements IMeasureHistoryService
 {
     
     
@@ -32,14 +37,40 @@ public class MeasureService implements IMeasureService
     private IEsperEngine        esperEngine;
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(MeasureService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MeasureHistoryService.class);
     
     
     
-    public MeasureService() {
+    public MeasureHistoryService() {
     
     
         super();
+    }
+    
+    
+    /**
+     * Builds the history purge action.
+     * 
+     * @param _kpi
+     *            the kpi
+     * @return the history purge action.
+     */
+    @Override
+    public IHistoryPurgeAction buildHistoryPurgeAction(final Kpi _kpi) {
+    
+    
+        switch (_kpi.getEvictionType()) {
+            case DAYS:
+                return new HistoryPurgePerDaysAction(measureDAO, _kpi);
+            case MONTHS:
+                return new HistoryPurgePerMonthsAction(measureDAO, _kpi);
+            case VALUES:
+                return new HistoryPurgePerValuesAction(measureDAO, _kpi);
+                
+        }
+        return null;
+        
+        
     }
     
     

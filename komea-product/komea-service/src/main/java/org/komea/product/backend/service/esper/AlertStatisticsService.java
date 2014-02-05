@@ -22,6 +22,7 @@ import org.komea.product.backend.service.kpi.IEntityWithKPIAdapter;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.Project;
@@ -223,9 +224,11 @@ public class AlertStatisticsService implements IAlertStatisticsService
             kpi.setMaxValue(Double.MAX_VALUE);
             kpi.setName("Number of alerts received under 24 hours.");
             kpi.setEntityID(systemProject.getSystemProject().getId());
-            kpi.setCronExpression("0/5 * * * * ?");
+            kpi.setCronExpression("0 0 0 * * ?");
+            kpi.setEvictionRate(30);
+            kpi.setEvictionType(EvictionType.DAYS);
             final List<Kpi> listOfKpisOfEntity =
-                    kpiService.getListOfKpisOfEntity(systemProject.getSystemProject());
+                    kpiService.getListOfKpisForEntity(systemProject.getSystemProject());
             listOfKpisOfEntity.add(kpi);
             kpiService.updateKPIOfEntity(systemProject.getSystemProject(), listOfKpisOfEntity);
             

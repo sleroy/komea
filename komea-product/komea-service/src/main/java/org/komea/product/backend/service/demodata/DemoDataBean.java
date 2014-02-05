@@ -56,7 +56,7 @@ public class DemoDataBean
     }
     
     
-    @Scheduled(fixedRate = 100)
+    @Scheduled(fixedRate = 10000)
     public void sendAlert() {
     
     

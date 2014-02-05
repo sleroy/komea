@@ -40,7 +40,7 @@ public class EntityWithKPIAdapter implements IEntityWithKPIAdapter
     
     
         LOGGER.info("Build adapter for {} ", _entity);
-        return new EntityWithKPI(_entity, kpiService.getListOfKpisOfEntity(_entity));
+        return new EntityWithKPI(_entity, kpiService.getListOfKpisForEntity(_entity));
     }
 
 

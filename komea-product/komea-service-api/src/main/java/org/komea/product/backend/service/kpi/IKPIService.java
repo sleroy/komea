@@ -47,7 +47,14 @@ public interface IKPIService
     public Kpi findKPIOrFail(IEntity _entity, String _alertReceivedInOneDay);
     
     
-    public List<Kpi> getListOfKpisOfEntity(IEntity _entity);
+    /**
+     * Returns the list of kpifs for an entity.
+     * 
+     * @param _entity
+     *            the entity
+     * @return the list of KPI.
+     */
+    public List<Kpi> getListOfKpisForEntity(IEntity _entity);
     
     
     /**

@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.komea.product.backend.service.business.IKPIFacade;
 import org.komea.product.backend.service.kpi.IEPMetric;
-import org.komea.product.backend.service.kpi.IMeasureService;
+import org.komea.product.backend.service.kpi.IMeasureHistoryService;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
@@ -27,7 +27,7 @@ public class KPIFacade<TEntity extends IEntity> implements IKPIFacade<TEntity>
     private final IEPMetric       metric;
     private final TEntity         entity;
     private final Kpi             requestedKPI;
-    private final IMeasureService measureService;
+    private final IMeasureHistoryService measureService;
     
     
     
@@ -45,7 +45,7 @@ public class KPIFacade<TEntity extends IEntity> implements IKPIFacade<TEntity>
             final IEPMetric _statement,
             final TEntity _entity,
             final Kpi _requestedKPI,
-            final IMeasureService _measureService) {
+            final IMeasureHistoryService _measureService) {
     
     
         super();
