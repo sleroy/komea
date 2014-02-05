@@ -4,10 +4,12 @@ package org.komea.product.backend.service.kpi;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
+import org.komea.product.backend.esper.reactor.KPINotFoundRuntimeException;
 import org.komea.product.backend.esper.reactor.QueryDefinition;
 import org.komea.product.backend.kpi.KPIFacade;
 import org.komea.product.backend.service.business.IKPIFacade;
@@ -16,6 +18,7 @@ import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
+import org.komea.product.database.model.Measure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +34,6 @@ public final class KPIService implements IKPIService
     
     @Autowired
     private IMeasureService     measureService;
-    
-    
-    @Autowired
-    private IMetricService      metricService;
     
     
     @Autowired
@@ -56,11 +55,15 @@ public final class KPIService implements IKPIService
     
     
     @Override
-    public Kpi findKPI(final String _kpiName) {
+    public Kpi findKPI(final IEntity _entity, final String _kpiName) {
     
     
         final KpiCriteria kpiCriteria = new KpiCriteria();
         kpiCriteria.createCriteria().andKpiKeyEqualTo(_kpiName);
+        if (_entity != null) {
+            kpiCriteria.createCriteria().andEntityIDEqualTo(_entity.getId());
+            kpiCriteria.createCriteria().andEntityTypeEqualTo(_entity.getType());
+        }
         return CollectionUtil.singleOrNull(kpiDAO.selectByExampleWithBLOBs(kpiCriteria));
         
     }
@@ -80,10 +83,20 @@ public final class KPIService implements IKPIService
         
         if (requestedKpi == null) { throw new KPINotFoundException(_entity, _kpiName); }
         final IEPMetric metricWrapperOverEsperQuery =
-                metricService.findMeasure(requestedKpi.computeKPIEsperKey(_entity));
+                measureService.findMeasure(requestedKpi.computeKPIEsperKey(_entity));
         return new KPIFacade<TEntity>(metricWrapperOverEsperQuery, _entity, requestedKpi,
                 measureService);
         
+    }
+    
+    
+    @Override
+    public Kpi findKPIOrFail(final IEntity _entity, final String _kpiName) {
+    
+    
+        final Kpi findKPI = findKPI(_entity, _kpiName);
+        if (findKPI == null) { throw new KPINotFoundRuntimeException(_entity, _kpiName); }
+        return findKPI;
     }
     
     
@@ -105,7 +118,7 @@ public final class KPIService implements IKPIService
     
     
     @Override
-    public <TEntity extends IEntity> List<Kpi> getListOfKpisOfEntity(final TEntity _entity) {
+    public List<Kpi> getListOfKpisOfEntity(final IEntity _entity) {
     
     
         final List<Kpi> kpis = new ArrayList<Kpi>();
@@ -129,16 +142,6 @@ public final class KPIService implements IKPIService
     
     
         return measureService;
-    }
-    
-    
-    /**
-     * @return the metricService
-     */
-    public final IMetricService getMetricService() {
-    
-    
-        return metricService;
     }
     
     
@@ -194,19 +197,35 @@ public final class KPIService implements IKPIService
     }
     
     
-    /**
-     * @param _metricService
-     *            the metricService to set
-     */
-    public final void setMetricService(final IMetricService _metricService) {
+    @Transactional
+    @Override
+    public void storeValueInHistory(final IEntity _entity, final Kpi _kpiName) {
     
     
-        metricService = _metricService;
+        final Measure measure = new Measure();
+        switch (_entity.getType()) {
+            case PERSON:
+                measure.setIdPerson(_entity.getId());
+                break;
+            case PERSONG_GROUP:
+                measure.setIdPersonGroup(_entity.getId());
+                break;
+            case PROJECT:
+                measure.setIdProject(_entity.getId());
+                break;
+        
+        }
+        measure.setDate(new Date());
+        measure.setIdKpi(_kpiName.getId());
+        measure.setValue(measureService.findMeasure(_kpiName.computeKPIEsperKey(_entity))
+                .getDoubleValue());
+        measureService.storeMeasure(measure);
+        
     }
     
     
     @Override
-    public <TEntity extends IEntity> void synchronizeInEsper(final TEntity _entity) {
+    public void synchronizeInEsper(final IEntity _entity) {
     
     
         LOGGER.info("Updating / Refreshing Kpi statements of entity {}", _entity);
@@ -223,9 +242,7 @@ public final class KPIService implements IKPIService
     
     @Transactional
     @Override
-    public <TEntity extends IEntity> void updateKPIOfEntity(
-            final TEntity _entity,
-            final List<Kpi> listOfKpis) {
+    public void updateKPIOfEntity(final IEntity _entity, final List<Kpi> listOfKpis) {
     
     
         // Ignore silently global kpi...

@@ -25,4 +25,23 @@ public interface IMeasureService
      * @return the list of measures.
      */
     public List<Measure> getMeasures(IEntity _entity, Kpi _kpi);
+    
+    
+    /**
+     * Stores a new measure in the history.
+     * 
+     * @param _measure
+     *            the measure
+     */
+    public void storeMeasure(Measure _measure);
+    
+    
+    /**
+     * Returns a metric from a EPStatement.
+     * 
+     * @param _measureName
+     *            the measure name.
+     * @return the epstatement metric.
+     */
+    IEPMetric findMeasure(String _measureName);
 }

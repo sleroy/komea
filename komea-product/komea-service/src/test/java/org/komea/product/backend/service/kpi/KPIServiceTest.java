@@ -68,17 +68,15 @@ public class KPIServiceTest
         final EPStatement epStatementMock =
                 Mockito.mock(EPStatement.class, Mockito.withSettings().verboseLogging());
         
-        final MetricService metricService = new MetricService();
-        metricService.setEsperEngine(esperEngine);
         
         final MeasureService measureService = new MeasureService();
-        
+        measureService.setEsperEngine(esperEngine);
         measureService.setMeasureDAO(measureDAOMock);
         
         
         final KPIService kpiService = new KPIService();
         kpiService.setEsperEngine(esperEngine);
-        kpiService.setMetricService(metricService);
+        
         kpiService.setMeasureService(measureService);
         kpiService.setKpiDAO(kpiDAOMock);
         final Person person = new Person();
@@ -101,8 +99,8 @@ public class KPIServiceTest
         kpi.setValueType(ValueType.INT);
         kpiList.add(kpi);
         
-        Mockito.when(kpiDAOMock.selectByCriteria(Matchers.any(KpiCriteria.class))).thenReturn(
-                kpiList);
+        Mockito.when(kpiDAOMock.selectByExampleWithBLOBs(Matchers.any(KpiCriteria.class)))
+                .thenReturn(kpiList);
         
         Mockito.when(esperEngine.getStatementOrFail(KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12))
                 .thenReturn(epStatementMock);
@@ -145,17 +143,15 @@ public class KPIServiceTest
         final EPStatement epStatementMock =
                 Mockito.mock(EPStatement.class, Mockito.withSettings().verboseLogging());
         
-        final MetricService metricService = new MetricService();
-        metricService.setEsperEngine(esperEngine);
         
         final MeasureService measureService = new MeasureService();
-        
+        measureService.setEsperEngine(esperEngine);
         measureService.setMeasureDAO(measureDAOMock);
         
         
         final KPIService kpiService = new KPIService();
         kpiService.setEsperEngine(esperEngine);
-        kpiService.setMetricService(metricService);
+        
         kpiService.setMeasureService(measureService);
         kpiService.setKpiDAO(kpiDAOMock);
         
@@ -181,8 +177,8 @@ public class KPIServiceTest
         kpiList.add(kpi);
         kpiService.updateKPIOfEntity(person, kpiList);
         
-        Mockito.when(kpiDAOMock.selectByCriteria(Matchers.any(KpiCriteria.class))).thenReturn(
-                kpiList);
+        Mockito.when(kpiDAOMock.selectByExampleWithBLOBs(Matchers.any(KpiCriteria.class)))
+                .thenReturn(kpiList);
         
         Mockito.when(esperEngine.getStatementOrFail(KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12))
                 .thenReturn(epStatementMock);
@@ -192,7 +188,7 @@ public class KPIServiceTest
         
         final ArgumentCaptor<QueryDefinition> forClass =
                 ArgumentCaptor.forClass(QueryDefinition.class);
-        Mockito.verify(esperEngine, Mockito.times(1)).createOrUpdateEPL(forClass.capture());
+        Mockito.verify(esperEngine, Mockito.times(2)).createOrUpdateEPL(forClass.capture());
         Assert.assertEquals(KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12, forClass.getValue().getName());
         Assert.assertEquals(SELECT_COUNT_FROM_ALERT, forClass.getValue().getQuery());
         

@@ -5,6 +5,7 @@ package org.komea.product.backend.service.esper;
 
 import java.util.List;
 
+import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.AlertTypeStatistic;
 
 
@@ -13,6 +14,19 @@ public interface IAlertStatisticsService
 {
     
     
+    /**
+     * Returns the list of all measures for the number of alerts.
+     * 
+     * @return the list of all measures.
+     */
+    public List<Measure> getAllMeasures();
+    
+    
+    /**
+     * Returns the number oof received alerts in 24 last hours.
+     * 
+     * @return the number of alerts.
+     */
     public List<AlertTypeStatistic> getReceivedAlertTypesIn24LastHours();
     
     

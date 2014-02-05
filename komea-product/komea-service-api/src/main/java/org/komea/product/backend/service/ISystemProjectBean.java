@@ -7,7 +7,7 @@ import org.komea.product.database.model.Project;
 
 
 
-public interface ISystemProject
+public interface ISystemProjectBean
 {
     
     

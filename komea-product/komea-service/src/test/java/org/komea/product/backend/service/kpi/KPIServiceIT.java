@@ -3,12 +3,15 @@ package org.komea.product.backend.service.kpi;
 
 
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.service.esper.IAlertPushService;
 import org.komea.product.backend.service.esper.IAlertStatisticsService;
 import org.komea.product.database.alert.AlertBuilder;
 import org.komea.product.database.alert.enums.Criticity;
+import org.komea.product.service.dto.AlertTypeStatistic;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -47,6 +50,13 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
                     .provided("SYSTEM").type("DEMO_ALERT").getAlert());
         }
         Assert.assertTrue(systemProject.getReceivedAlertsIn24LastHours() >= 10);
+        final List<AlertTypeStatistic> receivedAlertTypesIn24LastHours =
+                systemProject.getReceivedAlertTypesIn24LastHours();
+        boolean found = false;
+        for (final AlertTypeStatistic stat : receivedAlertTypesIn24LastHours) {
+            found |= stat.getType().equals("DEMO_ALERT");
+        }
+        Assert.assertTrue("Alert is not found", found);
         
     }
 }

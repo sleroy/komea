@@ -3,17 +3,32 @@ package org.komea.product.backend.esper.reactor;
 
 
 
+import org.komea.product.database.api.IEntity;
+
+
+
 public class KPINotFoundRuntimeException extends RuntimeException
 {
     
     
-    private final Object entity;
-    private final String kpiName;
+    private final IEntity entity;
+    private final String  kpiName;
     
+    
+    
+    public KPINotFoundRuntimeException(final IEntity _entity, final String _kpiName) {
+    
+    
+        super("KPI was not found " + _kpiName);
+        entity = _entity;
+        kpiName = _kpiName;
+        
+        
+    }
     
     
     public KPINotFoundRuntimeException(
-            final Object _entity,
+            final IEntity _entity,
             final String _kpiName,
             final Throwable _e) {
     

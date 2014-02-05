@@ -17,22 +17,13 @@ public interface IKPIService
     
     
     /**
-     * Creates a new KPI.
-     * 
-     * @param _kpi
-     *            a new KPI.
-     */
-    public void saveOrUpdate(Kpi _kpi);
-    
-    
-    /**
      * Finds a KPI if existing.
      * 
      * @param _kpiName
      *            the kpi name
      * @return the kpi./
      */
-    public Kpi findKPI(String _kpiName);
+    public Kpi findKPI(IEntity _entity, String _kpiName);
     
     
     /**
@@ -46,7 +37,37 @@ public interface IKPIService
             String _kpiName) throws KPINotFoundException;
     
     
-    public <TEntity extends IEntity> List<Kpi> getListOfKpisOfEntity(TEntity _entity);
+    /**
+     * Finds a KPI or throws an exception
+     * 
+     * @param _alertReceivedInOneDay
+     *            the KPI name
+     * @return the KPI or an exception.
+     */
+    public Kpi findKPIOrFail(IEntity _entity, String _alertReceivedInOneDay);
+    
+    
+    public List<Kpi> getListOfKpisOfEntity(IEntity _entity);
+    
+    
+    /**
+     * Creates a new KPI.
+     * 
+     * @param _kpi
+     *            a new KPI.
+     */
+    public void saveOrUpdate(Kpi _kpi);
+    
+    
+    /**
+     * Store the real-time value in History
+     * 
+     * @param _entity
+     *            the entity.
+     * @param _kpiName
+     *            the kpi name.
+     */
+    public void storeValueInHistory(IEntity _entity, Kpi _kpiName);
     
     
     /**
@@ -55,8 +76,16 @@ public interface IKPIService
      * @param _kpi
      *            kpi
      */
-    public <TEntity extends IEntity> void synchronizeInEsper(TEntity _project);
+    public void synchronizeInEsper(IEntity _project);
     
     
-    public <TEntity extends IEntity> void updateKPIOfEntity(TEntity _entity, List<Kpi> _singleton);
+    /**
+     * Updates all the KPI related to an entioty.
+     * 
+     * @param _entity
+     *            the entity
+     * @param _kpis
+     *            the new list of KPI
+     */
+    public void updateKPIOfEntity(IEntity _entity, List<Kpi> _kpis);
 }

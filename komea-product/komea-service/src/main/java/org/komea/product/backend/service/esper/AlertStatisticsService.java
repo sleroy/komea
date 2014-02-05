@@ -16,7 +16,7 @@ import org.komea.product.backend.esper.reactor.EPStatementResult;
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
 import org.komea.product.backend.esper.reactor.KPINotFoundRuntimeException;
 import org.komea.product.backend.esper.reactor.QueryDefinition;
-import org.komea.product.backend.service.ISystemProject;
+import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.business.IKPIFacade;
 import org.komea.product.backend.service.kpi.IEntityWithKPIAdapter;
 import org.komea.product.backend.service.kpi.IKPIService;
@@ -64,7 +64,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     
     @Autowired
-    private ISystemProject        systemProject;
+    private ISystemProjectBean        systemProject;
     
     
     @Autowired
@@ -157,7 +157,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
     /**
      * @return the systemProject
      */
-    public final ISystemProject getSystemProject() {
+    public final ISystemProjectBean getSystemProject() {
     
     
         return systemProject;
@@ -169,7 +169,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     
         LOGGER.info("Creating System KPI for statistics...");
-        Kpi kpi = kpiService.findKPI(ALERT_RECEIVED_IN_ONE_DAY);
+        Kpi kpi = kpiService.findKPI(systemProject.getSystemProject(), ALERT_RECEIVED_IN_ONE_DAY);
         if (kpi == null) {
             
             
@@ -210,6 +210,15 @@ public class AlertStatisticsService implements IAlertStatisticsService
                 .fullMessage("Demo Alert").message("Demo alert").project("SYSTEM")
                 .provided("DEMO" + new Random().nextInt(12)).type("DemoAlert").getAlert());
         
+    }
+    
+    
+    @Scheduled(fixedRate = 400)
+    public void scheduleBackup() {
+    
+    
+        kpiService.storeValueInHistory(systemProject.getSystemProject(), kpiService.findKPIOrFail(
+                systemProject.getSystemProject(), ALERT_RECEIVED_IN_ONE_DAY));
     }
     
     
@@ -257,7 +266,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
      * @param _systemProject
      *            the systemProject to set
      */
-    public final void setSystemProject(final ISystemProject _systemProject) {
+    public final void setSystemProject(final ISystemProjectBean _systemProject) {
     
     
         systemProject = _systemProject;

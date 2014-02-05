@@ -11,6 +11,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.esper.IAlertStatisticsService;
+import org.komea.product.database.model.Measure;
+import org.komea.product.wicket.DateToJSDate;
 import org.komea.product.wicket.LayoutPage;
 
 import com.googlecode.wickedcharts.highcharts.options.Axis;
@@ -81,36 +83,17 @@ public class StatPage extends LayoutPage
         // of 1970/71 in order to be compared on the same x axis. Note
         // that in JavaScript, months start at 0 for January, 1 for February etc.
         
-        final List<Coordinate<String, Float>> seriesData1 =
-                new ArrayList<Coordinate<String, Float>>();
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1970,  9, 27)", 0f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1970, 10, 10)", 0.6f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1970, 10, 18)", 0.7f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1970, 11,  2)", 0.8f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1970, 11,  9)", 0.6f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1970, 11, 16)", 0.6f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1970, 11, 28)", 0.67f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  0,  1)", 0.81f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  0,  8)", 0.78f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  0, 12)", 0.98f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  0, 27)", 1.84f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  1, 10)", 1.80f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  1, 18)", 1.80f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  1, 24)", 1.92f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  2,  4)", 2.49f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  2, 11)", 2.79f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  2, 15)", 2.73f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  2, 25)", 2.61f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  3,  2)", 2.76f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  3,  6)", 2.82f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  3, 13)", 2.8f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  4,  3)", 2.1f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  4, 26)", 1.1f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  5,  9)", 0.25f));
-        seriesData1.add(new Coordinate<String, Float>("Date.UTC(1971,  5, 12)", 0f));
+        final List<Coordinate<String, Integer>> seriesData1 =
+                new ArrayList<Coordinate<String, Integer>>();
         
-        final CustomCoordinatesSeries<String, Float> series1 =
-                new CustomCoordinatesSeries<String, Float>();
+        for (final Measure measure : statService.getAllMeasures()) {
+            seriesData1.add(new Coordinate<String, Integer>(DateToJSDate.toJavaScript(measure
+                    .getDate()), measure.getValue().intValue()));
+        }
+        
+        
+        final CustomCoordinatesSeries<String, Integer> series1 =
+                new CustomCoordinatesSeries<String, Integer>();
         series1.setName("Number of alerts per day");
         series1.setData(seriesData1);
         options.addSeries(series1);

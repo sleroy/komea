@@ -5,12 +5,16 @@ package org.komea.product.backend.service.kpi;
 
 import java.util.List;
 
+import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.esper.reactor.EPMetric;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.database.model.MeasureCriteria.Criteria;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +26,13 @@ public class MeasureService implements IMeasureService
     
     
     @Autowired
-    private MeasureDao measureDAO;
+    private MeasureDao          measureDAO;
+    
+    @Autowired
+    private IEsperEngine        esperEngine;
+    
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(MeasureService.class);
     
     
     
@@ -30,6 +40,22 @@ public class MeasureService implements IMeasureService
     
     
         super();
+    }
+    
+    
+    @Override
+    public IEPMetric findMeasure(final String _measureName) {
+    
+    
+        return new EPMetric(esperEngine.getStatementOrFail(_measureName));
+        
+    }
+    
+    
+    public IEsperEngine getEsperEngine() {
+    
+    
+        return esperEngine;
     }
     
     
@@ -66,10 +92,27 @@ public class MeasureService implements IMeasureService
     }
     
     
+    public void setEsperEngine(final IEsperEngine _esperEngine) {
+    
+    
+        esperEngine = _esperEngine;
+    }
+    
+    
     public void setMeasureDAO(final MeasureDao _measureDAO) {
     
     
         measureDAO = _measureDAO;
+    }
+    
+    
+    @Override
+    public void storeMeasure(final Measure _measure) {
+    
+    
+        LOGGER.debug("Storing new measure : {}", _measure);
+        measureDAO.insert(_measure);
+        
     }
     
 }
