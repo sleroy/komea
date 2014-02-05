@@ -4,7 +4,7 @@ package org.komea.product.backend.service;
 
 import java.util.List;
 
-import org.komea.product.database.dao.PersonMapper;
+import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public final class PersonService implements IPersonService
 {
     
     @Autowired
-    private PersonMapper personRepository;
+    private PersonDao personRepository;
     
     /**
      * (non-Javadoc)
@@ -33,7 +33,7 @@ public final class PersonService implements IPersonService
     public List<Person> getPersonList() {
     
         PersonCriteria request = new PersonCriteria();
-        List<Person> persons = personRepository.selectByExample(request);
+        List<Person> persons = personRepository.selectByCriteria(request);
         return persons;
     }
     //
