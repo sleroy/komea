@@ -58,13 +58,15 @@ public class EPStatementResult
         SafeIterator<EventBean> safeIterator = null;
         try {
             safeIterator = statement.safeIterator();
-            if (safeIterator.hasNext()) {
+            while (safeIterator.hasNext()) {
                 final EventBean next = safeIterator.next();
                 res.add((Map<String, T>) next.getUnderlying());
             }
             
         } finally {
-            safeIterator.close();
+            if (safeIterator != null) {
+                safeIterator.close();
+            }
         }
         return res;
     }
@@ -84,7 +86,7 @@ public class EPStatementResult
         SafeIterator<EventBean> safeIterator = null;
         try {
             safeIterator = statement.safeIterator();
-            if (safeIterator.hasNext()) {
+            while (safeIterator.hasNext()) {
                 final EventBean next = safeIterator.next();
                 final T beanPojo = BeanUtils.instantiate(_implementationClass);
                 final Map<String, Object> propertyMap = (Map<String, Object>) next.getUnderlying();
@@ -92,7 +94,9 @@ public class EPStatementResult
                 res.add(beanPojo);
             }
         } finally {
-            safeIterator.close();
+            if (safeIterator != null) {
+                safeIterator.close();
+            }
         }
         return res;
     }
@@ -112,13 +116,36 @@ public class EPStatementResult
         SafeIterator<EventBean> safeIterator = null;
         try {
             safeIterator = statement.safeIterator();
-            if (safeIterator.hasNext()) {
+            while (safeIterator.hasNext()) {
                 final EventBean next = safeIterator.next();
                 res.add((T) next.get(_propertyName));
             }
             
         } finally {
-            safeIterator.close();
+            if (safeIterator != null) {
+                safeIterator.close();
+            }
+        }
+        return res;
+    }
+    
+    
+    public <T> List<T> listUnderlyingObjects() {
+    
+    
+        final List<T> res = new ArrayList<T>(100);
+        SafeIterator<EventBean> safeIterator = null;
+        try {
+            safeIterator = statement.safeIterator();
+            while (safeIterator.hasNext()) {
+                final EventBean next = safeIterator.next();
+                res.add((T) next.getUnderlying());
+            }
+            
+        } finally {
+            if (safeIterator != null) {
+                safeIterator.close();
+            }
         }
         return res;
     }
@@ -142,7 +169,9 @@ public class EPStatementResult
             }
             
         } finally {
-            safeIterator.close();
+            if (safeIterator != null) {
+                safeIterator.close();
+            }
         }
         return res;
     }
@@ -168,7 +197,9 @@ public class EPStatementResult
             }
             
         } finally {
-            safeIterator.close();
+            if (safeIterator != null) {
+                safeIterator.close();
+            }
         }
         return res;
     }

@@ -17,6 +17,7 @@ import org.komea.product.backend.esper.reactor.KPINotFoundRuntimeException;
 import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.business.IKPIFacade;
 import org.komea.product.backend.service.cron.ICronRegistryService;
+import org.komea.product.backend.service.demodata.AlertJobDemo;
 import org.komea.product.backend.service.kpi.IEntityWithKPIAdapter;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.dao.ProviderDao;
@@ -79,6 +80,9 @@ public class AlertStatisticsService implements IAlertStatisticsService
     @Autowired
     private ICronRegistryService  registry;
     
+    @Autowired
+    private IAlertPushService     alertPushService;
+    
     
     
     /**
@@ -88,6 +92,16 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     
         super();
+    }
+    
+    
+    /**
+     * @return the alertPushService
+     */
+    public IAlertPushService getAlertPushService() {
+    
+    
+        return alertPushService;
     }
     
     
@@ -220,9 +234,11 @@ public class AlertStatisticsService implements IAlertStatisticsService
         }
         
         kpiService.synchronizeEntityWithKomea(systemProject.getSystemProject());
-        esperEngine.createOrUpdateEPL(new QueryDefinition(
-                "SELECT DISTINCT provider, type, count(*) as number FROM Alert.win:time(24 hour)",
-                STATS_BREAKDOWN_24H));
+        // output snapshot every 1 minute
+        esperEngine
+                .createOrUpdateEPLQuery(new QueryDefinition(
+                        "SELECT provider, type, count(*) as number FROM Alert.win:time(24 hour)  ORDER BY provider ASC, type ASC",
+                        STATS_BREAKDOWN_24H));
         scheduleAlerts();
         
     }
@@ -232,11 +248,22 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     
         final JobDataMap properties = new JobDataMap();
-        properties.put("esper", esperEngine);
+        properties.put("esper", alertPushService);
         registry.registerCronTask("ALERT_DEMO_STAT", "0/1 * * * * ?", AlertJobDemo.class,
                 properties);
         
         
+    }
+    
+    
+    /**
+     * @param _alertPushService
+     *            the alertPushService to set
+     */
+    public void setAlertPushService(final IAlertPushService _alertPushService) {
+    
+    
+        alertPushService = _alertPushService;
     }
     
     

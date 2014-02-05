@@ -73,7 +73,7 @@ public final class EsperEngineBean implements IEsperEngine
      */
     
     @Override
-    public void createOrUpdateEPL(final IQueryDefinition _definition) {
+    public void createOrUpdateEPLQuery(final IQueryDefinition _definition) {
     
     
         LOGGER.info("Registering an esper query {} : {}", _definition.getQuery(),
@@ -182,7 +182,7 @@ public final class EsperEngineBean implements IEsperEngine
     public void sendAlert(final IAlert _alert) {
     
     
-        LOGGER.trace("Sending alert {}", _alert);
+        // LOGGER.trace("Sending alert {}", _alert);
         
         esperEngine.getEPRuntime().sendEvent(_alert);
         

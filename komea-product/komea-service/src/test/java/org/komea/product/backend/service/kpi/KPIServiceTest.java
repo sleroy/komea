@@ -188,7 +188,7 @@ public class KPIServiceTest
             
             final ArgumentCaptor<QueryDefinition> forClass =
                     ArgumentCaptor.forClass(QueryDefinition.class);
-            Mockito.verify(esperEngine, Mockito.times(2)).createOrUpdateEPL(forClass.capture());
+            Mockito.verify(esperEngine, Mockito.times(2)).createOrUpdateEPLQuery(forClass.capture());
             Assert.assertEquals(KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12, forClass.getValue().getName());
             Assert.assertEquals(SELECT_COUNT_FROM_ALERT, forClass.getValue().getQuery());
             

@@ -70,7 +70,7 @@ public final class KPIService implements IKPIService
      * @param _entity
      *            its entity.
      */
-    public void createOrUpdateHistoryJob(final Kpi _kpi, final IEntity _entity) {
+    public void createOrUpdateHistoryCronJob(final Kpi _kpi, final IEntity _entity) {
     
     
         if (StringUtils.isEmpty(_kpi.getCronExpression())) { return; }
@@ -283,8 +283,9 @@ public final class KPIService implements IKPIService
         LOGGER.info("EntityWithKPI {} has {} kpi", _entity, listOfKpisOfEntity.size());
         for (final Kpi kpi : listOfKpisOfEntity) {
             final String computeKPIEsperKey = kpi.computeKPIEsperKey(_entity);
-            createOrUpdateHistoryJob(kpi, _entity);
-            esperEngine.createOrUpdateEPL(new QueryDefinition(kpi, computeKPIEsperKey));
+            
+            esperEngine.createOrUpdateEPLQuery(new QueryDefinition(kpi, computeKPIEsperKey));
+            createOrUpdateHistoryCronJob(kpi, _entity);
         }
         
     }

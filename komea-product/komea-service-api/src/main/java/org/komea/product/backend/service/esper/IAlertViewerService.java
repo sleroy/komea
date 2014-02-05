@@ -16,15 +16,6 @@ public interface IAlertViewerService
     /**
      * Return an instant view from an EPL Statement
      * 
-     * @return an instant view.
-     * @since 28 juin 2013
-     */
-    List<IAlert> getDefaultView();
-    
-    
-    /**
-     * Return an instant view from an EPL Statement
-     * 
      * @param _eplStatement
      *            the esper statement
      * @return an instant view.

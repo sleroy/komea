@@ -1,11 +1,11 @@
 
-package org.komea.product.backend.service.esper;
+package org.komea.product.backend.service.demodata;
 
 
 
 import java.util.Random;
 
-import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.service.esper.IAlertPushService;
 import org.komea.product.database.alert.Alert;
 import org.komea.product.database.alert.AlertBuilder;
 import org.komea.product.database.alert.enums.Criticity;
@@ -35,7 +35,7 @@ public final class AlertJobDemo implements Job
                 AlertBuilder.newAlert().category("SCM").criticity(Criticity.BLOCKING)
                         .fullMessage("Demo Alert").message("Demo alert").project("SYSTEM")
                         .provided("DEMO" + new Random().nextInt(12)).type("DemoAlert").getAlert();
-        ((IEsperEngine) _context.getMergedJobDataMap().get("esper")).sendAlert(alert);
+        ((IAlertPushService) _context.getMergedJobDataMap().get("esper")).sendEvent(alert);
         
         
     }

@@ -35,7 +35,7 @@ public interface IEsperEngine
      * @param _statementName
      *            the statement name.
      */
-    void createOrUpdateEPL(IQueryDefinition _queryDefinition);
+    void createOrUpdateEPLQuery(IQueryDefinition _queryDefinition);
     
     
     /**
