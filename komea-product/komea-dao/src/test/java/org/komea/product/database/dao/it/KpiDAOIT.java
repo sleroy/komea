@@ -52,7 +52,8 @@ public class KpiDAOIT extends AbstractSpringIntegrationTestCase
         
         
         Assert.assertEquals(1, kpiDAO.selectByCriteria(request).size());
-        Assert.assertEquals("salut", kpiDAO.selectByCriteria(request).get(0).getEsperRequest());
+        Assert.assertEquals("salut", kpiDAO.selectByExampleWithBLOBs(request).get(0)
+                .getEsperRequest());
         
     }
     

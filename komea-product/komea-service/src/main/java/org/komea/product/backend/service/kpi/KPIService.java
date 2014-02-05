@@ -61,7 +61,7 @@ public final class KPIService implements IKPIService
     
         final KpiCriteria kpiCriteria = new KpiCriteria();
         kpiCriteria.createCriteria().andKpiKeyEqualTo(_kpiName);
-        return CollectionUtil.singleOrNull(kpiDAO.selectByCriteria(kpiCriteria));
+        return CollectionUtil.singleOrNull(kpiDAO.selectByExampleWithBLOBs(kpiCriteria));
         
     }
     
@@ -75,7 +75,8 @@ public final class KPIService implements IKPIService
         LOGGER.debug("Returning KPI facade from entity {} and kpi {}", _entity, _kpiName);
         final KpiCriteria criteria = new KpiCriteria();
         criteria.createCriteria().andKpiKeyEqualTo(_kpiName);
-        final Kpi requestedKpi = CollectionUtil.singleOrNull(kpiDAO.selectByCriteria(criteria));
+        final Kpi requestedKpi =
+                CollectionUtil.singleOrNull(kpiDAO.selectByExampleWithBLOBs(criteria));
         
         if (requestedKpi == null) { throw new KPINotFoundException(_entity, _kpiName); }
         final IEPMetric metricWrapperOverEsperQuery =
@@ -112,11 +113,11 @@ public final class KPIService implements IKPIService
         allKpisFromEntityType.createCriteria().andEntityTypeEqualTo(_entity.getType())
                 .andEntityIDIsNull();
         
-        kpis.addAll(kpiDAO.selectByCriteria(allKpisFromEntityType));
+        kpis.addAll(kpiDAO.selectByExampleWithBLOBs(allKpisFromEntityType));
         final KpiCriteria allKpisOnlyEntity = new KpiCriteria();
         allKpisOnlyEntity.createCriteria().andEntityTypeEqualTo(_entity.getType())
                 .andEntityIDEqualTo(_entity.getId());
-        kpis.addAll(kpiDAO.selectByCriteria(allKpisOnlyEntity));
+        kpis.addAll(kpiDAO.selectByExampleWithBLOBs(allKpisOnlyEntity));
         return kpis;
     }
     

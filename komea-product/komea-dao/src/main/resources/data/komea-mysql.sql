@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `valueDirection` INT NOT NULL,
   `valueType` INT NOT NULL,
   `entityType` VARCHAR(255) NOT NULL,
-  `esperRequest` TEXT NOT NULL,
+  `esperRequest` MEDIUMTEXT NOT NULL,
   `entityID` INT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `key_UNIQUE` (`kpiKey` ASC),
