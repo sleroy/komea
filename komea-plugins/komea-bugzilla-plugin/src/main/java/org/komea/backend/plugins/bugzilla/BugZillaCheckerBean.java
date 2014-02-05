@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 
 import org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory;
+import org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy;
 import org.komea.product.backend.service.esper.IAlertPushService;
@@ -45,7 +46,7 @@ public class BugZillaCheckerBean
     
     
     
-    @Scheduled(fixedDelay = 10)
+    @Scheduled(fixedDelay = 1000)
     public void checkServers() {
     
     
@@ -99,13 +100,6 @@ public class BugZillaCheckerBean
     }
     
     
-    public IAlertService getAlertService() {
-    
-    
-        return alertService;
-    }
-    
-    
     public IBugZillaConfigurationService getBugZillaConfiguration() {
     
     
@@ -124,13 +118,6 @@ public class BugZillaCheckerBean
     
     
         alertFactory = _alertFactory;
-    }
-    
-    
-    public void setAlertService(final IAlertService alertService) {
-    
-    
-        this.alertService = alertService;
     }
     
     
@@ -156,5 +143,19 @@ public class BugZillaCheckerBean
         }
         
         return result;
+    }
+
+
+    public IAlertPushService getAlertService() {
+    
+    
+        return alertService;
+    }
+
+
+    public void setAlertService(IAlertPushService _alertService) {
+    
+    
+        alertService = _alertService;
     }
 }
