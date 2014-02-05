@@ -6,6 +6,7 @@ package org.komea.product.backend.service.esper;
 
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -25,6 +26,7 @@ import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
+import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.Project;
 import org.komea.product.service.dto.AlertTypeStatistic;
 import org.slf4j.Logger;
@@ -64,7 +66,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     
     @Autowired
-    private ISystemProjectBean        systemProject;
+    private ISystemProjectBean    systemProject;
     
     
     @Autowired
@@ -86,6 +88,20 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     
         super();
+    }
+    
+    
+    @Override
+    public List<Measure> getAllMeasures() {
+    
+    
+        try {
+            return kpiService.findKPIFacade(systemProject.getSystemProject(),
+                    ALERT_RECEIVED_IN_ONE_DAY).getHistory();
+        } catch (final KPINotFoundException e) {
+            LOGGER.error("KPI is not initialized to obtain statistics", e);
+            return Collections.EMPTY_LIST;
+        }
     }
     
     
