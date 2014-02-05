@@ -6,7 +6,7 @@ package org.komea.product.backend.service.kpi;
 import java.util.List;
 
 import org.komea.product.backend.api.IEsperEngine;
-import org.komea.product.backend.esper.reactor.EPMetric;
+import org.komea.product.backend.service.esper.EPMetric;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.model.Kpi;

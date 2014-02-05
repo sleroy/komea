@@ -11,7 +11,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.product.backend.api.IEsperEngine;
-import org.komea.product.backend.esper.reactor.QueryDefinition;
 import org.komea.product.database.alert.IAlert;
 import org.mockito.Mockito;
 
@@ -37,7 +36,7 @@ public class EsperEngineBeanTest
     public void closeAfter() throws Exception {
     
     
-        ((EsperEngineBean) esperEngine).shutdown();
+        ((EsperEngineBean) esperEngine).destroy();
         
     }
     

@@ -1,10 +1,11 @@
 
-package org.komea.product.backend.esper.reactor;
+package org.komea.product.backend.service.esper;
 
 
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.database.model.Kpi;
 
 

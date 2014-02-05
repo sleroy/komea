@@ -12,7 +12,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.esper.IAlertStatisticsService;
 import org.komea.product.database.model.Measure;
-import org.komea.product.wicket.DateToJSDate;
 import org.komea.product.wicket.LayoutPage;
 
 import com.googlecode.wickedcharts.highcharts.options.Axis;
@@ -86,9 +85,10 @@ public class StatPage extends LayoutPage
         final List<Coordinate<String, Integer>> seriesData1 =
                 new ArrayList<Coordinate<String, Integer>>();
         
+        
         for (final Measure measure : statService.getAllMeasures()) {
-            seriesData1.add(new Coordinate<String, Integer>(DateToJSDate.toJavaScript(measure
-                    .getDate()), measure.getValue().intValue()));
+            seriesData1.add(new Coordinate<String, Integer>(measure.getId().toString(), measure
+                    .getValue().intValue()));
         }
         
         

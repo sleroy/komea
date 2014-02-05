@@ -13,8 +13,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
-import org.komea.product.backend.esper.reactor.QueryDefinition;
 import org.komea.product.backend.service.business.IKPIFacade;
+import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.enums.EntityType;
@@ -124,74 +124,74 @@ public class KPIServiceTest
     
     
     /**
-     * Test method for
-     * {@link org.komea.product.backend.service.kpi.KPIService#synchronizeInEsper(org.komea.product.backend.service.business.IEntityWithKPIFacade)}
-     * .
-     */
-    @Test
-    public final void testSynchronizeInEsper() {
-    
-    
-        final KpiDao kpiDAOMock =
-                Mockito.mock(KpiDao.class, Mockito.withSettings().verboseLogging());
-        final MeasureDao measureDAOMock =
-                Mockito.mock(MeasureDao.class, Mockito.withSettings().verboseLogging());
-        
-        final IEsperEngine esperEngine =
-                Mockito.mock(IEsperEngine.class, Mockito.withSettings().verboseLogging());
-        
-        final EPStatement epStatementMock =
-                Mockito.mock(EPStatement.class, Mockito.withSettings().verboseLogging());
+         * Test method for
+         * {@link org.komea.product.backend.service.kpi.KPIService#synchronizeEntityWithKomea(org.komea.product.backend.service.business.IEntityWithKPIFacade)}
+         * .
+         */
+        @Test
+        public final void testSynchronizeEntityWithKomea() {
         
         
-        final MeasureService measureService = new MeasureService();
-        measureService.setEsperEngine(esperEngine);
-        measureService.setMeasureDAO(measureDAOMock);
-        
-        
-        final KPIService kpiService = new KPIService();
-        kpiService.setEsperEngine(esperEngine);
-        
-        kpiService.setMeasureService(measureService);
-        kpiService.setKpiDAO(kpiDAOMock);
-        
-        
-        final Person person = new Person();
-        person.setId(12);
-        person.setFirstName("John");
-        person.setLastName("Dalton");
-        
-        final List<Kpi> kpiList = new ArrayList<Kpi>();
-        final Kpi kpi = new Kpi();
-        kpi.setId(1);
-        kpi.setEsperRequest(SELECT_COUNT_FROM_ALERT);
-        kpi.setEntityType(EntityType.PERSON);
-        kpi.setDescription("Demo of KPI");
-        kpi.setIdProvider(1);
-        kpi.setKpiKey("PERSON_PRODUCTIVITY");
-        kpi.setMinValue(0d);
-        kpi.setMaxValue(new Double(Long.MAX_VALUE));
-        kpi.setName("Person productivity");
-        kpi.setValueDirection(ValueDirection.BETTER);
-        kpi.setValueType(ValueType.INT);
-        kpiList.add(kpi);
-        kpiService.updateKPIOfEntity(person, kpiList);
-        
-        Mockito.when(kpiDAOMock.selectByExampleWithBLOBs(Matchers.any(KpiCriteria.class)))
-                .thenReturn(kpiList);
-        
-        Mockito.when(esperEngine.getStatementOrFail(KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12))
-                .thenReturn(epStatementMock);
-        
-        
-        kpiService.synchronizeInEsper(person);
-        
-        final ArgumentCaptor<QueryDefinition> forClass =
-                ArgumentCaptor.forClass(QueryDefinition.class);
-        Mockito.verify(esperEngine, Mockito.times(2)).createOrUpdateEPL(forClass.capture());
-        Assert.assertEquals(KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12, forClass.getValue().getName());
-        Assert.assertEquals(SELECT_COUNT_FROM_ALERT, forClass.getValue().getQuery());
-        
-        
-    }
+            final KpiDao kpiDAOMock =
+                    Mockito.mock(KpiDao.class, Mockito.withSettings().verboseLogging());
+            final MeasureDao measureDAOMock =
+                    Mockito.mock(MeasureDao.class, Mockito.withSettings().verboseLogging());
+            
+            final IEsperEngine esperEngine =
+                    Mockito.mock(IEsperEngine.class, Mockito.withSettings().verboseLogging());
+            
+            final EPStatement epStatementMock =
+                    Mockito.mock(EPStatement.class, Mockito.withSettings().verboseLogging());
+            
+            
+            final MeasureService measureService = new MeasureService();
+            measureService.setEsperEngine(esperEngine);
+            measureService.setMeasureDAO(measureDAOMock);
+            
+            
+            final KPIService kpiService = new KPIService();
+            kpiService.setEsperEngine(esperEngine);
+            
+            kpiService.setMeasureService(measureService);
+            kpiService.setKpiDAO(kpiDAOMock);
+            
+            
+            final Person person = new Person();
+            person.setId(12);
+            person.setFirstName("John");
+            person.setLastName("Dalton");
+            
+            final List<Kpi> kpiList = new ArrayList<Kpi>();
+            final Kpi kpi = new Kpi();
+            kpi.setId(1);
+            kpi.setEsperRequest(SELECT_COUNT_FROM_ALERT);
+            kpi.setEntityType(EntityType.PERSON);
+            kpi.setDescription("Demo of KPI");
+            kpi.setIdProvider(1);
+            kpi.setKpiKey("PERSON_PRODUCTIVITY");
+            kpi.setMinValue(0d);
+            kpi.setMaxValue(new Double(Long.MAX_VALUE));
+            kpi.setName("Person productivity");
+            kpi.setValueDirection(ValueDirection.BETTER);
+            kpi.setValueType(ValueType.INT);
+            kpiList.add(kpi);
+            kpiService.updateKPIOfEntity(person, kpiList);
+            
+            Mockito.when(kpiDAOMock.selectByExampleWithBLOBs(Matchers.any(KpiCriteria.class)))
+                    .thenReturn(kpiList);
+            
+            Mockito.when(esperEngine.getStatementOrFail(KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12))
+                    .thenReturn(epStatementMock);
+            
+            
+            kpiService.synchronizeEntityWithKomea(person);
+            
+            final ArgumentCaptor<QueryDefinition> forClass =
+                    ArgumentCaptor.forClass(QueryDefinition.class);
+            Mockito.verify(esperEngine, Mockito.times(2)).createOrUpdateEPL(forClass.capture());
+            Assert.assertEquals(KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12, forClass.getValue().getName());
+            Assert.assertEquals(SELECT_COUNT_FROM_ALERT, forClass.getValue().getQuery());
+            
+            
+        }
 }

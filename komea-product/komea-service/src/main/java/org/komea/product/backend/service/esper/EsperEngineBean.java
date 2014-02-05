@@ -7,11 +7,11 @@ package org.komea.product.backend.service.esper;
 
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.listeners.EPServiceStateListener1;
 import org.komea.product.backend.esper.listeners.EPStatementStateListener1;
-import org.komea.product.backend.esper.reactor.EsperDebugReactorListener;
 import org.komea.product.backend.exceptions.EsperStatementNotFoundException;
 import org.komea.product.backend.service.business.IQueryDefinition;
 import org.komea.product.database.alert.Alert;
@@ -67,6 +67,11 @@ public final class EsperEngineBean implements IEsperEngine
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see com.tocea.scertify.ci.flow.bean.IEsperEngine#getEsperEngine()
+     */
+    
     @Override
     public void createOrUpdateEPL(final IQueryDefinition _definition) {
     
@@ -85,10 +90,16 @@ public final class EsperEngineBean implements IEsperEngine
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see com.tocea.scertify.ci.flow.bean.IEsperEngine#getEsperEngine()
-     */
+    @PreDestroy
+    public void destroy() {
+    
+    
+        LOGGER.warn("-----------------------------------");
+        LOGGER.warn("Destroying the esper Engine");
+        esperEngine.destroy();
+        esperEngine = null;
+    }
+    
     
     @Override
     public boolean existEPL(final String _metricKey) {
@@ -177,15 +188,4 @@ public final class EsperEngineBean implements IEsperEngine
         
     }
     
-    
-    /**
-     * Destroy the esper engine.
-     */
-    public void shutdown() {
-    
-    
-        esperEngine.destroy();
-        esperEngine = null;
-        
-    }
 }

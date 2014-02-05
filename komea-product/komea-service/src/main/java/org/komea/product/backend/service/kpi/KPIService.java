@@ -7,12 +7,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
 import org.komea.product.backend.esper.reactor.KPINotFoundRuntimeException;
-import org.komea.product.backend.esper.reactor.QueryDefinition;
 import org.komea.product.backend.kpi.KPIFacade;
 import org.komea.product.backend.service.business.IKPIFacade;
+import org.komea.product.backend.service.cron.ICronRegistryService;
+import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.KpiDao;
@@ -33,17 +36,20 @@ public final class KPIService implements IKPIService
     
     
     @Autowired
-    private IMeasureService     measureService;
+    private IMeasureService      measureService;
     
     
     @Autowired
-    private IEsperEngine        esperEngine;
+    private IEsperEngine         esperEngine;
     
     @Autowired
-    private KpiDao              kpiDAO;
+    private KpiDao               kpiDAO;
+    
+    @Autowired
+    private ICronRegistryService cronRegistry;
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(KPIService.class);
+    private static final Logger  LOGGER = LoggerFactory.getLogger(KPIService.class);
     
     
     
@@ -51,6 +57,25 @@ public final class KPIService implements IKPIService
     
     
         super();
+    }
+    
+    
+    /**
+     * Creates of update the history job of a KPI
+     * 
+     * @param _kpi
+     *            the kpi
+     * @param _entity
+     *            its entity.
+     */
+    public void createOrUpdateHistoryJob(final Kpi _kpi, final IEntity _entity) {
+    
+    
+        if (cronRegistry.existCron(_kpi.getCronHistoryJobName(_entity))) {
+            
+        }
+        
+        
     }
     
     
@@ -100,6 +125,13 @@ public final class KPIService implements IKPIService
     }
     
     
+    public ICronRegistryService getCronRegistry() {
+    
+    
+        return cronRegistry;
+    }
+    
+    
     /**
      * @return the esperEngine
      */
@@ -145,8 +177,7 @@ public final class KPIService implements IKPIService
     }
     
     
-    @Transactional
-    @Autowired
+    @PostConstruct
     public void init() {
     
     
@@ -165,6 +196,13 @@ public final class KPIService implements IKPIService
         } else {
             kpiDAO.updateByPrimaryKey(_kpi);
         }
+    }
+    
+    
+    public void setCronRegistry(final ICronRegistryService _cronRegistry) {
+    
+    
+        cronRegistry = _cronRegistry;
     }
     
     
@@ -225,7 +263,7 @@ public final class KPIService implements IKPIService
     
     
     @Override
-    public void synchronizeInEsper(final IEntity _entity) {
+    public void synchronizeEntityWithKomea(final IEntity _entity) {
     
     
         LOGGER.info("Updating / Refreshing Kpi statements of entity {}", _entity);
@@ -234,6 +272,7 @@ public final class KPIService implements IKPIService
         LOGGER.info("EntityWithKPI {} has {} kpi", _entity, listOfKpisOfEntity.size());
         for (final Kpi kpi : listOfKpisOfEntity) {
             final String computeKPIEsperKey = kpi.computeKPIEsperKey(_entity);
+            createOrUpdateHistoryJob(kpi, _entity);
             esperEngine.createOrUpdateEPL(new QueryDefinition(kpi, computeKPIEsperKey));
         }
         

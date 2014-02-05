@@ -5,9 +5,9 @@ package org.komea.product.backend.service.kpi;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.komea.product.backend.esper.reactor.EPMetric;
-import org.komea.product.backend.esper.reactor.QueryDefinition;
+import org.komea.product.backend.service.esper.EPMetric;
 import org.komea.product.backend.service.esper.EsperEngineBean;
+import org.komea.product.backend.service.esper.QueryDefinition;
 
 import com.espertech.esper.client.EPStatement;
 

@@ -13,10 +13,8 @@ import java.util.Random;
 import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.api.IEsperEngine;
-import org.komea.product.backend.esper.reactor.EPStatementResult;
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
 import org.komea.product.backend.esper.reactor.KPINotFoundRuntimeException;
-import org.komea.product.backend.esper.reactor.QueryDefinition;
 import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.business.IKPIFacade;
 import org.komea.product.backend.service.kpi.IEntityWithKPIAdapter;
@@ -96,8 +94,11 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     
         try {
-            return kpiService.findKPIFacade(systemProject.getSystemProject(),
-                    ALERT_RECEIVED_IN_ONE_DAY).getHistory();
+            final List<Measure> history =
+                    kpiService.findKPIFacade(systemProject.getSystemProject(),
+                            ALERT_RECEIVED_IN_ONE_DAY).getHistory();
+            LOGGER.info("History of alerts {}", history.size());
+            return history;
         } catch (final KPINotFoundException e) {
             LOGGER.error("KPI is not initialized to obtain statistics", e);
             return Collections.EMPTY_LIST;
@@ -204,7 +205,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
                     kpiService.getListOfKpisOfEntity(systemProject.getSystemProject());
             listOfKpisOfEntity.add(kpi);
             kpiService.updateKPIOfEntity(systemProject.getSystemProject(), listOfKpisOfEntity);
-            kpiService.synchronizeInEsper(systemProject.getSystemProject());
+            kpiService.synchronizeEntityWithKomea(systemProject.getSystemProject());
         } else {
             LOGGER.info("Statistics KPI already existing.");
         }
@@ -218,7 +219,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
     }
     
     
-    @Scheduled(fixedRate = 100)
+    @Scheduled(fixedRate = 20000)
     public void scheduleAlerts() {
     
     
@@ -229,7 +230,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
     }
     
     
-    @Scheduled(fixedRate = 400)
+    @Scheduled(cron = "0 0 * * *")
     public void scheduleBackup() {
     
     

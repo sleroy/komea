@@ -76,7 +76,7 @@ public interface IKPIService
      * @param _kpi
      *            kpi
      */
-    public void synchronizeInEsper(IEntity _project);
+    public void synchronizeEntityWithKomea(IEntity _project);
     
     
     /**
