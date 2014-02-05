@@ -8,6 +8,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.settings.IExceptionSettings;
 import org.apache.wicket.settings.IExceptionSettings.ThreadDumpStrategy;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.komea.product.wicket.person.PersonPage;
 import org.komea.product.wicket.settings.SettingsPage;
 import org.komea.product.wicket.statistics.StatPage;
 
@@ -58,6 +59,7 @@ public class WicketApplication extends WebApplication
         mountPage("/stats", StatPage.class);
         mountPage("/auth/login", LoginPage.class);
         mountPage("/auth/accessdenied", UnauthorizedPage.class);
+        mountPage("/users", PersonPage.class);
         getExceptionSettings().setThreadDumpStrategy(ThreadDumpStrategy.ALL_THREADS);
         getExceptionSettings()
                 .setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_EXCEPTION_PAGE);

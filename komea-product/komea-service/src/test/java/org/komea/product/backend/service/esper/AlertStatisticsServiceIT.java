@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * @author sleroy
  */
-public class AlertStatisticsServiceTest extends AbstractSpringIntegrationTestCase
+public class AlertStatisticsServiceIT extends AbstractSpringIntegrationTestCase
 {
     
     

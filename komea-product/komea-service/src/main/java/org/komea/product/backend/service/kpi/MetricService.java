@@ -4,7 +4,7 @@ package org.komea.product.backend.service.kpi;
 
 
 import org.komea.product.backend.api.IEsperEngine;
-import org.komea.product.backend.kpi.EPMetric;
+import org.komea.product.backend.esper.reactor.EPMetric;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

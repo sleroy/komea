@@ -11,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.esper.reactor.QueryDefinition;
 import org.komea.product.database.alert.IAlert;
 import org.mockito.Mockito;
 
@@ -62,7 +63,8 @@ public class EsperEngineBeanTest
     public final void testCreateEPL() {
     
     
-        final EPStatement epl = esperEngine.createEPL("select * from Alert", "demo");
+        final EPStatement epl =
+                esperEngine.createEPL(new QueryDefinition("select * from Alert", "demo"));
         Assert.assertNotNull(epl);
         Assert.assertTrue(esperEngine.existEPL("demo"));
     }
@@ -76,7 +78,8 @@ public class EsperEngineBeanTest
     
     
         Assert.assertFalse(esperEngine.existEPL("demo"));
-        final EPStatement epl = esperEngine.createEPL("select * from Alert", "demo");
+        final EPStatement epl =
+                esperEngine.createEPL(new QueryDefinition("select * from Alert", "demo"));
         Assert.assertNotNull(epl);
         Assert.assertTrue(esperEngine.existEPL("demo"));
     }
@@ -101,7 +104,8 @@ public class EsperEngineBeanTest
     
     
         Assert.assertFalse(esperEngine.existEPL("demo"));
-        final EPStatement epl = esperEngine.createEPL("select * from Alert", "demo");
+        final EPStatement epl =
+                esperEngine.createEPL(new QueryDefinition("select * from Alert", "demo"));
         Assert.assertNotNull(epl);
         Assert.assertEquals(2, esperEngine.getStatementNames().length);
     }

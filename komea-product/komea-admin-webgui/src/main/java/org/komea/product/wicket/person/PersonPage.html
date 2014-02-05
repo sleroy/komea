@@ -84,82 +84,86 @@ margin-top:30px;
 					<span class="glyphicon glyphicon-wrench"></span> Manage Population of developers inside Komea
 				</div>
 				<div class="panel-body">
+					<div class="container">
 						<div class="container">
-							<h3>Liste des développeurs</h3>
-							<form class="form-horizontal" wicket:id="edit">
-								<fieldset>
-									<!-- Form Name -->
-									<legend>Editer / Ajouter un développeur</legend>
-									<!-- Text input-->
-									<div class="control-group">
-										<label class="control-label" for="login">Login</label>
-										<div class="controls">
-											<input id="login" name="login" type="text" placeholder="login" class="input-xlarge" required="">
-											<p class="help-block">Please write your login</p>
-										</div>
+							<table class="table table-striped table-bordered table-hover table-condensed custab" wicket:id="table">[table]
+							</table>
+						</div>
+						<!-- 						wicket:id="edit" -->
+						<form class="form-horizontal">
+							<fieldset>
+								<!-- Form Name -->
+								<legend>Edit/Create a new developer</legend>
+								<!-- Text input-->
+								<div class="control-group">
+									<label class="control-label" for="login">Login</label>
+									<div class="controls">
+										<input id="login" name="login" type="text" placeholder="login" class="input-xlarge" required="">
+										<p class="help-block">Please write your login</p>
 									</div>
-									<!-- Text input-->
-									<div class="control-group">
-										<label class="control-label" for="firstName">First name</label>
-										<div class="controls">
-											<input id="firstName" name="firstName" type="text" placeholder="firstName" class="input-xlarge" required="">
-											<p class="help-block">Please write your first name</p>
-										</div>
+								</div>
+								<!-- Text input-->
+								<div class="control-group">
+									<label class="control-label" for="firstName">First name</label>
+									<div class="controls">
+										<input id="firstName" name="firstName" type="text" placeholder="firstName" class="input-xlarge" required="">
+										<p class="help-block">Please write your first name</p>
 									</div>
-									<!-- Text input-->
-									<div class="control-group">
-										<label class="control-label" for="surename">Surename</label>
-										<div class="controls">
-											<input id="surename" name="surename" type="text" placeholder="surename" class="input-xlarge" required="">
-											<p class="help-block">Please write your surename</p>
-										</div>
+								</div>
+								<!-- Text input-->
+								<div class="control-group">
+									<label class="control-label" for="surename">Surename</label>
+									<div class="controls">
+										<input id="surename" name="surename" type="text" placeholder="surename" class="input-xlarge" required="">
+										<p class="help-block">Please write your surename</p>
 									</div>
-									<!-- Text input-->
-									<div class="control-group">
-										<label class="control-label" for="email">Email</label>
-										<div class="controls">
-											<input id="email" name="email" type="text" placeholder="email" class="input-xlarge" required="">
-											<p class="help-block">Please write your email</p>
-										</div>
+								</div>
+								<!-- Text input-->
+								<div class="control-group">
+									<label class="control-label" for="email">Email</label>
+									<div class="controls">
+										<input id="email" name="email" type="text" placeholder="email" class="input-xlarge" required="">
+										<p class="help-block">Please write your email</p>
 									</div>
-									<!-- Button Drop Down -->
-									<div class="control-group">
-										<label class="control-label" for="buttondropdown">Choose a developer group</label>
-										<div class="controls">
-											<div class="input-append">
-												<input id="buttondropdown" name="buttondropdown" class="input-xlarge" placeholder="team or department name" type="text">
-												<div class="btn-group">
-													<button class="btn dropdown-toggle" data-toggle="dropdown">
-														Attach to a group <span class="caret"></span>
-													</button>
-													<ul class="dropdown-menu">
-														<li><a href="#">Attach to a team</a></li>
-														<li><a href="#">Attach to a group</a></li>
-													</ul>
-												</div>
+								</div>
+								<!-- Button Drop Down -->
+								<div class="control-group">
+									<label class="control-label" for="buttondropdown">Choose a developer group</label>
+									<div class="controls">
+										<div class="input-append">
+											<input id="buttondropdown" name="buttondropdown" class="input-xlarge" placeholder="team or department name" type="text">
+											<div class="btn-group">
+												<button class="btn dropdown-toggle" data-toggle="dropdown">
+													Attach to a group <span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu">
+													<li><a href="#">Attach to a team</a></li>
+													<li><a href="#">Attach to a group</a></li>
+												</ul>
 											</div>
 										</div>
 									</div>
-									<!-- Select Basic -->
-									<div class="control-group">
-										<label class="control-label" for="userRole">Developer role</label>
-										<div class="controls">
-											<select id="userRole" name="userRole" class="input-xlarge">
-												<option>Developer</option>
-												<option>Project Manager</option>
-											</select>
-										</div>
+								</div>
+								<!-- Select Basic -->
+								<div class="control-group">
+									<label class="control-label" for="userRole">Developer role</label>
+									<div class="controls">
+										<select id="userRole" name="userRole" class="input-xlarge">
+											<option>Developer</option>
+											<option>Project Manager</option>
+										</select>
 									</div>
-									<!-- Button -->
-									<div class="control-group">
-										<label class="control-label" for="addedit">Add/Edit Developer informations</label>
-										<div class="controls">
-											<button id="addedit" name="addedit" class="btn btn-primary">Add/edit</button>
-										</div>
+								</div>
+								<!-- Button -->
+								<div class="control-group">
+									<label class="control-label" for="addedit">Add/Edit Developer informations</label>
+									<div class="controls">
+										<button id="addedit" name="addedit" class="btn btn-primary">Add/edit</button>
 									</div>
-								</fieldset>
-							</form>
-						</div>
+								</div>
+							</fieldset>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -5,10 +5,10 @@ package org.komea.product.backend.kpi;
 
 import java.util.List;
 
-import org.komea.product.backend.service.business.IEntityWithKPI;
 import org.komea.product.backend.service.business.IKPIFacade;
 import org.komea.product.backend.service.kpi.IEPMetric;
 import org.komea.product.backend.service.kpi.IMeasureService;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 
@@ -20,14 +20,14 @@ import org.komea.product.database.model.Measure;
  * @author sleroy
  * @param <T>
  */
-public class KPIFacade<T> implements IKPIFacade<T>
+public class KPIFacade<TEntity extends IEntity> implements IKPIFacade<TEntity>
 {
     
     
-    private final IEPMetric         metric;
-    private final IEntityWithKPI<T> entity;
-    private final String            requestedKPI;
-    private final IMeasureService   measureService;
+    private final IEPMetric       metric;
+    private final TEntity         entity;
+    private final Kpi             requestedKPI;
+    private final IMeasureService measureService;
     
     
     
@@ -43,8 +43,8 @@ public class KPIFacade<T> implements IKPIFacade<T>
      */
     public KPIFacade(
             final IEPMetric _statement,
-            final IEntityWithKPI<T> _entity,
-            final String _requestedKPI,
+            final TEntity _entity,
+            final Kpi _requestedKPI,
             final IMeasureService _measureService) {
     
     
@@ -58,7 +58,7 @@ public class KPIFacade<T> implements IKPIFacade<T>
     
     
     @Override
-    public IEntityWithKPI<T> getEntity() {
+    public TEntity getEntity() {
     
     
         return entity;
@@ -77,7 +77,7 @@ public class KPIFacade<T> implements IKPIFacade<T>
     public Kpi getKPI() {
     
     
-        return entity.getKpi(requestedKPI);
+        return requestedKPI;
     }
     
     

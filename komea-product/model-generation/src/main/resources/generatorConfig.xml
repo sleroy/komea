@@ -10,7 +10,7 @@
             <property name="replaceMapper" value="Dao" />
         </plugin>
 
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/komea" userId="root" password="root"/>
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/komea" userId="root" password=""/>
 
         <javaModelGenerator targetPackage="org.komea.product.database.model" targetProject="${basedir}/../komea-dto/src/main/java">
             <property name="constructorBased" value="true" />
@@ -45,13 +45,13 @@
         <table tableName="kom_pvd" domainObjectName="Provider" >
             <property name="useActualColumnNames" value="true" />
             <generatedKey column="id" sqlStatement="JDBC" identity="true" />
-            <columnOverride column="providerType" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+            <columnOverride column="providerType" typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.ProviderType" />
         </table>
         <table tableName="kom_kpi" domainObjectName="Kpi" >
             <property name="useActualColumnNames" value="true" />
             <generatedKey column="id" sqlStatement="JDBC" identity="true" />
-            <columnOverride column="entityType" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+            <columnOverride column="entityType" typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.EntityType" />
             <columnOverride column="valueDirection" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
                             javaType="org.komea.product.database.enums.ValueDirection" />
@@ -77,7 +77,7 @@
         <table tableName="kom_evt" domainObjectName="EventType" >
             <property name="useActualColumnNames" value="true" />
             <generatedKey column="id" sqlStatement="JDBC" identity="true" />
-            <columnOverride column="entityType" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+            <columnOverride column="entityType" typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.EntityType" />
             <columnOverride column="severity" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
                             javaType="org.komea.product.database.enums.Severity" />

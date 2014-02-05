@@ -13,8 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
-import org.komea.product.backend.service.EntityWithKPIAdapter;
-import org.komea.product.backend.service.business.IEntityWithKPI;
+import org.komea.product.backend.esper.reactor.QueryDefinition;
 import org.komea.product.backend.service.business.IKPIFacade;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
@@ -24,6 +23,7 @@ import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.Person;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
@@ -38,13 +38,16 @@ public class KPIServiceTest
 {
     
     
-    private static final String KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12 = "KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12";
-    private static final String SELECT_COUNT_FROM_ALERT = "SELECT COUNT(*) From Alert";
-
-
+    private static final String KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12 =
+                                                                              "KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12";
+    private static final String SELECT_COUNT_FROM_ALERT               =
+                                                                              "SELECT COUNT(*) From Alert";
+    
+    
+    
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.KPIService#findKPIFacade(org.komea.product.backend.service.business.IEntityWithKPI, java.lang.String)}
+     * {@link org.komea.product.backend.service.kpi.KPIService#findKPIFacade(org.komea.product.backend.service.business.IEntityWithKPIFacade, java.lang.String)}
      * This test initialises all the requested services to obtain a KPI Facade. Esper Engine is Mocked. The objective is to obtain the
      * requested entity with its KPI through a facade.
      * .
@@ -61,6 +64,7 @@ public class KPIServiceTest
         final IEsperEngine esperEngine =
                 Mockito.mock(IEsperEngine.class, Mockito.withSettings().verboseLogging());
         
+        
         final EPStatement epStatementMock =
                 Mockito.mock(EPStatement.class, Mockito.withSettings().verboseLogging());
         
@@ -71,15 +75,12 @@ public class KPIServiceTest
         
         measureService.setMeasureDAO(measureDAOMock);
         
-        final EntityWithKPIAdapter kpiAdapter = new EntityWithKPIAdapter();
-        
-        kpiAdapter.setKpiDAO(kpiDAOMock);
         
         final KPIService kpiService = new KPIService();
         kpiService.setEsperEngine(esperEngine);
         kpiService.setMetricService(metricService);
         kpiService.setMeasureService(measureService);
-        
+        kpiService.setKpiDAO(kpiDAOMock);
         final Person person = new Person();
         person.setId(12);
         person.setFirstName("John");
@@ -106,18 +107,14 @@ public class KPIServiceTest
         Mockito.when(esperEngine.getStatementOrFail(KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12))
                 .thenReturn(epStatementMock);
         
-        
-        final IEntityWithKPI<Person> personAdapter = kpiAdapter.adapt(person);
-        
         try {
             
             
             final IKPIFacade<Person> findKPIFacade =
-                    kpiService.findKPIFacade(personAdapter, "PERSON_PRODUCTIVITY");
+                    kpiService.findKPIFacade(person, "PERSON_PRODUCTIVITY");
             Assert.assertNotNull(findKPIFacade);
             Assert.assertEquals(kpi, findKPIFacade.getKPI());
-            Assert.assertEquals(personAdapter, findKPIFacade.getEntity());
-            Assert.assertEquals(kpiList, findKPIFacade.getEntity().getListofKpis());
+            Assert.assertEquals(person, findKPIFacade.getEntity());
             
             
         } catch (final KPINotFoundException e) {
@@ -130,7 +127,7 @@ public class KPIServiceTest
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.KPIService#synchronizeInEsper(org.komea.product.backend.service.business.IEntityWithKPI)}
+     * {@link org.komea.product.backend.service.kpi.KPIService#synchronizeInEsper(org.komea.product.backend.service.business.IEntityWithKPIFacade)}
      * .
      */
     @Test
@@ -155,14 +152,13 @@ public class KPIServiceTest
         
         measureService.setMeasureDAO(measureDAOMock);
         
-        final EntityWithKPIAdapter kpiAdapter = new EntityWithKPIAdapter();
-        
-        kpiAdapter.setKpiDAO(kpiDAOMock);
         
         final KPIService kpiService = new KPIService();
         kpiService.setEsperEngine(esperEngine);
         kpiService.setMetricService(metricService);
         kpiService.setMeasureService(measureService);
+        kpiService.setKpiDAO(kpiDAOMock);
+        
         
         final Person person = new Person();
         person.setId(12);
@@ -183,6 +179,7 @@ public class KPIServiceTest
         kpi.setValueDirection(ValueDirection.BETTER);
         kpi.setValueType(ValueType.INT);
         kpiList.add(kpi);
+        kpiService.updateKPIOfEntity(person, kpiList);
         
         Mockito.when(kpiDAOMock.selectByCriteria(Matchers.any(KpiCriteria.class))).thenReturn(
                 kpiList);
@@ -191,11 +188,13 @@ public class KPIServiceTest
                 .thenReturn(epStatementMock);
         
         
-        final IEntityWithKPI<Person> personAdapter = kpiAdapter.adapt(person);
-        kpiService.synchronizeInEsper(personAdapter);
+        kpiService.synchronizeInEsper(person);
         
-        Mockito.verify(esperEngine, Mockito.times(1)).createOrUpdateEPL(SELECT_COUNT_FROM_ALERT,
-                KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12);
+        final ArgumentCaptor<QueryDefinition> forClass =
+                ArgumentCaptor.forClass(QueryDefinition.class);
+        Mockito.verify(esperEngine, Mockito.times(1)).createOrUpdateEPL(forClass.capture());
+        Assert.assertEquals(KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12, forClass.getValue().getName());
+        Assert.assertEquals(SELECT_COUNT_FROM_ALERT, forClass.getValue().getQuery());
         
         
     }

@@ -11,6 +11,11 @@ public interface ISystemProject
 {
     
     
-    public abstract Project getSystemProject();
+    /**
+     * Returns the system project.
+     * 
+     * @return the system project.
+     */
+    public Project getSystemProject();
     
 }

@@ -4,7 +4,6 @@ package org.komea.product.backend.service.esper;
 
 
 import org.komea.product.database.alert.IAlert;
-import org.komea.product.database.alert.enums.Criticity;
 import org.springframework.stereotype.Service;
 
 
@@ -27,8 +26,7 @@ public class AlertValidationService implements IAlertValidationService
         if (_alert.getCategory() == null) { throw new IllegalArgumentException("invalid category."); }
         if (_alert.getType() == null || _alert.getType().isEmpty()) { throw new IllegalArgumentException(
                 "invalid type"); }
-        if (_alert.getCriticity() == Criticity.NONE) { throw new IllegalArgumentException(
-                "invalid criticity"); }
+        if (_alert.getCriticity() == null) { throw new IllegalArgumentException("invalid criticity"); }
         if (_alert.getDate() == null) { throw new IllegalArgumentException("invalid date"); }
         if (_alert.getMessage() == null) { throw new IllegalArgumentException("invalid message"); }
         // if (_alert.getProject() == null || _alert.getProject().isEmpty()) {

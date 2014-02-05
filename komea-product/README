@@ -1,0 +1,2 @@
+Use model-generation to regenerate the database.
+Don't forget to compile mybatis-jsr to add validation

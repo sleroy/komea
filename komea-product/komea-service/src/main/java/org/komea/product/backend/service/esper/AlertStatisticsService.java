@@ -9,24 +9,23 @@ package org.komea.product.backend.service.esper;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.PostConstruct;
+
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.reactor.EPStatementResult;
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
 import org.komea.product.backend.esper.reactor.KPINotFoundRuntimeException;
+import org.komea.product.backend.esper.reactor.QueryDefinition;
 import org.komea.product.backend.service.ISystemProject;
 import org.komea.product.backend.service.business.IKPIFacade;
 import org.komea.product.backend.service.kpi.IEntityWithKPIAdapter;
 import org.komea.product.backend.service.kpi.IKPIService;
-import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.alert.AlertBuilder;
 import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.enums.EntityType;
-import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Project;
-import org.komea.product.database.model.Provider;
-import org.komea.product.database.model.ProviderCriteria;
 import org.komea.product.service.dto.AlertTypeStatistic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,15 +48,15 @@ public class AlertStatisticsService implements IAlertStatisticsService
 {
     
     
-    private static final String   INTERNAL_KOMEA      = "INTERNAL_KOMEA";
+    public static final String    ALERT_RECEIVED_IN_ONE_DAY = "ALERT_RECEIVED_IN_ONE_DAY";
     
-    private static final String   STATS_BREAKDOWN_24H = "STATS_BREAKDOWN_24H";
     
-    private static final String   ALERT_STATS_NUMBER  = "ALERT_STATS_NUMBER";
+    private static final String   STATS_BREAKDOWN_24H       = "STATS_BREAKDOWN_24H";
     
-    private static final Logger   LOGGER              =
-                                                              LoggerFactory
-                                                                      .getLogger(AlertStatisticsService.class);
+    
+    private static final Logger   LOGGER                    =
+                                                                    LoggerFactory
+                                                                            .getLogger(AlertStatisticsService.class);
     
     
     @Autowired
@@ -130,13 +129,12 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
         try {
             final IKPIFacade<Project> findKPIFacade =
-                    kpiService.findKPIFacade(
-                            entityWithKPIAdapter.adapt(systemProject.getSystemProject()),
-                            ALERT_STATS_NUMBER);
+                    kpiService.findKPIFacade(systemProject.getSystemProject(),
+                            ALERT_RECEIVED_IN_ONE_DAY);
             return findKPIFacade.getMetric().getIntValue();
         } catch (final KPINotFoundException e) {
             throw new KPINotFoundRuntimeException(systemProject.getSystemProject(),
-                    ALERT_STATS_NUMBER, e);
+                    ALERT_RECEIVED_IN_ONE_DAY, e);
         }
         
     }
@@ -166,45 +164,39 @@ public class AlertStatisticsService implements IAlertStatisticsService
     }
     
     
-    @Autowired
+    @PostConstruct
     public void init() {
     
     
-        Kpi kpi = kpiService.findKPI(ALERT_STATS_NUMBER);
+        LOGGER.info("Creating System KPI for statistics...");
+        Kpi kpi = kpiService.findKPI(ALERT_RECEIVED_IN_ONE_DAY);
         if (kpi == null) {
             
-            
-            Provider internalProvider = null;
-            final ProviderCriteria findProviderWithName = new ProviderCriteria();
-            findProviderWithName.createCriteria().andNameEqualTo(INTERNAL_KOMEA);
-            internalProvider =
-                    CollectionUtil.singleOrNull(providerDAO.selectByCriteria(findProviderWithName));
-            if (internalProvider == null) {
-                internalProvider = new Provider();
-                
-                internalProvider.setIcon("internal");
-                internalProvider.setName(INTERNAL_KOMEA);
-                internalProvider.setProviderType(ProviderType.OTHER);
-                internalProvider.setUrl("");
-                providerDAO.insert(internalProvider);
-            }
             
             kpi = new Kpi();
             kpi.setDescription("Provides the number of alerts received under 24 hours");
             kpi.setEntityType(EntityType.PROJECT);
+            
             kpi.setEsperRequest("SELECT COUNT(*) as alert_number FROM Alert.win:time(24 hour)");
-            kpi.setKpiKey("ALERT_RECEIVED_IN_ONE_DAY");
+            kpi.setKpiKey(ALERT_RECEIVED_IN_ONE_DAY);
             kpi.setMinValue(0d);
             kpi.setMaxValue(Double.MAX_VALUE);
             kpi.setName("Number of alerts received under 24 hours.");
-            kpi.setIdProvider(internalProvider.getId());
-            kpiService.newKPI(kpi);
+            kpi.setEntityID(systemProject.getSystemProject().getId());
+            
+            final List<Kpi> listOfKpisOfEntity =
+                    kpiService.getListOfKpisOfEntity(systemProject.getSystemProject());
+            listOfKpisOfEntity.add(kpi);
+            kpiService.updateKPIOfEntity(systemProject.getSystemProject(), listOfKpisOfEntity);
+            kpiService.synchronizeInEsper(systemProject.getSystemProject());
+        } else {
+            LOGGER.info("Statistics KPI already existing.");
         }
         
         
-        esperEngine.createOrUpdateEPL(
+        esperEngine.createOrUpdateEPL(new QueryDefinition(
                 "SELECT DISTINCT provider, type, count(*) as number FROM Alert.win:time(24 hour)",
-                STATS_BREAKDOWN_24H);
+                STATS_BREAKDOWN_24H));
         
         
     }

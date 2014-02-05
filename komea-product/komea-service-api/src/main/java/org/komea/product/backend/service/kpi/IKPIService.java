@@ -3,15 +3,26 @@ package org.komea.product.backend.service.kpi;
 
 
 
+import java.util.List;
+
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
-import org.komea.product.backend.service.business.IEntityWithKPI;
 import org.komea.product.backend.service.business.IKPIFacade;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Kpi;
 
 
 
 public interface IKPIService
 {
+    
+    
+    /**
+     * Creates a new KPI.
+     * 
+     * @param _kpi
+     *            a new KPI.
+     */
+    public void saveOrUpdate(Kpi _kpi);
     
     
     /**
@@ -30,17 +41,12 @@ public interface IKPIService
      * @return the metric with the given name.
      * @throws KPINotFoundException
      */
-    public <T> IKPIFacade<T> findKPIFacade(IEntityWithKPI<T> _entity, String _kpiName)
-            throws KPINotFoundException;
+    public <TEntity extends IEntity> IKPIFacade<TEntity> findKPIFacade(
+            TEntity _entity,
+            String _kpiName) throws KPINotFoundException;
     
     
-    /**
-     * Creates a new JKPI.
-     * 
-     * @param _kpi
-     *            a new KPI.
-     */
-    public void newKPI(Kpi _kpi);
+    public <TEntity extends IEntity> List<Kpi> getListOfKpisOfEntity(TEntity _entity);
     
     
     /**
@@ -49,5 +55,8 @@ public interface IKPIService
      * @param _kpi
      *            kpi
      */
-    public void synchronizeInEsper(IEntityWithKPI<?> _entity);
+    public <TEntity extends IEntity> void synchronizeInEsper(TEntity _project);
+    
+    
+    public <TEntity extends IEntity> void updateKPIOfEntity(TEntity _entity, List<Kpi> _singleton);
 }

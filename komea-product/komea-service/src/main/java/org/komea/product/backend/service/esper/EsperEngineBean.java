@@ -13,6 +13,7 @@ import org.komea.product.backend.esper.listeners.EPServiceStateListener1;
 import org.komea.product.backend.esper.listeners.EPStatementStateListener1;
 import org.komea.product.backend.esper.reactor.EsperDebugReactorListener;
 import org.komea.product.backend.exceptions.EsperStatementNotFoundException;
+import org.komea.product.backend.service.business.IQueryDefinition;
 import org.komea.product.database.alert.Alert;
 import org.komea.product.database.alert.IAlert;
 import org.komea.product.database.alert.enums.Criticity;
@@ -55,28 +56,32 @@ public final class EsperEngineBean implements IEsperEngine
     
     
     @Override
-    public EPStatement createEPL(final String _eplQuery, final String _eplQueryName) {
+    public EPStatement createEPL(final IQueryDefinition _queryDefinition) {
     
     
-        LOGGER.info("Creation of a new EPL Statement {}->{}", _eplQuery, _eplQueryName);
+        LOGGER.info("Creation of a new EPL Statement {}", _queryDefinition);
         final EPStatement createEPL =
-                esperEngine.getEPAdministrator().createEPL(_eplQuery, _eplQueryName);
+                esperEngine.getEPAdministrator().createEPL(_queryDefinition.getQuery(),
+                        _queryDefinition.getName());
         return createEPL;
     }
     
     
     @Override
-    public void createOrUpdateEPL(final String _query, final String _statementName) {
+    public void createOrUpdateEPL(final IQueryDefinition _definition) {
     
     
-        LOGGER.info("Registering an esper query {} : {}", _query, _statementName);
-        if (existEPL(_query)) {
-            LOGGER.info("--> Replacing an esper query {} : {}", _query, _statementName);
-            createEPL(_query, _statementName);
+        LOGGER.info("Registering an esper query {} : {}", _definition.getQuery(),
+                _definition.getName());
+        if (existEPL(_definition.getQuery())) {
+            LOGGER.info("--> Replacing an esper query {} : {}", _definition.getQuery(),
+                    _definition.getName());
+            createEPL(_definition);
             return;
         }
-        LOGGER.info("--> Creating a new esper query {} : {}", _query, _statementName);
-        createEPL(_query, _statementName);
+        LOGGER.info("--> Creating a new esper query {} : {}", _definition.getQuery(),
+                _definition.getName());
+        createEPL(_definition);
     }
     
     

@@ -6,8 +6,8 @@ package org.komea.product.backend.kpi;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.komea.product.backend.service.business.IEntityWithKPI;
-import org.komea.product.database.enums.EntityType;
+import org.komea.product.backend.service.business.IEntityWithKPIFacade;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Kpi;
 
 
@@ -16,66 +16,40 @@ import org.komea.product.database.model.Kpi;
  * Builds a EntityWithKPI with KPI.
  * 
  * @author sleroy
- * @param <T>
+ * @param <TEntity>
  */
-public class EntityWithKPI<T> implements IEntityWithKPI<T>
+public class EntityWithKPI<TEntity extends IEntity> implements IEntityWithKPIFacade<TEntity>
 {
     
     
-    private final int  id;
+    private final TEntity entity;
     
-    
-    private final T    entity;
-    
-    private List<Kpi>  kpis       = new ArrayList<Kpi>();
-    
-    private EntityType entityType = null;
+    private List<Kpi>     kpis = new ArrayList<Kpi>();
     
     
     
     /**
      * Builds an entity wrapper.
      * 
-     * @param _id
      * @param _entity
      * @param _kpis
      * @param _entityType
      */
-    public EntityWithKPI(
-            final int _id,
-            final T _entity,
-            final List<Kpi> _kpis,
-            final EntityType _entityType) {
+    public EntityWithKPI(final TEntity _entity, final List<Kpi> _kpis) {
     
     
         super();
-        id = _id;
+        
         entity = _entity;
         kpis = _kpis;
-        entityType = _entityType;
     }
     
     
-    public T getEntity() {
+    @Override
+    public TEntity getEntity() {
     
     
         return entity;
-    }
-    
-    
-    @Override
-    public int getId() {
-    
-    
-        return id;
-    }
-    
-    
-    @Override
-    public List<Kpi> getListofKpis() {
-    
-    
-        return kpis;
     }
     
     
@@ -92,18 +66,10 @@ public class EntityWithKPI<T> implements IEntityWithKPI<T>
     
     
     @Override
-    public EntityType getType() {
+    public List<Kpi> getListofKpis() {
     
     
-        return entityType;
-    }
-    
-    
-    @Override
-    public T getUnderlyingObject() {
-    
-    
-        return entity;
+        return kpis;
     }
     
     
@@ -115,10 +81,7 @@ public class EntityWithKPI<T> implements IEntityWithKPI<T>
     public String toString() {
     
     
-        return "EntityWithKPI [id="
-                + id + ", " + (entity != null ? "entity=" + entity + ", " : "")
-                + (kpis != null ? "kpis=" + kpis + ", " : "")
-                + (entityType != null ? "entityType=" + entityType : "") + "]";
+        return "EntityWithKPI [entity=" + entity + ", kpis=" + kpis + "]";
     }
     
     

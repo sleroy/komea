@@ -26,12 +26,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_proj` (
   `idCustomer` INT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `key_UNIQUE` (`projectKey` ASC),
-  INDEX `fk_Project_Customer1_idx` (`idCustomer` ASC),
-  CONSTRAINT `fk_Project_Customer1`
-    FOREIGN KEY (`idCustomer`)
-    REFERENCES `komea`.`kom_customer` (`id`)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE)
+  INDEX `fk_Project_Customer1_idx` (`idCustomer` ASC))
 ENGINE = InnoDB;
 
 
@@ -55,21 +50,10 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pegr` (
   `description` VARCHAR(2048) NULL,
   `idPersonGroupParent` INT NULL,
   `idGroupKind` INT NULL,
-  `depth` INT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `key_UNIQUE` (`personGroupKey` ASC),
   INDEX `fk_UserGroup_UserGroup1_idx` (`idPersonGroupParent` ASC),
-  INDEX `fk_Person_Group_Group_Kind1_idx` (`idGroupKind` ASC),
-  CONSTRAINT `fk_UserGroup_UserGroup1`
-    FOREIGN KEY (`idPersonGroupParent`)
-    REFERENCES `komea`.`kom_pegr` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Person_Group_Group_Kind1`
-    FOREIGN KEY (`idGroupKind`)
-    REFERENCES `komea`.`kom_grk` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_Person_Group_Group_Kind1_idx` (`idGroupKind` ASC))
 ENGINE = InnoDB;
 
 
@@ -98,17 +82,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pe` (
   PRIMARY KEY (`id`),
   INDEX `fk_User_UserGroup1_idx` (`idPersonGroup` ASC),
   INDEX `fk_User_UserRole1_idx` (`idPersonRole` ASC),
-  UNIQUE INDEX `Personcol_UNIQUE` (`login` ASC),
-  CONSTRAINT `fk_User_UserGroup1`
-    FOREIGN KEY (`idPersonGroup`)
-    REFERENCES `komea`.`kom_pegr` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_User_UserRole1`
-    FOREIGN KEY (`idPersonRole`)
-    REFERENCES `komea`.`kom_pero` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  UNIQUE INDEX `Personcol_UNIQUE` (`login` ASC))
 ENGINE = InnoDB;
 
 
@@ -117,7 +91,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `komea`.`kom_pvd` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `providerType` INT NOT NULL,
+  `providerType` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `icon` VARCHAR(255) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
@@ -133,22 +107,18 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `kpiKey` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
-  `description` VARCHAR(2048) NULL,
-  `idProvider` INT NOT NULL,
+  `description` VARCHAR(2048) NOT NULL,
+  `idProvider` INT NULL,
   `minValue` DOUBLE NULL,
   `maxValue` DOUBLE NULL,
   `valueDirection` INT NOT NULL,
   `valueType` INT NOT NULL,
-  `entityType` INT NOT NULL,
-  `esperRequest` TEXT NULL,
+  `entityType` VARCHAR(255) NOT NULL,
+  `esperRequest` TEXT NOT NULL,
+  `entityID` INT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `key_UNIQUE` (`kpiKey` ASC),
-  INDEX `fk_Metric_Plugin1_idx` (`idProvider` ASC),
-  CONSTRAINT `fk_Metric_Plugin1`
-    FOREIGN KEY (`idProvider`)
-    REFERENCES `komea`.`kom_pvd` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_Metric_Plugin1_idx` (`idProvider` ASC))
 ENGINE = InnoDB;
 
 
@@ -167,27 +137,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_msr` (
   INDEX `fk_Measure_Metric1_idx` (`idKpi` ASC),
   INDEX `fk_Measure_UserGroup1_idx` (`idPersonGroup` ASC),
   INDEX `fk_Measure_User1_idx` (`idPerson` ASC),
-  INDEX `fk_Measure_Project1_idx` (`idProject` ASC),
-  CONSTRAINT `fk_Measure_Metric1`
-    FOREIGN KEY (`idKpi`)
-    REFERENCES `komea`.`kom_kpi` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Measure_UserGroup1`
-    FOREIGN KEY (`idPersonGroup`)
-    REFERENCES `komea`.`kom_pegr` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Measure_User1`
-    FOREIGN KEY (`idPerson`)
-    REFERENCES `komea`.`kom_pe` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Measure_Project1`
-    FOREIGN KEY (`idProject`)
-    REFERENCES `komea`.`kom_proj` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_Measure_Project1_idx` (`idProject` ASC))
 ENGINE = InnoDB;
 
 
@@ -207,12 +157,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpia` (
   `enabled` TINYINT(1) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_MetricAlert_Metric1_idx` (`idKpi` ASC),
-  UNIQUE INDEX `key_UNIQUE` (`kpiAlertKey` ASC),
-  CONSTRAINT `fk_MetricAlert_Metric1`
-    FOREIGN KEY (`idKpi`)
-    REFERENCES `komea`.`kom_kpi` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  UNIQUE INDEX `key_UNIQUE` (`kpiAlertKey` ASC))
 ENGINE = InnoDB;
 
 
@@ -225,12 +170,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_link` (
   `url` VARCHAR(255) NOT NULL,
   `idProject` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Tag_Project_idx` (`idProject` ASC),
-  CONSTRAINT `fk_Tag_Project`
-    FOREIGN KEY (`idProject`)
-    REFERENCES `komea`.`kom_proj` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_Tag_Project_idx` (`idProject` ASC))
 ENGINE = InnoDB;
 
 
@@ -246,15 +186,10 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_evt` (
   `enabled` TINYINT(1) NOT NULL,
   `description` VARCHAR(2048) NULL,
   `category` VARCHAR(255) NOT NULL,
-  `entityType` INT NOT NULL,
+  `entityType` VARCHAR(255) NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_Event_Plugin1_idx` (`idProvider` ASC),
-  UNIQUE INDEX `key_UNIQUE` (`eventKey` ASC),
-  CONSTRAINT `fk_Event_Plugin1`
-    FOREIGN KEY (`idProvider`)
-    REFERENCES `komea`.`kom_pvd` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  UNIQUE INDEX `key_UNIQUE` (`eventKey` ASC))
 ENGINE = InnoDB;
 
 
@@ -290,17 +225,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_pe` (
   `idPerson` INT NOT NULL,
   PRIMARY KEY (`idProject`, `idPerson`),
   INDEX `fk_Project_has_User_User1_idx` (`idPerson` ASC),
-  INDEX `fk_Project_has_User_Project1_idx` (`idProject` ASC),
-  CONSTRAINT `fk_Project_has_User_Project1`
-    FOREIGN KEY (`idProject`)
-    REFERENCES `komea`.`kom_proj` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Project_has_User_User1`
-    FOREIGN KEY (`idPerson`)
-    REFERENCES `komea`.`kom_pe` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_Project_has_User_Project1_idx` (`idProject` ASC))
 ENGINE = InnoDB;
 
 
@@ -316,12 +241,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pvds` (
   `description` VARCHAR(2048) NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `key_UNIQUE` (`providerSettingKey` ASC),
-  INDEX `fk_ProviderSetting_Provider1_idx` (`idProvider` ASC),
-  CONSTRAINT `fk_ProviderSetting_Provider1`
-    FOREIGN KEY (`idProvider`)
-    REFERENCES `komea`.`kom_pvd` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_ProviderSetting_Provider1_idx` (`idProvider` ASC))
 ENGINE = InnoDB;
 
 
@@ -333,17 +253,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_tag` (
   `idTag` INT NOT NULL,
   PRIMARY KEY (`idProject`, `idTag`),
   INDEX `fk_Project_has_Tag_Tag1_idx` (`idTag` ASC),
-  INDEX `fk_Project_has_Tag_Project1_idx` (`idProject` ASC),
-  CONSTRAINT `fk_Project_has_Tag_Project1`
-    FOREIGN KEY (`idProject`)
-    REFERENCES `komea`.`kom_proj` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Project_has_Tag_Tag1`
-    FOREIGN KEY (`idTag`)
-    REFERENCES `komea`.`kom_tag` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_Project_has_Tag_Project1_idx` (`idProject` ASC))
 ENGINE = InnoDB;
 
 
@@ -355,17 +265,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_kpia` (
   `idKpiAlertType` INT NOT NULL,
   PRIMARY KEY (`idProject`, `idKpiAlertType`),
   INDEX `fk_KOM_PROJ_has_KOM_KPIA_KOM_KPIA1_idx` (`idKpiAlertType` ASC),
-  INDEX `fk_KOM_PROJ_has_KOM_KPIA_KOM_PROJ1_idx` (`idProject` ASC),
-  CONSTRAINT `fk_KOM_PROJ_has_KOM_KPIA_KOM_PROJ1`
-    FOREIGN KEY (`idProject`)
-    REFERENCES `komea`.`kom_proj` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_KOM_PROJ_has_KOM_KPIA_KOM_KPIA1`
-    FOREIGN KEY (`idKpiAlertType`)
-    REFERENCES `komea`.`kom_kpia` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_KOM_PROJ_has_KOM_KPIA_KOM_PROJ1_idx` (`idProject` ASC))
 ENGINE = InnoDB;
 
 
@@ -377,17 +277,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_kpia_pegr` (
   `idPersonGroup` INT NOT NULL,
   PRIMARY KEY (`idKpiAlertType`, `idPersonGroup`),
   INDEX `fk_KOM_KPIA_has_KOM_PEGR_KOM_PEGR1_idx` (`idPersonGroup` ASC),
-  INDEX `fk_KOM_KPIA_has_KOM_PEGR_KOM_KPIA1_idx` (`idKpiAlertType` ASC),
-  CONSTRAINT `fk_KOM_KPIA_has_KOM_PEGR_KOM_KPIA1`
-    FOREIGN KEY (`idKpiAlertType`)
-    REFERENCES `komea`.`kom_kpia` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_KOM_KPIA_has_KOM_PEGR_KOM_PEGR1`
-    FOREIGN KEY (`idPersonGroup`)
-    REFERENCES `komea`.`kom_pegr` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_KOM_KPIA_has_KOM_PEGR_KOM_KPIA1_idx` (`idKpiAlertType` ASC))
 ENGINE = InnoDB;
 
 
@@ -399,17 +289,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_kpia_pe` (
   `idPerson` INT NOT NULL,
   PRIMARY KEY (`idKpiAlertType`, `idPerson`),
   INDEX `fk_KOM_KPIA_has_KOM_PE_KOM_PE1_idx` (`idPerson` ASC),
-  INDEX `fk_KOM_KPIA_has_KOM_PE_KOM_KPIA1_idx` (`idKpiAlertType` ASC),
-  CONSTRAINT `fk_KOM_KPIA_has_KOM_PE_KOM_KPIA1`
-    FOREIGN KEY (`idKpiAlertType`)
-    REFERENCES `komea`.`kom_kpia` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_KOM_KPIA_has_KOM_PE_KOM_PE1`
-    FOREIGN KEY (`idPerson`)
-    REFERENCES `komea`.`kom_pe` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_KOM_KPIA_has_KOM_PE_KOM_KPIA1_idx` (`idKpiAlertType` ASC))
 ENGINE = InnoDB;
 
 
@@ -421,17 +301,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_pegr` (
   `idPersonGroup` INT NOT NULL,
   PRIMARY KEY (`idProject`, `idPersonGroup`),
   INDEX `fk_kom_proj_has_kom_pegr_kom_pegr1_idx` (`idPersonGroup` ASC),
-  INDEX `fk_kom_proj_has_kom_pegr_kom_proj1_idx` (`idProject` ASC),
-  CONSTRAINT `fk_kom_proj_has_kom_pegr_kom_proj1`
-    FOREIGN KEY (`idProject`)
-    REFERENCES `komea`.`kom_proj` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_kom_proj_has_kom_pegr_kom_pegr1`
-    FOREIGN KEY (`idPersonGroup`)
-    REFERENCES `komea`.`kom_pegr` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_kom_proj_has_kom_pegr_kom_proj1_idx` (`idProject` ASC))
 ENGINE = InnoDB;
 
 

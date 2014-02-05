@@ -3,14 +3,16 @@ package org.komea.product.backend.service.kpi;
 
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
+import org.komea.product.backend.esper.reactor.QueryDefinition;
 import org.komea.product.backend.kpi.KPIFacade;
-import org.komea.product.backend.service.business.IEntityWithKPI;
 import org.komea.product.backend.service.business.IKPIFacade;
 import org.komea.product.backend.utils.CollectionUtil;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
@@ -64,22 +66,21 @@ public final class KPIService implements IKPIService
     }
     
     
-    /**
-     * Returns a facade to manipulate a KPI.
-     */
     @Override
-    public <T> IKPIFacade<T> findKPIFacade(final IEntityWithKPI<T> _entity, final String _kpiName)
-            throws KPINotFoundException {
+    public <TEntity extends IEntity> IKPIFacade<TEntity> findKPIFacade(
+            final TEntity _entity,
+            final String _kpiName) throws KPINotFoundException {
     
     
         LOGGER.debug("Returning KPI facade from entity {} and kpi {}", _entity, _kpiName);
-        
-        final Kpi requestedKpi = _entity.getKpi(_kpiName);
+        final KpiCriteria criteria = new KpiCriteria();
+        criteria.createCriteria().andKpiKeyEqualTo(_kpiName);
+        final Kpi requestedKpi = CollectionUtil.singleOrNull(kpiDAO.selectByCriteria(criteria));
         
         if (requestedKpi == null) { throw new KPINotFoundException(_entity, _kpiName); }
         final IEPMetric metricWrapperOverEsperQuery =
-                metricService.findMeasure(requestedKpi.computeKPIEsperKey(_entity.getId()));
-        return new KPIFacade<T>(metricWrapperOverEsperQuery, _entity, requestedKpi.getKpiKey(),
+                metricService.findMeasure(requestedKpi.computeKPIEsperKey(_entity));
+        return new KPIFacade<TEntity>(metricWrapperOverEsperQuery, _entity, requestedKpi,
                 measureService);
         
     }
@@ -92,6 +93,31 @@ public final class KPIService implements IKPIService
     
     
         return esperEngine;
+    }
+    
+    
+    public KpiDao getKpiDAO() {
+    
+    
+        return kpiDAO;
+    }
+    
+    
+    @Override
+    public <TEntity extends IEntity> List<Kpi> getListOfKpisOfEntity(final TEntity _entity) {
+    
+    
+        final List<Kpi> kpis = new ArrayList<Kpi>();
+        final KpiCriteria allKpisFromEntityType = new KpiCriteria();
+        allKpisFromEntityType.createCriteria().andEntityTypeEqualTo(_entity.getType())
+                .andEntityIDIsNull();
+        
+        kpis.addAll(kpiDAO.selectByCriteria(allKpisFromEntityType));
+        final KpiCriteria allKpisOnlyEntity = new KpiCriteria();
+        allKpisOnlyEntity.createCriteria().andEntityTypeEqualTo(_entity.getType())
+                .andEntityIDEqualTo(_entity.getId());
+        kpis.addAll(kpiDAO.selectByCriteria(allKpisOnlyEntity));
+        return kpis;
     }
     
     
@@ -127,10 +153,14 @@ public final class KPIService implements IKPIService
     
     @Transactional
     @Override
-    public void newKPI(final Kpi _kpi) {
+    public void saveOrUpdate(final Kpi _kpi) {
     
     
-        kpiDAO.insert(_kpi);
+        if (_kpi.getId() == null) {
+            kpiDAO.insert(_kpi);
+        } else {
+            kpiDAO.updateByPrimaryKey(_kpi);
+        }
     }
     
     
@@ -142,6 +172,13 @@ public final class KPIService implements IKPIService
     
     
         esperEngine = _esperEngine;
+    }
+    
+    
+    public void setKpiDAO(final KpiDao _kpiDAO) {
+    
+    
+        kpiDAO = _kpiDAO;
     }
     
     
@@ -168,17 +205,38 @@ public final class KPIService implements IKPIService
     
     
     @Override
-    public void synchronizeInEsper(final IEntityWithKPI<?> _entity) {
+    public <TEntity extends IEntity> void synchronizeInEsper(final TEntity _entity) {
     
     
         LOGGER.info("Updating / Refreshing Kpi statements of entity {}", _entity);
+        final List<Kpi> listOfKpisOfEntity = getListOfKpisOfEntity(_entity);
         
-        final List<Kpi> kpiOfEntity = _entity.getListofKpis();
-        LOGGER.info("EntityWithKPI {} has {} kpi", _entity, kpiOfEntity.size());
-        for (final Kpi kpi : kpiOfEntity) {
-            final String computeKPIEsperKey = kpi.computeKPIEsperKey(_entity.getId());
-            esperEngine.createOrUpdateEPL(kpi.getEsperRequest(), computeKPIEsperKey);
+        LOGGER.info("EntityWithKPI {} has {} kpi", _entity, listOfKpisOfEntity.size());
+        for (final Kpi kpi : listOfKpisOfEntity) {
+            final String computeKPIEsperKey = kpi.computeKPIEsperKey(_entity);
+            esperEngine.createOrUpdateEPL(new QueryDefinition(kpi, computeKPIEsperKey));
         }
         
     }
+    
+    
+    @Transactional
+    @Override
+    public <TEntity extends IEntity> void updateKPIOfEntity(
+            final TEntity _entity,
+            final List<Kpi> listOfKpis) {
+    
+    
+        // Ignore silently global kpi...
+        for (final Kpi kpi : listOfKpis) {
+            if (kpi.getEntityID() == null) {
+                continue;
+            }
+            saveOrUpdate(kpi);
+        }
+        
+        
+    }
+    
+    
 }

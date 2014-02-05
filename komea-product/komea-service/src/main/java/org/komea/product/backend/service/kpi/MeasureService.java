@@ -5,7 +5,7 @@ package org.komea.product.backend.service.kpi;
 
 import java.util.List;
 
-import org.komea.product.backend.service.business.IEntityWithKPI;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
@@ -33,11 +33,18 @@ public class MeasureService implements IMeasureService
     }
     
     
+    public MeasureDao getMeasureDAO() {
+    
+    
+        return measureDAO;
+    }
+    
+    
     /**
      * Returns the measures.
      */
     @Override
-    public List<Measure> getMeasures(final IEntityWithKPI<?> _entity, final Kpi _kpi) {
+    public List<Measure> getMeasures(final IEntity _entity, final Kpi _kpi) {
     
     
         final MeasureCriteria measureCriteria = new MeasureCriteria();
@@ -57,16 +64,9 @@ public class MeasureService implements IMeasureService
         final List<Measure> selectByCriteria = measureDAO.selectByCriteria(measureCriteria);
         return selectByCriteria;
     }
-
-
-    public MeasureDao getMeasureDAO() {
     
     
-        return measureDAO;
-    }
-
-
-    public void setMeasureDAO(MeasureDao _measureDAO) {
+    public void setMeasureDAO(final MeasureDao _measureDAO) {
     
     
         measureDAO = _measureDAO;

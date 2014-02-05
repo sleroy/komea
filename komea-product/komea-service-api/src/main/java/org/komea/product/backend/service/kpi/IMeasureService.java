@@ -5,7 +5,7 @@ package org.komea.product.backend.service.kpi;
 
 import java.util.List;
 
-import org.komea.product.backend.service.business.IEntityWithKPI;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 
@@ -24,5 +24,5 @@ public interface IMeasureService
      *            the kpi.
      * @return the list of measures.
      */
-    public List<Measure> getMeasures(IEntityWithKPI<?> _entity, Kpi _kpi);
+    public List<Measure> getMeasures(IEntity _entity, Kpi _kpi);
 }

@@ -3,6 +3,7 @@ package org.komea.product.backend.api;
 
 
 
+import org.komea.product.backend.service.business.IQueryDefinition;
 import org.komea.product.database.alert.IAlert;
 
 import com.espertech.esper.client.EPServiceProvider;
@@ -23,7 +24,7 @@ public interface IEsperEngine
      *            the statement query.
      * @return the esper compiled statement.
      */
-    EPStatement createEPL(String _query, String _name);
+    EPStatement createEPL(IQueryDefinition _queryDefinition);
     
     
     /**
@@ -34,10 +35,16 @@ public interface IEsperEngine
      * @param _statementName
      *            the statement name.
      */
-    void createOrUpdateEPL(String _query, String _statementName);
+    void createOrUpdateEPL(IQueryDefinition _queryDefinition);
     
     
-    boolean existEPL(String _metricKey);
+    /**
+     * Tests if a statement exist.
+     * 
+     * @param _statementKey
+     *            the statement key.
+     */
+    boolean existEPL(String _statementKey);
     
     
     /**

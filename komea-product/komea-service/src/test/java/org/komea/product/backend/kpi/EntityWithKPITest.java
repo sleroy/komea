@@ -46,7 +46,7 @@ public class EntityWithKPITest
         kpi.setKpiKey("demo");
         
         kpiList.add(kpi);
-        entityWithKPI = new EntityWithKPI<Person>(1, person, kpiList, EntityType.PERSON);
+        entityWithKPI = new EntityWithKPI<Person>(person, kpiList);
     }
     
     
@@ -70,7 +70,7 @@ public class EntityWithKPITest
     
     
         Assert.assertEquals(person.getId(), entityWithKPI.getEntity().getId());
-        Assert.assertEquals(person.getId(), (Integer) entityWithKPI.getId());
+        Assert.assertEquals(person.getId(), entityWithKPI.getEntity().getId());
     }
     
     
@@ -103,7 +103,7 @@ public class EntityWithKPITest
     public final void testGetType() {
     
     
-        Assert.assertEquals(EntityType.PERSON, entityWithKPI.getType());
+        Assert.assertEquals(EntityType.PERSON, entityWithKPI.getEntity().getType());
     }
     
     
@@ -114,7 +114,7 @@ public class EntityWithKPITest
     public final void testGetUnderlyingObject() {
     
     
-        Assert.assertEquals(person, entityWithKPI.getUnderlyingObject());
+        Assert.assertEquals(person, entityWithKPI.getEntity());
     }
     
     

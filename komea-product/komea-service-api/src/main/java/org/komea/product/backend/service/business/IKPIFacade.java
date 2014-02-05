@@ -6,6 +6,7 @@ package org.komea.product.backend.service.business;
 import java.util.List;
 
 import org.komea.product.backend.service.kpi.IEPMetric;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 
@@ -17,7 +18,7 @@ import org.komea.product.database.model.Measure;
  * 
  * @author sleroy
  */
-public interface IKPIFacade<TEntity>
+public interface IKPIFacade<TEntity extends IEntity>
 {
     
     
@@ -26,7 +27,7 @@ public interface IKPIFacade<TEntity>
      * 
      * @return the associated entity
      */
-    IEntityWithKPI<TEntity> getEntity();
+    IEntity getEntity();
     
     
     /**
@@ -44,7 +45,7 @@ public interface IKPIFacade<TEntity>
     
     
     /**
-     * Returns the metric.
+     * Returns the object to obtain metric values.
      * 
      * @return the metric.
      */
