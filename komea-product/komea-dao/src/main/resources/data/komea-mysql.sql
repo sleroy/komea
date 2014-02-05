@@ -116,6 +116,9 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `entityType` VARCHAR(255) NOT NULL,
   `esperRequest` MEDIUMTEXT NOT NULL,
   `entityID` INT NULL,
+  `cronExpression` VARCHAR(60) NULL,
+  `evictionRate` INT NOT NULL,
+  `evictionType` INT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `key_UNIQUE` (`kpiKey` ASC),
   INDEX `fk_Metric_Plugin1_idx` (`idProvider` ASC))

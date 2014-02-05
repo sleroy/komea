@@ -68,7 +68,7 @@ public interface ICronRegistryService
     void registerCronTask(
             String _cronName,
             String _cronExpression,
-            Job _runnable,
+            Class<? extends Job> _runnable,
             JobDataMap _properties);
     
     

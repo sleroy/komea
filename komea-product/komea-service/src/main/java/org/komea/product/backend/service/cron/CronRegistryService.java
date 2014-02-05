@@ -25,9 +25,11 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 
 
+@Service
 public class CronRegistryService implements ICronRegistryService
 {
     
@@ -145,13 +147,13 @@ public class CronRegistryService implements ICronRegistryService
     public void registerCronTask(
             final String _cronName,
             final String _cronExpression,
-            final Job _runnable,
+            final Class<? extends Job> _runnable,
             final JobDataMap _properties) {
     
     
         _properties.put(CRON_EXP, _cronExpression);
         final JobDetail jobDetail =
-                JobBuilder.newJob().withIdentity(_cronName).withDescription(_cronName)
+                JobBuilder.newJob(_runnable).withIdentity(_cronName).withDescription(_cronName)
                         .usingJobData(_properties).build();
         final Trigger trigger =
                 TriggerBuilder.newTrigger().forJob(jobDetail).usingJobData(_properties)
@@ -191,7 +193,7 @@ public class CronRegistryService implements ICronRegistryService
             jobDataMap.put(CRON_EXP, _cronExpression);
             final Trigger trigger =
                     TriggerBuilder.newTrigger().forJob(_cronExpression).usingJobData(jobDataMap)
-                            .withIdentity(_cronName)
+                            .withIdentity(_cronName).startNow()
                             .withSchedule(CronScheduleBuilder.cronSchedule(_cronExpression))
                             .build();
             schedulerFactory.getScheduler().rescheduleJob(TriggerKey.triggerKey(_cronExpression),

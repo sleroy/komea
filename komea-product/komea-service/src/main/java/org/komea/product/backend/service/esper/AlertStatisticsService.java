@@ -8,7 +8,6 @@ package org.komea.product.backend.service.esper;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.PostConstruct;
 
@@ -17,20 +16,19 @@ import org.komea.product.backend.esper.reactor.KPINotFoundException;
 import org.komea.product.backend.esper.reactor.KPINotFoundRuntimeException;
 import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.business.IKPIFacade;
+import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.kpi.IEntityWithKPIAdapter;
 import org.komea.product.backend.service.kpi.IKPIService;
-import org.komea.product.database.alert.AlertBuilder;
-import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.Project;
 import org.komea.product.service.dto.AlertTypeStatistic;
+import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.espertech.esper.client.EPStatement;
@@ -72,10 +70,14 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     
     @Autowired
-    private IEsperEngine          esperEngine;
+    IEsperEngine                  esperEngine;
     
     @Autowired
     private ProviderDao           providerDAO;
+    
+    
+    @Autowired
+    private ICronRegistryService  registry;
     
     
     
@@ -171,6 +173,13 @@ public class AlertStatisticsService implements IAlertStatisticsService
     }
     
     
+    public ICronRegistryService getRegistry() {
+    
+    
+        return registry;
+    }
+    
+    
     /**
      * @return the systemProject
      */
@@ -200,42 +209,34 @@ public class AlertStatisticsService implements IAlertStatisticsService
             kpi.setMaxValue(Double.MAX_VALUE);
             kpi.setName("Number of alerts received under 24 hours.");
             kpi.setEntityID(systemProject.getSystemProject().getId());
-            
+            kpi.setCronExpression("0/5 * * * * ?");
             final List<Kpi> listOfKpisOfEntity =
                     kpiService.getListOfKpisOfEntity(systemProject.getSystemProject());
             listOfKpisOfEntity.add(kpi);
             kpiService.updateKPIOfEntity(systemProject.getSystemProject(), listOfKpisOfEntity);
-            kpiService.synchronizeEntityWithKomea(systemProject.getSystemProject());
+            
         } else {
             LOGGER.info("Statistics KPI already existing.");
         }
         
-        
+        kpiService.synchronizeEntityWithKomea(systemProject.getSystemProject());
         esperEngine.createOrUpdateEPL(new QueryDefinition(
                 "SELECT DISTINCT provider, type, count(*) as number FROM Alert.win:time(24 hour)",
                 STATS_BREAKDOWN_24H));
-        
+        scheduleAlerts();
         
     }
     
     
-    @Scheduled(fixedRate = 20000)
     public void scheduleAlerts() {
     
     
-        esperEngine.sendAlert(AlertBuilder.newAlert().category("SCM").criticity(Criticity.BLOCKING)
-                .fullMessage("Demo Alert").message("Demo alert").project("SYSTEM")
-                .provided("DEMO" + new Random().nextInt(12)).type("DemoAlert").getAlert());
+        final JobDataMap properties = new JobDataMap();
+        properties.put("esper", esperEngine);
+        registry.registerCronTask("ALERT_DEMO_STAT", "0/1 * * * * ?", AlertJobDemo.class,
+                properties);
         
-    }
-    
-    
-    @Scheduled(cron = "0 0 * * *")
-    public void scheduleBackup() {
-    
-    
-        kpiService.storeValueInHistory(systemProject.getSystemProject(), kpiService.findKPIOrFail(
-                systemProject.getSystemProject(), ALERT_RECEIVED_IN_ONE_DAY));
+        
     }
     
     
@@ -276,6 +277,13 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     
         providerDAO = _providerDAO;
+    }
+    
+    
+    public void setRegistry(final ICronRegistryService _registry) {
+    
+    
+        registry = _registry;
     }
     
     

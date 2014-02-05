@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang.StringUtils;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
 import org.komea.product.backend.esper.reactor.KPINotFoundRuntimeException;
@@ -22,6 +23,7 @@ import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.Measure;
+import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +73,17 @@ public final class KPIService implements IKPIService
     public void createOrUpdateHistoryJob(final Kpi _kpi, final IEntity _entity) {
     
     
-        if (cronRegistry.existCron(_kpi.getCronHistoryJobName(_entity))) {
-            
+        if (StringUtils.isEmpty(_kpi.getCronExpression())) { return; }
+        final String kpiCronName = _kpi.getCronHistoryJobName(_entity);
+        if (cronRegistry.existCron(kpiCronName)) {
+            cronRegistry.updateCronFrequency(kpiCronName, _kpi.getCronExpression());
+        } else {
+            final JobDataMap properties = new JobDataMap();
+            properties.put("entity", _entity);
+            properties.put("kpi", _kpi);
+            properties.put("service", this);
+            cronRegistry.registerCronTask(kpiCronName, _kpi.getCronExpression(),
+                    KpiHistoryJob.class, properties);
         }
         
         
