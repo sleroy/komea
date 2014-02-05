@@ -237,7 +237,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
         // output snapshot every 1 minute
         esperEngine
                 .createOrUpdateEPLQuery(new QueryDefinition(
-                        "SELECT provider, type, count(*) as number FROM Alert.win:time(24 hour)  ORDER BY provider ASC, type ASC",
+                        "SELECT DISTINCT provider, type, count(*) as number FROM Alert.win:time(24 hour)  ORDER BY provider ASC, type ASC",
                         STATS_BREAKDOWN_24H));
         scheduleAlerts();
         
