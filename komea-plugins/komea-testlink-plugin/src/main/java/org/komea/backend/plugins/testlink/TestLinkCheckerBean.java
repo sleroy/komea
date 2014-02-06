@@ -10,7 +10,7 @@ import org.komea.backend.plugins.testlink.api.ITestLinkAlertFactory;
 import org.komea.backend.plugins.testlink.api.ITestLinkServerConfiguration;
 import org.komea.backend.plugins.testlink.api.ITestLinkServerManagerService;
 import org.komea.backend.plugins.testlink.api.ITestLinkServerProxy;
-import org.komea.product.backend.service.esper.IAlertService;
+import org.komea.product.backend.service.esper.IAlertPushService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -21,7 +21,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 public class TestLinkCheckerBean {
 
     @Autowired
-    private IAlertService alertService;
+    private IAlertPushService alertService;
 
     @Autowired
     private ITestLinkAlertFactory alertFactory;
@@ -37,18 +37,18 @@ public class TestLinkCheckerBean {
             // traitement spécifique au plugin
             List<TestLinkProject> listProject = openProxy.getListProject();
             for (TestLinkProject projet : listProject) {
-                
+
                 // solution lourde et lente qui permet d'avoir le detail de chaque test
                 List<TestLinkTestCase> totalTests = openProxy.getTotalTests(projet);
-                 TestFilter testFilter = TestFilter.filter(totalTests);
-                 this.alertService.sendEvent(this.alertFactory.newTotalTests(totalTests.size(), projet.getName()));
-                 this.alertService.sendEvent(this.alertFactory.newBlockedTests(testFilter.getBlockedTests().size(), projet.getName()));
-                 this.alertService.sendEvent(this.alertFactory.newFailedTests(testFilter.getFailedTests().size(), projet.getName()));
-                 this.alertService.sendEvent(this.alertFactory.newSuccessfultest(testFilter.getSuccessfulTests().size(), projet.getName()));
-                 this.alertService.sendEvent(this.alertFactory.newUnexecutedTest(testFilter.getUnexecutedTests().size(), projet.getName()));
-                 this.alertService.sendEvent(this.alertFactory.newUnassociedTest(testFilter.getUnassociedTest().size(), projet.getName()));
+                TestFilter testFilter = TestFilter.filter(totalTests);
+                this.alertService.sendEvent(this.alertFactory.newTotalTests(totalTests.size(), projet.getName()));
+                this.alertService.sendEvent(this.alertFactory.newBlockedTests(testFilter.getBlockedTests().size(), projet.getName()));
+                this.alertService.sendEvent(this.alertFactory.newFailedTests(testFilter.getFailedTests().size(), projet.getName()));
+                this.alertService.sendEvent(this.alertFactory.newSuccessfultest(testFilter.getSuccessfulTests().size(), projet.getName()));
+                this.alertService.sendEvent(this.alertFactory.newUnexecutedTest(testFilter.getUnexecutedTests().size(), projet.getName()));
+                this.alertService.sendEvent(this.alertFactory.newUnassociedTest(testFilter.getUnassociedTest().size(), projet.getName()));
 //                 
-                
+
                 //solution legère et rapide mais qui permet pas d'avoir le detail des tests
 //                MetricTest metricTest = openProxy.getMetricTest(projet);
 //                this.alertService.sendEvent(this.alertFactory.newTotalTests(metricTest.getNumberTest(), projet.getName()));
@@ -56,7 +56,6 @@ public class TestLinkCheckerBean {
 //                this.alertService.sendEvent(this.alertFactory.newFailedTests(metricTest.getFailedTest(), projet.getName()));
 //                this.alertService.sendEvent(this.alertFactory.newSuccessfultest(metricTest.getSuccessfulTest(), projet.getName()));
 //                this.alertService.sendEvent(this.alertFactory.newUnexecutedTest(metricTest.getUnexecutedTest(), projet.getName()));
-                
                 //Requirement
 //                List<TestLinkRequirement> requirements = openProxy.getRequirements(projet);
 //                RequirementFilter requirementFilter = RequirementFilter.filter(requirements);
@@ -68,11 +67,11 @@ public class TestLinkCheckerBean {
         }
     }
 
-    public IAlertService getAlertService() {
+    public IAlertPushService  getAlertService() {
         return alertService;
     }
 
-    public void setAlertService(IAlertService alertService) {
+    public void setAlertService(IAlertPushService  alertService) {
         this.alertService = alertService;
     }
 
