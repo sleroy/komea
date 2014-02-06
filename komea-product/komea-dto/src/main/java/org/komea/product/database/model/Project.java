@@ -179,7 +179,7 @@ public class Project implements Serializable, IEntity
     
     
     @Override
-    public EntityType getType() {
+    public EntityType entityType() {
     
     
         return EntityType.PROJECT;

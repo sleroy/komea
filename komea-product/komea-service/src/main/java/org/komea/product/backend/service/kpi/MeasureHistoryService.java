@@ -6,6 +6,7 @@ package org.komea.product.backend.service.kpi;
 import java.util.List;
 
 import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.service.business.IEPMetric;
 import org.komea.product.backend.service.esper.EPMetric;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.MeasureDao;
@@ -107,7 +108,7 @@ public class MeasureHistoryService implements IMeasureHistoryService
         final MeasureCriteria measureCriteria = new MeasureCriteria();
         final Criteria createCriteria = measureCriteria.createCriteria();
         createCriteria.andIdKpiEqualTo(_kpi.getId());
-        switch (_entity.getType()) {
+        switch (_entity.entityType()) {
             case PERSON:
                 createCriteria.andIdPersonEqualTo(_entity.getId());
                 break;

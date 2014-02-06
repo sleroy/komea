@@ -1,0 +1,134 @@
+
+package org.komea.product.backend.service.esper;
+
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.komea.product.backend.service.IEntityService;
+import org.komea.product.database.api.IEntity;
+import org.komea.product.database.dao.PersonDao;
+import org.komea.product.database.dao.PersonGroupDao;
+import org.komea.product.database.dao.ProjectDao;
+import org.komea.product.database.enums.EntityType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+
+
+@Service
+public class EntityService implements IEntityService
+{
+    
+    
+    @Autowired
+    private PersonDao      personDAO;
+    
+    @Autowired
+    private PersonGroupDao personGroupDao;
+    @Autowired
+    private ProjectDao     projectDao;
+    
+    
+    
+    public EntityService() {
+    
+    
+        super();
+    }
+    
+    
+    @Override
+    public <TEntity extends IEntity> TEntity getEntity(final EntityType _entityType, final int _key) {
+    
+    
+        switch (_entityType) {
+            case PERSON:
+                return (TEntity) personDAO.selectByPrimaryKey(_key);
+            case PERSONG_GROUP:
+                return (TEntity) personGroupDao.selectByPrimaryKey(_key);
+            case PROJECT:
+                return (TEntity) projectDao.selectByPrimaryKey(_key);
+        }
+        return null;
+        
+    }
+    
+    
+    /**
+     * @return the personDAO
+     */
+    public PersonDao getPersonDAO() {
+    
+    
+        return personDAO;
+    }
+    
+    
+    /**
+     * @return the personGroupDao
+     */
+    public PersonGroupDao getPersonGroupDao() {
+    
+    
+        return personGroupDao;
+    }
+    
+    
+    /**
+     * @return the projectDao
+     */
+    public ProjectDao getProjectDao() {
+    
+    
+        return projectDao;
+    }
+    
+    
+    @Override
+    public <TEntity extends IEntity> List<TEntity> loadEntities(
+            final EntityType _entityType,
+            final List<Integer> _keys) {
+    
+    
+        final List<TEntity> listOfEntities = new ArrayList<TEntity>(_keys.size());
+        for (final Integer key : _keys) {
+            listOfEntities.add((TEntity) getEntity(_entityType, key));
+        }
+        return listOfEntities;
+    }
+    
+    
+    /**
+     * @param _personDAO
+     *            the personDAO to set
+     */
+    public void setPersonDAO(final PersonDao _personDAO) {
+    
+    
+        personDAO = _personDAO;
+    }
+    
+    
+    /**
+     * @param _personGroupDao
+     *            the personGroupDao to set
+     */
+    public void setPersonGroupDao(final PersonGroupDao _personGroupDao) {
+    
+    
+        personGroupDao = _personGroupDao;
+    }
+    
+    
+    /**
+     * @param _projectDao
+     *            the projectDao to set
+     */
+    public void setProjectDao(final ProjectDao _projectDao) {
+    
+    
+        projectDao = _projectDao;
+    }
+}

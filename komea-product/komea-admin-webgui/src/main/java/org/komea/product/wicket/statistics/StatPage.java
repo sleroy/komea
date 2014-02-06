@@ -6,13 +6,17 @@ package org.komea.product.wicket.statistics;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.esper.IAlertStatisticsService;
 import org.komea.product.database.model.Measure;
+import org.komea.product.service.dto.AlertTypeStatistic;
 import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.model.ListDataModel;
+import org.komea.product.wicket.widget.DataTableBuilder;
 
 import com.googlecode.wickedcharts.highcharts.options.Axis;
 import com.googlecode.wickedcharts.highcharts.options.AxisType;
@@ -99,6 +103,19 @@ public class StatPage extends LayoutPage
         options.addSeries(series1);
         
         add(new Chart("chart", options));
+        
+        
+        final DataTable<AlertTypeStatistic, String> build =
+                DataTableBuilder
+                        .<AlertTypeStatistic, String> newTable("table")
+                        .addColumn("Alert type", "type")
+                        .addColumn("Provider", "provider")
+                        .addColumn("Number", "number")
+                        .displayRows(10)
+                        .withData(
+                                new ListDataModel(statService.getReceivedAlertTypesIn24LastHours()))
+                        .build();
+        
         
     }
 }

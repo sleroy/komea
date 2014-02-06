@@ -5,13 +5,16 @@
 http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
 	<http auto-config="true" use-expressions="true">
-		<intercept-url pattern="/p/auth/**" access="permitAll" />
+		<intercept-url pattern="/p/login" access="permitAll" />
+		<intercept-url pattern="/p/accessdenied" access="permitAll" />
+		<intercept-url pattern="/p/logout" access="permitAll" />
 		<intercept-url pattern="/p/**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/rest/**" access="permitAll" />
-		<form-login login-page="/p/auth/login" default-target-url="/p/"
-			authentication-failure-url="/p/auth/accessdenied" />
-		<logout logout-success-url="/p/auth/logout" />
+		<form-login login-page="/p/login" default-target-url="/p/"
+			authentication-failure-url="/p/accessdenied" />
+		<logout logout-success-url="/p/logout" />
 	</http>
+
 
 	<authentication-manager alias="authenticationManager">
 		<authentication-provider>

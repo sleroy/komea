@@ -203,7 +203,7 @@ public class PersonGroup implements Serializable, IEntity
     
     
     @Override
-    public EntityType getType() {
+    public EntityType entityType() {
     
     
         return EntityType.PERSONG_GROUP;

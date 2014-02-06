@@ -97,13 +97,13 @@ public class EntityWithKPITest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.kpi.EntityWithKPI#getType()}.
+     * Test method for {@link org.komea.product.backend.kpi.EntityWithKPI#entityType()}.
      */
     @Test
     public final void testGetType() {
     
     
-        Assert.assertEquals(EntityType.PERSON, entityWithKPI.getEntity().getType());
+        Assert.assertEquals(EntityType.PERSON, entityWithKPI.getEntity().entityType());
     }
     
     

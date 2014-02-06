@@ -1,4 +1,7 @@
-package org.komea.product.wicket.person;
+
+package org.komea.product.wicket.model;
+
+
 
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +12,8 @@ import org.apache.wicket.model.Model;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonCriteria;
+
+
 
 public final class PersonDataModel extends SortableDataProvider<Person, String>
 {
@@ -24,14 +29,6 @@ public final class PersonDataModel extends SortableDataProvider<Person, String>
         personDAO = _personDAO;
         
         
-    }
-    
-    
-    public List<Person> getPersons() {
-    
-    
-        final PersonCriteria example = new PersonCriteria();
-        return personDAO.selectByCriteria(example);
     }
     
     
@@ -58,6 +55,14 @@ public final class PersonDataModel extends SortableDataProvider<Person, String>
     public long size() {
     
     
-        return 0;
+        return getPersons().size();
+    }
+    
+    
+    private List<Person> getPersons() {
+    
+    
+        final PersonCriteria example = new PersonCriteria();
+        return personDAO.selectByCriteria(example);
     }
 }

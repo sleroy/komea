@@ -55,10 +55,12 @@ public class WicketApplication extends WebApplication
         // make markup friendly as in deployment-mode
         getMarkupSettings().setStripWicketTags(true);
         // page mounts / SEO
+        mountPage("/home", HomePage.class);
         mountPage("/settings", SettingsPage.class);
         mountPage("/stats", StatPage.class);
-        mountPage("/auth/login", LoginPage.class);
-        mountPage("/auth/accessdenied", UnauthorizedPage.class);
+        mountPage("/login", LoginPage.class);
+        mountPage("/logout", LoginPage.class);
+        mountPage("/accessdenied", UnauthorizedPage.class);
         mountPage("/users", PersonPage.class);
         getExceptionSettings().setThreadDumpStrategy(ThreadDumpStrategy.ALL_THREADS);
         getExceptionSettings()

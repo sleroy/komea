@@ -14,6 +14,7 @@ import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
 import org.komea.product.backend.esper.reactor.KPINotFoundRuntimeException;
 import org.komea.product.backend.kpi.KPIFacade;
+import org.komea.product.backend.service.business.IEPMetric;
 import org.komea.product.backend.service.business.IKPIFacade;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.esper.QueryDefinition;
@@ -98,7 +99,7 @@ public final class KPIService implements IKPIService
         kpiCriteria.createCriteria().andKpiKeyEqualTo(_kpiName);
         if (_entity != null) {
             kpiCriteria.createCriteria().andEntityIDEqualTo(_entity.getId());
-            kpiCriteria.createCriteria().andEntityTypeEqualTo(_entity.getType());
+            kpiCriteria.createCriteria().andEntityTypeEqualTo(_entity.entityType());
         }
         return CollectionUtil.singleOrNull(kpiDAO.selectByExampleWithBLOBs(kpiCriteria));
         
@@ -166,12 +167,12 @@ public final class KPIService implements IKPIService
     
         final List<Kpi> kpis = new ArrayList<Kpi>();
         final KpiCriteria allKpisFromEntityType = new KpiCriteria();
-        allKpisFromEntityType.createCriteria().andEntityTypeEqualTo(_entity.getType())
+        allKpisFromEntityType.createCriteria().andEntityTypeEqualTo(_entity.entityType())
                 .andEntityIDIsNull();
         
         kpis.addAll(kpiDAO.selectByExampleWithBLOBs(allKpisFromEntityType));
         final KpiCriteria allKpisOnlyEntity = new KpiCriteria();
-        allKpisOnlyEntity.createCriteria().andEntityTypeEqualTo(_entity.getType())
+        allKpisOnlyEntity.createCriteria().andEntityTypeEqualTo(_entity.entityType())
                 .andEntityIDEqualTo(_entity.getId());
         kpis.addAll(kpiDAO.selectByExampleWithBLOBs(allKpisOnlyEntity));
         return kpis;
@@ -252,7 +253,7 @@ public final class KPIService implements IKPIService
     
     
         final Measure measure = new Measure();
-        switch (_entity.getType()) {
+        switch (_entity.entityType()) {
             case PERSON:
                 measure.setIdPerson(_entity.getId());
                 break;

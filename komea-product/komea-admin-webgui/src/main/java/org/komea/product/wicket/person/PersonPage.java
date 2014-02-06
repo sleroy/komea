@@ -22,6 +22,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.model.Person;
 import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.model.PersonDataModel;
 
 
 

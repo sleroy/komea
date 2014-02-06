@@ -3,7 +3,7 @@ package org.komea.product.backend.service.esper;
 
 
 
-import org.komea.product.backend.service.kpi.IEPMetric;
+import org.komea.product.backend.service.business.IEPMetric;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

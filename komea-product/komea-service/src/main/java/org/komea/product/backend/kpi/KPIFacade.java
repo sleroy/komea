@@ -5,8 +5,8 @@ package org.komea.product.backend.kpi;
 
 import java.util.List;
 
+import org.komea.product.backend.service.business.IEPMetric;
 import org.komea.product.backend.service.business.IKPIFacade;
-import org.komea.product.backend.service.kpi.IEPMetric;
 import org.komea.product.backend.service.kpi.IMeasureHistoryService;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Kpi;

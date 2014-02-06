@@ -230,7 +230,7 @@ public class Person implements Serializable, IEntity
     
     
     @Override
-    public EntityType getType() {
+    public EntityType entityType() {
     
     
         return EntityType.PERSON;

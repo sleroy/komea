@@ -26,7 +26,7 @@ public interface IEntity
      * 
      * @return the entity type.
      */
-    EntityType getType();
+    EntityType entityType();
     
     
 }

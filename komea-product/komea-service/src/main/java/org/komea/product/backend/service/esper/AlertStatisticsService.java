@@ -72,7 +72,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     
     @Autowired
-    IEsperEngine                  esperEngine;
+    private IEsperEngine          esperEngine;
     
     @Autowired
     private ProviderDao           providerDAO;

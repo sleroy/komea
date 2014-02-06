@@ -1,5 +1,5 @@
 
-package org.komea.product.wicket;
+package org.komea.product.wicket.utils;
 
 
 
