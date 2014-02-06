@@ -27,6 +27,6 @@ public class ProjectsAPIIT extends AbstractRestClientIntegrationTestCase
         IProjectsAPI projectsAPI = RestClientFactory.INSTANCE.createProjectsAPI("http://localhost:8585/komea");
         Assert.assertNotNull(projectsAPI);
         List<Project> projects = projectsAPI.allProjects();
-        Assert.assertTrue(projects.isEmpty());
+        Assert.assertFalse(projects.isEmpty());
     }
 }

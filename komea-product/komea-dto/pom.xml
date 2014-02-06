@@ -44,6 +44,10 @@
             <artifactId>prettytime</artifactId>
             <type>jar</type>
         </dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+		</dependency>
     </dependencies>
 
 </project>

@@ -136,7 +136,7 @@ public class KomeaNotifier extends Notifier implements Serializable
         properties.put("project", projectKey);
         properties.put("buildNumber", String.valueOf(buildNumber));
         properties.put("branch", branch);
-        return new EventDto(KomeaComputerListener.EVENT_BUILD_STARTED, provider, message, properties, projectKey);
+        return new EventDto(KomeaComputerListener.EVENT_BUILD_STARTED, provider, message, properties, projectKey, new Date());
     }
     
     private EventDto createDurationEvent(final long start, final long end, final int buildNumber) {
@@ -150,7 +150,7 @@ public class KomeaNotifier extends Notifier implements Serializable
         properties.put("project", projectKey);
         properties.put("buildNumber", String.valueOf(buildNumber));
         properties.put("branch", branch);
-        return new EventDto(KomeaComputerListener.EVENT_BUILD_DURATION, provider, message, properties, projectKey);
+        return new EventDto(KomeaComputerListener.EVENT_BUILD_DURATION, provider, message, properties, projectKey, new Date());
     }
     
     private EventDto createResultEvent(final long end, final int buildNumber, final Result result) {
@@ -174,7 +174,8 @@ public class KomeaNotifier extends Notifier implements Serializable
         } else {
             severity = Severity.INFO;
         }
-        final EventDto eventDto = new EventDto(KomeaComputerListener.EVENT_BUILD_RESULT, provider, message, properties, projectKey);
+        final EventDto eventDto = new EventDto(KomeaComputerListener.EVENT_BUILD_RESULT, provider, message, properties, projectKey,
+                new Date());
         eventDto.getEventType().setSeverity(severity);
         return eventDto;
     }
@@ -186,7 +187,7 @@ public class KomeaNotifier extends Notifier implements Serializable
         properties.put("project", projectKey);
         properties.put("buildNumber", String.valueOf(buildNumber));
         properties.put("branch", branch);
-        return new EventDto(KomeaComputerListener.EVENT_BUILD_ENDED, provider, message, properties, projectKey);
+        return new EventDto(KomeaComputerListener.EVENT_BUILD_ENDED, provider, message, properties, projectKey, new Date());
     }
     
     @Override

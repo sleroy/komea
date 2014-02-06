@@ -5,9 +5,10 @@ package org.komea.product.rest.client;
 import java.net.ConnectException;
 import java.util.List;
 
+import javax.ws.rs.core.GenericType;
+
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.rest.client.api.IDepartmentsAPI;
-import org.komea.product.rest.util.GenericListType;
 
 public class DepartmentsAPI extends AbstractRestCientAPI implements IDepartmentsAPI
 {
@@ -23,7 +24,9 @@ public class DepartmentsAPI extends AbstractRestCientAPI implements IDepartments
     public List<PersonGroup> allDepartments() throws ConnectException {
     
         String url = DEPARTMENTS_PATH + "/all";
-        return get(url, new GenericListType<PersonGroup>());
+        return get(url, new GenericType<List<PersonGroup>>()
+        {
+        });
     }
     //
 }

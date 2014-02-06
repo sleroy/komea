@@ -1,13 +1,11 @@
 
-package org.komea.product.backend.service.esper;
-
+package org.komea.product.backend.service;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.komea.product.backend.exceptions.EntityNotFoundException;
-import org.komea.product.backend.service.IEntityService;
 import org.komea.product.backend.service.kpi.KpiKey;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.PersonDao;
@@ -17,12 +15,9 @@ import org.komea.product.database.enums.EntityType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-
 @Service
-public class EntityService implements IEntityService
+public final class EntityService implements IEntityService
 {
-    
     
     @Autowired
     private PersonDao      personDAO;
@@ -32,18 +27,13 @@ public class EntityService implements IEntityService
     @Autowired
     private ProjectDao     projectDao;
     
-    
-    
     public EntityService() {
-    
     
         super();
     }
     
-    
     @Override
     public <TEntity extends IEntity> TEntity getEntity(final EntityType _entityType, final int _key) {
-    
     
         switch (_entityType) {
             case PERSON:
@@ -75,50 +65,42 @@ public class EntityService implements IEntityService
         return entity;
     }
     
-    
     /**
      * @return the personDAO
      */
     public PersonDao getPersonDAO() {
     
-    
         return personDAO;
     }
-    
     
     /**
      * @return the personGroupDao
      */
     public PersonGroupDao getPersonGroupDao() {
     
-    
         return personGroupDao;
     }
-    
     
     /**
      * @return the projectDao
      */
     public ProjectDao getProjectDao() {
     
-    
         return projectDao;
     }
     
-    
     @Override
-    public <TEntity extends IEntity> List<TEntity> loadEntities(
-            final EntityType _entityType,
-            final List<Integer> _keys) {
-    
+    public <TEntity extends IEntity> List<TEntity> loadEntities(final EntityType _entityType, final List<Integer> _keys) {
     
         final List<TEntity> listOfEntities = new ArrayList<TEntity>(_keys.size());
         for (final Integer key : _keys) {
-            listOfEntities.add((TEntity) getEntity(_entityType, key));
+            IEntity entity = getEntity(_entityType, key);
+            if (entity != null) {
+                listOfEntities.add((TEntity) entity);
+            }
         }
         return listOfEntities;
     }
-    
     
     /**
      * @param _personDAO
@@ -126,10 +108,8 @@ public class EntityService implements IEntityService
      */
     public void setPersonDAO(final PersonDao _personDAO) {
     
-    
         personDAO = _personDAO;
     }
-    
     
     /**
      * @param _personGroupDao
@@ -137,17 +117,14 @@ public class EntityService implements IEntityService
      */
     public void setPersonGroupDao(final PersonGroupDao _personGroupDao) {
     
-    
         personGroupDao = _personGroupDao;
     }
-    
     
     /**
      * @param _projectDao
      *            the projectDao to set
      */
     public void setProjectDao(final ProjectDao _projectDao) {
-    
     
         projectDao = _projectDao;
     }

@@ -22,7 +22,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 @TestExecutionListeners({
         DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class })
-public class PersonGroupServiceTest extends AbstractSpringIntegrationTestCase
+public class PersonGroupServiceIT extends AbstractSpringIntegrationTestCase
 {
     
     @Autowired

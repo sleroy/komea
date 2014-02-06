@@ -14,11 +14,12 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
-import org.apache.log4j.Logger;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.komea.product.rest.client.api.IRestClientAPI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Komea abstract class to manage http request with the komea server REST API
@@ -30,13 +31,12 @@ import org.komea.product.rest.client.api.IRestClientAPI;
 abstract class AbstractRestCientAPI implements IRestClientAPI
 {
     
-    private final String          REST_BASE_URL = "rest";
+    private final String         REST_BASE_URL = "rest";
     
-    protected final static Logger LOGGER        = Logger.getLogger(AbstractRestCientAPI.class);
-    
+    private static final Logger  LOGGER        = LoggerFactory.getLogger(AbstractRestCientAPI.class);
     // private URI serverURI;
-    private final ResteasyClient  client;
-    private ResteasyWebTarget     target;
+    private final ResteasyClient client;
+    private ResteasyWebTarget    target;
     
     public AbstractRestCientAPI() {
     

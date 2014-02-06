@@ -2,7 +2,6 @@
 package org.komea.product.backend.service.esper;
 
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,32 +16,21 @@ import com.espertech.esper.client.EPStatement;
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.SafeIterator;
 
-
-
-public class EPStatementResult
+public final class EPStatementResult
 {
     
-    
-    public static EPStatementResult build(@NotNull
-    final EPStatement _epStatement) {
-    
+    public static EPStatementResult build(@NotNull final EPStatement _epStatement) {
     
         return new EPStatementResult(_epStatement);
     }
     
-    
-    
     private final EPStatement statement;
     
-    
-    
     private EPStatementResult(final EPStatement _statement) {
-    
     
         super();
         statement = _statement;
     }
-    
     
     /**
      * Returns a list of result from the EP Statement and a property expression.
@@ -52,7 +40,6 @@ public class EPStatementResult
      * @return the list of values or an empty list..
      */
     public <T> List<Map<String, T>> listMapResult() {
-    
     
         final List<Map<String, T>> res = new ArrayList<Map<String, T>>(100);
         SafeIterator<EventBean> safeIterator = null;
@@ -71,7 +58,6 @@ public class EPStatementResult
         return res;
     }
     
-    
     /**
      * Returns a list of result from the EP Statement and a property expression.
      * 
@@ -80,7 +66,6 @@ public class EPStatementResult
      * @return the list of values or an empty list..
      */
     public <T> List<T> listMapResult(final Class<T> _implementationClass) {
-    
     
         final List<T> res = new ArrayList<T>(100);
         SafeIterator<EventBean> safeIterator = null;
@@ -101,7 +86,6 @@ public class EPStatementResult
         return res;
     }
     
-    
     /**
      * Returns a list of result from the EP Statement and a property expression.
      * 
@@ -110,7 +94,6 @@ public class EPStatementResult
      * @return the list of values or an empty list..
      */
     public <T> List<T> listResult(final String _propertyName) {
-    
     
         final List<T> res = new ArrayList<T>(100);
         SafeIterator<EventBean> safeIterator = null;
@@ -129,9 +112,7 @@ public class EPStatementResult
         return res;
     }
     
-    
     public <T> List<T> listUnderlyingObjects() {
-    
     
         final List<T> res = new ArrayList<T>(100);
         SafeIterator<EventBean> safeIterator = null;
@@ -150,14 +131,12 @@ public class EPStatementResult
         return res;
     }
     
-    
     /**
      * This method should be use with great care, the statement must always returns a value.
      * 
      * @return
      */
     public <T> T singleResult() {
-    
     
         T res = null;
         SafeIterator<EventBean> safeIterator = null;
@@ -176,7 +155,6 @@ public class EPStatementResult
         return res;
     }
     
-    
     /**
      * Returns a single result from the EP Statement
      * 
@@ -185,7 +163,6 @@ public class EPStatementResult
      * @return the value or null.
      */
     public <T> T singleResult(final String _propertyName) {
-    
     
         T res = null;
         SafeIterator<EventBean> safeIterator = null;

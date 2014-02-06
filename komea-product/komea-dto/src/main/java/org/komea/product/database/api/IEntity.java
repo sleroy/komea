@@ -2,10 +2,8 @@
 package org.komea.product.database.api;
 
 
-
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.komea.product.database.enums.EntityType;
-
-
 
 /**
  * THis interfae defines a facade that provides basic informations on a entity. Informations are the id, the underlying object and list of
@@ -17,9 +15,7 @@ import org.komea.product.database.enums.EntityType;
 public interface IEntity
 {
     
-    
     Integer getId();
-    
     
     /**
      * Returns the enitty type.
@@ -27,6 +23,5 @@ public interface IEntity
      * @return the entity type.
      */
     EntityType entityType();
-    
     
 }
