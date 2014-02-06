@@ -139,4 +139,18 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory {
         return alert;
     }
 
+    @Override
+    public IAlert newUnassociedTest(long _alert, String _project) {
+        Alert alert = new Alert();
+        alert.setProvider("TESTLINK");
+        alert.setMessage("Total number of unassocied test in testlink");
+        alert.setCategory("TEST");
+        alert.setValue(_alert);
+        alert.setFullMessage(alert.getMessage());
+        alert.setProject(_project);
+        alert.setCriticity(Criticity.INFO);
+        alert.setDate(new Date());
+        return alert;
+    }
+
 }

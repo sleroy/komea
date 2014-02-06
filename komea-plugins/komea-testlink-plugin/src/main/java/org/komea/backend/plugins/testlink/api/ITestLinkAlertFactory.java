@@ -77,4 +77,12 @@ public interface ITestLinkAlertFactory {
      */
     public IAlert newUntested(long _alert, String _project);
 
+    /**
+     *
+     * @param _alert
+     * @param _project
+     * @return
+     */
+    public IAlert newUnassociedTest(long _alert, String _project);
+
 }

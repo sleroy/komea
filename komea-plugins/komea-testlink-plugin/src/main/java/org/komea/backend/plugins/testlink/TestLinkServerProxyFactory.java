@@ -18,6 +18,7 @@ public class TestLinkServerProxyFactory implements ITestLinkServerProxyFactory {
     @Override
     public ITestLinkServerProxy newConnector(TestLinkServer testLinkServer) {
         TestLinkJavaAPI apiConn = new TestLinkJavaAPI();
+        apiConn.connexion(testLinkServer);
         return apiConn;
     }
     
