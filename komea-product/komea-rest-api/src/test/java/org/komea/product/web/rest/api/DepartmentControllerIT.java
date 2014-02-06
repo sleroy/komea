@@ -25,7 +25,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 @TestExecutionListeners({
         DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class })
-public class PersonControllerTest extends AbstractSpringWebIntegrationTestCase
+public class DepartmentControllerIT extends AbstractSpringWebIntegrationTestCase
 {
     
     @Autowired
@@ -42,13 +42,12 @@ public class PersonControllerTest extends AbstractSpringWebIntegrationTestCase
     //
     @Test
     @DatabaseSetup("database.xml")
-    public void testAllPersons() throws Exception {
+    public void testAllDepartments() throws Exception {
     
-        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.get("/persons/all"));
+        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.get("/departments/all"));
         
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(2)));
-        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[0].login", Matchers.equalToIgnoringCase("jguidoux")));
-        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[1].login", Matchers.equalToIgnoringCase("sleroy")));
+        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)));
+        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.equalToIgnoringCase("devs")));
     }
 }

@@ -19,12 +19,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_proj` (
   `name` VARCHAR(255) NOT NULL,
   `description` VARCHAR(2048) NULL,
   `idCustomer` INT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_Project_Customer1`
-    FOREIGN KEY (`idCustomer`)
-    REFERENCES `komea`.`kom_customer` (`id`)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE)
+  PRIMARY KEY (`id`))
 ;
 
 
@@ -48,17 +43,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pegr` (
   `description` VARCHAR(2048) NULL,
   `idPersonGroupParent` INT NULL,
   `idGroupKind` INT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_UserGroup_UserGroup1`
-    FOREIGN KEY (`idPersonGroupParent`)
-    REFERENCES `komea`.`kom_pegr` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Person_Group_Group_Kind1`
-    FOREIGN KEY (`idGroupKind`)
-    REFERENCES `komea`.`kom_grk` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`id`))
 ;
 
 
@@ -83,17 +68,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pe` (
   `lastName` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `login` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_User_UserGroup1`
-    FOREIGN KEY (`idPersonGroup`)
-    REFERENCES `komea`.`kom_pegr` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_User_UserRole1`
-    FOREIGN KEY (`idPersonRole`)
-    REFERENCES `komea`.`kom_pero` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`id`))
 ;
 
 
@@ -128,13 +103,8 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `entityID` INT NULL,
   `cronExpression` VARCHAR(60) NULL,
   `evictionRate` INT NOT NULL,
-  `evictionType` INT NOT NULL,  
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_Metric_Plugin1`
-    FOREIGN KEY (`idProvider`)
-    REFERENCES `komea`.`kom_pvd` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  `evictionType` INT NOT NULL,
+  PRIMARY KEY (`id`))
 ;
 
 
@@ -149,27 +119,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_msr` (
   `idPerson` INT NULL,
   `idProject` INT NULL,
   `value` DOUBLE NOT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_Measure_Metric1`
-    FOREIGN KEY (`idKpi`)
-    REFERENCES `komea`.`kom_kpi` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Measure_UserGroup1`
-    FOREIGN KEY (`idPersonGroup`)
-    REFERENCES `komea`.`kom_pegr` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Measure_User1`
-    FOREIGN KEY (`idPerson`)
-    REFERENCES `komea`.`kom_pe` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Measure_Project1`
-    FOREIGN KEY (`idProject`)
-    REFERENCES `komea`.`kom_proj` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`id`))
 ;
 
 
@@ -187,12 +137,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpia` (
   `averageSince` DATE NULL,
   `operator` INT NOT NULL,
   `enabled` TINYINT(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_MetricAlert_Metric1`
-    FOREIGN KEY (`idKpi`)
-    REFERENCES `komea`.`kom_kpi` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`id`))
 ;
 
 
@@ -205,11 +150,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_link` (
   `url` VARCHAR(255) NOT NULL,
   `idProject` INT NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_Tag_Project`
-    FOREIGN KEY (`idProject`)
-    REFERENCES `komea`.`kom_proj` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_Tag_Project_idx` (`idProject` ASC))
 ;
 
 
@@ -226,12 +167,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_evt` (
   `description` VARCHAR(2048) NULL,
   `category` VARCHAR(255) NOT NULL,
   `entityType` VARCHAR(255) NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_Event_Plugin1`
-    FOREIGN KEY (`idProvider`)
-    REFERENCES `komea`.`kom_pvd` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`id`))
 ;
 
 
@@ -264,17 +200,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_tag` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_pe` (
   `idProject` INT NOT NULL,
   `idPerson` INT NOT NULL,
-  PRIMARY KEY (`idProject`, `idPerson`),
-  CONSTRAINT `fk_Project_has_User_Project1`
-    FOREIGN KEY (`idProject`)
-    REFERENCES `komea`.`kom_proj` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Project_has_User_User1`
-    FOREIGN KEY (`idPerson`)
-    REFERENCES `komea`.`kom_pe` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`idProject`, `idPerson`))
 ;
 
 
@@ -288,12 +214,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pvds` (
   `idProvider` INT NOT NULL,
   `type` VARCHAR(255) NOT NULL,
   `description` VARCHAR(2048) NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_ProviderSetting_Provider1`
-    FOREIGN KEY (`idProvider`)
-    REFERENCES `komea`.`kom_pvd` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`id`))
 ;
 
 
@@ -303,17 +224,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pvds` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_tag` (
   `idProject` INT NOT NULL,
   `idTag` INT NOT NULL,
-  PRIMARY KEY (`idProject`, `idTag`),
-  CONSTRAINT `fk_Project_has_Tag_Project1`
-    FOREIGN KEY (`idProject`)
-    REFERENCES `komea`.`kom_proj` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Project_has_Tag_Tag1`
-    FOREIGN KEY (`idTag`)
-    REFERENCES `komea`.`kom_tag` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`idProject`, `idTag`))
 ;
 
 
@@ -323,17 +234,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_tag` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_kpia` (
   `idProject` INT NOT NULL,
   `idKpiAlertType` INT NOT NULL,
-  PRIMARY KEY (`idProject`, `idKpiAlertType`),
-  CONSTRAINT `fk_KOM_PROJ_has_KOM_KPIA_KOM_PROJ1`
-    FOREIGN KEY (`idProject`)
-    REFERENCES `komea`.`kom_proj` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_KOM_PROJ_has_KOM_KPIA_KOM_KPIA1`
-    FOREIGN KEY (`idKpiAlertType`)
-    REFERENCES `komea`.`kom_kpia` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`idProject`, `idKpiAlertType`))
 ;
 
 
@@ -343,17 +244,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_kpia` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_has_kpia_pegr` (
   `idKpiAlertType` INT NOT NULL,
   `idPersonGroup` INT NOT NULL,
-  PRIMARY KEY (`idKpiAlertType`, `idPersonGroup`),
-  CONSTRAINT `fk_KOM_KPIA_has_KOM_PEGR_KOM_KPIA1`
-    FOREIGN KEY (`idKpiAlertType`)
-    REFERENCES `komea`.`kom_kpia` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_KOM_KPIA_has_KOM_PEGR_KOM_PEGR1`
-    FOREIGN KEY (`idPersonGroup`)
-    REFERENCES `komea`.`kom_pegr` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`idKpiAlertType`, `idPersonGroup`))
 ;
 
 
@@ -363,17 +254,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_kpia_pegr` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_has_kpia_pe` (
   `idKpiAlertType` INT NOT NULL,
   `idPerson` INT NOT NULL,
-  PRIMARY KEY (`idKpiAlertType`, `idPerson`),
-  CONSTRAINT `fk_KOM_KPIA_has_KOM_PE_KOM_KPIA1`
-    FOREIGN KEY (`idKpiAlertType`)
-    REFERENCES `komea`.`kom_kpia` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_KOM_KPIA_has_KOM_PE_KOM_PE1`
-    FOREIGN KEY (`idPerson`)
-    REFERENCES `komea`.`kom_pe` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`idKpiAlertType`, `idPerson`))
 ;
 
 
@@ -383,17 +264,5 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_kpia_pe` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_pegr` (
   `idProject` INT NOT NULL,
   `idPersonGroup` INT NOT NULL,
-  PRIMARY KEY (`idProject`, `idPersonGroup`),
-  CONSTRAINT `fk_kom_proj_has_kom_pegr_kom_proj1`
-    FOREIGN KEY (`idProject`)
-    REFERENCES `komea`.`kom_proj` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_kom_proj_has_kom_pegr_kom_pegr1`
-    FOREIGN KEY (`idPersonGroup`)
-    REFERENCES `komea`.`kom_pegr` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`idProject`, `idPersonGroup`))
 ;
-
-

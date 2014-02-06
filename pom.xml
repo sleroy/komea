@@ -76,6 +76,18 @@
 		<hamcrest.version>1.3</hamcrest.version>
 		<reasteasy.version>3.0.1.Final</reasteasy.version>
 		<jetty.version>6.1.26</jetty.version>
+
+
+		<!-- Sonar -->
+		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+		<!-- The destination file for the code coverage report has to be set to 
+			the same value in the parent pom and in each module pom. Then JaCoCo will 
+			add up information in the same report, so that, it will give the cross-module 
+			code coverage. -->
+		<sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath>
+		<sonar.language>java</sonar.language>
+
 	</properties>
 
 
@@ -101,6 +113,18 @@
 	</distributionManagement>
 
 	<build>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>0.5.3.201107060350</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -145,6 +169,30 @@
 				<artifactId>sonar-maven-plugin</artifactId>
 				<version>2.2</version>
 			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<configuration>
+					<includes>example.*</includes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>pre-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>post-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -251,10 +299,10 @@
 							<artifactId>maven-project-info-reports-plugin</artifactId>
 							<version>2.2</version>
 						</plugin>
-						<plugin>
-							<groupId>org.jacoco</groupId>
-							<artifactId>jacoco-maven-plugin</artifactId>
-							<version>0.6.4.201312101107</version>
+<!-- 						<plugin> -->
+<!-- 							<groupId>org.jacoco</groupId> -->
+<!-- 							<artifactId>jacoco-maven-plugin</artifactId> -->
+<!-- 							<version>0.6.4.201312101107</version> -->
 							<!-- <executions> -->
 							<!-- <execution> -->
 							<!-- <id>jacoco-prepare-agent</id> -->
@@ -294,7 +342,7 @@
 							<!-- </configuration> -->
 							<!-- </execution> -->
 							<!-- </executions> -->
-						</plugin>
+<!-- 						</plugin> -->
 
 					</reportPlugins>
 				</configuration>

@@ -46,7 +46,7 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class })
-public class ProvidersControllerTest
+public class ProvidersControllerIT
 {
     
     

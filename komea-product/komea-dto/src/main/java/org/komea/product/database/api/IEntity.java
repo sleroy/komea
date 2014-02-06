@@ -2,7 +2,6 @@
 package org.komea.product.database.api;
 
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.komea.product.database.enums.EntityType;
 
 /**
@@ -18,7 +17,7 @@ public interface IEntity
     Integer getId();
     
     /**
-     * Returns the enitty type.
+     * Returns the entitty type.
      * 
      * @return the entity type.
      */

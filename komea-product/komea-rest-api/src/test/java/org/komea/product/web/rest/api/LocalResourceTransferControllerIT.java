@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-public class LocalResourceTransferControllerTest extends AbstractSpringWebIntegrationTestCase
+public class LocalResourceTransferControllerIT extends AbstractSpringWebIntegrationTestCase
 {
     
     @Autowired
