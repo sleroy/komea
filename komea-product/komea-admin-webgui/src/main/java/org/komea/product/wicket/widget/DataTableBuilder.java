@@ -80,6 +80,14 @@ public class DataTableBuilder<T, S>
     }
     
     
+    public DataTableBuilder addColumn(final IColumn<T, S> _abstractColumn) {
+    
+    
+        columns.add(_abstractColumn);
+        return this;
+    }
+    
+    
     public DataTableBuilder<T, S> addColumn(final String _columName, final String _property) {
     
     

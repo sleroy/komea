@@ -116,8 +116,10 @@ public class CronRegistryService implements ICronRegistryService
                 final CronDetails cronDetails = new CronDetails();
                 cronDetails.setCronName(jobKey.getName());
                 cronDetails.setCronExpression(jobDetail.getJobDataMap().getString(CRON_EXP));
-                cronDetails.setNextTime(schedulerFactory.getScheduler()
-                        .getTrigger(TriggerKey.triggerKey(jobKey.getName())).getNextFireTime());
+                final TriggerKey triggerKey = TriggerKey.triggerKey(jobKey.getName());
+                final Trigger trigger = schedulerFactory.getScheduler().getTrigger(triggerKey);
+                cronDetails.setNextTime(trigger.getNextFireTime());
+                cronDetails.setStatus(schedulerFactory.getScheduler().getTriggerState(triggerKey));
                 cronDetailsList.add(cronDetails);
             }
         } catch (final SchedulerException e) {

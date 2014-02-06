@@ -35,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
+@Transactional
 public final class KPIService implements IKPIService
 {
     

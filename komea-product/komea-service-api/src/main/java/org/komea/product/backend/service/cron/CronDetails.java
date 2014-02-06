@@ -3,7 +3,10 @@ package org.komea.product.backend.service.cron;
 
 
 
+import java.io.Serializable;
 import java.util.Date;
+
+import org.quartz.Trigger.TriggerState;
 
 
 
@@ -12,16 +15,19 @@ import java.util.Date;
  * 
  * @author sleroy
  */
-public class CronDetails
+public class CronDetails implements Serializable
 {
     
     
-    private String cronName;
+    private String       cronName;
     
     
-    private String cronExpression;
+    private String       cronExpression;
     
-    private Date   nextTime;
+    private Date         nextTime;
+    
+    
+    private TriggerState triggerState;
     
     
     
@@ -66,6 +72,13 @@ public class CronDetails
     }
     
     
+    public TriggerState getTriggerState() {
+    
+    
+        return triggerState;
+    }
+    
+    
     public void setCronExpression(final String _cronExpression) {
     
     
@@ -84,6 +97,22 @@ public class CronDetails
     
     
         nextTime = _nextTime;
+    }
+    
+    
+    public void setStatus(final TriggerState _triggerState) {
+    
+    
+        triggerState = _triggerState;
+        
+        
+    }
+    
+    
+    public void setTriggerState(final TriggerState _triggerState) {
+    
+    
+        triggerState = _triggerState;
     }
     
     
