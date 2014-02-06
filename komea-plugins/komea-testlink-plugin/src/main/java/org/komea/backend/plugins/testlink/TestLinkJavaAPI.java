@@ -14,7 +14,6 @@ package org.komea.backend.plugins.testlink;
 
 import br.eti.kinoshita.testlinkjavaapi.TestLinkAPI;
 import br.eti.kinoshita.testlinkjavaapi.constants.TestCaseDetails;
-import br.eti.kinoshita.testlinkjavaapi.model.Build;
 import br.eti.kinoshita.testlinkjavaapi.model.Execution;
 import br.eti.kinoshita.testlinkjavaapi.model.TestCase;
 import br.eti.kinoshita.testlinkjavaapi.model.TestPlan;
@@ -24,11 +23,9 @@ import br.eti.kinoshita.testlinkjavaapi.util.TestLinkAPIException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.komea.backend.plugins.testlink.api.ITestLinkServerProxy;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -157,7 +154,7 @@ public class TestLinkJavaAPI implements ITestLinkServerProxy {
 //                        TestCase testCase1 = api.getTestCase(testCase.getId(), 1, testCase.getVersionId());
                             String status = "u";
                             try {
-                               
+                                // la valeur de l'id externe est mise  de facon arbitraire, si problème utilise une version personalise de l'api pour la recuperer
                                 Execution lastExecutionResult = api.getLastExecutionResult(testPlan.getId(), testCase.getId(), Integer.valueOf(1));
                                 if (lastExecutionResult != null && lastExecutionResult.getStatus() != null) {
                                     status = lastExecutionResult.getStatus().toString();

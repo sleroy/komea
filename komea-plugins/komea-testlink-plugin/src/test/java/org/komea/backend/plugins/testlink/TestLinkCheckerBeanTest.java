@@ -115,7 +115,7 @@ public class TestLinkCheckerBeanTest {
 //        TestLinkCheckerBean checkerBean = new TestLinkCheckerBean();
 //
 //        checkerBean.setAlertFactory(new TestLinkAlertFactory());
-//        IAlertService alertService = Mockito.mock(IAlertService.class);
+//        IAlertPushService alertService = Mockito.mock(IAlertPushService.class);
 //        checkerBean.setAlertService(alertService);
 //
 //        // creation structure internet du plugin
