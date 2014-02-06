@@ -48,7 +48,6 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pegr` (
   `description` VARCHAR(2048) NULL,
   `idPersonGroupParent` INT NULL,
   `idGroupKind` INT NULL,
-  `depth` INT NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_UserGroup_UserGroup1`
     FOREIGN KEY (`idPersonGroupParent`)
@@ -103,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pe` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `komea`.`kom_pvd` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `providerType` INT NOT NULL,
+  `providerType` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `icon` VARCHAR(255) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
@@ -118,14 +117,18 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `kpiKey` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
-  `description` VARCHAR(2048) NULL,
-  `idProvider` INT NOT NULL,
+  `description` VARCHAR(2048) NOT NULL,
+  `idProvider` INT NULL,
   `minValue` DOUBLE NULL,
   `maxValue` DOUBLE NULL,
   `valueDirection` INT NOT NULL,
   `valueType` INT NOT NULL,
-  `entityType` INT NOT NULL,
-  `esperRequest` TEXT NULL,
+  `entityType` VARCHAR(255) NOT NULL,
+  `esperRequest` MEDIUMTEXT NOT NULL,
+  `entityID` INT NULL,
+  `cronExpression` VARCHAR(60) NULL,
+  `evictionRate` INT NOT NULL,
+  `evictionType` INT NOT NULL,  
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_Metric_Plugin1`
     FOREIGN KEY (`idProvider`)
@@ -222,7 +225,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_evt` (
   `enabled` TINYINT(1) NOT NULL,
   `description` VARCHAR(2048) NULL,
   `category` VARCHAR(255) NOT NULL,
-  `entityType` INT NOT NULL,
+  `entityType` VARCHAR(255) NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_Event_Plugin1`
     FOREIGN KEY (`idProvider`)

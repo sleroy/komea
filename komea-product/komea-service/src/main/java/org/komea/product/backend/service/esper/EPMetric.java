@@ -2,45 +2,66 @@
 package org.komea.product.backend.service.esper;
 
 
-import org.komea.product.backend.api.IEPLMetric;
+
+import org.komea.product.backend.service.business.IEPMetric;
+import org.ocpsoft.prettytime.PrettyTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.espertech.esper.client.EPStatement;
-import com.espertech.esper.client.EventBean;
-import com.espertech.esper.client.SafeIterator;
 
-public class EPMetric implements IEPLMetric
+
+
+public class EPMetric implements IEPMetric
 {
     
-    private final EPStatement createEPL;
     
-    public EPMetric(final EPStatement _createEPL) {
+    private final EPStatement   epStatement;
     
-        super();
-        createEPL = _createEPL;
-    }
     
-    @Override
-    public EPStatement getStatement() {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EPMetric.class);
     
-        return createEPL;
-    }
     
-    @Override
-    public double getValue() {
     
-        SafeIterator<EventBean> safeIterator = null;
-        try {
-            safeIterator = createEPL.safeIterator();
-            if (safeIterator.hasNext()) {
-                return (Double) safeIterator.next().getUnderlying();
-            }
-        } finally {
-            if (safeIterator != null) {
-                safeIterator.close();
-            }
-        }
+    public EPMetric(final EPStatement _epStatement) {
+    
+    
+        epStatement = _epStatement;
         
-        return Double.NaN;
+        
+    }
+    
+    
+    @Override
+    public double getDoubleValue() {
+    
+    
+        return getValue().doubleValue();
+    }
+    
+    
+    @Override
+    public int getIntValue() {
+    
+    
+        return getValue().intValue();
+    }
+    
+    
+    @Override
+    public long getLongValue() {
+    
+    
+        return getValue().longValue();
+    }
+    
+    
+    public Number getValue() {
+    
+    
+        final Number metric_number = EPStatementResult.build(epStatement).singleResult();
+        LOGGER.debug("Metric value at {} is {}", new PrettyTime(), metric_number);
+        return metric_number;
     }
     
 }

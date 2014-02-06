@@ -4,6 +4,7 @@ package org.komea.product.backend.service;
 
 
 import org.komea.product.backend.fs.IObjectStorage;
+import org.komea.product.backend.service.business.IDAOObjectStorage;
 
 
 

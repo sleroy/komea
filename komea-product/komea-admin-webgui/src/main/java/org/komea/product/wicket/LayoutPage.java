@@ -16,7 +16,7 @@ public abstract class LayoutPage extends WebPage
     
     
         super(_parameters);
+        
     }
-    
     
 }

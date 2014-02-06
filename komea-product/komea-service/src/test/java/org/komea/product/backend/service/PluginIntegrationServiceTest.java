@@ -15,6 +15,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.plugin.api.InjectSetting;
+import org.komea.product.backend.service.business.ISettingProxy;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.dto.PropertyDTO;
 import org.komea.product.database.dto.ProviderDto;

@@ -6,10 +6,14 @@ package org.komea.product.backend.service;
 
 
 
+import java.util.Collections;
+
 import org.junit.Test;
 import org.komea.product.database.dao.SettingDao;
+import org.komea.product.database.model.SettingCriteria;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
-import org.mockito.Mock;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
 
 
 
@@ -18,11 +22,6 @@ import org.mockito.Mock;
  */
 public class SettingServiceTest extends AbstractSpringIntegrationTestCase
 {
-    
-    
-    @Mock
-    private SettingDao settingDAO;
-    
     
     
     /**
@@ -35,84 +34,11 @@ public class SettingServiceTest extends AbstractSpringIntegrationTestCase
     
     
         final SettingService settingService = new SettingService();
-        
+        final SettingDao settingDAO = Mockito.mock(SettingDao.class);
+        settingService.setSettingDAO(settingDAO);
+        Mockito.when(settingDAO.selectByCriteria(Matchers.any(SettingCriteria.class))).thenReturn(
+                Collections.EMPTY_LIST);
+        settingService.create("KEY_DEMO", "KEY_VALUE", String.class.getName(), "Demo Key");
     }
-    
-    //
-    // /**
-    // * Test method for {@link org.komea.product.backend.service.SettingService#getProxy(java.lang.Integer)}.
-    // */
-    // @Test
-    // public final void testGetProxyInteger() {
-    //
-    //
-    // fail("Not yet implemented"); // TODO
-    // }
-    //
-    //
-    // /**
-    // * Test method for {@link org.komea.product.backend.service.SettingService#getProxy(java.lang.String)}.
-    // */
-    // @Test
-    // public final void testGetProxyString() {
-    //
-    //
-    // fail("Not yet implemented"); // TODO
-    // }
-    //
-    //
-    // /**
-    // * Test method for {@link org.komea.product.backend.service.SettingService#getSettingDAO()}.
-    // */
-    // @Test
-    // public final void testGetSettingDAO() {
-    //
-    //
-    // fail("Not yet implemented"); // TODO
-    // }
-    //
-    //
-    // /**
-    // * Test method for {@link org.komea.product.backend.service.SettingService#getSettings()}.
-    // */
-    // @Test
-    // public final void testGetSettings() {
-    //
-    //
-    // fail("Not yet implemented"); // TODO
-    // }
-    //
-    //
-    // /**
-    // * Test method for {@link org.komea.product.backend.service.SettingService#newSelectOnNameCriteria(java.lang.String)}.
-    // */
-    // @Test
-    // public final void testNewSelectOnNameCriteria() {
-    //
-    //
-    // fail("Not yet implemented"); // TODO
-    // }
-    //
-    //
-    // /**
-    // * Test method for {@link org.komea.product.backend.service.SettingService#setSettingDAO(org.komea.product.database.dao.SettingDao)}.
-    // */
-    // @Test
-    // public final void testSetSettingDAO() {
-    //
-    //
-    // fail("Not yet implemented"); // TODO
-    // }
-    //
-    //
-    // /**
-    // * Test method for {@link org.komea.product.backend.service.SettingService#update(org.komea.product.database.model.Setting)}.
-    // */
-    // @Test
-    // public final void testUpdate() {
-    //
-    //
-    // fail("Not yet implemented"); // TODO
-    // }
     
 }

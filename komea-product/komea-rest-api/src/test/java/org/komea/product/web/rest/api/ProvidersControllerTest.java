@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.database.dto.ProviderDto;
@@ -66,6 +67,7 @@ public class ProvidersControllerTest
     
     @Test
     @ExpectedDatabase(value = "addProvider.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+    @Ignore
     public void testRegisterProvider() throws Exception {
     
     

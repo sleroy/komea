@@ -3,7 +3,7 @@ package org.komea.product.backend.service.proxy;
 
 
 
-import org.komea.product.backend.service.ISettingProxy;
+import org.komea.product.backend.service.business.ISettingProxy;
 import org.komea.product.backend.utils.SpringUtils;
 import org.komea.product.database.dao.SettingDao;
 import org.komea.product.database.model.Setting;

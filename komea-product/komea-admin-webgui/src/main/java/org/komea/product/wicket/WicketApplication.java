@@ -8,7 +8,9 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.settings.IExceptionSettings;
 import org.apache.wicket.settings.IExceptionSettings.ThreadDumpStrategy;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.komea.product.wicket.admin.SettingsPage;
+import org.komea.product.wicket.person.PersonPage;
+import org.komea.product.wicket.settings.SettingsPage;
+import org.komea.product.wicket.statistics.StatPage;
 
 
 
@@ -41,6 +43,8 @@ public class WicketApplication extends WebApplication
     
     
         super.init();
+        
+        
         getComponentInstantiationListeners().add(new SpringComponentInjector(this));
         // don't throw exceptions for missing translations
         getResourceSettings().setThrowExceptionOnMissingResource(false);
@@ -51,9 +55,13 @@ public class WicketApplication extends WebApplication
         // make markup friendly as in deployment-mode
         getMarkupSettings().setStripWicketTags(true);
         // page mounts / SEO
+        mountPage("/home", HomePage.class);
         mountPage("/settings", SettingsPage.class);
-        mountPage("/auth/login", LoginPage.class);
-        mountPage("/auth/accessdenied", UnauthorizedPage.class);
+        mountPage("/stats", StatPage.class);
+        mountPage("/login", LoginPage.class);
+        mountPage("/logout", LoginPage.class);
+        mountPage("/accessdenied", UnauthorizedPage.class);
+        mountPage("/users", PersonPage.class);
         getExceptionSettings().setThreadDumpStrategy(ThreadDumpStrategy.ALL_THREADS);
         getExceptionSettings()
                 .setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_EXCEPTION_PAGE);

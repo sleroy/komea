@@ -5,6 +5,7 @@ package org.komea.product.backend.service;
 
 import java.util.List;
 
+import org.komea.product.backend.service.business.ISettingProxy;
 import org.komea.product.database.dao.SettingDao;
 import org.komea.product.database.model.Setting;
 import org.komea.product.database.model.SettingCriteria;

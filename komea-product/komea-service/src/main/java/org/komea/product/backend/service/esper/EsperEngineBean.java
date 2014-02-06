@@ -6,21 +6,19 @@ package org.komea.product.backend.service.esper;
 
 
 
-import java.util.Date;
-
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
-import org.komea.product.backend.api.IEPLMetric;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.listeners.EPServiceStateListener1;
 import org.komea.product.backend.esper.listeners.EPStatementStateListener1;
-import org.komea.product.backend.esper.reactor.EsperDebugReactorListener;
+import org.komea.product.backend.exceptions.EsperStatementNotFoundException;
+import org.komea.product.backend.service.business.IQueryDefinition;
 import org.komea.product.database.alert.Alert;
 import org.komea.product.database.alert.IAlert;
 import org.komea.product.database.alert.enums.Criticity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.espertech.esper.client.Configuration;
@@ -35,17 +33,14 @@ import com.espertech.esper.client.EPStatement;
  * 
  * @author sleroy
  */
-@Service()
-public final class EsperEngineBean implements IAlertService, IEsperEngine
+@Service
+public final class EsperEngineBean implements IEsperEngine
 {
     
     
     private static final Logger LOGGER = LoggerFactory.getLogger(EsperEngineBean.class);
     
     private EPServiceProvider   esperEngine;
-    
-    @Autowired
-    private AlertValidationBean validator;
     
     
     
@@ -60,22 +55,49 @@ public final class EsperEngineBean implements IAlertService, IEsperEngine
     }
     
     
-    public EPStatement createEPL(final String _name, final String _query) {
+    @Override
+    public EPStatement createEPL(final IQueryDefinition _queryDefinition) {
     
     
-        LOGGER.info("Creation of a new EPL Statement {}->{}", _name, _query);
-        final EPStatement createEPL = esperEngine.getEPAdministrator().createEPL(_query, _name);
-        
+        LOGGER.info("Creation of a new EPL Statement {}", _queryDefinition);
+        final EPStatement createEPL =
+                esperEngine.getEPAdministrator().createEPL(_queryDefinition.getQuery(),
+                        _queryDefinition.getName());
         return createEPL;
     }
     
     
-    public IEPLMetric createMetric(final String _name, final String _query) {
+    /*
+     * (non-Javadoc)
+     * @see com.tocea.scertify.ci.flow.bean.IEsperEngine#getEsperEngine()
+     */
+    
+    @Override
+    public void createOrUpdateEPLQuery(final IQueryDefinition _definition) {
     
     
-        final EPStatement createEPL = createEPL(_name, _query);
-        
-        return new EPMetric(createEPL);
+        LOGGER.info("Registering an esper query {} : {}", _definition.getQuery(),
+                _definition.getName());
+        if (existEPL(_definition.getQuery())) {
+            LOGGER.info("--> Replacing an esper query {} : {}", _definition.getQuery(),
+                    _definition.getName());
+            createEPL(_definition);
+            return;
+        }
+        LOGGER.info("--> Creating a new esper query {} : {}", _definition.getQuery(),
+                _definition.getName());
+        createEPL(_definition);
+    }
+    
+    
+    @PreDestroy
+    public void destroy() {
+    
+    
+        LOGGER.warn("-----------------------------------");
+        LOGGER.warn("Destroying the esper Engine");
+        esperEngine.destroy();
+        esperEngine = null;
     }
     
     
@@ -87,11 +109,6 @@ public final class EsperEngineBean implements IAlertService, IEsperEngine
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see com.tocea.scertify.ci.flow.bean.IEsperEngine#getEsperEngine()
-     */
-    
     @Override
     public EPServiceProvider getEsper() {
     
@@ -100,10 +117,31 @@ public final class EsperEngineBean implements IAlertService, IEsperEngine
     }
     
     
-    public AlertValidationBean getValidator() {
+    @Override
+    public EPStatement getStatement(final String _statementName) {
     
     
-        return validator;
+        LOGGER.trace("Requesting esper statement {}", _statementName);
+        
+        return esperEngine.getEPAdministrator().getStatement(_statementName);
+    }
+    
+    
+    @Override
+    public String[] getStatementNames() {
+    
+    
+        return esperEngine.getEPAdministrator().getStatementNames();
+    }
+    
+    
+    @Override
+    public EPStatement getStatementOrFail(final String _measureName) {
+    
+    
+        final EPStatement statement = getStatement(_measureName);
+        if (statement == null) { throw new EsperStatementNotFoundException(_measureName); }
+        return statement;
     }
     
     
@@ -127,6 +165,7 @@ public final class EsperEngineBean implements IAlertService, IEsperEngine
         config.addEventType(IAlert.class);
         config.addEventType(Alert.class);
         
+        
         esperEngine = EPServiceProviderManager.getDefaultProvider(config);
         esperEngine.addServiceStateListener(new EPServiceStateListener1());
         esperEngine.addStatementStateListener(new EPStatementStateListener1());
@@ -140,44 +179,13 @@ public final class EsperEngineBean implements IAlertService, IEsperEngine
     
     
     @Override
-    public void sendEvent(final IAlert _alert) {
+    public void sendAlert(final IAlert _alert) {
     
     
-        validator.validate(_alert);
-        sendEventWithoutValidation(_alert);
+        // LOGGER.trace("Sending alert {}", _alert);
         
-    }
-    
-    
-    @Override
-    public void sendEventWithoutValidation(final IAlert _alert) {
-    
-    
-        if (_alert.getDate() == null) {
-            _alert.setDate(new Date());
-        }
         esperEngine.getEPRuntime().sendEvent(_alert);
         
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see
-     * com.tocea.scertify.ci.flow.bean.IEsperEngine#setEsperEngine(com.espertech
-     * .esper.client.EPServiceProvider)
-     */
-    public void setEsperEngine(final EPServiceProvider esperEngine) {
-    
-    
-        this.esperEngine = esperEngine;
-    }
-    
-    
-    public void setValidator(final AlertValidationBean _validator) {
-    
-    
-        validator = _validator;
     }
     
 }
