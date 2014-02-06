@@ -44,7 +44,7 @@ public class AlertStatisticsServiceIT extends AbstractSpringIntegrationTestCase
     
         final Alert alert =
                 AlertBuilder.newAlert().type("TYPE1").provided("JENKINS").category("SCM")
-                        .getAlert();
+                        .build();
         esperEngine.sendAlert(alert);
         esperEngine.sendAlert(alert);
         esperEngine.sendAlert(alert);

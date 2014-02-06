@@ -41,7 +41,7 @@ public class AlertPushServiceTest
         alertPushService.setEsperEngine(esperEngineMock);
         alertPushService.setValidator(Mockito.mock(IAlertValidationService.class));
         alertPushService.sendEvent(AlertBuilder.newAlert().category("PLUGIN_DEMO")
-                .criticity(Criticity.CRITICAL).message("DemoAlert").getAlert());
+                .criticity(Criticity.CRITICAL).message("DemoAlert").build());
         verify(esperEngineMock, Mockito.times(1)).sendAlert(Matchers.any(IAlert.class));
         
         
@@ -62,7 +62,7 @@ public class AlertPushServiceTest
         alertPushService.setValidator(Mockito.mock(IAlertValidationService.class));
         final Alert alert =
                 AlertBuilder.newAlert().category("PLUGIN_DEMO").criticity(Criticity.CRITICAL)
-                        .message("DemoAlert").getAlert();
+                        .message("DemoAlert").build();
         alert.setDate(null);
         alertPushService.sendEvent(alert);
         verify(esperEngineMock, Mockito.times(1)).sendAlert(Matchers.any(IAlert.class));

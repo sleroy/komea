@@ -6,7 +6,9 @@ package org.komea.product.backend.service.esper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.komea.product.backend.exceptions.EntityNotFoundException;
 import org.komea.product.backend.service.IEntityService;
+import org.komea.product.backend.service.kpi.KpiKey;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonGroupDao;
@@ -53,6 +55,24 @@ public class EntityService implements IEntityService
         }
         return null;
         
+    }
+    
+    
+    @Override
+    public IEntity getEntityAssociatedToKpi(final KpiKey _kpiKey) {
+    
+    
+        return getEntity(_kpiKey.getEntityType(), _kpiKey.getEntityID());
+    }
+    
+    
+    @Override
+    public IEntity getEntityOrFail(final EntityType _entityType, final int _entityID) {
+    
+    
+        final IEntity entity = getEntity(_entityType, _entityID);
+        if (entity == null) { throw new EntityNotFoundException(_entityID, _entityType); }
+        return entity;
     }
     
     

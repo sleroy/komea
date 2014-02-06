@@ -25,8 +25,6 @@ public final class ListDataModel<T extends Serializable> extends SortableDataPro
     
     
         modelList = _modelList;
-        
-        
     }
     
     
@@ -34,7 +32,7 @@ public final class ListDataModel<T extends Serializable> extends SortableDataPro
     public Iterator<? extends T> iterator(final long _first, final long _count) {
     
     
-        return modelList.subList((int) _first, (int) _count).iterator();
+        return modelList.subList((int) _first, (int) (_first + _count)).iterator();
     }
     
     

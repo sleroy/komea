@@ -34,7 +34,7 @@ public final class AlertJobDemo implements Job
         final Alert alert =
                 AlertBuilder.newAlert().category("SCM").criticity(Criticity.BLOCKING)
                         .fullMessage("Demo Alert").message("Demo alert").project("SYSTEM")
-                        .provided("DEMO" + new Random().nextInt(12)).type("DemoAlert").getAlert();
+                        .provided("DEMO" + new Random().nextInt(12)).type("DemoAlert").build();
         ((IAlertPushService) _context.getMergedJobDataMap().get("esper")).sendEvent(alert);
         
         

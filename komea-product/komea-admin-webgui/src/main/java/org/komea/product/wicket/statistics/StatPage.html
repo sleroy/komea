@@ -11,118 +11,53 @@
 <link rel="stylesheet" type="text/css" href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
 </head>
 <body>
-	<!--  BALISE HEADER -->
-	<header class="tocea-header">
-		<nav class="navbar navbar-inverse" role="navigation">
-			<div class="navbar-inner">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-						<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="/"><img src="/static/pics/logo.png" alt="logo" width="32" height="32" /> Komea Administration</a>
-				</div>
-				<div class="collapse navbar-collapse">
-					<ul class="nav navbar-nav">
-						<li id="home-nav"><a href="/p/"><span class="glyphicon glyphicon-home"></span>Home</a></li>
-						<li id="metrics-nav" sec:authorize="hasRole('ROLE_USER')"><a href="/p/infos"><span class="glyphicon glyphicon-signal"></span>Informations</a></li>
-					</ul>
-					<ul class="nav navbar-nav" sec:authorize="hasRole('ROLE_USER')">
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-list-alt"></i>Manage Data <b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li><a href="/p/projects"><i class="glyphicon glyphicon-book"></i>Manage Projects</a></li>
-								<li><a href="/p/teams"><i class="glyphicon glyphicon-cog"></i>Manage Teams</a></li>
-								<li><a href="/p/departments"><i class="glyphicon glyphicon-cog"></i>Manage Departments</a></li>
-								<li><a href="/p/customers"><i class="glyphicon glyphicon-cog"></i>Manage Customers</a></li>
-								<li><a href="/p/users"><i class="glyphicon glyphicon-user"></i>Manage Users</a></li>
-								<li class="divider"></li>
-								<li><a href="/p/alerts"><i class="glyphicon glyphicon-check"></i>Manage Alerts</a></li>
-								<li><a href="/p/kpis"><i class="glyphicon glyphicon-signal"></i>Manage KPI</a></li>
-							</ul></li>
-					</ul>
-					<ul class="nav navbar-nav navbar-right" sec:authorize="not hasRole('ROLE_USER')">
-						<li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
-							<div class="dropdown-menu" style="padding: 10px;">
-								<form method="POST" action="/p/j_spring_security_check">
-									Login<br></br> <input style="margin-bottom: 20px;" type="text" id="username" name="j_username"></input><br></br> Password<br></br> <input style="margin-bottom: 20px;" type="password" id="password" name="j_password"></input><br></br> <input style="float: left; margin-right: 10px;" type="checkbox" name="remember-me" id="remember-me" value="1"></input> <label for="user_remember_me">Remember me</label> <input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Sign In" style=""></input>
-								</form>
-							</div></li>
-					</ul>
-					<ul class="nav navbar-nav navbar-right" sec:authorize="hasRole('ROLE_USER')">
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>Welcome, User <b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li><a href="https://github.org/sleroy/komea"><i class="glyphicon glyphicon-envelope"></i>Contact Support</a></li>
-								<li class="divider"></li>
-								<li><a href="/p/j_spring_security_logout"><i class="glyphicon glyphicon-off"></i> Logout</a></li>
-							</ul></li>
-					</ul>
-					<ul class="nav navbar-nav" sec:authorize="hasRole('ROLE_ADMIN')">
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-wrench"></i>Administration <b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li><a href="/p/settings"><i class="glyphicon glyphicon-cog"></i>Settings</a></li>
-								<li><a href="/p/ldap"><i class="glyphicon glyphicon-user"></i>Configure LDAP</a></li>
-								<li><a href="/p/apialerts"><i class="glyphicon glyphicon-warning-sign"></i>API Alerts</a></li>
-								<li><a href="/p/plugins"><i class="glyphicon glyphicon-wrench"></i>Configure Plugins</a></li>
-								<li class="divider"></li>
-								<li><a href="/p/viewlog"><i class="glyphicon "></i>View log</a></li>
-							</ul></li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-	</header>
 	<wicket:extend>
-		<div class="container">
-			<h1>Komea Statistics</h1>
-			<div class="row">
+		<div class="container  container_father">
+			<div class="page-header">
+  <h1>Komea Statistics <small>Statistics from data received per Komea.</small></h1>
+</div>
+			<div class="row panel panel-default">
 				<div class="col-sm-3">
-					<div class="hero-widget well well-sm">
-						<div class="icon">
-							<i class="glyphicon glyphicon-user"></i>
-						</div>
-						<div class="text">
-							<var>3</var>
-							<label class="text-muted">Active users in the last 24 hours</label>
-						</div>
-					</div>
+					<table class="table table-stripped table-hover">
+						<tbody>
+							<tr  class="info" >
+								<th>Number of alerts</th>
+								<td > <span class="badge" wicket:id="alert_number"></span></td>
+							</tr>
+							<tr class="warning">
+								<th>Blocking alerts</th>
+								<td > <span class="badge" wicket:id="blocking"></span></td>
+							</tr>
+							<tr>
+								<th>Critical alerts</th>
+								<td> <span class="badge" wicket:id="critical"></span></td>
+							</tr>
+							<tr>
+								<th>Major alerts</th>
+								<td> <span class="badge"  wicket:id="major"></span></td>
+							</tr>
+							<tr>
+								<th>Minor alerts</th>
+								<td> <span class="badge" wicket:id="minor"></span></td>
+							</tr>
+							<tr>
+								<th>Info alerts</th>
+								<td> <span class="badge" wicket:id="info"></span></td>
+							</tr>
+							
+						</tbody>
+					</table>
+					
 				</div>
-				<div class="col-sm-3">
-					<div class="hero-widget well well-sm">
-						<div class="icon">
-							<i class="glyphicon glyphicon-star"></i>
-						</div>
-						<div class="text">
-							<var wicket:id="alert_number">614</var>
-							<label class="text-muted">Alerts received</label>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-3">
-					<div class="hero-widget well well-sm">
-						<div class="icon">
-							<i class="glyphicon glyphicon-tags"></i>
-						</div>
-						<div class="text">
-							<var>73</var>
-							<label class="text-muted">Blocking alerts</label>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-3">
-					<div class="hero-widget well well-sm">
-						<div class="icon">
-							<i class="glyphicon glyphicon-cog"></i>
-						</div>
-						<div class="text">
-							<var>75%</var>
-							<label class="text-muted">Alerts generated</label>
-						</div>
-					</div>
+				<div class="col-sm-9">
+					<div wicket:id="chart"></div>
 				</div>
 			</div>
-			<!-- HTML code -->
-			<div wicket:id="chart"></div>
-			<table class="table table-striped table-bordered table-hover table-condensed custab" wicket:id="table">[table]
-			</table>
+			<div class="row">
+				<h3>Type of alerts received.</h3>
+				<table class="table table-striped table-bordered table-hover table-condensed custab" wicket:id="table">[table]
+				</table>
+			</div>
 		</div>
 	</wicket:extend>
 	<footer class="tocea-footer">

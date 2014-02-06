@@ -5,10 +5,9 @@ package org.komea.product.backend.service.kpi;
 
 import java.util.List;
 
-import org.komea.product.backend.service.business.IEPMetric;
-import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
+import org.komea.product.database.model.MeasureCriteria;
 
 
 
@@ -25,7 +24,19 @@ public interface IMeasureHistoryService
      *            the kpi.
      * @return the list of measures.
      */
-    public List<Measure> getMeasures(IEntity _entity, Kpi _kpi);
+    public List<Measure> getMeasures(HistoryKey _kpiKey);
+    
+    
+    /**
+     * Returns the list of measures from an entity and a KPI.
+     * 
+     * @param _entity
+     *            the entity.
+     * @param _kpi
+     *            the kpi.
+     * @return the list of measures.
+     */
+    public List<Measure> getMeasures(HistoryKey _kpiKey, MeasureCriteria _criteria);
     
     
     /**
@@ -47,12 +58,4 @@ public interface IMeasureHistoryService
     IHistoryPurgeAction buildHistoryPurgeAction(Kpi _kpi);
     
     
-    /**
-     * Returns a metric from a EPStatement.
-     * 
-     * @param _measureName
-     *            the measure name.
-     * @return the epstatement metric.
-     */
-    IEPMetric findMeasure(String _measureName);
 }

@@ -13,10 +13,10 @@ import org.apache.commons.lang.StringUtils;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
 import org.komea.product.backend.esper.reactor.KPINotFoundRuntimeException;
-import org.komea.product.backend.kpi.KPIFacade;
+import org.komea.product.backend.service.IEntityService;
 import org.komea.product.backend.service.business.IEPMetric;
-import org.komea.product.backend.service.business.IKPIFacade;
 import org.komea.product.backend.service.cron.ICronRegistryService;
+import org.komea.product.backend.service.esper.EPMetric;
 import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.api.IEntity;
@@ -24,6 +24,7 @@ import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.Measure;
+import org.komea.product.database.model.MeasureCriteria;
 import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +54,10 @@ public final class KPIService implements IKPIService
     
     
     private static final Logger    LOGGER = LoggerFactory.getLogger(KPIService.class);
+    
+    
+    @Autowired
+    private IEntityService         entityService;
     
     
     
@@ -92,48 +97,56 @@ public final class KPIService implements IKPIService
     
     
     @Override
-    public Kpi findKPI(final IEntity _entity, final String _kpiName) {
+    public Kpi findKPI(final KpiKey _kpiKey) {
     
     
         final KpiCriteria kpiCriteria = new KpiCriteria();
-        kpiCriteria.createCriteria().andKpiKeyEqualTo(_kpiName);
-        if (_entity != null) {
-            kpiCriteria.createCriteria().andEntityIDEqualTo(_entity.getId());
-            kpiCriteria.createCriteria().andEntityTypeEqualTo(_entity.entityType());
+        kpiCriteria.createCriteria().andKpiKeyEqualTo(_kpiKey.getKpiName());
+        if (_kpiKey.isAssociatedToEntity()) {
+            kpiCriteria.createCriteria().andEntityIDEqualTo(_kpiKey.getEntityID());
+            kpiCriteria.createCriteria().andEntityTypeEqualTo(_kpiKey.getEntityType());
         }
         return CollectionUtil.singleOrNull(kpiDAO.selectByExampleWithBLOBs(kpiCriteria));
         
     }
     
     
+    // public <TEntity extends IEntity> IKPIFacade<TEntity> findKPIFacade(final KpiKey _kpiKey)
+    // throws KPINotFoundException {
+    //
+    //
+    // LOGGER.debug("Returning KPI facade from {}", _kpiKey);
+    // final KpiCriteria criteria = new KpiCriteria();
+    // criteria.createCriteria().andKpiKeyEqualTo(_kpiKey.getKpiName());
+    // final Kpi requestedKpi =
+    // CollectionUtil.singleOrNull(kpiDAO.selectByExampleWithBLOBs(criteria));
+    // final IEntity entity = entityService.getEntityAssociatedToKpi(_kpiKey);
+    // if (requestedKpi == null) { throw new KPINotFoundException(entity, _kpiKey.getKpiName()); }
+    // final IEPMetric metricWrapperOverEsperQuery =
+    // findMeasure(requestedKpi.computeKPIEsperKey(entity));
+    // return new KPIFacade<TEntity>(metricWrapperOverEsperQuery, (TEntity) entity, requestedKpi,
+    // measureService);
+    //
+    // }
+    //
+    
     @Override
-    public <TEntity extends IEntity> IKPIFacade<TEntity> findKPIFacade(
-            final TEntity _entity,
-            final String _kpiName) throws KPINotFoundException {
+    public Kpi findKPIOrFail(final KpiKey _kpiKey) {
     
     
-        LOGGER.debug("Returning KPI facade from entity {} and kpi {}", _entity, _kpiName);
-        final KpiCriteria criteria = new KpiCriteria();
-        criteria.createCriteria().andKpiKeyEqualTo(_kpiName);
-        final Kpi requestedKpi =
-                CollectionUtil.singleOrNull(kpiDAO.selectByExampleWithBLOBs(criteria));
-        
-        if (requestedKpi == null) { throw new KPINotFoundException(_entity, _kpiName); }
-        final IEPMetric metricWrapperOverEsperQuery =
-                measureService.findMeasure(requestedKpi.computeKPIEsperKey(_entity));
-        return new KPIFacade<TEntity>(metricWrapperOverEsperQuery, _entity, requestedKpi,
-                measureService);
-        
+        final IEntity entityAssociatedToKpi = entityService.getEntityAssociatedToKpi(_kpiKey);
+        final Kpi findKPI = findKPI(_kpiKey);
+        if (findKPI == null) { throw new KPINotFoundRuntimeException(entityAssociatedToKpi,
+                _kpiKey.getKpiName()); }
+        return findKPI;
     }
     
     
-    @Override
-    public Kpi findKPIOrFail(final IEntity _entity, final String _kpiName) {
+    public IEPMetric findMeasure(final String _measureName) {
     
     
-        final Kpi findKPI = findKPI(_entity, _kpiName);
-        if (findKPI == null) { throw new KPINotFoundRuntimeException(_entity, _kpiName); }
-        return findKPI;
+        return new EPMetric(esperEngine.getStatementOrFail(_measureName));
+        
     }
     
     
@@ -141,6 +154,13 @@ public final class KPIService implements IKPIService
     
     
         return cronRegistry;
+    }
+    
+    
+    public IEntityService getEntityService() {
+    
+    
+        return entityService;
     }
     
     
@@ -154,10 +174,51 @@ public final class KPIService implements IKPIService
     }
     
     
+    @Override
+    public List<Measure> getHistory(final KpiKey _kpiKey) {
+    
+    
+        final IEntity entityAssociatedToKpi = entityService.getEntityAssociatedToKpi(_kpiKey);
+        
+        return measureService.getMeasures(HistoryKey.of(findKPIOrFail(_kpiKey),
+                entityAssociatedToKpi));
+    }
+    
+    
+    @Override
+    public List<Measure> getHistory(final KpiKey _kpiKey, final MeasureCriteria _criteria) {
+    
+    
+        final IEntity entity = entityService.getEntityAssociatedToKpi(_kpiKey);
+        return measureService.getMeasures(HistoryKey.of(findKPIOrFail(_kpiKey), entity), _criteria);
+    }
+    
+    
     public KpiDao getKpiDAO() {
     
     
         return kpiDAO;
+    }
+    
+    
+    @Override
+    public double getKpiDoubleValue(final KpiKey _kpiKey) throws KPINotFoundException {
+    
+    
+        return getKPIValue(_kpiKey).getDoubleValue();
+        
+    }
+    
+    
+    @Override
+    public IEPMetric getKPIValue(final KpiKey _kpiKey) {
+    
+    
+        final IEntity entity = entityService.getEntityAssociatedToKpi(_kpiKey);
+        final Kpi findKPIOrFail = findKPIOrFail(_kpiKey);
+        return new EPMetric(
+                esperEngine.getStatementOrFail(findKPIOrFail.computeKPIEsperKey(entity)));
+        
     }
     
     
@@ -204,8 +265,10 @@ public final class KPIService implements IKPIService
     
     
         if (_kpi.getId() == null) {
+            LOGGER.info("Saving new KPI : {}", _kpi.getKpiKey());
             kpiDAO.insert(_kpi);
         } else {
+            LOGGER.info("KPI {} updated", _kpi.getKpiKey());
             kpiDAO.updateByPrimaryKey(_kpi);
         }
     }
@@ -215,6 +278,13 @@ public final class KPIService implements IKPIService
     
     
         cronRegistry = _cronRegistry;
+    }
+    
+    
+    public void setEntityService(final IEntityService _entityService) {
+    
+    
+        entityService = _entityService;
     }
     
     
@@ -249,28 +319,30 @@ public final class KPIService implements IKPIService
     
     @Transactional
     @Override
-    public void storeValueInHistory(final IEntity _entity, final Kpi _kpiName) {
+    public void storeValueInHistory(final KpiKey _kpiKey) {
     
     
         final Measure measure = new Measure();
-        switch (_entity.entityType()) {
+        switch (_kpiKey.getEntityType()) {
             case PERSON:
-                measure.setIdPerson(_entity.getId());
+                measure.setIdPerson(_kpiKey.getEntityID());
                 break;
             case PERSONG_GROUP:
-                measure.setIdPersonGroup(_entity.getId());
+                measure.setIdPersonGroup(_kpiKey.getEntityID());
                 break;
             case PROJECT:
-                measure.setIdProject(_entity.getId());
+                measure.setIdProject(_kpiKey.getEntityID());
                 break;
         
         }
+        final Kpi findKPI = findKPI(_kpiKey);
+        final IEntity entityAssociatedToKpi = entityService.getEntityAssociatedToKpi(_kpiKey);
         measure.setDate(new Date());
-        measure.setIdKpi(_kpiName.getId());
-        measure.setValue(measureService.findMeasure(_kpiName.computeKPIEsperKey(_entity))
+        measure.setIdKpi(findKPI.getId());
+        measure.setValue(findMeasure(findKPI.computeKPIEsperKey(entityAssociatedToKpi))
                 .getDoubleValue());
         measureService.storeMeasure(measure);
-        final int purgeHistory = measureService.buildHistoryPurgeAction(_kpiName).purgeHistory();
+        final int purgeHistory = measureService.buildHistoryPurgeAction(findKPI).purgeHistory();
         LOGGER.debug("Purge history : {} items", purgeHistory);
         
     }

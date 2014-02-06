@@ -17,6 +17,14 @@ import org.komea.product.backend.service.business.IQueryDefinition;
 import org.komea.product.database.alert.Alert;
 import org.komea.product.database.alert.IAlert;
 import org.komea.product.database.alert.enums.Criticity;
+import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.EventCategory;
+import org.komea.product.database.enums.EvictionType;
+import org.komea.product.database.enums.Operator;
+import org.komea.product.database.enums.ProviderType;
+import org.komea.product.database.enums.Severity;
+import org.komea.product.database.enums.ValueDirection;
+import org.komea.product.database.enums.ValueType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -164,6 +172,15 @@ public final class EsperEngineBean implements IEsperEngine
         config.setMetricsReportingEnabled();
         config.addEventType(IAlert.class);
         config.addEventType(Alert.class);
+        config.addImport(Criticity.class);
+        config.addImport(EntityType.class);
+        config.addImport(EventCategory.class);
+        config.addImport(EvictionType.class);
+        config.addImport(Operator.class);
+        config.addImport(ProviderType.class);
+        config.addImport(Severity.class);
+        config.addImport(ValueDirection.class);
+        config.addImport(ValueType.class);
         
         
         esperEngine = EPServiceProviderManager.getDefaultProvider(config);

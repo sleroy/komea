@@ -6,9 +6,6 @@ package org.komea.product.backend.service.kpi;
 import java.util.List;
 
 import org.komea.product.backend.api.IEsperEngine;
-import org.komea.product.backend.service.business.IEPMetric;
-import org.komea.product.backend.service.esper.EPMetric;
-import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
@@ -75,15 +72,6 @@ public class MeasureHistoryService implements IMeasureHistoryService
     }
     
     
-    @Override
-    public IEPMetric findMeasure(final String _measureName) {
-    
-    
-        return new EPMetric(esperEngine.getStatementOrFail(_measureName));
-        
-    }
-    
-    
     public IEsperEngine getEsperEngine() {
     
     
@@ -102,21 +90,29 @@ public class MeasureHistoryService implements IMeasureHistoryService
      * Returns the measures.
      */
     @Override
-    public List<Measure> getMeasures(final IEntity _entity, final Kpi _kpi) {
+    public List<Measure> getMeasures(final HistoryKey _kpiKey) {
     
     
         final MeasureCriteria measureCriteria = new MeasureCriteria();
+        return getMeasures(_kpiKey, measureCriteria);
+    }
+    
+    
+    @Override
+    public List<Measure> getMeasures(final HistoryKey _kpiKey, final MeasureCriteria measureCriteria) {
+    
+    
         final Criteria createCriteria = measureCriteria.createCriteria();
-        createCriteria.andIdKpiEqualTo(_kpi.getId());
-        switch (_entity.entityType()) {
+        createCriteria.andIdKpiEqualTo(_kpiKey.getKpiID());
+        switch (_kpiKey.getEntityType()) {
             case PERSON:
-                createCriteria.andIdPersonEqualTo(_entity.getId());
+                createCriteria.andIdPersonEqualTo(_kpiKey.getEntityID());
                 break;
             case PERSONG_GROUP:
-                createCriteria.andIdPersonGroupEqualTo(_entity.getId());
+                createCriteria.andIdPersonGroupEqualTo(_kpiKey.getEntityID());
                 break;
             case PROJECT:
-                createCriteria.andIdProjectEqualTo(_entity.getId());
+                createCriteria.andIdProjectEqualTo(_kpiKey.getEntityID());
                 break;
         }
         final List<Measure> selectByCriteria = measureDAO.selectByCriteria(measureCriteria);
@@ -146,5 +142,4 @@ public class MeasureHistoryService implements IMeasureHistoryService
         measureDAO.insert(_measure);
         
     }
-    
 }

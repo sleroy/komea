@@ -5,6 +5,7 @@ package org.komea.product.backend.service;
 
 import java.util.List;
 
+import org.komea.product.backend.service.kpi.KpiKey;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.EntityType;
 
@@ -24,6 +25,21 @@ public interface IEntityService
      * @return the entity
      */
     <TEntity extends IEntity> TEntity getEntity(EntityType _entityType, int _key);
+    
+    
+    IEntity getEntityAssociatedToKpi(KpiKey _kpiKey);
+    
+    
+    /**
+     * Returns the entity or fail
+     * 
+     * @param _entityType
+     *            the entity type
+     * @param _entityID
+     *            the entity ID
+     * @return the entity.
+     */
+    IEntity getEntityOrFail(EntityType _entityType, int _entityID);
     
     
     /**

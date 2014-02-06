@@ -64,7 +64,7 @@ public class DemoDataBean
             alertPushService.sendEvent(AlertBuilder.newAlert().category("SYSTEM")
                     .criticity(Criticity.values()[i % Criticity.values().length])
                     .fullMessage("Message of alert").message("Message of alert").project("SYSTEM")
-                    .provided("SYSTEM").type("DEMO_ALERT").getAlert());
+                    .provided("SYSTEM").type("DEMO_ALERT").build());
         }
     }
     

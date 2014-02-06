@@ -6,9 +6,11 @@ package org.komea.product.backend.service.kpi;
 import java.util.List;
 
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
-import org.komea.product.backend.service.business.IKPIFacade;
+import org.komea.product.backend.service.business.IEPMetric;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Kpi;
+import org.komea.product.database.model.Measure;
+import org.komea.product.database.model.MeasureCriteria;
 
 
 
@@ -19,32 +21,37 @@ public interface IKPIService
     /**
      * Finds a KPI if existing.
      * 
-     * @param _kpiName
-     *            the kpi name
      * @return the kpi./
      */
-    public Kpi findKPI(IEntity _entity, String _kpiName);
-    
-    
-    /**
-     * Finds the metric with the given name.
-     * 
-     * @return the metric with the given name.
-     * @throws KPINotFoundException
-     */
-    public <TEntity extends IEntity> IKPIFacade<TEntity> findKPIFacade(
-            TEntity _entity,
-            String _kpiName) throws KPINotFoundException;
+    public Kpi findKPI(KpiKey _kpiKey);
     
     
     /**
      * Finds a KPI or throws an exception
      * 
-     * @param _alertReceivedInOneDay
-     *            the KPI name
      * @return the KPI or an exception.
      */
-    public Kpi findKPIOrFail(IEntity _entity, String _alertReceivedInOneDay);
+    public Kpi findKPIOrFail(KpiKey _kpiKey);
+    
+    
+    /**
+     * Returns the list of measures
+     * 
+     * @param _kpiKey
+     *            the kpiKey
+     * @return the list measures
+     */
+    public List<Measure> getHistory(KpiKey _kpiKey);
+    
+    
+    /**
+     * Returns the list of measures
+     * 
+     * @param _kpiKey
+     *            the kpiKey
+     * @return the list measures
+     */
+    public List<Measure> getHistory(KpiKey _kpiKey, MeasureCriteria _criteria);
     
     
     /**
@@ -74,7 +81,7 @@ public interface IKPIService
      * @param _kpiName
      *            the kpi name.
      */
-    public void storeValueInHistory(IEntity _entity, Kpi _kpiName);
+    public void storeValueInHistory(KpiKey _kpiKey);
     
     
     /**
@@ -95,4 +102,34 @@ public interface IKPIService
      *            the new list of KPI
      */
     public void updateKPIOfEntity(IEntity _entity, List<Kpi> _kpis);
+    
+    
+    /**
+     * Returns the kPI double value.
+     * 
+     * @param _kpiName
+     *            the kpi name
+     * @param _entityID
+     *            the entity id
+     * @param _entityType
+     *            the entity type.
+     * @return the kpi double value.
+     * @throws KPINotFoundException
+     */
+    
+    double getKpiDoubleValue(KpiKey _kpiKey) throws KPINotFoundException;
+    
+    
+    /**
+     * Returns the KPI value
+     * 
+     * @param _entity
+     *            the entity
+     * @param _kpi
+     *            the kpi.
+     * @return
+     */
+    IEPMetric getKPIValue(KpiKey _measureKey);
+    
+    
 }

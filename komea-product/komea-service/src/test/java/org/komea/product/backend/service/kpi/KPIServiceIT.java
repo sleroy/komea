@@ -67,7 +67,7 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
             alertPushService.sendEvent(AlertBuilder.newAlert().category("SYSTEM")
                     .criticity(Criticity.values()[i % Criticity.values().length])
                     .fullMessage("Message of alert").message("Message of alert").project("SYSTEM")
-                    .provided("SYSTEM").type(ALERT_TYPE).getAlert());
+                    .provided("SYSTEM").type(ALERT_TYPE).build());
         }
         final long numberAlerts = systemProject.getReceivedAlertsIn24LastHours();
         LOGGER.info("Received alerts {}", numberAlerts);

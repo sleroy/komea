@@ -6,26 +6,23 @@ package org.komea.product.backend.service.esper;
 
 
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.api.IEsperEngine;
-import org.komea.product.backend.esper.reactor.KPINotFoundException;
-import org.komea.product.backend.esper.reactor.KPINotFoundRuntimeException;
 import org.komea.product.backend.service.ISystemProjectBean;
-import org.komea.product.backend.service.business.IKPIFacade;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.demodata.AlertJobDemo;
 import org.komea.product.backend.service.kpi.IEntityWithKPIAdapter;
 import org.komea.product.backend.service.kpi.IKPIService;
+import org.komea.product.backend.service.kpi.KpiKey;
+import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
-import org.komea.product.database.model.Project;
 import org.komea.product.service.dto.AlertTypeStatistic;
 import org.quartz.JobDataMap;
 import org.slf4j.Logger;
@@ -49,6 +46,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     
     public static final String    ALERT_RECEIVED_IN_ONE_DAY = "ALERT_RECEIVED_IN_ONE_DAY";
+    public static final String    ALERT_CRITICITY_DAY       = "ALERT_CRITICITY_DAY_";
     
     
     private static final String   STATS_BREAKDOWN_24H       = "STATS_BREAKDOWN_24H";
@@ -110,16 +108,12 @@ public class AlertStatisticsService implements IAlertStatisticsService
     public List<Measure> getAllMeasures() {
     
     
-        try {
-            final List<Measure> history =
-                    kpiService.findKPIFacade(systemProject.getSystemProject(),
-                            ALERT_RECEIVED_IN_ONE_DAY).getHistory();
-            LOGGER.info("History of alerts {}", history.size());
-            return history;
-        } catch (final KPINotFoundException e) {
-            LOGGER.error("KPI is not initialized to obtain statistics", e);
-            return Collections.EMPTY_LIST;
-        }
+        final List<Measure> history =
+                kpiService.getHistory(KpiKey.withEntity(ALERT_RECEIVED_IN_ONE_DAY,
+                        systemProject.getSystemProject()));
+        LOGGER.info("History of alerts {}", history.size());
+        return history;
+        
     }
     
     
@@ -150,6 +144,18 @@ public class AlertStatisticsService implements IAlertStatisticsService
     }
     
     
+    @Override
+    public long getNumberOfAlerts(final Criticity _criticity) {
+    
+    
+        return kpiService.getKPIValue(
+                KpiKey.withEntity(ALERT_CRITICITY_DAY + _criticity.name().toUpperCase(),
+                        systemProject.getSystemProject())).getIntValue();
+        
+        
+    }
+    
+    
     public ProviderDao getProviderDAO() {
     
     
@@ -161,15 +167,10 @@ public class AlertStatisticsService implements IAlertStatisticsService
     public long getReceivedAlertsIn24LastHours() {
     
     
-        try {
-            final IKPIFacade<Project> findKPIFacade =
-                    kpiService.findKPIFacade(systemProject.getSystemProject(),
-                            ALERT_RECEIVED_IN_ONE_DAY);
-            return findKPIFacade.getMetric().getIntValue();
-        } catch (final KPINotFoundException e) {
-            throw new KPINotFoundRuntimeException(systemProject.getSystemProject(),
-                    ALERT_RECEIVED_IN_ONE_DAY, e);
-        }
+        return kpiService.getKPIValue(
+                KpiKey.withEntity(ALERT_RECEIVED_IN_ONE_DAY, systemProject.getSystemProject()))
+                .getIntValue();
+        
         
     }
     
@@ -210,27 +211,24 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     
         LOGGER.info("Creating System KPI for statistics...");
-        Kpi kpi = kpiService.findKPI(systemProject.getSystemProject(), ALERT_RECEIVED_IN_ONE_DAY);
+        final KpiKey kpiKey =
+                KpiKey.withEntity(ALERT_RECEIVED_IN_ONE_DAY, systemProject.getSystemProject());
+        final Kpi kpi = kpiService.findKPI(kpiKey);
+        Kpi alertPerDay = null;
         if (kpi == null) {
-            
-            
-            kpi = new Kpi();
-            kpi.setDescription("Provides the number of alerts received under 24 hours");
-            kpi.setEntityType(EntityType.PROJECT);
-            
-            kpi.setEsperRequest("SELECT COUNT(*) as alert_number FROM Alert.win:time(24 hour)");
-            kpi.setKpiKey(ALERT_RECEIVED_IN_ONE_DAY);
-            kpi.setMinValue(0d);
-            kpi.setMaxValue(Double.MAX_VALUE);
-            kpi.setName("Number of alerts received under 24 hours.");
-            kpi.setEntityID(systemProject.getSystemProject().getId());
-            kpi.setCronExpression("0 0 0 * * ?");
-            kpi.setEvictionRate(30);
-            kpi.setEvictionType(EvictionType.DAYS);
             final List<Kpi> listOfKpisOfEntity =
                     kpiService.getListOfKpisForEntity(systemProject.getSystemProject());
-            listOfKpisOfEntity.add(kpi);
+            alertPerDay = alertPerDay();
+            listOfKpisOfEntity.add(alertPerDay);
+            listOfKpisOfEntity.add(alertCriticityPerDay(Criticity.BLOCKING));
+            listOfKpisOfEntity.add(alertCriticityPerDay(Criticity.CRITICAL));
+            listOfKpisOfEntity.add(alertCriticityPerDay(Criticity.MAJOR));
+            listOfKpisOfEntity.add(alertCriticityPerDay(Criticity.MINOR));
+            listOfKpisOfEntity.add(alertCriticityPerDay(Criticity.INFO));
+            
+            
             kpiService.updateKPIOfEntity(systemProject.getSystemProject(), listOfKpisOfEntity);
+            
             
         } else {
             LOGGER.info("Statistics KPI already existing.");
@@ -240,9 +238,14 @@ public class AlertStatisticsService implements IAlertStatisticsService
         // output snapshot every 1 minute
         esperEngine
                 .createOrUpdateEPLQuery(new QueryDefinition(
-                        "SELECT DISTINCT provider, type, count(*) as number FROM Alert.win:time(24 hour)  ORDER BY provider ASC, type ASC",
+                        "SELECT DISTINCT provider, type, count(*) as number FROM Alert.win:time(24 hour)  GROUP BY provider, type  ORDER BY provider ASC, type ASC",
                         STATS_BREAKDOWN_24H));
+        
         scheduleAlerts();
+        if (alertPerDay != null) {
+            kpiService.storeValueInHistory(kpiKey);
+            
+        }
         
     }
     
@@ -325,5 +328,47 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     
         systemProject = _systemProject;
+    }
+    
+    
+    private Kpi alertCriticityPerDay(final Criticity _criticity) {
+    
+    
+        Kpi kpi;
+        kpi = new Kpi();
+        kpi.setDescription("Provides the number of alerts of criticity "
+                + _criticity + " received under 24 hours");
+        kpi.setEntityType(EntityType.PROJECT);
+        kpi.setEsperRequest("SELECT COUNT(*) as alert_number FROM Alert.win:time(24 hour) WHERE criticity=Criticity."
+                + _criticity.name());
+        kpi.setKpiKey(ALERT_CRITICITY_DAY + _criticity.name());
+        kpi.setMinValue(0d);
+        kpi.setMaxValue(Double.MAX_VALUE);
+        kpi.setName("Number of alerts of criticity " + _criticity + " received under 24 hours.");
+        kpi.setEntityID(systemProject.getSystemProject().getId());
+        kpi.setCronExpression("0 0 0 * * ?");
+        kpi.setEvictionRate(30);
+        kpi.setEvictionType(EvictionType.DAYS);
+        return kpi;
+    }
+    
+    
+    private Kpi alertPerDay() {
+    
+    
+        Kpi kpi;
+        kpi = new Kpi();
+        kpi.setDescription("Provides the number of alerts received under 24 hours");
+        kpi.setEntityType(EntityType.PROJECT);
+        kpi.setEsperRequest("SELECT COUNT(*) as alert_number FROM Alert.win:time(24 hour)");
+        kpi.setKpiKey(ALERT_RECEIVED_IN_ONE_DAY);
+        kpi.setMinValue(0d);
+        kpi.setMaxValue(Double.MAX_VALUE);
+        kpi.setName("Number of alerts received under 24 hours.");
+        kpi.setEntityID(systemProject.getSystemProject().getId());
+        kpi.setCronExpression("0 0 0 * * ?");
+        kpi.setEvictionRate(30);
+        kpi.setEvictionType(EvictionType.DAYS);
+        return kpi;
     }
 }

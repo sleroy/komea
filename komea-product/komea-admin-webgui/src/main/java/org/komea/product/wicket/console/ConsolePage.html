@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+<meta content="Komea administration site" name="description"></meta>
+<meta content="Komea" name="author"></meta>
+<title>Komea Administration</title>
+<link rel="stylesheet" href="../../../../../../../main/webapp/static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
+<link rel="stylesheet" href="../../../../../../../main/webapp/static/css/style.css" type="text/css"></link>
+<link rel="stylesheet" type="text/css" href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
+</head>
+<body>
+	<wicket:extend>
+		<div class="container  container_father">
+			<div class="page-header">
+				<h1>
+					Komea Console <small>View the console log file of Komea.</small>
+				</h1>
+				<div class="panel panel-default">
+					<textarea class="form-control  focus" rows="20" wicket:id="console">Console of Komea</textarea>
+				</div>
+			</div>
+			<div class="row"></div>
+		</div>
+	</wicket:extend>
+	<footer class="tocea-footer">
+		<p>&copy; Komea.org</p>
+		<script src="../../../../../../../main/webapp/static/js/ui/jquery.js"></script>
+		<script src="../../../../../../../main/webapp/static/bootstrap/js/bootstrap.min.js"></script>
+	</footer>
+</body>
+</html>

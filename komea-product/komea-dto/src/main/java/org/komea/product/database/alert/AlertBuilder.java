@@ -67,7 +67,7 @@ public class AlertBuilder
     }
     
     
-    public Alert getAlert() {
+    public Alert build() {
     
     
         return alert;

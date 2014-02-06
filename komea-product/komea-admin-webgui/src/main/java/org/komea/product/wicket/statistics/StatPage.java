@@ -3,19 +3,20 @@ package org.komea.product.wicket.statistics;
 
 
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.esper.IAlertStatisticsService;
+import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.AlertTypeStatistic;
 import org.komea.product.wicket.LayoutPage;
-import org.komea.product.wicket.model.ListDataModel;
 import org.komea.product.wicket.widget.DataTableBuilder;
 
 import com.googlecode.wickedcharts.highcharts.options.Axis;
@@ -52,12 +53,31 @@ public class StatPage extends LayoutPage
     
     
         super(_parameters);
-        add(new Label("alert_number", Model.of(statService.getReceivedAlertsIn24LastHours())));
+        add(new Label("alert_number", new LoadableDetachableModel<Long>()
+        {
+            
+            
+            @Override
+            protected Long load() {
+            
+            
+                return statService.getReceivedAlertsIn24LastHours();
+                
+            }
+            
+        }));
+        generateLabelForAlertsWithCriticity(Criticity.BLOCKING);
+        generateLabelForAlertsWithCriticity(Criticity.CRITICAL);
+        generateLabelForAlertsWithCriticity(Criticity.MAJOR);
+        generateLabelForAlertsWithCriticity(Criticity.MINOR);
+        generateLabelForAlertsWithCriticity(Criticity.INFO);
+        
         final ChartOptions chartOptions = new ChartOptions();
         chartOptions.setType(SeriesType.SPLINE);
+        chartOptions.setBorderRadius(1);
+        chartOptions.setBorderColor(Color.GRAY);
         
         final Options options = new Options();
-        
         options.setChartOptions(chartOptions);
         
         options.setTitle(new Title("Number of alerts received per day"));
@@ -105,17 +125,31 @@ public class StatPage extends LayoutPage
         add(new Chart("chart", options));
         
         
-        final DataTable<AlertTypeStatistic, String> build =
-                DataTableBuilder
-                        .<AlertTypeStatistic, String> newTable("table")
-                        .addColumn("Alert type", "type")
-                        .addColumn("Provider", "provider")
-                        .addColumn("Number", "number")
-                        .displayRows(10)
-                        .withData(
-                                new ListDataModel(statService.getReceivedAlertTypesIn24LastHours()))
-                        .build();
+        final DataTable<AlertTypeStatistic, String> table =
+                DataTableBuilder.<AlertTypeStatistic, String> newTable("table")
+                        .addColumn("Alert type", "type").addColumn("Provider", "provider")
+                        .addColumn("Number", "number").displayRows(10)
+                        .withListData(statService.getReceivedAlertTypesIn24LastHours()).build();
+        add(table);
         
-        
+    }
+    
+    
+    private void generateLabelForAlertsWithCriticity(final Criticity criticity) {
+    
+    
+        add(new Label(criticity.name().toLowerCase(), new LoadableDetachableModel<Long>()
+        {
+            
+            
+            @Override
+            protected Long load() {
+            
+            
+                return statService.getNumberOfAlerts(criticity);
+                
+            }
+            
+        }));
     }
 }

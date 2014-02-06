@@ -1,9 +1,11 @@
 
 package org.komea.product.service.dto;
 
+import java.io.Serializable;
 
 
-public class AlertTypeStatistic
+
+public class AlertTypeStatistic implements Serializable
 {
     
     

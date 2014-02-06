@@ -25,10 +25,10 @@ public final class QueryDefinition implements IQueryDefinition
     }
     
     
-    public QueryDefinition(final String _query, final String _statementName) {
+    public QueryDefinition(final String _esperQuery, final String _statementName) {
     
     
-        query = _query;
+        query = _esperQuery;
         statementName = _statementName;
     }
     
