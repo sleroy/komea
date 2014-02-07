@@ -24,5 +24,6 @@ public class AbstractRestClientIntegrationTestCase
     public static void setAfterClass() throws Exception {
     
         komeaServerLauncher.stopServer();
+        Thread.sleep(5000);
     }
 }

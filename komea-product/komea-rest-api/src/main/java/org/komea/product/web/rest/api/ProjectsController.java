@@ -2,12 +2,10 @@
 package org.komea.product.web.rest.api;
 
 
-
 import java.util.List;
 
-import org.komea.product.database.dao.ProjectDao;
+import org.komea.product.backend.service.IEntityService;
 import org.komea.product.database.model.Project;
-import org.komea.product.database.model.ProjectCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,20 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
-
 @Controller
 @RequestMapping(value = "/projects")
 public class ProjectsController
 {
     
-    
     private static final Logger LOGGER = LoggerFactory.getLogger(ProjectsController.class);
     
     @Autowired
-    private ProjectDao          projectDAO;
-    
-    
+    private IEntityService      entityService;
     
     /**
      * This method return the project list
@@ -40,9 +33,8 @@ public class ProjectsController
     @ResponseBody
     public List<Project> allProjects() {
     
-    
         LOGGER.debug("call rest method /projects/all/");
-        return projectDAO.selectByCriteria(new ProjectCriteria());
+        return entityService.getAllProjects();
     }
     
 }

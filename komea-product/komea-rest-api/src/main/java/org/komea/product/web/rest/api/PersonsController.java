@@ -4,9 +4,8 @@ package org.komea.product.web.rest.api;
 
 import java.util.List;
 
-import org.komea.product.backend.service.IPersonService;
+import org.komea.product.backend.service.IEntityService;
 import org.komea.product.database.model.Person;
-import org.komea.product.database.model.PersonCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +29,7 @@ public class PersonsController
     private static final Logger LOGGER = LoggerFactory.getLogger(PersonsController.class);
     
     @Autowired
-    private IPersonService      personService;
-    
+    private IEntityService      entityService;
     
     /**
      * This method return the person list
@@ -45,7 +43,7 @@ public class PersonsController
     
         LOGGER.debug("call rest method /persons/all/");
         // TODO
-        return personService.getPersonList();
+        return entityService.getPersonList();
     }
     
 }

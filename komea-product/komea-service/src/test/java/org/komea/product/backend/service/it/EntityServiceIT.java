@@ -6,8 +6,10 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.komea.product.backend.service.IPersonService;
+import org.komea.product.backend.service.IEntityService;
 import org.komea.product.database.model.Person;
+import org.komea.product.database.model.PersonGroup;
+import org.komea.product.database.model.Project;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.TestExecutionListeners;
@@ -22,19 +24,34 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 @TestExecutionListeners({
         DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class })
-public class PersonServiceTest extends AbstractSpringIntegrationTestCase
+public class EntityServiceIT extends AbstractSpringIntegrationTestCase
 {
     
     @Autowired
-    private IPersonService personService;
+    private IEntityService entityService;
     
-    //
+    @Test
+    @DatabaseSetup("database.xml")
+    public void testGetAllDepartments() {
+    
+        List<PersonGroup> departments = entityService.getAllDepartments();
+        Assert.assertEquals(1, departments.size());
+    }
     
     @Test
     @DatabaseSetup("database.xml")
     public void testGetPersonList() {
     
-        List<Person> personList = personService.getPersonList();
+        List<Person> personList = entityService.getPersonList();
         Assert.assertEquals(2, personList.size());
     }
+    
+    @Test
+    @DatabaseSetup("database.xml")
+    public void testGetProjectList() {
+    
+        List<Project> projectList = entityService.getAllProjects();
+        Assert.assertEquals(1, projectList.size());
+    }
+    
 }

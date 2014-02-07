@@ -22,7 +22,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.util.NestedServletException;
 
 public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
 {
@@ -64,7 +63,7 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.comparesEqualTo(25D)));
     }
     
-    @Test(expected = NestedServletException.class)
+    @Test
     public void testLastMeasuresWithExceptions() throws Exception {
     
         Mockito.when(measureHistoryService.getKpiDoubleValue(org.mockito.Matchers.any(KpiKey.class))).thenThrow(KPINotFoundException.class);
@@ -80,14 +79,13 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testLastMeasuresWithNoMessage() throws Exception {
     
         Mockito.when(measureHistoryService.getKpiDoubleValue(null)).thenReturn(0D);
         
         final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/last/"));
         
-        httpRequest.andExpect(MockMvcResultMatchers.status().is(415));
-        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.comparesEqualTo(0D)));
+        httpRequest.andExpect(MockMvcResultMatchers.status().is(500));
     }
 }

@@ -11,9 +11,16 @@ import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.model.Person;
+import org.komea.product.database.model.PersonCriteria;
+import org.komea.product.database.model.PersonGroup;
+import org.komea.product.database.model.Project;
+import org.komea.product.database.model.ProjectCriteria;
 import org.komea.product.service.dto.KpiKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.Lists;
 
 @Service
 public final class EntityService implements IEntityService
@@ -47,21 +54,19 @@ public final class EntityService implements IEntityService
         
     }
     
-    
     @Override
     public IEntity getEntityAssociatedToKpi(final KpiKey _kpiKey) {
-    
     
         return getEntity(_kpiKey.getEntityType(), _kpiKey.getEntityID());
     }
     
-    
     @Override
     public IEntity getEntityOrFail(final EntityType _entityType, final int _entityID) {
     
-    
         final IEntity entity = getEntity(_entityType, _entityID);
-        if (entity == null) { throw new EntityNotFoundException(_entityID, _entityType); }
+        if (entity == null) {
+            throw new EntityNotFoundException(_entityID, _entityType);
+        }
         return entity;
     }
     
@@ -127,5 +132,35 @@ public final class EntityService implements IEntityService
     public void setProjectDao(final ProjectDao _projectDao) {
     
         projectDao = _projectDao;
+    }
+    
+    @Override
+    public List<Person> getPersonList() {
+    
+        PersonCriteria request = new PersonCriteria();
+        List<Person> persons = personDAO.selectByCriteria(request);
+        return persons;
+    }
+    
+    @Override
+    public List<PersonGroup> getAllDepartments() {
+    
+        // TODO Auto-generated getAllDepartments STUB
+        ArrayList<PersonGroup> departments = Lists.newArrayList();
+        PersonGroup group = new PersonGroup();
+        group.setName("devs");
+        group.setId(1);
+        group.setIdGroupKind(2);
+        group.setDescription("developers Department");
+        departments.add(group);
+        return departments;
+    }
+    
+    @Override
+    public List<Project> getAllProjects() {
+    
+        ProjectCriteria request = new ProjectCriteria();
+        List<Project> projects = projectDao.selectByCriteria(request);
+        return projects;
     }
 }

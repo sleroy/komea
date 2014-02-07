@@ -4,7 +4,7 @@ package org.komea.product.web.rest.api;
 
 import java.util.List;
 
-import org.komea.product.backend.service.IPersonGroupService;
+import org.komea.product.backend.service.IEntityService;
 import org.komea.product.database.model.PersonGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ public class DepartmentController
     private static final Logger LOGGER = LoggerFactory.getLogger(DepartmentController.class);
     
     @Autowired
-    private IPersonGroupService groupService;
+    private IEntityService      entityService;
     
     /**
      * This method return the departments list
@@ -34,7 +34,7 @@ public class DepartmentController
     public List<PersonGroup> allTeams() {
     
         LOGGER.debug("call rest method /departments/all/");
-        return groupService.getAllDepartments();
+        return entityService.getAllDepartments();
     }
     
 }

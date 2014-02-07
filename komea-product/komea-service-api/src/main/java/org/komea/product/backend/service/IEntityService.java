@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.model.Person;
+import org.komea.product.database.model.PersonGroup;
+import org.komea.product.database.model.Project;
 import org.komea.product.service.dto.KpiKey;
 
 public interface IEntityService
@@ -22,9 +25,7 @@ public interface IEntityService
      */
     <TEntity extends IEntity> TEntity getEntity(EntityType _entityType, int _key);
     
-    
     IEntity getEntityAssociatedToKpi(KpiKey _kpiKey);
-    
     
     /**
      * Returns the entity or fail
@@ -47,4 +48,25 @@ public interface IEntityService
      * @return the entity
      */
     <TEntity extends IEntity> List<TEntity> loadEntities(EntityType _entityType, List<Integer> _keys);
+    
+    /**
+     * This method return the complete person list
+     * 
+     * @return
+     */
+    List<Person> getPersonList();
+    
+    /**
+     * This method retun the complete department list
+     * 
+     * @return the department list
+     */
+    List<PersonGroup> getAllDepartments();
+    
+    /**
+     * This method retun the complete department list
+     * 
+     * @return the department list
+     */
+    List<Project> getAllProjects();
 }
