@@ -89,4 +89,12 @@ public class PersonPage extends LayoutPage
         
         add(dataTable);
     }
+    
+    
+    @Override
+    public String getTitle() {
+    
+    
+        return "User administration";
+    }
 }

@@ -52,6 +52,14 @@ public class SettingsPage extends LayoutPage
     }
     
     
+    @Override
+    public String getTitle() {
+    
+    
+        return "Server configuration";
+    }
+    
+    
     public void setService(final ISettingService _service) {
     
     

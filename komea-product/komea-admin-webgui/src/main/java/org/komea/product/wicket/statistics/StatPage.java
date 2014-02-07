@@ -135,6 +135,14 @@ public class StatPage extends LayoutPage
     }
     
     
+    @Override
+    public String getTitle() {
+    
+    
+        return "Komea Statistics";
+    }
+    
+    
     private void generateLabelForAlertsWithCriticity(final Criticity criticity) {
     
     

@@ -24,4 +24,12 @@ public class KpiPage extends LayoutPage
         
         // add(new DataTable<T, S>("montableau", columns, dataProvider, rowsPerPage));
     }
+    
+    
+    @Override
+    public String getTitle() {
+    
+    
+        return "KPI / Metrics Administration";
+    }
 }

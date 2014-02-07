@@ -66,4 +66,12 @@ public class CronPage extends LayoutPage
                         .displayRows(40).withListData(cronService.getCronTasks()).build();
         add(dataTable);
     }
+    
+    
+    @Override
+    public String getTitle() {
+    
+    
+        return "List of cron jobs inside Komea";
+    }
 }

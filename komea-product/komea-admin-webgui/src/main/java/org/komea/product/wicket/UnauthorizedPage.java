@@ -23,4 +23,12 @@ public class UnauthorizedPage extends LayoutPage
         
         
     }
+    
+    
+    @Override
+    public String getTitle() {
+    
+    
+        return "Access to this page is not authorized";
+    }
 }

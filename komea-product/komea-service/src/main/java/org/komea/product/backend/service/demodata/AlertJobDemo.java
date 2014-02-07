@@ -3,6 +3,7 @@ package org.komea.product.backend.service.demodata;
 
 
 
+import java.util.Date;
 import java.util.Random;
 
 import org.komea.product.backend.service.esper.IAlertPushService;
@@ -31,11 +32,13 @@ public final class AlertJobDemo implements Job
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
     
     
-        final Alert alert =
-                AlertBuilder.newAlert().category("SCM").criticity(Criticity.BLOCKING)
-                        .fullMessage("Demo Alert").message("Demo alert").project("SYSTEM")
-                        .provided("DEMO" + new Random().nextInt(12)).type("DemoAlert").build();
-        ((IAlertPushService) _context.getMergedJobDataMap().get("esper")).sendEvent(alert);
+        if (new Date().getSeconds() % 2 == 0) {
+            final Alert alert =
+                    AlertBuilder.newAlert().category("SCM").criticity(Criticity.BLOCKING)
+                            .fullMessage("Demo Alert").message("Demo alert").project("SYSTEM")
+                            .provided("DEMO" + new Random().nextInt(12)).type("DemoAlert").build();
+            ((IAlertPushService) _context.getMergedJobDataMap().get("esper")).sendEvent(alert);
+        }
         
         
     }

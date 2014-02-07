@@ -255,7 +255,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
         final JobDataMap properties = new JobDataMap();
         properties.put("esper", alertPushService);
-        registry.registerCronTask("ALERT_DEMO_STAT", "0/1 * * * * ?", AlertJobDemo.class,
+        registry.registerCronTask("ALERT_DEMO_STAT", "0/10 * * * * ?", AlertJobDemo.class,
                 properties);
         
         
@@ -346,8 +346,8 @@ public class AlertStatisticsService implements IAlertStatisticsService
         kpi.setMaxValue(Double.MAX_VALUE);
         kpi.setName("Number of alerts of criticity " + _criticity + " received under 24 hours.");
         kpi.setEntityID(systemProject.getSystemProject().getId());
-        kpi.setCronExpression("0 0 0 * * ?");
-        kpi.setEvictionRate(30);
+        kpi.setCronExpression("0 * * * * ?");
+        kpi.setEvictionRate(1);
         kpi.setEvictionType(EvictionType.DAYS);
         return kpi;
     }
@@ -366,8 +366,8 @@ public class AlertStatisticsService implements IAlertStatisticsService
         kpi.setMaxValue(Double.MAX_VALUE);
         kpi.setName("Number of alerts received under 24 hours.");
         kpi.setEntityID(systemProject.getSystemProject().getId());
-        kpi.setCronExpression("0 0 0 * * ?");
-        kpi.setEvictionRate(30);
+        kpi.setCronExpression("0 * * * * ?");
+        kpi.setEvictionRate(1);
         kpi.setEvictionType(EvictionType.DAYS);
         return kpi;
     }
