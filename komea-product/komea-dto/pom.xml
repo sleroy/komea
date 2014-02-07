@@ -1,48 +1,49 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.komea.product</groupId>
-		<artifactId>komea-product</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>org.komea.product</groupId>
+        <artifactId>komea-product</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>komea-dto</artifactId>
-	<name>Komea : DTO</name>
-	<description>Komea : DTO</description>
+    <artifactId>komea-dto</artifactId>
+    <name>Komea : DTO</name>
+    <description>Komea : DTO</description>
 
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**/enums/*.java</include>
-					<include>**/model/*.java</include>
-					<include>**/dto/*.java</include>
-				</includes>
-			</resource>
-		</resources>
-	</build>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/enums/*.java</include>
+                    <include>**/model/*.java</include>
+                    <include>**/dto/*.java</include>
+                    <include>**/api/*.java</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 
-	<dependencies>
+    <dependencies>
 
-		<!-- validator -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>${hibernatevalid.version}</version>
-			<scope>compile</scope>
-		</dependency>
+        <!-- validator -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernatevalid.version}</version>
+            <scope>compile</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>org.ocpsoft.prettytime</groupId>
-			<artifactId>prettytime</artifactId>
-			<type>jar</type>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.ocpsoft.prettytime</groupId>
+            <artifactId>prettytime</artifactId>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
 
 </project>

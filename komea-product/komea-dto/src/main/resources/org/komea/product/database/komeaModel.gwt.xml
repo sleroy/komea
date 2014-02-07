@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to='komeaModel'>
     <inherits name='com.google.gwt.user.User' />
+    <inherits name='com.google.gwt.resources.Resources' />
     <source path='enums' />
     <source path='model' />
     <source path='dto' />
+    <source path='api' />
 </module>
