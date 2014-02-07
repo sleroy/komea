@@ -6,6 +6,7 @@ import java.net.ConnectException;
 import java.util.List;
 
 import org.komea.product.database.model.Project;
+import org.komea.product.service.dto.errors.InternalServerException;
 
 /**
  * Komea rest client api to manage projects
@@ -23,6 +24,8 @@ public interface IProjectsAPI
      * @return the complete project list
      * @throws ConnectException
      *             launch if it can't connect to the server
+     * @throws InternalServerException
+     *             launch if exception happened in server side
      */
-    List<Project> allProjects() throws ConnectException;
+    List<Project> allProjects() throws ConnectException, InternalServerException;
 }

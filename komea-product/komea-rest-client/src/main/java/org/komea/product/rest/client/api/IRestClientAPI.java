@@ -7,6 +7,8 @@ import java.net.URISyntaxException;
 
 import javax.ws.rs.core.GenericType;
 
+import org.komea.product.service.dto.errors.InternalServerException;
+
 /**
  * Komea.
  * interface to connect server rest api ant test the connection
@@ -28,8 +30,10 @@ public interface IRestClientAPI
      * @return the http response content
      * @throws ConnectException
      *             launch if it can't connect to the server
+     * @throws InternalServerException
+     *             launch if exception happened in server side
      */
-    <R> R get(String _url, Class<R> _returnType) throws ConnectException;
+    <R> R get(String _url, Class<R> _returnType) throws ConnectException, InternalServerException;
     
     /**
      * This method send a a http GET request to the server
@@ -44,8 +48,10 @@ public interface IRestClientAPI
      * @return the http response content
      * @throws ConnectException
      *             launch if it can't connect to the server
+     * @throws InternalServerException
+     *             launch if exception happened in server side
      */
-    <R> R get(String _url, GenericType<R> _returnType, String... _params) throws ConnectException;
+    <R> R get(String _url, GenericType<R> _returnType, String... _params) throws ConnectException, InternalServerException;
     
     /**
      * This method send a a http POST request to the server
@@ -57,8 +63,10 @@ public interface IRestClientAPI
      * @throws ConnectException
      *             ConnectException
      *             launch if it can't connect to the server
+     * @throws InternalServerException
+     *             launch if exception happened in server side
      */
-    <T> void post(String _url, T _objectToSend) throws ConnectException;
+    <T> void post(String _url, T _objectToSend) throws ConnectException, InternalServerException;
     
     /**
      * This method send a a http POST request to the server
@@ -72,8 +80,10 @@ public interface IRestClientAPI
      * @return the http response content
      * @throws ConnectException
      *             launch if it can't connect to the server
+     * @throws InternalServerException
+     *             launch if exception happened in server side
      */
-    <T, R> R post(String _url, T _objectToSend, Class<R> _returnType) throws ConnectException;
+    <T, R> R post(String _url, T _objectToSend, Class<R> _returnType) throws InternalServerException, ConnectException;
     
     /**
      * This method send a a http POST request to the server
@@ -90,6 +100,8 @@ public interface IRestClientAPI
      * @return the http response content
      * @throws ConnectException
      *             launch if it can't connect to the server
+     * @throws InternalServerException
+     *             launch if exception happened in server side
      */
     <T, R> R post(String _url, T _objectToSend, GenericType<R> _returnType) throws ConnectException;
     

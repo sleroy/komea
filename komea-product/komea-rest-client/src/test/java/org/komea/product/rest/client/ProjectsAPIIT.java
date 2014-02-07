@@ -2,8 +2,6 @@
 package org.komea.product.rest.client;
 
 
-import java.net.ConnectException;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import org.junit.Assert;
@@ -22,7 +20,7 @@ public class ProjectsAPIIT extends AbstractRestClientIntegrationTestCase
     //
     
     @Test
-    public void testAllProjects() throws ConnectException, URISyntaxException {
+    public void testAllProjects() throws Exception {
     
         IProjectsAPI projectsAPI = RestClientFactory.INSTANCE.createProjectsAPI("http://localhost:8585/komea");
         Assert.assertNotNull(projectsAPI);

@@ -1,5 +1,5 @@
 
-package org.komea.product.database.dto;
+package org.komea.product.service.dto;
 
 
 import org.codehaus.jackson.annotate.JsonIgnore;

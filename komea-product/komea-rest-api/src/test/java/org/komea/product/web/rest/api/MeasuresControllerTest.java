@@ -7,8 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
 import org.komea.product.backend.service.kpi.IKPIService;
-import org.komea.product.database.dto.KpiKey;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.service.dto.KpiKey;
 import org.komea.product.test.spring.AbstractSpringWebIntegrationTestCase;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
-public class MeasuresControllerIT extends AbstractSpringWebIntegrationTestCase
+public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
 {
     
     @Autowired

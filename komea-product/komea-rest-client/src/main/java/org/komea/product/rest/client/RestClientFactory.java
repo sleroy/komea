@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 
 import org.komea.product.rest.client.api.IDepartmentsAPI;
 import org.komea.product.rest.client.api.IEventsAPI;
+import org.komea.product.rest.client.api.IMeasuresAPI;
 import org.komea.product.rest.client.api.IProjectsAPI;
 import org.komea.product.rest.client.api.IProvidersAPI;
 
@@ -70,9 +71,9 @@ public enum RestClientFactory {
      */
     public IProjectsAPI createProjectsAPI(final String _serverBaseURL) throws ConnectException, URISyntaxException {
     
-        ProjectsAPI eventsAPI = new ProjectsAPI();
-        eventsAPI.setServerBaseURL(_serverBaseURL);
-        return eventsAPI;
+        ProjectsAPI projectAPI = new ProjectsAPI();
+        projectAPI.setServerBaseURL(_serverBaseURL);
+        return projectAPI;
     }
     
     /**
@@ -88,8 +89,15 @@ public enum RestClientFactory {
      */
     public IDepartmentsAPI createDeparmtentsAPI(final String _serverBaseURL) throws ConnectException, URISyntaxException {
     
-        DepartmentsAPI eventsAPI = new DepartmentsAPI();
-        eventsAPI.setServerBaseURL(_serverBaseURL);
-        return eventsAPI;
+        DepartmentsAPI departmentAPI = new DepartmentsAPI();
+        departmentAPI.setServerBaseURL(_serverBaseURL);
+        return departmentAPI;
+    }
+    
+    public IMeasuresAPI createMeasuresAPI(final String _serverBaseURL) throws ConnectException, URISyntaxException {
+    
+        MeasuresAPI measuresAPI = new MeasuresAPI();
+        measuresAPI.setServerBaseURL(_serverBaseURL);
+        return measuresAPI;
     }
 }

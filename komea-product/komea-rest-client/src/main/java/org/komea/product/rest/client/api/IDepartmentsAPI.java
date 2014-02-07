@@ -6,6 +6,7 @@ import java.net.ConnectException;
 import java.util.List;
 
 import org.komea.product.database.model.PersonGroup;
+import org.komea.product.service.dto.errors.InternalServerException;
 
 /**
  * Komea rest client api to manage projects
@@ -23,6 +24,8 @@ public interface IDepartmentsAPI
      * @return the complete departments list
      * @throws ConnectException
      *             launch if it can't connect to the server
+     * @throws InternalServerException
+     *             launch if exception happened in server side
      */
-    List<PersonGroup> allDepartments() throws ConnectException;
+    List<PersonGroup> allDepartments() throws ConnectException, InternalServerException;
 }

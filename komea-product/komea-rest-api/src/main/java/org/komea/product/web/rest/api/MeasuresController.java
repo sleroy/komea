@@ -9,11 +9,11 @@ import java.util.Map;
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
 import org.komea.product.backend.service.IEntityService;
 import org.komea.product.backend.service.kpi.IKPIService;
-import org.komea.product.database.dto.KpiKey;
 import org.komea.product.database.dto.SearchHistoricalMeasuresDto;
 import org.komea.product.database.dto.SearchLastMeasuresDto;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
+import org.komea.product.service.dto.KpiKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,11 +78,23 @@ public class MeasuresController
      * @return the last measure value
      * @throws KPINotFoundException
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/last")
+    @RequestMapping(method = RequestMethod.POST, value = "/last", produces = "application/json")
     @ResponseBody
-    public double lastMeasuresForEntity(@RequestBody final KpiKey _kpiKey) throws KPINotFoundException {
+    public Double lastMeasuresForEntity(@RequestBody final KpiKey _kpiKey) throws KPINotFoundException {
     
-        return measureHistoryService.getKpiDoubleValue(_kpiKey);
+        LOGGER.info("request /measures/last");
+        LOGGER.info("kpi key =  {}", _kpiKey.toString());
+        double value = measureHistoryService.getKpiDoubleValue(_kpiKey);
+        LOGGER.info("value = {}", value);
+        return value;
     }
+    
+    // @ExceptionHandler({
+    // KPINotFoundException.class, Exception.class })
+    // @ResponseBody
+    // public String handleException() {
+    //
+    // return "une exception";
+    // }
     
 }

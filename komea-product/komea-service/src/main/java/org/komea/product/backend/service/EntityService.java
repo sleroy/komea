@@ -10,8 +10,8 @@ import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dao.ProjectDao;
-import org.komea.product.database.dto.KpiKey;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.service.dto.KpiKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
