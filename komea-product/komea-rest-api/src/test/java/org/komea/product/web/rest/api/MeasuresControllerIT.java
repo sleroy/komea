@@ -80,7 +80,7 @@ public class MeasuresControllerIT extends AbstractSpringWebIntegrationTestCase
         
     }
     
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testLastMeasuresWithNoMessage() throws Exception {
     
         Mockito.when(measureHistoryService.getKpiDoubleValue(null)).thenReturn(0D);
