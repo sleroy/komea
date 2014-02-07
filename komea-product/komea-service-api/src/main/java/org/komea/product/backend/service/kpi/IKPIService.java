@@ -8,6 +8,7 @@ import java.util.List;
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
 import org.komea.product.backend.service.business.IEPMetric;
 import org.komea.product.database.api.IEntity;
+import org.komea.product.database.dto.KpiKey;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;

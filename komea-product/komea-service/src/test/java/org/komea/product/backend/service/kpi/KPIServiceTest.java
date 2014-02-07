@@ -15,6 +15,7 @@ import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
+import org.komea.product.database.dto.KpiKey;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;

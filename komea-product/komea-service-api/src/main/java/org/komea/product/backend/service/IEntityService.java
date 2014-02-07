@@ -4,8 +4,8 @@ package org.komea.product.backend.service;
 
 import java.util.List;
 
-import org.komea.product.backend.service.kpi.KpiKey;
 import org.komea.product.database.api.IEntity;
+import org.komea.product.database.dto.KpiKey;
 import org.komea.product.database.enums.EntityType;
 
 public interface IEntityService

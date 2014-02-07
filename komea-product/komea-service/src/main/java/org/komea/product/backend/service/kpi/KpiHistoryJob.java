@@ -4,6 +4,7 @@ package org.komea.product.backend.service.kpi;
 
 
 import org.komea.product.database.api.IEntity;
+import org.komea.product.database.dto.KpiKey;
 import org.komea.product.database.model.Kpi;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
