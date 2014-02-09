@@ -11,163 +11,26 @@
 <link rel="stylesheet" type="text/css" href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
 </head>
 <body>
-	<script type="text/css">
-.panel-default {
-opacity: 0.9;
-margin-top:30px;
-}
-.form-group.last { margin-bottom:0px; }
-</script>
-	<!--  BALISE HEADER -->
-	<header class="tocea-header">
-		<nav class="navbar navbar-inverse" role="navigation">
-			<div class="navbar-inner">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-						<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="/"><img src="/static/pics/logo.png" alt="logo" width="32" height="32" /> Komea Administration</a>
-				</div>
-				<div class="collapse navbar-collapse">
-					<ul class="nav navbar-nav">
-						<li id="home-nav"><a href="/p/"><span class="glyphicon glyphicon-home"></span>Home</a></li>
-						<li id="metrics-nav" sec:authorize="hasRole('ROLE_USER')"><a href="/p/infos"><span class="glyphicon glyphicon-signal"></span>Informations</a></li>
-					</ul>
-					<ul class="nav navbar-nav" sec:authorize="hasRole('ROLE_USER')">
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-list-alt"></i>Manage Data <b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li><a href="/p/projects"><i class="glyphicon glyphicon-book"></i>Manage Projects</a></li>
-								<li><a href="/p/teams"><i class="glyphicon glyphicon-cog"></i>Manage Teams</a></li>
-								<li><a href="/p/departments"><i class="glyphicon glyphicon-cog"></i>Manage Departments</a></li>
-								<li><a href="/p/customers"><i class="glyphicon glyphicon-cog"></i>Manage Customers</a></li>
-								<li><a href="/p/users"><i class="glyphicon glyphicon-user"></i>Manage Users</a></li>
-								<li class="divider"></li>
-								<li><a href="/p/alerts"><i class="glyphicon glyphicon-check"></i>Manage Alerts</a></li>
-								<li><a href="/p/kpis"><i class="glyphicon glyphicon-signal"></i>Manage KPI</a></li>
-							</ul></li>
-					</ul>
-					<ul class="nav navbar-nav navbar-right" sec:authorize="not hasRole('ROLE_USER')">
-						<li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
-							<div class="dropdown-menu" style="padding: 10px;">
-								<form method="POST" action="/p/j_spring_security_check">
-									Login<br></br> <input style="margin-bottom: 20px;" type="text" id="username" name="j_username"></input><br></br> Password<br></br> <input style="margin-bottom: 20px;" type="password" id="password" name="j_password"></input><br></br> <input style="float: left; margin-right: 10px;" type="checkbox" name="remember-me" id="remember-me" value="1"></input> <label for="user_remember_me">Remember me</label> <input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Sign In" style=""></input>
-								</form>
-							</div></li>
-					</ul>
-					<ul class="nav navbar-nav navbar-right" sec:authorize="hasRole('ROLE_USER')">
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>Welcome, User <b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li><a href="https://github.org/sleroy/komea"><i class="glyphicon glyphicon-envelope"></i>Contact Support</a></li>
-								<li class="divider"></li>
-								<li><a href="/p/j_spring_security_logout"><i class="glyphicon glyphicon-off"></i> Logout</a></li>
-							</ul></li>
-					</ul>
-					<ul class="nav navbar-nav" sec:authorize="hasRole('ROLE_ADMIN')">
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-wrench"></i>Administration <b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li><a href="/p/settings"><i class="glyphicon glyphicon-cog"></i>Settings</a></li>
-								<li><a href="/p/ldap"><i class="glyphicon glyphicon-user"></i>Configure LDAP</a></li>
-								<li><a href="/p/apialerts"><i class="glyphicon glyphicon-warning-sign"></i>API Alerts</a></li>
-								<li><a href="/p/plugins"><i class="glyphicon glyphicon-wrench"></i>Configure Plugins</a></li>
-								<li class="divider"></li>
-								<li><a href="/p/viewlog"><i class="glyphicon "></i>View log</a></li>
-							</ul></li>
-					</ul>
-				</div>
+	<div class="container">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<span class="glyphicon cicon-user"></span> Manage Population of developers inside Komea
 			</div>
-		</nav>
-	</header>
-	<wicket:extend>
-		<div class="container">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<span class="glyphicon glyphicon-wrench"></span> Manage Population of developers inside Komea
-				</div>
-				<div class="panel-body">
-					<div class="container">
-						<div class="container">
-							<table class="table table-striped table-bordered table-hover table-condensed custab" wicket:id="table">[table]
+			<div class="panel-body">
+				<div class="container">
+					<!--  begin here -->
+					<wicket:extend>						
+							<a href="/p/adduser" class="btn btn-lg btn-success"><span class="glyphicon cicon-user"></span> Add new user</a>
+						<p></p>
+						<div class="row">
+							<table wicket:id="table">
 							</table>
 						</div>
-						<!-- 						wicket:id="edit" -->
-						<form class="form-horizontal">
-							<fieldset>
-								<!-- Form Name -->
-								<legend>Edit/Create a new developer</legend>
-								<!-- Text input-->
-								<div class="control-group">
-									<label class="control-label" for="login">Login</label>
-									<div class="controls">
-										<input id="login" name="login" type="text" placeholder="login" class="input-xlarge" required="">
-										<p class="help-block">Please write your login</p>
-									</div>
-								</div>
-								<!-- Text input-->
-								<div class="control-group">
-									<label class="control-label" for="firstName">First name</label>
-									<div class="controls">
-										<input id="firstName" name="firstName" type="text" placeholder="firstName" class="input-xlarge" required="">
-										<p class="help-block">Please write your first name</p>
-									</div>
-								</div>
-								<!-- Text input-->
-								<div class="control-group">
-									<label class="control-label" for="surename">Surename</label>
-									<div class="controls">
-										<input id="surename" name="surename" type="text" placeholder="surename" class="input-xlarge" required="">
-										<p class="help-block">Please write your surename</p>
-									</div>
-								</div>
-								<!-- Text input-->
-								<div class="control-group">
-									<label class="control-label" for="email">Email</label>
-									<div class="controls">
-										<input id="email" name="email" type="text" placeholder="email" class="input-xlarge" required="">
-										<p class="help-block">Please write your email</p>
-									</div>
-								</div>
-								<!-- Button Drop Down -->
-								<div class="control-group">
-									<label class="control-label" for="buttondropdown">Choose a developer group</label>
-									<div class="controls">
-										<div class="input-append">
-											<input id="buttondropdown" name="buttondropdown" class="input-xlarge" placeholder="team or department name" type="text">
-											<div class="btn-group">
-												<button class="btn dropdown-toggle" data-toggle="dropdown">
-													Attach to a group <span class="caret"></span>
-												</button>
-												<ul class="dropdown-menu">
-													<li><a href="#">Attach to a team</a></li>
-													<li><a href="#">Attach to a group</a></li>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</div>
-								<!-- Select Basic -->
-								<div class="control-group">
-									<label class="control-label" for="userRole">Developer role</label>
-									<div class="controls">
-										<select id="userRole" name="userRole" class="input-xlarge">
-											<option>Developer</option>
-											<option>Project Manager</option>
-										</select>
-									</div>
-								</div>
-								<!-- Button -->
-								<div class="control-group">
-									<label class="control-label" for="addedit">Add/Edit Developer informations</label>
-									<div class="controls">
-										<button id="addedit" name="addedit" class="btn btn-primary">Add/edit</button>
-									</div>
-								</div>
-							</fieldset>
-						</form>
-					</div>
+					</wicket:extend>
 				</div>
 			</div>
 		</div>
-	</wicket:extend>
+	</div>
 	<footer class="tocea-footer">
 		<p>&copy; Komea.org</p>
 		<script src="../../../../../../../main/webapp/static/js/ui/jquery.js"></script>

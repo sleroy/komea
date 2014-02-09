@@ -11,43 +11,43 @@
 <link rel="stylesheet" type="text/css" href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
 </head>
 <body>
-	<wicket:extend>
-		<div class="container  container_father">
-			<div class="page-header">
-  <h1>Komea Statistics <small>Statistics from data received per Komea.</small></h1>
-</div>
+	<div class="container  container_father">
+		<div class="page-header">
+			<h1>
+				Komea Statistics <small>Statistics from data received per Komea.</small>
+			</h1>
+		</div>
+		<wicket:extend>
 			<div class="row panel panel-default">
 				<div class="col-sm-3">
-					<table class="table table-stripped table-hover">
+					<table class="table">
 						<tbody>
-							<tr  class="info" >
+							<tr class="info">
 								<th>Number of alerts</th>
-								<td > <span class="badge" wicket:id="alert_number"></span></td>
+								<td><span class="badge" wicket:id="alert_number"></span></td>
 							</tr>
 							<tr class="warning">
 								<th>Blocking alerts</th>
-								<td > <span class="badge" wicket:id="blocking"></span></td>
+								<td><span class="badge" wicket:id="blocking"></span></td>
 							</tr>
 							<tr>
 								<th>Critical alerts</th>
-								<td> <span class="badge" wicket:id="critical"></span></td>
+								<td><span class="badge" wicket:id="critical"></span></td>
 							</tr>
 							<tr>
 								<th>Major alerts</th>
-								<td> <span class="badge"  wicket:id="major"></span></td>
+								<td><span class="badge" wicket:id="major"></span></td>
 							</tr>
 							<tr>
 								<th>Minor alerts</th>
-								<td> <span class="badge" wicket:id="minor"></span></td>
+								<td><span class="badge" wicket:id="minor"></span></td>
 							</tr>
 							<tr>
 								<th>Info alerts</th>
-								<td> <span class="badge" wicket:id="info"></span></td>
+								<td><span class="badge" wicket:id="info"></span></td>
 							</tr>
-							
 						</tbody>
 					</table>
-					
 				</div>
 				<div class="col-sm-9">
 					<div wicket:id="chart"></div>
@@ -55,11 +55,11 @@
 			</div>
 			<div class="row">
 				<h3>Type of alerts received.</h3>
-				<table class="table table-striped table-bordered table-hover table-condensed custab" wicket:id="table">[table]
+				<table wicket:id="table">
 				</table>
 			</div>
-		</div>
-	</wicket:extend>
+		</wicket:extend>
+	</div>
 	<footer class="tocea-footer">
 		<p>&copy; Komea.org</p>
 		<script src="../../../../../../../main/webapp/static/js/ui/jquery.js"></script>

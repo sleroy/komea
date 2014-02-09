@@ -17,7 +17,7 @@ import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.AlertTypeStatistic;
 import org.komea.product.wicket.LayoutPage;
-import org.komea.product.wicket.widget.DataTableBuilder;
+import org.komea.product.wicket.widget.builders.DataTableBuilder;
 
 import com.googlecode.wickedcharts.highcharts.options.Axis;
 import com.googlecode.wickedcharts.highcharts.options.AxisType;

@@ -1,12 +1,14 @@
 
-package org.komea.product.wicket.widget;
+package org.komea.product.wicket.widget.builders;
 
 
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -15,6 +17,9 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColu
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.komea.product.wicket.model.ListDataModel;
+import org.komea.product.wicket.utils.TableActionPanelColumn;
+import org.komea.product.wicket.widget.api.IDeleteAction;
+import org.komea.product.wicket.widget.api.IEditAction;
 
 
 
@@ -169,6 +174,9 @@ public class DataTableBuilder<T, S>
             dataTable =
                     new AjaxFallbackDefaultDataTable<T, S>(id, columns, dataProvider, rowsPerPage);
         }
+        
+        dataTable.add(new AttributeModifier("class",
+                "table table-striped table-bordered table-hover table-condensed tablesorter"));
         if (headers) {
             dataTable.add(new HeadersToolbar<S>(dataTable, null));
         }
@@ -203,6 +211,21 @@ public class DataTableBuilder<T, S>
     
     
         dataProvider = _dataProvider;
+        return this;
+    }
+    
+    
+    public DataTableBuilder withEditDeleteColumn(
+            final IDeleteAction<T> _deleteAction,
+            final IEditAction<T> _editAction) {
+    
+    
+        ;
+        final AbstractColumn<T, S> actionPanel =
+                new TableActionPanelColumn<T, S>(Model.of("Actions"), _editAction, _deleteAction);
+        
+        
+        addColumn(actionPanel);
         return this;
     }
     

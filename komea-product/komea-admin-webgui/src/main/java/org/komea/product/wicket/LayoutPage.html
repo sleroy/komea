@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:wicket="http://wicket.apache.org" xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns:wicket="http://wicket.apache.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 <meta charset="utf-8"></meta>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
@@ -9,7 +9,13 @@
 <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
 <link rel="stylesheet" href="static/css/style.css" type="text/css"></link>
 <link rel="stylesheet" href="static/images/sprites/sprites.css" type="text/css"></link>
+<!-- //<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/cupertino/jquery-ui.css"> -->
 <link rel="stylesheet" type="text/css" href="static/js/ui/themes/base/jquery-ui.css" />
+<!-- Tablesorter: required for bootstrap -->
+<!-- jQuery -->
+<link rel="stylesheet" href="static/tablesorter/css/theme.bootstrap.css">
+<!-- Tablesorter: optional -->
+<link rel="stylesheet" href="static/tablesorter/addons/pager/jquery.tablesorter.pager.css">
 </head>
 <body>
 	<!--  BALISE HEADER -->
@@ -39,7 +45,6 @@
 								<li><a href="j_spring_security_logout"><i class="glyphicon glyphicon-off"></i> Logout</a></li>
 							</ul></li>
 					</ul>
-					
 				</div>
 			</div>
 		</nav>
@@ -122,9 +127,87 @@
 	.
 	<footer class="tocea-footer">
 		<p>&copy; Komea.org</p>
-		<script src="//code.jquery.com/jquery-1.9.1.js"></script>
-		<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+		<script src="static/js/jquery.js"></script>
+		<script src="static/js/ui/jquery.js"></script>
 		<script src="static/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+		<script src="static/tablesorter/js/jquery.tablesorter.js"></script>
+		<script src="static/tablesorter/js/jquery.tablesorter.widgets.js"></script>
+		<script src="static/tablesorter/addons/pager/jquery.tablesorter.pager.js"></script>
+		<script id="js">
+			$(function() {
+
+				$
+						.extend(
+								$.tablesorter.themes.bootstrap,
+								{
+									// these classes are added to the table. To see other table classes available,
+									// look here: http://twitter.github.com/bootstrap/base-css.html#tables
+									table : 'table table-bordered table-condensed',
+									caption : 'caption',
+									header : 'bootstrap-header', // give the header a gradient background
+									footerRow : '',
+									footerCells : '',
+									icons : '', // add "icon-white" to make them white; this icon class is added to the <i> in the header
+									sortNone : 'bootstrap-icon-unsorted',
+									sortAsc : 'icon-chevron-up glyphicon glyphicon-chevron-up', // includes classes for Bootstrap v2 & v3
+									sortDesc : 'icon-chevron-down glyphicon glyphicon-chevron-down', // includes classes for Bootstrap v2 & v3
+									active : '', // applied when column is sorted
+									hover : '', // use custom css here - bootstrap class may not override it
+									filterRow : '', // filter row class
+									even : '', // odd row zebra striping
+									odd : '' // even row zebra striping
+								});
+
+				// call the tablesorter plugin and apply the uitheme widget
+				$("table")
+						.tablesorter({
+							// this will apply the bootstrap theme if "uitheme" widget is included
+							// the widgetOptions.uitheme is no longer required to be set
+							theme : "bootstrap",
+
+							widthFixed : true,
+
+							headerTemplate : '{content} {icon}', // new in v2.7. Needed to add the bootstrap icon!
+
+							// widget code contained in the jquery.tablesorter.widgets.js file
+							// use the zebra stripe widget if you plan on hiding any rows (filter widget)
+							widgets : [ "uitheme", "filter", "zebra" ],
+
+							widgetOptions : {
+								// using the default zebra striping class name, so it actually isn't included in the theme variable above
+								// this is ONLY needed for bootstrap theming if you are using the filter widget, because rows are hidden
+								zebra : [ "even", "odd" ],
+
+								// reset filters button
+								filter_reset : ".reset"
+
+							// set the uitheme widget to use the bootstrap theme class names
+							// this is no longer required, if theme is set
+							// ,uitheme : "bootstrap"
+
+							}
+						})
+						.tablesorterPager(
+								{
+
+									// target the pager markup - see the HTML block below
+									container : $(".ts-pager"),
+
+									// target the pager page select dropdown - choose a page
+									cssGoto : ".pagenum",
+
+									// remove rows from the table to speed up the sort of large tables.
+									// setting this to false, only hides the non-visible rows; needed if you plan to add/remove rows with the pager enabled.
+									removeRows : false,
+
+									// output string - default is '{page}/{totalPages}';
+									// possible variables: {page}, {totalPages}, {filteredPages}, {startRow}, {endRow}, {filteredRows} and {totalRows}
+									output : '{startRow} - {endRow} / {filteredRows} ({totalRows})'
+
+								});
+
+			});
+		</script>
 	</footer>
 </body>
 </html>

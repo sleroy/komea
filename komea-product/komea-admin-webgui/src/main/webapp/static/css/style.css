@@ -3,8 +3,7 @@
 }
 
 .tocea-footer {
-	padding: 5px;
-	float: right;
+	padding: 5px; float: right;
 }
 
 .tocea-content {
@@ -15,30 +14,42 @@
 	margin-right: 5px;
 }
 
-body{}
-#accordion .glyphicon { margin-right:10px; }
-.panel-collapse>.list-group .list-group-item:first-child {border-top-right-radius: 0;border-top-left-radius: 0;}
-.panel-collapse>.list-group .list-group-item {border-width: 1px 0;}
-.panel-collapse>.list-group {margin-bottom: 0;}
-.panel-collapse .list-group-item {border-radius:0;}
+body {
+	
+}
+
+#accordion .glyphicon {
+	margin-right: 10px;
+}
+
+.panel-collapse>.list-group .list-group-item:first-child {
+	border-top-right-radius: 0; border-top-left-radius: 0;
+}
+
+.panel-collapse>.list-group .list-group-item {
+	border-width: 1px 0;
+}
+
+.panel-collapse>.list-group {
+	margin-bottom: 0;
+}
+
+.panel-collapse .list-group-item {
+	border-radius: 0;
+}
 
 /* Custom container */
 .container-full {
-  margin-left : 5px;
-  width: 100%;
-  background-color: #FFFFFF;
+	margin-left: 5px; margin-right: 5px; width: auto;
+	background-color: #FFFFFF;
 }
 
-
-
 .error-template {
-	padding: 40px 15px;
-	text-align: center;
+	padding: 40px 15px; text-align: center;
 }
 
 .error-actions {
-	margin-top: 15px;
-	margin-bottom: 15px;
+	margin-top: 15px; margin-bottom: 15px;
 }
 
 .error-actions .btn {
@@ -46,64 +57,14 @@ body{}
 }
 
 #gni {
-	width: 120px;
-	margin-bottom: 10px;
-}
-
-.hero-widget {
-	text-align: center;
-	padding-top: 20px;
-	padding-bottom: 20px;
-}
-
-.hero-widget .icon {
-	display: block;
-	font-size: 96px;
-	line-height: 96px;
-	margin-bottom: 10px;
-	text-align: center;
-}
-
-.hero-widget var {
-	display: block;
-	height: 64px;
-	font-size: 64px;
-	line-height: 64px;
-	font-style: normal;
-}
-
-.hero-widget label {
-	font-size: 17px;
-}
-
-.hero-widget .options {
-	margin-top: 10px;
+	width: 120px; margin-bottom: 10px;
 }
 
 .custab {
-	border: 1px solid #ccc;
-	padding: 5px;
-	margin: 5% 0;
-	box-shadow: 3px 3px 2px #ccc;
-	transition: 0.5s;
+	border: 1px solid #ccc; padding: 5px; margin: 5% 0;
+	box-shadow: 3px 3px 2px #ccc; transition: 0.5s;
 }
 
 .custab:hover {
-	box-shadow: 3px 3px 0px transparent;
-	transition: 0.5s;
+	box-shadow: 3px 3px 0px transparent; transition: 0.5s;
 }
-
-/* 
-table tr th.wicket_orderDown { 
-	background-image: url(images/arrow_down.png);
-}
-
-
-table tr th.wicket_orderUp { 
-	background-image: url(images/arrow_up.png);
-}
-
-
-table tr th.wicket_orderNone { 
-	background-image: url(images/arrow_off.png);
-} */

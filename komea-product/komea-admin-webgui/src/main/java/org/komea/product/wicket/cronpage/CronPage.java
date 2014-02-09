@@ -15,8 +15,10 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.cron.CronDetails;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.wicket.LayoutPage;
-import org.komea.product.wicket.widget.DataTableBuilder;
+import org.komea.product.wicket.widget.bootstrap.SexyLabel;
+import org.komea.product.wicket.widget.builders.DataTableBuilder;
 import org.ocpsoft.prettytime.PrettyTime;
+import org.quartz.Trigger.TriggerState;
 
 
 
@@ -40,7 +42,7 @@ public class CronPage extends LayoutPage
         super(_parameters);
         
         
-        final AbstractColumn<CronDetails, String> abstractColumn =
+        final AbstractColumn<CronDetails, String> nextExecutionTime =
                 new AbstractColumn<CronDetails, String>(Model.of("Next execution time"))
                 {
                     
@@ -59,11 +61,49 @@ public class CronPage extends LayoutPage
                     
                     
                 };
+        final AbstractColumn<CronDetails, String> statusCol =
+                new AbstractColumn<CronDetails, String>(Model.of("Cron status"))
+                {
+                    
+                    
+                    @Override
+                    public void populateItem(
+                            final Item<ICellPopulator<CronDetails>> _cellItem,
+                            final String _componentId,
+                            final IModel<CronDetails> _rowModel) {
+                    
+                    
+                        final TriggerState triggerState = _rowModel.getObject().getTriggerState();
+                        switch (triggerState) {
+                            case BLOCKED:
+                                _cellItem.add(SexyLabel.newDangerLabel(_componentId, "Blocked"));
+                                break;
+                            
+                            case ERROR:
+                                _cellItem.add(SexyLabel.newDangerLabel(_componentId, "Danger"));
+                                break;
+                            case PAUSED:
+                                _cellItem.add(SexyLabel.newWarningLabel(_componentId, "Warning"));
+                                break;
+                            case NORMAL:
+                            case COMPLETE:
+                                _cellItem.add(SexyLabel.newSuccessLabel(_componentId, "Normal"));
+                                break;
+                            case NONE:
+                                _cellItem.add(SexyLabel.newInfoLabel(_componentId, "Unknown"));
+                                break;
+                        }
+                        
+                    }
+                    
+                    
+                };
         final DataTable dataTable =
                 DataTableBuilder.<CronDetails, String> newTable("table")
                         .addColumn("Cron task", "cronName")
-                        .addColumn("CRON Expression", "cronExpression").addColumn(abstractColumn)
-                        .displayRows(40).withListData(cronService.getCronTasks()).build();
+                        .addColumn("CRON Expression", "cronExpression")
+                        .addColumn(nextExecutionTime).addColumn(statusCol).displayRows(40)
+                        .withListData(cronService.getCronTasks()).build();
         add(dataTable);
     }
     

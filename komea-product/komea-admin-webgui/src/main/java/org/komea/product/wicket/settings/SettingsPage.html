@@ -13,48 +13,41 @@
 <body>
 	<wicket:extend>
 		<div class="container">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<span class="glyphicon glyphicon-wrench"></span> Manage settings of Komea
+			<form class="form-group" wicket:id="form">
+				<div class="alert alert-success" wicket:id="success">
+					<label>Preferences has been saved!</label>
 				</div>
-				<div class="panel-body">
-					<form class="form-group" wicket:id="form">
-						<div class="alert alert-success" wicket:id="success">
-							<label>Preferences has been saved!</label>
-						</div>
-						<div class="alert alert-warning" wicket:id="errors">
-							<label>Preferences has been saved but some properties could not be updated</label>
-							<ul>
-								<li>error message</li>
-							</ul>
-						</div>
-						<div class="container">
-							<div class="row">
-								<div class="span12">
-									<table class="table table-condensed table-hover table-striped table-bordered table-condensed">
-										<thead>
-											<tr>
-												<th>Property Description</th>
-												<th>Property Value</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr wicket:id="settings">
-												<td><p wicket:id="description">Log file path</p>
-													<p>
-														<em wicket:id="settingKey">key</em>
-													</p></td>
-												<th><input class="form-control input-sm" type="text" wicket:id="value"></input></th>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-						<input type="submit" value="Update properties" />
-					</form>
+				<div class="alert alert-warning" wicket:id="errors">
+					<label>Preferences has been saved but some properties could not be updated</label>
+					<ul>
+						<li>error message</li>
+					</ul>
 				</div>
-			</div>
+				<div class="container">
+					<div class="row">
+						<div class="span12">
+							<table class="table table-condensed table-hover table-striped table-bordered table-condensed">
+								<thead>
+									<tr>
+										<th>Property Description</th>
+										<th>Property Value</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr wicket:id="settings">
+										<td><p wicket:id="description">Log file path</p>
+											<p>
+												<em wicket:id="settingKey">key</em>
+											</p></td>
+										<th><input class="form-control input-sm" type="text" wicket:id="value"></input></th>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<input type="submit" value="Update properties" />
+			</form>
 		</div>
 	</wicket:extend>
 	<footer class="tocea-footer">
