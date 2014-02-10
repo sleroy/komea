@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.komea.product.database.model.Project;
+import org.komea.product.database.dto.ProjectDto;
 import org.komea.product.rest.client.api.IProjectsAPI;
 
 public class ProjectsAPIIT extends AbstractRestClientIntegrationTestCase {
@@ -23,7 +23,7 @@ public class ProjectsAPIIT extends AbstractRestClientIntegrationTestCase {
     
         IProjectsAPI projectsAPI = RestClientFactory.INSTANCE.createProjectsAPI("http://localhost:8585/komea");
         Assert.assertNotNull(projectsAPI);
-        List<Project> projects = projectsAPI.allProjects();
+        List<ProjectDto> projects = projectsAPI.allProjects();
         Assert.assertFalse(projects.isEmpty());
     }
 }

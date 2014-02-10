@@ -5,7 +5,7 @@ package org.komea.product.rest.client.api;
 import java.net.ConnectException;
 import java.util.List;
 
-import org.komea.product.database.model.Project;
+import org.komea.product.database.dto.ProjectDto;
 import org.komea.product.service.dto.errors.InternalServerException;
 
 /**
@@ -26,5 +26,5 @@ public interface IProjectsAPI {
      * @throws InternalServerException
      *             launch if exception happened in server side
      */
-    List<Project> allProjects() throws ConnectException, InternalServerException;
+    List<ProjectDto> allProjects() throws ConnectException, InternalServerException;
 }

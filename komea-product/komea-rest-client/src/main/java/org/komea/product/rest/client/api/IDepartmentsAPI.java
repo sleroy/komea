@@ -5,7 +5,7 @@ package org.komea.product.rest.client.api;
 import java.net.ConnectException;
 import java.util.List;
 
-import org.komea.product.database.model.PersonGroup;
+import org.komea.product.database.dto.DepartmentDto;
 import org.komea.product.service.dto.errors.InternalServerException;
 
 /**
@@ -26,5 +26,5 @@ public interface IDepartmentsAPI {
      * @throws InternalServerException
      *             launch if exception happened in server side
      */
-    List<PersonGroup> allDepartments() throws ConnectException, InternalServerException;
+    List<DepartmentDto> allDepartments() throws ConnectException, InternalServerException;
 }

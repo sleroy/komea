@@ -7,9 +7,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.service.IEntityService;
-import org.komea.product.database.model.Person;
-import org.komea.product.database.model.PersonGroup;
-import org.komea.product.database.model.Project;
+import org.komea.product.database.dto.DepartmentDto;
+import org.komea.product.database.dto.PersonDto;
+import org.komea.product.database.dto.ProjectDto;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.TestExecutionListeners;
@@ -24,8 +24,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 @TestExecutionListeners({
         DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class })
-public class EntityServiceIT extends AbstractSpringIntegrationTestCase
-{
+public class EntityServiceIT extends AbstractSpringIntegrationTestCase {
     
     @Autowired
     private IEntityService entityService;
@@ -34,7 +33,7 @@ public class EntityServiceIT extends AbstractSpringIntegrationTestCase
     @DatabaseSetup("database.xml")
     public void testGetAllDepartments() {
     
-        List<PersonGroup> departments = entityService.getAllDepartments();
+        List<DepartmentDto> departments = entityService.getAllDepartments();
         Assert.assertEquals(1, departments.size());
     }
     
@@ -42,7 +41,7 @@ public class EntityServiceIT extends AbstractSpringIntegrationTestCase
     @DatabaseSetup("database.xml")
     public void testGetPersonList() {
     
-        List<Person> personList = entityService.getPersonList();
+        List<PersonDto> personList = entityService.getPersonList();
         Assert.assertEquals(2, personList.size());
     }
     
@@ -50,7 +49,7 @@ public class EntityServiceIT extends AbstractSpringIntegrationTestCase
     @DatabaseSetup("database.xml")
     public void testGetProjectList() {
     
-        List<Project> projectList = entityService.getAllProjects();
+        List<ProjectDto> projectList = entityService.getAllProjects();
         Assert.assertEquals(1, projectList.size());
     }
     

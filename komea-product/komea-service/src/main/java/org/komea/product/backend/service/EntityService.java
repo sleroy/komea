@@ -10,10 +10,13 @@ import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dao.ProjectDao;
+import org.komea.product.database.dto.DepartmentDto;
+import org.komea.product.database.dto.PersonDto;
+import org.komea.product.database.dto.ProjectDto;
+import org.komea.product.database.dto.TeamDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonCriteria;
-import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.database.model.ProjectCriteria;
 import org.komea.product.service.dto.KpiKey;
@@ -23,8 +26,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 
 @Service
-public final class EntityService implements IEntityService
-{
+public final class EntityService implements IEntityService {
     
     @Autowired
     private PersonDao      personDAO;
@@ -135,32 +137,74 @@ public final class EntityService implements IEntityService
     }
     
     @Override
-    public List<Person> getPersonList() {
+    public List<PersonDto> getPersonList() {
     
+        // TOTO STUB
         PersonCriteria request = new PersonCriteria();
         List<Person> persons = personDAO.selectByCriteria(request);
-        return persons;
+        
+        List<PersonDto> personDtos = Lists.newArrayList();
+        for (Person person : persons) {
+            PersonDto personDto = new PersonDto();
+            personDto.setEmail(person.getEmail());
+            personDto.setFirstName(person.getFirstName());
+            personDto.setLastName(person.getLastName());
+            personDto.setLogin(person.getLogin());
+            personDtos.add(personDto);
+        }
+        return personDtos;
     }
     
+    /**
+     * (non-Javadoc)
+     * 
+     * @see org.komea.product.backend.service.IEntityService#getAllDepartments()
+     */
     @Override
-    public List<PersonGroup> getAllDepartments() {
+    public List<DepartmentDto> getAllDepartments() {
     
         // TODO Auto-generated getAllDepartments STUB
-        ArrayList<PersonGroup> departments = Lists.newArrayList();
-        PersonGroup group = new PersonGroup();
-        group.setName("devs");
-        group.setId(1);
-        group.setIdGroupKind(2);
-        group.setDescription("developers Department");
-        departments.add(group);
-        return departments;
+        DepartmentDto department = new DepartmentDto();
+        department.setName("devs");
+        department.setDescription("developers Department");
+        
+        List<DepartmentDto> departmentDtos = Lists.newArrayList(department);
+        return departmentDtos;
+    }
+    
+    /**
+     * (non-Javadoc)
+     * 
+     * @see org.komea.product.backend.service.IEntityService#getAllProjects()
+     */
+    @Override
+    public List<ProjectDto> getAllProjects() {
+    
+        // TOTO STUB
+        ProjectCriteria request = new ProjectCriteria();
+        List<Project> projects = projectDao.selectByCriteria(request);
+        List<ProjectDto> projectDTOs = Lists.newArrayList();
+        for (Project project : projects) {
+            ProjectDto projectDto = new ProjectDto();
+            projectDto.setDescription(project.getDescription());
+            projectDto.setName(project.getName());
+            projectDto.setProjectKey(project.getProjectKey());
+            projectDTOs.add(projectDto);
+        }
+        
+        // TODO
+        return projectDTOs;
     }
     
     @Override
-    public List<Project> getAllProjects() {
+    public List<TeamDto> getAllTeams() {
     
-        ProjectCriteria request = new ProjectCriteria();
-        List<Project> projects = projectDao.selectByCriteria(request);
-        return projects;
+        // TODO Auto-generated getAllDepartments STUB
+        TeamDto teamDTO = new TeamDto();
+        teamDTO.setName("devs");
+        teamDTO.setDescription("developers Department");
+        
+        List<TeamDto> teamDtos = Lists.newArrayList(teamDTO);
+        return teamDtos;
     }
 }

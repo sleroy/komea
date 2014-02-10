@@ -5,14 +5,14 @@ package org.komea.product.backend.service;
 import java.util.List;
 
 import org.komea.product.database.api.IEntity;
+import org.komea.product.database.dto.DepartmentDto;
+import org.komea.product.database.dto.PersonDto;
+import org.komea.product.database.dto.ProjectDto;
+import org.komea.product.database.dto.TeamDto;
 import org.komea.product.database.enums.EntityType;
-import org.komea.product.database.model.Person;
-import org.komea.product.database.model.PersonGroup;
-import org.komea.product.database.model.Project;
 import org.komea.product.service.dto.KpiKey;
 
-public interface IEntityService
-{
+public interface IEntityService {
     
     /**
      * Loads an entity from the database.
@@ -54,19 +54,26 @@ public interface IEntityService
      * 
      * @return
      */
-    List<Person> getPersonList();
+    List<PersonDto> getPersonList();
     
     /**
-     * This method retun the complete department list
+     * This method return the complete department list
      * 
      * @return the department list
      */
-    List<PersonGroup> getAllDepartments();
+    List<DepartmentDto> getAllDepartments();
     
     /**
-     * This method retun the complete department list
+     * This method return the complete project list
      * 
      * @return the department list
      */
-    List<Project> getAllProjects();
+    List<ProjectDto> getAllProjects();
+    
+    /**
+     * This method return the complete team list
+     * 
+     * @return the department list
+     */
+    List<TeamDto> getAllTeams();
 }
