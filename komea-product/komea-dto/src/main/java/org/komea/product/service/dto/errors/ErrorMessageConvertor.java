@@ -2,8 +2,7 @@
 package org.komea.product.service.dto.errors;
 
 
-public class ErrorMessageConvertor
-{
+public class ErrorMessageConvertor {
     
     public static Exception convertToException(final ErrorMessage _errorMessage) {
     
@@ -11,11 +10,10 @@ public class ErrorMessageConvertor
         
         try {
             exception = (Exception) Thread.currentThread().getContextClassLoader().loadClass(_errorMessage.getExceptionClassType())
-                    .newInstance();
+                    .getDeclaredConstructor(String.class).newInstance(_errorMessage.getMessage());
         } catch (Exception e) {
             exception = new Exception(_errorMessage.getMessage());
         }
-        
         StackTraceElement[] stackTrace = new StackTraceElement[_errorMessage.getStackTraceElements().size()];
         int i = 0;
         for (ErrorMessageElement elem : _errorMessage.getStackTraceElements()) {
