@@ -10,6 +10,7 @@ import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.dto.SearchHistoricalMeasuresDto;
 import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.service.dto.KpiKey;
+import org.komea.product.service.dto.MeasureHistoricalResultDto;
 import org.komea.product.service.dto.MeasureResultDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,20 +35,15 @@ public class MeasuresController {
     @Autowired
     private IEntityService      entityService;
     
-    /**
-     * This method return the historical measure for a set of entities and for a group of kpi types between two dates
-     * 
-     * @param _searchLastMeasure
-     *            contiain a set of entities a group of kpi types, the stating and the end date
-     * @return the historical measures for this entities
-     */
-    @RequestMapping(method = RequestMethod.POST, value = "/historical")
-    @ResponseBody
-    public List<MeasureHistoricalResultDto> historicalMeasures(@RequestBody final SearchHistoricalMeasuresDto _searchHistoricalMeasure) {
+    private List<MeasureHistoricalResultDto> findHistoricalsMeasuresByDate(final SearchHistoricalMeasuresDto _searchHistoricalMeasure) {
     
-        LOGGER.debug("call rest method /measures/historical/");
+        if (_searchHistoricalMeasure.getEnd().after(_searchHistoricalMeasure.getStart())) {
+            throw new IllegalArgumentException("End date must be after start date");
+        }
+        
         List<MeasureHistoricalResultDto> historicalMeasures = Lists.newArrayList();
         MeasureCriteria criteria = new MeasureCriteria();
+        criteria.setOrderByClause("date DESC");
         criteria.createCriteria().andDateBetween(_searchHistoricalMeasure.getStart(), _searchHistoricalMeasure.getEnd());
         for (KpiKey kpiKey : _searchHistoricalMeasure.getKpiKeys()) {
             MeasureHistoricalResultDto historic = new MeasureHistoricalResultDto(kpiKey);
@@ -56,6 +52,35 @@ public class MeasuresController {
         }
         
         return historicalMeasures;
+    }
+    
+    private List<MeasureHistoricalResultDto> findNLastHistoricalsMeasures(final SearchHistoricalMeasuresDto _searchHistoricalMeasure) {
+    
+        if (_searchHistoricalMeasure.getNumber() < 0) {
+            throw new IllegalArgumentException("Asked numbers of measures must be positive");
+        }
+        // TODO Auto-generated findNLastHistoricalsMeasures
+        throw new UnsupportedOperationException("not yet implemented");
+    }
+    
+    /**
+     * This method return the historical measure for a set of entities and for a group of kpi types between two dates
+     * 
+     * @param _searchLastMeasure
+     *            contiain a set of entities a group of kpi types, the stating and the end date or by number id start and end are null
+     * @return the historical measures for this entities
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "/historical")
+    @ResponseBody
+    public List<MeasureHistoricalResultDto> historicalMeasures(@RequestBody final SearchHistoricalMeasuresDto _searchHistoricalMeasure) {
+    
+        LOGGER.debug("call rest method /measures/historical/");
+        if (_searchHistoricalMeasure.getStart() != null && _searchHistoricalMeasure.getEnd() != null) {
+            
+            return findHistoricalsMeasuresByDate(_searchHistoricalMeasure);
+        } else {
+            return findNLastHistoricalsMeasures(_searchHistoricalMeasure);
+        }
     }
     /**
      * This method return the last measure for a set of entities and for a group of kpi types
