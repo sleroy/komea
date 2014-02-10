@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.komea.product.backend.service.IEventTypeService;
 import org.komea.product.database.dto.EventDto;
-import org.komea.product.database.dto.SearchEventsDto;
+import org.komea.product.database.dto.MeasureDTODto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class EventsController
      */
     @RequestMapping(method = RequestMethod.POST, value = "/find")
     @ResponseBody
-    public List<EventDto> findEvents(@RequestBody final SearchEventsDto _searchEvent) {
+    public List<EventDto> findEvents(@RequestBody final MeasureDTODto _searchEvent) {
     
         LOGGER.debug("call rest method /events/find to find event {}", _searchEvent.getEntityKeys());
         // TODO

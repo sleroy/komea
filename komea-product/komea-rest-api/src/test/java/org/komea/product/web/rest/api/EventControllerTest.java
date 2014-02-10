@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.komea.product.backend.service.IEventTypeService;
 import org.komea.product.database.dto.EventDto;
-import org.komea.product.database.dto.SearchEventsDto;
+import org.komea.product.database.dto.MeasureDTODto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
@@ -57,9 +57,9 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
     @Test
     public void findEventsTest() throws Exception {
     
-        Mockito.when(eventService.findEvents(Matchers.any(SearchEventsDto.class))).thenReturn(getEvents());
+        Mockito.when(eventService.findEvents(Matchers.any(MeasureDTODto.class))).thenReturn(getEvents());
         
-        SearchEventsDto search = new SearchEventsDto();
+        MeasureDTODto search = new MeasureDTODto();
         search.setSeverityMin(Severity.INFO);
         
         String jsonMessage = IntegrationTestUtil.convertObjectToJSON(search);
@@ -73,7 +73,7 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
         httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$", org.hamcrest.Matchers.hasSize(1)));
         httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[0].entityName", org.hamcrest.Matchers.equalToIgnoringCase("romain")));
         
-        Mockito.verify(eventService, Mockito.times(1)).findEvents(Matchers.any(SearchEventsDto.class));
+        Mockito.verify(eventService, Mockito.times(1)).findEvents(Matchers.any(MeasureDTODto.class));
     }
     
     @Test
@@ -81,7 +81,7 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
     
         Mockito.when(eventService.getEvents("MINOR", 1)).thenReturn(getEvents());
         
-        SearchEventsDto search = new SearchEventsDto();
+        MeasureDTODto search = new MeasureDTODto();
         search.setSeverityMin(Severity.INFO);
         
         final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.get("/events/get/MINOR/1"));

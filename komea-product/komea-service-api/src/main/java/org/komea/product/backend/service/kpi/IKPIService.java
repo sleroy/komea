@@ -2,7 +2,6 @@
 package org.komea.product.backend.service.kpi;
 
 
-
 import java.util.List;
 
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
@@ -13,11 +12,7 @@ import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.service.dto.KpiKey;
 
-
-
-public interface IKPIService
-{
-    
+public interface IKPIService {
     
     /**
      * Finds a KPI if existing.
@@ -26,14 +21,12 @@ public interface IKPIService
      */
     public Kpi findKPI(KpiKey _kpiKey);
     
-    
     /**
      * Finds a KPI or throws an exception
      * 
      * @return the KPI or an exception.
      */
     public Kpi findKPIOrFail(KpiKey _kpiKey);
-    
     
     /**
      * Returns the list of measures
@@ -44,7 +37,6 @@ public interface IKPIService
      */
     public List<Measure> getHistory(KpiKey _kpiKey);
     
-    
     /**
      * Returns the list of measures
      * 
@@ -53,7 +45,6 @@ public interface IKPIService
      * @return the list measures
      */
     public List<Measure> getHistory(KpiKey _kpiKey, MeasureCriteria _criteria);
-    
     
     /**
      * Returns the list of kpifs for an entity.
@@ -64,7 +55,6 @@ public interface IKPIService
      */
     public List<Kpi> getListOfKpisForEntity(IEntity _entity);
     
-    
     /**
      * Creates a new KPI.
      * 
@@ -72,7 +62,6 @@ public interface IKPIService
      *            a new KPI.
      */
     public void saveOrUpdate(Kpi _kpi);
-    
     
     /**
      * Store the real-time value in History
@@ -84,7 +73,6 @@ public interface IKPIService
      */
     public void storeValueInHistory(KpiKey _kpiKey);
     
-    
     /**
      * Creates a KPI, stores it and instantiate it Esper. Updates the cache with the query
      * 
@@ -92,7 +80,6 @@ public interface IKPIService
      *            kpi
      */
     public void synchronizeEntityWithKomea(IEntity _project);
-    
     
     /**
      * Updates all the KPI related to an entioty.
@@ -103,7 +90,6 @@ public interface IKPIService
      *            the new list of KPI
      */
     public void updateKPIOfEntity(IEntity _entity, List<Kpi> _kpis);
-    
     
     /**
      * Returns the kPI double value.
@@ -120,7 +106,6 @@ public interface IKPIService
     
     double getKpiDoubleValue(KpiKey _kpiKey) throws KPINotFoundException;
     
-    
     /**
      * Returns the KPI value
      * 
@@ -132,5 +117,20 @@ public interface IKPIService
      */
     IEPMetric getKPIValue(KpiKey _measureKey);
     
+    /**
+     * This method return the last kpi measure
+     * 
+     * @param _kpiKey
+     *            the kpi key
+     * @return the last measure
+     */
+    public Measure getLastMeasures(KpiKey _kpiKey) throws KPINotFoundException;
+    
+    /**
+     * This method return the complete list of KPIs
+     * 
+     * @return the kpi list
+     */
+    public List<Kpi> listAllKpis();
     
 }

@@ -111,6 +111,9 @@
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
+    <if test="desc != null">
+      DESC
+    </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     <!--

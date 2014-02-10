@@ -12,7 +12,7 @@ import org.komea.product.backend.exceptions.AlreadyExistingEventTypeException;
 import org.komea.product.backend.exceptions.InvalidEventTypeDescriptionException;
 import org.komea.product.database.dao.EventTypeDao;
 import org.komea.product.database.dto.EventDto;
-import org.komea.product.database.dto.SearchEventsDto;
+import org.komea.product.database.dto.MeasureDTODto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
@@ -29,8 +29,7 @@ import com.google.common.collect.Lists;
 
 @Service
 @Transactional
-public class EventTypeService implements IEventTypeService
-{
+public class EventTypeService implements IEventTypeService {
     
     @Autowired
     private EventTypeDao        eventTypeDAO;
@@ -100,6 +99,7 @@ public class EventTypeService implements IEventTypeService
         List<EventDto> events = Lists.newArrayList();
         EventDto event = new EventDto();
         event.setDate(new Date());
+        
         event.setEntityName("romain");
         
         EventType eventType = new EventType();
@@ -126,7 +126,7 @@ public class EventTypeService implements IEventTypeService
     }
     
     @Override
-    public List<EventDto> findEvents(final SearchEventsDto _searchEvent) {
+    public List<EventDto> findEvents(final MeasureDTODto _searchEvent) {
     
         // TODO STUB
         

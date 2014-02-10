@@ -11,8 +11,7 @@ import org.komea.product.rest.client.api.IEventsAPI;
 import org.komea.product.rest.client.api.IProvidersAPI;
 
 // @Ignore
-public class RestClientFactoryIT extends AbstractRestClientIntegrationTestCase
-{
+public class RestClientFactoryIT extends AbstractRestClientIntegrationTestCase {
     
     //
     

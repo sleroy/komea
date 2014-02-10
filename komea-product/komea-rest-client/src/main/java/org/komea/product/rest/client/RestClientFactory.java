@@ -23,21 +23,21 @@ public enum RestClientFactory {
     INSTANCE;
     
     /**
-     * This method create a providers api object
+     * This method create a departments api object
      * 
      * @param _serverBaseURL
      *            the server base url
-     * @return a providersAPI instance
+     * @return a departmentsAPI instance
      * @throws ConnectException
      *             launch if the server can't connect to the server
      * @throws URISyntaxException
      *             launch if the server URL in not valid
      */
-    public IProvidersAPI createProvidersAPI(final String _serverBaseURL) throws ConnectException, URISyntaxException {
+    public IDepartmentsAPI createDeparmtentsAPI(final String _serverBaseURL) throws ConnectException, URISyntaxException {
     
-        IProvidersAPI providersAPI = new ProvidersAPI();
-        providersAPI.setServerBaseURL(_serverBaseURL);
-        return providersAPI;
+        DepartmentsAPI departmentAPI = new DepartmentsAPI();
+        departmentAPI.setServerBaseURL(_serverBaseURL);
+        return departmentAPI;
     }
     
     /**
@@ -56,6 +56,13 @@ public enum RestClientFactory {
         IEventsAPI eventsAPI = new EventsAPI();
         eventsAPI.setServerBaseURL(_serverBaseURL);
         return eventsAPI;
+    }
+    
+    public IMeasuresAPI createMeasuresAPI(final String _serverBaseURL) throws ConnectException, URISyntaxException {
+    
+        MeasuresAPI measuresAPI = new MeasuresAPI();
+        measuresAPI.setServerBaseURL(_serverBaseURL);
+        return measuresAPI;
     }
     
     /**
@@ -77,27 +84,20 @@ public enum RestClientFactory {
     }
     
     /**
-     * This method create a departments api object
+     * This method create a providers api object
      * 
      * @param _serverBaseURL
      *            the server base url
-     * @return a departmentsAPI instance
+     * @return a providersAPI instance
      * @throws ConnectException
      *             launch if the server can't connect to the server
      * @throws URISyntaxException
      *             launch if the server URL in not valid
      */
-    public IDepartmentsAPI createDeparmtentsAPI(final String _serverBaseURL) throws ConnectException, URISyntaxException {
+    public IProvidersAPI createProvidersAPI(final String _serverBaseURL) throws ConnectException, URISyntaxException {
     
-        DepartmentsAPI departmentAPI = new DepartmentsAPI();
-        departmentAPI.setServerBaseURL(_serverBaseURL);
-        return departmentAPI;
-    }
-    
-    public IMeasuresAPI createMeasuresAPI(final String _serverBaseURL) throws ConnectException, URISyntaxException {
-    
-        MeasuresAPI measuresAPI = new MeasuresAPI();
-        measuresAPI.setServerBaseURL(_serverBaseURL);
-        return measuresAPI;
+        IProvidersAPI providersAPI = new ProvidersAPI();
+        providersAPI.setServerBaseURL(_serverBaseURL);
+        return providersAPI;
     }
 }

@@ -8,8 +8,7 @@ import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.rest.client.api.IProvidersAPI;
 import org.komea.product.service.dto.errors.InternalServerException;
 
-class ProvidersAPI extends AbstractRestCientAPI implements IProvidersAPI
-{
+class ProvidersAPI extends AbstractRestCientAPI implements IProvidersAPI {
     
     private static final String PROVIDERS_PATH = "providers";
     

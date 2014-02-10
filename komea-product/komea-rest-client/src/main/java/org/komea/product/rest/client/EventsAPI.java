@@ -7,16 +7,37 @@ import java.util.List;
 
 import javax.ws.rs.core.GenericType;
 
+import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.dto.EventDto;
-import org.komea.product.database.dto.SearchEventsDto;
+import org.komea.product.database.dto.MeasureDTODto;
 import org.komea.product.rest.client.api.IEventsAPI;
 import org.komea.product.service.dto.errors.InternalServerException;
 
-class EventsAPI extends AbstractRestCientAPI implements IEventsAPI
-{
+class EventsAPI extends AbstractRestCientAPI implements IEventsAPI {
     
     private static final String EVENTS_PATH = "events";
     
+    /**
+     * (non-Javadoc)
+     * 
+     * @see org.komea.product.rest.client.api.IEventsAPI#findEvents(org.komea.product.database.dto.MeasureDTODto)
+     */
+    @Override
+    public List<EventDto> findEvents(final MeasureDTODto _searchEvent) throws ConnectException, InternalServerException {
+    
+        String url = EVENTS_PATH + "/find";
+        return post(url, _searchEvent, new GenericType<List<EventDto>>() {
+        });
+    }
+    
+    @Override
+    public List<EventDto> getEvents(final Criticity _severityMin, final int _number) throws ConnectException, InternalServerException {
+    
+        String url = EVENTS_PATH + "/get/" + _severityMin.name() + "/" + _number;
+        return get(url, new GenericType<List<EventDto>>() {
+        });
+    }
+    //
     /**
      * (non-Javadoc)
      * 
@@ -29,22 +50,4 @@ class EventsAPI extends AbstractRestCientAPI implements IEventsAPI
         post(url, _event);
         
     }
-    
-    @Override
-    public List<EventDto> findEvents(final SearchEventsDto _searchEvent) throws ConnectException, InternalServerException {
-    
-        String url = EVENTS_PATH + "/find";
-        return post(url, _searchEvent, new GenericType<List<EventDto>>()
-        {
-        });
-    }
-    @Override
-    public List<EventDto> getEvents(final String _severityMin, final int _number) throws ConnectException, InternalServerException {
-    
-        String url = EVENTS_PATH + "/find";
-        return get(url, new GenericType<List<EventDto>>()
-        {
-        }, _severityMin, String.valueOf(_number));
-    }
-    //
 }

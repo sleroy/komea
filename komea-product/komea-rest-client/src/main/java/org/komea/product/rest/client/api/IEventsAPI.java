@@ -5,8 +5,9 @@ package org.komea.product.rest.client.api;
 import java.net.ConnectException;
 import java.util.List;
 
+import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.dto.EventDto;
-import org.komea.product.database.dto.SearchEventsDto;
+import org.komea.product.database.dto.MeasureDTODto;
 import org.komea.product.service.dto.errors.InternalServerException;
 
 /**
@@ -17,20 +18,7 @@ import org.komea.product.service.dto.errors.InternalServerException;
  * @author $Author: jguidoux $
  * @since 15 janv. 2014
  */
-public interface IEventsAPI extends IRestClientAPI
-{
-    
-    /**
-     * This method push a new event into komea
-     * 
-     * @param _event
-     *            the event to push
-     * @throws ConnectException
-     *             launch if it can't connect to the server
-     * @throws InternalServerException
-     *             launch if exception happened in server side
-     */
-    void pushEvent(final EventDto _event) throws ConnectException, InternalServerException;
+public interface IEventsAPI extends IRestClientAPI {
     
     /**
      * This method find events which have been stored into komea
@@ -43,7 +31,7 @@ public interface IEventsAPI extends IRestClientAPI
      * @throws InternalServerException
      *             launch if exception happened in server side
      */
-    List<EventDto> findEvents(final SearchEventsDto _searchEvent) throws ConnectException, InternalServerException;
+    List<EventDto> findEvents(final MeasureDTODto _searchEvent) throws ConnectException, InternalServerException;
     
     /**
      * This method find events
@@ -58,5 +46,17 @@ public interface IEventsAPI extends IRestClientAPI
      * @throws InternalServerException
      *             launch if exception happened in server side
      */
-    List<EventDto> getEvents(final String _severityMin, final int _number) throws ConnectException, InternalServerException;
+    List<EventDto> getEvents(final Criticity _severityMin, final int _number) throws ConnectException, InternalServerException;
+    
+    /**
+     * This method push a new event into komea
+     * 
+     * @param _event
+     *            the event to push
+     * @throws ConnectException
+     *             launch if it can't connect to the server
+     * @throws InternalServerException
+     *             launch if exception happened in server side
+     */
+    void pushEvent(final EventDto _event) throws ConnectException, InternalServerException;
 }

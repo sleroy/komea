@@ -2,7 +2,6 @@
 package org.komea.product.web.rest.api;
 
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,17 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
-
 @Controller
 @RequestMapping(value = "/alerttypes")
-public class AlertTypeController
-{
-    
+public class AlertTypeController {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(AlertTypeController.class);
-    
-    
     
     /**
      * This method return the alert type list
@@ -34,7 +27,6 @@ public class AlertTypeController
     @RequestMapping(method = RequestMethod.GET, value = "/all")
     @ResponseBody
     public List<KpiAlertType> allAlertIypes() {
-    
     
         LOGGER.debug("call rest method /alerttypes/all/");
         // TODO

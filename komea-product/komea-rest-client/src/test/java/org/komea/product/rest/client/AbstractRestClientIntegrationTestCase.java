@@ -6,10 +6,16 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.komea.product.rest.client.util.KomeaServerLauncher;
 
-public class AbstractRestClientIntegrationTestCase
-{
+public class AbstractRestClientIntegrationTestCase {
     
     private static KomeaServerLauncher komeaServerLauncher;
+    
+    @AfterClass
+    public static void setAfterClass() throws Exception {
+    
+        komeaServerLauncher.stopServer();
+        Thread.sleep(5000);
+    }
     
     @BeforeClass
     public static void setBeforeClass() throws Exception {
@@ -18,12 +24,5 @@ public class AbstractRestClientIntegrationTestCase
         komeaServerLauncher.startServer();
         Thread.sleep(5000);
         
-    }
-    
-    @AfterClass
-    public static void setAfterClass() throws Exception {
-    
-        komeaServerLauncher.stopServer();
-        Thread.sleep(5000);
     }
 }

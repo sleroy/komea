@@ -10,8 +10,7 @@ import org.junit.Test;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.rest.client.api.IDepartmentsAPI;
 
-public class DepartmentsAPIIT extends AbstractRestClientIntegrationTestCase
-{
+public class DepartmentsAPIIT extends AbstractRestClientIntegrationTestCase {
     
     @Before
     public void setUp() throws Exception {

@@ -2,18 +2,15 @@
 package org.komea.product.web.rest.api;
 
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
 import org.komea.product.backend.service.IEntityService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.dto.SearchHistoricalMeasuresDto;
-import org.komea.product.database.dto.SearchLastMeasuresDto;
-import org.komea.product.database.model.Kpi;
-import org.komea.product.database.model.Measure;
+import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.service.dto.KpiKey;
+import org.komea.product.service.dto.MeasureResultDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.collect.Lists;
+
 @Controller
 @RequestMapping(value = "/measures")
-public class MeasuresController
-{
+public class MeasuresController {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(MeasuresController.class);
     
@@ -45,29 +43,44 @@ public class MeasuresController
      */
     @RequestMapping(method = RequestMethod.POST, value = "/historical")
     @ResponseBody
-    public Map<Kpi, Map<String, List<Measure>>> historicalMeasures(@RequestBody final SearchHistoricalMeasuresDto _searchHistoricalMeasure) {
+    public List<MeasureHistoricalResultDto> historicalMeasures(@RequestBody final SearchHistoricalMeasuresDto _searchHistoricalMeasure) {
     
         LOGGER.debug("call rest method /measures/historical/");
-        // TODO
-        return null;
+        List<MeasureHistoricalResultDto> historicalMeasures = Lists.newArrayList();
+        MeasureCriteria criteria = new MeasureCriteria();
+        criteria.createCriteria().andDateBetween(_searchHistoricalMeasure.getStart(), _searchHistoricalMeasure.getEnd());
+        for (KpiKey kpiKey : _searchHistoricalMeasure.getKpiKeys()) {
+            MeasureHistoricalResultDto historic = new MeasureHistoricalResultDto(kpiKey);
+            historic.setMeasure(measureHistoryService.getHistory(kpiKey, criteria));
+            historicalMeasures.add(historic);
+        }
+        
+        return historicalMeasures;
     }
-    
     /**
      * This method return the last measure for a set of entities and for a group of kpi types
      * 
-     * @param _searchLastMeasure
+     * @param _kpiKeys
      *            contiain a set of entities and a group of kpi types
      * @return the last measures for this entities
+     * @throws KPINotFoundException
      */
     @RequestMapping(method = RequestMethod.POST, value = "/lastList")
     @ResponseBody
-    public Map<Kpi, Map<String, Measure>> lastMeasures(@RequestBody final SearchLastMeasuresDto _searchLastMeasure) {
+    public List<MeasureResultDto> lastMeasures(@RequestBody final List<KpiKey> _kpiKeys) throws KPINotFoundException {
     
         LOGGER.debug("call rest method /measures/last/");
+        List<MeasureResultDto> measuresResponse = Lists.newArrayList();
+        
+        for (KpiKey kpiKey : _kpiKeys) {
+            MeasureResultDto measureResult = new MeasureResultDto();
+            measureResult.setKpiKey(kpiKey);
+            measureResult.setMeasure(measureHistoryService.getLastMeasures(kpiKey));
+            measuresResponse.add(measureResult);
+        }
         // TODO
-        return new HashMap<Kpi, Map<String, Measure>>();
+        return measuresResponse;
     }
-    
     /**
      * This method get the last measure for a kpi type on an entity
      * 
@@ -88,13 +101,5 @@ public class MeasuresController
         LOGGER.info("value = {}", value);
         return value;
     }
-    
-    // @ExceptionHandler({
-    // KPINotFoundException.class, Exception.class })
-    // @ResponseBody
-    // public String handleException() {
-    //
-    // return "une exception";
-    // }
     
 }

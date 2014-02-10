@@ -2,7 +2,6 @@
 package org.komea.product.backend.service.kpi;
 
 
-
 import java.util.List;
 
 import org.komea.product.backend.api.IEsperEngine;
@@ -16,17 +15,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-
 /**
  * This interface provides the functions needed to manipulate the history
  * 
  * @author sleroy
  */
 @Service
-public class MeasureHistoryService implements IMeasureHistoryService
-{
-    
+public final class MeasureHistoryService implements IMeasureHistoryService {
     
     @Autowired
     private MeasureDao          measureDAO;
@@ -34,17 +29,12 @@ public class MeasureHistoryService implements IMeasureHistoryService
     @Autowired
     private IEsperEngine        esperEngine;
     
-    
     private static final Logger LOGGER = LoggerFactory.getLogger(MeasureHistoryService.class);
-    
-    
     
     public MeasureHistoryService() {
     
-    
         super();
     }
-    
     
     /**
      * Builds the history purge action.
@@ -55,7 +45,6 @@ public class MeasureHistoryService implements IMeasureHistoryService
      */
     @Override
     public IHistoryPurgeAction buildHistoryPurgeAction(final Kpi _kpi) {
-    
     
         switch (_kpi.getEvictionType()) {
             case DAYS:
@@ -68,23 +57,17 @@ public class MeasureHistoryService implements IMeasureHistoryService
         }
         return null;
         
-        
     }
     
-    
     public IEsperEngine getEsperEngine() {
-    
     
         return esperEngine;
     }
     
-    
     public MeasureDao getMeasureDAO() {
-    
     
         return measureDAO;
     }
-    
     
     /**
      * Returns the measures.
@@ -92,15 +75,12 @@ public class MeasureHistoryService implements IMeasureHistoryService
     @Override
     public List<Measure> getMeasures(final HistoryKey _kpiKey) {
     
-    
         final MeasureCriteria measureCriteria = new MeasureCriteria();
         return getMeasures(_kpiKey, measureCriteria);
     }
     
-    
     @Override
     public List<Measure> getMeasures(final HistoryKey _kpiKey, final MeasureCriteria measureCriteria) {
-    
     
         final Criteria createCriteria = measureCriteria.createCriteria();
         createCriteria.andIdKpiEqualTo(_kpiKey.getKpiID());
@@ -114,29 +94,28 @@ public class MeasureHistoryService implements IMeasureHistoryService
             case PROJECT:
                 createCriteria.andIdProjectEqualTo(_kpiKey.getEntityID());
                 break;
+            default:
+                // TODO:: Add code for default statement
+                throw new UnsupportedOperationException("Not implemented default statement");
+                
         }
+        
         final List<Measure> selectByCriteria = measureDAO.selectByCriteria(measureCriteria);
         return selectByCriteria;
     }
     
-    
     public void setEsperEngine(final IEsperEngine _esperEngine) {
-    
     
         esperEngine = _esperEngine;
     }
     
-    
     public void setMeasureDAO(final MeasureDao _measureDAO) {
-    
     
         measureDAO = _measureDAO;
     }
     
-    
     @Override
     public void storeMeasure(final Measure _measure) {
-    
     
         LOGGER.debug("Storing new measure : {}", _measure);
         measureDAO.insert(_measure);

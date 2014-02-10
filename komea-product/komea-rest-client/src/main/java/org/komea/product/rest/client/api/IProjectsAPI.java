@@ -15,8 +15,7 @@ import org.komea.product.service.dto.errors.InternalServerException;
  * @author $Author: jguidoux $
  * @since 4 févr. 2014
  */
-public interface IProjectsAPI
-{
+public interface IProjectsAPI {
     
     /**
      * This method return the project list stored in Komea

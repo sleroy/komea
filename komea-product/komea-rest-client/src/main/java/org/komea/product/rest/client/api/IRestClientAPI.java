@@ -17,8 +17,7 @@ import org.komea.product.service.dto.errors.InternalServerException;
  * @author $Author: jguidoux $
  * @since 15 janv. 2014
  */
-public interface IRestClientAPI
-{
+public interface IRestClientAPI {
     
     /**
      * This method send a a http GET request to the server
@@ -103,7 +102,7 @@ public interface IRestClientAPI
      * @throws InternalServerException
      *             launch if exception happened in server side
      */
-    <T, R> R post(String _url, T _objectToSend, GenericType<R> _returnType) throws ConnectException;
+    <T, R> R post(String _url, T _objectToSend, GenericType<R> _returnType) throws ConnectException, InternalServerException;
     
     /**
      * This method set the server base url (http://localhost:8080/komea for example

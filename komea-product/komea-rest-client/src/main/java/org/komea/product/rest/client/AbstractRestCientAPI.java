@@ -32,8 +32,7 @@ import org.springframework.http.HttpStatus;
  * @author $Author: jguidoux $
  * @since 5 févr. 2014
  */
-abstract class AbstractRestCientAPI implements IRestClientAPI
-{
+abstract class AbstractRestCientAPI implements IRestClientAPI {
     
     private final String         REST_BASE_URL = "rest";
     
@@ -45,6 +44,18 @@ abstract class AbstractRestCientAPI implements IRestClientAPI
     public AbstractRestCientAPI() {
     
         client = new ResteasyClientBuilder().build();
+    }
+    
+    private Builder createRequest(final String _url, final String... _params) {
+    
+        WebTarget path = getTarget().path(REST_BASE_URL).path(_url);
+        for (String param : _params) {
+            path.path(param);
+        }
+        
+        LOGGER.info("http request = " + path.getUri().toString());
+        
+        return path.request();
     }
     
     /**
@@ -88,18 +99,6 @@ abstract class AbstractRestCientAPI implements IRestClientAPI
         response.close(); // close connection
         
         return value;
-    }
-    
-    private Builder createRequest(final String _url, final String... _params) {
-    
-        WebTarget path = getTarget().path(REST_BASE_URL).path(_url);
-        for (String param : _params) {
-            path.path(param);
-        }
-        
-        LOGGER.info("http request = " + path.getUri().toString());
-        
-        return path.request();
     }
     public Client getClient() {
     
@@ -152,36 +151,27 @@ abstract class AbstractRestCientAPI implements IRestClientAPI
         
     }
     
-    private void validateResponse(final Response response) throws InternalServerException {
-    
-        if (response.getStatus() == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-            ErrorMessage errorMessage = response.readEntity(ErrorMessage.class);
-            InternalServerException errorException = new InternalServerException("Exception happened in Server Side : "
-                    + errorMessage.getMessage());
-            
-            errorException.initCause(ErrorMessageConvertor.convertToException(errorMessage));
-            throw errorException;
-        }
-    }
     /**
      * (non-Javadoc)
      * 
+     * @throws InternalServerException
      * @see org.komea.product.rest.client.api.IRestClientAPI#post(java.lang.String, java.lang.Object, javax.ws.rs.core.GenericType)
      */
     @Override
-    public <T, R> R post(final String url, final T _objectToSend, final GenericType<R> _returnType) throws ConnectException {
+    public <T, R> R post(final String url, final T _objectToSend, final GenericType<R> _returnType) throws ConnectException,
+            InternalServerException {
     
         if (!testConnectionValid()) {
             throw new ConnectException("can't connect to the server");
         }
         Response response = createRequest(url).post(Entity.json(_objectToSend));
+        validateResponse(response);
         R value = response.readEntity(_returnType);
         
         response.close(); // close connection
         
         return value;
     }
-    
     @Override
     public void setServerBaseURL(final String _serverURL) throws URISyntaxException, ConnectException {
     
@@ -214,4 +204,16 @@ abstract class AbstractRestCientAPI implements IRestClientAPI
         
     }
     //
+    
+    private void validateResponse(final Response response) throws InternalServerException {
+    
+        if (response.getStatus() == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
+            ErrorMessage errorMessage = response.readEntity(ErrorMessage.class);
+            InternalServerException errorException = new InternalServerException("Exception happened in Server Side : "
+                    + errorMessage.getMessage());
+            
+            errorException.initCause(ErrorMessageConvertor.convertToException(errorMessage));
+            throw errorException;
+        }
+    }
 }

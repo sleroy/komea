@@ -14,8 +14,7 @@ import org.komea.product.service.dto.errors.InternalServerException;
  * @author $Author: jguidoux $
  * @since 15 janv. 2014
  */
-public interface IProvidersAPI extends IRestClientAPI
-{
+public interface IProvidersAPI extends IRestClientAPI {
     
     /**
      * This method register an external provider into komea.

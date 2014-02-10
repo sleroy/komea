@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.komea.product.database.dao.EventTypeDao;
 import org.komea.product.database.dto.EventDto;
-import org.komea.product.database.dto.SearchEventsDto;
+import org.komea.product.database.dto.MeasureDTODto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
 
@@ -43,6 +43,6 @@ public interface IEventTypeService
      *            the event criterias as as severityMin, event key or event types
      * @return the event list
      */
-    public List<EventDto> findEvents(SearchEventsDto _searchEvent);
+    public List<EventDto> findEvents(MeasureDTODto _searchEvent);
     
 }

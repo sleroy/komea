@@ -10,8 +10,7 @@ import org.junit.Test;
 import org.komea.product.database.model.Project;
 import org.komea.product.rest.client.api.IProjectsAPI;
 
-public class ProjectsAPIIT extends AbstractRestClientIntegrationTestCase
-{
+public class ProjectsAPIIT extends AbstractRestClientIntegrationTestCase {
     
     @Before
     public void setUp() throws Exception {

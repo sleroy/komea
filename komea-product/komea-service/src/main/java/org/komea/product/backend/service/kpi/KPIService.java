@@ -34,8 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public final class KPIService implements IKPIService
-{
+public final class KPIService implements IKPIService {
     
     @Autowired
     private IMeasureHistoryService measureService;
@@ -278,8 +277,12 @@ public final class KPIService implements IKPIService
             case PROJECT:
                 measure.setIdProject(_kpiKey.getEntityID());
                 break;
-        
+            default:
+                // TODO:: Add code for default statement
+                throw new UnsupportedOperationException("Not implemented default statement");
+                
         }
+        
         final Kpi findKPI = findKPI(_kpiKey);
         final IEntity entityAssociatedToKpi = entityService.getEntityAssociatedToKpi(_kpiKey);
         measure.setDate(new Date());
@@ -319,6 +322,28 @@ public final class KPIService implements IKPIService
             saveOrUpdate(kpi);
         }
         
+    }
+    
+    @Override
+    public Measure getLastMeasures(final KpiKey _kpiKey) throws KPINotFoundException {
+    
+        // TODO STUB
+        Measure measure = new Measure();
+        measure.setDate(new Date());
+        measure.setId(1);
+        measure.setIdKpi(1);
+        measure.setIdPerson(1);
+        measure.setValue(12D);
+        
+        return measure;
+    }
+    
+    @Override
+    public List<Kpi> listAllKpis() {
+    
+        // TODO a faire le test
+        List<Kpi> kpiList = kpiDAO.selectByCriteria(new KpiCriteria());
+        return kpiList;
     }
     
 }

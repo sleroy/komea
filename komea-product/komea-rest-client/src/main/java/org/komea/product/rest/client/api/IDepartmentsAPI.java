@@ -15,8 +15,7 @@ import org.komea.product.service.dto.errors.InternalServerException;
  * @author $Author: jguidoux $
  * @since 4 févr. 2014
  */
-public interface IDepartmentsAPI
-{
+public interface IDepartmentsAPI {
     
     /**
      * This method return the departments list stored in Komea

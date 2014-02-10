@@ -9,8 +9,7 @@ import java.util.concurrent.Executors;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
-public class KomeaServerLauncher implements Runnable
-{
+public class KomeaServerLauncher implements Runnable {
     
     private final WebAppContext webAppContext;
     private final Server        server;
@@ -26,20 +25,6 @@ public class KomeaServerLauncher implements Runnable
         
     }
     
-    public void startServer() throws Exception {
-    
-        ExecutorService service = Executors.newSingleThreadExecutor();
-        service.execute(this);
-        
-    }
-    
-    public void stopServer() throws Exception {
-    
-        server.stop();
-        server.join();
-        System.out.println("Server stopped");
-    }
-    
     @Override
     public void run() {
     
@@ -52,6 +37,20 @@ public class KomeaServerLauncher implements Runnable
             e.printStackTrace();
         }
         
+    }
+    
+    public void startServer() throws Exception {
+    
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        service.execute(this);
+        
+    }
+    
+    public void stopServer() throws Exception {
+    
+        server.stop();
+        server.join();
+        System.out.println("Server stopped");
     }
     
 }
