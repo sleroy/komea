@@ -158,4 +158,11 @@ public class EventTypeService implements IEventTypeService {
         return events;
     }
     
+    @Override
+    public void pushEvent(final EventDto _event) {
+    
+        // TODO Auto-generated pushEvent STUB
+        
+    }
+    
 }

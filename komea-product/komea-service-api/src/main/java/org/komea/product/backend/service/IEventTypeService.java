@@ -10,8 +10,7 @@ import org.komea.product.database.dto.MeasureDTODto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
 
-public interface IEventTypeService
-{
+public interface IEventTypeService {
     
     public EventTypeDao getEventTypeDAO();
     
@@ -44,5 +43,13 @@ public interface IEventTypeService
      * @return the event list
      */
     public List<EventDto> findEvents(MeasureDTODto _searchEvent);
+    
+    /**
+     * This method push a new event
+     * 
+     * @param _event
+     *            the new event
+     */
+    public void pushEvent(EventDto _event);
     
 }

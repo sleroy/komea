@@ -89,7 +89,7 @@ public final class KPIService implements IKPIService {
     
         final KpiCriteria kpiCriteria = new KpiCriteria();
         kpiCriteria.createCriteria().andKpiKeyEqualTo(_kpiKey.getKpiName());
-        if (_kpiKey.isAssocoateWithEntity()) {
+        if (_kpiKey.isAssociateWithEntity()) {
             kpiCriteria.createCriteria().andEntityIDEqualTo(_kpiKey.getEntityID());
             kpiCriteria.createCriteria().andEntityTypeEqualTo(_kpiKey.getEntityType());
         }

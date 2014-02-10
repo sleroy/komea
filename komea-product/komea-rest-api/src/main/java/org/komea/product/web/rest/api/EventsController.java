@@ -21,8 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @RequestMapping(value = "/events")
-public class EventsController
-{
+public class EventsController {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(EventsController.class);
     
@@ -76,6 +75,7 @@ public class EventsController
     
         LOGGER.debug("call rest method /events/push to push event {}", _event.getMessage());
         // TODO
-        eventService.registerEvent(_event.getProvider(), _event.getEventType());
+        
+        eventService.pushEvent(_event);
     }
 }
