@@ -9,7 +9,7 @@ import org.komea.product.database.enums.Severity;
 
 import com.google.common.collect.Lists;
 
-public class MeasureDTODto implements Serializable {
+public class SearchEventDto implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
@@ -17,14 +17,14 @@ public class MeasureDTODto implements Serializable {
     private List<String>      entityKeys;
     private List<String>      eventTypeKeys;
     
-    public MeasureDTODto(final Severity severityMin, final List<String> entityKeys, final List<String> eventTypeKeys) {
+    public SearchEventDto(final Severity severityMin, final List<String> entityKeys, final List<String> eventTypeKeys) {
     
         this.severityMin = severityMin;
         this.entityKeys = entityKeys;
         this.eventTypeKeys = eventTypeKeys;
     }
     
-    public MeasureDTODto() {
+    public SearchEventDto() {
     
         entityKeys = Lists.newArrayList();
         eventTypeKeys = Lists.newArrayList();

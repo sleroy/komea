@@ -1,11 +1,10 @@
 
-package org.komea.product.web.rest.api;
+package org.komea.product.service.dto;
 
 
 import java.util.List;
 
 import org.komea.product.database.model.Measure;
-import org.komea.product.service.dto.KpiKey;
 
 import com.google.common.collect.Lists;
 

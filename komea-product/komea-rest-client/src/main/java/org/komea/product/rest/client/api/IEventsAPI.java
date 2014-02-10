@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.dto.EventDto;
-import org.komea.product.database.dto.MeasureDTODto;
+import org.komea.product.database.dto.SearchEventDto;
 import org.komea.product.service.dto.errors.InternalServerException;
 
 /**
@@ -31,7 +31,7 @@ public interface IEventsAPI extends IRestClientAPI {
      * @throws InternalServerException
      *             launch if exception happened in server side
      */
-    List<EventDto> findEvents(final MeasureDTODto _searchEvent) throws ConnectException, InternalServerException;
+    List<EventDto> findEvents(final SearchEventDto _searchEvent) throws ConnectException, InternalServerException;
     
     /**
      * This method find events

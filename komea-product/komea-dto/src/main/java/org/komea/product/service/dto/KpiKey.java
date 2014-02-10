@@ -2,13 +2,11 @@
 package org.komea.product.service.dto;
 
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 
-public class KpiKey
-{
+public class KpiKey {
     
     public static KpiKey newKpiWithEntityDetails(final Kpi _kpiName, final EntityType _entityTYpe, final int _entityID) {
     
@@ -80,10 +78,10 @@ public class KpiKey
         return kpiName;
     }
     
-    @JsonIgnore
-    public boolean isAssocoateWithEntity() {
+    // @JsonIgnore
+    public boolean verifiyIfIsAssociateToEntity() {
     
-        return entityType == null && entityID == null;
+        return entityType != null && entityID != null;
     }
     
     public void setEntityID(final Integer _entityID) {

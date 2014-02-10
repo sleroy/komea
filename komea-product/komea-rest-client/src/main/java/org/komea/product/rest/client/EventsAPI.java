@@ -9,7 +9,7 @@ import javax.ws.rs.core.GenericType;
 
 import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.dto.EventDto;
-import org.komea.product.database.dto.MeasureDTODto;
+import org.komea.product.database.dto.SearchEventDto;
 import org.komea.product.rest.client.api.IEventsAPI;
 import org.komea.product.service.dto.errors.InternalServerException;
 
@@ -20,10 +20,10 @@ class EventsAPI extends AbstractRestCientAPI implements IEventsAPI {
     /**
      * (non-Javadoc)
      * 
-     * @see org.komea.product.rest.client.api.IEventsAPI#findEvents(org.komea.product.database.dto.MeasureDTODto)
+     * @see org.komea.product.rest.client.api.IEventsAPI#findEvents(org.komea.product.database.dto.SearchEventDto)
      */
     @Override
-    public List<EventDto> findEvents(final MeasureDTODto _searchEvent) throws ConnectException, InternalServerException {
+    public List<EventDto> findEvents(final SearchEventDto _searchEvent) throws ConnectException, InternalServerException {
     
         String url = EVENTS_PATH + "/find";
         return post(url, _searchEvent, new GenericType<List<EventDto>>() {

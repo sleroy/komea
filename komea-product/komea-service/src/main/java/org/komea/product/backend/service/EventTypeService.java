@@ -12,7 +12,7 @@ import org.komea.product.backend.exceptions.AlreadyExistingEventTypeException;
 import org.komea.product.backend.exceptions.InvalidEventTypeDescriptionException;
 import org.komea.product.database.dao.EventTypeDao;
 import org.komea.product.database.dto.EventDto;
-import org.komea.product.database.dto.MeasureDTODto;
+import org.komea.product.database.dto.SearchEventDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
@@ -126,7 +126,7 @@ public class EventTypeService implements IEventTypeService {
     }
     
     @Override
-    public List<EventDto> findEvents(final MeasureDTODto _searchEvent) {
+    public List<EventDto> findEvents(final SearchEventDto _searchEvent) {
     
         // TODO STUB
         
