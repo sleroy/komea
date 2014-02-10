@@ -5,7 +5,9 @@ package org.komea.product.rest.client.api;
 import java.net.ConnectException;
 import java.util.List;
 
+import org.komea.product.database.dto.SearchHistoricalMeasuresDto;
 import org.komea.product.service.dto.KpiKey;
+import org.komea.product.service.dto.MeasureHistoricalResultDto;
 import org.komea.product.service.dto.MeasureResultDto;
 import org.komea.product.service.dto.errors.InternalServerException;
 
@@ -43,4 +45,13 @@ public interface IMeasuresAPI {
      *             launch if exceptions happened in the server
      */
     List<MeasureResultDto> lastMeasuresForKpiKeys(final List<KpiKey> _kpiKey) throws InternalServerException, ConnectException;
+    
+    /**
+     * This method return the historical measure for a set of entities and for a group of kpi types between two dates
+     * 
+     * @param _searchLastMeasure
+     *            contiain a set of entities a group of kpi types, the stating and the end date or by number id start and end are null
+     * @return the historical measures for this entities
+     */
+    public List<MeasureHistoricalResultDto> historicalMeasures(final SearchHistoricalMeasuresDto _searchHistoricalMeasure);
 }
