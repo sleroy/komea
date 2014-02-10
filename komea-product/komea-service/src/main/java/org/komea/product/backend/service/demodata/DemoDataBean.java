@@ -87,18 +87,18 @@ public class DemoDataBean
         
         
         final Person record =
-                new Person(null, null, null, "Obiwan", "Kenobi", "obiwan@lightforce.net", "obiwan");
+                new Person(null, null, null, "Obiwan", "Kenobi", "obiwan@lightforce.net", "obiwan", "");
         record.setIdPersonRole(userRole.getId());
         personDAO.insert(record);
         
         final Person record2 =
-                new Person(null, null, null, "Dark", "Maul", "darkmaul@darkforce.net", "dmaul");
+                new Person(null, null, null, "Dark", "Maul", "darkmaul@darkforce.net", "dmaul", "");
         record2.setIdPersonRole(userRole.getId());
         personDAO.insert(record2);
         
         final Person record3 =
                 new Person(null, null, null, "Luke", "Skywalker", "lskywalker@lightforce.net",
-                        "lskywalker");
+                        "lskywalker", "");
         record3.setIdPersonRole(userRole.getId());
         personDAO.insert(record3);
         

@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.komea.product.database.dto.EventDto;
+import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
 import org.komea.product.rest.client.RestClientFactory;
@@ -76,7 +76,7 @@ public class KomeaDecorator implements Decorator {
                 if (result == null) {
                     continue;
                 }
-                final EventDto event = createMeasureEvent(metric, result);
+                final EventSimpleDto event = createMeasureEvent(metric, result);
                 eventsAPI.pushEvent(event);
             }
         } catch (Exception ex) {
@@ -84,7 +84,7 @@ public class KomeaDecorator implements Decorator {
         }
     }
 
-    private EventDto createMeasureEvent(final Metric metric, final Double value) {
+    private EventSimpleDto createMeasureEvent(final Metric metric, final Double value) {
         final EventType eventType = KomeaPlugin.createEventType(metric);
         final String message = "'" + metric.getName() + "' for project " + komeaProjectKey + " is : " + value;
         final HashMap<String, String> properties = new HashMap<String, String>(0);
@@ -92,7 +92,18 @@ public class KomeaDecorator implements Decorator {
         properties.put("value", value.toString());
         properties.put("project", komeaProjectKey);
         properties.put("date", String.valueOf(new Date().getTime()));
-        return new EventDto(eventType, provider, message, properties, komeaProjectKey, new Date());
+        final EventSimpleDto event = new EventSimpleDto();
+        event.setDate(new Date());
+        event.setEventType(eventType.getEventKey());
+        event.setMessage(message);
+        event.setPersonGroup(null);
+        event.setPersons(null);
+        event.setProject(komeaProjectKey);
+        event.setProperties(properties);
+        event.setProvider(provider.getName());
+        event.setUrl(null);
+        event.setValue(value);
+        return event;
     }
 
     private Double getValue(final Metric metric, final DecoratorContext context) {

@@ -8,7 +8,10 @@ import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.api.dom.java.Field;
-import org.mybatis.generator.api.dom.java.Interface;
+import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
+import org.mybatis.generator.api.dom.java.JavaVisibility;
+import org.mybatis.generator.api.dom.java.Method;
+import org.mybatis.generator.api.dom.java.Parameter;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
 
@@ -21,11 +24,6 @@ public class JSR303Plugin extends PluginAdapter {
     @Override
     public boolean validate(List<String> warnings) {
         return true;
-    }
-
-    @Override
-    public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        return super.clientGenerated(interfaze, topLevelClass, introspectedTable); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -86,7 +84,6 @@ public class JSR303Plugin extends PluginAdapter {
             IntrospectedTable introspectedTable, ModelClassType modelClassType) {
 
         if (!introspectedColumn.isNullable()
-                // && !introspectedTable.getPrimaryKeyColumns().contains(introspectedColumn)) {
                 && (introspectedColumn.getJdbcType() != Types.INTEGER
                 || !introspectedColumn.getActualColumnName().startsWith("id"))) {
             topLevelClass.addImportedType("javax.validation.constraints.NotNull");
@@ -96,7 +93,6 @@ public class JSR303Plugin extends PluginAdapter {
             topLevelClass.addImportedType("javax.validation.constraints.Size");
             field.addAnnotation("@Size(min = 0, max = " + introspectedColumn.getLength() + ")");
         }
-
 //        if (introspectedColumn.getJdbcType() == Types.INTEGER) {
 //            topLevelClass.addImportedType("javax.validation.constraints.Max");
 //            field.addAnnotation("@Max(value=2147483647)");
@@ -105,6 +101,73 @@ public class JSR303Plugin extends PluginAdapter {
 //        }
         return super.modelFieldGenerated(field, topLevelClass, introspectedColumn,
                 introspectedTable, modelClassType);
+    }
+
+    @Override
+    public boolean modelBaseRecordClassGenerated(TopLevelClass topLevelClass,
+            IntrospectedTable introspectedTable) {
+        return modelClassGenerated(topLevelClass, introspectedTable);
+    }
+
+    @Override
+    public boolean modelPrimaryKeyClassGenerated(TopLevelClass topLevelClass,
+            IntrospectedTable introspectedTable) {
+        return modelClassGenerated(topLevelClass, introspectedTable);
+    }
+
+    @Override
+    public boolean modelRecordWithBLOBsClassGenerated(
+            TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        return modelClassGenerated(topLevelClass, introspectedTable);
+    }
+
+    private boolean modelClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        setEntityType(topLevelClass, introspectedTable);
+        addKpiMethods(topLevelClass);
+        return true;
+    }
+
+    private void addKpiMethods(TopLevelClass topLevelClass) {
+        if ("org.komea.product.database.model.Kpi".equals(topLevelClass.getType().toString())) {
+            final FullyQualifiedJavaType javaTypeIEntity
+                    = new FullyQualifiedJavaType("org.komea.product.database.api.IEntity");
+            topLevelClass.addImportedType(javaTypeIEntity);
+            final Parameter parameter = new Parameter(javaTypeIEntity, "_entity");
+
+            final Method computeKPIEsperKey = new Method("computeKPIEsperKey");
+            computeKPIEsperKey.setVisibility(JavaVisibility.PUBLIC);
+            computeKPIEsperKey.addParameter(parameter);
+            computeKPIEsperKey.setReturnType(FullyQualifiedJavaType.getStringInstance());
+            computeKPIEsperKey.addBodyLine("return \"KPI_\" + getKpiKey() + \"_T_\" + "
+                    + "getEntityType().ordinal() + \"_ENTITY_\" + _entity.getId();");
+            topLevelClass.addMethod(computeKPIEsperKey);
+
+            final Method getCronHistoryJobName = new Method("getCronHistoryJobName");
+            getCronHistoryJobName.setVisibility(JavaVisibility.PUBLIC);
+            getCronHistoryJobName.addParameter(parameter);
+            getCronHistoryJobName.setReturnType(FullyQualifiedJavaType.getStringInstance());
+            getCronHistoryJobName.addBodyLine("return \"HISTORY_\" + computeKPIEsperKey(_entity);");
+            topLevelClass.addMethod(getCronHistoryJobName);
+        }
+    }
+
+    private void setEntityType(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        final String entityType = introspectedTable.getTableConfigurationProperty("entityType");
+        if (entityType != null) {
+            final FullyQualifiedJavaType javaIEntityType
+                    = new FullyQualifiedJavaType("org.komea.product.database.api.IEntity");
+            topLevelClass.addImportedType(javaIEntityType);
+            topLevelClass.addSuperInterface(javaIEntityType);
+            final FullyQualifiedJavaType javaEntityType
+                    = new FullyQualifiedJavaType("org.komea.product.database.enums.EntityType");
+            topLevelClass.addImportedType(javaEntityType);
+            final Method method = new Method("entityType");
+            method.addAnnotation("@Override");
+            method.setVisibility(JavaVisibility.PUBLIC);
+            method.setReturnType(javaEntityType);
+            method.addBodyLine("return EntityType." + entityType + ";");
+            topLevelClass.addMethod(method);
+        }
     }
 
 }

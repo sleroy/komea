@@ -45,7 +45,7 @@ public final class EntityService implements IEntityService
         switch (_entityType) {
             case PERSON:
                 return (TEntity) personDAO.selectByPrimaryKey(_key);
-            case PERSONG_GROUP:
+            case PERSON_GROUP:
                 return (TEntity) personGroupDao.selectByPrimaryKey(_key);
             case PROJECT:
                 return (TEntity) projectDao.selectByPrimaryKey(_key);

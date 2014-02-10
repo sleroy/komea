@@ -3,7 +3,7 @@ package org.komea.providers.sonar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import org.komea.product.database.dto.EventDto;
+import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.model.Provider;
 import org.komea.product.rest.client.RestClientFactory;
 import org.komea.product.rest.client.api.IEventsAPI;
@@ -74,16 +74,26 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
         return ciFlowProjectKey;
     }
 
-    private EventDto createStartEvent(final String projectKey, final long start) {
+    private EventSimpleDto createStartEvent(final String projectKey, final long start) {
         final String message = "Analysis of " + projectKey + " started.";
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(start));
         properties.put("project", projectKey);
-        return new EventDto(KomeaPlugin.EVENT_ANALYSIS_STARTED, provider,
-                message, properties, projectKey, new Date());
+        final EventSimpleDto event = new EventSimpleDto();
+        event.setDate(new Date());
+        event.setEventType(KomeaPlugin.EVENT_ANALYSIS_STARTED.getEventKey());
+        event.setMessage(message);
+        event.setPersonGroup(null);
+        event.setPersons(null);
+        event.setProject(projectKey);
+        event.setProperties(properties);
+        event.setProvider(provider.getName());
+        event.setUrl(null);
+        event.setValue(event.getDate().getTime());
+        return event;
     }
 
-    private EventDto createDurationEvent(final String projectKey, final long start, final long end) {
+    private EventSimpleDto createDurationEvent(final String projectKey, final long start, final long end) {
         final long duration = end - start;
         final String message = "Analysis of " + projectKey + " done in : " + duration + "ms";
         final Map<String, String> properties = new HashMap<String, String>(3);
@@ -91,17 +101,37 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
         properties.put("end", String.valueOf(end));
         properties.put("duration", String.valueOf(duration));
         properties.put("project", projectKey);
-        return new EventDto(KomeaPlugin.EVENT_ANALYSIS_DURATION, provider,
-                message, properties, projectKey, new Date());
+        final EventSimpleDto event = new EventSimpleDto();
+        event.setDate(new Date());
+        event.setEventType(KomeaPlugin.EVENT_ANALYSIS_DURATION.getEventKey());
+        event.setMessage(message);
+        event.setPersonGroup(null);
+        event.setPersons(null);
+        event.setProject(projectKey);
+        event.setProperties(properties);
+        event.setProvider(provider.getName());
+        event.setUrl(null);
+        event.setValue(duration);
+        return event;
     }
 
-    private EventDto createEndEvent(final String projectKey, final long end) {
+    private EventSimpleDto createEndEvent(final String projectKey, final long end) {
         final String message = "Analysis of " + projectKey + " ended.";
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(end));
         properties.put("project", projectKey);
-        return new EventDto(KomeaPlugin.EVENT_ANALYSIS_ENDED, provider,
-                message, properties, projectKey, new Date());
+        final EventSimpleDto event = new EventSimpleDto();
+        event.setDate(new Date());
+        event.setEventType(KomeaPlugin.EVENT_ANALYSIS_ENDED.getEventKey());
+        event.setMessage(message);
+        event.setPersonGroup(null);
+        event.setPersons(null);
+        event.setProject(projectKey);
+        event.setProperties(properties);
+        event.setProvider(provider.getName());
+        event.setUrl(null);
+        event.setValue(event.getDate().getTime());
+        return event;
     }
 
 }

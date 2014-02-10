@@ -406,7 +406,7 @@ public final class KPIService implements IKPIService
             case PERSON:
                 measure.setIdPerson(_kpiKey.getEntityID());
                 break;
-            case PERSONG_GROUP:
+            case PERSON_GROUP:
                 measure.setIdPersonGroup(_kpiKey.getEntityID());
                 break;
             case PROJECT:

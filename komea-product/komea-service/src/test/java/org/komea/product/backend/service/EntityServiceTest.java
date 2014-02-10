@@ -106,7 +106,7 @@ public class EntityServiceTest
         
         Mockito.when(personGroupDao.selectByPrimaryKey(12)).thenReturn(group);
         
-        IEntity entity = entityService.getEntity(EntityType.PERSONG_GROUP, 12);
+        IEntity entity = entityService.getEntity(EntityType.PERSON_GROUP, 12);
         
         Assert.assertTrue(entity instanceof PersonGroup);
         PersonGroup result = (PersonGroup) entity;

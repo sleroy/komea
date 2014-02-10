@@ -88,7 +88,7 @@ public final class MeasureHistoryService implements IMeasureHistoryService {
             case PERSON:
                 createCriteria.andIdPersonEqualTo(_kpiKey.getEntityID());
                 break;
-            case PERSONG_GROUP:
+            case PERSON_GROUP:
                 createCriteria.andIdPersonGroupEqualTo(_kpiKey.getEntityID());
                 break;
             case PROJECT:
