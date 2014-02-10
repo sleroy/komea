@@ -23,7 +23,7 @@ public class AlertPushService implements IEventPushService
     
     
     @Autowired
-    private IAlertValidationService validator;
+    private IEventConvertionAndValidationService validator;
     
     
     
@@ -74,7 +74,7 @@ public class AlertPushService implements IEventPushService
     }
     
     
-    public void setValidator(final IAlertValidationService _validator) {
+    public void setValidator(final IEventConvertionAndValidationService _validator) {
     
     
         validator = _validator;

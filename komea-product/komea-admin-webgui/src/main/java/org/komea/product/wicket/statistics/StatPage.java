@@ -12,7 +12,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.komea.product.backend.service.esper.IAlertStatisticsService;
+import org.komea.product.backend.service.esper.IEventStatisticsService;
 import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.AlertTypeStatistic;
@@ -45,7 +45,7 @@ public class StatPage extends LayoutPage
     
     
     @SpringBean
-    private IAlertStatisticsService statService;
+    private IEventStatisticsService statService;
     
     
     

@@ -9,7 +9,7 @@ import java.util.List;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
-import org.komea.product.database.dto.MeasureDTODto;
+import org.komea.product.database.dto.SearchEventDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
@@ -43,7 +43,7 @@ public class AlertViewerService implements IEventViewerService
     
     
     @Override
-    public List<IEvent> findEvents(final MeasureDTODto _searchEvent) {
+    public List<IEvent> findEvents(final SearchEventDto _searchEvent) {
     
     
         // TODO STUB

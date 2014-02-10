@@ -38,8 +38,8 @@ public class AlertPushServiceTest
         final AlertPushService alertPushService = new AlertPushService();
         final IEsperEngine esperEngineMock = Mockito.mock(IEsperEngine.class);
         alertPushService.setEsperEngine(esperEngineMock);
-        final IAlertValidationService mock =
-                Mockito.mock(IAlertValidationService.class, Mockito.withSettings().verboseLogging());
+        final IEventConvertionAndValidationService mock =
+                Mockito.mock(IEventConvertionAndValidationService.class, Mockito.withSettings().verboseLogging());
         Mockito.when(mock.convert(Matchers.any(EventSimpleDto.class))).thenReturn(new Event());
         alertPushService.setValidator(mock);
         alertPushService.sendEventDto(EventDtoBuilder.newAlert().message("DemoAlert").build());
@@ -61,8 +61,8 @@ public class AlertPushServiceTest
         final AlertPushService alertPushService = new AlertPushService();
         final IEsperEngine esperEngineMock = Mockito.mock(IEsperEngine.class);
         alertPushService.setEsperEngine(esperEngineMock);
-        final IAlertValidationService mock =
-                Mockito.mock(IAlertValidationService.class, Mockito.withSettings().verboseLogging());
+        final IEventConvertionAndValidationService mock =
+                Mockito.mock(IEventConvertionAndValidationService.class, Mockito.withSettings().verboseLogging());
         Mockito.when(mock.convert(Matchers.any(EventSimpleDto.class))).thenReturn(new Event());
         alertPushService.setValidator(mock);
         

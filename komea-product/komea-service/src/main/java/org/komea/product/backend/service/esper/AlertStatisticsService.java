@@ -42,7 +42,7 @@ import com.espertech.esper.client.EPStatement;
  * @author sleroy
  */
 @Service
-public class AlertStatisticsService implements IAlertStatisticsService
+public class AlertStatisticsService implements IEventStatisticsService
 {
     
     
@@ -178,7 +178,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.backend.service.esper.IAlertStatisticsService#getReceivedAlertTypesIn24Hours()
+     * @see org.komea.product.backend.service.esper.IEventStatisticsService#getReceivedAlertTypesIn24Hours()
      */
     @Override
     public List<AlertTypeStatistic> getReceivedAlertTypesIn24LastHours() {

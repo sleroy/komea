@@ -9,7 +9,7 @@ import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.backend.service.esper.IEventViewerService;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;
-import org.komea.product.database.dto.MeasureDTODto;
+import org.komea.product.database.dto.SearchEventDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class EventsController
     @RequestMapping(method = RequestMethod.POST, value = "/find")
     @ResponseBody
     public List<IEvent> findEvents(@RequestBody
-    final MeasureDTODto _searchEvent) {
+    final SearchEventDto _searchEvent) {
     
     
         LOGGER.debug("call rest method /events/find to find event {}", _searchEvent.getEntityKeys());

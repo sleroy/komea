@@ -8,7 +8,7 @@ import org.komea.product.database.dto.EventSimpleDto;
 
 
 
-public interface IAlertValidationService
+public interface IEventConvertionAndValidationService
 {
     
     

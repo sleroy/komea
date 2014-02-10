@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class AlertValidationService implements IAlertValidationService
+public class AlertValidationService implements IEventConvertionAndValidationService
 {
     
     
@@ -159,7 +159,7 @@ public class AlertValidationService implements IAlertValidationService
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.backend.service.esper.IAlertValidationService#validate(org.komea.product.database.alert.IEvent)
+     * @see org.komea.product.backend.service.esper.IEventConvertionAndValidationService#validate(org.komea.product.database.alert.IEvent)
      */
     @Override
     public void validate(final IEvent _event) {

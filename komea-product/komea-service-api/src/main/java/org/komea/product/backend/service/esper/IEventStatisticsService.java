@@ -11,7 +11,7 @@ import org.komea.product.service.dto.AlertTypeStatistic;
 
 
 
-public interface IAlertStatisticsService
+public interface IEventStatisticsService
 {
     
     

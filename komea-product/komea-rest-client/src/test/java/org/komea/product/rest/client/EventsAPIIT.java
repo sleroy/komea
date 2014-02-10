@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.dto.EventSimpleDto;
-import org.komea.product.database.dto.MeasureDTODto;
+import org.komea.product.database.dto.SearchEventDto;
 import org.komea.product.rest.client.api.IEventsAPI;
 import org.komea.product.service.dto.errors.InternalServerException;
 
@@ -32,7 +32,7 @@ public class EventsAPIIT extends AbstractRestClientIntegrationTestCase
     public void findEvents() throws Exception {
     
     
-        final MeasureDTODto searchEvent = new MeasureDTODto();
+        final SearchEventDto searchEvent = new SearchEventDto();
         searchEvent.getEntityKeys().add("1");
         searchEvent.getEventTypeKeys().add("dtc");
         

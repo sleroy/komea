@@ -6,7 +6,7 @@ package org.komea.product.backend.service.esper;
 import java.util.List;
 
 import org.komea.product.database.alert.IEvent;
-import org.komea.product.database.dto.MeasureDTODto;
+import org.komea.product.database.dto.SearchEventDto;
 
 
 
@@ -21,7 +21,7 @@ public interface IEventViewerService
      *            the event criterias as as severityMin, event key or event types
      * @return the event list
      */
-    public List<IEvent> findEvents(MeasureDTODto _searchEvent);
+    public List<IEvent> findEvents(SearchEventDto _searchEvent);
     
     
     /**

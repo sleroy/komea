@@ -12,7 +12,7 @@ import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.backend.service.esper.IEventViewerService;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
-import org.komea.product.database.dto.MeasureDTODto;
+import org.komea.product.database.dto.SearchEventDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
@@ -62,10 +62,10 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
     public void findEventsTest() throws Exception {
     
     
-        Mockito.when(eventService.findEvents(Matchers.any(MeasureDTODto.class))).thenReturn(
+        Mockito.when(eventService.findEvents(Matchers.any(SearchEventDto.class))).thenReturn(
                 getEvents());
         
-        final MeasureDTODto search = new MeasureDTODto();
+        final SearchEventDto search = new SearchEventDto();
         search.setSeverityMin(Severity.INFO);
         
         final String jsonMessage = IntegrationTestUtil.convertObjectToJSON(search);
@@ -82,8 +82,8 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
         httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[0].entityName",
                 org.hamcrest.Matchers.equalToIgnoringCase("romain")));
         
-        Mockito.verify(eventService, Mockito.times(1))
-                .findEvents(Matchers.any(MeasureDTODto.class));
+        Mockito.verify(eventService, Mockito.times(1)).findEvents(
+                Matchers.any(SearchEventDto.class));
     }
     
     
@@ -93,7 +93,7 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
     
         Mockito.when(eventService.getEvents("MINOR", 1)).thenReturn(getEvents());
         
-        final MeasureDTODto search = new MeasureDTODto();
+        final SearchEventDto search = new SearchEventDto();
         search.setSeverityMin(Severity.INFO);
         
         final ResultActions httpRequest =

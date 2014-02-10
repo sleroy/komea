@@ -9,7 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.service.esper.IEventPushService;
-import org.komea.product.backend.service.esper.IAlertStatisticsService;
+import org.komea.product.backend.service.esper.IEventStatisticsService;
 import org.komea.product.backend.service.esper.IEventViewerService;
 import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.database.alert.EventBuilder;
@@ -39,7 +39,7 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
     private IEventPushService       eventPushService;
     
     @Autowired
-    private IAlertStatisticsService systemProject;
+    private IEventStatisticsService systemProject;
     
     @Autowired
     private IEsperEngine            esperEngine;
