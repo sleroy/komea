@@ -8,9 +8,9 @@ package org.komea.product.backend.service.esper;
 
 import static org.mockito.Mockito.verify;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.EventDtoBuilder;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;
@@ -38,8 +38,12 @@ public class AlertPushServiceTest
         final AlertPushService alertPushService = new AlertPushService();
         final IEsperEngine esperEngineMock = Mockito.mock(IEsperEngine.class);
         alertPushService.setEsperEngine(esperEngineMock);
-        alertPushService.setValidator(Mockito.mock(IAlertValidationService.class));
+        final IAlertValidationService mock =
+                Mockito.mock(IAlertValidationService.class, Mockito.withSettings().verboseLogging());
+        Mockito.when(mock.convert(Matchers.any(EventSimpleDto.class))).thenReturn(new Event());
+        alertPushService.setValidator(mock);
         alertPushService.sendEventDto(EventDtoBuilder.newAlert().message("DemoAlert").build());
+        
         verify(esperEngineMock, Mockito.times(1)).sendAlert(Matchers.any(IEvent.class));
         
         
@@ -57,12 +61,16 @@ public class AlertPushServiceTest
         final AlertPushService alertPushService = new AlertPushService();
         final IEsperEngine esperEngineMock = Mockito.mock(IEsperEngine.class);
         alertPushService.setEsperEngine(esperEngineMock);
-        alertPushService.setValidator(Mockito.mock(IAlertValidationService.class));
+        final IAlertValidationService mock =
+                Mockito.mock(IAlertValidationService.class, Mockito.withSettings().verboseLogging());
+        Mockito.when(mock.convert(Matchers.any(EventSimpleDto.class))).thenReturn(new Event());
+        alertPushService.setValidator(mock);
+        
         final EventSimpleDto event = EventDtoBuilder.newAlert().message("DemoAlert").build();
         event.setDate(null);
         alertPushService.sendEventDto(event);
         verify(esperEngineMock, Mockito.times(1)).sendAlert(Matchers.any(IEvent.class));
-        Assert.assertNotNull(event.getDate());
+        
     }
     
 }

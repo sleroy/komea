@@ -48,7 +48,8 @@ public class AlertPushService implements IAlertPushService
     public void sendEventDto(final EventSimpleDto _dto) {
     
     
-        sendEvent(validator.convert(_dto));
+        final IEvent convert = validator.convert(_dto);
+        sendEvent(convert);
         
     }
     
