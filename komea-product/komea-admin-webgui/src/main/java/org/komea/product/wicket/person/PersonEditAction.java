@@ -45,7 +45,8 @@ public class PersonEditAction implements IEditAction<Person>
             editedPerson.setRole("");
         }
         editedPerson.setId(_object.getId());
-        editedPersonPage.setResponsePage(new PersonAddPage(editedPerson));
+        editedPersonPage.setResponsePage(new PersonPage(editedPersonPage.getPageParameters(),
+                editedPerson));
         
         //
         

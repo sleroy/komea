@@ -10,7 +10,6 @@ import org.apache.wicket.settings.IExceptionSettings.ThreadDumpStrategy;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.komea.product.wicket.console.ConsolePage;
 import org.komea.product.wicket.cronpage.CronPage;
-import org.komea.product.wicket.person.PersonAddPage;
 import org.komea.product.wicket.person.PersonPage;
 import org.komea.product.wicket.settings.SettingsPage;
 import org.komea.product.wicket.statistics.StatPage;
@@ -64,7 +63,6 @@ public class WicketApplication extends WebApplication
         mountPage("/settings", SettingsPage.class);
         mountPage("/viewlog", ConsolePage.class);
         mountPage("/stats", StatPage.class);
-        mountPage("/adduser", PersonAddPage.class);
         mountPage("/login", LoginPage.class);
         mountPage("/cronpage", CronPage.class);
         mountPage("/logout", LoginPage.class);

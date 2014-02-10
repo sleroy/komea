@@ -13,16 +13,9 @@ public class PersonDeleteAction implements IDeleteAction<Person>
 {
     
     
-    private final PersonDao personDAO;
-    
-    
-    
     public PersonDeleteAction(final PersonDao _personDAO) {
     
     
-        personDAO = _personDAO;
-        
-        
     }
     
     
@@ -30,8 +23,5 @@ public class PersonDeleteAction implements IDeleteAction<Person>
     public void delete(final Person _object) {
     
     
-        personDAO.deleteByPrimaryKey(_object.getId());
-        
     }
-    
 }

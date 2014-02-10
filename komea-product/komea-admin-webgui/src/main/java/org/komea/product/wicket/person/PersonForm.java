@@ -3,14 +3,15 @@ package org.komea.product.wicket.person;
 
 
 
-import org.apache.wicket.extensions.markup.html.form.select.Select;
-import org.apache.wicket.extensions.markup.html.form.select.SelectOption;
+import java.util.List;
+
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonRoleDao;
 import org.komea.product.database.dto.PersonDto;
@@ -30,9 +31,12 @@ public final class PersonForm extends Form<PersonDto>
     
     
     private final PersonDao     personDAO;
-    private final PersonDto     personDto;
-    private PersonRole          personRole;
+    
     private final PersonRoleDao personRoleDAO;
+    private final PersonDto     personDto;
+    private PersonRole          selectedRole;
+    
+    private final Integer       key;
     
     
     
@@ -47,31 +51,38 @@ public final class PersonForm extends Form<PersonDto>
         personRoleDAO = _personRoleDAO;
         personDAO = _personDAO;
         personDto = _dto.getObject();
-        add(new HiddenField<Integer>("key", Model.<Integer> of(personDto.getId())));
-        add(new TextField<String>("login", Model.<String> of(personDto.getLogin())));
-        add(new TextField<String>("firstname", Model.<String> of(personDto.getFirstName())));
-        add(new TextField<String>("lastname", Model.<String> of(personDto.getLastName())));
-        add(new TextField<String>("email", Model.<String> of(personDto.getLogin())));
-        final Select<PersonRole> select =
-                new Select<PersonRole>("role", new PropertyModel<PersonRole>(this, "personRole"));
-        add(select);
-        for (final PersonRole personRoleItem : personRoleDAO
-                .selectByCriteria(new PersonRoleCriteria())) {
-            select.add(new SelectOption<PersonRole>(personRoleItem.getName(), Model
-                    .of(personRoleItem)));
-        }
+        key = personDto.getId();
+        add(new TextField<String>("login", new PropertyModel<String>(personDto, "login")));
+        add(new TextField<String>("firstname", new PropertyModel<String>(personDto, "firstName")));
+        add(new TextField<String>("lastname", new PropertyModel<String>(personDto, "lastName")));
+        final TextField<String> textField =
+                new TextField<String>("email", new PropertyModel<String>(personDto, "email"));
+        textField.add(EmailAddressValidator.getInstance());
+        add(textField);
+        // Creation the drop down.
+        final List<PersonRole> selectPersonRoles =
+                personRoleDAO.selectByCriteria(new PersonRoleCriteria());
+        final PropertyModel<PersonRole> selectionRoleModel =
+                new PropertyModel<PersonRole>(this, "selectedRole");
+        
+        final DropDownChoice<PersonRole> dropDownChoice =
+                new DropDownChoice<PersonRole>("role", selectionRoleModel, selectPersonRoles,
+                        new ChoiceRenderer<PersonRole>("name"));
+        add(dropDownChoice);
         
         
     }
     
     
     /**
-     * Validation of the formular : settings are updated from the DTO
+     * Validation the formular : settings are updated from the DTO
      */
     @Override
     protected void onSubmit() {
     
     
+        debug("Submitting person...");
+        
         final Person person = new Person();
         person.setId(personDto.getId());
         person.setFirstName(personDto.getFirstName());
@@ -79,8 +90,8 @@ public final class PersonForm extends Form<PersonDto>
         person.setEmail(personDto.getEmail());
         person.setLastName(personDto.getLastName());
         person.setLogin(personDto.getLogin());
-        if (personRole != null) {
-            person.setIdPersonRole(personRole.getId());
+        if (selectedRole != null) {
+            person.setIdPersonRole(selectedRole.getId());
         }
         if (person.getId() != null) {
             personDAO.updateByPrimaryKey(person);
