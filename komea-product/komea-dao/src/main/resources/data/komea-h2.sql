@@ -1,5 +1,3 @@
-
-
 -- -----------------------------------------------------
 -- Table `komea`.`kom_customer`
 -- -----------------------------------------------------
@@ -43,6 +41,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pegr` (
   `description` VARCHAR(2048) NULL,
   `idPersonGroupParent` INT NULL,
   `idGroupKind` INT NULL,
+  `depth` INT NOT NULL,
   PRIMARY KEY (`id`))
 ;
 
@@ -68,6 +67,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pe` (
   `lastName` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `login` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`))
 ;
 
