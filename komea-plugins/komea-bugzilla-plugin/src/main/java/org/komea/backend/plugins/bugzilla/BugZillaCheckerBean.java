@@ -22,7 +22,7 @@ import org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy;
-import org.komea.product.backend.service.esper.IAlertPushService;
+import org.komea.product.backend.service.esper.IEventPushService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -36,7 +36,7 @@ public class BugZillaCheckerBean
     
     
     @Autowired
-    private IAlertPushService             alertService;
+    private IEventPushService             alertService;
     
     @Autowired
     private IBugZillaAlertFactory         alertFactory;
@@ -61,28 +61,27 @@ public class BugZillaCheckerBean
                 bugZillaContext.updateBugs(project, listBugs);
                 final int bug = listBugs.size();
                 
-                alertService.sendEvent(alertFactory.newTotalBugs(bug, project));
+                alertService.sendEventDto(alertFactory.newTotalBugs(bug, project));
                 alertService
-                        .sendEvent(alertFactory.newNewBug(
+                        .sendEventDto(alertFactory.newNewBug(
                                 bugZillaContext.getFilterBugs(project, BugZillaStatus.ADD).size(),
                                 project));
-                alertService.sendEvent(alertFactory.newUpdatedBugs(
-                        bugZillaContext.getFilterBugs(project, BugZillaStatus.UPDATED).size(),
-                        project));
-                alertService.sendEvent(alertFactory.newAssignedBugs(
-                        bugZillaContext.getFilterBugs(project, BugZillaStatus.ASSIGNED).size(),
-                        project));
+                alertService.sendEventDto(alertFactory.newUpdatedBugs(bugZillaContext
+                        .getFilterBugs(project, BugZillaStatus.UPDATED).size(), project));
+                alertService.sendEventDto(alertFactory.newAssignedBugs(bugZillaContext
+                        .getFilterBugs(project, BugZillaStatus.ASSIGNED).size(), project));
                 final Set<String> status = bugZillaContext.getStatus();
                 for (final String stat : status) {
                     final List<BugzillaBug> filterBugsByStatus =
                             bugZillaContext.getFilterBugsByStatus(stat, project);
                     if (filterBugsByStatus != null) {
-                        alertService.sendEvent(alertFactory.newStatusBug(filterBugsByStatus.size(),
-                                project, stat));
+                        alertService.sendEventDto(alertFactory.newStatusBug(
+                                filterBugsByStatus.size(), project, stat));
                     }
                 }
                 final List<BugzillaBug> reminderAlert = getReminderAlert(10, listBugs);
-                alertService.sendEvent(alertFactory.newReminterBugs(reminderAlert.size(), project));
+                alertService.sendEventDto(alertFactory.newReminterBugs(reminderAlert.size(),
+                        project));
             }
             try {
                 bugzillaProxy.close();
@@ -97,6 +96,13 @@ public class BugZillaCheckerBean
     
     
         return alertFactory;
+    }
+    
+    
+    public IEventPushService getAlertService() {
+    
+    
+        return alertService;
     }
     
     
@@ -118,6 +124,13 @@ public class BugZillaCheckerBean
     
     
         alertFactory = _alertFactory;
+    }
+    
+    
+    public void setAlertService(final IEventPushService _alertService) {
+    
+    
+        alertService = _alertService;
     }
     
     
@@ -143,19 +156,5 @@ public class BugZillaCheckerBean
         }
         
         return result;
-    }
-
-
-    public IAlertPushService getAlertService() {
-    
-    
-        return alertService;
-    }
-
-
-    public void setAlertService(IAlertPushService _alertService) {
-    
-    
-        alertService = _alertService;
     }
 }

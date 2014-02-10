@@ -6,7 +6,7 @@ package org.komea.product.backend.service.demodata;
 import java.util.Date;
 import java.util.Random;
 
-import org.komea.product.backend.service.esper.IAlertPushService;
+import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.alert.EventDtoBuilder;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.quartz.Job;
@@ -36,7 +36,7 @@ public final class AlertJobDemo implements Job
                     EventDtoBuilder.newAlert().message("Demo alert").project("SYSTEM")
                             .provided("DEMO" + new Random().nextInt(12)).eventType("demo_alert")
                             .build();
-            ((IAlertPushService) _context.getMergedJobDataMap().get("esper")).sendEventDto(event);
+            ((IEventPushService) _context.getMergedJobDataMap().get("esper")).sendEventDto(event);
         }
         
         

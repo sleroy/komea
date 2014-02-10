@@ -3,105 +3,110 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.komea.backend.plugins.bugzilla.api;
 
-import org.komea.product.database.alert.IEvent;
+
+
+import org.komea.product.database.dto.EventSimpleDto;
+
+
 
 /**
- *
  * @author rgalerme
  */
-public interface IBugZillaAlertFactory {
-
+public interface IBugZillaAlertFactory
+{
     
-    public IEvent newStatusBug(long _alert, String _project, String _status);
     
     /**
-     *
      * @param _alert
      * @param _project
      * @return
      */
-    public IEvent newTotalBugs(long _alert, String _project);
-
+    public EventSimpleDto newAssignedBugs(long _alert, String _project);
+    
+    
     /**
-     *
      * @param _alert
      * @param _project
      * @return
      */
-    public IEvent newUnconfirmedBugs(long _alert, String _project);
-
+    public EventSimpleDto newNewBug(long _alert, String _project);
+    
+    
     /**
-     *
      * @param _alert
      * @param _project
      * @return
      */
-    public IEvent newNewBugs(long _alert, String _project);
-
+    public EventSimpleDto newNewBugs(long _alert, String _project);
+    
+    
     /**
-     *
      * @param _alert
      * @param _project
      * @return
      */
-    public IEvent newAssignedBugs(long _alert, String _project);
-
+    public EventSimpleDto newReadyBugs(long _alert, String _project);
+    
+    
     /**
-     *
      * @param _alert
      * @param _project
      * @return
      */
-    public IEvent newReopenedBugs(long _alert, String _project);
-
+    public EventSimpleDto newReminterBugs(long _alert, String _project);
+    
+    
     /**
-     *
      * @param _alert
      * @param _project
      * @return
      */
-    public IEvent newReadyBugs(long _alert, String _project);
-
+    public EventSimpleDto newReopenedBugs(long _alert, String _project);
+    
+    
     /**
-     *
      * @param _alert
      * @param _project
      * @return
      */
-    public IEvent newResolvedBugs(long _alert, String _project);
-
+    public EventSimpleDto newResolvedBugs(long _alert, String _project);
+    
+    
+    public EventSimpleDto newStatusBug(long _alert, String _project, String _status);
+    
+    
     /**
-     *
      * @param _alert
      * @param _project
      * @return
      */
-    public IEvent newVerifiedBugs(long _alert, String _project);
-
+    public EventSimpleDto newTotalBugs(long _alert, String _project);
+    
+    
     /**
-     *
      * @param _alert
      * @param _project
      * @return
      */
-    public IEvent newNewBug(long _alert, String _project);
-
+    public EventSimpleDto newUnconfirmedBugs(long _alert, String _project);
+    
+    
     /**
-     *
      * @param _alert
      * @param _project
      * @return
      */
-    public IEvent newUpdatedBugs(long _alert, String _project);
-
+    public EventSimpleDto newUpdatedBugs(long _alert, String _project);
+    
+    
     /**
-     *
      * @param _alert
      * @param _project
      * @return
      */
-    public IEvent newReminterBugs(long _alert, String _project);
-
+    public EventSimpleDto newVerifiedBugs(long _alert, String _project);
+    
 }

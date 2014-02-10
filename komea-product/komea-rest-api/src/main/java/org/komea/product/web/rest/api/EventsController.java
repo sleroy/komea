@@ -2,11 +2,14 @@
 package org.komea.product.web.rest.api;
 
 
+
 import java.util.List;
 
-import org.komea.product.backend.service.IEventTypeService;
-import org.komea.product.database.dto.EventDto;
-import org.komea.product.database.dto.SearchEventDto;
+import org.komea.product.backend.service.esper.IEventPushService;
+import org.komea.product.backend.service.esper.IEventViewerService;
+import org.komea.product.database.alert.IEvent;
+import org.komea.product.database.dto.EventSimpleDto;
+import org.komea.product.database.dto.MeasureDTODto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +22,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+
+
 @Controller
 @RequestMapping(value = "/events")
-public class EventsController {
+public class EventsController
+{
+    
     
     private static final Logger LOGGER = LoggerFactory.getLogger(EventsController.class);
     
     @Autowired
-    private IEventTypeService   eventService;
+    private IEventViewerService eventService;
+    @Autowired
+    private IEventPushService   eventPushService;
+    
+    
     
     /**
      * This method find events which have been stored into komea
@@ -37,12 +48,22 @@ public class EventsController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/find")
     @ResponseBody
-    public List<EventDto> findEvents(@RequestBody final SearchEventDto _searchEvent) {
+    public List<IEvent> findEvents(@RequestBody
+    final MeasureDTODto _searchEvent) {
+    
     
         LOGGER.debug("call rest method /events/find to find event {}", _searchEvent.getEntityKeys());
         // TODO
         return eventService.findEvents(_searchEvent);
     }
+    
+    
+    public IEventPushService getEventPushService() {
+    
+    
+        return eventPushService;
+    }
+    
     
     /**
      * This method find events
@@ -55,13 +76,25 @@ public class EventsController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/get/{severityMin}/{number}")
     @ResponseBody
-    public List<EventDto> getEvents(@PathVariable(value = "severityMin") final String _severityMin,
-            @PathVariable(value = "number") final int _number) {
+    public List<IEvent> getEvents(@PathVariable(value = "severityMin")
+    final String _severityMin, @PathVariable(value = "number")
+    final int _number) {
     
-        LOGGER.debug("call rest method /events/get/{severityMin}/{number} to find {} events with severity min = {}", _number, _severityMin);
+    
+        LOGGER.debug(
+                "call rest method /events/get/{severityMin}/{number} to find {} events with severity min = {}",
+                _number, _severityMin);
         // TODO
         return eventService.getEvents(_severityMin, _number);
     }
+    
+    
+    public IEventViewerService getEventService() {
+    
+    
+        return eventService;
+    }
+    
     
     /**
      * This method push a new event into komea
@@ -71,11 +104,26 @@ public class EventsController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/push")
     @ResponseStatus(value = HttpStatus.OK)
-    public void pushEvent(@RequestBody final EventDto _event) {
+    public void pushEvent(@RequestBody
+    final EventSimpleDto _event) {
+    
     
         LOGGER.debug("call rest method /events/push to push event {}", _event.getMessage());
         // TODO
-        
-        eventService.pushEvent(_event);
+        eventPushService.sendEventDto(_event);
+    }
+    
+    
+    public void setEventPushService(final IEventPushService _eventPushService) {
+    
+    
+        eventPushService = _eventPushService;
+    }
+    
+    
+    public void setEventService(final IEventViewerService _eventService) {
+    
+    
+        eventService = _eventService;
     }
 }

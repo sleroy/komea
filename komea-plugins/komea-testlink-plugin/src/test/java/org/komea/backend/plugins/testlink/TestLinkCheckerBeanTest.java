@@ -12,7 +12,7 @@ import org.komea.backend.plugins.testlink.api.ITestLinkServerManagerService;
 import org.komea.backend.plugins.testlink.api.ITestLinkServerProxy;
 import org.komea.product.backend.fs.IObjectStorage;
 import org.komea.product.backend.service.IPluginStorageService;
-import org.komea.product.backend.service.esper.IAlertPushService;
+import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.alert.IEvent;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -29,7 +29,7 @@ public class TestLinkCheckerBeanTest {
         TestLinkCheckerBean checkerBean = new TestLinkCheckerBean();
 
         checkerBean.setAlertFactory(new TestLinkAlertFactory());
-        IAlertPushService alertService = Mockito.mock(IAlertPushService.class);
+        IEventPushService alertService = Mockito.mock(IEventPushService.class);
         checkerBean.setAlertService(alertService);
 
         // creation structure internet du plugin
@@ -115,7 +115,7 @@ public class TestLinkCheckerBeanTest {
 //        TestLinkCheckerBean checkerBean = new TestLinkCheckerBean();
 //
 //        checkerBean.setAlertFactory(new TestLinkAlertFactory());
-//        IAlertPushService alertService = Mockito.mock(IAlertPushService.class);
+//        IEventPushService alertService = Mockito.mock(IEventPushService.class);
 //        checkerBean.setAlertService(alertService);
 //
 //        // creation structure internet du plugin

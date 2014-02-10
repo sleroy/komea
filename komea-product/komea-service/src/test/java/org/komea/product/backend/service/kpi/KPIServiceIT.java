@@ -8,9 +8,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.api.IEsperEngine;
-import org.komea.product.backend.service.esper.IAlertPushService;
+import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.backend.service.esper.IAlertStatisticsService;
-import org.komea.product.backend.service.esper.IAlertViewerService;
+import org.komea.product.backend.service.esper.IEventViewerService;
 import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.database.alert.EventBuilder;
 import org.komea.product.database.alert.IEvent;
@@ -36,7 +36,7 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
     private IKPIService             kpiService;
     
     @Autowired
-    private IAlertPushService       alertPushService;
+    private IEventPushService       eventPushService;
     
     @Autowired
     private IAlertStatisticsService systemProject;
@@ -47,7 +47,7 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
     private static Logger           LOGGER     = LoggerFactory.getLogger(KPIServiceIT.class);
     
     @Autowired
-    private IAlertViewerService     viewerService;
+    private IEventViewerService     viewerService;
     
     
     
@@ -71,7 +71,7 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
         for (int i = 0; i < 10; ++i) {
             
             
-            alertPushService.sendEvent(EventBuilder.newAlert().message("Message of alert")
+            eventPushService.sendEvent(EventBuilder.newAlert().message("Message of alert")
                     .provided(provider).eventType(eventType).build());
         }
         final long numberAlerts = systemProject.getReceivedAlertsIn24LastHours();

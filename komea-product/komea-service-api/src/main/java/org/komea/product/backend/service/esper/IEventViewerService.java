@@ -10,7 +10,7 @@ import org.komea.product.database.dto.MeasureDTODto;
 
 
 
-public interface IAlertViewerService
+public interface IEventViewerService
 {
     
     

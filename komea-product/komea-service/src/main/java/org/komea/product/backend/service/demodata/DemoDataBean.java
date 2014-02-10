@@ -7,7 +7,7 @@ import java.util.Random;
 
 import javax.annotation.PostConstruct;
 
-import org.komea.product.backend.service.esper.IAlertPushService;
+import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.alert.EventDtoBuilder;
 import org.komea.product.database.dao.GroupKindDao;
 import org.komea.product.database.dao.PersonDao;
@@ -30,7 +30,7 @@ public class DemoDataBean
     
     
     @Autowired
-    private IAlertPushService alertPushService;
+    private IEventPushService eventPushService;
     
     
     @Autowired
@@ -146,7 +146,7 @@ public class DemoDataBean
                     EventDtoBuilder.newAlert().message("Demo alert").project("SYSTEM")
                             .provided("DEMO" + new Random().nextInt(12)).eventType("demo_alert")
                             .build();
-            alertPushService.sendEventDto(event);
+            eventPushService.sendEventDto(event);
             
         }
     }

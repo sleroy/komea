@@ -2,14 +2,17 @@
 package org.komea.product.web.rest.api;
 
 
+
 import java.util.Date;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.komea.product.backend.service.IEventTypeService;
-import org.komea.product.database.dto.EventDto;
-import org.komea.product.database.dto.SearchEventDto;
+import org.komea.product.backend.service.esper.IEventPushService;
+import org.komea.product.backend.service.esper.IEventViewerService;
+import org.komea.product.database.alert.Event;
+import org.komea.product.database.alert.IEvent;
+import org.komea.product.database.dto.MeasureDTODto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
@@ -32,7 +35,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.google.common.collect.Lists;
 
-public class EventControllerTest extends AbstractSpringWebIntegrationTestCase {
+
+
+public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
+{
+    
     
     @Autowired
     private WebApplicationContext context;
@@ -44,63 +51,74 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase {
     private EventsController      contoller;
     
     @Mock
-    private IEventTypeService     eventService;
+    private IEventViewerService   eventService;
     
-    @Before
-    public void setUp() {
+    @Mock
+    private IEventPushService     eventPushService;
     
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-        MockitoAnnotations.initMocks(this);
-    }
+    
     
     @Test
     public void findEventsTest() throws Exception {
     
-        Mockito.when(eventService.findEvents(Matchers.any(SearchEventDto.class))).thenReturn(getEvents());
+    
+        Mockito.when(eventService.findEvents(Matchers.any(MeasureDTODto.class))).thenReturn(
+                getEvents());
         
-        SearchEventDto search = new SearchEventDto();
+        final MeasureDTODto search = new MeasureDTODto();
         search.setSeverityMin(Severity.INFO);
         
-        String jsonMessage = IntegrationTestUtil.convertObjectToJSON(search);
+        final String jsonMessage = IntegrationTestUtil.convertObjectToJSON(search);
         
         LOGGER.info(jsonMessage);
         
-        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/events/find/")
-                .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
+        final ResultActions httpRequest =
+                mockMvc.perform(MockMvcRequestBuilders.post("/events/find/")
+                        .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
         
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$", org.hamcrest.Matchers.hasSize(1)));
-        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[0].entityName", org.hamcrest.Matchers.equalToIgnoringCase("romain")));
+        httpRequest
+                .andExpect(MockMvcResultMatchers.jsonPath("$", org.hamcrest.Matchers.hasSize(1)));
+        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[0].entityName",
+                org.hamcrest.Matchers.equalToIgnoringCase("romain")));
         
-        Mockito.verify(eventService, Mockito.times(1)).findEvents(Matchers.any(SearchEventDto.class));
+        Mockito.verify(eventService, Mockito.times(1))
+                .findEvents(Matchers.any(MeasureDTODto.class));
     }
+    
     
     @Test
     public void getEventsTest() throws Exception {
     
+    
         Mockito.when(eventService.getEvents("MINOR", 1)).thenReturn(getEvents());
         
-        SearchEventDto search = new SearchEventDto();
+        final MeasureDTODto search = new MeasureDTODto();
         search.setSeverityMin(Severity.INFO);
         
-        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.get("/events/get/MINOR/1"));
+        final ResultActions httpRequest =
+                mockMvc.perform(MockMvcRequestBuilders.get("/events/get/MINOR/1"));
         
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$", org.hamcrest.Matchers.hasSize(1)));
-        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[0].entityName", org.hamcrest.Matchers.equalToIgnoringCase("romain")));
+        httpRequest
+                .andExpect(MockMvcResultMatchers.jsonPath("$", org.hamcrest.Matchers.hasSize(1)));
+        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[0].entityName",
+                org.hamcrest.Matchers.equalToIgnoringCase("romain")));
         
         Mockito.verify(eventService, Mockito.times(1)).getEvents("MINOR", 1);
     }
     
+    
     @Test
     public void pushEventTest() throws Exception {
     
-        Provider provider = new Provider();
-        provider.setIcon("/icon.png");
+    
+        final Provider provider = new Provider();
+        provider.setIcon("/incon.png");
         provider.setId(1);
         provider.setProviderType(ProviderType.JENKINS);
         
-        EventType eventType = new EventType();
+        final EventType eventType = new EventType();
         eventType.setCategory("large category");
         eventType.setDescription("a large event");
         eventType.setEntityType(EntityType.PROJECT);
@@ -110,31 +128,43 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase {
         eventType.setName("dtc");
         eventType.setSeverity(Severity.MINOR);
         
-        // Mockito.when(eventService.pushEvent(Matchers.any(EventDto)).;
-        
-        String jsonMessage = IntegrationTestUtil.convertObjectToJSON(getEvents().get(0));
+        final String jsonMessage = IntegrationTestUtil.convertObjectToJSON(getEvents().get(0));
         
         LOGGER.info(jsonMessage);
         
-        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/events/push")
-                .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
+        final ResultActions httpRequest =
+                mockMvc.perform(MockMvcRequestBuilders.post("/events/push")
+                        .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
         
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
         // HTTPREQUEST.ANDEXPECT(MOCKMVCRESULTMATCHERS.JSONPATH("$", ORG.HAMCREST.MATCHERS.HASSIZE(1)));
         // HTTpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[0].entityName", org.hamcrest.Matchers.equalToIgnoringCase("romain")));
-        
-        Mockito.verify(eventService, Mockito.times(1)).pushEvent(Matchers.any(EventDto.class));
+        //
+        // Mockito.verify(eventService, Mockito.times(1)).registerEvent(Matchers.any(Provider.class),
+        // Matchers.any(EventType.class));
     }
-    private List<EventDto> getEvents() {
+    
+    
+    @Before
+    public void setUp() {
+    
+    
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+        MockitoAnnotations.initMocks(this);
+    }
+    
+    
+    private List<IEvent> getEvents() {
+    
     
         // TODO STUB
         
-        List<EventDto> events = Lists.newArrayList();
-        EventDto event = new EventDto();
+        final List<IEvent> events = Lists.newArrayList();
+        final Event event = new Event();
         event.setDate(new Date());
-        event.setEntityName("romain");
         
-        EventType eventType = new EventType();
+        
+        final EventType eventType = new EventType();
         eventType.setCategory("large category");
         eventType.setDescription("a large event");
         eventType.setEntityType(EntityType.PROJECT);
@@ -147,7 +177,7 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase {
         
         event.setMessage("a massage");
         
-        Provider provider = new Provider();
+        final Provider provider = new Provider();
         provider.setIcon("/incon.png");
         provider.setId(1);
         provider.setProviderType(ProviderType.JENKINS);

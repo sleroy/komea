@@ -81,7 +81,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
     private ICronRegistryService  registry;
     
     @Autowired
-    private IAlertPushService     alertPushService;
+    private IEventPushService     eventPushService;
     
     
     
@@ -96,12 +96,12 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     
     /**
-     * @return the alertPushService
+     * @return the eventPushService
      */
-    public IAlertPushService getAlertPushService() {
+    public IEventPushService getAlertPushService() {
     
     
-        return alertPushService;
+        return eventPushService;
     }
     
     
@@ -255,7 +255,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     
         final JobDataMap properties = new JobDataMap();
-        properties.put("esper", alertPushService);
+        properties.put("esper", eventPushService);
         registry.registerCronTask("ALERT_DEMO_STAT", "0/10 * * * * ?", AlertJobDemo.class,
                 properties);
         
@@ -264,13 +264,13 @@ public class AlertStatisticsService implements IAlertStatisticsService
     
     
     /**
-     * @param _alertPushService
-     *            the alertPushService to set
+     * @param _eventPushService
+     *            the eventPushService to set
      */
-    public void setAlertPushService(final IAlertPushService _alertPushService) {
+    public void setAlertPushService(final IEventPushService _eventPushService) {
     
     
-        alertPushService = _alertPushService;
+        eventPushService = _eventPushService;
     }
     
     

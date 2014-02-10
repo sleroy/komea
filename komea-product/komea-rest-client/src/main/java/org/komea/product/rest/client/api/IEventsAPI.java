@@ -2,13 +2,17 @@
 package org.komea.product.rest.client.api;
 
 
+
 import java.net.ConnectException;
 import java.util.List;
 
+import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.alert.enums.Criticity;
-import org.komea.product.database.dto.EventDto;
-import org.komea.product.database.dto.SearchEventDto;
+import org.komea.product.database.dto.EventSimpleDto;
+import org.komea.product.database.dto.MeasureDTODto;
 import org.komea.product.service.dto.errors.InternalServerException;
+
+
 
 /**
  * Komea rest api client to manage events
@@ -18,7 +22,9 @@ import org.komea.product.service.dto.errors.InternalServerException;
  * @author $Author: jguidoux $
  * @since 15 janv. 2014
  */
-public interface IEventsAPI extends IRestClientAPI {
+public interface IEventsAPI extends IRestClientAPI
+{
+    
     
     /**
      * This method find events which have been stored into komea
@@ -31,7 +37,9 @@ public interface IEventsAPI extends IRestClientAPI {
      * @throws InternalServerException
      *             launch if exception happened in server side
      */
-    List<EventDto> findEvents(final SearchEventDto _searchEvent) throws ConnectException, InternalServerException;
+    List<IEvent> findEvents(final MeasureDTODto _searchEvent)
+            throws ConnectException, InternalServerException;
+    
     
     /**
      * This method find events
@@ -46,7 +54,9 @@ public interface IEventsAPI extends IRestClientAPI {
      * @throws InternalServerException
      *             launch if exception happened in server side
      */
-    List<EventDto> getEvents(final Criticity _severityMin, final int _number) throws ConnectException, InternalServerException;
+    List<IEvent> getEvents(final Criticity _severityMin, final int _number)
+            throws ConnectException, InternalServerException;
+    
     
     /**
      * This method push a new event into komea
@@ -58,5 +68,5 @@ public interface IEventsAPI extends IRestClientAPI {
      * @throws InternalServerException
      *             launch if exception happened in server side
      */
-    void pushEvent(final EventDto _event) throws ConnectException, InternalServerException;
+    void pushEvent(final EventSimpleDto _event) throws ConnectException, InternalServerException;
 }

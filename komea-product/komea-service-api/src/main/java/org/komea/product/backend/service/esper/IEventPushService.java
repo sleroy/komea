@@ -16,7 +16,7 @@ import org.komea.product.database.dto.EventSimpleDto;
  * 
  * @author sleroy
  */
-public interface IAlertPushService
+public interface IEventPushService
 {
     
     

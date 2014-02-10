@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class AlertPushService implements IAlertPushService
+public class AlertPushService implements IEventPushService
 {
     
     

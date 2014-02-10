@@ -41,7 +41,7 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
     
     @InjectMocks
     @Autowired
-    private MeasuresController    contoller;
+    private MeasuresController    controller;
     
     @Mock
     private IKPIService           measureHistoryService;

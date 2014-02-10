@@ -26,7 +26,7 @@ import com.google.common.collect.Lists;
 
 
 @Service
-public class AlertViewerService implements IAlertViewerService
+public class AlertViewerService implements IEventViewerService
 {
     
     

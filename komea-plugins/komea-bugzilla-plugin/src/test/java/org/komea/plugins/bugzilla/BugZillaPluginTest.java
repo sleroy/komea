@@ -30,7 +30,7 @@ import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxyFactory;
 import org.komea.product.backend.fs.IObjectStorage;
 import org.komea.product.backend.service.IPluginStorageService;
-import org.komea.product.backend.service.esper.IAlertPushService;
+import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.mockito.ArgumentCaptor;
@@ -59,7 +59,7 @@ public class BugZillaPluginTest extends AbstractSpringIntegrationTestCase
         
         final IBugZillaAlertFactory alertFactory = new BugZillaAlertFactory();
         bbean.setAlertFactory(alertFactory);
-        final IAlertPushService mockAlertService = Mockito.mock(IAlertPushService.class);
+        final IEventPushService mockAlertService = Mockito.mock(IEventPushService.class);
         final ArgumentCaptor<IEvent> forClass = ArgumentCaptor.forClass(IEvent.class);
         bbean.setAlertService(mockAlertService);
         
