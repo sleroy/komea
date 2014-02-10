@@ -52,24 +52,6 @@
 			</plugin>
 
 
-			<!-- Copy static web files before executing gwt:run -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.4</version>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>exploded</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<webappDirectory>${webappDirectory}</webappDirectory>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 
