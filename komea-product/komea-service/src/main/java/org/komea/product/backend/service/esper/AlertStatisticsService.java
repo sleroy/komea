@@ -148,7 +148,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
     public long getNumberOfAlerts(final Criticity _criticity) {
     
     
-        return kpiService.getKPIValue(
+        return kpiService.getKpiValue(
                 KpiKey.withEntity(ALERT_CRITICITY_DAY + _criticity.name().toUpperCase(),
                         systemProject.getSystemProject())).getIntValue();
         
@@ -167,7 +167,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
     public long getReceivedAlertsIn24LastHours() {
     
     
-        return kpiService.getKPIValue(
+        return kpiService.getKpiValue(
                 KpiKey.withEntity(ALERT_RECEIVED_IN_ONE_DAY, systemProject.getSystemProject()))
                 .getIntValue();
         

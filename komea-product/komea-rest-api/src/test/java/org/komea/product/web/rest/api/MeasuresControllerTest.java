@@ -81,7 +81,7 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         measure.setIdPerson(1);
         measure.setValue(12D);
         
-        Mockito.when(measureHistoryService.getLastMeasures(org.mockito.Matchers.any(KpiKey.class))).thenReturn(measure);
+        Mockito.when(measureHistoryService.getKpiMeasureValue(org.mockito.Matchers.any(KpiKey.class))).thenReturn(measure);
         KpiKey kpiKey = KpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
         
         // MyKpiKey kpiKey2 = MyKpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
@@ -111,7 +111,7 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         measure.setIdPerson(1);
         measure.setValue(12D);
         
-        Mockito.when(measureHistoryService.getLastMeasures(org.mockito.Matchers.any(KpiKey.class))).thenThrow(KPINotFoundException.class);
+        Mockito.when(measureHistoryService.getKpiMeasureValue(org.mockito.Matchers.any(KpiKey.class))).thenThrow(KPINotFoundException.class);
         KpiKey kpiKey = KpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
         
         // MyKpiKey kpiKey2 = MyKpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);

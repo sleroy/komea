@@ -100,7 +100,7 @@ public class MeasuresController {
         for (KpiKey kpiKey : _kpiKeys) {
             MeasureResultDto measureResult = new MeasureResultDto();
             measureResult.setKpiKey(kpiKey);
-            measureResult.setMeasure(measureHistoryService.getLastMeasures(kpiKey));
+            measureResult.setMeasure(measureHistoryService.getKpiMeasureValue(kpiKey));
             measuresResponse.add(measureResult);
         }
         // TODO

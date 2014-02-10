@@ -51,6 +51,7 @@ public class PersonPage extends LayoutPage
         
         
         final IDeleteAction<Person> personDeleteAction = new PersonDeleteAction(personDAO);
+        
         final IEditAction<Person> personEditAction = new PersonEditAction(this, personRoleDAO);
         final ISortableDataProvider<Person, String> dataProvider = new PersonDataModel(personDAO);
         add(DataTableBuilder.<Person, String> newTable("table").addColumn("Login", "login")
