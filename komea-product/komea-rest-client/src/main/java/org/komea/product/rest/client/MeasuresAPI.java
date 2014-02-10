@@ -7,8 +7,10 @@ import java.util.List;
 
 import javax.ws.rs.core.GenericType;
 
+import org.komea.product.database.dto.SearchHistoricalMeasuresDto;
 import org.komea.product.rest.client.api.IMeasuresAPI;
 import org.komea.product.service.dto.KpiKey;
+import org.komea.product.service.dto.MeasureHistoricalResultDto;
 import org.komea.product.service.dto.MeasureResultDto;
 import org.komea.product.service.dto.errors.InternalServerException;
 
@@ -39,6 +41,15 @@ public class MeasuresAPI extends AbstractRestCientAPI implements IMeasuresAPI {
     
         String url = MEASURES_PATH + "/lastList";
         return post(url, _kpiKeys, new GenericType<List<MeasureResultDto>>() {
+        });
+    }
+    
+    @Override
+    public List<MeasureHistoricalResultDto> historicalMeasures(final SearchHistoricalMeasuresDto _searchHistoricalMeasure)
+            throws InternalServerException, ConnectException {
+    
+        String url = MEASURES_PATH + "/lastList";
+        return post(url, _searchHistoricalMeasure, new GenericType<List<MeasureHistoricalResultDto>>() {
         });
     }
 }

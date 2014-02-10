@@ -50,8 +50,13 @@ public interface IMeasuresAPI {
      * This method return the historical measure for a set of entities and for a group of kpi types between two dates
      * 
      * @param _searchLastMeasure
-     *            contiain a set of entities a group of kpi types, the stating and the end date or by number id start and end are null
+     *            contain a set of entities a group of kpi types, the stating and the end date or by number id start and end are null
      * @return the historical measures for this entities
+     *         * @throws InternalServerException
+     *         launch if it can't connect to the server
+     * @throws ConnectException
+     *             launch if exceptions happened in the server
      */
-    public List<MeasureHistoricalResultDto> historicalMeasures(final SearchHistoricalMeasuresDto _searchHistoricalMeasure);
+    public List<MeasureHistoricalResultDto> historicalMeasures(final SearchHistoricalMeasuresDto _searchHistoricalMeasure)
+            throws InternalServerException, ConnectException;;
 }
