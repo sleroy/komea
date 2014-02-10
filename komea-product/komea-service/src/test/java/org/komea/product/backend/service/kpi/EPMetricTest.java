@@ -23,7 +23,7 @@ public class EPMetricTest
     
         final EsperEngineBean esperEngineBean = new EsperEngineBean();
         esperEngineBean.init();
-        esperEngineBean.createOrUpdateEPLQuery(new QueryDefinition("SELECT COUNT(*) FROM Alert",
+        esperEngineBean.createOrUpdateEPLQuery(new QueryDefinition("SELECT COUNT(*) FROM Event",
                 "DEMO_ESPER"));
         
         final EPStatement statement = esperEngineBean.getStatement("DEMO_ESPER");

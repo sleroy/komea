@@ -50,7 +50,7 @@ public class EsperDebugReactorListener implements UpdateListener
     
     
         LOGGER.info("Initializing debug provider");
-        final String expression = "select * from Alert";
+        final String expression = "select * from Event";
         LOGGER.info("Esper component referenced : " + (esperEngine != null ? "Y" : "N"));
         LOGGER.info("Esper Initialized : " + (esperEngine.getEsper() != null ? "Y" : "N"));
         esperEngine.getEsper().getEPAdministrator().createEPL(expression).addListener(this);
@@ -74,7 +74,7 @@ public class EsperDebugReactorListener implements UpdateListener
     public void update(final EventBean[] arg0, final EventBean[] arg1) {
     
     
-        LOGGER.debug("Alert received {} ", arg0[0].getUnderlying());
+        LOGGER.debug("Event received {} ", arg0[0].getUnderlying());
     }
     
     

@@ -14,8 +14,8 @@ import org.komea.product.backend.esper.listeners.EPServiceStateListener1;
 import org.komea.product.backend.esper.listeners.EPStatementStateListener1;
 import org.komea.product.backend.exceptions.EsperStatementNotFoundException;
 import org.komea.product.backend.service.business.IQueryDefinition;
-import org.komea.product.database.alert.Alert;
-import org.komea.product.database.alert.IAlert;
+import org.komea.product.database.alert.Event;
+import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.EventCategory;
@@ -170,8 +170,8 @@ public final class EsperEngineBean implements IEsperEngine
         // .setInternalTimerEnabled(false);
         config.addEventTypeAutoName("com.tocea.scertify.ci.flow.model");
         config.setMetricsReportingEnabled();
-        config.addEventType(IAlert.class);
-        config.addEventType(Alert.class);
+        config.addEventType(IEvent.class);
+        config.addEventType(Event.class);
         config.addImport(Criticity.class);
         config.addImport(EntityType.class);
         config.addImport(EventCategory.class);
@@ -196,12 +196,12 @@ public final class EsperEngineBean implements IEsperEngine
     
     
     @Override
-    public void sendAlert(final IAlert _alert) {
+    public void sendAlert(final IEvent _event) {
     
     
         // LOGGER.trace("Sending alert {}", _alert);
         
-        esperEngine.getEPRuntime().sendEvent(_alert);
+        esperEngine.getEPRuntime().sendEvent(_event);
         
     }
     

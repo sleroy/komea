@@ -11,7 +11,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.product.backend.api.IEsperEngine;
-import org.komea.product.database.alert.IAlert;
+import org.komea.product.database.alert.IEvent;
 import org.mockito.Mockito;
 
 import com.espertech.esper.client.EPStatement;
@@ -63,7 +63,7 @@ public class EsperEngineBeanTest
     
     
         final EPStatement epl =
-                esperEngine.createEPL(new QueryDefinition("select * from Alert", "demo"));
+                esperEngine.createEPL(new QueryDefinition("select * from Event", "demo"));
         Assert.assertNotNull(epl);
         Assert.assertTrue(esperEngine.existEPL("demo"));
     }
@@ -78,7 +78,7 @@ public class EsperEngineBeanTest
     
         Assert.assertFalse(esperEngine.existEPL("demo"));
         final EPStatement epl =
-                esperEngine.createEPL(new QueryDefinition("select * from Alert", "demo"));
+                esperEngine.createEPL(new QueryDefinition("select * from Event", "demo"));
         Assert.assertNotNull(epl);
         Assert.assertTrue(esperEngine.existEPL("demo"));
     }
@@ -104,20 +104,20 @@ public class EsperEngineBeanTest
     
         Assert.assertFalse(esperEngine.existEPL("demo"));
         final EPStatement epl =
-                esperEngine.createEPL(new QueryDefinition("select * from Alert", "demo"));
+                esperEngine.createEPL(new QueryDefinition("select * from Event", "demo"));
         Assert.assertNotNull(epl);
         Assert.assertEquals(2, esperEngine.getStatementNames().length);
     }
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.esper.EsperEngineBean#sendAlert(org.komea.product.database.alert.IAlert)}.
+     * Test method for {@link org.komea.product.backend.service.esper.EsperEngineBean#sendAlert(org.komea.product.database.alert.IEvent)}.
      */
     @Test
     public final void testSendAlert() {
     
     
-        esperEngine.sendAlert(Mockito.mock(IAlert.class));
+        esperEngine.sendAlert(Mockito.mock(IEvent.class));
     }
     
 }

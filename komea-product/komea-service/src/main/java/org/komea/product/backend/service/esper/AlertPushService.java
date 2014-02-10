@@ -6,7 +6,8 @@ package org.komea.product.backend.service.esper;
 import java.util.Date;
 
 import org.komea.product.backend.api.IEsperEngine;
-import org.komea.product.database.alert.IAlert;
+import org.komea.product.database.alert.IEvent;
+import org.komea.product.database.dto.EventSimpleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,24 +35,32 @@ public class AlertPushService implements IAlertPushService
     
     
     @Override
-    public void sendEvent(final IAlert _alert) {
+    public void sendEvent(final IEvent _event) {
     
     
-        validator.validate(_alert);
-        sendEventWithoutValidation(_alert);
+        validator.validate(_event);
+        sendEventWithoutValidation(_event);
         
     }
     
     
     @Override
-    public void sendEventWithoutValidation(final IAlert _alert) {
+    public void sendEventDto(final EventSimpleDto _dto) {
     
     
-        if (_alert.getDate() == null) {
-            _alert.setDate(new Date());
+        sendEvent(validator.convert(_dto));
+        
+    }
+    
+    
+    public void sendEventWithoutValidation(final IEvent _event) {
+    
+    
+        if (_event.getDate() == null) {
+            _event.setDate(new Date());
         }
         
-        esperEngine.sendAlert(_alert);
+        esperEngine.sendAlert(_event);
         
         
     }

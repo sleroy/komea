@@ -5,7 +5,7 @@
  */
 package org.komea.backend.plugins.bugzilla.api;
 
-import org.komea.product.database.alert.IAlert;
+import org.komea.product.database.alert.IEvent;
 
 /**
  *
@@ -14,7 +14,7 @@ import org.komea.product.database.alert.IAlert;
 public interface IBugZillaAlertFactory {
 
     
-    public IAlert newStatusBug(long _alert, String _project, String _status);
+    public IEvent newStatusBug(long _alert, String _project, String _status);
     
     /**
      *
@@ -22,7 +22,7 @@ public interface IBugZillaAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newTotalBugs(long _alert, String _project);
+    public IEvent newTotalBugs(long _alert, String _project);
 
     /**
      *
@@ -30,7 +30,7 @@ public interface IBugZillaAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newUnconfirmedBugs(long _alert, String _project);
+    public IEvent newUnconfirmedBugs(long _alert, String _project);
 
     /**
      *
@@ -38,7 +38,7 @@ public interface IBugZillaAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newNewBugs(long _alert, String _project);
+    public IEvent newNewBugs(long _alert, String _project);
 
     /**
      *
@@ -46,7 +46,7 @@ public interface IBugZillaAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newAssignedBugs(long _alert, String _project);
+    public IEvent newAssignedBugs(long _alert, String _project);
 
     /**
      *
@@ -54,7 +54,7 @@ public interface IBugZillaAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newReopenedBugs(long _alert, String _project);
+    public IEvent newReopenedBugs(long _alert, String _project);
 
     /**
      *
@@ -62,7 +62,7 @@ public interface IBugZillaAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newReadyBugs(long _alert, String _project);
+    public IEvent newReadyBugs(long _alert, String _project);
 
     /**
      *
@@ -70,7 +70,7 @@ public interface IBugZillaAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newResolvedBugs(long _alert, String _project);
+    public IEvent newResolvedBugs(long _alert, String _project);
 
     /**
      *
@@ -78,7 +78,7 @@ public interface IBugZillaAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newVerifiedBugs(long _alert, String _project);
+    public IEvent newVerifiedBugs(long _alert, String _project);
 
     /**
      *
@@ -86,7 +86,7 @@ public interface IBugZillaAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newNewBug(long _alert, String _project);
+    public IEvent newNewBug(long _alert, String _project);
 
     /**
      *
@@ -94,7 +94,7 @@ public interface IBugZillaAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newUpdatedBugs(long _alert, String _project);
+    public IEvent newUpdatedBugs(long _alert, String _project);
 
     /**
      *
@@ -102,6 +102,6 @@ public interface IBugZillaAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newReminterBugs(long _alert, String _project);
+    public IEvent newReminterBugs(long _alert, String _project);
 
 }

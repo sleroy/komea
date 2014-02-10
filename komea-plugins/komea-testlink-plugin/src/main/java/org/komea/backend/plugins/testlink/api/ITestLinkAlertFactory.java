@@ -5,7 +5,7 @@
  */
 package org.komea.backend.plugins.testlink.api;
 
-import org.komea.product.database.alert.IAlert;
+import org.komea.product.database.alert.IEvent;
 
 /**
  *
@@ -19,7 +19,7 @@ public interface ITestLinkAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newTotalTests(long _alert, String _project);
+    public IEvent newTotalTests(long _alert, String _project);
 
     /**
      *
@@ -27,7 +27,7 @@ public interface ITestLinkAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newSuccessfultest(long _alert, String _project);
+    public IEvent newSuccessfultest(long _alert, String _project);
 
     /**
      *
@@ -35,7 +35,7 @@ public interface ITestLinkAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newFailedTests(long _alert, String _project);
+    public IEvent newFailedTests(long _alert, String _project);
 
     /**
      *
@@ -43,7 +43,7 @@ public interface ITestLinkAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newUnexecutedTest(long _alert, String _project);
+    public IEvent newUnexecutedTest(long _alert, String _project);
 
     /**
      *
@@ -51,7 +51,7 @@ public interface ITestLinkAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newBlockedTests(long _alert, String _project);
+    public IEvent newBlockedTests(long _alert, String _project);
 
     /**
      *
@@ -59,7 +59,7 @@ public interface ITestLinkAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newRequirements(long _alert, String _project);
+    public IEvent newRequirements(long _alert, String _project);
 
     /**
      *
@@ -67,7 +67,7 @@ public interface ITestLinkAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newTested(long _alert, String _project);
+    public IEvent newTested(long _alert, String _project);
 
     /**
      *
@@ -75,7 +75,7 @@ public interface ITestLinkAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newUntested(long _alert, String _project);
+    public IEvent newUntested(long _alert, String _project);
 
     /**
      *
@@ -83,6 +83,6 @@ public interface ITestLinkAlertFactory {
      * @param _project
      * @return
      */
-    public IAlert newUnassociedTest(long _alert, String _project);
+    public IEvent newUnassociedTest(long _alert, String _project);
 
 }

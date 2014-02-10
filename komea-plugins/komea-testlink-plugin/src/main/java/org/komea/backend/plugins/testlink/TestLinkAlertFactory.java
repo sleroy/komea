@@ -7,8 +7,8 @@ package org.komea.backend.plugins.testlink;
 
 import java.util.Date;
 import org.komea.backend.plugins.testlink.api.ITestLinkAlertFactory;
-import org.komea.product.database.alert.Alert;
-import org.komea.product.database.alert.IAlert;
+import org.komea.product.database.alert.Event;
+import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.alert.enums.Criticity;
 import org.springframework.stereotype.Service;
 
@@ -20,137 +20,137 @@ import org.springframework.stereotype.Service;
 public class TestLinkAlertFactory implements ITestLinkAlertFactory {
 
     @Override
-    public IAlert newTotalTests(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("TESTLINK");
-        alert.setMessage("Total number of tests in testlink");
-        alert.setCategory("TEST");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
+    public IEvent newTotalTests(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("TESTLINK");
+        event.setMessage("Total number of tests in testlink");
+        event.setCategory("TEST");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newSuccessfultest(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("TESTLINK");
-        alert.setMessage("Total number of successful test in testlink");
-        alert.setCategory("TEST");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
+    public IEvent newSuccessfultest(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("TESTLINK");
+        event.setMessage("Total number of successful test in testlink");
+        event.setCategory("TEST");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newFailedTests(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("TESTLINK");
-        alert.setMessage("Total number of failed test in testlink");
-        alert.setCategory("TEST");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
+    public IEvent newFailedTests(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("TESTLINK");
+        event.setMessage("Total number of failed test in testlink");
+        event.setCategory("TEST");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newUnexecutedTest(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("TESTLINK");
-        alert.setMessage("Total number of unexecuted test in testlink");
-        alert.setCategory("TEST");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
+    public IEvent newUnexecutedTest(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("TESTLINK");
+        event.setMessage("Total number of unexecuted test in testlink");
+        event.setCategory("TEST");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newBlockedTests(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("TESTLINK");
-        alert.setMessage("Total number of blocked test in testlink");
-        alert.setCategory("TEST");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
+    public IEvent newBlockedTests(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("TESTLINK");
+        event.setMessage("Total number of blocked test in testlink");
+        event.setCategory("TEST");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newRequirements(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("TESTLINK");
-        alert.setMessage("Total number of requirements in testlink");
-        alert.setCategory("TEST");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
+    public IEvent newRequirements(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("TESTLINK");
+        event.setMessage("Total number of requirements in testlink");
+        event.setCategory("TEST");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newTested(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("TESTLINK");
-        alert.setMessage("Total number of tested in testlink");
-        alert.setCategory("TEST");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
+    public IEvent newTested(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("TESTLINK");
+        event.setMessage("Total number of tested in testlink");
+        event.setCategory("TEST");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newUntested(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("TESTLINK");
-        alert.setMessage("Total number of untested in testlink");
-        alert.setCategory("TEST");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
+    public IEvent newUntested(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("TESTLINK");
+        event.setMessage("Total number of untested in testlink");
+        event.setCategory("TEST");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newUnassociedTest(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("TESTLINK");
-        alert.setMessage("Total number of unassocied test in testlink");
-        alert.setCategory("TEST");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
-        return alert;
+    public IEvent newUnassociedTest(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("TESTLINK");
+        event.setMessage("Total number of unassocied test in testlink");
+        event.setCategory("TEST");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
+        return event;
     }
 
 }

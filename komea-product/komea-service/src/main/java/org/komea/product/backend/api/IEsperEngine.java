@@ -4,7 +4,7 @@ package org.komea.product.backend.api;
 
 
 import org.komea.product.backend.service.business.IQueryDefinition;
-import org.komea.product.database.alert.IAlert;
+import org.komea.product.database.alert.IEvent;
 
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPStatement;
@@ -84,8 +84,8 @@ public interface IEsperEngine
     /**
      * Push alerts
      * 
-     * @param _alert
+     * @param _event
      */
-    void sendAlert(IAlert _alert);
+    void sendAlert(IEvent _event);
     
 }

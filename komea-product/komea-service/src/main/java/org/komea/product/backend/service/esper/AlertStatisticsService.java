@@ -20,6 +20,7 @@ import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.EvictionType;
+import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.AlertTypeStatistic;
@@ -220,11 +221,11 @@ public class AlertStatisticsService implements IAlertStatisticsService
                     kpiService.getListOfKpisForEntity(systemProject.getSystemProject());
             alertPerDay = alertPerDay();
             listOfKpisOfEntity.add(alertPerDay);
-            listOfKpisOfEntity.add(alertCriticityPerDay(Criticity.BLOCKING));
-            listOfKpisOfEntity.add(alertCriticityPerDay(Criticity.CRITICAL));
-            listOfKpisOfEntity.add(alertCriticityPerDay(Criticity.MAJOR));
-            listOfKpisOfEntity.add(alertCriticityPerDay(Criticity.MINOR));
-            listOfKpisOfEntity.add(alertCriticityPerDay(Criticity.INFO));
+            listOfKpisOfEntity.add(alertCriticityPerDay(Severity.BLOCKER));
+            listOfKpisOfEntity.add(alertCriticityPerDay(Severity.CRITICAL));
+            listOfKpisOfEntity.add(alertCriticityPerDay(Severity.MAJOR));
+            listOfKpisOfEntity.add(alertCriticityPerDay(Severity.MINOR));
+            listOfKpisOfEntity.add(alertCriticityPerDay(Severity.INFO));
             
             
             kpiService.updateKPIOfEntity(systemProject.getSystemProject(), listOfKpisOfEntity);
@@ -238,7 +239,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
         // output snapshot every 1 minute
         esperEngine
                 .createOrUpdateEPLQuery(new QueryDefinition(
-                        "SELECT DISTINCT provider, type, count(*) as number FROM Alert.win:time(24 hour)  GROUP BY provider, type  ORDER BY provider ASC, type ASC",
+                        "SELECT DISTINCT provider.name as provider, eventType.eventKey as type, count(*) as number FROM Event.win:time(24 hour)  GROUP BY provider.name, eventType.name ORDER BY provider.name ASC, eventType.name ASC",
                         STATS_BREAKDOWN_24H));
         
         scheduleAlerts();
@@ -331,7 +332,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
     }
     
     
-    private Kpi alertCriticityPerDay(final Criticity _criticity) {
+    private Kpi alertCriticityPerDay(final Severity _criticity) {
     
     
         Kpi kpi;
@@ -339,7 +340,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
         kpi.setDescription("Provides the number of alerts of criticity "
                 + _criticity + " received under 24 hours");
         kpi.setEntityType(EntityType.PROJECT);
-        kpi.setEsperRequest("SELECT COUNT(*) as alert_number FROM Alert.win:time(24 hour) WHERE criticity=Criticity."
+        kpi.setEsperRequest("SELECT COUNT(*) as alert_number FROM Event.win:time(24 hour) WHERE eventType.severity=Severity."
                 + _criticity.name());
         kpi.setKpiKey(ALERT_CRITICITY_DAY + _criticity.name());
         kpi.setMinValue(0d);
@@ -360,7 +361,7 @@ public class AlertStatisticsService implements IAlertStatisticsService
         kpi = new Kpi();
         kpi.setDescription("Provides the number of alerts received under 24 hours");
         kpi.setEntityType(EntityType.PROJECT);
-        kpi.setEsperRequest("SELECT COUNT(*) as alert_number FROM Alert.win:time(24 hour)");
+        kpi.setEsperRequest("SELECT COUNT(*) as alert_number FROM Event.win:time(24 hour)");
         kpi.setKpiKey(ALERT_RECEIVED_IN_ONE_DAY);
         kpi.setMinValue(0d);
         kpi.setMaxValue(Double.MAX_VALUE);

@@ -3,16 +3,25 @@ package org.komea.product.backend.service.esper;
 
 
 
+import java.util.Date;
 import java.util.List;
 
 import org.komea.product.backend.api.IEsperEngine;
-import org.komea.product.database.alert.IAlert;
+import org.komea.product.database.alert.Event;
+import org.komea.product.database.alert.IEvent;
+import org.komea.product.database.dto.MeasureDTODto;
+import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ProviderType;
+import org.komea.product.database.enums.Severity;
+import org.komea.product.database.model.EventType;
+import org.komea.product.database.model.Provider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.espertech.esper.client.EPStatement;
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.SafeIterator;
+import com.google.common.collect.Lists;
 
 
 
@@ -33,6 +42,41 @@ public class AlertViewerService implements IAlertViewerService
     }
     
     
+    @Override
+    public List<IEvent> findEvents(final MeasureDTODto _searchEvent) {
+    
+    
+        // TODO STUB
+        
+        final List<IEvent> events = Lists.newArrayList();
+        final IEvent event = new Event();
+        event.setDate(new Date());
+        
+        
+        final EventType eventType = new EventType();
+        eventType.setCategory("large category");
+        eventType.setDescription("a large event");
+        eventType.setEntityType(EntityType.PROJECT);
+        eventType.setEventKey("dtc");
+        eventType.setId(1);
+        eventType.setIdProvider(1);
+        eventType.setName("dtc");
+        eventType.setSeverity(Severity.MINOR);
+        event.setEventType(eventType);
+        
+        event.setMessage("a massage");
+        
+        final Provider provider = new Provider();
+        provider.setIcon("/incon.png");
+        provider.setId(1);
+        provider.setProviderType(ProviderType.JENKINS);
+        event.setProvider(provider);
+        
+        events.add(event);
+        return events;
+    }
+    
+    
     public IEsperEngine getEsperService() {
     
     
@@ -41,7 +85,41 @@ public class AlertViewerService implements IAlertViewerService
     
     
     @Override
-    public List<IAlert> getInstantView(final String _EplStatement) {
+    public List<IEvent> getEvents(final String _severityMin, final int _number) {
+    
+    
+        // TODO STUB
+        
+        final List<IEvent> events = Lists.newArrayList();
+        final IEvent event = new Event();
+        event.setDate(new Date());
+        
+        final EventType eventType = new EventType();
+        eventType.setCategory("large category");
+        eventType.setDescription("a large event");
+        eventType.setEntityType(EntityType.PROJECT);
+        eventType.setEventKey("dtc");
+        eventType.setId(1);
+        eventType.setIdProvider(1);
+        eventType.setName("dtc");
+        eventType.setSeverity(Severity.MINOR);
+        event.setEventType(eventType);
+        
+        event.setMessage("a massage");
+        
+        final Provider provider = new Provider();
+        provider.setIcon("/incon.png");
+        provider.setId(1);
+        provider.setProviderType(ProviderType.JENKINS);
+        event.setProvider(provider);
+        
+        events.add(event);
+        return events;
+    }
+    
+    
+    @Override
+    public List<IEvent> getInstantView(final String _EplStatement) {
     
     
         final EPStatement statementOrFail = esperService.getStatementOrFail(_EplStatement);

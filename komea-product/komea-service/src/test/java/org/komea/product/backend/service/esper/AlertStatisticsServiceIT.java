@@ -11,8 +11,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.komea.product.database.alert.Alert;
-import org.komea.product.database.alert.AlertBuilder;
+import org.komea.product.database.alert.Event;
+import org.komea.product.database.enums.ProviderType;
+import org.komea.product.database.model.Provider;
 import org.komea.product.service.dto.AlertTypeStatistic;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +43,12 @@ public class AlertStatisticsServiceIT extends AbstractSpringIntegrationTestCase
     public final void testGetReceivedAlertTypesIn24LastHours() {
     
     
-        final Alert alert =
-                AlertBuilder.newAlert().type("TYPE1").provided("JENKINS").category("SCM")
-                        .build();
-        esperEngine.sendAlert(alert);
-        esperEngine.sendAlert(alert);
-        esperEngine.sendAlert(alert);
-        esperEngine.sendAlert(alert);
+        final Event event = new Event();
+        event.setProvider(new Provider(0, ProviderType.OTHER, "TYPE1", "", ""));
+        esperEngine.sendAlert(event);
+        esperEngine.sendAlert(event);
+        esperEngine.sendAlert(event);
+        esperEngine.sendAlert(event);
         
         final List<AlertTypeStatistic> receivedAlertTypesIn24Hours =
                 alertStats.getReceivedAlertTypesIn24LastHours();
@@ -59,7 +59,7 @@ public class AlertStatisticsServiceIT extends AbstractSpringIntegrationTestCase
         for (final AlertTypeStatistic stat : receivedAlertTypesIn24Hours) {
             found |= stat.getType().equals("TYPE1");
         }
-        Assert.assertTrue("Alert is not found", found);
+        Assert.assertTrue("Event is not found", found);
         ;
         
     }

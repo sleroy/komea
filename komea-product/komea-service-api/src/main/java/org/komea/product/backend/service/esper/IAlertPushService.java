@@ -6,7 +6,8 @@ package org.komea.product.backend.service.esper;
 
 
 
-import org.komea.product.database.alert.IAlert;
+import org.komea.product.database.alert.IEvent;
+import org.komea.product.database.dto.EventSimpleDto;
 
 
 
@@ -22,17 +23,19 @@ public interface IAlertPushService
     /**
      * Send the event : alerts
      * 
-     * @param _alert
+     * @param _event
      *            the alert.
      */
-    void sendEvent(IAlert _alert);
+    void sendEvent(IEvent _event);
     
     
     /**
-     * Send an event without validation.
+     * Send the event dto.
      * 
-     * @param _alert
-     *            the alert.
+     * @param _dto
+     *            the dto.
      */
-    void sendEventWithoutValidation(IAlert _alert);
+    void sendEventDto(EventSimpleDto _dto);
+    
+    
 }

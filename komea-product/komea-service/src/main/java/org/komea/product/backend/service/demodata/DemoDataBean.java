@@ -3,15 +3,17 @@ package org.komea.product.backend.service.demodata;
 
 
 
+import java.util.Random;
+
 import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.service.esper.IAlertPushService;
-import org.komea.product.database.alert.AlertBuilder;
-import org.komea.product.database.alert.enums.Criticity;
+import org.komea.product.database.alert.EventDtoBuilder;
 import org.komea.product.database.dao.GroupKindDao;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dao.PersonRoleDao;
+import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.model.GroupKind;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
@@ -140,10 +142,12 @@ public class DemoDataBean
     
     
         for (int i = 0; i < 10; ++i) {
-            alertPushService.sendEvent(AlertBuilder.newAlert().category("SYSTEM")
-                    .criticity(Criticity.values()[i % Criticity.values().length])
-                    .fullMessage("Message of alert").message("Message of alert").project("SYSTEM")
-                    .provided("SYSTEM").type("DEMO_ALERT").build());
+            final EventSimpleDto event =
+                    EventDtoBuilder.newAlert().message("Demo alert").project("SYSTEM")
+                            .provided("DEMO" + new Random().nextInt(12)).eventType("demo_alert")
+                            .build();
+            alertPushService.sendEventDto(event);
+            
         }
     }
     

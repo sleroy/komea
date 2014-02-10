@@ -12,9 +12,10 @@ import org.komea.product.backend.service.esper.IAlertPushService;
 import org.komea.product.backend.service.esper.IAlertStatisticsService;
 import org.komea.product.backend.service.esper.IAlertViewerService;
 import org.komea.product.backend.service.esper.QueryDefinition;
-import org.komea.product.database.alert.AlertBuilder;
-import org.komea.product.database.alert.IAlert;
-import org.komea.product.database.alert.enums.Criticity;
+import org.komea.product.database.alert.EventBuilder;
+import org.komea.product.database.alert.IEvent;
+import org.komea.product.database.model.EventType;
+import org.komea.product.database.model.Provider;
 import org.komea.product.service.dto.AlertTypeStatistic;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.slf4j.Logger;
@@ -61,13 +62,17 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
     public void testifAlertStatisticsKPIAreWorking() {
     
     
-        esperEngine.createEPL(new QueryDefinition("SELECT * FROM Alert", TEST_QUERY));
+        esperEngine.createEPL(new QueryDefinition("SELECT * FROM Event", TEST_QUERY));
+        final EventType eventType = new EventType();
         
+        eventType.setEventKey(ALERT_TYPE);
+        final Provider provider = new Provider();
+        provider.setName("PROVIDER_DEMO");
         for (int i = 0; i < 10; ++i) {
-            alertPushService.sendEvent(AlertBuilder.newAlert().category("SYSTEM")
-                    .criticity(Criticity.values()[i % Criticity.values().length])
-                    .fullMessage("Message of alert").message("Message of alert").project("SYSTEM")
-                    .provided("SYSTEM").type(ALERT_TYPE).build());
+            
+            
+            alertPushService.sendEvent(EventBuilder.newAlert().message("Message of alert")
+                    .provided(provider).eventType(eventType).build());
         }
         final long numberAlerts = systemProject.getReceivedAlertsIn24LastHours();
         LOGGER.info("Received alerts {}", numberAlerts);
@@ -76,17 +81,17 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
                 systemProject.getReceivedAlertTypesIn24LastHours();
         LOGGER.info("Received alerts {}", receivedAlertTypesIn24LastHours);
         // On récupère la liste des alertes reçues dans ce laps de temps, pour vérifier que Esper a bien reçu nos alertes
-        final List<IAlert> instantView = viewerService.getInstantView(TEST_QUERY);
+        final List<IEvent> instantView = viewerService.getInstantView(TEST_QUERY);
         boolean found = false;
-        for (final IAlert alert : instantView) {
-            found |= ALERT_TYPE.equals(alert.getType());
+        for (final IEvent event : instantView) {
+            found |= ALERT_TYPE.equals(event.getEventType().getEventKey());
         }
         Assert.assertTrue("We received alerts from the corresponding type", found);
         found = false;
         for (final AlertTypeStatistic stat : receivedAlertTypesIn24LastHours) {
             found |= ALERT_TYPE.equals(stat.getType());
         }
-        Assert.assertTrue("Alert is not found", found);
+        Assert.assertTrue("Event is not found", found);
         
     }
     

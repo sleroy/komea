@@ -7,8 +7,8 @@ package org.komea.backend.plugins.bugzilla;
 
 import java.util.Date;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory;
-import org.komea.product.database.alert.Alert;
-import org.komea.product.database.alert.IAlert;
+import org.komea.product.database.alert.Event;
+import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.model.Project;
 import org.springframework.stereotype.Service;
@@ -20,181 +20,181 @@ import org.springframework.stereotype.Service;
 @Service
 public class BugZillaAlertFactory implements IBugZillaAlertFactory {
 
-    public IAlert newTotalBugs(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("BUGZILLA");
-        alert.setMessage("Total number of bugs in BugZilla Server");
-        alert.setCategory("BUGTRACKER");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
+    public IEvent newTotalBugs(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("BUGZILLA");
+        event.setMessage("Total number of bugs in BugZilla Server");
+        event.setCategory("BUGTRACKER");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newUnconfirmedBugs(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("BUGZILLA");
-        alert.setMessage("Total number of unconfirmed bugs in BugZilla Project");
-        alert.setCategory("BUGTRACKER");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
+    public IEvent newUnconfirmedBugs(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("BUGZILLA");
+        event.setMessage("Total number of unconfirmed bugs in BugZilla Project");
+        event.setCategory("BUGTRACKER");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newNewBugs(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("BUGZILLA");
-        alert.setMessage("Total number of new type bugs in BugZilla Project");
-        alert.setCategory("BUGTRACKER");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
+    public IEvent newNewBugs(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("BUGZILLA");
+        event.setMessage("Total number of new type bugs in BugZilla Project");
+        event.setCategory("BUGTRACKER");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newAssignedBugs(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("BUGZILLA");
-        alert.setMessage("Total number of assigned bugs in BugZilla Project");
-        alert.setCategory("BUGTRACKER");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
+    public IEvent newAssignedBugs(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("BUGZILLA");
+        event.setMessage("Total number of assigned bugs in BugZilla Project");
+        event.setCategory("BUGTRACKER");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newReopenedBugs(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("BUGZILLA");
-        alert.setMessage("Total number of reopened bugs in BugZilla Project");
-        alert.setCategory("BUGTRACKER");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
+    public IEvent newReopenedBugs(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("BUGZILLA");
+        event.setMessage("Total number of reopened bugs in BugZilla Project");
+        event.setCategory("BUGTRACKER");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newReadyBugs(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("BUGZILLA");
-        alert.setMessage("Total number of ready bugs in BugZilla Project");
-        alert.setCategory("BUGTRACKER");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
+    public IEvent newReadyBugs(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("BUGZILLA");
+        event.setMessage("Total number of ready bugs in BugZilla Project");
+        event.setCategory("BUGTRACKER");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newResolvedBugs(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("BUGZILLA");
-        alert.setMessage("Total number of resolved bugs in BugZilla Project");
-        alert.setCategory("BUGTRACKER");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
+    public IEvent newResolvedBugs(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("BUGZILLA");
+        event.setMessage("Total number of resolved bugs in BugZilla Project");
+        event.setCategory("BUGTRACKER");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newVerifiedBugs(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("BUGZILLA");
-        alert.setMessage("Total number of verified bugs in BugZilla Project");
-        alert.setCategory("BUGTRACKER");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
+    public IEvent newVerifiedBugs(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("BUGZILLA");
+        event.setMessage("Total number of verified bugs in BugZilla Project");
+        event.setCategory("BUGTRACKER");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newNewBug(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("BUGZILLA");
-        alert.setMessage("Total number of new bugs in BugZilla Project");
-        alert.setCategory("BUGTRACKER");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.MAJOR);
-        alert.setDate(new Date());
+    public IEvent newNewBug(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("BUGZILLA");
+        event.setMessage("Total number of new bugs in BugZilla Project");
+        event.setCategory("BUGTRACKER");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.MAJOR);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newUpdatedBugs(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("BUGZILLA");
-        alert.setMessage("Total number of updated bugs in BugZilla Project");
-        alert.setCategory("BUGTRACKER");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.MINOR);
-        alert.setDate(new Date());
+    public IEvent newUpdatedBugs(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("BUGZILLA");
+        event.setMessage("Total number of updated bugs in BugZilla Project");
+        event.setCategory("BUGTRACKER");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.MINOR);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newReminterBugs(long _alert, String _project) {
-        Alert alert = new Alert();
-        alert.setProvider("BUGZILLA");
-        alert.setMessage("Total number of new type bugs in BugZilla Project");
-        alert.setCategory("BUGTRACKER");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.MINOR);
-        alert.setDate(new Date());
+    public IEvent newReminterBugs(long _alert, String _project) {
+        IEvent event = new Event();
+        event.setProvider("BUGZILLA");
+        event.setMessage("Total number of new type bugs in BugZilla Project");
+        event.setCategory("BUGTRACKER");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.MINOR);
+        event.setDate(new Date());
 
-        return alert;
+        return event;
     }
 
     @Override
-    public IAlert newStatusBug(long _alert, String _project, String _status) {
-           Alert alert = new Alert();
-        alert.setProvider("BUGZILLA");
-        alert.setMessage("Total number of "+_status+"  bugs in BugZilla Project");
-        alert.setCategory("BUGTRACKER");
-        alert.setValue(_alert);
-        alert.setFullMessage(alert.getMessage());
-        alert.setProject(_project);
-        alert.setCriticity(Criticity.INFO);
-        alert.setDate(new Date());
-        return alert;
+    public IEvent newStatusBug(long _alert, String _project, String _status) {
+           IEvent event = new Event();
+        event.setProvider("BUGZILLA");
+        event.setMessage("Total number of "+_status+"  bugs in BugZilla Project");
+        event.setCategory("BUGTRACKER");
+        event.setValue(_alert);
+        event.setFullMessage(event.getMessage());
+        event.setProject(_project);
+        event.setCriticity(Criticity.INFO);
+        event.setDate(new Date());
+        return event;
     }
 }

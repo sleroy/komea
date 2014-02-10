@@ -127,7 +127,7 @@ public class StatPage extends LayoutPage
         
         final DataTable<AlertTypeStatistic, String> table =
                 DataTableBuilder.<AlertTypeStatistic, String> newTable("table")
-                        .addColumn("Alert type", "type").addColumn("Provider", "provider")
+                        .addColumn("Event type", "type").addColumn("Provider", "provider")
                         .addColumn("Number", "number").displayRows(10)
                         .withListData(statService.getReceivedAlertTypesIn24LastHours()).build();
         add(table);

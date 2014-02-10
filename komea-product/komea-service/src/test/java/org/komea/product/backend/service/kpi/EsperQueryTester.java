@@ -13,7 +13,7 @@ import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.service.esper.EPStatementResult;
 import org.komea.product.backend.service.esper.EsperEngineBean;
 import org.komea.product.backend.service.esper.QueryDefinition;
-import org.komea.product.database.alert.IAlert;
+import org.komea.product.database.alert.IEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,24 +23,6 @@ import com.espertech.esper.client.EPStatement;
 
 public class EsperQueryTester
 {
-    
-    
-    public interface IEsperLineTestPredicate
-    {
-        
-        
-        void evaluate(final Map<String, Object> _bean);
-    }
-    
-    
-    
-    public interface IEsperTestPredicate
-    {
-        
-        
-        void evaluate(final EPStatement _epStatement);
-    }
-    
     
     
     private static class MapLinePredicate implements IEsperLineTestPredicate
@@ -174,14 +156,14 @@ public class EsperQueryTester
     private String                              esperQuery;
     
     
-    private final List<IAlert>                  alerts              = new ArrayList<IAlert>();
+    private final List<IEvent>                  events              = new ArrayList<IEvent>();
     
     private final List<IEsperTestPredicate>     esperPredicates     =
-                                                                            new ArrayList<EsperQueryTester.IEsperTestPredicate>();
+                                                                            new ArrayList<IEsperTestPredicate>();
     
     
     private final List<IEsperLineTestPredicate> esperLinePredicates =
-                                                                            new ArrayList<EsperQueryTester.IEsperLineTestPredicate>();
+                                                                            new ArrayList<IEsperLineTestPredicate>();
     
     
     private EPStatement                         epStatement;
@@ -219,6 +201,14 @@ public class EsperQueryTester
     }
     
     
+    public EsperQueryTester hasLineResult(final IEsperLineTestPredicate _testPredicate) {
+    
+    
+        esperLinePredicates.add(_testPredicate);
+        return this;
+    }
+    
+    
     public EsperQueryTester hasLineResult(final Map<String, Object> _map) {
     
     
@@ -232,6 +222,8 @@ public class EsperQueryTester
     
         esperLinePredicates.add(new SingleLinePredicate(_columnName, _expectedValue));
         return this;
+        
+        
     }
     
     
@@ -246,8 +238,8 @@ public class EsperQueryTester
     public void prepareAlerts(final IEsperEngine esperEngineBean) {
     
     
-        for (final IAlert alert : alerts) {
-            esperEngineBean.sendAlert(alert);
+        for (final IEvent event : events) {
+            esperEngineBean.sendAlert(event);
         }
     }
     
@@ -278,19 +270,19 @@ public class EsperQueryTester
     }
     
     
-    public EsperQueryTester send(final IAlert _alert1) {
+    public EsperQueryTester send(final IEvent _alert1) {
     
     
-        alerts.add(_alert1);
+        events.add(_alert1);
         return this;
     }
     
     
-    public EsperQueryTester send(final IAlert _alert1, int _numberTimes) {
+    public EsperQueryTester send(final IEvent _alert1, int _numberTimes) {
     
     
         while (_numberTimes-- > 0) {
-            alerts.add(_alert1);
+            events.add(_alert1);
         }
         return this;
     }

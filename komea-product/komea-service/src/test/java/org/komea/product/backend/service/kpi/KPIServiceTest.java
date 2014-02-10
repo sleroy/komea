@@ -40,7 +40,7 @@ public class KPIServiceTest
     private static final String KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12 =
                                                                               "KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12";
     private static final String SELECT_COUNT_FROM_ALERT               =
-                                                                              "SELECT COUNT(*) From Alert";
+                                                                              "SELECT COUNT(*) From Event";
     
     
     

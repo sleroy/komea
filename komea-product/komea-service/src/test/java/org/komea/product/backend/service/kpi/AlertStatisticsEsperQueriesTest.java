@@ -3,11 +3,17 @@ package org.komea.product.backend.service.kpi;
 
 
 
+import java.util.Map;
+
+import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.api.IEsperEngine;
-import org.komea.product.database.alert.AlertBuilder;
-import org.komea.product.database.alert.IAlert;
+import org.komea.product.database.alert.EventBuilder;
+import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.alert.enums.Criticity;
+import org.komea.product.database.enums.Severity;
+import org.komea.product.database.model.EventType;
+import org.komea.product.database.model.Provider;
 
 
 
@@ -26,9 +32,9 @@ public class AlertStatisticsEsperQueriesTest
     public void testEsperQuery() {
     
     
-        final IAlert alert1 = AlertBuilder.newAlert().type("BLA").build();
+        final IEvent alert1 = EventBuilder.newAlert().eventType(newEventType("BLA")).build();
         EsperQueryTester.newTest("ALERT_NUMBER")
-                .withQuery("SELECT COUNT(*) as alert_number FROM Alert.win:time(24 hour)")
+                .withQuery("SELECT COUNT(*) as alert_number FROM Event.win:time(24 hour)")
                 .send(alert1, 4).hasSingleResult("alert_number", Long.valueOf(4)).runTest();
     }
     
@@ -37,22 +43,63 @@ public class AlertStatisticsEsperQueriesTest
     public void testEsperQuery2() {
     
     
-        final IAlert alert1 = AlertBuilder.newAlert().type("BLA").provided("PROV1").build();
-        final IAlert alert2 = AlertBuilder.newAlert().type("BLA2").provided("PROV2").build();
-        final IAlert alert3 = AlertBuilder.newAlert().type("BLA3").provided("PROV3").build();
+        final IEvent alert1 =
+                EventBuilder.newAlert().eventType(newEventType("BLA"))
+                        .provided(newProvider("PROV1")).build();
+        final IEvent alert2 =
+                EventBuilder.newAlert().eventType(newEventType("BLA2"))
+                        .provided(newProvider("PROV2")).build();
+        final IEvent alert3 =
+                EventBuilder.newAlert().eventType(newEventType("BLA3"))
+                        .provided(newProvider("PROV3")).build();
         final IEsperEngine esperEngine = EsperQueryTester.newEngine();
         
         final EsperQueryTester test1 =
                 EsperQueryTester.newTest("ALERT_NUMBER")
-                        .withQuery("SELECT COUNT(*) as value FROM Alert").send(alert1, 4)
+                        .withQuery("SELECT COUNT(*) as value FROM Event").send(alert1, 4)
                         .send(alert2, 3).send(alert3, 2).hasSingleResult("value", Long.valueOf(9));
         final EsperQueryTester test2 =
                 EsperQueryTester
                         .newTest("ALERT_NUMBER_2")
                         .withQuery(
-                                "SELECT  provider, type, count(*) as number FROM Alert.win:time(24 hour)  GROUP BY provider, type ORDER BY provider ASC, type ASC")
-                        .dump().hasLineResult("provider", "PROV1").expectRows(3)
-                        .hasLineResult("provider", "PROV2").hasLineResult("provider", "PROV3");
+                                "SELECT DISTINCT provider, eventType, count(*) as number FROM Event.win:time(24 hour)  GROUP BY provider.name, eventType.name ORDER BY provider.name ASC, eventType.name ASC")
+                        .dump().expectRows(3).hasLineResult(new IEsperLineTestPredicate()
+                        {
+                            
+                            
+                            @Override
+                            public void evaluate(final Map<String, Object> _bean) {
+                            
+                            
+                                Assert.assertEquals("PROV1",
+                                        ((Provider) _bean.get("provider")).getName());
+                                
+                            }
+                        }).hasLineResult(new IEsperLineTestPredicate()
+                        {
+                            
+                            
+                            @Override
+                            public void evaluate(final Map<String, Object> _bean) {
+                            
+                            
+                                Assert.assertEquals("PROV2",
+                                        ((Provider) _bean.get("provider")).getName());
+                                
+                            }
+                        }).hasLineResult(new IEsperLineTestPredicate()
+                        {
+                            
+                            
+                            @Override
+                            public void evaluate(final Map<String, Object> _bean) {
+                            
+                            
+                                Assert.assertEquals("PROV3",
+                                        ((Provider) _bean.get("provider")).getName());
+                                
+                            }
+                        });
         
         test1.prepareQuery(esperEngine);
         test2.prepareQuery(esperEngine);
@@ -68,12 +115,33 @@ public class AlertStatisticsEsperQueriesTest
     public void testEsperQuery3() {
     
     
-        final IAlert alert1 = AlertBuilder.newAlert().type("BLA").criticity(Criticity.INFO).build();
+        final IEvent alert1 = EventBuilder.newAlert().eventType(newEventType("BLA")).build();
         EsperQueryTester
                 .newTest("ALERT_NUMBER")
                 .withQuery(
-                        "SELECT COUNT(*) as alert_number FROM Alert.win:time(24 hour) WHERE criticity=Criticity."
+                        "SELECT COUNT(*) as alert_number FROM Event.win:time(24 hour) WHERE eventType.severity=Severity."
                                 + Criticity.INFO.name()).send(alert1, 4)
                 .hasSingleResult("alert_number", Long.valueOf(4)).runTest();
+    }
+    
+    
+    private EventType newEventType(final String _string) {
+    
+    
+        final EventType eventType = new EventType();
+        eventType.setName(_string);
+        eventType.setSeverity(Severity.INFO);
+        return eventType;
+    }
+    
+    
+    private Provider newProvider(final String _string) {
+    
+    
+        final Provider provider = new Provider();
+        provider.setId(_string.hashCode());
+        provider.setName(_string);
+        
+        return provider;
     }
 }

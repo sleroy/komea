@@ -13,7 +13,7 @@ import org.komea.backend.plugins.testlink.api.ITestLinkServerProxy;
 import org.komea.product.backend.fs.IObjectStorage;
 import org.komea.product.backend.service.IPluginStorageService;
 import org.komea.product.backend.service.esper.IAlertPushService;
-import org.komea.product.database.alert.IAlert;
+import org.komea.product.database.alert.IEvent;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
@@ -97,14 +97,14 @@ public class TestLinkCheckerBeanTest {
         serverManager.setServerProxyFactory(testLinkServerProxyFactory);
         ///////////////////////////////////
 
-        ArgumentCaptor<IAlert> forClass = ArgumentCaptor.forClass(IAlert.class);
+        ArgumentCaptor<IEvent> forClass = ArgumentCaptor.forClass(IEvent.class);
 
         checkerBean.setServerConfig(serverManager);
         checkerBean.checkServers();
         Mockito.verify(alertService, Mockito.times(12)).sendEvent(forClass.capture());
-        List<IAlert> allValues = forClass.getAllValues();
+        List<IEvent> allValues = forClass.getAllValues();
         //afficher les alerts
-        for (IAlert iAlert : allValues) {
+        for (IEvent iAlert : allValues) {
             System.out.println(iAlert.getProject() + " : " + iAlert.getMessage() + " : " + iAlert.getValue());
         }
     }
@@ -142,14 +142,14 @@ public class TestLinkCheckerBeanTest {
 //        serverManager.setServerProxyFactory(testLinkServerProxyFactory);
 //        ///////////////////////////////////
 //
-//        ArgumentCaptor<IAlert> forClass = ArgumentCaptor.forClass(IAlert.class);
+//        ArgumentCaptor<IEvent> forClass = ArgumentCaptor.forClass(IEvent.class);
 //
 //        checkerBean.setServerConfig(serverManager);
 //        checkerBean.checkServers();
 //        Mockito.verify(alertService, Mockito.times(54)).sendEvent(forClass.capture());
-//        List<IAlert> allValues = forClass.getAllValues();
+//        List<IEvent> allValues = forClass.getAllValues();
 //       // affiche les alerts
-//        for (IAlert iAlert : allValues) {
+//        for (IEvent iAlert : allValues) {
 //            System.out.println(iAlert.getProject() + " : " + iAlert.getMessage() + " : " + iAlert.getValue());
 //
 //        }
