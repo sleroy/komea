@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.komea.product.backend.service.IEventTypeService;
 import org.komea.product.database.dto.EventDto;
-import org.komea.product.database.dto.MeasureDTODto;
+import org.komea.product.database.dto.SearchEventDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
@@ -32,8 +32,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.google.common.collect.Lists;
 
-public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
-{
+public class EventControllerTest extends AbstractSpringWebIntegrationTestCase {
     
     @Autowired
     private WebApplicationContext context;
@@ -57,9 +56,9 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
     @Test
     public void findEventsTest() throws Exception {
     
-        Mockito.when(eventService.findEvents(Matchers.any(MeasureDTODto.class))).thenReturn(getEvents());
+        Mockito.when(eventService.findEvents(Matchers.any(SearchEventDto.class))).thenReturn(getEvents());
         
-        MeasureDTODto search = new MeasureDTODto();
+        SearchEventDto search = new SearchEventDto();
         search.setSeverityMin(Severity.INFO);
         
         String jsonMessage = IntegrationTestUtil.convertObjectToJSON(search);
@@ -73,7 +72,7 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
         httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$", org.hamcrest.Matchers.hasSize(1)));
         httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[0].entityName", org.hamcrest.Matchers.equalToIgnoringCase("romain")));
         
-        Mockito.verify(eventService, Mockito.times(1)).findEvents(Matchers.any(MeasureDTODto.class));
+        Mockito.verify(eventService, Mockito.times(1)).findEvents(Matchers.any(SearchEventDto.class));
     }
     
     @Test
@@ -81,7 +80,7 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
     
         Mockito.when(eventService.getEvents("MINOR", 1)).thenReturn(getEvents());
         
-        MeasureDTODto search = new MeasureDTODto();
+        SearchEventDto search = new SearchEventDto();
         search.setSeverityMin(Severity.INFO);
         
         final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.get("/events/get/MINOR/1"));
@@ -97,7 +96,7 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
     public void pushEventTest() throws Exception {
     
         Provider provider = new Provider();
-        provider.setIcon("/incon.png");
+        provider.setIcon("/icon.png");
         provider.setId(1);
         provider.setProviderType(ProviderType.JENKINS);
         
@@ -111,6 +110,8 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
         eventType.setName("dtc");
         eventType.setSeverity(Severity.MINOR);
         
+        // Mockito.when(eventService.pushEvent(Matchers.any(EventDto)).;
+        
         String jsonMessage = IntegrationTestUtil.convertObjectToJSON(getEvents().get(0));
         
         LOGGER.info(jsonMessage);
@@ -122,7 +123,7 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
         // HTTPREQUEST.ANDEXPECT(MOCKMVCRESULTMATCHERS.JSONPATH("$", ORG.HAMCREST.MATCHERS.HASSIZE(1)));
         // HTTpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[0].entityName", org.hamcrest.Matchers.equalToIgnoringCase("romain")));
         
-        Mockito.verify(eventService, Mockito.times(1)).registerEvent(Matchers.any(Provider.class), Matchers.any(EventType.class));
+        Mockito.verify(eventService, Mockito.times(1)).pushEvent(Matchers.any(EventDto.class));
     }
     private List<EventDto> getEvents() {
     
