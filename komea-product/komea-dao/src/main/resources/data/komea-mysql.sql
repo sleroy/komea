@@ -48,6 +48,17 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `komea`.`kom_pero`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`kom_pero` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `komea`.`kom_pe`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `komea`.`kom_pe` (
@@ -57,9 +68,12 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pe` (
   `lastName` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `login` VARCHAR(255) NOT NULL,
+  `idPersonRole` INT NULL,
+  `password` VARCHAR(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   INDEX `fk_User_UserGroup1_idx` (`idPersonGroup` ASC),
-  UNIQUE INDEX `Personcol_UNIQUE` (`login` ASC))
+  UNIQUE INDEX `Personcol_UNIQUE` (`login` ASC),
+  INDEX `fk_kom_pe_kom_pero1_idx` (`idPersonRole` ASC))
 ENGINE = InnoDB;
 
 
@@ -86,8 +100,8 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `name` VARCHAR(255) NOT NULL,
   `description` VARCHAR(2048) NOT NULL,
   `idProvider` INT NULL,
-  `minValue` DOUBLE NULL,
-  `maxValue` DOUBLE NULL,
+  `valueMin` DOUBLE NULL,
+  `valueMax` DOUBLE NULL,
   `valueDirection` INT NOT NULL,
   `valueType` INT NOT NULL,
   `entityType` VARCHAR(255) NOT NULL,
@@ -151,17 +165,6 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_link` (
   `idProject` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_Tag_Project_idx` (`idProject` ASC))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `komea`.`kom_pero`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `komea`.`kom_pero` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC))
 ENGINE = InnoDB;
 
 
