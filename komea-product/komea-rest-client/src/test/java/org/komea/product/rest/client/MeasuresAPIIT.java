@@ -19,8 +19,7 @@ import com.google.common.collect.Lists;
 
 public class MeasuresAPIIT extends AbstractRestClientIntegrationTestCase {
     
-    @Test
-    // (expected = InternalServerException.class)
+    @Test(expected = InternalServerException.class)
     public void testLastMeasure() throws Exception {
     
         IMeasuresAPI measuresAPI = RestClientFactory.INSTANCE.createMeasuresAPI("http://localhost:8585/komea");

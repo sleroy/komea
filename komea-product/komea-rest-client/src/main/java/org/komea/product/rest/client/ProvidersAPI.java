@@ -21,6 +21,6 @@ class ProvidersAPI extends AbstractRestCientAPI implements IProvidersAPI {
     public void registerProvider(final ProviderDto _provider) throws InternalServerException, ConnectException {
     
         String url = PROVIDERS_PATH + "/register";
-        post(url, _provider, ProviderDto.class);
+        post(url, _provider);
     }
 }

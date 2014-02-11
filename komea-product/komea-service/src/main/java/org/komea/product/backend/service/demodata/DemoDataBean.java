@@ -2,40 +2,42 @@
 package org.komea.product.backend.service.demodata;
 
 
-
 import java.util.Random;
 
 import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.alert.EventDtoBuilder;
+import org.komea.product.database.dao.EventTypeDao;
 import org.komea.product.database.dao.GroupKindDao;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dao.PersonRoleDao;
+import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.dto.EventSimpleDto;
+import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ProviderType;
+import org.komea.product.database.enums.Severity;
+import org.komea.product.database.model.EventType;
+import org.komea.product.database.model.EventTypeCriteria;
 import org.komea.product.database.model.GroupKind;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.PersonRole;
+import org.komea.product.database.model.Provider;
+import org.komea.product.database.model.ProviderCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-
-
 @Component
-public class DemoDataBean
-{
-    
+public class DemoDataBean {
     
     @Autowired
     private IEventPushService eventPushService;
     
-    
     @Autowired
     private PersonDao         personDAO;
-    
     
     @Autowired
     private PersonRoleDao     personRoleDao;
@@ -43,62 +45,51 @@ public class DemoDataBean
     @Autowired
     private GroupKindDao      groupKindDAO;
     
-    
     @Autowired
     private PersonGroupDao    personGroupDao;
     
+    @Autowired
+    private ProviderDao       providerDao;
     
+    @Autowired
+    private EventTypeDao      eventTypeDAO;
     
     public DemoDataBean() {
-    
     
         super();
     }
     
-    
     public GroupKindDao getGroupKindDAO() {
-    
     
         return groupKindDAO;
     }
     
-    
     public PersonGroupDao getPersonGroupDao() {
-    
     
         return personGroupDao;
     }
     
-    
     public PersonRoleDao getPersonRoleDao() {
-    
     
         return personRoleDao;
     }
     
-    
     @PostConstruct
     public void init() {
-    
     
         personRoleDao.insert(new PersonRole(null, "Administrator"));
         final PersonRole userRole = new PersonRole(null, "Standard user");
         personRoleDao.insert(userRole);
         
-        
-        final Person record =
-                new Person(null, null, null, "Obiwan", "Kenobi", "obiwan@lightforce.net", "obiwan", "");
+        final Person record = new Person(null, null, null, "Obiwan", "Kenobi", "obiwan@lightforce.net", "obiwan", "");
         record.setIdPersonRole(userRole.getId());
         personDAO.insert(record);
         
-        final Person record2 =
-                new Person(null, null, null, "Dark", "Maul", "darkmaul@darkforce.net", "dmaul", "");
+        final Person record2 = new Person(null, null, null, "Dark", "Maul", "darkmaul@darkforce.net", "dmaul", "");
         record2.setIdPersonRole(userRole.getId());
         personDAO.insert(record2);
         
-        final Person record3 =
-                new Person(null, null, null, "Luke", "Skywalker", "lskywalker@lightforce.net",
-                        "lskywalker", "");
+        final Person record3 = new Person(null, null, null, "Luke", "Skywalker", "lskywalker@lightforce.net", "lskywalker", "");
         record3.setIdPersonRole(userRole.getId());
         personDAO.insert(record3);
         
@@ -108,7 +99,6 @@ public class DemoDataBean
         final GroupKind teamKind = new GroupKind(null, "Team");
         groupKindDAO.insert(teamKind);
         
-        
         final PersonGroup department = new PersonGroup();
         department.setName("Department ABC");
         department.setDescription("Example of Department");
@@ -116,7 +106,6 @@ public class DemoDataBean
         department.setIdGroupKind(departmentKind.getId());
         department.setIdPersonGroupParent(null);
         personGroupDao.insert(department);
-        
         
         final PersonGroup team = new PersonGroup();
         team.setName("Team 1");
@@ -126,7 +115,6 @@ public class DemoDataBean
         team.setIdPersonGroupParent(department.getId());
         personGroupDao.insert(team);
         
-        
         final PersonGroup team2 = new PersonGroup();
         team2.setName("Team 2");
         team2.setDescription("Example of Team");
@@ -134,40 +122,89 @@ public class DemoDataBean
         team2.setIdGroupKind(teamKind.getId());
         team2.setIdPersonGroupParent(department.getId());
         personGroupDao.insert(team2);
+        
+        Provider provider = new Provider();
+        provider.setIcon("icon.png");
+        provider.setName("jenkins");
+        provider.setUrl("http://komea.tocea.com/jenkins");
+        provider.setProviderType(ProviderType.JENKINS);
+        
+        ProviderCriteria criteria = new ProviderCriteria();
+        criteria.createCriteria().andNameEqualTo("jenkins");
+        if (providerDao.countByCriteria(criteria) == 0) {
+            
+            providerDao.insert(provider);
+        }
+        
+        EventType eventType = new EventType();
+        eventType.setCategory("Build step");
+        eventType.setDescription("a build has been launched");
+        eventType.setEnabled(true);
+        eventType.setEventKey("BUILD_LAUNCHED");
+        eventType.setEntityType(EntityType.PROJECT);
+        eventType.setIdProvider(provider.getId());
+        eventType.setName("build launched");
+        eventType.setSeverity(Severity.INFO);
+        
+        EventTypeCriteria criteria2 = new EventTypeCriteria();
+        criteria2.createCriteria().andEventKeyEqualTo("BUILD_LAUNCHED");
+        if (eventTypeDAO.countByCriteria(criteria2) == 0) {
+            
+            eventTypeDAO.insert(eventType);
+        }
+        
+        provider = new Provider();
+        provider.setIcon("icon2.png");
+        provider.setName("DEMO");
+        provider.setUrl("http://komea.tocea.com/demo");
+        provider.setProviderType(ProviderType.JENKINS);
+        
+        ProviderCriteria criteria3 = new ProviderCriteria();
+        criteria3.createCriteria().andNameEqualTo("DEMO");
+        if (providerDao.countByCriteria(criteria3) == 0) {
+            
+            providerDao.insert(provider);
+        }
+        
+        eventType = new EventType();
+        eventType.setCategory("DEMO");
+        eventType.setDescription("demo alert");
+        eventType.setEnabled(true);
+        eventType.setEventKey("demo_alert");
+        eventType.setEntityType(EntityType.PROJECT);
+        eventType.setIdProvider(provider.getId());
+        eventType.setName("demoAlert");
+        eventType.setSeverity(Severity.MAJOR);
+        EventTypeCriteria criteria4 = new EventTypeCriteria();
+        criteria4.createCriteria().andEventKeyEqualTo("demo_alert");
+        if (eventTypeDAO.countByCriteria(criteria4) == 0) {
+            
+            eventTypeDAO.insert(eventType);
+        }
+        
     }
-    
-    
     @Scheduled(fixedRate = 10000)
     public void sendAlert() {
     
-    
         for (int i = 0; i < 10; ++i) {
-            final EventSimpleDto event =
-                    EventDtoBuilder.newAlert().message("Demo alert").project("SYSTEM")
-                            .provided("DEMO" + new Random().nextInt(12)).eventType("demo_alert")
-                            .build();
+            final EventSimpleDto event = EventDtoBuilder.newAlert().message("Demo alert" + new Random().nextInt(12)).project("SYSTEM")
+                    .provided("DEMO").eventType("demo_alert").build();
             eventPushService.sendEventDto(event);
             
         }
     }
     
-    
     public void setGroupKindDAO(final GroupKindDao _groupKindDAO) {
-    
     
         groupKindDAO = _groupKindDAO;
     }
     
-    
     public void setPersonGroupDao(final PersonGroupDao _personGroupDao) {
-    
     
         personGroupDao = _personGroupDao;
     }
     
-    
     public void setPersonRoleDao(final PersonRoleDao _personRoleDao) {
-    
     
         personRoleDao = _personRoleDao;
     }

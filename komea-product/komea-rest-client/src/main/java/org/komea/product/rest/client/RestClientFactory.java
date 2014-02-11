@@ -8,8 +8,10 @@ import java.net.URISyntaxException;
 import org.komea.product.rest.client.api.IDepartmentsAPI;
 import org.komea.product.rest.client.api.IEventsAPI;
 import org.komea.product.rest.client.api.IMeasuresAPI;
+import org.komea.product.rest.client.api.IPersonsAPI;
 import org.komea.product.rest.client.api.IProjectsAPI;
 import org.komea.product.rest.client.api.IProvidersAPI;
+import org.komea.product.rest.client.api.ITeamsAPI;
 
 /**
  * Komea factory to create rest api client objects
@@ -84,6 +86,24 @@ public enum RestClientFactory {
     }
     
     /**
+     * This method create a team api object
+     * 
+     * @param _serverBaseURL
+     *            the server base url
+     * @return a projectsAPI instance
+     * @throws ConnectException
+     *             launch if the server can't connect to the server
+     * @throws URISyntaxException
+     *             launch if the server URL in not valid
+     */
+    public ITeamsAPI createTeamsAPI(final String _serverBaseURL) throws ConnectException, URISyntaxException {
+    
+        TeamsAPI teamAPI = new TeamsAPI();
+        teamAPI.setServerBaseURL(_serverBaseURL);
+        return teamAPI;
+    }
+    
+    /**
      * This method create a providers api object
      * 
      * @param _serverBaseURL
@@ -99,5 +119,23 @@ public enum RestClientFactory {
         IProvidersAPI providersAPI = new ProvidersAPI();
         providersAPI.setServerBaseURL(_serverBaseURL);
         return providersAPI;
+    }
+    
+    /**
+     * This method create a providers api object
+     * 
+     * @param _serverBaseURL
+     *            the server base url
+     * @return a providersAPI instance
+     * @throws ConnectException
+     *             launch if the server can't connect to the server
+     * @throws URISyntaxException
+     *             launch if the server URL in not valid
+     */
+    public IPersonsAPI createPersonsAPI(final String _serverBaseURL) throws ConnectException, URISyntaxException {
+    
+        PersonsAPI personAPI = new PersonsAPI();
+        personAPI.setServerBaseURL(_serverBaseURL);
+        return personAPI;
     }
 }
