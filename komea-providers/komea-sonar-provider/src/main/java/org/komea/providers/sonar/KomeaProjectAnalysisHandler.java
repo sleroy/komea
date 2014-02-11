@@ -1,8 +1,11 @@
+
 package org.komea.providers.sonar;
+
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.model.Provider;
 import org.komea.product.rest.client.RestClientFactory;
@@ -16,26 +19,27 @@ import org.sonar.api.resources.Project;
 
 /**
  * KomeaProjectAnalysisHandler.java (UTF-8)
- *
  * 28 oct. 2013
- *
+ * 
  * @author scarreau
  */
 public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(KomeaProjectAnalysisHandler.class.getName());
-    private final Map<Integer, Long> map = new HashMap<Integer, Long>(0);
-    private final Settings settings;
-    private final Provider provider;
+    
+    private static final Logger        LOGGER     = LoggerFactory.getLogger(KomeaProjectAnalysisHandler.class.getName());
+    private final Map<Integer, Long>   map        = new HashMap<Integer, Long>(0);
+    private final Settings             settings;
+    private final Provider             provider;
     private final Map<Integer, String> projectMap = new HashMap<Integer, String>(0);
-
+    
     public KomeaProjectAnalysisHandler(final Server server, final Settings settings) {
+    
         this.settings = settings;
-        this.provider = KomeaPlugin.getProvider(server.getURL());
+        provider = KomeaPlugin.getProvider(server.getURL());
     }
-
+    
     @Override
-    public void onProjectAnalysis(ProjectAnalysisEvent event) {
+    public void onProjectAnalysis(final ProjectAnalysisEvent event) {
+    
         try {
             final String komeaUrl = KomeaPlugin.getServerUrl(settings);
             if (komeaUrl == null) {
@@ -58,8 +62,9 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
             LOGGER.warn(ex.getMessage(), ex);
         }
     }
-
+    
     private String getCiFlowProjectKey(final Project project) {
+    
         final int projectId = project.getId();
         String ciFlowProjectKey;
         if (projectMap.containsKey(projectId)) {
@@ -73,8 +78,9 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
         }
         return ciFlowProjectKey;
     }
-
+    
     private EventSimpleDto createStartEvent(final String projectKey, final long start) {
+    
         final String message = "Analysis of " + projectKey + " started.";
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(start));
@@ -87,13 +93,14 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
         event.setPersons(null);
         event.setProject(projectKey);
         event.setProperties(properties);
-        event.setProvider(provider.getName());
+        event.setProvider(provider.getUrl());
         event.setUrl(null);
         event.setValue(event.getDate().getTime());
         return event;
     }
-
+    
     private EventSimpleDto createDurationEvent(final String projectKey, final long start, final long end) {
+    
         final long duration = end - start;
         final String message = "Analysis of " + projectKey + " done in : " + duration + "ms";
         final Map<String, String> properties = new HashMap<String, String>(3);
@@ -109,13 +116,14 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
         event.setPersons(null);
         event.setProject(projectKey);
         event.setProperties(properties);
-        event.setProvider(provider.getName());
+        event.setProvider(provider.getUrl());
         event.setUrl(null);
         event.setValue(duration);
         return event;
     }
-
+    
     private EventSimpleDto createEndEvent(final String projectKey, final long end) {
+    
         final String message = "Analysis of " + projectKey + " ended.";
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(end));
@@ -128,10 +136,10 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
         event.setPersons(null);
         event.setProject(projectKey);
         event.setProperties(properties);
-        event.setProvider(provider.getName());
+        event.setProvider(provider.getUrl());
         event.setUrl(null);
         event.setValue(event.getDate().getTime());
         return event;
     }
-
+    
 }

@@ -22,7 +22,7 @@ public class AbstractRestClientIntegrationTestCase {
     
         komeaServerLauncher = new KomeaServerLauncher();
         komeaServerLauncher.startServer();
-        Thread.sleep(6000);
+        Thread.sleep(7000);
         
     }
 }

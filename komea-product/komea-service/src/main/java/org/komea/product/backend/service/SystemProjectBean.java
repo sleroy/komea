@@ -2,7 +2,6 @@
 package org.komea.product.backend.service;
 
 
-
 import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.utils.CollectionUtil;
@@ -14,37 +13,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
-
 @Component
-public class SystemProjectBean implements ISystemProjectBean
-{
-    
+public class SystemProjectBean implements ISystemProjectBean {
     
     @Autowired
     private ProjectDao          projectDAO;
     
-    
     private Project             systemProject;
-    
     
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemProjectBean.class);
     
-    
-    
     public SystemProjectBean() {
-    
     
         super();
     }
     
-    
     public ProjectDao getProjectDAO() {
-    
     
         return projectDAO;
     }
-    
     
     /*
      * (non-Javadoc)
@@ -53,18 +40,15 @@ public class SystemProjectBean implements ISystemProjectBean
     @Override
     public Project getSystemProject() {
     
-    
         return systemProject;
     }
-    
     
     @PostConstruct
     public void init() {
     
-    
         LOGGER.info("--SYSTEM PROJECT--");
         final ProjectCriteria projectCriteria = new ProjectCriteria();
-        projectCriteria.createCriteria().andNameEqualTo("SYSTEM");
+        projectCriteria.createCriteria().andProjectKeyEqualTo("SYSTEM");
         systemProject = CollectionUtil.singleOrNull(projectDAO.selectByCriteria(projectCriteria));
         if (systemProject == null) {
             
@@ -73,7 +57,6 @@ public class SystemProjectBean implements ISystemProjectBean
             systemProject.setDescription("System project for Komea Statistics");
             systemProject.setName("Komea System");
             systemProject.setProjectKey("SYSTEM");
-            
             projectDAO.insert(systemProject);
             
         }
@@ -82,16 +65,12 @@ public class SystemProjectBean implements ISystemProjectBean
         
     }
     
-    
     public void setProjectDAO(final ProjectDao _projectDAO) {
-    
     
         projectDAO = _projectDAO;
     }
     
-    
     public void setSystemProject(final Project _systemProject) {
-    
     
         systemProject = _systemProject;
     }

@@ -1,4 +1,6 @@
+
 package org.komea.providers.sonar;
+
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -6,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
@@ -29,26 +32,26 @@ import org.sonar.api.resources.ResourceUtils;
 
 /**
  * KomeaDecorator.java (UTF-8)
- *
  * 28 oct. 2013
- *
+ * 
  * @author scarreau
  */
 @DependsUpon(DecoratorBarriers.END_OF_VIOLATION_TRACKING)
 public class KomeaDecorator implements Decorator {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(KomeaDecorator.class.getName());
-    private String komeaProjectKey;
-    private final MetricFinder metricFinder;
-    private IEventsAPI eventsAPI = null;
-    private final Provider provider;
+    
+    private static final Logger        LOGGER     = LoggerFactory.getLogger(KomeaDecorator.class.getName());
+    private String                     komeaProjectKey;
+    private final MetricFinder         metricFinder;
+    private IEventsAPI                 eventsAPI  = null;
+    private final Provider             provider;
     private final Map<Integer, String> projectMap = new HashMap<Integer, String>(0);
-    private final List<String> projectMetricKeys;
-
+    private final List<String>         projectMetricKeys;
+    
     public KomeaDecorator(final Server server, final Settings settings, final MetricFinder metricFinder) {
+    
         this.metricFinder = metricFinder;
-        this.provider = KomeaPlugin.getProvider(server.getURL());
-        this.komeaProjectKey = KomeaPlugin.getProjectKey(settings);
+        provider = KomeaPlugin.getProvider(server.getURL());
+        komeaProjectKey = KomeaPlugin.getProjectKey(settings);
         final String komeaUrl = KomeaPlugin.getServerUrl(settings);
         if (komeaUrl != null) {
             try {
@@ -59,9 +62,10 @@ public class KomeaDecorator implements Decorator {
         }
         projectMetricKeys = KomeaPlugin.getMetricKeys(settings);
     }
-
+    
     @Override
     public void decorate(final Resource resource, final DecoratorContext context) {
+    
         if (!ResourceUtils.isProject(resource) || eventsAPI == null) {
             return;
         }
@@ -83,8 +87,9 @@ public class KomeaDecorator implements Decorator {
             LOGGER.error(ex.getMessage(), ex);
         }
     }
-
+    
     private EventSimpleDto createMeasureEvent(final Metric metric, final Double value) {
+    
         final EventType eventType = KomeaPlugin.createEventType(metric);
         final String message = "'" + metric.getName() + "' for project " + komeaProjectKey + " is : " + value;
         final HashMap<String, String> properties = new HashMap<String, String>(0);
@@ -100,13 +105,14 @@ public class KomeaDecorator implements Decorator {
         event.setPersons(null);
         event.setProject(komeaProjectKey);
         event.setProperties(properties);
-        event.setProvider(provider.getName());
+        event.setProvider(provider.getUrl());
         event.setUrl(null);
         event.setValue(value);
         return event;
     }
-
+    
     private Double getValue(final Metric metric, final DecoratorContext context) {
+    
         if (metric == null || !metric.isNumericType()) {
             return null;
         }
@@ -120,15 +126,17 @@ public class KomeaDecorator implements Decorator {
         }
         return result;
     }
-
+    
     @Override
-    public boolean shouldExecuteOnProject(Project project) {
+    public boolean shouldExecuteOnProject(final Project project) {
+    
         return true;
     }
-
+    
     @DependsUpon
     public List<Metric> dependsUpon() {
+    
         return Arrays.asList(CoreMetrics.VIOLATIONS_DENSITY);
     }
-
+    
 }
