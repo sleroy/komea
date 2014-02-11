@@ -142,6 +142,7 @@ public class DemoDataBean {
         department.setPersonGroupKey("DEPARTMENT_ABC");
         department.setIdGroupKind(departmentKind.getId());
         department.setIdPersonGroupParent(null);
+        department.setDepth(1);
         PersonGroupCriteria pgCriteria = new PersonGroupCriteria();
         pgCriteria.createCriteria().andPersonGroupKeyEqualTo("DEPARTMENT_ABC");
         if (personGroupDao.countByCriteria(pgCriteria) == 0) {
@@ -154,6 +155,7 @@ public class DemoDataBean {
         team.setPersonGroupKey("TEAMA");
         team.setIdGroupKind(teamKind.getId());
         team.setIdPersonGroupParent(department.getId());
+        team.setDepth(2);
         pgCriteria = new PersonGroupCriteria();
         pgCriteria.createCriteria().andPersonGroupKeyEqualTo("TEAMA");
         if (personGroupDao.countByCriteria(pgCriteria) == 0) {
@@ -166,6 +168,7 @@ public class DemoDataBean {
         team2.setPersonGroupKey("TEAMB");
         team2.setIdGroupKind(teamKind.getId());
         team2.setIdPersonGroupParent(department.getId());
+        team2.setDepth(2);
         pgCriteria = new PersonGroupCriteria();
         pgCriteria.createCriteria().andPersonGroupKeyEqualTo("TEAMB");
         if (personGroupDao.countByCriteria(pgCriteria) == 0) {

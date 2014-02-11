@@ -116,7 +116,7 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase {
         event.setEventType("dtc");
         event.setMessage("a message");
         event.setProject("komea");
-        event.setProvider("a provider");
+        event.setProvider("http://komea.tocea.com/jenkins");
         event.setUrl("http://...");
         event.setValue(12);
         

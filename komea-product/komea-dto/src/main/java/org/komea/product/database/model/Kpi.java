@@ -605,6 +605,8 @@ public class Kpi implements Serializable {
     
     public String computeKPIEsperKey(final IEntity _entity) {
     
+        System.out.println("entity = " + _entity);
+        System.out.println("entity type  = " + getEntityType());
         return "KPI_" + getKpiKey() + "_T_" + getEntityType().ordinal() + "_ENTITY_" + _entity.getId();
     }
     

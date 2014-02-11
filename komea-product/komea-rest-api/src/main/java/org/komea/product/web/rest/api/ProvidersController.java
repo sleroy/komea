@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @RequestMapping(value = "/providers")
-public class ProvidersController
-{
+public class ProvidersController {
     
     private static final Logger       LOGGER = LoggerFactory.getLogger(ProvidersController.class);
     
@@ -27,6 +26,7 @@ public class ProvidersController
     /**
      * This method register an external provider into komea.
      * After this, providers can use komea to send alert
+     * If a provider with same url already exist, an exception is launched
      * 
      * @param _provider
      */

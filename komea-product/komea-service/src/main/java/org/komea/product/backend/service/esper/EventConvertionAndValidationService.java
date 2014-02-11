@@ -2,7 +2,6 @@
 package org.komea.product.backend.service.esper;
 
 
-
 import java.util.ArrayList;
 
 import org.apache.commons.lang.StringUtils;
@@ -24,12 +23,8 @@ import org.komea.product.database.model.ProviderCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-
 @Service
-public class EventConvertionAndValidationService implements IEventConvertionAndValidationService
-{
-    
+public class EventConvertionAndValidationService implements IEventConvertionAndValidationService {
     
     @Autowired
     private PersonDao      personDAO;
@@ -44,26 +39,21 @@ public class EventConvertionAndValidationService implements IEventConvertionAndV
     @Autowired
     private EventTypeDao   eventTypeDAO;
     
-    
-    
     @Override
     public IEvent convert(final EventSimpleDto _dto) {
-    
     
         final Event event = new Event();
         event.setDate(_dto.getDate());
         
         final EventTypeCriteria eventTypeCriteria = new EventTypeCriteria();
         eventTypeCriteria.createCriteria().andEventKeyEqualTo(_dto.getEventType());
-        event.setEventType(CollectionUtil.singleOrNull(eventTypeDAO
-                .selectByCriteria(eventTypeCriteria)));
+        event.setEventType(CollectionUtil.singleOrNull(eventTypeDAO.selectByCriteria(eventTypeCriteria)));
         
         event.setMessage(_dto.getMessage());
         
         final PersonGroupCriteria personGroupCriteria = new PersonGroupCriteria();
         personGroupCriteria.createCriteria().andPersonGroupKeyEqualTo(_dto.getEventType());
-        event.setPersonGroup(CollectionUtil.singleOrNull(personGroupDAO
-                .selectByCriteria(personGroupCriteria)));
+        event.setPersonGroup(CollectionUtil.singleOrNull(personGroupDAO.selectByCriteria(personGroupCriteria)));
         
         event.setProperties(_dto.getProperties());
         event.setUrl(_dto.getUrl());
@@ -74,91 +64,68 @@ public class EventConvertionAndValidationService implements IEventConvertionAndV
         event.setProject(CollectionUtil.singleOrNull(projectDAO.selectByCriteria(projectCriteria)));
         
         final ProviderCriteria providerCriteria = new ProviderCriteria();
-        providerCriteria.createCriteria().andNameEqualTo(_dto.getProvider());
-        event.setProvider(CollectionUtil.singleOrNull(providerDAO
-                .selectByCriteria(providerCriteria)));
+        providerCriteria.createCriteria().andUrlEqualTo(_dto.getProvider());
+        event.setProvider(CollectionUtil.singleOrNull(providerDAO.selectByCriteria(providerCriteria)));
         event.setPersons(new ArrayList<Person>());
         for (final String userName : _dto.getPersons()) {
             
             final PersonCriteria personCriteria = new PersonCriteria();
             personCriteria.createCriteria().andLoginEqualTo(userName);
-            event.getPersons().add(
-                    CollectionUtil.singleOrNull(personDAO.selectByCriteria(personCriteria)));
+            event.getPersons().add(CollectionUtil.singleOrNull(personDAO.selectByCriteria(personCriteria)));
         }
         
         return event;
     }
     
-    
     public EventTypeDao getEventTypeDAO() {
-    
     
         return eventTypeDAO;
     }
     
-    
     public PersonDao getPersonDAO() {
-    
     
         return personDAO;
     }
     
-    
     public PersonGroupDao getPersonGroupDAO() {
-    
     
         return personGroupDAO;
     }
     
-    
     public ProjectDao getProjectDAO() {
-    
     
         return projectDAO;
     }
     
-    
     public ProviderDao getProviderDAO() {
-    
     
         return providerDAO;
     }
     
-    
     public void setEventTypeDAO(final EventTypeDao _eventTypeDAO) {
-    
     
         eventTypeDAO = _eventTypeDAO;
     }
     
-    
     public void setPersonDAO(final PersonDao _personDAO) {
-    
     
         personDAO = _personDAO;
     }
     
-    
     public void setPersonGroupDAO(final PersonGroupDao _personGroupDAO) {
-    
     
         personGroupDAO = _personGroupDAO;
     }
     
-    
     public void setProjectDAO(final ProjectDao _projectDAO) {
-    
     
         projectDAO = _projectDAO;
     }
     
-    
     public void setProviderDAO(final ProviderDao _providerDAO) {
-    
     
         providerDAO = _providerDAO;
     }
-    
     
     /*
      * (non-Javadoc)
@@ -167,16 +134,17 @@ public class EventConvertionAndValidationService implements IEventConvertionAndV
     @Override
     public void validate(final IEvent _event) {
     
-    
-        if (_event.getProvider() == null) { throw new IllegalArgumentException("invalid provider."); }
-        if (_event.getEventType() == null) { throw new IllegalArgumentException(
-                "Event not registered, ignoring it."); }
+        if (_event.getProvider() == null) {
+            throw new IllegalArgumentException("invalid provider.");
+        }
+        if (_event.getEventType() == null) {
+            throw new IllegalArgumentException("Event not registered, ignoring it.");
+        }
         
-        if (StringUtils.isEmpty(_event.getMessage())) { throw new IllegalArgumentException(
-                "invalid message"); }
-        
+        if (StringUtils.isEmpty(_event.getMessage())) {
+            throw new IllegalArgumentException("invalid message");
+        }
         
     }
-    
     
 }

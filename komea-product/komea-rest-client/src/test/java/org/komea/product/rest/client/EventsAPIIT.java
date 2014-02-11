@@ -65,7 +65,7 @@ public class EventsAPIIT extends AbstractRestClientIntegrationTestCase {
         event.setDate(new Date());
         event.setEventType("BUILD_LAUNCHED");
         event.setMessage("a message");
-        event.setProvider("jenkins");
+        event.setProvider("http://komea.tocea.com/jenkins");
         event.setValue(12);
         event.setProject("komea");
         
