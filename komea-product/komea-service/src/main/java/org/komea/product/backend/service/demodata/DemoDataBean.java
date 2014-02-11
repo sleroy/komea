@@ -9,19 +9,17 @@ import javax.annotation.PostConstruct;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.alert.EventDtoBuilder;
 import org.komea.product.database.dao.EventTypeDao;
-import org.komea.product.database.dao.GroupKindDao;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dao.PersonRoleDao;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.EventTypeCriteria;
-import org.komea.product.database.model.GroupKind;
-import org.komea.product.database.model.GroupKindCriteria;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonCriteria;
 import org.komea.product.database.model.PersonGroup;
@@ -47,9 +45,6 @@ public class DemoDataBean {
     private PersonRoleDao     personRoleDao;
     
     @Autowired
-    private GroupKindDao      groupKindDAO;
-    
-    @Autowired
     private PersonGroupDao    personGroupDao;
     
     @Autowired
@@ -61,11 +56,6 @@ public class DemoDataBean {
     public DemoDataBean() {
     
         super();
-    }
-    
-    public GroupKindDao getGroupKindDAO() {
-    
-        return groupKindDAO;
     }
     
     public PersonGroupDao getPersonGroupDao() {
@@ -122,27 +112,13 @@ public class DemoDataBean {
             
         }
         
-        final GroupKind departmentKind = new GroupKind(null, "Department");
-        GroupKindCriteria gkCriteria = new GroupKindCriteria();
-        gkCriteria.createCriteria().andNameEqualTo("Department");
-        if (groupKindDAO.countByCriteria(gkCriteria) == 0) {
-            groupKindDAO.insert(departmentKind);
-        }
-        
-        final GroupKind teamKind = new GroupKind(null, "Team");
-        gkCriteria = new GroupKindCriteria();
-        gkCriteria.createCriteria().andNameEqualTo("Team");
-        if (groupKindDAO.countByCriteria(gkCriteria) == 0) {
-            groupKindDAO.insert(teamKind);
-        }
-        
         final PersonGroup department = new PersonGroup();
         department.setName("Department ABC");
         department.setDescription("Example of Department");
         department.setPersonGroupKey("DEPARTMENT_ABC");
-        department.setIdGroupKind(departmentKind.getId());
         department.setIdPersonGroupParent(null);
-        department.setDepth(1);
+        department.setType(PersonGroupType.DEPARTMENT);
+        ;
         PersonGroupCriteria pgCriteria = new PersonGroupCriteria();
         pgCriteria.createCriteria().andPersonGroupKeyEqualTo("DEPARTMENT_ABC");
         if (personGroupDao.countByCriteria(pgCriteria) == 0) {
@@ -153,9 +129,8 @@ public class DemoDataBean {
         team.setName("Team 1");
         team.setDescription("Example of Team");
         team.setPersonGroupKey("TEAMA");
-        team.setIdGroupKind(teamKind.getId());
         team.setIdPersonGroupParent(department.getId());
-        team.setDepth(2);
+        team.setType(PersonGroupType.TEAM);
         pgCriteria = new PersonGroupCriteria();
         pgCriteria.createCriteria().andPersonGroupKeyEqualTo("TEAMA");
         if (personGroupDao.countByCriteria(pgCriteria) == 0) {
@@ -166,9 +141,8 @@ public class DemoDataBean {
         team2.setName("Team 2");
         team2.setDescription("Example of Team");
         team2.setPersonGroupKey("TEAMB");
-        team2.setIdGroupKind(teamKind.getId());
         team2.setIdPersonGroupParent(department.getId());
-        team2.setDepth(2);
+        team2.setType(PersonGroupType.TEAM);
         pgCriteria = new PersonGroupCriteria();
         pgCriteria.createCriteria().andPersonGroupKeyEqualTo("TEAMB");
         if (personGroupDao.countByCriteria(pgCriteria) == 0) {
@@ -244,11 +218,6 @@ public class DemoDataBean {
             eventPushService.sendEventDto(event);
             
         }
-    }
-    
-    public void setGroupKindDAO(final GroupKindDao _groupKindDAO) {
-    
-        groupKindDAO = _groupKindDAO;
     }
     
     public void setPersonGroupDao(final PersonGroupDao _personGroupDao) {

@@ -2,7 +2,6 @@
 package org.komea.product.web.rest.api;
 
 
-
 import java.util.List;
 
 import org.komea.product.backend.service.esper.IEventPushService;
@@ -25,20 +24,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.google.common.collect.Lists;
 
-
-
 @Controller
 @RequestMapping(value = "/alerts")
-public class AlertController
-{
-    
+public class AlertController {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(AlertController.class);
     
     @Autowired
     private IEventPushService   pushService;
-    
-    
     
     // private IAlertService alertService;
     
@@ -51,12 +44,9 @@ public class AlertController
      */
     @RequestMapping(method = RequestMethod.POST, value = "/find")
     @ResponseBody
-    public List<KpiAlertDto> findAlerts(@RequestBody
-    final SearchKpiAlertsDto _searchAlert) {
+    public List<KpiAlertDto> findAlerts(@RequestBody final SearchKpiAlertsDto _searchAlert) {
     
-    
-        LOGGER.debug("call rest method /alerts/find to find alerts {}",
-                _searchAlert.getEntityKeys());
+        LOGGER.debug("call rest method /alerts/find to find alerts {}", _searchAlert.getEntityKeys());
         // TODO STUB
         
         final List<KpiAlertDto> alerts = Lists.newArrayList();
@@ -74,7 +64,6 @@ public class AlertController
         return alerts;
     }
     
-    
     /**
      * This method check if alert of type 'kpiAlertTypeKey' exist for the entity 'entityKey'
      * 
@@ -86,38 +75,20 @@ public class AlertController
      */
     @RequestMapping(method = RequestMethod.GET, value = "/get/{kpiAlertTypeKey}/{entityKey}")
     @ResponseBody
-    public boolean getAlerts(@RequestParam(value = "kpiAlertTypeKey")
-    final String _kpiAlertTypeKey, @RequestParam(value = "number")
-    final String _entityKey) {
+    public boolean getAlerts(@RequestParam(value = "kpiAlertTypeKey") final String _kpiAlertTypeKey,
+            @RequestParam(value = "entityKey") final String _entityKey) {
     
-    
-        LOGGER.debug("call rest method /alerts/get/{kpiAlertTypeKey}/{number} to check if an alert exist ");
+        LOGGER.debug("call rest method /alerts/get/{kpiAlertTypeKey}/{entityKey} to check if an alert exist ");
         // TODO
         return false;
     }
     
-    
-    public IEventPushService getPushService() {
-    
-    
-        return pushService;
-    }
-    
-    
     @RequestMapping(method = RequestMethod.POST, value = "/push")
     @ResponseStatus(value = HttpStatus.OK)
-    public void pushEvent(@RequestBody
-    final EventSimpleDto _event) {
-    
+    public void pushEvent(@RequestBody final EventSimpleDto _event) {
     
         LOGGER.debug("call rest method /alerts/push to push event {}", _event.getMessage());
         pushService.sendEventDto(_event);
     }
     
-    
-    public void setPushService(final IEventPushService _pushService) {
-    
-    
-        pushService = _pushService;
-    }
 }

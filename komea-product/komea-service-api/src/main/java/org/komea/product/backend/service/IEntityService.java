@@ -76,4 +76,5 @@ public interface IEntityService {
      * @return the department list
      */
     List<TeamDto> getAllTeams();
+    
 }

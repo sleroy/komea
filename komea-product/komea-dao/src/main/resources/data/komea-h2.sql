@@ -1,3 +1,4 @@
+
 -- -----------------------------------------------------
 -- Table `komea`.`kom_customer`
 -- -----------------------------------------------------
@@ -22,16 +23,6 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_proj` (
 
 
 -- -----------------------------------------------------
--- Table `komea`.`kom_grk`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `komea`.`kom_grk` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`))
-;
-
-
--- -----------------------------------------------------
 -- Table `komea`.`kom_pegr`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `komea`.`kom_pegr` (
@@ -40,8 +31,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pegr` (
   `personGroupKey` VARCHAR(255) NOT NULL,
   `description` VARCHAR(2048) NULL,
   `idPersonGroupParent` INT NULL,
-  `idGroupKind` INT NULL,
-  `depth` INT NOT NULL,
+  `type` INT NOT NULL,
   PRIMARY KEY (`id`))
 ;
 
@@ -52,8 +42,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pegr` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_pero` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC))
+  PRIMARY KEY (`id`))
 ;
 
 
@@ -68,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pe` (
   `lastName` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `login` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`))
 ;
 

@@ -7,6 +7,10 @@ import java.util.List;
 
 import org.komea.product.backend.exceptions.EntityNotFoundException;
 import org.komea.product.database.api.IEntity;
+import org.komea.product.database.dao.CustomerDao;
+import org.komea.product.database.dao.HasProjectPersonDao;
+import org.komea.product.database.dao.HasProjectPersonGroupDao;
+import org.komea.product.database.dao.HasProjectTagDao;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dao.ProjectDao;
@@ -15,8 +19,14 @@ import org.komea.product.database.dto.PersonDto;
 import org.komea.product.database.dto.ProjectDto;
 import org.komea.product.database.dto.TeamDto;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.PersonGroupType;
+import org.komea.product.database.model.HasProjectPersonCriteria;
+import org.komea.product.database.model.HasProjectPersonGroupCriteria;
+import org.komea.product.database.model.HasProjectPersonGroupKey;
+import org.komea.product.database.model.HasProjectPersonKey;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonCriteria;
+import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.database.model.ProjectCriteria;
 import org.komea.product.service.dto.KpiKey;
@@ -29,18 +39,36 @@ import com.google.common.collect.Lists;
 public final class EntityService implements IEntityService {
     
     @Autowired
-    private PersonDao      personDAO;
+    private PersonDao                personDAO;
     
     @Autowired
-    private PersonGroupDao personGroupDao;
+    private CustomerDao              customerDAO;
+    
     @Autowired
-    private ProjectDao     projectDao;
+    private PersonGroupDao           personGroupDao;
+    
+    @Autowired
+    private ProjectDao               projectDao;
+    
+    @Autowired
+    private HasProjectPersonDao      projectPersonDAO;
+    
+    @Autowired
+    private HasProjectPersonGroupDao projectPersonGroupDAO;
+    
+    @Autowired
+    private HasProjectTagDao         projectTagsAO;
     
     public EntityService() {
     
         super();
     }
     
+    /**
+     * (non-Javadoc)
+     * 
+     * @see org.komea.product.backend.service.IEntityService#getEntity(org.komea.product.database.enums.EntityType, int)
+     */
     @Override
     public <TEntity extends IEntity> TEntity getEntity(final EntityType _entityType, final int _key) {
     
@@ -56,12 +84,22 @@ public final class EntityService implements IEntityService {
         
     }
     
+    /**
+     * (non-Javadoc)
+     * 
+     * @see org.komea.product.backend.service.IEntityService#getEntityAssociatedToKpi(org.komea.product.service.dto.KpiKey)
+     */
     @Override
     public IEntity getEntityAssociatedToKpi(final KpiKey _kpiKey) {
     
         return getEntity(_kpiKey.getEntityType(), _kpiKey.getEntityID());
     }
     
+    /**
+     * (non-Javadoc)
+     * 
+     * @see org.komea.product.backend.service.IEntityService#getEntityOrFail(org.komea.product.database.enums.EntityType, int)
+     */
     @Override
     public IEntity getEntityOrFail(final EntityType _entityType, final int _entityID) {
     
@@ -70,30 +108,6 @@ public final class EntityService implements IEntityService {
             throw new EntityNotFoundException(_entityID, _entityType);
         }
         return entity;
-    }
-    
-    /**
-     * @return the personDAO
-     */
-    public PersonDao getPersonDAO() {
-    
-        return personDAO;
-    }
-    
-    /**
-     * @return the personGroupDao
-     */
-    public PersonGroupDao getPersonGroupDao() {
-    
-        return personGroupDao;
-    }
-    
-    /**
-     * @return the projectDao
-     */
-    public ProjectDao getProjectDao() {
-    
-        return projectDao;
     }
     
     @Override
@@ -107,33 +121,6 @@ public final class EntityService implements IEntityService {
             }
         }
         return listOfEntities;
-    }
-    
-    /**
-     * @param _personDAO
-     *            the personDAO to set
-     */
-    public void setPersonDAO(final PersonDao _personDAO) {
-    
-        personDAO = _personDAO;
-    }
-    
-    /**
-     * @param _personGroupDao
-     *            the personGroupDao to set
-     */
-    public void setPersonGroupDao(final PersonGroupDao _personGroupDao) {
-    
-        personGroupDao = _personGroupDao;
-    }
-    
-    /**
-     * @param _projectDao
-     *            the projectDao to set
-     */
-    public void setProjectDao(final ProjectDao _projectDao) {
-    
-        projectDao = _projectDao;
     }
     
     @Override
@@ -150,9 +137,16 @@ public final class EntityService implements IEntityService {
             personDto.setFirstName(person.getFirstName());
             personDto.setLastName(person.getLastName());
             personDto.setLogin(person.getLogin());
+            List<PersonGroup> departments = getDepartment(person);
             personDtos.add(personDto);
+            
         }
         return personDtos;
+    }
+    
+    private List<PersonGroup> getDepartment(final Person _person) {
+    
+        return null;
     }
     
     /**
@@ -189,11 +183,47 @@ public final class EntityService implements IEntityService {
             projectDto.setDescription(project.getDescription());
             projectDto.setName(project.getName());
             projectDto.setProjectKey(project.getProjectKey());
-            projectDTOs.add(projectDto);
+            // projectDto.associatePersonList(getPersonsAssociateToProject(project.getId()));
+            // projectDto.associateTeamList(getTeamsAssociateToProject(project.getId()));
+            // projectDto.setCustomer(customerDAO.selectByPrimaryKey(project.getIdCustomer()).getName());
+            // projectDto.setTags(getProjectTags(project.getId()));
+            // projectDTOs.add(projectDto);
         }
         
         // TODO
         return projectDTOs;
+    }
+    
+    private List<String> getProjectTags(final Integer _id) {
+    
+        // projectTagsAO.selectByCriteria(null);
+        return null;
+    }
+    private List<PersonGroup> getTeamsAssociateToProject(final Integer _projectID) {
+    
+        List<PersonGroup> groupList = Lists.newArrayList();
+        HasProjectPersonGroupCriteria criteria = new HasProjectPersonGroupCriteria();
+        criteria.createCriteria().andIdProjectEqualTo(_projectID);
+        List<HasProjectPersonGroupKey> selection = projectPersonGroupDAO.selectByCriteria(criteria);
+        for (HasProjectPersonGroupKey hasProjectPersonGroupKey : selection) {
+            PersonGroup personGroup = personGroupDao.selectByPrimaryKey(hasProjectPersonGroupKey.getIdPersonGroup());
+            if (personGroup.getType() == PersonGroupType.TEAM) {
+                groupList.add(personGroup);
+            }
+        }
+        return groupList;
+    }
+    
+    private List<Person> getPersonsAssociateToProject(final int _projectID) {
+    
+        List<Person> personList = Lists.newArrayList();
+        HasProjectPersonCriteria criteria = new HasProjectPersonCriteria();
+        criteria.createCriteria().andIdProjectEqualTo(_projectID);
+        List<HasProjectPersonKey> selection = projectPersonDAO.selectByCriteria(criteria);
+        for (HasProjectPersonKey hasProjectPersonKey : selection) {
+            personList.add(personDAO.selectByPrimaryKey(hasProjectPersonKey.getIdPerson()));
+        }
+        return personList;
     }
     
     @Override
