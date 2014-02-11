@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 
 import org.komea.product.rest.client.api.IDepartmentsAPI;
 import org.komea.product.rest.client.api.IEventsAPI;
+import org.komea.product.rest.client.api.IKpisAPI;
 import org.komea.product.rest.client.api.IMeasuresAPI;
 import org.komea.product.rest.client.api.IPersonsAPI;
 import org.komea.product.rest.client.api.IProjectsAPI;
@@ -122,7 +123,7 @@ public enum RestClientFactory {
     }
     
     /**
-     * This method create a providers api object
+     * This method create a persons api object
      * 
      * @param _serverBaseURL
      *            the server base url
@@ -137,5 +138,23 @@ public enum RestClientFactory {
         PersonsAPI personAPI = new PersonsAPI();
         personAPI.setServerBaseURL(_serverBaseURL);
         return personAPI;
+    }
+    
+    /**
+     * This method create a kpis api object
+     * 
+     * @param _serverBaseURL
+     *            the server base url
+     * @return a providersAPI instance
+     * @throws ConnectException
+     *             launch if the server can't connect to the server
+     * @throws URISyntaxException
+     *             launch if the server URL in not valid
+     */
+    public IKpisAPI createKpisAPI(final String _serverBaseURL) throws ConnectException, URISyntaxException {
+    
+        KpisAPI kpiAPI = new KpisAPI();
+        kpiAPI.setServerBaseURL(_serverBaseURL);
+        return kpiAPI;
     }
 }
