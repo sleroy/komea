@@ -26,7 +26,7 @@ public final class AlertJobDemo implements Job {
         if (new Date().getSeconds() % 2 == 0) {
             int random = new Random().nextInt(12);
             final EventSimpleDto event = EventDtoBuilder.newAlert().message("Demo alert " + random).project("SYSTEM" + random)
-                    .provided("DEMO").eventType("demo_alert").build();
+                    .provided("http://komea.tocea.com/demo").eventType("demo_alert").build();
             ((IEventPushService) _context.getMergedJobDataMap().get("esper")).sendEventDto(event);
         }
         

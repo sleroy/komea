@@ -140,8 +140,6 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase {
     
     private List<IEvent> getEvents() {
     
-        // TODO STUB
-        
         final List<IEvent> events = Lists.newArrayList();
         final Event event = new Event();
         event.setDate(new Date());

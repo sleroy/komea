@@ -240,7 +240,7 @@ public class DemoDataBean {
     
         for (int i = 0; i < 10; ++i) {
             final EventSimpleDto event = EventDtoBuilder.newAlert().message("Demo alert" + new Random().nextInt(12)).project("SYSTEM")
-                    .provided("DEMO").eventType("demo_alert").build();
+                    .provided("http://komea.tocea.com/demo").eventType("demo_alert").build();
             eventPushService.sendEventDto(event);
             
         }
