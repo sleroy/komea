@@ -154,7 +154,6 @@ public class JSR303Plugin extends PluginAdapter {
             constructor.setConstructor(true);
             for (final IntrospectedColumn column : introspectedTable.getNonBLOBColumns()) {
                 final String fieldName = column.getActualColumnName();
-                System.out.println("field : " + column.getJdbcTypeName() + " - " + column.getActualColumnName());
                 Parameter param = new Parameter(column.getFullyQualifiedJavaType(), "_" + fieldName);
                 constructor.addParameter(param);
                 constructor.addBodyLine("this." + fieldName + " = _" + fieldName + ";");

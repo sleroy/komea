@@ -34,14 +34,12 @@
             <property name="entityType" value="PROJECT" />
             <generatedKey column="id" sqlStatement="JDBC" identity="true" />
         </table>
-        <table tableName="kom_grk" domainObjectName="GroupKind">
-            <property name="useActualColumnNames" value="true" />
-            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
-        </table>
         <table tableName="kom_pegr" domainObjectName="PersonGroup">
             <property name="useActualColumnNames" value="true" />
             <property name="entityType" value="PERSON_GROUP" />
             <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+            <columnOverride column="type" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+                            javaType="org.komea.product.database.enums.PersonGroupType" />
         </table>
         <table tableName="kom_pero" domainObjectName="PersonRole">
             <property name="useActualColumnNames" value="true" />
