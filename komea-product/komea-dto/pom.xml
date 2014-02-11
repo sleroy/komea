@@ -20,10 +20,7 @@
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
-                    <include>**/enums/*.java</include>
-                    <include>**/model/*.java</include>
-                    <include>**/dto/*.java</include>
-                    <include>**/api/*.java</include>
+                    <include>**/*.java</include>
                 </includes>
             </resource>
         </resources>
@@ -44,10 +41,10 @@
             <artifactId>prettytime</artifactId>
             <type>jar</type>
         </dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

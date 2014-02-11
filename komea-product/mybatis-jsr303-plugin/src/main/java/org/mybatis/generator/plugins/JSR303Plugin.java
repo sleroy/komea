@@ -151,6 +151,7 @@ public class JSR303Plugin extends PluginAdapter {
 
             final Method constructor = new Method("Kpi");
             constructor.setVisibility(JavaVisibility.PUBLIC);
+            constructor.setConstructor(true);
             for (final IntrospectedColumn column : introspectedTable.getNonBLOBColumns()) {
                 final String fieldName = column.getActualColumnName();
                 System.out.println("field : " + column.getJdbcTypeName() + " - " + column.getActualColumnName());

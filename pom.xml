@@ -378,7 +378,7 @@
 
 		<dependency>
 			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
+			<artifactId>guava-gwt</artifactId>
 			<version>${guava.version}</version>
 		</dependency>
 	</dependencies>
