@@ -5,13 +5,15 @@ package org.komea.product.wicket.person;
 
 import java.util.List;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
@@ -21,7 +23,6 @@ import org.komea.product.database.dto.PersonDto;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonRole;
 import org.komea.product.database.model.PersonRoleCriteria;
-import org.komea.product.wicket.widget.EmptyStringValidator;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
 
 
@@ -43,33 +44,37 @@ public final class PersonForm extends Form<PersonDto>
     
     private final Integer       key;
     
+    private final Component     feedBack;
+    
     
     
     public PersonForm(
             final PersonRoleDao _personRoleDAO,
             final PersonDao _personDAO,
             final String _id,
+            final Component _feedBack,
             final IModel<PersonDto> _dto) {
     
     
         super(_id, _dto);
         personRoleDAO = _personRoleDAO;
         personDAO = _personDAO;
+        feedBack = _feedBack;
         personDto = _dto.getObject();
         key = personDto.getId();
         
-        add(TextFieldBuilder.<String> create("login", personDto, "login").simpleValidator(1, 255)
-                .withTooltip("User requires a login.").highlightOnErrors().build());
-        add(TextFieldBuilder.<String> create("firstname", personDto, "firstName")
-                .withTooltip("User requires a first name.")
-                .withValidation(new EmptyStringValidator()).highlightOnErrors().build());
-        add(TextFieldBuilder.<String> create("lastname", personDto, "lastName")
-                .withValidation(new EmptyStringValidator()).highlightOnErrors()
+        add(TextFieldBuilder.<String> createRequired("login", personDto, "login")
+                .simpleValidator(3, 255).withTooltip("User requires a login.").highlightOnErrors()
+                .build());
+        add(TextFieldBuilder.<String> createRequired("firstname", personDto, "firstName")
+                .simpleValidator(2, 255).withTooltip("User requires a first name.")
+                .highlightOnErrors().simpleValidator(2, 255).build());
+        add(TextFieldBuilder.<String> createRequired("lastname", personDto, "lastName")
+                .simpleValidator(2, 255).highlightOnErrors()
                 .withTooltip("User requires a last name.").build());
-        add(TextFieldBuilder.<String> create("email", personDto, "email")
-                .withValidation(new EmptyStringValidator())
+        add(TextFieldBuilder.<String> createRequired("email", personDto, "email")
                 .withTooltip("User requires a valid email.").highlightOnErrors().build());
-        
+        // add(new FormComponentFeedbackIndicator(id));
         // Creation the drop down.
         final List<PersonRole> selectPersonRoles =
                 personRoleDAO.selectByCriteria(new PersonRoleCriteria());
@@ -80,9 +85,29 @@ public final class PersonForm extends Form<PersonDto>
                 new DropDownChoice<PersonRole>("role", selectionRoleModel, selectPersonRoles,
                         new ChoiceRenderer<PersonRole>("name"));
         add(dropDownChoice);
-        final FeedbackPanel feedbackPanel = new FeedbackPanel("feedbackPanel");
-        feedbackPanel.setOutputMarkupId(true);
-        add(feedbackPanel);
+        
+        add(new IFormValidator()
+        {
+            
+            
+            @Override
+            public FormComponent<?>[] getDependentFormComponents() {
+            
+            
+                // TODO Auto-generated method stub
+                return null;
+            }
+            
+            
+            @Override
+            public void validate(final Form<?> _form) {
+            
+            
+                System.out.println("Validation du formular");
+                ;
+                
+            }
+        });
         
         AjaxFormValidatingBehavior.addToAllFormComponents(this, "onkeyup", Duration.ONE_SECOND);
         
@@ -97,7 +122,7 @@ public final class PersonForm extends Form<PersonDto>
             
                 error("error found");
                 // repaint the feedback panel so errors are shown
-                target.add(feedbackPanel);
+                target.add(feedBack);
             }
             
             
@@ -107,7 +132,7 @@ public final class PersonForm extends Form<PersonDto>
             
                 info("Submitted information");
                 // repaint the feedback panel so that it is hidden
-                target.add(feedbackPanel);
+                target.add(feedBack);
             }
         });
         

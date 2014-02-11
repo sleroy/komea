@@ -4,6 +4,7 @@ package org.komea.product.wicket.widget.builders;
 
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
@@ -74,6 +75,14 @@ public class TextFieldBuilder<T>
         } else {
             textField = new TextField<T>(_wicketId, new PropertyModel<T>(_data, _field));
         }
+    }
+    
+    
+    public TextFieldBuilder addBehaviour(final Behavior _borderBehavior) {
+    
+    
+        textField.add(_borderBehavior);
+        return this;
     }
     
     

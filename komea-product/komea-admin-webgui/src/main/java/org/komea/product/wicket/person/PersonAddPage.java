@@ -3,6 +3,7 @@ package org.komea.product.wicket.person;
 
 
 
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -44,8 +45,11 @@ public class PersonAddPage extends LayoutPage
         super(_parameters);
         
         
+        final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+        feedbackPanel.setOutputMarkupId(true);
+        add(feedbackPanel);
         final PersonForm personForm =
-                new PersonForm(personRoleDAO, personDAO, "form",
+                new PersonForm(personRoleDAO, personDAO, "form", feedbackPanel,
                         new CompoundPropertyModel<PersonDto>(_personDTO));
         add(personForm);
         

@@ -20,75 +20,84 @@
 				<div class="container">
 					<!--  begin here -->
 					<wicket:extend>
-						<a href="/p/users" class="btn btn-lg btn-success"><span class="glyphicon cicon-user"></span> Add new user</a>
-						<form class="form" wicket:id="form">
-							<p wicket:id="feedbackPanel" class="bg-info"></p>
-							<fieldset>
-								<div class="control-group">
-									<div class="controls">
-										<label class="control-label" for="firstName">Login</label> <input id="login" name="login" type="text" placeholder="login" class="form-control" required="required" wicket:id="login">
+						<div class="alert alert-danger" wicket:id="feedback"></div>
+						<form class="form" wicket:id="form" role="form">
+							<legend>Editing a user</legend>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-2" for="inputEmail1">Login</label>
+									<div class="col-md-4">
+										<input id="login" name="login" type="text" placeholder="login" class="form-control" required="required" wicket:id="login">
 									</div>
 								</div>
-								<!-- Text input-->
-								<div class="control-group">
-									<label class="control-label" for="firstName">First name</label>
-									<div class="controls">
-										<input id="firstName"  name="firstName" type="text" placeholder="firstName" class="form-control" required="required" wicket:id="firstname">
+							</div>
+							<!-- Text input-->
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-2" for="inputEmail1">First name</label>
+									<div class="col-md-4">
+										<input id="firstName" name="firstName" type="text" placeholder="firstName" class="form-control" required="required" wicket:id="firstname">
 									</div>
 								</div>
-								<!-- Text input-->
-								<div class="control-group">
-									<label class="control-label" for="surename">Surename</label>
-									<div class="controls">
+							</div>
+							<!-- Text input-->
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-2" for="inputEmail1">Last name</label>
+									<div class="col-md-4">
 										<input id="surename" name="surename" type="text" placeholder="surename" class="form-control" required="required" wicket:id="lastname">
 									</div>
 								</div>
-								<!-- Text input-->
-								<div class="control-group">
-									<label class="control-label" for="email">Email</label>
-									<div class="controls">
+							</div>
+							<!-- Text input-->
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-2" for="inputEmail1">Email</label>
+									<div class="col-md-4">
 										<input id="email" name="email" type="text" placeholder="email" class="form-control" required="required" wicket:id="email">
 									</div>
 								</div>
-								<!-- Button Drop Down -->
-								<div class="control-group">
-									<label class="control-label" for="buttondropdown">Attach the developer to a group.</label>
-									<div class="controls">
-										<div class="input-append">
-											<div class="btn-group">
-												<button type="button" class="btn btn-small btn-info ">Attach to a department</button>
-												<button type="button" class="btn btn-small btn-info ">Attach to a team</button>
-											</div>
+							</div>
+							<!-- Text input-->
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-2" for="inputEmail1">Attach the user to a group.</label>
+									<div class="col-md-4">
+										<div class="row">
+											<button type="button" class="btn btn-small btn-info col-md-5">Attach to a department</button>
+											<button type="button" class="btn btn-small btn-info col-md-offset-2 col-md-5">Attach to a team</button>
 										</div>
 									</div>
 								</div>
-								<!-- Button Drop Down -->
-								<div class="control-group">
-									<label class="control-label" for="buttondropdown">Attach the developer to a project.</label>
-									<div class="controls">
-										<div class="input-append">
-											<div class="btn-group">
-												<button type="button" class="btn btn-small btn-info">Attach to a project</button>
-											</div>
-										</div>
+							</div>
+							<!-- Text input-->
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-2" for="inputEmail1">Choose a project.</label>
+									<div class="col-md-4">
+										<select id="project" name="project" class="form-control">
+										</select>
 									</div>
 								</div>
-								<!-- Select Basic -->
-								<div class="control-group">
-									<label class="control-label" for="userRole">Choose a role</label>
-									<div class="controls">
+							</div>
+							<!-- Text input-->
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-2" for="inputEmail1">Choose a role.</label>
+									<div class="col-md-4">
 										<select id="userRole" name="userRole" class="form-control" wicket:id="role">
 										</select>
 									</div>
 								</div>
-								<!-- Button -->
-								<div class="control-group">
-									<label class="control-label" for="addedit">Add/Edit Developer informations</label>
-									<div class="controls">
+							</div>
+							<!-- Text input-->
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-offset-2 col-md-4">
 										<button id="addedit" name="addedit" class="btn btn-primary" wicket:id="submit">Add/edit</button>
 									</div>
 								</div>
-							</fieldset>
+							</div>
 						</form>
 					</wicket:extend>
 				</div>

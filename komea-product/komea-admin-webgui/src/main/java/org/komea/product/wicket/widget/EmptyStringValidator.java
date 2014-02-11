@@ -27,9 +27,11 @@ public class EmptyStringValidator extends AbstractValidator<String> implements
     protected void onValidate(final IValidatable<String> _validatable) {
     
     
-        System.out.println("Validation of form");
+        System.out.println("Validation of form : " + _validatable.getValue());
         if (Strings.isEmpty(_validatable.getValue())) {
+            System.err.println("FOund error");
             _validatable.error(new ValidationError("This field should not be empty"));
+            
             
         }
         
