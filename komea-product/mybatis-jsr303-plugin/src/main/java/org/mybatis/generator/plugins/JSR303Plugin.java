@@ -123,11 +123,11 @@ public class JSR303Plugin extends PluginAdapter {
 
     private boolean modelClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         setEntityType(topLevelClass, introspectedTable);
-        addKpiMethods(topLevelClass);
+        addKpiMethods(topLevelClass, introspectedTable);
         return true;
     }
 
-    private void addKpiMethods(TopLevelClass topLevelClass) {
+    private void addKpiMethods(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         if ("org.komea.product.database.model.Kpi".equals(topLevelClass.getType().toString())) {
             final FullyQualifiedJavaType javaTypeIEntity
                     = new FullyQualifiedJavaType("org.komea.product.database.api.IEntity");
@@ -148,6 +148,18 @@ public class JSR303Plugin extends PluginAdapter {
             getCronHistoryJobName.setReturnType(FullyQualifiedJavaType.getStringInstance());
             getCronHistoryJobName.addBodyLine("return \"HISTORY_\" + computeKPIEsperKey(_entity);");
             topLevelClass.addMethod(getCronHistoryJobName);
+
+            final Method constructor = new Method("Kpi");
+            constructor.setVisibility(JavaVisibility.PUBLIC);
+            for (final IntrospectedColumn column : introspectedTable.getNonBLOBColumns()) {
+                final String fieldName = column.getActualColumnName();
+                System.out.println("field : " + column.getJdbcTypeName() + " - " + column.getActualColumnName());
+                Parameter param = new Parameter(column.getFullyQualifiedJavaType(), "_" + fieldName);
+                constructor.addParameter(param);
+                constructor.addBodyLine("this." + fieldName + " = _" + fieldName + ";");
+            }
+            topLevelClass.addMethod(constructor);
+
         }
     }
 
