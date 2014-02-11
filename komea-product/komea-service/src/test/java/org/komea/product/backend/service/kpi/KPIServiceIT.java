@@ -2,7 +2,7 @@
 package org.komea.product.backend.service.kpi;
 
 
-
+import java.lang.annotation.Annotation;
 import java.util.List;
 
 import org.junit.Assert;
@@ -22,11 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
-
-public class KPIServiceIT extends AbstractSpringIntegrationTestCase
-{
-    
+public class KPIServiceIT extends AbstractSpringIntegrationTestCase {
     
     private static final String     ALERT_TYPE = "KpiServiceIT_TYPE";
     
@@ -49,19 +45,20 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
     @Autowired
     private IEventViewerService     viewerService;
     
-    
-    
     public KPIServiceIT() {
-    
     
         super();
     }
     
-    
     @Test
     public void testifAlertStatisticsKPIAreWorking() {
     
-    
+        System.out.println();
+        for (Annotation annotation : this.getClass().getAnnotations()) {
+            
+            System.out.println(annotation);
+        }
+        System.out.println();
         esperEngine.createEPL(new QueryDefinition("SELECT * FROM Event", TEST_QUERY));
         final EventType eventType = new EventType();
         
@@ -70,15 +67,13 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
         provider.setName("PROVIDER_DEMO");
         for (int i = 0; i < 10; ++i) {
             
-            
-            eventPushService.sendEvent(EventBuilder.newAlert().message("Message of alert")
-                    .provided(provider).eventType(eventType).build());
+            eventPushService.sendEvent(EventBuilder.newAlert().message("Message of alert").provided(provider).eventType(eventType).build());
         }
+        System.out.println(kpiService.listAllKpis());
         final long numberAlerts = systemProject.getReceivedAlertsIn24LastHours();
         LOGGER.info("Received alerts {}", numberAlerts);
         Assert.assertTrue(numberAlerts >= 10);
-        final List<AlertTypeStatistic> receivedAlertTypesIn24LastHours =
-                systemProject.getReceivedAlertTypesIn24LastHours();
+        final List<AlertTypeStatistic> receivedAlertTypesIn24LastHours = systemProject.getReceivedAlertTypesIn24LastHours();
         LOGGER.info("Received alerts {}", receivedAlertTypesIn24LastHours);
         // On récupère la liste des alertes reçues dans ce laps de temps, pour vérifier que Esper a bien reçu nos alertes
         final List<IEvent> instantView = viewerService.getInstantView(TEST_QUERY);

@@ -65,6 +65,7 @@ public class EventConvertionAndValidationService implements IEventConvertionAndV
         
         final ProviderCriteria providerCriteria = new ProviderCriteria();
         providerCriteria.createCriteria().andUrlEqualTo(_dto.getProvider());
+        System.out.println("provider url = " + _dto.getProvider());
         event.setProvider(CollectionUtil.singleOrNull(providerDAO.selectByCriteria(providerCriteria)));
         event.setPersons(new ArrayList<Person>());
         for (final String userName : _dto.getPersons()) {

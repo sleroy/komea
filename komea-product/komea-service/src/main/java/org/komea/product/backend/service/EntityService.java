@@ -187,7 +187,7 @@ public final class EntityService implements IEntityService {
             // projectDto.associateTeamList(getTeamsAssociateToProject(project.getId()));
             // projectDto.setCustomer(customerDAO.selectByPrimaryKey(project.getIdCustomer()).getName());
             // projectDto.setTags(getProjectTags(project.getId()));
-            // projectDTOs.add(projectDto);
+            projectDTOs.add(projectDto);
         }
         
         // TODO
