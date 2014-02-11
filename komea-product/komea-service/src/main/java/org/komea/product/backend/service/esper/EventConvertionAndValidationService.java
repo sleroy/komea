@@ -21,6 +21,7 @@ import org.komea.product.database.model.PersonCriteria;
 import org.komea.product.database.model.PersonGroupCriteria;
 import org.komea.product.database.model.ProjectCriteria;
 import org.komea.product.database.model.ProviderCriteria;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -30,15 +31,17 @@ public class EventConvertionAndValidationService implements IEventConvertionAndV
 {
     
     
+    @Autowired
     private PersonDao      personDAO;
     
-    
+    @Autowired
     private PersonGroupDao personGroupDAO;
     
-    
+    @Autowired
     private ProjectDao     projectDAO;
-    
+    @Autowired
     private ProviderDao    providerDAO;
+    @Autowired
     private EventTypeDao   eventTypeDAO;
     
     
