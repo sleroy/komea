@@ -21,9 +21,13 @@ import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.EventTypeCriteria;
 import org.komea.product.database.model.GroupKind;
+import org.komea.product.database.model.GroupKindCriteria;
 import org.komea.product.database.model.Person;
+import org.komea.product.database.model.PersonCriteria;
 import org.komea.product.database.model.PersonGroup;
+import org.komea.product.database.model.PersonGroupCriteria;
 import org.komea.product.database.model.PersonRole;
+import org.komea.product.database.model.PersonRoleCriteria;
 import org.komea.product.database.model.Provider;
 import org.komea.product.database.model.ProviderCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,27 +81,60 @@ public class DemoDataBean {
     @PostConstruct
     public void init() {
     
-        personRoleDao.insert(new PersonRole(null, "Administrator"));
+        PersonRole administrator = new PersonRole(null, "Administrator");
+        PersonRoleCriteria prCriteria = new PersonRoleCriteria();
+        prCriteria.createCriteria().andNameEqualTo("Administrator");
+        if (personRoleDao.countByCriteria(prCriteria) == 0) {
+            personRoleDao.insert(administrator);
+        }
+        
         final PersonRole userRole = new PersonRole(null, "Standard user");
-        personRoleDao.insert(userRole);
+        prCriteria = new PersonRoleCriteria();
+        prCriteria.createCriteria().andNameEqualTo("Standard user");
+        if (personRoleDao.countByCriteria(prCriteria) == 0) {
+            personRoleDao.insert(userRole);
+        }
         
         final Person record = new Person(null, null, null, "Obiwan", "Kenobi", "obiwan@lightforce.net", "obiwan", "");
         record.setIdPersonRole(userRole.getId());
-        personDAO.insert(record);
+        PersonCriteria pCriteria = new PersonCriteria();
+        pCriteria.createCriteria().andLoginEqualTo("obiwan");
+        if (personDAO.countByCriteria(pCriteria) == 0) {
+            personDAO.insert(record);
+            
+        }
         
         final Person record2 = new Person(null, null, null, "Dark", "Maul", "darkmaul@darkforce.net", "dmaul", "");
         record2.setIdPersonRole(userRole.getId());
-        personDAO.insert(record2);
+        pCriteria = new PersonCriteria();
+        pCriteria.createCriteria().andLoginEqualTo("dmaul");
+        if (personDAO.countByCriteria(pCriteria) == 0) {
+            personDAO.insert(record2);
+            
+        }
         
         final Person record3 = new Person(null, null, null, "Luke", "Skywalker", "lskywalker@lightforce.net", "lskywalker", "");
         record3.setIdPersonRole(userRole.getId());
-        personDAO.insert(record3);
+        pCriteria = new PersonCriteria();
+        pCriteria.createCriteria().andLoginEqualTo("lskywalker");
+        if (personDAO.countByCriteria(pCriteria) == 0) {
+            personDAO.insert(record3);
+            
+        }
         
         final GroupKind departmentKind = new GroupKind(null, "Department");
-        groupKindDAO.insert(departmentKind);
+        GroupKindCriteria gkCriteria = new GroupKindCriteria();
+        gkCriteria.createCriteria().andNameEqualTo("Department");
+        if (groupKindDAO.countByCriteria(gkCriteria) == 0) {
+            groupKindDAO.insert(departmentKind);
+        }
         
         final GroupKind teamKind = new GroupKind(null, "Team");
-        groupKindDAO.insert(teamKind);
+        gkCriteria = new GroupKindCriteria();
+        gkCriteria.createCriteria().andNameEqualTo("Team");
+        if (groupKindDAO.countByCriteria(gkCriteria) == 0) {
+            groupKindDAO.insert(teamKind);
+        }
         
         final PersonGroup department = new PersonGroup();
         department.setName("Department ABC");
@@ -105,7 +142,11 @@ public class DemoDataBean {
         department.setPersonGroupKey("DEPARTMENT_ABC");
         department.setIdGroupKind(departmentKind.getId());
         department.setIdPersonGroupParent(null);
-        personGroupDao.insert(department);
+        PersonGroupCriteria pgCriteria = new PersonGroupCriteria();
+        pgCriteria.createCriteria().andPersonGroupKeyEqualTo("DEPARTMENT_ABC");
+        if (personGroupDao.countByCriteria(pgCriteria) == 0) {
+            personGroupDao.insert(department);
+        }
         
         final PersonGroup team = new PersonGroup();
         team.setName("Team 1");
@@ -113,7 +154,11 @@ public class DemoDataBean {
         team.setPersonGroupKey("TEAMA");
         team.setIdGroupKind(teamKind.getId());
         team.setIdPersonGroupParent(department.getId());
-        personGroupDao.insert(team);
+        pgCriteria = new PersonGroupCriteria();
+        pgCriteria.createCriteria().andPersonGroupKeyEqualTo("TEAMA");
+        if (personGroupDao.countByCriteria(pgCriteria) == 0) {
+            personGroupDao.insert(team);
+        }
         
         final PersonGroup team2 = new PersonGroup();
         team2.setName("Team 2");
@@ -121,7 +166,11 @@ public class DemoDataBean {
         team2.setPersonGroupKey("TEAMB");
         team2.setIdGroupKind(teamKind.getId());
         team2.setIdPersonGroupParent(department.getId());
-        personGroupDao.insert(team2);
+        pgCriteria = new PersonGroupCriteria();
+        pgCriteria.createCriteria().andPersonGroupKeyEqualTo("TEAMB");
+        if (personGroupDao.countByCriteria(pgCriteria) == 0) {
+            personGroupDao.insert(team2);
+        }
         
         Provider provider = new Provider();
         provider.setIcon("icon.png");

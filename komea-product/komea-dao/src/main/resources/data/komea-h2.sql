@@ -52,7 +52,8 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pegr` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_pero` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`))
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC))
 ;
 
 
@@ -94,8 +95,8 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `name` VARCHAR(255) NOT NULL,
   `description` VARCHAR(2048) NOT NULL,
   `idProvider` INT NULL,
-  `minValue` DOUBLE NULL,
-  `maxValue` DOUBLE NULL,
+  `valueMin` DOUBLE NULL,
+  `valueMax` DOUBLE NULL,
   `valueDirection` INT NOT NULL,
   `valueType` INT NOT NULL,
   `entityType` VARCHAR(255) NOT NULL,
@@ -149,8 +150,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_link` (
   `name` VARCHAR(255) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
   `idProject` INT NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_Tag_Project_idx` (`idProject` ASC))
+  PRIMARY KEY (`id`))
 ;
 
 
