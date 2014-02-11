@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class AlertValidationService implements IEventConvertionAndValidationService
+public class EventConvertionAndValidationService implements IEventConvertionAndValidationService
 {
     
     

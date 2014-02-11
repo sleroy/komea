@@ -4,7 +4,6 @@ package org.komea.product.wicket.person;
 
 
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.database.dao.PersonDao;
@@ -61,10 +60,6 @@ public class PersonPage extends LayoutPage
                 .withData(dataProvider).build());
         
         
-        final PersonForm personForm =
-                new PersonForm(personRoleDAO, personDAO, "form",
-                        new CompoundPropertyModel<PersonDto>(_personDTO));
-        add(personForm);
     }
     
     
