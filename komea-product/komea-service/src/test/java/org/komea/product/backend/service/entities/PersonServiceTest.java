@@ -96,7 +96,7 @@ public class PersonServiceTest {
         return role;
     }
     
-    public PersonGroup getTeam() {
+    private PersonGroup getTeam() {
     
         PersonGroup team = new PersonGroup();
         team.setId(2);
