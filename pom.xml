@@ -65,7 +65,7 @@
 
 		<!-- Tests -->
 		<dbunit.version>2.4.9</dbunit.version>
-		<spring.test.dbunit.version>1.0.0</spring.test.dbunit.version>
+		<spring.test.dbunit.version>1.0.1</spring.test.dbunit.version>
 		<junit.version>4.10</junit.version>
 
 		<hsqldb.version>2.2.9</hsqldb.version>
@@ -144,12 +144,21 @@
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>2.16</version>
 				<configuration>
-					<forkCount>1C</forkCount>
+					<!-- <forkCount>1C</forkCount> -->
 				</configuration>
 				<executions>
 					<execution>
+						<id>integration-test</id>
 						<goals>
 							<goal>integration-test</goal>
+						</goals>
+						<configuration>
+						<reuseForks>false</reuseForks>
+						</configuration>
+					</execution>
+					<execution>
+						<id>verify</id>
+						<goals>
 							<goal>verify</goal>
 						</goals>
 					</execution>
