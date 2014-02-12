@@ -7,7 +7,6 @@
 package org.komea.plugins.bugzilla;
 
 
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,26 +30,21 @@ import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxyFactory;
 import org.komea.product.backend.fs.IObjectStorage;
 import org.komea.product.backend.service.IPluginStorageService;
 import org.komea.product.backend.service.esper.IEventPushService;
-import org.komea.product.database.alert.IEvent;
+import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-
-
 
 /**
  * @author rgalerme
  */
 // @RunWith(SpringJUnit4ClassRunner.class)
-public class BugZillaPluginTest extends AbstractSpringIntegrationTestCase
-{
-    
+public class BugZillaPluginTest extends AbstractSpringIntegrationTestCase {
     
     // @Mock
     // private IBugZillaConfigurationService conf;
     @Test
     public void testPluginWithoutBugZilla() {
-    
     
         System.out.println("Debut du test");
         // Mockito.when(conf.getServers()).then(new Answer<List<I>)
@@ -60,11 +54,10 @@ public class BugZillaPluginTest extends AbstractSpringIntegrationTestCase
         final IBugZillaAlertFactory alertFactory = new BugZillaAlertFactory();
         bbean.setAlertFactory(alertFactory);
         final IEventPushService mockAlertService = Mockito.mock(IEventPushService.class);
-        final ArgumentCaptor<IEvent> forClass = ArgumentCaptor.forClass(IEvent.class);
+        final ArgumentCaptor<EventSimpleDto> forClass = ArgumentCaptor.forClass(EventSimpleDto.class);
         bbean.setAlertService(mockAlertService);
         
-        final IBugZillaConfigurationService bugZillaConfiguration =
-                new BugZillaConfigurationService();
+        final IBugZillaConfigurationService bugZillaConfiguration = new BugZillaConfigurationService();
         final IPluginStorageService plService = Mockito.mock(IPluginStorageService.class);
         bugZillaConfiguration.setPluginStorage(plService);
         
@@ -123,8 +116,7 @@ public class BugZillaPluginTest extends AbstractSpringIntegrationTestCase
         
         Mockito.when(bconf.getConfigurations()).thenReturn(listBServ);
         Mockito.when(storage.get()).thenReturn(bconf);
-        Mockito.when(plService.registerStorage("BUGZILLA", BugZillaConfiguration.class))
-                .thenReturn(storage);
+        Mockito.when(plService.registerStorage("BUGZILLA", BugZillaConfiguration.class)).thenReturn(storage);
         
         ((BugZillaConfigurationService) bugZillaConfiguration).init();
         
@@ -132,10 +124,10 @@ public class BugZillaPluginTest extends AbstractSpringIntegrationTestCase
         Mockito.when(bzfact.newConnector(idServer)).thenReturn(j2connector);
         
         bbean.checkServers();
-        Mockito.verify(mockAlertService, Mockito.times(17)).sendEvent(forClass.capture());
+        Mockito.verify(mockAlertService, Mockito.times(17)).sendEventDto(forClass.capture());
         System.out.println("forClass" + forClass.getAllValues());
         bbean.checkServers();
-        Mockito.verify(mockAlertService, Mockito.times(34)).sendEvent(forClass.capture());
+        Mockito.verify(mockAlertService, Mockito.times(34)).sendEventDto(forClass.capture());
         System.out.println("Fin du test");
         
     }
