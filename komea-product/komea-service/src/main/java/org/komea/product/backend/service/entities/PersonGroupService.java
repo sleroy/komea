@@ -50,8 +50,8 @@ public final class PersonGroupService implements IPersonGroupService {
     
         // TODO Auto-generated getAllDepartments STUB
         TeamDto teamDTO = new TeamDto();
-        teamDTO.setName("devs");
-        teamDTO.setDescription("developers Department");
+        teamDTO.setName("komea");
+        teamDTO.setDescription("komea team");
         
         List<TeamDto> teamDtos = Lists.newArrayList(teamDTO);
         return teamDtos;

@@ -13,6 +13,9 @@ import org.komea.product.database.model.Link;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 /**
  * decribe information on a project
  * <p>
@@ -48,6 +51,10 @@ public class ProjectDto implements Serializable {
     
     public ProjectDto() {
     
+        associatedPersons = Maps.newHashMap();
+        associatedTeams = Maps.newHashMap();
+        links = Maps.newHashMap();
+        tags = Lists.newArrayList();
     }
     
     public ProjectDto(final String projectKey, final String name, final String description, final String customer,
@@ -91,7 +98,7 @@ public class ProjectDto implements Serializable {
     
     public void associatePerson(final Person _person) {
     
-        associatedPersons.put(_person.getLogin(), _person.getFirstName() + _person.getLastName());
+        associatedPersons.put(_person.getLogin(), _person.getFirstName() + " " + _person.getLastName());
     }
     
     public void associatePersonList(final List<Person> _personlist) {

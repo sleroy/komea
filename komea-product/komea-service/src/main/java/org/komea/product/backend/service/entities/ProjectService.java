@@ -29,6 +29,7 @@ import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.PersonGroupCriteria;
 import org.komea.product.database.model.Project;
 import org.komea.product.database.model.ProjectCriteria;
+import org.komea.product.database.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -91,7 +92,7 @@ public final class ProjectService implements IProjectService {
                 projectDto.setCustomer(customer.getName());
             }
             projectDto.setTags(getProjectTags(project.getId()));
-            projectDto.addLinkList(getprojectList(project.getId()));
+            projectDto.addLinkList(getProjectLinks(project.getId()));
             projectDTOs.add(projectDto);
         }
         
@@ -110,17 +111,21 @@ public final class ProjectService implements IProjectService {
         criteria.createCriteria().andIdProjectEqualTo(_projectID);
         List<HasProjectPersonKey> selection = projectPersonDAO.selectByCriteria(criteria);
         for (HasProjectPersonKey hasProjectPersonKey : selection) {
-            personList.add(personDAO.selectByPrimaryKey(hasProjectPersonKey.getIdPerson()));
+            Person person = personDAO.selectByPrimaryKey(hasProjectPersonKey.getIdPerson());
+            if (person != null) {
+                
+                personList.add(person);
+            }
         }
         return personList;
     }
     /**
      * (non-Javadoc)
      * 
-     * @see org.komea.product.backend.service.entities.IProjectService#getprojectList(java.lang.Integer)
+     * @see org.komea.product.backend.service.entities.IProjectService#getProjectLinks(java.lang.Integer)
      */
     @Override
-    public List<Link> getprojectList(final Integer _projectId) {
+    public List<Link> getProjectLinks(final Integer _projectId) {
     
         LinkCriteria criteria = new LinkCriteria();
         criteria.createCriteria().andIdProjectEqualTo(_projectId);
@@ -141,7 +146,10 @@ public final class ProjectService implements IProjectService {
         criteria.createCriteria().andIdProjectEqualTo(_projectId);
         List<HasProjectTagKey> projectTags = projectTagsDAO.selectByCriteria(criteria);
         for (HasProjectTagKey projectTag : projectTags) {
-            tags.add(tagDAO.selectByPrimaryKey(projectTag.getIdTag()).getName());
+            Tag tag = tagDAO.selectByPrimaryKey(projectTag.getIdTag());
+            if (tag != null) {
+                tags.add(tag.getName());
+            }
             
         }
         return tags;

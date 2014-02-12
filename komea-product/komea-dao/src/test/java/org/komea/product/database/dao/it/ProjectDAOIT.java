@@ -16,8 +16,7 @@ import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-public class ProjectDAOIT extends AbstractSpringIntegrationTestCase
-{
+public class ProjectDAOIT extends AbstractSpringIntegrationTestCase {
     
     @Autowired
     private ProjectDao  projectDAO;
@@ -52,6 +51,25 @@ public class ProjectDAOIT extends AbstractSpringIntegrationTestCase
         
         Assert.assertFalse(projectDAO.selectByCriteria(request).isEmpty());
         Assert.assertEquals(1, projectDAO.selectByCriteria(request).size());
+    }
+    
+    @Test
+    @Transactional
+    public void testNoExistringProject() {
+    
+        final ProjectCriteria request = new ProjectCriteria();
+        request.createCriteria().andNameEqualTo("noExistingProject");
+        // Assert.assertTrue(projectDAO.selectByExample(request).isEmpty());
+        
+        Assert.assertTrue(projectDAO.selectByCriteria(request).isEmpty());
+        Assert.assertEquals(0, projectDAO.selectByCriteria(request).size());
+    }
+    
+    @Test
+    @Transactional
+    public void testNoExistringProjectByID() {
+    
+        Assert.assertNull(projectDAO.selectByPrimaryKey(666));
     }
     
 }

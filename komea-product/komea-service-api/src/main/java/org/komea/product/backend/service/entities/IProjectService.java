@@ -41,7 +41,7 @@ public interface IProjectService {
      *            the project if
      * @return the link list
      */
-    List<Link> getprojectList(Integer _projectId);
+    List<Link> getProjectLinks(Integer _projectId);
     
     /**
      * This method list tags associate to a project
