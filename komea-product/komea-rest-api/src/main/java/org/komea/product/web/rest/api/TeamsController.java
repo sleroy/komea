@@ -4,7 +4,7 @@ package org.komea.product.web.rest.api;
 
 import java.util.List;
 
-import org.komea.product.backend.service.IEntityService;
+import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.database.dto.TeamDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class TeamsController {
     private static final Logger LOGGER = LoggerFactory.getLogger(TeamsController.class);
     
     @Autowired
-    private IEntityService      service;
+    private IPersonGroupService service;
     
     /**
      * This method return the team list

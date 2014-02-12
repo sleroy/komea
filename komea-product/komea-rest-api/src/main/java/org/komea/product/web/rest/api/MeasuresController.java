@@ -5,7 +5,7 @@ package org.komea.product.web.rest.api;
 import java.util.List;
 
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
-import org.komea.product.backend.service.IEntityService;
+import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.dto.SearchHistoricalMeasuresDto;
 import org.komea.product.database.model.MeasureCriteria;

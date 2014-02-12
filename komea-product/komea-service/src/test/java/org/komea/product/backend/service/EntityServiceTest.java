@@ -7,6 +7,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.komea.product.backend.service.entities.EntityService;
+import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonGroupDao;

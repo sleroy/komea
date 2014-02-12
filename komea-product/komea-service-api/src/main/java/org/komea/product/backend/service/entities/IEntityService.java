@@ -1,14 +1,10 @@
 
-package org.komea.product.backend.service;
+package org.komea.product.backend.service.entities;
 
 
 import java.util.List;
 
 import org.komea.product.database.api.IEntity;
-import org.komea.product.database.dto.DepartmentDto;
-import org.komea.product.database.dto.PersonDto;
-import org.komea.product.database.dto.ProjectDto;
-import org.komea.product.database.dto.TeamDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.service.dto.KpiKey;
 
@@ -49,32 +45,32 @@ public interface IEntityService {
      */
     <TEntity extends IEntity> List<TEntity> loadEntities(EntityType _entityType, List<Integer> _keys);
     
-    /**
-     * This method return the complete person list
-     * 
-     * @return
-     */
-    List<PersonDto> getPersonList();
-    
-    /**
-     * This method return the complete department list
-     * 
-     * @return the department list
-     */
-    List<DepartmentDto> getAllDepartments();
-    
-    /**
-     * This method return the complete project list
-     * 
-     * @return the department list
-     */
-    List<ProjectDto> getAllProjects();
-    
-    /**
-     * This method return the complete team list
-     * 
-     * @return the department list
-     */
-    List<TeamDto> getAllTeams();
+    // /**
+    // * This method return the complete person list
+    // *
+    // * @return
+    // */
+    // List<PersonDto> getPersonList();
+    //
+    // /**
+    // * This method return the complete department list
+    // *
+    // * @return the department list
+    // */
+    // List<DepartmentDto> getAllDepartments();
+    //
+    // /**
+    // * This method return the complete project list
+    // *
+    // * @return the department list
+    // */
+    // List<ProjectDto> getAllProjects();
+    //
+    // /**
+    // * This method return the complete team list
+    // *
+    // * @return the department list
+    // */
+    // List<TeamDto> getAllTeams();
     
 }
