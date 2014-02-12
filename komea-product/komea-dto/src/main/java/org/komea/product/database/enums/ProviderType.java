@@ -5,5 +5,5 @@ package org.komea.product.database.enums;
 
 public enum ProviderType {
     
-    SONARQUBE, JENKINS, BUGZILLA, TESTLINK, PERFORCE, OTHER
+    QUALITY, CI_BUILD, BUGTRACKER, REQUIREMENTS, SCM, OTHER
 }

@@ -24,18 +24,18 @@ import org.mockito.Mockito;
  * 
  * @author sleroy
  */
-public class AlertPushServiceTest
+public class EventPushServiceTest
 {
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.esper.AlertPushService#sendEvent(org.komea.product.database.alert.IEvent)}.
+     * Test method for {@link org.komea.product.backend.service.esper.EventPushService#sendEvent(org.komea.product.database.alert.IEvent)}.
      */
     @Test
     public final void testSendEvent() {
     
     
-        final AlertPushService alertPushService = new AlertPushService();
+        final EventPushService alertPushService = new EventPushService();
         final IEsperEngine esperEngineMock = Mockito.mock(IEsperEngine.class);
         alertPushService.setEsperEngine(esperEngineMock);
         final IEventConvertionAndValidationService mock =
@@ -52,13 +52,13 @@ public class AlertPushServiceTest
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.esper.AlertPushService#sendEventWithoutValidation(org.komea.product.database.alert.IEvent)}.
+     * {@link org.komea.product.backend.service.esper.EventPushService#sendEventWithoutValidation(org.komea.product.database.alert.IEvent)}.
      */
     @Test
     public final void testSendEventWithoutValidation() {
     
     
-        final AlertPushService alertPushService = new AlertPushService();
+        final EventPushService alertPushService = new EventPushService();
         final IEsperEngine esperEngineMock = Mockito.mock(IEsperEngine.class);
         alertPushService.setEsperEngine(esperEngineMock);
         final IEventConvertionAndValidationService mock =

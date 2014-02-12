@@ -58,7 +58,7 @@ public class AlertViewerService implements IEventViewerService {
         final Provider provider = new Provider();
         provider.setIcon("/incon.png");
         provider.setId(1);
-        provider.setProviderType(ProviderType.JENKINS);
+        provider.setProviderType(ProviderType.CI_BUILD);
         event.setProvider(provider);
         
         events.add(event);
@@ -96,7 +96,7 @@ public class AlertViewerService implements IEventViewerService {
         final Provider provider = new Provider();
         provider.setIcon("/incon.png");
         provider.setId(1);
-        provider.setProviderType(ProviderType.JENKINS);
+        provider.setProviderType(ProviderType.CI_BUILD);
         provider.setName("jenkins provider");
         provider.setUrl("http://provider/jenkins");
         event.setProvider(provider);

@@ -153,7 +153,7 @@ public class DemoDataBean {
         provider.setIcon("icon.png");
         provider.setName("jenkins");
         provider.setUrl("http://komea.tocea.com/jenkins");
-        provider.setProviderType(ProviderType.JENKINS);
+        provider.setProviderType(ProviderType.CI_BUILD);
         
         ProviderCriteria criteria = new ProviderCriteria();
         criteria.createCriteria().andNameEqualTo("jenkins");
@@ -183,7 +183,7 @@ public class DemoDataBean {
         provider.setIcon("icon2.png");
         provider.setName("DEMO");
         provider.setUrl("http://komea.tocea.com/demo");
-        provider.setProviderType(ProviderType.JENKINS);
+        provider.setProviderType(ProviderType.CI_BUILD);
         
         ProviderCriteria criteria3 = new ProviderCriteria();
         criteria3.createCriteria().andNameEqualTo("DEMO");

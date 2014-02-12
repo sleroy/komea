@@ -5,6 +5,7 @@ package org.komea.product.database.dto;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ public class EventSimpleDto implements Serializable {
     private List<String>        persons          = new ArrayList<String>();
     private String              personGroup      = null;
     private String              project          = null;
-    private Map<String, String> properties;
+    private Map<String, String> properties       = new HashMap<String, String>();
     
     @NotNull
     private Date                date;

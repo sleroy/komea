@@ -1,5 +1,5 @@
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.backend.esper.test;
 
 
 
@@ -13,6 +13,8 @@ import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.service.esper.EPStatementResult;
 import org.komea.product.backend.service.esper.EsperEngineBean;
 import org.komea.product.backend.service.esper.QueryDefinition;
+import org.komea.product.backend.service.kpi.IEsperLineTestPredicate;
+import org.komea.product.backend.service.kpi.IEsperTestPredicate;
 import org.komea.product.database.alert.IEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
