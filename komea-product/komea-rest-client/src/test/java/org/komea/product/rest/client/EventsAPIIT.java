@@ -68,7 +68,7 @@ public class EventsAPIIT extends AbstractRestClientIntegrationTestCase {
         event.setProvider("http://komea.tocea.com/jenkins");
         event.setValue(12);
         event.setProject("komea");
-        
+        event.setUrl("http://komea.tocea.com/jenkins/event1");
         projectsAPI.pushEvent(event);
         
         // List<EventDto> events = projectsAPI.getEvents("MINOR", 1);

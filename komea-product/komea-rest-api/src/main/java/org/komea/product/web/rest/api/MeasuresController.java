@@ -4,6 +4,8 @@ package org.komea.product.web.rest.api;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.kpi.IKPIService;
@@ -59,8 +61,15 @@ public class MeasuresController {
         if (_searchHistoricalMeasure.getNumber() < 0) {
             throw new IllegalArgumentException("Asked numbers of measures must be positive");
         }
-        // TODO Auto-generated findNLastHistoricalsMeasures
-        throw new UnsupportedOperationException("not yet implemented");
+        
+        List<MeasureHistoricalResultDto> historicalMeasures = Lists.newArrayList();
+        for (KpiKey kpiKey : _searchHistoricalMeasure.getKpiKeys()) {
+            MeasureHistoricalResultDto historic = new MeasureHistoricalResultDto(kpiKey);
+            historic.setMeasure(measureHistoryService.getHistory(kpiKey, _searchHistoricalMeasure.getNumber()));
+            historicalMeasures.add(historic);
+        }
+        
+        return historicalMeasures;
     }
     
     /**
@@ -72,7 +81,8 @@ public class MeasuresController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/historical")
     @ResponseBody
-    public List<MeasureHistoricalResultDto> historicalMeasures(@RequestBody final SearchHistoricalMeasuresDto _searchHistoricalMeasure) {
+    public List<MeasureHistoricalResultDto> historicalMeasures(
+            @Valid @RequestBody final SearchHistoricalMeasuresDto _searchHistoricalMeasure) {
     
         LOGGER.debug("call rest method /measures/historical/");
         if (_searchHistoricalMeasure.getStart() != null && _searchHistoricalMeasure.getEnd() != null) {
@@ -118,7 +128,7 @@ public class MeasuresController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/last", produces = "application/json")
     @ResponseBody
-    public Double lastMeasuresForEntity(@RequestBody final KpiKey _kpiKey) throws KPINotFoundException {
+    public Double lastMeasuresForEntity(@Valid @RequestBody final KpiKey _kpiKey) throws KPINotFoundException {
     
         LOGGER.info("request /measures/last");
         LOGGER.info("kpi key =  {}", _kpiKey.toString());

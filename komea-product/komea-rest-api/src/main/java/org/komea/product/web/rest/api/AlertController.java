@@ -4,6 +4,8 @@ package org.komea.product.web.rest.api;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.dto.KpiAlertDto;
@@ -44,7 +46,7 @@ public class AlertController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/find")
     @ResponseBody
-    public List<KpiAlertDto> findAlerts(@RequestBody final SearchKpiAlertsDto _searchAlert) {
+    public List<KpiAlertDto> findAlerts(@Valid @RequestBody final SearchKpiAlertsDto _searchAlert) {
     
         LOGGER.debug("call rest method /alerts/find to find alerts {}", _searchAlert.getEntityKeys());
         // TODO STUB
@@ -85,7 +87,7 @@ public class AlertController {
     
     @RequestMapping(method = RequestMethod.POST, value = "/push")
     @ResponseStatus(value = HttpStatus.OK)
-    public void pushEvent(@RequestBody final EventSimpleDto _event) {
+    public void pushEvent(@Valid @RequestBody final EventSimpleDto _event) {
     
         LOGGER.debug("call rest method /alerts/push to push event {}", _event.getMessage());
         pushService.sendEventDto(_event);

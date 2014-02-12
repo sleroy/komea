@@ -2,18 +2,13 @@
 package org.komea.product.backend.service.kpi;
 
 
-
 import java.util.List;
 
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
 
-
-
-public interface IMeasureHistoryService
-{
-    
+public interface IMeasureHistoryService {
     
     /**
      * Returns the list of measures from an entity and a KPI.
@@ -26,7 +21,6 @@ public interface IMeasureHistoryService
      */
     public List<Measure> getMeasures(HistoryKey _kpiKey);
     
-    
     /**
      * Returns the list of measures from an entity and a KPI.
      * 
@@ -38,7 +32,6 @@ public interface IMeasureHistoryService
      */
     public List<Measure> getMeasures(HistoryKey _kpiKey, MeasureCriteria _criteria);
     
-    
     /**
      * Stores a new measure in the history.
      * 
@@ -46,7 +39,6 @@ public interface IMeasureHistoryService
      *            the measure
      */
     public void storeMeasure(Measure _measure);
-    
     
     /**
      * Builds an history purge action from a kpi.
@@ -57,5 +49,15 @@ public interface IMeasureHistoryService
      */
     IHistoryPurgeAction buildHistoryPurgeAction(Kpi _kpi);
     
+    /**
+     * This method get the last n measure for a history key
+     * 
+     * @param _kpiKey
+     *            the kpi key
+     * @param _nbRow
+     *            the number of result asked
+     * @return the measures list
+     */
+    List<Measure> getLastNMeasures(HistoryKey _kpiKey, int _nbRow);
     
 }

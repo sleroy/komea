@@ -2,6 +2,9 @@
 package org.komea.product.service.dto;
 
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
@@ -38,10 +41,14 @@ public class KpiKey {
         return new KpiKey(null, null, _kpiName);
     }
     
+    @NotNull
     private EntityType entityType;
     
+    @NotNull
     private Integer    entityID;
     
+    @NotNull
+    @Size(min = 0, max = 255)
     private String     kpiName;
     
     /**

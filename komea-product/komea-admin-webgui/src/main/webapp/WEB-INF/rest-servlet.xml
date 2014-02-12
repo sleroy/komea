@@ -10,8 +10,7 @@
 			    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
 
-	<mvc:annotation-driven>
-	</mvc:annotation-driven>
+	<mvc:annotation-driven/>
 
 	<!-- <mvc:resources mapping="/static/**" location="/static/" /> -->
 

@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.komea.product.service.dto.KpiKey;
 
 import com.google.common.collect.Lists;
@@ -14,6 +16,7 @@ public class SearchHistoricalMeasuresDto implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
+    @NotNull
     private List<KpiKey>      kpiKeys;
     private Date              start;
     private Date              end;

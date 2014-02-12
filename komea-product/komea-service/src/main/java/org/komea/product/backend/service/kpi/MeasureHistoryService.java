@@ -4,6 +4,7 @@ package org.komea.product.backend.service.kpi;
 
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.model.Kpi;
@@ -82,8 +83,29 @@ public final class MeasureHistoryService implements IMeasureHistoryService {
     @Override
     public List<Measure> getMeasures(final HistoryKey _kpiKey, final MeasureCriteria measureCriteria) {
     
+        initMeasureCriteria(_kpiKey, measureCriteria);
+        
+        final List<Measure> selectByCriteria = measureDAO.selectByCriteria(measureCriteria);
+        return selectByCriteria;
+    }
+    
+    @Override
+    public List<Measure> getLastNMeasures(final HistoryKey _kpiKey, final int nbRow) {
+    
+        MeasureCriteria measureCriteria = new MeasureCriteria();
+        measureCriteria.setOrderByClause("date DESC");
+        initMeasureCriteria(_kpiKey, measureCriteria);
+        
+        RowBounds rowBounds = new RowBounds(0, nbRow);
+        final List<Measure> selectByCriteria = measureDAO.selectByCriteriaWithRowbounds(measureCriteria, rowBounds);
+        return selectByCriteria;
+    }
+    
+    private void initMeasureCriteria(final HistoryKey _kpiKey, final MeasureCriteria measureCriteria) {
+    
         final Criteria createCriteria = measureCriteria.createCriteria();
         createCriteria.andIdKpiEqualTo(_kpiKey.getKpiID());
+        
         switch (_kpiKey.getEntityType()) {
             case PERSON:
                 createCriteria.andIdPersonEqualTo(_kpiKey.getEntityID());
@@ -99,9 +121,6 @@ public final class MeasureHistoryService implements IMeasureHistoryService {
                 throw new UnsupportedOperationException("Not implemented default statement");
                 
         }
-        
-        final List<Measure> selectByCriteria = measureDAO.selectByCriteria(measureCriteria);
-        return selectByCriteria;
     }
     
     public void setEsperEngine(final IEsperEngine _esperEngine) {

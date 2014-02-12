@@ -4,6 +4,8 @@ package org.komea.product.web.rest.api;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.backend.service.esper.IEventViewerService;
 import org.komea.product.database.alert.IEvent;
@@ -41,7 +43,7 @@ public class EventsController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/find")
     @ResponseBody
-    public List<IEvent> findEvents(@RequestBody final SearchEventDto _searchEvent) {
+    public List<IEvent> findEvents(@Valid @RequestBody final SearchEventDto _searchEvent) {
     
         LOGGER.debug("call rest method /events/find to find event {}", _searchEvent.getEntityKeys());
         return eventService.findEvents(_searchEvent);
@@ -83,7 +85,7 @@ public class EventsController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/push")
     @ResponseStatus(value = HttpStatus.OK)
-    public void pushEvent(@RequestBody final EventSimpleDto _event) {
+    public void pushEvent(@Valid @RequestBody final EventSimpleDto _event) {
     
         LOGGER.debug("call rest method /events/push to push event {}", _event.getMessage());
         // TODO
