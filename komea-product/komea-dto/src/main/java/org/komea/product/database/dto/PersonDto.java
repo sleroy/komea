@@ -273,7 +273,7 @@ public class PersonDto implements Serializable {
     public void modifyTeam(final PersonGroup _team) {
     
         if (_team != null) {
-            if (_team.getType() == PersonGroupType.TEAM) {
+            if (_team.getType() != PersonGroupType.TEAM) {
                 throw new IllegalArgumentException("_team paramter must be of TEAM type");
             }
             team = new Pair<String, String>(_team.getPersonGroupKey(), _team.getName());
@@ -289,7 +289,7 @@ public class PersonDto implements Serializable {
     public void modifyDepartment(final PersonGroup _department) {
     
         if (_department != null) {
-            if (_department.getType() == PersonGroupType.DEPARTMENT) {
+            if (_department.getType() != PersonGroupType.DEPARTMENT) {
                 throw new IllegalArgumentException("_department paramter must be of DEPARTMENT type");
             }
             department = new Pair<String, String>(_department.getPersonGroupKey(), _department.getName());

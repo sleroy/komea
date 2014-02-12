@@ -226,7 +226,7 @@ public class ProjectServiceTest {
         PersonGroup team = teams.get(0);
         Assert.assertEquals(1, team.getId().intValue());
         Assert.assertEquals("KOMEA_TEAM", team.getPersonGroupKey());
-        Assert.assertEquals(PersonGroupType.DEPARTMENT, team.getType());
+        Assert.assertEquals(PersonGroupType.TEAM, team.getType());
         
         Mockito.verify(projectPersonGroupDAOmock, Mockito.times(1)).selectByCriteria(Matchers.any(HasProjectPersonGroupCriteria.class));
         
@@ -416,7 +416,7 @@ public class ProjectServiceTest {
         team.setName("komea team");
         team.setDescription("komea team");
         team.setPersonGroupKey("KOMEA_TEAM");
-        team.setType(PersonGroupType.DEPARTMENT);
+        team.setType(PersonGroupType.TEAM);
         
         return Lists.newArrayList(team);
     }
