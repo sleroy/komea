@@ -5,6 +5,7 @@ package org.komea.product.backend.service.entities;
 import java.util.List;
 
 import org.komea.product.database.dto.PersonDto;
+import org.komea.product.database.model.Project;
 
 /**
  * Komea service to manage person
@@ -20,6 +21,15 @@ public interface IPersonService {
      * 
      * @return the person list
      */
-    public abstract List<PersonDto> getPersonList();
+    List<PersonDto> getPersonList();
+    
+    /**
+     * This method return the list of projects associate to a person
+     * 
+     * @param _personId
+     *            the person if
+     * @return the project list
+     */
+    List<Project> getProjectsAssociateToAPerson(Integer _personId);
     
 }

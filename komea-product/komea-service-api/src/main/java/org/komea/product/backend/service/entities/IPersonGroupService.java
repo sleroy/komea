@@ -32,12 +32,23 @@ public interface IPersonGroupService {
     List<TeamDto> getAllTeams();
     
     /**
-     * This method get the list of depaertment associate to an person
+     * This method get a department from a group.
+     * if the group is a department, it will be return otherwise it will find it in the parent group
      * 
-     * @param _personID
-     *            a person
-     * @return the departments list
+     * @param _groupID
+     *            a group id
+     * @return the department
      */
-    PersonGroup getDepartment(Integer _personID);
+    PersonGroup getDepartment(Integer _groupID);
+    
+    /**
+     * This method get a team from a group.
+     * if the group is a team, it will be return otherwise it will find it in the parent group
+     * 
+     * @param _groupID
+     *            a group id
+     * @return the team
+     */
+    PersonGroup getTeam(Integer _groupID);
     
 }

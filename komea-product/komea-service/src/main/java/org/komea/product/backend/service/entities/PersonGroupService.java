@@ -8,6 +8,7 @@ import org.komea.product.database.dao.HasProjectPersonGroupDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dto.DepartmentDto;
 import org.komea.product.database.dto.TeamDto;
+import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.PersonGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,8 +64,28 @@ public final class PersonGroupService implements IPersonGroupService {
      * @see org.komea.product.backend.service.entities.IPersonGroupService#getDepartment(java.lang.Integer)
      */
     @Override
-    public PersonGroup getDepartment(final Integer _personID) {
+    public PersonGroup getDepartment(final Integer _groupID) {
     
-        return null;
+        PersonGroup group = personGroupDao.selectByPrimaryKey(_groupID);
+        if (group == null) {
+            return null;
+        }
+        if (group.getType() == PersonGroupType.DEPARTMENT) {
+            return group;
+        }
+        return getDepartment(group.getIdPersonGroupParent());
+    }
+    
+    @Override
+    public PersonGroup getTeam(final Integer _groupID) {
+    
+        PersonGroup group = personGroupDao.selectByPrimaryKey(_groupID);
+        if (group == null) {
+            return null;
+        }
+        if (group.getType() == PersonGroupType.TEAM) {
+            return group;
+        }
+        return getTeam(group.getIdPersonGroupParent());
     }
 }
