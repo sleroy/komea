@@ -14,8 +14,8 @@ public class TeamDto implements Serializable {
     private String               key;
     private String               name;
     private String               description;
-    private Map<String, String> projects = new HashMap<String, String>(0);
-    private Map<String, String> persons = new HashMap<String, String>(0);
+    private Map<String, String>  projects         = new HashMap<String, String>(0);
+    private Map<String, String>  persons          = new HashMap<String, String>(0);
     private Pair<String, String> department;
     
     public TeamDto() {
@@ -92,12 +92,12 @@ public class TeamDto implements Serializable {
     
         this.department = department;
     }
-
+    
     @Override
     public String toString() {
-        return "TeamDto{" + "key=" + key + ", name=" + name + ", description=" + description
-                + ", projects=" + projects + ", persons=" + persons
-                + ", department=" + department + ", type=" + type + '}';
+    
+        return "TeamDto{" + "key=" + key + ", name=" + name + ", description=" + description + ", projects=" + projects + ", persons="
+                + persons + ", department=" + department + '}';
     }
     
 }
