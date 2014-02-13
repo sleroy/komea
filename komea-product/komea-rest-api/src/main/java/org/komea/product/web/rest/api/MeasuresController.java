@@ -113,7 +113,6 @@ public class MeasuresController {
             measureResult.setMeasure(measureHistoryService.getKpiMeasureValue(kpiKey));
             measuresResponse.add(measureResult);
         }
-        // TODO
         return measuresResponse;
     }
     /**
