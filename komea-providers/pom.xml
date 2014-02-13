@@ -1,21 +1,35 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.komea</groupId>
-		<artifactId>komea</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>org.komea</groupId>
+        <artifactId>komea</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
 
-	<groupId>org.komea.providers</groupId>
-	<artifactId>komea-providers</artifactId>
-	<packaging>pom</packaging>
-	<name>Komea : provider container</name>
+    <groupId>org.komea.providers</groupId>
+    <artifactId>komea-providers</artifactId>
+    <packaging>pom</packaging>
+    <name>Komea : provider container</name>
 
-	<modules>
-		<module>komea-jenkins-provider</module>
-		<module>komea-sonar-provider</module>
-	</modules>
+    <modules>
+        <module>komea-jenkins-provider</module>
+        <module>komea-sonar-provider</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.komea.product</groupId>
+            <artifactId>komea-rest-client</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
 
 </project>
