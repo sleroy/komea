@@ -44,7 +44,7 @@ public class EventPushServiceTest
         alertPushService.setValidator(mock);
         alertPushService.sendEventDto(EventDtoBuilder.newAlert().message("DemoAlert").build());
         
-        verify(esperEngineMock, Mockito.times(1)).sendAlert(Matchers.any(IEvent.class));
+        verify(esperEngineMock, Mockito.times(1)).sendEvent(Matchers.any(IEvent.class));
         
         
     }
@@ -69,7 +69,7 @@ public class EventPushServiceTest
         final EventSimpleDto event = EventDtoBuilder.newAlert().message("DemoAlert").build();
         event.setDate(null);
         alertPushService.sendEventDto(event);
-        verify(esperEngineMock, Mockito.times(1)).sendAlert(Matchers.any(IEvent.class));
+        verify(esperEngineMock, Mockito.times(1)).sendEvent(Matchers.any(IEvent.class));
         
     }
     

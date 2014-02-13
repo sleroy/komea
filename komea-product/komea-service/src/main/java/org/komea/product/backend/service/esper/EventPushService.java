@@ -70,7 +70,7 @@ public class EventPushService implements IEventPushService
             LOGGER.trace("Event discarded since event type (} is disabled", _event.getEventType()
                     .getName());
         }
-        esperEngine.sendAlert(_event);
+        esperEngine.sendEvent(_event);
         
         
     }

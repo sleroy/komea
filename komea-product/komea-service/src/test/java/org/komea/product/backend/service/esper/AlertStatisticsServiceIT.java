@@ -45,10 +45,10 @@ public class AlertStatisticsServiceIT extends AbstractSpringIntegrationTestCase
     
         final Event event = new Event();
         event.setProvider(new Provider(0, ProviderType.OTHER, "TYPE1", "", ""));
-        esperEngine.sendAlert(event);
-        esperEngine.sendAlert(event);
-        esperEngine.sendAlert(event);
-        esperEngine.sendAlert(event);
+        esperEngine.sendEvent(event);
+        esperEngine.sendEvent(event);
+        esperEngine.sendEvent(event);
+        esperEngine.sendEvent(event);
         
         final List<AlertTypeStatistic> receivedAlertTypesIn24Hours =
                 alertStats.getReceivedAlertTypesIn24LastHours();

@@ -6,7 +6,6 @@ package org.komea.product.backend.service.esper;
 import java.util.List;
 
 import org.komea.product.database.alert.IEvent;
-import org.komea.product.database.dto.SearchEventDto;
 
 
 
@@ -15,25 +14,19 @@ public interface IEventViewerService
     
     
     /**
-     * This method find event list which respect some criterias
+     * Returns the events provided in a day.
      * 
-     * @param _searchEvent
-     *            the event criterias as as severityMin, event key or event types
-     * @return the event list
+     * @return the day events.
      */
-    public List<IEvent> findEvents(SearchEventDto _searchEvent);
+    List<IEvent> getDayEvents();
     
     
     /**
-     * This method return a n event which has a severity min > _severityMin
+     * Returns the events provided in a hour.
      * 
-     * @param _severityMin
-     *            all events to return must have severiyy > _severityMin
-     * @param _number
-     *            the number of events to return
-     * @return the event list
+     * @return the day events.
      */
-    public List<IEvent> getEvents(String _severityMin, int _number);
+    List<IEvent> getHourEvents();
     
     
     /**

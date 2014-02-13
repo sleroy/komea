@@ -202,7 +202,7 @@ public final class EsperEngineBean implements IEsperEngine
     
     
     @Override
-    public void sendAlert(final IEvent _event) {
+    public void sendEvent(final IEvent _event) {
     
     
         // LOGGER.trace("Sending alert {}", _alert);

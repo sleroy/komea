@@ -86,6 +86,6 @@ public interface IEsperEngine
      * 
      * @param _event
      */
-    void sendAlert(IEvent _event);
+    void sendEvent(IEvent _event);
     
 }

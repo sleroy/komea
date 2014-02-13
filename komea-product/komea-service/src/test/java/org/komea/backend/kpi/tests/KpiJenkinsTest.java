@@ -36,8 +36,6 @@ public class KpiJenkinsTest
                 .sendEvent(jenkinsEventFactory.sendBuildFailed("SCERTIFY", 908, "SPRINT"))
                 .sendEvent(jenkinsEventFactory.sendBuildInterrupted("SCERTIFY", 908, "SPRINT"))
                 .runTest();
-        ;
-        
         
     }
     
@@ -48,7 +46,7 @@ public class KpiJenkinsTest
     
         final JenkinsEventFactory jenkinsEventFactory = new JenkinsEventFactory();
         EsperQueryTester
-                .newTest("KPI_NUMBER_RELEASES_PER_WEEK")
+                .newTest("KPI_NUMBER_RELEASES_PER_MONTH")
                 .withQuery(
                         "SELECT COUNT(*) as count FROM Event.win:time(1 month) WHERE eventType.eventKey IN('build_complete', 'build_failed', 'build_interrupted') AND project.name="
                                 + "'SCERTIFY'").expectRows(1).hasLineResult("count", 3L).dump()
@@ -57,8 +55,6 @@ public class KpiJenkinsTest
                 .sendEvent(jenkinsEventFactory.sendBuildFailed("SCERTIFY", 908, "SPRINT"))
                 .sendEvent(jenkinsEventFactory.sendBuildInterrupted("SCERTIFY", 908, "SPRINT"))
                 .runTest();
-        ;
-        
         
     }
     
@@ -78,8 +74,6 @@ public class KpiJenkinsTest
                 .sendEvent(jenkinsEventFactory.sendBuildFailed("SCERTIFY", 908, "SPRINT"))
                 .sendEvent(jenkinsEventFactory.sendBuildInterrupted("SCERTIFY", 908, "SPRINT"))
                 .runTest();
-        ;
-        
         
     }
     
@@ -90,7 +84,7 @@ public class KpiJenkinsTest
     
         final JenkinsEventFactory jenkinsEventFactory = new JenkinsEventFactory();
         EsperQueryTester
-                .newTest("KPI_NUMBER_RELEASES_PER_WEEK")
+                .newTest("KPI_NUMBER_RELEASES_PER_MONTH")
                 .withQuery(
                         "SELECT COUNT(*) as count FROM Event.win:time(1 month) WHERE eventType.eventKey='build_complete' AND project.name="
                                 + "'SCERTIFY'").expectRows(1).hasLineResult("count", 1L).dump()
@@ -99,9 +93,6 @@ public class KpiJenkinsTest
                 .sendEvent(jenkinsEventFactory.sendBuildFailed("SCERTIFY", 908, "SPRINT"))
                 .sendEvent(jenkinsEventFactory.sendBuildInterrupted("SCERTIFY", 908, "SPRINT"))
                 .runTest();
-        ;
-        
-        
     }
     
     
@@ -120,8 +111,6 @@ public class KpiJenkinsTest
                 .sendEvent(jenkinsEventFactory.sendBuildFailed("SCERTIFY", 908, "SPRINT"))
                 .sendEvent(jenkinsEventFactory.sendBuildInterrupted("SCERTIFY", 908, "SPRINT"))
                 .runTest();
-        ;
-        
         
     }
 }

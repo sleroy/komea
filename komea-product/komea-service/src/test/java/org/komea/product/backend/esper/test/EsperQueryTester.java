@@ -275,7 +275,7 @@ public class EsperQueryTester
     
         for (final IEvent event : events) {
             LOGGER.info("Sending alert : " + event);
-            esperEngineBean.sendAlert(event);
+            esperEngineBean.sendEvent(event);
         }
     }
     
@@ -430,6 +430,13 @@ public class EsperQueryTester
                 LOGGER.info("#{}-{} received : {}", i++, esperName, value);
             }
         }
+    }
+
+
+    public List<IEvent> getEvents() {
+    
+    
+        return events;
     }
     
 }
