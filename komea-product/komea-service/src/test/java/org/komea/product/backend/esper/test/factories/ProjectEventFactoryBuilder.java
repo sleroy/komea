@@ -11,7 +11,7 @@ import org.komea.product.backend.esper.test.EventFactoryBuilder;
 
 
 
-public class ProjectEventFactory
+public class ProjectEventFactoryBuilder
 {
     
     
@@ -107,7 +107,7 @@ public class ProjectEventFactory
     }
     
     
-    public ProjectEventFactory() {
+    public ProjectEventFactoryBuilder() {
     
     
         super();

@@ -13,7 +13,7 @@ import org.komea.product.backend.esper.test.EventFactoryBuilder;
 
 
 
-public class BugZillaEventFactory
+public class BugZillaEventFactoryBuilder
 {
     
     
@@ -68,7 +68,7 @@ public class BugZillaEventFactory
     }
     
     
-    public BugZillaEventFactory() {
+    public BugZillaEventFactoryBuilder() {
     
     
         super();

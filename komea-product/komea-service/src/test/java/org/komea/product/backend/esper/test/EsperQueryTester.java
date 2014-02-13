@@ -4,6 +4,8 @@ package org.komea.product.backend.esper.test;
 
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -11,11 +13,19 @@ import java.util.Map.Entry;
 import org.junit.Assert;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.service.esper.EPStatementResult;
+import org.komea.product.backend.service.esper.ElFormula;
 import org.komea.product.backend.service.esper.EsperEngineBean;
 import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.backend.service.kpi.IEsperLineTestPredicate;
 import org.komea.product.backend.service.kpi.IEsperTestPredicate;
+import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
+import org.komea.product.database.dto.EventSimpleDto;
+import org.komea.product.database.model.EventType;
+import org.komea.product.database.model.Person;
+import org.komea.product.database.model.PersonGroup;
+import org.komea.product.database.model.Project;
+import org.komea.product.database.model.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -175,6 +185,21 @@ public class EsperQueryTester
     private int                                 expectedRows        = -1;
     
     
+    private final Map<String, Provider>         mockProviders       =
+                                                                            new HashMap<String, Provider>();
+    
+    
+    private final Map<String, EventType>        mockEventTypes      =
+                                                                            new HashMap<String, EventType>();
+    
+    
+    private final Map<String, PersonGroup>      mockGroup           =
+                                                                            new HashMap<String, PersonGroup>();
+    private final Map<String, Person>           mockPerson          = new HashMap<String, Person>();
+    private final Map<String, Project>          mockProject         =
+                                                                            new HashMap<String, Project>();
+    
+    
     
     private EsperQueryTester(final String _statementName) {
     
@@ -237,10 +262,19 @@ public class EsperQueryTester
     }
     
     
+    public EsperQueryTester instantiatedQuery(final String _formula, final Project _project) {
+    
+    
+        esperQuery = new ElFormula(_formula).getValue(_project, String.class);
+        return this;
+    }
+    
+    
     public void prepareAlerts(final IEsperEngine esperEngineBean) {
     
     
         for (final IEvent event : events) {
+            LOGGER.info("Sending alert : " + event);
             esperEngineBean.sendAlert(event);
         }
     }
@@ -290,6 +324,69 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Send an event DTO into esper engine.
+     * 
+     * @param _eventDto
+     *            the event dto
+     */
+    public EsperQueryTester sendEvent(final EventSimpleDto _eventDto) {
+    
+    
+        if (_eventDto == null) {
+            _eventDto.setDate(new Date());
+            
+        }
+        final String providerName = _eventDto.getProvider();
+        if (mockProviders.get(providerName) == null) {
+            final Provider provider = new Provider();
+            provider.setName(providerName);
+            mockProviders.put(providerName, provider);
+        }
+        if (mockEventTypes.get(_eventDto.getEventType()) == null) {
+            final EventType eventType = new EventType();
+            eventType.setName(_eventDto.getEventType());
+            eventType.setEventKey(_eventDto.getEventType());
+            mockEventTypes.put(_eventDto.getEventType(), eventType);
+        }
+        
+        final Event event = new Event();
+        event.setDate(_eventDto.getDate());
+        event.setEventType(mockEventTypes.get(_eventDto.getEventType()));
+        event.setProvider(mockProviders.get(_eventDto.getProvider()));
+        event.setMessage(_eventDto.getMessage());
+        
+        for (final String user : _eventDto.getPersons()) {
+            if (mockPerson.get(user) == null) {
+                final Person person = new Person();
+                person.setLogin(user);
+                mockPerson.put(user, person);
+            }
+            event.getPersons().add(mockPerson.get(user));
+        }
+        if (mockGroup.get(_eventDto.getPersonGroup()) == null) {
+            final PersonGroup group = new PersonGroup();
+            group.setName(_eventDto.getPersonGroup());
+            mockGroup.put(_eventDto.getPersonGroup(), group);
+        }
+        final String projectName = _eventDto.getProject();
+        event.setPersonGroup(mockGroup.get(projectName));
+        if (mockProject.get(projectName) == null) {
+            final Project group = new Project();
+            group.setName(projectName);
+            group.setProjectKey(projectName);
+            mockProject.put(projectName, group);
+        }
+        event.setProject(mockProject.get(projectName));
+        event.setValue(_eventDto.getValue());
+        event.setUrl(_eventDto.getUrl());
+        event.setProperties(_eventDto.getProperties());
+        
+        send(event);
+        return this;
+    }
+    
+    
     public void validPredicates() {
     
     
@@ -334,6 +431,5 @@ public class EsperQueryTester
             }
         }
     }
-    
     
 }

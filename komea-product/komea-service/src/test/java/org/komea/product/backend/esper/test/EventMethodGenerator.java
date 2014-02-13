@@ -24,7 +24,7 @@ public class EventMethodGenerator
     private boolean               value;
     
     
-    private final String          eventName;
+    private final String          eventFactoryMethodName;
     
     
     private Map<String, Class<?>> parameters;
@@ -35,13 +35,13 @@ public class EventMethodGenerator
     
     
     public EventMethodGenerator(
-            final String _eventName,
+            final String _eventMethodName,
             final String _provider,
             final String _eventType) {
     
     
         super();
-        eventName = _eventName;
+        eventFactoryMethodName = _eventMethodName;
         provider = _provider;
         eventType = _eventType;
     }
@@ -242,6 +242,8 @@ public class EventMethodGenerator
     
     
         _sb.append("EventSimpleDto event = new EventSimpleDto();\n");
+        _sb.append("event.setEventType(\"" + eventType + "\");\n");
+        _sb.append("event.setProvider(\"" + provider + "\");\n");
         if (project) {
             _sb.append("event.setProject(_projectName);\n");
         }
@@ -256,6 +258,7 @@ public class EventMethodGenerator
         if (value) {
             _sb.append("event.setValue(_value);\n");
         }
+        
         if (url) {
             _sb.append("event.setURL(_url.toString());\n");
         }
@@ -279,7 +282,7 @@ public class EventMethodGenerator
     private void buildHeader(final StringBuilder _sb) {
     
     
-        _sb.append("public EventSimpleDto " + eventName + "(");
+        _sb.append("public EventSimpleDto " + eventFactoryMethodName + "(");
         buildArguments(_sb);
         _sb.append(") {");
         

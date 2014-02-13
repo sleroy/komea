@@ -11,7 +11,7 @@ import org.komea.product.backend.esper.test.EventFactoryBuilder;
 
 
 
-public class ScmEventFactory
+public class ScmEventFactoryBuilder
 {
     
     
@@ -34,7 +34,7 @@ public class ScmEventFactory
     }
     
     
-    public ScmEventFactory() {
+    public ScmEventFactoryBuilder() {
     
     
         super();

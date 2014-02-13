@@ -11,7 +11,7 @@ import org.komea.product.backend.esper.test.EventFactoryBuilder;
 
 
 
-public class JenkinsEventFactory
+public class JenkinsEventFactoryBuilder
 {
     
     
@@ -21,6 +21,7 @@ public class JenkinsEventFactory
         final EventFactoryBuilder eventFactoryBuilder =
                 new EventFactoryBuilder("JenkinsEventFactory", "org.komea.event.factory", new File(
                         "src/test/java"));
+        
         eventFactoryBuilder.register(DSLEventBuilder
                 .newEvent("sendLevelIndustrialisation", "jenkins", "build_industrialization")
                 .linkToProject().withValue()
@@ -48,7 +49,7 @@ public class JenkinsEventFactory
     }
     
     
-    public JenkinsEventFactory() {
+    public JenkinsEventFactoryBuilder() {
     
     
         super();

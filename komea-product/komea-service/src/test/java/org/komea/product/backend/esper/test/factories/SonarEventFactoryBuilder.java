@@ -11,7 +11,7 @@ import org.komea.product.backend.esper.test.EventFactoryBuilder;
 
 
 
-public class SonarEventFactory
+public class SonarEventFactoryBuilder
 {
     
     
@@ -39,7 +39,7 @@ public class SonarEventFactory
     }
     
     
-    public SonarEventFactory() {
+    public SonarEventFactoryBuilder() {
     
     
         super();
