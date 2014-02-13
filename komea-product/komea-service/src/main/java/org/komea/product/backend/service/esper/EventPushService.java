@@ -25,7 +25,7 @@ public class EventPushService implements IEventPushService
     
     
     @Autowired
-    private IEventConvertionAndValidationService validator;
+    private IEventConversionAndValidationService validator;
     
     
     private static final Logger                  LOGGER = LoggerFactory
@@ -66,6 +66,7 @@ public class EventPushService implements IEventPushService
         if (_event.getDate() == null) {
             _event.setDate(new Date());
         }
+        
         if (!_event.getEventType().getEnabled()) {
             LOGGER.trace("Event discarded since event type (} is disabled", _event.getEventType()
                     .getName());
@@ -83,7 +84,7 @@ public class EventPushService implements IEventPushService
     }
     
     
-    public void setValidator(final IEventConvertionAndValidationService _validator) {
+    public void setValidator(final IEventConversionAndValidationService _validator) {
     
     
         validator = _validator;

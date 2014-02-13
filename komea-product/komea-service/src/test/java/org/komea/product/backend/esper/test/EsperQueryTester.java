@@ -18,9 +18,12 @@ import org.komea.product.backend.service.esper.EsperEngineBean;
 import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.backend.service.kpi.IEsperLineTestPredicate;
 import org.komea.product.backend.service.kpi.IEsperTestPredicate;
+import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;
+import org.komea.product.database.enums.ProviderType;
+import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
@@ -146,6 +149,23 @@ public class EsperQueryTester
     
     
     
+    /**
+     * Converts an event dto into a event.
+     * 
+     * @param _eventDTO
+     *            the event dto
+     * @return the event.
+     */
+    public static IEvent convertEventDTO(final EventSimpleDto _eventDTO) {
+    
+    
+        final EsperQueryTester esperQueryTester = new EsperQueryTester("TRUC");
+        esperQueryTester.sendEvent(_eventDTO);
+        
+        return CollectionUtil.singleOrNull(esperQueryTester.getEvents());
+    }
+    
+    
     public static IEsperEngine newEngine() {
     
     
@@ -165,10 +185,11 @@ public class EsperQueryTester
     
     private final String                        esperName;
     
+    
     private String                              esperQuery;
     
-    
     private final List<IEvent>                  events              = new ArrayList<IEvent>();
+    
     
     private final List<IEsperTestPredicate>     esperPredicates     =
                                                                             new ArrayList<IEsperTestPredicate>();
@@ -177,10 +198,10 @@ public class EsperQueryTester
     private final List<IEsperLineTestPredicate> esperLinePredicates =
                                                                             new ArrayList<IEsperLineTestPredicate>();
     
-    
     private EPStatement                         epStatement;
     
     private boolean                             dump;
+    
     
     private int                                 expectedRows        = -1;
     
@@ -191,11 +212,11 @@ public class EsperQueryTester
     
     private final Map<String, EventType>        mockEventTypes      =
                                                                             new HashMap<String, EventType>();
-    
-    
     private final Map<String, PersonGroup>      mockGroup           =
                                                                             new HashMap<String, PersonGroup>();
     private final Map<String, Person>           mockPerson          = new HashMap<String, Person>();
+    
+    
     private final Map<String, Project>          mockProject         =
                                                                             new HashMap<String, Project>();
     
@@ -225,6 +246,13 @@ public class EsperQueryTester
         expectedRows = _numberRows;
         
         return this;
+    }
+    
+    
+    public List<IEvent> getEvents() {
+    
+    
+        return events;
     }
     
     
@@ -341,18 +369,27 @@ public class EsperQueryTester
         if (mockProviders.get(providerName) == null) {
             final Provider provider = new Provider();
             provider.setName(providerName);
+            provider.setProviderType(ProviderType.CI_BUILD);
+            provider.setIcon("");
+            provider.setUrl("");
             mockProviders.put(providerName, provider);
         }
-        if (mockEventTypes.get(_eventDto.getEventType()) == null) {
+        final String eventTypeName = _eventDto.getEventType();
+        if (mockEventTypes.get(eventTypeName) == null) {
             final EventType eventType = new EventType();
-            eventType.setName(_eventDto.getEventType());
-            eventType.setEventKey(_eventDto.getEventType());
-            mockEventTypes.put(_eventDto.getEventType(), eventType);
+            eventType.setName(eventTypeName);
+            eventType.setEventKey(eventTypeName);
+            eventType.setCategory("");
+            eventType.setDescription(eventTypeName);
+            eventType.setEnabled(true);
+            eventType.setSeverity(Severity.INFO);
+            
+            mockEventTypes.put(eventTypeName, eventType);
         }
         
         final Event event = new Event();
         event.setDate(_eventDto.getDate());
-        event.setEventType(mockEventTypes.get(_eventDto.getEventType()));
+        event.setEventType(mockEventTypes.get(eventTypeName));
         event.setProvider(mockProviders.get(_eventDto.getProvider()));
         event.setMessage(_eventDto.getMessage());
         
@@ -430,13 +467,6 @@ public class EsperQueryTester
                 LOGGER.info("#{}-{} received : {}", i++, esperName, value);
             }
         }
-    }
-
-
-    public List<IEvent> getEvents() {
-    
-    
-        return events;
     }
     
 }

@@ -14,6 +14,8 @@ import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.EventDtoBuilder;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;
+import org.komea.product.database.model.EventType;
+import org.komea.product.database.model.Provider;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
@@ -38,9 +40,13 @@ public class EventPushServiceTest
         final EventPushService alertPushService = new EventPushService();
         final IEsperEngine esperEngineMock = Mockito.mock(IEsperEngine.class);
         alertPushService.setEsperEngine(esperEngineMock);
-        final IEventConvertionAndValidationService mock =
-                Mockito.mock(IEventConvertionAndValidationService.class, Mockito.withSettings().verboseLogging());
-        Mockito.when(mock.convert(Matchers.any(EventSimpleDto.class))).thenReturn(new Event());
+        final IEventConversionAndValidationService mock =
+                Mockito.mock(IEventConversionAndValidationService.class, Mockito.withSettings()
+                        .verboseLogging());
+        final Event value = new Event();
+        value.setEventType(Mockito.mock(EventType.class));
+        value.setProvider(Mockito.mock(Provider.class));
+        Mockito.when(mock.convert(Matchers.any(EventSimpleDto.class))).thenReturn(value);
         alertPushService.setValidator(mock);
         alertPushService.sendEventDto(EventDtoBuilder.newAlert().message("DemoAlert").build());
         
@@ -61,9 +67,14 @@ public class EventPushServiceTest
         final EventPushService alertPushService = new EventPushService();
         final IEsperEngine esperEngineMock = Mockito.mock(IEsperEngine.class);
         alertPushService.setEsperEngine(esperEngineMock);
-        final IEventConvertionAndValidationService mock =
-                Mockito.mock(IEventConvertionAndValidationService.class, Mockito.withSettings().verboseLogging());
-        Mockito.when(mock.convert(Matchers.any(EventSimpleDto.class))).thenReturn(new Event());
+        final IEventConversionAndValidationService mock =
+                Mockito.mock(IEventConversionAndValidationService.class, Mockito.withSettings()
+                        .verboseLogging());
+        final Event value = new Event();
+        value.setEventType(Mockito.mock(EventType.class));
+        value.setProvider(Mockito.mock(Provider.class));
+        
+        Mockito.when(mock.convert(Matchers.any(EventSimpleDto.class))).thenReturn(value);
         alertPushService.setValidator(mock);
         
         final EventSimpleDto event = EventDtoBuilder.newAlert().message("DemoAlert").build();

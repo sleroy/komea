@@ -15,19 +15,22 @@ import org.mockito.Mockito;
 /**
  * @author sleroy
  */
-public class EventConvertionAndValidationServiceTest
+public class EventConversionAndValidationServiceTest
 {
     
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.esper.EventConvertionAndValidationService#validate(org.komea.product.database.alert.IEvent)}.
+     * {@link org.komea.product.backend.service.esper.EventConversionAndValidationService#validate(org.komea.product.database.alert.IEvent)}
+     * .
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testValidate() {
     
     
-        final EventConvertionAndValidationService alertValidationService = new EventConvertionAndValidationService();
+        final EventConversionAndValidationService alertValidationService =
+                new EventConversionAndValidationService();
+        alertValidationService.initialize();
         alertValidationService.validate(Mockito.mock(IEvent.class));
     }
     

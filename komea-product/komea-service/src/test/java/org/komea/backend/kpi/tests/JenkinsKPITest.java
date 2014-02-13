@@ -3,17 +3,18 @@ package org.komea.backend.kpi.tests;
 
 
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
 import org.komea.product.backend.esper.test.EsperQueryTester;
 
 
 
-public class KpiJenkinsTest
+public class JenkinsKPITest
 {
     
     
-    public KpiJenkinsTest() {
+    public JenkinsKPITest() {
     
     
         super();
@@ -21,6 +22,7 @@ public class KpiJenkinsTest
     
     
     @Test
+    @Ignore("Not finished")
     public void testMTBFPerProject() {
     
     

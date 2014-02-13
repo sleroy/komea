@@ -11,8 +11,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
@@ -32,15 +34,17 @@ public class Event implements IEvent
 {
     
     
+    @NotNull
     private EventType           eventType;
     
-    
+    @NotNull
     private Provider            provider;
     
-    
+    @NotNull
+    @NotEmpty
     private String              message     = "";
     
-    
+    @NotNull
     private List<Person>        persons     = new ArrayList<Person>();
     
     
