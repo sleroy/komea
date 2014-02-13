@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package 
+       uri = "http://www.komea.org/events/dsl/EventDsl" 
+       class = "org.komea.events.dsl.eventDsl.EventDslPackage"
+       genModel = "model/generated/EventDsl.genmodel" /> 
+	
+  </extension>
+
+
+
+</plugin>

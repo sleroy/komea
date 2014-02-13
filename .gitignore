@@ -14,6 +14,8 @@ komea.log
 .project
 .classpath
 .settings/
+bin/
+xtend-gen/
 
 #temp
 *~
@@ -21,3 +23,5 @@ komea.log
 #git
 *.orig
 
+
+tools/org.komea.events.dsl.ui/bin/org/komea/events/dsl/ui/contentassist/.EventDslProposalProvider.java._trace
