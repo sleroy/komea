@@ -3,6 +3,7 @@ package org.komea.product.database.dto;
 
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -13,8 +14,8 @@ public class DepartmentDto implements Serializable {
     private String              key;
     private String              name;
     private String              description;
-    private Map<String, String> teams;
-    private Map<String, String> persons;
+    private Map<String, String> teams = new HashMap<String, String>(0);
+    private Map<String, String> persons = new HashMap<String, String>(0);
     
     public DepartmentDto() {
     
@@ -78,6 +79,12 @@ public class DepartmentDto implements Serializable {
     public void setPersons(final Map<String, String> persons) {
     
         this.persons = persons;
+    }
+
+    @Override
+    public String toString() {
+        return "DepartmentDto{" + "key=" + key + ", name=" + name + ", description=" + description
+                + ", teams=" + teams + ", persons=" + persons + ", type=" + type + '}';
     }
     
 }

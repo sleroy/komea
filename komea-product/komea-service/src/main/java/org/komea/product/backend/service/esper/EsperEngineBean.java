@@ -64,14 +64,20 @@ public final class EsperEngineBean implements IEsperEngine
     
     
     @Override
-    public EPStatement createEPL(final IQueryDefinition _queryDefinition) {
+    public EPStatement createEPL(final IQueryDefinition _queryDefinition) throws RuntimeException {
     
     
         LOGGER.info("Creation of a new EPL Statement {}", _queryDefinition);
-        final EPStatement createEPL =
-                esperEngine.getEPAdministrator().createEPL(_queryDefinition.getQuery(),
-                        _queryDefinition.getName());
-        return createEPL;
+        try {
+            final EPStatement createEPL =
+                    esperEngine.getEPAdministrator().createEPL(_queryDefinition.getQuery(),
+                            _queryDefinition.getName());
+            return createEPL;
+        } catch (final RuntimeException e) {
+            LOGGER.error("Query invalid : ", e);
+            throw e;
+        }
+        
     }
     
     

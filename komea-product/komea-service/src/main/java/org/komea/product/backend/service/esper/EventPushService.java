@@ -8,26 +8,32 @@ import java.util.Date;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 
 @Service
-public class AlertPushService implements IEventPushService
+public class EventPushService implements IEventPushService
 {
     
     
     @Autowired
-    private IEsperEngine            esperEngine;
+    private IEsperEngine                         esperEngine;
     
     
     @Autowired
     private IEventConvertionAndValidationService validator;
     
     
+    private static final Logger                  LOGGER = LoggerFactory
+                                                                .getLogger(EventPushService.class);
     
-    public AlertPushService() {
+    
+    
+    public EventPushService() {
     
     
         super();
@@ -60,7 +66,10 @@ public class AlertPushService implements IEventPushService
         if (_event.getDate() == null) {
             _event.setDate(new Date());
         }
-        
+        if (!_event.getEventType().getEnabled()) {
+            LOGGER.trace("Event discarded since event type (} is disabled", _event.getEventType()
+                    .getName());
+        }
         esperEngine.sendAlert(_event);
         
         

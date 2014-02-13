@@ -72,7 +72,7 @@ public class ProvidersControllerIT
     
     
         final Provider provider =
-                new Provider(null, ProviderType.JENKINS, "MyProvider", "file://", "http://");
+                new Provider(null, ProviderType.CI_BUILD, "MyProvider", "file://", "http://");
         
         final EventType eventType =
                 new EventType(null, 1, "EventUN", "MyEvent", Severity.CRITICAL, true,

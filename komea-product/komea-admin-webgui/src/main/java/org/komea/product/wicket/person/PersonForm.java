@@ -12,10 +12,9 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.time.Duration;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonRoleDao;
@@ -86,29 +85,6 @@ public final class PersonForm extends Form<PersonDto>
                         new ChoiceRenderer<PersonRole>("name"));
         add(dropDownChoice);
         
-        add(new IFormValidator()
-        {
-            
-            
-            @Override
-            public FormComponent<?>[] getDependentFormComponents() {
-            
-            
-                // TODO Auto-generated method stub
-                return null;
-            }
-            
-            
-            @Override
-            public void validate(final Form<?> _form) {
-            
-            
-                System.out.println("Validation du formular");
-                ;
-                
-            }
-        });
-        
         AjaxFormValidatingBehavior.addToAllFormComponents(this, "onkeyup", Duration.ONE_SECOND);
         
         // add a button that can be used to submit the form via ajax
@@ -133,6 +109,7 @@ public final class PersonForm extends Form<PersonDto>
                 info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
+                setResponsePage(new PersonPage(new PageParameters()));
             }
         });
         

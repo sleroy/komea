@@ -53,7 +53,7 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
 
     public static Provider getProvider(final String serverUrl) {
         final Provider provider = new Provider();
-        provider.setProviderType(ProviderType.JENKINS);
+        provider.setProviderType(ProviderType.CI_BUILD);
         provider.setName("Jenkins");
         provider.setUrl(serverUrl);
         provider.setIcon(serverUrl + "/static/komea/jenkins_logo.png");
