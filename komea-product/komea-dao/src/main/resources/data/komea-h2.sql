@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pe` (
   `email` VARCHAR(255) NOT NULL,
   `login` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL DEFAULT '',
+  `userBdd` INT NOT NULL,
   PRIMARY KEY (`id`))
 ;
 
