@@ -9,6 +9,7 @@ import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.dto.DepartmentDto;
 import org.komea.product.database.dto.TeamDto;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.EntityTypeExtended;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.PersonGroupCriteria;
@@ -93,14 +94,16 @@ public final class PersonGroupService implements IPersonGroupService {
     }
 
     @Override
-    public List<PersonGroup> getPersonGroups(final List<String> personGroupKeys) {
+    public List<PersonGroup> getPersonGroups(final List<String> personGroupKeys,
+            final EntityTypeExtended entityTypeExtended) {
         final PersonGroupCriteria personGroupCriteria = new PersonGroupCriteria();
+        final PersonGroupType type = PersonGroupType.valueOf(entityTypeExtended.name());
         if (personGroupKeys.isEmpty()) {
-            personGroupCriteria.createCriteria();
+            personGroupCriteria.createCriteria().andTypeEqualTo(type);
         } else {
             for (final String entityKey : personGroupKeys) {
                 final PersonGroupCriteria.Criteria criteria = personGroupCriteria.or();
-                criteria.andPersonGroupKeyEqualTo(entityKey);
+                criteria.andPersonGroupKeyEqualTo(entityKey).andTypeEqualTo(type);
             }
         }
         return personGroupDao.selectByCriteria(personGroupCriteria);
@@ -110,7 +113,7 @@ public final class PersonGroupService implements IPersonGroupService {
     public List<BaseEntity> personGroupsToBaseEntities(List<PersonGroup> personGroups) {
         final List<BaseEntity> entities = new ArrayList<BaseEntity>(personGroups.size());
         for (final PersonGroup personGroup : personGroups) {
-            final BaseEntity entity = new BaseEntity(EntityType.PROJECT, personGroup.getId(),
+            final BaseEntity entity = new BaseEntity(EntityType.PERSON_GROUP, personGroup.getId(),
                     personGroup.getPersonGroupKey(), personGroup.getName(), personGroup.getDescription());
             entities.add(entity);
         }

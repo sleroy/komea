@@ -3,7 +3,7 @@ package org.komea.product.database.dto;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.EntityTypeExtended;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 
@@ -11,7 +11,7 @@ public class MeasuresDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private EntityType entityType;
+    private EntityTypeExtended entityTypeExtended;
     private List<BaseEntity> entities = new ArrayList<BaseEntity>();
     private List<Kpi> kpis = new ArrayList<Kpi>();
     private List<Measure> measures = new ArrayList<Measure>();
@@ -19,20 +19,20 @@ public class MeasuresDto implements Serializable {
     public MeasuresDto() {
     }
 
-    public MeasuresDto(EntityType entityType, List<BaseEntity> entities,
+    public MeasuresDto(EntityTypeExtended entityTypeExtended, List<BaseEntity> entities,
             List<Kpi> kpis, List<Measure> measures) {
-        this.entityType = entityType;
+        this.entityTypeExtended = entityTypeExtended;
         this.entities = entities;
         this.kpis = kpis;
         this.measures = measures;
     }
 
-    public EntityType getEntityType() {
-        return entityType;
+    public EntityTypeExtended getEntityTypeExtended() {
+        return entityTypeExtended;
     }
 
-    public void setEntityType(EntityType entityType) {
-        this.entityType = entityType;
+    public void setEntityTypeExtended(EntityTypeExtended entityTypeExtended) {
+        this.entityTypeExtended = entityTypeExtended;
     }
 
     public List<BaseEntity> getEntities() {
@@ -61,7 +61,7 @@ public class MeasuresDto implements Serializable {
 
     @Override
     public String toString() {
-        return "MeasuresDto{" + "entityType=" + entityType + ", entities="
+        return "MeasuresDto{" + "entityTypeExtended=" + entityTypeExtended + ", entities="
                 + entities + ", kpis=" + kpis + ", measures=" + measures + '}';
     }
 

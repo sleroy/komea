@@ -1,8 +1,6 @@
 package org.komea.product.backend.service.entities;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import org.komea.product.backend.exceptions.EntityNotFoundException;
 import org.komea.product.database.api.IEntity;
@@ -11,6 +9,7 @@ import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.EntityTypeExtended;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
@@ -109,15 +108,16 @@ public final class EntityService implements IEntityService {
     }
 
     @Override
-    public List<BaseEntity> getEntities(final EntityType entityType, final List<String> entityKeys) {
+    public List<BaseEntity> getEntities(final EntityTypeExtended entityTypeExtended, final List<String> entityKeys) {
         final List<BaseEntity> entities = new ArrayList<BaseEntity>(entityKeys.size());
-        switch (entityType) {
+        switch (entityTypeExtended.getEntityType()) {
             case PERSON:
                 final List<Person> persons = personService.getPersons(entityKeys);
                 entities.addAll(personService.personsToBaseEntities(persons));
                 break;
             case PERSON_GROUP:
-                final List<PersonGroup> personGroups = personGroupService.getPersonGroups(entityKeys);
+                final List<PersonGroup> personGroups = personGroupService.getPersonGroups(
+                        entityKeys, entityTypeExtended);
                 entities.addAll(personGroupService.personGroupsToBaseEntities(personGroups));
                 break;
             case PROJECT:
@@ -125,13 +125,6 @@ public final class EntityService implements IEntityService {
                 entities.addAll(projectService.projectsToBaseEntities(projects));
                 break;
         }
-        Collections.sort(entities, new Comparator<BaseEntity>() {
-
-            @Override
-            public int compare(BaseEntity o1, BaseEntity o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
         return entities;
     }
 

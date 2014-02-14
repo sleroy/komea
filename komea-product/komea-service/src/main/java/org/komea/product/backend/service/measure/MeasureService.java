@@ -9,9 +9,6 @@ import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.dto.SearchMeasuresDto;
-import static org.komea.product.database.enums.EntityType.PERSON;
-import static org.komea.product.database.enums.EntityType.PERSON_GROUP;
-import static org.komea.product.database.enums.EntityType.PROJECT;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
@@ -55,14 +52,17 @@ public class MeasureService implements IMeasureService {
                 if (to != null) {
                     criteria.andDateLessThanOrEqualTo(to);
                 }
-                switch (searchMeasuresDto.getEntityType()) {
+                switch (searchMeasuresDto.getEntityTypeExtended()) {
                     case PERSON:
                         criteria.andIdPersonEqualTo(idEntity);
                         break;
                     case PROJECT:
                         criteria.andIdProjectEqualTo(idEntity);
                         break;
-                    case PERSON_GROUP:
+                    case TEAM:
+                        criteria.andIdPersonGroupEqualTo(idEntity);
+                        break;
+                    case DEPARTMENT:
                         criteria.andIdPersonGroupEqualTo(idEntity);
                         break;
                 }
