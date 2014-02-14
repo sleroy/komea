@@ -9,7 +9,6 @@ import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.enums.EntityType;
-import org.komea.product.database.enums.EntityTypeExtended;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
@@ -56,7 +55,8 @@ public final class EntityService implements IEntityService {
         switch (_entityType) {
             case PERSON:
                 return (TEntity) personDao.selectByPrimaryKey(_key);
-            case PERSON_GROUP:
+            case TEAM:
+            case DEPARTMENT:
                 return (TEntity) personGroupDao.selectByPrimaryKey(_key);
             case PROJECT:
                 return (TEntity) projectDao.selectByPrimaryKey(_key);
@@ -108,17 +108,18 @@ public final class EntityService implements IEntityService {
     }
 
     @Override
-    public List<BaseEntity> getEntities(final EntityTypeExtended entityTypeExtended, final List<String> entityKeys) {
+    public List<BaseEntity> getEntities(final EntityType entityType, final List<String> entityKeys) {
         final List<BaseEntity> entities = new ArrayList<BaseEntity>(entityKeys.size());
-        switch (entityTypeExtended.getEntityType()) {
+        switch (entityType) {
             case PERSON:
                 final List<Person> persons = personService.getPersons(entityKeys);
                 entities.addAll(personService.personsToBaseEntities(persons));
                 break;
-            case PERSON_GROUP:
+            case TEAM:
+            case DEPARTMENT:
                 final List<PersonGroup> personGroups = personGroupService.getPersonGroups(
-                        entityKeys, entityTypeExtended);
-                entities.addAll(personGroupService.personGroupsToBaseEntities(personGroups));
+                        entityKeys, entityType);
+                entities.addAll(personGroupService.personGroupsToBaseEntities(personGroups, entityType));
                 break;
             case PROJECT:
                 final List<Project> projects = projectService.getProjects(entityKeys);

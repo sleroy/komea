@@ -52,7 +52,7 @@ public class MeasureService implements IMeasureService {
                 if (to != null) {
                     criteria.andDateLessThanOrEqualTo(to);
                 }
-                switch (searchMeasuresDto.getEntityTypeExtended()) {
+                switch (searchMeasuresDto.getEntityType()) {
                     case PERSON:
                         criteria.andIdPersonEqualTo(idEntity);
                         break;
@@ -60,8 +60,6 @@ public class MeasureService implements IMeasureService {
                         criteria.andIdProjectEqualTo(idEntity);
                         break;
                     case TEAM:
-                        criteria.andIdPersonGroupEqualTo(idEntity);
-                        break;
                     case DEPARTMENT:
                         criteria.andIdPersonGroupEqualTo(idEntity);
                         break;

@@ -4,7 +4,7 @@ import java.util.List;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.dto.DepartmentDto;
 import org.komea.product.database.dto.TeamDto;
-import org.komea.product.database.enums.EntityTypeExtended;
+import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.PersonGroup;
 
 /**
@@ -48,8 +48,8 @@ public interface IPersonGroupService {
      */
     PersonGroup getTeam(Integer _groupID);
 
-    List<PersonGroup> getPersonGroups(List<String> personGroupKeys, EntityTypeExtended entityTypeExtended);
+    List<PersonGroup> getPersonGroups(List<String> personGroupKeys, EntityType entityType);
 
-    List<BaseEntity> personGroupsToBaseEntities(List<PersonGroup> personGroups);
+    List<BaseEntity> personGroupsToBaseEntities(List<PersonGroup> personGroups, EntityType entityType);
 
 }

@@ -17,7 +17,7 @@ import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dto.KpiTendancyDto;
-import org.komea.product.database.enums.EntityTypeExtended;
+import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.Measure;
@@ -337,7 +337,8 @@ public final class KPIService implements IKPIService {
             case PERSON:
                 measure.setIdPerson(_kpiKey.getEntityID());
                 break;
-            case PERSON_GROUP:
+            case TEAM:
+            case DEPARTMENT:
                 measure.setIdPersonGroup(_kpiKey.getEntityID());
                 break;
             case PROJECT:
@@ -356,14 +357,14 @@ public final class KPIService implements IKPIService {
     }
 
     @Override
-    public List<Kpi> getKpis(final EntityTypeExtended entityTypeExtended, final List<String> kpiKeys) {
+    public List<Kpi> getKpis(final EntityType entityType, final List<String> kpiKeys) {
         final KpiCriteria kpiCriteria = new KpiCriteria();
         if (kpiKeys.isEmpty()) {
-            kpiCriteria.createCriteria().andEntityTypeEqualTo(entityTypeExtended.getEntityType());
+            kpiCriteria.createCriteria().andEntityTypeEqualTo(entityType);
         } else {
             for (final String kpiKey : kpiKeys) {
                 final KpiCriteria.Criteria criteria = kpiCriteria.or();
-                criteria.andKpiKeyEqualTo(kpiKey.trim()).andEntityTypeEqualTo(entityTypeExtended.getEntityType());
+                criteria.andKpiKeyEqualTo(kpiKey.trim()).andEntityTypeEqualTo(entityType);
             }
         }
         return kpiDao.selectByCriteria(kpiCriteria);

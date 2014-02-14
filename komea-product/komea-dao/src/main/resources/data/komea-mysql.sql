@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pe` (
   `email` VARCHAR(255) NOT NULL,
   `login` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL DEFAULT '',
+  `userBdd` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_User_UserGroup1_idx` (`idPersonGroup` ASC),
   UNIQUE INDEX `Personcol_UNIQUE` (`login` ASC),

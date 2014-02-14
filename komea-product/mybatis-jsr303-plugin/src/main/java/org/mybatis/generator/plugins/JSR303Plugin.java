@@ -164,7 +164,7 @@ public class JSR303Plugin extends PluginAdapter {
     }
 
     private void setEntityType(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        final String entityType = introspectedTable.getTableConfigurationProperty("entityType");
+        String entityType = introspectedTable.getTableConfigurationProperty("entityType");
         if (entityType != null) {
             final FullyQualifiedJavaType javaIEntityType
                     = new FullyQualifiedJavaType("org.komea.product.database.api.IEntity");
@@ -177,7 +177,12 @@ public class JSR303Plugin extends PluginAdapter {
             method.addAnnotation("@Override");
             method.setVisibility(JavaVisibility.PUBLIC);
             method.setReturnType(javaEntityType);
-            method.addBodyLine("return EntityType." + entityType + ";");
+            if ("PERSON_GROUP".equals(entityType)) {
+                entityType = "this.getType().name()";
+                method.addBodyLine("return EntityType.valueOf(" + entityType + ");");
+            } else {
+                method.addBodyLine("return EntityType." + entityType + ";");
+            }
             topLevelClass.addMethod(method);
         }
     }

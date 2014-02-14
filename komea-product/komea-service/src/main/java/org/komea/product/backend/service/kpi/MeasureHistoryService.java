@@ -1,9 +1,6 @@
-
 package org.komea.product.backend.service.kpi;
 
-
 import java.util.List;
-
 import org.apache.ibatis.session.RowBounds;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.database.dao.MeasureDao;
@@ -18,35 +15,34 @@ import org.springframework.stereotype.Service;
 
 /**
  * This interface provides the functions needed to manipulate the history
- * 
+ *
  * @author sleroy
  */
 @Service
 public final class MeasureHistoryService implements IMeasureHistoryService {
-    
+
     @Autowired
-    private MeasureDao          measureDAO;
-    
+    private MeasureDao measureDAO;
+
     @Autowired
-    private IEsperEngine        esperEngine;
-    
+    private IEsperEngine esperEngine;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MeasureHistoryService.class);
-    
+
     public MeasureHistoryService() {
-    
+
         super();
     }
-    
+
     /**
      * Builds the history purge action.
-     * 
-     * @param _kpi
-     *            the kpi
+     *
+     * @param _kpi the kpi
      * @return the history purge action.
      */
     @Override
     public IHistoryPurgeAction buildHistoryPurgeAction(final Kpi _kpi) {
-    
+
         switch (_kpi.getEvictionType()) {
             case DAYS:
                 return new HistoryPurgePerDaysAction(measureDAO, _kpi);
@@ -54,63 +50,64 @@ public final class MeasureHistoryService implements IMeasureHistoryService {
                 return new HistoryPurgePerMonthsAction(measureDAO, _kpi);
             case VALUES:
                 return new HistoryPurgePerValuesAction(measureDAO, _kpi);
-                
+
         }
         return null;
-        
+
     }
-    
+
     public IEsperEngine getEsperEngine() {
-    
+
         return esperEngine;
     }
-    
+
     public MeasureDao getMeasureDAO() {
-    
+
         return measureDAO;
     }
-    
+
     /**
      * Returns the measures.
      */
     @Override
     public List<Measure> getMeasures(final HistoryKey _kpiKey) {
-    
+
         final MeasureCriteria measureCriteria = new MeasureCriteria();
         return getMeasures(_kpiKey, measureCriteria);
     }
-    
+
     @Override
     public List<Measure> getMeasures(final HistoryKey _kpiKey, final MeasureCriteria measureCriteria) {
-    
+
         initMeasureCriteria(_kpiKey, measureCriteria);
-        
+
         final List<Measure> selectByCriteria = measureDAO.selectByCriteria(measureCriteria);
         return selectByCriteria;
     }
-    
+
     @Override
     public List<Measure> getLastNMeasures(final HistoryKey _kpiKey, final int nbRow) {
-    
+
         MeasureCriteria measureCriteria = new MeasureCriteria();
         measureCriteria.setOrderByClause("date DESC");
         initMeasureCriteria(_kpiKey, measureCriteria);
-        
+
         RowBounds rowBounds = new RowBounds(0, nbRow);
         final List<Measure> selectByCriteria = measureDAO.selectByCriteriaWithRowbounds(measureCriteria, rowBounds);
         return selectByCriteria;
     }
-    
+
     private void initMeasureCriteria(final HistoryKey _kpiKey, final MeasureCriteria measureCriteria) {
-    
+
         final Criteria createCriteria = measureCriteria.createCriteria();
         createCriteria.andIdKpiEqualTo(_kpiKey.getKpiID());
-        
+
         switch (_kpiKey.getEntityType()) {
             case PERSON:
                 createCriteria.andIdPersonEqualTo(_kpiKey.getEntityID());
                 break;
-            case PERSON_GROUP:
+            case TEAM:
+            case DEPARTMENT:
                 createCriteria.andIdPersonGroupEqualTo(_kpiKey.getEntityID());
                 break;
             case PROJECT:
@@ -119,25 +116,25 @@ public final class MeasureHistoryService implements IMeasureHistoryService {
             default:
                 // TODO:: Add code for default statement
                 throw new UnsupportedOperationException("Not implemented default statement");
-                
+
         }
     }
-    
+
     public void setEsperEngine(final IEsperEngine _esperEngine) {
-    
+
         esperEngine = _esperEngine;
     }
-    
+
     public void setMeasureDAO(final MeasureDao _measureDAO) {
-    
+
         measureDAO = _measureDAO;
     }
-    
+
     @Override
     public void storeMeasure(final Measure _measure) {
-    
+
         LOGGER.debug("Storing new measure : {}", _measure);
         measureDAO.insert(_measure);
-        
+
     }
 }

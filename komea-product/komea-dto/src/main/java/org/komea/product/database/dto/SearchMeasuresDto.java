@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.NotNull;
-import org.komea.product.database.enums.EntityTypeExtended;
+import org.komea.product.database.enums.EntityType;
 
 public class SearchMeasuresDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @NotNull
-    private EntityTypeExtended entityTypeExtended;
+    private EntityType entityType;
     @NotNull
     private List<String> kpiKeys = new ArrayList<String>(0);
     @NotNull
@@ -24,24 +24,24 @@ public class SearchMeasuresDto implements Serializable {
     public SearchMeasuresDto() {
     }
 
-    public SearchMeasuresDto(EntityTypeExtended entityTypeExtended, List<String> kpiKeys,
+    public SearchMeasuresDto(EntityType entityType, List<String> kpiKeys,
             List<String> entityKeys, Integer nbMeasures) {
-        this(entityTypeExtended, kpiKeys, entityKeys, nbMeasures, null, null);
+        this(entityType, kpiKeys, entityKeys, nbMeasures, null, null);
     }
 
-    public SearchMeasuresDto(EntityTypeExtended entityTypeExtended, List<String> kpiKeys,
+    public SearchMeasuresDto(EntityType entityType, List<String> kpiKeys,
             List<String> entityKeys, Date fromDate) {
-        this(entityTypeExtended, kpiKeys, entityKeys, null, fromDate, null);
+        this(entityType, kpiKeys, entityKeys, null, fromDate, null);
     }
 
-    public SearchMeasuresDto(EntityTypeExtended entityTypeExtended, List<String> kpiKeys,
+    public SearchMeasuresDto(EntityType entityType, List<String> kpiKeys,
             List<String> entityKeys, Date fromDate, Date toDate) {
-        this(entityTypeExtended, kpiKeys, entityKeys, null, fromDate, toDate);
+        this(entityType, kpiKeys, entityKeys, null, fromDate, toDate);
     }
 
-    private SearchMeasuresDto(EntityTypeExtended entityTypeExtended, List<String> kpiKeys,
+    private SearchMeasuresDto(EntityType entityType, List<String> kpiKeys,
             List<String> entityKeys, Integer nbMeasures, Date fromDate, Date toDate) {
-        this.entityTypeExtended = entityTypeExtended;
+        this.entityType = entityType;
         this.kpiKeys = kpiKeys;
         this.entityKeys = entityKeys;
         this.nbMeasures = nbMeasures;
@@ -89,17 +89,17 @@ public class SearchMeasuresDto implements Serializable {
         this.toDate = toDate;
     }
 
-    public EntityTypeExtended getEntityTypeExtended() {
-        return entityTypeExtended;
+    public EntityType getEntityType() {
+        return entityType;
     }
 
-    public void setEntityTypeExtended(EntityTypeExtended entityTypeExtended) {
-        this.entityTypeExtended = entityTypeExtended;
+    public void setEntityType(EntityType entityType) {
+        this.entityType = entityType;
     }
 
     @Override
     public String toString() {
-        return "SearchMeasuresDto{" + "entityTypeExtended=" + entityTypeExtended + ", kpiKeys="
+        return "SearchMeasuresDto{" + "entityType=" + entityType + ", kpiKeys="
                 + kpiKeys + ", entityKeys=" + entityKeys + ", nbMeasures="
                 + nbMeasures + ", fromDate=" + fromDate + ", toDate=" + toDate + '}';
     }

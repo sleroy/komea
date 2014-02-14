@@ -9,7 +9,6 @@ import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.dto.DepartmentDto;
 import org.komea.product.database.dto.TeamDto;
 import org.komea.product.database.enums.EntityType;
-import org.komea.product.database.enums.EntityTypeExtended;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.PersonGroupCriteria;
@@ -95,9 +94,9 @@ public final class PersonGroupService implements IPersonGroupService {
 
     @Override
     public List<PersonGroup> getPersonGroups(final List<String> personGroupKeys,
-            final EntityTypeExtended entityTypeExtended) {
+            final EntityType entityType) {
         final PersonGroupCriteria personGroupCriteria = new PersonGroupCriteria();
-        final PersonGroupType type = PersonGroupType.valueOf(entityTypeExtended.name());
+        final PersonGroupType type = PersonGroupType.valueOf(entityType.name());
         if (personGroupKeys.isEmpty()) {
             personGroupCriteria.createCriteria().andTypeEqualTo(type);
         } else {
@@ -110,10 +109,11 @@ public final class PersonGroupService implements IPersonGroupService {
     }
 
     @Override
-    public List<BaseEntity> personGroupsToBaseEntities(List<PersonGroup> personGroups) {
+    public List<BaseEntity> personGroupsToBaseEntities(List<PersonGroup> personGroups,
+            final EntityType entityType) {
         final List<BaseEntity> entities = new ArrayList<BaseEntity>(personGroups.size());
         for (final PersonGroup personGroup : personGroups) {
-            final BaseEntity entity = new BaseEntity(EntityType.PERSON_GROUP, personGroup.getId(),
+            final BaseEntity entity = new BaseEntity(entityType, personGroup.getId(),
                     personGroup.getPersonGroupKey(), personGroup.getName(), personGroup.getDescription());
             entities.add(entity);
         }

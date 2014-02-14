@@ -11,7 +11,7 @@ import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.dto.MeasuresDto;
 import org.komea.product.database.dto.SearchHistoricalMeasuresDto;
 import org.komea.product.database.dto.SearchMeasuresDto;
-import org.komea.product.database.enums.EntityTypeExtended;
+import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
@@ -150,14 +150,14 @@ public class MeasuresController {
     @ResponseBody
     public MeasuresDto findMeasures(@RequestBody final SearchMeasuresDto _searchMeasuresDto) {
         System.out.println("findMeasures : " + _searchMeasuresDto.toString());
-        final EntityTypeExtended entityTypeExtended = _searchMeasuresDto.getEntityTypeExtended();
-        final List<Kpi> kpis = kpiService.getKpis(entityTypeExtended, _searchMeasuresDto.getKpiKeys());
+        final EntityType entityType = _searchMeasuresDto.getEntityType();
+        final List<Kpi> kpis = kpiService.getKpis(entityType, _searchMeasuresDto.getKpiKeys());
         System.out.println("kpis : " + kpis.toString());
-        final List<BaseEntity> entities = entityService.getEntities(entityTypeExtended, _searchMeasuresDto.getEntityKeys());
+        final List<BaseEntity> entities = entityService.getEntities(entityType, _searchMeasuresDto.getEntityKeys());
         System.out.println("entities : " + entities.toString());
         final List<Measure> measures = measureService.getMeasures(kpis, entities, _searchMeasuresDto);
         System.out.println("measures : " + measures.toString());
-        return new MeasuresDto(entityTypeExtended, entities, kpis, measures);
+        return new MeasuresDto(entityType, entities, kpis, measures);
     }
 
 }
