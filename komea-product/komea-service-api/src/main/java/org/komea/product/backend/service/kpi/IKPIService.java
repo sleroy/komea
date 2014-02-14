@@ -37,9 +37,22 @@ public interface IKPIService
      * 
      * @param _kpiKey
      *            the kpi key.
+     * @param _alertValue
      * @return the kpi single value;
      */
     public Double getKpiSingleValue(KpiKey _kpiKey);
+    
+    
+    /**
+     * Method that returns a single value for the *special* KPI that does not render a table.
+     * 
+     * @param _kpiKey
+     *            the kpi key.
+     * @param _columnName
+     *            the column name.
+     * @return the kpi single value;
+     */
+    public Double getKpiSingleValue(KpiKey _kpiKey, String _columnName);
     
     
     /**

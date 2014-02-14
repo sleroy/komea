@@ -166,7 +166,7 @@ public class EsperQueryTester
     }
     
     
-    public static IEsperEngine newEngine() {
+    public static EsperEngineBean newEngine() {
     
     
         final EsperEngineBean esperEngineBean = new EsperEngineBean();
@@ -320,7 +320,9 @@ public class EsperQueryTester
     public void runTest() {
     
     
-        runTest(newEngine());
+        final EsperEngineBean newEngine = newEngine();
+        runTest(newEngine);
+        newEngine.destroy();
     }
     
     

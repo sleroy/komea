@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 
 
-public class AlertTypeStatistic implements Serializable
+public class EventTypeStatistic implements Serializable
 {
     
     
@@ -18,7 +18,7 @@ public class AlertTypeStatistic implements Serializable
     
     
     
-    public AlertTypeStatistic() {
+    public EventTypeStatistic() {
     
     
         super();
@@ -30,7 +30,7 @@ public class AlertTypeStatistic implements Serializable
      * @param _provider
      * @param _number
      */
-    public AlertTypeStatistic(final String _type, final String _provider, final long _number) {
+    public EventTypeStatistic(final String _type, final String _provider, final long _number) {
     
     
         super();

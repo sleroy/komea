@@ -15,7 +15,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Measure;
-import org.komea.product.service.dto.AlertTypeStatistic;
+import org.komea.product.service.dto.EventTypeStatistic;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
 
@@ -125,8 +125,8 @@ public class StatPage extends LayoutPage
         add(new Chart("chart", options));
         
         
-        final DataTable<AlertTypeStatistic, String> table =
-                DataTableBuilder.<AlertTypeStatistic, String> newTable("table")
+        final DataTable<EventTypeStatistic, String> table =
+                DataTableBuilder.<EventTypeStatistic, String> newTable("table")
                         .addColumn("Event type", "type").addColumn("Provider", "provider")
                         .addColumn("Number", "number").displayRows(10)
                         .withListData(statService.getReceivedAlertTypesIn24LastHours()).build();

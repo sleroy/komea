@@ -20,7 +20,7 @@ public final class QueryDefinition implements IQueryDefinition
     public QueryDefinition(final Kpi _kpi) {
     
     
-        super(_kpi, _kpi.computeKPIEsperKey());
+        this(_kpi, _kpi.computeKPIEsperKey());
     }
     
     

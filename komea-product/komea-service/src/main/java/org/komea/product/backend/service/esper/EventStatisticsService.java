@@ -25,7 +25,7 @@ import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
-import org.komea.product.service.dto.AlertTypeStatistic;
+import org.komea.product.service.dto.EventTypeStatistic;
 import org.komea.product.service.dto.KpiKey;
 import org.quartz.JobDataMap;
 import org.slf4j.Logger;
@@ -44,48 +44,48 @@ import com.espertech.esper.client.EPStatement;
  * @author sleroy
  */
 @Service
-public class AlertStatisticsService implements IEventStatisticsService
+public class EventStatisticsService implements IEventStatisticsService
 {
     
     
-    public static final String     ALERT_RECEIVED_IN_ONE_DAY = "ALERT_RECEIVED_IN_ONE_DAY";
-    public static final String     ALERT_CRITICITY_DAY       = "ALERT_CRITICITY_DAY_";
+    public static final String   ALERT_RECEIVED_IN_ONE_DAY = "ALERT_RECEIVED_IN_ONE_DAY";
+    public static final String   ALERT_CRITICITY_DAY       = "ALERT_CRITICITY_DAY_";
     
-    public static final String     STATS_BREAKDOWN_24H       = "STATS_BREAKDOWN_24H";
+    public static final String   STATS_BREAKDOWN_24H       = "STATS_BREAKDOWN_24H";
     
-    private static final Logger    LOGGER                    =
-                                                                     LoggerFactory
-                                                                             .getLogger(AlertStatisticsService.class);
-    
-    @Autowired
-    private IKPIService            kpiService;
+    private static final Logger  LOGGER                    =
+                                                                   LoggerFactory
+                                                                           .getLogger(EventStatisticsService.class);
     
     @Autowired
-    private ISystemProjectBean     systemProject;
-    
-    
-    @Autowired
-    private IEsperEngine           esperEngine;
+    private IKPIService          kpiService;
     
     @Autowired
-    private ProviderDao            providerDAO;
-    
-    @Autowired
-    private ICronRegistryService   registry;
-    
-    @Autowired
-    private IEventPushService      eventPushService;
+    private ISystemProjectBean   systemProject;
     
     
     @Autowired
-    private IHistoryService measureHistoryService;
+    private IEsperEngine         esperEngine;
+    
+    @Autowired
+    private ProviderDao          providerDAO;
+    
+    @Autowired
+    private ICronRegistryService registry;
+    
+    @Autowired
+    private IEventPushService    eventPushService;
+    
+    
+    @Autowired
+    private IHistoryService      measureHistoryService;
     
     
     
     /**
      *
      */
-    public AlertStatisticsService() {
+    public EventStatisticsService() {
     
     
         super();
@@ -136,9 +136,10 @@ public class AlertStatisticsService implements IEventStatisticsService
     public long getNumberOfAlerts(final Severity _criticity) {
     
     
-        return kpiService.getKpiSingleValue(
-                KpiKey.ofKpiNameAndEntity(ALERT_CRITICITY_DAY + _criticity.name().toUpperCase(),
-                        systemProject.getSystemProject())).intValue();
+        final Double kpiSingleValue =
+                kpiService.getKpiSingleValue(KpiKey.ofKpiName(getKpiNameFromSeverity(_criticity)),
+                        "alert_number");
+        return kpiSingleValue.intValue();
         
     }
     
@@ -154,9 +155,8 @@ public class AlertStatisticsService implements IEventStatisticsService
     public long getReceivedAlertsIn24LastHours() {
     
     
-        return kpiService.getKpiSingleValue(
-                KpiKey.ofKpiNameAndEntity(ALERT_RECEIVED_IN_ONE_DAY, systemProject.getSystemProject()))
-                .intValue();
+        return kpiService.getKpiSingleValue(KpiKey.ofKpiName(ALERT_RECEIVED_IN_ONE_DAY),
+                "alert_number").intValue();
         
     }
     
@@ -166,12 +166,12 @@ public class AlertStatisticsService implements IEventStatisticsService
      * @see org.komea.product.backend.service.esper.IEventStatisticsService#getReceivedAlertTypesIn24Hours()
      */
     @Override
-    public List<AlertTypeStatistic> getReceivedAlertTypesIn24LastHours() {
+    public List<EventTypeStatistic> getReceivedAlertTypesIn24LastHours() {
     
     
         final EPStatement statsBreakdownStatement = esperEngine.getStatement(STATS_BREAKDOWN_24H);
         return EPStatementResult.build(statsBreakdownStatement).mapAPojoPerResultLine(
-                AlertTypeStatistic.class);
+                EventTypeStatistic.class);
     }
     
     
@@ -197,7 +197,7 @@ public class AlertStatisticsService implements IEventStatisticsService
     
     
         LOGGER.info("Creating System KPI for statistics...");
-        final KpiKey kpiKey = KpiKey.ofKpiNameAndEntityType(ALERT_RECEIVED_IN_ONE_DAY, EntityType.PERSON);
+        final KpiKey kpiKey = KpiKey.ofKpiName(ALERT_RECEIVED_IN_ONE_DAY);
         final Kpi kpi = kpiService.findKPI(kpiKey);
         Kpi alertPerDay = null;
         if (kpi == null) {
@@ -305,9 +305,9 @@ public class AlertStatisticsService implements IEventStatisticsService
         kpi.setDescription("Provides the number of alerts of criticity "
                 + _criticity + " received under 24 hours");
         kpi.setEntityType(EntityType.PROJECT);
-        kpi.setEsperRequest("SELECT COUNT(*) as alert_number FROM Event.win:time(24 hour) WHERE eventType.severity=Severity."
-                + _criticity.name());
-        kpi.setKpiKey(ALERT_CRITICITY_DAY + _criticity.name());
+        kpi.setEsperRequest("SELECT COUNT(*) as alert_number FROM Event(eventType.severity=Severity."
+                + _criticity.name() + ")" + ".win:time(24 hour)");
+        kpi.setKpiKey(getKpiNameFromSeverity(_criticity));
         kpi.setValueMin(0d);
         kpi.setValueMax(Double.MAX_VALUE);
         kpi.setName("Number of alerts of criticity " + _criticity + " received under 24 hours.");
@@ -340,5 +340,12 @@ public class AlertStatisticsService implements IEventStatisticsService
         kpi.setValueDirection(ValueDirection.WORST);
         kpi.setValueType(ValueType.INT);
         return kpi;
+    }
+    
+    
+    private String getKpiNameFromSeverity(final Severity _criticity) {
+    
+    
+        return ALERT_CRITICITY_DAY + _criticity.name();
     }
 }

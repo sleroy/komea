@@ -106,10 +106,16 @@ public final class MeasureHistoryService implements IMeasureHistoryService
     }
     
     
-    public MeasureDao getMeasureDAO() {
+    @Override
+    public List<Measure> getFilteredHistory(
+            final HistoryKey _kpiKey,
+            final MeasureCriteria measureCriteria) {
     
     
-        return measureDAO;
+        initMeasureCriteria(_kpiKey, measureCriteria);
+        
+        final List<Measure> selectByCriteria = measureDAO.selectByCriteria(measureCriteria);
+        return selectByCriteria;
     }
     
     
@@ -125,14 +131,10 @@ public final class MeasureHistoryService implements IMeasureHistoryService
     }
     
     
-    @Override
-    public List<Measure> getFilteredHistory(final HistoryKey _kpiKey, final MeasureCriteria measureCriteria) {
+    public MeasureDao getMeasureDAO() {
     
     
-        initMeasureCriteria(_kpiKey, measureCriteria);
-        
-        final List<Measure> selectByCriteria = measureDAO.selectByCriteria(measureCriteria);
-        return selectByCriteria;
+        return measureDAO;
     }
     
     
@@ -166,20 +168,5 @@ public final class MeasureHistoryService implements IMeasureHistoryService
         final Criteria createCriteria = measureCriteria.createCriteria();
         createCriteria.andIdKpiEqualTo(_kpiKey.getKpiID());
         
-        switch (_kpiKey.getEntityType()) {
-            case PERSON:
-                createCriteria.andIdPersonEqualTo(_kpiKey.getEntityID());
-                break;
-            case PERSON_GROUP:
-                createCriteria.andIdPersonGroupEqualTo(_kpiKey.getEntityID());
-                break;
-            case PROJECT:
-                createCriteria.andIdProjectEqualTo(_kpiKey.getEntityID());
-                break;
-            default:
-                // TODO:: Add code for default statement
-                throw new UnsupportedOperationException("Not implemented default statement");
-                
-        }
     }
 }

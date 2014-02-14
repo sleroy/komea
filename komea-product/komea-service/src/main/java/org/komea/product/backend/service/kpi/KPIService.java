@@ -185,8 +185,21 @@ public final class KPIService implements IKPIService
         final EPStatement epStatement =
                 esperEngine.getStatementOrFail(kpiOrFail.computeKPIEsperKey());
         
+        final Number number = EPStatementResult.build(epStatement).singleResult();
+        return number.doubleValue();
+    }
+    
+    
+    @Override
+    public Double getKpiSingleValue(final KpiKey _kpiKey, final String _columnName) {
+    
+    
+        final Kpi kpiOrFail = findKPIOrFail(_kpiKey);
+        final EPStatement epStatement =
+                esperEngine.getStatementOrFail(kpiOrFail.computeKPIEsperKey());
         
-        return EPStatementResult.build(epStatement).singleResult();
+        final Number number = EPStatementResult.build(epStatement).singleResult(_columnName);
+        return number.doubleValue();
     }
     
     

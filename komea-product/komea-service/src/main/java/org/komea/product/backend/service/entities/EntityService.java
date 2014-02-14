@@ -11,6 +11,7 @@ import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dao.ProjectDao;
+import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.service.dto.KpiKey;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,15 @@ public final class EntityService implements IEntityService
     }
     
     
+    @Override
+    public List<BaseEntity> getEntities(final EntityType _entityType, final List<String> _entityKeys) {
+    
+    
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    
     /**
      * (non-Javadoc)
      * 
@@ -55,10 +65,16 @@ public final class EntityService implements IEntityService
         switch (_entityType) {
             case PERSON:
                 return (TEntity) personDAO.selectByPrimaryKey(_key);
-            case PERSON_GROUP:
+            case DEPARTMENT:
+            case TEAM:
                 return (TEntity) personGroupDao.selectByPrimaryKey(_key);
             case PROJECT:
                 return (TEntity) projectDao.selectByPrimaryKey(_key);
+            case SYSTEM:
+                break;
+            default:
+                break;
+        
         }
         return null;
         

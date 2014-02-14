@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Measure;
-import org.komea.product.service.dto.AlertTypeStatistic;
+import org.komea.product.service.dto.EventTypeStatistic;
 
 
 
@@ -28,7 +28,7 @@ public interface IEventStatisticsService
      * 
      * @return the number of alerts.
      */
-    public List<AlertTypeStatistic> getReceivedAlertTypesIn24LastHours();
+    public List<EventTypeStatistic> getReceivedAlertTypesIn24LastHours();
     
     
     long getNumberOfAlerts(Severity _criticity);

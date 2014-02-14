@@ -15,7 +15,7 @@ import org.komea.product.backend.service.esper.IEventStatisticsService;
 import org.komea.product.backend.service.esper.IEventViewerService;
 import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.database.alert.IEvent;
-import org.komea.product.service.dto.AlertTypeStatistic;
+import org.komea.product.service.dto.EventTypeStatistic;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +73,7 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
         final long numberAlerts = systemProject.getReceivedAlertsIn24LastHours();
         LOGGER.info("Received alerts {}", numberAlerts);
         Assert.assertTrue(numberAlerts >= 10);
-        final List<AlertTypeStatistic> receivedAlertTypesIn24LastHours =
+        final List<EventTypeStatistic> receivedAlertTypesIn24LastHours =
                 systemProject.getReceivedAlertTypesIn24LastHours();
         LOGGER.info("Received alerts {}", receivedAlertTypesIn24LastHours);
         // On récupère la liste des alertes reçues dans ce laps de temps, pour vérifier que Esper a bien reçu nos alertes
@@ -86,7 +86,7 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
         }
         Assert.assertTrue("We received alerts from the corresponding type", found);
         found = false;
-        for (final AlertTypeStatistic stat : receivedAlertTypesIn24LastHours) {
+        for (final EventTypeStatistic stat : receivedAlertTypesIn24LastHours) {
             found |= eventToSend.getEventType().getEventKey().equals(stat.getType());
         }
         Assert.assertTrue("Event is not found", found);

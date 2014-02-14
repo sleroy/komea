@@ -244,7 +244,8 @@ public class Measure implements Serializable
             case PERSON:
                 setIdPerson(_entityID);
                 break;
-            case PERSON_GROUP:
+            case DEPARTMENT:
+            case TEAM:
                 setIdPersonGroup(_entityID);
                 break;
             case PROJECT:

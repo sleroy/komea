@@ -19,7 +19,7 @@ public class KpiKey
     public static KpiKey ofKpi(final Kpi _kpiName) {
     
     
-        return new KpiKey(null, null, _kpiName.getKpiKey());
+        return new KpiKey(_kpiName.getEntityType(), _kpiName.getEntityID(), _kpiName.getKpiKey());
     }
     
     

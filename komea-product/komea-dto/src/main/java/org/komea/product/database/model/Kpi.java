@@ -39,6 +39,7 @@ public class Kpi implements Serializable
     
         final StringBuilder sb = new StringBuilder();
         sb.append("KPI_");
+        sb.append(_kpiKey);
         if (_entityType != null) {
             sb.append("_T_").append(_entityType.name());
         }

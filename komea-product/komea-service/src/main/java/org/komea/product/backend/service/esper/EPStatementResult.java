@@ -79,36 +79,6 @@ public final class EPStatementResult
      *            the property expression
      * @return the list of values or an empty list..
      */
-    public <T> List<T> mapAPojoPerResultLine(final Class<T> _implementationClass) {
-    
-    
-        final List<T> res = new ArrayList<T>(100);
-        SafeIterator<EventBean> safeIterator = null;
-        try {
-            safeIterator = statement.safeIterator();
-            while (safeIterator.hasNext()) {
-                final EventBean next = safeIterator.next();
-                final T beanPojo = BeanUtils.instantiate(_implementationClass);
-                final Map<String, Object> propertyMap = (Map<String, Object>) next.getUnderlying();
-                BeanUtil.populateBean(beanPojo, propertyMap);
-                res.add(beanPojo);
-            }
-        } finally {
-            if (safeIterator != null) {
-                safeIterator.close();
-            }
-        }
-        return res;
-    }
-    
-    
-    /**
-     * Returns a list of result from the EP Statement and a property expression.
-     * 
-     * @param _propertyName
-     *            the property expression
-     * @return the list of values or an empty list..
-     */
     public <T> List<T> listResult(final String _propertyName) {
     
     
@@ -152,6 +122,36 @@ public final class EPStatementResult
     
     
     /**
+     * Returns a list of result from the EP Statement and a property expression.
+     * 
+     * @param _propertyName
+     *            the property expression
+     * @return the list of values or an empty list..
+     */
+    public <T> List<T> mapAPojoPerResultLine(final Class<T> _implementationClass) {
+    
+    
+        final List<T> res = new ArrayList<T>(100);
+        SafeIterator<EventBean> safeIterator = null;
+        try {
+            safeIterator = statement.safeIterator();
+            while (safeIterator.hasNext()) {
+                final EventBean next = safeIterator.next();
+                final T beanPojo = BeanUtils.instantiate(_implementationClass);
+                final Map<String, Object> propertyMap = (Map<String, Object>) next.getUnderlying();
+                BeanUtil.populateBean(beanPojo, propertyMap);
+                res.add(beanPojo);
+            }
+        } finally {
+            if (safeIterator != null) {
+                safeIterator.close();
+            }
+        }
+        return res;
+    }
+    
+    
+    /**
      * This method should be use with great care, the statement must always returns a value.
      * 
      * @return
@@ -165,6 +165,7 @@ public final class EPStatementResult
             safeIterator = statement.safeIterator();
             if (safeIterator.hasNext()) {
                 final EventBean next = safeIterator.next();
+                
                 res = (T) ((Map) next.getUnderlying()).values().iterator().next();
             }
             
