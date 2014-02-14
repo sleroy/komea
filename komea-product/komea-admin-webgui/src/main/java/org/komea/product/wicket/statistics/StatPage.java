@@ -13,7 +13,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
-import org.komea.product.database.alert.enums.Criticity;
+import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.AlertTypeStatistic;
 import org.komea.product.wicket.LayoutPage;
@@ -66,11 +66,11 @@ public class StatPage extends LayoutPage
             }
             
         }));
-        generateLabelForAlertsWithCriticity(Criticity.BLOCKING);
-        generateLabelForAlertsWithCriticity(Criticity.CRITICAL);
-        generateLabelForAlertsWithCriticity(Criticity.MAJOR);
-        generateLabelForAlertsWithCriticity(Criticity.MINOR);
-        generateLabelForAlertsWithCriticity(Criticity.INFO);
+        generateLabelForAlertsWithCriticity(Severity.BLOCKER);
+        generateLabelForAlertsWithCriticity(Severity.CRITICAL);
+        generateLabelForAlertsWithCriticity(Severity.MAJOR);
+        generateLabelForAlertsWithCriticity(Severity.MINOR);
+        generateLabelForAlertsWithCriticity(Severity.INFO);
         
         final ChartOptions chartOptions = new ChartOptions();
         chartOptions.setType(SeriesType.SPLINE);
@@ -143,7 +143,7 @@ public class StatPage extends LayoutPage
     }
     
     
-    private void generateLabelForAlertsWithCriticity(final Criticity criticity) {
+    private void generateLabelForAlertsWithCriticity(final Severity criticity) {
     
     
         add(new Label(criticity.name().toLowerCase(), new LoadableDetachableModel<Long>()

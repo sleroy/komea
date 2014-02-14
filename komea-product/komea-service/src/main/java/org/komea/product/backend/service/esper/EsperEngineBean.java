@@ -33,6 +33,7 @@ import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
+import com.espertech.esper.client.UpdateListener;
 
 
 
@@ -201,12 +202,27 @@ public final class EsperEngineBean implements IEsperEngine
     }
     
     
+    /**
+     * Register an update listener.
+     * 
+     * @param _updateListener
+     *            the update listener.
+     */
+    public void registerListener(final String _statementName, final UpdateListener _updateListener) {
+    
+    
+        LOGGER.info("Registering listener on {}", _statementName);
+        final EPStatement statement = getStatement(_statementName);
+        if (statement == null) { throw new EsperStatementNotFoundException(_statementName); }
+        statement.addListener(_updateListener);
+        
+    }
+    
+    
     @Override
     public void sendEvent(final IEvent _event) {
     
     
-        // LOGGER.trace("Sending alert {}", _alert);
-        
         esperEngine.getEPRuntime().sendEvent(_event);
         
     }

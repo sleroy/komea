@@ -56,7 +56,7 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
     @Test
     public void testHistoricalMeasures() throws Exception {
     
-        final KpiKey kpiKey = KpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
+        final KpiKey kpiKey = KpiKey.ofKpiNameAndEntityDetails("KPI1", EntityType.PERSON, 1);
         
         final Measure measure = new Measure();
         measure.setDate(new Date());
@@ -87,7 +87,7 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
     @Test
     public void testHistoricalMeasuresByNegativeNumbers() throws Exception {
     
-        final KpiKey kpiKey = KpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
+        final KpiKey kpiKey = KpiKey.ofKpiNameAndEntityDetails("KPI1", EntityType.PERSON, 1);
         
         final Measure measure = new Measure();
         measure.setDate(new Date());
@@ -114,7 +114,7 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
     @Test
     public void testHistoricalMeasuresByNumbers() throws Exception {
     
-        final KpiKey kpiKey = KpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
+        final KpiKey kpiKey = KpiKey.ofKpiNameAndEntityDetails("KPI1", EntityType.PERSON, 1);
         
         final Measure measure = new Measure();
         measure.setDate(new Date());
@@ -142,7 +142,7 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
     @Test
     public void testHistoricalMeasuresInvalideDate() throws Exception {
     
-        final KpiKey kpiKey = KpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
+        final KpiKey kpiKey = KpiKey.ofKpiNameAndEntityDetails("KPI1", EntityType.PERSON, 1);
         
         final Measure measure = new Measure();
         measure.setDate(new Date());
@@ -177,8 +177,8 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         measure.setIdPerson(1);
         measure.setValue(12D);
         
-        Mockito.when(measureHistoryService.getKpiMeasureValue(org.mockito.Matchers.any(KpiKey.class))).thenReturn(measure);
-        final KpiKey kpiKey = KpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
+        Mockito.when(measureHistoryService.getKpiRealTimeValueInMeasureObject(org.mockito.Matchers.any(KpiKey.class))).thenReturn(measure);
+        final KpiKey kpiKey = KpiKey.ofKpiNameAndEntityDetails("KPI1", EntityType.PERSON, 1);
         
         // MyKpiKey kpiKey2 = MyKpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
         final String jsonMessage = IntegrationTestUtil.convertObjectToJSON(Lists.newArrayList(kpiKey));
@@ -193,7 +193,7 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)));
         httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[0].measure.value", Matchers.comparesEqualTo(12D)));
         
-        Mockito.verify(measureHistoryService, Mockito.times(1)).getKpiMeasureValue(org.mockito.Matchers.any(KpiKey.class));
+        Mockito.verify(measureHistoryService, Mockito.times(1)).getKpiRealTimeValueInMeasureObject(org.mockito.Matchers.any(KpiKey.class));
         
     }
     
@@ -207,9 +207,9 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         measure.setIdPerson(1);
         measure.setValue(12D);
         
-        Mockito.when(measureHistoryService.getKpiMeasureValue(org.mockito.Matchers.any(KpiKey.class)))
+        Mockito.when(measureHistoryService.getKpiRealTimeValueInMeasureObject(org.mockito.Matchers.any(KpiKey.class)))
                 .thenThrow(KPINotFoundException.class);
-        final KpiKey kpiKey = KpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
+        final KpiKey kpiKey = KpiKey.ofKpiNameAndEntityDetails("KPI1", EntityType.PERSON, 1);
         
         // MyKpiKey kpiKey2 = MyKpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
         final String jsonMessage = IntegrationTestUtil.convertObjectToJSON(Lists.newArrayList(kpiKey));
@@ -221,15 +221,15 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isInternalServerError());
-        Mockito.verify(measureHistoryService, Mockito.times(1)).getKpiMeasureValue(org.mockito.Matchers.any(KpiKey.class));
+        Mockito.verify(measureHistoryService, Mockito.times(1)).getKpiRealTimeValueInMeasureObject(org.mockito.Matchers.any(KpiKey.class));
         
     }
     
     @Test
     public void testLastMeasures() throws Exception {
     
-        Mockito.when(measureHistoryService.getKpiDoubleValue(org.mockito.Matchers.any(KpiKey.class))).thenReturn(25D);
-        final KpiKey kpiKey = KpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
+        Mockito.when(measureHistoryService.getKpiRealTimeValues(org.mockito.Matchers.any(KpiKey.class))).thenReturn(25D);
+        final KpiKey kpiKey = KpiKey.ofKpiNameAndEntityDetails("KPI1", EntityType.PERSON, 1);
         
         // MyKpiKey kpiKey2 = MyKpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
         final String jsonMessage = IntegrationTestUtil.convertObjectToJSON(kpiKey);
@@ -246,8 +246,8 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
     @Test
     public void testLastMeasuresWithExceptions() throws Exception {
     
-        Mockito.when(measureHistoryService.getKpiDoubleValue(org.mockito.Matchers.any(KpiKey.class))).thenThrow(KPINotFoundException.class);
-        final KpiKey kpiKey = KpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
+        Mockito.when(measureHistoryService.getKpiRealTimeValues(org.mockito.Matchers.any(KpiKey.class))).thenThrow(KPINotFoundException.class);
+        final KpiKey kpiKey = KpiKey.ofKpiNameAndEntityDetails("KPI1", EntityType.PERSON, 1);
         
         // MyKpiKey kpiKey2 = MyKpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
         final String jsonMessage = IntegrationTestUtil.convertObjectToJSON(kpiKey);
@@ -259,14 +259,14 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         
         httpRequest.andExpect(MockMvcResultMatchers.status().isInternalServerError());
         
-        Mockito.verify(measureHistoryService, Mockito.times(1)).getKpiDoubleValue(org.mockito.Matchers.any(KpiKey.class));
+        Mockito.verify(measureHistoryService, Mockito.times(1)).getKpiRealTimeValues(org.mockito.Matchers.any(KpiKey.class));
         
     }
     
     @Test
     public void testLastMeasuresWithNoMessage() throws Exception {
     
-        Mockito.when(measureHistoryService.getKpiDoubleValue(null)).thenReturn(0D);
+        Mockito.when(measureHistoryService.getKpiRealTimeValues(null)).thenReturn(0D);
         
         final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/last/"));
         

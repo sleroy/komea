@@ -1,5 +1,5 @@
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.backend.service.history;
 
 
 
@@ -11,6 +11,13 @@ import org.komea.product.database.model.Kpi;
 
 public class HistoryKey
 {
+    
+    
+    public static HistoryKey of(final int _kpiID) {
+    
+    
+        return new HistoryKey(_kpiID, null, 0);
+    }
     
     
     public static HistoryKey of(final int _id, final EntityType _entity, final int entityID) {
@@ -37,6 +44,8 @@ public class HistoryKey
     
     
     private final int        kpiID;
+    
+    
     private final EntityType entityType;
     
     

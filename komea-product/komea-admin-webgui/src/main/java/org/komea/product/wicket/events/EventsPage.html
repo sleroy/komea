@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+<meta content="Komea administration site" name="description"></meta>
+<meta content="Komea" name="author"></meta>
+<title>Komea Administration</title>
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
+<link rel="stylesheet" href="/static/css/style.css" type="text/css"></link>
+<link rel="stylesheet" type="text/css" href="/static/js/ui/themes/base/jquery-ui.css" />
+</head>
+<body>
+	<wicket:extend>
+		<div class="container">
+			<table class="table table-condensed table-hover">
+				<thead>
+					<tr>
+						<th class="span1">Provider</th>
+						<th class="span2">Project</th>
+						<th class="span2">Criticity</th>
+						<th class="span9">Message</th>
+						<th class="span2">When</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr wicket:id="events">
+						<td><img src="http://dummyimage.com/16/ff00ff/000000.png" wicket:id="icon" width="16" height="16"></img> <a href="" wicket:id="url"><i class="icon-star-empty"></i></a></td>
+						<td><strong wicket:id="project">Project XYZ</strong></td>
+						<td><span class="label pull-right" wicket:id="severity">Notifications</span></td>
+						<td><strong wicket:id="message"">Message body goes here</strong></td>
+						<td><strong wicket:id="date"">11:23 PM</strong></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</wicket:extend>
+	<footer class="tocea-footer">
+		<p>&copy; Komea.org</p>
+		<script src="/static/js/ui/jquery.js"></script>
+		<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+	</footer>
+</body>
+</html>

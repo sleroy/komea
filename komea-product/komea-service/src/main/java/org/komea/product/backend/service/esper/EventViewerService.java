@@ -5,6 +5,8 @@ package org.komea.product.backend.service.esper;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.database.alert.IEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +67,7 @@ public class EventViewerService implements IEventViewerService
     }
     
     
-    @Autowired
+    @PostConstruct
     public void initialize() {
     
     

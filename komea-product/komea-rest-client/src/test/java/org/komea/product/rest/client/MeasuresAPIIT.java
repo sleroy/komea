@@ -24,7 +24,7 @@ public class MeasuresAPIIT extends AbstractRestClientIntegrationTestCase {
     
         IMeasuresAPI measuresAPI = RestClientFactory.INSTANCE.createMeasuresAPI("http://localhost:8585/komea");
         Assert.assertNotNull(measuresAPI);
-        KpiKey kpiKey = KpiKey.newKpiWithEntityDetails("lines", EntityType.PERSON, 1);
+        KpiKey kpiKey = KpiKey.ofKpiNameAndEntityDetails("lines", EntityType.PERSON, 1);
         List<MeasureResultDto> measures = measuresAPI.lastMeasuresForKpiKeys(Lists.newArrayList(kpiKey));
         Assert.assertEquals(12D, measures.get(0).getMeasure().getValue().doubleValue(), 0.1);
         // Assert.assertTrue(projects.get(0) instanceof PersonGroup);
@@ -35,7 +35,7 @@ public class MeasuresAPIIT extends AbstractRestClientIntegrationTestCase {
     
         IMeasuresAPI measuresAPI = RestClientFactory.INSTANCE.createMeasuresAPI("http://localhost:8585/komea");
         Assert.assertNotNull(measuresAPI);
-        KpiKey kpiKey = KpiKey.newKpiWithEntityDetails("lines", EntityType.PERSON, 1);
+        KpiKey kpiKey = KpiKey.ofKpiNameAndEntityDetails("lines", EntityType.PERSON, 1);
         double val = measuresAPI.lastMeasuresForKpiKey(kpiKey);
         // Assert.assertTrue(projects.get(0) instanceof PersonGroup);
         // Assert.assertFalse(projects.isEmpty());
@@ -44,7 +44,7 @@ public class MeasuresAPIIT extends AbstractRestClientIntegrationTestCase {
     @Test
     public void testHistoricalMeasures() throws Exception {
     
-        KpiKey kpiKey = KpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
+        KpiKey kpiKey = KpiKey.ofKpiNameAndEntityDetails("KPI1", EntityType.PERSON, 1);
         
         IMeasuresAPI measuresAPI = RestClientFactory.INSTANCE.createMeasuresAPI("http://localhost:8585/komea");
         Assert.assertNotNull(measuresAPI);
@@ -59,7 +59,7 @@ public class MeasuresAPIIT extends AbstractRestClientIntegrationTestCase {
     @Test(expected = InternalServerException.class)
     public void testHistoricalMeasuresInvalideDate() throws Exception {
     
-        KpiKey kpiKey = KpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
+        KpiKey kpiKey = KpiKey.ofKpiNameAndEntityDetails("KPI1", EntityType.PERSON, 1);
         
         IMeasuresAPI measuresAPI = RestClientFactory.INSTANCE.createMeasuresAPI("http://localhost:8585/komea");
         Assert.assertNotNull(measuresAPI);
@@ -76,7 +76,7 @@ public class MeasuresAPIIT extends AbstractRestClientIntegrationTestCase {
     @Test(expected = InternalServerException.class)
     public void testHistoricalMeasuresByNumbers() throws Exception {
     
-        KpiKey kpiKey = KpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
+        KpiKey kpiKey = KpiKey.ofKpiNameAndEntityDetails("KPI1", EntityType.PERSON, 1);
         
         IMeasuresAPI measuresAPI = RestClientFactory.INSTANCE.createMeasuresAPI("http://localhost:8585/komea");
         Assert.assertNotNull(measuresAPI);
@@ -93,7 +93,7 @@ public class MeasuresAPIIT extends AbstractRestClientIntegrationTestCase {
     @Test(expected = InternalServerException.class)
     public void testHistoricalMeasuresByNegativeNumbers() throws Exception {
     
-        KpiKey kpiKey = KpiKey.newKpiWithEntityDetails("KPI1", EntityType.PERSON, 1);
+        KpiKey kpiKey = KpiKey.ofKpiNameAndEntityDetails("KPI1", EntityType.PERSON, 1);
         
         IMeasuresAPI measuresAPI = RestClientFactory.INSTANCE.createMeasuresAPI("http://localhost:8585/komea");
         Assert.assertNotNull(measuresAPI);

@@ -5,7 +5,7 @@ package org.komea.product.backend.service.esper;
 
 import java.util.List;
 
-import org.komea.product.database.alert.enums.Criticity;
+import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.AlertTypeStatistic;
 
@@ -31,7 +31,7 @@ public interface IEventStatisticsService
     public List<AlertTypeStatistic> getReceivedAlertTypesIn24LastHours();
     
     
-    long getNumberOfAlerts(Criticity _criticity);
+    long getNumberOfAlerts(Severity _criticity);
     
     
     /**

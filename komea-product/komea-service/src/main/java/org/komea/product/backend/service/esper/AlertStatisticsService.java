@@ -5,6 +5,7 @@
 package org.komea.product.backend.service.esper;
 
 
+
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -13,9 +14,9 @@ import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.demodata.AlertJobDemo;
-import org.komea.product.backend.service.kpi.IEntityWithKPIAdapter;
+import org.komea.product.backend.service.history.HistoryKey;
+import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
-import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.EvictionType;
@@ -34,6 +35,8 @@ import org.springframework.stereotype.Service;
 
 import com.espertech.esper.client.EPStatement;
 
+
+
 /**
  * This service provides informations about the informations received by esper
  * (number of alerts received per days, and alert type breakdown);
@@ -41,101 +44,122 @@ import com.espertech.esper.client.EPStatement;
  * @author sleroy
  */
 @Service
-public class AlertStatisticsService implements IEventStatisticsService {
+public class AlertStatisticsService implements IEventStatisticsService
+{
     
-    public static final String    ALERT_RECEIVED_IN_ONE_DAY = "ALERT_RECEIVED_IN_ONE_DAY";
-    public static final String    ALERT_CRITICITY_DAY       = "ALERT_CRITICITY_DAY_";
     
-    private static final String   STATS_BREAKDOWN_24H       = "STATS_BREAKDOWN_24H";
+    public static final String     ALERT_RECEIVED_IN_ONE_DAY = "ALERT_RECEIVED_IN_ONE_DAY";
+    public static final String     ALERT_CRITICITY_DAY       = "ALERT_CRITICITY_DAY_";
     
-    private static final Logger   LOGGER                    = LoggerFactory.getLogger(AlertStatisticsService.class);
+    public static final String     STATS_BREAKDOWN_24H       = "STATS_BREAKDOWN_24H";
     
-    @Autowired
-    private IKPIService           kpiService;
-    
-    @Autowired
-    private ISystemProjectBean    systemProject;
+    private static final Logger    LOGGER                    =
+                                                                     LoggerFactory
+                                                                             .getLogger(AlertStatisticsService.class);
     
     @Autowired
-    private IEntityWithKPIAdapter entityWithKPIAdapter;
+    private IKPIService            kpiService;
     
     @Autowired
-    private IEsperEngine          esperEngine;
+    private ISystemProjectBean     systemProject;
+    
     
     @Autowired
-    private ProviderDao           providerDAO;
+    private IEsperEngine           esperEngine;
     
     @Autowired
-    private ICronRegistryService  registry;
+    private ProviderDao            providerDAO;
     
     @Autowired
-    private IEventPushService     eventPushService;
+    private ICronRegistryService   registry;
+    
+    @Autowired
+    private IEventPushService      eventPushService;
+    
+    
+    @Autowired
+    private IHistoryService measureHistoryService;
+    
+    
     
     /**
      *
      */
     public AlertStatisticsService() {
     
+    
         super();
     }
+    
     
     /**
      * @return the eventPushService
      */
     public IEventPushService getAlertPushService() {
     
+    
         return eventPushService;
     }
+    
     
     @Override
     public List<Measure> getAllMeasures() {
     
-        final List<Measure> history = kpiService.getHistory(KpiKey.withEntity(ALERT_RECEIVED_IN_ONE_DAY, systemProject.getSystemProject()));
+    
+        final List<Measure> history =
+                measureHistoryService.getHistory(HistoryKey.of(kpiService.findKPI(
+                        KpiKey.ofKpiName(ALERT_RECEIVED_IN_ONE_DAY)).getId()));
         LOGGER.info("History of alerts {}", history.size());
         return history;
         
     }
     
-    /**
-     * @return the entityWithKPIAdapter
-     */
-    public final IEntityWithKPIAdapter getEntityWithKPIAdapter() {
-    
-        return entityWithKPIAdapter;
-    }
     
     /**
      * @return the esperEngine
      */
     public final IEsperEngine getEsperEngine() {
     
+    
         return esperEngine;
     }
     
+    
     public IKPIService getKpiService() {
+    
     
         return kpiService;
     }
     
-    @Override
-    public long getNumberOfAlerts(final Criticity _criticity) {
     
-        return kpiService.getKpiValue(
-                KpiKey.withEntity(ALERT_CRITICITY_DAY + _criticity.name().toUpperCase(), systemProject.getSystemProject())).getIntValue();
+    @Override
+    public long getNumberOfAlerts(final Severity _criticity) {
+    
+    
+        return kpiService.getKpiSingleValue(
+                KpiKey.ofKpiNameAndEntity(ALERT_CRITICITY_DAY + _criticity.name().toUpperCase(),
+                        systemProject.getSystemProject())).intValue();
         
     }
     
+    
     public ProviderDao getProviderDAO() {
+    
     
         return providerDAO;
     }
     
+    
     @Override
     public long getReceivedAlertsIn24LastHours() {
     
-        return kpiService.getKpiValue(KpiKey.withEntity(ALERT_RECEIVED_IN_ONE_DAY, systemProject.getSystemProject())).getIntValue();
+    
+        return kpiService.getKpiSingleValue(
+                KpiKey.ofKpiNameAndEntity(ALERT_RECEIVED_IN_ONE_DAY, systemProject.getSystemProject()))
+                .intValue();
         
     }
+    
     
     /*
      * (non-Javadoc)
@@ -144,47 +168,52 @@ public class AlertStatisticsService implements IEventStatisticsService {
     @Override
     public List<AlertTypeStatistic> getReceivedAlertTypesIn24LastHours() {
     
+    
         final EPStatement statsBreakdownStatement = esperEngine.getStatement(STATS_BREAKDOWN_24H);
-        return EPStatementResult.build(statsBreakdownStatement).listMapResult(AlertTypeStatistic.class);
+        return EPStatementResult.build(statsBreakdownStatement).mapAPojoPerResultLine(
+                AlertTypeStatistic.class);
     }
+    
     
     public ICronRegistryService getRegistry() {
     
+    
         return registry;
     }
+    
     
     /**
      * @return the systemProject
      */
     public final ISystemProjectBean getSystemProject() {
     
+    
         return systemProject;
     }
+    
     
     @PostConstruct
     public void init() {
     
+    
         LOGGER.info("Creating System KPI for statistics...");
-        final KpiKey kpiKey = KpiKey.withEntity(ALERT_RECEIVED_IN_ONE_DAY, systemProject.getSystemProject());
+        final KpiKey kpiKey = KpiKey.ofKpiNameAndEntityType(ALERT_RECEIVED_IN_ONE_DAY, EntityType.PERSON);
         final Kpi kpi = kpiService.findKPI(kpiKey);
         Kpi alertPerDay = null;
         if (kpi == null) {
-            final List<Kpi> listOfKpisOfEntity = kpiService.getListOfKpisForEntity(systemProject.getSystemProject());
             alertPerDay = alertPerDay();
-            listOfKpisOfEntity.add(alertPerDay);
-            listOfKpisOfEntity.add(alertCriticityPerDay(Severity.BLOCKER));
-            listOfKpisOfEntity.add(alertCriticityPerDay(Severity.CRITICAL));
-            listOfKpisOfEntity.add(alertCriticityPerDay(Severity.MAJOR));
-            listOfKpisOfEntity.add(alertCriticityPerDay(Severity.MINOR));
-            listOfKpisOfEntity.add(alertCriticityPerDay(Severity.INFO));
+            kpiService.saveOrUpdate(alertPerDay);
+            kpiService.saveOrUpdate(alertCriticityPerDay(Severity.BLOCKER));
+            kpiService.saveOrUpdate(alertCriticityPerDay(Severity.CRITICAL));
+            kpiService.saveOrUpdate(alertCriticityPerDay(Severity.MAJOR));
+            kpiService.saveOrUpdate(alertCriticityPerDay(Severity.MINOR));
+            kpiService.saveOrUpdate(alertCriticityPerDay(Severity.INFO));
             
-            kpiService.updateKPIOfEntity(systemProject.getSystemProject(), listOfKpisOfEntity);
             
-        } else {
             LOGGER.info("Statistics KPI already existing.");
         }
         
-        kpiService.synchronizeEntityWithKomea(systemProject.getSystemProject());
+        
         // output snapshot every 1 minute
         esperEngine
                 .createOrUpdateEPLQuery(new QueryDefinition(
@@ -194,18 +223,21 @@ public class AlertStatisticsService implements IEventStatisticsService {
         scheduleAlerts();
         if (alertPerDay != null) {
             kpiService.storeValueInHistory(kpiKey);
-            
         }
         
     }
     
+    
     public void scheduleAlerts() {
+    
     
         final JobDataMap properties = new JobDataMap();
         properties.put("esper", eventPushService);
-        registry.registerCronTask("ALERT_DEMO_STAT", "0/10 * * * * ?", AlertJobDemo.class, properties);
+        registry.registerCronTask("ALERT_DEMO_STAT", "0/10 * * * * ?", AlertJobDemo.class,
+                properties);
         
     }
+    
     
     /**
      * @param _eventPushService
@@ -213,17 +245,10 @@ public class AlertStatisticsService implements IEventStatisticsService {
      */
     public void setAlertPushService(final IEventPushService _eventPushService) {
     
+    
         eventPushService = _eventPushService;
     }
     
-    /**
-     * @param _entityWithKPIAdapter
-     *            the entityWithKPIAdapter to set
-     */
-    public final void setEntityWithKPIAdapter(final IEntityWithKPIAdapter _entityWithKPIAdapter) {
-    
-        entityWithKPIAdapter = _entityWithKPIAdapter;
-    }
     
     /**
      * @param _esperEngine
@@ -231,8 +256,10 @@ public class AlertStatisticsService implements IEventStatisticsService {
      */
     public final void setEsperEngine(final IEsperEngine _esperEngine) {
     
+    
         esperEngine = _esperEngine;
     }
+    
     
     /**
      * @param _kpiService
@@ -240,18 +267,24 @@ public class AlertStatisticsService implements IEventStatisticsService {
      */
     public final void setKpiService(final IKPIService _kpiService) {
     
+    
         kpiService = _kpiService;
     }
     
+    
     public void setProviderDAO(final ProviderDao _providerDAO) {
+    
     
         providerDAO = _providerDAO;
     }
     
+    
     public void setRegistry(final ICronRegistryService _registry) {
+    
     
         registry = _registry;
     }
+    
     
     /**
      * @param _systemProject
@@ -259,14 +292,18 @@ public class AlertStatisticsService implements IEventStatisticsService {
      */
     public final void setSystemProject(final ISystemProjectBean _systemProject) {
     
+    
         systemProject = _systemProject;
     }
     
+    
     private Kpi alertCriticityPerDay(final Severity _criticity) {
+    
     
         Kpi kpi;
         kpi = new Kpi();
-        kpi.setDescription("Provides the number of alerts of criticity " + _criticity + " received under 24 hours");
+        kpi.setDescription("Provides the number of alerts of criticity "
+                + _criticity + " received under 24 hours");
         kpi.setEntityType(EntityType.PROJECT);
         kpi.setEsperRequest("SELECT COUNT(*) as alert_number FROM Event.win:time(24 hour) WHERE eventType.severity=Severity."
                 + _criticity.name());
@@ -283,7 +320,9 @@ public class AlertStatisticsService implements IEventStatisticsService {
         return kpi;
     }
     
+    
     private Kpi alertPerDay() {
+    
     
         Kpi kpi;
         kpi = new Kpi();

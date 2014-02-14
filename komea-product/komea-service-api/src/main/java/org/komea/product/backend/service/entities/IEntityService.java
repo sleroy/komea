@@ -1,12 +1,17 @@
 package org.komea.product.backend.service.entities;
 
+
 import java.util.List;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.service.dto.KpiKey;
 
-public interface IEntityService {
+
+
+public interface IEntityService
+{
+    
 
     /**
      * Loads an entity from the database.
@@ -15,10 +20,12 @@ public interface IEntityService {
      * @param _key the key
      * @return the entity or null if the entity does not exist
      */
-    <TEntity extends IEntity> TEntity getEntity(EntityType _entityType, int _key);
+    <TEntity extends IEntity> TEntity getEntity(EntityType _entityType, Integer _key);
+    
 
     IEntity getEntityAssociatedToKpi(KpiKey _kpiKey);
 
+    
     /**
      * Returns the entity or fail
      *
@@ -26,7 +33,8 @@ public interface IEntityService {
      * @param _entityID the entity ID
      * @return the entity.
      */
-    IEntity getEntityOrFail(EntityType _entityType, int _entityID);
+    IEntity getEntityOrFail(EntityType _entityType, Integer _entityID);
+    
 
     /**
      * Loads a list of entities from the database.

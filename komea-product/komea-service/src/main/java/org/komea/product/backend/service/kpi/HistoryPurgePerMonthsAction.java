@@ -35,8 +35,9 @@ public class HistoryPurgePerMonthsAction implements IHistoryPurgeAction
     
         final DateTime dateTime = new DateTime();
         dateTime.minusMonths(kpi.getEvictionRate());
-        final MeasureCriteria example = new MeasureCriteria();
-        example.createCriteria().andDateLessThan(dateTime.toDate());
-        return measureDAO.deleteByCriteria(example);
+        final MeasureCriteria historyFilter = new MeasureCriteria();
+        historyFilter.createCriteria().andDateLessThan(dateTime.toDate()).andIdKpiEqualTo(kpi.getId());
+        ;
+        return measureDAO.deleteByCriteria(historyFilter);
     }
 }

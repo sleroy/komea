@@ -38,6 +38,7 @@ public class HistoryPurgePerValuesAction implements IHistoryPurgeAction
     
         final MeasureCriteria measureCriteria = new MeasureCriteria();
         measureCriteria.setOrderByClause("date");
+        measureCriteria.createCriteria().andIdKpiEqualTo(kpi.getId());
         final List<Measure> listofMeasures = measureDAO.selectByCriteria(measureCriteria);
         if (listofMeasures.size() > kpi.getEvictionRate()) {
             listofMeasures.subList(kpi.getEvictionRate(), listofMeasures.size());
@@ -50,6 +51,7 @@ public class HistoryPurgePerValuesAction implements IHistoryPurgeAction
         }
         final MeasureCriteria deleteCriteria = new MeasureCriteria();
         deleteCriteria.createCriteria().andIdIn(listofMeasuresId);
+        
         return measureDAO.deleteByCriteria(deleteCriteria);
         
         

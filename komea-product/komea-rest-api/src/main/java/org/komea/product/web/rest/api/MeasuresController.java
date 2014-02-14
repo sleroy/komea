@@ -121,7 +121,7 @@ public class MeasuresController {
         for (KpiKey kpiKey : _kpiKeys) {
             MeasureResultDto measureResult = new MeasureResultDto();
             measureResult.setKpiKey(kpiKey);
-            measureResult.setMeasure(measureHistoryService.getKpiMeasureValue(kpiKey));
+            measureResult.setMeasure(measureHistoryService.getKpiRealTimeValueInMeasureObject(kpiKey));
             measuresResponse.add(measureResult);
         }
         return measuresResponse;
@@ -141,7 +141,7 @@ public class MeasuresController {
 
         LOGGER.info("request /measures/last");
         LOGGER.info("kpi key =  {}", _kpiKey.toString());
-        double value = measureHistoryService.getKpiDoubleValue(_kpiKey);
+        double value = measureHistoryService.getKpiRealTimeValues(_kpiKey);
         LOGGER.info("value = {}", value);
         return value;
     }
