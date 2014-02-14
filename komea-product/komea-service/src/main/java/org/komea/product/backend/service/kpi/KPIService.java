@@ -19,7 +19,7 @@ import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dto.KpiTendancyDto;
-import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.EntityTypeExtended;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.Measure;
@@ -358,14 +358,14 @@ public final class KPIService implements IKPIService {
     }
 
     @Override
-    public List<Kpi> getKpis(final EntityType entityType, final List<String> kpiKeys) {
+    public List<Kpi> getKpis(final EntityTypeExtended entityTypeExtended, final List<String> kpiKeys) {
         final KpiCriteria kpiCriteria = new KpiCriteria();
         if (kpiKeys.isEmpty()) {
-            kpiCriteria.createCriteria().andEntityTypeEqualTo(entityType);
+            kpiCriteria.createCriteria().andEntityTypeEqualTo(entityTypeExtended.getEntityType());
         } else {
             for (final String kpiKey : kpiKeys) {
                 final KpiCriteria.Criteria criteria = kpiCriteria.or();
-                criteria.andKpiKeyEqualTo(kpiKey.trim()).andEntityTypeEqualTo(entityType);
+                criteria.andKpiKeyEqualTo(kpiKey.trim()).andEntityTypeEqualTo(entityTypeExtended.getEntityType());
             }
         }
         final List<Kpi> kpis = kpiDao.selectByCriteria(kpiCriteria);

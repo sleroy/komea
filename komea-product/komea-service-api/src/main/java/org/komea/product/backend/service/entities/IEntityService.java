@@ -4,6 +4,7 @@ import java.util.List;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.EntityTypeExtended;
 import org.komea.product.service.dto.KpiKey;
 
 public interface IEntityService {
@@ -37,7 +38,7 @@ public interface IEntityService {
      */
     <TEntity extends IEntity> List<TEntity> loadEntities(EntityType _entityType, List<Integer> _keys);
 
-    List<BaseEntity> getEntities(final EntityType entityType, final List<String> entityKeys);
+    List<BaseEntity> getEntities(final EntityTypeExtended entityTypeExtended, final List<String> entityKeys);
 
     // /**
     // * This method return the complete person list

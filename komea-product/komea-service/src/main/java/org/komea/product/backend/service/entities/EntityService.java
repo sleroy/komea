@@ -11,6 +11,7 @@ import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.EntityTypeExtended;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
@@ -109,16 +110,20 @@ public final class EntityService implements IEntityService {
     }
 
     @Override
-    public List<BaseEntity> getEntities(final EntityType entityType, final List<String> entityKeys) {
+    public List<BaseEntity> getEntities(final EntityTypeExtended entityTypeExtended, final List<String> entityKeys) {
         final List<BaseEntity> entities = new ArrayList<BaseEntity>(entityKeys.size());
-        switch (entityType) {
+        switch (entityTypeExtended) {
             case PERSON:
                 final List<Person> persons = personService.getPersons(entityKeys);
                 entities.addAll(personService.personsToBaseEntities(persons));
                 break;
-            case PERSON_GROUP:
-                final List<PersonGroup> personGroups = personGroupService.getPersonGroups(entityKeys);
-                entities.addAll(personGroupService.personGroupsToBaseEntities(personGroups));
+            case TEAM:
+                final List<PersonGroup> teams = personGroupService.getPersonGroups(entityKeys);
+                entities.addAll(personGroupService.personGroupsToBaseEntities(teams));
+                break;
+            case DEPARTMENT:
+                final List<PersonGroup> departments = personGroupService.getPersonGroups(entityKeys);
+                entities.addAll(personGroupService.personGroupsToBaseEntities(departments));
                 break;
             case PROJECT:
                 final List<Project> projects = projectService.getProjects(entityKeys);
