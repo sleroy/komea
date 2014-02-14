@@ -1,13 +1,11 @@
-
 package org.komea.product.backend.service.kpi;
 
-
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-
 import javax.annotation.PostConstruct;
-
 import org.apache.commons.lang.StringUtils;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.reactor.KPINotFoundException;
@@ -21,6 +19,7 @@ import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dto.KpiTendancyDto;
+import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.Measure;
@@ -36,39 +35,37 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public final class KPIService implements IKPIService {
-    
+
     @Autowired
     private IMeasureHistoryService measureService;
-    
+
     @Autowired
-    private IEsperEngine           esperEngine;
-    
+    private IEsperEngine esperEngine;
+
     @Autowired
-    private KpiDao                 kpiDAO;
-    
+    private KpiDao kpiDao;
+
     @Autowired
-    private ICronRegistryService   cronRegistry;
-    
-    private static final Logger    LOGGER = LoggerFactory.getLogger(KPIService.class);
-    
+    private ICronRegistryService cronRegistry;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(KPIService.class);
+
     @Autowired
-    private IEntityService         entityService;
-    
+    private IEntityService entityService;
+
     public KPIService() {
-    
+
         super();
     }
-    
+
     /**
      * Creates of update the history job of a KPI
-     * 
-     * @param _kpi
-     *            the kpi
-     * @param _entity
-     *            its entity.
+     *
+     * @param _kpi the kpi
+     * @param _entity its entity.
      */
     public void createOrUpdateHistoryCronJob(final Kpi _kpi, final IEntity _entity) {
-    
+
         if (StringUtils.isEmpty(_kpi.getCronExpression())) {
             return;
         }
@@ -82,22 +79,22 @@ public final class KPIService implements IKPIService {
             properties.put("service", this);
             cronRegistry.registerCronTask(kpiCronName, _kpi.getCronExpression(), KpiHistoryJob.class, properties);
         }
-        
+
     }
-    
+
     @Override
     public Kpi findKPI(final KpiKey _kpiKey) {
-    
+
         final KpiCriteria kpiCriteria = new KpiCriteria();
         kpiCriteria.createCriteria().andKpiKeyEqualTo(_kpiKey.getKpiName());
         if (_kpiKey.verifiyIfIsAssociateToEntity()) {
             kpiCriteria.createCriteria().andEntityIDEqualTo(_kpiKey.getEntityID());
             kpiCriteria.createCriteria().andEntityTypeEqualTo(_kpiKey.getEntityType());
         }
-        return CollectionUtil.singleOrNull(kpiDAO.selectByExampleWithBLOBs(kpiCriteria));
-        
+        return CollectionUtil.singleOrNull(kpiDao.selectByExampleWithBLOBs(kpiCriteria));
+
     }
-    
+
     // public <TEntity extends IEntity> IKPIFacade<TEntity> findKPIFacade(final KpiKey _kpiKey)
     // throws KPINotFoundException {
     //
@@ -106,7 +103,7 @@ public final class KPIService implements IKPIService {
     // final KpiCriteria criteria = new KpiCriteria();
     // criteria.createCriteria().andKpiKeyEqualTo(_kpiKey.getKpiName());
     // final Kpi requestedKpi =
-    // CollectionUtil.singleOrNull(kpiDAO.selectByExampleWithBLOBs(criteria));
+    // CollectionUtil.singleOrNull(kpiDao.selectByExampleWithBLOBs(criteria));
     // final IEntity entity = entityService.getEntityAssociatedToKpi(_kpiKey);
     // if (requestedKpi == null) { throw new KPINotFoundException(entity, _kpiKey.getKpiName()); }
     // final IEPMetric metricWrapperOverEsperQuery =
@@ -116,10 +113,9 @@ public final class KPIService implements IKPIService {
     //
     // }
     //
-    
     @Override
     public Kpi findKPIOrFail(final KpiKey _kpiKey) {
-    
+
         final IEntity entityAssociatedToKpi = entityService.getEntityAssociatedToKpi(_kpiKey);
         final Kpi findKPI = findKPI(_kpiKey);
         if (findKPI == null) {
@@ -127,176 +123,173 @@ public final class KPIService implements IKPIService {
         }
         return findKPI;
     }
-    
+
     public IEPMetric findMeasure(final String _measureName) {
-    
+
         return new EPMetric(esperEngine.getStatementOrFail(_measureName));
-        
+
     }
-    
+
     public ICronRegistryService getCronRegistry() {
-    
+
         return cronRegistry;
     }
-    
+
     public IEntityService getEntityService() {
-    
+
         return entityService;
     }
-    
+
     /**
      * @return the esperEngine
      */
     public final IEsperEngine getEsperEngine() {
-    
+
         return esperEngine;
     }
-    
+
     @Override
     public List<Measure> getHistory(final KpiKey _kpiKey) {
-    
+
         final IEntity entityAssociatedToKpi = entityService.getEntityAssociatedToKpi(_kpiKey);
-        
+
         return measureService.getMeasures(HistoryKey.of(findKPIOrFail(_kpiKey), entityAssociatedToKpi));
     }
-    
+
     @Override
     public List<Measure> getHistory(final KpiKey _kpiKey, final MeasureCriteria _criteria) {
-    
+
         final IEntity entity = entityService.getEntityAssociatedToKpi(_kpiKey);
         return measureService.getMeasures(HistoryKey.of(findKPIOrFail(_kpiKey), entity), _criteria);
     }
-    
+
     @Override
     public List<Measure> getHistory(final KpiKey _kpiKey, final int _nbRow) {
-    
+
         final IEntity entity = entityService.getEntityAssociatedToKpi(_kpiKey);
         return measureService.getLastNMeasures(HistoryKey.of(findKPIOrFail(_kpiKey), entity), _nbRow);
     }
-    
+
     public KpiDao getKpiDAO() {
-    
-        return kpiDAO;
+
+        return kpiDao;
     }
-    
+
     @Override
     public double getKpiDoubleValue(final KpiKey _kpiKey) throws KPINotFoundException {
-    
+
         return getKpiValue(_kpiKey).getDoubleValue();
-        
+
     }
-    
+
     @Override
     public Measure getKpiMeasureValue(final KpiKey _kpiKey) throws KPINotFoundException {
-    
+
         final double kpiDoubleValue = getKpiDoubleValue(_kpiKey);
         final Measure measure = initializeMeasureFromKPI(_kpiKey);
         measure.setValue(kpiDoubleValue);
         return measure;
     }
-    
+
     @Override
     public KpiTendancyDto getKpiTendancy(final KpiKey _measureKey) {
-    
+
         // TODO Auto-generated method stub
         return new KpiTendancyDto(0, 0, _measureKey);
     }
-    
+
     @Override
     public IEPMetric getKpiValue(final KpiKey _kpiKey) {
-    
+
         final IEntity entity = entityService.getEntityAssociatedToKpi(_kpiKey);
         final Kpi findKPIOrFail = findKPIOrFail(_kpiKey);
         return new EPMetric(esperEngine.getStatementOrFail(findKPIOrFail.computeKPIEsperKey(entity)));
-        
+
     }
-    
+
     @Override
     public List<Kpi> getListOfKpisForEntity(final IEntity _entity) {
-    
+
         final List<Kpi> kpis = new ArrayList<Kpi>();
         final KpiCriteria allKpisFromEntityType = new KpiCriteria();
         allKpisFromEntityType.createCriteria().andEntityTypeEqualTo(_entity.entityType()).andEntityIDIsNull();
-        
-        kpis.addAll(kpiDAO.selectByExampleWithBLOBs(allKpisFromEntityType));
+
+        kpis.addAll(kpiDao.selectByExampleWithBLOBs(allKpisFromEntityType));
         final KpiCriteria allKpisOnlyEntity = new KpiCriteria();
         allKpisOnlyEntity.createCriteria().andEntityTypeEqualTo(_entity.entityType()).andEntityIDEqualTo(_entity.getId());
-        kpis.addAll(kpiDAO.selectByExampleWithBLOBs(allKpisOnlyEntity));
+        kpis.addAll(kpiDao.selectByExampleWithBLOBs(allKpisOnlyEntity));
         return kpis;
     }
-    
+
     /**
      * @return the measureService
      */
     public final IMeasureHistoryService getMeasureService() {
-    
+
         return measureService;
     }
-    
+
     @PostConstruct
     public void init() {
-    
+
         //
-        
     }
-    
+
     @Override
     public List<Kpi> listAllKpis() {
-    
-        final List<Kpi> kpiList = kpiDAO.selectByCriteria(new KpiCriteria());
+
+        final List<Kpi> kpiList = kpiDao.selectByCriteria(new KpiCriteria());
         return kpiList;
     }
-    
+
     @Transactional
     @Override
     public void saveOrUpdate(final Kpi _kpi) {
-    
+
         if (_kpi.getId() == null) {
             LOGGER.info("Saving new KPI : {}", _kpi.getKpiKey());
-            kpiDAO.insert(_kpi);
+            kpiDao.insert(_kpi);
         } else {
             LOGGER.info("KPI {} updated", _kpi.getKpiKey());
-            kpiDAO.updateByPrimaryKey(_kpi);
+            kpiDao.updateByPrimaryKey(_kpi);
         }
     }
-    
+
     public void setCronRegistry(final ICronRegistryService _cronRegistry) {
-    
+
         cronRegistry = _cronRegistry;
     }
-    
+
     public void setEntityService(final IEntityService _entityService) {
-    
+
         entityService = _entityService;
     }
-    
+
     /**
-     * @param _esperEngine
-     *            the esperEngine to set
+     * @param _esperEngine the esperEngine to set
      */
     public final void setEsperEngine(final IEsperEngine _esperEngine) {
-    
+
         esperEngine = _esperEngine;
     }
-    
+
     public void setKpiDAO(final KpiDao _kpiDAO) {
-    
-        kpiDAO = _kpiDAO;
+
+        kpiDao = _kpiDAO;
     }
-    
+
     /**
-     * @param _measureService
-     *            the measureService to set
+     * @param _measureService the measureService to set
      */
     public final void setMeasureService(final IMeasureHistoryService _measureService) {
-    
+
         measureService = _measureService;
     }
-    
+
     @Transactional
     @Override
     public void storeValueInHistory(final KpiKey _kpiKey) {
-    
+
         final Measure measure = initializeMeasureFromKPI(_kpiKey);
         final IEntity entityAssociatedToKpi = entityService.getEntityAssociatedToKpi(_kpiKey);
         final Kpi findKPI = findKPIOrFail(_kpiKey);
@@ -304,29 +297,29 @@ public final class KPIService implements IKPIService {
         measureService.storeMeasure(measure);
         final int purgeHistory = measureService.buildHistoryPurgeAction(findKPI).purgeHistory();
         LOGGER.debug("Purge history : {} items", purgeHistory);
-        
+
     }
-    
+
     @Override
     public void synchronizeEntityWithKomea(final IEntity _entity) {
-    
+
         LOGGER.info("Updating / Refreshing Kpi statements of entity {}", _entity);
         final List<Kpi> listOfKpisOfEntity = getListOfKpisForEntity(_entity);
-        
+
         LOGGER.info("EntityWithKPI {} has {} kpi", _entity, listOfKpisOfEntity.size());
         for (final Kpi kpi : listOfKpisOfEntity) {
             final String computeKPIEsperKey = kpi.computeKPIEsperKey(_entity);
-            
+
             esperEngine.createOrUpdateEPLQuery(new QueryDefinition(kpi, computeKPIEsperKey));
             createOrUpdateHistoryCronJob(kpi, _entity);
         }
-        
+
     }
-    
+
     @Transactional
     @Override
     public void updateKPIOfEntity(final IEntity _entity, final List<Kpi> listOfKpis) {
-    
+
         // Ignore silently global kpi...
         for (final Kpi kpi : listOfKpis) {
             if (kpi.getEntityID() == null) {
@@ -334,14 +327,14 @@ public final class KPIService implements IKPIService {
             }
             saveOrUpdate(kpi);
         }
-        
+
     }
-    
+
     private Measure initializeMeasureFromKPI(final KpiKey _kpiKey) {
-    
+
         final Measure measure = new Measure();
         measure.setDate(new Date());
-        
+
         switch (_kpiKey.getEntityType()) {
             case PERSON:
                 measure.setIdPerson(_kpiKey.getEntityID());
@@ -355,13 +348,35 @@ public final class KPIService implements IKPIService {
             default:
                 // TODO:: Add code for default statement
                 throw new UnsupportedOperationException("Not implemented default statement");
-                
+
         }
         final Kpi findKPI = findKPI(_kpiKey);
-        
+
         measure.setIdKpi(findKPI.getId());
-        
+
         return measure;
     }
-    
+
+    @Override
+    public List<Kpi> getKpis(final EntityType entityType, final List<String> kpiKeys) {
+        final KpiCriteria kpiCriteria = new KpiCriteria();
+        if (kpiKeys.isEmpty()) {
+            kpiCriteria.createCriteria().andEntityTypeEqualTo(entityType);
+        } else {
+            for (final String kpiKey : kpiKeys) {
+                final KpiCriteria.Criteria criteria = kpiCriteria.or();
+                criteria.andKpiKeyEqualTo(kpiKey.trim()).andEntityTypeEqualTo(entityType);
+            }
+        }
+        final List<Kpi> kpis = kpiDao.selectByCriteria(kpiCriteria);
+        Collections.sort(kpis, new Comparator<Kpi>() {
+
+            @Override
+            public int compare(Kpi o1, Kpi o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        return kpis;
+    }
+
 }

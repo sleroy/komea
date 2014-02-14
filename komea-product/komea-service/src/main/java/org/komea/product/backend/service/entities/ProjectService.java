@@ -1,9 +1,8 @@
-
 package org.komea.product.backend.service.entities;
 
-
+import com.google.common.collect.Lists;
+import java.util.ArrayList;
 import java.util.List;
-
 import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.dao.HasProjectPersonDao;
 import org.komea.product.database.dao.HasProjectPersonGroupDao;
@@ -13,7 +12,9 @@ import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dao.TagDao;
+import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.dto.ProjectDto;
+import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.Customer;
 import org.komea.product.database.model.HasProjectPersonCriteria;
@@ -33,50 +34,49 @@ import org.komea.product.database.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Lists;
-
 @Service
 public final class ProjectService implements IProjectService {
-    
+
     @Autowired
-    private PersonDao                personDAO;
-    
+    private PersonDao personDAO;
+
     @Autowired
-    private ProjectDao               projectDao;
-    
+    private ProjectDao projectDao;
+
     @Autowired
-    private HasProjectPersonDao      projectPersonDAO;
-    
+    private HasProjectPersonDao projectPersonDAO;
+
     @Autowired
-    private HasProjectTagDao         projectTagsDAO;
-    
+    private HasProjectTagDao projectTagsDAO;
+
     @Autowired
-    private TagDao                   tagDAO;
-    
+    private TagDao tagDAO;
+
     @Autowired
-    private LinkDao                  linkDAO;
-    
+    private LinkDao linkDAO;
+
     @Autowired
-    private CustomerDao              customerDAO;
-    
+    private CustomerDao customerDAO;
+
     @Autowired
-    private IPersonGroupService      groupService;
-    
+    private IPersonGroupService groupService;
+
     @Autowired
     private HasProjectPersonGroupDao projectPersonGroupDAO;
-    
+
     @Autowired
-    private PersonGroupDao           personGroupDao;
-    
+    private PersonGroupDao personGroupDao;
+
     /**
      * (non-Javadoc)
-     * 
-     * @see org.komea.product.backend.service.entities.IProjectService#getAllProjects()
+     *
+     * @see
+     * org.komea.product.backend.service.entities.IProjectService#getAllProjects()
      */
     @Override
     @Autowired
     public List<ProjectDto> getAllProjects() {
-    
+
         ProjectCriteria request = new ProjectCriteria();
         List<Project> projects = projectDao.selectByCriteria(request);
         List<ProjectDto> projectDTOs = Lists.newArrayList();
@@ -95,17 +95,19 @@ public final class ProjectService implements IProjectService {
             projectDto.addLinkList(getProjectLinks(project.getId()));
             projectDTOs.add(projectDto);
         }
-        
+
         return projectDTOs;
     }
+
     /**
      * (non-Javadoc)
-     * 
-     * @see org.komea.product.backend.service.entities.IProjectService#getPersonsAssociateToProject(int)
+     *
+     * @see
+     * org.komea.product.backend.service.entities.IProjectService#getPersonsAssociateToProject(int)
      */
     @Override
     public List<Person> getPersonsAssociateToProject(final int _projectID) {
-    
+
         List<Person> personList = Lists.newArrayList();
         HasProjectPersonCriteria criteria = new HasProjectPersonCriteria();
         criteria.createCriteria().andIdProjectEqualTo(_projectID);
@@ -113,34 +115,37 @@ public final class ProjectService implements IProjectService {
         for (HasProjectPersonKey hasProjectPersonKey : selection) {
             Person person = personDAO.selectByPrimaryKey(hasProjectPersonKey.getIdPerson());
             if (person != null) {
-                
+
                 personList.add(person);
             }
         }
         return personList;
     }
+
     /**
      * (non-Javadoc)
-     * 
-     * @see org.komea.product.backend.service.entities.IProjectService#getProjectLinks(java.lang.Integer)
+     *
+     * @see
+     * org.komea.product.backend.service.entities.IProjectService#getProjectLinks(java.lang.Integer)
      */
     @Override
     public List<Link> getProjectLinks(final Integer _projectId) {
-    
+
         LinkCriteria criteria = new LinkCriteria();
         criteria.createCriteria().andIdProjectEqualTo(_projectId);
-        
+
         return linkDAO.selectByCriteria(criteria);
     }
-    
+
     /**
      * (non-Javadoc)
-     * 
-     * @see org.komea.product.backend.service.entities.IProjectService#getProjectTags(java.lang.Integer)
+     *
+     * @see
+     * org.komea.product.backend.service.entities.IProjectService#getProjectTags(java.lang.Integer)
      */
     @Override
     public List<String> getProjectTags(final Integer _projectId) {
-    
+
         List<String> tags = Lists.newArrayList();
         HasProjectTagCriteria criteria = new HasProjectTagCriteria();
         criteria.createCriteria().andIdProjectEqualTo(_projectId);
@@ -150,19 +155,20 @@ public final class ProjectService implements IProjectService {
             if (tag != null) {
                 tags.add(tag.getName());
             }
-            
+
         }
         return tags;
     }
-    
+
     /**
      * (non-Javadoc)
-     * 
-     * @see org.komea.product.backend.service.entities.IProjectService#getTeamsAssociateToProject(java.lang.Integer)
+     *
+     * @see
+     * org.komea.product.backend.service.entities.IProjectService#getTeamsAssociateToProject(java.lang.Integer)
      */
     @Override
     public List<PersonGroup> getTeamsAssociateToProject(final Integer _projectID) {
-    
+
         List<PersonGroup> groupList = Lists.newArrayList();
         HasProjectPersonGroupCriteria criteria = new HasProjectPersonGroupCriteria();
         criteria.createCriteria().andIdProjectEqualTo(_projectID);
@@ -175,5 +181,30 @@ public final class ProjectService implements IProjectService {
         }
         return groupList;
     }
-    
+
+    @Override
+    public List<Project> getProjects(final List<String> projectKeys) {
+        final ProjectCriteria projectCriteria = new ProjectCriteria();
+        if (projectKeys.isEmpty()) {
+            projectCriteria.createCriteria();
+        } else {
+            for (final String entityKey : projectKeys) {
+                final ProjectCriteria.Criteria criteria = projectCriteria.or();
+                criteria.andProjectKeyEqualTo(entityKey);
+            }
+        }
+        return projectDao.selectByCriteria(projectCriteria);
+    }
+
+    @Override
+    public List<BaseEntity> projectsToBaseEntities(List<Project> projects) {
+        final List<BaseEntity> entities = new ArrayList<BaseEntity>(projects.size());
+        for (final Project project : projects) {
+            final BaseEntity entity = new BaseEntity(EntityType.PROJECT, project.getId(),
+                    project.getProjectKey(), project.getName(), project.getDescription());
+            entities.add(entity);
+        }
+        return entities;
+    }
+
 }

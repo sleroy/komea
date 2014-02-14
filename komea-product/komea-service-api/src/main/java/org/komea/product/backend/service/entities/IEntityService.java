@@ -1,50 +1,44 @@
-
 package org.komea.product.backend.service.entities;
 
-
 import java.util.List;
-
 import org.komea.product.database.api.IEntity;
+import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.service.dto.KpiKey;
 
 public interface IEntityService {
-    
+
     /**
      * Loads an entity from the database.
-     * 
-     * @param _entityType
-     *            the entity type
-     * @param _key
-     *            the key
+     *
+     * @param _entityType the entity type
+     * @param _key the key
      * @return the entity or null if the entity does not exist
      */
     <TEntity extends IEntity> TEntity getEntity(EntityType _entityType, int _key);
-    
+
     IEntity getEntityAssociatedToKpi(KpiKey _kpiKey);
-    
+
     /**
      * Returns the entity or fail
-     * 
-     * @param _entityType
-     *            the entity type
-     * @param _entityID
-     *            the entity ID
+     *
+     * @param _entityType the entity type
+     * @param _entityID the entity ID
      * @return the entity.
      */
     IEntity getEntityOrFail(EntityType _entityType, int _entityID);
-    
+
     /**
      * Loads a list of entities from the database.
-     * 
-     * @param _entityType
-     *            the entity type
-     * @param _keys
-     *            the keys
+     *
+     * @param _entityType the entity type
+     * @param _keys the keys
      * @return the entity
      */
     <TEntity extends IEntity> List<TEntity> loadEntities(EntityType _entityType, List<Integer> _keys);
-    
+
+    List<BaseEntity> getEntities(final EntityType entityType, final List<String> entityKeys);
+
     // /**
     // * This method return the complete person list
     // *
@@ -72,5 +66,4 @@ public interface IEntityService {
     // * @return the department list
     // */
     // List<TeamDto> getAllTeams();
-    
 }
