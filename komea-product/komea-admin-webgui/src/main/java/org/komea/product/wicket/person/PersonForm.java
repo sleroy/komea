@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -15,7 +14,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.time.Duration;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonRoleDao;
 import org.komea.product.database.dto.PersonDto;
@@ -85,7 +83,7 @@ public final class PersonForm extends Form<PersonDto>
                         new ChoiceRenderer<PersonRole>("name"));
         add(dropDownChoice);
         
-        AjaxFormValidatingBehavior.addToAllFormComponents(this, "onkeyup", Duration.ONE_SECOND);
+        // AjaxFormValidatingBehavior.addToAllFormComponents(this, "onkeyup", Duration.ONE_SECOND);
         
         // add a button that can be used to submit the form via ajax
         add(new AjaxButton("submit", this)

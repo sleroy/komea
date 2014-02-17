@@ -6,9 +6,9 @@
 <meta content="Komea administration site" name="description"></meta>
 <meta content="Komea" name="author"></meta>
 <title>Komea Administration</title>
-<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
-<link rel="stylesheet" href="/static/css/style.css" type="text/css"></link>
-<link rel="stylesheet" type="text/css" href="/static/js/ui/themes/base/jquery-ui.css" />
+<link rel="stylesheet" href="../../../../../../../main/webapp/static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
+<link rel="stylesheet" href="../../../../../../../main/webapp/static/css/style.css" type="text/css"></link>
+<link rel="stylesheet" type="text/css" href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
 </head>
 <body>
 	<wicket:extend>
@@ -25,11 +25,14 @@
 				</thead>
 				<tbody>
 					<tr wicket:id="events">
-						<td><img src="http://dummyimage.com/16/ff00ff/000000.png" wicket:id="icon" width="16" height="16"></img> <a href="" wicket:id="url"><i class="icon-star-empty"></i></a></td>
+						<td><img src="http://dummyimage.com/16/ff00ff/000000.png" wicket:id="icon" width="16" height="16"></img></td>
 						<td><strong wicket:id="project">Project XYZ</strong></td>
-						<td><span class="label pull-right" wicket:id="severity">Notifications</span></td>
-						<td><strong wicket:id="message"">Message body goes here</strong></td>
-						<td><strong wicket:id="date"">11:23 PM</strong></td>
+						<td><span wicket:id="severity">BLOCKER</span></td>
+						<td><a href="" wicket:id="url"><span wicket:id="message">Build started for Project XYZ</span></a><br /> Users associated :<br />
+							<ul wicket:id="users">
+								<li wicket:id="useritem">sleroy</li>
+							</ul> Group associated : <b wicket:id="group"></b></td>
+						<td><span wicket:id="date">11:23 PM</span></td>
 					</tr>
 				</tbody>
 			</table>

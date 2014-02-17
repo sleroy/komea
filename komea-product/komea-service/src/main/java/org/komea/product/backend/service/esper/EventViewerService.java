@@ -21,8 +21,9 @@ public class EventViewerService implements IEventViewerService
 {
     
     
-    private static final String DAY_EVENTS  = "DAY_EVENTS";
-    private static final String HOUR_EVENTS = "HOUR_EVENTS";
+    private static final String DAY_EVENTS     = "DAY_EVENTS";
+    private static final String HOUR_EVENTS    = "HOUR_EVENTS";
+    private static final String LAST100_EVENTS = "LAST100_EVENTS";
     @Autowired
     private IEsperEngine        esperService;
     
@@ -67,14 +68,26 @@ public class EventViewerService implements IEventViewerService
     }
     
     
+    @Override
+    public List<IEvent> getLastEvents() {
+    
+    
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    
     @PostConstruct
     public void initialize() {
     
     
-        esperService.createEPL(new QueryDefinition("SELECT * FROM  Event.win:time(1 day)",
-                DAY_EVENTS));
-        esperService.createEPL(new QueryDefinition("SELECT * FROM  Event.win:time(1 hour)",
-                HOUR_EVENTS));
+        esperService.createEPL(new QueryDefinition(
+                "SELECT * FROM  Event.win:time(1 day) ORDER BY date DESC", DAY_EVENTS));
+        esperService.createEPL(new QueryDefinition(
+                "SELECT * FROM  Event.win:time(1 hour) ORDER BY date DESC", HOUR_EVENTS));
+        esperService.createEPL(new QueryDefinition(
+                "SELECT * FROM  Event.win:time(1 hour) ORDER BY date DESC LIMIT 100",
+                LAST100_EVENTS));
     }
     
     

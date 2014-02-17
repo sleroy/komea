@@ -6,10 +6,10 @@
 <meta content="Komea administration site" name="description"></meta>
 <meta content="Komea" name="author"></meta>
 <title>Komea Administration</title>
-<link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
+<link rel="stylesheet" href="static/bootstrap/css/bootstrap.css" type="text/css" media="screen"></link>
+<link rel="stylesheet" href="static/bootstrap/css/bootstrap-theme.css" type="text/css" media="screen"></link>
 <link rel="stylesheet" href="static/css/style.css" type="text/css"></link>
 <link rel="stylesheet" href="static/images/sprites/sprites.css" type="text/css"></link>
-<!-- //<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/cupertino/jquery-ui.css"> -->
 <link rel="stylesheet" type="text/css" href="static/js/ui/themes/base/jquery-ui.css" />
 <!-- Tablesorter: required for bootstrap -->
 <!-- jQuery -->
@@ -51,7 +51,7 @@
 	</header>
 	<div class="container-full">
 		<div class="row">
-			<div class="col-sm-2 col-md-2">
+			<div class="col-sm-2 col-md-2">			
 				<div class="panel-group" id="accordion">
 					<div class="panel panel-default">
 						<div class="panel-heading">
@@ -60,13 +60,25 @@
 							</h4>
 						</div>
 						<div id="collapseOne" class="panel-collapse collapse in">
-							<ul class="list-group">
-								<li class="list-group-item"><a href="p/projects">Manage Projects</a></li>
-								<li class="list-group-item"><a href="p/teams">Manage Teams</a></li>
-								<li class="list-group-item"><a href="p/departments">Manage Departments</a></li>
-								<li class="list-group-item"><a href="p/customers">Manage Customers</a></li>
-								<li class="list-group-item"><a href="p/users">Manage Users</a></li>
-							</ul>
+							<div class="panel-body">
+								<table class="table">
+									<tr>
+										<td><span class="glyphicon glyphicon-list-alt "></span><a href="p/projects">Projects</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon  cicon-users2 "></span><a href="p/teams"> Teams</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon cicon-users text-info"></span><a href="p/departments">Departments</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon glyphicon-usd "></span><a href="p/customers">Manage Customers</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon cicon-user "></span><a href="p/users">Manage Users</a></td>
+									</tr>
+								</table>
+							</div>
 						</div>
 					</div>
 					<div class="panel panel-default">
@@ -75,11 +87,17 @@
 								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><span class="glyphicon cicon-stats"> </span>KPI and Metrics</a>
 							</h4>
 						</div>
-						<div id="collapseTwo" class="panel-collapse collapse in">
-							<ul class="list-group">
-								<li class="list-group-item"><a href="p/alerts">Alerts</a></li>
-								<li class="list-group-item"><a href="p/kpis">KPI and metrics</a></li>
-							</ul>
+						<div id="collapseTwo" class="panel-collapse collapse">
+							<div class="panel-body">
+								<table class="table">
+									<tr>
+										<td><span class="glyphicon glyphicon-pencil "></span><a href="p/alerts">Alerts</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon glyphicon-flash "></span><a href="p/kpis">KPI and metrics</a></td>
+									</tr>
+								</table>
+							</div>
 						</div>
 					</div>
 					<div class="panel panel-default">
@@ -88,12 +106,20 @@
 								<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"><span class="glyphicon cicon-tree"> </span>Server administration</a>
 							</h4>
 						</div>
-						<div id="collapseThree" class="panel-collapse collapse in">
-							<ul class="list-group">
-								<li class="list-group-item"><a href="p/ldap">LDAP configuration</a></li>
-								<li class="list-group-item"><a href="p/plugins">Plugins</a></li>
-								<li class="list-group-item"><a href="p/settings">Server settings</a></li>
-							</ul>
+						<div id="collapseThree" class="panel-collapse collapse">
+							<div class="panel-body">
+								<table class="table">
+									<tr>
+										<td><span class="glyphicon glyphicon-pencil "></span><a href="p/ldap">LDAP configuration</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon glyphicon-flash "></span><a href="p/plugins">Plugins</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon glyphicon-th-list "></span><a href="p/settings">Server settings</a></td>
+									</tr>
+								</table>
+							</div>
 						</div>
 					</div>
 					<div class="panel panel-default">
@@ -102,12 +128,23 @@
 								<a data-toggle="collapse" data-parent="#accordion" href="#collapseFour"><span class="glyphicon cicon-wrench"> </span>Server maintenance</a>
 							</h4>
 						</div>
-						<div id="collapseFour" class="panel-collapse collapse in">
-							<ul class="list-group">
-								<li class="list-group-item"><a href="p/viewlog">Log files</a></li>
-								<li class="list-group-item"><a href="p/stats">Statistics</a></li>
-								<li class="list-group-item"><a href="p/cronpage">Cron jobs</a></li>
-							</ul>
+						<div id="collapseFour" class="panel-collapse collapse">
+							<div class="panel-body">
+							<table class="table">
+									<tr>
+										<td><span class="glyphicon glyphicon-pencil "></span><a href="p/viewlog">Log files</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon cicon-bars "></span><a href="p/stats">Statistics</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon glyphicon-eye-open "></span><a href="p/events">Events</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon glyphicon-repeat "></span><a href="p/cronpage">Cron jobs</a></td>
+									</tr>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -129,7 +166,7 @@
 		<p>&copy; Komea.org</p>
 		<script src="static/js/jquery.js"></script>
 		<script src="static/js/ui/jquery.js"></script>
-		<script src="static/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+		<script src="static/bootstrap/js/bootstrap.js" type="text/javascript"></script>
 		<script src="static/tablesorter/js/jquery.tablesorter.js"></script>
 		<script src="static/tablesorter/js/jquery.tablesorter.widgets.js"></script>
 		<script src="static/tablesorter/addons/pager/jquery.tablesorter.pager.js"></script>

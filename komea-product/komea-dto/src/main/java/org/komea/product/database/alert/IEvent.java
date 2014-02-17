@@ -3,6 +3,7 @@ package org.komea.product.database.alert;
 
 
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ import org.komea.product.database.model.Provider;
 
 
 
-public interface IEvent
+public interface IEvent extends Serializable
 {
     
     
