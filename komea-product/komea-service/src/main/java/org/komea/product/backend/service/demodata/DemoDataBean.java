@@ -7,6 +7,7 @@ import java.util.Random;
 
 import javax.annotation.PostConstruct;
 
+import org.komea.product.backend.auth.IPasswordEncoder;
 import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.esper.IEventPushService;
@@ -73,6 +74,10 @@ public class DemoDataBean
     private EventTypeDao      eventTypeDAO;
     
     
+    @Autowired
+    private IPasswordEncoder  encoder;
+    
+    
     
     public DemoDataBean() {
     
@@ -106,6 +111,7 @@ public class DemoDataBean
             personRoleDao.insert(administrator);
         }
         
+        
         final PersonRole userRole = new PersonRole(null, "Standard user");
         prCriteria = new PersonRoleCriteria();
         prCriteria.createCriteria().andNameEqualTo("Standard user");
@@ -113,37 +119,27 @@ public class DemoDataBean
             personRoleDao.insert(userRole);
         }
         
-        final Person record =
+        
+        final Person obiwan =
                 new Person(null, null, null, "Obiwan", "Kenobi", "obiwan@lightforce.net", "obiwan",
-                        "");
-        record.setIdPersonRole(userRole.getId());
-        PersonCriteria pCriteria = new PersonCriteria();
-        pCriteria.createCriteria().andLoginEqualTo("obiwan");
-        if (personDAO.countByCriteria(pCriteria) == 0) {
-            personDAO.insert(record);
-            
-        }
+                        encoder.encodePassword("obiwan"));
+        
+        createUser(obiwan, userRole);
+        
+        final Person admin =
+                new Person(null, null, null, "admin", "admin", "admiweb@tocea.com", "admin",
+                        encoder.encodePassword("admin"));
+        createUser(admin, administrator);
         
         final Person record2 =
-                new Person(null, null, null, "Dark", "Maul", "darkmaul@darkforce.net", "dmaul", "");
-        record2.setIdPersonRole(userRole.getId());
-        pCriteria = new PersonCriteria();
-        pCriteria.createCriteria().andLoginEqualTo("dmaul");
-        if (personDAO.countByCriteria(pCriteria) == 0) {
-            personDAO.insert(record2);
-            
-        }
+                new Person(null, null, null, "Dark", "Maul", "darkmaul@darkforce.net", "dmaul",
+                        encoder.encodePassword("dmaul"));
+        createUser(record2, userRole);
         
         final Person record3 =
                 new Person(null, null, null, "Luke", "Skywalker", "lskywalker@lightforce.net",
-                        "lskywalker", "");
-        record3.setIdPersonRole(userRole.getId());
-        pCriteria = new PersonCriteria();
-        pCriteria.createCriteria().andLoginEqualTo("lskywalker");
-        if (personDAO.countByCriteria(pCriteria) == 0) {
-            personDAO.insert(record3);
-            
-        }
+                        "lskywalker", encoder.encodePassword("lskywalker"));
+        createUser(record3, userRole);
         
         final PersonGroup department = new PersonGroup();
         department.setName("Department ABC");
@@ -273,6 +269,20 @@ public class DemoDataBean
     
     
         personRoleDao = _personRoleDao;
+    }
+    
+    
+    private Person createUser(final Person record, final PersonRole userRole) {
+    
+    
+        record.setIdPersonRole(userRole.getId());
+        final PersonCriteria pCriteria = new PersonCriteria();
+        pCriteria.createCriteria().andLoginEqualTo(record.getLogin());
+        if (personDAO.countByCriteria(pCriteria) == 0) {
+            personDAO.insert(record);
+            
+        }
+        return record;
     }
     
 }

@@ -72,6 +72,7 @@ public class WicketApplication extends WebApplication
         mountPage("/users", PersonPage.class);
         mountPage("/useradd", PersonAddPage.class);
         mountPage("/events", EventsPage.class);
+        
         getExceptionSettings().setThreadDumpStrategy(ThreadDumpStrategy.ALL_THREADS);
         getExceptionSettings()
                 .setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_EXCEPTION_PAGE);

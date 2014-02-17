@@ -56,13 +56,13 @@ public @interface EventTypeDef {
     /**
      * This field describes the key of the alert.
      */
-    String key();
+    String key() default "";
     
     
     /**
      * This field describes the alert name;
      */
-    String name();
+    String name() default "";
     
     
     /**

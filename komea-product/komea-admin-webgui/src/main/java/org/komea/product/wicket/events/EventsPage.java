@@ -73,6 +73,7 @@ public class EventsPage extends LayoutPage
             _item.add(link);
             link.add(new Label("message", event.getMessage()));
             _item.add(new Label("severity", event.getEventType().getName()));
+            
             _item.add(new Label("icon", event.getProvider().getIcon()));
             
             final PrettyTime prettyTime = new PrettyTime();
