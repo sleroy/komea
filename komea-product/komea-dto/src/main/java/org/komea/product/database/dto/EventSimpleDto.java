@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.hibernate.validator.constraints.NotEmpty;
 
 public class EventSimpleDto implements Serializable {
 
@@ -23,7 +22,7 @@ public class EventSimpleDto implements Serializable {
     private String provider;
 
     @NotNull
-    @NotEmpty
+    @Size(min = 1)
     private String message = "";
 
     @NotNull
