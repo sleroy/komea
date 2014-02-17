@@ -1,5 +1,6 @@
 package org.komea.product.backend.service.measure;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MeasureService implements IMeasureService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MeasureService.class);
+
     @Autowired
     private MeasureDao measureDao;
 
@@ -37,14 +39,18 @@ public class MeasureService implements IMeasureService {
         if (kpis.isEmpty() || entities.isEmpty()) {
             return Collections.EMPTY_LIST;
         }
-        final MeasureCriteria measureCriteria = new MeasureCriteria();
         final Date from = searchMeasuresDto.getFromDate();
         final Date to = searchMeasuresDto.getToDate();
+        final Integer limit = searchMeasuresDto.getNbMeasures();
+        final RowBounds rowBounds = new RowBounds(0, limit == null ? Integer.MAX_VALUE : limit);
+        final List<Measure> measures = new ArrayList<Measure>();
         for (final IEntity entity : entities) {
             final Integer idEntity = entity.getId();
             for (final Kpi kpi : kpis) {
                 final Integer idKpi = kpi.getId();
-                final MeasureCriteria.Criteria criteria = measureCriteria.or();
+                final MeasureCriteria measureCriteria = new MeasureCriteria();
+                measureCriteria.setOrderByClause("date DESC");
+                final MeasureCriteria.Criteria criteria = measureCriteria.createCriteria();
                 criteria.andIdKpiEqualTo(idKpi);
                 if (from != null) {
                     criteria.andDateGreaterThanOrEqualTo(from);
@@ -64,12 +70,9 @@ public class MeasureService implements IMeasureService {
                         criteria.andIdPersonGroupEqualTo(idEntity);
                         break;
                 }
+                measures.addAll(measureDao.selectByCriteriaWithRowbounds(measureCriteria, rowBounds));
             }
         }
-        final Integer limit = searchMeasuresDto.getNbMeasures();
-        final RowBounds rowBounds = new RowBounds(0, limit == null ? Integer.MAX_VALUE : limit);
-        final List<Measure> measures = measureDao.selectByCriteriaWithRowbounds(
-                measureCriteria, rowBounds);
         Collections.sort(measures, new Comparator<Measure>() {
 
             @Override

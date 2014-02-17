@@ -25,6 +25,11 @@ public class SearchMeasuresDto implements Serializable {
     }
 
     public SearchMeasuresDto(EntityType entityType, List<String> kpiKeys,
+            List<String> entityKeys) {
+        this(entityType, kpiKeys, entityKeys, null, null, null);
+    }
+
+    public SearchMeasuresDto(EntityType entityType, List<String> kpiKeys,
             List<String> entityKeys, Integer nbMeasures) {
         this(entityType, kpiKeys, entityKeys, nbMeasures, null, null);
     }
