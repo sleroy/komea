@@ -38,4 +38,12 @@ public interface IEventViewerService
      * @since 28 juin 2013
      */
     List<IEvent> getInstantView(String _eplStatement);
+    
+    
+    /**
+     * Returns the last 100 events.
+     * 
+     * @return the last 1000 events.
+     */
+    List<IEvent> getLastEvents();
 }

@@ -62,11 +62,13 @@ public class LocalResourceTransferController
     
         LOGGER.debug("Requesting resource {}", name);
         final Enumeration<URL> resourceAsStream =
-                Thread.currentThread().getContextClassLoader().getResources(name + ".png");
+                Thread.currentThread().getContextClassLoader()
+                        .getResources("pics/" + name + ".png");
         if (!resourceAsStream.hasMoreElements()) { return new byte[0]; }
         
         final InputStream resourceStream =
-                Thread.currentThread().getContextClassLoader().getResourceAsStream(name + ".png");
+                Thread.currentThread().getContextClassLoader()
+                        .getResourceAsStream("pics/" + name + ".png");
         return IOUtils.toByteArray(resourceStream);
     }
     
