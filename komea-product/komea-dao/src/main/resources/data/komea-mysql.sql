@@ -51,9 +51,10 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `komea`.`kom_pero` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `roleKey` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC))
+  UNIQUE INDEX `roleKey_UNIQUE` (`roleKey` ASC))
 ENGINE = InnoDB;
 
 
