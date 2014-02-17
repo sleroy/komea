@@ -62,7 +62,7 @@ public class UserAuthenticationService implements UserDetailsService
                 CollectionUtil.singleOrNull(personRoleDAO.selectByCriteria(personRoleCriteria));
         String right = "";
         if (personRole != null) {
-            right = personRole.getName();
+            right = personRole.getRoleKey();
         } else {
             throw new UsernameNotFoundException("Invalid username/password.");
         }

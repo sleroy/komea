@@ -104,7 +104,7 @@ public class DemoDataBean
     public void init() {
     
     
-        final PersonRole administrator = new PersonRole(null, "Administrator");
+        final PersonRole administrator = new PersonRole(null, "ADMIN", "Administrator");
         PersonRoleCriteria prCriteria = new PersonRoleCriteria();
         prCriteria.createCriteria().andNameEqualTo("Administrator");
         if (personRoleDao.countByCriteria(prCriteria) == 0) {
@@ -112,7 +112,7 @@ public class DemoDataBean
         }
         
         
-        final PersonRole userRole = new PersonRole(null, "Standard user");
+        final PersonRole userRole = new PersonRole(null, "ADMIN", "Standard user");
         prCriteria = new PersonRoleCriteria();
         prCriteria.createCriteria().andNameEqualTo("Standard user");
         if (personRoleDao.countByCriteria(prCriteria) == 0) {
