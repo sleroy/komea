@@ -8,7 +8,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 		<intercept-url pattern="/p/login" access="permitAll" />
 		<intercept-url pattern="/p/accessdenied" access="permitAll" />
 		<intercept-url pattern="/p/logout" access="permitAll" />
-		<intercept-url pattern="/p/**" access="hasRole('Administrator')" />
+		<intercept-url pattern="/p/**" access="hasRole('ADMIN')" />
 		<intercept-url pattern="/rest/**" access="permitAll" />
 		<form-login login-page="/p/login" default-target-url="/p/"
 			authentication-failure-url="/p/accessdenied" />
