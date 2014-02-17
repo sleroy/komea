@@ -3,6 +3,7 @@ package org.komea.product.database.model;
 import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.EntityType;
@@ -462,6 +463,7 @@ public class Kpi implements Serializable {
         return valueType;
     }
 
+    @XmlTransient
     @JsonIgnore
     public boolean isIndividualKPI() {
 
