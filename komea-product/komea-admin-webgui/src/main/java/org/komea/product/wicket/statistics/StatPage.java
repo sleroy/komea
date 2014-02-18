@@ -153,8 +153,7 @@ public class StatPage extends LayoutPage
             @Override
             protected Long load() {
             
-            
-                return statService.getNumberOfAlerts(criticity);
+                           return statService.getNumberOfAlerts(criticity);
                 
             }
             
