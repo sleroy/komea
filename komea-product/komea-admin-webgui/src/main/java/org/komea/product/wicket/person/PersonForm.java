@@ -33,15 +33,15 @@ public final class PersonForm extends Form<PersonDto>
 {
     
     
-    private final PersonDao     personDAO;
-    
-    private final PersonRoleDao personRoleDAO;
-    private final PersonDto     personDto;
-    private PersonRole          selectedRole;
+    private final Component     feedBack;
     
     private final Integer       key;
+    private final PersonDao     personDAO;
+    private final PersonDto     personDto;
     
-    private final Component     feedBack;
+    private final PersonRoleDao personRoleDAO;
+    
+    private PersonRole          selectedRole;
     
     
     
@@ -59,7 +59,7 @@ public final class PersonForm extends Form<PersonDto>
         feedBack = _feedBack;
         personDto = _dto.getObject();
         key = personDto.getId();
-        
+        feedBack.setVisible(false);
         add(TextFieldBuilder.<String> createRequired("login", personDto, "login")
                 .simpleValidator(3, 255).withTooltip("User requires a login.").highlightOnErrors()
                 .build());
@@ -94,6 +94,7 @@ public final class PersonForm extends Form<PersonDto>
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
             
             
+                feedBack.setVisible(true);
                 error("error found");
                 // repaint the feedback panel so errors are shown
                 target.add(feedBack);
@@ -104,6 +105,7 @@ public final class PersonForm extends Form<PersonDto>
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
             
             
+                feedBack.setVisible(false);
                 info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);

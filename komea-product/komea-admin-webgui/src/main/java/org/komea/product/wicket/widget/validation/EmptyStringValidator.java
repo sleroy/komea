@@ -1,18 +1,17 @@
 
-package org.komea.product.wicket.widget;
+package org.komea.product.wicket.widget.validation;
 
 
 
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.INullAcceptingValidator;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
-import org.apache.wicket.validation.validator.AbstractValidator;
 
 
 
-public class EmptyStringValidator extends AbstractValidator<String> implements
-        INullAcceptingValidator<String>
+public class EmptyStringValidator extends Behavior implements INullAcceptingValidator<String>
 {
     
     
@@ -24,7 +23,7 @@ public class EmptyStringValidator extends AbstractValidator<String> implements
     
     
     @Override
-    protected void onValidate(final IValidatable<String> _validatable) {
+    public void validate(final IValidatable<String> _validatable) {
     
     
         System.out.println("Validation of form : " + _validatable.getValue());
@@ -34,6 +33,7 @@ public class EmptyStringValidator extends AbstractValidator<String> implements
             
             
         }
+        
         
     }
     

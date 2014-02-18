@@ -1,5 +1,5 @@
 
-package org.komea.product.wicket.utils;
+package org.komea.product.wicket.widget;
 
 
 
@@ -7,7 +7,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulato
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
-import org.komea.product.wicket.widget.TableActionPanel;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
 

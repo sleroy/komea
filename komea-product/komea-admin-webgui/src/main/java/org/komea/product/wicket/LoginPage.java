@@ -25,10 +25,4 @@ public class LoginPage extends LayoutPage
     }
     
     
-    @Override
-    public String getTitle() {
-    
-    
-        return "Please login";
-    }
 }

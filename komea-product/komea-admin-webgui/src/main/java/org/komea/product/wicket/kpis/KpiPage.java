@@ -26,10 +26,4 @@ public class KpiPage extends LayoutPage
     }
     
     
-    @Override
-    public String getTitle() {
-    
-    
-        return "KPI / Metrics Administration";
-    }
 }

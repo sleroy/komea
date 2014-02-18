@@ -16,10 +16,10 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDat
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.komea.product.wicket.model.ListDataModel;
-import org.komea.product.wicket.utils.TableActionPanelColumn;
+import org.komea.product.wicket.widget.TableActionPanelColumn;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
+import org.komea.product.wicket.widget.model.ListDataModel;
 
 
 
