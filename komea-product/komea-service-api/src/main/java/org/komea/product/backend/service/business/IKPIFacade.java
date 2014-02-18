@@ -16,6 +16,7 @@ import org.komea.product.database.model.Measure;
  * saving. You cannot serialize this object!
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public interface IKPIFacade<TEntity extends IEntity>
 {
@@ -24,21 +25,22 @@ public interface IKPIFacade<TEntity extends IEntity>
     /**
      * Returns the associated entity.
      * 
-     * @return the associated entity
-     */
+    
+     * @return the associated entity */
     IEntity getEntity();
     
     
     /**
      * Returns the full history of a KPI
      * 
-     * @return the history.
-     */
+    
+     * @return the history. */
     List<Measure> getHistory();
     
     
     /**
      * Returns the KPI
+     * @return Kpi
      */
     Kpi getKPI();
     
@@ -46,8 +48,8 @@ public interface IKPIFacade<TEntity extends IEntity>
     /**
      * Returns the object to obtain metric values.
      * 
-     * @return the metric.
-     */
+    
+     * @return the metric. */
     IEPMetric getMetric();
     
     

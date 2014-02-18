@@ -15,7 +15,8 @@ import org.komea.product.database.model.Kpi;
  * kpis.
  * 
  * @author sleroy
- * @param <T>
+
+ * @version $Revision: 1.0 $
  */
 public interface IEntityWithKPIFacade<T extends IEntity>
 {
@@ -24,7 +25,8 @@ public interface IEntityWithKPIFacade<T extends IEntity>
     /**
      * Returns the entity
      * 
-     * @return
+    
+     * @return T
      */
     T getEntity();
     
@@ -33,17 +35,17 @@ public interface IEntityWithKPIFacade<T extends IEntity>
      * Returns the list of KPI of this entity
      * 
      * @param _kpiName
-     * @return the list of Kpi.
-     */
+    
+     * @return the list of Kpi. */
     Kpi getKpi(String _kpiName);
     
     
     /**
      * Returns the list of KPI of this entity
      * 
-     * @param _kpiName
-     * @return the Kpi.
-     */
+    
+    
+     * @return the Kpi. */
     List<Kpi> getListofKpis();
     
     

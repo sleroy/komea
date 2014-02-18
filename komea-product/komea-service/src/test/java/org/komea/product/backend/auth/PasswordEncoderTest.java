@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 
+/**
+ */
 public class PasswordEncoderTest extends AbstractSpringIntegrationTestCase
 {
     

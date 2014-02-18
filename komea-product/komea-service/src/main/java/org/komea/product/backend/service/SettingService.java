@@ -24,6 +24,8 @@ import org.springframework.stereotype.Service;
 
 
 
+/**
+ */
 @Properties(@Property(
         key = "logfile_path",
         description = "Specify the path to access logs",
@@ -45,6 +47,15 @@ public class SettingService implements ISettingService
      * (non-Javadoc)
      * @see org.komea.product.settings.service.ISettingService#getOrCreate(java.lang.String, java.lang.String, java.lang.String)
      */
+    /**
+     * Method create.
+     * @param _key String
+     * @param _value String
+     * @param _typeName String
+     * @param _description String
+     * @return Setting
+     * @see org.komea.product.backend.service.ISettingService#create(String, String, String, String)
+     */
     @Override
     public Setting create(@NotBlank
     final String _key, @NotNull
@@ -63,6 +74,12 @@ public class SettingService implements ISettingService
     }
     
     
+    /**
+     * Method getProxy.
+     * @param _key Integer
+     * @return ISettingProxy<T>
+     * @see org.komea.product.backend.service.ISettingService#getProxy(Integer)
+     */
     @Override
     public <T> ISettingProxy<T> getProxy(final Integer _key) {
     
@@ -71,6 +88,12 @@ public class SettingService implements ISettingService
     }
     
     
+    /**
+     * Method getProxy.
+     * @param _key String
+     * @return ISettingProxy<T>
+     * @see org.komea.product.backend.service.ISettingService#getProxy(String)
+     */
     @Override
     public <T> ISettingProxy<T> getProxy(final String _key) {
     
@@ -84,6 +107,11 @@ public class SettingService implements ISettingService
     }
     
     
+    /**
+     * Method getSettingDAO.
+     * @return SettingDao
+     * @see org.komea.product.backend.service.ISettingService#getSettingDAO()
+     */
     @Override
     public SettingDao getSettingDAO() {
     
@@ -92,6 +120,11 @@ public class SettingService implements ISettingService
     }
     
     
+    /**
+     * Method getSettings.
+     * @return List<Setting>
+     * @see org.komea.product.backend.service.ISettingService#getSettings()
+     */
     @Override
     public List<Setting> getSettings() {
     
@@ -115,6 +148,10 @@ public class SettingService implements ISettingService
     }
     
     
+    /**
+     * Method setSettingDAO.
+     * @param _settingDAO SettingDao
+     */
     public void setSettingDAO(final SettingDao _settingDAO) {
     
     
@@ -122,6 +159,11 @@ public class SettingService implements ISettingService
     }
     
     
+    /**
+     * Method update.
+     * @param _setting Setting
+     * @see org.komea.product.backend.service.ISettingService#update(Setting)
+     */
     @Override
     public void update(final Setting _setting) {
     
@@ -135,6 +177,14 @@ public class SettingService implements ISettingService
     /*
      * (non-Javadoc)
      * @see org.komea.product.settings.service.ISettingService#newSetting(java.lang.String, java.lang.String, java.lang.String)
+     */
+    /**
+     * Method newSetting.
+     * @param _key String
+     * @param _value String
+     * @param _typeName String
+     * @param _description String
+     * @return Setting
      */
     private Setting newSetting(@NotBlank
     final String _key, @NotNull

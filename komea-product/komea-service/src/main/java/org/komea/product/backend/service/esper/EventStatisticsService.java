@@ -42,6 +42,7 @@ import com.espertech.esper.client.EPStatement;
  * (number of alerts received per days, and alert type breakdown);
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 @Service
 public class EventStatisticsService implements IEventStatisticsService
@@ -93,8 +94,8 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
     /**
-     * @return the eventPushService
-     */
+    
+     * @return the eventPushService */
     public IEventPushService getAlertPushService() {
     
     
@@ -102,6 +103,11 @@ public class EventStatisticsService implements IEventStatisticsService
     }
     
     
+    /**
+     * Method getAllMeasures.
+     * @return List<Measure>
+     * @see org.komea.product.backend.service.esper.IEventStatisticsService#getAllMeasures()
+     */
     @Override
     public List<Measure> getAllMeasures() {
     
@@ -116,8 +122,8 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
     /**
-     * @return the esperEngine
-     */
+    
+     * @return the esperEngine */
     public final IEsperEngine getEsperEngine() {
     
     
@@ -125,6 +131,10 @@ public class EventStatisticsService implements IEventStatisticsService
     }
     
     
+    /**
+     * Method getKpiService.
+     * @return IKPIService
+     */
     public IKPIService getKpiService() {
     
     
@@ -132,6 +142,12 @@ public class EventStatisticsService implements IEventStatisticsService
     }
     
     
+    /**
+     * Method getNumberOfAlerts.
+     * @param _criticity Severity
+     * @return long
+     * @see org.komea.product.backend.service.esper.IEventStatisticsService#getNumberOfAlerts(Severity)
+     */
     @Override
     public long getNumberOfAlerts(final Severity _criticity) {
     
@@ -144,6 +160,10 @@ public class EventStatisticsService implements IEventStatisticsService
     }
     
     
+    /**
+     * Method getProviderDAO.
+     * @return ProviderDao
+     */
     public ProviderDao getProviderDAO() {
     
     
@@ -151,6 +171,11 @@ public class EventStatisticsService implements IEventStatisticsService
     }
     
     
+    /**
+     * Method getReceivedAlertsIn24LastHours.
+     * @return long
+     * @see org.komea.product.backend.service.esper.IEventStatisticsService#getReceivedAlertsIn24LastHours()
+     */
     @Override
     public long getReceivedAlertsIn24LastHours() {
     
@@ -165,6 +190,11 @@ public class EventStatisticsService implements IEventStatisticsService
      * (non-Javadoc)
      * @see org.komea.product.backend.service.esper.IEventStatisticsService#getReceivedAlertTypesIn24Hours()
      */
+    /**
+     * Method getReceivedAlertTypesIn24LastHours.
+     * @return List<EventTypeStatistic>
+     * @see org.komea.product.backend.service.esper.IEventStatisticsService#getReceivedAlertTypesIn24LastHours()
+     */
     @Override
     public List<EventTypeStatistic> getReceivedAlertTypesIn24LastHours() {
     
@@ -175,6 +205,10 @@ public class EventStatisticsService implements IEventStatisticsService
     }
     
     
+    /**
+     * Method getRegistry.
+     * @return ICronRegistryService
+     */
     public ICronRegistryService getRegistry() {
     
     
@@ -183,8 +217,8 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
     /**
-     * @return the systemProject
-     */
+    
+     * @return the systemProject */
     public final ISystemProjectBean getSystemProject() {
     
     
@@ -272,6 +306,10 @@ public class EventStatisticsService implements IEventStatisticsService
     }
     
     
+    /**
+     * Method setProviderDAO.
+     * @param _providerDAO ProviderDao
+     */
     public void setProviderDAO(final ProviderDao _providerDAO) {
     
     
@@ -279,6 +317,10 @@ public class EventStatisticsService implements IEventStatisticsService
     }
     
     
+    /**
+     * Method setRegistry.
+     * @param _registry ICronRegistryService
+     */
     public void setRegistry(final ICronRegistryService _registry) {
     
     
@@ -297,6 +339,11 @@ public class EventStatisticsService implements IEventStatisticsService
     }
     
     
+    /**
+     * Method alertCriticityPerDay.
+     * @param _criticity Severity
+     * @return Kpi
+     */
     private Kpi alertCriticityPerDay(final Severity _criticity) {
     
     
@@ -321,6 +368,10 @@ public class EventStatisticsService implements IEventStatisticsService
     }
     
     
+    /**
+     * Method alertPerDay.
+     * @return Kpi
+     */
     private Kpi alertPerDay() {
     
     
@@ -343,6 +394,11 @@ public class EventStatisticsService implements IEventStatisticsService
     }
     
     
+    /**
+     * Method getKpiNameFromSeverity.
+     * @param _criticity Severity
+     * @return String
+     */
     private String getKpiNameFromSeverity(final Severity _criticity) {
     
     

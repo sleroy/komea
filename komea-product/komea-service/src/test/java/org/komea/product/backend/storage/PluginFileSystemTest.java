@@ -21,6 +21,7 @@ import org.komea.product.backend.storage.PluginFileSystem;
 
 /**
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class PluginFileSystemTest
 {
@@ -57,9 +58,9 @@ public class PluginFileSystemTest
     /**
      * Test method for {@link org.komea.product.backend.storage.PluginFileSystem#FileSystemService(java.io.File)}.
      * 
-     * @throws IOException
-     * @throws FileNotFoundException
-     */
+    
+    
+     * @throws FileNotFoundException * @throws IOException */
     @Test
     public final void testFileSystemServiceOpen() throws FileNotFoundException, IOException {
     
@@ -77,9 +78,9 @@ public class PluginFileSystemTest
     /**
      * Test method for {@link org.komea.product.backend.storage.PluginFileSystem#FileSystemService(java.io.File)}.
      * 
-     * @throws IOException
-     * @throws FileNotFoundException
-     */
+    
+    
+     * @throws FileNotFoundException * @throws IOException */
     @Test
     public final void testFileSystemServiceStore() throws FileNotFoundException, IOException {
     

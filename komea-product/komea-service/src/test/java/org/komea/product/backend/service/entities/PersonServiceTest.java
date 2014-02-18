@@ -24,6 +24,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+/**
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class PersonServiceTest {
 
@@ -46,6 +48,10 @@ public class PersonServiceTest {
     private IPersonGroupService groupService;
 
     //
+    /**
+     * Method getDepartment.
+     * @return PersonGroup
+     */
     public PersonGroup getDepartment() {
 
         PersonGroup group = new PersonGroup();
@@ -59,6 +65,10 @@ public class PersonServiceTest {
 
     }
 
+    /**
+     * Method getPersons.
+     * @return List<Person>
+     */
     private List<Person> getPersons() {
 
         Person person = new Person();
@@ -73,6 +83,10 @@ public class PersonServiceTest {
         return Lists.newArrayList(person);
     }
 
+    /**
+     * Method getProjects.
+     * @return List<Project>
+     */
     private List<Project> getProjects() {
 
         Project team = new Project();
@@ -85,12 +99,20 @@ public class PersonServiceTest {
         return Lists.newArrayList(team);
     }
 
+    /**
+     * Method getRole.
+     * @return PersonRole
+     */
     private PersonRole getRole() {
 
         PersonRole role = new PersonRole(1, "dev", "dev");
         return role;
     }
 
+    /**
+     * Method getTeam.
+     * @return PersonGroup
+     */
     private PersonGroup getTeam() {
 
         PersonGroup team = new PersonGroup();

@@ -38,6 +38,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 
 
+/**
+ */
 @ProviderPlugin(
         eventTypes = {
             @EventTypeDef(
@@ -87,6 +89,10 @@ public class DemoDataBean
     }
     
     
+    /**
+     * Method getPersonGroupDao.
+     * @return PersonGroupDao
+     */
     public PersonGroupDao getPersonGroupDao() {
     
     
@@ -94,6 +100,10 @@ public class DemoDataBean
     }
     
     
+    /**
+     * Method getPersonRoleDao.
+     * @return PersonRoleDao
+     */
     public PersonRoleDao getPersonRoleDao() {
     
     
@@ -259,6 +269,10 @@ public class DemoDataBean
     }
     
     
+    /**
+     * Method setPersonGroupDao.
+     * @param _personGroupDao PersonGroupDao
+     */
     public void setPersonGroupDao(final PersonGroupDao _personGroupDao) {
     
     
@@ -266,6 +280,10 @@ public class DemoDataBean
     }
     
     
+    /**
+     * Method setPersonRoleDao.
+     * @param _personRoleDao PersonRoleDao
+     */
     public void setPersonRoleDao(final PersonRoleDao _personRoleDao) {
     
     
@@ -273,6 +291,12 @@ public class DemoDataBean
     }
     
     
+    /**
+     * Method createUser.
+     * @param record Person
+     * @param userRole PersonRole
+     * @return Person
+     */
     private Person createUser(final Person record, final PersonRole userRole) {
     
     

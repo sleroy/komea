@@ -42,6 +42,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
 
+/**
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class ProjectServiceTest {
     
@@ -377,6 +379,10 @@ public class ProjectServiceTest {
         
     }
     
+    /**
+     * Method getPerson.
+     * @return Person
+     */
     private Person getPerson() {
     
         Person person = new Person();
@@ -389,6 +395,10 @@ public class ProjectServiceTest {
         return person;
     }
     
+    /**
+     * Method getLinks.
+     * @return List<Link>
+     */
     private List<Link> getLinks() {
     
         Link link = new Link();
@@ -400,6 +410,10 @@ public class ProjectServiceTest {
         return Lists.newArrayList(link);
     }
     
+    /**
+     * Method getTag.
+     * @return Tag
+     */
     private Tag getTag() {
     
         Tag link = new Tag();
@@ -409,6 +423,10 @@ public class ProjectServiceTest {
         return link;
     }
     
+    /**
+     * Method getTeams.
+     * @return List<PersonGroup>
+     */
     private List<PersonGroup> getTeams() {
     
         PersonGroup team = new PersonGroup();
@@ -421,6 +439,10 @@ public class ProjectServiceTest {
         return Lists.newArrayList(team);
     }
     
+    /**
+     * Method getProject.
+     * @return List<Project>
+     */
     private List<Project> getProject() {
     
         Project team = new Project();
@@ -433,6 +455,10 @@ public class ProjectServiceTest {
         return Lists.newArrayList(team);
     }
     
+    /**
+     * Method getCustomer.
+     * @return Customer
+     */
     private Customer getCustomer() {
     
         return new Customer(1, "Soft@home");

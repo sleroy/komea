@@ -7,6 +7,7 @@ package org.komea.product.backend.service.business;
  * This interface is a simple wrapper over an EPStatement to obtain the value.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public interface IEPMetric
 {
@@ -15,24 +16,24 @@ public interface IEPMetric
     /**
      * Returns the value
      * 
-     * @return the value;
-     */
+    
+     * @return the value; */
     double getDoubleValue();
     
     
     /**
      * Returns the value
      * 
-     * @return the value;
-     */
+    
+     * @return the value; */
     int getIntValue();
     
     
     /**
      * Returns the value
      * 
-     * @return the value;
-     */
+    
+     * @return the value; */
     long getLongValue();
     
     

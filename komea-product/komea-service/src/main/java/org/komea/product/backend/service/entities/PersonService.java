@@ -1,8 +1,11 @@
+
 package org.komea.product.backend.service.entities;
 
-import com.google.common.collect.Lists;
+
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.komea.product.database.dao.HasProjectPersonDao;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonRoleDao;
@@ -14,45 +17,91 @@ import org.komea.product.database.model.HasProjectPersonCriteria;
 import org.komea.product.database.model.HasProjectPersonKey;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonCriteria;
+import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.PersonRole;
 import org.komea.product.database.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
+
+
+
+/**
+ */
 @Service
-public final class PersonService implements IPersonService {
-
+public class PersonService implements IPersonService
+{
+    
+    
     @Autowired
-    private PersonDao personDao;
-
+    private IPersonGroupService   groupService;
+    
     @Autowired
-    private IPersonGroupService groupService;
-
+    private PersonDao             personDao;
+    
     @Autowired
-    private PersonRoleDao roleDao;
-
+    private ProjectDao            projectDAO;
+    
     @Autowired
-    private HasProjectPersonDao projectPersonDao;
-
+    private HasProjectPersonDao   projectPersonDao;
+    
     @Autowired
-    private ProjectDao projectDAO;
-
+    private IProjectPersonService projectPersonService;
+    @Autowired
+    private PersonRoleDao         roleDao;
+    
+    
+    
+    /**
+     * 
+     */
+    public PersonService() {
+    
+    
+        super();
+    }
+    
+    
+    /**
+    
+     * @return the groupService */
+    public IPersonGroupService getGroupService() {
+    
+    
+        return groupService;
+    }
+    
+    
+    /**
+     * Method getPersonDao.
+     * @return PersonDao
+     * @see org.komea.product.backend.service.entities.IPersonService#getPersonDao()
+     */
+    @Override
+    public PersonDao getPersonDao() {
+    
+    
+        return personDao;
+    }
+    
+    
     /**
      * (non-Javadoc)
-     *
-     * @see
-     * org.komea.product.backend.service.entities.IPersonService#getPersonList()
+     * 
+     * @see org.komea.product.backend.service.entities.IPersonService#getPersonList()
      */
     @Override
     public List<PersonDto> getPersonList() {
-
+    
+    
         // TOTO STUB
-        PersonCriteria request = new PersonCriteria();
-        List<Person> persons = personDao.selectByCriteria(request);
-
-        List<PersonDto> personDtos = Lists.newArrayList();
-        for (Person person : persons) {
-            PersonDto personDto = new PersonDto();
+        final PersonCriteria request = new PersonCriteria();
+        final List<Person> persons = personDao.selectByCriteria(request);
+        
+        final List<PersonDto> personDtos = Lists.newArrayList();
+        for (final Person person : persons) {
+            final PersonDto personDto = new PersonDto();
             personDto.setId(person.getId());
             personDto.setEmail(person.getEmail());
             personDto.setFirstName(person.getFirstName());
@@ -60,35 +109,28 @@ public final class PersonService implements IPersonService {
             personDto.setLogin(person.getLogin());
             personDto.modifyDepartment(groupService.getDepartment(person.getIdPersonGroup()));
             personDto.modifyTeam(groupService.getTeam(person.getIdPersonGroup()));
-            PersonRole role = roleDao.selectByPrimaryKey(person.getIdPersonRole());
+            final PersonRole role = roleDao.selectByPrimaryKey(person.getIdPersonRole());
             if (role != null) {
                 personDto.setRole(role.getName());
             }
             personDto.associateToProjectList(getProjectsAssociateToAPerson(person.getId()));
             personDtos.add(personDto);
-
+            
         }
         return personDtos;
     }
-
-    @Override
-    public List<Project> getProjectsAssociateToAPerson(final Integer _personId) {
-
-        HasProjectPersonCriteria criteria = new HasProjectPersonCriteria();
-        criteria.createCriteria().andIdPersonEqualTo(_personId);
-        List<HasProjectPersonKey> result = projectPersonDao.selectByCriteria(criteria);
-        List<Project> projects = Lists.newArrayList();
-        for (HasProjectPersonKey hasProjectPersonKey : result) {
-            Project project = projectDAO.selectByPrimaryKey(hasProjectPersonKey.getIdProject());
-            if (project != null) {
-                projects.add(project);
-            }
-        }
-        return projects;
-    }
-
+    
+    
+    /**
+     * Method getPersons.
+     * @param logins List<String>
+     * @return List<Person>
+     * @see org.komea.product.backend.service.entities.IPersonService#getPersons(List<String>)
+     */
     @Override
     public List<Person> getPersons(final List<String> logins) {
+    
+    
         final PersonCriteria personCriteria = new PersonCriteria();
         if (logins.isEmpty()) {
             personCriteria.createCriteria();
@@ -100,16 +142,192 @@ public final class PersonService implements IPersonService {
         }
         return personDao.selectByCriteria(personCriteria);
     }
-
+    
+    
+    /**
+    
+     * @return the projectDAO */
+    public ProjectDao getProjectDAO() {
+    
+    
+        return projectDAO;
+    }
+    
+    
+    /**
+    
+     * @return the projectPersonDao */
+    public HasProjectPersonDao getProjectPersonDao() {
+    
+    
+        return projectPersonDao;
+    }
+    
+    
+    /**
+    
+     * @return the projectPersonService */
+    public IProjectPersonService getProjectPersonService() {
+    
+    
+        return projectPersonService;
+    }
+    
+    
+    /**
+     * Method getProjectsAssociateToAPerson.
+     * @param _personId Integer
+     * @return List<Project>
+     * @see org.komea.product.backend.service.entities.IPersonService#getProjectsAssociateToAPerson(Integer)
+     */
     @Override
-    public List<BaseEntity> personsToBaseEntities(List<Person> persons) {
+    public List<Project> getProjectsAssociateToAPerson(final Integer _personId) {
+    
+    
+        final HasProjectPersonCriteria criteria = new HasProjectPersonCriteria();
+        criteria.createCriteria().andIdPersonEqualTo(_personId);
+        final List<HasProjectPersonKey> result = projectPersonDao.selectByCriteria(criteria);
+        final List<Project> projects = Lists.newArrayList();
+        for (final HasProjectPersonKey hasProjectPersonKey : result) {
+            final Project project =
+                    projectDAO.selectByPrimaryKey(hasProjectPersonKey.getIdProject());
+            if (project != null) {
+                projects.add(project);
+            }
+        }
+        return projects;
+    }
+    
+    
+    /**
+    
+     * @return the roleDao */
+    public PersonRoleDao getRoleDao() {
+    
+    
+        return roleDao;
+    }
+    
+    
+    /**
+     * Method personsToBaseEntities.
+     * @param persons List<Person>
+     * @return List<BaseEntity>
+     * @see org.komea.product.backend.service.entities.IPersonService#personsToBaseEntities(List<Person>)
+     */
+    @Override
+    public List<BaseEntity> personsToBaseEntities(final List<Person> persons) {
+    
+    
         final List<BaseEntity> entities = new ArrayList<BaseEntity>(persons.size());
         for (final Person person : persons) {
-            final BaseEntity entity = new BaseEntity(EntityType.PERSON, person.getId(),
-                    person.getLogin(), person.getFirstName() + " " + person.getLastName(), person.getPassword());
+            final BaseEntity entity =
+                    new BaseEntity(EntityType.PERSON, person.getId(), person.getLogin(),
+                            person.getFirstName() + " " + person.getLastName(),
+                            person.getPassword());
             entities.add(entity);
         }
         return entities;
     }
-
+    
+    
+    /**
+     * Method saveOrUpdate.
+     * @param _person Person
+     * @param _selectedProject Project
+     * @param _personRole PersonRole
+     * @param _personGroup PersonGroup
+     */
+    public void saveOrUpdate(
+            final Person _person,
+            final Project _selectedProject,
+            final PersonRole _personRole,
+            final PersonGroup _personGroup) {
+    
+    
+        if (_personRole != null) {
+            _person.setIdPersonRole(_personRole.getId());
+        } else {
+            _person.setIdPersonRole(null);
+        }
+        if (_personGroup != null) {
+            _person.setIdPersonGroup(_personGroup.getId());
+        } else {
+            _person.setIdPersonGroup(null);
+        }
+        
+        if (_person.getId() != null) {
+            personDao.updateByPrimaryKey(_person);
+        } else {
+            personDao.insert(_person);
+        }
+        projectPersonService.updateProjectPersonLink(_selectedProject, _person);
+        
+    }
+    
+    
+    /**
+     * @param _groupService
+     *            the groupService to set
+     */
+    public void setGroupService(final IPersonGroupService _groupService) {
+    
+    
+        groupService = _groupService;
+    }
+    
+    
+    /**
+     * Method setPersonDao.
+     * @param _personDao PersonDao
+     */
+    public void setPersonDao(final PersonDao _personDao) {
+    
+    
+        personDao = _personDao;
+    }
+    
+    
+    /**
+     * @param _projectDAO
+     *            the projectDAO to set
+     */
+    public void setProjectDAO(final ProjectDao _projectDAO) {
+    
+    
+        projectDAO = _projectDAO;
+    }
+    
+    
+    /**
+     * @param _projectPersonDao
+     *            the projectPersonDao to set
+     */
+    public void setProjectPersonDao(final HasProjectPersonDao _projectPersonDao) {
+    
+    
+        projectPersonDao = _projectPersonDao;
+    }
+    
+    
+    /**
+     * @param _projectPersonService
+     *            the projectPersonService to set
+     */
+    public void setProjectPersonService(final IProjectPersonService _projectPersonService) {
+    
+    
+        projectPersonService = _projectPersonService;
+    }
+    
+    
+    /**
+     * @param _roleDao
+     *            the roleDao to set
+     */
+    public void setRoleDao(final PersonRoleDao _roleDao) {
+    
+    
+        roleDao = _roleDao;
+    }
 }

@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
  * This class defines service offering possibilities to load / store files in the Komea file system
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 
 public class PluginFileSystem implements IPluginFileSystem
@@ -37,6 +38,10 @@ public class PluginFileSystem implements IPluginFileSystem
     
     
     
+    /**
+     * Constructor for PluginFileSystem.
+     * @param _folder File
+     */
     public PluginFileSystem(final File _folder) {
     
     
@@ -46,6 +51,12 @@ public class PluginFileSystem implements IPluginFileSystem
     }
     
     
+    /**
+     * Method existResource.
+     * @param _resourceName String
+     * @return boolean
+     * @see org.komea.product.backend.service.IPluginFileSystem#existResource(String)
+     */
     @Override
     public boolean existResource(final String _resourceName) {
     
@@ -54,6 +65,12 @@ public class PluginFileSystem implements IPluginFileSystem
     }
     
     
+    /**
+     * Method open.
+     * @param _resourceName String
+     * @return InputStream
+     * @see org.komea.product.backend.service.IPluginFileSystem#open(String)
+     */
     @Override
     public InputStream open(final String _resourceName) {
     
@@ -68,6 +85,12 @@ public class PluginFileSystem implements IPluginFileSystem
     }
     
     
+    /**
+     * Method store.
+     * @param _resourceName String
+     * @param _inputStream InputStream
+     * @see org.komea.product.backend.service.IPluginFileSystem#store(String, InputStream)
+     */
     @Override
     public void store(final String _resourceName, final InputStream _inputStream) {
     
@@ -88,6 +111,11 @@ public class PluginFileSystem implements IPluginFileSystem
     }
     
     
+    /**
+     * Method getResource.
+     * @param _file File
+     * @return File
+     */
     private File getResource(final File _file) {
     
     
@@ -97,6 +125,11 @@ public class PluginFileSystem implements IPluginFileSystem
     }
     
     
+    /**
+     * Method getResourceInFS.
+     * @param _resourceName String
+     * @return File
+     */
     private File getResourceInFS(final String _resourceName) {
     
     

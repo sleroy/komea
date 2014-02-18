@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
  * This service defines the methods to load the provider API service.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 @Service
 public class ProviderDTOConvertorService implements IProviderDTOConvertorService
@@ -70,6 +71,12 @@ public class ProviderDTOConvertorService implements IProviderDTOConvertorService
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.service.IProviderAPIService#loadProviderDTO(java.lang.Object)
+     */
+    /**
+     * Method loadProviderDTO.
+     * @param providerAnnotation ProviderPlugin
+     * @return ProviderDto
+     * @see org.komea.product.backend.service.IProviderDTOConvertorService#loadProviderDTO(ProviderPlugin)
      */
     @Override
     public ProviderDto loadProviderDTO(final ProviderPlugin providerAnnotation) {

@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ */
 @Service
 @Transactional
 public class MeasureService implements IMeasureService {
@@ -32,6 +34,14 @@ public class MeasureService implements IMeasureService {
         super();
     }
 
+    /**
+     * Method getMeasures.
+     * @param kpis List<Kpi>
+     * @param entities List<BaseEntity>
+     * @param searchMeasuresDto SearchMeasuresDto
+     * @return List<Measure>
+     * @see org.komea.product.backend.service.measure.IMeasureService#getMeasures(List<Kpi>, List<BaseEntity>, SearchMeasuresDto)
+     */
     @Override
     @SuppressWarnings("unchecked")
     public List<Measure> getMeasures(List<Kpi> kpis, List<BaseEntity> entities,

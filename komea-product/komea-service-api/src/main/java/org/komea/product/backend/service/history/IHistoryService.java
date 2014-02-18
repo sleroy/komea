@@ -10,6 +10,8 @@ import org.komea.product.database.model.MeasureCriteria;
 
 
 
+/**
+ */
 public interface IHistoryService
 {
     
@@ -21,8 +23,9 @@ public interface IHistoryService
      *            the kpi key
      * @param _nbRow
      *            the number of result asked
-     * @return the measures list
-     */
+    
+     * @param _criteria MeasureCriteria
+     * @return the measures list */
     public abstract List<Measure> getFilteredHistory(
             HistoryKey _kpiKey,
             int _nbRow,
@@ -32,24 +35,23 @@ public interface IHistoryService
     /**
      * Returns the list of measures from an entity and a KPI.
      * 
-     * @param _entity
-     *            the entity.
-     * @param _kpi
-     *            the kpi.
-     * @return the list of measures.
-     */
+    
+    
+    
+     * @param _kpiKey HistoryKey
+     * @param _criteria MeasureCriteria
+     * @return the list of measures. */
     public abstract List<Measure> getFilteredHistory(HistoryKey _kpiKey, MeasureCriteria _criteria);
     
     
     /**
      * Returns the list of measures from an entity and a KPI.
      * 
-     * @param _entity
-     *            the entity.
-     * @param _kpi
-     *            the kpi.
-     * @return the list of measures.
-     */
+    
+    
+    
+     * @param _kpiKey HistoryKey
+     * @return the list of measures. */
     public abstract List<Measure> getHistory(HistoryKey _kpiKey);
     
     

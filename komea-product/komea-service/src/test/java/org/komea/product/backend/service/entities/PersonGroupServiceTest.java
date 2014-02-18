@@ -14,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+/**
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class PersonGroupServiceTest {
     
@@ -104,6 +106,10 @@ public class PersonGroupServiceTest {
         
     }
     
+    /**
+     * Method getTeam.
+     * @return PersonGroup
+     */
     private PersonGroup getTeam() {
     
         PersonGroup team = new PersonGroup();
@@ -116,6 +122,10 @@ public class PersonGroupServiceTest {
         return team;
     }
     
+    /**
+     * Method getDepartment.
+     * @return PersonGroup
+     */
     private PersonGroup getDepartment() {
     
         PersonGroup group = new PersonGroup();

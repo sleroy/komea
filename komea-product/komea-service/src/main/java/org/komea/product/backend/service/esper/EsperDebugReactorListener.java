@@ -19,6 +19,7 @@ import com.espertech.esper.client.UpdateListener;
  * This type defines the debug reactor of esper.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class EsperDebugReactorListener implements UpdateListener
 {
@@ -39,6 +40,10 @@ public class EsperDebugReactorListener implements UpdateListener
     }
     
     
+    /**
+     * Method getEsperEngine.
+     * @return IEsperEngine
+     */
     public IEsperEngine getEsperEngine() {
     
     
@@ -57,6 +62,10 @@ public class EsperDebugReactorListener implements UpdateListener
     }
     
     
+    /**
+     * Method setEsperEngine.
+     * @param _esperEngine IEsperEngine
+     */
     public void setEsperEngine(final IEsperEngine _esperEngine) {
     
     
@@ -69,6 +78,12 @@ public class EsperDebugReactorListener implements UpdateListener
      * @see
      * com.espertech.esper.client.UpdateListener#update(com.espertech.esper.
      * client.EventBean[], com.espertech.esper.client.EventBean[])
+     */
+    /**
+     * Method update.
+     * @param arg0 EventBean[]
+     * @param arg1 EventBean[]
+     * @see com.espertech.esper.client.UpdateListener#update(EventBean[], EventBean[])
      */
     @Override
     public void update(final EventBean[] arg0, final EventBean[] arg1) {

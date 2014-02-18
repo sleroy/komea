@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
  * This interface provides the functions needed to manipulate the history
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 @Service
 public final class MeasureHistoryService implements IMeasureHistoryService
@@ -52,7 +53,8 @@ public final class MeasureHistoryService implements IMeasureHistoryService
      * 
      * @param _kpi
      *            the kpi
-     * @return the history purge action.
+    
+     * @return the history purge action. * @see org.komea.product.backend.service.kpi.IMeasureHistoryService#buildHistoryPurgeAction(Kpi)
      */
     @Override
     public IHistoryPurgeAction buildHistoryPurgeAction(final Kpi _kpi) {
@@ -72,6 +74,10 @@ public final class MeasureHistoryService implements IMeasureHistoryService
     }
     
     
+    /**
+     * Method getEsperEngine.
+     * @return IEsperEngine
+     */
     public IEsperEngine getEsperEngine() {
     
     
@@ -86,7 +92,9 @@ public final class MeasureHistoryService implements IMeasureHistoryService
      *            the kpi key
      * @param _nbRow
      *            the number of result asked
-     * @return the measures list
+    
+     * @param _criteria MeasureCriteria
+     * @return the measures list * @see org.komea.product.backend.service.history.IHistoryService#getFilteredHistory(HistoryKey, int, MeasureCriteria)
      */
     @Override
     public List<Measure> getFilteredHistory(
@@ -106,6 +114,13 @@ public final class MeasureHistoryService implements IMeasureHistoryService
     }
     
     
+    /**
+     * Method getFilteredHistory.
+     * @param _kpiKey HistoryKey
+     * @param measureCriteria MeasureCriteria
+     * @return List<Measure>
+     * @see org.komea.product.backend.service.history.IHistoryService#getFilteredHistory(HistoryKey, MeasureCriteria)
+     */
     @Override
     public List<Measure> getFilteredHistory(
             final HistoryKey _kpiKey,
@@ -121,6 +136,9 @@ public final class MeasureHistoryService implements IMeasureHistoryService
     
     /**
      * Returns the measures.
+     * @param _kpiKey HistoryKey
+     * @return List<Measure>
+     * @see org.komea.product.backend.service.history.IHistoryService#getHistory(HistoryKey)
      */
     @Override
     public List<Measure> getHistory(final HistoryKey _kpiKey) {
@@ -131,6 +149,10 @@ public final class MeasureHistoryService implements IMeasureHistoryService
     }
     
     
+    /**
+     * Method getMeasureDAO.
+     * @return MeasureDao
+     */
     public MeasureDao getMeasureDAO() {
     
     
@@ -138,6 +160,10 @@ public final class MeasureHistoryService implements IMeasureHistoryService
     }
     
     
+    /**
+     * Method setEsperEngine.
+     * @param _esperEngine IEsperEngine
+     */
     public void setEsperEngine(final IEsperEngine _esperEngine) {
     
     
@@ -145,6 +171,10 @@ public final class MeasureHistoryService implements IMeasureHistoryService
     }
     
     
+    /**
+     * Method setMeasureDAO.
+     * @param _measureDAO MeasureDao
+     */
     public void setMeasureDAO(final MeasureDao _measureDAO) {
     
     
@@ -152,6 +182,11 @@ public final class MeasureHistoryService implements IMeasureHistoryService
     }
     
     
+    /**
+     * Method storeMeasure.
+     * @param _measure Measure
+     * @see org.komea.product.backend.service.history.IHistoryService#storeMeasure(Measure)
+     */
     @Override
     public void storeMeasure(final Measure _measure) {
     
@@ -162,6 +197,11 @@ public final class MeasureHistoryService implements IMeasureHistoryService
     }
     
     
+    /**
+     * Method initMeasureCriteria.
+     * @param _kpiKey HistoryKey
+     * @param measureCriteria MeasureCriteria
+     */
     private void initMeasureCriteria(final HistoryKey _kpiKey, final MeasureCriteria measureCriteria) {
     
     

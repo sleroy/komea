@@ -11,6 +11,7 @@ import java.io.InputStream;
  * This interface defines the methods to load and store resources from Komea Folder.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public interface IPluginFileSystem
 {
@@ -21,8 +22,8 @@ public interface IPluginFileSystem
      * 
      * @param _resourceName
      *            the name of the resource
-     * @return true if the resource is existing.
-     */
+    
+     * @return true if the resource is existing. */
     public boolean existResource(String _resourceName);
     
     
@@ -31,8 +32,8 @@ public interface IPluginFileSystem
      * 
      * @param _resourceName
      *            the resource name
-     * @return the resource.
-     */
+    
+     * @return the resource. */
     public InputStream open(String _resourceName);
     
     

@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 
 
+/**
+ */
 @Service
 public class EventPushService implements IEventPushService
 {
@@ -40,6 +42,11 @@ public class EventPushService implements IEventPushService
     }
     
     
+    /**
+     * Method sendEvent.
+     * @param _event IEvent
+     * @see org.komea.product.backend.service.esper.IEventPushService#sendEvent(IEvent)
+     */
     @Override
     public void sendEvent(final IEvent _event) {
     
@@ -50,6 +57,11 @@ public class EventPushService implements IEventPushService
     }
     
     
+    /**
+     * Method sendEventDto.
+     * @param _dto EventSimpleDto
+     * @see org.komea.product.backend.service.esper.IEventPushService#sendEventDto(EventSimpleDto)
+     */
     @Override
     public void sendEventDto(final EventSimpleDto _dto) {
     
@@ -60,6 +72,10 @@ public class EventPushService implements IEventPushService
     }
     
     
+    /**
+     * Method sendEventWithoutValidation.
+     * @param _event IEvent
+     */
     public void sendEventWithoutValidation(final IEvent _event) {
     
     
@@ -77,6 +93,10 @@ public class EventPushService implements IEventPushService
     }
     
     
+    /**
+     * Method setEsperEngine.
+     * @param _esperEngine IEsperEngine
+     */
     public void setEsperEngine(final IEsperEngine _esperEngine) {
     
     
@@ -84,6 +104,10 @@ public class EventPushService implements IEventPushService
     }
     
     
+    /**
+     * Method setValidator.
+     * @param _validator IEventConversionAndValidationService
+     */
     public void setValidator(final IEventConversionAndValidationService _validator) {
     
     

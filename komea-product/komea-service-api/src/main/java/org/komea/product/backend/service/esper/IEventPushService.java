@@ -15,6 +15,7 @@ import org.komea.product.database.dto.EventSimpleDto;
  * This interface defines the methods to push alerts.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public interface IEventPushService
 {

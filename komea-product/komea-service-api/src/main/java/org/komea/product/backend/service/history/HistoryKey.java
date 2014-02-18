@@ -9,10 +9,17 @@ import org.komea.product.database.model.Kpi;
 
 
 
+/**
+ */
 public class HistoryKey
 {
     
     
+    /**
+     * Method of.
+     * @param _kpiID int
+     * @return HistoryKey
+     */
     public static HistoryKey of(final int _kpiID) {
     
     
@@ -20,6 +27,13 @@ public class HistoryKey
     }
     
     
+    /**
+     * Method of.
+     * @param _id int
+     * @param _entity EntityType
+     * @param entityID int
+     * @return HistoryKey
+     */
     public static HistoryKey of(final int _id, final EntityType _entity, final int entityID) {
     
     
@@ -27,6 +41,13 @@ public class HistoryKey
     }
     
     
+    /**
+     * Method of.
+     * @param _kpi Kpi
+     * @param _entity EntityType
+     * @param entityID int
+     * @return HistoryKey
+     */
     public static HistoryKey of(final Kpi _kpi, final EntityType _entity, final int entityID) {
     
     
@@ -34,6 +55,12 @@ public class HistoryKey
     }
     
     
+    /**
+     * Method of.
+     * @param _findKPIOrFail Kpi
+     * @param _entityAssociatedToKpi IEntity
+     * @return HistoryKey
+     */
     public static HistoryKey of(final Kpi _findKPIOrFail, final IEntity _entityAssociatedToKpi) {
     
     
@@ -53,6 +80,12 @@ public class HistoryKey
     
     
     
+    /**
+     * Constructor for HistoryKey.
+     * @param _kpiID int
+     * @param _entity EntityType
+     * @param _entityID int
+     */
     private HistoryKey(final int _kpiID, final EntityType _entity, final int _entityID) {
     
     
@@ -63,6 +96,10 @@ public class HistoryKey
     }
     
     
+    /**
+     * Method getEntityID.
+     * @return int
+     */
     public int getEntityID() {
     
     
@@ -70,6 +107,10 @@ public class HistoryKey
     }
     
     
+    /**
+     * Method getEntityType.
+     * @return EntityType
+     */
     public EntityType getEntityType() {
     
     
@@ -77,6 +118,10 @@ public class HistoryKey
     }
     
     
+    /**
+     * Method getKpiID.
+     * @return int
+     */
     public int getKpiID() {
     
     

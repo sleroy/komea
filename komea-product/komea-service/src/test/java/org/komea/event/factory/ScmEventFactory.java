@@ -1,6 +1,22 @@
 package org.komea.event.factory;
 import org.komea.product.database.dto.EventSimpleDto;
+/**
+ */
 public class ScmEventFactory {
+/**
+ * Method sendCommit.
+ * @param _projectName String
+ * @param _code_files java.lang.String
+ * @param _num_files java.lang.String
+ * @param _author java.lang.String
+ * @param _num_lines java.lang.Integer
+ * @param _message_length java.lang.String
+ * @param _branch java.lang.String
+ * @param _type java.lang.String
+ * @param _misc_files java.lang.String
+ * @param _test_files java.lang.String
+ * @return EventSimpleDto
+ */
 public EventSimpleDto sendCommit(String _projectName,java.lang.String _code_files,java.lang.String _num_files,java.lang.String _author,java.lang.Integer _num_lines,java.lang.String _message_length,java.lang.String _branch,java.lang.String _type,java.lang.String _misc_files,java.lang.String _test_files) {EventSimpleDto event = new EventSimpleDto();
 event.setProject(_projectName);
 event.setMessage("New commit for the projet $project.");

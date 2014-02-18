@@ -13,7 +13,6 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
-import javax.xml.bind.JAXBException;
 
 import org.komea.product.backend.api.IEsperEngine;
 import org.slf4j.Logger;
@@ -29,6 +28,7 @@ import com.espertech.esper.client.EPStatement;
  * This type defines the esper catalog statements.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 @Component
 public class EsperXmlImportationBean
@@ -36,16 +36,16 @@ public class EsperXmlImportationBean
     
     
     @Autowired
-    private IEventPushService            engine;
+    private IEventPushService              engine;
     
     @Autowired
-    private IEsperEngine          esperEngine;
-    
-    private final Map<String, EPStatement> statements = new HashMap<String, EPStatement>();
+    private IEsperEngine                   esperEngine;
     
     private final Logger                   LOGGER     =
                                                               LoggerFactory
                                                                       .getLogger(EsperXmlImportationBean.class);
+    
+    private final Map<String, EPStatement> statements = new HashMap<String, EPStatement>();
     
     
     
@@ -59,8 +59,12 @@ public class EsperXmlImportationBean
     }
     
     
+    /**
+     * Method init.
+     * @throws IOException
+     */
     @PostConstruct
-    public void init() throws IOException, JAXBException {
+    public void init() throws IOException {
     
     
         importationRulesFromPropertyFile();
@@ -73,8 +77,8 @@ public class EsperXmlImportationBean
 		 * and {@link http://esper.codehaus.org/esper-4.10.0/doc/api/com/espertech/esper/client/EPAdministrator.html#createEPL(java.lang.String,%20java.lang.String,%20java.lang.Object)
 		 * for more information
 		 * 
-		 * @throws IOException
-		 */
+		
+		 * @throws IOException */
     private void importationRulesFromPropertyFile() throws IOException {
     
     

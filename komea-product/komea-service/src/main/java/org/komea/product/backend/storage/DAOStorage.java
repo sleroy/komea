@@ -16,6 +16,7 @@ import org.komea.product.backend.utils.SearchFilter;
  * This class defines a dao storage built upon an object storage.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class DAOStorage<T> implements IDAOObjectStorage<T>
 {
@@ -27,6 +28,10 @@ public class DAOStorage<T> implements IDAOObjectStorage<T>
     
     
     
+    /**
+     * Constructor for DAOStorage.
+     * @param _registerStorage IObjectStorage<DAOStorageIndex<T>>
+     */
     public DAOStorage(final IObjectStorage<DAOStorageIndex<T>> _registerStorage) {
     
     
@@ -39,6 +44,11 @@ public class DAOStorage<T> implements IDAOObjectStorage<T>
     }
     
     
+    /**
+     * Method delete.
+     * @param _object T
+     * @see org.komea.product.backend.service.business.IDAOObjectStorage#delete(T)
+     */
     @Override
     public void delete(final T _object) {
     
@@ -51,6 +61,10 @@ public class DAOStorage<T> implements IDAOObjectStorage<T>
     }
     
     
+    /**
+     * Method deleteAll.
+     * @see org.komea.product.backend.service.business.IDAOObjectStorage#deleteAll()
+     */
     @Override
     public void deleteAll() {
     
@@ -64,6 +78,10 @@ public class DAOStorage<T> implements IDAOObjectStorage<T>
     }
     
     
+    /**
+     * Method disableSaveOnChange.
+     * @see org.komea.product.backend.service.business.IDAOObjectStorage#disableSaveOnChange()
+     */
     @Override
     public void disableSaveOnChange() {
     
@@ -73,6 +91,10 @@ public class DAOStorage<T> implements IDAOObjectStorage<T>
     }
     
     
+    /**
+     * Method enableSaveOnChange.
+     * @see org.komea.product.backend.service.business.IDAOObjectStorage#enableSaveOnChange()
+     */
     @Override
     public void enableSaveOnChange() {
     
@@ -82,6 +104,12 @@ public class DAOStorage<T> implements IDAOObjectStorage<T>
     }
     
     
+    /**
+     * Method find.
+     * @param _filter SearchFilter<T>
+     * @return List<T>
+     * @see org.komea.product.backend.service.business.IDAOObjectStorage#find(SearchFilter<T>)
+     */
     @Override
     public List<T> find(final SearchFilter<T> _filter) {
     
@@ -96,6 +124,10 @@ public class DAOStorage<T> implements IDAOObjectStorage<T>
     }
     
     
+    /**
+     * Method saveChanges.
+     * @see org.komea.product.backend.service.business.IDAOObjectStorage#saveChanges()
+     */
     @Override
     public void saveChanges() {
     
@@ -105,6 +137,11 @@ public class DAOStorage<T> implements IDAOObjectStorage<T>
     }
     
     
+    /**
+     * Method selectAll.
+     * @return List<T>
+     * @see org.komea.product.backend.service.business.IDAOObjectStorage#selectAll()
+     */
     @Override
     public List<T> selectAll() {
     
@@ -113,6 +150,11 @@ public class DAOStorage<T> implements IDAOObjectStorage<T>
     }
     
     
+    /**
+     * Method update.
+     * @param _object T
+     * @see org.komea.product.backend.service.business.IDAOObjectStorage#update(T)
+     */
     @Override
     public void update(final T _object) {
     

@@ -16,7 +16,8 @@ import org.komea.product.database.model.Kpi;
  * Builds a EntityWithKPI with KPI.
  * 
  * @author sleroy
- * @param <TEntity>
+
+ * @version $Revision: 1.0 $
  */
 public class EntityWithKPI<TEntity extends IEntity> implements IEntityWithKPIFacade<TEntity>
 {
@@ -33,7 +34,7 @@ public class EntityWithKPI<TEntity extends IEntity> implements IEntityWithKPIFac
      * 
      * @param _entity
      * @param _kpis
-     * @param _entityType
+    
      */
     public EntityWithKPI(final TEntity _entity, final List<Kpi> _kpis) {
     
@@ -45,6 +46,11 @@ public class EntityWithKPI<TEntity extends IEntity> implements IEntityWithKPIFac
     }
     
     
+    /**
+     * Method getEntity.
+     * @return TEntity
+     * @see org.komea.product.backend.service.business.IEntityWithKPIFacade#getEntity()
+     */
     @Override
     public TEntity getEntity() {
     
@@ -53,6 +59,12 @@ public class EntityWithKPI<TEntity extends IEntity> implements IEntityWithKPIFac
     }
     
     
+    /**
+     * Method getKpi.
+     * @param _kpiName String
+     * @return Kpi
+     * @see org.komea.product.backend.service.business.IEntityWithKPIFacade#getKpi(String)
+     */
     @Override
     public Kpi getKpi(final String _kpiName) {
     
@@ -65,6 +77,11 @@ public class EntityWithKPI<TEntity extends IEntity> implements IEntityWithKPIFac
     }
     
     
+    /**
+     * Method getListofKpis.
+     * @return List<Kpi>
+     * @see org.komea.product.backend.service.business.IEntityWithKPIFacade#getListofKpis()
+     */
     @Override
     public List<Kpi> getListofKpis() {
     

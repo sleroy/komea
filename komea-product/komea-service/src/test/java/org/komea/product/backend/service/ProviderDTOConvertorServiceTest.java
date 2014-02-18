@@ -17,10 +17,14 @@ import org.springframework.core.annotation.AnnotationUtils;
 
 
 
+/**
+ */
 public class ProviderDTOConvertorServiceTest
 {
     
     
+    /**
+     */
     @ProviderPlugin(
             type = ProviderType.OTHER,
             name = "Sample provider plugin",
@@ -65,6 +69,10 @@ public class ProviderDTOConvertorServiceTest
         }
         
         
+        /**
+         * Method getBUILD_FAILURE.
+         * @return org.komea.product.database.model.EventType
+         */
         public org.komea.product.database.model.EventType getBUILD_FAILURE() {
         
         
@@ -72,6 +80,10 @@ public class ProviderDTOConvertorServiceTest
         }
         
         
+        /**
+         * Method setBUILD_FAILURE.
+         * @param _bUILD_FAILURE org.komea.product.database.model.EventType
+         */
         public void setBUILD_FAILURE(final org.komea.product.database.model.EventType _bUILD_FAILURE) {
         
         
@@ -82,6 +94,8 @@ public class ProviderDTOConvertorServiceTest
     
     
     
+    /**
+     */
     public class SampleProviderConfig implements Serializable
     {
         

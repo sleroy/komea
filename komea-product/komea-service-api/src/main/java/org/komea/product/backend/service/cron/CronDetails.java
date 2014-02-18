@@ -14,6 +14,7 @@ import org.quartz.Trigger.TriggerState;
  * This class defines the cron details.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class CronDetails implements Serializable
 {
@@ -51,6 +52,10 @@ public class CronDetails implements Serializable
     }
     
     
+    /**
+     * Method getCronExpression.
+     * @return String
+     */
     public String getCronExpression() {
     
     
@@ -58,6 +63,10 @@ public class CronDetails implements Serializable
     }
     
     
+    /**
+     * Method getCronName.
+     * @return String
+     */
     public String getCronName() {
     
     
@@ -65,6 +74,10 @@ public class CronDetails implements Serializable
     }
     
     
+    /**
+     * Method getNextTime.
+     * @return Date
+     */
     public Date getNextTime() {
     
     
@@ -72,6 +85,10 @@ public class CronDetails implements Serializable
     }
     
     
+    /**
+     * Method getTriggerState.
+     * @return TriggerState
+     */
     public TriggerState getTriggerState() {
     
     
@@ -79,6 +96,10 @@ public class CronDetails implements Serializable
     }
     
     
+    /**
+     * Method setCronExpression.
+     * @param _cronExpression String
+     */
     public void setCronExpression(final String _cronExpression) {
     
     
@@ -86,6 +107,10 @@ public class CronDetails implements Serializable
     }
     
     
+    /**
+     * Method setCronName.
+     * @param _cronName String
+     */
     public void setCronName(final String _cronName) {
     
     
@@ -93,6 +118,10 @@ public class CronDetails implements Serializable
     }
     
     
+    /**
+     * Method setNextTime.
+     * @param _nextTime Date
+     */
     public void setNextTime(final Date _nextTime) {
     
     
@@ -100,6 +129,10 @@ public class CronDetails implements Serializable
     }
     
     
+    /**
+     * Method setStatus.
+     * @param _triggerState TriggerState
+     */
     public void setStatus(final TriggerState _triggerState) {
     
     
@@ -109,6 +142,10 @@ public class CronDetails implements Serializable
     }
     
     
+    /**
+     * Method setTriggerState.
+     * @param _triggerState TriggerState
+     */
     public void setTriggerState(final TriggerState _triggerState) {
     
     

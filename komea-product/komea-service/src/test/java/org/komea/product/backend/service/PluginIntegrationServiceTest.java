@@ -32,19 +32,31 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.springframework.context.ApplicationContext;
 
+/**
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class PluginIntegrationServiceTest {
     
+    /**
+     */
     private class BeanWithInjection {
         
         private ISettingProxy<String> storage_path;
         
+        /**
+         * Method getStorage_path.
+         * @return ISettingProxy<String>
+         */
         @InjectSetting
         public ISettingProxy<String> getStorage_path() {
         
             return storage_path;
         }
         
+        /**
+         * Method setStorage_path.
+         * @param _storage_path ISettingProxy<String>
+         */
         public void setStorage_path(final ISettingProxy<String> _storage_path) {
         
             storage_path = _storage_path;
@@ -167,6 +179,10 @@ public class PluginIntegrationServiceTest {
         
     }
     
+    /**
+     * Method initPluginIntegrationService.
+     * @return PluginIntegrationService
+     */
     private PluginIntegrationService initPluginIntegrationService() {
     
         final PluginIntegrationService pluginService = new PluginIntegrationService();

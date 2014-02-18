@@ -9,6 +9,8 @@ import org.komea.product.service.dto.KpiKey;
 
 
 
+/**
+ */
 public interface IEntityService
 {
     
@@ -18,11 +20,16 @@ public interface IEntityService
      *
      * @param _entityType the entity type
      * @param _key the key
-     * @return the entity or null if the entity does not exist
-     */
+    
+     * @return the entity or null if the entity does not exist */
     <TEntity extends IEntity> TEntity getEntity(EntityType _entityType, Integer _key);
     
 
+    /**
+     * Method getEntityAssociatedToKpi.
+     * @param _kpiKey KpiKey
+     * @return IEntity
+     */
     IEntity getEntityAssociatedToKpi(KpiKey _kpiKey);
 
     
@@ -31,8 +38,8 @@ public interface IEntityService
      *
      * @param _entityType the entity type
      * @param _entityID the entity ID
-     * @return the entity.
-     */
+    
+     * @return the entity. */
     IEntity getEntityOrFail(EntityType _entityType, Integer _entityID);
     
 
@@ -41,10 +48,16 @@ public interface IEntityService
      *
      * @param _entityType the entity type
      * @param _keys the keys
-     * @return the entity
-     */
+    
+     * @return the entity */
     <TEntity extends IEntity> List<TEntity> loadEntities(EntityType _entityType, List<Integer> _keys);
 
+    /**
+     * Method getEntities.
+     * @param entityType EntityType
+     * @param entityKeys List<String>
+     * @return List<BaseEntity>
+     */
     List<BaseEntity> getEntities(final EntityType entityType, final List<String> entityKeys);
 
     // /**

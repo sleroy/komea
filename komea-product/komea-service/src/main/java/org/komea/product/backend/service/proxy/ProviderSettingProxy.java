@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
  * This class defines a proxy to manipulate a provider setting
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 
 public class ProviderSettingProxy<T> implements ISettingProxy<T>
@@ -29,6 +30,11 @@ public class ProviderSettingProxy<T> implements ISettingProxy<T>
     
     
     
+    /**
+     * Constructor for ProviderSettingProxy.
+     * @param _settingDAO ProviderSettingDao
+     * @param _key int
+     */
     public ProviderSettingProxy(final ProviderSettingDao _settingDAO, final int _key) {
     
     
@@ -39,6 +45,11 @@ public class ProviderSettingProxy<T> implements ISettingProxy<T>
     }
     
     
+    /**
+     * Method get.
+     * @return T
+     * @see org.komea.product.backend.service.business.ISettingProxy#get()
+     */
     @Override
     public T get() {
     
@@ -51,6 +62,11 @@ public class ProviderSettingProxy<T> implements ISettingProxy<T>
     }
     
     
+    /**
+     * Method getSetting.
+     * @return Object
+     * @see org.komea.product.backend.service.business.ISettingProxy#getSetting()
+     */
     @Override
     public Object getSetting() {
     
@@ -60,6 +76,11 @@ public class ProviderSettingProxy<T> implements ISettingProxy<T>
     }
     
     
+    /**
+     * Method getStringValue.
+     * @return String
+     * @see org.komea.product.backend.service.business.ISettingProxy#getStringValue()
+     */
     @Override
     public String getStringValue() {
     
@@ -68,6 +89,11 @@ public class ProviderSettingProxy<T> implements ISettingProxy<T>
     }
     
     
+    /**
+     * Method setValue.
+     * @param _value String
+     * @see org.komea.product.backend.service.business.ISettingProxy#setValue(String)
+     */
     @Override
     public void setValue(final String _value) {
     
@@ -85,6 +111,11 @@ public class ProviderSettingProxy<T> implements ISettingProxy<T>
     }
     
     
+    /**
+     * Method setValue.
+     * @param _value T
+     * @see org.komea.product.backend.service.business.ISettingProxy#setValue(T)
+     */
     @Override
     public void setValue(final T _value) {
     

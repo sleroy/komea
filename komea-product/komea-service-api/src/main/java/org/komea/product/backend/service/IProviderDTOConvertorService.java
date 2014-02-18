@@ -13,6 +13,8 @@ import org.komea.product.database.model.Provider;
 
 
 
+/**
+ */
 public interface IProviderDTOConvertorService
 {
     
@@ -21,7 +23,8 @@ public interface IProviderDTOConvertorService
      * Load the event types from the annotation.
      * 
      * @param _providerAnnotation
-     * @return
+    
+     * @return List<EventType>
      */
     List<EventType> loadEvents(ProviderPlugin _providerAnnotation);
     
@@ -31,16 +34,18 @@ public interface IProviderDTOConvertorService
      * 
      * @param providerAnnotation
      *            the provider annotation
-     * @return the provider description.
-     */
+    
+     * @return the provider description. */
     Provider loadProviderDescription(ProviderPlugin providerAnnotation);
     
     
     /**
      * Loads the description from the bean.
      * 
-     * @param providerBean
-     * @return
+    
+    
+     * @param providerAnnotation ProviderPlugin
+     * @return ProviderDto
      */
     ProviderDto loadProviderDTO(final ProviderPlugin providerAnnotation);
     
@@ -50,8 +55,8 @@ public interface IProviderDTOConvertorService
      * 
      * @param _eventTypeDef
      *            the event type definition.
-     * @return the new event type.
-     */
+    
+     * @return the new event type. */
     EventType newEventType(EventTypeDef _eventTypeDef);
     
 }

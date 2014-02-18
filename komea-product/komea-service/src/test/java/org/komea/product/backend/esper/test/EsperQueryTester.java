@@ -36,10 +36,14 @@ import com.espertech.esper.client.EPStatement;
 
 
 
+/**
+ */
 public class EsperQueryTester
 {
     
     
+    /**
+     */
     private static class MapLinePredicate implements IEsperLineTestPredicate
     {
         
@@ -49,8 +53,9 @@ public class EsperQueryTester
         
         
         /**
-         * @param _columnName
-         * @param _expectedValue
+        
+        
+         * @param _objects Map<String,Object>
          */
         public MapLinePredicate(final Map<String, Object> _objects) {
         
@@ -61,6 +66,11 @@ public class EsperQueryTester
         }
         
         
+        /**
+         * Method evaluate.
+         * @param _bean Map<String,Object>
+         * @see org.komea.product.backend.service.kpi.IEsperLineTestPredicate#evaluate(Map<String,Object>)
+         */
         @Override
         public void evaluate(final Map<String, Object> _bean) {
         
@@ -76,6 +86,8 @@ public class EsperQueryTester
     
     
     
+    /**
+     */
     private static class SingleColumnPredicate implements IEsperTestPredicate
     {
         
@@ -98,6 +110,11 @@ public class EsperQueryTester
         }
         
         
+        /**
+         * Method evaluate.
+         * @param _epStatement EPStatement
+         * @see org.komea.product.backend.service.kpi.IEsperTestPredicate#evaluate(EPStatement)
+         */
         @Override
         public void evaluate(final EPStatement _epStatement) {
         
@@ -110,6 +127,8 @@ public class EsperQueryTester
     
     
     
+    /**
+     */
     private static class SingleLinePredicate implements IEsperLineTestPredicate
     {
         
@@ -132,6 +151,11 @@ public class EsperQueryTester
         }
         
         
+        /**
+         * Method evaluate.
+         * @param _bean Map<String,Object>
+         * @see org.komea.product.backend.service.kpi.IEsperLineTestPredicate#evaluate(Map<String,Object>)
+         */
         @Override
         public void evaluate(final Map<String, Object> _bean) {
         
@@ -154,8 +178,8 @@ public class EsperQueryTester
      * 
      * @param _eventDTO
      *            the event dto
-     * @return the event.
-     */
+    
+     * @return the event. */
     public static IEvent convertEventDTO(final EventSimpleDto _eventDTO) {
     
     
@@ -166,6 +190,10 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method newEngine.
+     * @return EsperEngineBean
+     */
     public static EsperEngineBean newEngine() {
     
     
@@ -175,6 +203,11 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method newTest.
+     * @param _string String
+     * @return EsperQueryTester
+     */
     public static EsperQueryTester newTest(final String _string) {
     
     
@@ -222,6 +255,10 @@ public class EsperQueryTester
     
     
     
+    /**
+     * Constructor for EsperQueryTester.
+     * @param _statementName String
+     */
     private EsperQueryTester(final String _statementName) {
     
     
@@ -231,6 +268,10 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method dump.
+     * @return EsperQueryTester
+     */
     public EsperQueryTester dump() {
     
     
@@ -240,6 +281,11 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method expectRows.
+     * @param _numberRows int
+     * @return EsperQueryTester
+     */
     public EsperQueryTester expectRows(final int _numberRows) {
     
     
@@ -249,6 +295,10 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method getEvents.
+     * @return List<IEvent>
+     */
     public List<IEvent> getEvents() {
     
     
@@ -256,6 +306,11 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method hasLineResult.
+     * @param _testPredicate IEsperLineTestPredicate
+     * @return EsperQueryTester
+     */
     public EsperQueryTester hasLineResult(final IEsperLineTestPredicate _testPredicate) {
     
     
@@ -264,6 +319,11 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method hasLineResult.
+     * @param _map Map<String,Object>
+     * @return EsperQueryTester
+     */
     public EsperQueryTester hasLineResult(final Map<String, Object> _map) {
     
     
@@ -272,6 +332,12 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method hasLineResult.
+     * @param _columnName String
+     * @param _expectedValue Object
+     * @return EsperQueryTester
+     */
     public EsperQueryTester hasLineResult(final String _columnName, final Object _expectedValue) {
     
     
@@ -282,6 +348,12 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method hasSingleResult.
+     * @param _columnName String
+     * @param _expectedValue Object
+     * @return EsperQueryTester
+     */
     public EsperQueryTester hasSingleResult(final String _columnName, final Object _expectedValue) {
     
     
@@ -290,6 +362,12 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method instantiatedQuery.
+     * @param _formula String
+     * @param _project Project
+     * @return EsperQueryTester
+     */
     public EsperQueryTester instantiatedQuery(final String _formula, final Project _project) {
     
     
@@ -298,6 +376,10 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method prepareAlerts.
+     * @param esperEngineBean IEsperEngine
+     */
     public void prepareAlerts(final IEsperEngine esperEngineBean) {
     
     
@@ -308,6 +390,10 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method prepareQuery.
+     * @param esperEngineBean IEsperEngine
+     */
     public void prepareQuery(final IEsperEngine esperEngineBean) {
     
     
@@ -326,6 +412,10 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method runTest.
+     * @param esperEngineBean IEsperEngine
+     */
     public void runTest(final IEsperEngine esperEngineBean) {
     
     
@@ -336,6 +426,11 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method send.
+     * @param _alert1 IEvent
+     * @return EsperQueryTester
+     */
     public EsperQueryTester send(final IEvent _alert1) {
     
     
@@ -344,6 +439,12 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method send.
+     * @param _alert1 IEvent
+     * @param _numberTimes int
+     * @return EsperQueryTester
+     */
     public EsperQueryTester send(final IEvent _alert1, int _numberTimes) {
     
     
@@ -359,6 +460,7 @@ public class EsperQueryTester
      * 
      * @param _eventDto
      *            the event dto
+     * @return EsperQueryTester
      */
     public EsperQueryTester sendEvent(final EventSimpleDto _eventDto) {
     
@@ -452,6 +554,11 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method withQuery.
+     * @param _string String
+     * @return EsperQueryTester
+     */
     public EsperQueryTester withQuery(final String _string) {
     
     
@@ -460,6 +567,10 @@ public class EsperQueryTester
     }
     
     
+    /**
+     * Method dumpResults.
+     * @param listMapResult List<Map<String,Object>>
+     */
     private void dumpResults(final List<Map<String, Object>> listMapResult) {
     
     

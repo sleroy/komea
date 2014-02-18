@@ -20,6 +20,7 @@ import com.espertech.esper.client.EPStatement;
 
 /**
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class EsperEngineBeanTest
 {
@@ -30,8 +31,9 @@ public class EsperEngineBeanTest
     
     
     /**
-     * @throws java.lang.Exception
-     */
+    
+     * @throws Exception
+     * @throws java.lang.Exception */
     @After
     public void closeAfter() throws Exception {
     
@@ -42,8 +44,9 @@ public class EsperEngineBeanTest
     
     
     /**
-     * @throws java.lang.Exception
-     */
+    
+     * @throws Exception
+     * @throws java.lang.Exception */
     @Before
     public void setUp() throws Exception {
     

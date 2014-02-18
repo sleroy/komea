@@ -12,6 +12,8 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+/**
+ */
 public final class AlertJobDemo implements Job {
     
     public AlertJobDemo() {
@@ -20,6 +22,12 @@ public final class AlertJobDemo implements Job {
         
     }
     
+    /**
+     * Method execute.
+     * @param _context JobExecutionContext
+     * @throws JobExecutionException
+     * @see org.quartz.Job#execute(JobExecutionContext)
+     */
     @Override
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
     

@@ -15,6 +15,7 @@ import java.util.Set;
 /**
  *
  * @author rgalerme
+ * @version $Revision: 1.0 $
  */
 public class BugZillaContext {
 
@@ -32,10 +33,20 @@ public class BugZillaContext {
         this.listUpdateBug = new HashMap<String, List<BugzillaBug>>();
     }
 
+    /**
+     * Method getStatus.
+     * @return Set<String>
+     */
     public Set<String> getStatus() {
         return status.keySet();
     }
 
+    /**
+     * Method getFilterBugsByStatus.
+     * @param _status String
+     * @param _project String
+     * @return List<BugzillaBug>
+     */
     public List<BugzillaBug> getFilterBugsByStatus(String _status, String _project) {
         Map<String, List<BugzillaBug>> temps_list = this.status.get(_status);
         if (temps_list != null) {
@@ -44,6 +55,11 @@ public class BugZillaContext {
         return null;
     }
 
+    /**
+     * Method updateBugs.
+     * @param project String
+     * @param listOfBug List<BugzillaBug>
+     */
     public void updateBugs(String project, List<BugzillaBug> listOfBug) {
         List<BugzillaBug> get = this.listTotalBug.get(project);
         List<BugzillaBug> newbug = new ArrayList<BugzillaBug>();
@@ -91,6 +107,12 @@ public class BugZillaContext {
 
     }
 
+    /**
+     * Method getFilterBugs.
+     * @param project String
+     * @param status BugZillaStatus
+     * @return List<BugzillaBug>
+     */
     public List<BugzillaBug> getFilterBugs(String project, BugZillaStatus status) {
         List<BugzillaBug> filterBugs = null;
         if (status.equals(BugZillaStatus.ADD)) {

@@ -41,6 +41,7 @@ import com.espertech.esper.client.UpdateListener;
  * This type defines the esper engine bean. It initializes the Esper Engine.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 @Service
 public final class EsperEngineBean implements IEsperEngine
@@ -64,6 +65,13 @@ public final class EsperEngineBean implements IEsperEngine
     }
     
     
+    /**
+     * Method createEPL.
+     * @param _queryDefinition IQueryDefinition
+     * @return EPStatement
+     * @throws RuntimeException
+     * @see org.komea.product.backend.api.IEsperEngine#createEPL(IQueryDefinition)
+     */
     @Override
     public EPStatement createEPL(final IQueryDefinition _queryDefinition) throws RuntimeException {
     
@@ -87,6 +95,11 @@ public final class EsperEngineBean implements IEsperEngine
      * @see com.tocea.scertify.ci.flow.bean.IEsperEngine#getEsperEngine()
      */
     
+    /**
+     * Method createOrUpdateEPLQuery.
+     * @param _definition IQueryDefinition
+     * @see org.komea.product.backend.api.IEsperEngine#createOrUpdateEPLQuery(IQueryDefinition)
+     */
     @Override
     public void createOrUpdateEPLQuery(final IQueryDefinition _definition) {
     
@@ -116,6 +129,12 @@ public final class EsperEngineBean implements IEsperEngine
     }
     
     
+    /**
+     * Method existEPL.
+     * @param _metricKey String
+     * @return boolean
+     * @see org.komea.product.backend.api.IEsperEngine#existEPL(String)
+     */
     @Override
     public boolean existEPL(final String _metricKey) {
     
@@ -124,6 +143,11 @@ public final class EsperEngineBean implements IEsperEngine
     }
     
     
+    /**
+     * Method getEsper.
+     * @return EPServiceProvider
+     * @see org.komea.product.backend.api.IEsperEngine#getEsper()
+     */
     @Override
     public EPServiceProvider getEsper() {
     
@@ -132,6 +156,12 @@ public final class EsperEngineBean implements IEsperEngine
     }
     
     
+    /**
+     * Method getStatement.
+     * @param _statementName String
+     * @return EPStatement
+     * @see org.komea.product.backend.api.IEsperEngine#getStatement(String)
+     */
     @Override
     public EPStatement getStatement(final String _statementName) {
     
@@ -142,6 +172,11 @@ public final class EsperEngineBean implements IEsperEngine
     }
     
     
+    /**
+     * Method getStatementNames.
+     * @return String[]
+     * @see org.komea.product.backend.api.IEsperEngine#getStatementNames()
+     */
     @Override
     public String[] getStatementNames() {
     
@@ -150,6 +185,12 @@ public final class EsperEngineBean implements IEsperEngine
     }
     
     
+    /**
+     * Method getStatementOrFail.
+     * @param _measureName String
+     * @return EPStatement
+     * @see org.komea.product.backend.api.IEsperEngine#getStatementOrFail(String)
+     */
     @Override
     public EPStatement getStatementOrFail(final String _measureName) {
     
@@ -207,6 +248,7 @@ public final class EsperEngineBean implements IEsperEngine
      * 
      * @param _updateListener
      *            the update listener.
+     * @param _statementName String
      */
     public void registerListener(final String _statementName, final UpdateListener _updateListener) {
     
@@ -219,6 +261,11 @@ public final class EsperEngineBean implements IEsperEngine
     }
     
     
+    /**
+     * Method sendEvent.
+     * @param _event IEvent
+     * @see org.komea.product.backend.api.IEsperEngine#sendEvent(IEvent)
+     */
     @Override
     public void sendEvent(final IEvent _event) {
     

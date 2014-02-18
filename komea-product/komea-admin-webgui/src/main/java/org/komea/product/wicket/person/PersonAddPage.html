@@ -1,25 +1,36 @@
 <!DOCTYPE html>
-<html xmlns:wicket="http://wicket.apache.org" xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns:wicket="http://wicket.apache.org"
+	xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta charset="utf-8"></meta>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
 <meta content="Komea administration site" name="description"></meta>
 <meta content="Komea" name="author"></meta>
 <title>Komea Administration</title>
-<link rel="stylesheet" href="../../../../../../../main/webapp/static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
-<link rel="stylesheet" href="../../../../../../../main/webapp/static/css/style.css" type="text/css"></link>
-<link rel="stylesheet" type="text/css" href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
+<link rel="stylesheet"
+	href="../../../../../../../main/webapp/static/bootstrap/css/bootstrap.min.css"
+	type="text/css" media="screen"></link>
+<link rel="stylesheet"
+	href="../../../../../../../main/webapp/static/css/style.css"
+	type="text/css"></link>
+<link rel="stylesheet" type="text/css"
+	href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
 </head>
 <body>
 	<div class="container">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<span class="glyphicon cicon-user"></span> Manage Population of developers inside Komea
+				<span class="glyphicon cicon-user"></span> Manage Population of
+				developers inside Komea
 			</div>
 			<div class="panel-body">
 				<div class="container">
 					<!--  begin here -->
 					<wicket:extend>
+						<div wicket:id="dialog"></div>
+
+
+
 						<div class="alert alert-danger" wicket:id="feedback"></div>
 						<form class="form" wicket:id="form" role="form">
 							<legend>Editing a user</legend>
@@ -27,7 +38,8 @@
 								<div class="row">
 									<label class="col-md-2" for="inputEmail1">Login</label>
 									<div class="col-md-4">
-										<input id="login" name="login" type="text" placeholder="login" class="form-control" required="required" wicket:id="login">
+										<input id="login" name="login" type="text" placeholder="login"
+											class="form-control" required="required" wicket:id="login">
 									</div>
 								</div>
 							</div>
@@ -36,7 +48,9 @@
 								<div class="row">
 									<label class="col-md-2" for="inputEmail1">First name</label>
 									<div class="col-md-4">
-										<input id="firstName" name="firstName" type="text" placeholder="firstName" class="form-control" required="required" wicket:id="firstname">
+										<input id="firstName" name="firstName" type="text"
+											placeholder="firstName" class="form-control"
+											required="required" wicket:id="firstname">
 									</div>
 								</div>
 							</div>
@@ -45,7 +59,9 @@
 								<div class="row">
 									<label class="col-md-2" for="inputEmail1">Last name</label>
 									<div class="col-md-4">
-										<input id="surename" name="surename" type="text" placeholder="surename" class="form-control" required="required" wicket:id="lastname">
+										<input id="surename" name="surename" type="text"
+											placeholder="surename" class="form-control"
+											required="required" wicket:id="lastname">
 									</div>
 								</div>
 							</div>
@@ -54,18 +70,23 @@
 								<div class="row">
 									<label class="col-md-2" for="inputEmail1">Email</label>
 									<div class="col-md-4">
-										<input id="email" name="email" type="text" placeholder="email" class="form-control" required="required" wicket:id="email">
+										<input id="email" name="email" type="text" placeholder="email"
+											class="form-control" required="required" wicket:id="email">
 									</div>
 								</div>
 							</div>
 							<!-- Text input-->
 							<div class="form-group">
 								<div class="row">
-									<label class="col-md-2" for="inputEmail1">Attach the user to a group.</label>
+									<label class="col-md-2" for="inputEmail1">Attach the
+										user to a group.</label>
 									<div class="col-md-4">
 										<div class="row">
-											<button type="button" class="btn btn-small btn-info col-md-5">Attach to a department</button>
-											<button type="button" class="btn btn-small btn-info col-md-offset-2 col-md-5">Attach to a team</button>
+											<button type="button" class="btn btn-small btn-info col-md-5">Attach
+												to a department</button>
+											<button type="button" wicket:id="teambutton"
+												class="btn btn-small btn-info col-md-offset-2 col-md-5">Attach
+												to a team</button>
 										</div>
 									</div>
 								</div>
@@ -73,9 +94,11 @@
 							<!-- Text input-->
 							<div class="form-group">
 								<div class="row">
-									<label class="col-md-2" for="inputEmail1">Choose a project.</label>
+									<label class="col-md-2" for="inputEmail1">Choose a
+										project.</label>
 									<div class="col-md-4">
-										<select id="project" name="project" class="form-control">
+										<select id="project" name="project" class="form-control"
+											wicket:id="project">
 										</select>
 									</div>
 								</div>
@@ -83,9 +106,11 @@
 							<!-- Text input-->
 							<div class="form-group">
 								<div class="row">
-									<label class="col-md-2" for="inputEmail1">Choose a role.</label>
+									<label class="col-md-2" for="inputEmail1">Choose a
+										role.</label>
 									<div class="col-md-4">
-										<select id="userRole" name="userRole" class="form-control" wicket:id="role">
+										<select id="userRole" name="userRole" class="form-control"
+											wicket:id="role">
 										</select>
 									</div>
 								</div>
@@ -94,7 +119,8 @@
 							<div class="form-group">
 								<div class="row">
 									<div class="col-md-4">
-										<button id="submit" name="addedit" class="btn btn-primary" wicket:id="submit">Add/edit</button>
+										<button id="submit" name="addedit" class="btn btn-primary"
+											wicket:id="submit">Add/edit</button>
 									</div>
 								</div>
 							</div>
@@ -107,7 +133,8 @@
 	<footer class="tocea-footer">
 		<p>&copy; Komea.org</p>
 		<script src="../../../../../../../main/webapp/static/js/ui/jquery.js"></script>
-		<script src="../../../../../../../main/webapp/static/bootstrap/js/bootstrap.min.js"></script>
+		<script
+			src="../../../../../../../main/webapp/static/bootstrap/js/bootstrap.min.js"></script>
 	</footer>
 </body>
 </html>

@@ -20,6 +20,7 @@ import com.thoughtworks.xstream.XStream;
 
 /**
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class ObjectStorageTest
 {

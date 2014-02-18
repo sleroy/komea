@@ -13,11 +13,16 @@ import org.springframework.stereotype.Component;
  * 
  * @author sleroy
  * 
+ * @version $Revision: 1.0 $
  */
 @Component
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Target(value = { ElementType.TYPE })
 public @interface EventTypes {
+	/**
+	 * Method value.
+	 * @return EventTypeDef[]
+	 */
 	EventTypeDef[] value();
 }

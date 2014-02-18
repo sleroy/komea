@@ -12,6 +12,8 @@ import org.komea.product.database.model.SettingCriteria;
 
 
 
+/**
+ */
 public interface ISettingService
 {
     
@@ -27,8 +29,8 @@ public interface ISettingService
      *            the type name.
      * @param _description
      *            the description
-     * @return the Settings instance
-     */
+    
+     * @return the Settings instance */
     public Setting create(String _key, String _value, String _typeName, String _description);
     
     
@@ -37,18 +39,17 @@ public interface ISettingService
      * 
      * @param _key
      *            the key
-     * @return the proxy
-     */
+    
+     * @return the proxy */
     public <T> ISettingProxy<T> getProxy(Integer _key);
     
     
     /**
      * Returns the list of settings for a provider
      * 
-     * @param _providerID
-     *            the provider
-     * @return the list of settings.
-     */
+    
+    
+     * @return the list of settings. */
     public List<Setting> getSettings();
     
     
@@ -56,7 +57,8 @@ public interface ISettingService
      * Builds a new criteria that select on name.
      * 
      * @param _key
-     * @return
+    
+     * @return SettingCriteria
      */
     public SettingCriteria newSelectOnNameCriteria(String _key);
     
@@ -75,11 +77,15 @@ public interface ISettingService
      * 
      * @param _key
      *            the key
-     * @return the provider setting
-     */
+    
+     * @return the provider setting */
     <T> ISettingProxy<T> getProxy(String _key);
     
     
+    /**
+     * Method getSettingDAO.
+     * @return SettingDao
+     */
     SettingDao getSettingDAO();
     
 }

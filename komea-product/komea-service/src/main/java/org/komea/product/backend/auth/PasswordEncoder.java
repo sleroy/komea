@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 
 
+/**
+ */
 @Service
 public class PasswordEncoder implements IPasswordEncoder
 {
@@ -42,6 +44,10 @@ public class PasswordEncoder implements IPasswordEncoder
     }
     
     
+    /**
+     * Method getSalt.
+     * @return String
+     */
     public String getSalt() {
     
     
@@ -57,6 +63,10 @@ public class PasswordEncoder implements IPasswordEncoder
     }
     
     
+    /**
+     * Method setSalt.
+     * @param _salt String
+     */
     public void setSalt(final String _salt) {
     
     

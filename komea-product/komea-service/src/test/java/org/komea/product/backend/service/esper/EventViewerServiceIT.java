@@ -20,6 +20,7 @@ import org.komea.product.database.alert.IEvent;
  * Integration tests of the component EventViewer, validation of sending/receiving alerts.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class EventViewerServiceIT
 {
@@ -32,8 +33,9 @@ public class EventViewerServiceIT
     
     
     /**
-     * @throws java.lang.Exception
-     */
+    
+     * @throws Exception
+     * @throws java.lang.Exception */
     @Before
     public void setUp() throws Exception {
     
@@ -49,8 +51,9 @@ public class EventViewerServiceIT
     
     
     /**
-     * @throws java.lang.Exception
-     */
+    
+     * @throws Exception
+     * @throws java.lang.Exception */
     @After
     public void setUpAfter() throws Exception {
     

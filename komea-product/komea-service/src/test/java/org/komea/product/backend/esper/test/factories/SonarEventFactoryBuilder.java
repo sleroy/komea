@@ -11,10 +11,17 @@ import org.komea.product.backend.esper.test.EventFactoryBuilder;
 
 
 
+/**
+ */
 public class SonarEventFactoryBuilder
 {
     
     
+    /**
+     * Method main.
+     * @param args String[]
+     * @throws IOException
+     */
     public static void main(final String[] args) throws IOException {
     
     

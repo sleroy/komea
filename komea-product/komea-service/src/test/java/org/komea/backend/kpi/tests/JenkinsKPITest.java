@@ -10,6 +10,8 @@ import org.komea.product.backend.esper.test.EsperQueryTester;
 
 
 
+/**
+ */
 public class JenkinsKPITest
 {
     

@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 
 
+/**
+ */
 @Service(value = "komeaUserAuthService")
 public class UserAuthenticationService implements UserDetailsService
 {
@@ -45,6 +47,13 @@ public class UserAuthenticationService implements UserDetailsService
     }
     
     
+    /**
+     * Method loadUserByUsername.
+     * @param _username String
+     * @return UserDetails
+     * @throws UsernameNotFoundException
+     * @see org.springframework.security.core.userdetails.UserDetailsService#loadUserByUsername(String)
+     */
     @Override
     public UserDetails loadUserByUsername(final String _username) throws UsernameNotFoundException {
     

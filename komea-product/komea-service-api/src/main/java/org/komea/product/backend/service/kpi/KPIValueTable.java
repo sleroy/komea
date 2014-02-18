@@ -11,6 +11,8 @@ import org.komea.product.database.model.Kpi;
 
 
 
+/**
+ */
 public class KPIValueTable<T> implements Serializable
 {
     
@@ -41,8 +43,8 @@ public class KPIValueTable<T> implements Serializable
     
     
     /**
-     * @return the kpi
-     */
+    
+     * @return the kpi */
     public Kpi getKpi() {
     
     
@@ -51,8 +53,8 @@ public class KPIValueTable<T> implements Serializable
     
     
     /**
-     * @return the values
-     */
+    
+     * @return the values */
     public List<KpiLineValue<T>> getValues() {
     
     

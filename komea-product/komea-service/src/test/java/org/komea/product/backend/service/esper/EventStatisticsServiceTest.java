@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class EventStatisticsServiceTest
 {

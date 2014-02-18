@@ -8,6 +8,8 @@ import org.komea.product.database.model.Kpi;
 
 
 
+/**
+ */
 public interface IMeasureHistoryService extends IHistoryService
 {
     
@@ -17,8 +19,8 @@ public interface IMeasureHistoryService extends IHistoryService
      * 
      * @param _kpi
      *            the kpi
-     * @return the history purge action.
-     */
+    
+     * @return the history purge action. */
     IHistoryPurgeAction buildHistoryPurgeAction(Kpi _kpi);
     
     

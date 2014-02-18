@@ -8,6 +8,8 @@ import org.komea.product.database.model.Kpi;
 
 
 
+/**
+ */
 public final class QueryDefinition implements IQueryDefinition
 {
     
@@ -17,6 +19,10 @@ public final class QueryDefinition implements IQueryDefinition
     
     
     
+    /**
+     * Constructor for QueryDefinition.
+     * @param _kpi Kpi
+     */
     public QueryDefinition(final Kpi _kpi) {
     
     
@@ -24,6 +30,11 @@ public final class QueryDefinition implements IQueryDefinition
     }
     
     
+    /**
+     * Constructor for QueryDefinition.
+     * @param _kpi Kpi
+     * @param _statementName String
+     */
     public QueryDefinition(final Kpi _kpi, final String _statementName) {
     
     
@@ -32,6 +43,11 @@ public final class QueryDefinition implements IQueryDefinition
     }
     
     
+    /**
+     * Constructor for QueryDefinition.
+     * @param _esperQuery String
+     * @param _statementName String
+     */
     public QueryDefinition(final String _esperQuery, final String _statementName) {
     
     
@@ -40,6 +56,11 @@ public final class QueryDefinition implements IQueryDefinition
     }
     
     
+    /**
+     * Method getName.
+     * @return String
+     * @see org.komea.product.backend.service.business.IQueryDefinition#getName()
+     */
     @Override
     public String getName() {
     
@@ -48,6 +69,11 @@ public final class QueryDefinition implements IQueryDefinition
     }
     
     
+    /**
+     * Method getQuery.
+     * @return String
+     * @see org.komea.product.backend.service.business.IQueryDefinition#getQuery()
+     */
     @Override
     public String getQuery() {
     

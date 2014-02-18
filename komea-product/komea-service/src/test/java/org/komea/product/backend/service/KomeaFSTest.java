@@ -19,6 +19,7 @@ import org.mockito.Mockito;
 
 /**
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class KomeaFSTest
 {
@@ -27,8 +28,9 @@ public class KomeaFSTest
     /**
      * Tests the functionalities of Komea FS.
      * 
-     * @throws java.lang.Exception
-     */
+    
+     * @throws Exception
+     * @throws java.lang.Exception */
     @SuppressWarnings("resource")
     @Test
     public void testKomeaFS() throws Exception {

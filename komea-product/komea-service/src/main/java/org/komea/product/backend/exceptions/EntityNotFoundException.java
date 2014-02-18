@@ -7,10 +7,17 @@ import org.komea.product.database.enums.EntityType;
 
 
 
+/**
+ */
 public class EntityNotFoundException extends RuntimeException
 {
     
     
+    /**
+     * Constructor for EntityNotFoundException.
+     * @param _entityID int
+     * @param _entityType EntityType
+     */
     public EntityNotFoundException(final int _entityID, final EntityType _entityType) {
     
     

@@ -11,6 +11,8 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 
 
+/**
+ */
 public class ElFormula
 {
     
@@ -46,6 +48,10 @@ public class ElFormula
     }
     
     
+    /**
+     * Method getFormula.
+     * @return String
+     */
     public String getFormula() {
     
     
@@ -53,6 +59,12 @@ public class ElFormula
     }
     
     
+    /**
+     * Method getValue.
+     * @param _context Object
+     * @param _value Class<T>
+     * @return T
+     */
     public <T> T getValue(final Object _context, final Class<T> _value) {
     
     

@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class EventStatisticsServiceIT extends AbstractSpringIntegrationTestCase
 {

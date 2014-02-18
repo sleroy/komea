@@ -10,6 +10,8 @@ import org.komea.product.database.model.MeasureCriteria;
 
 
 
+/**
+ */
 public class HistoryPurgePerMonthsAction implements IHistoryPurgeAction
 {
     
@@ -19,6 +21,11 @@ public class HistoryPurgePerMonthsAction implements IHistoryPurgeAction
     
     
     
+    /**
+     * Constructor for HistoryPurgePerMonthsAction.
+     * @param _measureDAO MeasureDao
+     * @param _kpi Kpi
+     */
     public HistoryPurgePerMonthsAction(final MeasureDao _measureDAO, final Kpi _kpi) {
     
     
@@ -29,6 +36,11 @@ public class HistoryPurgePerMonthsAction implements IHistoryPurgeAction
     }
     
     
+    /**
+     * Method purgeHistory.
+     * @return int
+     * @see org.komea.product.backend.service.kpi.IHistoryPurgeAction#purgeHistory()
+     */
     @Override
     public int purgeHistory() {
     

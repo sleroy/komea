@@ -15,11 +15,14 @@ import org.komea.product.backend.utils.SearchFilter;
 
 /**
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class DAOStorageTest
 {
     
     
+    /**
+     */
     public class ObjectStorageStub<T> implements IObjectStorage<T>
     {
         
@@ -28,6 +31,11 @@ public class DAOStorageTest
         
         
         
+        /**
+         * Method get.
+         * @return T
+         * @see org.komea.product.backend.fs.IObjectStorage#get()
+         */
         @Override
         public T get() {
         
@@ -36,6 +44,11 @@ public class DAOStorageTest
         }
         
         
+        /**
+         * Method set.
+         * @param _object T
+         * @see org.komea.product.backend.fs.IObjectStorage#set(T)
+         */
         @Override
         public void set(final T _object) {
         
@@ -49,8 +62,9 @@ public class DAOStorageTest
     
     
     /**
-     * @throws java.lang.Exception
-     */
+    
+     * @throws Exception
+     * @throws java.lang.Exception */
     @Test
     public void testDAO() throws Exception {
     

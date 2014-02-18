@@ -15,6 +15,8 @@ import org.komea.product.database.model.PersonGroupCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ */
 @Service
 public final class PersonGroupService implements IPersonGroupService {
 
@@ -79,6 +81,12 @@ public final class PersonGroupService implements IPersonGroupService {
         return getDepartment(group.getIdPersonGroupParent());
     }
 
+    /**
+     * Method getTeam.
+     * @param _groupID Integer
+     * @return PersonGroup
+     * @see org.komea.product.backend.service.entities.IPersonGroupService#getTeam(Integer)
+     */
     @Override
     public PersonGroup getTeam(final Integer _groupID) {
 
@@ -92,6 +100,13 @@ public final class PersonGroupService implements IPersonGroupService {
         return getTeam(group.getIdPersonGroupParent());
     }
 
+    /**
+     * Method getPersonGroups.
+     * @param personGroupKeys List<String>
+     * @param entityType EntityType
+     * @return List<PersonGroup>
+     * @see org.komea.product.backend.service.entities.IPersonGroupService#getPersonGroups(List<String>, EntityType)
+     */
     @Override
     public List<PersonGroup> getPersonGroups(final List<String> personGroupKeys,
             final EntityType entityType) {
@@ -108,6 +123,13 @@ public final class PersonGroupService implements IPersonGroupService {
         return personGroupDao.selectByCriteria(personGroupCriteria);
     }
 
+    /**
+     * Method personGroupsToBaseEntities.
+     * @param personGroups List<PersonGroup>
+     * @param entityType EntityType
+     * @return List<BaseEntity>
+     * @see org.komea.product.backend.service.entities.IPersonGroupService#personGroupsToBaseEntities(List<PersonGroup>, EntityType)
+     */
     @Override
     public List<BaseEntity> personGroupsToBaseEntities(List<PersonGroup> personGroups,
             final EntityType entityType) {

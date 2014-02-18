@@ -8,6 +8,8 @@ import org.komea.product.database.alert.IEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ */
 @Service
 public class EventViewerService implements IEventViewerService {
 
@@ -22,23 +24,43 @@ public class EventViewerService implements IEventViewerService {
         super();
     }
 
+    /**
+     * Method getDayEvents.
+     * @return List<IEvent>
+     * @see org.komea.product.backend.service.esper.IEventViewerService#getDayEvents()
+     */
     @Override
     public List<IEvent> getDayEvents() {
 
         return getInstantView(DAY_EVENTS);
     }
 
+    /**
+     * Method getEsperService.
+     * @return IEsperEngine
+     */
     public IEsperEngine getEsperService() {
 
         return esperService;
     }
 
+    /**
+     * Method getHourEvents.
+     * @return List<IEvent>
+     * @see org.komea.product.backend.service.esper.IEventViewerService#getHourEvents()
+     */
     @Override
     public List<IEvent> getHourEvents() {
 
         return getInstantView(HOUR_EVENTS);
     }
 
+    /**
+     * Method getInstantView.
+     * @param _EplStatement String
+     * @return List<IEvent>
+     * @see org.komea.product.backend.service.esper.IEventViewerService#getInstantView(String)
+     */
     @Override
     public List<IEvent> getInstantView(final String _EplStatement) {
 
@@ -46,6 +68,11 @@ public class EventViewerService implements IEventViewerService {
         return EPStatementResult.build(requiredEplStatement).listUnderlyingObjects();
     }
 
+    /**
+     * Method getLastEvents.
+     * @return List<IEvent>
+     * @see org.komea.product.backend.service.esper.IEventViewerService#getLastEvents()
+     */
     @Override
     public List<IEvent> getLastEvents() {
 
@@ -64,6 +91,10 @@ public class EventViewerService implements IEventViewerService {
                 LAST100_EVENTS));
     }
 
+    /**
+     * Method setEsperService.
+     * @param _esperService IEsperEngine
+     */
     public void setEsperService(final IEsperEngine _esperService) {
 
         esperService = _esperService;

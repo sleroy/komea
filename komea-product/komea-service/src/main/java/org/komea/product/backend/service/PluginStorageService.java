@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
  * This plugin Storage Service.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 @Service
 public class PluginStorageService implements IPluginStorageService
@@ -27,6 +28,10 @@ public class PluginStorageService implements IPluginStorageService
     
     
     
+    /**
+     * Method getKomeaFS.
+     * @return IKomeaFS
+     */
     public IKomeaFS getKomeaFS() {
     
     
@@ -34,6 +39,13 @@ public class PluginStorageService implements IPluginStorageService
     }
     
     
+    /**
+     * Method registerDAOStorage.
+     * @param _pluginName String
+     * @param _pojoStorageClass Class<T>
+     * @return IDAOObjectStorage<T>
+     * @see org.komea.product.backend.service.IPluginStorageService#registerDAOStorage(String, Class<T>)
+     */
     @Override
     public <T> IDAOObjectStorage<T> registerDAOStorage(
             final String _pluginName,
@@ -44,6 +56,13 @@ public class PluginStorageService implements IPluginStorageService
     }
     
     
+    /**
+     * Method registerStorage.
+     * @param _pluginName String
+     * @param _pojoStorageClass Class<T>
+     * @return IObjectStorage<T>
+     * @see org.komea.product.backend.service.IPluginStorageService#registerStorage(String, Class<T>)
+     */
     @Override
     public <T> IObjectStorage<T> registerStorage(
             final String _pluginName,
@@ -54,6 +73,10 @@ public class PluginStorageService implements IPluginStorageService
     }
     
     
+    /**
+     * Method setKomeaFS.
+     * @param _komeaFS IKomeaFS
+     */
     public void setKomeaFS(final IKomeaFS _komeaFS) {
     
     

@@ -31,6 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ */
 @Service
 @Transactional
 public final class KPIService implements IKPIService {
@@ -82,6 +84,12 @@ public final class KPIService implements IKPIService {
 
     }
 
+    /**
+     * Method findKPI.
+     * @param _kpiKey KpiKey
+     * @return Kpi
+     * @see org.komea.product.backend.service.kpi.IKPIService#findKPI(KpiKey)
+     */
     @Override
     public Kpi findKPI(final KpiKey _kpiKey) {
 
@@ -95,6 +103,12 @@ public final class KPIService implements IKPIService {
 
     }
 
+    /**
+     * Method findKPIOrFail.
+     * @param _kpiKey KpiKey
+     * @return Kpi
+     * @see org.komea.product.backend.service.kpi.IKPIService#findKPIOrFail(KpiKey)
+     */
     @Override
     public Kpi findKPIOrFail(final KpiKey _kpiKey) {
 
@@ -105,35 +119,59 @@ public final class KPIService implements IKPIService {
         return findKPI;
     }
 
+    /**
+     * Method findMeasure.
+     * @param _measureName String
+     * @return IEPMetric
+     */
     public IEPMetric findMeasure(final String _measureName) {
 
         return new EPMetric(esperEngine.getStatementOrFail(_measureName));
 
     }
 
+    /**
+     * Method getCronRegistry.
+     * @return ICronRegistryService
+     */
     public ICronRegistryService getCronRegistry() {
 
         return cronRegistry;
     }
 
+    /**
+     * Method getEntityService.
+     * @return IEntityService
+     */
     public IEntityService getEntityService() {
 
         return entityService;
     }
 
     /**
-     * @return the esperEngine
-     */
+    
+     * @return the esperEngine */
     public final IEsperEngine getEsperEngine() {
 
         return esperEngine;
     }
 
+    /**
+     * Method getKpiDAO.
+     * @return KpiDao
+     */
     public KpiDao getKpiDAO() {
 
         return kpiDAO;
     }
 
+    /**
+     * Method getKpiRealTimeValues.
+     * @param _kpiKey KpiKey
+     * @return KPIValueTable<TEntity>
+     * @throws KPINotFoundException
+     * @see org.komea.product.backend.service.kpi.IKPIService#getKpiRealTimeValues(KpiKey)
+     */
     @Override
     public <TEntity> KPIValueTable<TEntity> getKpiRealTimeValues(final KpiKey _kpiKey)
             throws KPINotFoundException {
@@ -147,6 +185,12 @@ public final class KPIService implements IKPIService {
 
     }
 
+    /**
+     * Method getKpiSingleValue.
+     * @param _kpiKey KpiKey
+     * @return Double
+     * @see org.komea.product.backend.service.kpi.IKPIService#getKpiSingleValue(KpiKey)
+     */
     @Override
     public Double getKpiSingleValue(final KpiKey _kpiKey) {
 
@@ -158,6 +202,13 @@ public final class KPIService implements IKPIService {
         return number.doubleValue();
     }
 
+    /**
+     * Method getKpiSingleValue.
+     * @param _kpiKey KpiKey
+     * @param _columnName String
+     * @return Double
+     * @see org.komea.product.backend.service.kpi.IKPIService#getKpiSingleValue(KpiKey, String)
+     */
     @Override
     public Double getKpiSingleValue(final KpiKey _kpiKey, final String _columnName) {
 
@@ -169,6 +220,12 @@ public final class KPIService implements IKPIService {
         return number.doubleValue();
     }
 
+    /**
+     * Method getKpiTendancy.
+     * @param _measureKey KpiKey
+     * @return KpiTendancyDto
+     * @see org.komea.product.backend.service.kpi.IKPIService#getKpiTendancy(KpiKey)
+     */
     @Override
     public KpiTendancyDto getKpiTendancy(final KpiKey _measureKey) {
 
@@ -177,8 +234,8 @@ public final class KPIService implements IKPIService {
     }
 
     /**
-     * @return the measureService
-     */
+    
+     * @return the measureService */
     public final IHistoryService getMeasureService() {
 
         return measureService;
@@ -190,6 +247,11 @@ public final class KPIService implements IKPIService {
         //
     }
 
+    /**
+     * Method listAllKpis.
+     * @return List<Kpi>
+     * @see org.komea.product.backend.service.kpi.IKPIService#listAllKpis()
+     */
     @Override
     public List<Kpi> listAllKpis() {
 
@@ -197,6 +259,11 @@ public final class KPIService implements IKPIService {
         return kpiList;
     }
 
+    /**
+     * Method saveOrUpdate.
+     * @param _kpi Kpi
+     * @see org.komea.product.backend.service.kpi.IKPIService#saveOrUpdate(Kpi)
+     */
     @Transactional
     @Override
     public void saveOrUpdate(final Kpi _kpi) {
@@ -220,11 +287,19 @@ public final class KPIService implements IKPIService {
         createOrUpdateHistoryCronJob(_kpi, entity);
     }
 
+    /**
+     * Method setCronRegistry.
+     * @param _cronRegistry ICronRegistryService
+     */
     public void setCronRegistry(final ICronRegistryService _cronRegistry) {
 
         cronRegistry = _cronRegistry;
     }
 
+    /**
+     * Method setEntityService.
+     * @param _entityService IEntityService
+     */
     public void setEntityService(final IEntityService _entityService) {
 
         entityService = _entityService;
@@ -238,6 +313,10 @@ public final class KPIService implements IKPIService {
         esperEngine = _esperEngine;
     }
 
+    /**
+     * Method setKpiDAO.
+     * @param _kpiDAO KpiDao
+     */
     public void setKpiDAO(final KpiDao _kpiDAO) {
 
         kpiDAO = _kpiDAO;
@@ -251,6 +330,11 @@ public final class KPIService implements IKPIService {
         measureService = _measureService;
     }
 
+    /**
+     * Method storeValueInHistory.
+     * @param _kpiKey KpiKey
+     * @see org.komea.product.backend.service.kpi.IKPIService#storeValueInHistory(KpiKey)
+     */
     @Transactional
     @Override
     public void storeValueInHistory(final KpiKey _kpiKey) {
@@ -264,6 +348,11 @@ public final class KPIService implements IKPIService {
 
     }
 
+    /**
+     * Method initializeMeasureFromKPI.
+     * @param _kpiKey KpiKey
+     * @return Measure
+     */
     private Measure initializeMeasureFromKPI(final KpiKey _kpiKey) {
 
         final Measure measure = new Measure();
@@ -275,6 +364,13 @@ public final class KPIService implements IKPIService {
         return measure;
     }
 
+    /**
+     * Method getKpis.
+     * @param entityType EntityType
+     * @param kpiKeys List<String>
+     * @return List<Kpi>
+     * @see org.komea.product.backend.service.kpi.IKPIService#getKpis(EntityType, List<String>)
+     */
     @Override
     public List<Kpi> getKpis(final EntityType entityType, final List<String> kpiKeys) {
         final KpiCriteria kpiCriteria = new KpiCriteria();

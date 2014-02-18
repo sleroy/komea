@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 
+/**
+ */
 public interface IPluginIntegrationService
 {
     
@@ -17,8 +19,8 @@ public interface IPluginIntegrationService
     /**
      * Registers a provider from the DTO Description.
      * 
-     * @param _object
-     *            the provider DTO description
+    
+     * @param _providerDTO ProviderDto
      */
     public abstract void registerProvider(ProviderDto _providerDTO);
     

@@ -13,21 +13,22 @@ import org.komea.product.database.model.PersonGroup;
  *
  * @author $Author: jguidoux $
  * @since 12 févr. 2014
+ * @version $Revision: 1.0 $
  */
 public interface IPersonGroupService {
 
     /**
      * This method list all departments
      *
-     * @return the departments list
-     */
+    
+     * @return the departments list */
     List<DepartmentDto> getAllDepartments();
 
     /**
      * This method list all teams
      *
-     * @return the team list
-     */
+    
+     * @return the team list */
     List<TeamDto> getAllTeams();
 
     /**
@@ -35,8 +36,8 @@ public interface IPersonGroupService {
      * it will be return otherwise it will find it in the parent group
      *
      * @param _groupID a group id
-     * @return the department
-     */
+    
+     * @return the department */
     PersonGroup getDepartment(Integer _groupID);
 
     /**
@@ -44,12 +45,24 @@ public interface IPersonGroupService {
      * return otherwise it will find it in the parent group
      *
      * @param _groupID a group id
-     * @return the team
-     */
+    
+     * @return the team */
     PersonGroup getTeam(Integer _groupID);
 
+    /**
+     * Method getPersonGroups.
+     * @param personGroupKeys List<String>
+     * @param entityType EntityType
+     * @return List<PersonGroup>
+     */
     List<PersonGroup> getPersonGroups(List<String> personGroupKeys, EntityType entityType);
 
+    /**
+     * Method personGroupsToBaseEntities.
+     * @param personGroups List<PersonGroup>
+     * @param entityType EntityType
+     * @return List<BaseEntity>
+     */
     List<BaseEntity> personGroupsToBaseEntities(List<PersonGroup> personGroups, EntityType entityType);
 
 }

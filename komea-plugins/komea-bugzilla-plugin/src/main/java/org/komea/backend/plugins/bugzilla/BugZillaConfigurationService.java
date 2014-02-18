@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author rgalerme
+ * @version $Revision: 1.0 $
  */
 @Service
 public class BugZillaConfigurationService implements IBugZillaConfigurationService {
@@ -37,6 +38,11 @@ public class BugZillaConfigurationService implements IBugZillaConfigurationServi
         configurationStorage = pluginStorage.registerStorage("BUGZILLA", BugZillaConfiguration.class);
     }
 
+    /**
+     * Method getServers.
+     * @return List<IBugZillaServerConfiguration>
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService#getServers()
+     */
     @Override
     public List<IBugZillaServerConfiguration> getServers() {
         BugZillaConfiguration var = configurationStorage.get();
@@ -50,21 +56,41 @@ public class BugZillaConfigurationService implements IBugZillaConfigurationServi
         return result;
     }
 
+    /**
+     * Method getServerProxyFactory.
+     * @return IBugZillaServerProxyFactory
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService#getServerProxyFactory()
+     */
     @Override
     public IBugZillaServerProxyFactory getServerProxyFactory() {
         return serverProxyFactory;
     }
 
+    /**
+     * Method setServerProxyFactory.
+     * @param serverProxyFactory IBugZillaServerProxyFactory
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService#setServerProxyFactory(IBugZillaServerProxyFactory)
+     */
     @Override
     public void setServerProxyFactory(IBugZillaServerProxyFactory serverProxyFactory) {
         this.serverProxyFactory = serverProxyFactory;
     }
 
+    /**
+     * Method getPluginStorage.
+     * @return IPluginStorageService
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService#getPluginStorage()
+     */
     @Override
     public IPluginStorageService getPluginStorage() {
         return pluginStorage;
     }
 
+    /**
+     * Method setPluginStorage.
+     * @param pluginStorage IPluginStorageService
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService#setPluginStorage(IPluginStorageService)
+     */
     @Override
     public void setPluginStorage(IPluginStorageService pluginStorage) {
         this.pluginStorage = pluginStorage;

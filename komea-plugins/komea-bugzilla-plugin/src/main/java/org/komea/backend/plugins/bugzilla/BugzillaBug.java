@@ -14,6 +14,7 @@ import java.util.Date;
 
 /**
  * @author rgalerme
+ * @version $Revision: 1.0 $
  */
 public class BugzillaBug
 {
@@ -33,6 +34,14 @@ public class BugzillaBug
     }
     
     
+    /**
+     * Constructor for BugzillaBug.
+     * @param id int
+     * @param Status String
+     * @param is_open boolean
+     * @param date_creation Date
+     * @param is_assigned boolean
+     */
     public BugzillaBug(
             final int id,
             final String Status,
@@ -49,6 +58,10 @@ public class BugzillaBug
     }
     
     
+    /**
+     * Method getDate_creation.
+     * @return Date
+     */
     public Date getDate_creation() {
     
     
@@ -56,6 +69,10 @@ public class BugzillaBug
     }
     
     
+    /**
+     * Method getId.
+     * @return int
+     */
     public int getId() {
     
     
@@ -63,6 +80,10 @@ public class BugzillaBug
     }
     
     
+    /**
+     * Method getStatus.
+     * @return String
+     */
     public String getStatus() {
     
     
@@ -70,6 +91,10 @@ public class BugzillaBug
     }
     
     
+    /**
+     * Method isIs_assigned.
+     * @return boolean
+     */
     public boolean isIs_assigned() {
     
     
@@ -77,6 +102,10 @@ public class BugzillaBug
     }
     
     
+    /**
+     * Method isIs_open.
+     * @return boolean
+     */
     public boolean isIs_open() {
     
     
@@ -84,6 +113,10 @@ public class BugzillaBug
     }
     
     
+    /**
+     * Method setDate_creation.
+     * @param date_creation Date
+     */
     public void setDate_creation(final Date date_creation) {
     
     
@@ -91,6 +124,10 @@ public class BugzillaBug
     }
     
     
+    /**
+     * Method setId.
+     * @param id int
+     */
     public void setId(final int id) {
     
     
@@ -98,6 +135,10 @@ public class BugzillaBug
     }
     
     
+    /**
+     * Method setIs_assigned.
+     * @param is_assigned boolean
+     */
     public void setIs_assigned(final boolean is_assigned) {
     
     
@@ -105,6 +146,10 @@ public class BugzillaBug
     }
     
     
+    /**
+     * Method setIs_open.
+     * @param is_open boolean
+     */
     public void setIs_open(final boolean is_open) {
     
     
@@ -112,6 +157,10 @@ public class BugzillaBug
     }
     
     
+    /**
+     * Method setStatus.
+     * @param Status String
+     */
     public void setStatus(final String Status) {
     
     

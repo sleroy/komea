@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  *
  * @author rgalerme
+ * @version $Revision: 1.0 $
  */
 public class BugZillaServerConfiguration implements IBugZillaServerConfiguration {
 
@@ -22,12 +23,22 @@ public class BugZillaServerConfiguration implements IBugZillaServerConfiguration
 
     private final IBugZillaServerProxyFactory serverProxyFactory;
 
+    /**
+     * Constructor for BugZillaServerConfiguration.
+     * @param server BugZillaServer
+     * @param serverProxyFactory IBugZillaServerProxyFactory
+     */
     public BugZillaServerConfiguration(BugZillaServer server, IBugZillaServerProxyFactory serverProxyFactory) {
 
         this.server = server;
         this.serverProxyFactory = serverProxyFactory;
     }
 
+    /**
+     * Method openProxy.
+     * @return IBugZillaServerProxy
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration#openProxy()
+     */
     @Override
     public IBugZillaServerProxy openProxy() {
         if (this.serverController == null) {
@@ -36,6 +47,11 @@ public class BugZillaServerConfiguration implements IBugZillaServerConfiguration
         return serverController;
     }
 
+    /**
+     * Method getBugZillaContext.
+     * @return BugZillaContext
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration#getBugZillaContext()
+     */
     @Override
     public BugZillaContext getBugZillaContext() {
         return this.server.getContext();

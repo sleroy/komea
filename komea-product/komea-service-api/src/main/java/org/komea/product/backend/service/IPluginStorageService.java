@@ -12,6 +12,7 @@ import org.komea.product.backend.service.business.IDAOObjectStorage;
  * This interface defines the plugin storage service.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public interface IPluginStorageService
 {
@@ -24,8 +25,8 @@ public interface IPluginStorageService
      *            the plugin name
      * @param _pojoStorageClass
      *            the class of the pojo to be stored/retrieved
-     * @return the object stoirage
-     */
+    
+     * @return the object stoirage */
     <T> IDAOObjectStorage<T> registerDAOStorage(String _pluginName, Class<T> _pojoStorageClass);
     
     
@@ -36,7 +37,7 @@ public interface IPluginStorageService
      *            the plugin name
      * @param _pojoStorageClass
      *            the class of the pojo to be stored/retrieved
-     * @return the object stoirage
-     */
+    
+     * @return the object stoirage */
     <T> IObjectStorage<T> registerStorage(String _pluginName, Class<T> _pojoStorageClass);
 }

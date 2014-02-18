@@ -7,6 +7,8 @@ import org.komea.product.database.api.IEntity;
 
 
 
+/**
+ */
 public class KPINotFoundRuntimeException extends RuntimeException
 {
     
@@ -25,6 +27,11 @@ public class KPINotFoundRuntimeException extends RuntimeException
     }
     
     
+    /**
+     * Constructor for KPINotFoundRuntimeException.
+     * @param _entity IEntity
+     * @param _kpiName String
+     */
     public KPINotFoundRuntimeException(final IEntity _entity, final String _kpiName) {
     
     
@@ -35,6 +42,12 @@ public class KPINotFoundRuntimeException extends RuntimeException
     }
     
     
+    /**
+     * Constructor for KPINotFoundRuntimeException.
+     * @param _entity IEntity
+     * @param _kpiName String
+     * @param _e Throwable
+     */
     public KPINotFoundRuntimeException(
             final IEntity _entity,
             final String _kpiName,
@@ -48,6 +61,10 @@ public class KPINotFoundRuntimeException extends RuntimeException
     }
     
     
+    /**
+     * Constructor for KPINotFoundRuntimeException.
+     * @param _kpiName String
+     */
     public KPINotFoundRuntimeException(final String _kpiName) {
     
     
@@ -56,6 +73,10 @@ public class KPINotFoundRuntimeException extends RuntimeException
     }
     
     
+    /**
+     * Method getEntity.
+     * @return Object
+     */
     public Object getEntity() {
     
     
@@ -63,6 +84,10 @@ public class KPINotFoundRuntimeException extends RuntimeException
     }
     
     
+    /**
+     * Method getKpiName.
+     * @return String
+     */
     public String getKpiName() {
     
     

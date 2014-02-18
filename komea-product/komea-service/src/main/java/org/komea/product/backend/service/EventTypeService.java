@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 
+/**
+ */
 @Service
 @Transactional
 public class EventTypeService implements IEventTypeService
@@ -56,7 +58,8 @@ public class EventTypeService implements IEventTypeService
      * Builds a new criteria with the name.
      * 
      * @param _eventType
-     * @return
+    
+     * @return EventTypeCriteria
      */
     public EventTypeCriteria newCriteriaSelectByName(final EventType _eventType) {
     
@@ -90,6 +93,10 @@ public class EventTypeService implements IEventTypeService
     }
     
     
+    /**
+     * Method setEventTypeDAO.
+     * @param _eventTypeDAO EventTypeDao
+     */
     public void setEventTypeDAO(final EventTypeDao _eventTypeDAO) {
     
     

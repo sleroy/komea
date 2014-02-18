@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 
 
 
+/**
+ */
 @Service
 public final class EntityService implements IEntityService
 {
@@ -53,6 +55,13 @@ public final class EntityService implements IEntityService
     }
     
     
+    /**
+     * Method getEntities.
+     * @param _entityType EntityType
+     * @param _entityKeys List<String>
+     * @return List<BaseEntity>
+     * @see org.komea.product.backend.service.entities.IEntityService#getEntities(EntityType, List<String>)
+     */
     @Override
     public List<BaseEntity> getEntities(final EntityType _entityType, final List<String> _entityKeys) {
     
@@ -82,8 +91,11 @@ public final class EntityService implements IEntityService
     /**
      * (non-Javadoc)
      * 
-     * @see org.komea.product.backend.service.entities.IEntityService#getEntity(org.komea.product.database.enums.EntityType, int)
-     */
+    
+     * @param _entityType EntityType
+     * @param _key Integer
+     * @return TEntity
+     * @see org.komea.product.backend.service.entities.IEntityService#getEntity(org.komea.product.database.enums.EntityType, int) */
     @Override
     public <TEntity extends IEntity> TEntity getEntity(
             final EntityType _entityType,
@@ -125,8 +137,11 @@ public final class EntityService implements IEntityService
     /**
      * (non-Javadoc)
      * 
-     * @see org.komea.product.backend.service.entities.IEntityService#getEntityOrFail(org.komea.product.database.enums.EntityType, int)
-     */
+    
+     * @param _entityType EntityType
+     * @param _entityID Integer
+     * @return IEntity
+     * @see org.komea.product.backend.service.entities.IEntityService#getEntityOrFail(org.komea.product.database.enums.EntityType, int) */
     @Override
     public IEntity getEntityOrFail(final EntityType _entityType, final Integer _entityID) {
     
@@ -137,6 +152,13 @@ public final class EntityService implements IEntityService
     }
     
     
+    /**
+     * Method loadEntities.
+     * @param _entityType EntityType
+     * @param _keys List<Integer>
+     * @return List<TEntity>
+     * @see org.komea.product.backend.service.entities.IEntityService#loadEntities(EntityType, List<Integer>)
+     */
     @Override
     public <TEntity extends IEntity> List<TEntity> loadEntities(
             final EntityType _entityType,

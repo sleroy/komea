@@ -24,6 +24,8 @@ import org.komea.product.database.model.ProviderCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ */
 @Service
 public class EventConversionAndValidationService implements IEventConversionAndValidationService {
 
@@ -42,6 +44,12 @@ public class EventConversionAndValidationService implements IEventConversionAndV
 
     private Validator validator;
 
+    /**
+     * Method convert.
+     * @param _dto EventSimpleDto
+     * @return IEvent
+     * @see org.komea.product.backend.service.esper.IEventConversionAndValidationService#convert(EventSimpleDto)
+     */
     @Override
     public IEvent convert(final EventSimpleDto _dto) {
 
@@ -91,26 +99,46 @@ public class EventConversionAndValidationService implements IEventConversionAndV
         return event;
     }
 
+    /**
+     * Method getEventTypeDAO.
+     * @return EventTypeDao
+     */
     public EventTypeDao getEventTypeDAO() {
 
         return eventTypeDAO;
     }
 
+    /**
+     * Method getPersonDAO.
+     * @return PersonDao
+     */
     public PersonDao getPersonDAO() {
 
         return personDAO;
     }
 
+    /**
+     * Method getPersonGroupDAO.
+     * @return PersonGroupDao
+     */
     public PersonGroupDao getPersonGroupDAO() {
 
         return personGroupDAO;
     }
 
+    /**
+     * Method getProjectDAO.
+     * @return ProjectDao
+     */
     public ProjectDao getProjectDAO() {
 
         return projectDAO;
     }
 
+    /**
+     * Method getProviderDAO.
+     * @return ProviderDao
+     */
     public ProviderDao getProviderDAO() {
 
         return providerDAO;
@@ -123,26 +151,46 @@ public class EventConversionAndValidationService implements IEventConversionAndV
 
     }
 
+    /**
+     * Method setEventTypeDAO.
+     * @param _eventTypeDAO EventTypeDao
+     */
     public void setEventTypeDAO(final EventTypeDao _eventTypeDAO) {
 
         eventTypeDAO = _eventTypeDAO;
     }
 
+    /**
+     * Method setPersonDAO.
+     * @param _personDAO PersonDao
+     */
     public void setPersonDAO(final PersonDao _personDAO) {
 
         personDAO = _personDAO;
     }
 
+    /**
+     * Method setPersonGroupDAO.
+     * @param _personGroupDAO PersonGroupDao
+     */
     public void setPersonGroupDAO(final PersonGroupDao _personGroupDAO) {
 
         personGroupDAO = _personGroupDAO;
     }
 
+    /**
+     * Method setProjectDAO.
+     * @param _projectDAO ProjectDao
+     */
     public void setProjectDAO(final ProjectDao _projectDAO) {
 
         projectDAO = _projectDAO;
     }
 
+    /**
+     * Method setProviderDAO.
+     * @param _providerDAO ProviderDao
+     */
     public void setProviderDAO(final ProviderDao _providerDAO) {
 
         providerDAO = _providerDAO;
@@ -161,6 +209,10 @@ public class EventConversionAndValidationService implements IEventConversionAndV
 
     }
 
+    /**
+     * Method validationObject.
+     * @param _object T
+     */
     public <T> void validationObject(final T _object) {
 
         final Set<ConstraintViolation<T>> constraintViolationException

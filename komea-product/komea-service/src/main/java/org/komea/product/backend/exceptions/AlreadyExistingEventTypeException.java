@@ -7,6 +7,8 @@ import org.komea.product.database.model.EventType;
 
 
 
+/**
+ */
 public class AlreadyExistingEventTypeException extends RuntimeException
 {
     
@@ -15,6 +17,10 @@ public class AlreadyExistingEventTypeException extends RuntimeException
     
     
     
+    /**
+     * Constructor for AlreadyExistingEventTypeException.
+     * @param _eventType EventType
+     */
     public AlreadyExistingEventTypeException(final EventType _eventType) {
     
     
@@ -26,6 +32,10 @@ public class AlreadyExistingEventTypeException extends RuntimeException
     }
     
     
+    /**
+     * Method getEventType.
+     * @return EventType
+     */
     public EventType getEventType() {
     
     

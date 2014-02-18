@@ -7,6 +7,8 @@ import org.komea.product.database.model.Project;
 
 
 
+/**
+ */
 public interface ISystemProjectBean
 {
     
@@ -14,8 +16,8 @@ public interface ISystemProjectBean
     /**
      * Returns the system project.
      * 
-     * @return the system project.
-     */
+    
+     * @return the system project. */
     public Project getSystemProject();
     
 }

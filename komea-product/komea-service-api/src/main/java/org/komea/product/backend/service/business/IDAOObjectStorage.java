@@ -13,7 +13,8 @@ import org.komea.product.backend.utils.SearchFilter;
  * Returns an interface to manipulate entities as DAO.
  * 
  * @author sleroy
- * @param <T>
+
+ * @version $Revision: 1.0 $
  */
 public interface IDAOObjectStorage<T>
 {
@@ -50,8 +51,8 @@ public interface IDAOObjectStorage<T>
      * 
      * @param _filter
      *            the filter
-     * @return the entities.
-     */
+    
+     * @return the entities. */
     List<T> find(SearchFilter<T> _filter);
     
     
@@ -64,8 +65,8 @@ public interface IDAOObjectStorage<T>
     /**
      * Returns all the entities
      * 
-     * @return the entities
-     */
+    
+     * @return the entities */
     List<T> selectAll();
     
     

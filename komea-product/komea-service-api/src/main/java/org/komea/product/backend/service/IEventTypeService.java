@@ -9,10 +9,16 @@ import org.komea.product.database.model.Provider;
 
 
 
+/**
+ */
 public interface IEventTypeService
 {
     
     
+    /**
+     * Method getEventTypeDAO.
+     * @return EventTypeDao
+     */
     public EventTypeDao getEventTypeDAO();
     
     

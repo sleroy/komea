@@ -3,12 +3,15 @@ package org.komea.product.backend.fs;
 
 
 
+/**
+ */
 public interface IObjectStorage<T>
 {
     
     
     /**
      * Returns the object.
+     * @return T
      */
     T get();
     
