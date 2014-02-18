@@ -30,18 +30,15 @@ public class KomeaServerStartHandler implements ServerStartHandler {
     @Override
     public void onServerStart(Server server) {
         final String komeaUrl = KomeaPlugin.getServerUrl(settings);
+        final String serverUrl = settings.getString("sonar.core.serverBaseURL");
         if (komeaUrl == null) {
             return;
         }
         final ProviderDto providerDto = new ProviderDto();
-
-        final Provider provider = KomeaPlugin.getProvider(server.getURL());
+        final Provider provider = KomeaPlugin.getProvider(serverUrl);
         providerDto.setProvider(provider);
 
         final List<EventType> eventTypes = new ArrayList<EventType>(KomeaPlugin.EVENT_TYPES);
-        eventTypes.add(KomeaPlugin.EVENT_ANALYSIS_STARTED);
-        eventTypes.add(KomeaPlugin.EVENT_ANALYSIS_ENDED);
-        eventTypes.add(KomeaPlugin.EVENT_ANALYSIS_DURATION);
         final Collection<String> metricKeys = KomeaPlugin.getMetricKeys(settings);
         final Collection<Metric> metrics = metricFinder.findAll(new ArrayList<String>(metricKeys));
         for (final Metric metric : metrics) {

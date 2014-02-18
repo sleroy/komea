@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import jenkins.model.Jenkins;
+import jenkins.model.JenkinsLocationConfiguration;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.EventCategory;
@@ -89,7 +90,8 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
         }
         final ProviderDto providerDto = new ProviderDto();
 
-        final Provider provider = getProvider(c.getUrl());
+        final JenkinsLocationConfiguration globalConfig = new JenkinsLocationConfiguration();
+        final Provider provider = getProvider(globalConfig.getUrl());
         providerDto.setProvider(provider);
 
         final List<EventType> eventTypes = new ArrayList<EventType>(EVENT_TYPES);
@@ -100,7 +102,7 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
 
     private void registerProvider(final String serverUrl, final ProviderDto provider,
             final TaskListener listener) {
-        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+        final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
             final IProvidersAPI providersAPI = RestClientFactory.INSTANCE.createProvidersAPI(serverUrl);

@@ -111,7 +111,6 @@ public class KomeaPlugin extends SonarPlugin {
     }
 
     public static Provider getProvider(final String serverUrl) {
-
         final Provider provider = new Provider();
         provider.setProviderType(ProviderType.QUALITY);
         provider.setName("SonarQube");

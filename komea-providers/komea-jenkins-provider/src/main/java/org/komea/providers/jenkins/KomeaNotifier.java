@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
-import jenkins.model.Jenkins;
+import jenkins.model.JenkinsLocationConfiguration;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
@@ -45,8 +45,8 @@ public class KomeaNotifier extends Notifier implements Serializable {
             this.projectKey = null;
         }
         this.branch = branch;
-        final String jenkinsUrl = Jenkins.getInstance().getRootUrl();
-        provider = KomeaComputerListener.getProvider(jenkinsUrl);
+        final JenkinsLocationConfiguration globalConfig = new JenkinsLocationConfiguration();
+        provider = KomeaComputerListener.getProvider(globalConfig.getUrl());
     }
 
     private String getServerUrl() {
@@ -158,8 +158,6 @@ public class KomeaNotifier extends Notifier implements Serializable {
         event.setDate(new Date());
         event.setEventType(KomeaComputerListener.EVENT_BUILD_DURATION.getEventKey());
         event.setMessage(message);
-        event.setPersonGroup(null);
-        event.setPersons(null);
         event.setProject(projectKey);
         event.setProperties(properties);
         event.setProvider(provider.getUrl());
@@ -194,8 +192,6 @@ public class KomeaNotifier extends Notifier implements Serializable {
         event.setDate(new Date());
         event.setEventType(KomeaComputerListener.EVENT_BUILD_RESULT.getEventKey());
         event.setMessage(message);
-        event.setPersonGroup(null);
-        event.setPersons(null);
         event.setProject(projectKey);
         event.setProperties(properties);
         event.setProvider(provider.getUrl());
@@ -216,8 +212,6 @@ public class KomeaNotifier extends Notifier implements Serializable {
         event.setDate(new Date());
         event.setEventType(KomeaComputerListener.EVENT_BUILD_ENDED.getEventKey());
         event.setMessage(message);
-        event.setPersonGroup(null);
-        event.setPersons(null);
         event.setProject(projectKey);
         event.setProperties(properties);
         event.setProvider(provider.getUrl());
