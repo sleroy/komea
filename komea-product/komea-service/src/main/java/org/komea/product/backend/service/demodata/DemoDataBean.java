@@ -2,10 +2,14 @@
 package org.komea.product.backend.service.demodata;
 
 
+
 import java.util.Random;
 
 import javax.annotation.PostConstruct;
 
+import org.komea.product.backend.auth.IPasswordEncoder;
+import org.komea.product.backend.plugin.api.EventTypeDef;
+import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.alert.EventDtoBuilder;
 import org.komea.product.database.dao.EventTypeDao;
@@ -30,10 +34,26 @@ import org.komea.product.database.model.Provider;
 import org.komea.product.database.model.ProviderCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
-@Component
-public class DemoDataBean {
+
+
+@ProviderPlugin(
+        eventTypes = {
+            @EventTypeDef(
+                    category = "SCM",
+                    description = "",
+                    enabled = true,
+                    entityType = EntityType.SYSTEM,
+                    key = "event-demo",
+                    name = "Demonstration event",
+                    severity = Severity.MAJOR) },
+        icon = "demo",
+        name = "Demo Provider plugin",
+        type = ProviderType.OTHER,
+        url = "/demoProvider")
+public class DemoDataBean
+{
+    
     
     @Autowired
     private IEventPushService eventPushService;
@@ -53,64 +73,73 @@ public class DemoDataBean {
     @Autowired
     private EventTypeDao      eventTypeDAO;
     
+    
+    @Autowired
+    private IPasswordEncoder  encoder;
+    
+    
+    
     public DemoDataBean() {
+    
     
         super();
     }
     
+    
     public PersonGroupDao getPersonGroupDao() {
+    
     
         return personGroupDao;
     }
     
+    
     public PersonRoleDao getPersonRoleDao() {
+    
     
         return personRoleDao;
     }
     
+    
     @PostConstruct
     public void init() {
     
-        PersonRole administrator = new PersonRole(null, "Administrator");
+    
+        final PersonRole administrator = new PersonRole(null, "ADMIN", "Administrator");
         PersonRoleCriteria prCriteria = new PersonRoleCriteria();
         prCriteria.createCriteria().andNameEqualTo("Administrator");
         if (personRoleDao.countByCriteria(prCriteria) == 0) {
             personRoleDao.insert(administrator);
         }
         
-        final PersonRole userRole = new PersonRole(null, "Standard user");
+        
+        final PersonRole userRole = new PersonRole(null, "ADMIN", "Standard user");
         prCriteria = new PersonRoleCriteria();
         prCriteria.createCriteria().andNameEqualTo("Standard user");
         if (personRoleDao.countByCriteria(prCriteria) == 0) {
             personRoleDao.insert(userRole);
         }
         
-        final Person record = new Person(null, null, null, "Obiwan", "Kenobi", "obiwan@lightforce.net", "obiwan", "");
-        record.setIdPersonRole(userRole.getId());
-        PersonCriteria pCriteria = new PersonCriteria();
-        pCriteria.createCriteria().andLoginEqualTo("obiwan");
-        if (personDAO.countByCriteria(pCriteria) == 0) {
-            personDAO.insert(record);
-            
-        }
         
-        final Person record2 = new Person(null, null, null, "Dark", "Maul", "darkmaul@darkforce.net", "dmaul", "");
-        record2.setIdPersonRole(userRole.getId());
-        pCriteria = new PersonCriteria();
-        pCriteria.createCriteria().andLoginEqualTo("dmaul");
-        if (personDAO.countByCriteria(pCriteria) == 0) {
-            personDAO.insert(record2);
-            
-        }
+        final Person obiwan =
+                new Person(null, null, null, "Obiwan", "Kenobi", "obiwan@lightforce.net", "obiwan",
+                        encoder.encodePassword("obiwan"));
         
-        final Person record3 = new Person(null, null, null, "Luke", "Skywalker", "lskywalker@lightforce.net", "lskywalker", "");
-        record3.setIdPersonRole(userRole.getId());
-        pCriteria = new PersonCriteria();
-        pCriteria.createCriteria().andLoginEqualTo("lskywalker");
-        if (personDAO.countByCriteria(pCriteria) == 0) {
-            personDAO.insert(record3);
-            
-        }
+        createUser(obiwan, userRole);
+        
+        final Person admin =
+                new Person(null, null, null, "admin", "admin", "admiweb@tocea.com", "admin",
+                        encoder.encodePassword("admin"));
+        createUser(admin, administrator);
+        
+        final Person record2 =
+                new Person(null, null, null, "Dark", "Maul", "darkmaul@darkforce.net", "dmaul",
+                        encoder.encodePassword("dmaul"));
+        createUser(record2, userRole);
+        
+        final Person record3 =
+                new Person(null, null, null, "Luke", "Skywalker", "lskywalker@lightforce.net",
+                        "lskywalker", encoder.encodePassword("lskywalker"));
+        createUser(record3, userRole);
         
         final PersonGroup department = new PersonGroup();
         department.setName("Department ABC");
@@ -153,9 +182,9 @@ public class DemoDataBean {
         provider.setIcon("icon.png");
         provider.setName("jenkins");
         provider.setUrl("http://komea.tocea.com/jenkins");
-        provider.setProviderType(ProviderType.JENKINS);
+        provider.setProviderType(ProviderType.CI_BUILD);
         
-        ProviderCriteria criteria = new ProviderCriteria();
+        final ProviderCriteria criteria = new ProviderCriteria();
         criteria.createCriteria().andNameEqualTo("jenkins");
         if (providerDao.countByCriteria(criteria) == 0) {
             
@@ -172,7 +201,7 @@ public class DemoDataBean {
         eventType.setName("build launched");
         eventType.setSeverity(Severity.INFO);
         
-        EventTypeCriteria criteria2 = new EventTypeCriteria();
+        final EventTypeCriteria criteria2 = new EventTypeCriteria();
         criteria2.createCriteria().andEventKeyEqualTo("BUILD_LAUNCHED");
         if (eventTypeDAO.countByCriteria(criteria2) == 0) {
             
@@ -183,9 +212,9 @@ public class DemoDataBean {
         provider.setIcon("icon2.png");
         provider.setName("DEMO");
         provider.setUrl("http://komea.tocea.com/demo");
-        provider.setProviderType(ProviderType.JENKINS);
+        provider.setProviderType(ProviderType.CI_BUILD);
         
-        ProviderCriteria criteria3 = new ProviderCriteria();
+        final ProviderCriteria criteria3 = new ProviderCriteria();
         criteria3.createCriteria().andNameEqualTo("DEMO");
         if (providerDao.countByCriteria(criteria3) == 0) {
             
@@ -201,7 +230,7 @@ public class DemoDataBean {
         eventType.setIdProvider(provider.getId());
         eventType.setName("demoAlert");
         eventType.setSeverity(Severity.MAJOR);
-        EventTypeCriteria criteria4 = new EventTypeCriteria();
+        final EventTypeCriteria criteria4 = new EventTypeCriteria();
         criteria4.createCriteria().andEventKeyEqualTo("demo_alert");
         if (eventTypeDAO.countByCriteria(criteria4) == 0) {
             
@@ -209,25 +238,51 @@ public class DemoDataBean {
         }
         
     }
+    
+    
     @Scheduled(fixedRate = 10000)
     public void sendAlert() {
     
+    
         for (int i = 0; i < 10; ++i) {
-            final EventSimpleDto event = EventDtoBuilder.newAlert().message("Demo alert" + new Random().nextInt(12)).project("SYSTEM")
-                    .provided("http://komea.tocea.com/demo").eventType("demo_alert").build();
+            final EventSimpleDto event =
+                    EventDtoBuilder
+                            .newAlert()
+                            .message(
+                                    "Event sent by Demonstration DemoDataBean"
+                                            + new Random().nextInt(12)).project("SYSTEM")
+                            .provided("/demoProvider").eventType("event-demo").build();
             eventPushService.sendEventDto(event);
             
         }
     }
     
+    
     public void setPersonGroupDao(final PersonGroupDao _personGroupDao) {
+    
     
         personGroupDao = _personGroupDao;
     }
     
+    
     public void setPersonRoleDao(final PersonRoleDao _personRoleDao) {
     
+    
         personRoleDao = _personRoleDao;
+    }
+    
+    
+    private Person createUser(final Person record, final PersonRole userRole) {
+    
+    
+        record.setIdPersonRole(userRole.getId());
+        final PersonCriteria pCriteria = new PersonCriteria();
+        pCriteria.createCriteria().andLoginEqualTo(record.getLogin());
+        if (personDAO.countByCriteria(pCriteria) == 0) {
+            personDAO.insert(record);
+            
+        }
+        return record;
     }
     
 }

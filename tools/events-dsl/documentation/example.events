@@ -1,0 +1,15 @@
+
+factory MyFactory {
+	event MyEvent1 {
+		String project ;
+		String message ;
+		
+	}
+	
+	event MyEvent2 {
+		String project ;
+		String message ;
+		
+	}
+
+}

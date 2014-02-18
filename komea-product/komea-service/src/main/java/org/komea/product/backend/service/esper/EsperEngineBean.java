@@ -33,6 +33,7 @@ import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
+import com.espertech.esper.client.UpdateListener;
 
 
 
@@ -64,14 +65,20 @@ public final class EsperEngineBean implements IEsperEngine
     
     
     @Override
-    public EPStatement createEPL(final IQueryDefinition _queryDefinition) {
+    public EPStatement createEPL(final IQueryDefinition _queryDefinition) throws RuntimeException {
     
     
         LOGGER.info("Creation of a new EPL Statement {}", _queryDefinition);
-        final EPStatement createEPL =
-                esperEngine.getEPAdministrator().createEPL(_queryDefinition.getQuery(),
-                        _queryDefinition.getName());
-        return createEPL;
+        try {
+            final EPStatement createEPL =
+                    esperEngine.getEPAdministrator().createEPL(_queryDefinition.getQuery(),
+                            _queryDefinition.getName());
+            return createEPL;
+        } catch (final RuntimeException e) {
+            LOGGER.error("Query invalid : ", e);
+            throw e;
+        }
+        
     }
     
     
@@ -195,12 +202,27 @@ public final class EsperEngineBean implements IEsperEngine
     }
     
     
-    @Override
-    public void sendAlert(final IEvent _event) {
+    /**
+     * Register an update listener.
+     * 
+     * @param _updateListener
+     *            the update listener.
+     */
+    public void registerListener(final String _statementName, final UpdateListener _updateListener) {
     
     
-        // LOGGER.trace("Sending alert {}", _alert);
+        LOGGER.info("Registering listener on {}", _statementName);
+        final EPStatement statement = getStatement(_statementName);
+        if (statement == null) { throw new EsperStatementNotFoundException(_statementName); }
+        statement.addListener(_updateListener);
         
+    }
+    
+    
+    @Override
+    public void sendEvent(final IEvent _event) {
+    
+    
         esperEngine.getEPRuntime().sendEvent(_event);
         
     }

@@ -2,6 +2,7 @@
 package org.komea.product.backend.service.esper;
 
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,21 +17,32 @@ import com.espertech.esper.client.EPStatement;
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.SafeIterator;
 
+
+
 public final class EPStatementResult
 {
     
-    public static EPStatementResult build(@NotNull final EPStatement _epStatement) {
+    
+    public static EPStatementResult build(@NotNull
+    final EPStatement _epStatement) {
+    
     
         return new EPStatementResult(_epStatement);
     }
     
+    
+    
     private final EPStatement statement;
     
+    
+    
     private EPStatementResult(final EPStatement _statement) {
+    
     
         super();
         statement = _statement;
     }
+    
     
     /**
      * Returns a list of result from the EP Statement and a property expression.
@@ -40,6 +52,7 @@ public final class EPStatementResult
      * @return the list of values or an empty list..
      */
     public <T> List<Map<String, T>> listMapResult() {
+    
     
         final List<Map<String, T>> res = new ArrayList<Map<String, T>>(100);
         SafeIterator<EventBean> safeIterator = null;
@@ -58,6 +71,7 @@ public final class EPStatementResult
         return res;
     }
     
+    
     /**
      * Returns a list of result from the EP Statement and a property expression.
      * 
@@ -65,7 +79,57 @@ public final class EPStatementResult
      *            the property expression
      * @return the list of values or an empty list..
      */
-    public <T> List<T> listMapResult(final Class<T> _implementationClass) {
+    public <T> List<T> listResult(final String _propertyName) {
+    
+    
+        final List<T> res = new ArrayList<T>(100);
+        SafeIterator<EventBean> safeIterator = null;
+        try {
+            safeIterator = statement.safeIterator();
+            while (safeIterator.hasNext()) {
+                final EventBean next = safeIterator.next();
+                res.add((T) next.get(_propertyName));
+            }
+            
+        } finally {
+            if (safeIterator != null) {
+                safeIterator.close();
+            }
+        }
+        return res;
+    }
+    
+    
+    public <T> List<T> listUnderlyingObjects() {
+    
+    
+        final List<T> res = new ArrayList<T>(100);
+        SafeIterator<EventBean> safeIterator = null;
+        try {
+            safeIterator = statement.safeIterator();
+            while (safeIterator.hasNext()) {
+                final EventBean next = safeIterator.next();
+                res.add((T) next.getUnderlying());
+            }
+            
+        } finally {
+            if (safeIterator != null) {
+                safeIterator.close();
+            }
+        }
+        return res;
+    }
+    
+    
+    /**
+     * Returns a list of result from the EP Statement and a property expression.
+     * 
+     * @param _propertyName
+     *            the property expression
+     * @return the list of values or an empty list..
+     */
+    public <T> List<T> mapAPojoPerResultLine(final Class<T> _implementationClass) {
+    
     
         final List<T> res = new ArrayList<T>(100);
         SafeIterator<EventBean> safeIterator = null;
@@ -86,50 +150,6 @@ public final class EPStatementResult
         return res;
     }
     
-    /**
-     * Returns a list of result from the EP Statement and a property expression.
-     * 
-     * @param _propertyName
-     *            the property expression
-     * @return the list of values or an empty list..
-     */
-    public <T> List<T> listResult(final String _propertyName) {
-    
-        final List<T> res = new ArrayList<T>(100);
-        SafeIterator<EventBean> safeIterator = null;
-        try {
-            safeIterator = statement.safeIterator();
-            while (safeIterator.hasNext()) {
-                final EventBean next = safeIterator.next();
-                res.add((T) next.get(_propertyName));
-            }
-            
-        } finally {
-            if (safeIterator != null) {
-                safeIterator.close();
-            }
-        }
-        return res;
-    }
-    
-    public <T> List<T> listUnderlyingObjects() {
-    
-        final List<T> res = new ArrayList<T>(100);
-        SafeIterator<EventBean> safeIterator = null;
-        try {
-            safeIterator = statement.safeIterator();
-            while (safeIterator.hasNext()) {
-                final EventBean next = safeIterator.next();
-                res.add((T) next.getUnderlying());
-            }
-            
-        } finally {
-            if (safeIterator != null) {
-                safeIterator.close();
-            }
-        }
-        return res;
-    }
     
     /**
      * This method should be use with great care, the statement must always returns a value.
@@ -138,12 +158,14 @@ public final class EPStatementResult
      */
     public <T> T singleResult() {
     
+    
         T res = null;
         SafeIterator<EventBean> safeIterator = null;
         try {
             safeIterator = statement.safeIterator();
             if (safeIterator.hasNext()) {
                 final EventBean next = safeIterator.next();
+                
                 res = (T) ((Map) next.getUnderlying()).values().iterator().next();
             }
             
@@ -155,6 +177,7 @@ public final class EPStatementResult
         return res;
     }
     
+    
     /**
      * Returns a single result from the EP Statement
      * 
@@ -163,6 +186,7 @@ public final class EPStatementResult
      * @return the value or null.
      */
     public <T> T singleResult(final String _propertyName) {
+    
     
         T res = null;
         SafeIterator<EventBean> safeIterator = null;

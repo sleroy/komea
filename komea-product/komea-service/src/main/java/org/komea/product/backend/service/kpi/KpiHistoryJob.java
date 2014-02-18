@@ -36,7 +36,7 @@ public class KpiHistoryJob implements Job
         final Kpi kpi = (Kpi) _context.getMergedJobDataMap().get("kpi");
         final IKPIService kpiService = (IKPIService) _context.getMergedJobDataMap().get("service");
         
-        kpiService.storeValueInHistory(KpiKey.withEntity(kpi, entity));
+        kpiService.storeValueInHistory(KpiKey.ofKpiAndEntity(kpi, entity));
     }
     
     

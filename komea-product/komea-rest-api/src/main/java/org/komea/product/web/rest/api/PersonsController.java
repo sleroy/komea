@@ -4,7 +4,7 @@ package org.komea.product.web.rest.api;
 
 import java.util.List;
 
-import org.komea.product.backend.service.IEntityService;
+import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.dto.PersonDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class PersonsController {
     private static final Logger LOGGER = LoggerFactory.getLogger(PersonsController.class);
     
     @Autowired
-    private IEntityService      entityService;
+    private IPersonService      entityService;
     
     /**
      * This method return the person list

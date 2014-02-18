@@ -49,6 +49,8 @@
             <property name="useActualColumnNames" value="true" />
             <property name="entityType" value="PERSON" />
             <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+            <columnOverride column="userBdd" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+                            javaType="org.komea.product.database.enums.UserBdd" />
         </table>
         <table tableName="kom_pvd" domainObjectName="Provider">
             <property name="useActualColumnNames" value="true" />

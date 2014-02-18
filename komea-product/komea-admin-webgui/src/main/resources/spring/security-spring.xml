@@ -3,27 +3,30 @@
 	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
-
-	<http auto-config="true" use-expressions="true">
+	<global-method-security secured-annotations="enabled" />
+	<http auto-config="false" use-expressions="true">
 		<intercept-url pattern="/p/login" access="permitAll" />
 		<intercept-url pattern="/p/accessdenied" access="permitAll" />
 		<intercept-url pattern="/p/logout" access="permitAll" />
-		<intercept-url pattern="/p/**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/p/**" access="hasRole('ADMIN')" />
 		<intercept-url pattern="/rest/**" access="permitAll" />
 		<form-login login-page="/p/login" default-target-url="/p/"
 			authentication-failure-url="/p/accessdenied" />
 		<logout logout-success-url="/p/logout" />
+		<session-management>
+			<concurrency-control max-sessions="2"
+				error-if-maximum-exceeded="true" />
+		</session-management>
 	</http>
 
-
 	<authentication-manager alias="authenticationManager">
-		<authentication-provider>
-			<user-service>
-				<user name="admin" password="admin"
-					authorities="ROLE_PUSH, ROLE_REST, ROLE_USER, ROLE_ADMIN" />
-				<user name="push" password="push" authorities="ROLE_USER, PUSH_ROLE" />
-			</user-service>
+		<authentication-provider user-service-ref="komeaUserAuthService">
+			<password-encoder hash="{sha}" />
+			<!-- <user-service> <user name="admin" password="admin" authorities="ROLE_PUSH, 
+				ROLE_REST, ROLE_USER, ROLE_ADMIN" /> <user name="push" password="push" authorities="ROLE_USER, 
+				PUSH_ROLE" /> </user-service> -->
 		</authentication-provider>
 	</authentication-manager>
+
 
 </beans:beans>

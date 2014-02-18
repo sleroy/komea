@@ -35,9 +35,11 @@ public class HistoryPurgePerDaysAction implements IHistoryPurgeAction
     
         final DateTime dateTime = new DateTime();
         dateTime.minusDays(kpi.getEvictionRate());
-        final MeasureCriteria example = new MeasureCriteria();
-        example.createCriteria().andDateLessThan(dateTime.toDate());
-        return measureDAO.deleteByCriteria(example);
+        final MeasureCriteria measureCriteria = new MeasureCriteria();
+        
+        measureCriteria.createCriteria().andDateLessThan(dateTime.toDate())
+                .andIdKpiEqualTo(kpi.getId());
+        return measureDAO.deleteByCriteria(measureCriteria);
     }
     
 }

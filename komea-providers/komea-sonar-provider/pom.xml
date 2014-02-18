@@ -36,12 +36,6 @@
             <version>${sonar.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.komea.product</groupId>
-            <artifactId>komea-rest-client</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
 
         <!-- Logging -->
         <dependency>

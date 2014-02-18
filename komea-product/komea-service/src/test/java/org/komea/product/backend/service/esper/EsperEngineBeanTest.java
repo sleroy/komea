@@ -111,13 +111,13 @@ public class EsperEngineBeanTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.esper.EsperEngineBean#sendAlert(org.komea.product.database.alert.IEvent)}.
-     */
-    @Test
-    public final void testSendAlert() {
-    
-    
-        esperEngine.sendAlert(Mockito.mock(IEvent.class));
-    }
+         * Test method for {@link org.komea.product.backend.service.esper.EsperEngineBean#sendEvent(org.komea.product.database.alert.IEvent)}.
+         */
+        @Test
+        public final void testSendEvent() {
+        
+        
+            esperEngine.sendEvent(Mockito.mock(IEvent.class));
+        }
     
 }

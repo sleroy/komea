@@ -65,7 +65,7 @@
 
 		<!-- Tests -->
 		<dbunit.version>2.4.9</dbunit.version>
-		<spring.test.dbunit.version>1.0.0</spring.test.dbunit.version>
+		<spring.test.dbunit.version>1.0.1</spring.test.dbunit.version>
 		<junit.version>4.10</junit.version>
 
 		<hsqldb.version>2.2.9</hsqldb.version>
@@ -85,7 +85,7 @@
 			the same value in the parent pom and in each module pom. Then JaCoCo will 
 			add up information in the same report, so that, it will give the cross-module 
 			code coverage. -->
-		<sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath>
+		<!-- <sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath> -->
 		<sonar.language>java</sonar.language>
 
 	</properties>
@@ -142,13 +142,19 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.5</version>
+				<version>2.16</version>
+				<configuration>
+					<!-- <forkCount>1C</forkCount> -->
+				</configuration>
 				<executions>
 					<execution>
 						<id>integration-test</id>
 						<goals>
 							<goal>integration-test</goal>
 						</goals>
+						<configuration>
+							<reuseForks>false</reuseForks>
+						</configuration>
 					</execution>
 					<execution>
 						<id>verify</id>
@@ -169,31 +175,11 @@
 				<artifactId>sonar-maven-plugin</artifactId>
 				<version>2.2</version>
 			</plugin>
-
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<configuration>
-					<includes>example.*</includes>
-				</configuration>
-				<executions>
-					<execution>
-						<id>pre-test</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>post-test</id>
-						<phase>test</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-
+			<!-- <plugin> <groupId>org.jacoco</groupId> <artifactId>jacoco-maven-plugin</artifactId> 
+				<configuration> <includes>example.*</includes> </configuration> <executions> 
+				<execution> <id>pre-test</id> <goals> <goal>prepare-agent</goal> </goals> 
+				</execution> <execution> <id>post-test</id> <phase>test</phase> <goals> <goal>report</goal> 
+				</goals> </execution> </executions> </plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -299,50 +285,50 @@
 							<artifactId>maven-project-info-reports-plugin</artifactId>
 							<version>2.2</version>
 						</plugin>
-<!-- 						<plugin> -->
-<!-- 							<groupId>org.jacoco</groupId> -->
-<!-- 							<artifactId>jacoco-maven-plugin</artifactId> -->
-<!-- 							<version>0.6.4.201312101107</version> -->
-							<!-- <executions> -->
-							<!-- <execution> -->
-							<!-- <id>jacoco-prepare-agent</id> -->
-							<!-- <phase>process-test-classes</phase> -->
-							<!-- <goals> -->
-							<!-- <goal>prepare-agent</goal> -->
-							<!-- </goals> -->
-							<!-- </execution> -->
-							<!-- <execution> -->
-							<!-- <id>jacoco-prepare-agent-integration</id> -->
-							<!-- <phase>pre-integration-test</phase> -->
-							<!-- <goals> -->
-							<!-- <goal>prepare-agent-integration</goal> -->
-							<!-- </goals> -->
-							<!-- </execution> -->
-							<!-- <execution> -->
-							<!-- <id>jacoco-report</id> -->
-							<!-- <goals> -->
-							<!-- <goal>report</goal> -->
-							<!-- </goals> -->
-							<!-- <phase>post-integration-test</phase> -->
-							<!-- </execution> -->
-							<!-- <execution> -->
-							<!-- <id>jacoco-integration</id> -->
-							<!-- <phase>post-integration-test</phase> -->
-							<!-- <goals> -->
-							<!-- <goal>report-integration</goal> -->
-							<!-- </goals> -->
-							<!-- </execution> -->
-							<!-- <execution> -->
-							<!-- <id>jacoco-check</id> -->
-							<!-- <goals> -->
-							<!-- <goal>check</goal> -->
-							<!-- </goals> -->
-							<!-- <configuration> -->
-							<!-- <rules /> -->
-							<!-- </configuration> -->
-							<!-- </execution> -->
-							<!-- </executions> -->
-<!-- 						</plugin> -->
+						<!-- <plugin> -->
+						<!-- <groupId>org.jacoco</groupId> -->
+						<!-- <artifactId>jacoco-maven-plugin</artifactId> -->
+						<!-- <version>0.6.4.201312101107</version> -->
+						<!-- <executions> -->
+						<!-- <execution> -->
+						<!-- <id>jacoco-prepare-agent</id> -->
+						<!-- <phase>process-test-classes</phase> -->
+						<!-- <goals> -->
+						<!-- <goal>prepare-agent</goal> -->
+						<!-- </goals> -->
+						<!-- </execution> -->
+						<!-- <execution> -->
+						<!-- <id>jacoco-prepare-agent-integration</id> -->
+						<!-- <phase>pre-integration-test</phase> -->
+						<!-- <goals> -->
+						<!-- <goal>prepare-agent-integration</goal> -->
+						<!-- </goals> -->
+						<!-- </execution> -->
+						<!-- <execution> -->
+						<!-- <id>jacoco-report</id> -->
+						<!-- <goals> -->
+						<!-- <goal>report</goal> -->
+						<!-- </goals> -->
+						<!-- <phase>post-integration-test</phase> -->
+						<!-- </execution> -->
+						<!-- <execution> -->
+						<!-- <id>jacoco-integration</id> -->
+						<!-- <phase>post-integration-test</phase> -->
+						<!-- <goals> -->
+						<!-- <goal>report-integration</goal> -->
+						<!-- </goals> -->
+						<!-- </execution> -->
+						<!-- <execution> -->
+						<!-- <id>jacoco-check</id> -->
+						<!-- <goals> -->
+						<!-- <goal>check</goal> -->
+						<!-- </goals> -->
+						<!-- <configuration> -->
+						<!-- <rules /> -->
+						<!-- </configuration> -->
+						<!-- </execution> -->
+						<!-- </executions> -->
+						<!-- </plugin> -->
 
 					</reportPlugins>
 				</configuration>
@@ -375,6 +361,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>3.2</version>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>com.google.guava</groupId>

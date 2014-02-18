@@ -13,9 +13,9 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
-import org.komea.product.database.alert.enums.Criticity;
+import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Measure;
-import org.komea.product.service.dto.AlertTypeStatistic;
+import org.komea.product.service.dto.EventTypeStatistic;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
 
@@ -44,6 +44,10 @@ public class StatPage extends LayoutPage
 {
     
     
+    /**
+     * 
+     */
+    private static final long       serialVersionUID = 825152658028992367L;
     @SpringBean
     private IEventStatisticsService statService;
     
@@ -66,11 +70,11 @@ public class StatPage extends LayoutPage
             }
             
         }));
-        generateLabelForAlertsWithCriticity(Criticity.BLOCKING);
-        generateLabelForAlertsWithCriticity(Criticity.CRITICAL);
-        generateLabelForAlertsWithCriticity(Criticity.MAJOR);
-        generateLabelForAlertsWithCriticity(Criticity.MINOR);
-        generateLabelForAlertsWithCriticity(Criticity.INFO);
+        generateLabelForAlertsWithCriticity(Severity.BLOCKER);
+        generateLabelForAlertsWithCriticity(Severity.CRITICAL);
+        generateLabelForAlertsWithCriticity(Severity.MAJOR);
+        generateLabelForAlertsWithCriticity(Severity.MINOR);
+        generateLabelForAlertsWithCriticity(Severity.INFO);
         
         final ChartOptions chartOptions = new ChartOptions();
         chartOptions.setType(SeriesType.SPLINE);
@@ -125,8 +129,8 @@ public class StatPage extends LayoutPage
         add(new Chart("chart", options));
         
         
-        final DataTable<AlertTypeStatistic, String> table =
-                DataTableBuilder.<AlertTypeStatistic, String> newTable("table")
+        final DataTable<EventTypeStatistic, String> table =
+                DataTableBuilder.<EventTypeStatistic, String> newTable("table")
                         .addColumn("Event type", "type").addColumn("Provider", "provider")
                         .addColumn("Number", "number").displayRows(10)
                         .withListData(statService.getReceivedAlertTypesIn24LastHours()).build();
@@ -135,15 +139,7 @@ public class StatPage extends LayoutPage
     }
     
     
-    @Override
-    public String getTitle() {
-    
-    
-        return "Komea Statistics";
-    }
-    
-    
-    private void generateLabelForAlertsWithCriticity(final Criticity criticity) {
+    private void generateLabelForAlertsWithCriticity(final Severity criticity) {
     
     
         add(new Label(criticity.name().toLowerCase(), new LoadableDetachableModel<Long>()

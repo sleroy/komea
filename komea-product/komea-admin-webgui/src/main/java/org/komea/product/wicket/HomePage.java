@@ -23,11 +23,4 @@ public class HomePage extends LayoutPage
         
     }
     
-    
-    @Override
-    public String getTitle() {
-    
-    
-        return "Welcome in Komea Administration!";
-    }
 }

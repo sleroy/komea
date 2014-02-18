@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.komea.product.backend.service.IEntityService;
+import org.komea.product.backend.service.entities.IPersonGroupService;
+import org.komea.product.backend.service.entities.IPersonService;
+import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.dto.DepartmentDto;
 import org.komea.product.database.dto.PersonDto;
 import org.komea.product.database.dto.ProjectDto;
@@ -15,25 +17,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
-@TransactionConfiguration(defaultRollback = true)
 @TestExecutionListeners({
         DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class })
 public class EntityServiceIT extends AbstractSpringIntegrationTestCase {
     
     @Autowired
-    private IEntityService entityService;
+    private IPersonService      personService;
+    
+    @Autowired
+    private IPersonGroupService groupService;
+    
+    @Autowired
+    private IProjectService     projectService;
     
     @Test
     @DatabaseSetup("database.xml")
     public void testGetAllDepartments() {
     
-        List<DepartmentDto> departments = entityService.getAllDepartments();
+        List<DepartmentDto> departments = groupService.getAllDepartments();
         Assert.assertEquals(1, departments.size());
     }
     
@@ -41,7 +47,7 @@ public class EntityServiceIT extends AbstractSpringIntegrationTestCase {
     @DatabaseSetup("database.xml")
     public void testGetPersonList() {
     
-        List<PersonDto> personList = entityService.getPersonList();
+        List<PersonDto> personList = personService.getPersonList();
         Assert.assertEquals(2, personList.size());
     }
     
@@ -49,7 +55,7 @@ public class EntityServiceIT extends AbstractSpringIntegrationTestCase {
     @DatabaseSetup("database.xml")
     public void testGetProjectList() {
     
-        List<ProjectDto> projectList = entityService.getAllProjects();
+        List<ProjectDto> projectList = projectService.getAllProjects();
         Assert.assertEquals(1, projectList.size());
     }
     

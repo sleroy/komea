@@ -29,7 +29,7 @@ public class ProvidersAPIIT extends AbstractRestClientIntegrationTestCase {
         provider.setName("jenkins");
         provider.setUrl("http://komea.tocea.com/test/registerProvider");
         provider.setIcon("incon3.png");
-        provider.setProviderType(ProviderType.JENKINS);
+        provider.setProviderType(ProviderType.CI_BUILD);
         providerDto.setProvider(provider);
         
         providersAPI.registerProvider(providerDto);

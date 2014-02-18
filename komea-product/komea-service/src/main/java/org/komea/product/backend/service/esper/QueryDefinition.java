@@ -17,6 +17,13 @@ public final class QueryDefinition implements IQueryDefinition
     
     
     
+    public QueryDefinition(final Kpi _kpi) {
+    
+    
+        this(_kpi, _kpi.computeKPIEsperKey());
+    }
+    
+    
     public QueryDefinition(final Kpi _kpi, final String _statementName) {
     
     

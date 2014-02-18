@@ -51,9 +51,10 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `komea`.`kom_pero` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `roleKey` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC))
+  UNIQUE INDEX `roleKey_UNIQUE` (`roleKey` ASC))
 ENGINE = InnoDB;
 
 
@@ -69,6 +70,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pe` (
   `email` VARCHAR(255) NOT NULL,
   `login` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL DEFAULT '',
+  `userBdd` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_User_UserGroup1_idx` (`idPersonGroup` ASC),
   UNIQUE INDEX `Personcol_UNIQUE` (`login` ASC),

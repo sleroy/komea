@@ -3,49 +3,13 @@ package org.komea.product.backend.service.kpi;
 
 
 
-import java.util.List;
-
+import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.database.model.Kpi;
-import org.komea.product.database.model.Measure;
-import org.komea.product.database.model.MeasureCriteria;
 
 
 
-public interface IMeasureHistoryService
+public interface IMeasureHistoryService extends IHistoryService
 {
-    
-    
-    /**
-     * Returns the list of measures from an entity and a KPI.
-     * 
-     * @param _entity
-     *            the entity.
-     * @param _kpi
-     *            the kpi.
-     * @return the list of measures.
-     */
-    public List<Measure> getMeasures(HistoryKey _kpiKey);
-    
-    
-    /**
-     * Returns the list of measures from an entity and a KPI.
-     * 
-     * @param _entity
-     *            the entity.
-     * @param _kpi
-     *            the kpi.
-     * @return the list of measures.
-     */
-    public List<Measure> getMeasures(HistoryKey _kpiKey, MeasureCriteria _criteria);
-    
-    
-    /**
-     * Stores a new measure in the history.
-     * 
-     * @param _measure
-     *            the measure
-     */
-    public void storeMeasure(Measure _measure);
     
     
     /**

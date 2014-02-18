@@ -1,47 +1,24 @@
 package org.komea.product.database.dto;
 
-public class Pair<K, V> {
+import java.io.Serializable;
+
+public class Pair<K, V> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public static <K, V> Pair<K, V> create(K k, V v) {
         return new Pair<K, V>(k, v);
     }
 
-    public final K key;
-    public final V value;
+    private K key;
+    private V value;
 
-    private Pair(K key, V value) {
-        this.key = key;
-        this.value = value;
+    public Pair() {
     }
 
-    @SuppressWarnings("rawtypes")
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Pair other = (Pair) obj;
-        if (key == null) {
-            if (other.key != null) {
-                return false;
-            }
-        } else if (!key.equals(other.key)) {
-            return false;
-        }
-        if (value == null) {
-            if (other.value != null) {
-                return false;
-            }
-        } else if (!value.equals(other.value)) {
-            return false;
-        }
-        return true;
+    public Pair(K key, V value) {
+        this.key = key;
+        this.value = value;
     }
 
     public K getKey() {
@@ -52,17 +29,12 @@ public class Pair<K, V> {
         return value;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((key == null) ? 0 : key.hashCode());
-        result = prime * result + ((value == null) ? 0 : value.hashCode());
-        return result;
+    public void setKey(K key) {
+        this.key = key;
     }
 
-    @Override
-    public String toString() {
-        return "(" + key + "," + value + ")";
+    public void setValue(V value) {
+        this.value = value;
     }
+
 }

@@ -7,16 +7,13 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.time.Duration;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonRoleDao;
 import org.komea.product.database.dto.PersonDto;
@@ -36,15 +33,15 @@ public final class PersonForm extends Form<PersonDto>
 {
     
     
-    private final PersonDao     personDAO;
-    
-    private final PersonRoleDao personRoleDAO;
-    private final PersonDto     personDto;
-    private PersonRole          selectedRole;
+    private final Component     feedBack;
     
     private final Integer       key;
+    private final PersonDao     personDAO;
+    private final PersonDto     personDto;
     
-    private final Component     feedBack;
+    private final PersonRoleDao personRoleDAO;
+    
+    private PersonRole          selectedRole;
     
     
     
@@ -62,7 +59,7 @@ public final class PersonForm extends Form<PersonDto>
         feedBack = _feedBack;
         personDto = _dto.getObject();
         key = personDto.getId();
-        
+        feedBack.setVisible(false);
         add(TextFieldBuilder.<String> createRequired("login", personDto, "login")
                 .simpleValidator(3, 255).withTooltip("User requires a login.").highlightOnErrors()
                 .build());
@@ -86,30 +83,7 @@ public final class PersonForm extends Form<PersonDto>
                         new ChoiceRenderer<PersonRole>("name"));
         add(dropDownChoice);
         
-        add(new IFormValidator()
-        {
-            
-            
-            @Override
-            public FormComponent<?>[] getDependentFormComponents() {
-            
-            
-                // TODO Auto-generated method stub
-                return null;
-            }
-            
-            
-            @Override
-            public void validate(final Form<?> _form) {
-            
-            
-                System.out.println("Validation du formular");
-                ;
-                
-            }
-        });
-        
-        AjaxFormValidatingBehavior.addToAllFormComponents(this, "onkeyup", Duration.ONE_SECOND);
+        // AjaxFormValidatingBehavior.addToAllFormComponents(this, "onkeyup", Duration.ONE_SECOND);
         
         // add a button that can be used to submit the form via ajax
         add(new AjaxButton("submit", this)
@@ -120,6 +94,7 @@ public final class PersonForm extends Form<PersonDto>
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
             
             
+                feedBack.setVisible(true);
                 error("error found");
                 // repaint the feedback panel so errors are shown
                 target.add(feedBack);
@@ -130,9 +105,11 @@ public final class PersonForm extends Form<PersonDto>
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
             
             
+                feedBack.setVisible(false);
                 info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
+                setResponsePage(new PersonPage(new PageParameters()));
             }
         });
         

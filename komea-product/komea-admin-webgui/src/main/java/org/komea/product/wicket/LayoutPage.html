@@ -1,21 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:wicket="http://wicket.apache.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:wicket="http://wicket.apache.org"
+	xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 <meta charset="utf-8"></meta>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
 <meta content="Komea administration site" name="description"></meta>
 <meta content="Komea" name="author"></meta>
 <title>Komea Administration</title>
-<link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
+<link rel="stylesheet" href="static/bootstrap/css/bootstrap.css"
+	type="text/css" media="screen"></link>
+<link rel="stylesheet" href="static/bootstrap/css/bootstrap-theme.css"
+	type="text/css" media="screen"></link>
 <link rel="stylesheet" href="static/css/style.css" type="text/css"></link>
-<link rel="stylesheet" href="static/images/sprites/sprites.css" type="text/css"></link>
-<!-- //<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/cupertino/jquery-ui.css"> -->
-<link rel="stylesheet" type="text/css" href="static/js/ui/themes/base/jquery-ui.css" />
+<link rel="stylesheet" href="static/images/sprites/sprites.css"
+	type="text/css"></link>
+<link rel="stylesheet" type="text/css"
+	href="static/js/ui/themes/base/jquery-ui.css" />
 <!-- Tablesorter: required for bootstrap -->
 <!-- jQuery -->
 <link rel="stylesheet" href="static/tablesorter/css/theme.bootstrap.css">
 <!-- Tablesorter: optional -->
-<link rel="stylesheet" href="static/tablesorter/addons/pager/jquery.tablesorter.pager.css">
+<link rel="stylesheet"
+	href="static/tablesorter/addons/pager/jquery.tablesorter.pager.css">
 </head>
 <body>
 	<!--  BALISE HEADER -->
@@ -23,91 +29,178 @@
 		<nav class="navbar navbar-inverse" role="navigation">
 			<div class="navbar-inner">
 				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-						<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+					<button type="button" class="navbar-toggle" data-toggle="collapse"
+						data-target=".navbar-ex1-collapse">
+						<span class="sr-only">Toggle navigation</span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="p/home"><img src="static/pics/logo.png" alt="logo" width="32" height="32" /> Komea Administration</a>
+					<a class="navbar-brand" href="p/home"><img
+						src="static/images/logo.png" alt="logo" width="32" height="32" />Komea
+						Administration</a>
 				</div>
 				<div class="collapse navbar-collapse">
-					<ul class="nav navbar-nav navbar-right" sec:authorize="not hasRole('ROLE_USER')">
-						<li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
+					<ul wicket:id="signinpanel" class="nav navbar-nav navbar-right">
+					</ul>
+					<ul wicket:id="personalpanel" class="nav navbar-nav navbar-right">
+					</ul>
+					<wicket:fragment wicket:id="signin">
+						<li class="dropdown"><a class="dropdown-toggle" href="#"
+							data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
 							<div class="dropdown-menu" style="padding: 10px;">
 								<form method="POST" action="j_spring_security_check">
-									Login<br></br> <input style="margin-bottom: 20px;" type="text" id="username" name="j_username"></input><br></br> Password<br></br> <input style="margin-bottom: 20px;" type="password" id="password" name="j_password"></input><br></br> <input style="float: left; margin-right: 10px;" type="checkbox" name="remember-me" id="remember-me" value="1"></input> <label for="user_remember_me">Remember me</label> <input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Sign In" style=""></input>
+									Login<br></br> <input style="margin-bottom: 20px;" type="text"
+										id="username" name="j_username"></input><br></br> Password<br></br>
+									<input style="margin-bottom: 20px;" type="password"
+										id="password" name="j_password"></input><br></br> <input
+										style="float: left; margin-right: 10px;" type="checkbox"
+										name="remember-me" id="remember-me" value="1"></input> <label
+										for="user_remember_me">Remember me</label> <input
+										class="btn btn-primary btn-block" type="submit" id="sign-in"
+										value="Sign In" style=""></input>
 								</form>
 							</div></li>
-					</ul>
-					<ul class="nav navbar-nav navbar-right" sec:authorize="hasRole('ROLE_USER')">
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>Welcome, User <b class="caret"></b></a>
+					</wicket:fragment>
+					<wicket:fragment wicket:id="personal">
+						<li class="dropdown"><a href="#" class="dropdown-toggle"
+							data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>Welcome,
+								User <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="https://github.org/sleroy/komea"><i class="glyphicon glyphicon-envelope"></i>Contact Support</a></li>
+								<li><a href="https://github.org/sleroy/komea"><i
+										class="glyphicon glyphicon-envelope"></i>Contact Support</a></li>
 								<li class="divider"></li>
-								<li><a href="j_spring_security_logout"><i class="glyphicon glyphicon-off"></i> Logout</a></li>
+								<li><a href="j_spring_security_logout"><i
+										class="glyphicon glyphicon-off"></i> Logout</a></li>
 							</ul></li>
-					</ul>
+					</wicket:fragment>
 				</div>
 			</div>
 		</nav>
 	</header>
+	<ol class="breadcrumb" >
+		<li wicket:id="bread"><a href="p" wicket:id="blink"><span wicket:id="text"></span></a></li>
+		<li wicket:id="breadactive" class="active"><span wicket:id="text"></span></li>
+	</ol>
+
 	<div class="container-full">
+
 		<div class="row">
 			<div class="col-sm-2 col-md-2">
 				<div class="panel-group" id="accordion">
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon cicon-office "> </span>Company</a>
+								<a data-toggle="collapse" data-parent="#accordion"
+									href="#collapseOne"><span class="glyphicon cicon-office ">
+								</span>Company</a>
 							</h4>
 						</div>
 						<div id="collapseOne" class="panel-collapse collapse in">
-							<ul class="list-group">
-								<li class="list-group-item"><a href="p/projects">Manage Projects</a></li>
-								<li class="list-group-item"><a href="p/teams">Manage Teams</a></li>
-								<li class="list-group-item"><a href="p/departments">Manage Departments</a></li>
-								<li class="list-group-item"><a href="p/customers">Manage Customers</a></li>
-								<li class="list-group-item"><a href="p/users">Manage Users</a></li>
-							</ul>
+							<div class="panel-body">
+								<table class="table">
+									<tr>
+										<td><span class="glyphicon glyphicon-list-alt "></span><a
+											href="p/projects">Projects</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon  cicon-users2 "></span><a
+											href="p/teams"> Teams</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon cicon-users text-info"></span><a
+											href="p/departments">Departments</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon glyphicon-usd "></span><a
+											href="p/customers">Manage Customers</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon cicon-user "></span><a
+											href="p/users">Manage Users</a></td>
+									</tr>
+								</table>
+							</div>
 						</div>
 					</div>
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><span class="glyphicon cicon-stats"> </span>KPI and Metrics</a>
+								<a data-toggle="collapse" data-parent="#accordion"
+									href="#collapseTwo"><span class="glyphicon cicon-stats">
+								</span>KPI and Metrics</a>
 							</h4>
 						</div>
-						<div id="collapseTwo" class="panel-collapse collapse in">
-							<ul class="list-group">
-								<li class="list-group-item"><a href="p/alerts">Alerts</a></li>
-								<li class="list-group-item"><a href="p/kpis">KPI and metrics</a></li>
-							</ul>
+						<div id="collapseTwo" class="panel-collapse collapse">
+							<div class="panel-body">
+								<table class="table">
+									<tr>
+										<td><span class="glyphicon glyphicon-pencil "></span><a
+											href="p/alerts">Alerts</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon glyphicon-flash "></span><a
+											href="p/kpis">KPI and metrics</a></td>
+									</tr>
+								</table>
+							</div>
 						</div>
 					</div>
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"><span class="glyphicon cicon-tree"> </span>Server administration</a>
+								<a data-toggle="collapse" data-parent="#accordion"
+									href="#collapseThree"><span class="glyphicon cicon-tree">
+								</span>Server administration</a>
 							</h4>
 						</div>
-						<div id="collapseThree" class="panel-collapse collapse in">
-							<ul class="list-group">
-								<li class="list-group-item"><a href="p/ldap">LDAP configuration</a></li>
-								<li class="list-group-item"><a href="p/plugins">Plugins</a></li>
-								<li class="list-group-item"><a href="p/settings">Server settings</a></li>
-							</ul>
+						<div id="collapseThree" class="panel-collapse collapse">
+							<div class="panel-body">
+								<table class="table">
+									<tr>
+										<td><span class="glyphicon glyphicon-pencil "></span><a
+											href="p/ldap">LDAP configuration</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon glyphicon-flash "></span><a
+											href="p/plugins">Plugins</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon glyphicon-th-list "></span><a
+											href="p/settings">Server settings</a></td>
+									</tr>
+								</table>
+							</div>
 						</div>
 					</div>
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseFour"><span class="glyphicon cicon-wrench"> </span>Server maintenance</a>
+								<a data-toggle="collapse" data-parent="#accordion"
+									href="#collapseFour"><span class="glyphicon cicon-wrench">
+								</span>Server maintenance</a>
 							</h4>
 						</div>
-						<div id="collapseFour" class="panel-collapse collapse in">
-							<ul class="list-group">
-								<li class="list-group-item"><a href="p/viewlog">Log files</a></li>
-								<li class="list-group-item"><a href="p/stats">Statistics</a></li>
-								<li class="list-group-item"><a href="p/cronpage">Cron jobs</a></li>
-							</ul>
+						<div id="collapseFour" class="panel-collapse collapse">
+							<div class="panel-body">
+								<table class="table">
+									<tr>
+										<td><span class="glyphicon glyphicon-pencil "></span><a
+											href="p/viewlog">Log files</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon cicon-bars "></span><a
+											href="p/stats">Statistics</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon glyphicon-eye-open "></span><a
+											href="p/events">Events</a></td>
+									</tr>
+									<tr>
+										<td><span class="glyphicon glyphicon-repeat "></span><a
+											href="p/cronpage">Cron jobs</a></td>
+									</tr>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -129,10 +222,11 @@
 		<p>&copy; Komea.org</p>
 		<script src="static/js/jquery.js"></script>
 		<script src="static/js/ui/jquery.js"></script>
-		<script src="static/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+		<script src="static/bootstrap/js/bootstrap.js" type="text/javascript"></script>
 		<script src="static/tablesorter/js/jquery.tablesorter.js"></script>
 		<script src="static/tablesorter/js/jquery.tablesorter.widgets.js"></script>
-		<script src="static/tablesorter/addons/pager/jquery.tablesorter.pager.js"></script>
+		<script
+			src="static/tablesorter/addons/pager/jquery.tablesorter.pager.js"></script>
 		<script id="js">
 			$(function() {
 

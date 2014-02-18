@@ -4,7 +4,7 @@ package org.komea.product.web.rest.api;
 
 import java.util.List;
 
-import org.komea.product.backend.service.IEntityService;
+import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.database.dto.DepartmentDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class DepartmentController {
     private static final Logger LOGGER = LoggerFactory.getLogger(DepartmentController.class);
     
     @Autowired
-    private IEntityService      entityService;
+    private IPersonGroupService entityService;
     
     /**
      * This method return the departments list

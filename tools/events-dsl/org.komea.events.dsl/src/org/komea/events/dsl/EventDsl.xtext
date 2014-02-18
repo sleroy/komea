@@ -1,0 +1,29 @@
+grammar org.komea.events.dsl.EventDsl with org.eclipse.xtext.common.Terminals
+
+generate eventDsl "http://www.komea.org/events/dsl/EventDsl"
+
+EventFactory:
+	('package' package=QualifiedName ';')?
+	('path' path=STRING ';')?
+	'factory' name=ID '{'
+	events+=Event*
+	'}';
+
+Event:
+	'event' name=ID '{'
+	(properties+=EventProperty ';')*
+	'}';
+
+EventProperty:
+	SimpleProperty | ListProperty;
+
+SimpleProperty:
+	type=QualifiedName name=ID ('=' value=STRING)?;
+
+ListProperty:
+    type=QualifiedName'[]' name=ID ('=' '{' (values+=STRING) (',' values+=STRING)* '}')?;
+
+
+
+QualifiedName:
+	ID ('.' ID)*;

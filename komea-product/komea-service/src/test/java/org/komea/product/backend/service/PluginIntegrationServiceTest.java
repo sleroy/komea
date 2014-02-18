@@ -95,7 +95,7 @@ public class PluginIntegrationServiceTest {
         final Provider provider = new Provider();
         provider.setIcon("icon.gif");
         provider.setName("name");
-        provider.setProviderType(ProviderType.BUGZILLA);
+        provider.setProviderType(ProviderType.BUGTRACKER);
         provider.setUrl("url://");
         
         final ArrayList<EventType> eventTypes = new ArrayList<EventType>();
