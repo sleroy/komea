@@ -54,12 +54,4 @@ public class ConsolePage extends LayoutPage
     }
     
     
-    @Override
-    public String getTitle() {
-    
-    
-        return "Console file of Komea";
-    }
-    
-    
 }

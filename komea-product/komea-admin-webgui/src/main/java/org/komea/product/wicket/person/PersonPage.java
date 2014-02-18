@@ -11,10 +11,10 @@ import org.komea.product.database.dao.PersonRoleDao;
 import org.komea.product.database.dto.PersonDto;
 import org.komea.product.database.model.Person;
 import org.komea.product.wicket.LayoutPage;
-import org.komea.product.wicket.model.PersonDataModel;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
+import org.komea.product.wicket.widget.model.PersonDataModel;
 
 
 
@@ -67,8 +67,7 @@ public class PersonPage extends LayoutPage
     public String getTitle() {
     
     
-        return "User administration";
+        return getString("PersonPage.title");
     }
-    
     
 }

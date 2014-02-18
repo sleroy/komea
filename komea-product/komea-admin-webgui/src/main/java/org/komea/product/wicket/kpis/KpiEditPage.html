@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8"></meta>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+        <meta content="Komea administration site" name="description"></meta>
+        <meta content="Komea" name="author"></meta>
+        <title>Komea Administration</title>
+        <link rel="stylesheet" href="../../../../../../../main/webapp/static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
+        <link rel="stylesheet" href="../../../../../../../main/webapp/static/css/style.css" type="text/css"></link>
+        <link rel="stylesheet" type="text/css" href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="glyphicon cicon-user"></span> Manage Population of developers inside Komea
+                </div>
+                <div class="panel-body">
+                    <div class="container">
+                        <!--  begin here -->
+                        <wicket:extend>
+                            <div class="alert alert-danger" wicket:id="feedback"></div>
+                            <form class="form" wicket:id="form" role="form">
+                                <legend>Editing a kpi</legend>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-md-3" for="inputEmail1">KpiKey</label>
+                                                <div class="col-md-6">
+                                                    <input id="kpiKey" name="kpiKey" type="text" placeholder="kpiKey" class="form-control" required="required" wicket:id="kpiKey">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-md-3" for="inputEmail1">Name</label>
+                                                <div class="col-md-6">
+                                                    <input id="firstName" name="name" type="text" placeholder="name" class="form-control" required="required" wicket:id="name">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-md-3" for="inputEmail1">Description</label>
+                                                <div class="col-md-6">
+                                                    <textarea  style="resize: none;"  class="form-control" rows="4" wicket:id="description"></textarea>
+                                                    <!--<textarea  rows="6" cols="40"></textarea>-->
+                                                    <!--<textarea rows="4" cols="50" wicket:id="description"></textarea>-->
+                                                    <!--<input id="surename" name="description" type="text" placeholder="description" class="form-control" required="required" wicket:id="description">-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-md-3" for="inputEmail1">IdProvider</label>
+                                                <div class="col-md-4">
+                                                    <input id="idProvider" name="idProvider" type="text" placeholder="idProvider" class="form-control" readonly="readonly"  wicket:id="idProvider">
+                                                </div>
+                                                 <div class="col-md-3">
+                                                <button type="button" class="btn btn-small btn-info col-md-5">...</button>
+                                                 </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-md-3" for="inputEmail1">ValueMin</label>
+                                                <div class="col-md-6">
+                                                    <input id="valueMin" name="valueMin" type="text" placeholder="valueMin" class="form-control"  wicket:id="valueMin">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-md-3" for="inputEmail1">ValueMax</label>
+                                                <div class="col-md-6">
+                                                    <input id="valueMax" name="valueMax" type="text" placeholder="valueMax" class="form-control"  wicket:id="valueMax">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-md-3" for="inputEmail1">ValueDirection</label>
+                                                <div class="col-md-6">
+                                                   <select id="fvalueDirection" name="valueDirection" t class="form-control" wicket:id="valueDirection"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-md-3" for="inputEmail1">ValueType</label>
+                                                <div class="col-md-6">
+                                                    <select id="valueType" name="valueType" class="form-control" wicket:id="valueType"></select>
+                                                    <!--<input id="valueType" name="valueType" type="text" placeholder="valueType" class="form-control" required="required" wicket:id="valueType">-->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-md-3" for="inputEmail1">EntityType</label>
+                                                <div class="col-md-6">
+                                                    <select id="entityType" name="entityType" class="form-control"  wicket:id="entityType"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-md-3" for="inputEmail1">EntityID</label>
+                                                <div class="col-md-4">
+                                                    <input id="entityID" name="entityID" type="text" placeholder="entityID" readonly="readonly" class="form-control" wicket:id="entityID">
+                                                </div>
+                                                   <div class="col-md-3">
+                                                <button type="button" class="btn btn-small btn-info col-md-5">...</button>
+                                                 </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-md-3" for="inputEmail1">CronExpression</label>
+                                                <div class="col-md-6">
+                                                    <input id="cronExpression" name="cronExpression" type="text" placeholder="cronExpression" class="form-control" required="required" wicket:id="cronExpression">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-md-3" for="inputEmail1">EvictionRate</label>
+                                                <div class="col-md-6">
+                                                    <input id="evictionRate" name="evictionRate" type="text" placeholder="evictionRate" class="form-control" required="required" wicket:id="evictionRate">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-md-3" for="inputEmail1">EvictionType</label>
+                                                <div class="col-md-6">
+                                                    <select id="evictionType" name="evictionType"  class="form-control"  wicket:id="evictionType"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-md-3" for="inputEmail1">EsperRequest</label>
+                                                <div class="col-md-6">
+                                                     <textarea class="form-control"  style="resize: none;"  rows="6" wicket:id="esperRequest"></textarea>
+                                                    <!--<input id="esperRequest" name="esperRequest" type="text" placeholder="esperRequest" class="form-control" required="required" wicket:id="esperRequest">-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <!--							<div class="form-group">
+                                                                                                <div class="row">
+                                                                                                        <label class="col-md-2" for="inputEmail1">Email</label>
+                                                                                                        <div class="col-md-6">
+                                                                                                                <input id="email" name="email" type="text" placeholder="email" class="form-control" required="required" wicket:id="email">
+                                                                                                        </div>
+                                                                                                </div>
+                                                                                        </div>-->
+                                <!-- Text input-->
+                                <!--							<div class="form-group">
+                                                                                                <div class="row">
+                                                                                                        <label class="col-md-2" for="inputEmail1">Attach the user to a group.</label>
+                                                                                                        <div class="col-md-4">
+                                                                                                                <div class="row">
+                                                                                                                        <button type="button" class="btn btn-small btn-info col-md-5">Attach to a department</button>
+                                                                                                                        <button type="button" class="btn btn-small btn-info col-md-offset-2 col-md-5">Attach to a team</button>
+                                                                                                                </div>
+                                                                                                        </div>
+                                                                                                </div>
+                                                                                        </div>-->
+                                <!-- Text input-->
+                                <!--							<div class="form-group">
+                                                                                                <div class="row">
+                                                                                                        <label class="col-md-2" for="inputEmail1">Choose a project.</label>
+                                                                                                        <div class="col-md-4">
+                                                                                                                <select id="project" name="project" class="form-control">
+                                                                                                                </select>
+                                                                                                        </div>
+                                                                                                </div>
+                                                                                        </div>-->
+                                <!-- Text input-->
+                                <!--							<div class="form-group">
+                                                                                                <div class="row">
+                                                                                                        <label class="col-md-2" for="inputEmail1">Choose a role.</label>
+                                                                                                        <div class="col-md-4">
+                                                                                                                <select id="userRole" name="userRole" class="form-control" wicket:id="role">
+                                                                                                                </select>
+                                                                                                        </div>
+                                                                                                </div>
+                                                                                        </div>-->
+                                <!-- Text input-->
+                                
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <button id="addedit" name="addedit" class="btn btn-primary" wicket:id="submit">Save</button>
+                                            <button id="cancel" name="cancel" class="btn btn-primary" wicket:id="cancel">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </form>
+                        </wicket:extend>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="tocea-footer">
+            <p>&copy; Komea.org</p>
+            <script src="../../../../../../../main/webapp/static/js/ui/jquery.js"></script>
+            <script src="../../../../../../../main/webapp/static/bootstrap/js/bootstrap.min.js"></script>
+        </footer>
+    </body>
+</html>

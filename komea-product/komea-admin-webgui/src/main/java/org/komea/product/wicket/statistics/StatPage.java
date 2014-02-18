@@ -44,6 +44,10 @@ public class StatPage extends LayoutPage
 {
     
     
+    /**
+     * 
+     */
+    private static final long       serialVersionUID = 825152658028992367L;
     @SpringBean
     private IEventStatisticsService statService;
     
@@ -135,14 +139,6 @@ public class StatPage extends LayoutPage
     }
     
     
-    @Override
-    public String getTitle() {
-    
-    
-        return "Komea Statistics";
-    }
-    
-    
     private void generateLabelForAlertsWithCriticity(final Severity criticity) {
     
     
@@ -153,8 +149,7 @@ public class StatPage extends LayoutPage
             @Override
             protected Long load() {
             
-            
-                return statService.getNumberOfAlerts(criticity);
+                           return statService.getNumberOfAlerts(criticity);
                 
             }
             

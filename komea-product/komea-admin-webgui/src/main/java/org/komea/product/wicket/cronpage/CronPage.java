@@ -108,10 +108,4 @@ public class CronPage extends LayoutPage
     }
     
     
-    @Override
-    public String getTitle() {
-    
-    
-        return "List of cron jobs inside Komea";
-    }
 }

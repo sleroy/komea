@@ -30,8 +30,8 @@ public final class SettingForm extends Form<SettingsDTO>
 {
     
     
-    private transient final List<TextField> textFields = new ArrayList<TextField>();
     private final ISettingService           settingsService;
+    private transient final List<TextField> textFields = new ArrayList<TextField>();
     
     
     
@@ -43,6 +43,16 @@ public final class SettingForm extends Form<SettingsDTO>
     
         super(_id, _dto);
         settingsService = _settingsService;
+        
+        
+    }
+    
+    
+    @Override
+    protected void onInitialize() {
+    
+    
+        super.onInitialize();
         final WebMarkupContainer webMarkupContainer = new WebMarkupContainer("success");
         webMarkupContainer.setVisible(false);
         add(webMarkupContainer);
@@ -62,7 +72,7 @@ public final class SettingForm extends Form<SettingsDTO>
                 final IModel<Setting> model = _item.getModel();
                 _item.setDefaultModel(new CompoundPropertyModel<Setting>(model.getObject()));
                 
-                final Setting object = model.getObject();
+                model.getObject();
                 _item.add(new Label("settingKey"));
                 _item.add(new Label("description"));
                 
@@ -75,7 +85,6 @@ public final class SettingForm extends Form<SettingsDTO>
         // listView.setReuseItems(true);
         
         add(listView);
-        
     }
     
     

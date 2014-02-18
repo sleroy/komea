@@ -145,14 +145,6 @@ public class EventsPage extends LayoutPage
     }
     
     
-    @Override
-    public String getTitle() {
-    
-    
-        return "Events received by Komea";
-    }
-    
-    
     public void setService(final IEventViewerService _service) {
     
     

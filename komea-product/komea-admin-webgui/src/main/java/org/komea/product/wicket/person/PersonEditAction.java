@@ -15,8 +15,8 @@ public class PersonEditAction implements IEditAction<Person>
 {
     
     
-    private final PersonRoleDao personRoleDAO;
     private final PersonPage    editedPersonPage;
+    private final PersonRoleDao personRoleDAO;
     
     
     
