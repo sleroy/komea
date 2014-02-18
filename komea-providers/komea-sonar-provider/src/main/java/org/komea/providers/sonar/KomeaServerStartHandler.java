@@ -3,7 +3,6 @@ package org.komea.providers.sonar;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
@@ -34,25 +33,36 @@ public class KomeaServerStartHandler implements ServerStartHandler {
         if (komeaUrl == null) {
             return;
         }
+        final ProviderDto providerDto = new ProviderDto();
+
+        final Provider provider = KomeaPlugin.getProvider(server.getURL());
+        providerDto.setProvider(provider);
+
+        final List<EventType> eventTypes = new ArrayList<EventType>(KomeaPlugin.EVENT_TYPES);
+        eventTypes.add(KomeaPlugin.EVENT_ANALYSIS_STARTED);
+        eventTypes.add(KomeaPlugin.EVENT_ANALYSIS_ENDED);
+        eventTypes.add(KomeaPlugin.EVENT_ANALYSIS_DURATION);
+        final Collection<String> metricKeys = KomeaPlugin.getMetricKeys(settings);
+        final Collection<Metric> metrics = metricFinder.findAll(new ArrayList<String>(metricKeys));
+        for (final Metric metric : metrics) {
+            final EventType eventType = KomeaPlugin.createEventType(metric);
+            eventTypes.add(eventType);
+        }
+        providerDto.setEventTypes(eventTypes);
+
+        registerProvider(komeaUrl, providerDto);
+    }
+
+    private void registerProvider(final String serverUrl, final ProviderDto provider) {
+        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
-            final ProviderDto providerDto = new ProviderDto();
-
-            final Provider provider = KomeaPlugin.getProvider(server.getURL());
-            providerDto.setProvider(provider);
-
-            final List<EventType> eventTypes = new ArrayList<EventType>(KomeaPlugin.EVENT_TYPES);
-            final Collection<String> metricKeys = KomeaPlugin.getMetricKeys(settings);
-            final Collection<Metric> metrics = metricFinder.findAll(new ArrayList<String>(metricKeys));
-            for (final Metric metric : metrics) {
-                final EventType eventType = KomeaPlugin.createEventType(metric);
-                eventTypes.add(eventType);
-            }
-            providerDto.setEventTypes(eventTypes);
-
-            final IProvidersAPI providersAPI = RestClientFactory.INSTANCE.createProvidersAPI(komeaUrl);
-            providersAPI.registerProvider(providerDto);
+            Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
+            final IProvidersAPI providersAPI = RestClientFactory.INSTANCE.createProvidersAPI(serverUrl);
+            providersAPI.registerProvider(provider);
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
+        } finally {
+            Thread.currentThread().setContextClassLoader(contextClassLoader);
         }
     }
 }

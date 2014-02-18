@@ -29,6 +29,7 @@ public class EventSimpleDto implements Serializable {
     private List<String> persons = new ArrayList<String>();
     private String personGroup = null;
     private String project = null;
+    @NotNull
     private Map<String, String> properties = new HashMap<String, String>();
 
     @NotNull
