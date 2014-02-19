@@ -40,52 +40,25 @@ import org.sonar.api.measures.Metric;
             global = false)})
 public class KomeaPlugin extends SonarPlugin {
 
-    private static final Logger LOGGER
-            = LoggerFactory
-            .getLogger(KomeaPlugin.class
-                    .getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(KomeaPlugin.class.getName());
     public static final String SERVER_URL_KEY = "komea.serverUrl";
     public static final String METRICS_KEY = "komea.metrics";
     public static final String PROJECT_KEY = "komea.project";
-    public static final String EVENT_ANALYSIS_STARTED_KEY = "SONARQUBE_ANALYSIS_STARTED";
-    public static final EventType EVENT_ANALYSIS_STARTED
-            = createEventType(
-                    EVENT_ANALYSIS_STARTED_KEY,
-                    "SonarQube analysis started",
-                    "",
-                    Severity.INFO);
-    public static final String EVENT_ANALYSIS_ENDED_KEY = "SONARQUBE_ANALYSIS_ENDED";
-    public static final EventType EVENT_ANALYSIS_ENDED
-            = createEventType(
-                    EVENT_ANALYSIS_ENDED_KEY,
-                    "SonarQube analysis ended",
-                    "",
-                    Severity.INFO);
-    public static final String EVENT_ANALYSIS_DURATION_KEY = "SONARQUBE_ANALYSIS_DURATION";
-    public static final EventType EVENT_ANALYSIS_DURATION
-            = createEventType(
-                    EVENT_ANALYSIS_DURATION_KEY,
-                    "SonarQube analysis duration",
-                    "",
-                    Severity.INFO);
-    public static final List<EventType> EVENT_TYPES
-            = Arrays.asList(
-                    EVENT_ANALYSIS_STARTED,
-                    EVENT_ANALYSIS_ENDED,
-                    EVENT_ANALYSIS_DURATION);
+    public static final EventType ANALYSIS_STARTED = createEventType(
+            "analysis_started", "SonarQube analysis started", "", Severity.INFO);
+    public static final EventType ANALYSIS_COMPLETE = createEventType(
+            "analysis_complete", "SonarQube analysis complete", "", Severity.INFO);
+    public static final List<EventType> EVENT_TYPES = Arrays.asList(
+            ANALYSIS_STARTED, ANALYSIS_COMPLETE);
 
     public static EventType createEventType(final Metric metric) {
-
-        return createEventType("SONARQUBE_MEASURE_" + metric.getKey(), "SonarQube measure '"
-                + metric.getName() + "'", metric.getDescription(), Severity.INFO);
+        return createEventType("analysis_measure_" + metric.getKey(),
+                "SonarQube measure " + metric.getName(),
+                metric.getDescription(), Severity.INFO);
     }
 
-    public static EventType createEventType(
-            final String key,
-            final String name,
-            final String description,
-            final Severity severity) {
-
+    public static EventType createEventType(final String key, final String name,
+            final String description, final Severity severity) {
         final EventType eventType = new EventType();
         eventType.setCategory(EventCategory.QUALITY.name());
         eventType.setDescription(description);
@@ -101,15 +74,6 @@ public class KomeaPlugin extends SonarPlugin {
         return Arrays.asList(settings.getStringArrayBySeparator(METRICS_KEY, ","));
     }
 
-    public static String getProjectKey(final Settings settings) {
-
-        String property = settings.getString(PROJECT_KEY);
-        if (property != null && property.trim().isEmpty()) {
-            property = null;
-        }
-        return property;
-    }
-
     public static Provider getProvider(final String serverUrl) {
         final Provider provider = new Provider();
         provider.setProviderType(ProviderType.QUALITY);
@@ -119,18 +83,38 @@ public class KomeaPlugin extends SonarPlugin {
         return provider;
     }
 
-    public static String getServerUrl(final Settings settings) {
-
-        String property = settings.getString(SERVER_URL_KEY);
-        if (property != null && property.trim().isEmpty()) {
-            property = null;
+    public static String getUrl(final Settings settings, final String urlKey) {
+        String url = settings.getString(urlKey);
+        if (url != null) {
+            url = url.trim();
+            if (url.endsWith("/")) {
+                url = url.substring(0, url.length() - 1);
+            }
+            if (url.isEmpty()) {
+                url = null;
+            }
         }
-        return property;
+        return url;
+    }
+
+    public static String getProjectKey(final Settings settings) {
+        return getUrl(settings, PROJECT_KEY);
+    }
+
+    public static String getKomeaUrl(final Settings settings) {
+        return getUrl(settings, SERVER_URL_KEY);
+    }
+
+    public static String getSonarUrl(final Settings settings) {
+        return getUrl(settings, "sonar.core.serverBaseURL");
     }
 
     public KomeaPlugin() {
-
         super();
+    }
+
+    public static String getProjectUrl(final String sonarUrl, final int projectId) {
+        return sonarUrl + "/dashboard/index/" + projectId;
     }
 
     public static void pushEvents(final String serverUrl, final EventSimpleDto... events) {
@@ -151,7 +135,6 @@ public class KomeaPlugin extends SonarPlugin {
     @Override
     @SuppressWarnings("unchecked")
     public List getExtensions() {
-
         return Arrays.asList(KomeaProjectAnalysisHandler.class, KomeaDecorator.class,
                 KomeaServerStartHandler.class);
     }

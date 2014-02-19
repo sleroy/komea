@@ -29,11 +29,12 @@ public class KomeaServerStartHandler implements ServerStartHandler {
 
     @Override
     public void onServerStart(Server server) {
-        final String komeaUrl = KomeaPlugin.getServerUrl(settings);
-        final String serverUrl = settings.getString("sonar.core.serverBaseURL");
+        final String komeaUrl = KomeaPlugin.getKomeaUrl(settings);
+        final String serverUrl = KomeaPlugin.getSonarUrl(settings);
         if (komeaUrl == null) {
             return;
         }
+
         final ProviderDto providerDto = new ProviderDto();
         final Provider provider = KomeaPlugin.getProvider(serverUrl);
         providerDto.setProvider(provider);

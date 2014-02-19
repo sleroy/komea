@@ -24,38 +24,30 @@ import org.komea.product.rest.client.api.IProvidersAPI;
 @Extension
 public class KomeaComputerListener extends ComputerListener implements Serializable {
 
-    public static final String EVENT_BUILD_STARTED_KEY = "JENKINS_BUILD_STARTED";
-    public static final EventType EVENT_BUILD_STARTED = createEventType(
-            EVENT_BUILD_STARTED_KEY,
-            "Jenkins build started",
+    public static final EventType BUILD_STARTED = createEventType(
+            "build_started", "Jenkins build started",
             "", Severity.INFO);
-    public static final String EVENT_BUILD_ENDED_KEY = "JENKINS_BUILD_ENDED";
-    public static final EventType EVENT_BUILD_ENDED = createEventType(
-            EVENT_BUILD_ENDED_KEY,
-            "Jenkins build ended", "",
+    public static final EventType BUILD_INDUSTRIALIZATION = createEventType(
+            "build_industrialization", "Jenkins build industrialization",
+            "", Severity.INFO);
+    public static final EventType BUILD_COMPLETE = createEventType(
+            "build_complete", "Jenkins build complete", "",
             Severity.INFO);
-    public static final String EVENT_BUILD_DURATION_KEY = "JENKINS_BUILD_DURATION";
-    public static final EventType EVENT_BUILD_DURATION = createEventType(
-            EVENT_BUILD_DURATION_KEY,
-            "Jenkins build duration",
-            "", Severity.INFO);
-    public static final String EVENT_BUILD_RESULT_KEY = "JENKINS_BUILD_RESULT";
-    public static final EventType EVENT_BUILD_RESULT = createEventType(
-            EVENT_BUILD_RESULT_KEY,
-            "Jenkins build result",
-            "", Severity.INFO);
+    public static final EventType BUILD_FAILED = createEventType(
+            "build_failed", "Jenkins build failed",
+            "", Severity.CRITICAL);
+    public static final EventType BUILD_UNSTABLE = createEventType(
+            "build_unstable", "Jenkins build unstable",
+            "", Severity.CRITICAL);
+    public static final EventType BUILD_INTERRUPTED = createEventType(
+            "build_interrupted", "Jenkins build interrupted",
+            "", Severity.MAJOR);
     public static final List<EventType> EVENT_TYPES = Arrays.asList(
-            EVENT_BUILD_STARTED,
-            EVENT_BUILD_ENDED,
-            EVENT_BUILD_DURATION,
-            EVENT_BUILD_RESULT);
+            BUILD_STARTED, BUILD_INDUSTRIALIZATION, BUILD_COMPLETE,
+            BUILD_FAILED, BUILD_INTERRUPTED);
 
-    public static EventType createEventType(
-            final String key,
-            final String name,
-            final String description,
-            final Severity severity) {
-
+    public static EventType createEventType(final String key, final String name,
+            final String description, final Severity severity) {
         final EventType eventType = new EventType();
         eventType.setCategory(EventCategory.BUILD.name());
         eventType.setDescription(description);
@@ -67,20 +59,39 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
         return eventType;
     }
 
-    public static Provider getProvider(final String serverUrl) {
+    public static String getProjectUrl(final String projectName, final int buildNumber) {
+        return getJenkinsUrl() + "/job/" + projectName + "/" + buildNumber;
+    }
 
+    public static Provider getProvider() {
+        final String jenkinsUrl = getJenkinsUrl();
         final Provider provider = new Provider();
         provider.setProviderType(ProviderType.CI_BUILD);
         provider.setName("Jenkins");
-        provider.setUrl(serverUrl);
-        provider.setIcon(serverUrl + "/static/komea/jenkins_logo.png");
+        provider.setUrl(jenkinsUrl);
+        provider.setIcon(jenkinsUrl + Jenkins.RESOURCE_PATH
+                + "/plugin/komea-jenkins-provider/images/jenkins_icon.png");
         return provider;
+    }
+
+    private static String getJenkinsUrl() {
+        final JenkinsLocationConfiguration globalConfig = new JenkinsLocationConfiguration();
+        String url = globalConfig.getUrl();
+        if (url != null) {
+            url = url.trim();
+            if (url.endsWith("/")) {
+                url = url.substring(0, url.length() - 1);
+            }
+            if (url.isEmpty()) {
+                url = null;
+            }
+        }
+        return url;
     }
 
     @Override
     public void onOnline(final Computer c, final TaskListener listener)
             throws IOException, InterruptedException {
-
         final Jenkins jenkins = Jenkins.getInstance();
         final KomeaNotifier.DescriptorImpl descriptor
                 = jenkins.getDescriptorByType(KomeaNotifier.DescriptorImpl.class);
@@ -90,8 +101,7 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
         }
         final ProviderDto providerDto = new ProviderDto();
 
-        final JenkinsLocationConfiguration globalConfig = new JenkinsLocationConfiguration();
-        final Provider provider = getProvider(globalConfig.getUrl());
+        final Provider provider = getProvider();
         providerDto.setProvider(provider);
 
         final List<EventType> eventTypes = new ArrayList<EventType>(EVENT_TYPES);
@@ -108,7 +118,7 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
             final IProvidersAPI providersAPI = RestClientFactory.INSTANCE.createProvidersAPI(serverUrl);
             providersAPI.registerProvider(provider);
         } catch (Exception ex) {
-            listener.error(ex.getMessage(), ex);
+            ex.printStackTrace(listener.getLogger());
         } finally {
             Thread.currentThread().setContextClassLoader(contextClassLoader);
         }

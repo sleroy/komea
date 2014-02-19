@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
@@ -26,11 +25,6 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.resources.ResourceUtils;
 
-/**
- * KomeaDecorator.java (UTF-8) 28 oct. 2013
- *
- * @author scarreau
- */
 @DependsUpon(DecoratorBarriers.END_OF_VIOLATION_TRACKING)
 public class KomeaDecorator implements Decorator {
 
@@ -38,25 +32,22 @@ public class KomeaDecorator implements Decorator {
     private String komeaProjectKey;
     private final MetricFinder metricFinder;
     private final Provider provider;
-    private String komeaUrl;
-    private final Map<Integer, String> projectMap = new HashMap<Integer, String>(0);
+    private final String komeaUrl;
+    private final String sonarUrl;
     private final List<String> projectMetricKeys;
 
-    public KomeaDecorator(final Server server, final Settings settings, final MetricFinder metricFinder) {
-
+    public KomeaDecorator(final Server server, final Settings settings,
+            final MetricFinder metricFinder) {
         this.metricFinder = metricFinder;
-        provider = KomeaPlugin.getProvider(server.getURL());
-        komeaProjectKey = KomeaPlugin.getProjectKey(settings);
-        this.komeaUrl = KomeaPlugin.getServerUrl(settings);
-        if (komeaUrl != null && komeaUrl.trim().isEmpty()) {
-            komeaUrl = null;
-        }
-        projectMetricKeys = KomeaPlugin.getMetricKeys(settings);
+        this.provider = KomeaPlugin.getProvider(server.getURL());
+        this.komeaProjectKey = KomeaPlugin.getProjectKey(settings);
+        this.komeaUrl = KomeaPlugin.getKomeaUrl(settings);
+        this.sonarUrl = KomeaPlugin.getSonarUrl(settings);
+        this.projectMetricKeys = KomeaPlugin.getMetricKeys(settings);
     }
 
     @Override
     public void decorate(final Resource resource, final DecoratorContext context) {
-
         if (!ResourceUtils.isProject(resource) || komeaUrl == null) {
             return;
         }
@@ -71,16 +62,18 @@ public class KomeaDecorator implements Decorator {
             if (result == null) {
                 continue;
             }
-            final EventSimpleDto event = createMeasureEvent(metric, result);
+            final EventSimpleDto event = createMeasureEvent(metric, result,
+                    sonarUrl, project.getId());
             events.add(event);
         }
         KomeaPlugin.pushEvents(komeaUrl, events.toArray(new EventSimpleDto[events.size()]));
     }
 
-    private EventSimpleDto createMeasureEvent(final Metric metric, final Double value) {
-
+    private EventSimpleDto createMeasureEvent(final Metric metric,
+            final Double value, final String sonarUrl, final int projectId) {
         final EventType eventType = KomeaPlugin.createEventType(metric);
-        final String message = "'" + metric.getName() + "' for project " + komeaProjectKey + " is : " + value;
+        final String message = "SonarQube measure of metric " + metric.getName()
+                + " for project " + komeaProjectKey + " is : " + value;
         final HashMap<String, String> properties = new HashMap<String, String>(0);
         properties.put("metric", metric.getKey());
         properties.put("value", value.toString());
@@ -93,13 +86,12 @@ public class KomeaDecorator implements Decorator {
         event.setProject(komeaProjectKey);
         event.setProperties(properties);
         event.setProvider(provider.getUrl());
-        event.setUrl(null);
+        event.setUrl(KomeaPlugin.getProjectUrl(sonarUrl, projectId));
         event.setValue(value);
         return event;
     }
 
     private Double getValue(final Metric metric, final DecoratorContext context) {
-
         if (metric == null || !metric.isNumericType()) {
             return null;
         }
@@ -116,13 +108,11 @@ public class KomeaDecorator implements Decorator {
 
     @Override
     public boolean shouldExecuteOnProject(final Project project) {
-
         return true;
     }
 
     @DependsUpon
     public List<Metric> dependsUpon() {
-
         return Arrays.asList(CoreMetrics.VIOLATIONS_DENSITY);
     }
 

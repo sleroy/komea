@@ -12,28 +12,24 @@ import org.sonar.api.config.Settings;
 import org.sonar.api.platform.Server;
 import org.sonar.api.resources.Project;
 
-/**
- * KomeaProjectAnalysisHandler.java (UTF-8) 28 oct. 2013
- *
- * @author scarreau
- */
 public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KomeaProjectAnalysisHandler.class.getName());
     private final Map<Integer, Long> map = new HashMap<Integer, Long>(0);
     private final Settings settings;
     private final Provider provider;
+    private final String sonarUrl;
     private final Map<Integer, String> projectMap = new HashMap<Integer, String>(0);
 
     public KomeaProjectAnalysisHandler(final Server server, final Settings settings) {
-
         this.settings = settings;
-        provider = KomeaPlugin.getProvider(server.getURL());
+        this.sonarUrl = KomeaPlugin.getSonarUrl(settings);
+        this.provider = KomeaPlugin.getProvider(sonarUrl);
     }
 
     @Override
     public void onProjectAnalysis(final ProjectAnalysisEvent event) {
-        final String komeaUrl = KomeaPlugin.getServerUrl(settings);
+        final String komeaUrl = KomeaPlugin.getKomeaUrl(settings);
         if (komeaUrl == null) {
             return;
         }
@@ -43,12 +39,13 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
             if (event.isStart()) {
                 final long start = new Date().getTime();
                 map.put(projectId, start);
-                KomeaPlugin.pushEvents(komeaUrl, createStartEvent(projectKey, start));
+                KomeaPlugin.pushEvents(komeaUrl, createStartEvent(
+                        projectKey, start, sonarUrl, projectId));
             } else if (event.isEnd()) {
                 final long start = map.get(projectId);
                 final long end = new Date().getTime();
-                KomeaPlugin.pushEvents(komeaUrl, createEndEvent(projectKey, end),
-                        createDurationEvent(projectKey, start, end));
+                KomeaPlugin.pushEvents(komeaUrl, createCompleteEvent(
+                        projectKey, start, end, sonarUrl, projectId));
             }
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
@@ -56,7 +53,6 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
     }
 
     private String getCiFlowProjectKey(final Project project) {
-
         final int projectId = project.getId();
         String ciFlowProjectKey;
         if (projectMap.containsKey(projectId)) {
@@ -71,59 +67,43 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
         return ciFlowProjectKey;
     }
 
-    private EventSimpleDto createStartEvent(final String projectKey, final long start) {
-
-        final String message = "Analysis of " + projectKey + " started.";
+    private EventSimpleDto createStartEvent(final String projectKey, final long start,
+            final String sonarUrl, final int projectId) {
+        final String message = "SonarQube analysis started for poject " + projectKey;
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(start));
         properties.put("project", projectKey);
         final EventSimpleDto event = new EventSimpleDto();
         event.setDate(new Date());
-        event.setEventType(KomeaPlugin.EVENT_ANALYSIS_STARTED.getEventKey());
+        event.setEventType(KomeaPlugin.ANALYSIS_STARTED.getEventKey());
         event.setMessage(message);
         event.setProject(projectKey);
         event.setProperties(properties);
         event.setProvider(provider.getUrl());
-        event.setUrl(null);
+        event.setUrl(KomeaPlugin.getProjectUrl(sonarUrl, projectId));
         event.setValue(event.getDate().getTime());
         return event;
     }
 
-    private EventSimpleDto createDurationEvent(final String projectKey, final long start, final long end) {
-
+    private EventSimpleDto createCompleteEvent(final String projectKey,
+            final long start, final long end, final String sonarUrl,
+            final int projectId) {
         final long duration = end - start;
-        final String message = "Analysis of " + projectKey + " done in : " + duration + "ms";
-        final Map<String, String> properties = new HashMap<String, String>(3);
-        properties.put("start", String.valueOf(start));
-        properties.put("end", String.valueOf(end));
-        properties.put("duration", String.valueOf(duration));
-        properties.put("project", projectKey);
-        final EventSimpleDto event = new EventSimpleDto();
-        event.setDate(new Date());
-        event.setEventType(KomeaPlugin.EVENT_ANALYSIS_DURATION.getEventKey());
-        event.setMessage(message);
-        event.setProject(projectKey);
-        event.setProperties(properties);
-        event.setProvider(provider.getUrl());
-        event.setUrl(null);
-        event.setValue(duration);
-        return event;
-    }
-
-    private EventSimpleDto createEndEvent(final String projectKey, final long end) {
-
-        final String message = "Analysis of " + projectKey + " ended.";
+        final String message = "SonarQube analysis complete for project "
+                + projectKey + " in " + duration + "ms";
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(end));
         properties.put("project", projectKey);
+        properties.put("start", String.valueOf(start));
+        properties.put("duration", String.valueOf(duration));
         final EventSimpleDto event = new EventSimpleDto();
         event.setDate(new Date());
-        event.setEventType(KomeaPlugin.EVENT_ANALYSIS_ENDED.getEventKey());
+        event.setEventType(KomeaPlugin.ANALYSIS_COMPLETE.getEventKey());
         event.setMessage(message);
         event.setProject(projectKey);
         event.setProperties(properties);
         event.setProvider(provider.getUrl());
-        event.setUrl(null);
+        event.setUrl(KomeaPlugin.getProjectUrl(sonarUrl, projectId));
         event.setValue(event.getDate().getTime());
         return event;
     }
