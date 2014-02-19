@@ -3,23 +3,16 @@ package org.komea.product.backend.service;
 
 
 
-import org.komea.product.database.dao.EventTypeDao;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
 
 
 
 /**
+ * 
  */
 public interface IEventTypeService
 {
-    
-    
-    /**
-     * Method getEventTypeDAO.
-     * @return EventTypeDao
-     */
-    public EventTypeDao getEventTypeDAO();
     
     
     /**

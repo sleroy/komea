@@ -5,7 +5,6 @@ package org.komea.product.backend.service.entities;
 
 import java.util.List;
 
-import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.dto.PersonDto;
 import org.komea.product.database.model.Person;
@@ -26,23 +25,18 @@ public interface IPersonService
     
     
     /**
-     * Method getPersonDao.
-     * @return PersonDao
-     */
-    PersonDao getPersonDao();
-    
-    
-    /**
      * This method list all person
      * 
-    
-     * @return the person list */
+     * @return the person list
+     */
     List<PersonDto> getPersonList();
     
     
     /**
      * Method getPersons.
-     * @param logins List<String>
+     * 
+     * @param logins
+     *            List<String>
      * @return List<Person>
      */
     List<Person> getPersons(final List<String> logins);
@@ -53,14 +47,16 @@ public interface IPersonService
      * 
      * @param _personId
      *            the person if
-    
-     * @return the project list */
+     * @return the project list
+     */
     List<Project> getProjectsAssociateToAPerson(Integer _personId);
     
     
     /**
      * Method personsToBaseEntities.
-     * @param persons List<Person>
+     * 
+     * @param persons
+     *            List<Person>
      * @return List<BaseEntity>
      */
     List<BaseEntity> personsToBaseEntities(List<Person> persons);
