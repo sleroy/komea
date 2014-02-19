@@ -83,7 +83,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `komea`.`kom_pvd` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `providerType` VARCHAR(255) NOT NULL,
+  `providerType` INT NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `icon` VARCHAR(255) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `valueMax` DOUBLE NULL,
   `valueDirection` INT NOT NULL,
   `valueType` INT NOT NULL,
-  `entityType` VARCHAR(255) NOT NULL,
+  `entityType` INT NOT NULL,
   `esperRequest` MEDIUMTEXT NOT NULL,
   `entityID` INT NULL,
   `cronExpression` VARCHAR(60) NULL,
@@ -181,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_evt` (
   `enabled` TINYINT(1) NOT NULL,
   `description` VARCHAR(2048) NULL,
   `category` VARCHAR(255) NOT NULL,
-  `entityType` VARCHAR(255) NULL,
+  `entityType` INT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_Event_Plugin1_idx` (`idProvider` ASC),
   UNIQUE INDEX `key_UNIQUE` (`eventKey` ASC))
@@ -297,6 +297,23 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_pegr` (
   PRIMARY KEY (`idProject`, `idPersonGroup`),
   INDEX `fk_kom_proj_has_kom_pegr_kom_pegr1_idx` (`idPersonGroup` ASC),
   INDEX `fk_kom_proj_has_kom_pegr_kom_proj1_idx` (`idProject` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`kom_acfi`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`kom_acfi` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `entityType` INT NOT NULL,
+  `idEntity` INT NULL,
+  `infoRetention` INT NOT NULL,
+  `minorRetention` INT NOT NULL,
+  `majorRetention` INT NOT NULL,
+  `criticalRetention` INT NOT NULL,
+  `blockerRetention` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC))
 ENGINE = InnoDB;
 
 

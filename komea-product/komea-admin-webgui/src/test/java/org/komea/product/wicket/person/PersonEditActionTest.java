@@ -5,6 +5,7 @@ import org.easymock.EasyMock;
 import org.junit.*;
 import static org.junit.Assert.*;
 import org.komea.product.database.dao.PersonRoleDao;
+import org.komea.product.database.enums.UserBdd;
 import org.komea.product.database.model.Person;
 
 /**
@@ -62,7 +63,7 @@ public class PersonEditActionTest
     public void testSelected_1()
         throws Exception {
         PersonEditAction fixture = new PersonEditAction(new PersonPage(new PageParameters()), EasyMock.createNiceMock(PersonRoleDao.class));
-        Person _object = new Person(new Integer(1), new Integer(1), new Integer(1), "", "", "", "", "");
+        Person _object = new Person(new Integer(1), new Integer(1), new Integer(1), "", "", "", "", "", UserBdd.KOMEA);
 
         fixture.selected(_object);
 
@@ -92,7 +93,7 @@ public class PersonEditActionTest
     public void testSelected_2()
         throws Exception {
         PersonEditAction fixture = new PersonEditAction(new PersonPage(new PageParameters()), EasyMock.createNiceMock(PersonRoleDao.class));
-        Person _object = new Person(new Integer(1), new Integer(1), new Integer(1), "", "", "", "", "");
+        Person _object = new Person(new Integer(1), new Integer(1), new Integer(1), "", "", "", "", "", UserBdd.KOMEA);
 
         fixture.selected(_object);
 

@@ -22,6 +22,7 @@ import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
+import org.komea.product.database.enums.UserBdd;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.EventTypeCriteria;
 import org.komea.product.database.model.Person;
@@ -122,23 +123,23 @@ public class DemoDataBean
         
         final Person obiwan =
                 new Person(null, null, null, "Obiwan", "Kenobi", "obiwan@lightforce.net", "obiwan",
-                        encoder.encodePassword("obiwan"));
+                        encoder.encodePassword("obiwan"), UserBdd.KOMEA);
         
         createUser(obiwan, userRole);
         
         final Person admin =
                 new Person(null, null, null, "admin", "admin", "admiweb@tocea.com", "admin",
-                        encoder.encodePassword("admin"));
+                        encoder.encodePassword("admin"), UserBdd.KOMEA);
         createUser(admin, administrator);
         
         final Person record2 =
                 new Person(null, null, null, "Dark", "Maul", "darkmaul@darkforce.net", "dmaul",
-                        encoder.encodePassword("dmaul"));
+                        encoder.encodePassword("dmaul"), UserBdd.KOMEA);
         createUser(record2, userRole);
         
         final Person record3 =
                 new Person(null, null, null, "Luke", "Skywalker", "lskywalker@lightforce.net",
-                        "lskywalker", encoder.encodePassword("lskywalker"));
+                        "lskywalker", encoder.encodePassword("lskywalker"), UserBdd.KOMEA);
         createUser(record3, userRole);
         
         final PersonGroup department = new PersonGroup();

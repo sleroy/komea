@@ -123,7 +123,7 @@ public class JSR303Plugin extends PluginAdapter {
 
     private boolean modelClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         setEntityType(topLevelClass, introspectedTable);
-        addKpiMethods(topLevelClass, introspectedTable);
+//        addKpiMethods(topLevelClass, introspectedTable);
         return true;
     }
 

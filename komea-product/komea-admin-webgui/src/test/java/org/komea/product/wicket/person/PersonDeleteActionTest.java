@@ -4,6 +4,7 @@ import org.easymock.EasyMock;
 import org.junit.*;
 import static org.junit.Assert.*;
 import org.komea.product.database.dao.PersonDao;
+import org.komea.product.database.enums.UserBdd;
 import org.komea.product.database.model.Person;
 
 /**
@@ -48,7 +49,7 @@ public class PersonDeleteActionTest
     public void testDelete_1()
         throws Exception {
         PersonDeleteAction fixture = new PersonDeleteAction(EasyMock.createNiceMock(PersonDao.class));
-        Person _object = new Person(new Integer(1), new Integer(1), new Integer(1), "", "", "", "", "");
+        Person _object = new Person(new Integer(1), new Integer(1), new Integer(1), "", "", "", "", "", UserBdd.KOMEA);
 
         fixture.delete(_object);
 
