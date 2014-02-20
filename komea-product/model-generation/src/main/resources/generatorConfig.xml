@@ -38,7 +38,7 @@
             <property name="useActualColumnNames" value="true" />
             <property name="entityType" value="PERSON_GROUP" />
             <generatedKey column="id" sqlStatement="JDBC" identity="true" />
-            <columnOverride column="type" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+            <columnOverride column="type" typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.PersonGroupType" />
         </table>
         <table tableName="kom_pero" domainObjectName="PersonRole">
@@ -49,28 +49,28 @@
             <property name="useActualColumnNames" value="true" />
             <property name="entityType" value="PERSON" />
             <generatedKey column="id" sqlStatement="JDBC" identity="true" />
-            <columnOverride column="userBdd" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+            <columnOverride column="userBdd" typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.UserBdd" />
         </table>
         <table tableName="kom_pvd" domainObjectName="Provider">
             <property name="useActualColumnNames" value="true" />
             <generatedKey column="id" sqlStatement="JDBC" identity="true" />
             <columnOverride column="providerType"
-                            typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="org.komea.product.database.enums.ProviderType" />
+                            typeHandler="org.apache.ibatis.type.EnumTypeHandler" javaType="org.komea.product.database.enums.ProviderType" />
         </table>
         <table tableName="kom_kpi" domainObjectName="Kpi">
             <property name="useActualColumnNames" value="true" />
             <generatedKey column="id" sqlStatement="JDBC" identity="true" />
             <columnOverride column="entityType"
-                            typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="org.komea.product.database.enums.EntityType" />
+                            typeHandler="org.apache.ibatis.type.EnumTypeHandler" javaType="org.komea.product.database.enums.EntityType" />
             <columnOverride column="evictionType"
-                            typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+                            typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.EvictionType" />
             <columnOverride column="valueDirection"
-                            typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+                            typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.ValueDirection" />
             <columnOverride column="valueType"
-                            typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+                            typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.ValueType" />
         </table>
         <table tableName="kom_msr" domainObjectName="Measure">
@@ -81,10 +81,10 @@
             <property name="useActualColumnNames" value="true" />
             <generatedKey column="id" sqlStatement="JDBC" identity="true" />
             <columnOverride column="operator"
-                            typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+                            typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.Operator" />
             <columnOverride column="severity"
-                            typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+                            typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.Severity" />
         </table>
         <table tableName="kom_link" domainObjectName="Link">
@@ -95,9 +95,9 @@
             <property name="useActualColumnNames" value="true" />
             <generatedKey column="id" sqlStatement="JDBC" identity="true" />
             <columnOverride column="entityType"
-                            typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="org.komea.product.database.enums.EntityType" />
+                            typeHandler="org.apache.ibatis.type.EnumTypeHandler" javaType="org.komea.product.database.enums.EntityType" />
             <columnOverride column="severity"
-                            typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+                            typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.Severity" />
         </table>
         <table tableName="kom_setting" domainObjectName="Setting">
@@ -107,17 +107,17 @@
         <table tableName="kom_acfi" domainObjectName="ActivityFilter">
             <property name="useActualColumnNames" value="true" />
             <generatedKey column="id" sqlStatement="JDBC" identity="true" />
-            <columnOverride column="entityType" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+            <columnOverride column="entityType" typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.EntityType" />
-            <columnOverride column="infoRetention" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+            <columnOverride column="infoRetention" typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.RetentionPeriod" />
-            <columnOverride column="minorRetention" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+            <columnOverride column="minorRetention" typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.RetentionPeriod" />
-            <columnOverride column="majorRetention" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+            <columnOverride column="majorRetention" typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.RetentionPeriod" />
-            <columnOverride column="criticalRetention" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+            <columnOverride column="criticalRetention" typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.RetentionPeriod" />
-            <columnOverride column="blockerRetention" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+            <columnOverride column="blockerRetention" typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.RetentionPeriod" />
         </table>
         <table tableName="kom_tag" domainObjectName="Tag">

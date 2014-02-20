@@ -5,8 +5,7 @@
 CREATE TABLE IF NOT EXISTS `komea`.`kom_customer` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`))
-;
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -18,8 +17,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_proj` (
   `name` VARCHAR(255) NOT NULL,
   `description` VARCHAR(2048) NULL,
   `idCustomer` INT NULL,
-  PRIMARY KEY (`id`))
-;
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -31,9 +29,8 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pegr` (
   `personGroupKey` VARCHAR(255) NOT NULL,
   `description` VARCHAR(2048) NULL,
   `idPersonGroupParent` INT NULL,
-  `type` INT NOT NULL,
-  PRIMARY KEY (`id`))
-;
+  `type` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -43,8 +40,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pero` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `roleKey` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`))
-;
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -59,9 +55,8 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pe` (
   `email` VARCHAR(255) NOT NULL,
   `login` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL DEFAULT '',
-  `userBdd` INT NOT NULL,
-  PRIMARY KEY (`id`))
-;
+  `userBdd` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -69,12 +64,11 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pe` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `komea`.`kom_pvd` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `providerType` INT NOT NULL,
+  `providerType` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `icon` VARCHAR(255) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`))
-;
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -88,16 +82,15 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `idProvider` INT NULL,
   `valueMin` DOUBLE NULL,
   `valueMax` DOUBLE NULL,
-  `valueDirection` INT NOT NULL,
-  `valueType` INT NOT NULL,
-  `entityType` INT NOT NULL,
+  `valueDirection` VARCHAR(255) NOT NULL,
+  `valueType` VARCHAR(255) NOT NULL,
+  `entityType` VARCHAR(255) NOT NULL,
   `esperRequest` MEDIUMTEXT NOT NULL,
   `entityID` INT NULL,
   `cronExpression` VARCHAR(60) NULL,
   `evictionRate` INT NOT NULL,
-  `evictionType` INT NOT NULL,
-  PRIMARY KEY (`id`))
-;
+  `evictionType` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -111,8 +104,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_msr` (
   `idPerson` INT NULL,
   `idProject` INT NULL,
   `value` DOUBLE NOT NULL,
-  PRIMARY KEY (`id`))
-;
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -124,13 +116,12 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpia` (
   `kpiAlertKey` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `description` VARCHAR(2048) NULL,
-  `severity` INT NOT NULL,
+  `severity` VARCHAR(255) NOT NULL,
   `value` DOUBLE NOT NULL,
   `averageSince` DATE NULL,
-  `operator` INT NOT NULL,
+  `operator` VARCHAR(255) NOT NULL,
   `enabled` TINYINT(1) NOT NULL,
-  PRIMARY KEY (`id`))
-;
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -141,8 +132,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_link` (
   `name` VARCHAR(255) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
   `idProject` INT NOT NULL,
-  PRIMARY KEY (`id`))
-;
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -153,13 +143,12 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_evt` (
   `idProvider` INT NOT NULL,
   `eventKey` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
-  `severity` INT NOT NULL,
+  `severity` VARCHAR(255) NOT NULL,
   `enabled` TINYINT(1) NOT NULL,
   `description` VARCHAR(2048) NULL,
   `category` VARCHAR(255) NOT NULL,
-  `entityType` INT NULL,
-  PRIMARY KEY (`id`))
-;
+  `entityType` VARCHAR(255) NULL,
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -171,8 +160,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_setting` (
   `value` VARCHAR(255) NOT NULL,
   `type` VARCHAR(255) NOT NULL,
   `description` VARCHAR(2048) NULL,
-  PRIMARY KEY (`id`))
-;
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -181,8 +169,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_setting` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_tag` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`))
-;
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -191,8 +178,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_tag` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_pe` (
   `idProject` INT NOT NULL,
   `idPerson` INT NOT NULL,
-  PRIMARY KEY (`idProject`, `idPerson`))
-;
+  PRIMARY KEY (`idProject`, `idPerson`));
 
 
 -- -----------------------------------------------------
@@ -205,8 +191,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pvds` (
   `idProvider` INT NOT NULL,
   `type` VARCHAR(255) NOT NULL,
   `description` VARCHAR(2048) NULL,
-  PRIMARY KEY (`id`))
-;
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -215,8 +200,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pvds` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_tag` (
   `idProject` INT NOT NULL,
   `idTag` INT NOT NULL,
-  PRIMARY KEY (`idProject`, `idTag`))
-;
+  PRIMARY KEY (`idProject`, `idTag`));
 
 
 -- -----------------------------------------------------
@@ -225,8 +209,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_tag` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_kpia` (
   `idProject` INT NOT NULL,
   `idKpiAlertType` INT NOT NULL,
-  PRIMARY KEY (`idProject`, `idKpiAlertType`))
-;
+  PRIMARY KEY (`idProject`, `idKpiAlertType`));
 
 
 -- -----------------------------------------------------
@@ -235,8 +218,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_kpia` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_has_kpia_pegr` (
   `idKpiAlertType` INT NOT NULL,
   `idPersonGroup` INT NOT NULL,
-  PRIMARY KEY (`idKpiAlertType`, `idPersonGroup`))
-;
+  PRIMARY KEY (`idKpiAlertType`, `idPersonGroup`));
 
 
 -- -----------------------------------------------------
@@ -245,8 +227,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_kpia_pegr` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_has_kpia_pe` (
   `idKpiAlertType` INT NOT NULL,
   `idPerson` INT NOT NULL,
-  PRIMARY KEY (`idKpiAlertType`, `idPerson`))
-;
+  PRIMARY KEY (`idKpiAlertType`, `idPerson`));
 
 
 -- -----------------------------------------------------
@@ -255,8 +236,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_kpia_pe` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_pegr` (
   `idProject` INT NOT NULL,
   `idPersonGroup` INT NOT NULL,
-  PRIMARY KEY (`idProject`, `idPersonGroup`))
-;
+  PRIMARY KEY (`idProject`, `idPersonGroup`));
 
 
 -- -----------------------------------------------------
@@ -264,12 +244,11 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_pegr` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `komea`.`kom_acfi` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `entityType` INT NOT NULL,
+  `entityType` VARCHAR(255) NOT NULL,
   `idEntity` INT NULL,
-  `infoRetention` INT NOT NULL,
-  `minorRetention` INT NOT NULL,
-  `majorRetention` INT NOT NULL,
-  `criticalRetention` INT NOT NULL,
-  `blockerRetention` INT NOT NULL,
-  PRIMARY KEY (`id`))
-;
+  `infoRetention` VARCHAR(255) NOT NULL,
+  `minorRetention` VARCHAR(255) NOT NULL,
+  `majorRetention` VARCHAR(255) NOT NULL,
+  `criticalRetention` VARCHAR(255) NOT NULL,
+  `blockerRetention` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`));

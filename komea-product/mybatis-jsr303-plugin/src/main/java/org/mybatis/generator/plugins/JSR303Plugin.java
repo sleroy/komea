@@ -52,11 +52,10 @@ public class JSR303Plugin extends PluginAdapter {
             oldType = matcher.replaceAll(replaceExample);
             introspectedTable.setUpdateByExampleStatementId(oldType);
 
-            oldType = introspectedTable.getUpdateByExampleWithBLOBsStatementId();
-            matcher = pattern.matcher(oldType);
-            oldType = matcher.replaceAll(replaceExample);
-            introspectedTable.setUpdateByExampleWithBLOBsStatementId(oldType);
-
+//            oldType = introspectedTable.getUpdateByExampleWithBLOBsStatementId();
+//            matcher = pattern.matcher(oldType);
+//            oldType = matcher.replaceAll(replaceExample);
+//            introspectedTable.setUpdateByExampleWithBLOBsStatementId(oldType);
             oldType = introspectedTable.getCountByExampleStatementId();
             matcher = pattern.matcher(oldType);
             oldType = matcher.replaceAll(replaceExample);
@@ -72,11 +71,10 @@ public class JSR303Plugin extends PluginAdapter {
             oldType = matcher.replaceAll(replaceExample);
             introspectedTable.setSelectByExampleStatementId(oldType);
 
-            oldType = introspectedTable.getSelectByExampleWithBLOBsStatementId();
-            matcher = pattern.matcher(oldType);
-            oldType = matcher.replaceAll(replaceExample);
-            introspectedTable.setSelectByExampleWithBLOBsStatementId(oldType);
-
+//            oldType = introspectedTable.getSelectByExampleWithBLOBsStatementId();
+//            matcher = pattern.matcher(oldType);
+//            oldType = matcher.replaceAll(replaceExample);
+//            introspectedTable.setSelectByExampleWithBLOBsStatementId(oldType);
             pattern = Pattern.compile("ExampleSelective$");
             replaceExample += "Selective";
 
