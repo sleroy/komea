@@ -20,6 +20,7 @@ import com.espertech.esper.client.annotation.Audit;
 /**
  */
 @Service
+@Transactional
 public class ProjectPersonService implements IProjectPersonService
 {
     
@@ -31,8 +32,11 @@ public class ProjectPersonService implements IProjectPersonService
     
     
     
-    /* (non-Javadoc)
-     * @see org.komea.product.backend.service.entities.IProjectPersonService#updateProjectPersonLink(org.komea.product.database.model.Project, org.komea.product.database.model.Person)
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.komea.product.backend.service.entities.IProjectPersonService#updateProjectPersonLink(org.komea.product.database.model.Project,
+     * org.komea.product.database.model.Person)
      */
     @Override
     @Transactional
