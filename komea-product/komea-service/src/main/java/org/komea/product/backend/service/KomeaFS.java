@@ -8,7 +8,8 @@ import java.io.File;
 import org.komea.product.backend.plugin.api.InjectSetting;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
-import org.komea.product.backend.service.business.ISettingProxy;
+import org.komea.product.backend.service.fs.IKomeaFS;
+import org.komea.product.backend.service.fs.IPluginFileSystem;
 import org.komea.product.backend.storage.PluginFileSystem;
 import org.springframework.stereotype.Service;
 
@@ -41,13 +42,13 @@ public class KomeaFS implements IKomeaFS
      * Method getFileSystem.
      * @param _fileSystemName String
      * @return IPluginFileSystem
-     * @see org.komea.product.backend.service.IKomeaFS#getFileSystem(String)
+     * @see org.komea.product.backend.service.fs.IKomeaFS#getFileSystem(String)
      */
     @Override
     public IPluginFileSystem getFileSystem(final String _fileSystemName) {
     
     
-        return new PluginFileSystem(getPath(new File(storage_path.get().getAbsolutePath(),
+        return new PluginFileSystem(getPath(new File(storage_path.getValue().getAbsolutePath(),
                 _fileSystemName)));
     }
     

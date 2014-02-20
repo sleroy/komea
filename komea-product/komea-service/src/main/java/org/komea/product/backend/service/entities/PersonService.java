@@ -6,6 +6,7 @@ package org.komea.product.backend.service.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.database.dao.HasProjectPersonDao;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonRoleDao;
@@ -30,15 +31,13 @@ import com.google.common.collect.Lists;
 /**
  */
 @Service
-public class PersonService implements IPersonService
+public class PersonService extends AbstractService<Person, Integer, PersonCriteria> implements
+        IPersonService
 {
     
     
     @Autowired
     private IPersonGroupService   groupService;
-    
-    @Autowired
-    private PersonDao             personDao;
     
     @Autowired
     private ProjectDao            projectDAO;
@@ -48,6 +47,9 @@ public class PersonService implements IPersonService
     
     @Autowired
     private IProjectPersonService projectPersonService;
+    
+    @Autowired
+    private PersonDao             requiredDAO;
     @Autowired
     private PersonRoleDao         roleDao;
     
@@ -64,25 +66,12 @@ public class PersonService implements IPersonService
     
     
     /**
-    
-     * @return the groupService */
+     * @return the groupService
+     */
     public IPersonGroupService getGroupService() {
     
     
         return groupService;
-    }
-    
-    
-    /**
-     * Method getPersonDao.
-     * @return PersonDao
-     * @see org.komea.product.backend.service.entities.IPersonService#getPersonDao()
-     */
-    @Override
-    public PersonDao getPersonDao() {
-    
-    
-        return personDao;
     }
     
     
@@ -97,7 +86,7 @@ public class PersonService implements IPersonService
     
         // TOTO STUB
         final PersonCriteria request = new PersonCriteria();
-        final List<Person> persons = personDao.selectByCriteria(request);
+        final List<Person> persons = requiredDAO.selectByCriteria(request);
         
         final List<PersonDto> personDtos = Lists.newArrayList();
         for (final Person person : persons) {
@@ -123,7 +112,9 @@ public class PersonService implements IPersonService
     
     /**
      * Method getPersons.
-     * @param logins List<String>
+     * 
+     * @param logins
+     *            List<String>
      * @return List<Person>
      * @see org.komea.product.backend.service.entities.IPersonService#getPersons(List<String>)
      */
@@ -140,13 +131,13 @@ public class PersonService implements IPersonService
                 criteria.andLoginEqualTo(entityKey);
             }
         }
-        return personDao.selectByCriteria(personCriteria);
+        return requiredDAO.selectByCriteria(personCriteria);
     }
     
     
     /**
-    
-     * @return the projectDAO */
+     * @return the projectDAO
+     */
     public ProjectDao getProjectDAO() {
     
     
@@ -155,8 +146,8 @@ public class PersonService implements IPersonService
     
     
     /**
-    
-     * @return the projectPersonDao */
+     * @return the projectPersonDao
+     */
     public HasProjectPersonDao getProjectPersonDao() {
     
     
@@ -165,8 +156,8 @@ public class PersonService implements IPersonService
     
     
     /**
-    
-     * @return the projectPersonService */
+     * @return the projectPersonService
+     */
     public IProjectPersonService getProjectPersonService() {
     
     
@@ -176,7 +167,9 @@ public class PersonService implements IPersonService
     
     /**
      * Method getProjectsAssociateToAPerson.
-     * @param _personId Integer
+     * 
+     * @param _personId
+     *            Integer
      * @return List<Project>
      * @see org.komea.product.backend.service.entities.IPersonService#getProjectsAssociateToAPerson(Integer)
      */
@@ -199,9 +192,17 @@ public class PersonService implements IPersonService
     }
     
     
-    /**
+    @Override
+    public PersonDao getRequiredDAO() {
     
-     * @return the roleDao */
+    
+        return requiredDAO;
+    }
+    
+    
+    /**
+     * @return the roleDao
+     */
     public PersonRoleDao getRoleDao() {
     
     
@@ -211,7 +212,9 @@ public class PersonService implements IPersonService
     
     /**
      * Method personsToBaseEntities.
-     * @param persons List<Person>
+     * 
+     * @param persons
+     *            List<Person>
      * @return List<BaseEntity>
      * @see org.komea.product.backend.service.entities.IPersonService#personsToBaseEntities(List<Person>)
      */
@@ -233,11 +236,17 @@ public class PersonService implements IPersonService
     
     /**
      * Method saveOrUpdate.
-     * @param _person Person
-     * @param _selectedProject Project
-     * @param _personRole PersonRole
-     * @param _personGroup PersonGroup
+     * 
+     * @param _person
+     *            Person
+     * @param _selectedProject
+     *            Project
+     * @param _personRole
+     *            PersonRole
+     * @param _personGroup
+     *            PersonGroup
      */
+    @Override
     public void saveOrUpdate(
             final Person _person,
             final Project _selectedProject,
@@ -245,6 +254,10 @@ public class PersonService implements IPersonService
             final PersonGroup _personGroup) {
     
     
+        getDaoEventRegistry().notifyUpdated(_person);
+        getDaoEventRegistry().notifyUpdated(_selectedProject);
+        getDaoEventRegistry().notifyUpdated(_personRole);
+        getDaoEventRegistry().notifyUpdated(_personGroup);
         if (_personRole != null) {
             _person.setIdPersonRole(_personRole.getId());
         } else {
@@ -257,9 +270,9 @@ public class PersonService implements IPersonService
         }
         
         if (_person.getId() != null) {
-            personDao.updateByPrimaryKey(_person);
+            requiredDAO.updateByPrimaryKey(_person);
         } else {
-            personDao.insert(_person);
+            requiredDAO.insert(_person);
         }
         projectPersonService.updateProjectPersonLink(_selectedProject, _person);
         
@@ -274,17 +287,6 @@ public class PersonService implements IPersonService
     
     
         groupService = _groupService;
-    }
-    
-    
-    /**
-     * Method setPersonDao.
-     * @param _personDao PersonDao
-     */
-    public void setPersonDao(final PersonDao _personDao) {
-    
-    
-        personDao = _personDao;
     }
     
     
@@ -318,6 +320,13 @@ public class PersonService implements IPersonService
     
     
         projectPersonService = _projectPersonService;
+    }
+    
+    
+    public void setRequiredDAO(final PersonDao _requiredDAO) {
+    
+    
+        requiredDAO = _requiredDAO;
     }
     
     

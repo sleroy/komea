@@ -2,6 +2,7 @@
 package org.komea.product.database.dao.it;
 
 
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.database.dao.KpiDao;
@@ -15,14 +16,21 @@ import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-public class KpiDAOIT extends AbstractSpringIntegrationTestCase {
+
+
+public class KpiDAOIT extends AbstractSpringIntegrationTestCase
+{
+    
     
     @Autowired
     private KpiDao kpiDAO;
     
+    
+    
     @Test
     @Transactional
     public void test() {
+    
     
         final KpiCriteria request = new KpiCriteria();
         request.createCriteria().andEntityTypeEqualTo(EntityType.PROJECT);
@@ -46,7 +54,8 @@ public class KpiDAOIT extends AbstractSpringIntegrationTestCase {
         kpiDAO.insert(record);
         
         Assert.assertEquals(1, kpiDAO.selectByCriteria(request).size());
-        Assert.assertEquals("salut", kpiDAO.selectByExampleWithBLOBs(request).get(0).getEsperRequest());
+        Assert.assertEquals("salut", kpiDAO.selectByExampleWithBLOBs(request).get(0)
+                .getEsperRequest());
         
     }
     

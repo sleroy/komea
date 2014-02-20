@@ -12,7 +12,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.komea.product.backend.service.IPluginFileSystem;
+import org.komea.product.backend.service.fs.IPluginFileSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +55,7 @@ public class PluginFileSystem implements IPluginFileSystem
      * Method existResource.
      * @param _resourceName String
      * @return boolean
-     * @see org.komea.product.backend.service.IPluginFileSystem#existResource(String)
+     * @see org.komea.product.backend.service.fs.IPluginFileSystem#existResource(String)
      */
     @Override
     public boolean existResource(final String _resourceName) {
@@ -69,7 +69,7 @@ public class PluginFileSystem implements IPluginFileSystem
      * Method open.
      * @param _resourceName String
      * @return InputStream
-     * @see org.komea.product.backend.service.IPluginFileSystem#open(String)
+     * @see org.komea.product.backend.service.fs.IPluginFileSystem#open(String)
      */
     @Override
     public InputStream open(final String _resourceName) {
@@ -89,7 +89,7 @@ public class PluginFileSystem implements IPluginFileSystem
      * Method store.
      * @param _resourceName String
      * @param _inputStream InputStream
-     * @see org.komea.product.backend.service.IPluginFileSystem#store(String, InputStream)
+     * @see org.komea.product.backend.service.fs.IPluginFileSystem#store(String, InputStream)
      */
     @Override
     public void store(final String _resourceName, final InputStream _inputStream) {

@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.komea.product.database.dao.PersonDao;
+import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonCriteria;
 
@@ -19,11 +19,11 @@ public final class PersonDataModel extends SortableDataProvider<Person, String>
 {
     
     
-    private final PersonDao personDAO;
+    private final IPersonService personDAO;
     
     
     
-    public PersonDataModel(final PersonDao _personDAO) {
+    public PersonDataModel(final IPersonService _personDAO) {
     
     
         personDAO = _personDAO;

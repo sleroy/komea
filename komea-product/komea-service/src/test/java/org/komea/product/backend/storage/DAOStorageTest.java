@@ -8,7 +8,7 @@ package org.komea.product.backend.storage;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.komea.product.backend.fs.IObjectStorage;
+import org.komea.product.backend.service.fs.IObjectStorage;
 import org.komea.product.backend.utils.SearchFilter;
 
 
@@ -34,7 +34,7 @@ public class DAOStorageTest
         /**
          * Method get.
          * @return T
-         * @see org.komea.product.backend.fs.IObjectStorage#get()
+         * @see org.komea.product.backend.service.fs.IObjectStorage#get()
          */
         @Override
         public T get() {
@@ -47,7 +47,7 @@ public class DAOStorageTest
         /**
          * Method set.
          * @param _object T
-         * @see org.komea.product.backend.fs.IObjectStorage#set(T)
+         * @see org.komea.product.backend.service.fs.IObjectStorage#set(T)
          */
         @Override
         public void set(final T _object) {

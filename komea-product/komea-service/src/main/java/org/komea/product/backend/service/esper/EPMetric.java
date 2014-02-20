@@ -3,7 +3,7 @@ package org.komea.product.backend.service.esper;
 
 
 
-import org.komea.product.backend.service.business.IEPMetric;
+import org.komea.product.backend.service.kpi.IEPMetric;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,7 @@ public class EPMetric implements IEPMetric
     /**
      * Method getDoubleValue.
      * @return double
-     * @see org.komea.product.backend.service.business.IEPMetric#getDoubleValue()
+     * @see org.komea.product.backend.service.kpi.IEPMetric#getDoubleValue()
      */
     @Override
     public double getDoubleValue() {
@@ -54,7 +54,7 @@ public class EPMetric implements IEPMetric
     /**
      * Method getIntValue.
      * @return int
-     * @see org.komea.product.backend.service.business.IEPMetric#getIntValue()
+     * @see org.komea.product.backend.service.kpi.IEPMetric#getIntValue()
      */
     @Override
     public int getIntValue() {
@@ -67,7 +67,7 @@ public class EPMetric implements IEPMetric
     /**
      * Method getLongValue.
      * @return long
-     * @see org.komea.product.backend.service.business.IEPMetric#getLongValue()
+     * @see org.komea.product.backend.service.kpi.IEPMetric#getLongValue()
      */
     @Override
     public long getLongValue() {

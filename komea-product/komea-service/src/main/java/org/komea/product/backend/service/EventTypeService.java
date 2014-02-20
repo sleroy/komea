@@ -8,7 +8,10 @@ import javax.validation.constraints.NotNull;
 
 import org.komea.product.backend.exceptions.AlreadyExistingEventTypeException;
 import org.komea.product.backend.exceptions.InvalidEventTypeDescriptionException;
+import org.komea.product.backend.genericservice.AbstractService;
+import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.database.dao.EventTypeDao;
+import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.EventTypeCriteria;
 import org.komea.product.database.model.Provider;
@@ -24,14 +27,16 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class EventTypeService implements IEventTypeService
+public class EventTypeService extends AbstractService<EventType, Integer, EventTypeCriteria>
+        implements IEventTypeService
 {
     
     
-    @Autowired
-    private EventTypeDao        eventTypeDAO;
-    
     private static final Logger LOGGER = LoggerFactory.getLogger(EventTypeService.class);
+    
+    
+    @Autowired
+    private EventTypeDao        requiredDAO;
     
     
     
@@ -44,13 +49,13 @@ public class EventTypeService implements IEventTypeService
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.backend.service.IEventTypeService#getEventTypeDAO()
+     * @see org.komea.product.backend.genericservice.AbstractService#getRequiredDAO()
      */
     @Override
-    public EventTypeDao getEventTypeDAO() {
+    public IGenericDAO<EventType, Integer, EventTypeCriteria> getRequiredDAO() {
     
     
-        return eventTypeDAO;
+        return requiredDAO;
     }
     
     
@@ -58,7 +63,6 @@ public class EventTypeService implements IEventTypeService
      * Builds a new criteria with the name.
      * 
      * @param _eventType
-    
      * @return EventTypeCriteria
      */
     public EventTypeCriteria newCriteriaSelectByName(final EventType _eventType) {
@@ -83,24 +87,20 @@ public class EventTypeService implements IEventTypeService
     
         LOGGER.info("Registering event type {} with {}", _eventType.getName(), _provider.getName());
         final EventTypeCriteria selectByName = newCriteriaSelectByName(_eventType);
-        final int existingProvider = eventTypeDAO.countByCriteria(selectByName);
+        final int existingProvider = requiredDAO.countByCriteria(selectByName);
         if (existingProvider > 0) { throw new AlreadyExistingEventTypeException(_eventType); }
         if (_eventType.getId() != null) { throw new InvalidEventTypeDescriptionException(
                 "EventType DTO should not register primary key"); }
         _eventType.setIdProvider(_provider.getId());
-        eventTypeDAO.insert(_eventType);
+        saveOrUpdate(_eventType);
         
     }
     
     
-    /**
-     * Method setEventTypeDAO.
-     * @param _eventTypeDAO EventTypeDao
-     */
-    public void setEventTypeDAO(final EventTypeDao _eventTypeDAO) {
+    public void setRequiredDAO(final EventTypeDao _requiredDAO) {
     
     
-        eventTypeDAO = _eventTypeDAO;
+        requiredDAO = _requiredDAO;
     }
     
 }

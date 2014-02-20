@@ -3,7 +3,7 @@ package org.komea.product.backend.service.proxy;
 
 
 
-import org.komea.product.backend.service.business.ISettingProxy;
+import org.komea.product.backend.service.ISettingProxy;
 import org.komea.product.backend.utils.SpringUtils;
 import org.komea.product.database.dao.ProviderSettingDao;
 import org.komea.product.database.model.ProviderSetting;
@@ -48,10 +48,10 @@ public class ProviderSettingProxy<T> implements ISettingProxy<T>
     /**
      * Method get.
      * @return T
-     * @see org.komea.product.backend.service.business.ISettingProxy#get()
+     * @see org.komea.product.backend.service.ISettingProxy#getValue()
      */
     @Override
-    public T get() {
+    public T getValue() {
     
     
         LOGGER.trace("Get provider proxy of setting {}", key);
@@ -65,7 +65,7 @@ public class ProviderSettingProxy<T> implements ISettingProxy<T>
     /**
      * Method getSetting.
      * @return Object
-     * @see org.komea.product.backend.service.business.ISettingProxy#getSetting()
+     * @see org.komea.product.backend.service.ISettingProxy#getSetting()
      */
     @Override
     public Object getSetting() {
@@ -79,7 +79,7 @@ public class ProviderSettingProxy<T> implements ISettingProxy<T>
     /**
      * Method getStringValue.
      * @return String
-     * @see org.komea.product.backend.service.business.ISettingProxy#getStringValue()
+     * @see org.komea.product.backend.service.ISettingProxy#getStringValue()
      */
     @Override
     public String getStringValue() {
@@ -92,7 +92,7 @@ public class ProviderSettingProxy<T> implements ISettingProxy<T>
     /**
      * Method setValue.
      * @param _value String
-     * @see org.komea.product.backend.service.business.ISettingProxy#setValue(String)
+     * @see org.komea.product.backend.service.ISettingProxy#setValue(String)
      */
     @Override
     public void setValue(final String _value) {
@@ -114,7 +114,7 @@ public class ProviderSettingProxy<T> implements ISettingProxy<T>
     /**
      * Method setValue.
      * @param _value T
-     * @see org.komea.product.backend.service.business.ISettingProxy#setValue(T)
+     * @see org.komea.product.backend.service.ISettingProxy#setValue(T)
      */
     @Override
     public void setValue(final T _value) {

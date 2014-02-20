@@ -10,7 +10,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.komea.product.backend.forms.PersonFormData;
-import org.komea.product.backend.service.entities.PersonService;
+import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.PersonRole;
@@ -106,7 +106,7 @@ public final class PersonForm extends Form<Person>
     
     
     private PersonGroup              personGroup;
-    private final PersonService      personService;
+    private final IPersonService     personService;
     
     private Project                  selectedProject;
     
@@ -117,7 +117,7 @@ public final class PersonForm extends Form<Person>
     
     
     public PersonForm(
-            final PersonService _personService,
+            final IPersonService _personService,
             final PersonFormData _personFormData,
             final String _id,
             final Component _feedBack,

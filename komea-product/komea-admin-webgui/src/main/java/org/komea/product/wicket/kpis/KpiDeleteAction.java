@@ -6,26 +6,37 @@
 
 package org.komea.product.wicket.kpis;
 
-import java.util.List;
-import org.komea.product.database.dao.KpiDao;
+
+
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 
+
+
 /**
- *
  * @author rgalerme
  */
-class KpiDeleteAction implements IDeleteAction<Kpi> {
-
-    private KpiDao kpiDao;
-
-    public KpiDeleteAction(KpiDao _kpiDao) {
-        this.kpiDao = _kpiDao;
+public class KpiDeleteAction implements IDeleteAction<Kpi>
+{
+    
+    
+    private final IKPIService kpiDao;
+    
+    
+    
+    public KpiDeleteAction(final IKPIService _kpiDao) {
+    
+    
+        kpiDao = _kpiDao;
     }
-
+    
+    
     @Override
-    public void delete(Kpi _kpi) {
-        this.kpiDao.deleteByPrimaryKey(_kpi.getId());
+    public void delete(final Kpi _kpi) {
+    
+    
+        kpiDao.deleteByPrimaryKey(_kpi.getId());
     }
     
 }

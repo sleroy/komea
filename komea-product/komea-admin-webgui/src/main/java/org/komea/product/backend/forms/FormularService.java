@@ -7,9 +7,9 @@ package org.komea.product.backend.forms;
 
 
 import org.komea.product.backend.api.IFormularService;
-import org.komea.product.database.dao.PersonGroupDao;
-import org.komea.product.database.dao.PersonRoleDao;
-import org.komea.product.database.dao.ProjectDao;
+import org.komea.product.backend.service.entities.IPersonGroupService;
+import org.komea.product.backend.service.entities.IPersonRoleService;
+import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.PersonGroupCriteria;
 import org.komea.product.database.model.PersonRoleCriteria;
@@ -28,15 +28,15 @@ public class FormularService implements IFormularService
     
     
     @Autowired
-    private PersonRoleDao  personRoleDAO;
+    private IPersonRoleService  personRoleDAO;
     
     
     @Autowired
-    private ProjectDao     projectDAO;
+    private IProjectService     projectDAO;
     
     
     @Autowired
-    private PersonGroupDao userGroupDAO;
+    private IPersonGroupService userGroupDAO;
     
     
     
@@ -53,7 +53,7 @@ public class FormularService implements IFormularService
     /**
      * @return the personRoleDAO
      */
-    public PersonRoleDao getPersonRoleDAO() {
+    public IPersonRoleService getPersonRoleDAO() {
     
     
         return personRoleDAO;
@@ -63,10 +63,17 @@ public class FormularService implements IFormularService
     /**
      * @return the projectDAO
      */
-    public ProjectDao getProjectDAO() {
+    public IProjectService getProjectDAO() {
     
     
         return projectDAO;
+    }
+    
+    
+    public IPersonGroupService getUserGroupDAO() {
+    
+    
+        return userGroupDAO;
     }
     
     
@@ -95,7 +102,7 @@ public class FormularService implements IFormularService
      * @param _personRoleDAO
      *            the personRoleDAO to set
      */
-    public void setPersonRoleDAO(final PersonRoleDao _personRoleDAO) {
+    public void setPersonRoleDAO(final IPersonRoleService _personRoleDAO) {
     
     
         personRoleDAO = _personRoleDAO;
@@ -106,21 +113,14 @@ public class FormularService implements IFormularService
      * @param _projectDAO
      *            the projectDAO to set
      */
-    public void setProjectDAO(final ProjectDao _projectDAO) {
+    public void setProjectDAO(final IProjectService _projectDAO) {
     
     
         projectDAO = _projectDAO;
     }
-
-
-    public PersonGroupDao getUserGroupDAO() {
     
     
-        return userGroupDAO;
-    }
-
-
-    public void setUserGroupDAO(PersonGroupDao _userGroupDAO) {
+    public void setUserGroupDAO(final IPersonGroupService _userGroupDAO) {
     
     
         userGroupDAO = _userGroupDAO;

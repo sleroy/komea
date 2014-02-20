@@ -2,7 +2,7 @@
 package org.komea.product.web.rest.api;
 
 
-import org.komea.product.backend.service.IPluginIntegrationService;
+import org.komea.product.backend.service.plugins.IPluginIntegrationService;
 import org.komea.product.database.dto.ProviderDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

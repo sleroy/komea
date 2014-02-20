@@ -16,19 +16,9 @@ public interface IEventViewerService
     
     
     /**
-     * Returns the events provided in a day.
-     * 
-    
-     * @return the day events. */
-    List<IEvent> getDayEvents();
-    
-    
-    /**
-     * Returns the events provided in a hour.
-     * 
-    
-     * @return the day events. */
-    List<IEvent> getHourEvents();
+     * Returns the global activity.
+     */
+    List<IEvent> getGlobalActivity();
     
     
     /**
@@ -36,16 +26,8 @@ public interface IEventViewerService
      * 
      * @param _eplStatement
      *            the esper statement
-    
      * @since 28 juin 2013
-     * @return an instant view. */
+     * @return an instant view.
+     */
     List<IEvent> getInstantView(String _eplStatement);
-    
-    
-    /**
-     * Returns the last 100 events.
-     * 
-    
-     * @return the last 1000 events. */
-    List<IEvent> getLastEvents();
 }

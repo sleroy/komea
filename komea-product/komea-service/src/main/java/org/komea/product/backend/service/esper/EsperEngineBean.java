@@ -13,7 +13,6 @@ import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.listeners.EPServiceStateListener1;
 import org.komea.product.backend.esper.listeners.EPStatementStateListener1;
 import org.komea.product.backend.exceptions.EsperStatementNotFoundException;
-import org.komea.product.backend.service.business.IQueryDefinition;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.alert.enums.Criticity;
@@ -22,6 +21,7 @@ import org.komea.product.database.enums.EventCategory;
 import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.enums.Operator;
 import org.komea.product.database.enums.ProviderType;
+import org.komea.product.database.enums.RetentionPeriod;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
@@ -48,7 +48,7 @@ public final class EsperEngineBean implements IEsperEngine
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(EsperEngineBean.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("komea-esper");
     
     private EPServiceProvider   esperEngine;
     
@@ -67,7 +67,9 @@ public final class EsperEngineBean implements IEsperEngine
     
     /**
      * Method createEPL.
-     * @param _queryDefinition IQueryDefinition
+     * 
+     * @param _queryDefinition
+     *            IQueryDefinition
      * @return EPStatement
      * @throws RuntimeException
      * @see org.komea.product.backend.api.IEsperEngine#createEPL(IQueryDefinition)
@@ -97,7 +99,9 @@ public final class EsperEngineBean implements IEsperEngine
     
     /**
      * Method createOrUpdateEPLQuery.
-     * @param _definition IQueryDefinition
+     * 
+     * @param _definition
+     *            IQueryDefinition
      * @see org.komea.product.backend.api.IEsperEngine#createOrUpdateEPLQuery(IQueryDefinition)
      */
     @Override
@@ -131,7 +135,9 @@ public final class EsperEngineBean implements IEsperEngine
     
     /**
      * Method existEPL.
-     * @param _metricKey String
+     * 
+     * @param _metricKey
+     *            String
      * @return boolean
      * @see org.komea.product.backend.api.IEsperEngine#existEPL(String)
      */
@@ -145,6 +151,7 @@ public final class EsperEngineBean implements IEsperEngine
     
     /**
      * Method getEsper.
+     * 
      * @return EPServiceProvider
      * @see org.komea.product.backend.api.IEsperEngine#getEsper()
      */
@@ -158,7 +165,9 @@ public final class EsperEngineBean implements IEsperEngine
     
     /**
      * Method getStatement.
-     * @param _statementName String
+     * 
+     * @param _statementName
+     *            String
      * @return EPStatement
      * @see org.komea.product.backend.api.IEsperEngine#getStatement(String)
      */
@@ -174,6 +183,7 @@ public final class EsperEngineBean implements IEsperEngine
     
     /**
      * Method getStatementNames.
+     * 
      * @return String[]
      * @see org.komea.product.backend.api.IEsperEngine#getStatementNames()
      */
@@ -187,7 +197,9 @@ public final class EsperEngineBean implements IEsperEngine
     
     /**
      * Method getStatementOrFail.
-     * @param _measureName String
+     * 
+     * @param _measureName
+     *            String
      * @return EPStatement
      * @see org.komea.product.backend.api.IEsperEngine#getStatementOrFail(String)
      */
@@ -213,11 +225,18 @@ public final class EsperEngineBean implements IEsperEngine
         final Configuration config = new Configuration();
         config.getEngineDefaults().getExecution().setPrioritized(true);
         
-        config.addImport(Criticity.class);
         // config.getEngineDefaults().getThreading()
         // .setInternalTimerEnabled(false);
-        config.addEventTypeAutoName("com.tocea.scertify.ci.flow.model");
+        
         config.setMetricsReportingEnabled();
+        
+        config.addEventTypeAutoName("org.komea.product.database.model");
+        config.addEventTypeAutoName("org.komea.product.database.enums");
+        
+        
+        config.addImport(Criticity.class);
+        
+        
         config.addEventType(IEvent.class);
         config.addEventType(Event.class);
         config.addImport(Criticity.class);
@@ -229,6 +248,8 @@ public final class EsperEngineBean implements IEsperEngine
         config.addImport(Severity.class);
         config.addImport(ValueDirection.class);
         config.addImport(ValueType.class);
+        config.addImport(RetentionPeriod.class);
+        config.setMetricsReportingEnabled();
         
         
         esperEngine = EPServiceProviderManager.getDefaultProvider(config);
@@ -248,7 +269,8 @@ public final class EsperEngineBean implements IEsperEngine
      * 
      * @param _updateListener
      *            the update listener.
-     * @param _statementName String
+     * @param _statementName
+     *            String
      */
     public void registerListener(final String _statementName, final UpdateListener _updateListener) {
     
@@ -263,7 +285,9 @@ public final class EsperEngineBean implements IEsperEngine
     
     /**
      * Method sendEvent.
-     * @param _event IEvent
+     * 
+     * @param _event
+     *            IEvent
      * @see org.komea.product.backend.api.IEsperEngine#sendEvent(IEvent)
      */
     @Override

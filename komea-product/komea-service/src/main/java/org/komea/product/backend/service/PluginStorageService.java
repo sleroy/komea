@@ -3,8 +3,10 @@ package org.komea.product.backend.service;
 
 
 
-import org.komea.product.backend.fs.IObjectStorage;
-import org.komea.product.backend.service.business.IDAOObjectStorage;
+import org.komea.product.backend.business.IDAOObjectStorage;
+import org.komea.product.backend.service.fs.IKomeaFS;
+import org.komea.product.backend.service.fs.IObjectStorage;
+import org.komea.product.backend.service.plugins.IPluginStorageService;
 import org.komea.product.backend.storage.DAOStorage;
 import org.komea.product.backend.storage.ObjectStorage;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -13,9 +13,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.api.IFormularService;
 import org.komea.product.backend.forms.PersonFormData;
-import org.komea.product.backend.service.entities.PersonService;
-import org.komea.product.database.dao.PersonRoleDao;
-import org.komea.product.database.dao.ProjectDao;
+import org.komea.product.backend.service.entities.IPersonRoleService;
+import org.komea.product.backend.service.entities.IPersonService;
+import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.model.Person;
 import org.komea.product.wicket.KomeaEntry;
 import org.komea.product.wicket.LayoutPage;
@@ -32,18 +32,18 @@ public class PersonAddPage extends LayoutPage
     
     
     @SpringBean
-    private IFormularService formularService;
+    private IFormularService   formularService;
     
     @SpringBean
-    private PersonService    personDAO;
-    
-    
-    @SpringBean
-    private PersonRoleDao    personRoleDAO;
+    private IPersonService     personDAO;
     
     
     @SpringBean
-    private ProjectDao       projectDAO;
+    private IPersonRoleService personRoleDAO;
+    
+    
+    @SpringBean
+    private IProjectService    projectDAO;
     
     
     
@@ -73,6 +73,16 @@ public class PersonAddPage extends LayoutPage
     }
     
     
+    /**
+     * @return the formularService
+     */
+    public IFormularService getFormularService() {
+    
+    
+        return formularService;
+    }
+    
+    
     @Override
     public List<? extends Entry<String, Class>> getMiddleLevelPages() {
     
@@ -86,7 +96,7 @@ public class PersonAddPage extends LayoutPage
     /**
      * @return the personDAO
      */
-    public PersonService getPersonDAO() {
+    public IPersonService getPersonDAO() {
     
     
         return personDAO;
@@ -96,7 +106,7 @@ public class PersonAddPage extends LayoutPage
     /**
      * @return the personRoleDAO
      */
-    public PersonRoleDao getPersonRoleDAO() {
+    public IPersonRoleService getPersonRoleDAO() {
     
     
         return personRoleDAO;
@@ -106,18 +116,21 @@ public class PersonAddPage extends LayoutPage
     /**
      * @return the projectDAO
      */
-    public ProjectDao getProjecDAO() {
+    public IProjectService getProjectDAO() {
     
     
         return projectDAO;
     }
     
     
-    @Override
-    public String getTitle() {
+    /**
+     * @param _formularService
+     *            the formularService to set
+     */
+    public void setFormularService(final IFormularService _formularService) {
     
     
-        return getString("PersonAddPage.title");
+        formularService = _formularService;
     }
     
     
@@ -125,7 +138,7 @@ public class PersonAddPage extends LayoutPage
      * @param _personDAO
      *            the personDAO to set
      */
-    public void setPersonDAO(final PersonService _personDAO) {
+    public void setPersonDAO(final IPersonService _personDAO) {
     
     
         personDAO = _personDAO;
@@ -136,7 +149,7 @@ public class PersonAddPage extends LayoutPage
      * @param _personRoleDAO
      *            the personRoleDAO to set
      */
-    public void setPersonRoleDAO(final PersonRoleDao _personRoleDAO) {
+    public void setPersonRoleDAO(final IPersonRoleService _personRoleDAO) {
     
     
         personRoleDAO = _personRoleDAO;
@@ -144,13 +157,14 @@ public class PersonAddPage extends LayoutPage
     
     
     /**
-     * @param _projecDAO
+     * @param _projectDAO
      *            the projectDAO to set
      */
-    public void setProjecDAO(final ProjectDao _projecDAO) {
+    public void setProjectDAO(final IProjectService _projectDAO) {
     
     
-        projectDAO = _projecDAO;
+        projectDAO = _projectDAO;
     }
+    
     
 }

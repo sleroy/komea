@@ -6,7 +6,7 @@ package org.komea.product.backend.kpi;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.komea.product.backend.service.business.IEntityWithKPIFacade;
+import org.komea.product.backend.service.kpi.IEntityWithKPIFacade;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Kpi;
 
@@ -49,7 +49,7 @@ public class EntityWithKPI<TEntity extends IEntity> implements IEntityWithKPIFac
     /**
      * Method getEntity.
      * @return TEntity
-     * @see org.komea.product.backend.service.business.IEntityWithKPIFacade#getEntity()
+     * @see org.komea.product.backend.service.kpi.IEntityWithKPIFacade#getEntity()
      */
     @Override
     public TEntity getEntity() {
@@ -63,7 +63,7 @@ public class EntityWithKPI<TEntity extends IEntity> implements IEntityWithKPIFac
      * Method getKpi.
      * @param _kpiName String
      * @return Kpi
-     * @see org.komea.product.backend.service.business.IEntityWithKPIFacade#getKpi(String)
+     * @see org.komea.product.backend.service.kpi.IEntityWithKPIFacade#getKpi(String)
      */
     @Override
     public Kpi getKpi(final String _kpiName) {
@@ -80,7 +80,7 @@ public class EntityWithKPI<TEntity extends IEntity> implements IEntityWithKPIFac
     /**
      * Method getListofKpis.
      * @return List<Kpi>
-     * @see org.komea.product.backend.service.business.IEntityWithKPIFacade#getListofKpis()
+     * @see org.komea.product.backend.service.kpi.IEntityWithKPIFacade#getListofKpis()
      */
     @Override
     public List<Kpi> getListofKpis() {

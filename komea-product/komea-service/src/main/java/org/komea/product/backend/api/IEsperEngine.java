@@ -3,7 +3,7 @@ package org.komea.product.backend.api;
 
 
 
-import org.komea.product.backend.service.business.IQueryDefinition;
+import org.komea.product.backend.service.esper.IQueryDefinition;
 import org.komea.product.database.alert.IEvent;
 
 import com.espertech.esper.client.EPServiceProvider;

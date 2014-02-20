@@ -5,6 +5,10 @@ package org.komea.product.backend.service.history;
 
 import java.util.List;
 
+import org.komea.product.backend.service.generic.IGenericService;
+import org.komea.product.database.dto.BaseEntity;
+import org.komea.product.database.dto.SearchMeasuresDto;
+import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
 
@@ -12,7 +16,7 @@ import org.komea.product.database.model.MeasureCriteria;
 
 /**
  */
-public interface IHistoryService
+public interface IHistoryService extends IGenericService<Measure, Integer, MeasureCriteria>
 {
     
     
@@ -23,36 +27,50 @@ public interface IHistoryService
      *            the kpi key
      * @param _nbRow
      *            the number of result asked
-    
-     * @param _criteria MeasureCriteria
-     * @return the measures list */
-    public abstract List<Measure> getFilteredHistory(
-            HistoryKey _kpiKey,
-            int _nbRow,
-            MeasureCriteria _criteria);
+     * @param _criteria
+     *            MeasureCriteria
+     * @return the measures list
+     */
+    List<Measure> getFilteredHistory(HistoryKey _kpiKey, int _nbRow, MeasureCriteria _criteria);
     
     
     /**
      * Returns the list of measures from an entity and a KPI.
      * 
-    
-    
-    
-     * @param _kpiKey HistoryKey
-     * @param _criteria MeasureCriteria
-     * @return the list of measures. */
-    public abstract List<Measure> getFilteredHistory(HistoryKey _kpiKey, MeasureCriteria _criteria);
+     * @param _kpiKey
+     *            HistoryKey
+     * @param _criteria
+     *            MeasureCriteria
+     * @return the list of measures.
+     */
+    List<Measure> getFilteredHistory(HistoryKey _kpiKey, MeasureCriteria _criteria);
     
     
     /**
      * Returns the list of measures from an entity and a KPI.
      * 
+     * @param _kpiKey
+     *            HistoryKey
+     * @return the list of measures.
+     */
+    List<Measure> getHistory(HistoryKey _kpiKey);
     
     
-    
-     * @param _kpiKey HistoryKey
-     * @return the list of measures. */
-    public abstract List<Measure> getHistory(HistoryKey _kpiKey);
+    /**
+     * Method getMeasures.
+     * 
+     * @param kpis
+     *            List<Kpi>
+     * @param entities
+     *            List<BaseEntity>
+     * @param searchMeasuresDto
+     *            SearchMeasuresDto
+     * @return List<Measure>
+     */
+    List<Measure> getMeasures(
+            List<Kpi> kpis,
+            List<BaseEntity> entities,
+            SearchMeasuresDto searchMeasuresDto);
     
     
     /**
@@ -61,6 +79,6 @@ public interface IHistoryService
      * @param _measure
      *            the measure
      */
-    public abstract void storeMeasure(Measure _measure);
+    void storeMeasure(Measure _measure);
     
 }

@@ -6,7 +6,8 @@
 package org.komea.backend.plugins.bugzilla.api;
 
 import java.util.List;
-import org.komea.product.backend.service.IPluginStorageService;
+
+import org.komea.product.backend.service.plugins.IPluginStorageService;
 
 /**
  *

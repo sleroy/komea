@@ -3,7 +3,6 @@ package org.komea.product.backend.service.esper;
 
 
 
-import org.komea.product.backend.service.business.IQueryDefinition;
 import org.komea.product.database.model.Kpi;
 
 
@@ -59,7 +58,7 @@ public final class QueryDefinition implements IQueryDefinition
     /**
      * Method getName.
      * @return String
-     * @see org.komea.product.backend.service.business.IQueryDefinition#getName()
+     * @see org.komea.product.backend.service.esper.IQueryDefinition#getName()
      */
     @Override
     public String getName() {
@@ -72,7 +71,7 @@ public final class QueryDefinition implements IQueryDefinition
     /**
      * Method getQuery.
      * @return String
-     * @see org.komea.product.backend.service.business.IQueryDefinition#getQuery()
+     * @see org.komea.product.backend.service.esper.IQueryDefinition#getQuery()
      */
     @Override
     public String getQuery() {

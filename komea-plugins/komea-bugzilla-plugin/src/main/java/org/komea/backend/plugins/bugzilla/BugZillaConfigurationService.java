@@ -13,8 +13,8 @@ import javax.annotation.PostConstruct;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxyFactory;
-import org.komea.product.backend.fs.IObjectStorage;
-import org.komea.product.backend.service.IPluginStorageService;
+import org.komea.product.backend.service.fs.IObjectStorage;
+import org.komea.product.backend.service.plugins.IPluginStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

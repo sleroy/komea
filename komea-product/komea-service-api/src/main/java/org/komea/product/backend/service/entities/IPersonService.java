@@ -5,9 +5,13 @@ package org.komea.product.backend.service.entities;
 
 import java.util.List;
 
+import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.dto.PersonDto;
 import org.komea.product.database.model.Person;
+import org.komea.product.database.model.PersonCriteria;
+import org.komea.product.database.model.PersonGroup;
+import org.komea.product.database.model.PersonRole;
 import org.komea.product.database.model.Project;
 
 
@@ -20,7 +24,7 @@ import org.komea.product.database.model.Project;
  * @since 12 févr. 2014
  * @version $Revision: 1.0 $
  */
-public interface IPersonService
+public interface IPersonService extends IGenericService<Person, Integer, PersonCriteria>
 {
     
     
@@ -60,5 +64,18 @@ public interface IPersonService
      * @return List<BaseEntity>
      */
     List<BaseEntity> personsToBaseEntities(List<Person> persons);
+    
+    
+    /**
+     * @param _person
+     * @param _selectedProject
+     * @param _selectedRole
+     * @param _personGroup
+     */
+    void saveOrUpdate(
+            Person _person,
+            Project _selectedProject,
+            PersonRole _selectedRole,
+            PersonGroup _personGroup);
     
 }
