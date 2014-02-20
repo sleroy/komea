@@ -12,8 +12,6 @@ import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.service.ISystemProjectBean;
-import org.komea.product.backend.service.cron.ICronRegistryService;
-import org.komea.product.backend.service.demodata.AlertJobDemo;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
@@ -27,7 +25,6 @@ import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.EventTypeStatistic;
 import org.komea.product.service.dto.KpiKey;
-import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,53 +46,40 @@ public class EventStatisticsService implements IEventStatisticsService
 {
     
     
-    public static final String   ALERT_RECEIVED_IN_ONE_DAY = "ALERT_RECEIVED_IN_ONE_DAY";
-    public static final String   ALERT_CRITICITY_DAY       = "ALERT_CRITICITY_DAY_";
+    public static final String  ALERT_CRITICITY_DAY       = "ALERT_CRITICITY_DAY_";
+    public static final String  ALERT_RECEIVED_IN_ONE_DAY = "ALERT_RECEIVED_IN_ONE_DAY";
     
-    public static final String   STATS_BREAKDOWN_24H       = "STATS_BREAKDOWN_24H";
+    public static final String  STATS_BREAKDOWN_24H       = "STATS_BREAKDOWN_24H";
     
-    private static final Logger  LOGGER                    =
-                                                                   LoggerFactory
-                                                                           .getLogger(EventStatisticsService.class);
-    
-    @Autowired
-    private IKPIService          kpiService;
+    private static final Logger LOGGER                    =
+                                                                  LoggerFactory
+                                                                          .getLogger(EventStatisticsService.class);
     
     @Autowired
-    private ISystemProjectBean   systemProject;
-    
-    
-    @Autowired
-    private IEsperEngine         esperEngine;
+    private IEsperEngine        esperEngine;
     
     @Autowired
-    private ProviderDao          providerDAO;
-    
-    @Autowired
-    private ICronRegistryService registry;
-    
-    @Autowired
-    private IEventPushService    eventPushService;
+    private IEventPushService   eventPushService;
     
     
     @Autowired
-    private IHistoryService      measureHistoryService;
+    private IKPIService         kpiService;
+    
+    @Autowired
+    private IHistoryService     measureHistoryService;
+    
+    @Autowired
+    private ProviderDao         providerDAO;
+    
+    
+    @Autowired
+    private ISystemProjectBean  systemProject;
     
     
     
     /**
-     *
+     * @return the eventPushService
      */
-    public EventStatisticsService() {
-    
-    
-        super();
-    }
-    
-    
-    /**
-    
-     * @return the eventPushService */
     public IEventPushService getAlertPushService() {
     
     
@@ -105,6 +89,7 @@ public class EventStatisticsService implements IEventStatisticsService
     
     /**
      * Method getAllMeasures.
+     * 
      * @return List<Measure>
      * @see org.komea.product.backend.service.esper.IEventStatisticsService#getAllMeasures()
      */
@@ -122,8 +107,8 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
     /**
-    
-     * @return the esperEngine */
+     * @return the esperEngine
+     */
     public final IEsperEngine getEsperEngine() {
     
     
@@ -133,6 +118,7 @@ public class EventStatisticsService implements IEventStatisticsService
     
     /**
      * Method getKpiService.
+     * 
      * @return IKPIService
      */
     public IKPIService getKpiService() {
@@ -144,7 +130,9 @@ public class EventStatisticsService implements IEventStatisticsService
     
     /**
      * Method getNumberOfAlerts.
-     * @param _criticity Severity
+     * 
+     * @param _criticity
+     *            Severity
      * @return long
      * @see org.komea.product.backend.service.esper.IEventStatisticsService#getNumberOfAlerts(Severity)
      */
@@ -162,6 +150,7 @@ public class EventStatisticsService implements IEventStatisticsService
     
     /**
      * Method getProviderDAO.
+     * 
      * @return ProviderDao
      */
     public ProviderDao getProviderDAO() {
@@ -173,6 +162,7 @@ public class EventStatisticsService implements IEventStatisticsService
     
     /**
      * Method getReceivedAlertsIn24LastHours.
+     * 
      * @return long
      * @see org.komea.product.backend.service.esper.IEventStatisticsService#getReceivedAlertsIn24LastHours()
      */
@@ -192,6 +182,7 @@ public class EventStatisticsService implements IEventStatisticsService
      */
     /**
      * Method getReceivedAlertTypesIn24LastHours.
+     * 
      * @return List<EventTypeStatistic>
      * @see org.komea.product.backend.service.esper.IEventStatisticsService#getReceivedAlertTypesIn24LastHours()
      */
@@ -206,19 +197,8 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
     /**
-     * Method getRegistry.
-     * @return ICronRegistryService
+     * @return the systemProject
      */
-    public ICronRegistryService getRegistry() {
-    
-    
-        return registry;
-    }
-    
-    
-    /**
-    
-     * @return the systemProject */
     public final ISystemProjectBean getSystemProject() {
     
     
@@ -254,21 +234,10 @@ public class EventStatisticsService implements IEventStatisticsService
                         "SELECT DISTINCT provider.name as provider, eventType.eventKey as type, count(*) as number FROM Event.win:time(24 hour)  GROUP BY provider.name, eventType.name ORDER BY provider.name ASC, eventType.name ASC",
                         STATS_BREAKDOWN_24H));
         
-        scheduleAlerts();
+        
         if (alertPerDay != null) {
             kpiService.storeValueInHistory(kpiKey);
         }
-        
-    }
-    
-    
-    public void scheduleAlerts() {
-    
-    
-        final JobDataMap properties = new JobDataMap();
-        properties.put("esper", eventPushService);
-        registry.registerCronTask("ALERT_DEMO_STAT", "0/10 * * * * ?", AlertJobDemo.class,
-                properties);
         
     }
     
@@ -308,23 +277,14 @@ public class EventStatisticsService implements IEventStatisticsService
     
     /**
      * Method setProviderDAO.
-     * @param _providerDAO ProviderDao
+     * 
+     * @param _providerDAO
+     *            ProviderDao
      */
     public void setProviderDAO(final ProviderDao _providerDAO) {
     
     
         providerDAO = _providerDAO;
-    }
-    
-    
-    /**
-     * Method setRegistry.
-     * @param _registry ICronRegistryService
-     */
-    public void setRegistry(final ICronRegistryService _registry) {
-    
-    
-        registry = _registry;
     }
     
     
@@ -341,7 +301,9 @@ public class EventStatisticsService implements IEventStatisticsService
     
     /**
      * Method alertCriticityPerDay.
-     * @param _criticity Severity
+     * 
+     * @param _criticity
+     *            Severity
      * @return Kpi
      */
     private Kpi alertCriticityPerDay(final Severity _criticity) {
@@ -370,6 +332,7 @@ public class EventStatisticsService implements IEventStatisticsService
     
     /**
      * Method alertPerDay.
+     * 
      * @return Kpi
      */
     private Kpi alertPerDay() {
@@ -396,7 +359,9 @@ public class EventStatisticsService implements IEventStatisticsService
     
     /**
      * Method getKpiNameFromSeverity.
-     * @param _criticity Severity
+     * 
+     * @param _criticity
+     *            Severity
      * @return String
      */
     private String getKpiNameFromSeverity(final Severity _criticity) {
