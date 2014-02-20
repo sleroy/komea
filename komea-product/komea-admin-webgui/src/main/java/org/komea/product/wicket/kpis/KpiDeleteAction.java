@@ -25,10 +25,10 @@ public class KpiDeleteAction implements IDeleteAction<Kpi>
     
     
     
-    public KpiDeleteAction(final IKPIService _kpiDao) {
+    public KpiDeleteAction(final IKPIService _kpi) {
     
     
-        kpiDao = _kpiDao;
+        kpiDao = _kpi;
     }
     
     

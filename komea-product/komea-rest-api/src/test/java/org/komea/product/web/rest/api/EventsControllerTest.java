@@ -4,20 +4,12 @@ package org.komea.product.web.rest.api;
 
 
 import java.util.Date;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.backend.service.esper.IEventViewerService;
-import org.komea.product.database.alert.Event;
-import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;
-import org.komea.product.database.enums.EntityType;
-import org.komea.product.database.enums.ProviderType;
-import org.komea.product.database.enums.Severity;
-import org.komea.product.database.model.EventType;
-import org.komea.product.database.model.Provider;
 import org.komea.product.test.spring.AbstractSpringWebIntegrationTestCase;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -32,28 +24,26 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.google.common.collect.Lists;
 
 
-
-public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
+public class EventsControllerTest extends AbstractSpringWebIntegrationTestCase
 {
     
     
     @Autowired
     private WebApplicationContext context;
     
-    private MockMvc               mockMvc;
-    
     @InjectMocks
     @Autowired
     private EventsController      contoller;
     
     @Mock
-    private IEventViewerService   eventService;
+    private IEventPushService     eventPushService;
     
     @Mock
-    private IEventPushService     eventPushService;
+    private IEventViewerService   eventService;
+    
+    private MockMvc               mockMvc;
     
     
     
@@ -96,6 +86,7 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
     //
     // Mockito.verify(eventService, Mockito.times(1)).getEvents("MINOR", 1);
     // }
+    
     
     @Test
     public void pushEventTest() throws Exception {
@@ -147,34 +138,14 @@ public class EventControllerTest extends AbstractSpringWebIntegrationTestCase
     }
     
     
-    private List<IEvent> getEvents() {
+    public void testGet() throws Exception {
     
     
-        final List<IEvent> events = Lists.newArrayList();
-        final Event event = new Event();
-        event.setDate(new Date());
+        final ResultActions httpRequest =
+                mockMvc.perform(MockMvcRequestBuilders.post("/events/get"));
         
-        final EventType eventType = new EventType();
-        eventType.setCategory("large category");
-        eventType.setDescription("a large event");
-        eventType.setEntityType(EntityType.PROJECT);
-        eventType.setEventKey("dtc");
-        eventType.setId(1);
-        eventType.setIdProvider(1);
-        eventType.setName("dtc");
-        eventType.setSeverity(Severity.MINOR);
-        event.setEventType(eventType);
-        
-        event.setMessage("a message");
-        
-        final Provider provider = new Provider();
-        provider.setIcon("/incon.png");
-        provider.setId(1);
-        provider.setProviderType(ProviderType.CI_BUILD);
-        event.setProvider(provider);
-        
-        events.add(event);
-        return events;
+        httpRequest.andDo(MockMvcResultHandlers.print());
+        httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
     }
     
 }

@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import jenkins.model.JenkinsLocationConfiguration;
 import net.sf.json.JSONObject;
 
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -122,11 +121,9 @@ public class KomeaNotifier extends Notifier implements Serializable
     
     
     
-    private String         branch     = "";
-    private String         projectKey = null;
+    private String branch     = "";
     
-    
-    private final Provider provider;
+    private String projectKey = null;
     
     
     
@@ -139,8 +136,6 @@ public class KomeaNotifier extends Notifier implements Serializable
             this.projectKey = null;
         }
         this.branch = branch;
-        final JenkinsLocationConfiguration globalConfig = new JenkinsLocationConfiguration();
-        provider = KomeaComputerListener.getProvider(globalConfig.getUrl());
     }
     
     
@@ -190,16 +185,21 @@ public class KomeaNotifier extends Notifier implements Serializable
     
     
         if (getServerUrl() == null) { return true; }
+        final String jenkinsProjectName = build.getProject().getName();
         if (projectKey == null) {
-            projectKey = build.getProject().getName();
+            projectKey = jenkinsProjectName;
         }
         final Result result = build.getResult();
         final int buildNumber = build.getNumber();
         final long start = build.getTime().getTime();
         final long end = new Date().getTime();
-        pushEvents(listener, createEndEvent(end, buildNumber),
-                createDurationEvent(start, end, buildNumber),
-                createResultEvent(end, buildNumber, result));
+        final Provider provider = KomeaComputerListener.getProvider();
+        final EventSimpleDto event =
+                createResultEvent(start, end, buildNumber, result, jenkinsProjectName,
+                        provider.getUrl());
+        if (event != null) {
+            pushEvents(listener, event);
+        }
         return true;
     }
     
@@ -208,116 +208,89 @@ public class KomeaNotifier extends Notifier implements Serializable
     public boolean prebuild(final AbstractBuild<?, ?> build, final BuildListener listener) {
     
     
+        final String jenkinsProjectName = build.getProject().getName();
         if (projectKey == null) {
-            projectKey = build.getProject().getName();
+            projectKey = jenkinsProjectName;
         }
+        final Provider provider = KomeaComputerListener.getProvider();
         final int buildNumber = build.getNumber();
         final long buildDate = build.getTime().getTime();
-        pushEvents(listener, createStartEvent(buildDate, buildNumber));
+        pushEvents(listener,
+                createStartEvent(buildDate, buildNumber, jenkinsProjectName, provider.getUrl()));
         return true;
     }
     
     
-    private EventSimpleDto createDurationEvent(
+    private EventSimpleDto createResultEvent(
             final long start,
             final long end,
-            final int buildNumber) {
+            final int buildNumber,
+            final Result result,
+            final String jenkinsProjectName,
+            final String providerUrl) {
     
     
         final long duration = end - start;
-        final String message = "Build of " + projectKey + " done in : " + duration + "ms";
-        final Map<String, String> properties = new HashMap<String, String>(3);
-        properties.put("start", String.valueOf(start));
-        properties.put("end", String.valueOf(end));
+        final Map<String, String> properties = new HashMap<String, String>(0);
+        properties.put("date", String.valueOf(end));
+        properties.put("project", projectKey);
+        properties.put("jenkinsProject", jenkinsProjectName);
+        properties.put("buildNumber", String.valueOf(buildNumber));
+        properties.put("branch", branch);
         properties.put("duration", String.valueOf(duration));
-        properties.put("project", projectKey);
-        properties.put("buildNumber", String.valueOf(buildNumber));
-        properties.put("branch", branch);
-        final EventSimpleDto event = new EventSimpleDto();
-        event.setDate(new Date());
-        event.setEventType(KomeaComputerListener.EVENT_BUILD_DURATION.getEventKey());
-        event.setMessage(message);
-        event.setProject(projectKey);
-        event.setProperties(properties);
-        event.setProvider(provider.getUrl());
-        event.setUrl(null);
-        event.setValue(duration);
-        return event;
-    }
-    
-    
-    private EventSimpleDto createEndEvent(final long end, final int buildNumber) {
-    
-    
-        final String message = "Build of " + projectKey + " ended.";
-        final Map<String, String> properties = new HashMap<String, String>(0);
-        properties.put("date", String.valueOf(end));
-        properties.put("project", projectKey);
-        properties.put("buildNumber", String.valueOf(buildNumber));
-        properties.put("branch", branch);
-        final EventSimpleDto event = new EventSimpleDto();
-        event.setDate(new Date());
-        event.setEventType(KomeaComputerListener.EVENT_BUILD_ENDED.getEventKey());
-        event.setMessage(message);
-        event.setProject(projectKey);
-        event.setProperties(properties);
-        event.setProvider(provider.getUrl());
-        event.setUrl(null);
-        event.setValue(event.getDate().getTime());
-        return event;
-    }
-    
-    
-    private EventSimpleDto createResultEvent(
-            final long end,
-            final int buildNumber,
-            final Result result) {
-    
-    
-        final String message = "Build of " + projectKey + " ended.";
-        final Map<String, String> properties = new HashMap<String, String>(0);
-        properties.put("date", String.valueOf(end));
-        properties.put("project", projectKey);
-        properties.put("buildNumber", String.valueOf(buildNumber));
-        properties.put("branch", branch);
         properties.put("result", result.toString());
-        if (Result.ABORTED.equals(result)) {
-        } else if (Result.FAILURE.equals(result)) {
-        } else if (Result.NOT_BUILT.equals(result)) {
-        } else if (Result.UNSTABLE.equals(result)) {
-        } else {
-        }
-        // eventDto.getEventType().setSeverity(severity);
         final EventSimpleDto event = new EventSimpleDto();
+        if (Result.ABORTED.equals(result)) {
+            event.setEventType(KomeaComputerListener.BUILD_INTERRUPTED.getEventKey());
+            event.setMessage("Jenkins build interrupted for the project "
+                    + jenkinsProjectName + " in " + duration + "ms.");
+        } else if (Result.FAILURE.equals(result)) {
+            event.setEventType(KomeaComputerListener.BUILD_FAILED.getEventKey());
+            event.setMessage("Jenkins build failed for the project "
+                    + jenkinsProjectName + " in " + duration + "ms.");
+        } else if (Result.SUCCESS.equals(result)) {
+            event.setEventType(KomeaComputerListener.BUILD_COMPLETE.getEventKey());
+            event.setMessage("Jenkins build performed for the project "
+                    + jenkinsProjectName + " in " + duration + "ms.");
+        } else if (Result.UNSTABLE.equals(result)) {
+            event.setEventType(KomeaComputerListener.BUILD_UNSTABLE.getEventKey());
+            event.setMessage("Jenkins build is unstable for the project "
+                    + jenkinsProjectName + " in " + duration + "ms.");
+        } else {
+            return null;
+        }
         event.setDate(new Date());
-        event.setEventType(KomeaComputerListener.EVENT_BUILD_RESULT.getEventKey());
-        event.setMessage(message);
         event.setProject(projectKey);
         event.setProperties(properties);
-        event.setProvider(provider.getUrl());
-        event.setUrl(null);
+        event.setProvider(providerUrl);
+        event.setUrl(KomeaComputerListener.getProjectUrl(jenkinsProjectName, buildNumber));
         event.setValue(result.ordinal);
         return event;
     }
     
     
-    private EventSimpleDto createStartEvent(final long start, final int buildNumber) {
+    private EventSimpleDto createStartEvent(
+            final long start,
+            final int buildNumber,
+            final String jenkinsProjectName,
+            final String providerUrl) {
     
     
-        final String message = "Build of " + projectKey + " started.";
+        final String message = "Jenkins build started for project " + projectKey;
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(start));
         properties.put("project", projectKey);
+        properties.put("jenkinsProject", jenkinsProjectName);
         properties.put("buildNumber", String.valueOf(buildNumber));
         properties.put("branch", branch);
         final EventSimpleDto event = new EventSimpleDto();
         event.setDate(new Date());
-        event.setEventType(KomeaComputerListener.EVENT_BUILD_STARTED.getEventKey());
+        event.setEventType(KomeaComputerListener.BUILD_STARTED.getEventKey());
         event.setMessage(message);
         event.setProject(projectKey);
         event.setProperties(properties);
-        event.setProvider(provider.getUrl());
-        event.setUrl(provider.getUrl());
+        event.setProvider(providerUrl);
+        event.setUrl(KomeaComputerListener.getProjectUrl(jenkinsProjectName, buildNumber));
         event.setValue(event.getDate().getTime());
         return event;
     }
@@ -347,7 +320,7 @@ public class KomeaNotifier extends Notifier implements Serializable
                 eventsAPI.pushEvent(event);
             }
         } catch (final Exception ex) {
-            listener.error(ex.getMessage(), ex);
+            ex.printStackTrace(listener.getLogger());
         } finally {
             Thread.currentThread().setContextClassLoader(contextClassLoader);
         }

@@ -6,10 +6,12 @@
 
 package org.komea.backend.plugins.testlink;
 
+
+
 /**
- *
  * @author rgalerme
  */
-public class TestLinkRequirement {
-    
+public class TestLinkRequirement
+{
+    // /
 }

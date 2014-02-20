@@ -21,6 +21,16 @@ public class EventsAPI extends AbstractRestCientAPI implements IEventsAPI
 {
     
     
+    /**
+     * @author sleroy
+     */
+    private static final class ListEventType extends GenericType<List<Event>>
+    {
+        //
+    }
+    
+    
+    
     private static final String EVENTS_PATH = "events";
     
     
@@ -36,9 +46,20 @@ public class EventsAPI extends AbstractRestCientAPI implements IEventsAPI
     
     
         final String url = EVENTS_PATH + "/find";
-        return post(url, _searchEvent, new GenericType<List<Event>>()
-        {
-        });
+        return post(url, _searchEvent, new ListEventType());
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.rest.client.api.IEventsAPI#getEvents()
+     */
+    @Override
+    public List<Event> getEvents() throws ConnectException, InternalServerException {
+    
+    
+        final String url = EVENTS_PATH + "/get";
+        return get(url, new ListEventType());
     }
     
     
@@ -48,9 +69,7 @@ public class EventsAPI extends AbstractRestCientAPI implements IEventsAPI
     
     
         final String url = EVENTS_PATH + "/get/" + _severityMin.name() + "/" + _number;
-        return get(url, new GenericType<List<Event>>()
-        {
-        });
+        return get(url, new ListEventType());
     }
     
     
