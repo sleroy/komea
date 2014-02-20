@@ -1,7 +1,4 @@
-
 package org.komea.product.rest.client;
-
-
 
 import java.net.ConnectException;
 import java.net.URISyntaxException;
@@ -13,72 +10,55 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.komea.product.database.alert.Event;
-import org.komea.product.database.alert.enums.Criticity;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.dto.SearchEventDto;
 import org.komea.product.rest.client.api.IEventsAPI;
 import org.komea.product.rest.client.api.IProvidersAPI;
 import org.komea.product.service.dto.errors.InternalServerException;
 
+public class EventsAPIIT extends AbstractRestClientIntegrationTestCase {
 
-
-public class EventsAPIIT extends AbstractRestClientIntegrationTestCase
-{
-    
-    
     private IEventsAPI projectsAPI;
-    
-    
-    
+
     @Test
     @Ignore("Need to be review")
     public void findEvents() throws Exception {
-    
-    
+
         final SearchEventDto searchEvent = new SearchEventDto();
         searchEvent.getEntityKeys().add("1");
         searchEvent.getEventTypeKeys().add("dtc");
-        
+
         final List<Event> events = projectsAPI.findEvents(searchEvent);
         Assert.assertFalse(events.isEmpty());
-        
+
         // FIXME::Assert.assertEquals("romain", events.get(0).getEntityName());
-        
     }
-    
-    
+
     @Test
     @Ignore("Need to be review")
     public void getEvents() throws Exception {
-    
-    
-        final List<Event> events = projectsAPI.getEvents(Criticity.MINOR, 1);
+
+        final List<Event> events = projectsAPI.getEvents();
         Assert.assertFalse(events.isEmpty());
-        
+
         // FIXME:: Assert.assertEquals("romain", events.get(0).getEntityName());
-        
     }
-    
-    
+
     @Before
     public void setUp() throws Exception {
-    
-    
+
         projectsAPI = RestClientFactory.INSTANCE.createEventsAPI("http://localhost:8585/komea");
         Assert.assertNotNull(projectsAPI);
     }
-    
-    
+
     //
-    
     @Test
     public void testPush() throws ConnectException, URISyntaxException, InternalServerException {
-    
-    
-        final IProvidersAPI providersAPI =
-                RestClientFactory.INSTANCE.createProvidersAPI("http://localhost:8585/komea");
+
+        final IProvidersAPI providersAPI
+                = RestClientFactory.INSTANCE.createProvidersAPI("http://localhost:8585/komea");
         Assert.assertNotNull(providersAPI);
-        
+
         final EventSimpleDto event = new EventSimpleDto();
         event.setDate(new Date());
         event.setEventType("BUILD_LAUNCHED");
@@ -88,10 +68,9 @@ public class EventsAPIIT extends AbstractRestClientIntegrationTestCase
         event.setProject("komea");
         event.setUrl("http://komea.tocea.com/jenkins/event1");
         projectsAPI.pushEvent(event);
-        
+
         // List<EventDto> events = projectsAPI.getEvents("MINOR", 1);
         // Assert.assertEquals(1, events.size());
-        
     }
-    
+
 }
