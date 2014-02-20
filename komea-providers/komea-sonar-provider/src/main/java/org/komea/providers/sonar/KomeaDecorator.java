@@ -43,7 +43,7 @@ public class KomeaDecorator implements Decorator {
         this.komeaProjectKey = KomeaPlugin.getProjectKey(settings);
         this.komeaUrl = KomeaPlugin.getKomeaUrl(settings);
         this.sonarUrl = KomeaPlugin.getSonarUrl(settings);
-        this.projectMetricKeys = KomeaPlugin.getMetricKeys(settings);
+        this.projectMetricKeys = new ArrayList<String>(KomeaPlugin.getMetricKeys(settings));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class KomeaDecorator implements Decorator {
         final String message = "SonarQube measure of metric " + metric.getName()
                 + " for project " + komeaProjectKey + " is : " + value;
         final HashMap<String, String> properties = new HashMap<String, String>(0);
-        properties.put("metric", metric.getKey());
+        properties.put("metricName", metric.getKey());
         properties.put("value", value.toString());
         properties.put("project", komeaProjectKey);
         properties.put("date", String.valueOf(new Date().getTime()));

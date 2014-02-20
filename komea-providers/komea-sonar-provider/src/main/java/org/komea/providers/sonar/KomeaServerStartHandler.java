@@ -40,7 +40,9 @@ public class KomeaServerStartHandler implements ServerStartHandler {
         providerDto.setProvider(provider);
 
         final List<EventType> eventTypes = new ArrayList<EventType>(KomeaPlugin.EVENT_TYPES);
+
         final Collection<String> metricKeys = KomeaPlugin.getMetricKeys(settings);
+
         final Collection<Metric> metrics = metricFinder.findAll(new ArrayList<String>(metricKeys));
         for (final Metric metric : metrics) {
             final EventType eventType = KomeaPlugin.createEventType(metric);

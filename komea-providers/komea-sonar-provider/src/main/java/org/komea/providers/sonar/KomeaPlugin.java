@@ -1,6 +1,8 @@
 package org.komea.providers.sonar;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.enums.EntityType;
@@ -17,6 +19,7 @@ import org.sonar.api.Properties;
 import org.sonar.api.Property;
 import org.sonar.api.SonarPlugin;
 import org.sonar.api.config.Settings;
+import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
 
 @Properties({
@@ -27,9 +30,15 @@ import org.sonar.api.measures.Metric;
             project = false,
             global = true),
     @Property(
-            key = KomeaPlugin.METRICS_KEY,
-            name = "Metric keys",
-            description = "Metric keys",
+            key = KomeaPlugin.ADDITIONAL_METRICS_KEYS,
+            name = "Additional metric keys",
+            description = "Metric keys to add with SonarQube Core metrics wich will be pushed to Komea. Separate keys with ','",
+            project = false,
+            global = true),
+    @Property(
+            key = KomeaPlugin.METRICS_KEYS_BLACKLISTED,
+            name = "Metric keys blacklisted",
+            description = "Keys of metrics wich will be not pushed to Komea. Separate keys with ','",
             project = false,
             global = true),
     @Property(
@@ -42,19 +51,20 @@ public class KomeaPlugin extends SonarPlugin {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KomeaPlugin.class.getName());
     public static final String SERVER_URL_KEY = "komea.serverUrl";
-    public static final String METRICS_KEY = "komea.metrics";
+    public static final String ADDITIONAL_METRICS_KEYS = "komea.metrics";
+    public static final String METRICS_KEYS_BLACKLISTED = "komea.metrics.blacklist";
     public static final String PROJECT_KEY = "komea.project";
     public static final EventType ANALYSIS_STARTED = createEventType(
             "analysis_started", "SonarQube analysis started", "", Severity.INFO);
-    public static final EventType ANALYSIS_COMPLETE = createEventType(
-            "analysis_complete", "SonarQube analysis complete", "", Severity.INFO);
+    public static final EventType ANALYSIS_SUCCESS = createEventType(
+            "analysis_success", "SonarQube analysis succeeded", "", Severity.INFO);
     public static final List<EventType> EVENT_TYPES = Arrays.asList(
-            ANALYSIS_STARTED, ANALYSIS_COMPLETE);
+            ANALYSIS_STARTED, ANALYSIS_SUCCESS);
 
     public static EventType createEventType(final Metric metric) {
-        return createEventType("analysis_measure_" + metric.getKey(),
-                "SonarQube measure " + metric.getName(),
-                metric.getDescription(), Severity.INFO);
+        return createEventType("metric_value",
+                "SonarQube measure",
+                "", Severity.INFO);
     }
 
     public static EventType createEventType(final String key, final String name,
@@ -70,8 +80,23 @@ public class KomeaPlugin extends SonarPlugin {
         return eventType;
     }
 
-    public static List<String> getMetricKeys(final Settings settings) {
-        return Arrays.asList(settings.getStringArrayBySeparator(METRICS_KEY, ","));
+    public static Collection<String> getMetricKeys(final Settings settings) {
+        final Collection<String> metricKeys = new HashSet<String>(
+                KomeaPlugin.getAdditionalMetricKeys(settings));
+        final List<Metric> coreMetrics = CoreMetrics.getMetrics();
+        for (Metric metric : coreMetrics) {
+            metricKeys.add(metric.getKey());
+        }
+        coreMetrics.removeAll(KomeaPlugin.getMetricKeysBlacklisted(settings));
+        return metricKeys;
+    }
+
+    private static List<String> getAdditionalMetricKeys(final Settings settings) {
+        return Arrays.asList(settings.getStringArrayBySeparator(ADDITIONAL_METRICS_KEYS, ","));
+    }
+
+    private static List<String> getMetricKeysBlacklisted(final Settings settings) {
+        return Arrays.asList(settings.getStringArrayBySeparator(METRICS_KEYS_BLACKLISTED, ","));
     }
 
     public static Provider getProvider(final String serverUrl) {

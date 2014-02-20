@@ -89,7 +89,7 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
             final long start, final long end, final String sonarUrl,
             final int projectId) {
         final long duration = end - start;
-        final String message = "SonarQube analysis complete for project "
+        final String message = "SonarQube analysis succeeded for project "
                 + projectKey + " in " + duration + "ms";
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(end));
@@ -98,7 +98,7 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
         properties.put("duration", String.valueOf(duration));
         final EventSimpleDto event = new EventSimpleDto();
         event.setDate(new Date());
-        event.setEventType(KomeaPlugin.ANALYSIS_COMPLETE.getEventKey());
+        event.setEventType(KomeaPlugin.ANALYSIS_SUCCESS.getEventKey());
         event.setMessage(message);
         event.setProject(projectKey);
         event.setProperties(properties);
