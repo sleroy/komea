@@ -29,13 +29,12 @@ public class KpiPage extends LayoutPage {
     public KpiPage(final PageParameters _parameters) {
 
         super(_parameters);
-        List<Kpi> listAllKpis = kpiService.listAllKpis();
         final IDeleteAction<Kpi> personDeleteAction = new KpiDeleteAction(kpi);
 
         final IEditAction<Kpi> kpiEditAction = new KpiEditAction(this);
 
         final ISortableDataProvider<Kpi, String> dataProvider = new KpiDataModel(this.kpiService);
-        DataTable<Kpi, String> build = DataTableBuilder.<Kpi, String>newTable("table").addColumn("id", "Id")
+        DataTable<Kpi, String> build = DataTableBuilder.<Kpi, String>newTable("table").addColumn("kpikey", "KpiKey")
                 .addColumn("name", "Name").addColumn("description", "Description")
                 .withEditDeleteColumn(personDeleteAction, kpiEditAction)
                 .displayRows(10).withData(dataProvider).build();

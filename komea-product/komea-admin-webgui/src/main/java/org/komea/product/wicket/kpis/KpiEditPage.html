@@ -59,11 +59,11 @@
                                             <div class="row">
                                                 <label class="col-md-3" for="inputEmail1">IdProvider</label>
                                                 <div class="col-md-4">
-                                                    <input id="idProvider" name="idProvider" type="text" placeholder="idProvider" class="form-control" readonly="readonly"  wicket:id="idProvider">
+                                                    <input id="idProvider" name="idProvider" type="text" placeholder="idProvider" class="form-control"  wicket:id="idProvider">
                                                 </div>
-                                                 <div class="col-md-3">
-                                                <button type="button" class="btn btn-small btn-info col-md-5">...</button>
-                                                 </div>
+                                                <div class="col-md-3">
+                                                    <button type="button" class="btn btn-small btn-info col-md-5">...</button>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -90,7 +90,7 @@
                                             <div class="row">
                                                 <label class="col-md-3" for="inputEmail1">ValueDirection</label>
                                                 <div class="col-md-6">
-                                                   <select id="fvalueDirection" name="valueDirection" t class="form-control" wicket:id="valueDirection"></select>
+                                                    <select id="fvalueDirection" name="valueDirection" t class="form-control" wicket:id="valueDirection"></select>
                                                 </div>
                                             </div>
                                         </div>
@@ -124,9 +124,12 @@
                                                 <div class="col-md-4">
                                                     <input id="entityID" name="entityID" type="text" placeholder="entityID" readonly="readonly" class="form-control" wicket:id="entityID">
                                                 </div>
-                                                   <div class="col-md-3">
-                                                <button type="button" class="btn btn-small btn-info col-md-5">...</button>
-                                                 </div>
+                                                <div class="col-md-3">
+                                                    <!--<button type="button" class="btn btn-small btn-info col-md-5">...</button>-->
+
+
+                                                    <button id="btnentity" name="btnentity" class="btn btn-small btn-info col-md-5" wicket:id="btnentity">...</button>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -165,7 +168,7 @@
                                             <div class="row">
                                                 <label class="col-md-3" for="inputEmail1">EsperRequest</label>
                                                 <div class="col-md-6">
-                                                     <textarea class="form-control"  style="resize: none;"  rows="6" wicket:id="esperRequest"></textarea>
+                                                    <textarea class="form-control"  style="resize: none;"  rows="6" wicket:id="esperRequest"></textarea>
                                                     <!--<input id="esperRequest" name="esperRequest" type="text" placeholder="esperRequest" class="form-control" required="required" wicket:id="esperRequest">-->
                                                 </div>
                                             </div>
@@ -214,7 +217,7 @@
                                                                                                 </div>
                                                                                         </div>-->
                                 <!-- Text input-->
-                                
+
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-4">
@@ -223,8 +226,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </form>
+                            <div id="wrapper-panel-frame" class="ui-corner-all">
+                                <form wicket:id="dform">
+                                    <button wicket:id="open">Open input dialog</button>
+                                    <br/><br/>
+                                    <div wicket:id="feedback" style="width: 360px;"></div>
+                                </form>
+                            </div>
+                            <div wicket:id="dialog">[dialog]</div>
                         </wicket:extend>
                     </div>
                 </div>

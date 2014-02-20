@@ -34,6 +34,13 @@ public class TestLinkServerManagerService implements ITestLinkServerManagerServi
     @PostConstruct
     public void init() {
         configurationStorage = pluginStorage.registerStorage("TESTLINK", TestLinkStorageConfiguration.class);
+        TestLinkStorageConfiguration var = configurationStorage.get();
+        List<TestLinkServer> configurations = var.getConfigurations();
+        TestLinkServer testLinkServer = new TestLinkServer("http://ares.tocea/testlink/lib/api/xmlrpc.php",
+                "2dec70df08045278463817fb15d79c4d");
+        configurations.add(testLinkServer);
+        var.setConfigurations(configurations);
+        configurationStorage.set(var);
     }
 
     @Override
@@ -41,9 +48,9 @@ public class TestLinkServerManagerService implements ITestLinkServerManagerServi
         TestLinkStorageConfiguration var = configurationStorage.get();
         List<TestLinkServer> configurations = var.getConfigurations();
         configurationStorage.set(var);
-        List<ITestLinkServerConfiguration>  result = new ArrayList<ITestLinkServerConfiguration>();
+        List<ITestLinkServerConfiguration> result = new ArrayList<ITestLinkServerConfiguration>();
         for (TestLinkServer testLinkServer : configurations) {
-            result.add(new TestLinkServerConfiguration(testLinkServer,serverProxyFactory));
+            result.add(new TestLinkServerConfiguration(testLinkServer, serverProxyFactory));
         }
         return result;
     }
@@ -68,4 +75,13 @@ public class TestLinkServerManagerService implements ITestLinkServerManagerServi
         this.serverProxyFactory = serverProxyFactory;
     }
 
+    public IObjectStorage<TestLinkStorageConfiguration> getConfigurationStorage() {
+        return configurationStorage;
+    }
+
+    public void setConfigurationStorage(IObjectStorage<TestLinkStorageConfiguration> configurationStorage) {
+        this.configurationStorage = configurationStorage;
+    }
+
+    
 }

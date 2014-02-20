@@ -201,7 +201,6 @@
 			<artifactId>wicked-charts-wicket6</artifactId>
 			<version>1.5.0</version>
 		</dependency>
-
 	</dependencies>
 
 

@@ -37,7 +37,7 @@ public class TestLinkCheckerBeanTest {
         
         // creation structure internet du plugin
         ITestLinkServerManagerService serverManager = new TestLinkServerManagerService();
-        
+//         ((TestLinkServerManagerService) serverManager).init();
         // simulation du système de configuration avec injection d'un vrai server testlink de test
         IPluginStorageService pluginStorage = Mockito.mock(IPluginStorageService.class);
         IObjectStorage objectStorage = Mockito.mock(IObjectStorage.class);
@@ -47,19 +47,20 @@ public class TestLinkCheckerBeanTest {
         TestLinkServer testLinkServer = new TestLinkServer("http://ares.tocea/testlink/lib/api/xmlrpc.php",
                 "2dec70df08045278463817fb15d79c4d");
         configurations.add(testLinkServer);
-        // configurations.add(new TestLinkServer("http://127.0.0.1:8080/testlink/lib/api/xmlrpc/v1/xmlrpc.php",
-        // "cf86c231b7c909f15b4d61e12ace5507"));
+        
+//        // configurations.add(new TestLinkServer("http://127.0.0.1:8080/testlink/lib/api/xmlrpc/v1/xmlrpc.php",
+//        // "cf86c231b7c909f15b4d61e12ace5507"));
         storConf.setConfigurations(configurations);
         
         Mockito.when(objectStorage.get()).thenReturn(storConf);
         Mockito.when(pluginStorage.registerStorage("TESTLINK", TestLinkStorageConfiguration.class)).thenReturn(objectStorage);
         
         serverManager.setPluginStorage(pluginStorage);
-        ((TestLinkServerManagerService) serverManager).init();
-        
+        ((TestLinkServerManagerService)serverManager).setConfigurationStorage(pluginStorage.registerStorage("TESTLINK", TestLinkStorageConfiguration.class));
         // //////////////////////////////////////////////
         // mock du server testlink
         TestLinkServerProxyFactory testLinkServerProxyFactory = Mockito.mock(TestLinkServerProxyFactory.class);
+//        TestLinkServerProxyFactory testLinkServerProxyFactory = new TestLinkServerProxyFactory();
         ITestLinkServerProxy proxy = Mockito.mock(ITestLinkServerProxy.class);
         
         // mise en place des données classique

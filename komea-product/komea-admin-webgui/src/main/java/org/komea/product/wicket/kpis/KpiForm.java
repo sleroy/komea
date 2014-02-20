@@ -1,19 +1,28 @@
 package org.komea.product.wicket.kpis;
 
+import com.googlecode.wicket.jquery.ui.panel.JQueryFeedbackPanel;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.dialog.InputDialog;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.util.time.Duration;
+import org.apache.wicket.model.Model;
+import org.komea.product.backend.service.entities.IEntityService;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.KpiDao;
+import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
+import org.komea.product.database.model.Person;
+import org.komea.product.database.model.PersonGroup;
+import org.komea.product.database.model.Project;
+import org.komea.product.database.model.Provider;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.widget.builders.SelectBoxBuilder;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
@@ -32,7 +41,7 @@ public final class KpiForm extends Form<Kpi> {
     private Kpi kpi;
     private LayoutPage page;
 
-    public KpiForm(String _id, KpiDao _kpi, final Component _feedBack, final IModel<Kpi> _dto, LayoutPage _kpiPage) {
+    public KpiForm(String _id, KpiDao _kpi, IEntityService _entity, ProviderDao _providerDao, final Component _feedBack, final IModel<Kpi> _dto, LayoutPage _kpiPage) {
 
         super(_id, _dto);
         this.kpiDao = _kpi;
@@ -51,7 +60,8 @@ public final class KpiForm extends Form<Kpi> {
         add(TextAreaBuilder.<String>create("description", kpi, "description")
                 .simpleValidator(0, 2048).highlightOnErrors()
                 .withTooltip("").build());
-
+        Provider provider = _providerDao.selectByPrimaryKey(kpi.getIdProvider());
+//        String name = provider.getName();
         add(TextFieldBuilder.<String>create("idProvider", kpi, "idProvider")
                 .withTooltip("").build());
 
@@ -67,7 +77,9 @@ public final class KpiForm extends Form<Kpi> {
 
         add(SelectBoxBuilder.<EntityType>createWithEnum("entityType", kpi, EntityType.class).build());
 
-        add(TextFieldBuilder.<String>create("entityID", kpi, "entityID")
+        IEntity entity = _entity.getEntity(kpi.getEntityType(), kpi.getEntityID());
+        String entityName = getEntityName(kpi.getEntityType(), entity);
+        add(TextFieldBuilder.<String>create("entityID", entityName, "toString")
                 .withTooltip("").build());
 
         add(TextFieldBuilder.<String>createRequired("cronExpression", kpi, "cronExpression")
@@ -83,8 +95,24 @@ public final class KpiForm extends Form<Kpi> {
                 .withTooltip("").build());
 
 //        AjaxFormValidatingBehavior.addToAllFormComponents(this, "onkeyup", Duration.ONE_SECOND);
+        
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////  Popup  //////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
 
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         add(new AjaxLinkLayout("cancel", this.page) {
+
+            @Override
+            public void onClick(AjaxRequestTarget art) {
+                this.getPageCustom().setResponsePage(new KpiPage(this.getPageCustom().getPageParameters()));
+            }
+        });
+
+        add(new AjaxLinkLayout("btnentity", this.page) {
 
             @Override
             public void onClick(AjaxRequestTarget art) {
@@ -113,6 +141,19 @@ public final class KpiForm extends Form<Kpi> {
             }
         });
 
+    }
+
+    private String getEntityName(EntityType type, IEntity entity) {
+        String result = "";
+        if (type.equals(EntityType.PERSON)) {
+            result = ((Person) entity).getFirstName() + " " + ((Person) entity).getLastName();
+        } else if (type.equals(EntityType.PROJECT)) {
+            result = ((Project) entity).getName();
+        } else if (type.equals(EntityType.TEAM) && type.equals(EntityType.DEPARTMENT)) {
+            result = ((PersonGroup) entity).getName();
+        }
+
+        return result;
     }
 
     public static abstract class AjaxLinkLayout extends AjaxLink {
