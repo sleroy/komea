@@ -8,6 +8,8 @@ import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.dto.SearchEventDto;
 import org.komea.product.service.dto.errors.InternalServerException;
 
+
+
 /**
  * Komea rest api client to manage events the interface call the komea server
  * via the rest api
@@ -17,6 +19,7 @@ import org.komea.product.service.dto.errors.InternalServerException;
  * @since 15 janv. 2014
  */
 public interface IEventsAPI extends IRestClientAPI {
+
 
     /**
      * This method find events which have been stored into komea
@@ -34,7 +37,10 @@ public interface IEventsAPI extends IRestClientAPI {
      * @return @throws InternalServerException
      * @throws ConnectException
      */
+
+
     List<Event> getEvents() throws ConnectException, InternalServerException;
+
 
     /**
      * This method push a new event into komea

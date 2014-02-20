@@ -71,8 +71,12 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <label class="col-md-3" for="inputEmail1">ValueMin</label>
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <input id="valueMin" name="valueMin" type="text" placeholder="valueMin" class="form-control"  wicket:id="valueMin">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <button type="button" class="btn btn-small btn-info col-md-5">Max</button>
+                                                    <!--<button id="btnentity" name="btnentity" class="btn btn-small btn-info col-md-5" wicket:id="btnentity">...</button>-->
                                                 </div>
                                             </div>
                                         </div>
@@ -80,9 +84,15 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <label class="col-md-3" for="inputEmail1">ValueMax</label>
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <input id="valueMax" name="valueMax" type="text" placeholder="valueMax" class="form-control"  wicket:id="valueMax">
                                                 </div>
+                                                <div class="col-md-3">
+                                                    <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="maxValueMax">Max</button>
+                                                    <!--<button id="btnentity" name="btnentity" class="btn btn-small btn-info col-md-5" wicket:id="btnentity">...</button>-->
+                                                </div>
+
+
                                             </div>
                                         </div>
                                         <!-- Text input-->
@@ -126,8 +136,6 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <!--<button type="button" class="btn btn-small btn-info col-md-5">...</button>-->
-
-
                                                     <button id="btnentity" name="btnentity" class="btn btn-small btn-info col-md-5" wicket:id="btnentity">...</button>
                                                 </div>
                                             </div>
@@ -164,14 +172,18 @@
                                         </div>
 
                                         <!-- Text input-->
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">EsperRequest</label>
-                                                <div class="col-md-6">
-                                                    <textarea class="form-control"  style="resize: none;"  rows="6" wicket:id="esperRequest"></textarea>
-                                                    <!--<input id="esperRequest" name="esperRequest" type="text" placeholder="esperRequest" class="form-control" required="required" wicket:id="esperRequest">-->
-                                                </div>
-                                            </div>
+
+                                    </div>
+
+
+
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-md-2" for="inputEmail1">EsperRequest</label>
+                                        <div class="col-md-10">
+                                            <textarea class="form-control" rows="6" wicket:id="esperRequest"></textarea>
+                                            <!--<input id="esperRequest" name="esperRequest" type="text" placeholder="esperRequest" class="form-control" required="required" wicket:id="esperRequest">-->
                                         </div>
                                     </div>
                                 </div>

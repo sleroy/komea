@@ -130,7 +130,8 @@ public class EventsPage extends LayoutPage
         final List<IEvent> hourEvents = service.getGlobalActivity();
         
         final ListView<IEvent> listView =
-                new EventTable("events", new CompoundPropertyModel<List<IEvent>>(hourEvents));
+                new EventTable("events", new CompoundPropertyModel<List<IEvent>>(
+                        hourEvents.subList(0, Math.min(hourEvents.size(), 100))));
         // listView.setReuseItems(true);
         
         add(listView);
