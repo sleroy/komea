@@ -1,3 +1,4 @@
+
 package org.komea.product.wicket.kpis;
 
 import org.apache.wicket.Component;
@@ -24,9 +25,11 @@ import org.komea.product.wicket.widget.builders.SelectBoxBuilder;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
 
+
+
 /**
  * Formular to edit properties in the settings page.
- *
+ * 
  * @author sleroy
  */
 public final class KpiForm extends Form<Kpi> {
@@ -132,10 +135,12 @@ public final class KpiForm extends Form<Kpi> {
             }
  
         });
-
+        
         // add a button that can be used to submit the form via ajax
-        add(new AjaxButton("submit", this) {
-
+        add(new AjaxButton("submit", this)
+        {
+            
+            
             @Override
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
 
@@ -144,7 +149,8 @@ public final class KpiForm extends Form<Kpi> {
                 // repaint the feedback panel so errors are shown
                 target.add(feedBack);
             }
-
+            
+            
             @Override
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
 
@@ -152,10 +158,10 @@ public final class KpiForm extends Form<Kpi> {
                 info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
-
+                
             }
         });
-
+        
     }
 
     private String getEntityName(final EntityType type, final IEntity entity) {
@@ -168,7 +174,7 @@ public final class KpiForm extends Form<Kpi> {
         } else if (type.equals(EntityType.TEAM) && type.equals(EntityType.DEPARTMENT)) {
             result = ((PersonGroup) entity).getName();
         }
-
+        
         return result;
     }
 
@@ -177,26 +183,27 @@ public final class KpiForm extends Form<Kpi> {
      */
     @Override
     protected void onSubmit() {
-
+    
+    
         final Kpi kpi = new Kpi();
         kpi.setId(this.kpi.getId());
         kpi.setCronExpression(this.kpi.getCronExpression());
         kpi.setDescription(this.kpi.getDescription());
         kpi.setName(this.kpi.getName());
         kpi.setKpiKey(this.kpi.getKpiKey());
-
+        
         kpi.setEntityID(this.kpi.getEntityID());
         kpi.setEntityType(this.kpi.getEntityType());
         kpi.setEvictionRate(this.kpi.getEvictionRate());
         kpi.setEvictionType(this.kpi.getEvictionType());
-
+        
         kpi.setValueMin(this.kpi.getValueMin());
         kpi.setValueMax(this.kpi.getValueMax());
         kpi.setValueDirection(this.kpi.getValueDirection());
         kpi.setValueType(this.kpi.getValueType());
-
+        
         kpi.setEsperRequest(this.kpi.getEsperRequest());
-
+        
         if (kpi.getId() != null) {
             kpiDao.updateByPrimaryKey(kpi);
         } else {
