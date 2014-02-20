@@ -48,7 +48,7 @@ public final class KpiForm extends Form<Kpi> {
         feedBack = _feedBack;
         kpi = _dto.getObject();
         this.page = _kpiPage;
-
+        feedBack.setVisible(false);
         add(TextFieldBuilder.<String>createRequired("name", kpi, "name")
                 .highlightOnErrors().simpleValidator(0, 255)
                 .build());
@@ -95,12 +95,9 @@ public final class KpiForm extends Form<Kpi> {
                 .withTooltip("").build());
 
 //        AjaxFormValidatingBehavior.addToAllFormComponents(this, "onkeyup", Duration.ONE_SECOND);
-        
         /////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////  Popup  //////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-
-
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -126,6 +123,7 @@ public final class KpiForm extends Form<Kpi> {
             @Override
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
 
+                feedBack.setVisible(true);
                 error("error found");
                 // repaint the feedback panel so errors are shown
                 target.add(feedBack);
@@ -134,6 +132,7 @@ public final class KpiForm extends Form<Kpi> {
             @Override
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
 
+                target.add(feedBack);
                 info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
