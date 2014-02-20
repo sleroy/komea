@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
  * provider) inside Komea. Several fields are required to describe the provider.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 @Component
 @Retention(RetentionPolicy.RUNTIME)
@@ -28,38 +29,42 @@ import org.springframework.stereotype.Component;
 public @interface ProviderPlugin {
     
     
+    /**
+     * Method eventTypes.
+     * @return EventTypeDef[]
+     */
     EventTypeDef[] eventTypes();
     
     
     /**
      * Defines the path to obtain the icon of the plugin
      * 
-     * @return the icon
-     */
+    
+     * @return the icon */
     String icon();
     
     
     /**
      * Defines the plugin's name
      * 
-     * @return the plugin's name
-     */
+    
+     * @return the plugin's name */
     String name();
     
     
     /**
      * Define the type of provider (SONAR? JENKINS...)
      * 
-     * @return the provider type
-     */
+    
+     * @return the provider type */
     ProviderType type();
     
     
     /**
      * Defines the URL to access to the server
      * 
-     * @return the URL to access to the server.
-     */
+    
+     * @return the URL to access to the server. */
     String url() default "";
     
 }

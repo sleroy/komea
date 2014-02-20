@@ -15,6 +15,7 @@ import org.komea.product.wicket.kpis.KpiEditPage;
 import org.komea.product.wicket.kpis.KpiPage;
 import org.komea.product.wicket.person.PersonAddPage;
 import org.komea.product.wicket.person.PersonPage;
+import org.komea.product.wicket.providers.ProviderPage;
 import org.komea.product.wicket.settings.SettingsPage;
 import org.komea.product.wicket.statistics.StatPage;
 
@@ -76,6 +77,7 @@ public class WicketApplication extends WebApplication
         mountPage("/users", PersonPage.class);
         mountPage("/useradd", PersonAddPage.class);
         mountPage("/events", EventsPage.class);
+        mountPage("/providers", ProviderPage.class);
         
         getExceptionSettings().setThreadDumpStrategy(ThreadDumpStrategy.ALL_THREADS);
         getExceptionSettings()

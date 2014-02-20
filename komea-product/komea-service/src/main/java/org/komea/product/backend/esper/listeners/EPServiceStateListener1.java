@@ -13,6 +13,7 @@ import com.espertech.esper.client.EPServiceStateListener;
 
 /**
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class EPServiceStateListener1 implements EPServiceStateListener
 {
@@ -26,6 +27,11 @@ public class EPServiceStateListener1 implements EPServiceStateListener
      * (com.espertech.esper.client.EPServiceProvider)
      */
     
+    /**
+     * Method onEPServiceDestroyRequested.
+     * @param arg0 EPServiceProvider
+     * @see com.espertech.esper.client.EPServiceStateListener#onEPServiceDestroyRequested(EPServiceProvider)
+     */
     @Override
     public void onEPServiceDestroyRequested(final EPServiceProvider arg0) {
     
@@ -40,6 +46,11 @@ public class EPServiceStateListener1 implements EPServiceStateListener
      * (com.espertech.esper.client.EPServiceProvider)
      */
     
+    /**
+     * Method onEPServiceInitialized.
+     * @param arg0 EPServiceProvider
+     * @see com.espertech.esper.client.EPServiceStateListener#onEPServiceInitialized(EPServiceProvider)
+     */
     @Override
     public void onEPServiceInitialized(final EPServiceProvider arg0) {
     

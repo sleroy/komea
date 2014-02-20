@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 
 
+/**
+ */
 public class KpiHistoryJob implements Job
 {
     
@@ -22,6 +24,12 @@ public class KpiHistoryJob implements Job
     
     
     
+    /**
+     * Method execute.
+     * @param _context JobExecutionContext
+     * @throws JobExecutionException
+     * @see org.quartz.Job#execute(JobExecutionContext)
+     */
     @Override
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
     

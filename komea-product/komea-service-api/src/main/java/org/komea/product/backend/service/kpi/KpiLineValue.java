@@ -7,6 +7,8 @@ import java.io.Serializable;
 
 
 
+/**
+ */
 public class KpiLineValue<T> implements Serializable
 {
     
@@ -38,8 +40,8 @@ public class KpiLineValue<T> implements Serializable
     
     
     /**
-     * @return the entity
-     */
+    
+     * @return the entity */
     public T getEntity() {
     
     
@@ -48,8 +50,8 @@ public class KpiLineValue<T> implements Serializable
     
     
     /**
-     * @return the value
-     */
+    
+     * @return the value */
     public Double getValue() {
     
     

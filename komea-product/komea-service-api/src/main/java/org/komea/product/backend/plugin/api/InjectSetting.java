@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
  * This interface defines an annotation to mark injected field with settings.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 @Component
 @Retention(RetentionPolicy.RUNTIME)
@@ -25,5 +26,5 @@ import org.springframework.stereotype.Component;
     ElementType.METHOD })
 public @interface InjectSetting {
     
-    
+    //
 }

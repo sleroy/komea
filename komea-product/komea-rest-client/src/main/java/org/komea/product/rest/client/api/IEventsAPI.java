@@ -2,6 +2,7 @@
 package org.komea.product.rest.client.api;
 
 
+
 import java.net.ConnectException;
 import java.util.List;
 
@@ -11,6 +12,8 @@ import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.dto.SearchEventDto;
 import org.komea.product.service.dto.errors.InternalServerException;
 
+
+
 /**
  * Komea rest api client to manage events
  * the interface call the komea server via the rest api
@@ -19,7 +22,9 @@ import org.komea.product.service.dto.errors.InternalServerException;
  * @author $Author: jguidoux $
  * @since 15 janv. 2014
  */
-public interface IEventsAPI extends IRestClientAPI {
+public interface IEventsAPI extends IRestClientAPI
+{
+    
     
     /**
      * This method find events which have been stored into komea
@@ -32,7 +37,17 @@ public interface IEventsAPI extends IRestClientAPI {
      * @throws InternalServerException
      *             launch if exception happened in server side
      */
-    List<Event> findEvents(final SearchEventDto _searchEvent) throws ConnectException, InternalServerException;
+    List<Event> findEvents(final SearchEventDto _searchEvent)
+            throws ConnectException, InternalServerException;
+    
+    
+    /**
+     * @return
+     * @throws InternalServerException
+     * @throws ConnectException
+     */
+    List<Event> getEvents() throws ConnectException, InternalServerException;
+    
     
     /**
      * This method find events
@@ -47,7 +62,9 @@ public interface IEventsAPI extends IRestClientAPI {
      * @throws InternalServerException
      *             launch if exception happened in server side
      */
-    List<Event> getEvents(final Criticity _severityMin, final int _number) throws ConnectException, InternalServerException;
+    List<Event> getEvents(final Criticity _severityMin, final int _number)
+            throws ConnectException, InternalServerException;
+    
     
     /**
      * This method push a new event into komea

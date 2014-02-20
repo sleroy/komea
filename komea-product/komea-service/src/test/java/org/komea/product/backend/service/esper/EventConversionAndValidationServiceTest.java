@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 
 /**
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class EventConversionAndValidationServiceTest
 {

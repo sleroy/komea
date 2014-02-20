@@ -40,12 +40,20 @@ public class SpringUtils
      *            the value
      * @return the new object
      */
+    @SuppressWarnings("unchecked")
     public static <T> T reifySetting(final String _typeName, final String _value) {
     
     
         try {
-            return (T) Thread.currentThread().getContextClassLoader().loadClass(_typeName)
-                    .getConstructor(String.class).newInstance(_value);
+            final Class referenceType =
+                    Thread.currentThread().getContextClassLoader().loadClass(_typeName);
+            if (referenceType.isEnum()) {
+                
+                return (T) Enum.valueOf(referenceType, _value);
+            } else {
+                return (T) referenceType.getConstructor(String.class).newInstance(_value);
+            }
+            
         } catch (final Exception e) {
             throw new IllegalArgumentException(e);
         }

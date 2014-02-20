@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
 import org.komea.product.database.enums.Operator;
 import org.komea.product.database.enums.Severity;
 

@@ -18,12 +18,20 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author rgalerme
+ * @version $Revision: 1.0 $
  */
 @Service
 public class BugZillaAlertFactory implements IBugZillaAlertFactory
 {
     
     
+    /**
+     * Method newAssignedBugs.
+     * @param _alert long
+     * @param _project String
+     * @return EventSimpleDto
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory#newAssignedBugs(long, String)
+     */
     @Override
     public EventSimpleDto newAssignedBugs(final long _alert, final String _project) {
     
@@ -42,6 +50,13 @@ public class BugZillaAlertFactory implements IBugZillaAlertFactory
     }
     
     
+    /**
+     * Method newNewBug.
+     * @param _alert long
+     * @param _project String
+     * @return EventSimpleDto
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory#newNewBug(long, String)
+     */
     @Override
     public EventSimpleDto newNewBug(final long _alert, final String _project) {
     
@@ -60,6 +75,13 @@ public class BugZillaAlertFactory implements IBugZillaAlertFactory
     }
     
     
+    /**
+     * Method newNewBugs.
+     * @param _alert long
+     * @param _project String
+     * @return EventSimpleDto
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory#newNewBugs(long, String)
+     */
     @Override
     public EventSimpleDto newNewBugs(final long _alert, final String _project) {
     
@@ -78,6 +100,13 @@ public class BugZillaAlertFactory implements IBugZillaAlertFactory
     }
     
     
+    /**
+     * Method newReadyBugs.
+     * @param _alert long
+     * @param _project String
+     * @return EventSimpleDto
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory#newReadyBugs(long, String)
+     */
     @Override
     public EventSimpleDto newReadyBugs(final long _alert, final String _project) {
     
@@ -96,6 +125,13 @@ public class BugZillaAlertFactory implements IBugZillaAlertFactory
     }
     
     
+    /**
+     * Method newReminterBugs.
+     * @param _alert long
+     * @param _project String
+     * @return EventSimpleDto
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory#newReminterBugs(long, String)
+     */
     @Override
     public EventSimpleDto newReminterBugs(final long _alert, final String _project) {
     
@@ -114,6 +150,13 @@ public class BugZillaAlertFactory implements IBugZillaAlertFactory
     }
     
     
+    /**
+     * Method newReopenedBugs.
+     * @param _alert long
+     * @param _project String
+     * @return EventSimpleDto
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory#newReopenedBugs(long, String)
+     */
     @Override
     public EventSimpleDto newReopenedBugs(final long _alert, final String _project) {
     
@@ -132,6 +175,13 @@ public class BugZillaAlertFactory implements IBugZillaAlertFactory
     }
     
     
+    /**
+     * Method newResolvedBugs.
+     * @param _alert long
+     * @param _project String
+     * @return EventSimpleDto
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory#newResolvedBugs(long, String)
+     */
     @Override
     public EventSimpleDto newResolvedBugs(final long _alert, final String _project) {
     
@@ -150,6 +200,14 @@ public class BugZillaAlertFactory implements IBugZillaAlertFactory
     }
     
     
+    /**
+     * Method newStatusBug.
+     * @param _alert long
+     * @param _project String
+     * @param _status String
+     * @return EventSimpleDto
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory#newStatusBug(long, String, String)
+     */
     @Override
     public EventSimpleDto newStatusBug(
             final long _alert,
@@ -170,6 +228,13 @@ public class BugZillaAlertFactory implements IBugZillaAlertFactory
     }
     
     
+    /**
+     * Method newTotalBugs.
+     * @param _alert long
+     * @param _project String
+     * @return EventSimpleDto
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory#newTotalBugs(long, String)
+     */
     @Override
     public EventSimpleDto newTotalBugs(final long _alert, final String _project) {
     
@@ -188,6 +253,13 @@ public class BugZillaAlertFactory implements IBugZillaAlertFactory
     }
     
     
+    /**
+     * Method newUnconfirmedBugs.
+     * @param _alert long
+     * @param _project String
+     * @return EventSimpleDto
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory#newUnconfirmedBugs(long, String)
+     */
     @Override
     public EventSimpleDto newUnconfirmedBugs(final long _alert, final String _project) {
     
@@ -206,6 +278,13 @@ public class BugZillaAlertFactory implements IBugZillaAlertFactory
     }
     
     
+    /**
+     * Method newUpdatedBugs.
+     * @param _alert long
+     * @param _project String
+     * @return EventSimpleDto
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory#newUpdatedBugs(long, String)
+     */
     @Override
     public EventSimpleDto newUpdatedBugs(final long _alert, final String _project) {
     
@@ -224,6 +303,13 @@ public class BugZillaAlertFactory implements IBugZillaAlertFactory
     }
     
     
+    /**
+     * Method newVerifiedBugs.
+     * @param _alert long
+     * @param _project String
+     * @return EventSimpleDto
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory#newVerifiedBugs(long, String)
+     */
     @Override
     public EventSimpleDto newVerifiedBugs(final long _alert, final String _project) {
     

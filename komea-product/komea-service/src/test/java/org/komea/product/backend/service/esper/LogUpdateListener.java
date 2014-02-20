@@ -15,6 +15,7 @@ import com.espertech.esper.client.UpdateListener;
  * Log Update Listener.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class LogUpdateListener implements UpdateListener
 {
@@ -27,6 +28,10 @@ public class LogUpdateListener implements UpdateListener
     
     
     
+    /**
+     * Constructor for LogUpdateListener.
+     * @param _statementName String
+     */
     public LogUpdateListener(final String _statementName) {
     
     
@@ -36,6 +41,12 @@ public class LogUpdateListener implements UpdateListener
     }
     
     
+    /**
+     * Method update.
+     * @param _newEvents EventBean[]
+     * @param _oldEvents EventBean[]
+     * @see com.espertech.esper.client.UpdateListener#update(EventBean[], EventBean[])
+     */
     @Override
     public void update(final EventBean[] _newEvents, final EventBean[] _oldEvents) {
     

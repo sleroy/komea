@@ -3,7 +3,7 @@ package org.komea.product.backend.service.esper;
 
 
 
-import org.komea.product.backend.service.business.IEPMetric;
+import org.komea.product.backend.service.kpi.IEPMetric;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +12,8 @@ import com.espertech.esper.client.EPStatement;
 
 
 
+/**
+ */
 public class EPMetric implements IEPMetric
 {
     
@@ -23,6 +25,10 @@ public class EPMetric implements IEPMetric
     
     
     
+    /**
+     * Constructor for EPMetric.
+     * @param _epStatement EPStatement
+     */
     public EPMetric(final EPStatement _epStatement) {
     
     
@@ -32,6 +38,11 @@ public class EPMetric implements IEPMetric
     }
     
     
+    /**
+     * Method getDoubleValue.
+     * @return double
+     * @see org.komea.product.backend.service.kpi.IEPMetric#getDoubleValue()
+     */
     @Override
     public double getDoubleValue() {
     
@@ -40,6 +51,11 @@ public class EPMetric implements IEPMetric
     }
     
     
+    /**
+     * Method getIntValue.
+     * @return int
+     * @see org.komea.product.backend.service.kpi.IEPMetric#getIntValue()
+     */
     @Override
     public int getIntValue() {
     
@@ -48,6 +64,11 @@ public class EPMetric implements IEPMetric
     }
     
     
+    /**
+     * Method getLongValue.
+     * @return long
+     * @see org.komea.product.backend.service.kpi.IEPMetric#getLongValue()
+     */
     @Override
     public long getLongValue() {
     
@@ -56,6 +77,10 @@ public class EPMetric implements IEPMetric
     }
     
     
+    /**
+     * Method getValue.
+     * @return Number
+     */
     public Number getValue() {
     
     

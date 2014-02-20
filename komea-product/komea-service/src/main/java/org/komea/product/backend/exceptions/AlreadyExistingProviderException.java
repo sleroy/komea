@@ -7,6 +7,8 @@ import org.komea.product.database.dto.ProviderDto;
 
 
 
+/**
+ */
 public class AlreadyExistingProviderException extends RuntimeException
 {
     
@@ -15,6 +17,10 @@ public class AlreadyExistingProviderException extends RuntimeException
     
     
     
+    /**
+     * Constructor for AlreadyExistingProviderException.
+     * @param _providerDTO ProviderDto
+     */
     public AlreadyExistingProviderException(final ProviderDto _providerDTO) {
     
     
@@ -25,6 +31,10 @@ public class AlreadyExistingProviderException extends RuntimeException
     }
     
     
+    /**
+     * Method getProviderDTO.
+     * @return ProviderDto
+     */
     public ProviderDto getProviderDTO() {
     
     

@@ -26,15 +26,25 @@ import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy;
 /**
  *
  * @author rgalerme
+ * @version $Revision: 1.0 $
  */
 public class J2BugZillaServerProxy implements IBugZillaServerProxy {
 
     private BugzillaConnector conn;
 
+    /**
+     * Constructor for J2BugZillaServerProxy.
+     * @param conn BugzillaConnector
+     */
     public J2BugZillaServerProxy(BugzillaConnector conn) {
         this.conn = conn;
     }
 
+    /**
+     * Method getListProjects.
+     * @return List<String>
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy#getListProjects()
+     */
     @Override
     public List<String> getListProjects() {
         List<Product> products = getProduct();
@@ -45,6 +55,12 @@ public class J2BugZillaServerProxy implements IBugZillaServerProxy {
         return projects;
     }
 
+    /**
+     * Method getListBugs.
+     * @param Project String
+     * @return List<BugzillaBug>
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy#getListBugs(String)
+     */
     @Override
     public List<BugzillaBug> getListBugs(String Project) {
 
@@ -73,6 +89,10 @@ public class J2BugZillaServerProxy implements IBugZillaServerProxy {
         return bugZillaBugs;
     }
 
+    /**
+     * Method getProduct.
+     * @return List<Product>
+     */
     private List<Product> getProduct() {
         List<Product> products = new ArrayList<Product>();
         try {
@@ -93,6 +113,10 @@ public class J2BugZillaServerProxy implements IBugZillaServerProxy {
         return products;
     }
 
+    /**
+     * Method close.
+     * @see java.io.Closeable#close()
+     */
     @Override
     public void close() {
         try {

@@ -7,8 +7,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-import org.komea.product.backend.fs.IObjectStorage;
-import org.komea.product.backend.service.IPluginFileSystem;
+import org.komea.product.backend.service.fs.IObjectStorage;
+import org.komea.product.backend.service.fs.IPluginFileSystem;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -18,6 +18,7 @@ import com.thoughtworks.xstream.XStream;
  * This class implements an Object Storage.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class ObjectStorage<T> implements IObjectStorage<T>
 {
@@ -29,6 +30,11 @@ public class ObjectStorage<T> implements IObjectStorage<T>
     
     
     
+    /**
+     * Constructor for ObjectStorage.
+     * @param _service IPluginFileSystem
+     * @param _className Class<?>
+     */
     public ObjectStorage(final IPluginFileSystem _service, final Class<?> _className) {
     
     
@@ -38,6 +44,11 @@ public class ObjectStorage<T> implements IObjectStorage<T>
     }
     
     
+    /**
+     * Method get.
+     * @return T
+     * @see org.komea.product.backend.service.fs.IObjectStorage#get()
+     */
     @Override
     public T get() {
     
@@ -49,6 +60,11 @@ public class ObjectStorage<T> implements IObjectStorage<T>
     }
     
     
+    /**
+     * Method set.
+     * @param _object T
+     * @see org.komea.product.backend.service.fs.IObjectStorage#set(T)
+     */
     @Override
     public void set(final T _object) {
     
@@ -62,6 +78,10 @@ public class ObjectStorage<T> implements IObjectStorage<T>
     }
     
     
+    /**
+     * Method getResource.
+     * @return String
+     */
     private String getResource() {
     
     

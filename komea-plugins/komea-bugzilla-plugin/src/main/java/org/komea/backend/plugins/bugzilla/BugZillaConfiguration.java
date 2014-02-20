@@ -13,15 +13,24 @@ import org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration;
 /**
  *
  * @author rgalerme
+ * @version $Revision: 1.0 $
  */
 public class BugZillaConfiguration {
     
     private List<BugZillaServer> configurations;
 
+    /**
+     * Method getConfigurations.
+     * @return List<BugZillaServer>
+     */
     public List<BugZillaServer> getConfigurations() {
         return configurations;
     }
 
+    /**
+     * Method setConfigurations.
+     * @param configurations List<BugZillaServer>
+     */
     public void setConfigurations(List<BugZillaServer> configurations) {
         this.configurations = configurations;
     }

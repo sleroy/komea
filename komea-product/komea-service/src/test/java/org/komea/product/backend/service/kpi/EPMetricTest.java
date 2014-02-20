@@ -13,6 +13,8 @@ import com.espertech.esper.client.EPStatement;
 
 
 
+/**
+ */
 public class EPMetricTest
 {
     

@@ -7,10 +7,18 @@ import org.komea.product.database.dto.EventSimpleDto;
 
 
 
+/**
+ */
 public class BugZillaEventFactory
 {
     
     
+    /**
+     * Method sendAssignedBugs.
+     * @param _projectName String
+     * @param _value double
+     * @return EventSimpleDto
+     */
     public EventSimpleDto sendAssignedBugs(final String _projectName, final double _value) {
     
     
@@ -21,6 +29,12 @@ public class BugZillaEventFactory
     }
     
     
+    /**
+     * Method sendNewBugs.
+     * @param _projectName String
+     * @param _value double
+     * @return EventSimpleDto
+     */
     public EventSimpleDto sendNewBugs(final String _projectName, final double _value) {
     
     
@@ -31,6 +45,15 @@ public class BugZillaEventFactory
     }
     
     
+    /**
+     * Method sendNewTicketBug.
+     * @param _projectName String
+     * @param _value double
+     * @param _ticketName java.lang.String
+     * @param _ticketUrl java.lang.String
+     * @param _ticketStatus java.lang.String
+     * @return EventSimpleDto
+     */
     public EventSimpleDto sendNewTicketBug(
             final String _projectName,
             final double _value,
@@ -50,6 +73,12 @@ public class BugZillaEventFactory
     }
     
     
+    /**
+     * Method sendReadyBugs.
+     * @param _projectName String
+     * @param _value double
+     * @return EventSimpleDto
+     */
     public EventSimpleDto sendReadyBugs(final String _projectName, final double _value) {
     
     
@@ -60,6 +89,15 @@ public class BugZillaEventFactory
     }
     
     
+    /**
+     * Method sendReminderTicketBug.
+     * @param _projectName String
+     * @param _value double
+     * @param _ticketName java.lang.String
+     * @param _ticketUrl java.lang.String
+     * @param _ticketStatus java.lang.String
+     * @return EventSimpleDto
+     */
     public EventSimpleDto sendReminderTicketBug(
             final String _projectName,
             final double _value,
@@ -79,6 +117,12 @@ public class BugZillaEventFactory
     }
     
     
+    /**
+     * Method sendReopenedBugs.
+     * @param _projectName String
+     * @param _value double
+     * @return EventSimpleDto
+     */
     public EventSimpleDto sendReopenedBugs(final String _projectName, final double _value) {
     
     
@@ -89,6 +133,12 @@ public class BugZillaEventFactory
     }
     
     
+    /**
+     * Method sendResolvedBugs.
+     * @param _projectName String
+     * @param _value double
+     * @return EventSimpleDto
+     */
     public EventSimpleDto sendResolvedBugs(final String _projectName, final double _value) {
     
     
@@ -99,6 +149,12 @@ public class BugZillaEventFactory
     }
     
     
+    /**
+     * Method sendTotalBugs.
+     * @param _projectName String
+     * @param _value double
+     * @return EventSimpleDto
+     */
     public EventSimpleDto sendTotalBugs(final String _projectName, final double _value) {
     
     
@@ -110,6 +166,12 @@ public class BugZillaEventFactory
     }
     
     
+    /**
+     * Method sendUnconfirmedBugs.
+     * @param _projectName String
+     * @param _value double
+     * @return EventSimpleDto
+     */
     public EventSimpleDto sendUnconfirmedBugs(final String _projectName, final double _value) {
     
     
@@ -120,6 +182,15 @@ public class BugZillaEventFactory
     }
     
     
+    /**
+     * Method sendUpdateTicketBug.
+     * @param _projectName String
+     * @param _value double
+     * @param _ticketName java.lang.String
+     * @param _ticketUrl java.lang.String
+     * @param _ticketStatus java.lang.String
+     * @return EventSimpleDto
+     */
     public EventSimpleDto sendUpdateTicketBug(
             final String _projectName,
             final double _value,

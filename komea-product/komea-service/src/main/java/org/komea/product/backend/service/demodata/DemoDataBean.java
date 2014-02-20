@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import org.komea.product.backend.auth.IPasswordEncoder;
 import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
+import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.alert.EventDtoBuilder;
 import org.komea.product.database.dao.EventTypeDao;
@@ -33,11 +34,14 @@ import org.komea.product.database.model.PersonRole;
 import org.komea.product.database.model.PersonRoleCriteria;
 import org.komea.product.database.model.Provider;
 import org.komea.product.database.model.ProviderCriteria;
+import org.quartz.JobDataMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
 
 
+/**
+ */
 @ProviderPlugin(
         eventTypes = {
             @EventTypeDef(
@@ -57,36 +61,38 @@ public class DemoDataBean
     
     
     @Autowired
-    private IEventPushService eventPushService;
+    private IPasswordEncoder     encoder;
     
     @Autowired
-    private PersonDao         personDAO;
+    private IEventPushService    eventPushService;
     
     @Autowired
-    private PersonRoleDao     personRoleDao;
+    private EventTypeDao         eventTypeDAO;
     
     @Autowired
-    private PersonGroupDao    personGroupDao;
+    private PersonDao            personDAO;
     
     @Autowired
-    private ProviderDao       providerDao;
+    private PersonGroupDao       personGroupDao;
     
     @Autowired
-    private EventTypeDao      eventTypeDAO;
+    private PersonRoleDao        personRoleDao;
     
     
     @Autowired
-    private IPasswordEncoder  encoder;
+    private ProviderDao          providerDao;
+    
+    
+    @Autowired
+    private ICronRegistryService registry;
     
     
     
-    public DemoDataBean() {
-    
-    
-        super();
-    }
-    
-    
+    /**
+     * Method getPersonGroupDao.
+     * 
+     * @return PersonGroupDao
+     */
     public PersonGroupDao getPersonGroupDao() {
     
     
@@ -94,6 +100,11 @@ public class DemoDataBean
     }
     
     
+    /**
+     * Method getPersonRoleDao.
+     * 
+     * @return PersonRoleDao
+     */
     public PersonRoleDao getPersonRoleDao() {
     
     
@@ -241,7 +252,18 @@ public class DemoDataBean
     }
     
     
-    @Scheduled(fixedRate = 10000)
+    public void scheduleAlerts() {
+    
+    
+        final JobDataMap properties = new JobDataMap();
+        properties.put("esper", eventPushService);
+        registry.registerCronTask("ALERT_DEMO_STAT", "0/10 * * * * ?", AlertJobDemo.class,
+                properties);
+        
+    }
+    
+    
+    @Scheduled(fixedRate = 60000)
     public void sendAlert() {
     
     
@@ -259,6 +281,12 @@ public class DemoDataBean
     }
     
     
+    /**
+     * Method setPersonGroupDao.
+     * 
+     * @param _personGroupDao
+     *            PersonGroupDao
+     */
     public void setPersonGroupDao(final PersonGroupDao _personGroupDao) {
     
     
@@ -266,6 +294,12 @@ public class DemoDataBean
     }
     
     
+    /**
+     * Method setPersonRoleDao.
+     * 
+     * @param _personRoleDao
+     *            PersonRoleDao
+     */
     public void setPersonRoleDao(final PersonRoleDao _personRoleDao) {
     
     
@@ -273,6 +307,15 @@ public class DemoDataBean
     }
     
     
+    /**
+     * Method createUser.
+     * 
+     * @param record
+     *            Person
+     * @param userRole
+     *            PersonRole
+     * @return Person
+     */
     private Person createUser(final Person record, final PersonRole userRole) {
     
     

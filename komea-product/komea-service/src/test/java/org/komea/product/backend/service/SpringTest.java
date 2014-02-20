@@ -8,6 +8,8 @@ import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 
 
 
+/**
+ */
 public class SpringTest extends AbstractSpringIntegrationTestCase
 {
     

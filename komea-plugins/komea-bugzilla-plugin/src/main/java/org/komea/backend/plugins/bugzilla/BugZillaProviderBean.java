@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
  * This class defines the bugzilla provider plugin. Informations are collected at runtime.
  * 
  * @author rgalerme
+ * @version $Revision: 1.0 $
  */
 @ProviderPlugin(
         type = ProviderType.BUGTRACKER,

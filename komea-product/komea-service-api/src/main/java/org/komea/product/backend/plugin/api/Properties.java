@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
  * This interface allows spring beans to define new properties inside Komea.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 @Component
 @Retention(RetentionPolicy.RUNTIME)
@@ -26,5 +27,9 @@ import org.springframework.stereotype.Component;
 public @interface Properties {
     
     
+    /**
+     * Method value.
+     * @return Property[]
+     */
     Property[] value();
 }

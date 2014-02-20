@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
  * This interface defines an annotation indicates a property.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 @Component
 @Retention(RetentionPolicy.RUNTIME)
@@ -29,22 +30,31 @@ public @interface Property {
     /**
      * Provides a description of the property
      * 
-     * @return the description.
-     */
+    
+     * @return the description. */
     String description() default "";
     
     
     /**
      * Provides the property key.
      * 
-     * @return
+    
+     * @return String
      */
     String key();
     
     
+    /**
+     * Method type.
+     * @return Class
+     */
     Class type() default String.class;
     
     
+    /**
+     * Method value.
+     * @return String
+     */
     String value() default "";
     
 }

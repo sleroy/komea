@@ -100,16 +100,10 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>komea-service-api</artifactId>
+			<artifactId>komea-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>komea-service</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
 
 
 		<dependency>

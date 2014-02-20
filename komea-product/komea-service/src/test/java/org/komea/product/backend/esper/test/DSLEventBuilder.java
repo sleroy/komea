@@ -7,10 +7,19 @@ import java.util.Map;
 
 
 
+/**
+ */
 public class DSLEventBuilder
 {
     
     
+    /**
+     * Method newEvent.
+     * @param _eventName String
+     * @param _provider String
+     * @param _eventType String
+     * @return DSLEventBuilder
+     */
     public static DSLEventBuilder newEvent(
             final String _eventName,
             final String _provider,
@@ -26,6 +35,12 @@ public class DSLEventBuilder
     
     
     
+    /**
+     * Constructor for DSLEventBuilder.
+     * @param _eventName String
+     * @param _provider String
+     * @param _eventType String
+     */
     private DSLEventBuilder(final String _eventName, final String _provider, final String _eventType) {
     
     
@@ -35,6 +50,10 @@ public class DSLEventBuilder
     }
     
     
+    /**
+     * Method build.
+     * @return EventMethodGenerator
+     */
     public EventMethodGenerator build() {
     
     
@@ -43,6 +62,10 @@ public class DSLEventBuilder
     }
     
     
+    /**
+     * Method fromGroup.
+     * @return DSLEventBuilder
+     */
     public DSLEventBuilder fromGroup() {
     
     
@@ -51,6 +74,10 @@ public class DSLEventBuilder
     }
     
     
+    /**
+     * Method fromUser.
+     * @return DSLEventBuilder
+     */
     public DSLEventBuilder fromUser() {
     
     
@@ -59,6 +86,10 @@ public class DSLEventBuilder
     }
     
     
+    /**
+     * Method linkToProject.
+     * @return DSLEventBuilder
+     */
     public DSLEventBuilder linkToProject() {
     
     
@@ -68,6 +99,11 @@ public class DSLEventBuilder
     }
     
     
+    /**
+     * Method predefinedMessage.
+     * @param _message String
+     * @return DSLEventBuilder
+     */
     public DSLEventBuilder predefinedMessage(final String _message) {
     
     
@@ -76,6 +112,10 @@ public class DSLEventBuilder
     }
     
     
+    /**
+     * Method withMessage.
+     * @return DSLEventBuilder
+     */
     public DSLEventBuilder withMessage() {
     
     
@@ -84,6 +124,12 @@ public class DSLEventBuilder
     }
     
     
+    /**
+     * Method withParameter.
+     * @param _key String
+     * @param _value Class<?>
+     * @return DSLEventBuilder
+     */
     public DSLEventBuilder withParameter(final String _key, final Class<?> _value) {
     
     
@@ -92,6 +138,11 @@ public class DSLEventBuilder
     }
     
     
+    /**
+     * Method withParameters.
+     * @param _parameters Map<String,Class<?>>
+     * @return DSLEventBuilder
+     */
     public DSLEventBuilder withParameters(final Map<String, Class<?>> _parameters) {
     
     
@@ -101,6 +152,10 @@ public class DSLEventBuilder
     }
     
     
+    /**
+     * Method withURL.
+     * @return DSLEventBuilder
+     */
     public DSLEventBuilder withURL() {
     
     
@@ -109,6 +164,10 @@ public class DSLEventBuilder
     }
     
     
+    /**
+     * Method withValue.
+     * @return DSLEventBuilder
+     */
     public DSLEventBuilder withValue() {
     
     

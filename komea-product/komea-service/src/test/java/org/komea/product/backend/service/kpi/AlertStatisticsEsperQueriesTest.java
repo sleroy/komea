@@ -18,6 +18,8 @@ import org.komea.product.database.model.Provider;
 
 
 
+/**
+ */
 public class AlertStatisticsEsperQueriesTest
 {
     
@@ -126,6 +128,11 @@ public class AlertStatisticsEsperQueriesTest
     }
     
     
+    /**
+     * Method newEventType.
+     * @param _string String
+     * @return EventType
+     */
     private EventType newEventType(final String _string) {
     
     
@@ -136,6 +143,11 @@ public class AlertStatisticsEsperQueriesTest
     }
     
     
+    /**
+     * Method newProvider.
+     * @param _string String
+     * @return Provider
+     */
     private Provider newProvider(final String _string) {
     
     

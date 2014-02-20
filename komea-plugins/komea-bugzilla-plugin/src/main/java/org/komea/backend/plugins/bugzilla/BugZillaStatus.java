@@ -9,6 +9,7 @@ package org.komea.backend.plugins.bugzilla;
 /**
  *
  * @author rgalerme
+ * @version $Revision: 1.0 $
  */
 public enum BugZillaStatus {
     NEW, UNCONFIRMED,ASSIGNED,REOPENED,READY,RESOLVED,VERIFIED,ADD,UPDATED,REMINDER

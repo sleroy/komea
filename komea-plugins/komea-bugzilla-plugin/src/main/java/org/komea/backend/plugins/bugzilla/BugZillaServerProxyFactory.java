@@ -17,14 +17,26 @@ import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxyFactory;
 /**
  *
  * @author rgalerme
+ * @version $Revision: 1.0 $
  */
 public class BugZillaServerProxyFactory implements IBugZillaServerProxyFactory {
 
+    /**
+     * Method newConnector.
+     * @param serv BugZillaServer
+     * @return IBugZillaServerProxy
+     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxyFactory#newConnector(BugZillaServer)
+     */
     @Override
     public IBugZillaServerProxy newConnector(BugZillaServer serv) {
         return new J2BugZillaServerProxy(connexion(serv));
     }
 
+    /**
+     * Method connexion.
+     * @param serv BugZillaServer
+     * @return BugzillaConnector
+     */
     private BugzillaConnector connexion(BugZillaServer serv) {
 
         BugzillaConnector conn = null;

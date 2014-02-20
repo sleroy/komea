@@ -12,13 +12,14 @@ import java.io.FileInputStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.komea.product.backend.service.business.ISettingProxy;
+import org.komea.product.backend.service.fs.IPluginFileSystem;
 import org.mockito.Mockito;
 
 
 
 /**
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class KomeaFSTest
 {
@@ -27,8 +28,9 @@ public class KomeaFSTest
     /**
      * Tests the functionalities of Komea FS.
      * 
-     * @throws java.lang.Exception
-     */
+    
+     * @throws Exception
+     * @throws java.lang.Exception */
     @SuppressWarnings("resource")
     @Test
     public void testKomeaFS() throws Exception {
@@ -36,7 +38,7 @@ public class KomeaFSTest
     
         final KomeaFS komeaFS = new KomeaFS();
         final ISettingProxy mock = Mockito.mock(ISettingProxy.class);
-        Mockito.when(mock.get()).thenReturn(new File("src/test/resources/fakeS"));
+        Mockito.when(mock.getValue()).thenReturn(new File("src/test/resources/fakeS"));
         komeaFS.setStorage_path(mock);
         final IPluginFileSystem fileSystem = komeaFS.getFileSystem("truc");
         Assert.assertNotNull(fileSystem);

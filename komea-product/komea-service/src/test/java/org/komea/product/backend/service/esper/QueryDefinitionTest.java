@@ -10,6 +10,8 @@ import org.komea.product.database.model.Kpi;
 
 
 
+/**
+ */
 public class QueryDefinitionTest
 {
     

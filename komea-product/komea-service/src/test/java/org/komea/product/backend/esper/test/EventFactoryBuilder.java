@@ -13,6 +13,8 @@ import org.apache.commons.io.IOUtils;
 
 
 
+/**
+ */
 public class EventFactoryBuilder
 {
     
@@ -38,6 +40,12 @@ public class EventFactoryBuilder
     }
     
     
+    /**
+     * Constructor for EventFactoryBuilder.
+     * @param _className String
+     * @param _packageName String
+     * @param _sourceDirectory File
+     */
     public EventFactoryBuilder(
             final String _className,
             final String _packageName,
@@ -56,8 +64,8 @@ public class EventFactoryBuilder
     /**
      * Generation of the event class.
      * 
-     * @throws IOException
-     */
+    
+     * @throws IOException */
     public void generate() throws IOException {
     
     
@@ -83,6 +91,10 @@ public class EventFactoryBuilder
     }
     
     
+    /**
+     * Method register.
+     * @param _builder EventMethodGenerator
+     */
     public void register(final EventMethodGenerator _builder) {
     
     

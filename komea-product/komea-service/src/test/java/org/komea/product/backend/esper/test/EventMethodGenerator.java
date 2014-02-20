@@ -10,6 +10,8 @@ import java.util.Set;
 
 
 
+/**
+ */
 public class EventMethodGenerator
 {
     
@@ -34,6 +36,12 @@ public class EventMethodGenerator
     
     
     
+    /**
+     * Constructor for EventMethodGenerator.
+     * @param _eventMethodName String
+     * @param _provider String
+     * @param _eventType String
+     */
     public EventMethodGenerator(
             final String _eventMethodName,
             final String _provider,
@@ -66,6 +74,10 @@ public class EventMethodGenerator
     }
     
     
+    /**
+     * Method build.
+     * @return String
+     */
     public String build() {
     
     
@@ -111,6 +123,10 @@ public class EventMethodGenerator
     }
     
     
+    /**
+     * Method setParameters.
+     * @param _parameters Map<String,Class<?>>
+     */
     public void setParameters(final Map<String, Class<?>> _parameters) {
     
     
@@ -120,6 +136,10 @@ public class EventMethodGenerator
     }
     
     
+    /**
+     * Method setPredefinedMessage.
+     * @param _predefMessage String
+     */
     public void setPredefinedMessage(final String _predefMessage) {
     
     
@@ -184,6 +204,10 @@ public class EventMethodGenerator
     }
     
     
+    /**
+     * Method buildArguments.
+     * @param _sb StringBuilder
+     */
     private void buildArguments(final StringBuilder _sb) {
     
     
@@ -238,6 +262,10 @@ public class EventMethodGenerator
     }
     
     
+    /**
+     * Method buildBody.
+     * @param _sb StringBuilder
+     */
     private void buildBody(final StringBuilder _sb) {
     
     
@@ -279,6 +307,10 @@ public class EventMethodGenerator
     }
     
     
+    /**
+     * Method buildHeader.
+     * @param _sb StringBuilder
+     */
     private void buildHeader(final StringBuilder _sb) {
     
     

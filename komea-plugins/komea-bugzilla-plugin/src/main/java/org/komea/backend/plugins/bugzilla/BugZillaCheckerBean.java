@@ -16,8 +16,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.PostConstruct;
-
 import org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration;
@@ -30,16 +28,17 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 /**
  * @author rgalerme
+ * @version $Revision: 1.0 $
  */
 public class BugZillaCheckerBean
 {
     
     
     @Autowired
-    private IEventPushService             alertService;
+    private IBugZillaAlertFactory         alertFactory;
     
     @Autowired
-    private IBugZillaAlertFactory         alertFactory;
+    private IEventPushService             alertService;
     
     @Autowired
     private IBugZillaConfigurationService bugZillaConfiguration;
@@ -92,6 +91,10 @@ public class BugZillaCheckerBean
     }
     
     
+    /**
+     * Method getAlertFactory.
+     * @return IBugZillaAlertFactory
+     */
     public IBugZillaAlertFactory getAlertFactory() {
     
     
@@ -99,6 +102,10 @@ public class BugZillaCheckerBean
     }
     
     
+    /**
+     * Method getAlertService.
+     * @return IEventPushService
+     */
     public IEventPushService getAlertService() {
     
     
@@ -106,6 +113,10 @@ public class BugZillaCheckerBean
     }
     
     
+    /**
+     * Method getBugZillaConfiguration.
+     * @return IBugZillaConfigurationService
+     */
     public IBugZillaConfigurationService getBugZillaConfiguration() {
     
     
@@ -113,13 +124,10 @@ public class BugZillaCheckerBean
     }
     
     
-    @PostConstruct
-    public void init() {
-    
-    
-    }
-    
-    
+    /**
+     * Method setAlertFactory.
+     * @param _alertFactory IBugZillaAlertFactory
+     */
     public void setAlertFactory(final IBugZillaAlertFactory _alertFactory) {
     
     
@@ -127,6 +135,10 @@ public class BugZillaCheckerBean
     }
     
     
+    /**
+     * Method setAlertService.
+     * @param _alertService IEventPushService
+     */
     public void setAlertService(final IEventPushService _alertService) {
     
     
@@ -134,6 +146,10 @@ public class BugZillaCheckerBean
     }
     
     
+    /**
+     * Method setBugZillaConfiguration.
+     * @param _bugZillaConfiguration IBugZillaConfigurationService
+     */
     public void setBugZillaConfiguration(final IBugZillaConfigurationService _bugZillaConfiguration) {
     
     
@@ -141,6 +157,12 @@ public class BugZillaCheckerBean
     }
     
     
+    /**
+     * Method getReminderAlert.
+     * @param days int
+     * @param listBugs List<BugzillaBug>
+     * @return List<BugzillaBug>
+     */
     private List<BugzillaBug> getReminderAlert(final int days, final List<BugzillaBug> listBugs) {
     
     

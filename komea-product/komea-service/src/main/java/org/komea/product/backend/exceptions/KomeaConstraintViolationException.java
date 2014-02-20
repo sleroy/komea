@@ -31,6 +31,8 @@ import javax.validation.ValidationException;
  * `@author Sylvain Leroy
  * 
  * @author Emmanuel Bernard
+ * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class KomeaConstraintViolationException extends ValidationException
 {
@@ -75,8 +77,8 @@ public class KomeaConstraintViolationException extends ValidationException
     /**
      * Set of constraint violations reported during a validation
      * 
-     * @return <code>Set</code> of <code>ConstraintViolation</code>
-     */
+    
+     * @return <code>Set</code> of <code>ConstraintViolation</code> */
     public Set<ConstraintViolation<?>> getConstraintViolations() {
     
     

@@ -17,6 +17,9 @@ import org.komea.product.backend.plugin.api.InjectSetting;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
+import org.komea.product.backend.service.plugins.IEventTypeService;
+import org.komea.product.backend.service.plugins.IPluginIntegrationService;
+import org.komea.product.backend.service.plugins.IProviderDTOConvertorService;
 import org.komea.product.backend.utils.SpringUtils;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.dto.ProviderDto;
@@ -39,6 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
  * This service registers providers loaded at the startup of Komea.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 @Service
 public class PluginIntegrationService implements IPluginIntegrationService, ApplicationContextAware
@@ -77,8 +81,8 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
      * 
      * @param criteria
      *            the criteria
-     * @return true if the provider is existing.
-     */
+    
+     * @return true if the provider is existing. */
     public boolean existSelectedProvider(final ProviderCriteria criteria) {
     
     
@@ -87,6 +91,10 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
+    /**
+     * Method getContext.
+     * @return ApplicationContext
+     */
     public ApplicationContext getContext() {
     
     
@@ -94,6 +102,10 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
+    /**
+     * Method getEventTypeService.
+     * @return IEventTypeService
+     */
     public IEventTypeService getEventTypeService() {
     
     
@@ -101,6 +113,10 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
+    /**
+     * Method getProviderAPIService.
+     * @return IProviderDTOConvertorService
+     */
     public IProviderDTOConvertorService getProviderAPIService() {
     
     
@@ -108,6 +124,10 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
+    /**
+     * Method getProviderMapper.
+     * @return ProviderDao
+     */
     public ProviderDao getProviderMapper() {
     
     
@@ -115,6 +135,10 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
+    /**
+     * Method getSettingsService.
+     * @return ISettingService
+     */
     public ISettingService getSettingsService() {
     
     
@@ -133,6 +157,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     
     /**
      * Injects settings fields
+     * @param _bean Object
      */
     
     public void injectSettings(final Object _bean) {
@@ -188,6 +213,12 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
+    /**
+     * Method setApplicationContext.
+     * @param _applicationContext ApplicationContext
+     * @throws BeansException
+     * @see org.springframework.context.ApplicationContextAware#setApplicationContext(ApplicationContext)
+     */
     @Override
     public void setApplicationContext(final ApplicationContext _applicationContext)
             throws BeansException {
@@ -240,6 +271,10 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
+    /**
+     * Method setContext.
+     * @param _context ApplicationContext
+     */
     public void setContext(final ApplicationContext _context) {
     
     
@@ -247,6 +282,10 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
+    /**
+     * Method setEventTypeService.
+     * @param _eventTypeService IEventTypeService
+     */
     public void setEventTypeService(final IEventTypeService _eventTypeService) {
     
     
@@ -254,6 +293,10 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
+    /**
+     * Method setProviderAPIService.
+     * @param _providerAPIService IProviderDTOConvertorService
+     */
     public void setProviderAPIService(final IProviderDTOConvertorService _providerAPIService) {
     
     
@@ -261,6 +304,10 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
+    /**
+     * Method setProviderMapper.
+     * @param _providerMapper ProviderDao
+     */
     public void setProviderMapper(final ProviderDao _providerMapper) {
     
     
@@ -268,6 +315,10 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
+    /**
+     * Method setSettingsService.
+     * @param _settingsService ISettingService
+     */
     public void setSettingsService(final ISettingService _settingsService) {
     
     

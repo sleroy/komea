@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ */
 @Component
 public class SystemProjectBean implements ISystemProjectBean {
     
@@ -28,6 +30,10 @@ public class SystemProjectBean implements ISystemProjectBean {
         super();
     }
     
+    /**
+     * Method getProjectDAO.
+     * @return ProjectDao
+     */
     public ProjectDao getProjectDAO() {
     
         return projectDAO;
@@ -65,11 +71,19 @@ public class SystemProjectBean implements ISystemProjectBean {
         
     }
     
+    /**
+     * Method setProjectDAO.
+     * @param _projectDAO ProjectDao
+     */
     public void setProjectDAO(final ProjectDao _projectDAO) {
     
         projectDAO = _projectDAO;
     }
     
+    /**
+     * Method setSystemProject.
+     * @param _systemProject Project
+     */
     public void setSystemProject(final Project _systemProject) {
     
         systemProject = _systemProject;

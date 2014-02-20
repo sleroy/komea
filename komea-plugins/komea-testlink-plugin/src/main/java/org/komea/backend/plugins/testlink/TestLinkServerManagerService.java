@@ -7,12 +7,14 @@ package org.komea.backend.plugins.testlink;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
+
 import org.komea.backend.plugins.testlink.api.ITestLinkServerConfiguration;
 import org.komea.backend.plugins.testlink.api.ITestLinkServerManagerService;
 import org.komea.backend.plugins.testlink.api.ITestLinkServerProxyFactory;
-import org.komea.product.backend.fs.IObjectStorage;
-import org.komea.product.backend.service.IPluginStorageService;
+import org.komea.product.backend.service.fs.IObjectStorage;
+import org.komea.product.backend.service.plugins.IPluginStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

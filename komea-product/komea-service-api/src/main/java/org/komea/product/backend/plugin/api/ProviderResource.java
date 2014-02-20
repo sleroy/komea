@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
  * This interface defines an annotation to marks fields defining provider resources.
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 @Component
 @Retention(RetentionPolicy.RUNTIME)
@@ -24,5 +25,5 @@ import org.springframework.stereotype.Component;
 @Target(value = {
     ElementType.FIELD })
 public @interface ProviderResource {
-    
+    //
 }

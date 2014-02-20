@@ -10,6 +10,8 @@ import org.komea.product.database.model.Provider;
 
 
 
+/**
+ */
 public class EsperEventFactory
 {
     
@@ -66,7 +68,8 @@ public class EsperEventFactory
     /**
      * Returns the bugzilla provider.
      * 
-     * @return
+    
+     * @return Provider
      */
     public static Provider bugzillaProvider() {
     
@@ -81,6 +84,10 @@ public class EsperEventFactory
     }
     
     
+    /**
+     * Method jenkinsProvider.
+     * @return Provider
+     */
     public static Provider jenkinsProvider() {
     
     
@@ -94,6 +101,10 @@ public class EsperEventFactory
     }
     
     
+    /**
+     * Method perforceProvider.
+     * @return Provider
+     */
     public static Provider perforceProvider() {
     
     
@@ -107,6 +118,10 @@ public class EsperEventFactory
     }
     
     
+    /**
+     * Method sonarProvider.
+     * @return Provider
+     */
     public static Provider sonarProvider() {
     
     
@@ -123,7 +138,8 @@ public class EsperEventFactory
     /**
      * Returns the bugzilla provider.
      * 
-     * @return
+    
+     * @return Provider
      */
     public static Provider testLinkProvider() {
     
@@ -138,6 +154,12 @@ public class EsperEventFactory
     }
     
     
+    /**
+     * Method newEventType.
+     * @param _eventKey String
+     * @param _info Severity
+     * @return EventType
+     */
     private static EventType newEventType(final String _eventKey, final Severity _info) {
     
     

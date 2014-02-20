@@ -19,6 +19,7 @@ import org.komea.product.database.model.Person;
 
 /**
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class EntityWithKPITest
 {

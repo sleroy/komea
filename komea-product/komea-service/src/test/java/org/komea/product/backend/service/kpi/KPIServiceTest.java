@@ -30,6 +30,7 @@ import com.espertech.esper.client.EPStatement;
 
 /**
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class KPIServiceTest
 {
@@ -44,7 +45,7 @@ public class KPIServiceTest
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.KPIService#findKPIFacade(org.komea.product.backend.service.business.IEntityWithKPIFacade, java.lang.String)}
+     * {@link org.komea.product.backend.service.kpi.KPIService#findKPIFacade(org.komea.product.backend.business.IEntityWithKPIFacade, java.lang.String)}
      * This test initialises all the requested services to obtain a KPI Facade.
      * Esper Engine is Mocked. The objective is to obtain the requested entity
      * with its KPI through a facade. .

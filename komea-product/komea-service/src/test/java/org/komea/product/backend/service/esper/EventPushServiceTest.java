@@ -25,6 +25,7 @@ import org.mockito.Mockito;
  * This class is the unit test to check alerts may be pushed
  * 
  * @author sleroy
+ * @version $Revision: 1.0 $
  */
 public class EventPushServiceTest
 {

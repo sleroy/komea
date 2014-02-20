@@ -127,7 +127,7 @@ public class EventsPage extends LayoutPage
     
     
         super(_parameters);
-        final List<IEvent> hourEvents = service.getHourEvents();
+        final List<IEvent> hourEvents = service.getGlobalActivity();
         
         final ListView<IEvent> listView =
                 new EventTable("events", new CompoundPropertyModel<List<IEvent>>(hourEvents));

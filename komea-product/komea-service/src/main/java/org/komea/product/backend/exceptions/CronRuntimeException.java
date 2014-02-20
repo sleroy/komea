@@ -7,10 +7,16 @@ import org.quartz.SchedulerException;
 
 
 
+/**
+ */
 public class CronRuntimeException extends RuntimeException
 {
     
     
+    /**
+     * Constructor for CronRuntimeException.
+     * @param _e SchedulerException
+     */
     public CronRuntimeException(final SchedulerException _e) {
     
     
@@ -18,6 +24,11 @@ public class CronRuntimeException extends RuntimeException
     }
     
     
+    /**
+     * Constructor for CronRuntimeException.
+     * @param _message String
+     * @param _e SchedulerException
+     */
     public CronRuntimeException(final String _message, final SchedulerException _e) {
     
     
