@@ -24,7 +24,6 @@ import org.komea.product.database.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.google.common.collect.Lists;
 
 
@@ -32,10 +31,7 @@ import com.google.common.collect.Lists;
 /**
  */
 @Service
-<<<<<<< HEAD
-=======
 @Transactional
->>>>>>> ae58d31ddbbf4053410d9e031d5cc440abebdc56
 public class PersonService extends AbstractService<Person, Integer, PersonCriteria> implements
         IPersonService
 {

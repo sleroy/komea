@@ -1,10 +1,5 @@
 package org.komea.product.rest.client.api;
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> ae58d31ddbbf4053410d9e031d5cc440abebdc56
 import java.net.ConnectException;
 import java.util.List;
 
@@ -23,15 +18,9 @@ import org.komea.product.service.dto.errors.InternalServerException;
  * @author $Author: jguidoux $
  * @since 15 janv. 2014
  */
-<<<<<<< HEAD
-public interface IEventsAPI extends IRestClientAPI
-{
-    
-    
-=======
 public interface IEventsAPI extends IRestClientAPI {
 
->>>>>>> ae58d31ddbbf4053410d9e031d5cc440abebdc56
+
     /**
      * This method find events which have been stored into komea
      *
@@ -43,33 +32,16 @@ public interface IEventsAPI extends IRestClientAPI {
      */
     List<Event> findEvents(final SearchEventDto _searchEvent)
             throws ConnectException, InternalServerException;
-<<<<<<< HEAD
-    
-    
-    /**
-     * @return
-     * @throws InternalServerException
-     * @throws ConnectException
-     */
-    List<Event> getEvents() throws ConnectException, InternalServerException;
-    
-    
-=======
 
->>>>>>> ae58d31ddbbf4053410d9e031d5cc440abebdc56
     /**
      * @return @throws InternalServerException
      * @throws ConnectException
      */
-<<<<<<< HEAD
-    List<Event> getEvents(final Criticity _severityMin, final int _number)
-            throws ConnectException, InternalServerException;
-    
-    
-=======
+
+
     List<Event> getEvents() throws ConnectException, InternalServerException;
 
->>>>>>> ae58d31ddbbf4053410d9e031d5cc440abebdc56
+
     /**
      * This method push a new event into komea
      *
