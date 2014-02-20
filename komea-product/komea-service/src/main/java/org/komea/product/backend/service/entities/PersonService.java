@@ -23,6 +23,7 @@ import org.komea.product.database.model.PersonRole;
 import org.komea.product.database.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
@@ -31,6 +32,7 @@ import com.google.common.collect.Lists;
 /**
  */
 @Service
+@Transactional
 public class PersonService extends AbstractService<Person, Integer, PersonCriteria> implements
         IPersonService
 {

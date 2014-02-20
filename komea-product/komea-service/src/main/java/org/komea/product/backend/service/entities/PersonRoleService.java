@@ -12,12 +12,16 @@ import org.komea.product.database.dao.PersonRoleDao;
 import org.komea.product.database.model.PersonRole;
 import org.komea.product.database.model.PersonRoleCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 
 /**
  * @author sleroy
  */
+@Transactional
+@Service
 public class PersonRoleService extends AbstractService<PersonRole, Integer, PersonRoleCriteria>
         implements IPersonRoleService
 {
