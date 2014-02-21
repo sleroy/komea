@@ -6,9 +6,9 @@ import javax.ws.rs.core.GenericType;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.dto.SearchEventDto;
+import org.komea.product.database.enums.Severity;
 import org.komea.product.rest.client.api.IEventsAPI;
 import org.komea.product.service.dto.errors.InternalServerException;
-   
 
 public class EventsAPI extends AbstractRestCientAPI implements IEventsAPI {
 
@@ -21,7 +21,6 @@ public class EventsAPI extends AbstractRestCientAPI implements IEventsAPI {
 
     private static final String EVENTS_PATH = "events";
 
-
     /**
      * (non-Javadoc)
      *
@@ -32,7 +31,6 @@ public class EventsAPI extends AbstractRestCientAPI implements IEventsAPI {
     public List<Event> findEvents(final SearchEventDto _searchEvent)
             throws ConnectException, InternalServerException {
 
-
         final String url = EVENTS_PATH + "/find";
         return post(url, _searchEvent, new ListEventType());
     }
@@ -42,7 +40,6 @@ public class EventsAPI extends AbstractRestCientAPI implements IEventsAPI {
      * (non-Javadoc)
      * @see org.komea.product.rest.client.api.IEventsAPI#getEvents()
      */
-
     @Override
     public List<Event> getEvents() throws ConnectException, InternalServerException {
 
@@ -50,6 +47,13 @@ public class EventsAPI extends AbstractRestCientAPI implements IEventsAPI {
         return get(url, new ListEventType());
     }
 
+    @Override
+    public List<Event> getEvents(final Severity _severityMin, final int _number)
+            throws ConnectException, InternalServerException {
+
+        final String url = EVENTS_PATH + "/get/" + _severityMin.name() + "/" + _number;
+        return get(url, new ListEventType());
+    }
 
     //
     /**
