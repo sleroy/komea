@@ -122,7 +122,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
         final KpiCriteria kpiCriteria = new KpiCriteria();
         kpiCriteria.createCriteria().andKpiKeyEqualTo(_kpiKey.getKpiName());
-        if (_kpiKey.verifiyIfIsAssociateToEntity()) {
+        if (_kpiKey.verifiyIfIsAssociatedToEntity()) {
             kpiCriteria.createCriteria().andEntityIDEqualTo(_kpiKey.getEntityID());
             kpiCriteria.createCriteria().andEntityTypeEqualTo(_kpiKey.getEntityType());
         }
@@ -459,19 +459,18 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     public void storeValueInHistory(final KpiKey _kpiKey) throws KPINotFoundException {
     
     
-        final Kpi findKPIOrFail = findKPIOrFail(_kpiKey);
-        final EPStatement epStatement =
-                esperEngine.getStatementOrFail(findKPIOrFail.computeKPIEsperKey());
+        final Kpi kpi = findKPIOrFail(_kpiKey);
+        final EPStatement epStatement = esperEngine.getStatementOrFail(kpi.computeKPIEsperKey());
         
-        if (findKPIOrFail.isGlobal()) {
+        if (kpi.isGlobal()) {
             final Number singleResult = EPStatementResult.build(epStatement).singleResult();
             storeMeasureOfAKpiInDatabase(_kpiKey, singleResult.doubleValue());
         } else {
-            final KPIValueTable<IEntity> kpiRealTimeValues =
-                    fetchKpiValueTable(findKPIOrFail, epStatement);
+            final KPIValueTable<IEntity> kpiRealTimeValues = fetchKpiValueTable(kpi, epStatement);
             for (final KpiLineValue<IEntity> kpiLineValue : kpiRealTimeValues.getValues()) {
                 final KpiKey kpiKeyWithEntity =
-                        KpiKey.ofKpiNameAndEntity(_kpiKey.getKpiName(), kpiLineValue.getEntity());
+                        KpiKey.ofKpiNameAndEntityOrNull(_kpiKey.getKpiName(),
+                                kpiLineValue.getEntity());
                 storeMeasureOfAKpiInDatabase(kpiKeyWithEntity, kpiLineValue.getValue());
                 
             }

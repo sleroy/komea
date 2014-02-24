@@ -6,6 +6,7 @@ package org.komea.product.service.dto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
@@ -16,6 +17,13 @@ public class KpiKey
 {
     
     
+    /**
+     * Creates a KPI.
+     * 
+     * @param _kpiName
+     *            the kpi name
+     * @return the kpi key.
+     */
     public static KpiKey ofKpi(final Kpi _kpiName) {
     
     
@@ -32,11 +40,26 @@ public class KpiKey
     
     public static KpiKey ofKpiAndEntityDetails(
             final Kpi _kpiName,
-            final EntityType _entityTYpe,
+            final EntityType _entityType,
             final int _entityID) {
     
     
-        return new KpiKey(_entityTYpe, _entityID, _kpiName.getKpiKey());
+        return new KpiKey(_entityType, _entityID, _kpiName.getKpiKey());
+    }
+    
+    
+    /**
+     * Return a kpi key from a kpi and a potential entity.
+     * 
+     * @param _kpi
+     * @param _entity
+     * @return the kpi key.
+     */
+    public static KpiKey ofKpiAndEntityOrNull(final Kpi _kpi, final IEntity _entity) {
+    
+    
+        if (_entity == null) { return ofKpi(_kpi); }
+        return ofKpiAndEntity(_kpi, _entity);
     }
     
     
@@ -65,6 +88,19 @@ public class KpiKey
     
     
     /**
+     * @param _kpiName
+     * @param _entity
+     * @return
+     */
+    public static KpiKey ofKpiNameAndEntityOrNull(final String _kpiName, final IEntity _entity) {
+    
+    
+        if (_entity == null) { return ofKpiName(_kpiName); }
+        return ofKpiNameAndEntity(_kpiName, _entity);
+    }
+    
+    
+    /**
      * Creates a new KpiKey referencing a GLOBAL KPI working for a given entityType.
      * 
      * @param _kpiName
@@ -81,9 +117,11 @@ public class KpiKey
     
     
     
+    private Integer    entityID;
+    
+    
     private EntityType entityType;
     
-    private Integer    entityID;
     
     @NotNull
     @Size(min = 0, max = 255)
@@ -100,7 +138,7 @@ public class KpiKey
     public KpiKey() {
     
     
-        // TODO Auto-generated KpiKey stub
+        super();
     }
     
     
@@ -169,8 +207,8 @@ public class KpiKey
     }
     
     
-    // @JsonIgnore
-    public boolean verifiyIfIsAssociateToEntity() {
+    @JsonIgnore
+    public boolean verifiyIfIsAssociatedToEntity() {
     
     
         return entityType != null && entityID != null;
