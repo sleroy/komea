@@ -2,7 +2,6 @@
 package org.komea.product.database.enums;
 
 
-
 public enum RetentionPeriod {
     
     NEVER(""),
@@ -18,24 +17,17 @@ public enum RetentionPeriod {
     
     ;
     
-    
     private final String valueName;
     
-    
-    
     private RetentionPeriod(final String _valueName) {
-    
     
         valueName = _valueName;
         
     }
     
-    
     public String getWindow() {
-    
     
         return valueName;
     }
-    
     
 }
