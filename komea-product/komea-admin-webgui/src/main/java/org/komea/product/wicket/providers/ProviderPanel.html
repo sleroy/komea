@@ -1,0 +1,39 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-xs-3 col-md-3 text-center">
+			<img src="http://localhost:8080/rest/local_resources/pic/jenkins.png"
+				width="114" height="114" alt="bootsnipp"
+				class="img-rounded img-responsive" />
+		</div>
+		<div class="col-xs-9 col-md-9 section-box">
+			<h2>
+				<strong wicket:id="providerName">Provider Jenkins</strong> <a
+					href="http://zeus:8080/jenkins" target="_blank" wicket:id="url"><span
+					class="glyphicon glyphicon-new-window"> </span></a>
+			</h2>
+			<div class="row">
+				<div class="col-md-3 col-md-offset-9">
+					<span class="label label-warning" wicket:id="providerType">Warning</span>
+				</div>
+			</div>
+
+			<p>Plugins for Jenkins CI.</p>
+			<p>
+				<strong>Events provided : </strong>
+			</p>
+			<select multiple class="form-control">
+				<option>jenkins-build-started</option>
+				<option>jenkins-build-failed</option>
+				<option>jenkins-build-level-industrialisation</option>
+			</select>
+
+			<hr />
+			<div class="row rating-desc">
+				<div class="col-md-6">
+					<a href="admin" wicket:id="adminpage">Administration page</a>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</wicket:panel>

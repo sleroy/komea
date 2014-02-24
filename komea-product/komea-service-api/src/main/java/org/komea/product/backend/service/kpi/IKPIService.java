@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.generic.IGenericService;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.KpiTendancyDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
@@ -88,8 +89,9 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria>
      * 
      * @param _kpiKey
      *            KpiKey
+     * @throws KPINotFoundException
      */
-    public void storeValueInHistory(KpiKey _kpiKey);
+    public void storeValueInHistory(KpiKey _kpiKey) throws KPINotFoundException;
     
     
     /**
@@ -99,7 +101,8 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria>
      *            KpiKey
      * @return the kpi double value. * @throws KPINotFoundException
      */
-    <T> KPIValueTable<T> getKpiRealTimeValues(KpiKey _kpiKey) throws KPINotFoundException;
+    <T extends IEntity> KPIValueTable<T> getKpiRealTimeValues(KpiKey _kpiKey)
+            throws KPINotFoundException;
     
     
     /**

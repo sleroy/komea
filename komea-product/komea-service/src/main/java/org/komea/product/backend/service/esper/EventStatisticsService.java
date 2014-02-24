@@ -16,7 +16,6 @@ import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.dao.ProviderDao;
-import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.enums.ValueDirection;
@@ -313,14 +312,14 @@ public class EventStatisticsService implements IEventStatisticsService
         kpi = new Kpi();
         kpi.setDescription("Provides the number of alerts of criticity "
                 + _criticity + " received under 24 hours");
-        kpi.setEntityType(EntityType.PROJECT);
+        kpi.setEntityType(null);
         kpi.setEsperRequest("SELECT COUNT(*) as alert_number FROM Event(eventType.severity=Severity."
                 + _criticity.name() + ")" + ".win:time(24 hour)");
         kpi.setKpiKey(getKpiNameFromSeverity(_criticity));
         kpi.setValueMin(0d);
         kpi.setValueMax(Double.MAX_VALUE);
         kpi.setName("Number of alerts of criticity " + _criticity + " received under 24 hours.");
-        kpi.setEntityID(systemProject.getSystemProject().getId());
+        kpi.setEntityID(null);
         kpi.setCronExpression("0 * * * * ?");
         kpi.setEvictionRate(1);
         kpi.setEvictionType(EvictionType.DAYS);
@@ -341,13 +340,13 @@ public class EventStatisticsService implements IEventStatisticsService
         Kpi kpi;
         kpi = new Kpi();
         kpi.setDescription("Provides the number of alerts received under 24 hours");
-        kpi.setEntityType(EntityType.PROJECT);
+        kpi.setEntityType(null);
         kpi.setEsperRequest("SELECT COUNT(*) as alert_number FROM Event.win:time(24 hour)");
         kpi.setKpiKey(ALERT_RECEIVED_IN_ONE_DAY);
         kpi.setValueMin(0d);
         kpi.setValueMax(Double.MAX_VALUE);
         kpi.setName("Number of alerts received under 24 hours.");
-        kpi.setEntityID(systemProject.getSystemProject().getId());
+        kpi.setEntityID(null);
         kpi.setCronExpression("0 * * * * ?");
         kpi.setEvictionRate(1);
         kpi.setEvictionType(EvictionType.DAYS);

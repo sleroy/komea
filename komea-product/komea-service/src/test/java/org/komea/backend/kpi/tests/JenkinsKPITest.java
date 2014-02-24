@@ -117,4 +117,25 @@ public class JenkinsKPITest
                 .runTest();
         
     }
+    
+    
+    @Test
+    public void testNumberOfReleasesPerWeekKpi() {
+    
+    
+        final JenkinsEventFactory jenkinsEventFactory = new JenkinsEventFactory();
+        final EsperQueryTester newTest = EsperQueryTester.newTest("KPI_NUMBER_RELEASES_PER_WEEK");
+        newTest.withQuery(
+                "SELECT project, COUNT(*) as count FROM Event.win:time(1 week) WHERE eventType.eventKey='build_complete' GROUP BY project")
+                .expectRows(2)
+                .sendEvent(jenkinsEventFactory.sendBuildComplete("SCERTIFY", 908, "SPRINT"))
+                .sendEvent(jenkinsEventFactory.sendBuildComplete("KOMEA", 908, "SPRINT"))
+                .sendEvent(jenkinsEventFactory.sendBuildFailed("SCERTIFY", 908, "SPRINT"))
+                .sendEvent(jenkinsEventFactory.sendBuildInterrupted("SCERTIFY", 908, "SPRINT"))
+                .hasResults(new Object[][] {
+                        {
+                                newTest.getProject("SCERTIFY"), 1L }, {
+                                newTest.getProject("KOMEA"), 1L } }).runTest();
+        
+    }
 }

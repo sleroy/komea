@@ -7,17 +7,24 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Kpi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
 /**
  */
-public class KPIValueTable<T> implements Serializable
+public class KPIValueTable<T extends IEntity> implements Serializable
 {
     
     
+    private static final Logger   LOGGER = LoggerFactory.getLogger("kpi-results");
     private Kpi                   kpi;
+    
+    private Number                singleValue;
+    
     private List<KpiLineValue<T>> values = new ArrayList<KpiLineValue<T>>(50);
     
     
@@ -43,8 +50,25 @@ public class KPIValueTable<T> implements Serializable
     
     
     /**
+     * Dump Informations
+     */
+    public void dump() {
     
-     * @return the kpi */
+    
+        if (!values.isEmpty()) {
+            for (final KpiLineValue value : values) {
+                LOGGER.info("kpi|{}|\t{}\t{}", kpi.getKpiKey(), value.getEntity(), value.getValue());
+            }
+        } else {
+            LOGGER.info("kpi|{}| has no result", kpi.getKpiKey());
+        }
+        
+    }
+    
+    
+    /**
+     * @return the kpi
+     */
     public Kpi getKpi() {
     
     
@@ -53,8 +77,25 @@ public class KPIValueTable<T> implements Serializable
     
     
     /**
+     * @return
+     */
+    public int getNumberOfRecords() {
     
-     * @return the values */
+    
+        return this.values.size();
+    }
+    
+    
+    public Number getSingleValue() {
+    
+    
+        return singleValue;
+    }
+    
+    
+    /**
+     * @return the values
+     */
     public List<KpiLineValue<T>> getValues() {
     
     
@@ -70,6 +111,13 @@ public class KPIValueTable<T> implements Serializable
     
     
         kpi = _kpi;
+    }
+    
+    
+    public void setSingleValue(final Number _singleValue) {
+    
+    
+        singleValue = _singleValue;
     }
     
     
@@ -92,7 +140,8 @@ public class KPIValueTable<T> implements Serializable
     public String toString() {
     
     
-        return "KPIValueTable [kpi=" + kpi + ", values=" + values + "]";
+        return "KPIValueTable [kpi="
+                + kpi + ", singleValue=" + singleValue + ", values=" + values + "]";
     }
     
 }

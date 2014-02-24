@@ -1,80 +1,150 @@
+
 package org.komea.product.database.dto;
 
+
+
 import java.io.Serializable;
+
 import org.komea.product.database.api.IEntity;
+import org.komea.product.database.api.IKeyVisitor;
 import org.komea.product.database.enums.EntityType;
 
-public class BaseEntity implements IEntity, Serializable {
 
+
+public class BaseEntity implements IEntity, Serializable
+{
+    
+    
     private static final long serialVersionUID = 1L;
-
-    private EntityType entityType;
-    private Integer id;
-    private String key;
-    private String name;
-    private String description;
-
+    
+    private String            description;
+    private EntityType        entityType;
+    private Integer           id;
+    private String            key;
+    private String            name;
+    
+    
+    
     public BaseEntity() {
+    
+    
     }
-
-    public BaseEntity(EntityType entityType, Integer id, String key, String name, String description) {
+    
+    
+    public BaseEntity(
+            final EntityType entityType,
+            final Integer id,
+            final String key,
+            final String name,
+            final String description) {
+    
+    
         this.entityType = entityType;
         this.id = id;
         this.key = key;
         this.name = name;
         this.description = description;
     }
-
-    public EntityType getEntityType() {
-        return entityType;
-    }
-
-    public void setEntityType(EntityType entityType) {
-        this.entityType = entityType;
-    }
-
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.database.api.IHasKey#accept(org.komea.product.database.api.IKeyVisitor)
+     */
     @Override
-    public Integer getId() {
-        return id;
+    public void accept(final IKeyVisitor _visitor) {
+    
+    
+        // this.
+        
     }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
+    
+    
     @Override
     public EntityType entityType() {
+    
+    
         return getEntityType();
     }
-
+    
+    
+    public String getDescription() {
+    
+    
+        return description;
+    }
+    
+    
+    public EntityType getEntityType() {
+    
+    
+        return entityType;
+    }
+    
+    
+    @Override
+    public Integer getId() {
+    
+    
+        return id;
+    }
+    
+    
+    public String getKey() {
+    
+    
+        return key;
+    }
+    
+    
+    public String getName() {
+    
+    
+        return name;
+    }
+    
+    
+    public void setDescription(final String description) {
+    
+    
+        this.description = description;
+    }
+    
+    
+    public void setEntityType(final EntityType entityType) {
+    
+    
+        this.entityType = entityType;
+    }
+    
+    
+    public void setId(final Integer id) {
+    
+    
+        this.id = id;
+    }
+    
+    
+    public void setKey(final String key) {
+    
+    
+        this.key = key;
+    }
+    
+    
+    public void setName(final String name) {
+    
+    
+        this.name = name;
+    }
+    
+    
     @Override
     public String toString() {
-        return "BaseEntity{" + "entityType=" + entityType + ", id=" + id
-                + ", key=" + key + ", name=" + name + ", description=" + description + '}';
+    
+    
+        return "BaseEntity{"
+                + "entityType=" + entityType + ", id=" + id + ", key=" + key + ", name=" + name
+                + ", description=" + description + '}';
     }
-
 }

@@ -27,7 +27,9 @@ public final class EPStatementResult
     
     /**
      * Method build.
-     * @param _epStatement EPStatement
+     * 
+     * @param _epStatement
+     *            EPStatement
      * @return EPStatementResult
      */
     public static EPStatementResult build(@NotNull
@@ -45,7 +47,9 @@ public final class EPStatementResult
     
     /**
      * Constructor for EPStatementResult.
-     * @param _statement EPStatement
+     * 
+     * @param _statement
+     *            EPStatement
      */
     private EPStatementResult(final EPStatement _statement) {
     
@@ -58,9 +62,8 @@ public final class EPStatementResult
     /**
      * Returns a list of result from the EP Statement and a property expression.
      * 
-    
-    
-     * @return the list of values or an empty list.. */
+     * @return the list of values or an empty list..
+     */
     public <T> List<Map<String, T>> listMapResult() {
     
     
@@ -87,8 +90,8 @@ public final class EPStatementResult
      * 
      * @param _propertyName
      *            the property expression
-    
-     * @return the list of values or an empty list.. */
+     * @return the list of values or an empty list..
+     */
     public <T> List<T> listResult(final String _propertyName) {
     
     
@@ -112,6 +115,7 @@ public final class EPStatementResult
     
     /**
      * Method listUnderlyingObjects.
+     * 
      * @return List<T>
      */
     public <T> List<T> listUnderlyingObjects() {
@@ -138,10 +142,10 @@ public final class EPStatementResult
     /**
      * Returns a list of result from the EP Statement and a property expression.
      * 
-    
-    
-     * @param _implementationClass Class<T>
-     * @return the list of values or an empty list.. */
+     * @param _implementationClass
+     *            Class<T>
+     * @return the list of values or an empty list..
+     */
     public <T> List<T> mapAPojoPerResultLine(final Class<T> _implementationClass) {
     
     
@@ -168,7 +172,6 @@ public final class EPStatementResult
     /**
      * This method should be use with great care, the statement must always returns a value.
      * 
-    
      * @return T
      */
     public <T> T singleResult() {
@@ -198,8 +201,8 @@ public final class EPStatementResult
      * 
      * @param _propertyName
      *            the property expression
-    
-     * @return the value or null. */
+     * @return the value or null.
+     */
     public <T> T singleResult(final String _propertyName) {
     
     

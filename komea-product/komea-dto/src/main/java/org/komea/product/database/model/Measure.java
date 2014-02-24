@@ -254,7 +254,7 @@ public class Measure implements Serializable, IHasKey
     }
     
     
-    public void setEntityId(final EntityType _entityType, final Integer _entityID) {
+    public void setEntity(final EntityType _entityType, final Integer _entityID) {
     
     
         if (_entityType == null || _entityID == null) { return; }

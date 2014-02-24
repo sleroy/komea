@@ -20,11 +20,11 @@ import org.komea.product.database.model.Provider;
 
 /**
  */
-public class AlertStatisticsEsperQueriesTest
+public class EventStatisticsEsperQueriesTest
 {
     
     
-    public AlertStatisticsEsperQueriesTest() {
+    public EventStatisticsEsperQueriesTest() {
     
     
         super();

@@ -65,7 +65,7 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
         
         
         final IEvent eventToSend =
-                EsperQueryTester.convertEventDTO(new JenkinsEventFactory().sendBuildComplete(
+                EsperQueryTester.convertToEventDTO(new JenkinsEventFactory().sendBuildComplete(
                         "SCERTIFY", 12, "TRUC"));
         for (int i = 0; i < 10; ++i) {
             

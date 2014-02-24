@@ -49,7 +49,7 @@ public class EventViewerServiceIT extends AbstractSpringIntegrationTestCase
     
     
         final IEvent convertEventDTO =
-                EsperQueryTester.convertEventDTO(new JenkinsEventFactory().sendBuildComplete(
+                EsperQueryTester.convertToEventDTO(new JenkinsEventFactory().sendBuildComplete(
                         "SCERTIFY", 12, "TRUC"));
         convertEventDTO.setDate(new Date());
         esperEngine.sendEvent(convertEventDTO);

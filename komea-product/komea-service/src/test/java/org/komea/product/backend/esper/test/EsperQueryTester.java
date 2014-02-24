@@ -18,7 +18,6 @@ import org.komea.product.backend.service.esper.EsperEngineBean;
 import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.backend.service.kpi.IEsperLineTestPredicate;
 import org.komea.product.backend.service.kpi.IEsperTestPredicate;
-import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;
@@ -40,6 +39,61 @@ import com.espertech.esper.client.EPStatement;
  */
 public class EsperQueryTester
 {
+    
+    
+    /**
+     */
+    private static class ArrayPredicate implements IEsperTestPredicate
+    {
+        
+        
+        private final Object[][] array;
+        
+        
+        
+        /**
+         * @param _columnName
+         * @param _expectedValue
+         */
+        public ArrayPredicate(final Object[][] _array) {
+        
+        
+            super();
+            array = _array;
+            
+        }
+        
+        
+        /**
+         * Method evaluate.
+         * 
+         * @param _epStatement
+         *            EPStatement
+         * @see org.komea.product.backend.service.kpi.IEsperTestPredicate#evaluate(EPStatement)
+         */
+        @Override
+        public void evaluate(final EPStatement _epStatement) {
+        
+        
+            final List<Map<String, Object>> listMapResult =
+                    EPStatementResult.build(_epStatement).listMapResult();
+            Assert.assertEquals("Expected same number of rows", array.length, listMapResult.size());
+            for (int i = 0; i < listMapResult.size(); ++i) {
+                
+                LOGGER.info("Evaluating line {} of esper request", i);
+                final ArrayList arrayList = new ArrayList(listMapResult.get(i).values());
+                Assert.assertEquals("Expected same number of cols for iteration " + i,
+                        array[i].length, arrayList.size());
+                for (int j = 0; j < arrayList.size(); j++) {
+                    LOGGER.info("Array[{}][{}]={} and should be {}", i, j, arrayList.get(j),
+                            array[i][j]);
+                    Assert.assertEquals(array[i][j], arrayList.get(j));
+                }
+            }
+            
+        }
+    }
+    
     
     
     /**
@@ -185,13 +239,13 @@ public class EsperQueryTester
      *            the event dto
      * @return the event.
      */
-    public static IEvent convertEventDTO(final EventSimpleDto _eventDTO) {
+    public static IEvent convertToEventDTO(final EventSimpleDto _eventDTO) {
     
     
         final EsperQueryTester esperQueryTester = new EsperQueryTester("TRUC");
-        esperQueryTester.sendEvent(_eventDTO);
+        return esperQueryTester.convertDto(_eventDTO);
         
-        return CollectionUtil.singleOrNull(esperQueryTester.getEvents());
+        
     }
     
     
@@ -229,9 +283,9 @@ public class EsperQueryTester
     
     private EPStatement                         epStatement;
     
+    
     private final List<IEsperLineTestPredicate> esperLinePredicates =
                                                                             new ArrayList<IEsperLineTestPredicate>();
-    
     
     private final String                        esperName;
     
@@ -239,10 +293,10 @@ public class EsperQueryTester
     private final List<IEsperTestPredicate>     esperPredicates     =
                                                                             new ArrayList<IEsperTestPredicate>();
     
+    
     private String                              esperQuery;
     
     private final List<IEvent>                  events              = new ArrayList<IEvent>();
-    
     
     private int                                 expectedRows        = -1;
     
@@ -253,11 +307,11 @@ public class EsperQueryTester
     
     private final Map<String, PersonGroup>      mockGroup           =
                                                                             new HashMap<String, PersonGroup>();
+    
+    
     private final Map<String, Person>           mockPerson          = new HashMap<String, Person>();
     private final Map<String, Project>          mockProject         =
                                                                             new HashMap<String, Project>();
-    
-    
     private final Map<String, Provider>         mockProviders       =
                                                                             new HashMap<String, Provider>();
     
@@ -275,6 +329,79 @@ public class EsperQueryTester
         super();
         esperName = _statementName;
         
+    }
+    
+    
+    /**
+     * Send an event DTO into esper engine.
+     * 
+     * @param _eventDto
+     *            the event dto
+     * @return EsperQueryTester
+     */
+    public IEvent convertDto(final EventSimpleDto _eventDto) {
+    
+    
+        if (_eventDto == null) {
+            _eventDto.setDate(new Date());
+            
+        }
+        final String providerName = _eventDto.getProvider();
+        if (getMockProviders().get(providerName) == null) {
+            final Provider provider = new Provider();
+            provider.setName(providerName);
+            provider.setProviderType(ProviderType.CI_BUILD);
+            provider.setIcon("");
+            provider.setUrl("");
+            getMockProviders().put(providerName, provider);
+        }
+        final String eventTypeName = _eventDto.getEventType();
+        if (mockEventTypes.get(eventTypeName) == null) {
+            final EventType eventType = new EventType();
+            eventType.setName(eventTypeName);
+            eventType.setEventKey(eventTypeName);
+            eventType.setCategory("");
+            eventType.setDescription(eventTypeName);
+            eventType.setEnabled(true);
+            eventType.setSeverity(Severity.INFO);
+            
+            mockEventTypes.put(eventTypeName, eventType);
+        }
+        
+        final Event event = new Event();
+        event.setDate(_eventDto.getDate());
+        event.setEventType(mockEventTypes.get(eventTypeName));
+        event.setProvider(getMockProviders().get(_eventDto.getProvider()));
+        event.setMessage(_eventDto.getMessage());
+        
+        for (final String user : _eventDto.getPersons()) {
+            if (mockPerson.get(user) == null) {
+                final Person person = new Person();
+                person.setLogin(user);
+                mockPerson.put(user, person);
+            }
+            event.getPersons().add(mockPerson.get(user));
+        }
+        if (mockGroup.get(_eventDto.getPersonGroup()) == null) {
+            final PersonGroup group = new PersonGroup();
+            group.setName(_eventDto.getPersonGroup());
+            mockGroup.put(_eventDto.getPersonGroup(), group);
+        }
+        final String projectName = _eventDto.getProject();
+        event.setPersonGroup(mockGroup.get(projectName));
+        if (mockProject.get(projectName) == null) {
+            final Project group = new Project();
+            group.setName(projectName);
+            group.setProjectKey(projectName);
+            mockProject.put(projectName, group);
+        }
+        event.setProject(mockProject.get(projectName));
+        event.setValue(_eventDto.getValue());
+        event.setUrl(_eventDto.getUrl());
+        event.setProperties(_eventDto.getProperties());
+        
+        
+        return event;
     }
     
     
@@ -317,6 +444,52 @@ public class EsperQueryTester
     
     
         return events;
+    }
+    
+    
+    public Map<String, EventType> getMockEventTypes() {
+    
+    
+        return mockEventTypes;
+    }
+    
+    
+    public Map<String, PersonGroup> getMockGroup() {
+    
+    
+        return mockGroup;
+    }
+    
+    
+    public Map<String, Person> getMockPerson() {
+    
+    
+        return mockPerson;
+    }
+    
+    
+    public Map<String, Project> getMockProject() {
+    
+    
+        return mockProject;
+    }
+    
+    
+    public Map<String, Provider> getMockProviders() {
+    
+    
+        return mockProviders;
+    }
+    
+    
+    /**
+     * @param _string
+     * @return
+     */
+    public Project getProject(final String _string) {
+    
+    
+        return mockProject.get(_string);
     }
     
     
@@ -366,6 +539,20 @@ public class EsperQueryTester
         return this;
         
         
+    }
+    
+    
+    /**
+     * Tests results against an array.
+     * 
+     * @param _objects
+     * @return
+     */
+    public EsperQueryTester hasResults(final Object[][] _objects) {
+    
+    
+        esperPredicates.add(new ArrayPredicate(_objects));
+        return this;
     }
     
     
@@ -496,75 +683,10 @@ public class EsperQueryTester
     }
     
     
-    /**
-     * Send an event DTO into esper engine.
-     * 
-     * @param _eventDto
-     *            the event dto
-     * @return EsperQueryTester
-     */
-    public EsperQueryTester sendEvent(final EventSimpleDto _eventDto) {
+    public EsperQueryTester sendEvent(final EventSimpleDto _eventDTO) {
     
     
-        if (_eventDto == null) {
-            _eventDto.setDate(new Date());
-            
-        }
-        final String providerName = _eventDto.getProvider();
-        if (mockProviders.get(providerName) == null) {
-            final Provider provider = new Provider();
-            provider.setName(providerName);
-            provider.setProviderType(ProviderType.CI_BUILD);
-            provider.setIcon("");
-            provider.setUrl("");
-            mockProviders.put(providerName, provider);
-        }
-        final String eventTypeName = _eventDto.getEventType();
-        if (mockEventTypes.get(eventTypeName) == null) {
-            final EventType eventType = new EventType();
-            eventType.setName(eventTypeName);
-            eventType.setEventKey(eventTypeName);
-            eventType.setCategory("");
-            eventType.setDescription(eventTypeName);
-            eventType.setEnabled(true);
-            eventType.setSeverity(Severity.INFO);
-            
-            mockEventTypes.put(eventTypeName, eventType);
-        }
-        
-        final Event event = new Event();
-        event.setDate(_eventDto.getDate());
-        event.setEventType(mockEventTypes.get(eventTypeName));
-        event.setProvider(mockProviders.get(_eventDto.getProvider()));
-        event.setMessage(_eventDto.getMessage());
-        
-        for (final String user : _eventDto.getPersons()) {
-            if (mockPerson.get(user) == null) {
-                final Person person = new Person();
-                person.setLogin(user);
-                mockPerson.put(user, person);
-            }
-            event.getPersons().add(mockPerson.get(user));
-        }
-        if (mockGroup.get(_eventDto.getPersonGroup()) == null) {
-            final PersonGroup group = new PersonGroup();
-            group.setName(_eventDto.getPersonGroup());
-            mockGroup.put(_eventDto.getPersonGroup(), group);
-        }
-        final String projectName = _eventDto.getProject();
-        event.setPersonGroup(mockGroup.get(projectName));
-        if (mockProject.get(projectName) == null) {
-            final Project group = new Project();
-            group.setName(projectName);
-            group.setProjectKey(projectName);
-            mockProject.put(projectName, group);
-        }
-        event.setProject(mockProject.get(projectName));
-        event.setValue(_eventDto.getValue());
-        event.setUrl(_eventDto.getUrl());
-        event.setProperties(_eventDto.getProperties());
-        
-        send(event);
+        send(convertDto(_eventDTO));
         return this;
     }
     

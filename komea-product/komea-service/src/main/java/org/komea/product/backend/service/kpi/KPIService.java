@@ -6,8 +6,6 @@ package org.komea.product.backend.service.kpi;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.lang.StringUtils;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.exceptions.KPINotFoundException;
@@ -15,7 +13,6 @@ import org.komea.product.backend.exceptions.KPINotFoundRuntimeException;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IEntityService;
-import org.komea.product.backend.service.esper.EPMetric;
 import org.komea.product.backend.service.esper.EPStatementResult;
 import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.backend.service.history.IHistoryService;
@@ -49,7 +46,22 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
 {
     
     
-    private static final Logger    LOGGER = LoggerFactory.getLogger("kpi-service");
+    private static final Logger LOGGER = LoggerFactory.getLogger("kpi-service");
+    
+    
+    
+    @SuppressWarnings("rawtypes")
+    private static <TEntity extends IEntity> KPIValueTable<TEntity> fetchKpiValueTable(
+            final Kpi kpiOrFail,
+            final EPStatement epStatement) {
+    
+    
+        final List<KpiLineValue> kpiLinesValues =
+                EPStatementResult.build(epStatement).mapAPojoPerResultLine(KpiLineValue.class);
+        return new KPIValueTable(kpiOrFail, kpiLinesValues);
+    }
+    
+    
     
     @Autowired
     private ICronRegistryService   cronRegistry;
@@ -63,16 +75,10 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Autowired
     private IMeasureHistoryService measureService;
     
+    
     @Autowired
     private KpiDao                 requiredDAO;
     
-    
-    
-    public KPIService() {
-    
-    
-        super();
-    }
     
     
     /**
@@ -144,21 +150,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
     
     /**
-     * Method findMeasure.
-     * 
-     * @param _measureName
-     *            String
-     * @return IEPMetric
-     */
-    public IEPMetric findMeasure(final String _measureName) {
-    
-    
-        return new EPMetric(esperEngine.getStatementOrFail(_measureName));
-        
-    }
-    
-    
-    /**
      * Method getCronRegistry.
      * 
      * @return ICronRegistryService
@@ -214,16 +205,16 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      * @see org.komea.product.backend.service.kpi.IKPIService#getKpiRealTimeValues(KpiKey)
      */
     @Override
-    public <TEntity> KPIValueTable<TEntity> getKpiRealTimeValues(final KpiKey _kpiKey)
-            throws KPINotFoundException {
+    public <TEntity extends IEntity> KPIValueTable<TEntity> getKpiRealTimeValues(
+            final KpiKey _kpiKey) throws KPINotFoundException {
     
     
         final Kpi kpiOrFail = findKPIOrFail(_kpiKey);
         final EPStatement epStatement =
                 esperEngine.getStatementOrFail(kpiOrFail.computeKPIEsperKey());
-        final List<KpiLineValue> kpiLinesValues =
-                EPStatementResult.build(epStatement).mapAPojoPerResultLine(KpiLineValue.class);
-        return new KPIValueTable(kpiOrFail, kpiLinesValues);
+        
+        return fetchKpiValueTable(kpiOrFail, epStatement);
+        
         
     }
     
@@ -236,7 +227,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      * @param kpiKeys
      *            List<String>
      * @return List<Kpi>
-     * @see org.komea.product.backend.service.kpi.IKPIService#getKpis(EntityType, List<String>)
      */
     @Override
     public List<Kpi> getKpis(final EntityType entityType, final List<String> kpiKeys) {
@@ -338,14 +328,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     }
     
     
-    @PostConstruct
-    public void init() {
-    
-    
-        //
-    }
-    
-    
     /**
      * Method listAllKpis.
      * 
@@ -385,7 +367,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         LOGGER.info("Updating Esper with the query {}", queryDefinition);
         esperEngine.createOrUpdateEPLQuery(queryDefinition);
         IEntity entity = null;
-        if (_kpi.isIndividualKPI()) {
+        if (_kpi.isAssociatedToEntity()) {
             
             entity = entityService.getEntityAssociatedToKpi(KpiKey.ofKpi(_kpi));
         }
@@ -454,6 +436,9 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     }
     
     
+    /**
+     * @param _requiredDAO
+     */
     public void setRequiredDAO(final KpiDao _requiredDAO) {
     
     
@@ -466,19 +451,31 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      * 
      * @param _kpiKey
      *            KpiKey
+     * @throws KPINotFoundException
      * @see org.komea.product.backend.service.kpi.IKPIService#storeValueInHistory(KpiKey)
      */
     @Transactional
     @Override
-    public void storeValueInHistory(final KpiKey _kpiKey) {
+    public void storeValueInHistory(final KpiKey _kpiKey) throws KPINotFoundException {
     
     
-        final Measure measure = initializeMeasureFromKPI(_kpiKey);
-        final Kpi findKPI = findKPIOrFail(_kpiKey);
-        measure.setValue(findMeasure(findKPI.computeKPIEsperKey()).getDoubleValue());
-        measureService.storeMeasure(measure);
-        final int purgeHistory = measureService.buildHistoryPurgeAction(findKPI).purgeHistory();
-        LOGGER.debug("Purge history : {} items", purgeHistory);
+        final Kpi findKPIOrFail = findKPIOrFail(_kpiKey);
+        final EPStatement epStatement =
+                esperEngine.getStatementOrFail(findKPIOrFail.computeKPIEsperKey());
+        
+        if (findKPIOrFail.isGlobal()) {
+            final Number singleResult = EPStatementResult.build(epStatement).singleResult();
+            storeMeasureOfAKpiInDatabase(_kpiKey, singleResult.doubleValue());
+        } else {
+            final KPIValueTable<IEntity> kpiRealTimeValues =
+                    fetchKpiValueTable(findKPIOrFail, epStatement);
+            for (final KpiLineValue<IEntity> kpiLineValue : kpiRealTimeValues.getValues()) {
+                final KpiKey kpiKeyWithEntity =
+                        KpiKey.ofKpiNameAndEntity(_kpiKey.getKpiName(), kpiLineValue.getEntity());
+                storeMeasureOfAKpiInDatabase(kpiKeyWithEntity, kpiLineValue.getValue());
+                
+            }
+        }
         
     }
     
@@ -490,16 +487,34 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      *            KpiKey
      * @return Measure
      */
-    private Measure initializeMeasureFromKPI(final KpiKey _kpiKey) {
+    private Measure initializeMeasureFromKPIKey(final KpiKey _kpiKey) {
     
     
         final Measure measure = new Measure();
         measure.setDate(new Date());
-        measure.setEntityId(_kpiKey.getEntityType(), _kpiKey.getEntityID());
-        
+        measure.setEntity(_kpiKey.getEntityType(), _kpiKey.getEntityID());
         measure.setIdKpi(findKPIOrFail(_kpiKey).getId());
         
         return measure;
     }
     
+    
+    /**
+     * Stores the measure of a kpi in the database
+     * 
+     * @param _kpiKey
+     *            the kpi key (with reference to the entity)
+     * @param _kpiValue
+     *            the value.
+     */
+    private void storeMeasureOfAKpiInDatabase(final KpiKey _kpiKey, final Double _kpiValue) {
+    
+    
+        final Measure measure = initializeMeasureFromKPIKey(_kpiKey);
+        final Kpi findKPI = findKPIOrFail(_kpiKey);
+        measure.setValue(_kpiValue);
+        measureService.storeMeasure(measure);
+        final int purgeHistory = measureService.buildHistoryPurgeAction(findKPI).purgeHistory();
+        LOGGER.debug("Purge history : {} items", purgeHistory);
+    }
 }

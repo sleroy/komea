@@ -98,7 +98,6 @@ public class Kpi implements Serializable, IHasKey
      * 
      * @mbggenerated Tue Feb 11 16:06:30 CET 2014
      */
-    @NotNull
     private EntityType     entityType;
     
     /**
@@ -543,10 +542,28 @@ public class Kpi implements Serializable, IHasKey
     
     @XmlTransient
     @JsonIgnore
-    public boolean isIndividualKPI() {
+    public boolean isAssociatedToEntity() {
     
     
         return entityID != null && entityType != null;
+    }
+    
+    
+    @XmlTransient
+    @JsonIgnore
+    public boolean isAssociatedToEntityType() {
+    
+    
+        return entityID == null && entityType != null;
+    }
+    
+    
+    @XmlTransient
+    @JsonIgnore
+    public boolean isGlobal() {
+    
+    
+        return entityID == null && entityType == null;
     }
     
     
