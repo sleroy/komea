@@ -6,8 +6,8 @@ import java.net.ConnectException;
 
 import javax.validation.Valid;
 
-import org.komea.product.backend.service.kpi.KPIValueTable;
 import org.komea.product.database.api.IEntity;
+import org.komea.product.service.dto.KPIValueTable;
 import org.komea.product.service.dto.KpiKey;
 import org.komea.product.service.dto.errors.InternalServerException;
 import org.springframework.web.bind.annotation.RequestBody;

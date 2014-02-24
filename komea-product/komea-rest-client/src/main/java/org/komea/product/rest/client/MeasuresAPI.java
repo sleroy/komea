@@ -4,9 +4,9 @@ package org.komea.product.rest.client;
 
 import java.net.ConnectException;
 
-import org.komea.product.backend.service.kpi.KPIValueTable;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.rest.client.api.IMeasuresAPI;
+import org.komea.product.service.dto.KPIValueTable;
 import org.komea.product.service.dto.KpiKey;
 import org.komea.product.service.dto.errors.InternalServerException;
 
