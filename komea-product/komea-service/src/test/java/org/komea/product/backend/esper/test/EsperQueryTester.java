@@ -301,17 +301,23 @@ public class EsperQueryTester
     private int                                 expectedRows        = -1;
     
     
+    private boolean                             hasEventList        = false;
+    
+    
+    private List<?>                             matchingList;
+    
+    
     private final Map<String, EventType>        mockEventTypes      =
                                                                             new HashMap<String, EventType>();
-    
-    
     private final Map<String, PersonGroup>      mockGroup           =
                                                                             new HashMap<String, PersonGroup>();
-    
-    
     private final Map<String, Person>           mockPerson          = new HashMap<String, Person>();
+    
+    
     private final Map<String, Project>          mockProject         =
                                                                             new HashMap<String, Project>();
+    
+    
     private final Map<String, Provider>         mockProviders       =
                                                                             new HashMap<String, Provider>();
     
@@ -494,6 +500,17 @@ public class EsperQueryTester
     
     
     /**
+     * @return
+     */
+    public EsperQueryTester hasEventList() {
+    
+    
+        hasEventList = true;
+        return this;
+    }
+    
+    
+    /**
      * Method hasLineResult.
      * 
      * @param _testPredicate
@@ -586,6 +603,17 @@ public class EsperQueryTester
     
     
         esperQuery = new ElFormula(_formula).getValue(_project, String.class);
+        return this;
+    }
+    
+    
+    /**
+     * @return
+     */
+    public EsperQueryTester matchList(final List<?> _objects) {
+    
+    
+        matchingList = _objects;
         return this;
     }
     
@@ -698,22 +726,43 @@ public class EsperQueryTester
         for (final IEsperTestPredicate testPred : esperPredicates) {
             testPred.evaluate(epStatement);
         }
-        final List<Map<String, Object>> listMapResult =
-                EPStatementResult.build(epStatement).listMapResult();
         
-        int i = 0;
-        for (final Map<String, Object> value : listMapResult) {
+        if (!hasEventList) {
+            if (!esperPredicates.isEmpty()) { return; }
+            final List<Map<String, Object>> listMapResult =
+                    EPStatementResult.build(epStatement).listMapResult();
             
-            LOGGER.info("Testing line {} -> {}", i, value);
-            if (i < esperLinePredicates.size()) {
-                esperLinePredicates.get(i).evaluate(value);
+            int i = 0;
+            for (final Map<String, Object> value : listMapResult) {
+                
+                LOGGER.info("Testing line {} -> {}", i, value);
+                if (i < esperLinePredicates.size()) {
+                    esperLinePredicates.get(i).evaluate(value);
+                }
+                i++;
+                
             }
-            i++;
-            
+            if (expectedRows != -1) {
+                Assert.assertEquals("Expected fixed number of rows", expectedRows, i);
+            }
+        } else {
+            final List<Object> resultsList =
+                    EPStatementResult.build(epStatement).listUnderlyingObjects();
+            if (matchingList != null) {
+                Assert.assertEquals("Expected same result size", matchingList.size(),
+                        resultsList.size());
+                int i = 0;
+                for (final Object object : matchingList) {
+                    Assert.assertEquals("expected[" + i + "]", object, resultsList.get(i));
+                    ++i;
+                }
+            }
+            if (expectedRows != -1) {
+                Assert.assertEquals("Expected fixed number of rows", expectedRows,
+                        resultsList.size());
+            }
         }
-        if (expectedRows != -1) {
-            Assert.assertEquals("Expected fixed number of rows", expectedRows, i);
-        }
+        
         
     }
     
