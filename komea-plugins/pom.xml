@@ -11,7 +11,7 @@
     <groupId>org.komea.plugins</groupId>
     <artifactId>komea-plugins</artifactId>
     <packaging>pom</packaging>
-	
+
     <name>Komea : plugins projects</name>
     <description>contains komea plugins</description>
 
@@ -47,12 +47,12 @@
     </profiles>
     <modules>
         <module>komea-git-plugin</module>
-        <module>komea-rss-plugin</module>
+        <!--<module>komea-rss-plugin</module>-->
         <module>komea-sample-plugin</module>
         <module>komea-standard-metrics-plugin</module>
         <module>komea-svn-plugin</module>
         <module>komea-bugzilla-plugin</module>
         <module>komea-testlink-plugin</module>
     </modules>
-	
+
 </project>
