@@ -1,12 +1,10 @@
-
 package org.komea.product.wicket.kpis;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.SubmitLink;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.database.api.IEntity;
@@ -21,20 +19,17 @@ import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.SelectBoxBuilder;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
 
-
-
 /**
  * Formular to edit properties in the settings page.
- * 
+ *
  * @author sleroy
  */
 public final class KpiForm extends Form<Kpi> {
-
-
 
     private final Component feedBack;
     private final Kpi kpi;
@@ -65,15 +60,16 @@ public final class KpiForm extends Form<Kpi> {
 
         add(TextAreaBuilder.<String>create("description", kpi, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("").build());
-        _providerDao.selectByPrimaryKey(kpi.getIdProvider());
+//        Provider selectByPrimaryKey = _providerDao.selectByPrimaryKey(kpi.getIdProvider());
         // String name = provider.getName();
         add(TextFieldBuilder.<String>create("idProvider", kpi, "idProvider").withTooltip("")
                 .build());
 
-        add(TextFieldBuilder.<String>create("valueMin", kpi, "valueMin").withTooltip("").build());
+         TextField<String> textminValue =TextFieldBuilder.<String>create("valueMin", kpi, "valueMin").withTooltip("").build();
+        add(textminValue);
 
-        add(TextFieldBuilder.<String>create("valueMax", kpi, "valueMax").withTooltip("").build());
-       
+        TextField<String> textMaxValue = TextFieldBuilder.<String>create("valueMax", kpi, "valueMax").withTooltip("").build();
+        add(textMaxValue);
 
         add(SelectBoxBuilder.<ValueDirection>createWithEnum("valueDirection", kpi,
                 ValueDirection.class).build());
@@ -83,8 +79,11 @@ public final class KpiForm extends Form<Kpi> {
         add(SelectBoxBuilder.<EntityType>createWithEnum("entityType", kpi, EntityType.class)
                 .build());
 
-        final IEntity entity = _entity.getEntity(kpi.getEntityType(), kpi.getEntityID());
-        final String entityName = getEntityName(kpi.getEntityType(), entity);
+        String entityName = "";
+        if (kpi.getEntityType() != null && kpi.getEntityID() != null) {
+            final IEntity entity = _entity.getEntity(kpi.getEntityType(), kpi.getEntityID());
+            entityName = getEntityName(kpi.getEntityType(), entity);
+        }
         add(TextFieldBuilder.<String>create("entityID", entityName, "toString").withTooltip("")
                 .build());
 
@@ -103,44 +102,54 @@ public final class KpiForm extends Form<Kpi> {
         // AjaxFormValidatingBehavior.addToAllFormComponents(this, "onkeyup", Duration.ONE_SECOND);
         // ///////////////////////////////////////////////////////////////////////////////////
         // //////////////////////////////// Popup //////////////////////////////////////////
-        // ///////////////////////////////////////////////////////////////////////////////////
-        // ///////////////////////////////////////////////////////////////////////////////////
-        // ///////////////////////////////////////////////////////////////////////////////////
-        // ///////////////////////////////////////////////////////////////////////////////////
-        add(new AjaxLinkLayout("cancel", page) {
+        add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
+
+            @Override
+            public void onClick(final AjaxRequestTarget art) {
+                LayoutPage page = getCustom();
+                page.setResponsePage(new KpiPage(page.getPageParameters()));
+            }
+        });
+
+        add(new AjaxLinkLayout<LayoutPage>("btnentity", page) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
 
-                getPageCustom().setResponsePage(new KpiPage(getPageCustom().getPageParameters()));
+
+//                getCustom().setResponsePage(new KpiPage(getCustom().getPageParameters()));
             }
         });
 
-        add(new AjaxLinkLayout("btnentity", page) {
+        final Kpi myKpi = this.kpi;
+        add(new AjaxLinkLayout<TextField>("maxValueMax", textMaxValue) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
 
-                getPageCustom().setResponsePage(new KpiPage(getPageCustom().getPageParameters()));
-            }
-        });
+                myKpi.setValueMax(Double.MAX_VALUE);
 
-        final Kpi trKpi = this.kpi; 
-        
-        add(new AjaxButton("maxValueMax", this) { 
+//                 ge System.out.println("de");tPageCustom().setResponsePage(new KpiPage(getCustom().getPageParameters()));
+                art.add(getCustom());
+            }
+
+        });
+                add(new AjaxLinkLayout<TextField>("maxValueMin", textminValue) {
 
             @Override
-            public void onSubmit() {
-               trKpi.setValueMax(Double.MAX_VALUE);
+            public void onClick(final AjaxRequestTarget art) {
+
+                myKpi.setValueMin(Double.MAX_VALUE);
+
+//                 ge System.out.println("de");tPageCustom().setResponsePage(new KpiPage(getCustom().getPageParameters()));
+                art.add(getCustom());
             }
- 
+
         });
-        
-        // add a button that can be used to submit the form via ajax
-        add(new AjaxButton("submit", this)
-        {
-            
-            
+//
+//        // add a button that can be used to submit the form via ajax
+        add(new AjaxButton("submit", this) {
+
             @Override
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
 
@@ -149,8 +158,8 @@ public final class KpiForm extends Form<Kpi> {
                 // repaint the feedback panel so errors are shown
                 target.add(feedBack);
             }
-            
-            
+//
+
             @Override
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
 
@@ -158,9 +167,14 @@ public final class KpiForm extends Form<Kpi> {
                 info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
-                
+
             }
         });
+
+        // ///////////////////////////////////////////////////////////////////////////////////
+        // ///////////////////////////////////////////////////////////////////////////////////
+        // ///////////////////////////////////////////////////////////////////////////////////
+        // ///////////////////////////////////////////////////////////////////////////////////
         
     }
 
@@ -174,7 +188,7 @@ public final class KpiForm extends Form<Kpi> {
         } else if (type.equals(EntityType.TEAM) && type.equals(EntityType.DEPARTMENT)) {
             result = ((PersonGroup) entity).getName();
         }
-        
+
         return result;
     }
 
@@ -183,31 +197,31 @@ public final class KpiForm extends Form<Kpi> {
      */
     @Override
     protected void onSubmit() {
-    
-    
-        final Kpi kpi = new Kpi();
-        kpi.setId(this.kpi.getId());
-        kpi.setCronExpression(this.kpi.getCronExpression());
-        kpi.setDescription(this.kpi.getDescription());
-        kpi.setName(this.kpi.getName());
-        kpi.setKpiKey(this.kpi.getKpiKey());
-        
-        kpi.setEntityID(this.kpi.getEntityID());
-        kpi.setEntityType(this.kpi.getEntityType());
-        kpi.setEvictionRate(this.kpi.getEvictionRate());
-        kpi.setEvictionType(this.kpi.getEvictionType());
-        
-        kpi.setValueMin(this.kpi.getValueMin());
-        kpi.setValueMax(this.kpi.getValueMax());
-        kpi.setValueDirection(this.kpi.getValueDirection());
-        kpi.setValueType(this.kpi.getValueType());
-        
-        kpi.setEsperRequest(this.kpi.getEsperRequest());
-        
-        if (kpi.getId() != null) {
-            kpiDao.updateByPrimaryKey(kpi);
+
+        final Kpi kpiInsert = new Kpi();
+        kpiInsert.setId(this.kpi.getId());
+        kpiInsert.setCronExpression(this.kpi.getCronExpression());
+        kpiInsert.setDescription(this.kpi.getDescription());
+        kpiInsert.setName(this.kpi.getName());
+        kpiInsert.setKpiKey(this.kpi.getKpiKey());
+
+        kpiInsert.setEntityID(this.kpi.getEntityID());
+        kpiInsert.setEntityType(this.kpi.getEntityType());
+        kpiInsert.setEvictionRate(this.kpi.getEvictionRate());
+        kpiInsert.setEvictionType(this.kpi.getEvictionType());
+
+        kpiInsert.setValueMin(this.kpi.getValueMin());
+        kpiInsert.setValueMax(this.kpi.getValueMax());
+        System.out.println("kpi max :" + this.kpi.getValueMax());
+        kpiInsert.setValueDirection(this.kpi.getValueDirection());
+        kpiInsert.setValueType(this.kpi.getValueType());
+
+        kpiInsert.setEsperRequest(this.kpi.getEsperRequest());
+
+        if (kpiInsert.getId() != null) {
+            kpiDao.updateByPrimaryKey(kpiInsert);
         } else {
-            kpiDao.insert(kpi);
+            kpiDao.insert(kpiInsert);
         }
         page.setResponsePage(new KpiPage(page.getPageParameters()));
         // faire la modification dans la base
@@ -224,28 +238,4 @@ public final class KpiForm extends Form<Kpi> {
         // personDAO.insert(person);
         // }
     }
-    public static abstract class AjaxLinkLayout extends AjaxLink {
-
-        private final LayoutPage page;
-
-        public AjaxLinkLayout(final String string, final IModel imodel, final LayoutPage page) {
-
-            super(string, imodel);
-            this.page = page;
-        }
-
-        public AjaxLinkLayout(final String string, final LayoutPage page) {
-
-            super(string);
-            this.page = page;
-        }
-
-        public LayoutPage getPageCustom() {
-
-            return page;
-        }
-
-    }
-    
-    
 }

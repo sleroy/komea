@@ -34,12 +34,6 @@ public class KpiEditAction implements IEditAction<Kpi>
     @Override
     public void selected(final Kpi _kpi) {
     
-    
-        final Kpi kpi = new Kpi();
-        kpi.setId(_kpi.getId());
-        kpi.setName(_kpi.getName());
-        kpi.setDescription(_kpi.getDescription());
-        kpi.setCronExpression(_kpi.getCronExpression());
         pagekpi.setResponsePage(new KpiEditPage(pagekpi.getPageParameters(), _kpi));
     }
     

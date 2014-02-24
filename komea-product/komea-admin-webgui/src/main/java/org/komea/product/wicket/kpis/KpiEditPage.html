@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org" xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <meta charset="utf-8"></meta>
+            <meta charset="utf-8"></meta>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
         <meta content="Komea administration site" name="description"></meta>
         <meta content="Komea" name="author"></meta>
@@ -62,7 +62,7 @@
                                                     <input id="idProvider" name="idProvider" type="text" placeholder="idProvider" class="form-control"  wicket:id="idProvider">
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <button type="button" class="btn btn-small btn-info col-md-5">...</button>
+                                                    <!--<button type="button" class="btn btn-small btn-info col-md-5">...</button>-->
                                                 </div>
                                             </div>
                                         </div>
@@ -75,7 +75,7 @@
                                                     <input id="valueMin" name="valueMin" type="text" placeholder="valueMin" class="form-control"  wicket:id="valueMin">
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <button type="button" class="btn btn-small btn-info col-md-5">Max</button>
+                                                    <button type="button" id="btnminvalue" name="btnminvalue" class="btn btn-small btn-info col-md-5"  wicket:id="maxValueMin">Min</button>
                                                     <!--<button id="btnentity" name="btnentity" class="btn btn-small btn-info col-md-5" wicket:id="btnentity">...</button>-->
                                                 </div>
                                             </div>
@@ -88,7 +88,7 @@
                                                     <input id="valueMax" name="valueMax" type="text" placeholder="valueMax" class="form-control"  wicket:id="valueMax">
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="maxValueMax">Max</button>
+                                                    <button type="button" name="btnmaxvalue" id="btnmaxvalue" class="btn btn-small btn-info col-md-5" wicket:id="maxValueMax">Max</button>
                                                     <!--<button id="btnentity" name="btnentity" class="btn btn-small btn-info col-md-5" wicket:id="btnentity">...</button>-->
                                                 </div>
 
@@ -240,15 +240,32 @@
                                 </div>
 
                             </form>
-                            <div id="wrapper-panel-frame" class="ui-corner-all">
-                                <form wicket:id="dform">
-                                    <button wicket:id="open">Open input dialog</button>
-                                    <br/><br/>
-                                    <div wicket:id="feedback" style="width: 360px;"></div>
+                            <!--                    <div id="wrapper-panel-frame" class="ui-corner-all">
+                                                            <form wicket:id="dform">
+                                                                <button name="open" id="open" wicket:id="open">Open input dialog</button>
+                                                                <br/><br/>
+                                                                <div wicket:id="feedback" style="width: 360px;"></div>
+                                                            </form>
+                                                        </div>
+                                   
+                            <div wicket:id="dialog">[dialog]</div>-->
+
+                            <div align="center">
+                                <strong>Wicket Ajax 'Are you sure?' Modal Window</strong>
+
+                                <form action="" wicket:id="formWithJavaScript">
+                                    <!--<input type="submit" wicket:id="buttonWithJavaScript" value="Action!"/>-->
                                 </form>
                             </div>
-                            <div wicket:id="dialog">[dialog]</div>
+
+                            <div align="center">
+                                <span wicket:id="yesNoPanel"/>
+                            </div>
                         </wicket:extend>
+
+                        <!--                        <wicket:panel>
+                                                        
+                                                    </wicket:panel>-->
                     </div>
                 </div>
             </div>

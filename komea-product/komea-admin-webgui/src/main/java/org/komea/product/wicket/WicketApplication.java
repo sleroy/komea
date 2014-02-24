@@ -15,6 +15,8 @@ import org.komea.product.wicket.kpis.KpiEditPage;
 import org.komea.product.wicket.kpis.KpiPage;
 import org.komea.product.wicket.person.PersonAddPage;
 import org.komea.product.wicket.person.PersonPage;
+import org.komea.product.wicket.project.ProjectEditPage;
+import org.komea.product.wicket.project.ProjectPage;
 import org.komea.product.wicket.providers.ProviderPage;
 import org.komea.product.wicket.settings.SettingsPage;
 import org.komea.product.wicket.statistics.StatPage;
@@ -67,6 +69,8 @@ public class WicketApplication extends WebApplication
         mountPage("/home", HomePage.class);
         mountPage("/kpiedit", KpiEditPage.class);
         mountPage("/kpis", KpiPage.class);
+        mountPage("/projectedit", ProjectEditPage.class);
+        mountPage("/projects", ProjectPage.class);
         mountPage("/settings", SettingsPage.class);
         mountPage("/viewlog", ConsolePage.class);
         mountPage("/stats", StatPage.class);

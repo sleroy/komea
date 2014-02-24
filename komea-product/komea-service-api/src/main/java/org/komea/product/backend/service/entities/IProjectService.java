@@ -35,6 +35,13 @@ public interface IProjectService extends IGenericService<Project, Integer, Proje
      */
     List<ProjectDto> getAllProjects();
     
+       /**
+     * This method list all stored projects
+     * 
+     * @return List<ProjectDto>
+     */
+    List<Project> getAllProjectsEntities();
+    
     
     /**
      * This method get all person associate to a project

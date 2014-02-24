@@ -1,7 +1,10 @@
-<!DOCTYPE html>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns:wicket="http://wicket.apache.org" xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta charset="utf-8"></meta>
+    <head>   
+         <meta charset="utf-8"></meta>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
         <meta content="Komea administration site" name="description"></meta>
         <meta content="Komea" name="author"></meta>
@@ -9,18 +12,25 @@
         <link rel="stylesheet" href="../../../../../../../main/webapp/static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
         <link rel="stylesheet" href="../../../../../../../main/webapp/static/css/style.css" type="text/css"></link>
         <link rel="stylesheet" type="text/css" href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
+       
     </head>
     <body>
-        <wicket:extend>
-
-            <a href="p/kpiedit" class="btn btn-lg btn-success"><span class="glyphicon cicon-user"></span> Add new kpi</a>
-            <p></p>
-            <div class="row">
-                <table wicket:id="table">
+        <wicket:panel>
+            <form wicket:id="yesNoForm" action="">
+                <span wicket:id="message">Are you sure?</span>
+                <table style="width: 65%;" align="center">
+                    <tr>
+                        <td align="left">
+                            <input type="submit" wicket:id="noButton" value="No" />
+                        </td>
+                        <td align="right">
+                            <input type="submit" wicket:id="yesButton" value="Yes" />
+                        </td>
+                    </tr>
                 </table>
-            </div>
-        </wicket:extend>
-        <footer class="tocea-footer">
+            </form>
+        </wicket:panel>
+              <footer class="tocea-footer">
             <p>&copy; Komea.org</p>
             <script src="../../../../../../../main/webapp/static/js/ui/jquery.js"></script>
             <script src="../../../../../../../main/webapp/static/bootstrap/js/bootstrap.min.js"></script>
