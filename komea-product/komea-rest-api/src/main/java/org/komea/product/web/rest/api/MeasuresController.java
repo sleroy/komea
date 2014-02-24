@@ -64,6 +64,7 @@ public class MeasuresController {
      * @return the last measure value
      * @throws KPINotFoundException
      */
+    @RequestMapping(method = RequestMethod.POST, value = "/last", produces = "application/json")
     @ResponseBody
     public Double lastMeasuresForEntity(@Valid @RequestBody final KpiKey _kpiKey) throws KPINotFoundException {
     
