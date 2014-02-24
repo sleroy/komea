@@ -81,7 +81,7 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
         event.setProperties(properties);
         event.setProvider(provider.getUrl());
         event.setUrl(KomeaPlugin.getProjectUrl(sonarUrl, projectId));
-        event.setValue(event.getDate().getTime());
+        event.setValue(start);
         return event;
     }
 
@@ -94,7 +94,6 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(end));
         properties.put("project", projectKey);
-        properties.put("start", String.valueOf(start));
         properties.put("duration", String.valueOf(duration));
         final EventSimpleDto event = new EventSimpleDto();
         event.setDate(new Date());

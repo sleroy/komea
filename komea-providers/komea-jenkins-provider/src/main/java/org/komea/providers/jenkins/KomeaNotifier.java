@@ -261,7 +261,7 @@ public class KomeaNotifier extends Notifier implements Serializable {
         properties.put("industrialization", industrialization);
         final EventSimpleDto event = new EventSimpleDto();
         event.setDate(new Date());
-        event.setEventType(KomeaComputerListener.BUILD_STARTED.getEventKey());
+        event.setEventType(KomeaComputerListener.BUILD_INDUSTRIALIZATION.getEventKey());
         event.setMessage(message);
         event.setProject(projectKey);
         event.setProperties(properties);
@@ -292,7 +292,7 @@ public class KomeaNotifier extends Notifier implements Serializable {
         event.setProperties(properties);
         event.setProvider(providerUrl);
         event.setUrl(KomeaComputerListener.getProjectUrl(jenkinsProjectName, buildNumber));
-        event.setValue(event.getDate().getTime());
+        event.setValue(start);
         return event;
     }
 

@@ -58,14 +58,10 @@ public class KomeaPlugin extends SonarPlugin {
             "analysis_started", "SonarQube analysis started", "", Severity.INFO);
     public static final EventType ANALYSIS_SUCCESS = createEventType(
             "analysis_success", "SonarQube analysis succeeded", "", Severity.INFO);
+    public static final EventType METRIC_VALUE = createEventType(
+            "metric_value", "SonarQube measure", "", Severity.INFO);
     public static final List<EventType> EVENT_TYPES = Arrays.asList(
-            ANALYSIS_STARTED, ANALYSIS_SUCCESS);
-
-    public static EventType createEventType(final Metric metric) {
-        return createEventType("metric_value",
-                "SonarQube measure",
-                "", Severity.INFO);
-    }
+            ANALYSIS_STARTED, ANALYSIS_SUCCESS, METRIC_VALUE);
 
     public static EventType createEventType(final String key, final String name,
             final String description, final Severity severity) {

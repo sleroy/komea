@@ -35,7 +35,7 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
             Severity.INFO);
     public static final EventType BUILD_FAILED = createEventType(
             "build_failed", "Jenkins build failed",
-            "", Severity.CRITICAL);
+            "", Severity.BLOCKER);
     public static final EventType BUILD_UNSTABLE = createEventType(
             "build_unstable", "Jenkins build unstable",
             "", Severity.CRITICAL);

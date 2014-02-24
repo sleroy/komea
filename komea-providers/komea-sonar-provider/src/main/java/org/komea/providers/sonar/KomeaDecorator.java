@@ -71,14 +71,13 @@ public class KomeaDecorator implements Decorator {
 
     private EventSimpleDto createMeasureEvent(final Metric metric,
             final Double value, final String sonarUrl, final int projectId) {
-        final EventType eventType = KomeaPlugin.createEventType(metric);
+        final EventType eventType = KomeaPlugin.METRIC_VALUE;
         final String message = "SonarQube measure of metric " + metric.getName()
                 + " for project " + komeaProjectKey + " is : " + value;
         final HashMap<String, String> properties = new HashMap<String, String>(0);
         properties.put("metricName", metric.getKey());
         properties.put("value", value.toString());
         properties.put("project", komeaProjectKey);
-        properties.put("date", String.valueOf(new Date().getTime()));
         final EventSimpleDto event = new EventSimpleDto();
         event.setDate(new Date());
         event.setEventType(eventType.getEventKey());
