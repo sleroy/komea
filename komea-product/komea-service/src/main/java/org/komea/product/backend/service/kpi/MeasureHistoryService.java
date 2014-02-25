@@ -203,8 +203,8 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
                         criteria.andIdPersonGroupEqualTo(idEntity);
                         break;
                 }
-                measures.addAll(requiredDAO.selectByCriteriaWithRowbounds(measureCriteria,
-                        rowBounds));
+                measures.addAll(requiredDAO.selectByCriteriaWithRowbounds(
+                        measureCriteria, rowBounds));
             }
         }
         Collections.sort(measures, new Comparator<Measure>() {
@@ -263,7 +263,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
     @Override
     public void storeMeasure(final Measure _measure) {
 
-        LOGGER.debug("Storing new measure : {}", _measure);
+        LOGGER.info("Storing new measure : {}", _measure);
         requiredDAO.insert(_measure);
 
     }

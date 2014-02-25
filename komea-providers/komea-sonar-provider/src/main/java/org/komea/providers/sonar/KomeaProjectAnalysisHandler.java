@@ -39,12 +39,12 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
             if (event.isStart()) {
                 final long start = new Date().getTime();
                 map.put(projectId, start);
-                KomeaPlugin.pushEvents(komeaUrl, createStartEvent(
+                KomeaPlugin.pushEvents(sonarUrl, komeaUrl, createStartEvent(
                         projectKey, start, sonarUrl, projectId));
             } else if (event.isEnd()) {
                 final long start = map.get(projectId);
                 final long end = new Date().getTime();
-                KomeaPlugin.pushEvents(komeaUrl, createCompleteEvent(
+                KomeaPlugin.pushEvents(sonarUrl, komeaUrl, createCompleteEvent(
                         projectKey, start, end, sonarUrl, projectId));
             }
         } catch (Exception ex) {

@@ -66,7 +66,7 @@ public class KomeaDecorator implements Decorator {
                     sonarUrl, project.getId());
             events.add(event);
         }
-        KomeaPlugin.pushEvents(komeaUrl, events.toArray(new EventSimpleDto[events.size()]));
+        KomeaPlugin.pushEvents(sonarUrl, komeaUrl, events.toArray(new EventSimpleDto[events.size()]));
     }
 
     private EventSimpleDto createMeasureEvent(final Metric metric,

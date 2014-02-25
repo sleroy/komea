@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import org.komea.product.database.dto.EventSimpleDto;
+import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.EventCategory;
 import org.komea.product.database.enums.ProviderType;
@@ -13,6 +14,7 @@ import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
 import org.komea.product.rest.client.RestClientFactory;
 import org.komea.product.rest.client.api.IEventsAPI;
+import org.komea.product.rest.client.api.IProvidersAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.Properties;
@@ -138,13 +140,42 @@ public class KomeaPlugin extends SonarPlugin {
         return sonarUrl + "/dashboard/index/" + projectId;
     }
 
-    public static void pushEvents(final String serverUrl, final EventSimpleDto... events) {
-        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+    public static void registerProvider(final String komeaUrl, final ProviderDto provider) {
+        final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(KomeaPlugin.class.getClassLoader());
-            final IEventsAPI eventsAPI = RestClientFactory.INSTANCE.createEventsAPI(serverUrl);
-            for (final EventSimpleDto event : events) {
-                eventsAPI.pushEvent(event);
+            final IProvidersAPI providersAPI = RestClientFactory.INSTANCE.createProvidersAPI(komeaUrl);
+            providersAPI.registerProvider(provider);
+        } catch (Exception ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        } finally {
+            Thread.currentThread().setContextClassLoader(contextClassLoader);
+        }
+    }
+
+    public static void pushEvents(final String sonarUrl, final String komeaUrl,
+            final EventSimpleDto... events) {
+        final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+        try {
+            Thread.currentThread().setContextClassLoader(KomeaPlugin.class.getClassLoader());
+            final IEventsAPI eventsAPI = RestClientFactory.INSTANCE.createEventsAPI(komeaUrl);
+            for (int i = 0; i < events.length; i++) {
+                final EventSimpleDto event = events[i];
+                if (i == 0) {
+                    try {
+                        eventsAPI.pushEvent(event);
+                    } catch (Exception ex) {
+                        final ProviderDto providerDto = new ProviderDto();
+                        final Provider provider = KomeaPlugin.getProvider(sonarUrl);
+                        providerDto.setProvider(provider);
+                        providerDto.setEventTypes(KomeaPlugin.EVENT_TYPES);
+                        registerProvider(komeaUrl, providerDto);
+                        eventsAPI.pushEvent(event);
+                    }
+                } else {
+                    eventsAPI.pushEvent(event);
+                }
+
             }
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);

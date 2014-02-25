@@ -25,6 +25,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.komea.product.database.dto.EventSimpleDto;
+import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.enums.BuildIndustrialization;
 import org.komea.product.database.model.Provider;
 import org.komea.product.rest.client.RestClientFactory;
@@ -307,16 +308,30 @@ public class KomeaNotifier extends Notifier implements Serializable {
 
     private void pushEvents(final BuildListener listener, final EventSimpleDto... events) {
 
-        final String serverUrl = getServerUrl();
-        if (serverUrl == null) {
+        final String komeaUrl = getServerUrl();
+        if (komeaUrl == null) {
             return;
         }
         final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
-            final IEventsAPI eventsAPI = RestClientFactory.INSTANCE.createEventsAPI(serverUrl);
-            for (final EventSimpleDto event : events) {
-                eventsAPI.pushEvent(event);
+            final IEventsAPI eventsAPI = RestClientFactory.INSTANCE.createEventsAPI(komeaUrl);
+            for (int i = 0; i < events.length; i++) {
+                final EventSimpleDto event = events[i];
+                if (i == 0) {
+                    try {
+                        eventsAPI.pushEvent(event);
+                    } catch (Exception ex) {
+                        final ProviderDto providerDto = new ProviderDto();
+                        final Provider provider = KomeaComputerListener.getProvider();
+                        providerDto.setProvider(provider);
+                        providerDto.setEventTypes(KomeaComputerListener.EVENT_TYPES);
+                        KomeaComputerListener.registerProvider(komeaUrl, providerDto, listener);
+                        eventsAPI.pushEvent(event);
+                    }
+                } else {
+                    eventsAPI.pushEvent(event);
+                }
             }
         } catch (final Exception ex) {
             ex.printStackTrace(listener.getLogger());

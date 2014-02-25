@@ -110,11 +110,11 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
         registerProvider(serverUrlProperty, providerDto, listener);
     }
 
-    private void registerProvider(final String serverUrl, final ProviderDto provider,
+    public static void registerProvider(final String serverUrl, final ProviderDto provider,
             final TaskListener listener) {
         final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
-            Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
+            Thread.currentThread().setContextClassLoader(KomeaComputerListener.class.getClassLoader());
             final IProvidersAPI providersAPI = RestClientFactory.INSTANCE.createProvidersAPI(serverUrl);
             providersAPI.registerProvider(provider);
         } catch (Exception ex) {

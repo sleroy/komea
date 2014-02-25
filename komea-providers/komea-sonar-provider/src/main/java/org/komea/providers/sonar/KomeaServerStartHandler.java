@@ -2,8 +2,6 @@ package org.komea.providers.sonar;
 
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.model.Provider;
-import org.komea.product.rest.client.RestClientFactory;
-import org.komea.product.rest.client.api.IProvidersAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.config.Settings;
@@ -29,26 +27,12 @@ public class KomeaServerStartHandler implements ServerStartHandler {
         if (komeaUrl == null) {
             return;
         }
-
         final ProviderDto providerDto = new ProviderDto();
         final Provider provider = KomeaPlugin.getProvider(serverUrl);
         providerDto.setProvider(provider);
-
         providerDto.setEventTypes(KomeaPlugin.EVENT_TYPES);
 
-        registerProvider(komeaUrl, providerDto);
+        KomeaPlugin.registerProvider(komeaUrl, providerDto);
     }
 
-    private void registerProvider(final String serverUrl, final ProviderDto provider) {
-        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-        try {
-            Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
-            final IProvidersAPI providersAPI = RestClientFactory.INSTANCE.createProvidersAPI(serverUrl);
-            providersAPI.registerProvider(provider);
-        } catch (Exception ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        } finally {
-            Thread.currentThread().setContextClassLoader(contextClassLoader);
-        }
-    }
 }
