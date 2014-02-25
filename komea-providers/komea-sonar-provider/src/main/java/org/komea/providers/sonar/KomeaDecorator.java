@@ -20,7 +20,6 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.measures.MetricFinder;
-import org.sonar.api.platform.Server;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.resources.ResourceUtils;
@@ -36,13 +35,13 @@ public class KomeaDecorator implements Decorator {
     private final String sonarUrl;
     private final List<String> projectMetricKeys;
 
-    public KomeaDecorator(final Server server, final Settings settings,
+    public KomeaDecorator(final Settings settings,
             final MetricFinder metricFinder) {
         this.metricFinder = metricFinder;
-        this.provider = KomeaPlugin.getProvider(server.getURL());
-        this.komeaProjectKey = KomeaPlugin.getProjectKey(settings);
         this.komeaUrl = KomeaPlugin.getKomeaUrl(settings);
         this.sonarUrl = KomeaPlugin.getSonarUrl(settings);
+        this.provider = KomeaPlugin.getProvider(sonarUrl);
+        this.komeaProjectKey = KomeaPlugin.getProjectKey(settings);
         this.projectMetricKeys = new ArrayList<String>(KomeaPlugin.getMetricKeys(settings));
     }
 

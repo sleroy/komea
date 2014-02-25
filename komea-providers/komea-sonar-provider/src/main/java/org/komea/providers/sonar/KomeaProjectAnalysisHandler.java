@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.events.ProjectAnalysisHandler;
 import org.sonar.api.config.Settings;
-import org.sonar.api.platform.Server;
 import org.sonar.api.resources.Project;
 
 public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
@@ -21,7 +20,7 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
     private final String sonarUrl;
     private final Map<Integer, String> projectMap = new HashMap<Integer, String>(0);
 
-    public KomeaProjectAnalysisHandler(final Server server, final Settings settings) {
+    public KomeaProjectAnalysisHandler(final Settings settings) {
         this.settings = settings;
         this.sonarUrl = KomeaPlugin.getSonarUrl(settings);
         this.provider = KomeaPlugin.getProvider(sonarUrl);
