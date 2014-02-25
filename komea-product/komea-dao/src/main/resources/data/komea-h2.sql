@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpi` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_msr` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `idKpi` INT NOT NULL,
-  `date` DATETIME NOT NULL,
+  `date` TIMESTAMP NOT NULL,
   `idPersonGroup` INT NULL,
   `idPerson` INT NULL,
   `idProject` INT NULL,

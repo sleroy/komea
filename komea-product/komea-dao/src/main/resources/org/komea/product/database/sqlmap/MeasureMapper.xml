@@ -10,7 +10,7 @@
         <constructor >
             <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
             <arg column="idKpi" jdbcType="INTEGER" javaType="java.lang.Integer" />
-            <arg column="date" jdbcType="DATETIME" javaType="java.util.Date" />
+            <arg column="date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
             <arg column="idPersonGroup" jdbcType="INTEGER" javaType="java.lang.Integer" />
             <arg column="idPerson" jdbcType="INTEGER" javaType="java.lang.Integer" />
             <arg column="idProject" jdbcType="INTEGER" javaType="java.lang.Integer" />
@@ -152,7 +152,7 @@
         insert into kom_msr (idKpi, date, idPersonGroup,
         idPerson, idProject, value
         )
-        values (#{idKpi,jdbcType=INTEGER}, #{date,jdbcType=DATETIME}, #{idPersonGroup,jdbcType=INTEGER},
+        values (#{idKpi,jdbcType=INTEGER}, #{date,jdbcType=TIMESTAMP}, #{idPersonGroup,jdbcType=INTEGER},
         #{idPerson,jdbcType=INTEGER}, #{idProject,jdbcType=INTEGER}, #{value,jdbcType=DOUBLE}
         )
     </insert>
@@ -188,7 +188,7 @@
                 #{idKpi,jdbcType=INTEGER},
             </if>
             <if test="date != null" >
-                #{date,jdbcType=DATETIME},
+                #{date,jdbcType=TIMESTAMP},
             </if>
             <if test="idPersonGroup != null" >
                 #{idPersonGroup,jdbcType=INTEGER},
@@ -230,7 +230,7 @@
                 idKpi = #{record.idKpi,jdbcType=INTEGER},
             </if>
             <if test="record.date != null" >
-                date = #{record.date,jdbcType=DATETIME},
+                date = #{record.date,jdbcType=TIMESTAMP},
             </if>
             <if test="record.idPersonGroup != null" >
                 idPersonGroup = #{record.idPersonGroup,jdbcType=INTEGER},
@@ -258,7 +258,7 @@
         update kom_msr
         set id = #{record.id,jdbcType=INTEGER},
         idKpi = #{record.idKpi,jdbcType=INTEGER},
-        date = #{record.date,jdbcType=DATETIME},
+        date = #{record.date,jdbcType=TIMESTAMP},
         idPersonGroup = #{record.idPersonGroup,jdbcType=INTEGER},
         idPerson = #{record.idPerson,jdbcType=INTEGER},
         idProject = #{record.idProject,jdbcType=INTEGER},
@@ -279,7 +279,7 @@
                 idKpi = #{idKpi,jdbcType=INTEGER},
             </if>
             <if test="date != null" >
-                date = #{date,jdbcType=DATETIME},
+                date = #{date,jdbcType=TIMESTAMP},
             </if>
             <if test="idPersonGroup != null" >
                 idPersonGroup = #{idPersonGroup,jdbcType=INTEGER},
@@ -304,7 +304,7 @@
         -->
         update kom_msr
         set idKpi = #{idKpi,jdbcType=INTEGER},
-        date = #{date,jdbcType=DATETIME},
+        date = #{date,jdbcType=TIMESTAMP},
         idPersonGroup = #{idPersonGroup,jdbcType=INTEGER},
         idPerson = #{idPerson,jdbcType=INTEGER},
         idProject = #{idProject,jdbcType=INTEGER},
