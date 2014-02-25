@@ -123,7 +123,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `komea`.`kom_msr` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `idKpi` INT NOT NULL,
-  `date` DATE NOT NULL,
+  `date` DATETIME NOT NULL,
   `idPersonGroup` INT NULL,
   `idPerson` INT NULL,
   `idProject` INT NULL,
