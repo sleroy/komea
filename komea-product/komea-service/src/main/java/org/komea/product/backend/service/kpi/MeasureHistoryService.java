@@ -176,6 +176,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
         final Date to = searchMeasuresDto.getToDate();
         final Integer limit = searchMeasuresDto.getNbMeasures();
         final RowBounds rowBounds = new RowBounds(0, limit == null ? Integer.MAX_VALUE : limit);
+        System.out.println("getAllMeasures : " + requiredDAO.selectByCriteria(new MeasureCriteria()));
         final List<Measure> measures = new ArrayList<Measure>();
         for (final IEntity entity : entities) {
             final Integer idEntity = entity.getId();
@@ -203,8 +204,12 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
                         criteria.andIdPersonGroupEqualTo(idEntity);
                         break;
                 }
-                measures.addAll(requiredDAO.selectByCriteriaWithRowbounds(
-                        measureCriteria, rowBounds));
+                final List<Measure> selectByCriteriaWithRowbounds
+                        = requiredDAO.selectByCriteriaWithRowbounds(measureCriteria, rowBounds);
+                for (Measure measure : selectByCriteriaWithRowbounds) {
+                    LOGGER.info("getMeasure : " + measure.toString());
+                }
+                measures.addAll(selectByCriteriaWithRowbounds);
             }
         }
         Collections.sort(measures, new Comparator<Measure>() {

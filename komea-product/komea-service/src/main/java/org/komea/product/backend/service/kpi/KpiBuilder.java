@@ -103,7 +103,7 @@ public class KpiBuilder {
 
     public KpiBuilder cronFiveMinutes() {
 
-        kpi.setCronExpression("0 0/5 * * * ?");
+        kpi.setCronExpression("0 0/5 * * * ? *");
         return this;
 
     }
