@@ -12,6 +12,7 @@ import org.komea.product.database.dto.KpiTendancyDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
+import org.komea.product.service.dto.KPIValueTable;
 import org.komea.product.service.dto.KpiKey;
 
 

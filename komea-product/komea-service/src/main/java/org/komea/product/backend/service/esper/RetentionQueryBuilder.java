@@ -41,6 +41,7 @@ public class RetentionQueryBuilder
     public String build() {
     
     
-        return "SELECT * FROM  Event" + retentionTime.getWindow();
+        return "SELECT * FROM  Event(eventType.severity=org.komea.product.database.enums.Severity."
+                + severity.name() + ")" + retentionTime.getWindow();
     }
 }

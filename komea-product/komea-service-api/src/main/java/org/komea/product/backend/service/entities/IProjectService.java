@@ -37,6 +37,13 @@ public interface IProjectService extends IGenericService<Project, Integer, Proje
     
     
     /**
+     * @param _projectKey
+     * @return
+     */
+    Project getOrCreate(String _projectKey);
+    
+    
+    /**
      * This method get all person associate to a project
      * 
      * @param _projectID
