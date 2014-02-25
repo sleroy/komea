@@ -48,8 +48,26 @@ public class EventsController {
             final SearchEventDto _searchEvent) {
 
         LOGGER.debug("call rest method /events/find to find event {}", _searchEvent.getEntityKeys());
-        // return eventService.findEvents(_searchEvent);
-        return Collections.EMPTY_LIST;
+        final List<IEvent> globalActivity = eventService.getGlobalActivity();
+        Collections.sort(globalActivity, new Comparator<IEvent>() {
+
+            @Override
+            public int compare(IEvent o1, IEvent o2) {
+                return o2.getDate().compareTo(o1.getDate());
+            }
+        });
+        final List<IEvent> events = new ArrayList<IEvent>(_searchEvent.getMaxEvents());
+        final Iterator<IEvent> iterator = globalActivity.iterator();
+        final Severity severity = _searchEvent.getSeverityMin();
+        final List<String> eventTypeKeys = _searchEvent.getEventTypeKeys();
+        while (iterator.hasNext() && events.size() < _searchEvent.getMaxEvents()) {
+            final IEvent event = iterator.next();
+            if ((eventTypeKeys.isEmpty() || eventTypeKeys.contains(event.getEventType().getEventKey()))
+                    && event.getEventType().getSeverity().compareTo(severity) >= 0) {
+                events.add(event);
+            }
+        }
+        return events;
     }
 
     public IEventPushService getEventPushService() {
@@ -81,6 +99,7 @@ public class EventsController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/get/{severityMin}/{number}")
     @ResponseBody
+    @SuppressWarnings("unchecked")
     public List<IEvent> getEvents(@PathVariable(value = "severityMin")
             final String _severityMin, @PathVariable(value = "number")
             final int _number) {
@@ -88,24 +107,8 @@ public class EventsController {
         LOGGER.debug(
                 "call rest method /events/get/{severityMin}/{number} to find {} events with severity min = {}",
                 _number, _severityMin);
-        final List<IEvent> globalActivity = eventService.getGlobalActivity();
-        Collections.sort(globalActivity, new Comparator<IEvent>() {
-
-            @Override
-            public int compare(IEvent o1, IEvent o2) {
-                return o2.getDate().compareTo(o1.getDate());
-            }
-        });
-        final List<IEvent> events = new ArrayList<IEvent>(_number);
-        final Iterator<IEvent> iterator = globalActivity.iterator();
-        final Severity severity = Severity.valueOf(_severityMin);
-        while (iterator.hasNext() && events.size() < _number) {
-            final IEvent event = iterator.next();
-            if (event.getEventType().getSeverity().compareTo(severity) >= 0) {
-                events.add(event);
-            }
-        }
-        return events;
+        return findEvents(new SearchEventDto(Severity.valueOf(_severityMin), _number,
+                null, Collections.EMPTY_LIST, Collections.EMPTY_LIST));
     }
 
     public IEventViewerService getEventService() {

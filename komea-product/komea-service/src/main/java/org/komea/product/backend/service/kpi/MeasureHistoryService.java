@@ -203,18 +203,8 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
                         criteria.andIdPersonGroupEqualTo(idEntity);
                         break;
                 }
-                List<Measure> selectByCriteriaWithRowbounds = requiredDAO.selectByCriteriaWithRowbounds(measureCriteria,
-                        rowBounds);
-                StringBuilder sb = new StringBuilder(kpi.getName() + "{");
-                for (Measure measure : selectByCriteriaWithRowbounds) {
-                    sb.append(measure.getDate().getTime() + "=" + measure.getValue() + ",");
-                }
-                if (!selectByCriteriaWithRowbounds.isEmpty()) {
-                    sb.deleteCharAt(sb.length() - 1);
-                }
-                sb.append("}");
-                System.out.println(sb.toString());
-                measures.addAll(selectByCriteriaWithRowbounds);
+                measures.addAll(requiredDAO.selectByCriteriaWithRowbounds(measureCriteria,
+                        rowBounds));
             }
         }
         Collections.sort(measures, new Comparator<Measure>() {
