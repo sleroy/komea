@@ -46,14 +46,15 @@ public class MeasuresController {
     @ResponseBody
     public MeasuresDto findMeasures(@RequestBody final SearchMeasuresDto _searchMeasuresDto) {
 
-        LOGGER.info("findMeasures : " + _searchMeasuresDto);
-
         final EntityType entityType = _searchMeasuresDto.getEntityType();
         final List<Kpi> kpis = kpiService.getKpis(entityType, _searchMeasuresDto.getKpiKeys());
         final List<BaseEntity> entities = entityService.getEntities(entityType, _searchMeasuresDto.getEntityKeys());
-        final Integer nbMeasures = _searchMeasuresDto.getNbMeasures();
+        Integer nbMeasures = _searchMeasuresDto.getNbMeasures();
+        if (nbMeasures == null) {
+            nbMeasures = Integer.MAX_VALUE;
+        }
         _searchMeasuresDto.setNbMeasures(nbMeasures - 1);
-        final List<Measure> measures = new ArrayList<Measure>(kpis.size() * entities.size() * nbMeasures);
+        final List<Measure> measures = new ArrayList<Measure>(kpis.size() * entities.size());
         for (final BaseEntity entity : entities) {
             for (final Kpi kpi : kpis) {
                 final Measure measure = kpiService.getRealTimeMeasure(kpi, entity);
@@ -72,7 +73,6 @@ public class MeasuresController {
                 return o2.getDate().compareTo(o1.getDate());
             }
         });
-        LOGGER.info("measures : " + measures);
         return new MeasuresDto(entityType, entities, kpis, measures);
     }
 

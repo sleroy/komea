@@ -76,6 +76,9 @@ public class EventsController {
         if ((eventTypeKeys.isEmpty() || eventTypeKeys.contains(event.getEventType().getEventKey()))
                 && (entityType == null || entityType.equals(event.getEventType().getEntityType()))
                 && event.getEventType().getSeverity().compareTo(severity) >= 0) {
+            if (entityType == null) {
+                return true;
+            }
             final String entityKey;
             switch (entityType) {
                 case TEAM:

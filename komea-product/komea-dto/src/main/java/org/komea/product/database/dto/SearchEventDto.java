@@ -3,6 +3,7 @@ package org.komea.product.database.dto;
 import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.Severity;
 
@@ -10,10 +11,13 @@ public class SearchEventDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @NotNull
     private Severity severityMin = Severity.INFO;
     private int maxEvents = 100;
     private EntityType entityType;
+    @NotNull
     private List<String> entityKeys = Lists.newArrayList();
+    @NotNull
     private List<String> eventTypeKeys = Lists.newArrayList();
 
     public SearchEventDto() {

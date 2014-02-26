@@ -1,11 +1,7 @@
-
 package org.komea.product.backend.service.entities;
-
-
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.komea.product.backend.exceptions.EntityNotFoundException;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.PersonDao;
@@ -21,62 +17,48 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 /**
  */
 @Service
 @Transactional
-public final class EntityService implements IEntityService
-{
-    
-    
+public final class EntityService implements IEntityService {
+
     @Autowired
-    private PersonDao           personDAO;
-    
-    
+    private PersonDao personDAO;
+
     @Autowired
-    private PersonGroupDao      personGroupDao;
-    
-    
+    private PersonGroupDao personGroupDao;
+
     @Autowired
     private IPersonGroupService personGroupService;
-    
-    
+
     @Autowired
-    private IPersonService      personService;
-    
-    
+    private IPersonService personService;
+
     @Autowired
-    private ProjectDao          projectDao;
-    
-    
+    private ProjectDao projectDao;
+
     @Autowired
-    private IProjectService     projectService;
-    
-    
-    
+    private IProjectService projectService;
+
     public EntityService() {
-    
-    
+
         super();
     }
-    
-    
+
     /**
      * Method getEntities.
-     * 
-     * @param _entityType
-     *            EntityType
-     * @param _entityKeys
-     *            List<String>
+     *
+     * @param _entityType EntityType
+     * @param _entityKeys List<String>
      * @return List<BaseEntity>
-     * @see org.komea.product.backend.service.entities.IEntityService#getEntities(EntityType, List<String>)
+     * @see
+     * org.komea.product.backend.service.entities.IEntityService#getEntities(EntityType,
+     * List<String>)
      */
     @Override
     public List<BaseEntity> getEntities(final EntityType _entityType, final List<String> _entityKeys) {
-    
-    
+
         final List<BaseEntity> entities = new ArrayList<BaseEntity>(_entityKeys.size());
         switch (_entityType) {
             case PERSON:
@@ -85,8 +67,8 @@ public final class EntityService implements IEntityService
                 break;
             case TEAM:
             case DEPARTMENT:
-                final List<PersonGroup> personGroups =
-                        personGroupService.getPersonGroups(_entityKeys, _entityType);
+                final List<PersonGroup> personGroups
+                        = personGroupService.getPersonGroups(_entityKeys, _entityType);
                 entities.addAll(personGroupService.personGroupsToBaseEntities(personGroups,
                         _entityType));
                 break;
@@ -94,27 +76,28 @@ public final class EntityService implements IEntityService
                 final List<Project> projects = projectService.getProjects(_entityKeys);
                 entities.addAll(projectService.projectsToBaseEntities(projects));
                 break;
+            case SYSTEM:
+                entities.add(new BaseEntity(_entityType, 1, "system", "System", "Komea System"));
+                break;
         }
         return entities;
     }
-    
-    
+
     /**
      * (non-Javadoc)
-     * 
-     * @param _entityType
-     *            EntityType
-     * @param _key
-     *            Integer
+     *
+     * @param _entityType EntityType
+     * @param _key Integer
      * @return TEntity
-     * @see org.komea.product.backend.service.entities.IEntityService#getEntity(org.komea.product.database.enums.EntityType, int)
+     * @see
+     * org.komea.product.backend.service.entities.IEntityService#getEntity(org.komea.product.database.enums.EntityType,
+     * int)
      */
     @Override
     public <TEntity extends IEntity> TEntity getEntity(
             final EntityType _entityType,
             final Integer _key) {
-    
-    
+
         switch (_entityType) {
             case PERSON:
                 return (TEntity) personDAO.selectByPrimaryKey(_key);
@@ -127,122 +110,107 @@ public final class EntityService implements IEntityService
                 break;
             default:
                 break;
-        
+
         }
         return null;
-        
+
     }
-    
-    
+
     /**
      * (non-Javadoc)
-     * 
-     * @see org.komea.product.backend.service.entities.IEntityService#getEntityAssociatedToKpi(org.komea.product.service.dto.KpiKey)
+     *
+     * @see
+     * org.komea.product.backend.service.entities.IEntityService#getEntityAssociatedToKpi(org.komea.product.service.dto.KpiKey)
      */
     @Override
     public IEntity getEntityAssociatedToKpi(final KpiKey _kpiKey) {
-    
-    
+
         return getEntity(_kpiKey.getEntityType(), _kpiKey.getEntityID());
     }
-    
-    
+
     /**
      * (non-Javadoc)
-     * 
-     * @param _entityType
-     *            EntityType
-     * @param _entityID
-     *            Integer
+     *
+     * @param _entityType EntityType
+     * @param _entityID Integer
      * @return IEntity
-     * @see org.komea.product.backend.service.entities.IEntityService#getEntityOrFail(org.komea.product.database.enums.EntityType, int)
+     * @see
+     * org.komea.product.backend.service.entities.IEntityService#getEntityOrFail(org.komea.product.database.enums.EntityType,
+     * int)
      */
     @Override
     public IEntity getEntityOrFail(final EntityType _entityType, final Integer _entityID) {
-    
-    
+
         final IEntity entity = getEntity(_entityType, _entityID);
-        if (entity == null) { throw new EntityNotFoundException(_entityID, _entityType); }
+        if (entity == null) {
+            throw new EntityNotFoundException(_entityID, _entityType);
+        }
         return entity;
     }
-    
-    
+
     /**
      * @return the personDAO
      */
     public PersonDao getPersonDAO() {
-    
-    
+
         return personDAO;
     }
-    
-    
+
     /**
      * @return the personGroupDao
      */
     public PersonGroupDao getPersonGroupDao() {
-    
-    
+
         return personGroupDao;
     }
-    
-    
+
     /**
      * @return the personGroupService
      */
     public IPersonGroupService getPersonGroupService() {
-    
-    
+
         return personGroupService;
     }
-    
-    
+
     /**
      * @return the personService
      */
     public IPersonService getPersonService() {
-    
-    
+
         return personService;
     }
-    
-    
+
     /**
      * @return the projectDao
      */
     public ProjectDao getProjectDao() {
-    
-    
+
         return projectDao;
     }
-    
-    
+
     /**
      * @return the projectService
      */
     public IProjectService getProjectService() {
-    
-    
+
         return projectService;
     }
-    
-    
+
     /**
      * Method loadEntities.
-     * 
-     * @param _entityType
-     *            EntityType
-     * @param _keys
-     *            List<Integer>
+     *
+     * @param _entityType EntityType
+     * @param _keys List<Integer>
      * @return List<TEntity>
-     * @see org.komea.product.backend.service.entities.IEntityService#loadEntities(EntityType, List<Integer>)
+     * @see
+     * org.komea.product.backend.service.entities.IEntityService#loadEntities(EntityType,
+     * List<Integer>)
      */
     @Override
     public <TEntity extends IEntity> List<TEntity> loadEntities(
             final EntityType _entityType,
             final List<Integer> _keys) {
-    
-    
+
         final List<TEntity> listOfEntities = new ArrayList<TEntity>(_keys.size());
         for (final Integer key : _keys) {
             final IEntity entity = getEntity(_entityType, key);
@@ -252,71 +220,53 @@ public final class EntityService implements IEntityService
         }
         return listOfEntities;
     }
-    
-    
+
     /**
-     * @param _personDAO
-     *            the personDAO to set
+     * @param _personDAO the personDAO to set
      */
     public void setPersonDAO(final PersonDao _personDAO) {
-    
-    
+
         personDAO = _personDAO;
     }
-    
-    
+
     /**
-     * @param _personGroupDao
-     *            the personGroupDao to set
+     * @param _personGroupDao the personGroupDao to set
      */
     public void setPersonGroupDao(final PersonGroupDao _personGroupDao) {
-    
-    
+
         personGroupDao = _personGroupDao;
     }
-    
-    
+
     /**
-     * @param _personGroupService
-     *            the personGroupService to set
+     * @param _personGroupService the personGroupService to set
      */
     public void setPersonGroupService(final IPersonGroupService _personGroupService) {
-    
-    
+
         personGroupService = _personGroupService;
     }
-    
-    
+
     /**
-     * @param _personService
-     *            the personService to set
+     * @param _personService the personService to set
      */
     public void setPersonService(final IPersonService _personService) {
-    
-    
+
         personService = _personService;
     }
-    
-    
+
     /**
-     * @param _projectDao
-     *            the projectDao to set
+     * @param _projectDao the projectDao to set
      */
     public void setProjectDao(final ProjectDao _projectDao) {
-    
-    
+
         projectDao = _projectDao;
     }
-    
-    
+
     /**
-     * @param _projectService
-     *            the projectService to set
+     * @param _projectService the projectService to set
      */
     public void setProjectService(final IProjectService _projectService) {
-    
-    
+
         projectService = _projectService;
     }
-    
+
 }
