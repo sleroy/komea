@@ -1,15 +1,15 @@
 
-package org.komea.backend.plugins.rss.bean;
+package org.komea.product.plugins.rss.bean;
 
 
 
 import java.util.Date;
 import java.util.List;
 
-import org.komea.backend.plugins.rss.model.RssFeed;
-import org.komea.backend.plugins.rss.repositories.api.IRssRepository;
-import org.komea.backend.plugins.rss.utils.RssFeeder;
 import org.komea.product.backend.service.esper.IEventPushService;
+import org.komea.product.plugins.rss.model.RssFeed;
+import org.komea.product.plugins.rss.repositories.api.IRssRepositories;
+import org.komea.product.plugins.rss.utils.RssFeeder;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -43,7 +43,7 @@ public class RssCronJob implements Job
     
         Date lastDate = (Date) _context.get("lastDate");
         final IEventPushService esperEngine = (IEventPushService) _context.get("esperEngine");
-        final IRssRepository repository = (IRssRepository) _context.get("repository");
+        final IRssRepositories repository = (IRssRepositories) _context.get("repository");
         
         
         final Date launched = new Date();

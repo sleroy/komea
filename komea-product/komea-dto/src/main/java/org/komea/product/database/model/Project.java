@@ -9,13 +9,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.komea.product.database.api.IEntity;
-import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.api.IKeyVisitor;
 import org.komea.product.database.enums.EntityType;
 
 
 
-public class Project implements IEntity, Serializable, IHasKey
+public class Project implements IEntity, Serializable
 {
     
     

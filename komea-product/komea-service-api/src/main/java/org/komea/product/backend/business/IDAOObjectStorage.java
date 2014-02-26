@@ -76,5 +76,5 @@ public interface IDAOObjectStorage<T>
      * @param _object
      *            the object
      */
-    void update(T _object);
+    void saveOrUpdate(T _object);
 }

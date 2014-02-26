@@ -3,12 +3,16 @@ package org.komea.product.backend.service.settings;
 
 
 
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.komea.product.backend.exceptions.DAOException;
+import org.komea.product.backend.plugin.api.InjectSetting;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.service.ISettingListener;
@@ -16,12 +20,17 @@ import org.komea.product.backend.service.ISettingProxy;
 import org.komea.product.backend.service.ISettingService;
 import org.komea.product.backend.service.proxy.SettingProxy;
 import org.komea.product.backend.utils.CollectionUtil;
+import org.komea.product.backend.utils.SpringUtils;
 import org.komea.product.database.dao.SettingDao;
 import org.komea.product.database.model.Setting;
 import org.komea.product.database.model.SettingCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,14 +45,13 @@ import org.springframework.transaction.annotation.Transactional;
         value = "komea.log"))
 @Service
 @Transactional
-public class SettingService implements ISettingService
+public class SettingService implements ISettingService, ApplicationContextAware
 {
     
     
     private static final Logger                 LOGGER                   =
                                                                                  LoggerFactory
                                                                                          .getLogger("server_settings");
-    
     @Autowired
     private SettingDao                          settingDAO;
     
@@ -81,6 +89,22 @@ public class SettingService implements ISettingService
         if (selectByCriteria.size() > 1) { throw new DAOException(
                 "The setting table should not contain two setting with the same key."); }
         return selectByCriteria.get(0);
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.ISettingService#existProperty(java.lang.String)
+     */
+    @Override
+    public boolean existProperty(final String _propertyName) {
+    
+    
+        final SettingCriteria settingCriteria = new SettingCriteria();
+        settingCriteria.createCriteria().andSettingKeyEqualTo(_propertyName);
+        final Setting setting =
+                CollectionUtil.singleOrNull(settingDAO.selectByCriteria(settingCriteria));
+        return setting != null;
     }
     
     
@@ -156,6 +180,39 @@ public class SettingService implements ISettingService
     }
     
     
+    /**
+     * Injects settings fields
+     * 
+     * @param _bean
+     *            Object
+     */
+    
+    public void injectSettings(final Object _bean) {
+    
+    
+        final PropertyDescriptor[] propertyDescriptors =
+                BeanUtils.getPropertyDescriptors(_bean.getClass());
+        
+        for (final PropertyDescriptor descriptor : propertyDescriptors) {
+            if (descriptor.getReadMethod() != null
+                    && descriptor.getReadMethod().isAnnotationPresent(InjectSetting.class)) {
+                LOGGER.info("Weaving setting proxy on property descriptor {} of bean {}",
+                        descriptor, _bean.getClass());
+                final Method writeMethod = descriptor.getWriteMethod();
+                try {
+                    writeMethod.invoke(_bean, getProxy(descriptor.getName()));
+                    
+                } catch (final Exception e) {
+                    throw new IllegalArgumentException(e);
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.settings.service.ISettingService#newSelectOnNameCriteria(java.lang.String)
@@ -182,6 +239,42 @@ public class SettingService implements ISettingService
     
         settingListenerContainer.register(_propertyName, _listener);
         
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
+     */
+    @Override
+    public void setApplicationContext(final ApplicationContext _applicationContext)
+            throws BeansException {
+    
+    
+        LOGGER.info("INITIALISATION OF SETTINGS---------------------------------------------");
+        LOGGER.info("Creating new Properties.");
+        final Map<String, Object> propertiesBeansMap =
+                _applicationContext.getBeansWithAnnotation(Properties.class);
+        LOGGER.info("Properties created.");
+        LOGGER.info("Found {} custom properties annotations", propertiesBeansMap.size());
+        
+        for (final Properties properties : SpringUtils.findAnnotations(_applicationContext,
+                Properties.class)) {
+            for (final Property property : properties.value()) {
+                create(property.key(), property.value(), property.type().getName(),
+                        property.description());
+            }
+        }
+        /**
+         * Injection de settings
+         */
+        for (final String beanName : _applicationContext.getBeanDefinitionNames()) {
+            final Object bean = _applicationContext.getBean(beanName);
+            injectSettings(bean);
+            
+        }
+        
+        LOGGER.info("-----------------------------------------------------------------------");
     }
     
     
@@ -244,5 +337,8 @@ public class SettingService implements ISettingService
         settingDAO.insert(setting);
         settingListenerContainer.notifyUpdate(setting);
         return setting;
+        
+        
     }
+    
 }

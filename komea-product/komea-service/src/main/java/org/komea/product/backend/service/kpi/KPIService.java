@@ -1,10 +1,15 @@
 package org.komea.product.backend.service.kpi;
 
 import com.espertech.esper.client.EPStatement;
+
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.exceptions.EsperStatementNotFoundException;
+import org.komea.product.backend.exceptions.EntityNotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundRuntimeException;
 import org.komea.product.backend.genericservice.AbstractService;
@@ -12,16 +17,19 @@ import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.esper.EPStatementResult;
 import org.komea.product.backend.service.esper.QueryDefinition;
+import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.KpiDao;
+import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.KpiTendancyDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.Measure;
+import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.service.dto.KPIValueTable;
 import org.komea.product.service.dto.KpiKey;
 import org.komea.product.service.dto.KpiLineValue;
@@ -32,21 +40,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+
 /**
  */
 @Service
 @Transactional
-public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria> implements IKPIService {
+public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria> implements
+        IKPIService
+{
+    
 
     private static final Logger LOGGER = LoggerFactory.getLogger("kpi-service");
 
+    
+    
     @SuppressWarnings("rawtypes")
-    private static <TEntity extends IEntity> KPIValueTable<TEntity> fetchKpiValueTable(final Kpi kpiOrFail, final EPStatement epStatement) {
+    private static <TEntity extends IEntity> KPIValueTable<TEntity> fetchKpiValueTable(
+            final Kpi kpiOrFail,
+            final EPStatement epStatement) {
 
-        final List<KpiLineValue> kpiLinesValues = EPStatementResult.build(epStatement).mapAPojoPerResultLine(KpiLineValue.class);
+    
+        final List<KpiLineValue> kpiLinesValues =
+                EPStatementResult.build(epStatement).mapAPojoPerResultLine(KpiLineValue.class);
         return new KPIValueTable(kpiOrFail, kpiLinesValues);
     }
 
+    
+    
     @Autowired
     private ICronRegistryService cronRegistry;
 
@@ -60,8 +81,13 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     private IMeasureHistoryService measureService;
 
     @Autowired
+    private ProjectDao             projectDao;
+    
+    @Autowired
     private KpiDao requiredDAO;
 
+    
+    
     /**
      * Creates of update the history job of a KPI
      *
@@ -70,9 +96,8 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      */
     public void createOrUpdateHistoryCronJob(final Kpi _kpi, final IEntity _entity) {
 
-        if (StringUtils.isEmpty(_kpi.getCronExpression())) {
-            return;
-        }
+    
+        if (StringUtils.isEmpty(_kpi.getCronExpression())) { return; }
         final String kpiCronName = _kpi.getCronHistoryJobName(_entity);
         if (cronRegistry.existCron(kpiCronName)) {
             cronRegistry.updateCronFrequency(kpiCronName, _kpi.getCronExpression());
@@ -81,11 +106,13 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
             properties.put("entity", _entity);
             properties.put("kpi", _kpi);
             properties.put("service", this);
-            cronRegistry.registerCronTask(kpiCronName, _kpi.getCronExpression(), KpiHistoryJob.class, properties);
+            cronRegistry.registerCronTask(kpiCronName, _kpi.getCronExpression(),
+                    KpiHistoryJob.class, properties);
         }
 
     }
 
+    
     /**
      * Method findKPI.
      *
@@ -96,9 +123,10 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public Kpi findKPI(final KpiKey _kpiKey) {
 
+    
         final KpiCriteria kpiCriteria = new KpiCriteria();
         kpiCriteria.createCriteria().andKpiKeyEqualTo(_kpiKey.getKpiName());
-        if (_kpiKey.verifiyIfIsAssociatedToEntity()) {
+        if (_kpiKey.isAssociatedToEntity()) {
             kpiCriteria.createCriteria().andEntityIDEqualTo(_kpiKey.getEntityID());
             kpiCriteria.createCriteria().andEntityTypeEqualTo(_kpiKey.getEntityType());
         }
@@ -106,6 +134,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
 
     }
 
+    
     /**
      * Method findKPIOrFail.
      *
@@ -117,13 +146,13 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public Kpi findKPIOrFail(final KpiKey _kpiKey) {
 
+    
         final Kpi findKPI = findKPI(_kpiKey);
-        if (findKPI == null) {
-            throw new KPINotFoundRuntimeException(_kpiKey.getKpiName());
-        }
+        if (findKPI == null) { throw new KPINotFoundRuntimeException(_kpiKey.getKpiName()); }
         return findKPI;
     }
 
+    
     /**
      * Method getCronRegistry.
      *
@@ -131,9 +160,11 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      */
     public ICronRegistryService getCronRegistry() {
 
+    
         return cronRegistry;
     }
 
+    
     /**
      * Method getEntityService.
      *
@@ -141,17 +172,21 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      */
     public IEntityService getEntityService() {
 
+    
         return entityService;
     }
 
+    
     /**
      * @return the esperEngine
      */
     public final IEsperEngine getEsperEngine() {
 
+    
         return esperEngine;
     }
 
+    
     /**
      * Method getKpiDAO.
      *
@@ -159,9 +194,11 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      */
     public KpiDao getKpiDAO() {
 
+    
         return requiredDAO;
     }
 
+    
     /**
      * Method getKpiRealTimeValues.
      *
@@ -172,15 +209,19 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      * org.komea.product.backend.service.kpi.IKPIService#getKpiRealTimeValues(KpiKey)
      */
     @Override
-    public <TEntity extends IEntity> KPIValueTable<TEntity> getKpiRealTimeValues(final KpiKey _kpiKey) throws KPINotFoundException {
+    public <TEntity extends IEntity> KPIValueTable<TEntity> getKpiRealTimeValues(
+            final KpiKey _kpiKey) throws KPINotFoundException {
+    
 
         final Kpi kpiOrFail = findKPIOrFail(_kpiKey);
-        final EPStatement epStatement = esperEngine.getStatementOrFail(kpiOrFail.computeKPIEsperKey());
+        final EPStatement epStatement =
+                esperEngine.getStatementOrFail(kpiOrFail.computeKPIEsperKey());
 
         return fetchKpiValueTable(kpiOrFail, epStatement);
 
     }
 
+    
     /**
      * Method getKpis.
      *
@@ -191,6 +232,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public List<Kpi> getKpis(final EntityType entityType, final List<String> kpiKeys) {
 
+    
         final KpiCriteria kpiCriteria = new KpiCriteria();
         if (kpiKeys.isEmpty()) {
             kpiCriteria.createCriteria().andEntityTypeEqualTo(entityType);
@@ -203,6 +245,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         return requiredDAO.selectByCriteria(kpiCriteria);
     }
 
+    
     /**
      * Method getKpiSingleValue.
      *
@@ -214,8 +257,10 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public Double getKpiSingleValue(final KpiKey _kpiKey) {
 
+    
         final Kpi kpiOrFail = findKPIOrFail(_kpiKey);
-        final EPStatement epStatement = esperEngine.getStatementOrFail(kpiOrFail.computeKPIEsperKey());
+        final EPStatement epStatement =
+                esperEngine.getStatementOrFail(kpiOrFail.computeKPIEsperKey());
 
         final Number number = EPStatementResult.build(epStatement).singleResult();
         return number == null ? 0 : number.doubleValue();
@@ -236,7 +281,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
                 measure.setValue(number.doubleValue());
                 return measure;
             }
-        } catch (Exception ex) {
+        } catch (EsperStatementNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
         }
         return null;
@@ -255,13 +300,16 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public Double getKpiSingleValue(final KpiKey _kpiKey, final String _columnName) {
 
+    
         final Kpi kpiOrFail = findKPIOrFail(_kpiKey);
-        final EPStatement epStatement = esperEngine.getStatementOrFail(kpiOrFail.computeKPIEsperKey());
+        final EPStatement epStatement =
+                esperEngine.getStatementOrFail(kpiOrFail.computeKPIEsperKey());
 
         final Number number = EPStatementResult.build(epStatement).singleResult(_columnName);
-        return number == null ? 0 : number.doubleValue();
+        return number == null ? Double.valueOf(0) : number.doubleValue();
     }
 
+    
     /**
      * Method getKpiTendancy.
      *
@@ -273,18 +321,47 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public KpiTendancyDto getKpiTendancy(final KpiKey _measureKey) {
 
-        // TODO Auto-generated method stub
-        return new KpiTendancyDto(0, 0, _measureKey);
+    
+        final KpiTendancyDto tendancies = new KpiTendancyDto(_measureKey);
+        final Kpi kpiOrFail = findKPIOrFail(_measureKey);
+        if (kpiOrFail.isGlobal()) { throw new IllegalArgumentException("Not work on global kpis"); }
+        
+        
+        final Map<IEntity, Double> realTimeValues = getKpiRealTimeValues(_measureKey).convertMap();
+        LOGGER.debug("Kpi {}, Received {} values from esper to compute tendancy", _measureKey,
+                realTimeValues.size());
+        LOGGER.trace("Real values for {}", realTimeValues);
+        final Map<IEntity, Double> lastMeasuresMap = getKpiLastMeasures(_measureKey).convertMap();
+        LOGGER.debug("Kpi {}, Received {} values from history to compute tendancy", _measureKey,
+                lastMeasuresMap.size());
+        LOGGER.trace("Last values for {}", lastMeasuresMap);
+        final List<IEntity> entities = getEntitiesAssociatedToKpiKey(_measureKey);
+        for (final IEntity entity : entities) {
+            final Double realValue = realTimeValues.get(entity);
+            final Double lastValue = lastMeasuresMap.get(entity);
+            tendancies.addTendancy(entity, realValue, lastValue);
+        }
+        return tendancies;
     }
 
+    
     /**
      * @return the measureService
      */
     public final IHistoryService getMeasureService() {
 
+    
         return measureService;
     }
 
+    
+    public ProjectDao getProjectDao() {
+    
+    
+        return projectDao;
+    }
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.genericservice.AbstractService#getRequiredDAO()
@@ -292,9 +369,11 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public IGenericDAO<Kpi, Integer, KpiCriteria> getRequiredDAO() {
 
+    
         return requiredDAO;
     }
 
+    
     /**
      * Method listAllKpis.
      *
@@ -304,10 +383,12 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public List<Kpi> listAllKpis() {
 
+    
         final List<Kpi> kpiList = requiredDAO.selectByCriteria(new KpiCriteria());
         return kpiList;
     }
 
+    
     /**
      * Method saveOrUpdate.
      *
@@ -317,9 +398,9 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Transactional
     @Override
     public void saveOrUpdate(final Kpi _kpi) {
-        final KpiCriteria kpiCriteria = new KpiCriteria();
-        kpiCriteria.createCriteria().andKpiKeyEqualTo(_kpi.getKpiKey());
-        if (_kpi.getId() == null && requiredDAO.countByCriteria(kpiCriteria) == 0) {
+
+    
+        if (_kpi.getId() == null) {
             LOGGER.info("Saving new KPI : {}", _kpi.getKpiKey());
             requiredDAO.insert(_kpi);
         } else {
@@ -338,6 +419,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         createOrUpdateHistoryCronJob(_kpi, entity);
     }
 
+    
     /**
      * Method setCronRegistry.
      *
@@ -345,9 +427,11 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      */
     public void setCronRegistry(final ICronRegistryService _cronRegistry) {
 
+    
         cronRegistry = _cronRegistry;
     }
 
+    
     /**
      * Method setEntityService.
      *
@@ -355,17 +439,21 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      */
     public void setEntityService(final IEntityService _entityService) {
 
+    
         entityService = _entityService;
     }
 
+    
     /**
      * @param _esperEngine the esperEngine to set
      */
     public final void setEsperEngine(final IEsperEngine _esperEngine) {
 
+    
         esperEngine = _esperEngine;
     }
 
+    
     /**
      * Method setKpiDAO.
      *
@@ -373,25 +461,38 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      */
     public void setKpiDAO(final KpiDao _kpiDAO) {
 
+    
         requiredDAO = _kpiDAO;
     }
 
+    
     /**
      * @param _measureService the measureService to set
      */
     public final void setMeasureService(final IMeasureHistoryService _measureService) {
 
+    
         measureService = _measureService;
     }
 
+    
+    public void setProjectDao(final ProjectDao _projectDao) {
+    
+    
+        projectDao = _projectDao;
+    }
+    
+    
     /**
      * @param _requiredDAO
      */
     public void setRequiredDAO(final KpiDao _requiredDAO) {
 
+    
         requiredDAO = _requiredDAO;
     }
 
+    
     /**
      * Method storeValueInHistory.
      *
@@ -404,6 +505,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public void storeValueInHistory(final KpiKey _kpiKey) throws KPINotFoundException {
 
+    
         final Kpi kpi = findKPIOrFail(_kpiKey);
         final EPStatement epStatement = esperEngine.getStatementOrFail(kpi.computeKPIEsperKey());
 
@@ -413,7 +515,9 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         } else {
             final KPIValueTable<IEntity> kpiRealTimeValues = fetchKpiValueTable(kpi, epStatement);
             for (final KpiLineValue<IEntity> kpiLineValue : kpiRealTimeValues.getValues()) {
-                final KpiKey kpiKeyWithEntity = KpiKey.ofKpiNameAndEntityOrNull(_kpiKey.getKpiName(), kpiLineValue.getEntity());
+                final KpiKey kpiKeyWithEntity =
+                        KpiKey.ofKpiNameAndEntityOrNull(_kpiKey.getKpiName(),
+                                kpiLineValue.getEntity());
                 storeMeasureOfAKpiInDatabase(kpiKeyWithEntity, kpiLineValue.getValue());
 
             }
@@ -421,6 +525,52 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
 
     }
 
+    
+    private List<IEntity> getEntitiesAssociatedToKpiKey(final KpiKey _measureKey) {
+    
+    
+        final Kpi findKPIOrFail = findKPIOrFail(_measureKey);
+        List<IEntity> entities = null;
+        if (_measureKey.isAssociatedToEntity()) {
+            final IEntity entityAssociatedToKpi =
+                    entityService.getEntityAssociatedToKpi(_measureKey);
+            if (entityAssociatedToKpi == null) { throw new EntityNotFoundException(
+                    _measureKey.getEntityID(), _measureKey.getEntityType()); }
+            entities = Collections.singletonList(entityAssociatedToKpi);
+        } else {
+            
+            entities = entityService.loadEntities(findKPIOrFail.getEntityType());
+            
+        }
+        return entities;
+    }
+    
+    
+    /**
+     * Returns the kpi last measures.
+     * 
+     * @param _measureKey
+     *            the measure key.
+     */
+    private KPIValueTable<IEntity> getKpiLastMeasures(final KpiKey _measureKey) {
+    
+    
+        final Kpi findKPIOrFail = findKPIOrFail(_measureKey);
+        final KPIValueTable<IEntity> kpiValueTable = new KPIValueTable<IEntity>();
+        for (final IEntity entity : entityService.loadEntities(findKPIOrFail.getEntityType())) {
+            final MeasureCriteria criteria = new MeasureCriteria();
+            final Measure valueMeasure =
+                    CollectionUtil.singleOrNull(measureService.getFilteredHistory(
+                            HistoryKey.of(findKPIOrFail, entity), 1, criteria));
+            kpiValueTable.addLine(entity, valueMeasure == null ? null : valueMeasure.getValue());
+        }
+        
+        return kpiValueTable;
+        
+        
+    }
+    
+    
     /**
      * Method initializeMeasureFromKPI.
      *
@@ -429,6 +579,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      */
     private Measure initializeMeasureFromKPIKey(final KpiKey _kpiKey) {
 
+    
         final Measure measure = new Measure();
         measure.setDate(new Date());
         measure.setEntity(_kpiKey.getEntityType(), _kpiKey.getEntityID());
@@ -437,6 +588,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         return measure;
     }
 
+    
     /**
      * Stores the measure of a kpi in the database
      *
@@ -444,6 +596,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      * @param _kpiValue the value.
      */
     private void storeMeasureOfAKpiInDatabase(final KpiKey _kpiKey, final Double _kpiValue) {
+    
 
         final Measure measure = initializeMeasureFromKPIKey(_kpiKey);
         final Kpi findKPI = findKPIOrFail(_kpiKey);

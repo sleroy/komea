@@ -208,7 +208,7 @@ public class KpiKey
     
     
     @JsonIgnore
-    public boolean verifiyIfIsAssociatedToEntity() {
+    public boolean isAssociatedToEntity() {
     
     
         return entityType != null && entityID != null;

@@ -26,6 +26,8 @@ import org.komea.product.database.model.EventTypeCriteria;
 import org.komea.product.database.model.PersonCriteria;
 import org.komea.product.database.model.PersonGroupCriteria;
 import org.komea.product.database.model.ProviderCriteria;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,20 +40,23 @@ public class EventConversionAndValidationService implements IEventConversionAndV
 {
     
     
-    @Autowired
-    private EventTypeDao    eventTypeDAO;
+    private static final Logger LOGGER = LoggerFactory.getLogger("event-validation");
     
     @Autowired
-    private PersonDao       personDAO;
+    private EventTypeDao        eventTypeDAO;
     
     @Autowired
-    private PersonGroupDao  personGroupDAO;
+    private PersonDao           personDAO;
     @Autowired
-    private IProjectService projectService;
+    private PersonGroupDao      personGroupDAO;
     @Autowired
-    private ProviderDao     providerDAO;
+    private IProjectService     projectService;
     
-    private Validator       validator;
+    @Autowired
+    private ProviderDao         providerDAO;
+    
+    
+    private Validator           validator;
     
     
     
@@ -271,8 +276,11 @@ public class EventConversionAndValidationService implements IEventConversionAndV
     
         final Set<ConstraintViolation<T>> constraintViolationException =
                 validator.validate(_object);
-        if (!constraintViolationException.isEmpty()) { throw new KomeaConstraintViolationException(
-                new HashSet<ConstraintViolation<?>>(constraintViolationException)); }
+        
+        if (!constraintViolationException.isEmpty()) {
+            LOGGER.error("Invalid event has been received : {}", _object);
+            throw new KomeaConstraintViolationException(new HashSet<ConstraintViolation<?>>(
+                    constraintViolationException));
+        }
     }
-    
 }

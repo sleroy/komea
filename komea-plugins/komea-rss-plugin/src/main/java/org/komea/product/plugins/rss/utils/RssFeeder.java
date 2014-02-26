@@ -1,5 +1,5 @@
 
-package org.komea.backend.plugins.rss.utils;
+package org.komea.product.plugins.rss.utils;
 
 
 
@@ -8,9 +8,10 @@ import java.util.Date;
 
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
-import org.komea.backend.plugins.rss.bean.RssProviderBean;
-import org.komea.backend.plugins.rss.model.RssFeed;
 import org.komea.product.backend.service.esper.IEventPushService;
+import org.komea.product.database.dto.EventSimpleDto;
+import org.komea.product.plugins.rss.bean.RssEventFactory;
+import org.komea.product.plugins.rss.model.RssFeed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,12 +32,15 @@ public class RssFeeder
 {
     
     
-    private static final Logger     LOGGER = LoggerFactory.getLogger(RssFeeder.class);
+    private static final Logger     LOGGER          = LoggerFactory.getLogger("rss-feeder");
     
     private final IEventPushService esperEngine;
     private final RssFeed           fetch;
     
     private final Date              lastDate;
+    
+    
+    private final RssEventFactory   rssEventFactory = new RssEventFactory();
     
     
     
@@ -88,7 +92,7 @@ public class RssFeeder
                  * Only posterior events will be published.
                  */
                 final DateTime dateTime = new DateTime(publishedDate);
-                ;
+                
                 if (fromTime != null && dateTime.isBefore(fromTime)) {
                     continue; /* We skip older events */
                 }
@@ -100,18 +104,13 @@ public class RssFeeder
                     
                     message.append(syndContent.getValue());
                 }
-                final AlertBuilder builder =
-                        AlertBuilder.create().setCategory("NEWS")
-                                .setCriticity(fetch.getDefaultCriticity().name())
-                                .setDate(publishedDate).setFullMessage(message.toString())
-                                .setIcon("/static/pics/rss.png").setShortMessage(entry.getTitle())
-                                
-                                .setProvider(RssProviderBean.PLUGIN_NAME).setAlertType("NEW_FEED")
-                                .setURL(entry.getUri());
-                if (!fetch.getProjectAssociated().isEmpty()) {
-                    builder.setProject(fetch.getProjectAssociated());
-                }
-                builder.send(esperEngine);
+                final EventSimpleDto rssNews =
+                        rssEventFactory.sendRssNews(message.toString(), publishedDate,
+                                entry.getUri());
+                // if (!fetch.getProjectAssociated().isEmpty()) {
+                // builder.setProject(fetch.getProjectAssociated());
+                // }
+                esperEngine.sendEventDto(rssNews);
                 
             }
             

@@ -1,10 +1,11 @@
-package com.tocea.scertify.ci.flow.test;
+package org.komea.product.plugins.rss;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.backend.plugins.rss.bean.RssExampleFeedBean;
-import org.komea.backend.plugins.rss.repositories.api.IRssRepository;
+import org.komea.backend.plugins.rss.api.plugin.IAlertReactor;
+import org.komea.product.plugins.rss.bean.RssCronJob;
+import org.komea.product.plugins.rss.bean.RssProviderBean;
+import org.komea.product.plugins.rss.repositories.api.IRssRepositories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
@@ -17,12 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextHierarchy({
 		@ContextConfiguration("classpath:/spring/application-context.xml"),
 		@ContextConfiguration("classpath:/spring/dispatcher-servlet.xml") })
-public class RssFeederTest {
+public class RssProviderTest {
 
 	@Autowired
-	private IRssRepository repository;
+	private IRssRepositories repository;
 	@Autowired
-	private RssExampleFeedBean feedBean;
+	private RssProviderBean feedBean;
+
+	@Autowired
+	private IAlertReactor esperEngine;
 
 	/**
 	 * Checks the default feeds are loaded.
@@ -33,6 +37,11 @@ public class RssFeederTest {
 	@Test
 	public void verifFeeds() throws Exception {
 
-		Assert.assertEquals(10, repository.findAll().size());
+		/**
+		 * Force execution of the feeder
+		 */
+
+		final RssCronJob timerThread = new RssCronJob(repository, esperEngine);
+		timerThread.run();
 	}
 }

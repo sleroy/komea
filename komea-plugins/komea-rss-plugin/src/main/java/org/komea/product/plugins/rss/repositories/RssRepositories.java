@@ -1,19 +1,19 @@
 
-package org.komea.backend.plugins.rss.repositories;
+package org.komea.product.plugins.rss.repositories;
 
 
 
-import org.komea.backend.plugins.rss.model.RssFeed;
-import org.komea.backend.plugins.rss.repositories.api.IRssRepository;
 import org.komea.product.backend.business.IDAOObjectStorage;
 import org.komea.product.backend.service.plugins.IPluginStorageService;
+import org.komea.product.plugins.rss.model.RssFeed;
+import org.komea.product.plugins.rss.repositories.api.IRssRepositories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 
 @Service
-public class RssRepository implements IRssRepository
+public class RssRepositories implements IRssRepositories
 {
     
     
@@ -23,7 +23,7 @@ public class RssRepository implements IRssRepository
     
     
     
-    public RssRepository() {
+    public RssRepositories() {
     
     
         super();
@@ -44,7 +44,7 @@ public class RssRepository implements IRssRepository
     
     /*
      * (non-Javadoc)
-     * @see org.komea.backend.plugins.rss.repositories.api.IRssRepository#getDAO()
+     * @see org.komea.product.plugins.rss.repositories.api.IRssRepositories#getDAO()
      */
     @Override
     public IDAOObjectStorage<RssFeed> getDAO() {

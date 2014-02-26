@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
+import org.komea.event.factory.SonarEventFactory;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.test.EsperQueryTester;
 import org.komea.product.backend.exceptions.KPINotFoundException;
@@ -34,6 +35,8 @@ public class KpiDemoServiceTest extends AbstractSpringIntegrationTestCase
     
     private static final EsperQueryTester    newTest             = EsperQueryTester
                                                                          .newTest("BUILDER");
+    
+    private static final SonarEventFactory   sonarEventFactory   = new SonarEventFactory();
     @Autowired
     private IEsperEngine                     engine;
     
@@ -55,13 +58,33 @@ public class KpiDemoServiceTest extends AbstractSpringIntegrationTestCase
                 "dev")));
         engine.sendEvent(newTest.convertDto(jenkinsEventFactory.sendBuildComplete("SYSTEM", 1.0,
                 "dev")));
-        engine.sendEvent(newTest.convertDto(jenkinsEventFactory.sendBuildComplete("SCERTIFY",
-                1.0, "dev")));
-        engine.sendEvent(newTest.convertDto(jenkinsEventFactory.sendBuildFailed("SCERTIFY", 1.0,
+        engine.sendEvent(newTest.convertDto(jenkinsEventFactory.sendBuildComplete("SCERTIFY", 1.0,
                 "dev")));
         engine.sendEvent(newTest.convertDto(jenkinsEventFactory.sendBuildFailed("SCERTIFY", 1.0,
                 "dev")));
+        engine.sendEvent(newTest.convertDto(jenkinsEventFactory.sendBuildFailed("SCERTIFY", 1.0,
+                "dev")));
+        engine.sendEvent(newTest.convertDto(sonarEventFactory.sendMetricValue("SCERTIFY", 12,
+                "line_coverage")));
         
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.backend.service.demodata.KpiDemoService#numberSuccessBuildPerWeek()}.
+     * 
+     * @throws KPINotFoundException
+     */
+    @Test
+    public final void testActualCoverage() throws KPINotFoundException {
+    
+    
+        final Kpi kpi = kpiDemoService.actualLineCoverage();
+        final KPIValueTable<Project> valueTable =
+                kpiService.getKpiRealTimeValues(KpiKey.ofKpi(kpi));
+        valueTable.dump();
+        kpiService.storeValueInHistory(KpiKey.ofKpi(kpi));
+        Assert.assertEquals(1, valueTable.getNumberOfRecords());
     }
     
     

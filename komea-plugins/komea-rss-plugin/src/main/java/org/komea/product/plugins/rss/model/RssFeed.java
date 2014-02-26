@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.backend.plugins.rss.model;
+package org.komea.product.plugins.rss.model;
 
 
 

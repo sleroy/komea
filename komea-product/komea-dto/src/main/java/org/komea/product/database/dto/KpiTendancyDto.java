@@ -3,20 +3,28 @@ package org.komea.product.database.dto;
 
 
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.komea.product.database.api.IEntity;
 import org.komea.product.service.dto.KpiKey;
 
 
 
-public class KpiTendancyDto
+/**
+ * DTO To hold tendancy.
+ * 
+ * @author sleroy
+ */
+public class KpiTendancyDto implements Serializable
 {
     
     
-    private double previousValue;
+    private final KpiKey                     kpiKey;
     
     
-    private double actualValue;
-    
-    private KpiKey kpiKey;
+    private final List<TendancyLineValueDto> lineValueDtos = new ArrayList<TendancyLineValueDto>();
     
     
     
@@ -25,26 +33,38 @@ public class KpiTendancyDto
      * @param _actualValue
      * @param _kpiKey
      */
-    public KpiTendancyDto(
-            final double _previousValue,
-            final double _actualValue,
-            final KpiKey _kpiKey) {
+    public KpiTendancyDto(final KpiKey _kpiKey) {
     
     
         super();
-        previousValue = _previousValue;
-        actualValue = _actualValue;
+        
         kpiKey = _kpiKey;
     }
     
     
-    public double getActualValue() {
+    /**
+     * Add the tendancy
+     * 
+     * @param _entity
+     *            the entity
+     * @param _realValue
+     *            the real value
+     * @param _lastValue
+     *            the last value.
+     */
+    public void addTendancy(final IEntity _entity, final Double _realValue, final Double _lastValue) {
     
     
-        return actualValue;
+        lineValueDtos.add(new TendancyLineValueDto(_entity, _realValue, _lastValue));
+        
     }
     
     
+    /**
+     * Returns the kpi key.
+     * 
+     * @return the kpi key.
+     */
     public KpiKey getKpiKey() {
     
     
@@ -52,30 +72,63 @@ public class KpiTendancyDto
     }
     
     
-    public double getPreviousValue() {
+    /**
+     * Returns the entity
+     * 
+     * @param _entity
+     *            the entity.
+     * @return the last value.
+     */
+    public Double getLastValue(final IEntity _entity) {
     
     
-        return previousValue;
+        for (final TendancyLineValueDto valueDto : lineValueDtos) {
+            if (_entity.equals(valueDto.getEntity())) { return valueDto.getPastValue(); }
+        }
+        
+        return null;
     }
     
     
-    public void setActualValue(final double _actualValue) {
+    /**
+     * Returns the line values.
+     * 
+     * @return the line values.
+     */
+    public List<TendancyLineValueDto> getLineValueDtos() {
     
     
-        actualValue = _actualValue;
+        return lineValueDtos;
     }
     
     
-    public void setKpiKey(final KpiKey _kpiKey) {
+    /**
+     * Returns the real value of an entity.
+     * 
+     * @param _entity
+     *            the entity.
+     * @return the real value.
+     */
+    public Double getRealValue(final IEntity _entity) {
     
     
-        kpiKey = _kpiKey;
+        for (final TendancyLineValueDto valueDto : lineValueDtos) {
+            if (_entity.equals(valueDto.getEntity())) { return valueDto.getRealValue(); }
+        }
+        
+        return null;
     }
     
     
-    public void setPreviousValue(final double _previousValue) {
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
     
     
-        previousValue = _previousValue;
+        return "KpiTendancyDto [kpiKey=" + kpiKey + ", lineValueDtos=" + lineValueDtos + "]";
     }
+    
 }

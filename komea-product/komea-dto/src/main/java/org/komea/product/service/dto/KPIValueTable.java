@@ -2,9 +2,12 @@
 package org.komea.product.service.dto;
 
 
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.komea.product.database.api.IEntity;
@@ -12,9 +15,13 @@ import org.komea.product.database.model.Kpi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+
 /**
  */
-public class KPIValueTable<T extends IEntity> implements Serializable {
+public class KPIValueTable<T extends IEntity> implements Serializable
+{
+    
     
     private static final Logger   LOGGER = LoggerFactory.getLogger("kpi-results");
     private Kpi                   kpi;
@@ -23,10 +30,14 @@ public class KPIValueTable<T extends IEntity> implements Serializable {
     
     private List<KpiLineValue<T>> values = new ArrayList<KpiLineValue<T>>(50);
     
+    
+    
     public KPIValueTable() {
+    
     
         super();
     }
+    
     
     /**
      * @param _kpi
@@ -34,15 +45,46 @@ public class KPIValueTable<T extends IEntity> implements Serializable {
      */
     public KPIValueTable(final Kpi _kpi, final List<KpiLineValue<T>> _values) {
     
+    
         super();
         kpi = _kpi;
         values = _values;
     }
     
+    
+    /**
+     * @param _entity
+     * @param _double
+     */
+    public void addLine(final IEntity _entity, final Double _double) {
+    
+    
+        values.add(new KpiLineValue(_entity, _double));
+        
+    }
+    
+    
+    /**
+     * Converts the table into a map.
+     * 
+     * @return convert the table into a map.
+     */
+    public Map<IEntity, Double> convertMap() {
+    
+    
+        final Map<IEntity, Double> entityMap = new HashMap<IEntity, Double>();
+        for (final KpiLineValue value : values) {
+            entityMap.put(value.getEntity(), value.getValue());
+        }
+        return entityMap;
+    }
+    
+    
     /**
      * Dump Informations
      */
     public void dump() {
+    
     
         if (!values.isEmpty()) {
             for (final KpiLineValue value : values) {
@@ -54,13 +96,16 @@ public class KPIValueTable<T extends IEntity> implements Serializable {
         
     }
     
+    
     /**
      * @return the kpi
      */
     public Kpi getKpi() {
     
+    
         return kpi;
     }
+    
     
     /**
      * @return
@@ -68,21 +113,27 @@ public class KPIValueTable<T extends IEntity> implements Serializable {
     @JsonIgnore
     public int getNumberOfRecords() {
     
+    
         return this.values.size();
     }
     
+    
     public Number getSingleValue() {
+    
     
         return singleValue;
     }
+    
     
     /**
      * @return the values
      */
     public List<KpiLineValue<T>> getValues() {
     
+    
         return values;
     }
+    
     
     /**
      * @param _kpi
@@ -90,13 +141,17 @@ public class KPIValueTable<T extends IEntity> implements Serializable {
      */
     public void setKpi(final Kpi _kpi) {
     
+    
         kpi = _kpi;
     }
     
+    
     public void setSingleValue(final Number _singleValue) {
+    
     
         singleValue = _singleValue;
     }
+    
     
     /**
      * @param _values
@@ -104,8 +159,10 @@ public class KPIValueTable<T extends IEntity> implements Serializable {
      */
     public void setValues(final List<KpiLineValue<T>> _values) {
     
+    
         values = _values;
     }
+    
     
     /*
      * (non-Javadoc)
@@ -114,7 +171,9 @@ public class KPIValueTable<T extends IEntity> implements Serializable {
     @Override
     public String toString() {
     
-        return "KPIValueTable [kpi=" + kpi + ", singleValue=" + singleValue + ", values=" + values + "]";
+    
+        return "KPIValueTable [kpi="
+                + kpi + ", singleValue=" + singleValue + ", values=" + values + "]";
     }
     
 }

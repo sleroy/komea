@@ -1,6 +1,7 @@
 package org.komea.product.backend.service.entities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.komea.product.backend.exceptions.EntityNotFoundException;
 import org.komea.product.database.api.IEntity;
@@ -10,8 +11,11 @@ import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Person;
+import org.komea.product.database.model.PersonCriteria;
 import org.komea.product.database.model.PersonGroup;
+import org.komea.product.database.model.PersonGroupCriteria;
 import org.komea.product.database.model.Project;
+import org.komea.product.database.model.ProjectCriteria;
 import org.komea.product.service.dto.KpiKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -194,6 +198,30 @@ public final class EntityService implements IEntityService {
     public IProjectService getProjectService() {
 
         return projectService;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.entities.IEntityService#loadEntities(org.komea.product.database.enums.EntityType)
+     */
+    @Override
+    public List<IEntity> loadEntities(final EntityType _entityType) {
+    
+    
+        switch (_entityType) {
+            case PERSON:
+                return (List) personDAO.selectByCriteria(new PersonCriteria());
+            case DEPARTMENT:
+            case TEAM:
+                return (List) personGroupDao.selectByCriteria(new PersonGroupCriteria());
+            case PROJECT:
+                return (List) projectDao.selectByCriteria(new ProjectCriteria());
+            case SYSTEM:
+            default:
+                return Collections.EMPTY_LIST;
+                
+        }
     }
 
     /**

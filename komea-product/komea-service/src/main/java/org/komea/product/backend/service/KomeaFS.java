@@ -5,12 +5,17 @@ package org.komea.product.backend.service;
 
 import java.io.File;
 
+import javax.annotation.PostConstruct;
+
 import org.komea.product.backend.plugin.api.InjectSetting;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.service.fs.IKomeaFS;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
 import org.komea.product.backend.storage.PluginFileSystem;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -19,7 +24,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Properties(@Property(
-        key = "storage_path",
+        key = KomeaFS.STORAGE_PATH_KEY,
         description = "Path to store informations of the plugins",
         type = File.class,
         value = "komea"))
@@ -27,7 +32,20 @@ public class KomeaFS implements IKomeaFS
 {
     
     
-    private ISettingProxy<File> storage_path;
+    /**
+     * 
+     */
+    public static final String      STORAGE_PATH_KEY = "storage_path";
+    
+    
+    private static org.slf4j.Logger LOGGER           = LoggerFactory.getLogger("komea-filesystem");
+    
+    
+    @Autowired
+    private ISettingService         settingService;
+    
+    
+    private ISettingProxy<File>     storage_path;
     
     
     
@@ -40,7 +58,9 @@ public class KomeaFS implements IKomeaFS
     
     /**
      * Method getFileSystem.
-     * @param _fileSystemName String
+     * 
+     * @param _fileSystemName
+     *            String
      * @return IPluginFileSystem
      * @see org.komea.product.backend.service.fs.IKomeaFS#getFileSystem(String)
      */
@@ -48,13 +68,21 @@ public class KomeaFS implements IKomeaFS
     public IPluginFileSystem getFileSystem(final String _fileSystemName) {
     
     
-        return new PluginFileSystem(getPath(new File(storage_path.getValue().getAbsolutePath(),
-                _fileSystemName)));
+        final File computePluginStoragePath = computePluginStoragePath(_fileSystemName);
+        return new PluginFileSystem(getPath(computePluginStoragePath));
+    }
+    
+    
+    public ISettingService getSettingService() {
+    
+    
+        return settingService;
     }
     
     
     /**
      * Method getStorage_path.
+     * 
      * @return ISettingProxy<File>
      */
     @InjectSetting
@@ -65,9 +93,30 @@ public class KomeaFS implements IKomeaFS
     }
     
     
+    @PostConstruct
+    public void init() {
+    
+    
+        storage_path = settingService.getProxy(STORAGE_PATH_KEY);
+        LOGGER.info("Storage path for plugins is " + storage_path);
+        if (storage_path == null) { throw new BeanCreationException(
+                "Storage path was not initialized"); }
+        
+    }
+    
+    
+    public void setSettingService(final ISettingService _settingService) {
+    
+    
+        settingService = _settingService;
+    }
+    
+    
     /**
      * Method setStorage_path.
-     * @param _storage_path ISettingProxy<File>
+     * 
+     * @param _storage_path
+     *            ISettingProxy<File>
      */
     public void setStorage_path(final ISettingProxy<File> _storage_path) {
     
@@ -76,9 +125,23 @@ public class KomeaFS implements IKomeaFS
     }
     
     
+    private File computePluginStoragePath(final String _fileSystemName) {
+    
+    
+        final File pluginPath = storage_path.getValue();
+        if (!pluginPath.exists() && !pluginPath.mkdirs()) { throw new InvalidKomeaFileSystemException(
+                "Could not initialize Komea Filesystem : folder could not be created", pluginPath); }
+        final String absolutePath = pluginPath.getAbsolutePath();
+        
+        return new File(absolutePath, _fileSystemName);
+    }
+    
+    
     /**
      * Method getPath.
-     * @param _file File
+     * 
+     * @param _file
+     *            File
      * @return File
      */
     private File getPath(final File _file) {

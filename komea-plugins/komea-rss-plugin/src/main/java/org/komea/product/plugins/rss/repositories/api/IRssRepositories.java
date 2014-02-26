@@ -1,10 +1,10 @@
 
-package org.komea.backend.plugins.rss.repositories.api;
+package org.komea.product.plugins.rss.repositories.api;
 
 
 
-import org.komea.backend.plugins.rss.model.RssFeed;
 import org.komea.product.backend.business.IDAOObjectStorage;
+import org.komea.product.plugins.rss.model.RssFeed;
 
 
 
@@ -13,7 +13,7 @@ import org.komea.product.backend.business.IDAOObjectStorage;
  * 
  * @author sleroy
  */
-public interface IRssRepository
+public interface IRssRepositories
 {
     
     

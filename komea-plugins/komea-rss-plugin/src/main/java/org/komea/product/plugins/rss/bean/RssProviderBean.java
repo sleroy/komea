@@ -1,14 +1,11 @@
 
-package org.komea.backend.plugins.rss.bean;
+package org.komea.product.plugins.rss.bean;
 
 
-
-import java.util.Timer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.komea.backend.plugins.rss.repositories.api.IRssRepository;
 import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.ISettingService;
@@ -18,12 +15,19 @@ import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Setting;
+import org.komea.product.plugins.rss.repositories.api.IRssRepositories;
+import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
 
+/**
+ * Main class to define the RSS Plugin.
+ * 
+ * @author sleroy
+ */
 @ProviderPlugin(
         eventTypes = {
             @EventTypeDef(
@@ -42,17 +46,17 @@ public class RssProviderBean implements org.komea.product.backend.service.ISetti
 {
     
     
-    public static final String   PLUGIN_NAME         = "RSS";
-    private static final long    DELAY_MIN           = 1500;
     private static final Logger  LOGGER              = LoggerFactory
                                                              .getLogger(RssProviderBean.class);
-    private static final long    PERIOD_DEFAULT      = 20000;
-    
     /**
      * 
      */
     private static final String  RSS_CRON_JOB        = "rss_cron_job";
     
+    /**
+     * 
+     */
+    private static final String  RSS_CRON_VALUE      = "0/5 * * * * ?";
     private static final String  RSS_PROVIDER_PERIOD = "rss_refresh_period";
     
     @Autowired
@@ -62,16 +66,19 @@ public class RssProviderBean implements org.komea.product.backend.service.ISetti
     private IEventPushService    esperEngine;
     
     @Autowired
-    private RssExampleFeedBean   feed;
+    private IRssExampleFeedBean  feed;
     
     @Autowired
     private ISettingService      registry;
     
     @Autowired
-    private IRssRepository       repository;
+    private IRssRepositories       rssRepository;
     
     
     
+    /**
+     * RSS Provider plugin.
+     */
     public RssProviderBean() {
     
     
@@ -93,28 +100,19 @@ public class RssProviderBean implements org.komea.product.backend.service.ISetti
     
         LOGGER.info("Initialisation du plugin RSS");
         
-        timerThread = new RssCronJob(repository, esperEngine);
         
-        final Timer timer2 = new Timer(true);
-        final long parseLong =
-                Long.parseLong(registry.initProperty(RSS_PROVIDER_PERIOD,
-                        Long.toString(PERIOD_DEFAULT)));
-        timer2.scheduleAtFixedRate(timerThread, DELAY_MIN, parseLong);
-        timerThread.setTimer(timer2);
+        final JobDataMap properties = new JobDataMap();
+        properties.put("lastDate", null);
+        properties.put("esperEngine", esperEngine);
+        properties.put("repository", this);
+        //
+        registry.create(RSS_PROVIDER_PERIOD, RSS_CRON_VALUE, "java.lang.String",
+                "Defines the cron value to fetch rss feeds");
+        registry.registerListener(RSS_PROVIDER_PERIOD, this);
+        cronRegistryService.registerCronTask(RSS_CRON_JOB, RSS_CRON_VALUE, RssCronJob.class,
+                properties);
         
-    }
-    
-    
-    @Override
-    public void notify(final String _key, final String _value) {
-    
-    
-        final Timer t = timerThread.getTimer();
-        t.purge();
-        t.cancel();
-        final Timer timer2 = new Timer();
-        timerThread.setTimer(timer2);
-        timer2.scheduleAtFixedRate(timerThread, DELAY_MIN, Long.parseLong(_value));
+        
     }
     
     
@@ -126,7 +124,7 @@ public class RssProviderBean implements org.komea.product.backend.service.ISetti
     public void notifyPropertyChanged(final Setting _setting) {
     
     
-        // TODO Auto-generated method stub
+        cronRegistryService.updateCronFrequency(RSS_CRON_JOB, _setting.getValue());
         
     }
     
