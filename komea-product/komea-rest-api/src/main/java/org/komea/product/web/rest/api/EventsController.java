@@ -48,7 +48,7 @@ public class EventsController {
             @RequestBody
             final SearchEventDto _searchEvent) {
 
-        LOGGER.debug("call rest method /events/find to find event {}", _searchEvent);
+        LOGGER.info("call rest method /events/find to find events {}", _searchEvent);
         final List<IEvent> globalActivity = eventService.getGlobalActivity();
         Collections.sort(globalActivity, new Comparator<IEvent>() {
 
@@ -65,6 +65,7 @@ public class EventsController {
                 events.add(event);
             }
         }
+        LOGGER.info("return events : " + events);
         return events;
     }
 
@@ -76,25 +77,25 @@ public class EventsController {
         if ((eventTypeKeys.isEmpty() || eventTypeKeys.contains(event.getEventType().getEventKey()))
                 && (entityType == null || entityType.equals(event.getEventType().getEntityType()))
                 && event.getEventType().getSeverity().compareTo(severity) >= 0) {
-            String entityKey = null;
-            if (!entityKeys.isEmpty()) {
-                switch (entityType) {
-                    case TEAM:
-                    case DEPARTMENT:
-                        entityKey = event.getPersonGroup() == null ? null
-                                : event.getPersonGroup().getPersonGroupKey();
-                        break;
-                    case PERSON:
-                        entityKey = event.getPersons().isEmpty() ? null
-                                : event.getPersons().get(0).getLogin();
-                        break;
-                    case PROJECT:
-                        entityKey = event.getProject() == null ? null
-                                : event.getProject().getProjectKey();
-                        break;
-                }
+            final String entityKey;
+            switch (entityType) {
+                case TEAM:
+                case DEPARTMENT:
+                    entityKey = event.getPersonGroup() == null ? null
+                            : event.getPersonGroup().getPersonGroupKey();
+                    break;
+                case PERSON:
+                    entityKey = event.getPersons().isEmpty() ? null
+                            : event.getPersons().get(0).getLogin();
+                    break;
+                case PROJECT:
+                    entityKey = event.getProject() == null ? null
+                            : event.getProject().getProjectKey();
+                    break;
+                default:
+                    entityKey = null;
             }
-            if (entityKey == null || entityKeys.contains(entityKey)) {
+            if (entityKeys.isEmpty() || entityKeys.contains(entityKey)) {
                 return true;
             }
         }
