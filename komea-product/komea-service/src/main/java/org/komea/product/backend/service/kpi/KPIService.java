@@ -225,7 +225,10 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public Measure getRealTimeMeasure(final Kpi _kpi, final IEntity _entity) {
         try {
+            final Integer id = _kpi.getEntityID();
+            _kpi.setEntityID(_entity.getId());
             final EPStatement epStatement = esperEngine.getStatementOrFail(_kpi.computeKPIEsperKey());
+            _kpi.setEntityID(id);
             final Number number = EPStatementResult.build(epStatement).singleResult();
             if (number != null) {
                 final Measure measure = new Measure();

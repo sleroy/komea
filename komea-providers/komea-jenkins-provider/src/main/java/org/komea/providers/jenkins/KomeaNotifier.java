@@ -253,7 +253,7 @@ public class KomeaNotifier extends Notifier implements Serializable {
             final String jenkinsProjectName,
             final String providerUrl) {
         final BuildIndustrialization indus = BuildIndustrialization.valueOf(industrialization);
-        final String message = "Jenkins build industrialization for project " + projectKey
+        final String message = "Jenkins build industrialization for project " + jenkinsProjectName
                 + " is " + enumNameToDisplayName(indus.name());
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(start));
@@ -280,7 +280,7 @@ public class KomeaNotifier extends Notifier implements Serializable {
             final String jenkinsProjectName,
             final String providerUrl) {
 
-        final String message = "Jenkins build started for project " + projectKey;
+        final String message = "Jenkins build started for project " + jenkinsProjectName;
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(start));
         properties.put("project", projectKey);
