@@ -48,7 +48,7 @@ public class EventsController {
             @RequestBody
             final SearchEventDto _searchEvent) {
 
-        LOGGER.debug("call rest method /events/find to find event {}", _searchEvent.getEntityKeys());
+        LOGGER.debug("call rest method /events/find to find event {}", _searchEvent);
         final List<IEvent> globalActivity = eventService.getGlobalActivity();
         Collections.sort(globalActivity, new Comparator<IEvent>() {
 
@@ -59,39 +59,46 @@ public class EventsController {
         });
         final List<IEvent> events = new ArrayList<IEvent>(_searchEvent.getMaxEvents());
         final Iterator<IEvent> iterator = globalActivity.iterator();
-        final Severity severity = _searchEvent.getSeverityMin();
-        final List<String> eventTypeKeys = _searchEvent.getEventTypeKeys();
-        final List<String> entityKeys = _searchEvent.getEntityKeys();
-        final EntityType entityType = _searchEvent.getEntityType();
         while (iterator.hasNext() && events.size() < _searchEvent.getMaxEvents()) {
             final IEvent event = iterator.next();
-            if ((eventTypeKeys.isEmpty() || eventTypeKeys.contains(event.getEventType().getEventKey()))
-                    && entityType.equals(event.getEventType().getEntityType())
-                    && event.getEventType().getSeverity().compareTo(severity) >= 0) {
-                String entityKey = null;
-                if (!entityKeys.isEmpty()) {
-                    switch (entityType) {
-                        case TEAM:
-                        case DEPARTMENT:
-                            entityKey = event.getPersonGroup() == null ? null
-                                    : event.getPersonGroup().getPersonGroupKey();
-                            break;
-                        case PERSON:
-                            entityKey = event.getPersons().isEmpty() ? null
-                                    : event.getPersons().get(0).getLogin();
-                            break;
-                        case PROJECT:
-                            entityKey = event.getProject() == null ? null
-                                    : event.getProject().getProjectKey();
-                            break;
-                    }
-                }
-                if (entityKey == null || entityKeys.contains(entityKey)) {
-                    events.add(event);
-                }
+            if (eventMatches(event, _searchEvent)) {
+                events.add(event);
             }
         }
         return events;
+    }
+
+    private boolean eventMatches(final IEvent event, final SearchEventDto searchEvent) {
+        final Severity severity = searchEvent.getSeverityMin();
+        final List<String> eventTypeKeys = searchEvent.getEventTypeKeys();
+        final List<String> entityKeys = searchEvent.getEntityKeys();
+        final EntityType entityType = searchEvent.getEntityType();
+        if ((eventTypeKeys.isEmpty() || eventTypeKeys.contains(event.getEventType().getEventKey()))
+                && (entityType == null || entityType.equals(event.getEventType().getEntityType()))
+                && event.getEventType().getSeverity().compareTo(severity) >= 0) {
+            String entityKey = null;
+            if (!entityKeys.isEmpty()) {
+                switch (entityType) {
+                    case TEAM:
+                    case DEPARTMENT:
+                        entityKey = event.getPersonGroup() == null ? null
+                                : event.getPersonGroup().getPersonGroupKey();
+                        break;
+                    case PERSON:
+                        entityKey = event.getPersons().isEmpty() ? null
+                                : event.getPersons().get(0).getLogin();
+                        break;
+                    case PROJECT:
+                        entityKey = event.getProject() == null ? null
+                                : event.getProject().getProjectKey();
+                        break;
+                }
+            }
+            if (entityKey == null || entityKeys.contains(entityKey)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public IEventPushService getEventPushService() {
