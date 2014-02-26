@@ -48,7 +48,7 @@ public class EventsController {
             @RequestBody
             final SearchEventDto _searchEvent) {
 
-        LOGGER.info("call rest method /events/find to find events {}", _searchEvent);
+        LOGGER.debug("call rest method /events/find to find events {}", _searchEvent);
         final List<IEvent> globalActivity = eventService.getGlobalActivity();
         Collections.sort(globalActivity, new Comparator<IEvent>() {
 
@@ -65,7 +65,6 @@ public class EventsController {
                 events.add(event);
             }
         }
-        LOGGER.info("return events : " + events);
         return events;
     }
 
