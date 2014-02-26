@@ -29,7 +29,7 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
     @Override
     public void onProjectAnalysis(final ProjectAnalysisEvent event) {
         final String komeaUrl = KomeaPlugin.getKomeaUrl(settings);
-        if (komeaUrl == null) {
+        if (komeaUrl == null || !event.getProject().isRoot()) {
             return;
         }
         try {

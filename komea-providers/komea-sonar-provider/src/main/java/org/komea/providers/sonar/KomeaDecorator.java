@@ -47,7 +47,7 @@ public class KomeaDecorator implements Decorator {
 
     @Override
     public void decorate(final Resource resource, final DecoratorContext context) {
-        if (!ResourceUtils.isProject(resource) || komeaUrl == null) {
+        if (!ResourceUtils.isRootProject(resource) || komeaUrl == null) {
             return;
         }
         Project project = (Project) resource;

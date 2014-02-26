@@ -164,7 +164,7 @@ public class KomeaNotifier extends Notifier implements Serializable {
             final Launcher launcher,
             final BuildListener listener) throws InterruptedException, IOException {
 
-        if (getServerUrl() == null) {
+        if (getServerUrl() == null || !build.equals(build.getRootBuild())) {
             return true;
         }
         final String jenkinsProjectName = build.getProject().getName();
@@ -186,7 +186,9 @@ public class KomeaNotifier extends Notifier implements Serializable {
 
     @Override
     public boolean prebuild(final AbstractBuild<?, ?> build, final BuildListener listener) {
-
+        if (getServerUrl() == null || !build.equals(build.getRootBuild())) {
+            return true;
+        }
         final String jenkinsProjectName = build.getProject().getName();
         if (projectKey == null) {
             projectKey = jenkinsProjectName;
