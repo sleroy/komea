@@ -1,5 +1,8 @@
 package org.komea.product.web.rest.api;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.validation.Valid;
 import org.komea.product.backend.exceptions.KPINotFoundException;
@@ -43,15 +46,30 @@ public class MeasuresController {
     @ResponseBody
     public MeasuresDto findMeasures(@RequestBody final SearchMeasuresDto _searchMeasuresDto) {
 
-        final int a = (int) (Math.random() * Integer.MAX_VALUE);
         final EntityType entityType = _searchMeasuresDto.getEntityType();
-        System.out.println("findMeasures " + a + " : " + _searchMeasuresDto);
         final List<Kpi> kpis = kpiService.getKpis(entityType, _searchMeasuresDto.getKpiKeys());
-        System.out.println("kpis " + a + " : " + kpis);
         final List<BaseEntity> entities = entityService.getEntities(entityType, _searchMeasuresDto.getEntityKeys());
-        System.out.println("entities " + a + " : " + entities);
-        final List<Measure> measures = measureService.getMeasures(kpis, entities, _searchMeasuresDto);
-        System.out.println("measures " + a + " : " + measures);
+        final Integer nbMeasures = _searchMeasuresDto.getNbMeasures();
+        _searchMeasuresDto.setNbMeasures(nbMeasures - 1);
+        final List<Measure> measures = new ArrayList<Measure>(kpis.size() * entities.size() * nbMeasures);
+        for (final BaseEntity entity : entities) {
+            for (final Kpi kpi : kpis) {
+                final Measure measure = kpiService.getRealTimeMeasure(kpi, entity);
+                if (measure != null) {
+                    measures.add(measure);
+                }
+            }
+        }
+        if (nbMeasures > 1) {
+            measures.addAll(measureService.getMeasures(kpis, entities, _searchMeasuresDto));
+        }
+        Collections.sort(measures, new Comparator<Measure>() {
+
+            @Override
+            public int compare(Measure o1, Measure o2) {
+                return o2.getDate().compareTo(o1.getDate());
+            }
+        });
         return new MeasuresDto(entityType, entities, kpis, measures);
     }
 

@@ -11,6 +11,7 @@ import org.komea.product.backend.service.esper.IEventViewerService;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.dto.SearchEventDto;
+import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.Severity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,11 +61,34 @@ public class EventsController {
         final Iterator<IEvent> iterator = globalActivity.iterator();
         final Severity severity = _searchEvent.getSeverityMin();
         final List<String> eventTypeKeys = _searchEvent.getEventTypeKeys();
+        final List<String> entityKeys = _searchEvent.getEntityKeys();
+        final EntityType entityType = _searchEvent.getEntityType();
         while (iterator.hasNext() && events.size() < _searchEvent.getMaxEvents()) {
             final IEvent event = iterator.next();
             if ((eventTypeKeys.isEmpty() || eventTypeKeys.contains(event.getEventType().getEventKey()))
+                    && entityType.equals(event.getEventType().getEntityType())
                     && event.getEventType().getSeverity().compareTo(severity) >= 0) {
-                events.add(event);
+                String entityKey = null;
+                if (!entityKeys.isEmpty()) {
+                    switch (entityType) {
+                        case TEAM:
+                        case DEPARTMENT:
+                            entityKey = event.getPersonGroup() == null ? null
+                                    : event.getPersonGroup().getPersonGroupKey();
+                            break;
+                        case PERSON:
+                            entityKey = event.getPersons().isEmpty() ? null
+                                    : event.getPersons().get(0).getLogin();
+                            break;
+                        case PROJECT:
+                            entityKey = event.getProject() == null ? null
+                                    : event.getProject().getProjectKey();
+                            break;
+                    }
+                }
+                if (entityKey == null || entityKeys.contains(entityKey)) {
+                    events.add(event);
+                }
             }
         }
         return events;

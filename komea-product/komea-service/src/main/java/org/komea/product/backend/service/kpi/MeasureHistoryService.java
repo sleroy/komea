@@ -268,7 +268,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
     @Override
     public void storeMeasure(final Measure _measure) {
 
-        LOGGER.info("Storing new measure : {}", _measure);
+        LOGGER.debug("Storing new measure : {}", _measure);
         requiredDAO.insert(_measure);
 
     }

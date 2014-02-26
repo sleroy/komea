@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.exceptions.EsperStatementNotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundRuntimeException;
 import org.komea.product.backend.genericservice.AbstractService;
@@ -221,6 +222,26 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         return number == null ? 0 : number.doubleValue();
     }
 
+    @Override
+    public Measure getRealTimeMeasure(final Kpi _kpi, final IEntity _entity) {
+        try {
+            final EPStatement epStatement = esperEngine.getStatementOrFail(_kpi.computeKPIEsperKey());
+            final Number number = EPStatementResult.build(epStatement).singleResult();
+            if (number != null) {
+                final Measure measure = new Measure();
+                measure.setDate(new Date());
+                measure.setEntity(_kpi.getEntityType(), _entity.getId());
+                measure.setId(null);
+                measure.setIdKpi(_kpi.getId());
+                measure.setValue(number.doubleValue());
+                return measure;
+            }
+        } catch (EsperStatementNotFoundException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        }
+        return null;
+    }
+
     /**
      * Method getKpiSingleValue.
      *
@@ -428,6 +449,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         measure.setValue(_kpiValue);
         measureService.storeMeasure(measure);
         final int purgeHistory = measureService.buildHistoryPurgeAction(findKPI).purgeHistory();
-        LOGGER.info("Purge history : {} items", purgeHistory);
+        LOGGER.debug("Purge history : {} items", purgeHistory);
     }
 }
