@@ -63,9 +63,7 @@ public class MeasuresController {
                 }
             }
         }
-        if (nbMeasures > 1) {
-            measures.addAll(measureService.getMeasures(kpis, entities, _searchMeasuresDto));
-        }
+        measures.addAll(measureService.getMeasures(kpis, entities, _searchMeasuresDto));
         Collections.sort(measures, new Comparator<Measure>() {
 
             @Override
