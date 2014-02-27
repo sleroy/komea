@@ -66,9 +66,11 @@ public class RssFeeder
     }
     
     
-    public void feed() {
+    public boolean feed() {
     
     
+        boolean res = false;
+        
         LOGGER.info("Checking update from {}", fetch.getFeedName());
         
         XmlReader reader = null;
@@ -113,17 +115,18 @@ public class RssFeeder
                 esperEngine.sendEventDto(rssNews);
                 
             }
-            
+            res = true;
         } catch (final Exception e) {
             LOGGER.error("Rss fetching failed for " + fetch.getFeedName() + " : " + e.getMessage(),
                     e);
-            
+            res = false;
         } finally {
             if (reader != null) {
                 IOUtils.closeQuietly(reader);
             }
+            
         }
-        
+        return res;
     }
     
     

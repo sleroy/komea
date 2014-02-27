@@ -45,7 +45,7 @@ import org.springframework.scheduling.annotation.Scheduled;
                     key = "event-demo",
                     name = "Demonstration event",
                     severity = Severity.MAJOR)},
-        icon = "demo",
+        icon = "logo.png",
         name = "Demo Provider plugin",
         type = ProviderType.OTHER,
         url = "/demoProvider")

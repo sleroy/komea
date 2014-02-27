@@ -77,7 +77,7 @@ public class WicketApplication extends WebApplication
         mountPage("/users", PersonPage.class);
         mountPage("/useradd", PersonAddPage.class);
         mountPage("/events", EventsPage.class);
-        mountPage("/providers", ProviderPage.class);
+        mountPage("/plugins", ProviderPage.class);
         
         
         getExceptionSettings().setThreadDumpStrategy(ThreadDumpStrategy.ALL_THREADS);

@@ -16,7 +16,6 @@ import org.komea.product.backend.service.entities.IProviderService;
 import org.komea.product.database.model.Provider;
 import org.komea.product.database.model.ProviderCriteria;
 import org.komea.product.wicket.LayoutPage;
-import org.komea.product.wicket.widget.builders.DataTableBuilder;
 
 
 
@@ -62,9 +61,6 @@ public class ProviderPage extends LayoutPage
         super(_parameters);
         
         final List<Provider> providers = providerDAO.selectByCriteria(new ProviderCriteria());
-        add(DataTableBuilder.<Provider, String> newTable("table").displayRows(20)
-                .withListData(providers).addColumn("name", "name").addColumn("url", "url")
-                .addColumn("providerType", "providerType").build());
         add(new ProviderListView("providerlist", new CompoundPropertyModel<List<Provider>>(
                 providers)));
     }

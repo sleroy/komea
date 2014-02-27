@@ -6,6 +6,7 @@ package org.komea.product.plugins.rss.bean;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.komea.product.backend.admin.plugins.IPluginAdminService;
 import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.ISettingService;
@@ -15,6 +16,7 @@ import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Setting;
+import org.komea.product.plugins.rss.admin.RssRepositoryPage;
 import org.komea.product.plugins.rss.repositories.api.IRssRepositories;
 import org.quartz.JobDataMap;
 import org.slf4j.Logger;
@@ -39,7 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
                     name = "Rss news",
                     severity = Severity.MINOR) },
         icon = "rss",
-        name = "Rss Provider plugin",
+        name = RssProviderBean.RSS_PROVIDER_PLUGIN,
         type = ProviderType.NEWS,
         url = "/rssnews")
 public class RssProviderBean implements org.komea.product.backend.service.ISettingListener
@@ -52,12 +54,16 @@ public class RssProviderBean implements org.komea.product.backend.service.ISetti
      * 
      */
     private static final String  RSS_CRON_JOB        = "rss_cron_job";
-    
     /**
      * 
      */
     private static final String  RSS_CRON_VALUE      = "0/5 * * * * ?";
+    
     private static final String  RSS_PROVIDER_PERIOD = "rss_refresh_period";
+    /**
+     * Rss Provider plugin name;
+     */
+    static final String          RSS_PROVIDER_PLUGIN = "Rss Provider plugin";
     
     @Autowired
     private ICronRegistryService cronRegistryService;
@@ -69,10 +75,13 @@ public class RssProviderBean implements org.komea.product.backend.service.ISetti
     private IRssExampleFeedBean  feed;
     
     @Autowired
+    private IPluginAdminService  pluginAdminService;
+    
+    @Autowired
     private ISettingService      registry;
     
     @Autowired
-    private IRssRepositories       rssRepository;
+    private IRssRepositories     rssRepository;
     
     
     
@@ -111,8 +120,7 @@ public class RssProviderBean implements org.komea.product.backend.service.ISetti
         registry.registerListener(RSS_PROVIDER_PERIOD, this);
         cronRegistryService.registerCronTask(RSS_CRON_JOB, RSS_CRON_VALUE, RssCronJob.class,
                 properties);
-        
-        
+        pluginAdminService.register(RSS_PROVIDER_PLUGIN, RssRepositoryPage.class);
     }
     
     
