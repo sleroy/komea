@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.komea.product.backend.api.IEsperEngine;
-import org.komea.product.backend.exceptions.EsperStatementNotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundRuntimeException;
 import org.komea.product.backend.genericservice.AbstractService;
@@ -237,9 +236,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
                 measure.setValue(number.doubleValue());
                 return measure;
             }
-        } catch (KPINotFoundRuntimeException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        } catch (EsperStatementNotFoundException ex) {
+        } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
         }
         return null;
