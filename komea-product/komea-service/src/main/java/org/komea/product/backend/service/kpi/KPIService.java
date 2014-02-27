@@ -317,8 +317,9 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Transactional
     @Override
     public void saveOrUpdate(final Kpi _kpi) {
-
-        if (_kpi.getId() == null) {
+        final KpiCriteria kpiCriteria = new KpiCriteria();
+        kpiCriteria.createCriteria().andKpiKeyEqualTo(_kpi.getKpiKey());
+        if (_kpi.getId() == null && requiredDAO.countByCriteria(kpiCriteria) == 0) {
             LOGGER.info("Saving new KPI : {}", _kpi.getKpiKey());
             requiredDAO.insert(_kpi);
         } else {
