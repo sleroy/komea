@@ -49,11 +49,6 @@ public class MeasuresController {
         final EntityType entityType = _searchMeasuresDto.getEntityType();
         final List<Kpi> kpis = kpiService.getKpis(entityType, _searchMeasuresDto.getKpiKeys());
         final List<BaseEntity> entities = entityService.getEntities(entityType, _searchMeasuresDto.getEntityKeys());
-        Integer nbMeasures = _searchMeasuresDto.getNbMeasures();
-        if (nbMeasures == null) {
-            nbMeasures = Integer.MAX_VALUE;
-        }
-        _searchMeasuresDto.setNbMeasures(nbMeasures - 1);
         final List<Measure> measures = new ArrayList<Measure>(kpis.size() * entities.size());
         for (final BaseEntity entity : entities) {
             for (final Kpi kpi : kpis) {
