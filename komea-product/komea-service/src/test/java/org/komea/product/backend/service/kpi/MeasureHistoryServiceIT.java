@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.genericservice.DAOEventRegistry;
 import org.komea.product.backend.service.history.HistoryKey;
+import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.EvictionType;
@@ -34,6 +35,10 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase
     
     
     @Autowired
+    private KpiDao                 kpiDao;
+    
+    
+    @Autowired
     private IMeasureHistoryService measureHistoryService;
     
     
@@ -48,7 +53,8 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase
     
     
         final Kpi exampleKPI = buildFakeKpi("DEMO_FILTER1");
-        final HistoryKey historyKey = HistoryKey.of(exampleKPI, EntityType.PROJECT, 1);
+        final HistoryKey historyKey =
+                HistoryKey.of(exampleKPI, EntityType.PROJECT, exampleKPI.getId());
         final List<Measure> filteredHistory =
                 measureHistoryService.getFilteredHistory(historyKey, 2, new MeasureCriteria());
         Assert.assertTrue(filteredHistory.isEmpty());
@@ -66,7 +72,9 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase
         final List<Measure> filterValidation =
                 measureHistoryService.getFilteredHistory(historyKey, 1, new MeasureCriteria());
         Assert.assertEquals(1, filterValidation.size());
-        Assert.assertEquals(measure.getId(), filterValidation.get(0).getId()); // LINKED TO BUG
+        System.out.println(filterValidation);
+        
+        Assert.assertEquals(measure2.getId(), filterValidation.get(0).getId()); // LINKED TO BUG
     }
     
     
@@ -80,7 +88,8 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase
     
     
         final Kpi exampleKPI = buildFakeKpi("DEMO_FILTER2");
-        final HistoryKey historyKey = HistoryKey.of(exampleKPI, EntityType.PROJECT, 1);
+        final HistoryKey historyKey =
+                HistoryKey.of(exampleKPI, EntityType.PROJECT, exampleKPI.getId());
         Assert.assertTrue("Expected no measures ",
                 measureHistoryService.getFilteredHistory(historyKey, 2, new MeasureCriteria())
                         .isEmpty());
@@ -102,7 +111,8 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase
     
     
         final Kpi exampleKPI = buildFakeKpi("DEMO_FILTER3");
-        final HistoryKey historyKey = HistoryKey.of(exampleKPI, EntityType.PROJECT, 1);
+        final HistoryKey historyKey =
+                HistoryKey.of(exampleKPI, EntityType.PROJECT, exampleKPI.getId());
         final Measure measure = buildFakeMeasure(exampleKPI);
         Assert.assertTrue(measureHistoryService.getHistory(historyKey).isEmpty());
         measureHistoryService.storeMeasure(measure);
@@ -125,7 +135,8 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase
     
     
         final Kpi exampleKPI = buildFakeKpi("DEMO_FILTER4");
-        HistoryKey.of(exampleKPI, EntityType.PROJECT, 1);
+        
+        HistoryKey.of(exampleKPI, EntityType.PROJECT, exampleKPI.getId());
         final Measure measure = buildFakeMeasure(exampleKPI);
         measureHistoryService.saveOrUpdate(measure);
         Assert.assertNotNull(measure.getId());
@@ -167,7 +178,8 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase
         exampleKPI.setKpiKey(_kpiNameString);
         exampleKPI.setEntityType(EntityType.PROJECT);
         exampleKPI.setEntityID(_kpiNameString.hashCode());
-        exampleKPI.setId(_kpiNameString.hashCode());
+        kpiDao.insert(exampleKPI);
+        // exampleKPI.setId(_kpiNameString.hashCode());
         return exampleKPI;
     }
     

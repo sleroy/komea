@@ -81,7 +81,7 @@ public class KpiDemoServiceTest extends AbstractSpringIntegrationTestCase
     
         final Kpi kpi = kpiDemoService.actualLineCoverage();
         final KPIValueTable<Project> valueTable =
-                kpiService.getKpiRealTimeValues(KpiKey.ofKpi(kpi));
+                kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
         valueTable.dump();
         kpiService.storeValueInHistory(KpiKey.ofKpi(kpi));
         Assert.assertEquals(1, valueTable.getNumberOfRecords());
@@ -99,7 +99,7 @@ public class KpiDemoServiceTest extends AbstractSpringIntegrationTestCase
     
         final Kpi kpi = kpiDemoService.numberBuildPerDay();
         final KPIValueTable<Project> valueTable =
-                kpiService.getKpiRealTimeValues(KpiKey.ofKpi(kpi));
+                kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
         valueTable.dump();
         kpiService.storeValueInHistory(KpiKey.ofKpi(kpi));
         
@@ -119,7 +119,7 @@ public class KpiDemoServiceTest extends AbstractSpringIntegrationTestCase
     
         final Kpi kpi = kpiDemoService.numberBuildPerMonth();
         final KPIValueTable<Project> valueTable =
-                kpiService.getKpiRealTimeValues(KpiKey.ofKpi(kpi));
+                kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
         valueTable.dump();
         kpiService.storeValueInHistory(KpiKey.ofKpi(kpi));
         Assert.assertEquals(2, valueTable.getNumberOfRecords());
@@ -137,7 +137,7 @@ public class KpiDemoServiceTest extends AbstractSpringIntegrationTestCase
     
         final Kpi kpi = kpiDemoService.numberSuccessBuildPerDay();
         final KPIValueTable<Project> valueTable =
-                kpiService.getKpiRealTimeValues(KpiKey.ofKpi(kpi));
+                kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
         valueTable.dump();
         kpiService.storeValueInHistory(KpiKey.ofKpi(kpi));
         Assert.assertEquals(2, valueTable.getNumberOfRecords());
@@ -155,7 +155,7 @@ public class KpiDemoServiceTest extends AbstractSpringIntegrationTestCase
     
         final Kpi kpi = kpiDemoService.numberSuccessBuildPerWeek();
         final KPIValueTable<Project> valueTable =
-                kpiService.getKpiRealTimeValues(KpiKey.ofKpi(kpi));
+                kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
         valueTable.dump();
         kpiService.storeValueInHistory(KpiKey.ofKpi(kpi));
         Assert.assertEquals(2, valueTable.getNumberOfRecords());

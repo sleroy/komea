@@ -140,7 +140,7 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
         final Double kpiSingleValue =
-                kpiService.getKpiSingleValue(KpiKey.ofKpiName(getKpiNameFromSeverity(_criticity)),
+                kpiService.getSingleValue(KpiKey.ofKpiName(getKpiNameFromSeverity(_criticity)),
                         "alert_number");
         return kpiSingleValue.intValue();
         
@@ -169,7 +169,7 @@ public class EventStatisticsService implements IEventStatisticsService
     public long getReceivedAlertsIn24LastHours() {
     
     
-        return kpiService.getKpiSingleValue(KpiKey.ofKpiName(ALERT_RECEIVED_IN_ONE_DAY),
+        return kpiService.getSingleValue(KpiKey.ofKpiName(ALERT_RECEIVED_IN_ONE_DAY),
                 "alert_number").intValue();
         
     }

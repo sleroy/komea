@@ -117,15 +117,12 @@ public class KpiKey
     
     
     
-    private Integer    entityID;
-    
-    
-    private EntityType entityType;
+    private EntityKey entityKey;
     
     
     @NotNull
     @Size(min = 0, max = 255)
-    private String     kpiName;
+    private String    kpiName;
     
     
     
@@ -142,27 +139,26 @@ public class KpiKey
     }
     
     
-    public KpiKey(final EntityType _entityType, final Integer _entityID, final String _kpiName) {
+    /**
+     * Builds a kpi.
+     * 
+     * @param _entityType
+     * @param _entityID
+     * @param _kpiName
+     */
+    private KpiKey(final EntityType _entityType, final Integer _entityID, final String _kpiName) {
     
     
         super();
-        entityType = _entityType;
-        entityID = _entityID;
+        entityKey = new EntityKey(_entityType, _entityID);
         kpiName = _kpiName;
     }
     
     
-    public Integer getEntityID() {
+    public EntityKey getEntityKey() {
     
     
-        return entityID;
-    }
-    
-    
-    public EntityType getEntityType() {
-    
-    
-        return entityType;
+        return entityKey;
     }
     
     
@@ -173,24 +169,18 @@ public class KpiKey
     }
     
     
-    public void setEntityID(final Integer _entityID) {
+    @JsonIgnore
+    public boolean isAssociatedToEntity() {
     
     
-        entityID = _entityID;
+        return entityKey != null && entityKey.isEntityReferenceKey();
     }
     
     
-    public void setEntityType(final EntityType _entityType) {
+    public void setEntityKey(final EntityKey _entityKey) {
     
     
-        entityType = _entityType;
-    }
-    
-    
-    public void setKpiName(final String _kpiName) {
-    
-    
-        kpiName = _kpiName;
+        entityKey = _entityKey;
     }
     
     
@@ -202,15 +192,7 @@ public class KpiKey
     public String toString() {
     
     
-        return "KpiKey [entityType="
-                + entityType + ", entityID=" + entityID + ", kpiName=" + kpiName + "]";
+        return "KpiKey [entityKey=" + entityKey + ", kpiName=" + kpiName + "]";
     }
     
-    
-    @JsonIgnore
-    public boolean isAssociatedToEntity() {
-    
-    
-        return entityType != null && entityID != null;
-    }
 }

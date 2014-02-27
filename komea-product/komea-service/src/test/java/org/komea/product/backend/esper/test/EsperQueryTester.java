@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.espertech.esper.client.EPStatement;
+import com.google.common.base.Strings;
 
 
 
@@ -359,6 +360,7 @@ public class EsperQueryTester
             provider.setProviderType(ProviderType.CI_BUILD);
             provider.setIcon("");
             provider.setUrl("");
+            provider.setId(providerName.hashCode());
             getMockProviders().put(providerName, provider);
         }
         final String eventTypeName = _eventDto.getEventType();
@@ -370,7 +372,7 @@ public class EsperQueryTester
             eventType.setDescription(eventTypeName);
             eventType.setEnabled(true);
             eventType.setSeverity(Severity.INFO);
-            
+            eventType.setId(eventTypeName.hashCode());
             mockEventTypes.put(eventTypeName, eventType);
         }
         
@@ -380,24 +382,28 @@ public class EsperQueryTester
         event.setProvider(getMockProviders().get(_eventDto.getProvider()));
         event.setMessage(_eventDto.getMessage());
         
-        for (final String user : _eventDto.getPersons()) {
-            if (mockPerson.get(user) == null) {
-                final Person person = new Person();
-                person.setLogin(user);
-                mockPerson.put(user, person);
-            }
-            event.getPersons().add(mockPerson.get(user));
+        final String user = _eventDto.getPerson();
+        if (!Strings.isNullOrEmpty(user) && mockPerson.get(user) == null) {
+            final Person person = new Person();
+            person.setLogin(user);
+            person.setId(user.hashCode());
+            mockPerson.put(user, person);
         }
-        if (mockGroup.get(_eventDto.getPersonGroup()) == null) {
+        event.setPerson(mockPerson.get(user));
+        
+        if (!Strings.isNullOrEmpty(_eventDto.getPersonGroup())
+                && mockGroup.get(_eventDto.getPersonGroup()) == null) {
             final PersonGroup group = new PersonGroup();
             group.setName(_eventDto.getPersonGroup());
+            group.setId(group.getName().hashCode());
             mockGroup.put(_eventDto.getPersonGroup(), group);
         }
         final String projectName = _eventDto.getProject();
         event.setPersonGroup(mockGroup.get(projectName));
-        if (mockProject.get(projectName) == null) {
+        if (!Strings.isNullOrEmpty(projectName) && mockProject.get(projectName) == null) {
             final Project group = new Project();
             group.setName(projectName);
+            group.setId(projectName.hashCode());
             group.setProjectKey(projectName);
             mockProject.put(projectName, group);
         }

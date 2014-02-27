@@ -57,7 +57,7 @@ public class RssFeederTest
             Assert.assertNull(eventDTO.getProject());
             Assert.assertNotNull(eventDTO.getProvider());
             Assert.assertNotNull(eventDTO.getDate());
-            Assert.assertTrue(eventDTO.getPersons().isEmpty());
+            Assert.assertTrue(eventDTO.getPerson().isEmpty());
             Assert.assertTrue(eventDTO.getProperties().isEmpty());
             Assert.assertNotNull(eventDTO.getValue());
             

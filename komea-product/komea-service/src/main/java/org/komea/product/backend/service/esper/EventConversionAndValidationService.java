@@ -31,6 +31,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Strings;
+
 
 
 /**
@@ -104,12 +106,11 @@ public class EventConversionAndValidationService implements IEventConversionAndV
         event.setProvider(CollectionUtil.singleOrNull(providerDAO
                 .selectByCriteria(providerCriteria)));
         
-        if (!_dto.getPersons().isEmpty()) {
+        if (!Strings.isNullOrEmpty(_dto.getPerson())) {
             final PersonCriteria personCriteria = new PersonCriteria();
-            for (final String login : _dto.getPersons()) {
-                personCriteria.or().andLoginEqualTo(login);
-            }
-            event.setPersons(personDAO.selectByCriteria(personCriteria));
+            personCriteria.or().andLoginEqualTo(_dto.getPerson());
+            
+            event.setPerson(CollectionUtil.singleOrNull(personDAO.selectByCriteria(personCriteria)));
         }
         
         return event;

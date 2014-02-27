@@ -5,7 +5,6 @@ package org.komea.product.database.alert;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import org.komea.product.database.model.EventType;
@@ -39,15 +38,15 @@ public interface IEvent extends Serializable
     
     
     /**
-     * @return the personGroup
+     * @return the person
      */
-    PersonGroup getPersonGroup();
+    Person getPerson();
     
     
     /**
-     * @return the persons
+     * @return the personGroup
      */
-    List<Person> getPersons();
+    PersonGroup getPersonGroup();
     
     
     /**
@@ -102,17 +101,17 @@ public interface IEvent extends Serializable
     
     
     /**
+     * @param _persons
+     *            the persons to set
+     */
+    void setPerson(Person _person);
+    
+    
+    /**
      * @param _personGroup
      *            the personGroup to set
      */
     void setPersonGroup(PersonGroup _personGroup);
-    
-    
-    /**
-     * @param _persons
-     *            the persons to set
-     */
-    void setPersons(List<Person> _persons);
     
     
     /**

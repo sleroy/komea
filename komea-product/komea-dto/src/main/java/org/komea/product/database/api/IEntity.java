@@ -4,6 +4,7 @@ package org.komea.product.database.api;
 
 
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.service.dto.EntityKey;
 
 
 
@@ -24,5 +25,14 @@ public interface IEntity extends IHasKey
      * @return the entity type.
      */
     EntityType entityType();
+    
+    
+    /**
+     * Returns the entity key.
+     * 
+     * @return the entity key.
+     */
+    EntityKey getEntityKey();
+    
     
 }

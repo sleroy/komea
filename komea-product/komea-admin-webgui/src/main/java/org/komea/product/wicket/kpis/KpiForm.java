@@ -1,12 +1,13 @@
 
 package org.komea.product.wicket.kpis;
 
+
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.model.IModel;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.database.api.IEntity;
@@ -20,6 +21,7 @@ import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
+import org.komea.product.service.dto.EntityKey;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.widget.builders.SelectBoxBuilder;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
@@ -32,17 +34,54 @@ import org.komea.product.wicket.widget.builders.TextFieldBuilder;
  * 
  * @author sleroy
  */
-public final class KpiForm extends Form<Kpi> {
-
-
-
-    private final Component feedBack;
-    private final Kpi kpi;
+public final class KpiForm extends Form<Kpi>
+{
+    
+    
+    public static abstract class AjaxLinkLayout extends AjaxLink
+    {
+        
+        
+        private final LayoutPage page;
+        
+        
+        
+        public AjaxLinkLayout(final String string, final IModel imodel, final LayoutPage page) {
+        
+        
+            super(string, imodel);
+            this.page = page;
+        }
+        
+        
+        public AjaxLinkLayout(final String string, final LayoutPage page) {
+        
+        
+            super(string);
+            this.page = page;
+        }
+        
+        
+        public LayoutPage getPageCustom() {
+        
+        
+            return page;
+        }
+        
+    }
+    
+    
+    
+    private final Component  feedBack;
+    private final Kpi        kpi;
+    
     // private Kpi kpi;
-    private final KpiDao kpiDao;
-
+    private final KpiDao     kpiDao;
+    
     private final LayoutPage page;
-
+    
+    
+    
     public KpiForm(
             final String _id,
             final KpiDao _kpi,
@@ -51,55 +90,58 @@ public final class KpiForm extends Form<Kpi> {
             final Component _feedBack,
             final IModel<Kpi> _dto,
             final LayoutPage _kpiPage) {
+    
+    
         super(_id, _dto);
         kpiDao = _kpi;
         feedBack = _feedBack;
         kpi = _dto.getObject();
         page = _kpiPage;
         feedBack.setVisible(false);
-        add(TextFieldBuilder.<String>createRequired("name", kpi, "name").highlightOnErrors()
+        add(TextFieldBuilder.<String> createRequired("name", kpi, "name").highlightOnErrors()
                 .simpleValidator(0, 255).build());
-
-        add(TextFieldBuilder.<String>createRequired("kpiKey", kpi, "kpiKey")
+        
+        add(TextFieldBuilder.<String> createRequired("kpiKey", kpi, "kpiKey")
                 .simpleValidator(0, 255).highlightOnErrors().withTooltip("").build());
-
-        add(TextAreaBuilder.<String>create("description", kpi, "description")
+        
+        add(TextAreaBuilder.<String> create("description", kpi, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("").build());
         _providerDao.selectByPrimaryKey(kpi.getIdProvider());
         // String name = provider.getName();
-        add(TextFieldBuilder.<String>create("idProvider", kpi, "idProvider").withTooltip("")
+        add(TextFieldBuilder.<String> create("idProvider", kpi, "idProvider").withTooltip("")
                 .build());
-
-        add(TextFieldBuilder.<String>create("valueMin", kpi, "valueMin").withTooltip("").build());
-
-        add(TextFieldBuilder.<String>create("valueMax", kpi, "valueMax").withTooltip("").build());
-       
-
-        add(SelectBoxBuilder.<ValueDirection>createWithEnum("valueDirection", kpi,
+        
+        add(TextFieldBuilder.<String> create("valueMin", kpi, "valueMin").withTooltip("").build());
+        
+        add(TextFieldBuilder.<String> create("valueMax", kpi, "valueMax").withTooltip("").build());
+        
+        
+        add(SelectBoxBuilder.<ValueDirection> createWithEnum("valueDirection", kpi,
                 ValueDirection.class).build());
-
-        add(SelectBoxBuilder.<ValueType>createWithEnum("valueType", kpi, ValueType.class).build());
-
-        add(SelectBoxBuilder.<EntityType>createWithEnum("entityType", kpi, EntityType.class)
+        
+        add(SelectBoxBuilder.<ValueType> createWithEnum("valueType", kpi, ValueType.class).build());
+        
+        add(SelectBoxBuilder.<EntityType> createWithEnum("entityType", kpi, EntityType.class)
                 .build());
-
-        final IEntity entity = _entity.getEntity(kpi.getEntityType(), kpi.getEntityID());
+        
+        final IEntity entity =
+                _entity.getEntity(EntityKey.of(kpi.getEntityType(), kpi.getEntityID()));
         final String entityName = getEntityName(kpi.getEntityType(), entity);
-        add(TextFieldBuilder.<String>create("entityID", entityName, "toString").withTooltip("")
+        add(TextFieldBuilder.<String> create("entityID", entityName, "toString").withTooltip("")
                 .build());
-
-        add(TextFieldBuilder.<String>createRequired("cronExpression", kpi, "cronExpression")
+        
+        add(TextFieldBuilder.<String> createRequired("cronExpression", kpi, "cronExpression")
                 .simpleValidator(0, 60).highlightOnErrors().withTooltip("").build());
-
-        add(TextFieldBuilder.<String>createRequired("evictionRate", kpi, "evictionRate")
+        
+        add(TextFieldBuilder.<String> createRequired("evictionRate", kpi, "evictionRate")
                 .withTooltip("").build());
-
-        add(SelectBoxBuilder.<EvictionType>createWithEnum("evictionType", kpi, EvictionType.class)
+        
+        add(SelectBoxBuilder.<EvictionType> createWithEnum("evictionType", kpi, EvictionType.class)
                 .build());
-
-        add(TextAreaBuilder.<String>create("esperRequest", kpi, "esperRequest").withTooltip("")
+        
+        add(TextAreaBuilder.<String> create("esperRequest", kpi, "esperRequest").withTooltip("")
                 .build());
-
+        
         // AjaxFormValidatingBehavior.addToAllFormComponents(this, "onkeyup", Duration.ONE_SECOND);
         // ///////////////////////////////////////////////////////////////////////////////////
         // //////////////////////////////// Popup //////////////////////////////////////////
@@ -107,33 +149,43 @@ public final class KpiForm extends Form<Kpi> {
         // ///////////////////////////////////////////////////////////////////////////////////
         // ///////////////////////////////////////////////////////////////////////////////////
         // ///////////////////////////////////////////////////////////////////////////////////
-        add(new AjaxLinkLayout("cancel", page) {
-
+        add(new AjaxLinkLayout("cancel", page)
+        {
+            
+            
             @Override
             public void onClick(final AjaxRequestTarget art) {
-
+            
+            
                 getPageCustom().setResponsePage(new KpiPage(getPageCustom().getPageParameters()));
             }
         });
-
-        add(new AjaxLinkLayout("btnentity", page) {
-
-            @Override
-            public void onClick(final AjaxRequestTarget art) {
-
-                getPageCustom().setResponsePage(new KpiPage(getPageCustom().getPageParameters()));
-            }
-        });
-
-        final Kpi trKpi = this.kpi; 
         
-        add(new AjaxButton("maxValueMax", this) { 
-
+        add(new AjaxLinkLayout("btnentity", page)
+        {
+            
+            
+            @Override
+            public void onClick(final AjaxRequestTarget art) {
+            
+            
+                getPageCustom().setResponsePage(new KpiPage(getPageCustom().getPageParameters()));
+            }
+        });
+        
+        final Kpi trKpi = kpi;
+        
+        add(new AjaxButton("maxValueMax", this)
+        {
+            
+            
             @Override
             public void onSubmit() {
-               trKpi.setValueMax(Double.MAX_VALUE);
+            
+            
+                trKpi.setValueMax(Double.MAX_VALUE);
             }
- 
+            
         });
         
         // add a button that can be used to submit the form via ajax
@@ -143,7 +195,8 @@ public final class KpiForm extends Form<Kpi> {
             
             @Override
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
-
+            
+            
                 feedBack.setVisible(true);
                 error("error found");
                 // repaint the feedback panel so errors are shown
@@ -153,7 +206,8 @@ public final class KpiForm extends Form<Kpi> {
             
             @Override
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-
+            
+            
                 feedBack.setVisible(false);
                 info("Submitted information");
                 // repaint the feedback panel so that it is hidden
@@ -163,21 +217,24 @@ public final class KpiForm extends Form<Kpi> {
         });
         
     }
-
+    
+    
     private String getEntityName(final EntityType type, final IEntity entity) {
-
+    
+    
         String result = "";
-        if (type.equals(EntityType.PERSON)) {
+        if (type == EntityType.PERSON) {
             result = ((Person) entity).getFirstName() + " " + ((Person) entity).getLastName();
-        } else if (type.equals(EntityType.PROJECT)) {
+        } else if (type == EntityType.PROJECT) {
             result = ((Project) entity).getName();
-        } else if (type.equals(EntityType.TEAM) && type.equals(EntityType.DEPARTMENT)) {
+        } else if (type == EntityType.TEAM && type == EntityType.DEPARTMENT) {
             result = ((PersonGroup) entity).getName();
         }
         
         return result;
     }
-
+    
+    
     /**
      * Validation the formular : settings are updated from the DTO
      */
@@ -223,28 +280,6 @@ public final class KpiForm extends Form<Kpi> {
         // } else {
         // personDAO.insert(person);
         // }
-    }
-    public static abstract class AjaxLinkLayout extends AjaxLink {
-
-        private final LayoutPage page;
-
-        public AjaxLinkLayout(final String string, final IModel imodel, final LayoutPage page) {
-
-            super(string, imodel);
-            this.page = page;
-        }
-
-        public AjaxLinkLayout(final String string, final LayoutPage page) {
-
-            super(string);
-            this.page = page;
-        }
-
-        public LayoutPage getPageCustom() {
-
-            return page;
-        }
-
     }
     
     

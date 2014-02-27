@@ -20,10 +20,12 @@ import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.database.model.MeasureCriteria.Criteria;
+import org.komea.product.service.dto.EntityKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 
@@ -34,6 +36,7 @@ import org.springframework.stereotype.Service;
  * @version $Revision: 1.0 $
  */
 @Service
+@Transactional
 public final class MeasureHistoryService extends AbstractService<Measure, Integer, MeasureCriteria>
         implements IMeasureHistoryService
 {
@@ -47,11 +50,90 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
     private static final Logger LOGGER          = LoggerFactory
                                                         .getLogger(MeasureHistoryService.class);
     
-    @Autowired
-    private IEsperEngine        esperEngine;
+    
+    
+    /**
+     * Build measure criteria from search filter.
+     * 
+     * @param searchMeasuresDto
+     *            the search filter
+     * @param _historyK
+     *            the history key
+     * @return the history key
+     */
+    public static MeasureCriteria buildMeasureCriteriaFromSearchFilter(
+            final SearchMeasuresDto searchMeasuresDto,
+            final HistoryKey _historyK) {
+    
+    
+        final MeasureCriteria measureCriteria = new MeasureCriteria();
+        measureCriteria.setOrderByClause(DATE_ORDER_DESC);
+        initMeasureCriteria(_historyK, measureCriteria);
+        
+        final Criteria criteria = measureCriteria.createCriteria();
+        if (searchMeasuresDto.hasFromDate()) {
+            criteria.andDateGreaterThanOrEqualTo(searchMeasuresDto.getFromDate());
+        }
+        if (searchMeasuresDto.hasToDate()) {
+            criteria.andDateLessThanOrEqualTo(searchMeasuresDto.getToDate());
+        }
+        
+        return measureCriteria;
+    }
+    
+    
+    private static void createEntityCriteriaForMeasure(
+            final EntityKey _entityKey,
+            final MeasureCriteria.Criteria criteria) {
+    
+    
+        switch (_entityKey.getEntityType()) {
+            case PERSON:
+                criteria.andIdPersonEqualTo(_entityKey.getId());
+                break;
+            case PROJECT:
+                criteria.andIdProjectEqualTo(_entityKey.getId());
+                break;
+            case TEAM:
+            case DEPARTMENT:
+                criteria.andIdPersonGroupEqualTo(_entityKey.getId());
+                break;
+            default:
+                break;
+        }
+    }
+    
+    
+    /**
+     * Method initMeasureCriteria.
+     * 
+     * @param _kpiKey
+     *            HistoryKey
+     * @param measureCriteria
+     *            MeasureCriteria
+     */
+    private static void initMeasureCriteria(
+            final HistoryKey _kpiKey,
+            final MeasureCriteria measureCriteria) {
+    
+    
+        final Criteria createCriteria = measureCriteria.createCriteria();
+        createCriteria.andIdKpiEqualTo(_kpiKey.getKpiID());
+        if (_kpiKey.hasEntityReference()) {
+            createEntityCriteriaForMeasure(_kpiKey.getEntityKey(), createCriteria);
+        }
+        
+        
+    }
+    
+    
     
     @Autowired
-    private MeasureDao          requiredDAO;
+    private IEsperEngine esperEngine;
+    
+    
+    @Autowired
+    private MeasureDao   requiredDAO;
     
     
     
@@ -119,7 +201,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
         initMeasureCriteria(_kpiKey, measureCriteria);
         
         
-        return requiredDAO.selectByCriteriaWithRowbounds(measureCriteria, rowBounds);
+        return getListOfMeasures(rowBounds, measureCriteria);
     }
     
     
@@ -202,14 +284,12 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
         final RowBounds rowBounds = new RowBounds(0, limit == null ? Integer.MAX_VALUE : limit);
         final List<Measure> measures = new ArrayList<Measure>(1000);
         for (final IEntity entity : entities) {
-            final Integer idEntity = entity.getId();
+            entity.getId();
             for (final Kpi kpi : kpis) {
-                final Integer idKpi = kpi.getId();
                 final MeasureCriteria measureCriteria =
-                        buildMeasureCriteriaFromSearchFilter(searchMeasuresDto, idEntity, idKpi);
-                final List<Measure> foundMeasures =
-                        requiredDAO.selectByCriteriaWithRowbounds(measureCriteria, rowBounds);
-                measures.addAll(foundMeasures);
+                        buildMeasureCriteriaFromSearchFilter(searchMeasuresDto,
+                                HistoryKey.of(kpi.getId(), entity.getEntityKey()));
+                measures.addAll(getListOfMeasures(rowBounds, measureCriteria));
             }
         }
         Collections.sort(measures, new DateComparator());
@@ -279,63 +359,14 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
     }
     
     
-    private MeasureCriteria buildMeasureCriteriaFromSearchFilter(
-            final SearchMeasuresDto searchMeasuresDto,
-            final Integer idEntity,
-            final Integer idKpi) {
+    private List<Measure> getListOfMeasures(
+            final RowBounds rowBounds,
+            final MeasureCriteria measureCriteria) {
     
     
-        final MeasureCriteria measureCriteria = new MeasureCriteria();
-        measureCriteria.setOrderByClause(DATE_ORDER_DESC);
-        final MeasureCriteria.Criteria criteria = measureCriteria.createCriteria();
-        criteria.andIdKpiEqualTo(idKpi);
-        if (searchMeasuresDto.hasFromDate()) {
-            criteria.andDateGreaterThanOrEqualTo(searchMeasuresDto.getFromDate());
-        }
-        if (searchMeasuresDto.hasToDate()) {
-            criteria.andDateLessThanOrEqualTo(searchMeasuresDto.getToDate());
-        }
-        createMeasureCriteriaForEntity(searchMeasuresDto, idEntity, criteria);
-        return measureCriteria;
-    }
-    
-    
-    private void createMeasureCriteriaForEntity(
-            final SearchMeasuresDto searchMeasuresDto,
-            final Integer idEntity,
-            final MeasureCriteria.Criteria criteria) {
-    
-    
-        switch (searchMeasuresDto.getEntityType()) {
-            case PERSON:
-                criteria.andIdPersonEqualTo(idEntity);
-                break;
-            case PROJECT:
-                criteria.andIdProjectEqualTo(idEntity);
-                break;
-            case TEAM:
-            case DEPARTMENT:
-                criteria.andIdPersonGroupEqualTo(idEntity);
-                break;
-            default:
-                break;
-        }
-    }
-    
-    
-    /**
-     * Method initMeasureCriteria.
-     * 
-     * @param _kpiKey
-     *            HistoryKey
-     * @param measureCriteria
-     *            MeasureCriteria
-     */
-    private void initMeasureCriteria(final HistoryKey _kpiKey, final MeasureCriteria measureCriteria) {
-    
-    
-        final Criteria createCriteria = measureCriteria.createCriteria();
-        createCriteria.andIdKpiEqualTo(_kpiKey.getKpiID());
-        
+        final List<Measure> list =
+                requiredDAO.selectByCriteriaWithRowbounds(measureCriteria, rowBounds);
+        LOGGER.trace("Get list of measures {} {} returns {}", rowBounds, measureCriteria, list);
+        return list;
     }
 }

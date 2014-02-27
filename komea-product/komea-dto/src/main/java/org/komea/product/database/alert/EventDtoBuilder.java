@@ -50,18 +50,18 @@ public class EventDtoBuilder
     }
     
     
-    public EventDtoBuilder message(final String _message) {
-    
-    
-        event.setMessage(_message);
-        return this;
-    }
-    
-    
     public EventDtoBuilder eventType(final String _eventType) {
     
     
         event.setEventType(_eventType);
+        return this;
+    }
+    
+    
+    public EventDtoBuilder message(final String _message) {
+    
+    
+        event.setMessage(_message);
         return this;
     }
     
@@ -137,7 +137,7 @@ public class EventDtoBuilder
     public EventDtoBuilder withUser(final String _userName) {
     
     
-        event.getPersons().add(_userName);
+        event.setPerson(_userName);
         return this;
     }
     

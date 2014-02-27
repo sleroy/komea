@@ -130,10 +130,12 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
         
         final KpiKey ofKpiName = KpiKey.ofKpiName(kpi.getKpiKey());
         eventPushService.sendEventDto(event);
-        final KpiTendancyDto kpiTendancy = kpiService.getKpiTendancy(ofKpiName);
+        final KpiTendancyDto kpiTendancy = kpiService.getTendancy(ofKpiName);
         final Project systemProject = systemProjectBean.getSystemProject();
+        System.err.println(kpiTendancy);
         Assert.assertTrue(kpiTendancy.getLineValueDtos().size() > 0);
-        Assert.assertNotNull(kpiTendancy.getRealValue(systemProject));
+        Assert.assertNotNull("Expected a real value for this project",
+                kpiTendancy.getRealValue(systemProject));
         Assert.assertNull(kpiTendancy.getLastValue(systemProject));
         
         // Seconds storage

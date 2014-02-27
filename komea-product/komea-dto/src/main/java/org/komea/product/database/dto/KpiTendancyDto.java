@@ -113,7 +113,8 @@ public class KpiTendancyDto implements Serializable
     
     
         for (final TendancyLineValueDto valueDto : lineValueDtos) {
-            if (_entity.equals(valueDto.getEntity())) { return valueDto.getRealValue(); }
+            if (_entity.getEntityKey().equals(valueDto.getEntity().getEntityKey())) { return valueDto
+                    .getRealValue(); }
         }
         
         return null;

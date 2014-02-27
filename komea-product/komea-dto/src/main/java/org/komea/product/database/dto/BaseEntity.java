@@ -8,6 +8,7 @@ import java.io.Serializable;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.api.IKeyVisitor;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.service.dto.EntityKey;
 
 
 
@@ -68,10 +69,41 @@ public class BaseEntity implements IEntity, Serializable
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(final Object obj) {
+    
+    
+        if (this == obj) { return true; }
+        if (obj == null) { return false; }
+        if (!(obj instanceof BaseEntity)) { return false; }
+        final BaseEntity other = (BaseEntity) obj;
+        if (id == null) {
+            if (other.id != null) { return false; }
+        } else if (!id.equals(other.id)) { return false; }
+        return true;
+    }
+    
+    
     public String getDescription() {
     
     
         return description;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.database.api.IEntity#getEntityKey()
+     */
+    @Override
+    public EntityKey getEntityKey() {
+    
+    
+        return new EntityKey(getEntityType(), getId());
     }
     
     
@@ -101,6 +133,21 @@ public class BaseEntity implements IEntity, Serializable
     
     
         return name;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+    
+    
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (id == null ? 0 : id.hashCode());
+        return result;
     }
     
     

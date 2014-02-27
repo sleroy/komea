@@ -70,7 +70,7 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         project.setId(1);
         project.setName("project 1");
         
-        Mockito.when(kpiService.getKpiRealTimeValues(kpiKey)).thenAnswer(new Answer<KPIValueTable<Project>>() {
+        Mockito.when(kpiService.getRealTimeValues(kpiKey)).thenAnswer(new Answer<KPIValueTable<Project>>() {
             
             @Override
             public KPIValueTable<Project> answer(final InvocationOnMock _invocation) throws Throwable {
@@ -103,7 +103,7 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         // httpRequest.andExpect(MockMvcResultMatchers.jsonPath("kpi.kpiKey",
         // org.hamcrest.Matchers.equalToIgnoringCase("NUMBER_OF_BUILD_PER_DAY")));
         
-        Mockito.verify(kpiService, Mockito.times(1)).getKpiRealTimeValues(Matchers.any(KpiKey.class));
+        Mockito.verify(kpiService, Mockito.times(1)).getRealTimeValues(Matchers.any(KpiKey.class));
         
     }
     @Test
@@ -115,7 +115,7 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         project.setId(1);
         project.setName("project 1");
         
-        Mockito.when(kpiService.getKpiRealTimeValues(org.mockito.Matchers.any(KpiKey.class))).thenThrow(KPINotFoundException.class);
+        Mockito.when(kpiService.getRealTimeValues(org.mockito.Matchers.any(KpiKey.class))).thenThrow(KPINotFoundException.class);
         
         final String jsonMessage = IntegrationTestUtil.convertObjectToJSON(kpiKey);
         LOGGER.info(jsonMessage);
@@ -125,7 +125,7 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isInternalServerError());
         
-        Mockito.verify(kpiService, Mockito.times(1)).getKpiRealTimeValues(Matchers.any(KpiKey.class));
+        Mockito.verify(kpiService, Mockito.times(1)).getRealTimeValues(Matchers.any(KpiKey.class));
         
     }
     // @Test

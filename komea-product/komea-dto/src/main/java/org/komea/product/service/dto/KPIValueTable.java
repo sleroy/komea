@@ -69,12 +69,12 @@ public class KPIValueTable<T extends IEntity> implements Serializable
      * 
      * @return convert the table into a map.
      */
-    public Map<IEntity, Double> convertMap() {
+    public Map<EntityKey, Double> convertIdMap() {
     
     
-        final Map<IEntity, Double> entityMap = new HashMap<IEntity, Double>();
+        final Map<EntityKey, Double> entityMap = new HashMap<EntityKey, Double>();
         for (final KpiLineValue value : values) {
-            entityMap.put(value.getEntity(), value.getValue());
+            entityMap.put(value.getEntity().getEntityKey(), value.getValue());
         }
         return entityMap;
     }
@@ -118,10 +118,32 @@ public class KPIValueTable<T extends IEntity> implements Serializable
     }
     
     
+    /**
+     * Returns the single value;
+     * 
+     * @return the single value.
+     */
     public Number getSingleValue() {
     
     
         return singleValue;
+    }
+    
+    
+    /**
+     * Returns the entity
+     * 
+     * @param _entity
+     *            the entity.
+     * @return the entity value.
+     */
+    public Double getValueOfEntity(final IEntity _entity) {
+    
+    
+        for (final KpiLineValue<?> value : values) {
+            if (_entity.equals(value.getEntity())) { return value.getValue(); }
+        }
+        return new Double(0d);
     }
     
     
@@ -175,5 +197,6 @@ public class KPIValueTable<T extends IEntity> implements Serializable
         return "KPIValueTable [kpi="
                 + kpi + ", singleValue=" + singleValue + ", values=" + values + "]";
     }
+    
     
 }
