@@ -237,6 +237,8 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
                 measure.setValue(number.doubleValue());
                 return measure;
             }
+        } catch (KPINotFoundRuntimeException ex) {
+            LOGGER.error(ex.getMessage(), ex);
         } catch (EsperStatementNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
         }
