@@ -12,6 +12,7 @@ import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.exceptions.EntityNotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundRuntimeException;
+import org.komea.product.backend.exceptions.KpiAlreadyExistingException;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IEntityService;
@@ -277,7 +278,9 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         final Measure measureKey =
                 Measure.initializeMeasureFromKPIKey(kpiOrFail.getId(), _key.getEntityKey());
         final List<IEntity> entitiesAssociatedToKpiKey = getEntitiesAssociatedToKpiKey(_key);
-        if (entitiesAssociatedToKpiKey.size() != -1) { throw new IllegalArgumentException(
+        if (entitiesAssociatedToKpiKey.isEmpty()) { throw new EntityNotFoundException(
+                _key.getEntityKey()); }
+        if (entitiesAssociatedToKpiKey.size() > 1) { throw new IllegalArgumentException(
                 "Cannot return a measure, many entities are referenced by the KpiKey " + _key); }
         final IEntity entity = CollectionUtil.singleOrNull(entitiesAssociatedToKpiKey);
         measureKey.setEntity(entity.entityType(), entity.getId());
@@ -437,6 +440,8 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
         if (_kpi.getId() == null) {
             LOGGER.info("Saving new KPI : {}", _kpi.getKpiKey());
+            if (findKPI(KpiKey.ofKpi(_kpi)) != null) { throw new KpiAlreadyExistingException(
+                    _kpi.getKpiKey()); }
             requiredDAO.insert(_kpi);
         } else {
             LOGGER.info("KPI {} updated", _kpi.getKpiKey());

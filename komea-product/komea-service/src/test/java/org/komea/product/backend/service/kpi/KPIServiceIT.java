@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.test.EsperQueryTester;
+import org.komea.product.backend.exceptions.KpiAlreadyExistingException;
 import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
@@ -22,6 +23,7 @@ import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.dto.KpiTendancyDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
+import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.Project;
 import org.komea.product.service.dto.EventTypeStatistic;
 import org.komea.product.service.dto.KPIValueTable;
@@ -68,6 +70,108 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
     
     
         super();
+    }
+    
+    
+    @Test
+    public void testBug() {
+    
+    
+        final String key = "testBugKPI";
+        final Kpi kpi =
+                KpiBuilder
+                        .createAscending()
+                        .nameAndKeyDescription(key)
+                        .entityType(EntityType.PROJECT)
+                        .expirationMonth()
+                        .query("SELECT project as entity, COUNT(*) as value FROM Event.win:time(1 day) GROUP BY project")
+                        .cronFiveMinutes().build();
+        
+        kpiService.saveOrUpdate(kpi);
+        
+        final Measure measure =
+                kpiService.getRealTimeMeasure(KpiKey.ofKpiAndEntity(kpi,
+                        systemProjectBean.getSystemProject()));
+        Assert.assertNotNull("Should be filtered and work", measure);
+        
+    }
+    
+    
+    @Test
+    public void testBug2() {
+    
+    
+        final String key = "testBugKPI2";
+        final Kpi kpi =
+                KpiBuilder
+                        .createAscending()
+                        .nameAndKeyDescription(key)
+                        .entityType(EntityType.PROJECT)
+                        .expirationMonth()
+                        .query("SELECT project as entity, COUNT(*) as value FROM Event.win:time(1 day) GROUP BY project")
+                        .cronFiveMinutes().build();
+        
+        kpiService.saveOrUpdate(kpi);
+        
+        final Measure measure = kpiService.getRealTimeMeasure(KpiKey.ofKpi(kpi));
+        Assert.assertNotNull("Should be filtered and work", measure);
+        
+    }
+    
+    
+    @Test(expected = KpiAlreadyExistingException.class)
+    public void testBugAlreadyExistingKPI() {
+    
+    
+        final String key = "testBugKPI3";
+        final Kpi kpi =
+                KpiBuilder
+                        .createAscending()
+                        .nameAndKeyDescription(key)
+                        .entityType(EntityType.PROJECT)
+                        .expirationMonth()
+                        .query("SELECT project as entity, COUNT(*) as value FROM Event.win:time(1 day) GROUP BY project")
+                        .cronFiveMinutes().build();
+        
+        kpiService.saveOrUpdate(kpi);
+        final Kpi kpi2 =
+                KpiBuilder
+                        .createAscending()
+                        .nameAndKeyDescription(key)
+                        .entityType(EntityType.PROJECT)
+                        .expirationMonth()
+                        .query("SELECT project as entity, COUNT(*) as value FROM Event.win:time(1 day) GROUP BY project")
+                        .cronFiveMinutes().build();
+        
+        kpiService.saveOrUpdate(kpi2);
+    }
+    
+    
+    @Test
+    public void testBugForIndividualKPI() {
+    
+    
+        final String key = "testBugIndividualKPI";
+        final Kpi kpi =
+                KpiBuilder
+                        .createAscending()
+                        .nameAndKeyDescription(key)
+                        .entityType(EntityType.PROJECT)
+                        .expirationMonth()
+                        .query("SELECT project as entity, COUNT(*) as value FROM Event.win:time(1 day) GROUP BY project")
+                        .cronFiveMinutes().build();
+        kpi.setEntityID(systemProjectBean.getSystemProject().getId());
+        kpiService.saveOrUpdate(kpi);
+        
+        final Measure measure =
+                kpiService.getRealTimeMeasure(KpiKey.ofKpiAndEntity(kpi,
+                        systemProjectBean.getSystemProject()));
+        Assert.assertNotNull("Should work, the results are filtered by the KPI Key", measure);
+        final Measure measure2 = kpiService.getRealTimeMeasure(KpiKey.ofKpi(kpi));
+        Assert.assertNotNull(
+                "Should work, the results are not filtered by the KPI Key (no entity key) but its an individual KPI",
+                measure2);
+        
     }
     
     
@@ -153,8 +257,8 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
         
         
         System.out.println(kpiTendancy);
-        ;
-        
         
     }
+    
+    
 }
