@@ -1,7 +1,9 @@
 package org.komea.product.backend.service.demodata;
 
 import java.util.Random;
+
 import javax.annotation.PostConstruct;
+
 import org.komea.product.backend.auth.IPasswordEncoder;
 import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
@@ -50,6 +52,11 @@ import org.springframework.scheduling.annotation.Scheduled;
         type = ProviderType.OTHER,
         url = "/demoProvider")
 public class DemoDataBean {
+
+    /**
+     * 
+     */
+    private static final String DEPARTMENT_ABC = "DEPARTMENT_ABC";
 
     @Autowired
     private IPasswordEncoder encoder;
@@ -136,12 +143,12 @@ public class DemoDataBean {
         final PersonGroup department = new PersonGroup();
         department.setName("Department ABC");
         department.setDescription("Example of Department");
-        department.setPersonGroupKey("DEPARTMENT_ABC");
+        department.setPersonGroupKey(DEPARTMENT_ABC);
         department.setIdPersonGroupParent(null);
         department.setType(PersonGroupType.DEPARTMENT);
         ;
         PersonGroupCriteria pgCriteria = new PersonGroupCriteria();
-        pgCriteria.createCriteria().andPersonGroupKeyEqualTo("DEPARTMENT_ABC");
+        pgCriteria.createCriteria().andPersonGroupKeyEqualTo(DEPARTMENT_ABC);
         if (personGroupDao.countByCriteria(pgCriteria) == 0) {
             personGroupDao.insert(department);
         }
