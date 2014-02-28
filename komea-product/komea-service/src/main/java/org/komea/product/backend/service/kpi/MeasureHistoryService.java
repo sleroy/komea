@@ -68,9 +68,10 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
     
         final MeasureCriteria measureCriteria = new MeasureCriteria();
         measureCriteria.setOrderByClause(DATE_ORDER_DESC);
-        initMeasureCriteria(_historyK, measureCriteria);
         
-        final Criteria criteria = measureCriteria.createCriteria();
+        
+        final Criteria criteria = initMeasureCriteria(_historyK, measureCriteria);
+        // Add ored criterias
         if (searchMeasuresDto.hasFromDate()) {
             criteria.andDateGreaterThanOrEqualTo(searchMeasuresDto.getFromDate());
         }
@@ -111,8 +112,9 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
      *            HistoryKey
      * @param measureCriteria
      *            MeasureCriteria
+     * @return
      */
-    private static void initMeasureCriteria(
+    private static Criteria initMeasureCriteria(
             final HistoryKey _kpiKey,
             final MeasureCriteria measureCriteria) {
     
@@ -122,6 +124,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
         if (_kpiKey.hasEntityReference()) {
             createEntityCriteriaForMeasure(_kpiKey.getEntityKey(), createCriteria);
         }
+        return createCriteria;
         
         
     }
@@ -223,8 +226,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
     
         initMeasureCriteria(_kpiKey, measureCriteria);
         
-        final List<Measure> selectByCriteria = requiredDAO.selectByCriteria(measureCriteria);
-        return selectByCriteria;
+        return requiredDAO.selectByCriteria(measureCriteria);
     }
     
     

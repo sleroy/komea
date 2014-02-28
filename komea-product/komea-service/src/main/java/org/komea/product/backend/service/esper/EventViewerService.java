@@ -173,8 +173,8 @@ public class EventViewerService implements IEventViewerService, ISettingListener
         settingService.registerListener(RETENTION_EVENT_MAJOR, this);
         settingService.registerListener(RETENTION_EVENT_MINOR, this);
         settingService.registerListener(RETENTION_EVENT_INFO, this);
-        //
-        
+        // Force update at least the first time
+        notifyPropertyChanged(null);
     }
     
     
