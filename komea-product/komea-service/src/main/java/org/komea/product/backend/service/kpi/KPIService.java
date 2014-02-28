@@ -552,7 +552,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         measure.setValue(_kpiValue);
         measureService.storeMeasure(measure);
         final int purgeHistory = measureService.buildHistoryPurgeAction(findKPI).purgeHistory();
-        LOGGER.debug("Purge history : {} items", purgeHistory);
+        LOGGER.info("Purge history : {} items", purgeHistory);
     }
     
     

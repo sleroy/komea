@@ -20,7 +20,7 @@ public class TendancyLineValueDto
     private IEntity entity;
     
     
-    private Double  pastValue;
+    private Double  previousValue;
     
     
     private Double  realValue;
@@ -37,13 +37,13 @@ public class TendancyLineValueDto
     
     public TendancyLineValueDto(
             final IEntity _entity,
-            final Double _pastValue,
-            final Double _realValue) {
+            final Double _realValue,
+            final Double _previousValue) {
     
     
         super();
         entity = _entity;
-        pastValue = _pastValue;
+        previousValue = _previousValue;
         realValue = _realValue;
     }
     
@@ -58,7 +58,7 @@ public class TendancyLineValueDto
     public Double getPastValue() {
     
     
-        return pastValue;
+        return previousValue;
     }
     
     
@@ -79,7 +79,7 @@ public class TendancyLineValueDto
     public void setPastValue(final Double _pastValue) {
     
     
-        pastValue = _pastValue;
+        previousValue = _pastValue;
     }
     
     
@@ -99,7 +99,7 @@ public class TendancyLineValueDto
     
     
         return "TendancyLineValueDto [entity="
-                + entity + ", pastValue=" + pastValue + ", realValue=" + realValue + "]";
+                + entity + ", previousValue=" + previousValue + ", realValue=" + realValue + "]";
     }
     
 }

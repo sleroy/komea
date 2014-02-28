@@ -49,13 +49,16 @@ public class KpiTendancyDto implements Serializable
      *            the entity
      * @param _realValue
      *            the real value
-     * @param _lastValue
+     * @param _previousValue
      *            the last value.
      */
-    public void addTendancy(final IEntity _entity, final Double _realValue, final Double _lastValue) {
+    public void addTendancy(
+            final IEntity _entity,
+            final Double _realValue,
+            final Double _previousValue) {
     
     
-        lineValueDtos.add(new TendancyLineValueDto(_entity, _realValue, _lastValue));
+        lineValueDtos.add(new TendancyLineValueDto(_entity, _realValue, _previousValue));
         
     }
     
@@ -73,24 +76,6 @@ public class KpiTendancyDto implements Serializable
     
     
     /**
-     * Returns the entity
-     * 
-     * @param _entity
-     *            the entity.
-     * @return the last value.
-     */
-    public Double getLastValue(final IEntity _entity) {
-    
-    
-        for (final TendancyLineValueDto valueDto : lineValueDtos) {
-            if (_entity.equals(valueDto.getEntity())) { return valueDto.getPastValue(); }
-        }
-        
-        return null;
-    }
-    
-    
-    /**
      * Returns the line values.
      * 
      * @return the line values.
@@ -99,6 +84,25 @@ public class KpiTendancyDto implements Serializable
     
     
         return lineValueDtos;
+    }
+    
+    
+    /**
+     * Returns the entity
+     * 
+     * @param _entity
+     *            the entity.
+     * @return the last value.
+     */
+    public Double getPreviousValue(final IEntity _entity) {
+    
+    
+        for (final TendancyLineValueDto valueDto : lineValueDtos) {
+            if (_entity.getEntityKey().equals(valueDto.getEntity().getEntityKey())) { return valueDto
+                    .getPastValue(); }
+        }
+        
+        return null;
     }
     
     

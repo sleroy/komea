@@ -17,12 +17,14 @@ import org.komea.product.backend.service.esper.IEventViewerService;
 import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.database.alert.EventDtoBuilder;
 import org.komea.product.database.alert.IEvent;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.dto.KpiTendancyDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Project;
 import org.komea.product.service.dto.EventTypeStatistic;
+import org.komea.product.service.dto.KPIValueTable;
 import org.komea.product.service.dto.KpiKey;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.slf4j.Logger;
@@ -128,23 +130,26 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
                         .message("Send event").project("SYSTEM").build();
         
         
-        final KpiKey ofKpiName = KpiKey.ofKpiName(kpi.getKpiKey());
+        final KpiKey kpiKey = KpiKey.ofKpiName(kpi.getKpiKey());
         eventPushService.sendEventDto(event);
-        final KpiTendancyDto kpiTendancy = kpiService.getTendancy(ofKpiName);
+        final KPIValueTable<IEntity> timeValues = kpiService.getRealTimeValues(kpiKey);
+        System.out.println(timeValues);
+        KpiTendancyDto kpiTendancy = kpiService.getTendancy(kpiKey);
         final Project systemProject = systemProjectBean.getSystemProject();
         System.err.println(kpiTendancy);
         Assert.assertTrue(kpiTendancy.getLineValueDtos().size() > 0);
         Assert.assertNotNull("Expected a real value for this project",
                 kpiTendancy.getRealValue(systemProject));
-        Assert.assertNull(kpiTendancy.getLastValue(systemProject));
+        Assert.assertNull(kpiTendancy.getPreviousValue(systemProject));
         
-        // Seconds storage
+        // Seconds storage and tendancy should have a previous value.
         eventPushService.sendEventDto(event);
         eventPushService.sendEventDto(event);
-        kpiService.storeValueInHistory(ofKpiName);
+        kpiService.storeValueInHistory(kpiKey);
+        kpiTendancy = kpiService.getTendancy(kpiKey);
         
-        Assert.assertNotNull(kpiTendancy.getRealValue(systemProject));
-        Assert.assertNotNull(kpiTendancy.getLastValue(systemProject));
+        Assert.assertNotNull("Expect a real time value", kpiTendancy.getRealValue(systemProject));
+        Assert.assertNotNull("Expect a previous value", kpiTendancy.getPreviousValue(systemProject));
         
         
         System.out.println(kpiTendancy);
