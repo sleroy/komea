@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
 import org.komea.product.backend.genericservice.AbstractService;
-import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.dto.DepartmentDto;
@@ -16,6 +15,8 @@ import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.PersonGroupCriteria;
 import org.komea.product.database.model.Project;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,8 @@ import org.springframework.stereotype.Service;
 @Service
 public final class PersonGroupService extends
         AbstractService<PersonGroup, Integer, PersonGroupCriteria> implements IPersonGroupService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PersonGroupService.class.getName());
 
     @Autowired
     private PersonGroupDao requiredDAO;
@@ -84,9 +87,11 @@ public final class PersonGroupService extends
         if (type == null || _groupID == null) {
             return null;
         }
-        final PersonGroupCriteria personGroupCriteria = new PersonGroupCriteria();
-        personGroupCriteria.createCriteria().andIdEqualTo(_groupID).andTypeEqualTo(type);
-        return CollectionUtil.singleOrNull(requiredDAO.selectByCriteria(personGroupCriteria));
+        final PersonGroup personGroup = requiredDAO.selectByPrimaryKey(_groupID);
+        if (personGroup != null && !type.equals(personGroup.getType())) {
+            return getPersonGroup(type, personGroup.getIdPersonGroupParent());
+        }
+        return personGroup;
     }
 
     /**
