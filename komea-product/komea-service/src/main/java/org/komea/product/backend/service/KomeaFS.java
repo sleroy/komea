@@ -8,8 +8,6 @@ import java.io.File;
 import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.plugin.api.InjectSetting;
-import org.komea.product.backend.plugin.api.Properties;
-import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.service.fs.IKomeaFS;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
 import org.komea.product.backend.storage.PluginFileSystem;
@@ -23,11 +21,6 @@ import org.springframework.stereotype.Service;
 /**
  */
 @Service
-@Properties(@Property(
-        key = KomeaFS.STORAGE_PATH_KEY,
-        description = "Path to store informations of the plugins",
-        type = File.class,
-        value = "komea"))
 public class KomeaFS implements IKomeaFS
 {
     

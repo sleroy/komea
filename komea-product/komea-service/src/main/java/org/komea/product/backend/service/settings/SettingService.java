@@ -38,11 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  */
-@Properties(@Property(
-        key = "logfile_path",
-        description = "Specify the path to access logs",
-        type = String.class,
-        value = "komea.log"))
+
 @Service
 @Transactional
 public class SettingService implements ISettingService, ApplicationContextAware
