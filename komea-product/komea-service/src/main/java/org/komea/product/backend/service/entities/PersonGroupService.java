@@ -1,6 +1,5 @@
 package org.komea.product.backend.service.entities;
 
-import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
 import org.komea.product.backend.genericservice.AbstractService;
@@ -45,14 +44,8 @@ public final class PersonGroupService extends
      */
     @Override
     public List<DepartmentDto> getAllDepartments() {
-
-        // TODO Auto-generated getAllDepartments STUB
-        final DepartmentDto department = new DepartmentDto();
-        department.setName("devs");
-        department.setDescription("developers Department");
-
-        final List<DepartmentDto> departmentDtos = Lists.newArrayList(department);
-        return departmentDtos;
+        final List<PersonGroup> groups = getAllPersonGroups(PersonGroupType.DEPARTMENT);
+        return convertToDepartmentDtoList(groups);
     }
 
     private List<PersonGroup> getAllPersonGroups(final PersonGroupType type) {
@@ -186,6 +179,12 @@ public final class PersonGroupService extends
         return getPersonGroup(parentType, idParent);
     }
 
+    private List<PersonGroup> getChildren(final PersonGroup group) {
+        final PersonGroupCriteria criteria = new PersonGroupCriteria();
+        criteria.createCriteria().andIdPersonGroupParentEqualTo(group.getId());
+        return requiredDAO.selectByCriteria(criteria);
+    }
+
     private List<TeamDto> convertToTeamDtoList(final List<PersonGroup> groups) {
         final List<TeamDto> teams = new ArrayList<TeamDto>(groups.size());
         for (final PersonGroup group : groups) {
@@ -193,6 +192,32 @@ public final class PersonGroupService extends
             teams.add(team);
         }
         return teams;
+    }
+
+    private List<DepartmentDto> convertToDepartmentDtoList(final List<PersonGroup> groups) {
+        final List<DepartmentDto> departments = new ArrayList<DepartmentDto>(groups.size());
+        for (final PersonGroup group : groups) {
+            final DepartmentDto department = convertToDepartmentDto(group);
+            departments.add(department);
+        }
+        return departments;
+    }
+
+    private DepartmentDto convertToDepartmentDto(final PersonGroup group) {
+        final DepartmentDto department = new DepartmentDto();
+        department.setKey(group.getPersonGroupKey());
+        department.setName(group.getName());
+        department.setDescription(group.getDescription());
+        final Integer groupId = group.getId();
+        final List<Person> persons = personService.getPersonsOfGroup(groupId);
+        final List<PersonGroup> children = getChildren(group);
+        for (final PersonGroup child : children) {
+            department.getTeams().put(child.getPersonGroupKey(), child.getName());
+        }
+        for (final Person person : persons) {
+            department.getPersons().put(person.getLogin(), person.getFullName());
+        }
+        return department;
     }
 
     private TeamDto convertToTeamDto(final PersonGroup group) {
