@@ -62,7 +62,7 @@ public class RssProviderBean implements org.komea.product.backend.service.ISetti
     /**
      * 
      */
-    private static final String  RSS_CRON_VALUE      = "0/5 * * * * ?";
+    private static final String  RSS_CRON_VALUE      = "0 0/5 * * * ?";
     
     
     private static final String  RSS_PROVIDER_PERIOD = "rss_refresh_period";
