@@ -34,7 +34,7 @@ public class RssEventFactory
         event.setEventType("rss-news");
         event.setProvider("/rssnews");
         event.setUrl(_uri);
-        event.setMessage(_message);
+        event.setMessage(_message.isEmpty() ? " " : _message);
         event.setDate(_publishedDate);
         return event;
         
