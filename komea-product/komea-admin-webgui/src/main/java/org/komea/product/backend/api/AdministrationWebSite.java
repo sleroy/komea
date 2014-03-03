@@ -43,7 +43,10 @@ import org.komea.product.wicket.statistics.StatPage;
         @MountPage(mount = "/users", page = PersonPage.class),
         @MountPage(mount = "/useradd", page = PersonAddPage.class),
         @MountPage(mount = "/events", page = EventsPage.class),
-        @MountPage(mount = "/plugins", page = ProviderPage.class) })
+        @MountPage(mount = "/plugins", page = ProviderPage.class)
+
+
+})
 public class AdministrationWebSite
 {
     //
