@@ -40,10 +40,12 @@ abstract class AbstractRestCientAPI implements IRestClientAPI
     
     private static final Logger  LOGGER        = LoggerFactory
                                                        .getLogger(AbstractRestCientAPI.class);
-    
+    //
     // private URI serverURI;
     private final ResteasyClient client;
     private final String         REST_BASE_URL = "rest";
+    
+    
     private ResteasyWebTarget    target;
     
     
@@ -209,14 +211,12 @@ abstract class AbstractRestCientAPI implements IRestClientAPI
         final int status = response.getStatus();
         
         response.close(); // close connection
-        
+        LOGGER.info("Response received : ", status);
         return status == Response.Status.OK.getStatusCode()
                 || status == Response.Status.FOUND.getStatusCode();
         
     }
     
-    
-    //
     
     private Builder createRequest(final String _url, final String... _params) {
     

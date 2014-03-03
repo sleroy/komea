@@ -153,10 +153,10 @@ public class DAOStorage<T> implements IDAOObjectStorage<T>
     /**
      * Method update.
      * @param _object T
-     * @see org.komea.product.backend.business.IDAOObjectStorage#update(T)
+     * @see org.komea.product.backend.business.IDAOObjectStorage#saveOrUpdate(T)
      */
     @Override
-    public void update(final T _object) {
+    public void saveOrUpdate(final T _object) {
     
     
         final int indexOf = daoStorageIndex.getObjectIndex().indexOf(_object);

@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.events.ProjectAnalysisHandler;
 import org.sonar.api.config.Settings;
-import org.sonar.api.platform.Server;
 import org.sonar.api.resources.Project;
 
 public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
@@ -21,7 +20,7 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
     private final String sonarUrl;
     private final Map<Integer, String> projectMap = new HashMap<Integer, String>(0);
 
-    public KomeaProjectAnalysisHandler(final Server server, final Settings settings) {
+    public KomeaProjectAnalysisHandler(final Settings settings) {
         this.settings = settings;
         this.sonarUrl = KomeaPlugin.getSonarUrl(settings);
         this.provider = KomeaPlugin.getProvider(sonarUrl);
@@ -30,7 +29,7 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
     @Override
     public void onProjectAnalysis(final ProjectAnalysisEvent event) {
         final String komeaUrl = KomeaPlugin.getKomeaUrl(settings);
-        if (komeaUrl == null) {
+        if (komeaUrl == null || !event.getProject().isRoot()) {
             return;
         }
         try {
@@ -39,12 +38,12 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
             if (event.isStart()) {
                 final long start = new Date().getTime();
                 map.put(projectId, start);
-                KomeaPlugin.pushEvents(komeaUrl, createStartEvent(
+                KomeaPlugin.pushEvents(sonarUrl, komeaUrl, createStartEvent(
                         projectKey, start, sonarUrl, projectId));
             } else if (event.isEnd()) {
                 final long start = map.get(projectId);
                 final long end = new Date().getTime();
-                KomeaPlugin.pushEvents(komeaUrl, createCompleteEvent(
+                KomeaPlugin.pushEvents(sonarUrl, komeaUrl, createCompleteEvent(
                         projectKey, start, end, sonarUrl, projectId));
             }
         } catch (Exception ex) {
@@ -81,7 +80,7 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
         event.setProperties(properties);
         event.setProvider(provider.getUrl());
         event.setUrl(KomeaPlugin.getProjectUrl(sonarUrl, projectId));
-        event.setValue(event.getDate().getTime());
+        event.setValue(start);
         return event;
     }
 
@@ -89,16 +88,15 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
             final long start, final long end, final String sonarUrl,
             final int projectId) {
         final long duration = end - start;
-        final String message = "SonarQube analysis complete for project "
+        final String message = "SonarQube analysis succeeded for project "
                 + projectKey + " in " + duration + "ms";
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(end));
         properties.put("project", projectKey);
-        properties.put("start", String.valueOf(start));
         properties.put("duration", String.valueOf(duration));
         final EventSimpleDto event = new EventSimpleDto();
         event.setDate(new Date());
-        event.setEventType(KomeaPlugin.ANALYSIS_COMPLETE.getEventKey());
+        event.setEventType(KomeaPlugin.ANALYSIS_SUCCESS.getEventKey());
         event.setMessage(message);
         event.setProject(projectKey);
         event.setProperties(properties);

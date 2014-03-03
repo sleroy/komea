@@ -73,10 +73,10 @@ public class DAOStorageTest
                 new ObjectStorageStub<DAOStorageIndex<String>>();
         final DAOStorage<String> daoStorage = new DAOStorage<String>(registerStorage);
         daoStorage.enableSaveOnChange();
-        daoStorage.update("A");
-        daoStorage.update("B");
-        daoStorage.update("C");
-        daoStorage.update("D");
+        daoStorage.saveOrUpdate("A");
+        daoStorage.saveOrUpdate("B");
+        daoStorage.saveOrUpdate("C");
+        daoStorage.saveOrUpdate("D");
         Assert.assertEquals(4, daoStorage.selectAll().size());
         daoStorage.delete("C");
         Assert.assertEquals(3, daoStorage.selectAll().size());

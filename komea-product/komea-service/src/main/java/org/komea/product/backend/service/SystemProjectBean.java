@@ -2,6 +2,7 @@
 package org.komea.product.backend.service;
 
 
+
 import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.utils.CollectionUtil;
@@ -13,31 +14,42 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+
+
 /**
  */
 @Component
-public class SystemProjectBean implements ISystemProjectBean {
+public class SystemProjectBean implements ISystemProjectBean
+{
+    
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger("system-project");
     
     @Autowired
     private ProjectDao          projectDAO;
     
     private Project             systemProject;
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(SystemProjectBean.class);
+    
     
     public SystemProjectBean() {
+    
     
         super();
     }
     
+    
     /**
      * Method getProjectDAO.
+     * 
      * @return ProjectDao
      */
     public ProjectDao getProjectDAO() {
     
+    
         return projectDAO;
     }
+    
     
     /*
      * (non-Javadoc)
@@ -46,11 +58,14 @@ public class SystemProjectBean implements ISystemProjectBean {
     @Override
     public Project getSystemProject() {
     
+    
         return systemProject;
     }
     
+    
     @PostConstruct
     public void init() {
+    
     
         LOGGER.info("--SYSTEM PROJECT--");
         final ProjectCriteria projectCriteria = new ProjectCriteria();
@@ -71,20 +86,28 @@ public class SystemProjectBean implements ISystemProjectBean {
         
     }
     
+    
     /**
      * Method setProjectDAO.
-     * @param _projectDAO ProjectDao
+     * 
+     * @param _projectDAO
+     *            ProjectDao
      */
     public void setProjectDAO(final ProjectDao _projectDAO) {
+    
     
         projectDAO = _projectDAO;
     }
     
+    
     /**
      * Method setSystemProject.
-     * @param _systemProject Project
+     * 
+     * @param _systemProject
+     *            Project
      */
     public void setSystemProject(final Project _systemProject) {
+    
     
         systemProject = _systemProject;
     }

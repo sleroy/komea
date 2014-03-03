@@ -22,16 +22,15 @@ public class EventPushService implements IEventPushService
 {
     
     
+    private static final Logger                  LOGGER = LoggerFactory.getLogger("event-push");
+    
+    
     @Autowired
     private IEsperEngine                         esperEngine;
     
     
     @Autowired
     private IEventConversionAndValidationService validator;
-    
-    
-    private static final Logger                  LOGGER = LoggerFactory
-                                                                .getLogger(EventPushService.class);
     
     
     
@@ -44,7 +43,9 @@ public class EventPushService implements IEventPushService
     
     /**
      * Method sendEvent.
-     * @param _event IEvent
+     * 
+     * @param _event
+     *            IEvent
      * @see org.komea.product.backend.service.esper.IEventPushService#sendEvent(IEvent)
      */
     @Override
@@ -59,7 +60,9 @@ public class EventPushService implements IEventPushService
     
     /**
      * Method sendEventDto.
-     * @param _dto EventSimpleDto
+     * 
+     * @param _dto
+     *            EventSimpleDto
      * @see org.komea.product.backend.service.esper.IEventPushService#sendEventDto(EventSimpleDto)
      */
     @Override
@@ -74,7 +77,9 @@ public class EventPushService implements IEventPushService
     
     /**
      * Method sendEventWithoutValidation.
-     * @param _event IEvent
+     * 
+     * @param _event
+     *            IEvent
      */
     public void sendEventWithoutValidation(final IEvent _event) {
     
@@ -95,7 +100,9 @@ public class EventPushService implements IEventPushService
     
     /**
      * Method setEsperEngine.
-     * @param _esperEngine IEsperEngine
+     * 
+     * @param _esperEngine
+     *            IEsperEngine
      */
     public void setEsperEngine(final IEsperEngine _esperEngine) {
     
@@ -106,7 +113,9 @@ public class EventPushService implements IEventPushService
     
     /**
      * Method setValidator.
-     * @param _validator IEventConversionAndValidationService
+     * 
+     * @param _validator
+     *            IEventConversionAndValidationService
      */
     public void setValidator(final IEventConversionAndValidationService _validator) {
     

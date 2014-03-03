@@ -48,7 +48,7 @@
 		<dependency>
 			<groupId>org.jodd</groupId>
 			<artifactId>jodd-bean</artifactId>
-			<version>3.4.10</version>
+			<version>3.5</version>
 		</dependency>
 
 

@@ -41,11 +41,9 @@ public class ObjectStorageTest
         
         final ObjectStorage<String> objectStorage = new ObjectStorage<String>(mock, String.class);
         objectStorage.set("Yoda is a coward");
-        
+        Mockito.when(mock.existResource(Matchers.anyString())).thenReturn(Boolean.TRUE);
         Mockito.when(mock.open(Matchers.anyString())).thenReturn(
                 new StringBufferInputStream(new XStream().toXML("Yoda is a coward")));
         Assert.assertEquals("Yoda is a coward", objectStorage.get());
     }
-    
-    
 }

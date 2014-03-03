@@ -24,16 +24,19 @@ public class ObjectStorage<T> implements IObjectStorage<T>
 {
     
     
-    private final XStream            X_STREAM = new XStream();
+    private final Class<?>          className;
     private final IPluginFileSystem service;
-    private final Class<?>           className;
+    private final XStream           X_STREAM = new XStream();
     
     
     
     /**
      * Constructor for ObjectStorage.
-     * @param _service IPluginFileSystem
-     * @param _className Class<?>
+     * 
+     * @param _service
+     *            IPluginFileSystem
+     * @param _className
+     *            Class<?>
      */
     public ObjectStorage(final IPluginFileSystem _service, final Class<?> _className) {
     
@@ -46,6 +49,7 @@ public class ObjectStorage<T> implements IObjectStorage<T>
     
     /**
      * Method get.
+     * 
      * @return T
      * @see org.komea.product.backend.service.fs.IObjectStorage#get()
      */
@@ -54,6 +58,7 @@ public class ObjectStorage<T> implements IObjectStorage<T>
     
     
         final String resourceName = getResource();
+        if (!service.existResource(resourceName)) { return null; }
         final InputStream open = service.open(resourceName);
         return (T) X_STREAM.fromXML(open);
         
@@ -62,7 +67,9 @@ public class ObjectStorage<T> implements IObjectStorage<T>
     
     /**
      * Method set.
-     * @param _object T
+     * 
+     * @param _object
+     *            T
      * @see org.komea.product.backend.service.fs.IObjectStorage#set(T)
      */
     @Override
@@ -80,12 +87,13 @@ public class ObjectStorage<T> implements IObjectStorage<T>
     
     /**
      * Method getResource.
+     * 
      * @return String
      */
     private String getResource() {
     
     
-        return className + ".xml";
+        return className.getName() + ".xml";
     }
     
 }

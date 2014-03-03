@@ -9,14 +9,17 @@ import org.komea.product.database.api.IEntity;
 
 /**
  */
-public class KPINotFoundException extends Exception
+public class KPINotFoundException extends RuntimeException
 {
     
     
     /**
      * Constructor for KPINotFoundException.
-     * @param _entity IEntity
-     * @param _kpiName String
+     * 
+     * @param _entity
+     *            IEntity
+     * @param _kpiName
+     *            String
      */
     public KPINotFoundException(final IEntity _entity, final String _kpiName) {
     

@@ -20,7 +20,6 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.measures.MetricFinder;
-import org.sonar.api.platform.Server;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.resources.ResourceUtils;
@@ -36,19 +35,19 @@ public class KomeaDecorator implements Decorator {
     private final String sonarUrl;
     private final List<String> projectMetricKeys;
 
-    public KomeaDecorator(final Server server, final Settings settings,
+    public KomeaDecorator(final Settings settings,
             final MetricFinder metricFinder) {
         this.metricFinder = metricFinder;
-        this.provider = KomeaPlugin.getProvider(server.getURL());
-        this.komeaProjectKey = KomeaPlugin.getProjectKey(settings);
         this.komeaUrl = KomeaPlugin.getKomeaUrl(settings);
         this.sonarUrl = KomeaPlugin.getSonarUrl(settings);
-        this.projectMetricKeys = KomeaPlugin.getMetricKeys(settings);
+        this.provider = KomeaPlugin.getProvider(sonarUrl);
+        this.komeaProjectKey = KomeaPlugin.getProjectKey(settings);
+        this.projectMetricKeys = new ArrayList<String>(KomeaPlugin.getMetricKeys(settings));
     }
 
     @Override
     public void decorate(final Resource resource, final DecoratorContext context) {
-        if (!ResourceUtils.isProject(resource) || komeaUrl == null) {
+        if (!ResourceUtils.isRootProject(resource) || komeaUrl == null) {
             return;
         }
         Project project = (Project) resource;
@@ -66,19 +65,18 @@ public class KomeaDecorator implements Decorator {
                     sonarUrl, project.getId());
             events.add(event);
         }
-        KomeaPlugin.pushEvents(komeaUrl, events.toArray(new EventSimpleDto[events.size()]));
+        KomeaPlugin.pushEvents(sonarUrl, komeaUrl, events.toArray(new EventSimpleDto[events.size()]));
     }
 
     private EventSimpleDto createMeasureEvent(final Metric metric,
             final Double value, final String sonarUrl, final int projectId) {
-        final EventType eventType = KomeaPlugin.createEventType(metric);
+        final EventType eventType = KomeaPlugin.METRIC_VALUE;
         final String message = "SonarQube measure of metric " + metric.getName()
                 + " for project " + komeaProjectKey + " is : " + value;
         final HashMap<String, String> properties = new HashMap<String, String>(0);
-        properties.put("metric", metric.getKey());
+        properties.put("metricName", metric.getKey());
         properties.put("value", value.toString());
         properties.put("project", komeaProjectKey);
-        properties.put("date", String.valueOf(new Date().getTime()));
         final EventSimpleDto event = new EventSimpleDto();
         event.setDate(new Date());
         event.setEventType(eventType.getEventKey());

@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `valueMax` DOUBLE NULL,
   `valueDirection` VARCHAR(255) NOT NULL,
   `valueType` VARCHAR(255) NOT NULL,
-  `entityType` VARCHAR(255) NOT NULL,
+  `entityType` VARCHAR(255) ,
   `esperRequest` MEDIUMTEXT NOT NULL,
   `entityID` INT NULL,
   `cronExpression` VARCHAR(60) NULL,
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpi` (
 CREATE TABLE IF NOT EXISTS `komea`.`kom_msr` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `idKpi` INT NOT NULL,
-  `date` DATE NOT NULL,
+  `date` TIMESTAMP NOT NULL,
   `idPersonGroup` INT NULL,
   `idPerson` INT NULL,
   `idProject` INT NULL,

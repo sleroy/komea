@@ -6,5 +6,8 @@
         <f:entry title="SCM Branch" field="branch">
             <f:textbox />
         </f:entry>
+        <f:entry title="Industrialization" field="industrialization">
+            <f:select />
+        </f:entry>
     </f:section>
 </j:jelly>

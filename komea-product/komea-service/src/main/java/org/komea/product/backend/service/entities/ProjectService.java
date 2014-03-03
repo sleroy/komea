@@ -1,9 +1,10 @@
 package org.komea.product.backend.service.entities;
 
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.komea.product.backend.genericservice.AbstractService;
+import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.dao.HasProjectPersonDao;
 import org.komea.product.database.dao.HasProjectPersonGroupDao;
@@ -35,8 +36,6 @@ import org.komea.product.database.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
 
 /**
  */
@@ -118,6 +117,27 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
     public LinkDao getLinkDAO() {
 
         return linkDAO;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.entities.IProjectService#getOrCreate(java.lang.String)
+     */
+    @Override
+    public Project getOrCreate(final String _projectKey) {
+
+        final ProjectCriteria projectCriteria = new ProjectCriteria();
+        projectCriteria.createCriteria().andProjectKeyEqualTo(_projectKey);
+        final Project singletonList
+                = CollectionUtil.singleOrNull(requiredDAO.selectByCriteria(projectCriteria));
+        if (singletonList == null) {
+            final Project project = new Project();
+            project.setDescription("Project automatically generated   " + _projectKey);
+            project.setName(_projectKey);
+            project.setProjectKey(_projectKey);
+            requiredDAO.insert(project);
+        }
+        return singletonList;
     }
 
     /**
@@ -378,5 +398,4 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         return requiredDAO.selectByCriteria(projectCriteria);
 
     }
-
 }

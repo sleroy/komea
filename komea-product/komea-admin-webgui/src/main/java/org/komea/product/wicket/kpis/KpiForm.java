@@ -1,6 +1,5 @@
 package org.komea.product.wicket.kpis;
 
-
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.InputDialog;
 import org.apache.wicket.Component;
@@ -22,6 +21,7 @@ import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
+import org.komea.product.service.dto.EntityKey;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.SelectBoxBuilder;
@@ -69,7 +69,7 @@ public final class KpiForm extends Form<Kpi> {
         add(TextFieldBuilder.<String>create("idProvider", kpi, "idProvider").withTooltip("")
                 .build());
 
-         TextField<String> textminValue =TextFieldBuilder.<String>create("valueMin", kpi, "valueMin").withTooltip("").build();
+        TextField<String> textminValue = TextFieldBuilder.<String>create("valueMin", kpi, "valueMin").withTooltip("").build();
         add(textminValue);
 
         TextField<String> textMaxValue = TextFieldBuilder.<String>create("valueMax", kpi, "valueMax").withTooltip("").build();
@@ -85,7 +85,7 @@ public final class KpiForm extends Form<Kpi> {
 
         String entityName = "";
         if (kpi.getEntityType() != null && kpi.getEntityID() != null) {
-            final IEntity entity = _entity.getEntity(kpi.getEntityType(), kpi.getEntityID());
+            final IEntity entity = _entity.getEntity(new EntityKey(kpi.getEntityType(), kpi.getEntityID()));
             entityName = getEntityName(kpi.getEntityType(), entity);
         }
         add(TextFieldBuilder.<String>create("entityID", entityName, "toString").withTooltip("")
@@ -104,8 +104,6 @@ public final class KpiForm extends Form<Kpi> {
                 .build());
 
         // AjaxFormValidatingBehavior.addToAllFormComponents(this, "onkeyup", Duration.ONE_SECOND);
-        
-        
         // ///////////////////////////////////////////////////////////////////////////////////
         // //////////////////////////////// Popup //////////////////////////////////////////
         // ///////////////////////////////////////////////////////////////////////////////////
@@ -142,7 +140,6 @@ public final class KpiForm extends Form<Kpi> {
 //		});
         // ///////////////////////////////////////////////////////////////////////////////////
         // ///////////////////////////////////////////////////////////////////////////////////
-        
         add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
 
             @Override
@@ -156,7 +153,6 @@ public final class KpiForm extends Form<Kpi> {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
-
 
 //                getCustom().setResponsePage(new KpiPage(getCustom().getPageParameters()));
             }
@@ -175,7 +171,7 @@ public final class KpiForm extends Form<Kpi> {
             }
 
         });
-                add(new AjaxLinkLayout<TextField>("maxValueMin", textminValue) {
+        add(new AjaxLinkLayout<TextField>("maxValueMin", textminValue) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
@@ -212,10 +208,8 @@ public final class KpiForm extends Form<Kpi> {
             }
         });
 
-
         // ///////////////////////////////////////////////////////////////////////////////////
         // ///////////////////////////////////////////////////////////////////////////////////
-        
     }
 
     private String getEntityName(final EntityType type, final IEntity entity) {

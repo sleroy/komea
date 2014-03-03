@@ -128,7 +128,7 @@
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-spring</artifactId>
-			<version>6.13.0</version>
+			<version>6.14.0</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>slf4j-api</artifactId>
@@ -139,7 +139,7 @@
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-extensions</artifactId>
-			<version>6.13.0</version>
+			<version>6.14.0</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>slf4j-api</artifactId>
@@ -150,7 +150,7 @@
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-util</artifactId>
-			<version>6.13.0</version>
+			<version>6.14.0</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>slf4j-api</artifactId>
@@ -161,19 +161,19 @@
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-native-websocket-tomcat</artifactId>
-			<version>0.15</version>
+			<version>6.14.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-native-websocket-jetty9</artifactId>
-			<version>0.15</version>
+			<version>6.14.0</version>
 		</dependency>
 
 
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket</artifactId>
-			<version>6.13.0</version>
+			<version>6.14.0</version>
 			<type>pom</type>
 			<exclusions>
 				<exclusion>
@@ -187,7 +187,7 @@
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui</artifactId>
-			<version>6.13.0</version>
+			<version>6.14.0</version>
 		</dependency>
 
 		<dependency>

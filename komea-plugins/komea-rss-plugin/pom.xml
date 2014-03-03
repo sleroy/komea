@@ -51,6 +51,13 @@
 
 
 
+        <dependency>
+            <groupId>org.komea.product</groupId>
+            <artifactId>komea-admin-webgui</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+
+        </dependency>
+
 
 		<dependency>
 			<groupId>org.komea.product</groupId>

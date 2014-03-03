@@ -3,6 +3,7 @@ package org.komea.product.wicket.events;
 
 
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.markup.html.basic.Label;
@@ -79,8 +80,8 @@ public class EventsPage extends LayoutPage
             final PrettyTime prettyTime = new PrettyTime();
             _item.add(new Label("date", prettyTime.format(event.getDate())));
             _item.setOutputMarkupId(true);
-            final List<Person> persons = event.getPersons();
-            _item.add(new UserList("users", persons));
+            final Person persons = event.getPerson();
+            _item.add(new UserList("users", Collections.singletonList(persons)));
             if (event.getPersonGroup() != null) {
                 _item.add(new Label("group", event.getPersonGroup().getName()));
                 
@@ -130,7 +131,8 @@ public class EventsPage extends LayoutPage
         final List<IEvent> hourEvents = service.getGlobalActivity();
         
         final ListView<IEvent> listView =
-                new EventTable("events", new CompoundPropertyModel<List<IEvent>>(hourEvents));
+                new EventTable("events", new CompoundPropertyModel<List<IEvent>>(
+                        hourEvents.subList(0, Math.min(hourEvents.size(), 100))));
         // listView.setReuseItems(true);
         
         add(listView);

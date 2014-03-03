@@ -68,9 +68,8 @@ public class EventViewerService implements IEventViewerService, ISettingListener
     public static final String      RETENTION_EVENT_MINOR    = "retention_event_minor";
     
     
-    private static final Logger     LOGGER                   =
-                                                                     LoggerFactory
-                                                                             .getLogger(EventViewerService.class);
+    private static final Logger     LOGGER                   = LoggerFactory
+                                                                     .getLogger("event-viewer");
     @Autowired
     private IEsperEngine            esperService;
     
@@ -173,8 +172,8 @@ public class EventViewerService implements IEventViewerService, ISettingListener
         settingService.registerListener(RETENTION_EVENT_MAJOR, this);
         settingService.registerListener(RETENTION_EVENT_MINOR, this);
         settingService.registerListener(RETENTION_EVENT_INFO, this);
-        //
-        
+        // Force update at least the first time
+        notifyPropertyChanged(null);
     }
     
     

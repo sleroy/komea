@@ -3,6 +3,7 @@ package org.komea.product.web.rest.api;
 
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -11,12 +12,14 @@ import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.dto.MeasuresDto;
 import org.komea.product.database.dto.SearchMeasuresDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
+import org.komea.product.service.dto.KPIValueTable;
 import org.komea.product.service.dto.KpiKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,8 +61,18 @@ public class MeasuresController
         final List<Kpi> kpis = kpiService.getKpis(entityType, _searchMeasuresDto.getKpiKeys());
         final List<BaseEntity> entities =
                 entityService.getEntities(entityType, _searchMeasuresDto.getEntityKeys());
-        final List<Measure> measures =
-                measureService.getMeasures(kpis, entities, _searchMeasuresDto);
+        final List<Measure> measures = new ArrayList<Measure>(kpis.size() * entities.size());
+        for (final BaseEntity entity : entities) {
+            for (final Kpi kpi : kpis) {
+                final Measure measure =
+                        kpiService.getRealTimeMeasure(KpiKey.ofKpiAndEntity(kpi, entity));
+                if (measure != null) {
+                    measures.add(measure);
+                }
+            }
+        }
+        measures.addAll(measureService.getMeasures(kpis, entities, _searchMeasuresDto));
+        // Collections.sort(measures, new DateComparator());
         return new MeasuresDto(entityType, entities, kpis, measures);
     }
     
@@ -83,8 +96,29 @@ public class MeasuresController
     
         LOGGER.info("request /measures/last");
         LOGGER.info("kpi key =  {}", _kpiKey.toString());
-        final double value = kpiService.getKpiSingleValue(_kpiKey);
+        final double value = kpiService.getSingleValue(_kpiKey);
         LOGGER.info("value = {}", value);
         return value;
+    }
+    
+    
+    /**
+     * Returns the kPI double value.
+     * 
+     * @param _kpiKey
+     *            KpiKey
+     * @return the kpi double value.
+     * @throws KPINotFoundException
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "/realtime", produces = "application/json")
+    @ResponseBody
+    <T extends IEntity> KPIValueTable<T> getKpiRealTimeValues(@Valid
+    @RequestBody
+    final KpiKey _kpiKey) throws KPINotFoundException {
+    
+    
+        final KPIValueTable<T> kpiValueTable = kpiService.getRealTimeValues(_kpiKey);
+        return kpiValueTable;
+        
     }
 }

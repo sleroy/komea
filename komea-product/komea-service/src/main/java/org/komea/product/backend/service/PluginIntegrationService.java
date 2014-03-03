@@ -3,32 +3,25 @@ package org.komea.product.backend.service;
 
 
 
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
-import org.komea.product.backend.exceptions.AlreadyExistingProviderException;
 import org.komea.product.backend.exceptions.InvalidProviderDescriptionException;
-import org.komea.product.backend.plugin.api.InjectSetting;
-import org.komea.product.backend.plugin.api.Properties;
-import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.backend.service.plugins.IPluginIntegrationService;
 import org.komea.product.backend.service.plugins.IProviderDTOConvertorService;
-import org.komea.product.backend.utils.SpringUtils;
+import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.model.EventType;
+import org.komea.product.database.model.EventTypeCriteria;
 import org.komea.product.database.model.Provider;
 import org.komea.product.database.model.ProviderCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -45,27 +38,28 @@ import org.springframework.transaction.annotation.Transactional;
  * @version $Revision: 1.0 $
  */
 @Service
+@Transactional
 public class PluginIntegrationService implements IPluginIntegrationService, ApplicationContextAware
 {
     
     
-    @Autowired
-    private ApplicationContext           context;
-    
     private static final Logger          LOGGER = LoggerFactory.getLogger("plugin-loader");
     
     @Autowired
-    private ProviderDao                  providerMapper;
+    private ApplicationContext           context;
+    
+    @Autowired
+    private IEventTypeService            eventTypeService;
     
     @Autowired
     private IProviderDTOConvertorService providerAPIService;
     
     @Autowired
-    private ISettingService              settingsService;
+    private ProviderDao                  providerMapper;
     
     
     @Autowired
-    private IEventTypeService            eventTypeService;
+    private ISettingService              settingsService;
     
     
     
@@ -81,8 +75,8 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
      * 
      * @param criteria
      *            the criteria
-    
-     * @return true if the provider is existing. */
+     * @return true if the provider is existing.
+     */
     public boolean existSelectedProvider(final ProviderCriteria criteria) {
     
     
@@ -93,6 +87,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     
     /**
      * Method getContext.
+     * 
      * @return ApplicationContext
      */
     public ApplicationContext getContext() {
@@ -104,6 +99,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     
     /**
      * Method getEventTypeService.
+     * 
      * @return IEventTypeService
      */
     public IEventTypeService getEventTypeService() {
@@ -115,6 +111,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     
     /**
      * Method getProviderAPIService.
+     * 
      * @return IProviderDTOConvertorService
      */
     public IProviderDTOConvertorService getProviderAPIService() {
@@ -126,6 +123,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     
     /**
      * Method getProviderMapper.
+     * 
      * @return ProviderDao
      */
     public ProviderDao getProviderMapper() {
@@ -137,6 +135,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     
     /**
      * Method getSettingsService.
+     * 
      * @return ISettingService
      */
     public ISettingService getSettingsService() {
@@ -146,43 +145,30 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
-    @PostConstruct
-    public void init() {
-    
-    
-        //
-        
-    }
-    
-    
     /**
-     * Injects settings fields
-     * @param _bean Object
+     * Load provider configuration from beans.
+     * 
+     * @param _providerPluginBeansMap
      */
+    public void loadProviderConfigurationFromBeans(final Map<String, Object> _providerPluginBeansMap) {
     
-    public void injectSettings(final Object _bean) {
     
-    
-        final PropertyDescriptor[] propertyDescriptors =
-                BeanUtils.getPropertyDescriptors(_bean.getClass());
+        LOGGER.info("Found {} plugins", _providerPluginBeansMap.size());
         
-        for (final PropertyDescriptor descriptor : propertyDescriptors) {
-            if (descriptor.getReadMethod() != null
-                    && descriptor.getReadMethod().isAnnotationPresent(InjectSetting.class)) {
-                LOGGER.info("Weaving setting proxy on property descriptor {} of bean {}",
-                        descriptor, _bean.getClass());
-                final Method writeMethod = descriptor.getWriteMethod();
-                try {
-                    writeMethod.invoke(_bean, settingsService.getProxy(descriptor.getName()));
-                    
-                } catch (final Exception e) {
-                    throw new IllegalArgumentException(e);
-                }
-                
+        for (final Entry<String, Object> providerDesc : _providerPluginBeansMap.entrySet()) {
+            LOGGER.debug("With bean {}", providerDesc.getKey());
+            try {
+                final ProviderDto loadProviderDTO =
+                        providerAPIService.loadProviderDTO(context.findAnnotationOnBean(
+                                providerDesc.getKey(), ProviderPlugin.class));
+                registerProvider(loadProviderDTO);
+            } catch (final Exception e) {
+                LOGGER.error("Cannot load the provider with bean {}, has failed : ",
+                        providerDesc.getKey(), e);
             }
-            
         }
         
+        LOGGER.info("Registration finished.");
     }
     
     
@@ -200,8 +186,11 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
         LOGGER.info("Registering provider {}", provider.getName());
         final ProviderCriteria criteria = new ProviderCriteria();
         criteria.createCriteria().andUrlEqualTo(provider.getUrl());
-        if (existSelectedProvider(criteria)) { throw new AlreadyExistingProviderException(
-                _providerDTO); }
+        if (existSelectedProvider(criteria)) {
+            LOGGER.warn("Replacing existing provider with new definition (}",
+                    _providerDTO.getProvider());
+            removeProvider(provider);
+        }
         if (provider.getId() != null) { throw new InvalidProviderDescriptionException(
                 "Producer DTO should not register primary key"); }
         providerMapper.insert(provider);
@@ -214,8 +203,31 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     
     
     /**
+     * Removes a provider.
+     * 
+     * @param _url
+     *            the url
+     */
+    public void removeProvider(final Provider _provider) {
+    
+    
+        final ProviderCriteria criteria = new ProviderCriteria();
+        criteria.createCriteria().andUrlEqualTo(_provider.getUrl());
+        final Provider provider =
+                CollectionUtil.singleOrNull(providerMapper.selectByCriteria(criteria));
+        providerMapper.deleteByCriteria(criteria);
+        final EventTypeCriteria eventTypeCriteria = new EventTypeCriteria();
+        eventTypeCriteria.createCriteria().andIdProviderEqualTo(provider.getId());
+        eventTypeService.deleteByCriteria(eventTypeCriteria);
+        
+    }
+    
+    
+    /**
      * Method setApplicationContext.
-     * @param _applicationContext ApplicationContext
+     * 
+     * @param _applicationContext
+     *            ApplicationContext
      * @throws BeansException
      * @see org.springframework.context.ApplicationContextAware#setApplicationContext(ApplicationContext)
      */
@@ -227,53 +239,21 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
         context = _applicationContext;
         LOGGER.info("-----------------------------------------------------------------------");
         LOGGER.info("Initializing the plugin loader");
-        
         final Map<String, Object> providerPluginBeansMap =
                 context.getBeansWithAnnotation(ProviderPlugin.class);
-        LOGGER.info("Found {} plugins", providerPluginBeansMap.size());
         
-        for (final Entry<String, Object> providerDesc : providerPluginBeansMap.entrySet()) {
-            LOGGER.debug("With bean {}", providerDesc.getKey());
-            try {
-                final ProviderDto loadProviderDTO =
-                        providerAPIService.loadProviderDTO(context.findAnnotationOnBean(
-                                providerDesc.getKey(), ProviderPlugin.class));
-                registerProvider(loadProviderDTO);
-            } catch (final Exception e) {
-                LOGGER.error("Cannot load the provider with bean {}, has failed : ",
-                        providerDesc.getKey(), e);
-            }
-        }
+        loadProviderConfigurationFromBeans(providerPluginBeansMap);
         
-        LOGGER.info("Registration finished.");
-        LOGGER.info("Creating new Properties.");
-        final Map<String, Object> propertiesBeansMap =
-                context.getBeansWithAnnotation(Properties.class);
-        LOGGER.info("Properties created.");
-        LOGGER.info("Found {} custom properties annotations", propertiesBeansMap.size());
         
-        for (final Properties properties : SpringUtils.findAnnotations(context, Properties.class)) {
-            for (final Property property : properties.value()) {
-                settingsService.create(property.key(), property.value(), property.type().getName(),
-                        property.description());
-            }
-        }
-        
-        /**
-         * Injection de settings
-         */
-        for (final String beanName : context.getBeanDefinitionNames()) {
-            final Object bean = context.getBean(beanName);
-            injectSettings(bean);
-            
-        }
         LOGGER.info("-----------------------------------------------------------------------");
     }
     
     
     /**
      * Method setContext.
-     * @param _context ApplicationContext
+     * 
+     * @param _context
+     *            ApplicationContext
      */
     public void setContext(final ApplicationContext _context) {
     
@@ -284,7 +264,9 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     
     /**
      * Method setEventTypeService.
-     * @param _eventTypeService IEventTypeService
+     * 
+     * @param _eventTypeService
+     *            IEventTypeService
      */
     public void setEventTypeService(final IEventTypeService _eventTypeService) {
     
@@ -295,7 +277,9 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     
     /**
      * Method setProviderAPIService.
-     * @param _providerAPIService IProviderDTOConvertorService
+     * 
+     * @param _providerAPIService
+     *            IProviderDTOConvertorService
      */
     public void setProviderAPIService(final IProviderDTOConvertorService _providerAPIService) {
     
@@ -306,7 +290,9 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     
     /**
      * Method setProviderMapper.
-     * @param _providerMapper ProviderDao
+     * 
+     * @param _providerMapper
+     *            ProviderDao
      */
     public void setProviderMapper(final ProviderDao _providerMapper) {
     
@@ -317,11 +303,15 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     
     /**
      * Method setSettingsService.
-     * @param _settingsService ISettingService
+     * 
+     * @param _settingsService
+     *            ISettingService
      */
     public void setSettingsService(final ISettingService _settingsService) {
     
     
         settingsService = _settingsService;
     }
+    
+    
 }

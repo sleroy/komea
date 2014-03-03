@@ -2,30 +2,46 @@
 package org.komea.product.rest.client;
 
 
+
 import java.net.ConnectException;
 import java.net.URISyntaxException;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 import org.komea.product.rest.client.api.IEventsAPI;
 import org.komea.product.rest.client.api.IProvidersAPI;
 
+
+
 // @Ignore
-public class RestClientFactoryIT extends AbstractRestClientIntegrationTestCase {
+public class RestClientFactoryIT
+{
+    
+    
+    @Rule
+    public ServerMethodRule serverInit = new ServerMethodRule();
+    
+    
     
     //
     
     @Test
-    public void testCreateEventsAPI() throws ConnectException, URISyntaxException, InterruptedException {
+    public void testCreateEventsAPI() throws ConnectException, URISyntaxException {
     
-        IEventsAPI eventsAPI = RestClientFactory.INSTANCE.createEventsAPI("http://localhost:8585/komea");
+    
+        final IEventsAPI eventsAPI =
+                RestClientFactory.INSTANCE.createEventsAPI(serverInit.getAddress());
         Assert.assertNotNull(eventsAPI);
     }
+    
     
     @Test
     public void testCreateProvidersAPI() throws ConnectException, URISyntaxException {
     
-        IProvidersAPI providersAPI = RestClientFactory.INSTANCE.createProvidersAPI("http://localhost:8585/komea");
+    
+        final IProvidersAPI providersAPI =
+                RestClientFactory.INSTANCE.createProvidersAPI(serverInit.getAddress());
         Assert.assertNotNull(providersAPI);
     }
 }

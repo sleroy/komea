@@ -33,6 +33,15 @@ public interface ISettingService
     
     
     /**
+     * Tests if the property exists.
+     * 
+     * @param _propertyName
+     * @return exist property
+     */
+    public boolean existProperty(String _propertyName);
+    
+    
+    /**
      * Return the proxy
      * 
      * @param _key

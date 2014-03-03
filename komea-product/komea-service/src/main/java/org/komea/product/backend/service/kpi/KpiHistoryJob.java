@@ -26,7 +26,9 @@ public class KpiHistoryJob implements Job
     
     /**
      * Method execute.
-     * @param _context JobExecutionContext
+     * 
+     * @param _context
+     *            JobExecutionContext
      * @throws JobExecutionException
      * @see org.quartz.Job#execute(JobExecutionContext)
      */
@@ -44,8 +46,7 @@ public class KpiHistoryJob implements Job
         final Kpi kpi = (Kpi) _context.getMergedJobDataMap().get("kpi");
         final IKPIService kpiService = (IKPIService) _context.getMergedJobDataMap().get("service");
         
-        kpiService.storeValueInHistory(KpiKey.ofKpiAndEntity(kpi, entity));
+        kpiService.storeValueInHistory(KpiKey.ofKpiAndEntityOrNull(kpi, entity));
     }
-    
     
 }

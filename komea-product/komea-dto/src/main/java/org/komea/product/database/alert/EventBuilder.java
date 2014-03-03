@@ -141,7 +141,7 @@ public class EventBuilder
     public EventBuilder withUser(final Person _userName) {
     
     
-        event.getPersons().add(_userName);
+        event.setPerson(_userName);
         return this;
     }
     

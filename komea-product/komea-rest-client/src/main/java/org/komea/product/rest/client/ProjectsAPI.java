@@ -2,6 +2,7 @@
 package org.komea.product.rest.client;
 
 
+
 import java.net.ConnectException;
 import java.util.List;
 
@@ -11,9 +12,25 @@ import org.komea.product.database.dto.ProjectDto;
 import org.komea.product.rest.client.api.IProjectsAPI;
 import org.komea.product.service.dto.errors.InternalServerException;
 
-public class ProjectsAPI extends AbstractRestCientAPI implements IProjectsAPI {
+
+
+public class ProjectsAPI extends AbstractRestCientAPI implements IProjectsAPI
+{
+    
+    
+    /**
+     * @author sleroy
+     */
+    private final class GenericTypeExtension extends GenericType<List<ProjectDto>>
+    {
+        //
+    }
+    
+    
     
     private static final String PROJECT_PATH = "projects";
+    
+    
     
     /**
      * (non-Javadoc)
@@ -23,9 +40,9 @@ public class ProjectsAPI extends AbstractRestCientAPI implements IProjectsAPI {
     @Override
     public List<ProjectDto> allProjects() throws ConnectException, InternalServerException {
     
-        String url = PROJECT_PATH + "/all";
-        return get(url, new GenericType<List<ProjectDto>>() {
-        });
+    
+        final String url = PROJECT_PATH + "/all";
+        return get(url, new GenericTypeExtension());
     }
     
     //

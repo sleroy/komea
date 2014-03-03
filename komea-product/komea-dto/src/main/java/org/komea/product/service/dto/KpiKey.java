@@ -6,6 +6,7 @@ package org.komea.product.service.dto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
@@ -16,6 +17,13 @@ public class KpiKey
 {
     
     
+    /**
+     * Creates a KPI.
+     * 
+     * @param _kpiName
+     *            the kpi name
+     * @return the kpi key.
+     */
     public static KpiKey ofKpi(final Kpi _kpiName) {
     
     
@@ -32,11 +40,26 @@ public class KpiKey
     
     public static KpiKey ofKpiAndEntityDetails(
             final Kpi _kpiName,
-            final EntityType _entityTYpe,
+            final EntityType _entityType,
             final int _entityID) {
     
     
-        return new KpiKey(_entityTYpe, _entityID, _kpiName.getKpiKey());
+        return new KpiKey(_entityType, _entityID, _kpiName.getKpiKey());
+    }
+    
+    
+    /**
+     * Return a kpi key from a kpi and a potential entity.
+     * 
+     * @param _kpi
+     * @param _entity
+     * @return the kpi key.
+     */
+    public static KpiKey ofKpiAndEntityOrNull(final Kpi _kpi, final IEntity _entity) {
+    
+    
+        if (_entity == null) { return ofKpi(_kpi); }
+        return ofKpiAndEntity(_kpi, _entity);
     }
     
     
@@ -65,6 +88,19 @@ public class KpiKey
     
     
     /**
+     * @param _kpiName
+     * @param _entity
+     * @return
+     */
+    public static KpiKey ofKpiNameAndEntityOrNull(final String _kpiName, final IEntity _entity) {
+    
+    
+        if (_entity == null) { return ofKpiName(_kpiName); }
+        return ofKpiNameAndEntity(_kpiName, _entity);
+    }
+    
+    
+    /**
      * Creates a new KpiKey referencing a GLOBAL KPI working for a given entityType.
      * 
      * @param _kpiName
@@ -81,13 +117,12 @@ public class KpiKey
     
     
     
-    private EntityType entityType;
+    private EntityKey entityKey;
     
-    private Integer    entityID;
     
     @NotNull
     @Size(min = 0, max = 255)
-    private String     kpiName;
+    private String    kpiName;
     
     
     
@@ -100,31 +135,30 @@ public class KpiKey
     public KpiKey() {
     
     
-        // TODO Auto-generated KpiKey stub
+        super();
     }
     
     
-    public KpiKey(final EntityType _entityType, final Integer _entityID, final String _kpiName) {
+    /**
+     * Builds a kpi.
+     * 
+     * @param _entityType
+     * @param _entityID
+     * @param _kpiName
+     */
+    private KpiKey(final EntityType _entityType, final Integer _entityID, final String _kpiName) {
     
     
         super();
-        entityType = _entityType;
-        entityID = _entityID;
+        entityKey = new EntityKey(_entityType, _entityID);
         kpiName = _kpiName;
     }
     
     
-    public Integer getEntityID() {
+    public EntityKey getEntityKey() {
     
     
-        return entityID;
-    }
-    
-    
-    public EntityType getEntityType() {
-    
-    
-        return entityType;
+        return entityKey;
     }
     
     
@@ -135,24 +169,18 @@ public class KpiKey
     }
     
     
-    public void setEntityID(final Integer _entityID) {
+    @JsonIgnore
+    public boolean isAssociatedToEntity() {
     
     
-        entityID = _entityID;
+        return entityKey != null && entityKey.isEntityReferenceKey();
     }
     
     
-    public void setEntityType(final EntityType _entityType) {
+    public void setEntityKey(final EntityKey _entityKey) {
     
     
-        entityType = _entityType;
-    }
-    
-    
-    public void setKpiName(final String _kpiName) {
-    
-    
-        kpiName = _kpiName;
+        entityKey = _entityKey;
     }
     
     
@@ -164,15 +192,7 @@ public class KpiKey
     public String toString() {
     
     
-        return "KpiKey [entityType="
-                + entityType + ", entityID=" + entityID + ", kpiName=" + kpiName + "]";
+        return "KpiKey [entityKey=" + entityKey + ", kpiName=" + kpiName + "]";
     }
     
-    
-    // @JsonIgnore
-    public boolean verifiyIfIsAssociateToEntity() {
-    
-    
-        return entityType != null && entityID != null;
-    }
 }

@@ -4,6 +4,7 @@ package org.komea.product.backend.service.entities;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.komea.product.backend.exceptions.EntityNotFoundException;
@@ -14,8 +15,12 @@ import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Person;
+import org.komea.product.database.model.PersonCriteria;
 import org.komea.product.database.model.PersonGroup;
+import org.komea.product.database.model.PersonGroupCriteria;
 import org.komea.product.database.model.Project;
+import org.komea.product.database.model.ProjectCriteria;
+import org.komea.product.service.dto.EntityKey;
 import org.komea.product.service.dto.KpiKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,22 +39,17 @@ public final class EntityService implements IEntityService
     @Autowired
     private PersonDao           personDAO;
     
-    
     @Autowired
     private PersonGroupDao      personGroupDao;
-    
     
     @Autowired
     private IPersonGroupService personGroupService;
     
-    
     @Autowired
     private IPersonService      personService;
     
-    
     @Autowired
     private ProjectDao          projectDao;
-    
     
     @Autowired
     private IProjectService     projectService;
@@ -71,7 +71,6 @@ public final class EntityService implements IEntityService
      * @param _entityKeys
      *            List<String>
      * @return List<BaseEntity>
-     * @see org.komea.product.backend.service.entities.IEntityService#getEntities(EntityType, List<String>)
      */
     @Override
     public List<BaseEntity> getEntities(final EntityType _entityType, final List<String> _entityKeys) {
@@ -94,6 +93,9 @@ public final class EntityService implements IEntityService
                 final List<Project> projects = projectService.getProjects(_entityKeys);
                 entities.addAll(projectService.projectsToBaseEntities(projects));
                 break;
+            case SYSTEM:
+                entities.add(new BaseEntity(_entityType, 1, "system", "System", "Komea System"));
+                break;
         }
         return entities;
     }
@@ -107,22 +109,19 @@ public final class EntityService implements IEntityService
      * @param _key
      *            Integer
      * @return TEntity
-     * @see org.komea.product.backend.service.entities.IEntityService#getEntity(org.komea.product.database.enums.EntityType, int)
      */
     @Override
-    public <TEntity extends IEntity> TEntity getEntity(
-            final EntityType _entityType,
-            final Integer _key) {
+    public <TEntity extends IEntity> TEntity getEntity(final EntityKey _entityKey) {
     
     
-        switch (_entityType) {
+        switch (_entityKey.getEntityType()) {
             case PERSON:
-                return (TEntity) personDAO.selectByPrimaryKey(_key);
+                return (TEntity) personDAO.selectByPrimaryKey(_entityKey.getId());
             case DEPARTMENT:
             case TEAM:
-                return (TEntity) personGroupDao.selectByPrimaryKey(_key);
+                return (TEntity) personGroupDao.selectByPrimaryKey(_entityKey.getId());
             case PROJECT:
-                return (TEntity) projectDao.selectByPrimaryKey(_key);
+                return (TEntity) projectDao.selectByPrimaryKey(_entityKey.getId());
             case SYSTEM:
                 break;
             default:
@@ -143,7 +142,7 @@ public final class EntityService implements IEntityService
     public IEntity getEntityAssociatedToKpi(final KpiKey _kpiKey) {
     
     
-        return getEntity(_kpiKey.getEntityType(), _kpiKey.getEntityID());
+        return getEntity(_kpiKey.getEntityKey());
     }
     
     
@@ -158,11 +157,12 @@ public final class EntityService implements IEntityService
      * @see org.komea.product.backend.service.entities.IEntityService#getEntityOrFail(org.komea.product.database.enums.EntityType, int)
      */
     @Override
-    public IEntity getEntityOrFail(final EntityType _entityType, final Integer _entityID) {
+    public IEntity getEntityOrFail(final EntityKey _entityKey) {
     
     
-        final IEntity entity = getEntity(_entityType, _entityID);
-        if (entity == null) { throw new EntityNotFoundException(_entityID, _entityType); }
+        final IEntity entity = getEntity(_entityKey);
+        if (entity == null) { throw new EntityNotFoundException(_entityKey.getId(),
+                _entityKey.getEntityType()); }
         return entity;
     }
     
@@ -227,6 +227,30 @@ public final class EntityService implements IEntityService
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.entities.IEntityService#loadEntities(org.komea.product.database.enums.EntityType)
+     */
+    @Override
+    public List<IEntity> loadEntities(final EntityType _entityType) {
+    
+    
+        switch (_entityType) {
+            case PERSON:
+                return (List) personDAO.selectByCriteria(new PersonCriteria());
+            case DEPARTMENT:
+            case TEAM:
+                return (List) personGroupDao.selectByCriteria(new PersonGroupCriteria());
+            case PROJECT:
+                return (List) projectDao.selectByCriteria(new ProjectCriteria());
+            case SYSTEM:
+            default:
+                return Collections.EMPTY_LIST;
+                
+        }
+    }
+    
+    
     /**
      * Method loadEntities.
      * 
@@ -235,7 +259,8 @@ public final class EntityService implements IEntityService
      * @param _keys
      *            List<Integer>
      * @return List<TEntity>
-     * @see org.komea.product.backend.service.entities.IEntityService#loadEntities(EntityType, List<Integer>)
+     * @see
+     *      org.komea.product.backend.service.entities.IEntityService#loadEntities(EntityType, List<Integer>)
      */
     @Override
     public <TEntity extends IEntity> List<TEntity> loadEntities(
@@ -245,7 +270,7 @@ public final class EntityService implements IEntityService
     
         final List<TEntity> listOfEntities = new ArrayList<TEntity>(_keys.size());
         for (final Integer key : _keys) {
-            final IEntity entity = getEntity(_entityType, key);
+            final IEntity entity = getEntity(EntityKey.of(_entityType, key));
             if (entity != null) {
                 listOfEntities.add((TEntity) entity);
             }

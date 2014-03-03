@@ -5,5 +5,5 @@ package org.komea.product.database.enums;
 
 public enum ProviderType {
     
-    QUALITY, CI_BUILD, BUGTRACKER, REQUIREMENTS, SCM, OTHER
+    BUGTRACKER, CI_BUILD, NEWS, OTHER, QUALITY, REQUIREMENTS, SCM
 }
