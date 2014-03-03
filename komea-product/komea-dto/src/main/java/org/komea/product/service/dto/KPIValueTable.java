@@ -141,7 +141,8 @@ public class KPIValueTable<T extends IEntity> implements Serializable
     
     
         for (final KpiLineValue<?> value : values) {
-            if (_entity.equals(value.getEntity())) { return value.getValue(); }
+            if (_entity.getEntityKey().equals(value.getEntity().getEntityKey())) { return value
+                    .getValue(); }
         }
         return new Double(0d);
     }

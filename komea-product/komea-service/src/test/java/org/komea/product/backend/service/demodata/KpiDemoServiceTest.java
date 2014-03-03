@@ -80,8 +80,7 @@ public class KpiDemoServiceTest extends AbstractSpringIntegrationTestCase
     
     
         final Kpi kpi = kpiDemoService.actualLineCoverage();
-        final KPIValueTable<Project> valueTable =
-                kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
+        final KPIValueTable<Project> valueTable = kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
         valueTable.dump();
         kpiService.storeValueInHistory(KpiKey.ofKpi(kpi));
         Assert.assertEquals(1, valueTable.getNumberOfRecords());
@@ -98,8 +97,7 @@ public class KpiDemoServiceTest extends AbstractSpringIntegrationTestCase
     
     
         final Kpi kpi = kpiDemoService.numberBuildPerDay();
-        final KPIValueTable<Project> valueTable =
-                kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
+        final KPIValueTable<Project> valueTable = kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
         valueTable.dump();
         kpiService.storeValueInHistory(KpiKey.ofKpi(kpi));
         
@@ -118,8 +116,7 @@ public class KpiDemoServiceTest extends AbstractSpringIntegrationTestCase
     
     
         final Kpi kpi = kpiDemoService.numberBuildPerMonth();
-        final KPIValueTable<Project> valueTable =
-                kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
+        final KPIValueTable<Project> valueTable = kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
         valueTable.dump();
         kpiService.storeValueInHistory(KpiKey.ofKpi(kpi));
         Assert.assertEquals(2, valueTable.getNumberOfRecords());
@@ -136,8 +133,7 @@ public class KpiDemoServiceTest extends AbstractSpringIntegrationTestCase
     
     
         final Kpi kpi = kpiDemoService.numberSuccessBuildPerDay();
-        final KPIValueTable<Project> valueTable =
-                kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
+        final KPIValueTable<Project> valueTable = kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
         valueTable.dump();
         kpiService.storeValueInHistory(KpiKey.ofKpi(kpi));
         Assert.assertEquals(2, valueTable.getNumberOfRecords());
@@ -154,11 +150,38 @@ public class KpiDemoServiceTest extends AbstractSpringIntegrationTestCase
     
     
         final Kpi kpi = kpiDemoService.numberSuccessBuildPerWeek();
-        final KPIValueTable<Project> valueTable =
-                kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
+        final KPIValueTable<Project> valueTable = kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
         valueTable.dump();
         kpiService.storeValueInHistory(KpiKey.ofKpi(kpi));
         Assert.assertEquals(2, valueTable.getNumberOfRecords());
     }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.backend.service.demodata.KpiDemoService#numberSuccessBuildPerWeek()}.
+     * 
+     * @throws KPINotFoundException
+     */
+    @Test
+    public final void testSuccessRateBuildPerWeek() throws KPINotFoundException {
+    
+    
+        final Project mockProject = newTest.getMockProject("SCERTIFY");
+        final Double successScertify =
+                kpiService.getRealTimeValues(
+                        KpiKey.ofKpi(kpiDemoService.numberSuccessBuildPerDay())).getValueOfEntity(
+                        mockProject);
+        final Double nbBuildScertify =
+                kpiService.getRealTimeValues(KpiKey.ofKpi(kpiDemoService.numberBuildPerDay()))
+                        .getValueOfEntity(mockProject);
+        
+        final Kpi kpi = kpiDemoService.successRateJenkins();
+        final KPIValueTable<Project> valueTable = kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
+        valueTable.dump();
+        kpiService.storeValueInHistory(KpiKey.ofKpi(kpi));
+        Assert.assertEquals(100 * successScertify / nbBuildScertify,
+                valueTable.getValueOfEntity(mockProject), 0.1d);
+    }
+    
     
 }

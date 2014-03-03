@@ -498,7 +498,7 @@ public class EsperQueryTester
      * @param _string
      * @return
      */
-    public Project getProject(final String _string) {
+    public Project getMockProject(final String _string) {
     
     
         return mockProject.get(_string);

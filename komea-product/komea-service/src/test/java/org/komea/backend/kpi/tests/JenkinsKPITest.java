@@ -133,8 +133,8 @@ public class JenkinsKPITest
                 .sendEvent(jenkinsEventFactory.sendBuildInterrupted("SCERTIFY", 908, "SPRINT"))
                 .hasResults(new Object[][] {
                         {
-                                newTest.getProject("SCERTIFY"), 1L }, {
-                                newTest.getProject("KOMEA"), 1L } }).runTest();
+                                newTest.getMockProject("SCERTIFY"), 1L }, {
+                                newTest.getMockProject("KOMEA"), 1L } }).runTest();
         
     }
 }
