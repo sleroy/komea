@@ -814,7 +814,6 @@
 
 	<modules>
 		<module>komea-product</module>
-		<module>komea-plugins</module>
 		<module>komea-providers</module>
 	</modules>
 
