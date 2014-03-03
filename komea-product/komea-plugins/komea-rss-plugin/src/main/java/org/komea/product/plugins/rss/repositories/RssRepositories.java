@@ -3,6 +3,8 @@ package org.komea.product.plugins.rss.repositories;
 
 
 
+import javax.annotation.PostConstruct;
+
 import org.komea.product.backend.business.IDAOObjectStorage;
 import org.komea.product.backend.service.plugins.IPluginStorageService;
 import org.komea.product.plugins.rss.model.RssFeed;
@@ -12,6 +14,11 @@ import org.springframework.stereotype.Service;
 
 
 
+/**
+ * This service defines the component that contains repositories.
+ * 
+ * @author sleroy
+ */
 @Service
 public class RssRepositories implements IRssRepositories
 {
@@ -61,7 +68,7 @@ public class RssRepositories implements IRssRepositories
     }
     
     
-    @Autowired
+    @PostConstruct
     public void init() {
     
     

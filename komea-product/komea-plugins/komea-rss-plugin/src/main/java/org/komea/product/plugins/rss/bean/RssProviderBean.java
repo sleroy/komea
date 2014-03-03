@@ -50,37 +50,49 @@ public class RssProviderBean implements org.komea.product.backend.service.ISetti
 {
     
     
-    private static final Logger  LOGGER              = LoggerFactory
-                                                             .getLogger(RssProviderBean.class);
+    private static final Logger  LOGGER              = LoggerFactory.getLogger("rss-provider");
+    
+    
     /**
      * 
      */
     private static final String  RSS_CRON_JOB        = "rss_cron_job";
+    
+    
     /**
      * 
      */
     private static final String  RSS_CRON_VALUE      = "0/5 * * * * ?";
     
+    
     private static final String  RSS_PROVIDER_PERIOD = "rss_refresh_period";
+    
+    
     /**
      * Rss Provider plugin name;
      */
     static final String          RSS_PROVIDER_PLUGIN = "Rss Provider plugin";
     
+    
     @Autowired
     private ICronRegistryService cronRegistryService;
+    
     
     @Autowired
     private IEventPushService    esperEngine;
     
+    
     @Autowired
     private IRssExampleFeedBean  feed;
+    
     
     @Autowired
     private IPluginAdminService  pluginAdminService;
     
+    
     @Autowired
     private ISettingService      registry;
+    
     
     @Autowired
     private IRssRepositories     rssRepository;
@@ -101,7 +113,68 @@ public class RssProviderBean implements org.komea.product.backend.service.ISetti
     public void destroy() {
     
     
+        LOGGER.debug("Removing RSS Cron");
         cronRegistryService.removeCronTask(RSS_CRON_JOB);
+    }
+    
+    
+    /**
+     * @return the cronRegistryService
+     */
+    public ICronRegistryService getCronRegistryService() {
+    
+    
+        return cronRegistryService;
+    }
+    
+    
+    /**
+     * @return the esperEngine
+     */
+    public IEventPushService getEsperEngine() {
+    
+    
+        return esperEngine;
+    }
+    
+    
+    /**
+     * @return the feed
+     */
+    public IRssExampleFeedBean getFeed() {
+    
+    
+        return feed;
+    }
+    
+    
+    /**
+     * @return the pluginAdminService
+     */
+    public IPluginAdminService getPluginAdminService() {
+    
+    
+        return pluginAdminService;
+    }
+    
+    
+    /**
+     * @return the registry
+     */
+    public ISettingService getRegistry() {
+    
+    
+        return registry;
+    }
+    
+    
+    /**
+     * @return the rssRepository
+     */
+    public IRssRepositories getRssRepository() {
+    
+    
+        return rssRepository;
     }
     
     
@@ -112,10 +185,7 @@ public class RssProviderBean implements org.komea.product.backend.service.ISetti
         LOGGER.info("Initialisation du plugin RSS");
         
         
-        final JobDataMap properties = new JobDataMap();
-        properties.put("lastDate", null);
-        properties.put("esperEngine", esperEngine);
-        properties.put("repository", this);
+        final JobDataMap properties = prepareJobMapForCron();
         //
         registry.create(RSS_PROVIDER_PERIOD, RSS_CRON_VALUE, "java.lang.String",
                 "Defines the cron value to fetch rss feeds");
@@ -136,6 +206,88 @@ public class RssProviderBean implements org.komea.product.backend.service.ISetti
     
         cronRegistryService.updateCronFrequency(RSS_CRON_JOB, _setting.getValue());
         
+    }
+    
+    
+    /**
+     * Prepares job map for cron.
+     * 
+     * @return
+     */
+    public JobDataMap prepareJobMapForCron() {
+    
+    
+        final JobDataMap properties = new JobDataMap();
+        properties.put("lastDate", null);
+        properties.put("esperEngine", esperEngine);
+        properties.put("repository", rssRepository);
+        return properties;
+    }
+    
+    
+    /**
+     * @param _cronRegistryService
+     *            the cronRegistryService to set
+     */
+    public void setCronRegistryService(final ICronRegistryService _cronRegistryService) {
+    
+    
+        cronRegistryService = _cronRegistryService;
+    }
+    
+    
+    /**
+     * @param _esperEngine
+     *            the esperEngine to set
+     */
+    public void setEsperEngine(final IEventPushService _esperEngine) {
+    
+    
+        esperEngine = _esperEngine;
+    }
+    
+    
+    /**
+     * @param _feed
+     *            the feed to set
+     */
+    public void setFeed(final IRssExampleFeedBean _feed) {
+    
+    
+        feed = _feed;
+    }
+    
+    
+    /**
+     * @param _pluginAdminService
+     *            the pluginAdminService to set
+     */
+    public void setPluginAdminService(final IPluginAdminService _pluginAdminService) {
+    
+    
+        pluginAdminService = _pluginAdminService;
+    }
+    
+    
+    /**
+     * @param _registry
+     *            the registry to set
+     */
+    public void setRegistry(final ISettingService _registry) {
+    
+    
+        registry = _registry;
+    }
+    
+    
+    /**
+     * @param _rssRepository
+     *            the rssRepository to set
+     */
+    public void setRssRepository(final IRssRepositories _rssRepository) {
+    
+    
+        rssRepository = _rssRepository;
     }
     
 }

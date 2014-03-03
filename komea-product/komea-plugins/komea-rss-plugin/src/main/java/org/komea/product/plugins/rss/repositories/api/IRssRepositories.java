@@ -27,6 +27,11 @@ public interface IRssRepositories
     RssFeed findByName(String _feedName);
     
     
+    /**
+     * Return the dao to manage repositories
+     * 
+     * @return the dao.
+     */
     IDAOObjectStorage<RssFeed> getDAO();
     
 }

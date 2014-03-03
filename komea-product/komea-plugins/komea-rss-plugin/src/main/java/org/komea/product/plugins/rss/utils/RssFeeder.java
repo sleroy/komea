@@ -66,6 +66,9 @@ public class RssFeeder
     }
     
     
+    /**
+     * Feed a stream
+     */
     public boolean feed() {
     
     

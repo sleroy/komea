@@ -3,6 +3,8 @@ package org.komea.product.plugins.rss.bean;
 
 
 
+// https://forums.terracotta.org/forums/posts/list/2768.page
+
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +13,7 @@ import org.komea.product.plugins.rss.model.RssFeed;
 import org.komea.product.plugins.rss.repositories.api.IRssRepositories;
 import org.komea.product.plugins.rss.utils.RssFeeder;
 import org.quartz.Job;
+import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -41,9 +44,11 @@ public class RssCronJob implements Job
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
     
     
-        Date lastDate = (Date) _context.get("lastDate");
-        final IEventPushService esperEngine = (IEventPushService) _context.get("esperEngine");
-        final IRssRepositories repository = (IRssRepositories) _context.get("repository");
+        final JobDataMap mergedJobDataMap = _context.getMergedJobDataMap();
+        Date lastDate = (Date) mergedJobDataMap.get("lastDate");
+        final IEventPushService esperEngine =
+                (IEventPushService) mergedJobDataMap.get("esperEngine");
+        final IRssRepositories repository = (IRssRepositories) mergedJobDataMap.get("repository");
         
         
         final Date launched = new Date();
@@ -56,6 +61,5 @@ public class RssCronJob implements Job
         }
         lastDate = launched;
     }
-    
     
 }
