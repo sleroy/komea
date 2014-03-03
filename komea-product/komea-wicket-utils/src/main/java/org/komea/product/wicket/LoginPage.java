@@ -8,7 +8,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 
 /**
- * Settings page
+ * Login page
  * 
  * @author sleroy
  */
