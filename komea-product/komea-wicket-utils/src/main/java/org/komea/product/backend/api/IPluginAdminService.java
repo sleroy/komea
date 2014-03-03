@@ -2,9 +2,11 @@
  * 
  */
 
-package org.komea.product.backend.admin.plugins;
+package org.komea.product.backend.api;
 
 
+
+import java.util.Map;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -13,10 +15,17 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * @author sleroy
- *
  */
 public interface IPluginAdminService
 {
+    
+    
+    /**
+     * Return the registered pages.
+     * 
+     * @return
+     */
+    Map<String, Class<? extends WebPage>> getRegisteredPages();
     
     
     /**
@@ -28,7 +37,7 @@ public interface IPluginAdminService
      *            the page parameters
      * @return the web page.
      */
-    public abstract WebPage initializePage(String _pluginPage, PageParameters _pageParameters);
+    WebPage initializePage(String _pluginPage, PageParameters _pageParameters);
     
     
     /**
@@ -39,6 +48,6 @@ public interface IPluginAdminService
      * @param _webPageClass
      *            the web page class.
      */
-    public abstract void register(String _providerName, Class<? extends WebPage> _webPageClass);
+    void register(String _providerName, Class<? extends WebPage> _webPageClass);
     
 }

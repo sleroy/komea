@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.komea.product</groupId>
+		<artifactId>komea-product</artifactId>
+		<version>1.0.1-SNAPSHOT</version>
+
+	</parent>
+
+	<groupId>org.komea.plugins</groupId>
+	<artifactId>komea-plugins</artifactId>
+	<packaging>pom</packaging>
+
+	<name>Komea : plugins projects</name>
+	<description>contains komea plugins</description>
+
+	<modules>
+		<module>komea-git-plugin</module>
+		<module>komea-rss-plugin</module>
+		<module>komea-sample-plugin</module>
+		<module>komea-standard-metrics-plugin</module>
+		<module>komea-svn-plugin</module>
+		<module>komea-bugzilla-plugin</module>
+		<module>komea-testlink-plugin</module>
+	</modules>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.komea.product</groupId>
+			<artifactId>komea-wicket-utils</artifactId>
+			<version>1.0.1-SNAPSHOT</version>
+		</dependency>
+
+	</dependencies>
+</project>

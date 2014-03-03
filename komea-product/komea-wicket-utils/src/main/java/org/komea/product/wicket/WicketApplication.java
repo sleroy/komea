@@ -3,23 +3,19 @@ package org.komea.product.wicket;
 
 
 
+import java.util.Map.Entry;
+import java.util.Set;
+
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.settings.IExceptionSettings;
 import org.apache.wicket.settings.IExceptionSettings.ThreadDumpStrategy;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.komea.product.wicket.console.ConsolePage;
-import org.komea.product.wicket.cronpage.CronPage;
-import org.komea.product.wicket.events.EventsPage;
-import org.komea.product.wicket.kpis.KpiEditPage;
-import org.komea.product.wicket.kpis.KpiPage;
-import org.komea.product.wicket.person.PersonAddPage;
-import org.komea.product.wicket.person.PersonPage;
-import org.komea.product.wicket.project.ProjectEditPage;
-import org.komea.product.wicket.project.ProjectPage;
-import org.komea.product.wicket.providers.ProviderPage;
-import org.komea.product.wicket.settings.SettingsPage;
-import org.komea.product.wicket.statistics.StatPage;
+import org.komea.product.backend.api.IPluginAdminService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 
 
@@ -31,6 +27,22 @@ import org.komea.product.wicket.statistics.StatPage;
  */
 public class WicketApplication extends WebApplication
 {
+    
+    
+    private static Logger LOGGER = LoggerFactory.getLogger(WicketApplication.class);
+    
+    
+    
+    /**
+     * Returns the application context.
+     * 
+     * @return the application context.
+     */
+    public ApplicationContext getAppCtx() {
+    
+    
+        return WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+    }
     
     
     /**
@@ -64,28 +76,38 @@ public class WicketApplication extends WebApplication
         getDebugSettings().setDevelopmentUtilitiesEnabled(true);
         // getDebugSettings().setComponentUseCheck(false);
         // make markup friendly as in deployment-mode
+        
+        
         getMarkupSettings().setStripWicketTags(true);
         // page mounts / SEO
         mountPage("/home", HomePage.class);
-        mountPage("/kpiedit", KpiEditPage.class);
-        mountPage("/kpis", KpiPage.class);
-        mountPage("/projectedit", ProjectEditPage.class);
-        mountPage("/projects", ProjectPage.class);
-        mountPage("/settings", SettingsPage.class);
-        mountPage("/viewlog", ConsolePage.class);
-        mountPage("/stats", StatPage.class);
-        mountPage("/login", LoginPage.class);
-        mountPage("/cronpage", CronPage.class);
-        mountPage("/logout", LoginPage.class);
-        mountPage("/accessdenied", UnauthorizedPage.class);
-        mountPage("/users", PersonPage.class);
-        mountPage("/useradd", PersonAddPage.class);
-        mountPage("/events", EventsPage.class);
-        mountPage("/plugins", ProviderPage.class);
+        LOGGER.info("#############################################################");
+        final Set<Entry<String, Class<? extends WebPage>>> entrySet =
+                getPluginAdminPage().getRegisteredPages().entrySet();
+        LOGGER.info("Wicket startup : {} pages", entrySet.size());
+        for (final java.util.Map.Entry<String, Class<? extends WebPage>> entry : entrySet) {
+            LOGGER.info("> mounting {}->", entry.getKey(), entry.getValue().getName());
+            mountPage(entry.getKey(), entry.getValue());
+        }
+        LOGGER.info("#############################################################");
         
         
         getExceptionSettings().setThreadDumpStrategy(ThreadDumpStrategy.ALL_THREADS);
         getExceptionSettings()
                 .setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_EXCEPTION_PAGE);
     }
+    
+    
+    /**
+     * Returns the plugin admin page.
+     * 
+     * @return the plugin admin page.
+     */
+    private IPluginAdminService getPluginAdminPage() {
+    
+    
+        return getAppCtx().getBean(IPluginAdminService.class);
+    }
+    
+    
 }

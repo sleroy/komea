@@ -8,24 +8,10 @@
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>komea-admin-webgui</artifactId>
+	<artifactId>komea-wicket-utils</artifactId>
 
-	<name>Komea : admin WebGUI</name>
-	<description>Komea admin Web GUI provides all required html/dynamic templates and spring MVC and Controllers.</description>
-
-
-
-	<properties>
-		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
-	</properties>
-
-
-	<repositories>
-		<repository>
-			<id>local-repo</id>
-			<url>file://${basedir}/libs</url>
-		</repository>
-	</repositories>
+	<name>Komea : Wicket Library</name>
+	<description>Komea Wicket library provides utilities and services for GUI integration (admin + plugins).</description>
 
 	<build>
 		<resources>
@@ -61,41 +47,6 @@
 			</testResource>
 		</testResources>
 
-		<plugins>
-
-			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<configuration>
-					<webAppConfig>
-						<allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
-						<resourceBases>
-							<resourceBase>src/main/webapp</resourceBase>
-							<resourceBase>${webappDirectory}</resourceBase>
-						</resourceBases>
-					</webAppConfig>
-				</configuration>
-				<!-- <dependencies> <dependency> <groupId>${project.groupId}</groupId> 
-					<artifactId>komea-service</artifactId> <version>${project.version}</version> 
-					<scope>compile</scope> </dependency> </dependencies> -->
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.4</version>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>exploded</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<webappDirectory>${webappDirectory}</webappDirectory>
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
 	<dependencies>
 		<dependency>
@@ -105,12 +56,6 @@
 		</dependency>
 
 
-
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>komea-wicket-utils</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -132,10 +77,45 @@
 		</dependency>
 
 
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-spring</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-extensions</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-util</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-native-websocket-tomcat</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-native-websocket-jetty9</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket</artifactId>
+			<type>pom</type>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.googlecode.wicket-jquery-ui</groupId>
+			<artifactId>wicket-jquery-ui</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.googlecode.wicked-charts</groupId>
+			<artifactId>wicked-charts-wicket6</artifactId>
+		</dependency>
 
 	</dependencies>
 
-
-
-	<packaging>war</packaging>
 </project>
