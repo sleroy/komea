@@ -86,7 +86,7 @@ public class WicketApplication extends WebApplication
                 getPluginAdminPage().getRegisteredPages().entrySet();
         LOGGER.info("Wicket startup : {} pages", entrySet.size());
         for (final java.util.Map.Entry<String, Class<? extends WebPage>> entry : entrySet) {
-            LOGGER.info("> mounting {}->", entry.getKey(), entry.getValue().getName());
+            LOGGER.info("> mounting {}->{}", entry.getKey(), entry.getValue().getName());
             mountPage(entry.getKey(), entry.getValue());
         }
         LOGGER.info("#############################################################");
