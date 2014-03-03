@@ -170,7 +170,7 @@ public class HistoryKey
     public boolean hasEntityReference() {
     
     
-        return entityKey != null;
+        return entityKey != null && entityKey.isEntityReferenceKey();
     }
     
     
