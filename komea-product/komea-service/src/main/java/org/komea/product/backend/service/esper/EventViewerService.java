@@ -68,9 +68,8 @@ public class EventViewerService implements IEventViewerService, ISettingListener
     public static final String      RETENTION_EVENT_MINOR    = "retention_event_minor";
     
     
-    private static final Logger     LOGGER                   =
-                                                                     LoggerFactory
-                                                                             .getLogger(EventViewerService.class);
+    private static final Logger     LOGGER                   = LoggerFactory
+                                                                     .getLogger("event-viewer");
     @Autowired
     private IEsperEngine            esperService;
     

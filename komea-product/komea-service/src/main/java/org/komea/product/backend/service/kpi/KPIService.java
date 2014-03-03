@@ -113,7 +113,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
     
         if (StringUtils.isEmpty(_kpi.getCronExpression())) { return; }
-        final String kpiCronName = _kpi.getCronHistoryJobName(_entity);
+        final String kpiCronName = _kpi.getCronHistoryJobName();
         if (cronRegistry.existCron(kpiCronName)) {
             cronRegistry.updateCronFrequency(kpiCronName, _kpi.getCronExpression());
         } else {
@@ -421,8 +421,28 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     public List<Kpi> listAllKpis() {
     
     
-        final List<Kpi> kpiList = requiredDAO.selectByCriteria(new KpiCriteria());
-        return kpiList;
+        return requiredDAO.selectByExampleWithBLOBs(new KpiCriteria());
+    }
+    
+    
+    /**
+     * Refresh esper with a KPI. The esper statement will be either created or updated and the cron job updated as well.
+     * 
+     * @param _kpi
+     *            the kpi.
+     */
+    @Override
+    public void refreshEsper(final Kpi _kpi) {
+    
+    
+        LOGGER.info("Refreshing Esper with KPI {}", _kpi.getKpiKey());
+        createEsperQueryFromKPI(_kpi);
+        IEntity entity = null;
+        if (_kpi.isAssociatedToEntity()) {
+            
+            entity = entityService.getEntityAssociatedToKpi(KpiKey.ofKpi(_kpi));
+        }
+        createOrUpdateHistoryCronJob(_kpi, entity);
     }
     
     
@@ -448,15 +468,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
             requiredDAO.updateByPrimaryKey(_kpi);
         }
         
-        final QueryDefinition queryDefinition = new QueryDefinition(_kpi);
-        LOGGER.info("Updating Esper with the query {}", queryDefinition);
-        esperEngine.createOrUpdateEPLQuery(queryDefinition);
-        IEntity entity = null;
-        if (_kpi.isAssociatedToEntity()) {
-            
-            entity = entityService.getEntityAssociatedToKpi(KpiKey.ofKpi(_kpi));
-        }
-        createOrUpdateHistoryCronJob(_kpi, entity);
+        refreshEsper(_kpi);
     }
     
     
@@ -594,6 +606,15 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     }
     
     
+    private void createEsperQueryFromKPI(final Kpi _kpi) {
+    
+    
+        final QueryDefinition queryDefinition = new QueryDefinition(_kpi);
+        LOGGER.info("Updating Esper with the query {}", queryDefinition);
+        esperEngine.createOrUpdateEPLQuery(queryDefinition);
+    }
+    
+    
     /**
      * Returns the list of entities associated to a KPI key.
      * 
@@ -631,8 +652,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     private EPStatement getEsperQueryFromKpi(final Kpi _kpi) {
     
     
-        final EPStatement epStatement = esperEngine.getStatementOrFail(_kpi.computeKPIEsperKey());
-        return epStatement;
+        return esperEngine.getStatementOrFail(_kpi.computeKPIEsperKey());
     }
     
     

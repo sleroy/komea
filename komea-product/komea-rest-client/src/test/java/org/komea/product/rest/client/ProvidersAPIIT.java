@@ -2,30 +2,39 @@
 package org.komea.product.rest.client;
 
 
+
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.model.Provider;
 import org.komea.product.rest.client.api.IProvidersAPI;
 
-public class ProvidersAPIIT extends AbstractRestClientIntegrationTestCase {
+
+
+public class ProvidersAPIIT
+{
     
-    @Before
-    public void setUp() throws Exception {
     
-    }
     //
+    
+    
+    @Rule
+    public ServerMethodRule serverInit = new ServerMethodRule();
+    
+    
     
     @Test
     public void testRegisterProvider() throws Exception {
     
-        IProvidersAPI providersAPI = RestClientFactory.INSTANCE.createProvidersAPI("http://localhost:8585/komea");
+    
+        final IProvidersAPI providersAPI =
+                RestClientFactory.INSTANCE.createProvidersAPI(serverInit.getAddress());
         Assert.assertNotNull(providersAPI);
         
-        ProviderDto providerDto = new ProviderDto();
-        Provider provider = new Provider();
+        final ProviderDto providerDto = new ProviderDto();
+        final Provider provider = new Provider();
         provider.setName("jenkins");
         provider.setUrl("http://komea.tocea.com/test/registerProvider");
         provider.setIcon("incon3.png");

@@ -14,6 +14,7 @@ import org.komea.product.backend.service.kpi.KpiBuilder;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.model.Kpi;
+import org.komea.product.service.dto.KpiKey;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -68,11 +69,11 @@ public class KpiDemoService
     public void initialize() {
     
     
-        kpiService.saveOrUpdate(numberSuccessBuildPerWeek());
-        kpiService.saveOrUpdate(numberSuccessBuildPerDay());
-        kpiService.saveOrUpdate(numberBuildPerDay());
-        kpiService.saveOrUpdate(numberBuildPerMonth());
-        kpiService.saveOrUpdate(actualLineCoverage());
+        saveOrUpdate(numberSuccessBuildPerWeek());
+        saveOrUpdate(numberSuccessBuildPerDay());
+        saveOrUpdate(numberBuildPerDay());
+        saveOrUpdate(numberBuildPerMonth());
+        saveOrUpdate(actualLineCoverage());
     }
     
     
@@ -130,5 +131,18 @@ public class KpiDemoService
                 .expirationYear()
                 .query("SELECT project as entity, COUNT(*) as value FROM Event.win:time(1 week) WHERE eventType.eventKey='build_complete' GROUP BY project")
                 .cronThreeDays().build();
+    }
+    
+    
+    /**
+     * @param _numberSuccessBuildPerDay
+     */
+    private void saveOrUpdate(final Kpi _kpi) {
+    
+    
+        if (kpiService.findKPI(KpiKey.ofKpi(_kpi)) != null) { return; }
+        kpiService.saveOrUpdate(_kpi);
+        
+        
     }
 }

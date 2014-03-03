@@ -32,7 +32,7 @@ public class EventTypeService extends AbstractService<EventType, Integer, EventT
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(EventTypeService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("event-type-service");
     
     
     @Autowired
@@ -85,7 +85,8 @@ public class EventTypeService extends AbstractService<EventType, Integer, EventT
     final EventType _eventType) {
     
     
-        LOGGER.info("Registering event type {} with {}", _eventType.getName(), _provider.getName());
+        LOGGER.debug("Registering event type '{}' from provider {}", _eventType.getName(),
+                _provider.getName());
         final EventTypeCriteria selectByName = newCriteriaSelectByName(_eventType);
         final int existingProvider = requiredDAO.countByCriteria(selectByName);
         if (existingProvider > 0) { throw new AlreadyExistingEventTypeException(_eventType); }

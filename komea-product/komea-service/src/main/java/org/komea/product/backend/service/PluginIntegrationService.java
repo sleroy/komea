@@ -8,15 +8,16 @@ import java.util.Map.Entry;
 
 import javax.validation.Valid;
 
-import org.komea.product.backend.exceptions.AlreadyExistingProviderException;
 import org.komea.product.backend.exceptions.InvalidProviderDescriptionException;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.backend.service.plugins.IPluginIntegrationService;
 import org.komea.product.backend.service.plugins.IProviderDTOConvertorService;
+import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.model.EventType;
+import org.komea.product.database.model.EventTypeCriteria;
 import org.komea.product.database.model.Provider;
 import org.komea.product.database.model.ProviderCriteria;
 import org.slf4j.Logger;
@@ -37,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @version $Revision: 1.0 $
  */
 @Service
+@Transactional
 public class PluginIntegrationService implements IPluginIntegrationService, ApplicationContextAware
 {
     
@@ -143,6 +145,33 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
+    /**
+     * Load provider configuration from beans.
+     * 
+     * @param _providerPluginBeansMap
+     */
+    public void loadProviderConfigurationFromBeans(final Map<String, Object> _providerPluginBeansMap) {
+    
+    
+        LOGGER.info("Found {} plugins", _providerPluginBeansMap.size());
+        
+        for (final Entry<String, Object> providerDesc : _providerPluginBeansMap.entrySet()) {
+            LOGGER.debug("With bean {}", providerDesc.getKey());
+            try {
+                final ProviderDto loadProviderDTO =
+                        providerAPIService.loadProviderDTO(context.findAnnotationOnBean(
+                                providerDesc.getKey(), ProviderPlugin.class));
+                registerProvider(loadProviderDTO);
+            } catch (final Exception e) {
+                LOGGER.error("Cannot load the provider with bean {}, has failed : ",
+                        providerDesc.getKey(), e);
+            }
+        }
+        
+        LOGGER.info("Registration finished.");
+    }
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.service.IPluginIntegrationService#registerProvider(org.komea.product.database.dto.ProviderDto)
@@ -157,8 +186,11 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
         LOGGER.info("Registering provider {}", provider.getName());
         final ProviderCriteria criteria = new ProviderCriteria();
         criteria.createCriteria().andUrlEqualTo(provider.getUrl());
-        if (existSelectedProvider(criteria)) { throw new AlreadyExistingProviderException(
-                _providerDTO); }
+        if (existSelectedProvider(criteria)) {
+            LOGGER.warn("Replacing existing provider with new definition (}",
+                    _providerDTO.getProvider());
+            removeProvider(provider);
+        }
         if (provider.getId() != null) { throw new InvalidProviderDescriptionException(
                 "Producer DTO should not register primary key"); }
         providerMapper.insert(provider);
@@ -167,6 +199,27 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
         for (final EventType eventType : _providerDTO.getEventTypes()) {
             eventTypeService.registerEvent(provider, eventType);
         }
+    }
+    
+    
+    /**
+     * Removes a provider.
+     * 
+     * @param _url
+     *            the url
+     */
+    public void removeProvider(final Provider _provider) {
+    
+    
+        final ProviderCriteria criteria = new ProviderCriteria();
+        criteria.createCriteria().andUrlEqualTo(_provider.getUrl());
+        final Provider provider =
+                CollectionUtil.singleOrNull(providerMapper.selectByCriteria(criteria));
+        providerMapper.deleteByCriteria(criteria);
+        final EventTypeCriteria eventTypeCriteria = new EventTypeCriteria();
+        eventTypeCriteria.createCriteria().andIdProviderEqualTo(provider.getId());
+        eventTypeService.deleteByCriteria(eventTypeCriteria);
+        
     }
     
     
@@ -186,25 +239,10 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
         context = _applicationContext;
         LOGGER.info("-----------------------------------------------------------------------");
         LOGGER.info("Initializing the plugin loader");
-        
         final Map<String, Object> providerPluginBeansMap =
                 context.getBeansWithAnnotation(ProviderPlugin.class);
-        LOGGER.info("Found {} plugins", providerPluginBeansMap.size());
         
-        for (final Entry<String, Object> providerDesc : providerPluginBeansMap.entrySet()) {
-            LOGGER.debug("With bean {}", providerDesc.getKey());
-            try {
-                final ProviderDto loadProviderDTO =
-                        providerAPIService.loadProviderDTO(context.findAnnotationOnBean(
-                                providerDesc.getKey(), ProviderPlugin.class));
-                registerProvider(loadProviderDTO);
-            } catch (final Exception e) {
-                LOGGER.error("Cannot load the provider with bean {}, has failed : ",
-                        providerDesc.getKey(), e);
-            }
-        }
-        
-        LOGGER.info("Registration finished.");
+        loadProviderConfigurationFromBeans(providerPluginBeansMap);
         
         
         LOGGER.info("-----------------------------------------------------------------------");
@@ -274,4 +312,6 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     
         settingsService = _settingsService;
     }
+    
+    
 }

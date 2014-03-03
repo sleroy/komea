@@ -25,8 +25,8 @@ public class EsperDebugReactorListener implements UpdateListener
 {
     
     
+    private static final Logger LOGGER = LoggerFactory.getLogger("esper-debug");
     private IEsperEngine        esperEngine;
-    private static final Logger LOGGER = LoggerFactory.getLogger(EsperDebugReactorListener.class);
     
     
     
@@ -42,6 +42,7 @@ public class EsperDebugReactorListener implements UpdateListener
     
     /**
      * Method getEsperEngine.
+     * 
      * @return IEsperEngine
      */
     public IEsperEngine getEsperEngine() {
@@ -54,17 +55,19 @@ public class EsperDebugReactorListener implements UpdateListener
     public void init() {
     
     
-        LOGGER.info("Initializing debug provider");
+        LOGGER.debug("Initializing debug provider");
         final String expression = "select * from Event";
-        LOGGER.info("Esper component referenced : " + (esperEngine != null ? "Y" : "N"));
-        LOGGER.info("Esper Initialized : " + (esperEngine.getEsper() != null ? "Y" : "N"));
+        LOGGER.debug("Esper component referenced : " + (esperEngine != null ? "Y" : "N"));
+        LOGGER.debug("Esper Initialized : " + (esperEngine.getEsper() != null ? "Y" : "N"));
         esperEngine.getEsper().getEPAdministrator().createEPL(expression).addListener(this);
     }
     
     
     /**
      * Method setEsperEngine.
-     * @param _esperEngine IEsperEngine
+     * 
+     * @param _esperEngine
+     *            IEsperEngine
      */
     public void setEsperEngine(final IEsperEngine _esperEngine) {
     
@@ -81,8 +84,11 @@ public class EsperDebugReactorListener implements UpdateListener
      */
     /**
      * Method update.
-     * @param arg0 EventBean[]
-     * @param arg1 EventBean[]
+     * 
+     * @param arg0
+     *            EventBean[]
+     * @param arg1
+     *            EventBean[]
      * @see com.espertech.esper.client.UpdateListener#update(EventBean[], EventBean[])
      */
     @Override

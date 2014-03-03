@@ -6,6 +6,7 @@ package org.komea.product.rest.client;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 import org.komea.product.database.dto.DepartmentDto;
 import org.komea.product.database.dto.PersonDto;
@@ -18,8 +19,13 @@ import org.komea.product.rest.client.api.ITeamsAPI;
 
 
 
-public class DepartmentsAPIIT extends AbstractRestClientIntegrationTestCase
+public class DepartmentsAPIIT
 {
+    
+    
+    @Rule
+    public ServerMethodRule serverInit = new ServerMethodRule();
+    
     
     
     //
@@ -29,7 +35,7 @@ public class DepartmentsAPIIT extends AbstractRestClientIntegrationTestCase
     
     
         final IProjectsAPI projectsAPI =
-                RestClientFactory.INSTANCE.createProjectsAPI("http://localhost:8585/komea");
+                RestClientFactory.INSTANCE.createProjectsAPI(serverInit.getAddress());
         Assert.assertNotNull(projectsAPI);
         final List<ProjectDto> projects = projectsAPI.allProjects();
         Assert.assertFalse(projects.isEmpty());
@@ -41,7 +47,7 @@ public class DepartmentsAPIIT extends AbstractRestClientIntegrationTestCase
     
     
         final IDepartmentsAPI projectsAPI =
-                RestClientFactory.INSTANCE.createDeparmtentsAPI("http://localhost:8585/komea");
+                RestClientFactory.INSTANCE.createDeparmtentsAPI(serverInit.getAddress());
         Assert.assertNotNull(projectsAPI);
         final List<DepartmentDto> projects = projectsAPI.allDepartments();
         Assert.assertTrue(projects.get(0) instanceof DepartmentDto);
@@ -54,7 +60,7 @@ public class DepartmentsAPIIT extends AbstractRestClientIntegrationTestCase
     
     
         final IPersonsAPI projectsAPI =
-                RestClientFactory.INSTANCE.createPersonsAPI("http://localhost:8585/komea");
+                RestClientFactory.INSTANCE.createPersonsAPI(serverInit.getAddress());
         Assert.assertNotNull(projectsAPI);
         final List<PersonDto> projects = projectsAPI.allPersons();
         Assert.assertFalse(projects.isEmpty());
@@ -66,7 +72,7 @@ public class DepartmentsAPIIT extends AbstractRestClientIntegrationTestCase
     
     
         final ITeamsAPI projectsAPI =
-                RestClientFactory.INSTANCE.createTeamsAPI("http://localhost:8585/komea");
+                RestClientFactory.INSTANCE.createTeamsAPI(serverInit.getAddress());
         Assert.assertNotNull(projectsAPI);
         final List<TeamDto> projects = projectsAPI.allTeams();
         Assert.assertFalse(projects.isEmpty());

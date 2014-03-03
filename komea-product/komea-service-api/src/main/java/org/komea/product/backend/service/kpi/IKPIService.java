@@ -109,16 +109,6 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria>
     
     
     /**
-     * Returns the tendancy for a KPI.
-     * 
-     * @param _measureKey
-     *            the measure key.
-     * @return the kpi tendancy.
-     */
-    KpiTendancyDto getTendancy(KpiKey _measureKey);
-    
-    
-    /**
      * Get last Measure of a Kpi for an entity from Esper
      * 
      * @param _kpi
@@ -139,6 +129,25 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria>
      */
     <T extends IEntity> KPIValueTable<T> getRealTimeValues(KpiKey _kpiKey)
             throws KPINotFoundException;
+    
+    
+    /**
+     * Returns the tendancy for a KPI.
+     * 
+     * @param _measureKey
+     *            the measure key.
+     * @return the kpi tendancy.
+     */
+    KpiTendancyDto getTendancy(KpiKey _measureKey);
+    
+    
+    /**
+     * Refresh esper with a KPI. The esper statement will be either created or updated and the cron job updated as well.
+     * 
+     * @param _kpi
+     *            the kpi.
+     */
+    void refreshEsper(Kpi _kpi);
     
     
     /**

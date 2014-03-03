@@ -4,7 +4,10 @@ package org.komea.product.backend.service;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -26,7 +29,10 @@ import org.komea.product.database.enums.EventCategory;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.EventType;
+import org.komea.product.database.model.EventTypeCriteria;
 import org.komea.product.database.model.Provider;
+import org.komea.product.database.model.ProviderCriteria;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -103,6 +109,18 @@ public class PluginIntegrationServiceTest
         // // Add missing mocking
         // initPluginIntegrationService.injectSettings(beanWithInjection);
         // Assert.assertEquals(beanWithInjection.getStorage_path(), mock);
+        
+    }
+    
+    
+    @Test
+    public void testLoadProviderFromBean() {
+    
+    
+        final PluginIntegrationService pluginIntegrationService = initPluginIntegrationService();
+        // Should work without beans
+        final Map<String, Object> map = new HashMap<String, Object>();
+        pluginIntegrationService.loadProviderConfigurationFromBeans(map);
         
     }
     
@@ -194,6 +212,36 @@ public class PluginIntegrationServiceTest
             System.err.println(validate2);
         }
         Assert.assertFalse("Provider should not be valid", validate2.isEmpty());
+        
+    }
+    
+    
+    /**
+     * Method removeProvider.
+     */
+    @Test
+    public void testRemoveProvider() {
+    
+    
+        final PluginIntegrationService pluginService = initPluginIntegrationService();
+        final Provider provider = new Provider();
+        provider.setId(1);
+        provider.setUrl("url://mockProvider");
+        provider.setName("Mock provider");
+        provider.setProviderType(ProviderType.NEWS);
+        provider.setIcon("icon");
+        Mockito.when(
+                pluginService.getProviderMapper().selectByCriteria(
+                        Matchers.any(ProviderCriteria.class))).thenReturn(
+                Collections.singletonList(provider));
+        pluginService.removeProvider(provider);
+        Mockito.verify(pluginService.getProviderMapper(), Mockito.times(1)).deleteByCriteria(
+                Matchers.any(ProviderCriteria.class));
+        final ArgumentCaptor<EventTypeCriteria> eventTypeCriteriaCaptor =
+                ArgumentCaptor.forClass(EventTypeCriteria.class);
+        Mockito.verify(pluginService.getEventTypeService(), Mockito.times(1)).deleteByCriteria(
+                eventTypeCriteriaCaptor.capture());
+        eventTypeCriteriaCaptor.getValue();
         
     }
     

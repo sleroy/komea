@@ -52,7 +52,7 @@ public class EventStatisticsService implements IEventStatisticsService
     
     private static final Logger LOGGER                    =
                                                                   LoggerFactory
-                                                                          .getLogger(EventStatisticsService.class);
+                                                                          .getLogger("event-statistic-system");
     
     @Autowired
     private IEsperEngine        esperEngine;
@@ -99,7 +99,7 @@ public class EventStatisticsService implements IEventStatisticsService
         final List<Measure> history =
                 measureHistoryService.getHistory(HistoryKey.of(kpiService.findKPI(
                         KpiKey.ofKpiName(ALERT_RECEIVED_IN_ONE_DAY)).getId()));
-        LOGGER.info("History of alerts {}", history.size());
+        LOGGER.debug("History of alerts {}", history.size());
         return history;
         
     }
@@ -225,7 +225,7 @@ public class EventStatisticsService implements IEventStatisticsService
             
             LOGGER.info("Statistics KPI already existing.");
         }
-        
+        LOGGER.info("Creating cron for statistics.");
         
         // output snapshot every 1 minute
         esperEngine
