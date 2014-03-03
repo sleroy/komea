@@ -49,6 +49,17 @@ public class EntitiesControllerIT extends AbstractSpringWebIntegrationTestCase {
 
     @Test
     @DatabaseSetup("database.xml")
+    public void testAllTeams() throws Exception {
+
+        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.get("/teams/all"));
+
+        httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
+        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(2)));
+        httpRequest.andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.equalToIgnoringCase("Team 1")));
+    }
+
+    @Test
+    @DatabaseSetup("database.xml")
     public void testAllPersons() throws Exception {
 
         final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.get("/persons/all"));
