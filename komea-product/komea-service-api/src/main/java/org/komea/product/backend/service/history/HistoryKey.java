@@ -70,6 +70,20 @@ public class HistoryKey
     /**
      * Method of.
      * 
+     * @param _kpiID
+     *            Integer
+     * @return HistoryKey
+     */
+    public static HistoryKey of(final Kpi _kpi) {
+    
+    
+        return new HistoryKey(_kpi.getId(), null, 0);
+    }
+    
+    
+    /**
+     * Method of.
+     * 
      * @param _kpi
      *            Kpi
      * @param _entity
