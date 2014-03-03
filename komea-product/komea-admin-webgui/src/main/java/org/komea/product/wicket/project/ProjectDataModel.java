@@ -11,7 +11,6 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvid
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.komea.product.backend.service.entities.IProjectService;
-import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Project;
 
 /**

@@ -240,4 +240,14 @@ public final class PersonGroupService extends
         }
         return team;
     }
+
+    @Override
+    public List<PersonGroup> getAllDepartmentsPG() {
+        return getAllPersonGroups(PersonGroupType.DEPARTMENT);
+    }
+
+    @Override
+    public List<PersonGroup> getAllTeamsPG() {
+        return getAllPersonGroups(PersonGroupType.TEAM);
+    }
 }

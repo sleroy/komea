@@ -40,8 +40,8 @@ public class KpiPage extends LayoutPage
         
         final ISortableDataProvider<Kpi, String> dataProvider = new KpiDataModel(kpiService);
         final DataTable<Kpi, String> build =
-                DataTableBuilder.<Kpi, String> newTable("table").addColumn("kpikey", "KpiKey")
-                        .addColumn("name", "Name").addColumn("description", "Description")
+                DataTableBuilder.<Kpi, String> newTable("table").addColumn("Kpi key", "KpiKey")
+                        .addColumn("Name", "Name").addColumn("Description", "Description")
                         .withEditDeleteColumn(personDeleteAction, kpiEditAction).displayRows(10)
                         .withData(dataProvider).build();
         add(build);

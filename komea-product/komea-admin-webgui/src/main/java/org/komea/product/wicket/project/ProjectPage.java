@@ -28,15 +28,15 @@ public class ProjectPage extends LayoutPage {
     
     public ProjectPage(PageParameters _parameters) {
         super(_parameters);
-         final IDeleteAction<Project> personDeleteAction = new ProjectDeleteAction(projectService);
+         final IDeleteAction<Project> projectDeleteAction = new ProjectDeleteAction(projectService);
         
-        final IEditAction<Project> kpiEditAction = new ProjectEditAction(this);
+        final IEditAction<Project> projectEditAction = new ProjectEditAction(this);
 
         final ISortableDataProvider<Project, String> dataProvider = new ProjectDataModel(projectService);
         final DataTable<Project, String> build =
-                DataTableBuilder.<Project, String> newTable("table").addColumn("projectkey", "ProjectKey")
-                        .addColumn("name", "Name").addColumn("description", "Description")
-                        .withEditDeleteColumn(personDeleteAction, kpiEditAction).displayRows(10)
+                DataTableBuilder.<Project, String> newTable("table").addColumn("Project key", "ProjectKey")
+                        .addColumn("Name", "Name").addColumn("Description", "Description")
+                        .withEditDeleteColumn(projectDeleteAction, projectEditAction).displayRows(10)
                         .withData(dataProvider).build();
         add(build);
         

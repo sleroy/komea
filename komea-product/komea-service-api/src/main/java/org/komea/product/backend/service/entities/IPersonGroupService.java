@@ -28,6 +28,21 @@ public interface IPersonGroupService extends
 {
     
     
+    
+        /**
+     * This method list all departments
+     * 
+     * @return the departments list
+     */
+    List<PersonGroup> getAllDepartmentsPG();
+    
+    
+    /**
+     * This method list all teams
+     * 
+     * @return the team list
+     */
+    List<PersonGroup> getAllTeamsPG();
     /**
      * This method list all departments
      * 
