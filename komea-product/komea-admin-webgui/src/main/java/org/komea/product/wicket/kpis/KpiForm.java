@@ -1,11 +1,15 @@
 package org.komea.product.wicket.kpis;
 
+
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.dialog.InputDialog;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.KpiDao;
@@ -100,8 +104,45 @@ public final class KpiForm extends Form<Kpi> {
                 .build());
 
         // AjaxFormValidatingBehavior.addToAllFormComponents(this, "onkeyup", Duration.ONE_SECOND);
+        
+        
         // ///////////////////////////////////////////////////////////////////////////////////
         // //////////////////////////////// Popup //////////////////////////////////////////
+        // ///////////////////////////////////////////////////////////////////////////////////
+//        final KpiForm formular = this;
+//        final InputDialog<String> dialog = new InputDialog<String>("dialog", "Input", "Please provide a value:", new Model<String>("a sample value")) {
+//
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public void onSubmit(AjaxRequestTarget target)
+//			{
+//				this.info("The form has been submitted");
+//				this.info(String.format("The model object is: '%s'", this.getModelObject()));
+//			}
+//
+//			@Override
+//			public void onClose(AjaxRequestTarget target, DialogButton button)
+//			{
+//				this.info(button + " has been clicked");
+//				target.add(formular);
+//			}
+//		};
+//        this.add(dialog);
+//        
+//        add(new AjaxButton("openIdProvider") {
+//
+//		
+//
+//			@Override
+//			protected void onSubmit(AjaxRequestTarget target, Form<?> form)
+//			{
+//				dialog.open(target);
+//			}
+//		});
+        // ///////////////////////////////////////////////////////////////////////////////////
+        // ///////////////////////////////////////////////////////////////////////////////////
+        
         add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
 
             @Override
@@ -171,8 +212,7 @@ public final class KpiForm extends Form<Kpi> {
             }
         });
 
-        // ///////////////////////////////////////////////////////////////////////////////////
-        // ///////////////////////////////////////////////////////////////////////////////////
+
         // ///////////////////////////////////////////////////////////////////////////////////
         // ///////////////////////////////////////////////////////////////////////////////////
         
@@ -212,7 +252,7 @@ public final class KpiForm extends Form<Kpi> {
 
         kpiInsert.setValueMin(this.kpi.getValueMin());
         kpiInsert.setValueMax(this.kpi.getValueMax());
-        System.out.println("kpi max :" + this.kpi.getValueMax());
+//        System.out.println("kpi max :" + this.kpi.getValueMax());
         kpiInsert.setValueDirection(this.kpi.getValueDirection());
         kpiInsert.setValueType(this.kpi.getValueType());
 
@@ -224,18 +264,6 @@ public final class KpiForm extends Form<Kpi> {
             kpiDao.insert(kpiInsert);
         }
         page.setResponsePage(new KpiPage(page.getPageParameters()));
-        // faire la modification dans la base
-        // ////////////////////////////
-        // this.kpiDao.i
-        // //////////////////////////////
-        // exemple
-        // if (selectedRole != null) {
-        // person.setIdPersonRole(selectedRole.getId());
-        // }
-        // if (person.getId() != null) {
-        // personDAO.updateByPrimaryKey(person);
-        // } else {
-        // personDAO.insert(person);
-        // }
+
     }
 }

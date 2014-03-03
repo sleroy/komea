@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org" xmlns="http://www.w3.org/1999/xhtml">
     <head>
-            <meta charset="utf-8"></meta>
+        <meta charset="utf-8"></meta>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
         <meta content="Komea administration site" name="description"></meta>
         <meta content="Komea" name="author"></meta>
@@ -61,12 +61,12 @@
                                                 <div class="col-md-4">
                                                     <input id="idProvider" name="idProvider" type="text" placeholder="idProvider" class="form-control"  wicket:id="idProvider">
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <!--<button type="button" class="btn btn-small btn-info col-md-5">...</button>-->
+                                                <div  class="col-md-3">
+                                                    <button id="btnIdProvider" type="button" class="btn btn-small btn-info col-md-5" wicket:id="open">...</button>
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <!--<div wicket:id="dialog">[dialog]</div>-->
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
@@ -250,17 +250,24 @@
                                    
                             <div wicket:id="dialog">[dialog]</div>-->
 
-                            <div align="center">
-                                <strong>Wicket Ajax 'Are you sure?' Modal Window</strong>
+                            <!--                            <div align="center">
+                                                            <strong>Wicket Ajax 'Are you sure?' Modal Window</strong>
+                            
+                                                            <form action="" wicket:id="formWithJavaScript">
+                                                                <input type="submit" wicket:id="buttonWithJavaScript" value="Action!"/>
+                                                            </form>
+                                                        </div>-->
 
-                                <form action="" wicket:id="formWithJavaScript">
-                                    <!--<input type="submit" wicket:id="buttonWithJavaScript" value="Action!"/>-->
-                                </form>
-                            </div>
-
-                            <div align="center">
-                                <span wicket:id="yesNoPanel"/>
-                            </div>
+                            <!--                            <div align="center">
+                                                            <span wicket:id="yesNoPanel"/>
+                                                        </div>-->
+                           
+                               
+<!--                                    <button wicket:id="open">Open input dialog</button>-->
+                                   
+                                
+                           
+                            <div wicket:id="dialog">[dialog]</div>
                         </wicket:extend>
 
                         <!--                        <wicket:panel>
@@ -272,8 +279,6 @@
         </div>
         <footer class="tocea-footer">
             <p>&copy; Komea.org</p>
-            <script src="../../../../../../../main/webapp/static/js/ui/jquery.js"></script>
-            <script src="../../../../../../../main/webapp/static/bootstrap/js/bootstrap.min.js"></script>
         </footer>
     </body>
 </html>
