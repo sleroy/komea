@@ -103,5 +103,12 @@ public class EventTypeService extends AbstractService<EventType, Integer, EventT
     
         requiredDAO = _requiredDAO;
     }
+	
+	@Override
+    protected EventTypeCriteria getCriteriaKey(String key) {
+        final EventTypeCriteria criteria = new EventTypeCriteria();
+        criteria.createCriteria().andEventKeyEqualTo(key);
+        return criteria;
+    }
     
 }

@@ -684,4 +684,11 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         
         
     }
+	
+	@Override
+    protected KpiCriteria getCriteriaKey(String key) {
+        final KpiCriteria criteria = new KpiCriteria();
+        criteria.createCriteria().andKpiKeyEqualTo(key);
+        return criteria;
+    }
 }

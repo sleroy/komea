@@ -371,4 +371,9 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
         LOGGER.trace("Get list of measures {} {} returns {}", rowBounds, measureCriteria, list);
         return list;
     }
+	
+	    @Override
+    protected MeasureCriteria getCriteriaKey(String key) {
+        throw new UnsupportedOperationException("Not supported.");
+    }
 }

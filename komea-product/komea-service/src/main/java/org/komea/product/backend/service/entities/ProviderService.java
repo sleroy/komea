@@ -55,5 +55,12 @@ public class ProviderService extends AbstractService<Provider, Integer, Provider
     
         requiredDao = _requiredDao;
     }
+	
+	@Override
+    protected ProviderCriteria getCriteriaKey(String key) {
+        final ProviderCriteria criteria = new ProviderCriteria();
+        criteria.createCriteria().andUrlEqualTo(key);
+        return criteria;
+    }
     
 }

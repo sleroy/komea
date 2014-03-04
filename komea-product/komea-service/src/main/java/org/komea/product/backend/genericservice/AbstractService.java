@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.ibatis.session.RowBounds;
 import org.komea.product.backend.service.generic.IGenericService;
+import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.dao.IGenericDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,6 +122,20 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
             updateByPrimaryKey(_tEntity);
         }
 
+    }
+
+    @Override
+    public List<TEntity> selectAll() {
+
+        return selectByCriteria(null);
+    }
+
+    protected abstract TCriteria getCriteriaKey(String key);
+
+    @Override
+    public TEntity selectByKey(String key) {
+
+        return CollectionUtil.singleOrNull(selectByCriteria(getCriteriaKey(key)));
     }
 
     /*

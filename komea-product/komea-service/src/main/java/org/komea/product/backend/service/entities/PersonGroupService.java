@@ -250,4 +250,11 @@ public final class PersonGroupService extends
     public List<PersonGroup> getAllTeamsPG() {
         return getAllPersonGroups(PersonGroupType.TEAM);
     }
+
+    @Override
+    protected PersonGroupCriteria getCriteriaKey(String key) {
+        final PersonGroupCriteria criteria = new PersonGroupCriteria();
+        criteria.createCriteria().andPersonGroupKeyEqualTo(key);
+        return criteria;
+    }
 }

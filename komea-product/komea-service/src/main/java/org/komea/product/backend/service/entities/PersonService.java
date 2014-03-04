@@ -294,4 +294,11 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
         criteria.createCriteria().andIdPersonGroupEqualTo(groupId);
         return requiredDAO.selectByCriteria(criteria);
     }
+
+    @Override
+    protected PersonCriteria getCriteriaKey(String key) {
+        final PersonCriteria criteria = new PersonCriteria();
+        criteria.createCriteria().andLoginEqualTo(key);
+        return criteria;
+    }
 }
