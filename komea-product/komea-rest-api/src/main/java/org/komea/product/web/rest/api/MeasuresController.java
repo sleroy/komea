@@ -45,28 +45,27 @@ public class MeasuresController {
     public MeasuresDto findMeasures(@RequestBody
             final SearchMeasuresDto _searchMeasuresDto) {
 
-        try {
-            final EntityType entityType = _searchMeasuresDto.getEntityType();
-            final List<Kpi> kpis = kpiService.getKpis(entityType, _searchMeasuresDto.getKpiKeys());
-            final List<BaseEntity> entities
-                    = entityService.getEntities(entityType, _searchMeasuresDto.getEntityKeys());
-            final List<Measure> measures = new ArrayList<Measure>(kpis.size() * entities.size());
-            for (final BaseEntity entity : entities) {
-                for (final Kpi kpi : kpis) {
+        final EntityType entityType = _searchMeasuresDto.getEntityType();
+        final List<Kpi> kpis = kpiService.getKpis(entityType, _searchMeasuresDto.getKpiKeys());
+        final List<BaseEntity> entities
+                = entityService.getEntities(entityType, _searchMeasuresDto.getEntityKeys());
+        final List<Measure> measures = new ArrayList<Measure>(kpis.size() * entities.size());
+        for (final BaseEntity entity : entities) {
+            for (final Kpi kpi : kpis) {
+                try {
                     final Measure measure
                             = kpiService.getRealTimeMeasure(KpiKey.ofKpiAndEntity(kpi, entity));
                     if (measure != null) {
                         measures.add(measure);
                     }
+                } catch (Exception ex) {
+                    LOGGER.error(ex.getMessage(), ex);
                 }
             }
-            measures.addAll(measureService.getMeasures(kpis, entities, _searchMeasuresDto));
-            // Collections.sort(measures, new DateComparator());
-            return new MeasuresDto(entityType, entities, kpis, measures);
-        } catch (Exception ex) {
-            LOGGER.error(ex.getMessage(), ex);
         }
-        return null;
+        measures.addAll(measureService.getMeasures(kpis, entities, _searchMeasuresDto));
+        // Collections.sort(measures, new DateComparator());
+        return new MeasuresDto(entityType, entities, kpis, measures);
     }
 
     /**
