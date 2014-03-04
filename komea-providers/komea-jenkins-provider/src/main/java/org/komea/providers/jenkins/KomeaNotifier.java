@@ -24,6 +24,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
@@ -40,6 +42,7 @@ public class KomeaNotifier extends Notifier implements Serializable {
     @Extension
     public static class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
+        private static final Logger LOGGER = Logger.getLogger(DescriptorImpl.class.getName());
         private String serverUrl;
 
         public DescriptorImpl() {
@@ -50,6 +53,9 @@ public class KomeaNotifier extends Notifier implements Serializable {
         @Override
         public boolean configure(final StaplerRequest req, final JSONObject formData)
                 throws FormException {
+            LOGGER.log(Level.WARNING, "CONFIGURATION CHANGES : "
+                    + (req.getUserPrincipal() == null ? "" : req.getUserPrincipal().getName()) + " - "
+                    + req.getRequestURIWithQueryString());
 
             serverUrl = formData.getString("serverUrl");
             save();
