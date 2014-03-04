@@ -5,7 +5,10 @@ import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
+import hudson.model.Cause;
 import hudson.model.Result;
+import hudson.model.User;
+import hudson.scm.ChangeLogSet;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
@@ -19,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -196,6 +200,17 @@ public class KomeaNotifier extends Notifier implements Serializable {
         final Provider provider = KomeaComputerListener.getProvider();
         final int buildNumber = build.getNumber();
         final long buildDate = build.getTime().getTime();
+        for (Cause cause : build.getCauses()) {
+            listener.getLogger().println("CAUSE : " + cause.getShortDescription() + " - " + cause.getClass().getName());
+        }
+        Iterator<? extends ChangeLogSet.Entry> iterator = build.getChangeSet().iterator();
+        while (iterator.hasNext()) {
+            ChangeLogSet.Entry entry = iterator.next();
+            listener.getLogger().println("CHANGE : " + entry.getAuthor().getDisplayName() + " - " + entry.getMsg());
+        }
+        for (final User user : build.getCulprits()) {
+            listener.getLogger().println("USER : " + user.getId() + " - " + user.getDisplayName() + " - " + user.getFullName());
+        }
         pushEvents(listener, createStartEvent(buildDate, buildNumber, jenkinsProjectName, provider.getUrl()),
                 createIndustrializationEvent(buildDate, buildNumber, jenkinsProjectName, provider.getUrl()));
         return true;
