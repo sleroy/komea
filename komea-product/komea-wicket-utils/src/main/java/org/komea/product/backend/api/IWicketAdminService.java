@@ -16,8 +16,14 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 /**
  * @author sleroy
  */
-public interface IPluginAdminService
+public interface IWicketAdminService
 {
+    
+    
+    /**
+     * @return
+     */
+    Map<String, Class<? extends WebPage>> getPluginPages();
     
     
     /**
@@ -49,5 +55,16 @@ public interface IPluginAdminService
      *            the web page class.
      */
     void register(String _providerName, Class<? extends WebPage> _webPageClass);
+    
+    
+    /**
+     * Plugin name
+     * 
+     * @param _pluginName
+     *            the plugin name
+     * @param _webPageClass
+     *            the web page
+     */
+    void registerPlugin(String _pluginName, Class<? extends WebPage> _webPageClass);
     
 }

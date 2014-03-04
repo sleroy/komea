@@ -8,7 +8,7 @@ package org.komea.product.plugins.rss.bean;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.product.backend.api.IPluginAdminService;
+import org.komea.product.backend.api.IWicketAdminService;
 import org.komea.product.backend.business.IDAOObjectStorage;
 import org.komea.product.backend.service.ISettingService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
@@ -44,7 +44,7 @@ public class RssProviderBeanTest
     
     
     @Mock
-    private IPluginAdminService  pluginAdminService;
+    private IWicketAdminService  pluginAdminService;
     
     
     @Mock

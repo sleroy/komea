@@ -6,7 +6,7 @@ package org.komea.product.plugins.rss.bean;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.komea.product.backend.api.IPluginAdminService;
+import org.komea.product.backend.api.IWicketAdminService;
 import org.komea.product.backend.api.MountAdminPages;
 import org.komea.product.backend.api.MountPage;
 import org.komea.product.backend.plugin.api.EventTypeDef;
@@ -87,7 +87,7 @@ public class RssProviderBean implements org.komea.product.backend.service.ISetti
     
     
     @Autowired
-    private IPluginAdminService  pluginAdminService;
+    private IWicketAdminService  pluginAdminService;
     
     
     @Autowired
@@ -151,7 +151,7 @@ public class RssProviderBean implements org.komea.product.backend.service.ISetti
     /**
      * @return the pluginAdminService
      */
-    public IPluginAdminService getPluginAdminService() {
+    public IWicketAdminService getPluginAdminService() {
     
     
         return pluginAdminService;
@@ -262,7 +262,7 @@ public class RssProviderBean implements org.komea.product.backend.service.ISetti
      * @param _pluginAdminService
      *            the pluginAdminService to set
      */
-    public void setPluginAdminService(final IPluginAdminService _pluginAdminService) {
+    public void setPluginAdminService(final IWicketAdminService _pluginAdminService) {
     
     
         pluginAdminService = _pluginAdminService;

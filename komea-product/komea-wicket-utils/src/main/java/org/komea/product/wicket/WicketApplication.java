@@ -11,7 +11,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.settings.IExceptionSettings;
 import org.apache.wicket.settings.IExceptionSettings.ThreadDumpStrategy;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.komea.product.backend.api.IPluginAdminService;
+import org.komea.product.backend.api.IWicketAdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -103,10 +103,10 @@ public class WicketApplication extends WebApplication
      * 
      * @return the plugin admin page.
      */
-    private IPluginAdminService getPluginAdminPage() {
+    private IWicketAdminService getPluginAdminPage() {
     
     
-        return getAppCtx().getBean(IPluginAdminService.class);
+        return getAppCtx().getBean(IWicketAdminService.class);
     }
     
     

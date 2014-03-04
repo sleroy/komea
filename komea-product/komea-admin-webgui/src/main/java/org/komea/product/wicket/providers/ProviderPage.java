@@ -12,6 +12,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.komea.product.backend.api.IWicketAdminService;
 import org.komea.product.backend.service.entities.IProviderService;
 import org.komea.product.database.model.Provider;
 import org.komea.product.database.model.ProviderCriteria;
@@ -32,10 +33,18 @@ public class ProviderPage extends LayoutPage
     {
         
         
-        private ProviderListView(final String _id, final IModel<? extends List<Provider>> _model) {
+        private final IWicketAdminService wicketAdmin;
+        
+        
+        
+        private ProviderListView(
+                final String _id,
+                final IModel<? extends List<Provider>> _model,
+                final IWicketAdminService _wicketAdmin) {
         
         
             super(_id, _model);
+            wicketAdmin = _wicketAdmin;
         }
         
         
@@ -44,14 +53,17 @@ public class ProviderPage extends LayoutPage
         
         
             final IModel<Provider> model = _item.getModel();
-            _item.add(new ProviderPanel("providerone", model));
+            _item.add(new ProviderPanel("providerone", model, wicketAdmin));
         }
     }
     
     
     
     @SpringBean
-    private IProviderService providerDAO;
+    private IProviderService    providerDAO;
+    
+    @SpringBean
+    private IWicketAdminService wicketAdminService;
     
     
     
@@ -62,6 +74,6 @@ public class ProviderPage extends LayoutPage
         
         final List<Provider> providers = providerDAO.selectByCriteria(new ProviderCriteria());
         add(new ProviderListView("providerlist", new CompoundPropertyModel<List<Provider>>(
-                providers)));
+                providers), wicketAdminService));
     }
 }
