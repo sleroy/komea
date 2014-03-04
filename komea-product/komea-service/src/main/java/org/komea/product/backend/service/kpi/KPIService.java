@@ -271,7 +271,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     public Measure getRealTimeMeasure(final KpiKey _key) {
     
     
-        LOGGER.debug("Obtain the real time measure : {}", _key);
+        LOGGER.info("Obtain the real time measure : {}", _key);
         final Kpi kpiOrFail = findKPIOrFail(_key);
         final KPIValueTable<IEntity> valueTable =
                 fetchKpiValueTable(kpiOrFail, getEsperQueryFromKpi(kpiOrFail));
@@ -285,7 +285,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         final IEntity entity = CollectionUtil.singleOrNull(entitiesAssociatedToKpiKey);
         measureKey.setEntity(entity.entityType(), entity.getId());
         measureKey.setValue(valueTable.getValueOfEntity(entity));
-        LOGGER.debug("Obtain the real time measure : {} result = ", _key, measureKey.getValue());
+        LOGGER.info("Obtain the real time measure : {} result = ", _key, measureKey.getValue());
         return measureKey;
     }
     
