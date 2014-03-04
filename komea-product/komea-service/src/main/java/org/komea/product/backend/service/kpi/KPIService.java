@@ -285,7 +285,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         final IEntity entity = CollectionUtil.singleOrNull(entitiesAssociatedToKpiKey);
         measureKey.setEntity(entity.entityType(), entity.getId());
         measureKey.setValue(valueTable.getValueOfEntity(entity));
-        LOGGER.info("Obtain the real time measure : {} result = ", _key, measureKey.getValue());
+        LOGGER.info("Obtain the real time measure : {} result = {}", _key, measureKey.getValue());
         return measureKey;
     }
     
