@@ -60,7 +60,7 @@ public class RssCronJob implements Job
             new RssFeeder(fetch, lastDate, esperEngine).feed();
         }
         lastDate = launched;
-        _context.getJobDetail().getJobDataMap().put("lastDate", launched);
+        _context.put("lastDate", launched);
     }
     
 }
