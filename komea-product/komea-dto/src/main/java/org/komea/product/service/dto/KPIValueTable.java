@@ -115,7 +115,7 @@ public class KPIValueTable<T extends IEntity> implements Serializable {
         LOGGER.info("getValueOfEntity " + _entity);
         for (final KpiLineValue<?> value : values) {
             LOGGER.info("KpiLineValue : " + value);
-            if (_entity.getEntityKey().equals(value.getEntity().getEntityKey())) {
+            if (value.getEntity() != null && _entity.getEntityKey().equals(value.getEntity().getEntityKey())) {
                 return value
                         .getValue();
             }
