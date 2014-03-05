@@ -12,6 +12,7 @@ import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.model.Kpi;
+import org.komea.product.database.model.Provider;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.SelectDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
@@ -48,39 +49,27 @@ public class KpiEditPage extends LayoutPage {
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
-//        final KpiForm KpiForm = null;
-//        new KpiForm(PARENT_PATH, _kpi, feedbackPanel, null)
+
 
         final KpiForm KpiForm = new KpiForm("form", kpiDao, entityService, providerDao, feedbackPanel, new CompoundPropertyModel<Kpi>(_kpi), this);
         add(KpiForm);
 
-//        Form formWithJavaScript = new Form("formWithJavaScript");
-//        Button buttonWithJavaScript = new Button("buttonWithJavaScript") {
-//
-//            @Override
-//            public void onSubmit() {
-//                System.out.println("Doing my job");
-//            }
-//        };
-//        buttonWithJavaScript.add(new SimpleAttributeModifier(
-//                "onclick", "if(!confirm('Do you really want to perform this action?')) return false;"));
-//        formWithJavaScript.add(buttonWithJavaScript);
-//        add(formWithJavaScript);
-//         final Form<Void> form = new Form<Void>("dform");
-//        this.add(form);
-        // FeedbackPanel //
-//        form.add(new JQueryFeedbackPanel("feedback"));
-        // Dialog //
-        final SelectDialog dialog = new SelectDialog("dialog", "Select", providerDao) {
 
+        // Dialog //
+        final SelectDialog dialog;
+        dialog = new SelectDialog("dialog", "Select", providerDao) {
+            
             @Override
             public void onClose(AjaxRequestTarget target, DialogButton button) {
                 target.add(KpiForm);
             }
 
             @Override
-            protected void onSubmit(AjaxRequestTarget art) {
-                this.info("The form has been submitted");
+            protected void onSubmit(AjaxRequestTarget target) {
+                Provider selectedProvider = getSelectedProvider();
+                KpiForm.getKpi().setIdProvider(selectedProvider.getId());
+                KpiForm.getNameProvider().setName(selectedProvider.getName());
+                target.add(KpiForm);
 //                this.info(String.format("The model object is: '%s'", this.getModelObject()));
             }
         };
@@ -93,7 +82,7 @@ public class KpiEditPage extends LayoutPage {
             public void onClick(final AjaxRequestTarget art) {
                 dialog.open(art);
 
-//                getCustom().setResponsePage(new KpiPage(getCustom().getPageParameters()));
+
             }
         });
     }
