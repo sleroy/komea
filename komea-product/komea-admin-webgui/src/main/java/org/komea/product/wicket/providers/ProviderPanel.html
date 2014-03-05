@@ -1,37 +1,95 @@
-<wicket:panel xmlns:wicket="http://wicket.apache.org">
-	<div class="row">
-		<div class="col-xs-1 col-md-1 text-center">
-			<img src="http://localhost:8080/rest/local_resources/pic/jenkins.png"
-				width="114" height="114" alt="bootsnipp"
-				class="img-rounded img-responsive" wicket:id="icon" />
-		</div>
-		<div class="col-xs-5 col-md-5 section-box">
-			<h2>
-				<strong wicket:id="providerName">Provider Jenkins</strong> <a
-					href="http://zeus:8080/jenkins" target="_blank" wicket:id="url"><span
-					class="glyphicon glyphicon-new-window"> </span></a>
-			</h2>
-			<div class="row">
-				<div class="col-md-3">
-					<span class="label label-warning" wicket:id="providerType">Warning</span>
-				</div>
-				<div class="col-md-9">
-					<a href="admin" wicket:id="adminpage">Administration page</a>
-				</div>
+<!-- <!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org"
+	xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+<meta content="Komea administration site" name="description"></meta>
+<meta content="Komea" name="author"></meta>
+<title>Komea Administration</title>
+<link rel="stylesheet"
+	href="../../../../../../../main/webapp/static//bootstrap/css/bootstrap.css"
+	type="text/css" media="screen"></link>
+<link rel="stylesheet"
+	href="../../../../../../../main/webapp/static//bootstrap/css/bootstrap-theme.css"
+	type="text/css" media="screen"></link>
+<link rel="stylesheet"
+	href="../../../../../../../main/webapp/static//css/style.css"
+	type="text/css"></link>
+<link rel="stylesheet"
+	href="../../../../../../../main/webapp/static//images/sprites/sprites.css"
+	type="text/css"></link>
+<link rel="stylesheet" type="text/css"
+	href="../../../../../../../main/webapp/static//js/ui/themes/base/jquery-ui.css" />
+
+<script type="text/css">
+.glyphicon-heart { color:#e74c3c;}
+.glyphicon-comment { color:#27ae60;}
+.section-box h2 { margin-top:0px;}
+.section-box h2 a { font-size:15px; }
+.separator { padding-right:5px;padding-left:5px; }
+.section-box hr {margin-top: 0;margin-bottom: 5px;border: 0;border-top: 1px solid rgb(199, 199, 199);}
+
+</script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12" wicket:id="providerlist">
+				<div class="well well-sm" wicket:id="providerone">
+ -->
+					<wicket:panel xmlns:wicket="http://wicket.apache.org">
+						<div class="row">
+							<div class="col-xs-1 col-md-1 text-center">
+								<img
+									src="http://localhost:8080/rest/local_resources/pic/jenkins.png"
+									width="150" height="150" alt=""
+									class="pull-left img-responsive thumb margin10 img-thumbnail" wicket:id="icon" />
+							</div>
+							<div class="col-xs-5 col-md-5 section-box">
+								<h2>
+									<strong wicket:id="providerName">Provider Jenkins</strong> 
+								</h2>
+								<div class="row">
+									<div class="col-md-3">
+										<span class="label label-warning" wicket:id="providerType">Warning</span>
+									</div>
+									<div class="col-md-9">
+									<a href="#" wicket:id="adminpage" class="btn btn-success btn-sm active">Administration page</a>
+									<a href="#" wicket:id="url" target="_blank"  class="btn btn-info btn-sm active">Go to server</a>										     
+									</div>
 
 
+								</div>
+
+							</div>
+							<div class="col-xs-6 col-md-6 section-box">
+								<p>
+									<strong>Events provided : </strong>
+								</p>
+								<select multiple class="form-control">
+									<option>jenkins-build-started</option>
+									<option>jenkins-build-failed</option>
+									<option>jenkins-build-level-industrialisation</option>
+								</select>
+							</div>
+						</div>
+					</wicket:panel>
+<!-- 					
+				</div>
 			</div>
-
-		</div>
-		<div class="col-xs-6 col-md-6 section-box">
-			<p>
-				<strong>Events provided : </strong>
-			</p>
-			<select multiple class="form-control">
-				<option>jenkins-build-started</option>
-				<option>jenkins-build-failed</option>
-				<option>jenkins-build-level-industrialisation</option>
-			</select>
 		</div>
 	</div>
-</wicket:panel>
+
+	<footer class="tocea-footer">
+		<p>&copy; Komea.org</p>
+		<script src="../../../../../../../main/webapp/static//js/jquery.js"></script>
+		<script src="../../../../../../../main/webapp/static//js/ui/jquery.js"></script>
+		<script
+			src="../../../../../../../main/webapp/static//bootstrap/js/bootstrap.js"
+			type="text/javascript"></script>
+
+	</footer>
+</body>
+</html>
+-->
