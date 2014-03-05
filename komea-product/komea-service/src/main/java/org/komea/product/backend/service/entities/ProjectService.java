@@ -1,8 +1,8 @@
 package org.komea.product.backend.service.entities;
 
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.dao.HasProjectPersonDao;
@@ -35,8 +35,6 @@ import org.komea.product.database.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
 
 /**
  */
@@ -134,14 +132,14 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
     @Override
     public Project getOrCreate(final String _projectKey) {
 
-        Project project = requiredDAO.selectByKey(_projectKey);
+        Project project = selectByKey(_projectKey);
         if (project == null) {
             project = new Project();
             project.setDescription("Project automatically generated   " + _projectKey);
             project.setName(_projectKey);
             project.setProjectKey(_projectKey);
             requiredDAO.insert(project);
-            project = requiredDAO.selectByKey(_projectKey);
+            project = selectByKey(_projectKey);
         }
         return project;
     }
