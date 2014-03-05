@@ -44,7 +44,7 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
             "", Severity.MAJOR);
     public static final List<EventType> EVENT_TYPES = Arrays.asList(
             BUILD_STARTED, BUILD_INDUSTRIALIZATION, BUILD_COMPLETE,
-            BUILD_FAILED, BUILD_INTERRUPTED);
+            BUILD_FAILED, BUILD_INTERRUPTED, BUILD_UNSTABLE);
 
     public static EventType createEventType(final String key, final String name,
             final String description, final Severity severity) {
