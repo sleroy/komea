@@ -2,6 +2,7 @@ package org.komea.product.wicket.kpis;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.InputDialog;
+import java.io.Serializable;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -11,6 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.database.api.IEntity;
+import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.enums.EntityType;
@@ -21,8 +23,10 @@ import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
+import org.komea.product.database.model.Provider;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.utils.SelectDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.SelectBoxBuilder;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
@@ -37,10 +41,10 @@ public final class KpiForm extends Form<Kpi> {
 
     private final Component feedBack;
     private final Kpi kpi;
-    // private Kpi kpi;
     private final KpiDao kpiDao;
-
+    private final ProviderDao providerDao;
     private final LayoutPage page;
+    private final NameProvider nameProvider;
 
     public KpiForm(
             final String _id,
@@ -55,6 +59,7 @@ public final class KpiForm extends Form<Kpi> {
         feedBack = _feedBack;
         kpi = _dto.getObject();
         page = _kpiPage;
+        providerDao = _providerDao;
         feedBack.setVisible(false);
         add(TextFieldBuilder.<String>createRequired("name", kpi, "name").highlightOnErrors()
                 .simpleValidator(0, 255).build());
@@ -64,10 +69,14 @@ public final class KpiForm extends Form<Kpi> {
 
         add(TextAreaBuilder.<String>create("description", kpi, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("").build());
-//        Provider selectByPrimaryKey = _providerDao.selectByPrimaryKey(kpi.getIdProvider());
-        // String name = provider.getName();
-        add(TextFieldBuilder.<String>create("idProvider", kpi, "idProvider").withTooltip("")
-                .build());
+        this.nameProvider = new NameProvider("");
+        Provider selectByPrimaryKey = _providerDao.selectByPrimaryKey(kpi.getIdProvider());
+        if (selectByPrimaryKey != null) {
+            this.nameProvider.setName(selectByPrimaryKey.getName());
+        }
+        TextField<String> fieldIdProvider = TextFieldBuilder.<String>create("idProvider", nameProvider, "name").withTooltip("")
+                .build();
+        add(fieldIdProvider);
 
         TextField<String> textminValue = TextFieldBuilder.<String>create("valueMin", kpi, "valueMin").withTooltip("").build();
         add(textminValue);
@@ -83,12 +92,12 @@ public final class KpiForm extends Form<Kpi> {
         add(SelectBoxBuilder.<EntityType>createWithEnum("entityType", kpi, EntityType.class)
                 .build());
 
-        String entityName = "";
-        if (kpi.getEntityType() != null && kpi.getEntityID() != null) {
-            final IEntity entity = _entity.getEntity(new EntityKey(kpi.getEntityType(), kpi.getEntityID()));
-            entityName = getEntityName(kpi.getEntityType(), entity);
-        }
-        add(TextFieldBuilder.<String>create("entityID", entityName, "toString").withTooltip("")
+//        String entityName = "";
+//        if (kpi.getEntityType() != null && kpi.getEntityID() != null) {
+//            final IEntity entity = _entity.getEntity(new EntityKey(kpi.getEntityType(), kpi.getEntityID()));
+//            entityName = getEntityName(kpi.getEntityType(), entity);
+//        }
+        add(TextFieldBuilder.<String>create("entityID", kpi, "entityID").withTooltip("")
                 .build());
 
         add(TextFieldBuilder.<String>createRequired("cronExpression", kpi, "cronExpression")
@@ -103,41 +112,39 @@ public final class KpiForm extends Form<Kpi> {
         add(TextAreaBuilder.<String>create("esperRequest", kpi, "esperRequest").withTooltip("")
                 .build());
 
-        // AjaxFormValidatingBehavior.addToAllFormComponents(this, "onkeyup", Duration.ONE_SECOND);
+        final Kpi myKpi = this.kpi;
         // ///////////////////////////////////////////////////////////////////////////////////
         // //////////////////////////////// Popup //////////////////////////////////////////
         // ///////////////////////////////////////////////////////////////////////////////////
-//        final KpiForm formular = this;
-//        final InputDialog<String> dialog = new InputDialog<String>("dialog", "Input", "Please provide a value:", new Model<String>("a sample value")) {
+//        final SelectDialog<TextField> dialog;
+//        dialog = new SelectDialog<TextField>("dialog", "Select", providerDao, fieldIdProvider) {
 //
-//			private static final long serialVersionUID = 1L;
+//            @Override
+//            public void onClose(AjaxRequestTarget target, DialogButton button) {
+////                target.add(KpiForm);
+//            }
 //
-//			@Override
-//			public void onSubmit(AjaxRequestTarget target)
-//			{
-//				this.info("The form has been submitted");
-//				this.info(String.format("The model object is: '%s'", this.getModelObject()));
-//			}
+//            @Override
+//            protected void onSubmit(AjaxRequestTarget art) {
+//                Provider selectedProvider = getSelectedProvider();
+//                myKpi.setIdProvider(selectedProvider.getId());
+//                System.out.println("on Submit dialog " + selectedProvider.getName());
+////                art.add(getCustom());
+////                this.info(String.format("The model object is: '%s'", this.getModelObject()));
+//            }
+//        };
 //
-//			@Override
-//			public void onClose(AjaxRequestTarget target, DialogButton button)
-//			{
-//				this.info(button + " has been clicked");
-//				target.add(formular);
-//			}
-//		};
 //        this.add(dialog);
-//        
-//        add(new AjaxButton("openIdProvider") {
+//        // Buttons //
+//        add(new AjaxLinkLayout<LayoutPage>("open", page) {
 //
-//		
+//            @Override
+//            public void onClick(final AjaxRequestTarget art) {
+//                dialog.open(art);
 //
-//			@Override
-//			protected void onSubmit(AjaxRequestTarget target, Form<?> form)
-//			{
-//				dialog.open(target);
-//			}
-//		});
+////                getCustom().setResponsePage(new KpiPage(getCustom().getPageParameters()));
+//            }
+//        });
         // ///////////////////////////////////////////////////////////////////////////////////
         // ///////////////////////////////////////////////////////////////////////////////////
         add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
@@ -158,7 +165,6 @@ public final class KpiForm extends Form<Kpi> {
             }
         });
 
-        final Kpi myKpi = this.kpi;
         add(new AjaxLinkLayout<TextField>("maxValueMax", textMaxValue) {
 
             @Override
@@ -166,7 +172,8 @@ public final class KpiForm extends Form<Kpi> {
 
                 myKpi.setValueMax(Double.MAX_VALUE);
 
-//                 ge System.out.println("de");tPageCustom().setResponsePage(new KpiPage(getCustom().getPageParameters()));
+                System.out.println("de max");
+//                  tPageCustom().setResponsePage(new KpiPage(getCustom().getPageParameters()));
                 art.add(getCustom());
             }
 
@@ -178,7 +185,8 @@ public final class KpiForm extends Form<Kpi> {
 
                 myKpi.setValueMin(Double.MAX_VALUE);
 
-//                 ge System.out.println("de");tPageCustom().setResponsePage(new KpiPage(getCustom().getPageParameters()));
+                System.out.println("de min");
+//                  tPageCustom().setResponsePage(new KpiPage(getCustom().getPageParameters()));
                 art.add(getCustom());
             }
 
@@ -226,6 +234,16 @@ public final class KpiForm extends Form<Kpi> {
         return result;
     }
 
+    public Kpi getKpi() {
+        return kpi;
+    }
+
+    public NameProvider getNameProvider() {
+        return nameProvider;
+    }
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * Validation the formular : settings are updated from the DTO
      */
@@ -238,7 +256,7 @@ public final class KpiForm extends Form<Kpi> {
         kpiInsert.setDescription(this.kpi.getDescription());
         kpiInsert.setName(this.kpi.getName());
         kpiInsert.setKpiKey(this.kpi.getKpiKey());
-
+        kpiInsert.setIdProvider(this.kpi.getIdProvider());
         kpiInsert.setEntityID(this.kpi.getEntityID());
         kpiInsert.setEntityType(this.kpi.getEntityType());
         kpiInsert.setEvictionRate(this.kpi.getEvictionRate());
@@ -260,4 +278,26 @@ public final class KpiForm extends Form<Kpi> {
         page.setResponsePage(new KpiPage(page.getPageParameters()));
 
     }
+
+    public static class NameProvider implements Serializable {
+
+        private String name;
+
+        public NameProvider(String name) {
+            this.name = name;
+        }
+
+        public NameProvider() {
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+    }
+
 }

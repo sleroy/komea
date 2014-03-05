@@ -34,20 +34,16 @@ public abstract class SelectDialog extends AbstractFormDialog<String> {
 
     private Form form;
     private FeedbackPanel feedback;
+   
 
     private Provider selectedProvider = null;
+    
 
-    public Provider getSelectedProvider() {
-        return selectedProvider;
-    }
-
-    public void setSelectedProvider(Provider selectedProvider) {
-        this.selectedProvider = selectedProvider;
-    }
 
     public SelectDialog(String id, String title, ProviderDao providerService) {
         super(id, title, true);
         this.form = new Form<String>("form");
+     
 
         List<Provider> list = providerService.selectByCriteria(new ProviderCriteria());
         setSelectedProvider(list.get(0));
@@ -77,6 +73,16 @@ public abstract class SelectDialog extends AbstractFormDialog<String> {
         this.add(this.form);
     }
 
+
+
+    
+        public Provider getSelectedProvider() {
+        return selectedProvider;
+    }
+
+    public void setSelectedProvider(Provider selectedProvider) {
+        this.selectedProvider = selectedProvider;
+    }
     @Override
     protected List<DialogButton> getButtons() {
         return Arrays.asList(this.btnSelect, this.btnCancel);
@@ -112,4 +118,6 @@ public abstract class SelectDialog extends AbstractFormDialog<String> {
     public void onError(AjaxRequestTarget target) {
 //        target.add(this.feedback);
     }
+    
+    
 }
