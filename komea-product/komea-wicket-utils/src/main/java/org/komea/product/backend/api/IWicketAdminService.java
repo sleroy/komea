@@ -21,6 +21,13 @@ public interface IWicketAdminService
     
     
     /**
+     * @param _name
+     * @return
+     */
+    Class<? extends WebPage> getPluginPage(String _name);
+    
+    
+    /**
      * @return
      */
     Map<String, Class<? extends WebPage>> getPluginPages();

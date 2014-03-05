@@ -57,6 +57,19 @@ public class WicketAdminService implements IWicketAdminService, ApplicationConte
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.api.IWicketAdminService#getPluginPage(java.lang.String)
+     */
+    @Override
+    public Class<? extends WebPage> getPluginPage(final String _name) {
+    
+    
+        LOGGER.info("Request admin page for plugin  {}", _name);
+        return pluginPages.get(_name);
+    }
+    
+    
     /**
      * Returns the plugin pages.
      * 
@@ -130,7 +143,7 @@ public class WicketAdminService implements IWicketAdminService, ApplicationConte
             final Class<? extends WebPage> _webPageClass) {
     
     
-        LOGGER.debug("Register a new plugin {} -> {}", _pluginName, _webPageClass.getName());
+        LOGGER.info("Register a new plugin {} -> {}", _pluginName, _webPageClass.getName());
         pluginPages.put(_pluginName, _webPageClass);
         register("/plugin" + _pluginName.hashCode(), _webPageClass);
     }

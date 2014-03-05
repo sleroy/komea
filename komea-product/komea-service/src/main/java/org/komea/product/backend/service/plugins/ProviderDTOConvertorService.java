@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
-import org.komea.product.backend.service.plugins.IProviderDTOConvertorService;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
@@ -65,6 +64,7 @@ public class ProviderDTOConvertorService implements IProviderDTOConvertorService
         provider.setUrl(providerAnnotation.url());
         provider.setProviderType(providerAnnotation.type());
         
+        
         return provider;
     }
     
@@ -75,7 +75,9 @@ public class ProviderDTOConvertorService implements IProviderDTOConvertorService
      */
     /**
      * Method loadProviderDTO.
-     * @param providerAnnotation ProviderPlugin
+     * 
+     * @param providerAnnotation
+     *            ProviderPlugin
      * @return ProviderDto
      * @see org.komea.product.backend.service.plugins.IProviderDTOConvertorService#loadProviderDTO(ProviderPlugin)
      */

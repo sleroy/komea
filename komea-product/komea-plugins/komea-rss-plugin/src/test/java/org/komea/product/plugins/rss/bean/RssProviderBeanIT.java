@@ -20,7 +20,7 @@ public class RssProviderBeanIT extends AbstractSpringIntegrationTestCase
     
     
     @Autowired
-    private RssProviderBean providerBean;
+    private RssProviderPlugin providerBean;
     
     
     

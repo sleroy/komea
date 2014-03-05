@@ -7,8 +7,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.komea.product.backend.api.IWicketAdminService;
-import org.komea.product.backend.api.MountAdminPages;
-import org.komea.product.backend.api.MountPage;
+import org.komea.product.backend.api.PluginAdminPages;
+import org.komea.product.backend.api.PluginMountPage;
 import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.ISettingService;
@@ -37,16 +37,18 @@ import org.springframework.beans.factory.annotation.Autowired;
                     category = "NEWS",
                     description = "Rss provider plugin",
                     enabled = true,
-                    entityType = EntityType.PROJECT,
+                    entityType = EntityType.SYSTEM,
                     key = "rss-news",
                     name = "Rss news",
                     severity = Severity.MINOR) },
         icon = "rss",
-        name = RssProviderBean.RSS_PROVIDER_PLUGIN,
+        name = RssProviderPlugin.RSS_PROVIDER_PLUGIN,
         type = ProviderType.NEWS,
         url = "/rssnews")
-@MountAdminPages(@MountPage(mount = "rssnews", page = RssRepositoryPage.class))
-public class RssProviderBean implements org.komea.product.backend.service.ISettingListener
+@PluginAdminPages(@PluginMountPage(
+        pluginName = RssProviderPlugin.RSS_PROVIDER_PLUGIN,
+        page = RssRepositoryPage.class))
+public class RssProviderPlugin implements org.komea.product.backend.service.ISettingListener
 {
     
     
@@ -102,7 +104,7 @@ public class RssProviderBean implements org.komea.product.backend.service.ISetti
     /**
      * RSS Provider plugin.
      */
-    public RssProviderBean() {
+    public RssProviderPlugin() {
     
     
         super();

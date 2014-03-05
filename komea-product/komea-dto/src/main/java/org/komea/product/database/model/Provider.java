@@ -172,8 +172,8 @@ public class Provider implements Serializable, IHasKey
     public String getIconURL() {
     
     
-        if (url.startsWith("http://")) { return url; }
-        return REST_LOCAL_RESOURCES_PIC + url;
+        if (url.startsWith("http://")) { return icon; }
+        return REST_LOCAL_RESOURCES_PIC + icon;
     }
     
     
@@ -255,6 +255,21 @@ public class Provider implements Serializable, IHasKey
      * @return true if the url is absolute.
      */
     public boolean isAbsoluteURL() {
+    
+    
+        final String[] schemes = {
+                "http", "https" }; // DEFAULT schemes = "http", "https", "ftp"
+        final UrlValidator urlValidator = new UrlValidator(schemes);
+        return urlValidator.isValid(url);
+    }
+    
+    
+    /**
+     * Tests if the url provider is absolute.
+     * 
+     * @return true if the url is absolute.
+     */
+    public boolean isValidURL() {
     
     
         final String[] schemes = {

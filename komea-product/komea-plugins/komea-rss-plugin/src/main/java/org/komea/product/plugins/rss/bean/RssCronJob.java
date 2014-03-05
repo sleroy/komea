@@ -25,7 +25,7 @@ public class RssCronJob implements Job
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(RssProviderBean.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RssProviderPlugin.class);
     
     
     

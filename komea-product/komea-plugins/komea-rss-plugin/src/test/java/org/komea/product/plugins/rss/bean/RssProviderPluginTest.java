@@ -27,7 +27,7 @@ import org.quartz.JobExecutionContext;
  * @author sleroy
  */
 @RunWith(MockitoJUnitRunner.class)
-public class RssProviderBeanTest
+public class RssProviderPluginTest
 {
     
     
@@ -52,14 +52,14 @@ public class RssProviderBeanTest
     
     
     @InjectMocks
-    private RssProviderBean      rssProviderBean;
+    private RssProviderPlugin      rssProviderBean;
     @Mock
     private IRssRepositories     rssRepository;
     
     
     
     /**
-     * Test method for {@link org.komea.product.plugins.rss.bean.RssProviderBean#initializeProvider()}.
+     * Test method for {@link org.komea.product.plugins.rss.bean.RssProviderPlugin#initializeProvider()}.
      */
     @Test
     public final void testInitializeProvider() throws Exception {
@@ -72,7 +72,7 @@ public class RssProviderBeanTest
     
     /**
      * Test method for
-     * {@link org.komea.product.plugins.rss.bean.RssProviderBean#notifyPropertyChanged(org.komea.product.database.model.Setting)}.
+     * {@link org.komea.product.plugins.rss.bean.RssProviderPlugin#notifyPropertyChanged(org.komea.product.database.model.Setting)}.
      */
     @Test
     public final void testNotifyPropertyChanged() throws Exception {
@@ -84,7 +84,7 @@ public class RssProviderBeanTest
     
     
     /**
-     * Test method for {@link org.komea.product.plugins.rss.bean.RssProviderBean#prepareJobMapForCron()}.
+     * Test method for {@link org.komea.product.plugins.rss.bean.RssProviderPlugin#prepareJobMapForCron()}.
      */
     @Test
     public final void testPrepareJobMapForCron() throws Exception {
@@ -92,7 +92,7 @@ public class RssProviderBeanTest
     
         final RssCronJob rssCronJob = new RssCronJob();
         
-        final RssProviderBean providerBean = new RssProviderBean();
+        final RssProviderPlugin providerBean = new RssProviderPlugin();
         providerBean.setRssRepository(rssRepository);
         
         final JobDataMap prepareJobMapForCron = providerBean.prepareJobMapForCron();

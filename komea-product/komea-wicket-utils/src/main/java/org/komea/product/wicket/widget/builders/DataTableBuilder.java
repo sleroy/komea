@@ -68,12 +68,12 @@ public class DataTableBuilder<T, S>
     
     
     
-    private String                      id          = "";
+    private String                      caption;
     private List<IColumn<T, S>>         columns     = new ArrayList<IColumn<T, S>>(20);
     private ISortableDataProvider<T, S> dataProvider;
-    private int                         rowsPerPage = 5;
-    private String                      caption;
     private boolean                     headers;
+    private String                      id          = "";
+    private int                         rowsPerPage = 5;
     
     
     
@@ -220,7 +220,6 @@ public class DataTableBuilder<T, S>
             final IEditAction<T> _editAction) {
     
     
-        ;
         final AbstractColumn<T, S> actionPanel =
                 new TableActionPanelColumn<T, S>(Model.of("Actions"), _editAction, _deleteAction);
         

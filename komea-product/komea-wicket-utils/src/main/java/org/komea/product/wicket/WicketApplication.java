@@ -73,7 +73,7 @@ public class WicketApplication extends WebApplication
         getResourceSettings().setThrowExceptionOnMissingResource(false);
         
         // enable ajax debug etc.
-        getDebugSettings().setDevelopmentUtilitiesEnabled(true);
+        getDebugSettings().setDevelopmentUtilitiesEnabled(false);
         // getDebugSettings().setComponentUseCheck(false);
         // make markup friendly as in deployment-mode
         
