@@ -78,7 +78,7 @@ public abstract class EventsBuilder {
         properties.put("person", user);
         final EventSimpleDto event = new EventSimpleDto();
         event.setDate(new Date());
-        event.setEventType(KomeaComputerListener.BUILD_CODE_CHANGED.getEventKey());
+        event.setEventType(KomeaComputerListener.BUILD_STARTED_BY_USER.getEventKey());
         event.setMessage(message);
         event.setPerson(user);
         event.setProject(projectKey);
