@@ -208,17 +208,15 @@ public class KomeaNotifier extends Notifier implements Serializable {
         if (resultEvent != null) {
             events.add(resultEvent);
         }
-        final String user = getStartedByUser(build);
-        if (user != null) {
-            events.add(EventsBuilder.createStartedByUser(start, buildNumber,
-                    jenkinsProjectName, projectKey, user, projectKey, branch));
-        }
-        if (buildBroken(build)) {
-            events.add(EventsBuilder.createBuildBroken(start, buildNumber,
-                    jenkinsProjectName, projectKey, user, projectKey, branch));
-        } else if (buildFixed(build)) {
-            events.add(EventsBuilder.createBuildFixed(start, buildNumber,
-                    jenkinsProjectName, projectKey, user, projectKey, branch));
+        final Map<String, Integer> commiters = getCommiters(build);
+        for (final String commiter : commiters.keySet()) {
+            if (buildBroken(build)) {
+                events.add(EventsBuilder.createBuildBroken(start, buildNumber,
+                        jenkinsProjectName, provider.getUrl(), commiter, projectKey, branch));
+            } else if (buildFixed(build)) {
+                events.add(EventsBuilder.createBuildFixed(start, buildNumber,
+                        jenkinsProjectName, provider.getUrl(), commiter, projectKey, branch));
+            }
         }
         pushEvents(listener, events);
         return true;
@@ -271,6 +269,11 @@ public class KomeaNotifier extends Notifier implements Serializable {
         for (final String commiter : commiters.keySet()) {
             events.add(EventsBuilder.createCodeChangedEvent(buildDate, buildNumber, jenkinsProjectName,
                     provider.getUrl(), commiters.get(commiter), commiter, projectKey, branch));
+        }
+        final String user = getStartedByUser(build);
+        if (user != null) {
+            events.add(EventsBuilder.createStartedByUser(buildDate, buildNumber,
+                    jenkinsProjectName, provider.getUrl(), user, projectKey, branch));
         }
         pushEvents(listener, events);
         return true;
