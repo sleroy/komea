@@ -16,9 +16,6 @@
     <mappers>
         <mapper resource="org/komea/product/database/sqlmap/CustomerMapper.xml" />
         <mapper resource="org/komea/product/database/sqlmap/EventTypeMapper.xml" />
-        <mapper resource="org/komea/product/database/sqlmap/HasPersonGroupKpiAlertTypeMapper.xml" />
-        <mapper resource="org/komea/product/database/sqlmap/HasPersonKpiAlertTypeMapper.xml" />
-        <mapper resource="org/komea/product/database/sqlmap/HasProjectKpiAlertTypeMapper.xml" />
         <mapper resource="org/komea/product/database/sqlmap/HasProjectPersonGroupMapper.xml" />
         <mapper resource="org/komea/product/database/sqlmap/HasProjectPersonMapper.xml" />
         <mapper resource="org/komea/product/database/sqlmap/HasProjectTagMapper.xml" />
@@ -35,6 +32,8 @@
         <mapper resource="org/komea/product/database/sqlmap/SettingMapper.xml" />
         <mapper resource="org/komea/product/database/sqlmap/TagMapper.xml" />
         <mapper resource="org/komea/product/database/sqlmap/ActivityFilterMapper.xml" />
+        <mapper resource="org/komea/product/database/sqlmap/SuccessFactorMapper.xml" />
+        <mapper resource="org/komea/product/database/sqlmap/HasSuccessFactorKpiMapper.xml" />
     </mappers>
 
 

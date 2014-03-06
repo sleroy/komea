@@ -35,7 +35,7 @@ public class KpiDAOIT extends AbstractSpringIntegrationTestCase
         final KpiCriteria request = new KpiCriteria();
         request.createCriteria().andEntityTypeEqualTo(EntityType.PROJECT);
         
-        Assert.assertTrue(kpiDAO.selectByExampleWithBLOBs(request).isEmpty());
+        Assert.assertTrue(kpiDAO.selectByCriteriaWithBLOBs(request).isEmpty());
         
         final Kpi record = new Kpi();
         record.setDescription("");
@@ -54,7 +54,7 @@ public class KpiDAOIT extends AbstractSpringIntegrationTestCase
         kpiDAO.insert(record);
         
         Assert.assertEquals(1, kpiDAO.selectByCriteria(request).size());
-        Assert.assertEquals("salut", kpiDAO.selectByExampleWithBLOBs(request).get(0)
+        Assert.assertEquals("salut", kpiDAO.selectByCriteriaWithBLOBs(request).get(0)
                 .getEsperRequest());
         
     }
