@@ -63,7 +63,8 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
     public static final List<EventType> EVENT_TYPES = Arrays.asList(
             BUILD_STARTED, BUILD_INDUSTRIALIZATION, BUILD_COMPLETE,
             BUILD_FAILED, BUILD_INTERRUPTED, BUILD_UNSTABLE,
-            BUILD_CODE_CHANGED, BUILD_BROKEN, BUILD_FIXED, JOB_CONFIGURATION_CHANGED);
+            BUILD_CODE_CHANGED, BUILD_BROKEN, BUILD_FIXED, JOB_CONFIGURATION_CHANGED,
+            BUILD_STARTED_BY_USER);
 
     public static EventType createEventType(final String key, final String name,
             final String description, final Severity severity, final EntityType entityType) {
