@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jenkins.model.Jenkins;
 import jenkins.model.JenkinsLocationConfiguration;
 import org.komea.product.database.dto.ProviderDto;
@@ -24,6 +26,7 @@ import org.komea.product.rest.client.api.IProvidersAPI;
 @Extension
 public class KomeaComputerListener extends ComputerListener implements Serializable {
 
+    private static final Logger LOGGER = Logger.getLogger(KomeaComputerListener.class.getName());
     public static final EventType BUILD_STARTED = createEventType(
             "build_started", "Jenkins build started",
             "", Severity.INFO);
@@ -42,24 +45,49 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
     public static final EventType BUILD_INTERRUPTED = createEventType(
             "build_interrupted", "Jenkins build interrupted",
             "", Severity.MAJOR);
+    public static final EventType BUILD_CODE_CHANGED = createEventType(
+            "build_code_changed", "Jenkins build with code changes",
+            "", Severity.INFO, EntityType.PERSON);
+    public static final EventType BUILD_FIXED = createEventType(
+            "build_fixed", "Jenkins build fixed",
+            "", Severity.INFO, EntityType.PERSON);
+    public static final EventType BUILD_BROKEN = createEventType(
+            "build_broken", "Jenkins build broken",
+            "", Severity.CRITICAL, EntityType.PERSON);
+    public static final EventType JOB_CONFIGURATION_CHANGED = createEventType(
+            "job_configuration_changed", "Jenkins job configuration changed",
+            "", Severity.CRITICAL);
+    public static final EventType BUILD_STARTED_BY_USER = createEventType(
+            "build_started_by_user", "Jenkins build started by user",
+            "", Severity.INFO, EntityType.PERSON);
     public static final List<EventType> EVENT_TYPES = Arrays.asList(
             BUILD_STARTED, BUILD_INDUSTRIALIZATION, BUILD_COMPLETE,
-            BUILD_FAILED, BUILD_INTERRUPTED, BUILD_UNSTABLE);
+            BUILD_FAILED, BUILD_INTERRUPTED, BUILD_UNSTABLE,
+            BUILD_CODE_CHANGED, BUILD_BROKEN, BUILD_FIXED, JOB_CONFIGURATION_CHANGED);
 
     public static EventType createEventType(final String key, final String name,
-            final String description, final Severity severity) {
+            final String description, final Severity severity, final EntityType entityType) {
         final EventType eventType = new EventType();
         eventType.setCategory(EventCategory.BUILD.name());
         eventType.setDescription(description);
         eventType.setEnabled(true);
-        eventType.setEntityType(EntityType.PROJECT);
+        eventType.setEntityType(entityType);
         eventType.setEventKey(key);
         eventType.setName(name);
         eventType.setSeverity(severity);
         return eventType;
     }
 
-    public static String getProjectUrl(final String projectName, final int buildNumber) {
+    public static EventType createEventType(final String key, final String name,
+            final String description, final Severity severity) {
+        return createEventType(key, name, description, severity, EntityType.PROJECT);
+    }
+
+    public static String getProjectConfigurationUrl(final String projectName) {
+        return getJenkinsUrl() + "/job/" + projectName + "/configure";
+    }
+
+    public static String getProjectBuildUrl(final String projectName, final int buildNumber) {
         return getJenkinsUrl() + "/job/" + projectName + "/" + buildNumber;
     }
 
@@ -118,7 +146,11 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
             final IProvidersAPI providersAPI = RestClientFactory.INSTANCE.createProvidersAPI(serverUrl);
             providersAPI.registerProvider(provider);
         } catch (Exception ex) {
-            ex.printStackTrace(listener.getLogger());
+            if (listener == null) {
+                LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+            } else {
+                ex.printStackTrace(listener.getLogger());
+            }
         } finally {
             Thread.currentThread().setContextClassLoader(contextClassLoader);
         }
