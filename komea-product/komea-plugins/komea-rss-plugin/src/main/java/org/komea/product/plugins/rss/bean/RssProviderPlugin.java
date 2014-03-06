@@ -1,11 +1,7 @@
-
 package org.komea.product.plugins.rss.bean;
-
-
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-
 import org.komea.product.backend.api.IWicketAdminService;
 import org.komea.product.backend.api.PluginAdminPages;
 import org.komea.product.backend.api.PluginMountPage;
@@ -24,11 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
-
 /**
  * Main class to define the RSS Plugin.
- * 
+ *
  * @author sleroy
  */
 @ProviderPlugin(
@@ -37,156 +31,125 @@ import org.springframework.beans.factory.annotation.Autowired;
                     category = "NEWS",
                     description = "Rss provider plugin",
                     enabled = true,
-                    entityType = EntityType.SYSTEM,
+                    entityType = EntityType.PROJECT,
                     key = "rss-news",
                     name = "Rss news",
-                    severity = Severity.MINOR) },
+                    severity = Severity.MINOR)},
         icon = "rss",
         name = RssProviderPlugin.RSS_PROVIDER_PLUGIN,
         type = ProviderType.NEWS,
         url = "/rssnews")
-@PluginAdminPages(@PluginMountPage(
-        pluginName = RssProviderPlugin.RSS_PROVIDER_PLUGIN,
-        page = RssRepositoryPage.class))
-public class RssProviderPlugin implements org.komea.product.backend.service.ISettingListener
-{
-    
-    
-    private static final Logger  LOGGER              = LoggerFactory.getLogger("rss-provider");
-    
-    
+@PluginAdminPages(
+        @PluginMountPage(
+                pluginName = RssProviderPlugin.RSS_PROVIDER_PLUGIN,
+                page = RssRepositoryPage.class))
+public class RssProviderPlugin implements org.komea.product.backend.service.ISettingListener {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger("rss-provider");
+
     /**
-     * 
+     *
      */
-    private static final String  RSS_CRON_JOB        = "rss_cron_job";
-    
-    
+    private static final String RSS_CRON_JOB = "rss_cron_job";
+
     /**
-     * 
+     *
      */
-    private static final String  RSS_CRON_VALUE      = "0 0/5 * * * ?";
-    
-    
-    private static final String  RSS_PROVIDER_PERIOD = "rss_refresh_period";
-    
-    
+    private static final String RSS_CRON_VALUE = "0 0/5 * * * ?";
+
+    private static final String RSS_PROVIDER_PERIOD = "rss_refresh_period";
+
     /**
      * Rss Provider plugin name;
      */
-    static final String          RSS_PROVIDER_PLUGIN = "Rss Provider plugin";
-    
-    
+    static final String RSS_PROVIDER_PLUGIN = "Rss Provider plugin";
+
     @Autowired
     private ICronRegistryService cronRegistryService;
-    
-    
+
     @Autowired
-    private IEventPushService    esperEngine;
-    
-    
+    private IEventPushService esperEngine;
+
     @Autowired
-    private IRssExampleFeedBean  feed;
-    
-    
+    private IRssExampleFeedBean feed;
+
     @Autowired
-    private IWicketAdminService  pluginAdminService;
-    
-    
+    private IWicketAdminService pluginAdminService;
+
     @Autowired
-    private ISettingService      registry;
-    
-    
+    private ISettingService registry;
+
     @Autowired
-    private IRssRepositories     rssRepository;
-    
-    
-    
+    private IRssRepositories rssRepository;
+
     /**
      * RSS Provider plugin.
      */
     public RssProviderPlugin() {
-    
-    
+
         super();
     }
-    
-    
+
     @PreDestroy
     public void destroy() {
-    
-    
+
         LOGGER.debug("Removing RSS Cron");
         cronRegistryService.removeCronTask(RSS_CRON_JOB);
     }
-    
-    
+
     /**
      * @return the cronRegistryService
      */
     public ICronRegistryService getCronRegistryService() {
-    
-    
+
         return cronRegistryService;
     }
-    
-    
+
     /**
      * @return the esperEngine
      */
     public IEventPushService getEsperEngine() {
-    
-    
+
         return esperEngine;
     }
-    
-    
+
     /**
      * @return the feed
      */
     public IRssExampleFeedBean getFeed() {
-    
-    
+
         return feed;
     }
-    
-    
+
     /**
      * @return the pluginAdminService
      */
     public IWicketAdminService getPluginAdminService() {
-    
-    
+
         return pluginAdminService;
     }
-    
-    
+
     /**
      * @return the registry
      */
     public ISettingService getRegistry() {
-    
-    
+
         return registry;
     }
-    
-    
+
     /**
      * @return the rssRepository
      */
     public IRssRepositories getRssRepository() {
-    
-    
+
         return rssRepository;
     }
-    
-    
+
     @PostConstruct
     public void initializeProvider() {
-    
-    
+
         LOGGER.info("Initialisation du plugin RSS");
-        
-        
+
         final JobDataMap properties = prepareJobMapForCron();
         //
         registry.create(RSS_PROVIDER_PERIOD, RSS_CRON_VALUE, "java.lang.String",
@@ -194,102 +157,80 @@ public class RssProviderPlugin implements org.komea.product.backend.service.ISet
         registry.registerListener(RSS_PROVIDER_PERIOD, this);
         cronRegistryService.registerCronTask(RSS_CRON_JOB, RSS_CRON_VALUE, RssCronJob.class,
                 properties);
-        
+
     }
-    
-    
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.service.ISettingListener#notifyPropertyChanged(org.komea.product.database.model.Setting)
      */
     @Override
     public void notifyPropertyChanged(final Setting _setting) {
-    
-    
+
         cronRegistryService.updateCronFrequency(RSS_CRON_JOB, _setting.getValue());
-        
+
     }
-    
-    
+
     /**
      * Prepares job map for cron.
-     * 
+     *
      * @return
      */
     public JobDataMap prepareJobMapForCron() {
-    
-    
+
         final JobDataMap properties = new JobDataMap();
         properties.put("lastDate", null);
         properties.put("esperEngine", esperEngine);
         properties.put("repository", rssRepository);
         return properties;
     }
-    
-    
+
     /**
-     * @param _cronRegistryService
-     *            the cronRegistryService to set
+     * @param _cronRegistryService the cronRegistryService to set
      */
     public void setCronRegistryService(final ICronRegistryService _cronRegistryService) {
-    
-    
+
         cronRegistryService = _cronRegistryService;
     }
-    
-    
+
     /**
-     * @param _esperEngine
-     *            the esperEngine to set
+     * @param _esperEngine the esperEngine to set
      */
     public void setEsperEngine(final IEventPushService _esperEngine) {
-    
-    
+
         esperEngine = _esperEngine;
     }
-    
-    
+
     /**
-     * @param _feed
-     *            the feed to set
+     * @param _feed the feed to set
      */
     public void setFeed(final IRssExampleFeedBean _feed) {
-    
-    
+
         feed = _feed;
     }
-    
-    
+
     /**
-     * @param _pluginAdminService
-     *            the pluginAdminService to set
+     * @param _pluginAdminService the pluginAdminService to set
      */
     public void setPluginAdminService(final IWicketAdminService _pluginAdminService) {
-    
-    
+
         pluginAdminService = _pluginAdminService;
     }
-    
-    
+
     /**
-     * @param _registry
-     *            the registry to set
+     * @param _registry the registry to set
      */
     public void setRegistry(final ISettingService _registry) {
-    
-    
+
         registry = _registry;
     }
-    
-    
+
     /**
-     * @param _rssRepository
-     *            the rssRepository to set
+     * @param _rssRepository the rssRepository to set
      */
     public void setRssRepository(final IRssRepositories _rssRepository) {
-    
-    
+
         rssRepository = _rssRepository;
     }
-    
+
 }

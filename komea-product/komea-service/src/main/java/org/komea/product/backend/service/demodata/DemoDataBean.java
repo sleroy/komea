@@ -1,9 +1,7 @@
 package org.komea.product.backend.service.demodata;
 
 import java.util.Random;
-
 import javax.annotation.PostConstruct;
-
 import org.komea.product.backend.auth.IPasswordEncoder;
 import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
@@ -43,7 +41,7 @@ import org.springframework.scheduling.annotation.Scheduled;
                     category = "SCM",
                     description = "",
                     enabled = true,
-                    entityType = EntityType.SYSTEM,
+                    entityType = EntityType.PROJECT,
                     key = "event-demo",
                     name = "Demonstration event",
                     severity = Severity.MAJOR)},
@@ -54,7 +52,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 public class DemoDataBean {
 
     /**
-     * 
+     *
      */
     private static final String DEPARTMENT_ABC = "DEPARTMENT_ABC";
 
