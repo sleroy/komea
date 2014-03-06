@@ -288,4 +288,14 @@ public class Project implements IEntity, Serializable {
 
         return new EntityKey(entityType(), getId());
     }
+
+    @Override
+    public String getKey() {
+        return projectKey;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return name;
+    }
 }

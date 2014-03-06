@@ -93,7 +93,7 @@ public class ProjectDto implements Serializable {
 
     public void associatePerson(final Person _person) {
 
-        associatedPersons.put(_person.getLogin(), _person.getFirstName() + " " + _person.getLastName());
+        associatedPersons.put(_person.getLogin(), _person.getDisplayName());
     }
 
     public void associatePersonList(final List<Person> _personlist) {

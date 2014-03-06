@@ -197,7 +197,7 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
         for (final Person person : persons) {
             final BaseEntity entity
                     = new BaseEntity(EntityType.PERSON, person.getId(), person.getLogin(),
-                            person.getFirstName() + " " + person.getLastName(),
+                            person.getDisplayName(),
                             person.getPassword());
             entities.add(entity);
         }
