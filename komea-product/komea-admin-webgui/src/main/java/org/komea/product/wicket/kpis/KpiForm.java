@@ -1,18 +1,15 @@
 package org.komea.product.wicket.kpis;
 
-import java.io.Serializable;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.entities.IProviderService;
 import org.komea.product.backend.service.kpi.IKPIService;
-import org.komea.product.database.api.IEntity;
-import org.komea.product.database.dao.KpiDao;
-import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.enums.ValueDirection;
@@ -20,6 +17,7 @@ import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Provider;
 import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.utils.NameGeneric;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.SelectBoxBuilder;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
@@ -38,7 +36,10 @@ public final class KpiForm extends Form<Kpi> {
     private final LayoutPage page;
     private final NameGeneric nameProvider;
     private final NameGeneric nameEntity;
+    private final DropDownChoice entityTypeField;
+    private final TextField providerField;
 
+    private static final long serialVersionUID = 1L;
     public KpiForm(
             final String _id,
             final IKPIService _kpi,
@@ -70,9 +71,9 @@ public final class KpiForm extends Form<Kpi> {
         if (selectByPrimaryKey != null) {
             this.nameProvider.setName(selectByPrimaryKey.getName());
         }
-        TextField<String> fieldIdProvider = TextFieldBuilder.<String>create("idProvider", nameProvider, "name").withTooltip("")
+        providerField = TextFieldBuilder.<String>create("idProvider", nameProvider, "name").withTooltip("")
                 .build();
-        add(fieldIdProvider);
+        add(providerField);
 
         TextField<String> textminValue = TextFieldBuilder.<String>create("valueMin", kpi, "valueMin").withTooltip("").build();
         add(textminValue);
@@ -84,16 +85,25 @@ public final class KpiForm extends Form<Kpi> {
                 ValueDirection.class).build());
 
         add(SelectBoxBuilder.<ValueType>createWithEnum("valueType", kpi, ValueType.class).build());
+        this.entityTypeField = SelectBoxBuilder.<EntityType>createWithEnum("entityType", kpi, EntityType.class).build();
 
-        add(SelectBoxBuilder.<EntityType>createWithEnum("entityType", kpi, EntityType.class)
-                .build());
+//        this.entityTypeField.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+//           
+//            @Override
+//            protected void onUpdate(AjaxRequestTarget target) {
+//                System.out.println("ca marche bro");
+//                target.add(entityTypeField);
+//            }
+//        });
 
-        if (kpi.getEntityType() != null && kpi.getEntityID() != null) {
-            final IEntity entity = _entity.getEntity(new EntityKey(kpi.getEntityType(), kpi.getEntityID()));
-            nameEntity.setName(getEntityName(kpi.getEntityType(), entity));
-        }
-        add(TextFieldBuilder.<String>create("entityID", nameEntity, "name").withTooltip("")
-                .build());
+        add(this.entityTypeField);
+
+//        if (kpi.getEntityType() != null && kpi.getEntityID() != null) {
+//            final IEntity entity = _entity.getEntity(new EntityKey(kpi.getEntityType(), kpi.getEntityID()));
+//            nameEntity.setName(entity.getDisplayName());
+//        }
+//        add(TextFieldBuilder.<String>create("entityID", nameEntity, "name").withTooltip("")
+//                .build());
 
         add(TextFieldBuilder.<String>createRequired("cronExpression", kpi, "cronExpression")
                 .simpleValidator(0, 60).highlightOnErrors().withTooltip("").build());
@@ -117,8 +127,6 @@ public final class KpiForm extends Form<Kpi> {
                 page.setResponsePage(new KpiPage(page.getPageParameters()));
             }
         });
-
-
 
         add(new AjaxLinkLayout<TextField>("maxValueMax", textMaxValue) {
 
@@ -174,20 +182,28 @@ public final class KpiForm extends Form<Kpi> {
         // ///////////////////////////////////////////////////////////////////////////////////
         // ///////////////////////////////////////////////////////////////////////////////////
     }
-
-    public String getEntityName(final EntityType type, final IEntity entity) {
-        return entity.getDisplayName();
-    }
-
     public Kpi getKpi() {
         return kpi;
     }
 
-    public NameGeneric getNameGeneric() {
+    public TextField getProviderField() {
+        return providerField;
+    }
+
+    
+    
+    public NameGeneric getNameProvider() {
         return nameProvider;
     }
 
-    private static final long serialVersionUID = 1L;
+    public NameGeneric getNameEntity() {
+        return nameEntity;
+    }
+
+    public DropDownChoice getEntityTypeField() {
+        return entityTypeField;
+    }
+
 
     /**
      * Validation the formular : settings are updated from the DTO
@@ -224,25 +240,5 @@ public final class KpiForm extends Form<Kpi> {
 
     }
 
-    public static class NameGeneric implements Serializable {
-
-        private String name;
-
-        public NameGeneric(String name) {
-            this.name = name;
-        }
-
-        public NameGeneric() {
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-    }
 
 }

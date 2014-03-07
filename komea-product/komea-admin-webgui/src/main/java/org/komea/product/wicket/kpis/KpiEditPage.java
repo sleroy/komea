@@ -1,6 +1,7 @@
 package org.komea.product.wicket.kpis;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -76,21 +77,24 @@ public class KpiEditPage extends LayoutPage {
         };
 
         final SelectDialog<Provider> dialogProvider;
-        dialogProvider = new SelectDialog<Provider>("dialog", "Select", providerService, iChoiceRenderer) {
+        dialogProvider = new SelectDialog<Provider>("dialogProvider", "Choose a provider", providerService, iChoiceRenderer) {
 
             @Override
             public void onClose(AjaxRequestTarget target, DialogButton button) {
-                target.add(kpiForm);
+//                target.add(kpiForm);
             }
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 Provider selectedProvider = getSelectedProvider();
-                kpiForm.getKpi().setIdProvider(selectedProvider.getId());
-                kpiForm.getNameGeneric().setName(selectedProvider.getName());
-                target.add(kpiForm);
+                if (selectedProvider != null) {
+                    kpiForm.getKpi().setIdProvider(selectedProvider.getId());
+                    kpiForm.getNameProvider().setName(selectedProvider.getName());
+                    target.add(kpiForm.getProviderField());
+                }
 //                this.info(String.format("The model object is: '%s'", this.getModelObject()));
             }
+
         };
 
         this.add(dialogProvider);
@@ -106,55 +110,65 @@ public class KpiEditPage extends LayoutPage {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // dialog entity //
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        final EntityType entityType = kpiForm.getKpi().getEntityType();
-        List<IEntity> loadEntities = entityService.loadEntities(entityType);
-       
-             IChoiceRenderer<IEntity> iChoiceEntityRenderer = new IChoiceRenderer<IEntity>() {
+//        final EntityType entityType = kpiForm.getKpi().getEntityType();
+//        List<IEntity> loadEntities;
+//        if (entityType == null) {
+//            loadEntities = new ArrayList<IEntity>();
+//        } else {
+//            loadEntities = entityService.loadEntities(entityType);
+//        }
+//
+//        IChoiceRenderer<IEntity> iChoiceEntityRenderer = new IChoiceRenderer<IEntity>() {
+//
+//            @Override
+//            public Object getDisplayValue(IEntity t) {
+//                return t.getDisplayName();
+//            }
+//
+//            @Override
+//            public String getIdValue(IEntity t, int i) {
+//                return String.valueOf(t.getId());
+//            }
+//
+//        };
+//
+//        final SelectDialog<IEntity> entityDialog = new SelectDialog<IEntity>("dialogEntity", "Select", loadEntities, iChoiceEntityRenderer) {
+//
+//            @Override
+//            public void onClose(AjaxRequestTarget target, DialogButton button) {
+////                target.add(kpiForm);
+//            }
+//
+//            @Override
+//            protected void onSubmit(AjaxRequestTarget target) {
+//                IEntity entity = getSelectedProvider();
+//                if (entity != null) {
+//                    kpiForm.getKpi().setEntityID(entity.getId());
+//                    kpiForm.getNameEntity().setName(entity.getDisplayName());
+//                    target.add(kpiForm);
+//                }
+////                this.info(String.format("The model object is: '%s'", this.getModelObject()));
+//            }
+//        };
 
-            @Override
-            public Object getDisplayValue(IEntity t) {
-                
-                return kpiForm.getEntityName(entityType, t);
-            }
-
-            @Override
-            public String getIdValue(IEntity t, int i) {
-                return String.valueOf(t.getId());
-            }
-
-        };
-
-        final SelectDialog<IEntity> entityDialog = new SelectDialog<IEntity>("dialog", "Select", loadEntities, iChoiceEntityRenderer) {
-
-            @Override
-            public void onClose(AjaxRequestTarget target, DialogButton button) {
-                target.add(kpiForm);
-            }
-
-            @Override
-            protected void onSubmit(AjaxRequestTarget target) {
-                IEntity entity = getSelectedProvider();
-                kpiForm.getKpi().setEntityID(entity.getId());
-                kpiForm.getNameGeneric().setName(kpiForm.getEntityName(entityType, entity));
-                target.add(kpiForm);
-//                this.info(String.format("The model object is: '%s'", this.getModelObject()));
-            }
-        };
-        
-        this.add(entityDialog);
-        kpiForm.add(new AjaxLinkLayout<LayoutPage>("btnentity", this) {
-
-            @Override
-            public void onClick(final AjaxRequestTarget art) {
-                if (entityDialog != null) {
-                    entityDialog.open(art);
-                }
-//                getCustom().setResponsePage(new KpiPage(getCustom().getPageParameters()));
-            }
-        });
+//        this.add(entityDialog);
+//        kpiForm.add(new AjaxLinkLayout<LayoutPage>("btnentity", this) {
+//
+//            @Override
+//            public void onClick(final AjaxRequestTarget art) {
+//                if (entityDialog != null) {
+////                    kpiForm.getEntityTypeField().validate();
+////                    kpiForm.getEntityTypeField().updateModel();
+////                    entityDialog.getList().clear();
+////                    List<IEntity> listEntities = entityService.loadEntities(kpiForm.getKpi().getEntityType());
+////                    entityDialog.getList().addAll(listEntities);
+//                    entityDialog.open(art);
+//
+//                }
+////                getCustom().setResponsePage(new KpiPage(getCustom().getPageParameters()));
+//            }
+//        });
     }
-
- 
 
     @Override
 

@@ -33,7 +33,7 @@ public class TeamDataModel extends SortableDataProvider<PersonGroup, String>  {
 
     @Override
     public long size() {
-        return this.personGroupService.getAllDepartments().size();
+        return this.personGroupService.getAllTeamsPG().size();
     }
 
     @Override

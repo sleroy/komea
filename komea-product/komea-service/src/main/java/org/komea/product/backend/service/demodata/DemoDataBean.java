@@ -8,6 +8,7 @@ import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.alert.EventDtoBuilder;
+import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.dao.EventTypeDao;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonGroupDao;
@@ -19,6 +20,7 @@ import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.enums.UserBdd;
+import org.komea.product.database.model.Customer;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.EventTypeCriteria;
 import org.komea.product.database.model.Person;
@@ -79,6 +81,9 @@ public class DemoDataBean {
 
     @Autowired
     private ICronRegistryService registry;
+    
+    @Autowired
+    private CustomerDao customerDao;
 
     /**
      * Method getPersonGroupDao.
@@ -102,6 +107,13 @@ public class DemoDataBean {
 
     @PostConstruct
     public void init() {
+        
+        Customer customer1 = new Customer(1, "Yoric");
+        Customer customer2 = new Customer(2, "Garren");
+        Customer customer3 = new Customer(3, "Kennen");
+        customerDao.insert(customer1);
+        customerDao.insert(customer2);
+        customerDao.insert(customer3);
 
         final PersonRole administrator = new PersonRole(null, "ADMIN", "Administrator");
         PersonRoleCriteria prCriteria = new PersonRoleCriteria();

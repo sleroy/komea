@@ -25,13 +25,9 @@ public class SelectBoxBuilder<T> {
             final Object _data, Class<T> type) {
         return new SelectBoxBuilder<T>(_wicketId, _data, type);
     }
-
     private SelectBoxBuilder(String _wicketId, Object _data, Class<T> type) {
-        
-       
-//       Enum en = ((Enum)type);
+
         final List<T> selectPersonRoles = Arrays.asList(type.getEnumConstants());
-//        ValueType valueType = kpi.getValueType();
         final PropertyModel<T> selectionRoleModel
                 = new PropertyModel<T>(_data, _wicketId);
         this.dropDownChoice = new DropDownChoice<T>(_wicketId, selectionRoleModel, selectPersonRoles, new ChoiceRenderer<T>("toString"));

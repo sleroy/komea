@@ -22,6 +22,7 @@ import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.model.Provider;
 import org.komea.product.database.model.ProviderCriteria;
+import org.komea.product.wicket.widget.builders.IChangeField;
 
 /**
  *
@@ -36,23 +37,22 @@ public abstract class SelectDialog<T> extends AbstractFormDialog<String> {
 
     private Form form;
     private FeedbackPanel feedback;
-   
+    private List<T> list;
 
     private T selectedProvider;
-    
 
-
-    public SelectDialog(String id, String title, IGenericService service,IChoiceRenderer<T> rendener) {
-        this(id, title, (List<T>)service.selectAll(), rendener);
+    public SelectDialog(String id, String title, IGenericService service, IChoiceRenderer<T> rendener) {
+        this(id, title, (List<T>) service.selectAll(), rendener);
     }
 
-     public SelectDialog(String id, String title, List<T> objectList,IChoiceRenderer<T> rendener) {
+    public SelectDialog(String id, String title, List<T> objectList, IChoiceRenderer<T> rendener) {
         super(id, title, true);
         this.form = new Form<String>("form");
-        List<T> list = objectList;
-//        List<Provider> list = service.selectByCriteria(new ProviderCriteria());
-        selectedProvider = list.get(0);
+        list = objectList;
 
+        if (!list.isEmpty()) {
+            selectedProvider = list.get(0);
+        }
 
         ListChoice<T> listEntite = new ListChoice<T>("table",
                 new PropertyModel<T>(this, "selectedProvider"), list);
@@ -61,19 +61,26 @@ public abstract class SelectDialog<T> extends AbstractFormDialog<String> {
         listEntite.setMaxRows(8);
         this.form.add(listEntite);
         this.feedback = new JQueryFeedbackPanel("feedback");
-//        this.form.add(new Label("monlabel", "message affiche"));
         this.add(this.form);
     }
 
+    public List<T> getList() {
+        return list;
+    }
+
+    public void setList(List<T> list) {
+        this.list = list;
+    }
 
     
-        public T getSelectedProvider() {
+    public T getSelectedProvider() {
         return selectedProvider;
     }
 
     public void setSelectedProvider(T selectedProvider) {
         this.selectedProvider = selectedProvider;
     }
+
     @Override
     protected List<DialogButton> getButtons() {
         return Arrays.asList(this.btnSelect, this.btnCancel);
@@ -109,6 +116,5 @@ public abstract class SelectDialog<T> extends AbstractFormDialog<String> {
     public void onError(AjaxRequestTarget target) {
 //        target.add(this.feedback);
     }
-    
-    
+
 }
