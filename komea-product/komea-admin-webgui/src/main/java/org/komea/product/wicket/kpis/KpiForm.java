@@ -98,12 +98,6 @@ public final class KpiForm extends Form<Kpi> {
 
         add(this.entityTypeField);
 
-//        if (kpi.getEntityType() != null && kpi.getEntityID() != null) {
-//            final IEntity entity = _entity.getEntity(new EntityKey(kpi.getEntityType(), kpi.getEntityID()));
-//            nameEntity.setName(entity.getDisplayName());
-//        }
-//        add(TextFieldBuilder.<String>create("entityID", nameEntity, "name").withTooltip("")
-//                .build());
 
         add(TextFieldBuilder.<String>createRequired("cronExpression", kpi, "cronExpression")
                 .simpleValidator(0, 60).highlightOnErrors().withTooltip("").build());
@@ -134,9 +128,6 @@ public final class KpiForm extends Form<Kpi> {
             public void onClick(final AjaxRequestTarget art) {
 
                 myKpi.setValueMax(Double.MAX_VALUE);
-
-                System.out.println("de max");
-//                  tPageCustom().setResponsePage(new KpiPage(getCustom().getPageParameters()));
                 art.add(getCustom());
             }
 
@@ -147,9 +138,6 @@ public final class KpiForm extends Form<Kpi> {
             public void onClick(final AjaxRequestTarget art) {
 
                 myKpi.setValueMin(Double.MAX_VALUE);
-
-                System.out.println("de min");
-//                  tPageCustom().setResponsePage(new KpiPage(getCustom().getPageParameters()));
                 art.add(getCustom());
             }
 

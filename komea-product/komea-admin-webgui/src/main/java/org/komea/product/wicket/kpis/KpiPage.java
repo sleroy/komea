@@ -45,14 +45,6 @@ public class KpiPage extends LayoutPage
                         .withEditDeleteColumn(personDeleteAction, kpiEditAction).displayRows(10)
                         .withData(dataProvider).build();
         add(build);
-        
-        // DataTableBuilder.<Person, String> newTable("table").addColumn("Login", "login")
-        // .addColumn("First name", "firstName").addColumn("Last name", "lastName")
-        // .addColumn("Email", "email")
-        // .withEditDeleteColumn(personDeleteAction, personEditAction).displayRows(10)
-        // .withData(dataProvider).build()
-        // add(new Label("label", "hello word"));
-        // add(new DataTable<T, S>("montableau", columns, dataProvider, rowsPerPage));
     }
     
     

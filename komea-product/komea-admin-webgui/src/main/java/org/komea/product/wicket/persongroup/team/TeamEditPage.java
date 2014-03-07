@@ -6,6 +6,7 @@
 package org.komea.product.wicket.persongroup.team;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import java.util.List;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -54,8 +55,8 @@ public class TeamEditPage extends LayoutPage {
             }
 
         };
-
-        final SelectDialog<PersonGroup> dialogPersonGroup = new SelectDialog<PersonGroup>("dialogParent", "Choose a parent", prService, iChoiceRenderer) {
+        List<PersonGroup> allDepartmentsPG = prService.getAllDepartmentsPG();
+        final SelectDialog<PersonGroup> dialogPersonGroup = new SelectDialog<PersonGroup>("dialogParent", "Choose a department", allDepartmentsPG, iChoiceRenderer) {
 
             @Override
             public void onClose(AjaxRequestTarget target, DialogButton button) {

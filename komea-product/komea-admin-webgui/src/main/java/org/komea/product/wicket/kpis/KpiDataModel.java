@@ -5,6 +5,7 @@
  */
 package org.komea.product.wicket.kpis;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
@@ -27,7 +28,15 @@ public class KpiDataModel extends SortableDataProvider<Kpi, String> {
 
     @Override
     public Iterator<? extends Kpi> iterator(long l, long l1) {
-        return this.kpiService.listAllKpis().subList((int) l, (int) l1).iterator();
+        List<Kpi> listAllKpis = this.kpiService.listAllKpis();
+        List<Kpi> listKpisResult = new ArrayList<Kpi>();
+        for (Kpi kpi : listAllKpis) {
+           if(!kpi.isGlobal()) 
+           {
+           listKpisResult.add(kpi);
+           }
+        }
+        return listKpisResult.subList((int) l, (int) l1).iterator();
     }
 
     @Override
