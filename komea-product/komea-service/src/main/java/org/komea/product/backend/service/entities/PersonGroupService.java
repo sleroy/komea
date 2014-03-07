@@ -1,8 +1,10 @@
 package org.komea.product.backend.service.entities;
 
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
 import org.komea.product.backend.genericservice.AbstractService;
+import org.komea.product.database.dao.HasProjectPersonGroupDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.dto.DepartmentDto;
@@ -10,6 +12,8 @@ import org.komea.product.database.dto.Pair;
 import org.komea.product.database.dto.TeamDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.PersonGroupType;
+import org.komea.product.database.model.HasProjectPersonGroupCriteria;
+import org.komea.product.database.model.HasProjectPersonGroupKey;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.PersonGroupCriteria;
@@ -31,10 +35,13 @@ public final class PersonGroupService extends
     private PersonGroupDao requiredDAO;
 
     @Autowired
-    private IProjectPersonGroupService projectPersonGroupService;
+    private IPersonService personService;
 
     @Autowired
-    private IPersonService personService;
+    private IProjectService projectService;
+
+    @Autowired
+    private HasProjectPersonGroupDao projectPersonGroupDao;
 
     /**
      * (non-Javadoc)
@@ -174,14 +181,19 @@ public final class PersonGroupService extends
     }
 
     private PersonGroup getParent(final PersonGroup group) {
-        final Integer idParent = group.getIdPersonGroupParent();
         final PersonGroupType parentType = getParentType(group);
-        return getPersonGroup(parentType, idParent);
+        return getPersonGroup(parentType, group.getId());
     }
 
-    private List<PersonGroup> getChildren(final PersonGroup group) {
+    @Override
+    public PersonGroup getParent(final Integer groupId) {
+        return getParent(selectByPrimaryKey(groupId));
+    }
+
+    @Override
+    public List<PersonGroup> getChildren(final Integer groupId) {
         final PersonGroupCriteria criteria = new PersonGroupCriteria();
-        criteria.createCriteria().andIdPersonGroupParentEqualTo(group.getId());
+        criteria.createCriteria().andIdPersonGroupParentEqualTo(groupId);
         return requiredDAO.selectByCriteria(criteria);
     }
 
@@ -209,8 +221,8 @@ public final class PersonGroupService extends
         department.setName(group.getName());
         department.setDescription(group.getDescription());
         final Integer groupId = group.getId();
-        final List<Person> persons = personService.getPersonsOfGroup(groupId);
-        final List<PersonGroup> children = getChildren(group);
+        final List<Person> persons = personService.getPersonsOfPersonGroup(groupId);
+        final List<PersonGroup> children = getChildren(group.getId());
         for (final PersonGroup child : children) {
             department.getTeams().put(child.getPersonGroupKey(), child.getName());
         }
@@ -227,8 +239,8 @@ public final class PersonGroupService extends
         team.setDescription(group.getDescription());
         final Integer groupId = group.getId();
         final PersonGroup parent = getParent(group);
-        final List<Project> projects = projectPersonGroupService.getProjectsAssociateToPersonGroup(groupId);
-        final List<Person> persons = personService.getPersonsOfGroup(groupId);
+        final List<Project> projects = projectService.getProjectsOfPersonGroup(groupId);
+        final List<Person> persons = personService.getPersonsOfPersonGroup(groupId);
         if (parent != null) {
             team.setDepartment(Pair.create(parent.getPersonGroupKey(), parent.getName()));
         }
@@ -256,5 +268,22 @@ public final class PersonGroupService extends
         final PersonGroupCriteria criteria = new PersonGroupCriteria();
         criteria.createCriteria().andPersonGroupKeyEqualTo(key);
         return criteria;
+    }
+
+    @Override
+    public List<PersonGroup> getTeamsOfProject(final Integer _projectId) {
+        final List<PersonGroup> groupList = Lists.newArrayList();
+        final HasProjectPersonGroupCriteria criteria = new HasProjectPersonGroupCriteria();
+        criteria.createCriteria().andIdProjectEqualTo(_projectId);
+        final List<HasProjectPersonGroupKey> selection
+                = projectPersonGroupDao.selectByCriteria(criteria);
+        for (final HasProjectPersonGroupKey hasProjectPersonGroupKey : selection) {
+            final PersonGroupCriteria departmentCriteria = new PersonGroupCriteria();
+            departmentCriteria.createCriteria()
+                    .andIdEqualTo(hasProjectPersonGroupKey.getIdPersonGroup())
+                    .andTypeEqualTo(PersonGroupType.DEPARTMENT);
+            groupList.addAll(selectByCriteria(departmentCriteria));
+        }
+        return groupList;
     }
 }

@@ -36,14 +36,6 @@ public interface IPersonService extends IGenericService<Person, Integer, PersonC
     List<Person> getPersons(final List<String> logins);
 
     /**
-     * This method return the list of projects associate to a person
-     *
-     * @param _personId the person if
-     * @return the project list
-     */
-    List<Project> getProjectsAssociateToAPerson(Integer _personId);
-
-    /**
      * Method personsToBaseEntities.
      *
      * @param persons List<Person>
@@ -69,6 +61,14 @@ public interface IPersonService extends IGenericService<Person, Integer, PersonC
      * @param groupId id of the group
      * @return persons
      */
-    public List<Person> getPersonsOfGroup(Integer groupId);
+    List<Person> getPersonsOfPersonGroup(Integer groupId);
+
+    /**
+     * get persons of a project
+     *
+     * @param _projectId id of the project
+     * @returnlist of persons
+     */
+    List<Person> getPersonsOfProject(Integer _projectId);
 
 }

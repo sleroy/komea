@@ -5,8 +5,6 @@ import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.dto.ProjectDto;
 import org.komea.product.database.model.Link;
-import org.komea.product.database.model.Person;
-import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.database.model.ProjectCriteria;
 
@@ -32,21 +30,13 @@ public interface IProjectService extends IGenericService<Project, Integer, Proje
      * @return
      */
     Project getOrCreate(String _projectKey);
-       /**
+
+    /**
      * This method list all stored projects
-     * 
+     *
      * @return List<ProjectDto>
      */
     List<Project> getAllProjectsEntities();
-    
-
-    /**
-     * This method get all person associate to a project
-     *
-     * @param _projectID the project id
-     * @return the person list
-     */
-    List<Person> getPersonsAssociateToProject(int _projectID);
 
     /**
      * This method list all links associate to a project
@@ -73,19 +63,27 @@ public interface IProjectService extends IGenericService<Project, Integer, Proje
     List<String> getProjectTags(Integer _projectId);
 
     /**
-     * This method list all teams associate to a project
-     *
-     * @param _projectID Integer
-     * @return the team list
-     */
-    List<PersonGroup> getTeamsAssociateToProject(Integer _projectID);
-
-    /**
      * Method projectsToBaseEntities.
      *
      * @param projects List<Project>
      * @return List<BaseEntity>
      */
     List<BaseEntity> projectsToBaseEntities(List<Project> projects);
+
+    /**
+     * get projects of a personGroup
+     *
+     * @param _personGroupId id of the personGroup
+     * @return list of projects
+     */
+    List<Project> getProjectsOfPersonGroup(final Integer _personGroupId);
+
+    /**
+     * get projects of a person
+     *
+     * @param _personId id of the person
+     * @return list of projects
+     */
+    List<Project> getProjectsOfPerson(final Integer _personId);
 
 }

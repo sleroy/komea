@@ -7,7 +7,6 @@ import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.database.dao.HasProjectPersonDao;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonRoleDao;
-import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.dto.PersonDto;
 import org.komea.product.database.enums.EntityType;
@@ -33,7 +32,7 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     private IPersonGroupService groupService;
 
     @Autowired
-    private ProjectDao projectDAO;
+    private IProjectService projectService;
 
     @Autowired
     private HasProjectPersonDao projectPersonDao;
@@ -89,7 +88,7 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
             if (role != null) {
                 personDto.setRole(role.getName());
             }
-            personDto.associateToProjectList(getProjectsAssociateToAPerson(person.getId()));
+            personDto.associateToProjectList(projectService.getProjectsOfPerson(person.getId()));
             personDtos.add(personDto);
 
         }
@@ -120,14 +119,6 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     }
 
     /**
-     * @return the projectDAO
-     */
-    public ProjectDao getProjectDAO() {
-
-        return projectDAO;
-    }
-
-    /**
      * @return the projectPersonDao
      */
     public HasProjectPersonDao getProjectPersonDao() {
@@ -141,31 +132,6 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     public IProjectPersonService getProjectPersonService() {
 
         return projectPersonService;
-    }
-
-    /**
-     * Method getProjectsAssociateToAPerson.
-     *
-     * @param _personId Integer
-     * @return List<Project>
-     * @see
-     * org.komea.product.backend.service.entities.IPersonService#getProjectsAssociateToAPerson(Integer)
-     */
-    @Override
-    public List<Project> getProjectsAssociateToAPerson(final Integer _personId) {
-
-        final HasProjectPersonCriteria criteria = new HasProjectPersonCriteria();
-        criteria.createCriteria().andIdPersonEqualTo(_personId);
-        final List<HasProjectPersonKey> result = projectPersonDao.selectByCriteria(criteria);
-        final List<Project> projects = Lists.newArrayList();
-        for (final HasProjectPersonKey hasProjectPersonKey : result) {
-            final Project project
-                    = projectDAO.selectByPrimaryKey(hasProjectPersonKey.getIdProject());
-            if (project != null) {
-                projects.add(project);
-            }
-        }
-        return projects;
     }
 
     @Override
@@ -252,14 +218,6 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     }
 
     /**
-     * @param _projectDAO the projectDAO to set
-     */
-    public void setProjectDAO(final ProjectDao _projectDAO) {
-
-        projectDAO = _projectDAO;
-    }
-
-    /**
      * @param _projectPersonDao the projectPersonDao to set
      */
     public void setProjectPersonDao(final HasProjectPersonDao _projectPersonDao) {
@@ -289,7 +247,7 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     }
 
     @Override
-    public List<Person> getPersonsOfGroup(Integer groupId) {
+    public List<Person> getPersonsOfPersonGroup(Integer groupId) {
         final PersonCriteria criteria = new PersonCriteria();
         criteria.createCriteria().andIdPersonGroupEqualTo(groupId);
         return requiredDAO.selectByCriteria(criteria);
@@ -301,4 +259,21 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
         criteria.createCriteria().andLoginEqualTo(key);
         return criteria;
     }
+
+    @Override
+    public List<Person> getPersonsOfProject(final Integer _projectId) {
+        final List<Person> personList = Lists.newArrayList();
+        final HasProjectPersonCriteria criteria = new HasProjectPersonCriteria();
+        criteria.createCriteria().andIdProjectEqualTo(_projectId);
+        final List<HasProjectPersonKey> selection = projectPersonDao.selectByCriteria(criteria);
+        for (final HasProjectPersonKey hasProjectPersonKey : selection) {
+            final Person person = selectByPrimaryKey(hasProjectPersonKey.getIdPerson());
+            if (person != null) {
+
+                personList.add(person);
+            }
+        }
+        return personList;
+    }
+
 }

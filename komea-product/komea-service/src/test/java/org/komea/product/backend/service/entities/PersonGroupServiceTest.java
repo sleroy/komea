@@ -1,15 +1,19 @@
 package org.komea.product.backend.service.entities;
 
+import com.google.common.collect.Lists;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.komea.product.database.dao.HasProjectPersonGroupDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dto.DepartmentDto;
 import org.komea.product.database.dto.TeamDto;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.enums.UserBdd;
+import org.komea.product.database.model.HasProjectPersonGroupCriteria;
+import org.komea.product.database.model.HasProjectPersonGroupKey;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.PersonGroupCriteria;
@@ -33,10 +37,13 @@ public class PersonGroupServiceTest {
     private PersonGroupDao personGroupDaoMock;
 
     @Mock
+    private HasProjectPersonGroupDao projectPersonGroupDaoMock;
+
+    @Mock
     private IPersonService personService;
 
     @Mock
-    private IProjectPersonGroupService projectPersonGroupService;
+    private IProjectService projectService;
 
     @Test
     public void testGetDepartment() {
@@ -87,9 +94,9 @@ public class PersonGroupServiceTest {
         int teamId = team.getId();
         Mockito.when(groupService.selectByCriteria(any(PersonGroupCriteria.class))).thenReturn(
                 Arrays.asList(getTeam()));
-        Mockito.when(projectPersonGroupService.getProjectsAssociateToPersonGroup(teamId)).thenReturn(
+        Mockito.when(projectService.getProjectsOfPersonGroup(teamId)).thenReturn(
                 Arrays.asList(getProject()));
-        Mockito.when(personService.getPersonsOfGroup(teamId)).thenReturn(
+        Mockito.when(personService.getPersonsOfPersonGroup(teamId)).thenReturn(
                 getPersons(teamId));
 
         List<TeamDto> allTeams = groupService.getAllTeams();
@@ -109,7 +116,7 @@ public class PersonGroupServiceTest {
         int departmentId = department.getId();
         Mockito.when(groupService.selectByCriteria(any(PersonGroupCriteria.class))).thenReturn(
                 Arrays.asList(getDepartment()));
-        Mockito.when(personService.getPersonsOfGroup(departmentId)).thenReturn(
+        Mockito.when(personService.getPersonsOfPersonGroup(departmentId)).thenReturn(
                 getPersons(departmentId));
 
         List<DepartmentDto> allDepartments = groupService.getAllDepartments();
@@ -221,6 +228,41 @@ public class PersonGroupServiceTest {
 
     private List<Person> getPersons(Integer personGroupId) {
         return Arrays.asList(getPerson(personGroupId, 5), getPerson(personGroupId, 6));
+
+    }
+
+    private List<PersonGroup> getTeams() {
+
+        PersonGroup team = new PersonGroup();
+        team.setId(1);
+        team.setName("komea team");
+        team.setDescription("komea team");
+        team.setPersonGroupKey("KOMEA_TEAM");
+        team.setType(PersonGroupType.TEAM);
+
+        return Lists.newArrayList(team);
+    }
+
+    @Test
+    public void testGetprojectTeams() {
+
+        List<HasProjectPersonGroupKey> projectGroups = Lists.newArrayList(new HasProjectPersonGroupKey(1, 1));
+        Mockito.when(projectPersonGroupDaoMock.selectByCriteria(Matchers.any(HasProjectPersonGroupCriteria.class))).thenReturn(
+                projectGroups);
+
+        Mockito.when(personGroupDaoMock.selectByCriteria(Matchers.any(PersonGroupCriteria.class))).thenReturn(getTeams());
+
+        List<PersonGroup> teams = groupService.getTeamsOfProject(1);
+
+        Assert.assertEquals(1, teams.size());
+        PersonGroup team = teams.get(0);
+        Assert.assertEquals(1, team.getId().intValue());
+        Assert.assertEquals("KOMEA_TEAM", team.getPersonGroupKey());
+        Assert.assertEquals(PersonGroupType.TEAM, team.getType());
+
+        Mockito.verify(projectPersonGroupDaoMock, Mockito.times(1)).selectByCriteria(Matchers.any(HasProjectPersonGroupCriteria.class));
+
+        Mockito.verify(personGroupDaoMock, Mockito.times(1)).selectByCriteria(Matchers.any(PersonGroupCriteria.class));
 
     }
 
