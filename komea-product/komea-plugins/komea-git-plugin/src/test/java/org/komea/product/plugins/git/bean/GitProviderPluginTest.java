@@ -40,6 +40,9 @@ public class GitProviderPluginTest
     private IEventPushService    esperEngine;
     
     
+    @Mock
+    private IGitClonerService    gitClonerService;
+    
     @InjectMocks
     private GitProviderPlugin    gitProviderPlugin;
     
@@ -61,7 +64,7 @@ public class GitProviderPluginTest
     
         final GitRepo gitRepo = new GitRepo();
         
-        new GitCronJob();
+        
         final GitScheduleCronJob gitScheduleCronJob = new GitScheduleCronJob();
         
         final JobDataMap prepareJobMapForCron = gitProviderPlugin.prepareJobMapForCron();
@@ -72,6 +75,8 @@ public class GitProviderPluginTest
         for (final String requiredKey : GitCronJob.requiredKeys()) {
             Assert.assertTrue("provider must provide key",
                     prepareJobMapForCron2.containsKey(requiredKey));
+            Assert.assertNotNull("Key " + requiredKey + " should not be null",
+                    prepareJobMapForCron2.get(requiredKey));
         }
         
     }
@@ -88,12 +93,16 @@ public class GitProviderPluginTest
         for (final String requiredKey : GitScheduleCronJob.requiredKeys()) {
             Assert.assertTrue("provider must provide key",
                     prepareJobMapForCron.containsKey(requiredKey));
+            Assert.assertNotNull("Key " + requiredKey + " should not be null",
+                    prepareJobMapForCron.get(requiredKey));
         }
         
         
         for (final String requiredKey : GitCronJob.requiredKeys()) {
             Assert.assertTrue("provider must provide key",
                     prepareJobMapForCron.containsKey(requiredKey));
+            Assert.assertNotNull("Key " + requiredKey + " should not be null",
+                    prepareJobMapForCron.get(requiredKey));
         }
         
     }

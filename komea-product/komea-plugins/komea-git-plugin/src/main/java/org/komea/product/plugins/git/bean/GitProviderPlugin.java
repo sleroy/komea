@@ -134,7 +134,7 @@ public class GitProviderPlugin implements org.komea.product.backend.service.ISet
     @Autowired
     private IEventPushService    esperEngine;
     
-    
+    @Autowired
     private IGitClonerService    gitClonerService;
     
     
@@ -258,6 +258,7 @@ public class GitProviderPlugin implements org.komea.product.backend.service.ISet
         properties.put("gitcloner", gitClonerService);
         properties.put("personService", personService);
         properties.put("cron", cronRegistryService);
+        
         return properties;
     }
     

@@ -7,6 +7,7 @@ package org.komea.product.plugins.git.cron;
 
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.plugins.git.model.GitRepo;
 import org.komea.product.plugins.git.repositories.api.IGitRepository;
@@ -28,6 +29,11 @@ public class GitScheduleCronJob implements Job
 {
     
     
+    /**
+     * 
+     */
+    private static final String KEY_REPO = "repo";
+
     /**
      * Cron value for GIT Provider.
      */
@@ -101,7 +107,8 @@ public class GitScheduleCronJob implements Job
         final IGitRepository repository = (IGitRepository) _context.get(KEY_REPOSITORY);
         final ICronRegistryService cronRegistryService =
                 (ICronRegistryService) _context.get(KEY_CRON);
-        
+        Validate.notNull(repository);
+        Validate.notNull(cronRegistryService);
         checkIfGitRepositoryHaveJobs(repository, cronRegistryService,
                 _context.getMergedJobDataMap());
     }
@@ -116,7 +123,7 @@ public class GitScheduleCronJob implements Job
     
     
         final JobDataMap properties = new JobDataMap(_parentDataMap.getWrappedMap());
-        properties.put("repo", _gitRepo);
+        properties.put(KEY_REPO, _gitRepo);
         return properties;
     }
 }

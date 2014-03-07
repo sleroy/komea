@@ -26,29 +26,11 @@ public class GitCronJob implements Job
 {
     
     
-    /**
-     * 
-     */
     private static final String KEY_CRON           = "cron";
-    /**
-     * 
-     */
     private static final String KEY_ESPER_ENGINE   = "esperEngine";
-    /**
-     * 
-     */
     private static final String KEY_GITCLONER      = "gitcloner";
-    /**
-     * 
-     */
     private static final String KEY_PERSON_SERVICE = "personService";
-    /**
-     * 
-     */
     private static final String KEY_REPO           = "repo";
-    /**
-     * 
-     */
     private static final String KEY_REPOSITORY     = "repository";
     private static final Logger LOGGER             = LoggerFactory.getLogger("git-cron-fetch");
     
