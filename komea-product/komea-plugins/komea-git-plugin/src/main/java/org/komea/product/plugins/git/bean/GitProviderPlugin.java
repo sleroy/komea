@@ -18,6 +18,7 @@ import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Setting;
+import org.komea.product.plugins.git.cron.GitCronJob;
 import org.komea.product.plugins.git.repositories.api.IGitRepository;
 import org.quartz.JobDataMap;
 import org.slf4j.Logger;
@@ -38,7 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
                         description = "A new commit has been pushed on a GIT Server",
                         enabled = true,
                         entityType = EntityType.PROJECT,
-                        key = GitProviderPlugin.SCM_NEW_COMMIT,
+                        key = "scm-new-commit",
                         name = "New commit on git server",
                         severity = Severity.INFO),
                 @EventTypeDef(
@@ -46,9 +47,54 @@ import org.springframework.beans.factory.annotation.Autowired;
                         description = "Fetch on git server has failed",
                         enabled = true,
                         entityType = EntityType.PROJECT,
-                        key = GitProviderPlugin.GIT_FETCH_FAILED,
+                        key = "scm-fetch-failed",
                         name = "Fetch on git server has failed.",
-                        severity = Severity.INFO) },
+                        severity = Severity.INFO),
+                @EventTypeDef(
+                        category = "SCM",
+                        description = "Number of tags in a git branch. The plugin will try to detect how many tags are present on the git branch.",
+                        enabled = true,
+                        entityType = EntityType.PROJECT,
+                        key = "scm-tag-perbranch-numbers",
+                        name = "Number of tags per branch.",
+                        severity = Severity.INFO),
+                @EventTypeDef(
+                        category = "SCM",
+                        description = "Event sent when a git repository is fetched.",
+                        enabled = true,
+                        entityType = EntityType.PROJECT,
+                        key = "scm-fetch-repository",
+                        name = "Number of tags per branch.",
+                        severity = Severity.INFO),
+                @EventTypeDef(
+                        category = "SCM",
+                        description = "Number of customer tags . This plugin will try to detect custom tags present on a git repository.",
+                        enabled = true,
+                        entityType = EntityType.PROJECT,
+                        key = "scm-customer-tag-numbers",
+                        name = "Number of customer tags.",
+                        severity = Severity.INFO),
+                @EventTypeDef(
+                        category = "SCM",
+                        description = "Number of customer branches . This plugin will try to detect the number of customer branches present on a git repository.",
+                        enabled = true,
+                        entityType = EntityType.PROJECT,
+                        key = "scm-customer-branch-numbers",
+                        name = "Number of customer branches.",
+                        severity = Severity.INFO),
+                @EventTypeDef(
+                        category = "SCM",
+                        description = "Number of branches . This plugin will try to detect the number of branches present on a git repository.",
+                        enabled = true,
+                        entityType = EntityType.PROJECT,
+                        key = "scm-branch-numbers",
+                        name = "Number of branches.",
+                        severity = Severity.INFO)
+        
+        
+        },
+        
+        
         icon = "git",
         name = GitProviderPlugin.GIT_PROVIDER_PLUGIN,
         type = ProviderType.NEWS,
@@ -60,19 +106,13 @@ public class GitProviderPlugin implements org.komea.product.backend.service.ISet
 {
     
     
-    public static final String   GIT_FETCH_FAILED    = "git-fetch-failed";
-    
-    
-    public static final String   SCM_NEW_COMMIT      = "scm-new-commit";
-    
-    
     private static final String  GIT_CRON_JOB        = "git_cron_job";
     
     
     /**
      * Cron value for GIT Provider.
      */
-    private static final String  GIT_CRON_VALUE      = "0 0/5 * * * ?";
+    private static final String  GIT_CRON_VALUE      = "0 0/1 * * * ?";
     
     
     private static final String  GIT_PROVIDER_PERIOD = "git_refresh_period";
@@ -213,11 +253,11 @@ public class GitProviderPlugin implements org.komea.product.backend.service.ISet
     
     
         final JobDataMap properties = new JobDataMap();
-        properties.put("lastDate", null);
         properties.put("esperEngine", esperEngine);
         properties.put("repository", gitRepository);
         properties.put("gitcloner", gitClonerService);
         properties.put("personService", personService);
+        properties.put("cron", cronRegistryService);
         return properties;
     }
     

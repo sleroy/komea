@@ -1,12 +1,15 @@
 
-package org.komea.product.plugins.git.bean;
+package org.komea.product.plugins.git.cron;
 
 
 
 // https://forums.terracotta.org/forums/posts/list/2768.page
 
+import org.apache.commons.lang.Validate;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.esper.IEventPushService;
+import org.komea.product.plugins.git.bean.GitEventFactory;
+import org.komea.product.plugins.git.bean.IGitClonerService;
 import org.komea.product.plugins.git.model.GitRepo;
 import org.komea.product.plugins.git.repositories.api.IGitRepository;
 import org.komea.product.plugins.git.utils.GitCloner;
@@ -23,8 +26,45 @@ public class GitCronJob implements Job
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger("git-cron-fetch");
+    /**
+     * 
+     */
+    private static final String KEY_CRON           = "cron";
+    /**
+     * 
+     */
+    private static final String KEY_ESPER_ENGINE   = "esperEngine";
+    /**
+     * 
+     */
+    private static final String KEY_GITCLONER      = "gitcloner";
+    /**
+     * 
+     */
+    private static final String KEY_PERSON_SERVICE = "personService";
+    /**
+     * 
+     */
+    private static final String KEY_REPO           = "repo";
+    /**
+     * 
+     */
+    private static final String KEY_REPOSITORY     = "repository";
+    private static final Logger LOGGER             = LoggerFactory.getLogger("git-cron-fetch");
     
+    
+    
+    /**
+     * Returns the list of required keys.
+     * 
+     * @return the list of required keys.
+     */
+    public static String[] requiredKeys() {
+    
+    
+        return new String[] {
+                KEY_ESPER_ENGINE, KEY_REPOSITORY, KEY_GITCLONER, KEY_PERSON_SERVICE, KEY_CRON };
+    }
     
     
     /*
@@ -35,11 +75,11 @@ public class GitCronJob implements Job
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
     
     
-        final IEventPushService esperEngine = (IEventPushService) _context.get("esperEngine");
-        final IGitRepository repository = (IGitRepository) _context.get("repository");
-        final IGitClonerService gitcloner = (IGitClonerService) _context.get("gitcloner");
-        final GitRepo fetch = (GitRepo) _context.get("repo");
-        final IPersonService personService = (IPersonService) _context.get("personService");
+        final IEventPushService esperEngine = (IEventPushService) _context.get(KEY_ESPER_ENGINE);
+        final IGitRepository repository = (IGitRepository) _context.get(KEY_REPOSITORY);
+        final IGitClonerService gitcloner = (IGitClonerService) _context.get(KEY_GITCLONER);
+        final GitRepo fetch = (GitRepo) _context.get(KEY_REPO);
+        final IPersonService personService = (IPersonService) _context.get(KEY_PERSON_SERVICE);
         
         executeGitCron(esperEngine, repository, gitcloner, fetch, personService);
         
@@ -68,6 +108,11 @@ public class GitCronJob implements Job
             final IPersonService _personService) {
     
     
+        Validate.notNull(esperEngine);
+        Validate.notNull(repository);
+        Validate.notNull(gitcloner);
+        Validate.notNull(gitRepositoryDefinition);
+        Validate.notNull(_personService);
         repository.saveOrUpdate(gitRepositoryDefinition);
         
         try {

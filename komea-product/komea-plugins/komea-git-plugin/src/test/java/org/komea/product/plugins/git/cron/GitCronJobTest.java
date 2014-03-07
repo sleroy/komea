@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.plugins.git.bean;
+package org.komea.product.plugins.git.cron;
 
 
 
@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.model.Person;
+import org.komea.product.plugins.git.bean.GitClonerService;
 import org.komea.product.plugins.git.model.GitRepo;
 import org.komea.product.plugins.git.repositories.api.IGitRepository;
 import org.mockito.Matchers;
@@ -29,7 +30,7 @@ public class GitCronJobTest
     
     
     /**
-     * Test method for {@link org.komea.product.plugins.git.bean.GitCronJob#execute(org.quartz.JobExecutionContext)}.
+     * Test method for {@link org.komea.product.plugins.git.cron.GitCronJob#execute(org.quartz.JobExecutionContext)}.
      */
     @Test
     public final void testExecute() throws Exception {
@@ -75,4 +76,5 @@ public class GitCronJobTest
                 });
         gitCronJob.executeGitCron(esperEngine, repository, gitcloner, gitRepo, personService);
     }
+    
 }

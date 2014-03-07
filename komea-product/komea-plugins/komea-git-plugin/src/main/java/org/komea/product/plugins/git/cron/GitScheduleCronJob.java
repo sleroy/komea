@@ -1,5 +1,5 @@
 
-package org.komea.product.plugins.git.bean;
+package org.komea.product.plugins.git.cron;
 
 
 
@@ -33,8 +33,31 @@ public class GitScheduleCronJob implements Job
      */
     private static final String GIT_CRON_VALUE = "0 0/1 * * * ?";
     
+    /**
+     * 
+     */
+    private static final String KEY_CRON       = "cron";
+    
+    /**
+     * 
+     */
+    private static final String KEY_REPOSITORY = "repository";
+    
     private static final Logger LOGGER         = LoggerFactory.getLogger("git-schedule");
     
+    
+    
+    /**
+     * Returns the list of required keys.
+     * 
+     * @return the list of required keys.
+     */
+    public static String[] requiredKeys() {
+    
+    
+        return new String[] {
+                "esperEngine", KEY_REPOSITORY, "gitcloner", "personService", KEY_CRON };
+    }
     
     
     public GitScheduleCronJob() {
@@ -54,6 +77,7 @@ public class GitScheduleCronJob implements Job
         final List<GitRepo> feeds = repository.getAllRepositories();
         for (final GitRepo fetch : feeds) {
             if (!repository.isAssociatedToCron(fetch)) {
+                LOGGER.info("Creating Cron for the git repository {}", fetch.getRepoName());
                 final String cronName = repository.initializeCronName(fetch);
                 cronRegistryService.registerCronTask(cronName, GIT_CRON_VALUE, GitCronJob.class,
                         prepareJobMapForCron(_jobDataMap, fetch));
@@ -74,9 +98,9 @@ public class GitScheduleCronJob implements Job
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
     
     
-        final IGitRepository repository = (IGitRepository) _context.get("repository");
+        final IGitRepository repository = (IGitRepository) _context.get(KEY_REPOSITORY);
         final ICronRegistryService cronRegistryService =
-                (ICronRegistryService) _context.get("repo");
+                (ICronRegistryService) _context.get(KEY_CRON);
         
         checkIfGitRepositoryHaveJobs(repository, cronRegistryService,
                 _context.getMergedJobDataMap());

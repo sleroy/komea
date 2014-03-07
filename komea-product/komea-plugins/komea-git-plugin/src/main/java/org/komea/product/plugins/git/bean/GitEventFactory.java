@@ -70,7 +70,7 @@ public class GitEventFactory
     
     
         final EventSimpleDto event = initializeGitEvent(_repo);
-        event.setEventType("git-fetch-failed");
+        event.setEventType("scm-fetch-failed");
         event.setMessage("Git Repository " + _repo.getRepoName() + " could not be fetch.");
         return event;
     }

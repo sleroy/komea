@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.plugins.git.bean;
+package org.komea.product.plugins.git.cron;
 
 
 
@@ -13,6 +13,8 @@ import java.util.Collections;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.service.cron.ICronRegistryService;
+import org.komea.product.plugins.git.cron.GitCronJob;
+import org.komea.product.plugins.git.cron.GitScheduleCronJob;
 import org.komea.product.plugins.git.model.GitRepo;
 import org.komea.product.plugins.git.repositories.api.IGitRepository;
 import org.mockito.Matchers;
@@ -30,7 +32,7 @@ public class GitScheduleCronJobTest
     
     /**
      * Test method for
-     * {@link org.komea.product.plugins.git.bean.GitScheduleCronJob#checkIfGitRepositoryHaveJobs(org.quartz.JobExecutionContext, org.komea.product.plugins.git.repositories.api.IGitRepository, org.komea.product.backend.service.cron.ICronRegistryService)}
+     * {@link org.komea.product.plugins.git.cron.GitScheduleCronJob#checkIfGitRepositoryHaveJobs(org.quartz.JobExecutionContext, org.komea.product.plugins.git.repositories.api.IGitRepository, org.komea.product.backend.service.cron.ICronRegistryService)}
      * .
      */
     @Test
@@ -56,7 +58,7 @@ public class GitScheduleCronJobTest
     
     /**
      * Test method for
-     * {@link org.komea.product.plugins.git.bean.GitScheduleCronJob#prepareJobMapForCron(org.quartz.JobDataMap, org.komea.product.plugins.git.model.GitRepo)}
+     * {@link org.komea.product.plugins.git.cron.GitScheduleCronJob#prepareJobMapForCron(org.quartz.JobDataMap, org.komea.product.plugins.git.model.GitRepo)}
      * .
      */
     @Test
