@@ -151,8 +151,7 @@ public final class PersonForm extends Form<Person> {
      */
     @Override
     protected void onSubmit() {
-
-        personService.saveOrUpdate(person);
+        personService.saveOrUpdate(person); // full save comme les autres
         setResponsePage(new PersonPage(new PageParameters()));
     }
 
