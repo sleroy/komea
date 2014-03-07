@@ -23,7 +23,6 @@ import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.wicket.LayoutPage;
-import org.komea.product.wicket.persongroup.department.DepartmentPage;
 import org.komea.product.wicket.utils.NameGeneric;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
@@ -45,7 +44,6 @@ public class TeamForm extends Form<PersonGroup> {
     private Person selectedPerson;
     private List<Person> personsOfGroup;
     private List<Person> personNeedUpdate;
-    
 
     TeamForm(String form, IPersonService _personService, IPersonGroupService prService, FeedbackPanel feedbackPanel, CompoundPropertyModel<PersonGroup> compoundPropertyModel, TeamEditPage aThis) {
 
@@ -67,7 +65,7 @@ public class TeamForm extends Form<PersonGroup> {
         add(TextAreaBuilder.<String>create("description", this.personGroup, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("Description can be add").build());
 
-        personsOfGroup = personService.getPersonsOfGroup(this.personGroup.getId());
+        personsOfGroup = personService.getPersonsOfPersonGroup(this.personGroup.getId());
         IChoiceRenderer<Person> displayGroup = new IChoiceRenderer<Person>() {
             @Override
             public Object getDisplayValue(Person t) {
@@ -108,8 +106,8 @@ public class TeamForm extends Form<PersonGroup> {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
-               
-              art.add(getCustom());
+
+                art.add(getCustom());
             }
         });
 
@@ -118,11 +116,11 @@ public class TeamForm extends Form<PersonGroup> {
             @Override
             public void onClick(final AjaxRequestTarget art) {
                 art.add(getCustom());
-               selectedPerson.setIdPersonGroup(null);
-               personsOfGroup.remove(selectedPerson);
-               personNeedUpdate.add(selectedPerson);
+                selectedPerson.setIdPersonGroup(null);
+                personsOfGroup.remove(selectedPerson);
+                personNeedUpdate.add(selectedPerson);
 //               personService.saveOrUpdate(selectedPerson);
-               art.add(getCustom());
+                art.add(getCustom());
             }
         });
 
@@ -198,7 +196,7 @@ public class TeamForm extends Form<PersonGroup> {
         for (Person peson : this.personNeedUpdate) {
             personService.saveOrUpdate(peson);
         }
-        
+
         page.setResponsePage(new TeamPage(page.getPageParameters()));
 
     }
