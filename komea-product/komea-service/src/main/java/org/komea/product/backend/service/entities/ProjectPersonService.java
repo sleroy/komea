@@ -32,23 +32,12 @@ public class ProjectPersonService implements IProjectPersonService
     
     
     
-
-    /* (non-Javadoc)
-     * @see org.komea.product.backend.service.entities.IProjectPersonService#updateProjectPersonLink(org.komea.product.database.model.Project, org.komea.product.database.model.Person)
-=======
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.entities.IProjectPersonService#updateProjectPersonLink(org.komea.product.database.model.Project,
-     * org.komea.product.database.model.Person)
->>>>>>> ae58d31ddbbf4053410d9e031d5cc440abebdc56
-     */
     @Override
     @Transactional
-    public void updateProjectPersonLink(final Project _project, final Person _person) {
+    public void updatePersonToProjectLink(final Project _project, final Person _person) {
     
     
-        LOGGER.debug("Update project {} person {} link ");
+        LOGGER.debug("Update project {} person {} now is linked ");
         final HasProjectPersonCriteria hasProjectPersonCriteria = new HasProjectPersonCriteria();
         hasProjectPersonCriteria.createCriteria().andIdPersonEqualTo(_person.getId());
         projectPersonDAO.deleteByCriteria(hasProjectPersonCriteria);

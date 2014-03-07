@@ -51,8 +51,8 @@ public class KpiEditPage extends LayoutPage {
         add(feedbackPanel);
 
 
-        final KpiForm KpiForm = new KpiForm("form", kpiDao, entityService, providerDao, feedbackPanel, new CompoundPropertyModel<Kpi>(_kpi), this);
-        add(KpiForm);
+        final KpiForm kpiForm = new KpiForm("form", kpiDao, entityService, providerDao, feedbackPanel, new CompoundPropertyModel<Kpi>(_kpi), this);
+        add(kpiForm);
 
 
         // Dialog //
@@ -61,22 +61,22 @@ public class KpiEditPage extends LayoutPage {
             
             @Override
             public void onClose(AjaxRequestTarget target, DialogButton button) {
-                target.add(KpiForm);
+                target.add(kpiForm);
             }
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 Provider selectedProvider = getSelectedProvider();
-                KpiForm.getKpi().setIdProvider(selectedProvider.getId());
-                KpiForm.getNameProvider().setName(selectedProvider.getName());
-                target.add(KpiForm);
+                kpiForm.getKpi().setIdProvider(selectedProvider.getId());
+                kpiForm.getNameProvider().setName(selectedProvider.getName());
+                target.add(kpiForm);
 //                this.info(String.format("The model object is: '%s'", this.getModelObject()));
             }
         };
 
         this.add(dialog);
         // Buttons //
-        KpiForm.add(new AjaxLinkLayout<LayoutPage>("open", this) {
+        kpiForm.add(new AjaxLinkLayout<LayoutPage>("open", this) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {

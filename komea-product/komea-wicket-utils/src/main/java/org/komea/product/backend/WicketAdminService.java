@@ -65,7 +65,7 @@ public class WicketAdminService implements IWicketAdminService, ApplicationConte
     public Class<? extends WebPage> getPluginPage(final String _name) {
     
     
-        LOGGER.info("Request admin page for plugin  {}", _name);
+        LOGGER.debug("Request admin page for plugin  {}", _name);
         return pluginPages.get(_name);
     }
     
@@ -143,7 +143,7 @@ public class WicketAdminService implements IWicketAdminService, ApplicationConte
             final Class<? extends WebPage> _webPageClass) {
     
     
-        LOGGER.info("Register a new plugin {} -> {}", _pluginName, _webPageClass.getName());
+        LOGGER.debug("Register a new plugin {} -> {}", _pluginName, _webPageClass.getName());
         pluginPages.put(_pluginName, _webPageClass);
         register("/plugin" + _pluginName.hashCode(), _webPageClass);
     }

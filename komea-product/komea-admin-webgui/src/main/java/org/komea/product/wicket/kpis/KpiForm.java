@@ -116,8 +116,8 @@ public final class KpiForm extends Form<Kpi> {
         // ///////////////////////////////////////////////////////////////////////////////////
         // //////////////////////////////// Popup //////////////////////////////////////////
         // ///////////////////////////////////////////////////////////////////////////////////
-//        final SelectDialog<TextField> dialog;
-//        dialog = new SelectDialog<TextField>("dialog", "Select", providerDao, fieldIdProvider) {
+//        final TeamSelectDialog<TextField> dialog;
+//        dialog = new TeamSelectDialog<TextField>("dialog", "Select", providerDao, fieldIdProvider) {
 //
 //            @Override
 //            public void onClose(AjaxRequestTarget target, DialogButton button) {

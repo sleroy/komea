@@ -57,7 +57,7 @@ public class ProviderService extends AbstractService<Provider, Integer, Provider
     }
 	
 	@Override
-    protected ProviderCriteria getCriteriaKey(String key) {
+    protected ProviderCriteria createPersonCriteriaOnLogin(String key) {
         final ProviderCriteria criteria = new ProviderCriteria();
         criteria.createCriteria().andUrlEqualTo(key);
         return criteria;

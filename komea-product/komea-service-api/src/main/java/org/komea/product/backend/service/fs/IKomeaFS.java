@@ -3,6 +3,10 @@ package org.komea.product.backend.service.fs;
 
 
 
+import java.io.File;
+
+
+
 /**
  * This interface defines the methods to load/store informations of a plugin in a dedicated place.
  * 
@@ -18,7 +22,17 @@ public interface IKomeaFS
      * 
      * @param _fileSystemName
      *            the file system name;
-    
-     * @return the file system service. */
+     * @return the file system service.
+     */
     IPluginFileSystem getFileSystem(String _fileSystemName);
+    
+    
+    /**
+     * Returns the insert
+     * 
+     * @param _fileSystemName
+     *            the file system name
+     * @return the folder path.
+     */
+    File getFileSystemFolder(final String _fileSystemName);
 }

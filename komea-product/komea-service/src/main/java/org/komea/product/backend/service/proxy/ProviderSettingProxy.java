@@ -92,10 +92,10 @@ public class ProviderSettingProxy<T> implements ISettingProxy<T>
     /**
      * Method setValue.
      * @param _value String
-     * @see org.komea.product.backend.service.ISettingProxy#setValue(String)
+     * @see org.komea.product.backend.service.ISettingProxy#setStringValue(String)
      */
     @Override
-    public void setValue(final String _value) {
+    public void setStringValue(final String _value) {
     
     
         LOGGER.trace("Set the value {} -> {}", key, _value);
@@ -120,7 +120,7 @@ public class ProviderSettingProxy<T> implements ISettingProxy<T>
     public void setValue(final T _value) {
     
     
-        setValue(_value == null ? null : _value.toString());
+        setStringValue(_value == null ? null : _value.toString());
     }
     
 }

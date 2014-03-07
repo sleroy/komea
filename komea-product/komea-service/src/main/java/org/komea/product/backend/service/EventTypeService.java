@@ -105,7 +105,7 @@ public class EventTypeService extends AbstractService<EventType, Integer, EventT
     }
 	
 	@Override
-    protected EventTypeCriteria getCriteriaKey(String key) {
+    protected EventTypeCriteria createPersonCriteriaOnLogin(String key) {
         final EventTypeCriteria criteria = new EventTypeCriteria();
         criteria.createCriteria().andEventKeyEqualTo(key);
         return criteria;

@@ -49,7 +49,7 @@ public class EntityServiceIT extends AbstractSpringIntegrationTestCase {
     @DatabaseSetup("database.xml")
     public void testGetPersonList() {
     
-        List<PersonDto> personList = personService.getPersonList();
+        List<PersonDto> personList = personService.convertAllPersonsIntoPersonDTO();
         Assert.assertEquals(2, personList.size());
     }
     

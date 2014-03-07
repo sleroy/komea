@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+</head>
+<body>
+	<wicket:panel>
+		<form class="form-horizontal">
+			<fieldset>
+
+				<!-- Select Multiple -->
+				<div class="control-group">
+					<label class="control-label" for="selectTeam">Select a team</label>
+					<div class="controls">
+						<select id="selectTeam" name="selectTeam" class="input-large"
+							multiple="multiple" wicket:id="teams">
+							<option>Team A</option>
+							<option>Team B</option>
+						</select>
+					</div>
+				</div>
+
+			</fieldset>
+		</form>
+
+	</wicket:panel>
+</body>
+</html>

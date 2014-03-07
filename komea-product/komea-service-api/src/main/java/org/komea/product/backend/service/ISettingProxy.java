@@ -43,7 +43,7 @@ public interface ISettingProxy<T>
      * @param _value
      *            the value
      */
-    void setValue(String _value);
+    void setStringValue(String _value);
     
     
     /**

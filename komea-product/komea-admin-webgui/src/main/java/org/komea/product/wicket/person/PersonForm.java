@@ -5,7 +5,6 @@ package org.komea.product.wicket.person;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -15,14 +14,16 @@ import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.PersonRole;
 import org.komea.product.database.model.Project;
-import org.komea.product.wicket.widget.TeamSelectorDialog;
 import org.komea.product.wicket.widget.builders.DropDownBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
+import org.komea.product.wicket.widget.gravatar.GravatarImageLink;
+
+import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 
 
 
 /**
- * Formular to edit properties in the settings page.
+ * Defines the formular to edit a person.
  * 
  * @author sleroy
  */
@@ -72,47 +73,45 @@ public final class PersonForm extends Form<Person>
     
     
     
-    /**
-     * @author sleroy
-     */
-    private final class TeamButton extends AjaxButton
-    {
-        
-        
-        /**
-         * @param _id
-         * @param _form
-         */
-        private TeamButton(final String _id) {
-        
-        
-            super(_id);
-        }
-        
-        
-        @Override
-        protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-        
-        
-            teamDialog.open(target);
-        }
-    }
+    // /**
+    // * @author sleroy
+    // */
+    // private final class TeamButton extends AjaxButton
+    // {
+    //
+    //
+    // /**
+    // * @param _id
+    // * @param _form
+    // */
+    // private TeamButton(final String _id) {
+    //
+    //
+    // super(_id);
+    // }
+    //
+    //
+    // @Override
+    // protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+    //
+    //
+    // teamDialog.open(target);
+    // }
+    // }
+    //
     
     
+    private final Component      feedBack;
     
-    private final Component          feedBack;
-    
-    private final Person             person;
+    private final Person         person;
     
     
-    private PersonGroup              personGroup;
-    private final IPersonService     personService;
+    private PersonGroup          personGroup;
+    private final IPersonService personService;
     
-    private Project                  selectedProject;
+    private Project              selectedProject;
     
-    private PersonRole               selectedRole;
-    
-    private final TeamSelectorDialog teamDialog;
+    private PersonRole           selectedRole;
     
     
     
@@ -129,6 +128,7 @@ public final class PersonForm extends Form<Person>
         feedBack = _feedBack;
         person = _compoundPropertyModel.getObject();
         feedBack.setVisible(false);
+        add(new GravatarImageLink("avatar", _compoundPropertyModel.getObject().getEmail(), 125));
         add(TextFieldBuilder.<String> createRequired("login", person, "login")
                 .simpleValidator(3, 255).withTooltip("User requires a login.").highlightOnErrors()
                 .build());
@@ -151,8 +151,8 @@ public final class PersonForm extends Form<Person>
         
         // add a button that can be used to submit the form via ajax
         add(new SubmitButton("submit", this));
-        teamDialog = new TeamSelectorDialog(_personFormData.getTeams(), "teamDialog");
-        this.add(teamDialog);
+        // teamDialog = new TeamSelectorDialog(_personFormData.getTeams(), "teamDialog");
+        // this.add(teamDialog);
         
     }
     
@@ -166,6 +166,5 @@ public final class PersonForm extends Form<Person>
     
         personService.saveOrUpdate(person, selectedProject, selectedRole, personGroup);
     }
-    
     
 }

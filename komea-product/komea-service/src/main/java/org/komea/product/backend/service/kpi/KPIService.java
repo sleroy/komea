@@ -271,7 +271,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     public Measure getRealTimeMeasure(final KpiKey _key) {
     
     
-        LOGGER.info("Obtain the real time measure : {}", _key);
+        LOGGER.debug("Obtain the real time measure : {}", _key);
         final Kpi kpiOrFail = findKPIOrFail(_key);
         final KPIValueTable<IEntity> valueTable =
                 fetchKpiValueTable(kpiOrFail, getEsperQueryFromKpi(kpiOrFail));
@@ -285,7 +285,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         final IEntity entity = CollectionUtil.singleOrNull(entitiesAssociatedToKpiKey);
         measureKey.setEntity(entity.entityType(), entity.getId());
         measureKey.setValue(valueTable.getValueOfEntity(entity));
-        LOGGER.info("Obtain the real time measure : {} result = {}", _key, measureKey.getValue());
+        LOGGER.debug("Obtain the real time measure : {} result = {}", _key, measureKey.getValue());
         return measureKey;
     }
     
@@ -435,7 +435,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     public void refreshEsper(final Kpi _kpi) {
     
     
-        LOGGER.info("Refreshing Esper with KPI {}", _kpi.getKpiKey());
+        LOGGER.debug("Refreshing Esper with KPI {}", _kpi.getKpiKey());
         createEsperQueryFromKPI(_kpi);
         IEntity entity = null;
         if (_kpi.isAssociatedToEntity()) {
@@ -459,12 +459,12 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
     
         if (_kpi.getId() == null) {
-            LOGGER.info("Saving new KPI : {}", _kpi.getKpiKey());
+            LOGGER.debug("Saving new KPI : {}", _kpi.getKpiKey());
             if (findKPI(KpiKey.ofKpi(_kpi)) != null) { throw new KpiAlreadyExistingException(
                     _kpi.getKpiKey()); }
             requiredDAO.insert(_kpi);
         } else {
-            LOGGER.info("KPI {} updated", _kpi.getKpiKey());
+            LOGGER.debug("KPI {} updated", _kpi.getKpiKey());
             requiredDAO.updateByPrimaryKey(_kpi);
         }
         
@@ -569,7 +569,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         measure.setValue(_kpiValue);
         measureService.storeMeasure(measure);
         final int purgeHistory = measureService.buildHistoryPurgeAction(findKPI).purgeHistory();
-        LOGGER.info("Purge history : {} items", purgeHistory);
+        LOGGER.debug("Purge history : {} items", purgeHistory);
     }
     
     
@@ -610,7 +610,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
     
         final QueryDefinition queryDefinition = new QueryDefinition(_kpi);
-        LOGGER.info("Updating Esper with the query {}", queryDefinition);
+        LOGGER.debug("Updating Esper with the query {}", queryDefinition);
         esperEngine.createOrUpdateEPLQuery(queryDefinition);
     }
     
@@ -684,9 +684,12 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         
         
     }
-	
-	@Override
-    protected KpiCriteria getCriteriaKey(String key) {
+    
+    
+    @Override
+    protected KpiCriteria createPersonCriteriaOnLogin(final String key) {
+    
+    
         final KpiCriteria criteria = new KpiCriteria();
         criteria.createCriteria().andKpiKeyEqualTo(key);
         return criteria;

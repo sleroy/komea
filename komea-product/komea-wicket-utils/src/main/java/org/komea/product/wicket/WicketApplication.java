@@ -65,7 +65,6 @@ public class WicketApplication extends WebApplication
     
         super.init();
         
-        // best place to do this is in Application#init()
         // Bootstrap.install(Application.get(), new BootstrapSettings());
         
         getComponentInstantiationListeners().add(new SpringComponentInjector(this));
@@ -73,18 +72,19 @@ public class WicketApplication extends WebApplication
         getResourceSettings().setThrowExceptionOnMissingResource(false);
         
         // enable ajax debug etc.
-        getDebugSettings().setDevelopmentUtilitiesEnabled(false);
+        getDebugSettings().setDevelopmentUtilitiesEnabled(true);
         // getDebugSettings().setComponentUseCheck(false);
         // make markup friendly as in deployment-mode
         
-        
         getMarkupSettings().setStripWicketTags(true);
+        
+        
         // page mounts / SEO
         mountPage("/home", HomePage.class);
         LOGGER.info("#############################################################");
         final Set<Entry<String, Class<? extends WebPage>>> entrySet =
                 getPluginAdminPage().getRegisteredPages().entrySet();
-        LOGGER.info("Wicket startup : {} pages", entrySet.size());
+        LOGGER.debug("Wicket startup : {} pages", entrySet.size());
         for (final java.util.Map.Entry<String, Class<? extends WebPage>> entry : entrySet) {
             LOGGER.info("> mounting {}->{}", entry.getKey(), entry.getValue().getName());
             mountPage(entry.getKey(), entry.getValue());

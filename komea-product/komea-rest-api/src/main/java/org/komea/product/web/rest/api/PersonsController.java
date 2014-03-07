@@ -42,7 +42,7 @@ public class PersonsController {
     
         LOGGER.debug("call rest method /persons/all/");
         // TODO
-        return entityService.getPersonList();
+        return entityService.convertAllPersonsIntoPersonDTO();
     }
     
 }

@@ -4,6 +4,7 @@ package org.komea.product.wicket.person;
 
 
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.entities.IPersonRoleService;
@@ -53,9 +54,9 @@ public class PersonPage extends LayoutPage
         
         final IEditAction<Person> personEditAction = new PersonEditAction(this, personRoleDAO);
         final ISortableDataProvider<Person, String> dataProvider = new PersonDataModel(personDAO);
-        add(DataTableBuilder.<Person, String> newTable("table").addColumn("Login", "login")
-                .addColumn("First name", "firstName").addColumn("Last name", "lastName")
-                .addColumn("Email", "email")
+        add(DataTableBuilder.<Person, String> newTable("table")
+                .addColumn(new LoginColumn(Model.of("Login"))).addColumn("Last name", "lastName")
+                .addColumn("First name", "firstName").addColumn("Email", "email")
                 .withEditDeleteColumn(personDeleteAction, personEditAction).displayRows(10)
                 .withData(dataProvider).build());
         

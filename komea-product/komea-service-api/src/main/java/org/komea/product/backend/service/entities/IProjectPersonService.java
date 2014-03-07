@@ -12,6 +12,8 @@ import org.komea.product.database.model.Project;
 
 
 /**
+ * This interface defines a service to manage links between a project and persons.
+ * 
  * @author sleroy
  * @version $Revision: 1.0 $
  */
@@ -27,6 +29,6 @@ public interface IProjectPersonService
      * @param _person
      *            Person
      */
-    public void updateProjectPersonLink(Project _project, Person _person);
+    public void updatePersonToProjectLink(Project _project, Person _person);
     
 }

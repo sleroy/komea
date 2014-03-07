@@ -89,7 +89,7 @@ public class PersonGroupServiceTest {
                 Arrays.asList(getTeam()));
         Mockito.when(projectPersonGroupService.getProjectsAssociateToPersonGroup(teamId)).thenReturn(
                 Arrays.asList(getProject()));
-        Mockito.when(personService.getPersonsOfGroup(teamId)).thenReturn(
+        Mockito.when(personService.searchPersonWithGroupID(teamId)).thenReturn(
                 getPersons(teamId));
 
         List<TeamDto> allTeams = groupService.getAllTeams();
@@ -109,7 +109,7 @@ public class PersonGroupServiceTest {
         int departmentId = department.getId();
         Mockito.when(groupService.selectByCriteria(any(PersonGroupCriteria.class))).thenReturn(
                 Arrays.asList(getDepartment()));
-        Mockito.when(personService.getPersonsOfGroup(departmentId)).thenReturn(
+        Mockito.when(personService.searchPersonWithGroupID(departmentId)).thenReturn(
                 getPersons(departmentId));
 
         List<DepartmentDto> allDepartments = groupService.getAllDepartments();

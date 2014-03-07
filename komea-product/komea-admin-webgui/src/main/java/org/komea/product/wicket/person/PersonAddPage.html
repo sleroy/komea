@@ -27,29 +27,47 @@
 				<div class="container">
 					<!--  begin here -->
 					<wicket:extend>
-						<div wicket:id="dialog"></div>
 
 
 
-						<div class="alert alert-danger" wicket:id="feedback"></div>
+						<div class="alert alert-danger" wicket:id="feedBack"></div>
 						<form class="form" wicket:id="form" role="form">
+
+							<div wicket:id="teamDialog">[dialog]</div>
+
+							<button class="btn dropdown-toggle" data-toggle="dropdown">
+								Choose a team or a department <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li><a href="#">Option one</a></li>
+								<li><a href="#">Option two</a></li>
+								<li><a href="#">Option three</a></li>
+							</ul>
+
 							<legend>Editing a user</legend>
+							<div>
+								<img class="img-responsive img-thumbnail" style="padding: 5px;"
+									src="../static/photo.png" width="150" height="150"
+									alt="Gravatar logo" wicket:id="avatar" />
+							</div>
+
 							<div class="form-group">
 								<div class="row">
-									<label class="col-md-2" for="inputEmail1">Login</label>
+									<label class="col-md-2" for="login">Login</label>
 									<div class="col-md-4">
 										<input id="login" name="login" type="text" placeholder="login"
-											class="form-control" required="required" wicket:id="login">
+											class="form-control input-sm" required="required"
+											wicket:id="login">
 									</div>
 								</div>
 							</div>
 							<!-- Text input-->
 							<div class="form-group">
 								<div class="row">
-									<label class="col-md-2" for="inputEmail1">First name</label>
+									<label class="col-md-2" for="firstName">First name</label>
 									<div class="col-md-4">
 										<input id="firstName" name="firstName" type="text"
-											placeholder="firstName" class="form-control"
+											placeholder="firstName" class="form-control input-sm"
 											required="required" wicket:id="firstname">
 									</div>
 								</div>
@@ -57,10 +75,10 @@
 							<!-- Text input-->
 							<div class="form-group">
 								<div class="row">
-									<label class="col-md-2" for="inputEmail1">Last name</label>
+									<label class="col-md-2" for="surename">Last name</label>
 									<div class="col-md-4">
 										<input id="surename" name="surename" type="text"
-											placeholder="surename" class="form-control"
+											placeholder="surename" class="form-control input-sm"
 											required="required" wicket:id="lastname">
 									</div>
 								</div>
@@ -68,25 +86,25 @@
 							<!-- Text input-->
 							<div class="form-group">
 								<div class="row">
-									<label class="col-md-2" for="inputEmail1">Email</label>
+									<label class="col-md-2" for="email">Email</label>
 									<div class="col-md-4">
 										<input id="email" name="email" type="text" placeholder="email"
-											class="form-control" required="required" wicket:id="email">
+											class="form-control input-sm" required="required"
+											wicket:id="email">
 									</div>
 								</div>
 							</div>
 							<!-- Text input-->
 							<div class="form-group">
 								<div class="row">
-									<label class="col-md-2" for="inputEmail1">Attach the
-										user to a group.</label>
+									<label class="col-md-2">Attach the user to a group.</label>
 									<div class="col-md-4">
 										<div class="row">
 											<button type="button" class="btn btn-small btn-info col-md-5">Attach
 												to a department</button>
-											<button type="button" wicket:id="teambutton"
-												class="btn btn-small btn-info col-md-offset-2 col-md-5">Attach
-												to a team</button>
+											<button type="button"
+												class="btn btn-small btn-info col-md-offset-2 col-md-5"
+												wicket:id="teamlink">Attach to a team</button>
 										</div>
 									</div>
 								</div>
@@ -94,11 +112,10 @@
 							<!-- Text input-->
 							<div class="form-group">
 								<div class="row">
-									<label class="col-md-2" for="inputEmail1">Choose a
-										project.</label>
+									<label class="col-md-2">Choose a project.</label>
 									<div class="col-md-4">
-										<select id="project" name="project" class="form-control"
-											wicket:id="project">
+										<select id="project" name="project"
+											class="form-control input-sm" wicket:id="project">
 										</select>
 									</div>
 								</div>
@@ -106,11 +123,10 @@
 							<!-- Text input-->
 							<div class="form-group">
 								<div class="row">
-									<label class="col-md-2" for="inputEmail1">Choose a
-										role.</label>
+									<label class="col-md-2">Choose a role.</label>
 									<div class="col-md-4">
-										<select id="userRole" name="userRole" class="form-control"
-											wicket:id="role">
+										<select id="userRole" name="userRole"
+											class="form-control input-sm" wicket:id="role">
 										</select>
 									</div>
 								</div>

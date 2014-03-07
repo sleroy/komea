@@ -52,7 +52,7 @@ public class PersonRoleService extends AbstractService<PersonRole, Integer, Pers
     }
 	
 	@Override
-    protected PersonRoleCriteria getCriteriaKey(String key) {
+    protected PersonRoleCriteria createPersonCriteriaOnLogin(String key) {
         final PersonRoleCriteria criteria = new PersonRoleCriteria();
         criteria.createCriteria().andRoleKeyEqualTo(key);
         return criteria;

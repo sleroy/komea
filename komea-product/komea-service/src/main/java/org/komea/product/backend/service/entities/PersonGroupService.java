@@ -209,7 +209,7 @@ public final class PersonGroupService extends
         department.setName(group.getName());
         department.setDescription(group.getDescription());
         final Integer groupId = group.getId();
-        final List<Person> persons = personService.getPersonsOfGroup(groupId);
+        final List<Person> persons = personService.searchPersonWithGroupID(groupId);
         final List<PersonGroup> children = getChildren(group);
         for (final PersonGroup child : children) {
             department.getTeams().put(child.getPersonGroupKey(), child.getName());
@@ -228,7 +228,7 @@ public final class PersonGroupService extends
         final Integer groupId = group.getId();
         final PersonGroup parent = getParent(group);
         final List<Project> projects = projectPersonGroupService.getProjectsAssociateToPersonGroup(groupId);
-        final List<Person> persons = personService.getPersonsOfGroup(groupId);
+        final List<Person> persons = personService.searchPersonWithGroupID(groupId);
         if (parent != null) {
             team.setDepartment(Pair.create(parent.getPersonGroupKey(), parent.getName()));
         }
@@ -252,7 +252,7 @@ public final class PersonGroupService extends
     }
 
     @Override
-    protected PersonGroupCriteria getCriteriaKey(String key) {
+    protected PersonGroupCriteria createPersonCriteriaOnLogin(String key) {
         final PersonGroupCriteria criteria = new PersonGroupCriteria();
         criteria.createCriteria().andPersonGroupKeyEqualTo(key);
         return criteria;

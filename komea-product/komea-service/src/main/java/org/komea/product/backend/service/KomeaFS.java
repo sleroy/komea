@@ -66,6 +66,23 @@ public class KomeaFS implements IKomeaFS
     }
     
     
+    /**
+     * Method getFileSystem.
+     * 
+     * @param _fileSystemName
+     *            String
+     * @return IPluginFileSystem
+     * @see org.komea.product.backend.service.fs.IKomeaFS#getFileSystem(String)
+     */
+    @Override
+    public File getFileSystemFolder(final String _fileSystemName) {
+    
+    
+        final File computePluginStoragePath = computePluginStoragePath(_fileSystemName);
+        return getPath(computePluginStoragePath);
+    }
+    
+    
     public ISettingService getSettingService() {
     
     

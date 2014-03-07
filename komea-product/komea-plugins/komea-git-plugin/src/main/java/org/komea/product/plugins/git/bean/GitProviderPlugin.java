@@ -1,0 +1,272 @@
+
+package org.komea.product.plugins.git.bean;
+
+
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+import org.komea.product.backend.api.PluginAdminPages;
+import org.komea.product.backend.api.PluginMountPage;
+import org.komea.product.backend.plugin.api.EventTypeDef;
+import org.komea.product.backend.plugin.api.ProviderPlugin;
+import org.komea.product.backend.service.ISettingService;
+import org.komea.product.backend.service.cron.ICronRegistryService;
+import org.komea.product.backend.service.entities.IPersonService;
+import org.komea.product.backend.service.esper.IEventPushService;
+import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ProviderType;
+import org.komea.product.database.enums.Severity;
+import org.komea.product.database.model.Setting;
+import org.komea.product.plugins.git.repositories.api.IGitRepository;
+import org.quartz.JobDataMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+
+
+/**
+ * Main class to define the GIT Provider Plugin.
+ * 
+ * @author sleroy
+ */
+@ProviderPlugin(
+        eventTypes = {
+                @EventTypeDef(
+                        category = "SCM",
+                        description = "A new commit has been pushed on a GIT Server",
+                        enabled = true,
+                        entityType = EntityType.PROJECT,
+                        key = GitProviderPlugin.SCM_NEW_COMMIT,
+                        name = "New commit on git server",
+                        severity = Severity.INFO),
+                @EventTypeDef(
+                        category = "SCM",
+                        description = "Fetch on git server has failed",
+                        enabled = true,
+                        entityType = EntityType.PROJECT,
+                        key = GitProviderPlugin.GIT_FETCH_FAILED,
+                        name = "Fetch on git server has failed.",
+                        severity = Severity.INFO) },
+        icon = "git",
+        name = GitProviderPlugin.GIT_PROVIDER_PLUGIN,
+        type = ProviderType.NEWS,
+        url = "/git-provider")
+@PluginAdminPages(@PluginMountPage(
+        pluginName = GitProviderPlugin.GIT_PROVIDER_PLUGIN,
+        page = GitRepositoryPage.class))
+public class GitProviderPlugin implements org.komea.product.backend.service.ISettingListener
+{
+    
+    
+    public static final String   GIT_FETCH_FAILED    = "git-fetch-failed";
+    
+    
+    public static final String   SCM_NEW_COMMIT      = "scm-new-commit";
+    
+    
+    private static final String  GIT_CRON_JOB        = "git_cron_job";
+    
+    
+    /**
+     * Cron value for GIT Provider.
+     */
+    private static final String  GIT_CRON_VALUE      = "0 0/5 * * * ?";
+    
+    
+    private static final String  GIT_PROVIDER_PERIOD = "git_refresh_period";
+    
+    
+    private static final Logger  LOGGER              = LoggerFactory.getLogger("git-provider");
+    
+    
+    /**
+     * Rss Provider plugin name;
+     */
+    static final String          GIT_PROVIDER_PLUGIN = "GIT Provider plugin";
+    
+    
+    @Autowired
+    private ICronRegistryService cronRegistryService;
+    
+    
+    @Autowired
+    private IEventPushService    esperEngine;
+    
+    
+    private IGitClonerService    gitClonerService;
+    
+    
+    @Autowired
+    private IGitRepository       gitRepository;
+    
+    
+    @Autowired
+    private IPersonService       personService;
+    
+    @Autowired
+    private ISettingService      registry;
+    
+    
+    
+    /**
+     * RSS Provider plugin.
+     */
+    public GitProviderPlugin() {
+    
+    
+        super();
+    }
+    
+    
+    @PreDestroy
+    public void destroy() {
+    
+    
+        LOGGER.debug("Removing RSS Cron");
+        cronRegistryService.removeCronTask(GIT_CRON_JOB);
+    }
+    
+    
+    /**
+     * @return the cronRegistryService
+     */
+    public ICronRegistryService getCronRegistryService() {
+    
+    
+        return cronRegistryService;
+    }
+    
+    
+    /**
+     * @return the esperEngine
+     */
+    public IEventPushService getEsperEngine() {
+    
+    
+        return esperEngine;
+    }
+    
+    
+    public IGitRepository getGitRepository() {
+    
+    
+        return gitRepository;
+    }
+    
+    
+    public IPersonService getPersonService() {
+    
+    
+        return personService;
+    }
+    
+    
+    /**
+     * @return the registry
+     */
+    public ISettingService getRegistry() {
+    
+    
+        return registry;
+    }
+    
+    
+    @PostConstruct
+    public void initializeProvider() {
+    
+    
+        LOGGER.info("Initialisation du plugin RSS");
+        
+        
+        final JobDataMap properties = prepareJobMapForCron();
+        //
+        registry.create(GIT_PROVIDER_PERIOD, GIT_CRON_VALUE, "java.lang.String",
+                "Defines the cron value to fetch rss feeds");
+        registry.registerListener(GIT_PROVIDER_PERIOD, this);
+        cronRegistryService.registerCronTask(GIT_CRON_JOB, GIT_CRON_VALUE, GitCronJob.class,
+                properties);
+        
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.ISettingListener#notifyPropertyChanged(org.komea.product.database.model.Setting)
+     */
+    @Override
+    public void notifyPropertyChanged(final Setting _setting) {
+    
+    
+        cronRegistryService.updateCronFrequency(GIT_CRON_JOB, _setting.getValue());
+        
+    }
+    
+    
+    /**
+     * Prepares job map for cron.
+     * 
+     * @return the job data map.
+     */
+    public JobDataMap prepareJobMapForCron() {
+    
+    
+        final JobDataMap properties = new JobDataMap();
+        properties.put("lastDate", null);
+        properties.put("esperEngine", esperEngine);
+        properties.put("repository", gitRepository);
+        properties.put("gitcloner", gitClonerService);
+        properties.put("personService", personService);
+        return properties;
+    }
+    
+    
+    /**
+     * @param _cronRegistryService
+     *            the cronRegistryService to set
+     */
+    public void setCronRegistryService(final ICronRegistryService _cronRegistryService) {
+    
+    
+        cronRegistryService = _cronRegistryService;
+    }
+    
+    
+    /**
+     * @param _esperEngine
+     *            the esperEngine to set
+     */
+    public void setEsperEngine(final IEventPushService _esperEngine) {
+    
+    
+        esperEngine = _esperEngine;
+    }
+    
+    
+    public void setGitRepository(final IGitRepository _gitRepository) {
+    
+    
+        gitRepository = _gitRepository;
+    }
+    
+    
+    public void setPersonService(final IPersonService _personService) {
+    
+    
+        personService = _personService;
+    }
+    
+    
+    /**
+     * @param _registry
+     *            the registry to set
+     */
+    public void setRegistry(final ISettingService _registry) {
+    
+    
+        registry = _registry;
+    }
+    
+    
+}

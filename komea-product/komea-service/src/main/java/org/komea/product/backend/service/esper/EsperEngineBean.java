@@ -9,6 +9,7 @@ package org.komea.product.backend.service.esper;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.apache.commons.lang.Validate;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.listeners.EPServiceStateListener1;
 import org.komea.product.backend.esper.listeners.EPStatementStateListener1;
@@ -78,14 +79,15 @@ public final class EsperEngineBean implements IEsperEngine
     public EPStatement createEPL(final IQueryDefinition _queryDefinition) throws RuntimeException {
     
     
-        LOGGER.info("Creation of a new EPL Statement {}", _queryDefinition);
+        Validate.notNull(_queryDefinition);
+        LOGGER.debug("Creation of a new EPL Statement {}", _queryDefinition);
         try {
             final EPStatement createEPL =
                     esperEngine.getEPAdministrator().createEPL(_queryDefinition.getQuery(),
                             _queryDefinition.getName());
             return createEPL;
         } catch (final RuntimeException e) {
-            LOGGER.error("Query invalid : ", e);
+            LOGGER.error("Query invalid : " + _queryDefinition, e);
             throw e;
         }
         
@@ -108,15 +110,17 @@ public final class EsperEngineBean implements IEsperEngine
     public void createOrUpdateEPLQuery(final IQueryDefinition _definition) {
     
     
-        LOGGER.info("Registering an esper query {} : {}", _definition.getQuery(),
+        Validate.notNull(_definition);
+        
+        LOGGER.debug("Registering an esper query {} : {}", _definition.getQuery(),
                 _definition.getName());
         if (existEPL(_definition.getQuery())) {
-            LOGGER.info("--> Replacing an esper query {} : {}", _definition.getQuery(),
+            LOGGER.debug("--> Replacing an esper query {} : {}", _definition.getQuery(),
                     _definition.getName());
             createEPL(_definition);
             return;
         }
-        LOGGER.info("--> Creating a new esper query {} : {}", _definition.getQuery(),
+        LOGGER.debug("--> Creating a new esper query {} : {}", _definition.getQuery(),
                 _definition.getName());
         createEPL(_definition);
     }
@@ -176,7 +180,7 @@ public final class EsperEngineBean implements IEsperEngine
     
     
         LOGGER.trace("Requesting esper statement {}", _statementName);
-        
+        Validate.notEmpty(_statementName);
         return esperEngine.getEPAdministrator().getStatement(_statementName);
     }
     
@@ -207,6 +211,7 @@ public final class EsperEngineBean implements IEsperEngine
     public EPStatement getStatementOrFail(final String _measureName) {
     
     
+        Validate.notEmpty(_measureName);
         final EPStatement statement = getStatement(_measureName);
         if (statement == null) { throw new EsperStatementNotFoundException(_measureName); }
         return statement;
@@ -221,7 +226,7 @@ public final class EsperEngineBean implements IEsperEngine
     public void init() {
     
     
-        LOGGER.info("Initialization of Esper Engine");
+        LOGGER.debug("Initialization of Esper Engine");
         final Configuration config = new Configuration();
         config.getEngineDefaults().getExecution().setPrioritized(true);
         
@@ -256,11 +261,11 @@ public final class EsperEngineBean implements IEsperEngine
         esperEngine.addServiceStateListener(new EPServiceStateListener1());
         esperEngine.addStatementStateListener(new EPStatementStateListener1());
         LOGGER.info("Esper engine created : " + esperEngine);
-        LOGGER.info("Creation of notification listener");
+        LOGGER.debug("Creation of notification listener");
         final EsperDebugReactorListener esperDebugReactorListener = new EsperDebugReactorListener();
         esperDebugReactorListener.setEsperEngine(this);
         esperDebugReactorListener.init();
-        LOGGER.info("Esper notification listener created");
+        LOGGER.debug("Esper notification listener created");
     }
     
     
@@ -275,7 +280,9 @@ public final class EsperEngineBean implements IEsperEngine
     public void registerListener(final String _statementName, final UpdateListener _updateListener) {
     
     
-        LOGGER.info("Registering listener on {}", _statementName);
+        Validate.notEmpty(_statementName);
+        Validate.notNull(_updateListener);
+        LOGGER.debug("Registering listener on {}", _statementName);
         final EPStatement statement = getStatement(_statementName);
         if (statement == null) { throw new EsperStatementNotFoundException(_statementName); }
         statement.addListener(_updateListener);

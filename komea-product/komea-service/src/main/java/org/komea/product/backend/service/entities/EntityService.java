@@ -79,8 +79,8 @@ public final class EntityService implements IEntityService
         final List<BaseEntity> entities = new ArrayList<BaseEntity>(_entityKeys.size());
         switch (_entityType) {
             case PERSON:
-                final List<Person> persons = personService.getPersons(_entityKeys);
-                entities.addAll(personService.personsToBaseEntities(persons));
+                final List<Person> persons = personService.searchPersonWithGivenLogin(_entityKeys);
+                entities.addAll(personService.convertPersonsToBaseEntities(persons));
                 break;
             case TEAM:
             case DEPARTMENT:
