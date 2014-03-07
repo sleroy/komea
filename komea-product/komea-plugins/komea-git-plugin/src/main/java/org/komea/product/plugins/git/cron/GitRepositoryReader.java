@@ -1,5 +1,5 @@
 
-package org.komea.product.plugins.git.utils;
+package org.komea.product.plugins.git.cron;
 
 
 
@@ -23,8 +23,12 @@ import org.eclipse.jgit.transport.FetchResult;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.dto.EventSimpleDto;
-import org.komea.product.plugins.git.bean.GitEventFactory;
 import org.komea.product.plugins.git.model.GitRepo;
+import org.komea.product.plugins.git.repositories.api.IGitCloner;
+import org.komea.product.plugins.git.repositories.api.IGitRepositoryReader;
+import org.komea.product.plugins.git.utils.CommitBranchAssociationPredicate;
+import org.komea.product.plugins.git.utils.GitEventFactory;
+import org.komea.product.plugins.git.utils.GitRepositoryReaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +41,7 @@ import com.google.common.base.Strings;
  * 
  * @author sleroy
  */
-public class GitRepositoryReader
+public class GitRepositoryReader implements IGitRepositoryReader
 {
     
     
@@ -50,7 +54,7 @@ public class GitRepositoryReader
     
     private final GitRepo           fetch;
     
-    private final GitCloner         gitCloner;
+    private final IGitCloner         gitCloner;
     
     private final IPersonService    personService;
     
@@ -69,7 +73,7 @@ public class GitRepositoryReader
     public GitRepositoryReader(
             final GitRepo _fetch,
             final IEventPushService _esperEngine,
-            final GitCloner _gitCloner,
+            final IGitCloner _gitCloner,
             final IPersonService _personService) {
     
     
@@ -262,9 +266,10 @@ public class GitRepositoryReader
     }
     
     
-    /**
-     * Fetch the repository and check updates.
+    /* (non-Javadoc)
+     * @see org.komea.product.plugins.git.utils.IGitRepositoryReader#feed()
      */
+    @Override
     public void feed() {
     
     

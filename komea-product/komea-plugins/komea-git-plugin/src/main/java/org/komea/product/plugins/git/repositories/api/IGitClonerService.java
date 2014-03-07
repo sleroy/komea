@@ -2,12 +2,11 @@
  * 
  */
 
-package org.komea.product.plugins.git.bean;
+package org.komea.product.plugins.git.repositories.api;
 
 
 
 import org.komea.product.plugins.git.model.GitRepo;
-import org.komea.product.plugins.git.utils.GitCloner;
 
 
 
@@ -25,5 +24,5 @@ public interface IGitClonerService
      * 
      * @return the cloner.
      */
-    GitCloner getOrCreate(GitRepo _gitID);
+    IGitCloner getOrCreate(GitRepo _gitID);
 }

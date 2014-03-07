@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.plugins.git.utils.api;
+package org.komea.product.plugins.git.repositories.api;
 
 
 /**

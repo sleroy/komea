@@ -16,6 +16,7 @@ import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.plugins.git.cron.GitCronJob;
 import org.komea.product.plugins.git.cron.GitScheduleCronJob;
 import org.komea.product.plugins.git.model.GitRepo;
+import org.komea.product.plugins.git.repositories.api.IGitClonerService;
 import org.komea.product.plugins.git.repositories.api.IGitRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

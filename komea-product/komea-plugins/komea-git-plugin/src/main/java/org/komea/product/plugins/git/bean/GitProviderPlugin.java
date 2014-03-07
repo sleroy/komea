@@ -19,6 +19,7 @@ import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Setting;
 import org.komea.product.plugins.git.cron.GitCronJob;
+import org.komea.product.plugins.git.repositories.api.IGitClonerService;
 import org.komea.product.plugins.git.repositories.api.IGitRepository;
 import org.quartz.JobDataMap;
 import org.slf4j.Logger;

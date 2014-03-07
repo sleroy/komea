@@ -1,5 +1,5 @@
 
-package org.komea.product.plugins.git.utils;
+package org.komea.product.plugins.git.cron;
 
 
 
@@ -13,12 +13,13 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.TextProgressMonitor;
 import org.komea.product.plugins.git.model.GitRepo;
+import org.komea.product.plugins.git.repositories.api.IGitCloner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 
-public class GitCloner
+public class GitCloner implements IGitCloner
 {
     
     
@@ -51,6 +52,10 @@ public class GitCloner
     }
     
     
+    /* (non-Javadoc)
+     * @see org.komea.product.plugins.git.utils.IGitCloner#getGit()
+     */
+    @Override
     public Git getGit() {
     
     
@@ -58,6 +63,10 @@ public class GitCloner
     }
     
     
+    /* (non-Javadoc)
+     * @see org.komea.product.plugins.git.utils.IGitCloner#getGitRepositoryFolder()
+     */
+    @Override
     public File getGitRepositoryFolder() {
     
     
@@ -65,6 +74,10 @@ public class GitCloner
     }
     
     
+    /* (non-Javadoc)
+     * @see org.komea.product.plugins.git.utils.IGitCloner#getRepository()
+     */
+    @Override
     public Repository getRepository() {
     
     
@@ -72,6 +85,10 @@ public class GitCloner
     }
     
     
+    /* (non-Javadoc)
+     * @see org.komea.product.plugins.git.utils.IGitCloner#getStorageFolder()
+     */
+    @Override
     public File getStorageFolder() {
     
     

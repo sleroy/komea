@@ -65,6 +65,7 @@ public class GitClonerServiceTest
                 new File("/tmp"));
         gitClonerService.initialize();
         Assert.assertEquals("/tmp", gitClonerService.getSystem().getAbsolutePath());
+        
     }
     
 }

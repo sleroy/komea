@@ -1,5 +1,5 @@
 
-package org.komea.product.plugins.git.bean;
+package org.komea.product.plugins.git.utils;
 
 
 

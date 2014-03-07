@@ -131,13 +131,6 @@
 	<dependencies>
 
 		<dependency>
-			<artifactId>testng</artifactId>
-			<groupId>org.testng</groupId>
-			<version>6.1.1</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<artifactId>junit</artifactId>
 			<groupId>junit</groupId>
 			<scope>test</scope>

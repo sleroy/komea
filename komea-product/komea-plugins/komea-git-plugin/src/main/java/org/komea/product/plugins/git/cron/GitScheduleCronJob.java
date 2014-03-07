@@ -30,11 +30,6 @@ public class GitScheduleCronJob implements Job
     
     
     /**
-     * 
-     */
-    private static final String KEY_REPO = "repo";
-
-    /**
      * Cron value for GIT Provider.
      */
     private static final String GIT_CRON_VALUE = "0 0/1 * * * ?";
@@ -47,9 +42,14 @@ public class GitScheduleCronJob implements Job
     /**
      * 
      */
+    private static final String KEY_REPO       = "repo";
+    
+    /**
+     * 
+     */
     private static final String KEY_REPOSITORY = "repository";
     
-    private static final Logger LOGGER         = LoggerFactory.getLogger("git-schedule");
+    private static final Logger LOGGER         = LoggerFactory.getLogger("git-scheduler");
     
     
     
@@ -66,12 +66,16 @@ public class GitScheduleCronJob implements Job
     }
     
     
-    public GitScheduleCronJob() {
-    
-    
-        super();
-    }
-    
+    /**
+     * Check if a repository has an associated cron job.
+     * 
+     * @param repository
+     *            the repository
+     * @param cronRegistryService
+     *            the cron registry service.
+     * @param _jobDataMap
+     *            the job data map.
+     */
     
     public void checkIfGitRepositoryHaveJobs(
             final IGitRepository repository,
@@ -79,9 +83,10 @@ public class GitScheduleCronJob implements Job
             final JobDataMap _jobDataMap) {
     
     
-        LOGGER.debug("@@@@@ GIT CRON SCHEDULER @@@@@@@");
+        LOGGER.info("@@@@@ GIT CRON SCHEDULER @@@@@@@");
         final List<GitRepo> feeds = repository.getAllRepositories();
         for (final GitRepo fetch : feeds) {
+            Validate.notNull(fetch);
             if (!repository.isAssociatedToCron(fetch)) {
                 LOGGER.info("Creating Cron for the git repository {}", fetch.getRepoName());
                 final String cronName = repository.initializeCronName(fetch);
@@ -92,7 +97,7 @@ public class GitScheduleCronJob implements Job
             }
         }
         
-        LOGGER.debug("@@@@@                     @@@@@@@");
+        LOGGER.info("@@@@@                     @@@@@@@");
     }
     
     
@@ -104,9 +109,10 @@ public class GitScheduleCronJob implements Job
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
     
     
-        final IGitRepository repository = (IGitRepository) _context.get(KEY_REPOSITORY);
+        final IGitRepository repository =
+                (IGitRepository) _context.getMergedJobDataMap().get(KEY_REPOSITORY);
         final ICronRegistryService cronRegistryService =
-                (ICronRegistryService) _context.get(KEY_CRON);
+                (ICronRegistryService) _context.getMergedJobDataMap().get(KEY_CRON);
         Validate.notNull(repository);
         Validate.notNull(cronRegistryService);
         checkIfGitRepositoryHaveJobs(repository, cronRegistryService,

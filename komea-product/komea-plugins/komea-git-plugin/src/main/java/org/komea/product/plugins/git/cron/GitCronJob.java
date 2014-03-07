@@ -8,13 +8,13 @@ package org.komea.product.plugins.git.cron;
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.esper.IEventPushService;
-import org.komea.product.plugins.git.bean.GitEventFactory;
-import org.komea.product.plugins.git.bean.IGitClonerService;
 import org.komea.product.plugins.git.model.GitRepo;
+import org.komea.product.plugins.git.repositories.api.IGitCloner;
+import org.komea.product.plugins.git.repositories.api.IGitClonerService;
 import org.komea.product.plugins.git.repositories.api.IGitRepository;
-import org.komea.product.plugins.git.utils.GitCloner;
-import org.komea.product.plugins.git.utils.GitRepositoryReader;
+import org.komea.product.plugins.git.utils.GitEventFactory;
 import org.quartz.Job;
+import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -57,13 +57,8 @@ public class GitCronJob implements Job
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
     
     
-        final IEventPushService esperEngine = (IEventPushService) _context.get(KEY_ESPER_ENGINE);
-        final IGitRepository repository = (IGitRepository) _context.get(KEY_REPOSITORY);
-        final IGitClonerService gitcloner = (IGitClonerService) _context.get(KEY_GITCLONER);
-        final GitRepo fetch = (GitRepo) _context.get(KEY_REPO);
-        final IPersonService personService = (IPersonService) _context.get(KEY_PERSON_SERVICE);
-        
-        executeGitCron(esperEngine, repository, gitcloner, fetch, personService);
+        final JobDataMap mergedJobDataMap = _context.getMergedJobDataMap();
+        runCronTaskWithJobDataMap(mergedJobDataMap);
         
         
     }
@@ -101,7 +96,7 @@ public class GitCronJob implements Job
             
             LOGGER.debug("Fetching GitRepo feed  : {} {}", gitRepositoryDefinition.getRepoName(),
                     gitRepositoryDefinition.getUrl());
-            final GitCloner gitCloner = gitcloner.getOrCreate(gitRepositoryDefinition);
+            final IGitCloner gitCloner = gitcloner.getOrCreate(gitRepositoryDefinition);
             
             
             new GitRepositoryReader(gitRepositoryDefinition, esperEngine, gitCloner, _personService)
@@ -113,5 +108,20 @@ public class GitCronJob implements Job
         } finally {
             repository.saveOrUpdate(gitRepositoryDefinition);
         }
+    }
+    
+    
+    private void runCronTaskWithJobDataMap(final JobDataMap mergedJobDataMap) {
+    
+    
+        final IEventPushService esperEngine =
+                (IEventPushService) mergedJobDataMap.get(KEY_ESPER_ENGINE);
+        final IGitRepository repository = (IGitRepository) mergedJobDataMap.get(KEY_REPOSITORY);
+        final IGitClonerService gitcloner = (IGitClonerService) mergedJobDataMap.get(KEY_GITCLONER);
+        final GitRepo fetch = (GitRepo) mergedJobDataMap.get(KEY_REPO);
+        final IPersonService personService =
+                (IPersonService) mergedJobDataMap.get(KEY_PERSON_SERVICE);
+        
+        executeGitCron(esperEngine, repository, gitcloner, fetch, personService);
     }
 }
