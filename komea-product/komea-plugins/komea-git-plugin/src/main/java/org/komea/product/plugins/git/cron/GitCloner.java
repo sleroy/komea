@@ -12,7 +12,7 @@ import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.TextProgressMonitor;
-import org.komea.product.plugins.git.model.GitRepo;
+import org.komea.product.plugins.git.model.GitRepositoryDefinition;
 import org.komea.product.plugins.git.repositories.api.IGitCloner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ public class GitCloner implements IGitCloner
     private Repository          fileRepository;
     
     private Git                 git;
-    private final GitRepo       gitRepo;
+    private final GitRepositoryDefinition       gitRepo;
     private File                gitRepositoryFolder;
     private final File          storageFolder;
     
@@ -40,19 +40,20 @@ public class GitCloner implements IGitCloner
      * @param _repositoryName
      * @param _repositoryURL
      */
-    public GitCloner(final File _storageFolder, final GitRepo _gitRepo) {
+    public GitCloner(final File _storageFolder, final GitRepositoryDefinition _gitRepo) {
     
     
         super();
         Validate.notNull(_storageFolder);
         Validate.notNull(_gitRepo);
-        Validate.notNull(_gitRepo.getId());
+        Validate.notNull(_gitRepo.getKey());
         storageFolder = _storageFolder;
         gitRepo = _gitRepo;
     }
     
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.git.utils.IGitCloner#getGit()
      */
     @Override
@@ -63,7 +64,8 @@ public class GitCloner implements IGitCloner
     }
     
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.git.utils.IGitCloner#getGitRepositoryFolder()
      */
     @Override
@@ -74,7 +76,8 @@ public class GitCloner implements IGitCloner
     }
     
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.git.utils.IGitCloner#getRepository()
      */
     @Override
@@ -85,7 +88,8 @@ public class GitCloner implements IGitCloner
     }
     
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.git.utils.IGitCloner#getStorageFolder()
      */
     @Override
@@ -126,7 +130,7 @@ public class GitCloner implements IGitCloner
     private void initializeStorageFolder() {
     
     
-        gitRepositoryFolder = new File(storageFolder, "repo" + gitRepo.getId());
+        gitRepositoryFolder = new File(storageFolder, "repo" + gitRepo.getKey());
         try {
             FileUtils.deleteDirectory(gitRepositoryFolder);
         } catch (final IOException e) {

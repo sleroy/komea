@@ -12,7 +12,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.service.fs.IKomeaFS;
-import org.komea.product.plugins.git.model.GitRepo;
+import org.komea.product.plugins.git.model.GitRepositoryDefinition;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -40,16 +40,19 @@ public class GitClonerServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.plugins.git.bean.GitClonerService#getOrCreate(org.komea.product.plugins.git.model.GitRepo)}.
+     * Test method for
+     * {@link org.komea.product.plugins.git.bean.GitClonerService#getOrCreate(org.komea.product.plugins.git.model.GitRepositoryDefinition)}.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testGetOrCreate() throws Exception {
     
     
         // Should create a git cloner but fail on initializeation.
-        final GitRepo gitID = new GitRepo();
-        gitID.setId(1L);
-        gitClonerService.setSystem(new File("target/tmp"));
+        final GitRepositoryDefinition gitID =
+                GitRepositoryDefinition.newGitRepository("DEMO1", "http://");
+        gitID.setKey("DEMO");
+        Mockito.when(gitClonerService.getSystem()).thenReturn(new File("target/tmp"));
+        
         gitClonerService.getOrCreate(gitID);
     }
     
@@ -63,7 +66,7 @@ public class GitClonerServiceTest
     
         Mockito.when(komeaFS.getFileSystemFolder("git-clone-repository")).thenReturn(
                 new File("/tmp"));
-        gitClonerService.initialize();
+        
         Assert.assertEquals("/tmp", gitClonerService.getSystem().getAbsolutePath());
         
     }

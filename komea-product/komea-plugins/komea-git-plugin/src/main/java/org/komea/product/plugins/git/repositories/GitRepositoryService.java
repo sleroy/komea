@@ -11,8 +11,8 @@ import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.business.IDAOObjectStorage;
 import org.komea.product.backend.service.plugins.IPluginStorageService;
-import org.komea.product.plugins.git.model.GitRepo;
-import org.komea.product.plugins.git.repositories.api.IGitRepository;
+import org.komea.product.plugins.git.model.GitRepositoryDefinition;
+import org.komea.product.plugins.git.repositories.api.IGitRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,24 +24,24 @@ import org.springframework.stereotype.Service;
  * @author sleroy
  */
 @Service
-public class GitRepository implements IGitRepository
+public class GitRepositoryService implements IGitRepositoryService
 {
     
     
-    private final Map<Long, String>    cronTasks = new HashMap();
-    private IDAOObjectStorage<GitRepo> daoStorage;
+    private final Map<String, String>                  cronTasks = new HashMap();
+    private IDAOObjectStorage<GitRepositoryDefinition> daoStorage;
     
     
     @Autowired
-    private IPluginStorageService      pluginStorageService;
+    private IPluginStorageService                      pluginStorageService;
     
     
     
     @Override
-    public GitRepo findByName(final String _feedName) {
+    public GitRepositoryDefinition findByName(final String _feedName) {
     
     
-        for (final GitRepo feed : daoStorage.selectAll()) {
+        for (final GitRepositoryDefinition feed : daoStorage.selectAll()) {
             if (_feedName.equals(feed.getRepoName())) { return feed; }
         }
         return null;
@@ -56,17 +56,17 @@ public class GitRepository implements IGitRepository
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.git.repositories.api.IGitRepository#getAllRepositories()
+     * @see org.komea.product.plugins.git.repositories.api.IGitRepositoryService#getAllRepositories()
      */
     @Override
-    public List<GitRepo> getAllRepositories() {
+    public List<GitRepositoryDefinition> getAllRepositories() {
     
     
         return getDAO().selectAll();
     }
     
     
-    public IDAOObjectStorage<GitRepo> getDAO() {
+    public IDAOObjectStorage<GitRepositoryDefinition> getDAO() {
     
     
         return daoStorage;
@@ -76,7 +76,7 @@ public class GitRepository implements IGitRepository
     /**
      * @return the daoStorage
      */
-    public IDAOObjectStorage<GitRepo> getDaoStorage() {
+    public IDAOObjectStorage<GitRepositoryDefinition> getDaoStorage() {
     
     
         return daoStorage;
@@ -94,20 +94,23 @@ public class GitRepository implements IGitRepository
     public void init() {
     
     
-        daoStorage = pluginStorageService.registerDAOStorage("rss_plugin", GitRepo.class);
+        daoStorage =
+                pluginStorageService
+                        .registerDAOStorage("git_plugin", GitRepositoryDefinition.class);
     }
     
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.git.repositories.api.IGitRepository#initializeCronName(org.komea.product.plugins.git.model.GitRepo)
+     * @see org.komea.product.plugins.git.repositories.api.IGitRepositoryService#initializeCronName(org.komea.product.plugins.git.model.
+     * GitRepositoryDefinition)
      */
     @Override
-    public synchronized String initializeCronName(final GitRepo _fetch) {
+    public synchronized String initializeCronName(final GitRepositoryDefinition _fetch) {
     
     
         final String cronName = "GIT_REPO_CRON_" + _fetch.getRepoName();
-        cronTasks.put(_fetch.getId(), cronName);
+        cronTasks.put(_fetch.getKey(), cronName);
         getDAO().saveOrUpdate(_fetch);
         return cronName;
     }
@@ -115,22 +118,24 @@ public class GitRepository implements IGitRepository
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.git.repositories.api.IGitRepository#isAssociatedToCron(org.komea.product.plugins.git.model.GitRepo)
+     * @see org.komea.product.plugins.git.repositories.api.IGitRepositoryService#isAssociatedToCron(org.komea.product.plugins.git.model.
+     * GitRepositoryDefinition)
      */
     @Override
-    public boolean isAssociatedToCron(final GitRepo _fetch) {
+    public boolean isAssociatedToCron(final GitRepositoryDefinition _fetch) {
     
     
-        return cronTasks.containsKey(_fetch.getId());
+        return cronTasks.containsKey(_fetch.getKey());
     }
     
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.git.repositories.api.IGitRepository#saveOrUpdate(org.komea.product.plugins.git.model.GitRepo)
+     * @see org.komea.product.plugins.git.repositories.api.IGitRepositoryService#saveOrUpdate(org.komea.product.plugins.git.model.
+     * GitRepositoryDefinition)
      */
     @Override
-    public void saveOrUpdate(final GitRepo _gitRepository) {
+    public void saveOrUpdate(final GitRepositoryDefinition _gitRepository) {
     
     
         getDAO().saveOrUpdate(_gitRepository);

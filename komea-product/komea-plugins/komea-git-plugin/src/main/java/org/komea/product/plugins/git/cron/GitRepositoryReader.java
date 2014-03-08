@@ -23,7 +23,7 @@ import org.eclipse.jgit.transport.FetchResult;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.dto.EventSimpleDto;
-import org.komea.product.plugins.git.model.GitRepo;
+import org.komea.product.plugins.git.model.GitRepositoryDefinition;
 import org.komea.product.plugins.git.repositories.api.IGitCloner;
 import org.komea.product.plugins.git.repositories.api.IGitRepositoryReader;
 import org.komea.product.plugins.git.utils.CommitBranchAssociationPredicate;
@@ -52,7 +52,7 @@ public class GitRepositoryReader implements IGitRepositoryReader
     private final IEventPushService esperEngine;
     private final GitEventFactory   eventFactory = new GitEventFactory();
     
-    private final GitRepo           fetch;
+    private final GitRepositoryDefinition           fetch;
     
     private final IGitCloner         gitCloner;
     
@@ -71,7 +71,7 @@ public class GitRepositoryReader implements IGitRepositoryReader
      */
     
     public GitRepositoryReader(
-            final GitRepo _fetch,
+            final GitRepositoryDefinition _fetch,
             final IEventPushService _esperEngine,
             final IGitCloner _gitCloner,
             final IPersonService _personService) {

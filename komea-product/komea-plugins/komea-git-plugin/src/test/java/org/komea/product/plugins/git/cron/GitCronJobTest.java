@@ -11,10 +11,12 @@ import java.io.File;
 import org.junit.Test;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.esper.IEventPushService;
+import org.komea.product.backend.service.fs.IKomeaFS;
+import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.model.Person;
 import org.komea.product.plugins.git.bean.GitClonerService;
-import org.komea.product.plugins.git.model.GitRepo;
-import org.komea.product.plugins.git.repositories.api.IGitRepository;
+import org.komea.product.plugins.git.model.GitRepositoryDefinition;
+import org.komea.product.plugins.git.repositories.api.IGitRepositoryService;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -40,19 +42,19 @@ public class GitCronJobTest
         
         final IEventPushService esperEngine =
                 Mockito.mock(IEventPushService.class, Mockito.withSettings().verboseLogging());
-        final IGitRepository repository = Mockito.mock(IGitRepository.class);
+        final IGitRepositoryService repository = Mockito.mock(IGitRepositoryService.class);
         final GitClonerService gitcloner = new GitClonerService();
-        
+        final IKomeaFS komeaFS = Mockito.mock(IKomeaFS.class);
+        gitcloner.setKomeaFS(komeaFS);
         
         final File system = new File("target/tmp");
         system.mkdirs();
-        gitcloner.setSystem(system);
+        Mockito.when(komeaFS.getFileSystemFolder(Matchers.anyString())).thenReturn(system);
         
         
-        final GitRepo gitRepo = new GitRepo();
-        gitRepo.setId(1L);
-        gitRepo.setRepoName("MyBatis generator");
-        gitRepo.setUrl("https://github.com/sleroy/generator.git");
+        final GitRepositoryDefinition gitRepo =
+                GitRepositoryDefinition.newGitRepository("MyBatis generator",
+                        "https://github.com/sleroy/generator.git");
         gitRepo.setProjectAssociated("MyBatis generator");
         
         final IPersonService personService =
@@ -75,6 +77,8 @@ public class GitCronJobTest
                     }
                 });
         gitCronJob.executeGitCron(esperEngine, repository, gitcloner, gitRepo, personService);
+        Mockito.verify(esperEngine, Mockito.atLeastOnce()).sendEventDto(
+                Matchers.any(EventSimpleDto.class));
     }
     
 }

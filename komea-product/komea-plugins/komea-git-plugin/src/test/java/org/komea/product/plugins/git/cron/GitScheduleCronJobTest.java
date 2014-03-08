@@ -13,10 +13,8 @@ import java.util.Collections;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.service.cron.ICronRegistryService;
-import org.komea.product.plugins.git.cron.GitCronJob;
-import org.komea.product.plugins.git.cron.GitScheduleCronJob;
-import org.komea.product.plugins.git.model.GitRepo;
-import org.komea.product.plugins.git.repositories.api.IGitRepository;
+import org.komea.product.plugins.git.model.GitRepositoryDefinition;
+import org.komea.product.plugins.git.repositories.api.IGitRepositoryService;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.quartz.JobDataMap;
@@ -32,7 +30,7 @@ public class GitScheduleCronJobTest
     
     /**
      * Test method for
-     * {@link org.komea.product.plugins.git.cron.GitScheduleCronJob#checkIfGitRepositoryHaveJobs(org.quartz.JobExecutionContext, org.komea.product.plugins.git.repositories.api.IGitRepository, org.komea.product.backend.service.cron.ICronRegistryService)}
+     * {@link org.komea.product.plugins.git.cron.GitScheduleCronJob#checkIfGitRepositoryHaveJobs(org.quartz.JobExecutionContext, org.komea.product.plugins.git.repositories.api.IGitRepositoryService, org.komea.product.backend.service.cron.ICronRegistryService)}
      * .
      */
     @Test
@@ -40,10 +38,11 @@ public class GitScheduleCronJobTest
     
     
         final GitScheduleCronJob gitScheduleCronJob = new GitScheduleCronJob();
-        final IGitRepository repository = mock(IGitRepository.class);
+        final IGitRepositoryService repository = mock(IGitRepositoryService.class);
         final ICronRegistryService registry = mock(ICronRegistryService.class);
         final JobDataMap _dataMap = mock(JobDataMap.class);
-        final GitRepo gitRepo = new GitRepo();
+        final GitRepositoryDefinition gitRepo =
+                GitRepositoryDefinition.newGitRepository("DEMO", "http://");
         Mockito.when(repository.getAllRepositories())
                 .thenReturn(Collections.singletonList(gitRepo));
         // We want to force association
@@ -58,7 +57,7 @@ public class GitScheduleCronJobTest
     
     /**
      * Test method for
-     * {@link org.komea.product.plugins.git.cron.GitScheduleCronJob#prepareJobMapForCron(org.quartz.JobDataMap, org.komea.product.plugins.git.model.GitRepo)}
+     * {@link org.komea.product.plugins.git.cron.GitScheduleCronJob#prepareJobMapForCron(org.quartz.JobDataMap, org.komea.product.plugins.git.model.GitRepositoryDefinition)}
      * .
      */
     @Test
@@ -66,7 +65,8 @@ public class GitScheduleCronJobTest
     
     
         final GitScheduleCronJob gitScheduleCronJob = new GitScheduleCronJob();
-        final GitRepo gitRepo = new GitRepo();
+        final GitRepositoryDefinition gitRepo =
+                GitRepositoryDefinition.newGitRepository("DEMO", "http://");
         final JobDataMap parentDataMap = new JobDataMap();
         parentDataMap.put("v1", "example");
         final JobDataMap resDataMap =

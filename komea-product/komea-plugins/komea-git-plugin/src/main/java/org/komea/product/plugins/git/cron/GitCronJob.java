@@ -8,10 +8,10 @@ package org.komea.product.plugins.git.cron;
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.esper.IEventPushService;
-import org.komea.product.plugins.git.model.GitRepo;
+import org.komea.product.plugins.git.model.GitRepositoryDefinition;
 import org.komea.product.plugins.git.repositories.api.IGitCloner;
 import org.komea.product.plugins.git.repositories.api.IGitClonerService;
-import org.komea.product.plugins.git.repositories.api.IGitRepository;
+import org.komea.product.plugins.git.repositories.api.IGitRepositoryService;
 import org.komea.product.plugins.git.utils.GitEventFactory;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -79,9 +79,9 @@ public class GitCronJob implements Job
      */
     public void executeGitCron(
             final IEventPushService esperEngine,
-            final IGitRepository repository,
+            final IGitRepositoryService repository,
             final IGitClonerService gitcloner,
-            final GitRepo gitRepositoryDefinition,
+            final GitRepositoryDefinition gitRepositoryDefinition,
             final IPersonService _personService) {
     
     
@@ -94,7 +94,7 @@ public class GitCronJob implements Job
         
         try {
             
-            LOGGER.debug("Fetching GitRepo feed  : {} {}", gitRepositoryDefinition.getRepoName(),
+            LOGGER.debug("Fetching GitRepositoryDefinition feed  : {} {}", gitRepositoryDefinition.getRepoName(),
                     gitRepositoryDefinition.getUrl());
             final IGitCloner gitCloner = gitcloner.getOrCreate(gitRepositoryDefinition);
             
@@ -116,9 +116,9 @@ public class GitCronJob implements Job
     
         final IEventPushService esperEngine =
                 (IEventPushService) mergedJobDataMap.get(KEY_ESPER_ENGINE);
-        final IGitRepository repository = (IGitRepository) mergedJobDataMap.get(KEY_REPOSITORY);
+        final IGitRepositoryService repository = (IGitRepositoryService) mergedJobDataMap.get(KEY_REPOSITORY);
         final IGitClonerService gitcloner = (IGitClonerService) mergedJobDataMap.get(KEY_GITCLONER);
-        final GitRepo fetch = (GitRepo) mergedJobDataMap.get(KEY_REPO);
+        final GitRepositoryDefinition fetch = (GitRepositoryDefinition) mergedJobDataMap.get(KEY_REPO);
         final IPersonService personService =
                 (IPersonService) mergedJobDataMap.get(KEY_PERSON_SERVICE);
         

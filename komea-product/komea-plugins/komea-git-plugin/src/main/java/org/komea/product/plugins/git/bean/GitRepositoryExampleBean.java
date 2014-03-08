@@ -6,8 +6,8 @@ package org.komea.product.plugins.git.bean;
 import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.service.ISettingService;
-import org.komea.product.plugins.git.model.GitRepo;
-import org.komea.product.plugins.git.repositories.api.IGitRepository;
+import org.komea.product.plugins.git.model.GitRepositoryDefinition;
+import org.komea.product.plugins.git.repositories.api.IGitRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +28,7 @@ public class GitRepositoryExampleBean
     private static final String GIT_REPOSITORY_SAMPLES = "GIT_REPOSITORY_SAMPLES";
     
     @Autowired
-    private IGitRepository      repository;
+    private IGitRepositoryService      repository;
     
     @Autowired
     private ISettingService     settingsService;
@@ -60,9 +60,8 @@ public class GitRepositoryExampleBean
     private void registerRepo(final String _feedName, final String _url, final String _project) {
     
     
-        final GitRepo gitRepository = new GitRepo();
-        gitRepository.setRepoName(_feedName);
-        gitRepository.setUrl(_url);
+        final GitRepositoryDefinition gitRepository =
+                GitRepositoryDefinition.newGitRepository(_feedName, _url);
         gitRepository.setProjectAssociated(_project);
         repository.saveOrUpdate(gitRepository);
         

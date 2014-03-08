@@ -18,9 +18,9 @@ import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Setting;
-import org.komea.product.plugins.git.cron.GitCronJob;
+import org.komea.product.plugins.git.cron.GitScheduleCronJob;
 import org.komea.product.plugins.git.repositories.api.IGitClonerService;
-import org.komea.product.plugins.git.repositories.api.IGitRepository;
+import org.komea.product.plugins.git.repositories.api.IGitRepositoryService;
 import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,7 +140,7 @@ public class GitProviderPlugin implements org.komea.product.backend.service.ISet
     
     
     @Autowired
-    private IGitRepository       gitRepository;
+    private IGitRepositoryService       gitRepository;
     
     
     @Autowired
@@ -190,7 +190,7 @@ public class GitProviderPlugin implements org.komea.product.backend.service.ISet
     }
     
     
-    public IGitRepository getGitRepository() {
+    public IGitRepositoryService getGitRepository() {
     
     
         return gitRepository;
@@ -226,8 +226,8 @@ public class GitProviderPlugin implements org.komea.product.backend.service.ISet
         registry.create(GIT_PROVIDER_PERIOD, GIT_CRON_VALUE, "java.lang.String",
                 "Defines the cron value to fetch rss feeds");
         registry.registerListener(GIT_PROVIDER_PERIOD, this);
-        cronRegistryService.registerCronTask(GIT_CRON_JOB, GIT_CRON_VALUE, GitCronJob.class,
-                properties);
+        cronRegistryService.registerCronTask(GIT_CRON_JOB, GIT_CRON_VALUE,
+                GitScheduleCronJob.class, properties);
         
     }
     
@@ -286,7 +286,7 @@ public class GitProviderPlugin implements org.komea.product.backend.service.ISet
     }
     
     
-    public void setGitRepository(final IGitRepository _gitRepository) {
+    public void setGitRepository(final IGitRepositoryService _gitRepository) {
     
     
         gitRepository = _gitRepository;

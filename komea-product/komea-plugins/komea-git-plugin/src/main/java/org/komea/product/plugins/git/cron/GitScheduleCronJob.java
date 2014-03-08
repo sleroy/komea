@@ -9,8 +9,8 @@ import java.util.List;
 
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.service.cron.ICronRegistryService;
-import org.komea.product.plugins.git.model.GitRepo;
-import org.komea.product.plugins.git.repositories.api.IGitRepository;
+import org.komea.product.plugins.git.model.GitRepositoryDefinition;
+import org.komea.product.plugins.git.repositories.api.IGitRepositoryService;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -78,14 +78,14 @@ public class GitScheduleCronJob implements Job
      */
     
     public void checkIfGitRepositoryHaveJobs(
-            final IGitRepository repository,
+            final IGitRepositoryService repository,
             final ICronRegistryService cronRegistryService,
             final JobDataMap _jobDataMap) {
     
     
         LOGGER.info("@@@@@ GIT CRON SCHEDULER @@@@@@@");
-        final List<GitRepo> feeds = repository.getAllRepositories();
-        for (final GitRepo fetch : feeds) {
+        final List<GitRepositoryDefinition> feeds = repository.getAllRepositories();
+        for (final GitRepositoryDefinition fetch : feeds) {
             Validate.notNull(fetch);
             if (!repository.isAssociatedToCron(fetch)) {
                 LOGGER.info("Creating Cron for the git repository {}", fetch.getRepoName());
@@ -109,8 +109,8 @@ public class GitScheduleCronJob implements Job
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
     
     
-        final IGitRepository repository =
-                (IGitRepository) _context.getMergedJobDataMap().get(KEY_REPOSITORY);
+        final IGitRepositoryService repository =
+                (IGitRepositoryService) _context.getMergedJobDataMap().get(KEY_REPOSITORY);
         final ICronRegistryService cronRegistryService =
                 (ICronRegistryService) _context.getMergedJobDataMap().get(KEY_CRON);
         Validate.notNull(repository);
@@ -125,7 +125,7 @@ public class GitScheduleCronJob implements Job
      * 
      * @return the job data map.
      */
-    public JobDataMap prepareJobMapForCron(final JobDataMap _parentDataMap, final GitRepo _gitRepo) {
+    public JobDataMap prepareJobMapForCron(final JobDataMap _parentDataMap, final GitRepositoryDefinition _gitRepo) {
     
     
         final JobDataMap properties = new JobDataMap(_parentDataMap.getWrappedMap());

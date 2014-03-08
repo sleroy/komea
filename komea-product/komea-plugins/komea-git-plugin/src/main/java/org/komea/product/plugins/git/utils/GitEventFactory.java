@@ -5,7 +5,7 @@ package org.komea.product.plugins.git.utils;
 
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.model.Person;
-import org.komea.product.plugins.git.model.GitRepo;
+import org.komea.product.plugins.git.model.GitRepositoryDefinition;
 
 
 
@@ -20,7 +20,7 @@ public class GitEventFactory
     
     
     
-    public EventSimpleDto sendBranchNumbers(final GitRepo _repo, final int _number) {
+    public EventSimpleDto sendBranchNumbers(final GitRepositoryDefinition _repo, final int _number) {
     
     
         final EventSimpleDto event = initializeGitEvent(_repo);
@@ -32,7 +32,7 @@ public class GitEventFactory
     }
     
     
-    public EventSimpleDto sendCustomerBranches(final GitRepo _repo, final int _number) {
+    public EventSimpleDto sendCustomerBranches(final GitRepositoryDefinition _repo, final int _number) {
     
     
         final EventSimpleDto event = initializeGitEvent(_repo);
@@ -44,7 +44,7 @@ public class GitEventFactory
     }
     
     
-    public EventSimpleDto sendCustomerTags(final GitRepo _repo, final int _number) {
+    public EventSimpleDto sendCustomerTags(final GitRepositoryDefinition _repo, final int _number) {
     
     
         final EventSimpleDto event = initializeGitEvent(_repo);
@@ -56,7 +56,7 @@ public class GitEventFactory
     }
     
     
-    public EventSimpleDto sendFetchRepository(final GitRepo _repo) {
+    public EventSimpleDto sendFetchRepository(final GitRepositoryDefinition _repo) {
     
     
         final EventSimpleDto event = initializeGitEvent(_repo);
@@ -66,7 +66,7 @@ public class GitEventFactory
     }
     
     
-    public EventSimpleDto sendGitFetchFailed(final GitRepo _repo) {
+    public EventSimpleDto sendGitFetchFailed(final GitRepositoryDefinition _repo) {
     
     
         final EventSimpleDto event = initializeGitEvent(_repo);
@@ -77,7 +77,7 @@ public class GitEventFactory
     
     
     public EventSimpleDto sendNewCommit(
-            final GitRepo _gitRepo,
+            final GitRepositoryDefinition _gitRepo,
             final String _message,
             final Person _person,
             final String _revision) {
@@ -94,7 +94,7 @@ public class GitEventFactory
     
     
     public EventSimpleDto sendNumberTagPerBranch(
-            final GitRepo _repo,
+            final GitRepositoryDefinition _repo,
             final int _number,
             final String _branchName) {
     
@@ -108,7 +108,7 @@ public class GitEventFactory
     }
     
     
-    private EventSimpleDto initializeGitEvent(final GitRepo _repo) {
+    private EventSimpleDto initializeGitEvent(final GitRepositoryDefinition _repo) {
     
     
         final EventSimpleDto event = new EventSimpleDto();

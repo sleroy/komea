@@ -5,7 +5,7 @@ package org.komea.product.plugins.git.repositories.api;
 
 import java.util.List;
 
-import org.komea.product.plugins.git.model.GitRepo;
+import org.komea.product.plugins.git.model.GitRepositoryDefinition;
 
 
 
@@ -14,7 +14,7 @@ import org.komea.product.plugins.git.model.GitRepo;
  * 
  * @author sleroy
  */
-public interface IGitRepository
+public interface IGitRepositoryService
 {
     
     
@@ -25,7 +25,7 @@ public interface IGitRepository
      *            the repository name
      * @return the rss feed.
      */
-    GitRepo findByName(String _name);
+    GitRepositoryDefinition findByName(String _name);
     
     
     /**
@@ -33,7 +33,7 @@ public interface IGitRepository
      * 
      * @return the list of all repositories
      */
-    List<GitRepo> getAllRepositories();
+    List<GitRepositoryDefinition> getAllRepositories();
     
     
     /**
@@ -43,13 +43,13 @@ public interface IGitRepository
      *            the git repository.
      * @return the cron name.
      */
-    String initializeCronName(GitRepo _fetch);
+    String initializeCronName(GitRepositoryDefinition _fetch);
     
     
     /**
      * Returns true if the git repository has an associated cron task.
      */
-    boolean isAssociatedToCron(GitRepo _fetch);
+    boolean isAssociatedToCron(GitRepositoryDefinition _fetch);
     
     
     /**
@@ -58,5 +58,5 @@ public interface IGitRepository
      * @param _gitRepository
      *            the git repository.
      */
-    void saveOrUpdate(GitRepo _gitRepository);
+    void saveOrUpdate(GitRepositoryDefinition _gitRepository);
 }
