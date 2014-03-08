@@ -13,6 +13,7 @@ import org.komea.product.plugins.git.repositories.api.IGitCloner;
 import org.komea.product.plugins.git.repositories.api.IGitClonerService;
 import org.komea.product.plugins.git.repositories.api.IGitRepositoryService;
 import org.komea.product.plugins.git.utils.GitEventFactory;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 
 
+@DisallowConcurrentExecution
 public class GitCronJob implements Job
 {
     
@@ -94,8 +96,8 @@ public class GitCronJob implements Job
         
         try {
             
-            LOGGER.debug("Fetching GitRepositoryDefinition feed  : {} {}", gitRepositoryDefinition.getRepoName(),
-                    gitRepositoryDefinition.getUrl());
+            LOGGER.debug("Fetching GitRepositoryDefinition feed  : {} {}",
+                    gitRepositoryDefinition.getRepoName(), gitRepositoryDefinition.getUrl());
             final IGitCloner gitCloner = gitcloner.getOrCreate(gitRepositoryDefinition);
             
             
@@ -116,9 +118,11 @@ public class GitCronJob implements Job
     
         final IEventPushService esperEngine =
                 (IEventPushService) mergedJobDataMap.get(KEY_ESPER_ENGINE);
-        final IGitRepositoryService repository = (IGitRepositoryService) mergedJobDataMap.get(KEY_REPOSITORY);
+        final IGitRepositoryService repository =
+                (IGitRepositoryService) mergedJobDataMap.get(KEY_REPOSITORY);
         final IGitClonerService gitcloner = (IGitClonerService) mergedJobDataMap.get(KEY_GITCLONER);
-        final GitRepositoryDefinition fetch = (GitRepositoryDefinition) mergedJobDataMap.get(KEY_REPO);
+        final GitRepositoryDefinition fetch =
+                (GitRepositoryDefinition) mergedJobDataMap.get(KEY_REPO);
         final IPersonService personService =
                 (IPersonService) mergedJobDataMap.get(KEY_PERSON_SERVICE);
         

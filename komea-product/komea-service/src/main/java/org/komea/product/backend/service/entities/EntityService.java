@@ -70,8 +70,8 @@ public final class EntityService implements IEntityService {
             case TEAM:
             case DEPARTMENT:
                 final List<PersonGroup> personGroups
-                        = personGroupService.getPersonGroups(_entityKeys, _entityType);
-                entities.addAll(personGroupService.personGroupsToBaseEntities(personGroups,
+                        = personGroupService.searchPersonGroups(_entityKeys, _entityType);
+                entities.addAll(personGroupService.convertPersonGroupsToBaseEntities(personGroups,
                         _entityType));
                 break;
             case PROJECT:

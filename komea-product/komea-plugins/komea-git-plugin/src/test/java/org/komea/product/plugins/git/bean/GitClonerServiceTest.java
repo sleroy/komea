@@ -41,7 +41,7 @@ public class GitClonerServiceTest
     
     /**
      * Test method for
-     * {@link org.komea.product.plugins.git.bean.GitClonerService#getOrCreate(org.komea.product.plugins.git.model.GitRepositoryDefinition)}.
+     * {@link org.komea.product.plugins.git.bean.GitClonerService#getOrCreate(org.komea.product.plugins.repository.model.GitRepositoryDefinition)}.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testGetOrCreate() throws Exception {

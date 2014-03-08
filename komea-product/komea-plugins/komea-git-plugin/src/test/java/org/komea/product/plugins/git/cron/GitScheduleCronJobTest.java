@@ -57,7 +57,7 @@ public class GitScheduleCronJobTest
     
     /**
      * Test method for
-     * {@link org.komea.product.plugins.git.cron.GitScheduleCronJob#prepareJobMapForCron(org.quartz.JobDataMap, org.komea.product.plugins.git.model.GitRepositoryDefinition)}
+     * {@link org.komea.product.plugins.git.cron.GitScheduleCronJob#prepareJobMapForCron(org.quartz.JobDataMap, org.komea.product.plugins.repository.model.GitRepositoryDefinition)}
      * .
      */
     @Test

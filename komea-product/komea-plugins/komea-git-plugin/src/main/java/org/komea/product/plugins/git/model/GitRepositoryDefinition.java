@@ -9,12 +9,14 @@ package org.komea.product.plugins.git.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
+
 
 
 /**
  * @author sleroy
  */
-public class GitRepositoryDefinition
+public class GitRepositoryDefinition extends ScmRepositoryDefinition
 {
     
     
@@ -32,31 +34,17 @@ public class GitRepositoryDefinition
     
         final GitRepositoryDefinition gitRepo = new GitRepositoryDefinition();
         gitRepo.setRepoName(_name);
-        gitRepo.setKey(gitRepo.transformNameInKey(_name));
+        gitRepo.setKey(transformNameInKey(_name));
         gitRepo.setUrl(_url);
         return gitRepo;
     }
     
     
     
-    private final Map<String, BranchDefinition> branchDefinitionsMap =
-                                                                             new HashMap<String, BranchDefinition>();
-    
-    private String                              key                  = "";
-    
     /**
      * last references.
      */
-    private final Map<String, String>           lastRefs             =
-                                                                             new HashMap<String, String>();
-    
-    private String                              password             = "";
-    
-    private String                              projectForRepository = "";
-    
-    private String                              repoName             = "";
-    
-    private String                              url                  = "";
+    private final Map<String, String> lastRefs = new HashMap<String, String>();
     
     
     
@@ -68,13 +56,6 @@ public class GitRepositoryDefinition
     
         super();
         
-    }
-    
-    
-    public String getKey() {
-    
-    
-        return key;
     }
     
     
@@ -92,73 +73,15 @@ public class GitRepositoryDefinition
     }
     
     
+    /**
+     * Returns the last references
+     * 
+     * @return the last references.
+     */
     public Map<String, String> getLastRefs() {
     
     
         return lastRefs;
-    }
-    
-    
-    public String getPassword() {
-    
-    
-        return password;
-    }
-    
-    
-    public String getProjectForRepository() {
-    
-    
-        return projectForRepository;
-    }
-    
-    
-    public String getRepoName() {
-    
-    
-        return repoName;
-    }
-    
-    
-    public String getUrl() {
-    
-    
-        return url;
-    }
-    
-    
-    public void setKey(final String _key) {
-    
-    
-        key = _key;
-    }
-    
-    
-    public void setPassword(final String _password) {
-    
-    
-        password = _password;
-    }
-    
-    
-    public void setProjectForRepository(final String _projectForRepository) {
-    
-    
-        projectForRepository = _projectForRepository;
-    }
-    
-    
-    public void setRepoName(final String _repoName) {
-    
-    
-        repoName = _repoName;
-    }
-    
-    
-    public void setUrl(final String _url) {
-    
-    
-        url = _url;
     }
     
     
@@ -177,25 +100,4 @@ public class GitRepositoryDefinition
     }
     
     
-    /**
-     * Converts a name into a key.
-     * 
-     * @param _name
-     *            the repository name
-     * @return the key.
-     */
-    private String transformNameInKey(final String _name) {
-    
-    
-        final StringBuilder sBuilder = new StringBuilder();
-        for (int i = 0, ni = _name.length(); i < ni; ++i) {
-            final char charAt = _name.charAt(i);
-            if (Character.isAlphabetic(charAt) || Character.isDigit(charAt)) {
-                sBuilder.append(charAt);
-            } else if (' ' == charAt) {
-                sBuilder.append('_');
-            }
-        }
-        return sBuilder.toString();
-    }
 }

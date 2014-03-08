@@ -20,6 +20,19 @@ public class GitEventFactory
     
     
     
+    public EventSimpleDto sendBranchAssociated(
+            final GitRepositoryDefinition _repo,
+            final String _branchName) {
+    
+    
+        final EventSimpleDto event = initializeGitEvent(_repo);
+        event.setEventType("scm-fetch-failed");
+        event.setProject(_repo.getProjectAssociated(_branchName));
+        event.setMessage("Git Repository " + _repo.getRepoName() + " could not be fetch.");
+        return event;
+    }
+    
+    
     public EventSimpleDto sendBranchNumbers(final GitRepositoryDefinition _repo, final int _number) {
     
     
@@ -32,7 +45,9 @@ public class GitEventFactory
     }
     
     
-    public EventSimpleDto sendCustomerBranches(final GitRepositoryDefinition _repo, final int _number) {
+    public EventSimpleDto sendCustomerBranches(
+            final GitRepositoryDefinition _repo,
+            final int _number) {
     
     
         final EventSimpleDto event = initializeGitEvent(_repo);
@@ -113,7 +128,7 @@ public class GitEventFactory
     
         final EventSimpleDto event = new EventSimpleDto();
         event.setProvider(GIT_PROVIDER);
-        event.setProject(_repo.getProjectAssociated());
+        event.setProject(_repo.getProjectForRepository());
         return event;
     }
 }

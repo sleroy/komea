@@ -64,7 +64,7 @@ public interface IPersonGroupService extends
      * @param entityType EntityType
      * @return List<PersonGroup>
      */
-    List<PersonGroup> getPersonGroups(List<String> personGroupKeys, EntityType entityType);
+    List<PersonGroup> searchPersonGroups(List<String> personGroupKeys, EntityType entityType);
 
     /**
      * This method get a team from a group. if the group is a team, it will be
@@ -82,7 +82,7 @@ public interface IPersonGroupService extends
      * @param entityType EntityType
      * @return List<BaseEntity>
      */
-    List<BaseEntity> personGroupsToBaseEntities(
+    List<BaseEntity> convertPersonGroupsToBaseEntities(
             List<PersonGroup> personGroups,
             EntityType entityType);
 

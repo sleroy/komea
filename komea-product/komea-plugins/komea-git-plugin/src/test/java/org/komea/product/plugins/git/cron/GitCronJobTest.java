@@ -55,7 +55,7 @@ public class GitCronJobTest
         final GitRepositoryDefinition gitRepo =
                 GitRepositoryDefinition.newGitRepository("MyBatis generator",
                         "https://github.com/sleroy/generator.git");
-        gitRepo.setProjectAssociated("MyBatis generator");
+        gitRepo.setProjectForRepository("MyBatis generator");
         
         final IPersonService personService =
                 Mockito.mock(IPersonService.class, Mockito.withSettings());

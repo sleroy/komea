@@ -12,6 +12,7 @@ import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.plugins.rss.model.RssFeed;
 import org.komea.product.plugins.rss.repositories.api.IRssRepositories;
 import org.komea.product.plugins.rss.utils.RssFeeder;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 
 
+@DisallowConcurrentExecution
 public class RssCronJob implements Job
 {
     

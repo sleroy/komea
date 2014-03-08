@@ -259,9 +259,9 @@ public class EventConversionAndValidationService implements IEventConversionAndV
     public void validate(final IEvent _event) {
     
     
-        validationObject(_event);
-        validationObject(_event.getEventType());
-        validationObject(_event.getProvider());
+        validateObject(_event);
+        validateObject(_event.getEventType());
+        validateObject(_event.getProvider());
         
     }
     
@@ -272,7 +272,8 @@ public class EventConversionAndValidationService implements IEventConversionAndV
      * @param _object
      *            T
      */
-    public <T> void validationObject(final T _object) {
+    @Override
+    public <T> void validateObject(final T _object) {
     
     
         final Set<ConstraintViolation<T>> constraintViolationException =

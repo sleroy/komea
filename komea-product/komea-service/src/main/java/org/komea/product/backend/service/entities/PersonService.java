@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.komea.product.backend.genericservice.AbstractService;
+import org.komea.product.backend.service.esper.IEventConversionAndValidationService;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.HasProjectPersonDao;
 import org.komea.product.database.dao.PersonDao;
@@ -15,6 +16,7 @@ import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.BaseEntity;
 import org.komea.product.database.dto.PersonDto;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.UserBdd;
 import org.komea.product.database.model.HasProjectPersonCriteria;
 import org.komea.product.database.model.HasProjectPersonKey;
 import org.komea.product.database.model.Person;
@@ -41,25 +43,29 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
 {
     
     
-    private static final Logger   LOGGER = LoggerFactory.getLogger(PersonService.class);
+    private static final Logger                  LOGGER = LoggerFactory
+                                                                .getLogger(PersonService.class);
     
     @Autowired
-    private IPersonGroupService   groupService;
+    private IEventConversionAndValidationService eventConversionAndValidationService;
     
     @Autowired
-    private ProjectDao            projectDAO;
+    private IPersonGroupService                  groupService;
     
     @Autowired
-    private HasProjectPersonDao   projectPersonDao;
+    private ProjectDao                           projectDAO;
     
     @Autowired
-    private IProjectPersonService projectPersonService;
+    private HasProjectPersonDao                  projectPersonDao;
     @Autowired
-    private PersonDao             requiredDAO;
+    private IProjectPersonService                projectPersonService;
     
     
     @Autowired
-    private PersonRoleDao         roleDao;
+    private PersonDao                            requiredDAO;
+    
+    @Autowired
+    private PersonRoleDao                        roleDao;
     
     
     
@@ -70,6 +76,41 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     
     
         super();
+    }
+    
+    
+    /**
+     * (non-Javadoc)
+     * 
+     * @see org.komea.product.backend.service.entities.IPersonService#convertAllPersonsIntoPersonDTO()
+     */
+    @Override
+    public List<PersonDto> convertAllPersonsIntoPersonDTO() {
+    
+    
+        // TOTO STUB
+        final PersonCriteria request = new PersonCriteria();
+        final List<Person> persons = requiredDAO.selectByCriteria(request);
+        
+        final List<PersonDto> personDtos = Lists.newArrayList();
+        for (final Person person : persons) {
+            final PersonDto personDto = new PersonDto();
+            personDto.setId(person.getId());
+            personDto.setEmail(person.getEmail());
+            personDto.setFirstName(person.getFirstName());
+            personDto.setLastName(person.getLastName());
+            personDto.setLogin(person.getLogin());
+            personDto.modifyDepartment(groupService.getDepartment(person.getIdPersonGroup()));
+            personDto.modifyTeam(groupService.getTeam(person.getIdPersonGroup()));
+            final PersonRole role = roleDao.selectByPrimaryKey(person.getIdPersonRole());
+            if (role != null) {
+                personDto.setRole(role.getName());
+            }
+            personDto.associateToProjectList(findProjectsAssociatedToAPerson(person.getId()));
+            personDtos.add(personDto);
+            
+        }
+        return personDtos;
     }
     
     
@@ -116,10 +157,53 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
             personRequested.setEmail(_email);
             personRequested.setLogin(personRequested.getEmail().substring(0,
                     personRequested.getEmail().indexOf('@')));
+            personRequested.setFirstName(personRequested.getLogin());
+            personRequested.setLastName("");
+            personRequested.setPassword("");
+            personRequested.setUserBdd(UserBdd.KOMEA);
+            
+            
+            eventConversionAndValidationService.validateObject(personRequested);
+            
+            
             saveOrUpdate(personRequested);
         }
         
         return personRequested;
+    }
+    
+    
+    /**
+     * Method getProjectsAssociateToAPerson.
+     * 
+     * @param _personId
+     *            Integer
+     * @return List<Project>
+     * @see org.komea.product.backend.service.entities.IPersonService#findProjectsAssociatedToAPerson(Integer)
+     */
+    @Override
+    public List<Project> findProjectsAssociatedToAPerson(final Integer _personId) {
+    
+    
+        final HasProjectPersonCriteria criteria = new HasProjectPersonCriteria();
+        criteria.createCriteria().andIdPersonEqualTo(_personId);
+        final List<HasProjectPersonKey> result = projectPersonDao.selectByCriteria(criteria);
+        final List<Project> projects = Lists.newArrayList();
+        for (final HasProjectPersonKey hasProjectPersonKey : result) {
+            final Project project =
+                    projectDAO.selectByPrimaryKey(hasProjectPersonKey.getIdProject());
+            if (project != null) {
+                projects.add(project);
+            }
+        }
+        return projects;
+    }
+    
+    
+    public IEventConversionAndValidationService getEventConversionAndValidationService() {
+    
+    
+        return eventConversionAndValidationService;
     }
     
     
@@ -133,69 +217,8 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     }
     
     
-    /**
-     * (non-Javadoc)
-     * 
-     * @see org.komea.product.backend.service.entities.IPersonService#convertAllPersonsIntoPersonDTO()
-     */
     @Override
-    public List<PersonDto> convertAllPersonsIntoPersonDTO() {
-    
-    
-        // TOTO STUB
-        final PersonCriteria request = new PersonCriteria();
-        final List<Person> persons = requiredDAO.selectByCriteria(request);
-        
-        final List<PersonDto> personDtos = Lists.newArrayList();
-        for (final Person person : persons) {
-            final PersonDto personDto = new PersonDto();
-            personDto.setId(person.getId());
-            personDto.setEmail(person.getEmail());
-            personDto.setFirstName(person.getFirstName());
-            personDto.setLastName(person.getLastName());
-            personDto.setLogin(person.getLogin());
-            personDto.modifyDepartment(groupService.getDepartment(person.getIdPersonGroup()));
-            personDto.modifyTeam(groupService.getTeam(person.getIdPersonGroup()));
-            final PersonRole role = roleDao.selectByPrimaryKey(person.getIdPersonRole());
-            if (role != null) {
-                personDto.setRole(role.getName());
-            }
-            personDto.associateToProjectList(findProjectsAssociatedToAPerson(person.getId()));
-            personDtos.add(personDto);
-            
-        }
-        return personDtos;
-    }
-    
-    
-    /**
-     * Method getPersons.
-     * 
-     * @param logins
-     *            List<String>
-     * @return List<Person>
-     * @see
-     *      org.komea.product.backend.service.entities.IPersonService#getPersons(List<String>)
-     */
-    @Override
-    public List<Person> searchPersonWithGivenLogin(final List<String> logins) {
-    
-    
-        final PersonCriteria personCriteria = new PersonCriteria();
-        if (logins.isEmpty()) {
-            personCriteria.createCriteria();
-        } else {
-            for (final String entityKey : logins) {
-                final PersonCriteria.Criteria criteria = personCriteria.or();
-                criteria.andLoginEqualTo(entityKey);
-            }
-        }
-        return requiredDAO.selectByCriteria(personCriteria);
-    }
-    
-    
-    @Override
-    public List<Person> searchPersonWithGroupID(final Integer groupId) {
+    public List<Person> getPersonsOfPersonGroup(final Integer groupId) {
     
     
         final PersonCriteria criteria = new PersonCriteria();
@@ -231,33 +254,6 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     
     
         return projectPersonService;
-    }
-    
-    
-    /**
-     * Method getProjectsAssociateToAPerson.
-     * 
-     * @param _personId
-     *            Integer
-     * @return List<Project>
-     * @see org.komea.product.backend.service.entities.IPersonService#findProjectsAssociatedToAPerson(Integer)
-     */
-    @Override
-    public List<Project> findProjectsAssociatedToAPerson(final Integer _personId) {
-    
-    
-        final HasProjectPersonCriteria criteria = new HasProjectPersonCriteria();
-        criteria.createCriteria().andIdPersonEqualTo(_personId);
-        final List<HasProjectPersonKey> result = projectPersonDao.selectByCriteria(criteria);
-        final List<Project> projects = Lists.newArrayList();
-        for (final HasProjectPersonKey hasProjectPersonKey : result) {
-            final Project project =
-                    projectDAO.selectByPrimaryKey(hasProjectPersonKey.getIdProject());
-            if (project != null) {
-                projects.add(project);
-            }
-        }
-        return projects;
     }
     
     
@@ -321,6 +317,40 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
         }
         projectPersonService.updatePersonToProjectLink(_selectedProject, _person);
         
+    }
+    
+    
+    /**
+     * Method getPersons.
+     * 
+     * @param logins
+     *            List<String>
+     * @return List<Person>
+     * @see
+     *      org.komea.product.backend.service.entities.IPersonService#getPersons(List<String>)
+     */
+    @Override
+    public List<Person> searchPersonWithGivenLogin(final List<String> logins) {
+    
+    
+        final PersonCriteria personCriteria = new PersonCriteria();
+        if (logins.isEmpty()) {
+            personCriteria.createCriteria();
+        } else {
+            for (final String entityKey : logins) {
+                final PersonCriteria.Criteria criteria = personCriteria.or();
+                criteria.andLoginEqualTo(entityKey);
+            }
+        }
+        return requiredDAO.selectByCriteria(personCriteria);
+    }
+    
+    
+    public void setEventConversionAndValidationService(
+            final IEventConversionAndValidationService _eventConversionAndValidationService) {
+    
+    
+        eventConversionAndValidationService = _eventConversionAndValidationService;
     }
     
     

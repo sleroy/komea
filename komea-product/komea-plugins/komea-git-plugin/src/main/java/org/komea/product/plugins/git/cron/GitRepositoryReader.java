@@ -45,18 +45,19 @@ public class GitRepositoryReader implements IGitRepositoryReader
 {
     
     
-    private static final String     GIT          = "GIT";
+    private static final String           GIT          = "GIT";
     
-    private static final Logger     LOGGER       = LoggerFactory.getLogger("git-repository-reader");
+    private static final Logger           LOGGER       = LoggerFactory
+                                                               .getLogger("git-repository-reader");
     
-    private final IEventPushService esperEngine;
-    private final GitEventFactory   eventFactory = new GitEventFactory();
+    private final IEventPushService       esperEngine;
+    private final GitEventFactory         eventFactory = new GitEventFactory();
     
-    private final GitRepositoryDefinition           fetch;
+    private final GitRepositoryDefinition gitRepositoryDefinition;
     
-    private final IGitCloner         gitCloner;
+    private final IGitCloner              gitCloner;
     
-    private final IPersonService    personService;
+    private final IPersonService          personService;
     
     
     
@@ -77,7 +78,7 @@ public class GitRepositoryReader implements IGitRepositoryReader
             final IPersonService _personService) {
     
     
-        fetch = _fetch;
+        gitRepositoryDefinition = _fetch;
         esperEngine = _esperEngine;
         gitCloner = _gitCloner;
         personService = _personService;
@@ -100,14 +101,14 @@ public class GitRepositoryReader implements IGitRepositoryReader
         
         final String revisionName = parseCommit.getId().name();
         if (!Strings.isNullOrEmpty(authorIdent.getName())) {
-            notifyEvent(eventFactory.sendNewCommit(fetch, parseCommit.getShortMessage(),
+            notifyEvent(eventFactory.sendNewCommit(gitRepositoryDefinition, parseCommit.getShortMessage(),
                     personService.findOrCreatePersonByEmail(authorIdent.getEmailAddress()),
                     revisionName));
         }
         
         if (!Strings.isNullOrEmpty(committerIdent.getName())
                 && !committerIdent.getName().equals(authorIdent.getName())) {
-            notifyEvent(eventFactory.sendNewCommit(fetch, parseCommit.getShortMessage(),
+            notifyEvent(eventFactory.sendNewCommit(gitRepositoryDefinition, parseCommit.getShortMessage(),
                     personService.findOrCreatePersonByEmail(authorIdent.getEmailAddress()),
                     revisionName));
         }
@@ -140,7 +141,7 @@ public class GitRepositoryReader implements IGitRepositoryReader
     
     
         GitRepositoryReaderUtils.switchBranch(git, branch);
-        
+        gitRepositoryDefinition.registerBranch(branch.getName());
         final Repository repository = gitCloner.getRepository();
         checkNumberofTagsPerBranch(branch.getName(), repository);
         
@@ -183,7 +184,7 @@ public class GitRepositoryReader implements IGitRepositoryReader
     
     
         final int branchSize = branches.size();
-        notifyEvent(eventFactory.sendBranchNumbers(fetch, branchSize));
+        notifyEvent(eventFactory.sendBranchNumbers(gitRepositoryDefinition, branchSize));
     }
     
     
@@ -200,7 +201,7 @@ public class GitRepositoryReader implements IGitRepositoryReader
     
         final int numberOfTagsPerBranch = repository.getTags().size();
         
-        notifyEvent(eventFactory.sendNumberTagPerBranch(fetch, numberOfTagsPerBranch,
+        notifyEvent(eventFactory.sendNumberTagPerBranch(gitRepositoryDefinition, numberOfTagsPerBranch,
                 currentBranchName));
     }
     
@@ -261,19 +262,20 @@ public class GitRepositoryReader implements IGitRepositoryReader
                 
             }
         }
-        fetch.updateLastRef(_branch.getName(), objID); // Store last object scanned
+        gitRepositoryDefinition.updateLastRef(_branch.getName(), objID); // Store last object scanned
         
     }
     
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.git.utils.IGitRepositoryReader#feed()
      */
     @Override
     public void feed() {
     
     
-        LOGGER.info("Checking updates from {}", fetch.getRepoName());
+        LOGGER.info("Checking updates from {}", gitRepositoryDefinition.getRepoName());
         RevWalk revWalk = null;
         
         try {
@@ -285,8 +287,8 @@ public class GitRepositoryReader implements IGitRepositoryReader
             LOGGER.debug("Advertised Ref : {}", fetchRepository.getAdvertisedRefs());
             LOGGER.info("Fetch ended with message {}", fetchRepository.getMessages());
             
-            // Begin fetch
-            esperEngine.sendEventDto(eventFactory.sendFetchRepository(fetch));
+            // Begin gitRepositoryDefinition
+            esperEngine.sendEventDto(eventFactory.sendFetchRepository(gitRepositoryDefinition));
             analysisGitRepository(revWalk);
             
         } catch (final Throwable e) {
@@ -311,7 +313,7 @@ public class GitRepositoryReader implements IGitRepositoryReader
     public boolean isLastCommitCheckedPreviousTime(final Ref _branch, final RevCommit targetCommit) {
     
     
-        return targetCommit.getId().name().equals(fetch.getLastCommit(_branch.getName()));
+        return targetCommit.getId().name().equals(gitRepositoryDefinition.getLastCommit(_branch.getName()));
     }
     
     

@@ -102,7 +102,7 @@ public class GitRepositoryService implements IGitRepositoryService
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.git.repositories.api.IGitRepositoryService#initializeCronName(org.komea.product.plugins.git.model.
+     * @see org.komea.product.plugins.git.repositories.api.IGitRepositoryService#initializeCronName(org.komea.product.plugins.repository.model.
      * GitRepositoryDefinition)
      */
     @Override
@@ -118,7 +118,7 @@ public class GitRepositoryService implements IGitRepositoryService
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.git.repositories.api.IGitRepositoryService#isAssociatedToCron(org.komea.product.plugins.git.model.
+     * @see org.komea.product.plugins.git.repositories.api.IGitRepositoryService#isAssociatedToCron(org.komea.product.plugins.repository.model.
      * GitRepositoryDefinition)
      */
     @Override
@@ -131,7 +131,7 @@ public class GitRepositoryService implements IGitRepositoryService
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.git.repositories.api.IGitRepositoryService#saveOrUpdate(org.komea.product.plugins.git.model.
+     * @see org.komea.product.plugins.git.repositories.api.IGitRepositoryService#saveOrUpdate(org.komea.product.plugins.repository.model.
      * GitRepositoryDefinition)
      */
     @Override

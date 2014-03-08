@@ -35,7 +35,7 @@ public interface IPersonService extends IGenericService<Person, Integer, PersonC
      *            id of the group
      * @return persons
      */
-    public List<Person> searchPersonWithGroupID(Integer groupId);
+    public List<Person> getPersonsOfPersonGroup(Integer groupId);
     
     
     /**

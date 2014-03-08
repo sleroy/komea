@@ -23,15 +23,15 @@ public class GitRepositoryExampleBean
 {
     
     
-    private static final String DEFAULT_VALUE          = "0";
+    private static final String   DEFAULT_VALUE          = "0";
     
-    private static final String GIT_REPOSITORY_SAMPLES = "GIT_REPOSITORY_SAMPLES";
-    
-    @Autowired
-    private IGitRepositoryService      repository;
+    private static final String   GIT_REPOSITORY_SAMPLES = "GIT_REPOSITORY_SAMPLES";
     
     @Autowired
-    private ISettingService     settingsService;
+    private IGitRepositoryService repository;
+    
+    @Autowired
+    private ISettingService       settingsService;
     
     
     
@@ -62,7 +62,7 @@ public class GitRepositoryExampleBean
     
         final GitRepositoryDefinition gitRepository =
                 GitRepositoryDefinition.newGitRepository(_feedName, _url);
-        gitRepository.setProjectAssociated(_project);
+        gitRepository.setProjectForRepository(_project);
         repository.saveOrUpdate(gitRepository);
         
     }
