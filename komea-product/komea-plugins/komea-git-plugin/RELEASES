@@ -1,0 +1,17 @@
+v1.0.1-SNAPSHOT
+------------------
+
+Features :
+* Support multiple GIT repositories
+* Support parallelism
+* Support events (branch number, tags number, tag per branch, new_commit, fetch_failed, branch_association)
+* Support customer branch
+
+Limitations : 
+ * No authentication support
+ * No admin page
+ 
+
+
+
+
