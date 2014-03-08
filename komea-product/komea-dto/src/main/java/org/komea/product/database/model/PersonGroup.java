@@ -346,4 +346,14 @@ public class PersonGroup implements IEntity, Serializable {
         sb.append("]");
         return sb.toString();
     }
+
+    @Override
+    public String getKey() {
+        return personGroupKey;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return name;
+    }
 }

@@ -454,4 +454,14 @@ public class Person implements IEntity, Serializable {
     public String getFullName() {
         return firstName + " " + lastName;
     }
+
+    @Override
+    public String getKey() {
+        return login;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return getFullName();
+    }
 }

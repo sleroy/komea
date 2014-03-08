@@ -38,7 +38,7 @@ public class JSR303Plugin extends PluginAdapter {
             introspectedTable.setMyBatis3JavaMapperType(oldType);
         }
 
-        String replaceExample = properties.getProperty("replaceExample");
+        final String replaceExample = properties.getProperty("replaceExample");
         if (stringHasValue(replaceExample)) {
             Pattern pattern = Pattern.compile("Example$");
 
@@ -52,10 +52,6 @@ public class JSR303Plugin extends PluginAdapter {
             oldType = matcher.replaceAll(replaceExample);
             introspectedTable.setUpdateByExampleStatementId(oldType);
 
-//            oldType = introspectedTable.getUpdateByExampleWithBLOBsStatementId();
-//            matcher = pattern.matcher(oldType);
-//            oldType = matcher.replaceAll(replaceExample);
-//            introspectedTable.setUpdateByExampleWithBLOBsStatementId(oldType);
             oldType = introspectedTable.getCountByExampleStatementId();
             matcher = pattern.matcher(oldType);
             oldType = matcher.replaceAll(replaceExample);
@@ -71,16 +67,25 @@ public class JSR303Plugin extends PluginAdapter {
             oldType = matcher.replaceAll(replaceExample);
             introspectedTable.setSelectByExampleStatementId(oldType);
 
-//            oldType = introspectedTable.getSelectByExampleWithBLOBsStatementId();
-//            matcher = pattern.matcher(oldType);
-//            oldType = matcher.replaceAll(replaceExample);
-//            introspectedTable.setSelectByExampleWithBLOBsStatementId(oldType);
+            pattern = Pattern.compile("ExampleWithBLOBs$");
+            String replaceExample2 = replaceExample + "WithBLOBs";
+
+            oldType = introspectedTable.getUpdateByExampleWithBLOBsStatementId();
+            matcher = pattern.matcher(oldType);
+            oldType = matcher.replaceAll(replaceExample2);
+            introspectedTable.setUpdateByExampleWithBLOBsStatementId(oldType);
+
+            oldType = introspectedTable.getSelectByExampleWithBLOBsStatementId();
+            matcher = pattern.matcher(oldType);
+            oldType = matcher.replaceAll(replaceExample2);
+            introspectedTable.setSelectByExampleWithBLOBsStatementId(oldType);
+
             pattern = Pattern.compile("ExampleSelective$");
-            replaceExample += "Selective";
+            replaceExample2 = replaceExample + "Selective";
 
             oldType = introspectedTable.getUpdateByExampleSelectiveStatementId();
             matcher = pattern.matcher(oldType);
-            oldType = matcher.replaceAll(replaceExample);
+            oldType = matcher.replaceAll(replaceExample2);
             introspectedTable.setUpdateByExampleSelectiveStatementId(oldType);
 
         }

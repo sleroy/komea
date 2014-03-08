@@ -24,7 +24,7 @@ public interface KpiDao extends IGenericDAO<Kpi, Integer, KpiCriteria>
      * 
      * @mbggenerated Wed Feb 19 11:03:52 CET 2014
      */
-    List<Kpi> selectByExampleWithBLOBs(KpiCriteria example);
+    List<Kpi> selectByCriteriaWithBLOBs(KpiCriteria example);
     
     
     /**
@@ -33,7 +33,7 @@ public interface KpiDao extends IGenericDAO<Kpi, Integer, KpiCriteria>
      * 
      * @mbggenerated Wed Feb 19 11:03:52 CET 2014
      */
-    List<Kpi> selectByExampleWithBLOBsWithRowbounds(KpiCriteria example, RowBounds rowBounds);
+    List<Kpi> selectByCriteriaWithBLOBsWithRowbounds(KpiCriteria example, RowBounds rowBounds);
     
     
     /**
@@ -42,7 +42,7 @@ public interface KpiDao extends IGenericDAO<Kpi, Integer, KpiCriteria>
      * 
      * @mbggenerated Wed Feb 19 11:03:52 CET 2014
      */
-    int updateByExampleWithBLOBs(@Param("record")
+    int updateByCriteriaWithBLOBs(@Param("record")
     Kpi record, @Param("example")
     KpiCriteria example);
 }

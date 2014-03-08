@@ -24,7 +24,7 @@ public class PersonGroupDeleteAction implements IDeleteAction<PersonGroup> {
 
     @Override
     public void delete(PersonGroup _object) {
-        this.personGroupService.delete(_object);
+        this.personGroupService.deleteByPrimaryKey(_object.getId());
     }
 
 }

@@ -17,15 +17,18 @@ import org.apache.wicket.markup.html.form.ListChoice;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
+import org.komea.product.backend.service.entities.IProviderService;
+import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.model.Provider;
 import org.komea.product.database.model.ProviderCriteria;
+import org.komea.product.wicket.widget.builders.IChangeField;
 
 /**
  *
  * @author rgalerme
  */
-public abstract class SelectDialog extends AbstractFormDialog<String> {
+public abstract class SelectDialog<T> extends AbstractFormDialog<String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,55 +37,50 @@ public abstract class SelectDialog extends AbstractFormDialog<String> {
 
     private Form form;
     private FeedbackPanel feedback;
-   
+    private List<T> list;
 
-    private Provider selectedProvider = null;
-    
+    private T selectedProvider;
 
+    public SelectDialog(String id, String title, IGenericService service, IChoiceRenderer<T> rendener) {
+        this(id, title, (List<T>) service.selectAll(), rendener);
+    }
 
-    public SelectDialog(String id, String title, ProviderDao providerService) {
+    public SelectDialog(String id, String title, List<T> objectList, IChoiceRenderer<T> rendener) {
         super(id, title, true);
         this.form = new Form<String>("form");
-     
+        list = objectList;
 
-        List<Provider> list = providerService.selectByCriteria(new ProviderCriteria());
-        setSelectedProvider(list.get(0));
-//        list.add("element 1");
-//        list.add("element 2");
+        if (!list.isEmpty()) {
+            selectedProvider = list.get(0);
+        }
 
-        ListChoice<Provider> listEntite = new ListChoice<Provider>("table",
-                new PropertyModel<Provider>(this, "selectedProvider"), list);
-        listEntite.setChoiceRenderer(new IChoiceRenderer<Provider>() {
-
-            @Override
-            public Object getDisplayValue(Provider t) {
-               return t.getName();
-            }
-
-            @Override
-            public String getIdValue(Provider t, int i) {
-            return String.valueOf(t.getId());
-            }
-
-        });
+        ListChoice<T> listEntite = new ListChoice<T>("table",
+                new PropertyModel<T>(this, "selectedProvider"), list);
+        listEntite.setChoiceRenderer(rendener);
         listEntite.setNullValid(false);
         listEntite.setMaxRows(8);
         this.form.add(listEntite);
         this.feedback = new JQueryFeedbackPanel("feedback");
-//        this.form.add(new Label("monlabel", "message affiche"));
         this.add(this.form);
     }
 
+    public List<T> getList() {
+        return list;
+    }
 
+    public void setList(List<T> list) {
+        this.list = list;
+    }
 
     
-        public Provider getSelectedProvider() {
+    public T getSelectedProvider() {
         return selectedProvider;
     }
 
-    public void setSelectedProvider(Provider selectedProvider) {
+    public void setSelectedProvider(T selectedProvider) {
         this.selectedProvider = selectedProvider;
     }
+
     @Override
     protected List<DialogButton> getButtons() {
         return Arrays.asList(this.btnSelect, this.btnCancel);
@@ -118,6 +116,5 @@ public abstract class SelectDialog extends AbstractFormDialog<String> {
     public void onError(AjaxRequestTarget target) {
 //        target.add(this.feedback);
     }
-    
-    
+
 }

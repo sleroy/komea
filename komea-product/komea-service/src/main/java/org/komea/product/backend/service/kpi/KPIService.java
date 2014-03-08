@@ -147,7 +147,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
             kpiCriteria.createCriteria().andEntityTypeEqualTo(
                     _kpiKey.getEntityKey().getEntityType());
         }
-        return CollectionUtil.singleOrNull(requiredDAO.selectByExampleWithBLOBs(kpiCriteria));
+        return CollectionUtil.singleOrNull(requiredDAO.selectByCriteriaWithBLOBs(kpiCriteria));
         
     }
     
@@ -421,7 +421,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     public List<Kpi> listAllKpis() {
     
     
-        return requiredDAO.selectByExampleWithBLOBs(new KpiCriteria());
+        return requiredDAO.selectByCriteriaWithBLOBs(new KpiCriteria());
     }
     
     

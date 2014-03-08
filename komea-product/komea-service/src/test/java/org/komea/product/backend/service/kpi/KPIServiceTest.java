@@ -95,7 +95,7 @@ public class KPIServiceTest
         kpi.setValueType(ValueType.INT);
         kpiList.add(kpi);
         
-        Mockito.when(kpiDAOMock.selectByExampleWithBLOBs(Matchers.any(KpiCriteria.class)))
+        Mockito.when(kpiDAOMock.selectByCriteriaWithBLOBs(Matchers.any(KpiCriteria.class)))
                 .thenReturn(kpiList);
         
         Mockito.when(esperEngine.getStatementOrFail(KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12))

@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_proj` (
   `name` VARCHAR(255) NOT NULL,
   `description` VARCHAR(2048) NULL,
   `idCustomer` INT NULL,
+  `icon` VARCHAR(255) NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `key_UNIQUE` (`projectKey` ASC),
   INDEX `fk_Project_Customer1_idx` (`idCustomer` ASC))
@@ -87,6 +88,7 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_pvd` (
   `name` VARCHAR(255) NOT NULL,
   `icon` VARCHAR(255) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
+  `description` VARCHAR(2048) NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `url_UNIQUE` (`url` ASC))
 ENGINE = InnoDB;
@@ -105,12 +107,13 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `valueMax` DOUBLE NULL,
   `valueDirection` VARCHAR(255) NOT NULL,
   `valueType` VARCHAR(255) NOT NULL,
-  `entityType` VARCHAR(255),
+  `entityType` VARCHAR(255) NULL,
   `esperRequest` MEDIUMTEXT NOT NULL,
   `entityID` INT NULL,
   `cronExpression` VARCHAR(60) NULL,
   `evictionRate` INT NOT NULL,
   `evictionType` VARCHAR(255) NOT NULL,
+  `objective` DOUBLE NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `key_UNIQUE` (`kpiKey` ASC),
   INDEX `fk_Metric_Plugin1_idx` (`idProvider` ASC))
@@ -253,42 +256,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `komea`.`kom_has_proj_kpia`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_kpia` (
-  `idProject` INT NOT NULL,
-  `idKpiAlertType` INT NOT NULL,
-  PRIMARY KEY (`idProject`, `idKpiAlertType`),
-  INDEX `fk_KOM_PROJ_has_KOM_KPIA_KOM_KPIA1_idx` (`idKpiAlertType` ASC),
-  INDEX `fk_KOM_PROJ_has_KOM_KPIA_KOM_PROJ1_idx` (`idProject` ASC))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `komea`.`kom_has_kpia_pegr`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `komea`.`kom_has_kpia_pegr` (
-  `idKpiAlertType` INT NOT NULL,
-  `idPersonGroup` INT NOT NULL,
-  PRIMARY KEY (`idKpiAlertType`, `idPersonGroup`),
-  INDEX `fk_KOM_KPIA_has_KOM_PEGR_KOM_PEGR1_idx` (`idPersonGroup` ASC),
-  INDEX `fk_KOM_KPIA_has_KOM_PEGR_KOM_KPIA1_idx` (`idKpiAlertType` ASC))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `komea`.`kom_has_kpia_pe`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `komea`.`kom_has_kpia_pe` (
-  `idKpiAlertType` INT NOT NULL,
-  `idPerson` INT NOT NULL,
-  PRIMARY KEY (`idKpiAlertType`, `idPerson`),
-  INDEX `fk_KOM_KPIA_has_KOM_PE_KOM_PE1_idx` (`idPerson` ASC),
-  INDEX `fk_KOM_KPIA_has_KOM_PE_KOM_KPIA1_idx` (`idKpiAlertType` ASC))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `komea`.`kom_has_proj_pegr`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `komea`.`kom_has_proj_pegr` (
@@ -314,6 +281,32 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_acfi` (
   `blockerRetention` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`kom_sfac`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`kom_sfac` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `successFactorKey` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `description` VARCHAR(2048) NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  UNIQUE INDEX `successFactoryKey_UNIQUE` (`successFactorKey` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`kom_has_sfac_kpi`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`kom_has_sfac_kpi` (
+  `idSuccessFactor` INT NOT NULL,
+  `idKpi` INT NOT NULL,
+  PRIMARY KEY (`idSuccessFactor`, `idKpi`),
+  INDEX `fk_kom_sfac_has_kom_kpi_kom_kpi1_idx` (`idKpi` ASC),
+  INDEX `fk_kom_sfac_has_kom_kpi_kom_sfac1_idx` (`idSuccessFactor` ASC))
 ENGINE = InnoDB;
 
 

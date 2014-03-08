@@ -128,22 +128,20 @@
             <property name="useActualColumnNames" value="true" />
             <generatedKey column="id" sqlStatement="JDBC" identity="true" />
         </table>
+        <table tableName="kom_sfac" domainObjectName="SuccessFactor">
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
+        </table>
         <table tableName="kom_has_proj_pe" domainObjectName="HasProjectPerson">
             <property name="useActualColumnNames" value="true" />
         </table>
         <table tableName="kom_has_proj_tag" domainObjectName="HasProjectTag">
             <property name="useActualColumnNames" value="true" />
         </table>
-        <table tableName="kom_has_proj_kpia" domainObjectName="HasProjectKpiAlertType">
-            <property name="useActualColumnNames" value="true" />
-        </table>
         <table tableName="kom_has_proj_pegr" domainObjectName="HasProjectPersonGroup">
             <property name="useActualColumnNames" value="true" />
         </table>
-        <table tableName="kom_has_kpia_pegr" domainObjectName="HasPersonGroupKpiAlertType">
-            <property name="useActualColumnNames" value="true" />
-        </table>
-        <table tableName="kom_has_kpia_pe" domainObjectName="HasPersonKpiAlertType">
+        <table tableName="kom_has_sfac_kpi" domainObjectName="HasSuccessFactorKpi">
             <property name="useActualColumnNames" value="true" />
         </table>
     </context>
