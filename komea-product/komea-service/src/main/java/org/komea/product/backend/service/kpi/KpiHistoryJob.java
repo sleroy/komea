@@ -6,6 +6,7 @@ package org.komea.product.backend.service.kpi;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.service.dto.KpiKey;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -15,7 +16,9 @@ import org.slf4j.LoggerFactory;
 
 
 /**
+ * This cron performs the backup of the kpi value into an history regularly.
  */
+@DisallowConcurrentExecution
 public class KpiHistoryJob implements Job
 {
     
