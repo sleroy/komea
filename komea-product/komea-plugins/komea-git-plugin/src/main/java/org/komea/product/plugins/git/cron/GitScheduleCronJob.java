@@ -125,7 +125,9 @@ public class GitScheduleCronJob implements Job
      * 
      * @return the job data map.
      */
-    public JobDataMap prepareJobMapForCron(final JobDataMap _parentDataMap, final GitRepositoryDefinition _gitRepo) {
+    public JobDataMap prepareJobMapForCron(
+            final JobDataMap _parentDataMap,
+            final GitRepositoryDefinition _gitRepo) {
     
     
         final JobDataMap properties = new JobDataMap(_parentDataMap.getWrappedMap());

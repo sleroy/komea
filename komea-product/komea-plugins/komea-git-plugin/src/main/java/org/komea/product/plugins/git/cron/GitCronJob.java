@@ -96,8 +96,8 @@ public class GitCronJob implements Job
         
         try {
             
-            LOGGER.debug("Fetching GitRepositoryDefinition feed  : {} {}",
-                    gitRepositoryDefinition.getRepoName(), gitRepositoryDefinition.getUrl());
+            LOGGER.debug("Fetching git repository : {} {}", gitRepositoryDefinition.getRepoName(),
+                    gitRepositoryDefinition.getUrl());
             final IGitCloner gitCloner = gitcloner.getOrCreate(gitRepositoryDefinition);
             
             

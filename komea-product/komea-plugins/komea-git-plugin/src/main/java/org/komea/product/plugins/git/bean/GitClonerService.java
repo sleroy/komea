@@ -55,7 +55,7 @@ public class GitClonerService implements IGitClonerService
     public IGitCloner getOrCreate(final GitRepositoryDefinition _gitID) {
     
     
-        if (clonedDirectories.containsKey(_gitID)) { return clonedDirectories.get(_gitID); }
+        if (clonedDirectories.containsKey(_gitID.getKey())) { return clonedDirectories.get(_gitID); }
         LOGGER.info("Cloning workspace for git repo : {}", _gitID.getRepoName());
         final GitCloner gitCloner = new GitCloner(getSystem(), _gitID);
         gitCloner.initRepository();
