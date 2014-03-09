@@ -97,16 +97,16 @@ public final class PersonForm extends Form<Person> {
         this.groupName = new NameGeneric("");
 
         add(TextFieldBuilder.<String>createRequired("login", person, "login")
-                .simpleValidator(3, 255).withTooltip("User requires a login.").highlightOnErrors()
+                .simpleValidator(3, 255).withTooltip("LdapUser requires a login.").highlightOnErrors()
                 .build());
         add(TextFieldBuilder.<String>createRequired("firstname", person, "firstName")
-                .simpleValidator(2, 255).withTooltip("User requires a first name.")
+                .simpleValidator(2, 255).withTooltip("LdapUser requires a first name.")
                 .highlightOnErrors().simpleValidator(2, 255).build());
         add(TextFieldBuilder.<String>createRequired("lastname", person, "lastName")
                 .simpleValidator(2, 255).highlightOnErrors()
-                .withTooltip("User requires a last name.").build());
+                .withTooltip("LdapUser requires a last name.").build());
         add(TextFieldBuilder.<String>createRequired("email", person, "email")
-                .withTooltip("User requires a valid email.").highlightOnErrors().build());
+                .withTooltip("LdapUser requires a valid email.").highlightOnErrors().build());
         // add(new FormComponentFeedbackIndicator(id));
         // Creation the drop down.
         PersonGroup selectByPrimaryKey = this.prService.selectByPrimaryKey(this.person.getIdPersonGroup());

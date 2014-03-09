@@ -103,7 +103,7 @@ public class ProjectEventFactoryBuilder
         eventFactoryBuilder.register(DSLEventBuilder
                 .newEvent("sendUserValue", "project", "user_value").linkToProject()
                 .withParameter("planned", Double.class).withParameter("done", Double.class)
-                .predefinedMessage("User value planned/performed").build());
+                .predefinedMessage("LdapUser value planned/performed").build());
         eventFactoryBuilder.register(DSLEventBuilder
                 .newEvent("sendStoryStatus", "project", "story_status").linkToProject()
                 .withParameter("name", String.class).withParameter("status", String.class)

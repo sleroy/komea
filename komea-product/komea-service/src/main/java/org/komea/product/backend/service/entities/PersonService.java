@@ -10,6 +10,7 @@ import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.esper.IEventConversionAndValidationService;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.HasProjectPersonDao;
+import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonRoleDao;
 import org.komea.product.database.dao.ProjectDao;
@@ -200,23 +201,6 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     }
     
     
-    public IEventConversionAndValidationService getEventConversionAndValidationService() {
-    
-    
-        return eventConversionAndValidationService;
-    }
-    
-    
-    /**
-     * @return the groupService
-     */
-    public IPersonGroupService getGroupService() {
-    
-    
-        return groupService;
-    }
-    
-    
     @Override
     public List<Person> getPersonsOfPersonGroup(final Integer groupId) {
     
@@ -227,51 +211,15 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     }
     
     
-    /**
-     * @return the projectDAO
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.genericservice.AbstractService#getRequiredDAO()
      */
-    public ProjectDao getProjectDAO() {
-    
-    
-        return projectDAO;
-    }
-    
-    
-    /**
-     * @return the projectPersonDao
-     */
-    public HasProjectPersonDao getProjectPersonDao() {
-    
-    
-        return projectPersonDao;
-    }
-    
-    
-    /**
-     * @return the projectPersonService
-     */
-    public IProjectPersonService getProjectPersonService() {
-    
-    
-        return projectPersonService;
-    }
-    
-    
     @Override
-    public PersonDao getRequiredDAO() {
+    public IGenericDAO<Person, Integer, PersonCriteria> getRequiredDAO() {
     
     
         return requiredDAO;
-    }
-    
-    
-    /**
-     * @return the roleDao
-     */
-    public PersonRoleDao getRoleDao() {
-    
-    
-        return roleDao;
     }
     
     
@@ -299,38 +247,18 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
         getDaoEventRegistry().notifyUpdated(_selectedProject);
         getDaoEventRegistry().notifyUpdated(_personRole);
         getDaoEventRegistry().notifyUpdated(_personGroup);
-        if (_personRole != null) {
-            _person.setIdPersonRole(_personRole.getId());
-        } else {
-            _person.setIdPersonRole(null);
-        }
-        if (_personGroup != null) {
-            _person.setIdPersonGroup(_personGroup.getId());
-        } else {
-            _person.setIdPersonGroup(null);
-        }
+        _person.setIdPersonRoleOrNull(_personRole);
+        _person.setIdPersonGroupOrNull(_personGroup);
         
-        if (_person.getId() != null) {
-            requiredDAO.updateByPrimaryKey(_person);
-        } else {
-            requiredDAO.insert(_person);
-        }
+        this.saveOrUpdate(_person);
         projectPersonService.updatePersonToProjectLink(_selectedProject, _person);
+        
         
     }
     
     
-    /**
-     * Method getPersons.
-     * 
-     * @param logins
-     *            List<String>
-     * @return List<Person>
-     * @see
-     *      org.komea.product.backend.service.entities.IPersonService#getPersons(List<String>)
-     */
     @Override
-    public List<Person> searchPersonWithGivenLogin(final List<String> logins) {
+    public List<Person> findPersonWithGivenLogin(final List<String> logins) {
     
     
         final PersonCriteria personCriteria = new PersonCriteria();

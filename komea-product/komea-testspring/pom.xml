@@ -74,6 +74,14 @@
 			<artifactId>spring-test-dbunit</artifactId>
 			<version>${spring.test.dbunit.version}</version>
 		</dependency>
+		<!-- Apache DS server for ldap stubbing -->
+
+		<dependency>
+			<groupId>org.apache.directory.server</groupId>
+			<artifactId>apacheds-all</artifactId>
+			<version>1.5.5</version>
+			<scope>compile</scope>
+		</dependency>
 
 	</dependencies>
 

@@ -1,32 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/security"
-	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:sec="http://www.springframework.org/schema/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tasks="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:cache="http://www.springframework.org/schema/cache"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
-	<global-method-security secured-annotations="enabled" />
-	<http auto-config="false" use-expressions="true">
-		<intercept-url pattern="/p/login" access="permitAll" />
-		<intercept-url pattern="/p/accessdenied" access="permitAll" />
-		<intercept-url pattern="/p/logout" access="permitAll" />
-		<intercept-url pattern="/p/**" access="hasRole('ADMIN')" />
-		<intercept-url pattern="/rest/**" access="permitAll" />
-		<form-login login-page="/p/login" default-target-url="/p/"
-			authentication-failure-url="/p/accessdenied" />
-		<logout logout-success-url="/p/logout" />
-		<session-management>
-			<concurrency-control max-sessions="2"
-				error-if-maximum-exceeded="true" />
-		</session-management>
-	</http>
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+                http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
-	<authentication-manager alias="authenticationManager">
-		<authentication-provider user-service-ref="komeaUserAuthService">
-			<password-encoder hash="{sha}" />
+	<sec:global-method-security
+		secured-annotations="enabled" />
+	<sec:http auto-config="false" use-expressions="true">
+		<sec:intercept-url pattern="/p/login" access="permitAll" />
+		<sec:intercept-url pattern="/p/accessdenied" access="permitAll" />
+		<sec:intercept-url pattern="/p/logout" access="permitAll" />
+		<sec:intercept-url pattern="/p/**" access="hasRole('ADMIN')" />
+		<sec:intercept-url pattern="/rest/**" access="permitAll" />
+		<sec:form-login login-page="/p/login"
+			default-target-url="/p/" authentication-failure-url="/p/accessdenied" />
+		<sec:logout logout-success-url="/p/logout" />
+		<sec:session-management>
+			<sec:concurrency-control max-sessions="2"
+				error-if-maximum-exceeded="true" />
+		</sec:session-management>
+	</sec:http>
+
+	<sec:authentication-manager alias="authenticationManager">
+		<sec:authentication-provider
+			user-service-ref="komeaUserAuthService">
+			<sec:password-encoder hash="{sha}" />
 			<!-- <user-service> <user name="admin" password="admin" authorities="ROLE_PUSH, 
 				ROLE_REST, ROLE_USER, ROLE_ADMIN" /> <user name="push" password="push" authorities="ROLE_USER, 
 				PUSH_ROLE" /> </user-service> -->
-		</authentication-provider>
-	</authentication-manager>
+		</sec:authentication-provider>
+	</sec:authentication-manager>
 
+	<bean id="contextSource"
+		class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+		<constructor-arg value="ldap://monkeymachine:389/dc=springframework,dc=org" />
+		<property name="userDn" value="cn=manager,dc=springframework,dc=org" />
+		<property name="password" value="password" />
+	</bean>
 
-</beans:beans>
+	<bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+		<constructor-arg ref="contextSource" />
+	</bean>
+
+</beans>

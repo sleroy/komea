@@ -16,7 +16,7 @@
 
 
 	<import resource="security-spring.xml" />
-
+	<!-- SALT FOR PASSWORDS -->
 	<util:properties id="authProperties" location="classpath:/config/auth.properties">
 	</util:properties>
 

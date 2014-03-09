@@ -72,7 +72,7 @@ public interface IPersonService extends IGenericService<Person, Integer, PersonC
      *            List<String>
      * @return List<Person>
      */
-    List<Person> searchPersonWithGivenLogin(final List<String> logins);
+    List<Person> findPersonWithGivenLogin(final List<String> logins);
     
     
     /**

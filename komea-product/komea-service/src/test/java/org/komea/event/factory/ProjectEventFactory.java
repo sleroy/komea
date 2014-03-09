@@ -171,7 +171,7 @@ return event;
  */
 public EventSimpleDto sendUserValue(String _projectName,java.lang.Double _done,java.lang.Double _planned) {EventSimpleDto event = new EventSimpleDto();
 event.setProject(_projectName);
-event.setMessage("User value planned/performed");
+event.setMessage("LdapUser value planned/performed");
 event.setProperties(new java.util.HashMap());
 event.getProperties().put("done",_done.toString());
 event.getProperties().put("planned",_planned.toString());
@@ -201,7 +201,7 @@ return event;
  */
 public EventSimpleDto sendUserValue(String _projectName,java.lang.String _performed,java.lang.String _planned) {EventSimpleDto event = new EventSimpleDto();
 event.setProject(_projectName);
-event.setMessage("User value planned/performed");
+event.setMessage("LdapUser value planned/performed");
 event.setProperties(new java.util.HashMap());
 event.getProperties().put("performed",_performed.toString());
 event.getProperties().put("planned",_planned.toString());

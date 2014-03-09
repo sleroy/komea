@@ -75,7 +75,7 @@ public class UserAuthenticationService implements UserDetailsService
         } else {
             throw new UsernameNotFoundException("Invalid username/password.");
         }
-        LOGGER.info("-----AUTH----- User authentication requested {}", _username);
+        LOGGER.info("-----AUTH----- LdapUser authentication requested {}", _username);
         return new User(requestedLoginUsers.getLogin(), requestedLoginUsers.getPassword(),
                 AuthorityUtils.createAuthorityList(right));
     }
