@@ -84,20 +84,10 @@
 			<artifactId>komea-git-plugin</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>org.komea.plugins</groupId> -->
-		<!-- <artifactId>komea-standard-metrics-plugin</artifactId> -->
-		<!-- <version>${project.version}</version> -->
-		<!-- </dependency> -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.komea.plugins</groupId> -->
-		<!-- <artifactId>komea-sample-plugin</artifactId> -->
-		<!-- <version>${project.version}</version> -->
-		<!-- </dependency> -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.komea.plugins</groupId> -->
-		<!-- <artifactId>komea-git-plugin</artifactId> -->
-		<!-- <version>${project.version}</version> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.komea.plugins</groupId>
+			<artifactId>komea-ldap-plugin</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

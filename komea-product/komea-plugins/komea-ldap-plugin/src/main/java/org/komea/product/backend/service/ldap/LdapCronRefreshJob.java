@@ -9,6 +9,8 @@ package org.komea.product.backend.service.ldap;
 import java.util.Collections;
 
 import org.apache.commons.lang.Validate;
+import org.komea.product.api.service.ldap.ILdapUserService;
+import org.komea.product.api.service.ldap.LdapUser;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.enums.EntityType;

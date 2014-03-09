@@ -9,6 +9,8 @@ import javax.annotation.PostConstruct;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
+import org.komea.product.api.service.ldap.ILdapUserService;
+import org.komea.product.api.service.ldap.LdapUser;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;

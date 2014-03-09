@@ -1,5 +1,5 @@
 
-package org.komea.product.backend.service.ldap;
+package org.komea.product.api.service.ldap;
 
 
 

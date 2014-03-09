@@ -20,6 +20,7 @@
 	<modules>
 		<module>komea-git-plugin</module>
 		<module>komea-rss-plugin</module>
+		<module>komea-ldap-plugin</module>
 		<module>komea-sample-plugin</module>
 		<module>komea-standard-metrics-plugin</module>
 		<module>komea-svn-plugin</module>

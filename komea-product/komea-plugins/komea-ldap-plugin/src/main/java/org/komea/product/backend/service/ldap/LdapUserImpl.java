@@ -5,6 +5,8 @@ package org.komea.product.backend.service.ldap;
 
 import java.util.Arrays;
 
+import org.komea.product.api.service.ldap.LdapUser;
+
 
 
 public class LdapUserImpl implements LdapUser
