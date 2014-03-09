@@ -9,6 +9,7 @@
 target/
 *.versionsBackup
 komea.log
+komea
 
 #eclipse
 .project
