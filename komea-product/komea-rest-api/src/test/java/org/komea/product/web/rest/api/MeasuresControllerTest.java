@@ -2,6 +2,7 @@
 package org.komea.product.web.rest.api;
 
 
+
 import java.util.List;
 
 import org.junit.Before;
@@ -23,6 +24,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,68 +38,86 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.google.common.collect.Lists;
 
-public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase {
+
+
+public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
+{
+    
+    
+    private static final Logger   LOGGER = LoggerFactory.getLogger(MeasuresControllerTest.class);
     
     @Autowired
     private WebApplicationContext context;
-    
-    private MockMvc               mockMvc;
     
     @InjectMocks
     @Autowired
     private MeasuresController    controller;
     
-    @Mock
-    private IKPIService           kpiService;
-    
     @Autowired
     private KpiDemoService        kpiDemoService;
     
+    @Mock
+    private IKPIService           kpiService;
+    
+    private MockMvc               mockMvc;
+    
+    
+    
     @Before
     public void setUp() {
+    
     
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
         MockitoAnnotations.initMocks(this);
     }
     
+    
     @Test
     public void testGetKpiRealTimeValues() throws Exception {
+    
     
         final Kpi kpi = kpiDemoService.numberBuildPerDay();
         
         final KpiKey kpiKey = KpiKey.ofKpi(kpi);
         
-        Project project = new Project();
+        final Project project = new Project();
         project.setId(1);
         project.setName("project 1");
         
-        Mockito.when(kpiService.getRealTimeValues(kpiKey)).thenAnswer(new Answer<KPIValueTable<Project>>() {
-            
-            @Override
-            public KPIValueTable<Project> answer(final InvocationOnMock _invocation) throws Throwable {
-            
-                Kpi kpi = new Kpi();
-                kpi.setId(1);
-                kpi.setKpiKey("KPI1");
-                kpi.setEntityID(1);
-                kpi.setEntityType(EntityType.PROJECT);
-                List<KpiLineValue<Project>> values = Lists.newArrayList();
-                
-                Project project = new Project();
-                project.setId(1);
-                project.setName("project 1");
-                
-                values.add(new KpiLineValue<Project>(project, 5D));
-                KPIValueTable<Project> kpiValueTable = new KPIValueTable<Project>(kpi, values);
-                
-                return kpiValueTable;
-            }
-        });
+        Mockito.when(kpiService.getRealTimeValues(kpiKey)).thenAnswer(
+                new Answer<KPIValueTable<Project>>()
+                {
+                    
+                    
+                    @Override
+                    public KPIValueTable<Project> answer(final InvocationOnMock _invocation)
+                            throws Throwable {
+                    
+                    
+                        final Kpi kpi = new Kpi();
+                        kpi.setId(1);
+                        kpi.setKpiKey("KPI1");
+                        kpi.setEntityID(1);
+                        kpi.setEntityType(EntityType.PROJECT);
+                        final List<KpiLineValue<Project>> values = Lists.newArrayList();
+                        
+                        final Project project = new Project();
+                        project.setId(1);
+                        project.setName("project 1");
+                        
+                        values.add(new KpiLineValue<Project>(project, 5D));
+                        final KPIValueTable<Project> kpiValueTable =
+                                new KPIValueTable<Project>(kpi, values);
+                        
+                        return kpiValueTable;
+                    }
+                });
         
         final String jsonMessage = IntegrationTestUtil.convertObjectToJSON(kpiKey);
         LOGGER.info(jsonMessage);
-        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/realtime")
-                .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
+        final ResultActions httpRequest =
+                mockMvc.perform(MockMvcRequestBuilders.post("/measures/realtime")
+                        .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
         
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
@@ -106,21 +127,26 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         Mockito.verify(kpiService, Mockito.times(1)).getRealTimeValues(Matchers.any(KpiKey.class));
         
     }
+    
+    
     @Test
     public void testGetKpiRealTimeValuesWithException() throws Exception {
     
+    
         final KpiKey kpiKey = KpiKey.ofKpiNameAndEntityDetails("KPI1", EntityType.PROJECT, 1);
         
-        Project project = new Project();
+        final Project project = new Project();
         project.setId(1);
         project.setName("project 1");
         
-        Mockito.when(kpiService.getRealTimeValues(org.mockito.Matchers.any(KpiKey.class))).thenThrow(KPINotFoundException.class);
+        Mockito.when(kpiService.getRealTimeValues(org.mockito.Matchers.any(KpiKey.class)))
+                .thenThrow(KPINotFoundException.class);
         
         final String jsonMessage = IntegrationTestUtil.convertObjectToJSON(kpiKey);
         LOGGER.info(jsonMessage);
-        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/realtime")
-                .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
+        final ResultActions httpRequest =
+                mockMvc.perform(MockMvcRequestBuilders.post("/measures/realtime")
+                        .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
         
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isInternalServerError());

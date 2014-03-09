@@ -9,7 +9,7 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 			    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
-	<import resource="security-spring-test.xml" />
+	<!-- <import resource="security-spring-test.xml" /> -->
 	<import resource="thymeleaf-spring-test.xml" />
 
 	<mvc:annotation-driven>

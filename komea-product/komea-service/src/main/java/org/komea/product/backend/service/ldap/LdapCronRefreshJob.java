@@ -21,6 +21,8 @@ import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 
@@ -36,6 +38,10 @@ public class LdapCronRefreshJob implements Job
 {
     
     
+    private static final Logger LOGGER = LoggerFactory.getLogger(LdapCronRefreshJob.class);
+    
+    
+    
     /**
      * Ldap Cron refresh job.
      */
@@ -43,6 +49,64 @@ public class LdapCronRefreshJob implements Job
     
     
         super();
+    }
+    
+    
+    /**
+     * Generate missing department.
+     * 
+     * @param _personGroupService
+     * @param _ldapDepartment
+     * @return
+     */
+    public PersonGroup createMissingDepartment(
+            final IPersonGroupService _personGroupService,
+            final String _ldapDepartment) {
+    
+    
+        PersonGroup department =
+                org.komea.product.backend.utils.CollectionUtil.singleOrNull(_personGroupService
+                        .searchPersonGroups(Collections.singletonList(_ldapDepartment),
+                                EntityType.DEPARTMENT));
+        
+        if (department == null) {
+            LOGGER.info("Creation of the department from ldap {}", _ldapDepartment);
+            department = new PersonGroup();
+            department.setType(PersonGroupType.DEPARTMENT);
+            department.setDescription("Department " + _ldapDepartment + " created from ldap");
+            department.setName(_ldapDepartment);
+            department.setPersonGroupKey(_ldapDepartment.toUpperCase());
+            _personGroupService.saveOrUpdate(department);
+        }
+        return department;
+    }
+    
+    
+    /**
+     * Create missing ldap users.
+     * 
+     * @param _ldapService
+     * @param _personGroupService
+     * @param _personGroupService2
+     * @param _ldapUser
+     */
+    public void createMissingLdapUser(
+            final ILdapUserService ldapService,
+            final IPersonService _personService,
+            final IPersonGroupService personGroupService,
+            final LdapUser ldapUser) {
+    
+    
+        LOGGER.info("Creation of the user {} from LDAP", ldapUser);
+        final Person personRequested = new Person();
+        personRequested.setFirstName(ldapUser.getFirstName());
+        personRequested.setLastName(ldapUser.getLastName());
+        personRequested.setLogin(ldapUser.getUserName());
+        personRequested.setPassword(ldapUser.getPassword());
+        final String ldapDepartment = ldapUser.getDepartment();
+        final PersonGroup department = createMissingDepartment(personGroupService, ldapDepartment);
+        _personService.saveOrUpdate(personRequested, null, null, department);
+        
     }
     
     
@@ -90,62 +154,6 @@ public class LdapCronRefreshJob implements Job
             
             
         }
-        
-    }
-    
-    
-    /**
-     * Generate missing department.
-     * 
-     * @param personGroupService
-     * @param ldapDepartment
-     * @return
-     */
-    private PersonGroup createMissingDepartment(
-            final IPersonGroupService personGroupService,
-            final String ldapDepartment) {
-    
-    
-        PersonGroup department =
-                org.komea.product.backend.utils.CollectionUtil.singleOrNull(personGroupService
-                        .searchPersonGroups(Collections.singletonList(ldapDepartment),
-                                EntityType.DEPARTMENT));
-        
-        if (department == null) {
-            department = new PersonGroup();
-            department.setType(PersonGroupType.DEPARTMENT);
-            department.setDescription("Department " + ldapDepartment + " created from ldap");
-            department.setName(ldapDepartment);
-            department.setPersonGroupKey(ldapDepartment.toUpperCase());
-            personGroupService.saveOrUpdate(department);
-        }
-        return department;
-    }
-    
-    
-    /**
-     * Create missing ldap users.
-     * 
-     * @param _ldapService
-     * @param _personGroupService
-     * @param _personGroupService2
-     * @param _ldapUser
-     */
-    private void createMissingLdapUser(
-            final ILdapUserService ldapService,
-            final IPersonService _personService,
-            final IPersonGroupService personGroupService,
-            final LdapUser ldapUser) {
-    
-    
-        final Person personRequested = new Person();
-        personRequested.setFirstName(ldapUser.getFirstName());
-        personRequested.setLastName(ldapUser.getLastName());
-        personRequested.setLogin(ldapUser.getUserName());
-        personRequested.setPassword(ldapUser.getPassword());
-        final String ldapDepartment = ldapUser.getDepartment();
-        final PersonGroup department = createMissingDepartment(personGroupService, ldapDepartment);
-        _personService.saveOrUpdate(personRequested, null, null, department);
         
     }
     

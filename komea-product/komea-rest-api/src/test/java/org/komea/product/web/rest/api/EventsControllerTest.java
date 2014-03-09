@@ -14,6 +14,8 @@ import org.komea.product.test.spring.AbstractSpringWebIntegrationTestCase;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,6 +31,8 @@ import org.springframework.web.context.WebApplicationContext;
 public class EventsControllerTest extends AbstractSpringWebIntegrationTestCase
 {
     
+    
+    private static final Logger   LOGGER = LoggerFactory.getLogger(EventsControllerTest.class);
     
     @Autowired
     private WebApplicationContext context;

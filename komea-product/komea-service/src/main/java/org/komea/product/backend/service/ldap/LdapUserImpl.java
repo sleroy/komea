@@ -145,7 +145,7 @@ public class LdapUserImpl implements LdapUser
     
         return "LdapUserImpl [department="
                 + department + ", email=" + email + ", firstName=" + firstName + ", groups="
-                + Arrays.toString(groups) + ", lastName=" + lastName + ", password=" + password
-                + ", userName=" + userName + "]";
+                + Arrays.toString(groups) + ", lastName=" + lastName + ", userName=" + userName
+                + "]";
     }
 }
