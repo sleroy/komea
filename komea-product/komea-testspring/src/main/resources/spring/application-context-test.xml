@@ -15,8 +15,7 @@
                                                 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
 	<import resource="database-spring-test.xml" />
-	<import resource="security-spring-test.xml" />
-
+	
 
 	<util:properties id="authProperties" location="classpath:/config/auth.properties">
 	</util:properties>

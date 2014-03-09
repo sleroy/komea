@@ -25,10 +25,10 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
  * @author sleroy
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-        locations = {
-                "classpath:/spring/application-context-test.xml",
-                "classpath:/spring/ldap-spring-test.xml" })
+@ContextConfiguration(locations = {
+        "classpath*:/spring/application-context-test.xml",
+        "classpath*:/spring/security-spring-test.xml",
+        "classpath*:/spring/ldap-spring-test.xml" })
 @TransactionConfiguration(defaultRollback = true)
 public class LdapUserServiceTest extends AbstractSpringIntegrationTestCase
 {
