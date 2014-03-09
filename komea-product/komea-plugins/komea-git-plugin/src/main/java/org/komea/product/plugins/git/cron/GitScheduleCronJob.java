@@ -32,7 +32,7 @@ public class GitScheduleCronJob implements Job
     /**
      * Cron value for GIT Provider.
      */
-    private static final String GIT_CRON_VALUE = "0 0/1 * * * ?";
+    private static final String GIT_CRON_VALUE = "0 0/2 * * * ?";
     
     /**
      * 

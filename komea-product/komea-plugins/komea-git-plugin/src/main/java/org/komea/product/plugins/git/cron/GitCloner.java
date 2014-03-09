@@ -7,11 +7,13 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.TextProgressMonitor;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.komea.product.plugins.git.model.GitRepositoryDefinition;
 import org.komea.product.plugins.git.repositories.api.IGitCloner;
 import org.slf4j.Logger;
@@ -23,13 +25,13 @@ public class GitCloner implements IGitCloner
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(GitCloner.class);
-    private Repository          fileRepository;
+    private static final Logger           LOGGER = LoggerFactory.getLogger(GitCloner.class);
+    private Repository                    fileRepository;
     
-    private Git                 git;
-    private final GitRepositoryDefinition       gitRepo;
-    private File                gitRepositoryFolder;
-    private final File          storageFolder;
+    private Git                           git;
+    private final GitRepositoryDefinition gitRepositoryDefinition;
+    private File                          gitRepositoryFolder;
+    private final File                    storageFolder;
     
     
     
@@ -48,7 +50,7 @@ public class GitCloner implements IGitCloner
         Validate.notNull(_gitRepo);
         Validate.notNull(_gitRepo.getKey());
         storageFolder = _storageFolder;
-        gitRepo = _gitRepo;
+        gitRepositoryDefinition = _gitRepo;
     }
     
     
@@ -111,7 +113,21 @@ public class GitCloner implements IGitCloner
             cloneRepository.setNoCheckout(true);
             
             cloneRepository.setProgressMonitor(new TextProgressMonitor());
-            git = cloneRepository.setURI(gitRepo.getUrl()).setDirectory(gitRepositoryFolder).call();
+            
+            
+            if (StringUtils.isNotEmpty(gitRepositoryDefinition.getUserName())
+                    && StringUtils.isNotEmpty(gitRepositoryDefinition.getPassword())) {
+                final UsernamePasswordCredentialsProvider credentials =
+                        new UsernamePasswordCredentialsProvider(
+                                gitRepositoryDefinition.getUserName(),
+                                gitRepositoryDefinition.getPassword());
+                
+                cloneRepository.setCredentialsProvider(credentials);
+            }
+            
+            git =
+                    cloneRepository.setURI(gitRepositoryDefinition.getUrl())
+                            .setDirectory(gitRepositoryFolder).call();
         } catch (final Exception e) {
             throw new IllegalArgumentException(e);
         }
@@ -130,7 +146,7 @@ public class GitCloner implements IGitCloner
     private void initializeStorageFolder() {
     
     
-        gitRepositoryFolder = new File(storageFolder, "repo" + gitRepo.getKey());
+        gitRepositoryFolder = new File(storageFolder, "repo" + gitRepositoryDefinition.getKey());
         try {
             FileUtils.deleteDirectory(gitRepositoryFolder);
         } catch (final IOException e) {
