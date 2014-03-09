@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
                 key = KomeaFS.STORAGE_PATH_KEY,
                 description = "Path to store informations of the plugins",
                 type = File.class,
-                value = "komea") })
+                value = ".komea") })
 @Component
 public class ServerPropertiesBean
 {
