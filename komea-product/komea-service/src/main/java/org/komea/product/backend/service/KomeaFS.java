@@ -160,7 +160,7 @@ public class KomeaFS implements IKomeaFS
         if (!_file.isAbsolute()) { throw new IllegalArgumentException(
                 "File system names should be a directory folder"); }
         if (!_file.exists() && !_file.mkdirs()) { throw new IllegalArgumentException(
-                "Cannot create the folder for the FS " + _file.getName()); }
+                "Cannot create the folder for the FS " + _file.getAbsolutePath()); }
         return _file;
     }
     
