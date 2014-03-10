@@ -2,7 +2,9 @@ package org.komea.product.database.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
@@ -57,6 +59,34 @@ public class MeasuresDto implements Serializable {
 
     public void setMeasures(List<Measure> measures) {
         this.measures = measures;
+    }
+
+    public String[] getKpiNames() {
+        final String[] kpiNames = new String[kpis.size()];
+        for (int i = 0; i < kpis.size(); i++) {
+            kpiNames[i] = kpis.get(i).getName();
+        }
+        return kpiNames;
+    }
+
+    public Map<String, List<Number>> getSeries() {
+        final Map<String, List<Number>> series = new HashMap<String, List<Number>>(entities.size());
+        for (final BaseEntity entity : entities) {
+            final List<Number> numbers = new ArrayList<Number>();
+            series.put(entity.getDisplayName(), numbers);
+            for (final Kpi kpi : kpis) {
+                Number number = null;
+                for (final Measure measure : measures) {
+                    if (kpi.getId().equals(measure.getIdKpi())
+                            && entity.getId().equals(measure.getIdProject())) {
+                        number = measure.getValue();
+                        break;
+                    }
+                }
+                numbers.add(number);
+            }
+        }
+        return series;
     }
 
     @Override
