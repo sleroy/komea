@@ -1,5 +1,6 @@
 package org.komea.product.backend.service.entities;
 
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -61,7 +62,10 @@ public final class EntityService implements IEntityService {
     @Override
     public List<BaseEntity> getEntities(final EntityType _entityType, final List<String> _entityKeys) {
 
-        final List<BaseEntity> entities = new ArrayList<BaseEntity>(_entityKeys.size());
+        final List<BaseEntity> entities = Lists.newArrayList();
+        if (_entityKeys == null) {
+            return entities;
+        }
         switch (_entityType) {
             case PERSON:
                 final List<Person> persons = personService.findPersonWithGivenLogin(_entityKeys);
