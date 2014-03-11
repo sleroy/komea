@@ -28,7 +28,7 @@ public class GridViewEntities<T extends IEntity> extends GridView<T> {
     @Override
     protected void populateItem(Item<T> item) {
         final T modelObject = item.getModelObject();
-        item.add(new Label(id + "Element", modelObject.getDisplayName()));
+        item.add(new Label(id + "Element", "- " + modelObject.getDisplayName()));
     }
 
 }
