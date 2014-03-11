@@ -16,7 +16,9 @@ public class GridViewEntities<T extends IEntity> extends GridView<T> {
         super(id, new ListDataProvider<T>(data));
         this.id = id;
         this.setColumns(1);
-        this.setRows(data.size());
+        if (!data.isEmpty()) {
+            this.setRows(data.size());
+        }
     }
 
     @Override
