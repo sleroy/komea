@@ -5,6 +5,7 @@
  */
 package org.komea.product.wicket.project;
 
+import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -12,13 +13,18 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.PropertyModel;
+import org.komea.product.backend.service.entities.IPersonGroupService;
+import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.model.Customer;
+import org.komea.product.database.model.Person;
+import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
-import org.komea.product.wicket.kpis.KpiPage;
 import org.komea.product.wicket.utils.NameGeneric;
+import org.komea.product.wicket.widget.ListChoiceEntities;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
@@ -36,7 +42,9 @@ public class ProjectForm extends Form<Project> {
     private final NameGeneric customerName;
     private final TextField customerFiel;
 
-    public ProjectForm(String form, IProjectService projectService, CustomerDao _customerService, FeedbackPanel feedbackPanel, CompoundPropertyModel<Project> compoundPropertyModel, ProjectEditPage aThis) {
+    public ProjectForm(String form, IProjectService projectService, CustomerDao _customerService,
+            FeedbackPanel feedbackPanel, CompoundPropertyModel<Project> compoundPropertyModel,
+            ProjectEditPage aThis, IPersonService personService, IPersonGroupService personGroupService) {
         super(form, compoundPropertyModel);
         this.prService = projectService;
         this.feedBack = feedbackPanel;
@@ -61,6 +69,17 @@ public class ProjectForm extends Form<Project> {
         }
         this.customerFiel = TextFieldBuilder.<String>create("idCustomer", customerName, "name").withTooltip("customer can be affected").build();
         add(customerFiel);
+
+        final List<Person> personsOfProject = personService.getPersonsOfProject(this.project.getId());
+        final ListChoiceEntities<Person> personsView = new ListChoiceEntities<Person>("table",
+                new PropertyModel<Person>(this, "associatedPersons"),
+                personsOfProject);
+        add(personsView);
+        final List<PersonGroup> teamsOfProject = personGroupService.getTeamsOfProject(this.project.getId());
+        final ListChoiceEntities<PersonGroup> teamsView = new ListChoiceEntities<PersonGroup>("table",
+                new PropertyModel<PersonGroup>(this, "associatedTeams"),
+                teamsOfProject);
+        add(teamsView);
 
         //button
         add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
@@ -107,8 +126,6 @@ public class ProjectForm extends Form<Project> {
     public TextField getCustomerFiel() {
         return customerFiel;
     }
-    
-    
 
     @Override
     protected void onSubmit() {
