@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -62,7 +61,7 @@ public class PersonAddPage extends LayoutPage {
         final PersonFormData newPersonForm = formularService.newPersonForm();
         final PersonForm personForm
                 = new PersonForm(personDAO, newPersonForm, "form", feedbackPanel,
-                        new CompoundPropertyModel<Person>(_person), this, personGroupService);
+                        new CompoundPropertyModel<Person>(_person), this, personGroupService, projectDAO);
         add(personForm);
 
         IChoiceRenderer<PersonGroup> iChoiceRenderer = new IChoiceRenderer<PersonGroup>() {
@@ -79,7 +78,7 @@ public class PersonAddPage extends LayoutPage {
 
         };
 
-        final SelectDialog<PersonGroup> dialogPersonGroup = new SelectDialog<PersonGroup>("dialogGroup", "Choose a team or department",personGroupService, iChoiceRenderer) {
+        final SelectDialog<PersonGroup> dialogPersonGroup = new SelectDialog<PersonGroup>("dialogGroup", "Choose a team or department", personGroupService, iChoiceRenderer) {
 
             @Override
             public void onClose(AjaxRequestTarget target, DialogButton button) {

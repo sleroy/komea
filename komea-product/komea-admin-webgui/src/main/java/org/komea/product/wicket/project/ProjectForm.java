@@ -71,12 +71,12 @@ public class ProjectForm extends Form<Project> {
         add(customerFiel);
 
         final List<Person> personsOfProject = personService.getPersonsOfProject(this.project.getId());
-        final ListChoiceEntities<Person> personsView = new ListChoiceEntities<Person>("table",
+        final ListChoiceEntities<Person> personsView = new ListChoiceEntities<Person>("personsTable",
                 new PropertyModel<Person>(this, "associatedPersons"),
                 personsOfProject);
         add(personsView);
         final List<PersonGroup> teamsOfProject = personGroupService.getTeamsOfProject(this.project.getId());
-        final ListChoiceEntities<PersonGroup> teamsView = new ListChoiceEntities<PersonGroup>("table",
+        final ListChoiceEntities<PersonGroup> teamsView = new ListChoiceEntities<PersonGroup>("teamsTable",
                 new PropertyModel<PersonGroup>(this, "associatedTeams"),
                 teamsOfProject);
         add(teamsView);
