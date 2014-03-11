@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
-import org.komea.product.database.enums.PersonGroupType;
-import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 
 /**
@@ -257,36 +255,6 @@ public class PersonDto implements Serializable {
     public void setRole(final String role) {
 
         this.role = role;
-    }
-
-    /**
-     * This method set team
-     *
-     * @param _team the team to insert
-     */
-    public void modifyTeam(final PersonGroup _team) {
-
-        if (_team != null) {
-            if (_team.getType() != PersonGroupType.TEAM) {
-                throw new IllegalArgumentException("_team paramter must be of TEAM type");
-            }
-            team = new Pair<String, String>(_team.getPersonGroupKey(), _team.getName());
-        }
-    }
-
-    /**
-     * This method set department
-     *
-     * @param _department the department to insert
-     */
-    public void modifyDepartment(final PersonGroup _department) {
-
-        if (_department != null) {
-            if (_department.getType() != PersonGroupType.DEPARTMENT) {
-                throw new IllegalArgumentException("_department paramter must be of DEPARTMENT type");
-            }
-            department = new Pair<String, String>(_department.getPersonGroupKey(), _department.getName());
-        }
     }
 
     public void setTeam(final Pair<String, String> team) {

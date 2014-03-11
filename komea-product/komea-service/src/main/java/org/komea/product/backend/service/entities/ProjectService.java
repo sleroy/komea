@@ -1,11 +1,8 @@
-
 package org.komea.product.backend.service.entities;
 
-
-
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.dao.HasProjectPersonDao;
@@ -33,57 +30,49 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
-
-
-
 /**
  */
 @Service
 @Transactional
 public final class ProjectService extends AbstractService<Project, Integer, ProjectCriteria>
-        implements IProjectService
-{
-    
-    
+        implements IProjectService {
+
     @Autowired
-    private CustomerDao              customerDAO;
-    
+    private CustomerDao customerDAO;
+
     @Autowired
-    private LinkDao                  linkDAO;
-    
+    private LinkDao linkDAO;
+
     @Autowired
-    private IPersonGroupService      personGroupService;
-    
+    private IPersonGroupService personGroupService;
+
     @Autowired
-    private IPersonService           personService;
-    
+    private IPersonService personService;
+
     @Autowired
-    private HasProjectPersonDao      projectPersonDAO;
-    
+    private HasProjectPersonDao projectPersonDAO;
+
     @Autowired
     private HasProjectPersonGroupDao projectPersonGroupDAO;
-    
+
     @Autowired
-    private HasProjectTagDao         projectTagsDAO;
-    
+    private HasProjectTagDao projectTagsDAO;
+
     @Autowired
-    private ProjectDao               requiredDAO;
-    
+    private ProjectDao requiredDAO;
+
     @Autowired
-    private TagDao                   tagDAO;
-    
-    
-    
+    private TagDao tagDAO;
+
     /**
      * (non-Javadoc)
-     * 
-     * @see org.komea.product.backend.service.entities.IProjectService#getAllProjects()
+     *
+     * @see
+     * org.komea.product.backend.service.entities.IProjectService#getAllProjects()
      */
     @Override
     public List<ProjectDto> getAllProjects() {
-    
-    
+
         final ProjectCriteria request = new ProjectCriteria();
         final List<Project> projects = requiredDAO.selectByCriteria(request);
         final List<ProjectDto> projectDTOs = Lists.newArrayList();
@@ -102,49 +91,41 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
             projectDto.addLinkList(getProjectLinks(project.getId()));
             projectDTOs.add(projectDto);
         }
-        
+
         return projectDTOs;
     }
-    
-    
+
     @Override
     public List<Project> getAllProjectsEntities() {
-    
-    
+
         final ProjectCriteria projectCriteria = new ProjectCriteria();
         return requiredDAO.selectByCriteria(projectCriteria);
-        
+
     }
-    
-    
+
     /**
      * @return the customerDAO
      */
     public CustomerDao getCustomerDAO() {
-    
-    
+
         return customerDAO;
     }
-    
-    
+
     /**
      * @return the linkDAO
      */
     public LinkDao getLinkDAO() {
-    
-    
+
         return linkDAO;
     }
-    
-    
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.service.entities.IProjectService#getOrCreate(java.lang.String)
      */
     @Override
     public Project getOrCreate(final String _projectKey) {
-    
-    
+
         Project project = selectByKey(_projectKey);
         if (project == null) {
             project = new Project();
@@ -156,74 +137,41 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         }
         return project;
     }
-    
-    
+
     /**
      * (non-Javadoc)
-     * 
-     * @see org.komea.product.backend.service.entities.IProjectService#getProjectLinks(java.lang.Integer)
+     *
+     * @see
+     * org.komea.product.backend.service.entities.IProjectService#getProjectLinks(java.lang.Integer)
      */
     @Override
     public List<Link> getProjectLinks(final Integer _projectId) {
-    
-    
+
         final LinkCriteria criteria = new LinkCriteria();
         criteria.createCriteria().andIdProjectEqualTo(_projectId);
-        
+
         return linkDAO.selectByCriteria(criteria);
     }
-    
-    
+
     /**
      * @return the projectPersonDAO
      */
     public HasProjectPersonDao getProjectPersonDAO() {
-    
-    
+
         return projectPersonDAO;
     }
-    
-    
+
     /**
      * @return the projectPersonGroupDAO
      */
     public HasProjectPersonGroupDao getProjectPersonGroupDAO() {
-    
-    
+
         return projectPersonGroupDAO;
     }
-    
-    
-    /**
-     * Method getProjects.
-     * 
-     * @param projectKeys
-     *            List<String>
-     * @return List<Project>
-     * @see
-     *      org.komea.product.backend.service.entities.IProjectService#getProjects(List<String>)
-     */
-    @Override
-    public List<Project> getProjects(final List<String> projectKeys) {
-    
-    
-        final ProjectCriteria projectCriteria = new ProjectCriteria();
-        if (projectKeys.isEmpty()) {
-            projectCriteria.createCriteria();
-        } else {
-            for (final String entityKey : projectKeys) {
-                final ProjectCriteria.Criteria criteria = projectCriteria.or();
-                criteria.andProjectKeyEqualTo(entityKey);
-            }
-        }
-        return requiredDAO.selectByCriteria(projectCriteria);
-    }
-    
-    
+
     @Override
     public List<Project> getProjectsOfPerson(final Integer _personId) {
-    
-    
+
         final HasProjectPersonCriteria criteria = new HasProjectPersonCriteria();
         criteria.createCriteria().andIdPersonEqualTo(_personId);
         final List<HasProjectPersonKey> result = projectPersonDAO.selectByCriteria(criteria);
@@ -236,33 +184,30 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         }
         return projects;
     }
-    
-    
+
     @Override
     public List<Project> getProjectsOfPersonGroup(final Integer _personGroupId) {
-    
-    
+
         final HasProjectPersonGroupCriteria criteria = new HasProjectPersonGroupCriteria();
         criteria.createCriteria().andIdPersonGroupEqualTo(_personGroupId);
-        final List<HasProjectPersonGroupKey> selectByCriteria =
-                projectPersonGroupDAO.selectByCriteria(criteria);
+        final List<HasProjectPersonGroupKey> selectByCriteria
+                = projectPersonGroupDAO.selectByCriteria(criteria);
         final List<Integer> projectIds = new ArrayList<Integer>(selectByCriteria.size());
         for (final HasProjectPersonGroupKey projectPersonGroup : selectByCriteria) {
             projectIds.add(projectPersonGroup.getIdProject());
         }
         return selectByPrimaryKeyList(projectIds);
     }
-    
-    
+
     /**
      * (non-Javadoc)
-     * 
-     * @see org.komea.product.backend.service.entities.IProjectService#getProjectTags(java.lang.Integer)
+     *
+     * @see
+     * org.komea.product.backend.service.entities.IProjectService#getProjectTags(java.lang.Integer)
      */
     @Override
     public List<String> getProjectTags(final Integer _projectId) {
-    
-    
+
         final List<String> tags = Lists.newArrayList();
         final HasProjectTagCriteria criteria = new HasProjectTagCriteria();
         criteria.createCriteria().andIdProjectEqualTo(_projectId);
@@ -272,141 +217,110 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
             if (tag != null) {
                 tags.add(tag.getName());
             }
-            
+
         }
         return tags;
     }
-    
-    
+
     /**
      * @return the projectTagsDAO
      */
     public HasProjectTagDao getProjectTagsDAO() {
-    
-    
+
         return projectTagsDAO;
     }
-    
-    
+
     @Override
     public ProjectDao getRequiredDAO() {
-    
-    
+
         return requiredDAO;
     }
-    
-    
+
     /**
      * @return the tagDAO
      */
     public TagDao getTagDAO() {
-    
-    
+
         return tagDAO;
     }
-    
-    
+
     /**
      * Method projectsToBaseEntities.
-     * 
-     * @param projects
-     *            List<Project>
+     *
+     * @param projects List<Project>
      * @return List<BaseEntity>
      * @see
-     *      org.komea.product.backend.service.entities.IProjectService#projectsToBaseEntities(List<Project>)
+     * org.komea.product.backend.service.entities.IProjectService#projectsToBaseEntities(List<Project>)
      */
     @Override
     public List<BaseEntity> projectsToBaseEntities(final List<Project> projects) {
-    
-    
+
         final List<BaseEntity> entities = new ArrayList<BaseEntity>(projects.size());
         for (final Project project : projects) {
-            final BaseEntity entity =
-                    new BaseEntity(EntityType.PROJECT, project.getId(), project.getProjectKey(),
+            final BaseEntity entity
+                    = new BaseEntity(EntityType.PROJECT, project.getId(), project.getProjectKey(),
                             project.getName(), project.getDescription());
             entities.add(entity);
         }
         return entities;
     }
-    
-    
+
     /**
-     * @param _customerDAO
-     *            the customerDAO to set
+     * @param _customerDAO the customerDAO to set
      */
     public void setCustomerDAO(final CustomerDao _customerDAO) {
-    
-    
+
         customerDAO = _customerDAO;
     }
-    
-    
+
     /**
-     * @param _linkDAO
-     *            the linkDAO to set
+     * @param _linkDAO the linkDAO to set
      */
     public void setLinkDAO(final LinkDao _linkDAO) {
-    
-    
+
         linkDAO = _linkDAO;
     }
-    
-    
+
     /**
-     * @param _projectPersonDAO
-     *            the projectPersonDAO to set
+     * @param _projectPersonDAO the projectPersonDAO to set
      */
     public void setProjectPersonDAO(final HasProjectPersonDao _projectPersonDAO) {
-    
-    
+
         projectPersonDAO = _projectPersonDAO;
     }
-    
-    
+
     /**
-     * @param _projectPersonGroupDAO
-     *            the projectPersonGroupDAO to set
+     * @param _projectPersonGroupDAO the projectPersonGroupDAO to set
      */
     public void setProjectPersonGroupDAO(final HasProjectPersonGroupDao _projectPersonGroupDAO) {
-    
-    
+
         projectPersonGroupDAO = _projectPersonGroupDAO;
     }
-    
-    
+
     /**
-     * @param _projectTagsDAO
-     *            the projectTagsDAO to set
+     * @param _projectTagsDAO the projectTagsDAO to set
      */
     public void setProjectTagsDAO(final HasProjectTagDao _projectTagsDAO) {
-    
-    
+
         projectTagsDAO = _projectTagsDAO;
     }
-    
-    
+
     public void setRequiredDAO(final ProjectDao _requiredDAO) {
-    
-    
+
         requiredDAO = _requiredDAO;
     }
-    
-    
+
     /**
-     * @param _tagDAO
-     *            the tagDAO to set
+     * @param _tagDAO the tagDAO to set
      */
     public void setTagDAO(final TagDao _tagDAO) {
-    
-    
+
         tagDAO = _tagDAO;
     }
-    
-    
+
     @Override
     protected ProjectCriteria createPersonCriteriaOnLogin(final String key) {
-    
-    
+
         final ProjectCriteria criteria = new ProjectCriteria();
         criteria.createCriteria().andProjectKeyEqualTo(key);
         return criteria;

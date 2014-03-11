@@ -138,6 +138,18 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
         return CollectionUtil.singleOrNull(selectByCriteria(createPersonCriteriaOnLogin(key)));
     }
 
+    @Override
+    public List<TEntity> selectByKeys(List<String> keys) {
+        final List<TEntity> elements = new ArrayList<TEntity>(keys.size());
+        for (final String key : keys) {
+            final TEntity element = selectByKey(key);
+            if (element != null) {
+                elements.add(element);
+            }
+        }
+        return elements;
+    }
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.service.IGenericService#selectByCriteria(java.lang.Object)

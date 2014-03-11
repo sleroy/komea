@@ -1,11 +1,8 @@
-
 package org.komea.product.backend.service.entities;
 
-
-
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.database.dao.HasProjectPersonGroupDao;
 import org.komea.product.database.dao.PersonGroupDao;
@@ -26,173 +23,144 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Lists;
-
-
-
 /**
  */
 @Service
 public final class PersonGroupService extends
-        AbstractService<PersonGroup, Integer, PersonGroupCriteria> implements IPersonGroupService
-{
-    
-    
-    private static final Logger      LOGGER = LoggerFactory.getLogger(PersonGroupService.class
-                                                    .getName());
-    
+        AbstractService<PersonGroup, Integer, PersonGroupCriteria> implements IPersonGroupService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PersonGroupService.class
+            .getName());
+
     @Autowired
-    private IPersonService           personService;
-    
+    private IPersonService personService;
+
     @Autowired
     private HasProjectPersonGroupDao projectPersonGroupDao;
-    
+
     @Autowired
-    private IProjectService          projectService;
-    
+    private IProjectService projectService;
+
     @Autowired
-    private PersonGroupDao           requiredDAO;
-    
-    
-    
+    private PersonGroupDao requiredDAO;
+
     /**
      * Method personGroupsToBaseEntities.
-     * 
-     * @param personGroups
-     *            List<PersonGroup>
-     * @param entityType
-     *            EntityType
+     *
+     * @param personGroups List<PersonGroup>
+     * @param entityType EntityType
      * @return List<BaseEntity>
      * @see
-     *      org.komea.product.backend.service.entities.IPersonGroupService#personGroupsToBaseEntities(List<PersonGroup>,
-     *      EntityType)
+     * org.komea.product.backend.service.entities.IPersonGroupService#personGroupsToBaseEntities(List<PersonGroup>,
+     * EntityType)
      */
     @Override
     public List<BaseEntity> convertPersonGroupsToBaseEntities(
             final List<PersonGroup> personGroups,
             final EntityType entityType) {
-    
-    
+
         final List<BaseEntity> entities = new ArrayList<BaseEntity>(personGroups.size());
         for (final PersonGroup personGroup : personGroups) {
-            final BaseEntity entity =
-                    new BaseEntity(entityType, personGroup.getId(),
+            final BaseEntity entity
+                    = new BaseEntity(entityType, personGroup.getId(),
                             personGroup.getPersonGroupKey(), personGroup.getName(),
                             personGroup.getDescription());
             entities.add(entity);
         }
         return entities;
     }
-    
-    
+
     /**
      * (non-Javadoc)
-     * 
-     * @see org.komea.product.backend.service.entities.IPersonGroupService#getAllDepartments()
+     *
+     * @see
+     * org.komea.product.backend.service.entities.IPersonGroupService#getAllDepartments()
      */
     @Override
     public List<DepartmentDto> getAllDepartments() {
-    
-    
+
         final List<PersonGroup> groups = getAllPersonGroups(PersonGroupType.DEPARTMENT);
         return convertToDepartmentDtoList(groups);
     }
-    
-    
+
     @Override
     public List<PersonGroup> getAllDepartmentsPG() {
-    
-    
+
         return getAllPersonGroups(PersonGroupType.DEPARTMENT);
     }
-    
-    
+
     /**
      * get all teams converted in TeamDto
-     * 
+     *
      * @return teams
      */
     @Override
     public List<TeamDto> getAllTeams() {
-    
-    
+
         final List<PersonGroup> groups = getAllPersonGroups(PersonGroupType.TEAM);
         return convertToTeamDtoList(groups);
     }
-    
-    
+
     @Override
     public List<PersonGroup> getAllTeamsPG() {
-    
-    
+
         return getAllPersonGroups(PersonGroupType.TEAM);
     }
-    
-    
+
     @Override
     public List<PersonGroup> getChildren(final Integer groupId) {
-    
-    
+
         final PersonGroupCriteria criteria = new PersonGroupCriteria();
         criteria.createCriteria().andIdPersonGroupParentEqualTo(groupId);
         return requiredDAO.selectByCriteria(criteria);
     }
-    
-    
+
     /**
      * (non-Javadoc)
-     * 
-     * @see org.komea.product.backend.service.entities.IPersonGroupService#getDepartment(java.lang.Integer)
+     *
+     * @see
+     * org.komea.product.backend.service.entities.IPersonGroupService#getDepartment(java.lang.Integer)
      */
     @Override
     public PersonGroup getDepartment(final Integer _groupID) {
-    
-    
+
         return getPersonGroup(PersonGroupType.DEPARTMENT, _groupID);
     }
-    
-    
+
     @Override
     public PersonGroup getParent(final Integer groupId) {
-    
-    
+
         return getParent(selectByPrimaryKey(groupId));
     }
-    
-    
+
     @Override
     public PersonGroupDao getRequiredDAO() {
-    
-    
+
         return requiredDAO;
     }
-    
-    
+
     /**
      * Method getTeam.
-     * 
-     * @param _groupID
-     *            Integer
+     *
+     * @param _groupID Integer
      * @return PersonGroup
-     * @see org.komea.product.backend.service.entities.IPersonGroupService#getTeam(Integer)
+     * @see
+     * org.komea.product.backend.service.entities.IPersonGroupService#getTeam(Integer)
      */
     @Override
     public PersonGroup getTeam(final Integer _groupID) {
-    
-    
+
         return getPersonGroup(PersonGroupType.TEAM, _groupID);
     }
-    
-    
+
     @Override
     public List<PersonGroup> getTeamsOfProject(final Integer _projectId) {
-    
-    
+
         final List<PersonGroup> groupList = Lists.newArrayList();
         final HasProjectPersonGroupCriteria criteria = new HasProjectPersonGroupCriteria();
         criteria.createCriteria().andIdProjectEqualTo(_projectId);
-        final List<HasProjectPersonGroupKey> selection =
-                projectPersonGroupDao.selectByCriteria(criteria);
+        final List<HasProjectPersonGroupKey> selection
+                = projectPersonGroupDao.selectByCriteria(criteria);
         for (final HasProjectPersonGroupKey hasProjectPersonGroupKey : selection) {
             final PersonGroupCriteria departmentCriteria = new PersonGroupCriteria();
             departmentCriteria.createCriteria()
@@ -202,50 +170,14 @@ public final class PersonGroupService extends
         }
         return groupList;
     }
-    
-    
-    /**
-     * Method getPersonGroups.
-     * 
-     * @param personGroupKeys
-     *            List<String>
-     * @param entityType
-     *            EntityType
-     * @return List<PersonGroup>
-     * @see
-     *      org.komea.product.backend.service.entities.IPersonGroupService#getPersonGroups(List<String>,
-     *      EntityType)
-     */
-    @Override
-    public List<PersonGroup> searchPersonGroups(
-            final List<String> personGroupKeys,
-            final EntityType entityType) {
-    
-    
-        final PersonGroupCriteria personGroupCriteria = new PersonGroupCriteria();
-        final PersonGroupType type = PersonGroupType.valueOf(entityType.name());
-        if (personGroupKeys.isEmpty()) {
-            personGroupCriteria.createCriteria().andTypeEqualTo(type);
-        } else {
-            for (final String entityKey : personGroupKeys) {
-                final PersonGroupCriteria.Criteria criteria = personGroupCriteria.or();
-                criteria.andPersonGroupKeyEqualTo(entityKey).andTypeEqualTo(type);
-            }
-        }
-        return requiredDAO.selectByCriteria(personGroupCriteria);
-    }
-    
-    
+
     public void setRequiredDAO(final PersonGroupDao _requiredDAO) {
-    
-    
+
         requiredDAO = _requiredDAO;
     }
-    
-    
+
     private DepartmentDto convertToDepartmentDto(final PersonGroup group) {
-    
-    
+
         final DepartmentDto department = new DepartmentDto();
         department.setKey(group.getPersonGroupKey());
         department.setName(group.getName());
@@ -261,11 +193,9 @@ public final class PersonGroupService extends
         }
         return department;
     }
-    
-    
+
     private List<DepartmentDto> convertToDepartmentDtoList(final List<PersonGroup> groups) {
-    
-    
+
         final List<DepartmentDto> departments = new ArrayList<DepartmentDto>(groups.size());
         for (final PersonGroup group : groups) {
             final DepartmentDto department = convertToDepartmentDto(group);
@@ -273,11 +203,9 @@ public final class PersonGroupService extends
         }
         return departments;
     }
-    
-    
+
     private TeamDto convertToTeamDto(final PersonGroup group) {
-    
-    
+
         final TeamDto team = new TeamDto();
         team.setKey(group.getPersonGroupKey());
         team.setName(group.getName());
@@ -297,11 +225,9 @@ public final class PersonGroupService extends
         }
         return team;
     }
-    
-    
+
     private List<TeamDto> convertToTeamDtoList(final List<PersonGroup> groups) {
-    
-    
+
         final List<TeamDto> teams = new ArrayList<TeamDto>(groups.size());
         for (final PersonGroup group : groups) {
             final TeamDto team = convertToTeamDto(group);
@@ -309,49 +235,45 @@ public final class PersonGroupService extends
         }
         return teams;
     }
-    
-    
+
     private List<PersonGroup> getAllPersonGroups(final PersonGroupType type) {
-    
-    
+
         final PersonGroupCriteria criteria = new PersonGroupCriteria();
         criteria.createCriteria().andTypeEqualTo(type);
         return selectByCriteria(criteria);
     }
-    
-    
+
     private PersonGroup getParent(final PersonGroup group) {
-    
-    
+
         final PersonGroupType parentType = getParentType(group);
         return getPersonGroup(parentType, group.getId());
     }
-    
-    
+
     private PersonGroupType getParentType(final PersonGroup group) {
-    
-    
+
         final int parentTypeOrdinal = group.getType().ordinal() + 1;
-        if (PersonGroupType.values().length > parentTypeOrdinal) { return PersonGroupType.values()[parentTypeOrdinal]; }
+        if (PersonGroupType.values().length > parentTypeOrdinal) {
+            return PersonGroupType.values()[parentTypeOrdinal];
+        }
         return null;
     }
-    
-    
+
     private PersonGroup getPersonGroup(final PersonGroupType type, final Integer _groupID) {
-    
-    
-        if (type == null || _groupID == null) { return null; }
+
+        if (type == null || _groupID == null) {
+            return null;
+        }
         final PersonGroup personGroup = requiredDAO.selectByPrimaryKey(_groupID);
-        if (personGroup != null && !type.equals(personGroup.getType())) { return getPersonGroup(
-                type, personGroup.getIdPersonGroupParent()); }
+        if (personGroup != null && !type.equals(personGroup.getType())) {
+            return getPersonGroup(
+                    type, personGroup.getIdPersonGroupParent());
+        }
         return personGroup;
     }
-    
-    
+
     @Override
     protected PersonGroupCriteria createPersonCriteriaOnLogin(final String key) {
-    
-    
+
         final PersonGroupCriteria criteria = new PersonGroupCriteria();
         criteria.createCriteria().andPersonGroupKeyEqualTo(key);
         return criteria;

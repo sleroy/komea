@@ -47,14 +47,6 @@ public interface IProjectService extends IGenericService<Project, Integer, Proje
     List<Link> getProjectLinks(Integer _projectId);
 
     /**
-     * Method getProjects.
-     *
-     * @param projectKeys List<String>
-     * @return List<Project>
-     */
-    List<Project> getProjects(final List<String> projectKeys);
-
-    /**
      * This method list tags associate to a project
      *
      * @param _projectId the project id

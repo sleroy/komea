@@ -68,18 +68,18 @@ public final class EntityService implements IEntityService {
         }
         switch (_entityType) {
             case PERSON:
-                final List<Person> persons = personService.findPersonWithGivenLogin(_entityKeys);
+                final List<Person> persons = personService.selectByKeys(_entityKeys);
                 entities.addAll(personService.convertPersonsToBaseEntities(persons));
                 break;
             case TEAM:
             case DEPARTMENT:
                 final List<PersonGroup> personGroups
-                        = personGroupService.searchPersonGroups(_entityKeys, _entityType);
-                entities.addAll(personGroupService.convertPersonGroupsToBaseEntities(personGroups,
-                        _entityType));
+                        = personGroupService.selectByKeys(_entityKeys);
+                entities.addAll(personGroupService.convertPersonGroupsToBaseEntities(
+                        personGroups, _entityType));
                 break;
             case PROJECT:
-                final List<Project> projects = projectService.getProjects(_entityKeys);
+                final List<Project> projects = projectService.selectByKeys(_entityKeys);
                 entities.addAll(projectService.projectsToBaseEntities(projects));
                 break;
         }

@@ -58,15 +58,6 @@ public interface IPersonGroupService extends
     PersonGroup getDepartment(Integer _groupID);
 
     /**
-     * Method getPersonGroups.
-     *
-     * @param personGroupKeys List<String>
-     * @param entityType EntityType
-     * @return List<PersonGroup>
-     */
-    List<PersonGroup> searchPersonGroups(List<String> personGroupKeys, EntityType entityType);
-
-    /**
      * This method get a team from a group. if the group is a team, it will be
      * return otherwise it will find it in the parent group
      *

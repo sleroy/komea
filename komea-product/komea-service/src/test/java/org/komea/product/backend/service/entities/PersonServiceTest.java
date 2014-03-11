@@ -1,14 +1,13 @@
 package org.komea.product.backend.service.entities;
 
 import com.google.common.collect.Lists;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.database.dao.HasProjectPersonDao;
 import org.komea.product.database.dao.PersonDao;
-import org.komea.product.database.dao.PersonRoleDao;
-import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.PersonDto;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.HasProjectPersonCriteria;
@@ -36,20 +35,19 @@ public class PersonServiceTest {
     private HasProjectPersonDao projectPersonDaoMock;
 
     @Mock
-    private ProjectDao projectDAOmock;
-
-    @Mock
     private PersonDao personDAOmock;
 
     @Mock
-    private PersonRoleDao roleDAOmock;
-
-    @Mock
     private IPersonGroupService groupService;
+    @Mock
+    private IPersonRoleService personRoleService;
+    @Mock
+    private IProjectService projectService;
 
     //
     /**
      * Method getDepartment.
+     *
      * @return PersonGroup
      */
     public PersonGroup getDepartment() {
@@ -67,6 +65,7 @@ public class PersonServiceTest {
 
     /**
      * Method getPersons.
+     *
      * @return List<Person>
      */
     private List<Person> getPersons() {
@@ -85,6 +84,7 @@ public class PersonServiceTest {
 
     /**
      * Method getProjects.
+     *
      * @return List<Project>
      */
     private List<Project> getProjects() {
@@ -101,6 +101,7 @@ public class PersonServiceTest {
 
     /**
      * Method getRole.
+     *
      * @return PersonRole
      */
     private PersonRole getRole() {
@@ -111,6 +112,7 @@ public class PersonServiceTest {
 
     /**
      * Method getTeam.
+     *
      * @return PersonGroup
      */
     private PersonGroup getTeam() {
@@ -125,88 +127,61 @@ public class PersonServiceTest {
     }
 
     @Test
-        public void testConvertAllPersonsIntoPersonDTO() {
-    
-            Mockito.when(personDAOmock.selectByCriteria(Matchers.any(PersonCriteria.class))).thenReturn(getPersons());
-    
-            List<PersonDto> personList = service.convertAllPersonsIntoPersonDTO();
-    
-            Assert.assertEquals(1, personList.size());
-            PersonDto person = personList.get(0);
-            Assert.assertEquals(1, person.getId().intValue());
-            Assert.assertEquals("lskywalker", person.getLogin());
-            Assert.assertEquals(0, person.nbProject());
-            Assert.assertEquals(null, person.departmentKey());
-            Assert.assertEquals(null, person.departmentName());
-            Assert.assertEquals(null, person.getRole());
-    
-            Mockito.verify(personDAOmock, Mockito.times(1)).selectByCriteria(Matchers.any(PersonCriteria.class));
-            Mockito.verify(projectPersonDaoMock, Mockito.times(1)).selectByCriteria(Matchers.any(HasProjectPersonCriteria.class));
-    
-            Mockito.verify(projectDAOmock, Mockito.times(0)).selectByPrimaryKey(1);
-            Mockito.verify(groupService, Mockito.times(1)).getDepartment(2);
-            Mockito.verify(roleDAOmock, Mockito.times(1)).selectByPrimaryKey(1);
-    
-        }
+    public void testConvertAllPersonsIntoPersonDTO() {
+
+        Mockito.when(personDAOmock.selectByCriteria(Matchers.any(PersonCriteria.class))).thenReturn(getPersons());
+        Mockito.when(groupService.selectByPrimaryKey(2)).thenReturn(getTeam());
+        Mockito.when(personRoleService.selectByPrimaryKey(1)).thenReturn(getRole());
+        Mockito.when(projectService.getProjectsOfPerson(1)).thenReturn(Collections.EMPTY_LIST);
+
+        List<PersonDto> personList = service.convertAllPersonsIntoPersonDTO();
+
+        Assert.assertEquals(1, personList.size());
+        PersonDto person = personList.get(0);
+        Assert.assertEquals(1, person.getId().intValue());
+        Assert.assertEquals("lskywalker", person.getLogin());
+        Assert.assertEquals(0, person.nbProject());
+        Assert.assertFalse(person.hasDepartment());
+        Assert.assertTrue(person.hasTeam());
+        Assert.assertEquals("KOMEA_TEAM", person.teamKey());
+        Assert.assertEquals("dev", person.getRole());
+
+        Mockito.verify(personDAOmock, Mockito.times(1)).selectByCriteria(Matchers.any(PersonCriteria.class));
+
+        Mockito.verify(projectService, Mockito.times(0)).selectByPrimaryKey(1);
+
+    }
 
     @Test
-        public void testConvertAllPersonsIntoPersonDTOComplete() {
-    
-            Mockito.when(personDAOmock.selectByCriteria(Matchers.any(PersonCriteria.class))).thenReturn(getPersons());
-    
-            List<HasProjectPersonKey> projectPersonList = Lists.newArrayList(new HasProjectPersonKey(1, 1));
-            Mockito.when(projectPersonDaoMock.selectByCriteria(Matchers.any(HasProjectPersonCriteria.class))).thenReturn(projectPersonList);
-    
-            Mockito.when(projectDAOmock.selectByPrimaryKey(1)).thenReturn(getProjects().get(0));
-    
-            Mockito.when(groupService.getDepartment(2)).thenReturn(getDepartment());
-    
-            Mockito.when(groupService.getTeam(2)).thenReturn(getTeam());
-    
-            Mockito.when(roleDAOmock.selectByPrimaryKey(1)).thenReturn(getRole());
-    
-            List<PersonDto> personList = service.convertAllPersonsIntoPersonDTO();
-    
-            Assert.assertEquals(1, personList.size());
-            PersonDto person = personList.get(0);
-            Assert.assertEquals(1, person.getId().intValue());
-            Assert.assertEquals("lskywalker", person.getLogin());
-            Assert.assertEquals(1, person.nbProject());
-            Assert.assertEquals("RESEARCH_DEPARTMENT", person.departmentKey());
-            Assert.assertEquals("research department", person.departmentName());
-            Assert.assertEquals("dev", person.getRole());
-    
-            Mockito.verify(personDAOmock, Mockito.times(1)).selectByCriteria(Matchers.any(PersonCriteria.class));
-            Mockito.verify(projectPersonDaoMock, Mockito.times(1)).selectByCriteria(Matchers.any(HasProjectPersonCriteria.class));
-    
-            Mockito.verify(projectDAOmock, Mockito.times(1)).selectByPrimaryKey(1);
-            Mockito.verify(groupService, Mockito.times(1)).getDepartment(2);
-            Mockito.verify(groupService, Mockito.times(1)).getTeam(2);
-            Mockito.verify(roleDAOmock, Mockito.times(1)).selectByPrimaryKey(1);
-    
-        }
+    public void testConvertAllPersonsIntoPersonDTOComplete() {
 
-    @Test
-            public void testFindProjectsAssociatedToAPerson() {
-        
-                List<HasProjectPersonKey> projectPersonList = Lists.newArrayList(new HasProjectPersonKey(1, 1));
-                Mockito.when(projectPersonDaoMock.selectByCriteria(Matchers.any(HasProjectPersonCriteria.class))).thenReturn(projectPersonList);
-        
-                Mockito.when(projectDAOmock.selectByPrimaryKey(1)).thenReturn(getProjects().get(0));
-        
-                List<Project> projects = service.findProjectsAssociatedToAPerson(1);
-        
-                Assert.assertEquals(1, projects.size());
-                Project project = projects.get(0);
-                Assert.assertEquals("komea", project.getName());
-                Assert.assertEquals("KOMEA", project.getProjectKey());
-                Assert.assertEquals("komea kpi", project.getDescription());
-                Assert.assertEquals(1, project.getIdCustomer().intValue());
-        
-                Mockito.verify(projectPersonDaoMock, Mockito.times(1)).selectByCriteria(Matchers.any(HasProjectPersonCriteria.class));
-        
-                Mockito.verify(projectDAOmock, Mockito.times(1)).selectByPrimaryKey(1);
-        
-            }
+        Mockito.when(personDAOmock.selectByCriteria(Matchers.any(PersonCriteria.class))).thenReturn(getPersons());
+
+        List<HasProjectPersonKey> projectPersonList = Lists.newArrayList(new HasProjectPersonKey(1, 1));
+        Mockito.when(projectPersonDaoMock.selectByCriteria(Matchers.any(HasProjectPersonCriteria.class))).thenReturn(projectPersonList);
+
+        Mockito.when(projectService.selectByPrimaryKey(1)).thenReturn(getProjects().get(0));
+
+        Mockito.when(groupService.selectByPrimaryKey(2)).thenReturn(getDepartment());
+
+        Mockito.when(personRoleService.selectByPrimaryKey(1)).thenReturn(getRole());
+        Mockito.when(projectService.getProjectsOfPerson(1)).thenReturn(getProjects());
+
+        List<PersonDto> personList = service.convertAllPersonsIntoPersonDTO();
+
+        Assert.assertEquals(1, personList.size());
+        PersonDto person = personList.get(0);
+        Assert.assertEquals(1, person.getId().intValue());
+        Assert.assertEquals("lskywalker", person.getLogin());
+        Assert.assertEquals(1, person.nbProject());
+        Assert.assertEquals("RESEARCH_DEPARTMENT", person.departmentKey());
+        Assert.assertEquals("research department", person.departmentName());
+        Assert.assertEquals("dev", person.getRole());
+
+        Mockito.verify(personDAOmock, Mockito.times(1)).selectByCriteria(Matchers.any(PersonCriteria.class));
+
+        Mockito.verify(personRoleService, Mockito.times(1)).selectByPrimaryKey(1);
+
+    }
 
 }
