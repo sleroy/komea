@@ -5,6 +5,7 @@
  */
 package org.komea.product.wicket.persongroup.department;
 
+import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -12,12 +13,12 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.komea.product.backend.service.entities.IPersonGroupService;
-import org.komea.product.backend.service.entities.IProjectService;
+import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.enums.PersonGroupType;
+import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
-import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
-import org.komea.product.wicket.project.ProjectPage;
+import org.komea.product.wicket.widget.GridViewEntities;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
@@ -33,7 +34,8 @@ public class DepartmentForm extends Form<PersonGroup> {
     private final LayoutPage page;
     private final PersonGroup personGroup;
 
-    DepartmentForm(String form, IPersonGroupService personGroupService, FeedbackPanel feedbackPanel, CompoundPropertyModel<PersonGroup> compoundPropertyModel, DepartmentEditPage aThis) {
+    DepartmentForm(String form, IPersonGroupService personGroupService, FeedbackPanel feedbackPanel,
+            CompoundPropertyModel<PersonGroup> compoundPropertyModel, DepartmentEditPage aThis, IPersonService personService) {
         super(form, compoundPropertyModel);
         this.prService = personGroupService;
         this.feedBack = feedbackPanel;
@@ -52,6 +54,16 @@ public class DepartmentForm extends Form<PersonGroup> {
 
 //        add(TextFieldBuilder.<String>create("idCustomer", this.project, "idCustomer").withTooltip("customer can be affected")
 //                .build());
+        final List<Person> associatedPersons = personService.getPersonsOfPersonGroup(this.personGroup.getId());
+        final GridViewEntities<Person> personsView = new GridViewEntities<Person>(
+                "personsTable", associatedPersons);
+        add(personsView);
+
+        final List<PersonGroup> associatedTeams = personGroupService.getChildren(this.personGroup.getId());
+        final GridViewEntities<PersonGroup> teamsView = new GridViewEntities<PersonGroup>(
+                "teamsTable", associatedTeams);
+        add(teamsView);
+
         //button
         add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
 

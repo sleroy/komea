@@ -7,7 +7,6 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.komea.product.backend.forms.PersonFormData;
 import org.komea.product.backend.service.entities.IPersonGroupService;
@@ -19,7 +18,7 @@ import org.komea.product.database.model.PersonRole;
 import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.NameGeneric;
-import org.komea.product.wicket.widget.ListChoiceEntities;
+import org.komea.product.wicket.widget.GridViewEntities;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
 
@@ -122,10 +121,9 @@ public final class PersonForm extends Form<Person> {
 //                _personFormData.getPersonRoles()));
 //        add(DropDownBuilder.buildDropdown("selectedProject", this, "project", "name",
 //                _personFormData.getProjects()));
-        final List<Project> projectsOfPerson = _projectService.getProjectsOfPerson(this.person.getId());
-        final ListChoiceEntities<Project> projectsView = new ListChoiceEntities<Project>("projectsTable",
-                new PropertyModel<Project>(this, "associatedProjects"),
-                projectsOfPerson);
+        final List<Project> associatedProjects = _projectService.getProjectsOfPerson(this.person.getId());
+        final GridViewEntities<Project> projectsView = new GridViewEntities<Project>(
+                "projectsTable", associatedProjects);
         add(projectsView);
 
         add(new SubmitButton("submit", this));

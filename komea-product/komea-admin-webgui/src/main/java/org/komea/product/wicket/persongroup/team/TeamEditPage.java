@@ -15,6 +15,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
+import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.SelectDialog;
@@ -31,6 +32,8 @@ public class TeamEditPage extends LayoutPage {
 
     @SpringBean
     private IPersonService personService;
+    @SpringBean
+    private IProjectService projectService;
 
     public TeamEditPage(PageParameters _parameters) {
         this(_parameters, new PersonGroup());
@@ -43,7 +46,8 @@ public class TeamEditPage extends LayoutPage {
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
 
-        final TeamForm teamForm = new TeamForm("form", personService, prService, feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this);
+        final TeamForm teamForm = new TeamForm("form", personService, prService,
+                feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this, projectService);
         add(teamForm);
 
         IChoiceRenderer<PersonGroup> iChoiceRenderer = new IChoiceRenderer<PersonGroup>() {

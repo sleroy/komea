@@ -11,6 +11,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -18,12 +19,14 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
+import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
+import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.NameGeneric;
-import org.komea.product.wicket.widget.ListChoiceEntities;
+import org.komea.product.wicket.widget.GridViewEntities;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
@@ -45,7 +48,9 @@ public class TeamForm extends Form<PersonGroup> {
     private List<Person> personsOfGroup;
     private List<Person> personNeedUpdate;
 
-    TeamForm(String form, IPersonService _personService, IPersonGroupService prService, FeedbackPanel feedbackPanel, CompoundPropertyModel<PersonGroup> compoundPropertyModel, TeamEditPage aThis) {
+    TeamForm(String form, IPersonService _personService, IPersonGroupService prService,
+            FeedbackPanel feedbackPanel, CompoundPropertyModel<PersonGroup> compoundPropertyModel,
+            TeamEditPage aThis, IProjectService projectService) {
 
         super(form, compoundPropertyModel);
         this.prService = prService;
@@ -66,14 +71,39 @@ public class TeamForm extends Form<PersonGroup> {
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("Description can be add").build());
 
         personsOfGroup = personService.getPersonsOfPersonGroup(this.personGroup.getId());
+        IChoiceRenderer<Person> displayGroup = new IChoiceRenderer<Person>() {
+            @Override
+            public Object getDisplayValue(Person t) {
+                return t.getFirstName() + " " + t.getLastName();
+            }
+
+            @Override
+            public String getIdValue(Person t, int i) {
+                return String.valueOf(t.getId());
+            }
+        };
         if (!personsOfGroup.isEmpty()) {
             this.selectedPerson = personsOfGroup.get(0);
         }
-        final ListChoiceEntities<Person> listEntite = new ListChoiceEntities<Person>("table",
-                new PropertyModel<Person>(this, "selectedPerson"),
-                personsOfGroup);
+        ListChoice<Person> listEntite = new ListChoice<Person>("table",
+                new PropertyModel<Person>(this, "selectedPerson"), personsOfGroup) {
+
+                    @Override
+                    protected String getNullKeyDisplayValue() {
+                        return " ";//To change body of generated methods, choose Tools | Templates.
+                    }
+                };
+        listEntite.setChoiceRenderer(displayGroup);
+        listEntite.setNullValid(false);
+        listEntite.setMaxRows(8);
+        listEntite.setOutputMarkupId(true);
 
         add(listEntite);
+
+        final List<Project> associatedProjects = projectService.getProjectsOfPersonGroup(this.personGroup.getId());
+        final GridViewEntities<Project> projectsView = new GridViewEntities<Project>(
+                "projectsTable", associatedProjects);
+        add(projectsView);
 
         PersonGroup selectByPrimaryKey = this.prService.selectByPrimaryKey(this.personGroup.getIdPersonGroupParent());
         if (selectByPrimaryKey != null) {

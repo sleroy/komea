@@ -13,7 +13,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.PropertyModel;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
@@ -24,7 +23,7 @@ import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.NameGeneric;
-import org.komea.product.wicket.widget.ListChoiceEntities;
+import org.komea.product.wicket.widget.GridViewEntities;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
@@ -70,15 +69,14 @@ public class ProjectForm extends Form<Project> {
         this.customerFiel = TextFieldBuilder.<String>create("idCustomer", customerName, "name").withTooltip("customer can be affected").build();
         add(customerFiel);
 
-        final List<Person> personsOfProject = personService.getPersonsOfProject(this.project.getId());
-        final ListChoiceEntities<Person> personsView = new ListChoiceEntities<Person>("personsTable",
-                new PropertyModel<Person>(this, "associatedPersons"),
-                personsOfProject);
+        final List<Person> associatedPersons = personService.getPersonsOfProject(this.project.getId());
+        final GridViewEntities<Person> personsView = new GridViewEntities<Person>(
+                "personsTable", associatedPersons);
         add(personsView);
-        final List<PersonGroup> teamsOfProject = personGroupService.getTeamsOfProject(this.project.getId());
-        final ListChoiceEntities<PersonGroup> teamsView = new ListChoiceEntities<PersonGroup>("teamsTable",
-                new PropertyModel<PersonGroup>(this, "associatedTeams"),
-                teamsOfProject);
+
+        final List<PersonGroup> associatedTeams = personGroupService.getTeamsOfProject(this.project.getId());
+        final GridViewEntities<PersonGroup> teamsView = new GridViewEntities<PersonGroup>(
+                "teamsTable", associatedTeams);
         add(teamsView);
 
         //button
