@@ -145,6 +145,7 @@
 		<module>komea-testspring</module>
 		<module>komea-dao</module>
 		<module>komea-service-api</module>
+		<module>komea-cep-engine</module>
 		<module>komea-service</module>
 		<module>komea-admin-webgui</module>
 		<module>komea-wicket-utils</module>
