@@ -1,0 +1,32 @@
+/**
+ * 
+ */
+
+package org.komea.product.cep.api;
+
+
+
+/**
+ * @author sleroy
+ * @param S
+ *            the type of the transformed event.
+ */
+public interface TransformedEvent<S>
+{
+    
+    
+    /**
+     * Returns the data
+     * 
+     * @return the data.
+     */
+    S getData();
+    
+    
+    /**
+     * Returns true if the data is valid and should be inserted.
+     * 
+     * @return true if the data is valid.
+     */
+    boolean isValid();
+}

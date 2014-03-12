@@ -37,6 +37,12 @@ public class LdapUserService implements ILdapUserService
 {
     
     
+    /**
+     * 
+     */
+    private static final String LDAP_CRON_REFRESH = "LDAP-CRON-REFRESH";
+
+
     private static class UserAttributesMapper implements AttributesMapper
     {
         
@@ -62,6 +68,12 @@ public class LdapUserService implements ILdapUserService
         }
     }
     
+    
+    
+    /**
+     * 
+     */
+    private static final String  CRON_LDAP        = "0 0/5 * * * ?";
     
     
     private static final long    serialVersionUID = 4889152297004460837L;
@@ -196,8 +208,8 @@ public class LdapUserService implements ILdapUserService
         properties.put("person", personService);
         properties.put("group", groupService);
         
-        registryService.registerCronTask("LDAP-CRON-REFRESH", "0 0/30 * * * ?",
-                LdapCronRefreshJob.class, properties);
+        registryService.registerCronTask(LDAP_CRON_REFRESH, CRON_LDAP, LdapCronRefreshJob.class,
+                properties);
         
     }
     

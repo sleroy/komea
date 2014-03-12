@@ -25,6 +25,12 @@
 	</build>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.carrotsearch</groupId>
+			<artifactId>junit-benchmarks</artifactId>
+			<version>0.7.2</version>
+			<scope>compile</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.komea.product</groupId>

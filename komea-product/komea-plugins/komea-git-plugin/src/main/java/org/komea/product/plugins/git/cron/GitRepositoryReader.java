@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.Validate;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -53,9 +54,9 @@ public class GitRepositoryReader implements IGitRepositoryReader
     private final IEventPushService       esperEngine;
     private final GitEventFactory         eventFactory = new GitEventFactory();
     
-    private final GitRepositoryDefinition gitRepositoryDefinition;
-    
     private final IGitCloner              gitCloner;
+    
+    private final GitRepositoryDefinition gitRepositoryDefinition;
     
     private final IPersonService          personService;
     
@@ -82,7 +83,8 @@ public class GitRepositoryReader implements IGitRepositoryReader
         esperEngine = _esperEngine;
         gitCloner = _gitCloner;
         personService = _personService;
-        
+        Validate.notNull(_gitCloner, "Problem to initialize git repository");
+        Validate.notNull(_fetch, "Problem to obtain GIT repository definition.");
         
     }
     
@@ -101,14 +103,16 @@ public class GitRepositoryReader implements IGitRepositoryReader
         
         final String revisionName = parseCommit.getId().name();
         if (!Strings.isNullOrEmpty(authorIdent.getName())) {
-            notifyEvent(eventFactory.sendNewCommit(gitRepositoryDefinition, parseCommit.getShortMessage(),
+            notifyEvent(eventFactory.sendNewCommit(gitRepositoryDefinition,
+                    parseCommit.getShortMessage(),
                     personService.findOrCreatePersonByEmail(authorIdent.getEmailAddress()),
                     revisionName));
         }
         
         if (!Strings.isNullOrEmpty(committerIdent.getName())
                 && !committerIdent.getName().equals(authorIdent.getName())) {
-            notifyEvent(eventFactory.sendNewCommit(gitRepositoryDefinition, parseCommit.getShortMessage(),
+            notifyEvent(eventFactory.sendNewCommit(gitRepositoryDefinition,
+                    parseCommit.getShortMessage(),
                     personService.findOrCreatePersonByEmail(authorIdent.getEmailAddress()),
                     revisionName));
         }
@@ -201,8 +205,8 @@ public class GitRepositoryReader implements IGitRepositoryReader
     
         final int numberOfTagsPerBranch = repository.getTags().size();
         
-        notifyEvent(eventFactory.sendNumberTagPerBranch(gitRepositoryDefinition, numberOfTagsPerBranch,
-                currentBranchName));
+        notifyEvent(eventFactory.sendNumberTagPerBranch(gitRepositoryDefinition,
+                numberOfTagsPerBranch, currentBranchName));
     }
     
     
@@ -313,7 +317,8 @@ public class GitRepositoryReader implements IGitRepositoryReader
     public boolean isLastCommitCheckedPreviousTime(final Ref _branch, final RevCommit targetCommit) {
     
     
-        return targetCommit.getId().name().equals(gitRepositoryDefinition.getLastCommit(_branch.getName()));
+        return targetCommit.getId().name()
+                .equals(gitRepositoryDefinition.getLastCommit(_branch.getName()));
     }
     
     

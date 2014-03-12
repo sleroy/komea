@@ -13,7 +13,6 @@ import java.util.Map.Entry;
 import org.junit.Assert;
 import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.service.esper.EPStatementResult;
-import org.komea.product.backend.service.esper.ElFormula;
 import org.komea.product.backend.service.esper.EsperEngineBean;
 import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.backend.service.kpi.IEsperLineTestPredicate;
@@ -81,12 +80,12 @@ public class EsperQueryTester
             Assert.assertEquals("Expected same number of rows", array.length, listMapResult.size());
             for (int i = 0; i < listMapResult.size(); ++i) {
                 
-                LOGGER.info("Evaluating line {} of esper request", i);
+                LOGGER.debug("Evaluating line {} of esper request", i);
                 final ArrayList arrayList = new ArrayList(listMapResult.get(i).values());
                 Assert.assertEquals("Expected same number of cols for iteration " + i,
                         array[i].length, arrayList.size());
                 for (int j = 0; j < arrayList.size(); j++) {
-                    LOGGER.info("Array[{}][{}]={} and should be {}", i, j, arrayList.get(j),
+                    LOGGER.debug("Array[{}][{}]={} and should be {}", i, j, arrayList.get(j),
                             array[i][j]);
                     Assert.assertEquals(array[i][j], arrayList.get(j));
                 }
@@ -487,13 +486,6 @@ public class EsperQueryTester
     }
     
     
-    public Map<String, Provider> getMockProviders() {
-    
-    
-        return mockProviders;
-    }
-    
-    
     /**
      * @param _string
      * @return
@@ -502,6 +494,13 @@ public class EsperQueryTester
     
     
         return mockProject.get(_string);
+    }
+    
+    
+    public Map<String, Provider> getMockProviders() {
+    
+    
+        return mockProviders;
     }
     
     
@@ -597,23 +596,6 @@ public class EsperQueryTester
     
     
     /**
-     * Method instantiatedQuery.
-     * 
-     * @param _formula
-     *            String
-     * @param _project
-     *            Project
-     * @return EsperQueryTester
-     */
-    public EsperQueryTester instantiatedQuery(final String _formula, final Project _project) {
-    
-    
-        esperQuery = new ElFormula(_formula).getValue(_project, String.class);
-        return this;
-    }
-    
-    
-    /**
      * @return
      */
     public EsperQueryTester matchList(final List<?> _objects) {
@@ -634,7 +616,7 @@ public class EsperQueryTester
     
     
         for (final IEvent event : events) {
-            LOGGER.info("Sending alert : " + event);
+            LOGGER.debug("Sending alert : " + event);
             esperEngineBean.sendEvent(event);
         }
     }
@@ -741,7 +723,7 @@ public class EsperQueryTester
             int i = 0;
             for (final Map<String, Object> value : listMapResult) {
                 
-                LOGGER.info("Testing line {} -> {}", i, value);
+                LOGGER.debug("Testing line {} -> {}", i, value);
                 if (i < esperLinePredicates.size()) {
                     esperLinePredicates.get(i).evaluate(value);
                 }
@@ -798,7 +780,7 @@ public class EsperQueryTester
         final List<Object> listUnderlyingObjects =
                 EPStatementResult.build(epStatement).listUnderlyingObjects();
         for (final Object object : listUnderlyingObjects) {
-            LOGGER.info("[{}] Received {}", i++, object);
+            LOGGER.debug("[{}] Received {}", i++, object);
         }
         
     }

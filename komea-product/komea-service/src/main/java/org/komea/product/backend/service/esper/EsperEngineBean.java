@@ -14,6 +14,7 @@ import org.komea.product.backend.api.IEsperEngine;
 import org.komea.product.backend.esper.listeners.EPServiceStateListener1;
 import org.komea.product.backend.esper.listeners.EPStatementStateListener1;
 import org.komea.product.backend.exceptions.EsperStatementNotFoundException;
+import org.komea.product.cep.api.ICEPEngine;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.alert.enums.Criticity;
@@ -28,6 +29,7 @@ import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.espertech.esper.client.Configuration;
@@ -50,6 +52,10 @@ public final class EsperEngineBean implements IEsperEngine
     
     
     private static final Logger LOGGER = LoggerFactory.getLogger("komea-esper");
+    
+    @Autowired
+    private ICEPEngine          cepEngine;
+    
     
     private EPServiceProvider   esperEngine;
     
@@ -130,8 +136,8 @@ public final class EsperEngineBean implements IEsperEngine
     public void destroy() {
     
     
-        LOGGER.warn("-----------------------------------");
-        LOGGER.warn("Destroying the esper Engine");
+        LOGGER.debug("-----------------------------------");
+        LOGGER.debug("Destroying the esper Engine");
         esperEngine.destroy();
         esperEngine = null;
     }
@@ -150,6 +156,13 @@ public final class EsperEngineBean implements IEsperEngine
     
     
         return esperEngine.getEPAdministrator().getStatement(_metricKey) != null;
+    }
+    
+    
+    public ICEPEngine getCepEngine() {
+    
+    
+        return cepEngine;
     }
     
     
@@ -260,7 +273,7 @@ public final class EsperEngineBean implements IEsperEngine
         esperEngine = EPServiceProviderManager.getDefaultProvider(config);
         esperEngine.addServiceStateListener(new EPServiceStateListener1());
         esperEngine.addStatementStateListener(new EPStatementStateListener1());
-        LOGGER.info("Esper engine created : " + esperEngine);
+        LOGGER.debug("Esper engine created : " + esperEngine);
         LOGGER.debug("Creation of notification listener");
         final EsperDebugReactorListener esperDebugReactorListener = new EsperDebugReactorListener();
         esperDebugReactorListener.setEsperEngine(this);
@@ -303,6 +316,13 @@ public final class EsperEngineBean implements IEsperEngine
     
         esperEngine.getEPRuntime().sendEvent(_event);
         
+    }
+    
+    
+    public void setCepEngine(final ICEPEngine _cepEngine) {
+    
+    
+        cepEngine = _cepEngine;
     }
     
 }
