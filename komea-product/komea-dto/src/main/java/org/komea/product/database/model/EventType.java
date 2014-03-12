@@ -3,8 +3,6 @@ package org.komea.product.database.model;
 
 
 
-import java.io.Serializable;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -15,7 +13,7 @@ import org.komea.product.database.enums.Severity;
 
 
 
-public class EventType implements Serializable, IHasKey
+public class EventType implements IHasKey
 {
     
     

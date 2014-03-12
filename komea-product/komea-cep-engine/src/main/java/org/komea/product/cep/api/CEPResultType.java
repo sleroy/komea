@@ -12,5 +12,5 @@ package org.komea.product.cep.api;
  * @author sleroy
  */
 public enum CEPResultType {
-    NUMERICAL, TABLE
+    CUSTOM, NUMERICAL, TABLE
 }

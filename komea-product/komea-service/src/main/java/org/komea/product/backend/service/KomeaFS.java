@@ -5,8 +5,6 @@ package org.komea.product.backend.service;
 
 import java.io.File;
 
-import javax.annotation.PostConstruct;
-
 import org.komea.product.backend.plugin.api.InjectSetting;
 import org.komea.product.backend.service.fs.IKomeaFS;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
@@ -36,9 +34,6 @@ public class KomeaFS implements IKomeaFS
     
     @Autowired
     private ISettingService         settingService;
-    
-    
-    private ISettingProxy<File>     storage_path;
     
     
     
@@ -99,19 +94,12 @@ public class KomeaFS implements IKomeaFS
     public ISettingProxy<File> getStorage_path() {
     
     
-        return storage_path;
-    }
-    
-    
-    @PostConstruct
-    public void init() {
-    
-    
-        storage_path = settingService.getProxy(STORAGE_PATH_KEY);
+        final ISettingProxy<File> storage_path = settingService.getProxy(STORAGE_PATH_KEY);
         LOGGER.info("Storage path for plugins is " + storage_path);
         if (storage_path == null) { throw new BeanCreationException(
                 "Storage path was not initialized"); }
         
+        return storage_path;
     }
     
     
@@ -122,23 +110,10 @@ public class KomeaFS implements IKomeaFS
     }
     
     
-    /**
-     * Method setStorage_path.
-     * 
-     * @param _storage_path
-     *            ISettingProxy<File>
-     */
-    public void setStorage_path(final ISettingProxy<File> _storage_path) {
-    
-    
-        storage_path = _storage_path;
-    }
-    
-    
     private File computePluginStoragePath(final String _fileSystemName) {
     
     
-        final File pluginPath = storage_path.getValue();
+        final File pluginPath = getStorage_path().getValue();
         if (!pluginPath.exists() && !pluginPath.mkdirs()) { throw new InvalidKomeaFileSystemException(
                 "Could not initialize Komea Filesystem : folder could not be created", pluginPath); }
         final String absolutePath = pluginPath.getAbsolutePath();

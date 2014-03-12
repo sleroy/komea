@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.genericservice.DAOEventRegistry;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.dao.KpiDao;
@@ -202,7 +202,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase
         final MeasureHistoryService measureHistoryService = new MeasureHistoryService();
         measureHistoryService.setDaoEventRegistry(Mockito.mock(DAOEventRegistry.class, Mockito
                 .withSettings().verboseLogging()));
-        measureHistoryService.setEsperEngine(Mockito.mock(IEsperEngine.class, Mockito
+        measureHistoryService.setEsperEngine(Mockito.mock(IEventEngineService.class, Mockito
                 .withSettings().verboseLogging()));
         measureHistoryService.setMeasureDAO(Mockito.mock(MeasureDao.class, Mockito.withSettings()
                 .verboseLogging()));

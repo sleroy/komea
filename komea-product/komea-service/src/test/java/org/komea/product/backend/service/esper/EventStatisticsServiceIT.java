@@ -40,7 +40,7 @@ public class EventStatisticsServiceIT extends AbstractSpringIntegrationTestCase
     private EventStatisticsService        alertStats;
     
     @Autowired
-    private EsperEngineBean               esperEngine;
+    private EventEngineService               esperEngine;
     
     @Autowired
     private IKPIService                   kpiService;

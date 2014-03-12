@@ -6,14 +6,16 @@ package org.komea.product.cep;
 
 
 
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.lang.Validate;
+import org.komea.product.cep.api.ICEPConfiguration;
 import org.komea.product.cep.api.ICEPEngine;
-import org.komea.product.cep.api.ICEPEventListener;
-import org.springframework.stereotype.Service;
+import org.komea.product.cep.api.ICEPQueryEventListener;
+import org.komea.product.cep.api.IQueryAdministrator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -22,14 +24,103 @@ import org.springframework.stereotype.Service;
  * 
  * @author sleroy
  */
-@Service
+
 public class CEPEngine implements ICEPEngine
 {
     
     
-    private final Map<String, ICEPEventListener> eventListeners =
-                                                                        new HashMap<String, ICEPEventListener>();
+    private enum CEPEngineMode {
+        DESTROYED, NOT_STARTED, RUNNING
+    }
     
+    
+    
+    private static final Logger    LOGGER        = LoggerFactory.getLogger("cep-engine");
+    
+    private final CEPConfiguration cepConfiguration;
+    private ICEPQueryEventListener      eventListener = null;
+    
+    
+    private CEPEngineMode          mode          = CEPEngineMode.NOT_STARTED;
+    
+    private IQueryAdministrator    queryAdministrator;
+    
+    
+    
+    /**
+     * Builds the CEP Engine with the given configuration.
+     * 
+     * @param _cepConfiguration
+     *            the cep configuration/
+     */
+    public CEPEngine(final CEPConfiguration _cepConfiguration) {
+    
+    
+        cepConfiguration = _cepConfiguration;
+        
+        
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see java.io.Closeable#close()
+     */
+    @Override
+    public void close() throws IOException {
+    
+    
+        try {
+            queryAdministrator = null;
+            eventListener = null;
+        } finally {
+            mode = CEPEngineMode.DESTROYED;
+        }
+        
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.api.ICEPEngine#getConfiguration()
+     */
+    @Override
+    public ICEPConfiguration getConfiguration() {
+    
+    
+        return cepConfiguration;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.api.ICEPEngine#getQueryAdministration()
+     */
+    @Override
+    public IQueryAdministrator getQueryAdministration() {
+    
+    
+        return queryAdministrator;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.api.ICEPEngine#initialize()
+     */
+    @Override
+    public void initialize() throws IOException {
+    
+    
+        if (isInitialized()) {
+            close();
+        }
+        final int res = cepConfiguration.getNumberQueryListeners();
+        LOGGER.debug("CEP Engine starts with {} query listeners", res);
+        eventListener = new CEPQueryListener();
+        
+        queryAdministrator = new QueryAdministrator(eventListener);
+    }
     
     
     /*
@@ -42,39 +133,17 @@ public class CEPEngine implements ICEPEngine
     
         Validate.notNull(_event);
         
-        for (final ICEPEventListener cepQuery : eventListeners.values()) {
-            cepQuery.notify(_event);
-        }
+        eventListener.notify(mode);
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPEngine#registerEventListener(java.lang.String, org.komea.product.cep.api.ICEPEventListener)
+    /**
+     * Returns true if the engine is initialized.
      */
-    @Override
-    public void registerEventListener(final String _name, final ICEPEventListener _listener) {
+    private boolean isInitialized() {
     
     
-        Validate.notNull(_name);
-        Validate.notNull(_listener);
-        eventListeners.put(_name, _listener);
-        
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPEngine#removeEventListener(java.lang.String)
-     */
-    @Override
-    public void removeEventListener(final String _name) {
-    
-    
-        Validate.notNull(_name);
-        
-        eventListeners.remove(_name);
-        
+        return mode == CEPEngineMode.RUNNING;
     }
     
 }

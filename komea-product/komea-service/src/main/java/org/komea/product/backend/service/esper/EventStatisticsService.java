@@ -10,11 +10,12 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
+import org.komea.product.cep.api.ICEPQuery;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.enums.Severity;
@@ -28,8 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.espertech.esper.client.EPStatement;
 
 
 
@@ -55,7 +54,7 @@ public class EventStatisticsService implements IEventStatisticsService
                                                                           .getLogger("event-statistic-system");
     
     @Autowired
-    private IEsperEngine        esperEngine;
+    private IEventEngineService cepEngine;
     
     @Autowired
     private IEventPushService   eventPushService;
@@ -106,12 +105,12 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
     /**
-     * @return the esperEngine
+     * @return the cepEngine
      */
-    public final IEsperEngine getEsperEngine() {
+    public final IEventEngineService getEsperEngine() {
     
     
-        return esperEngine;
+        return cepEngine;
     }
     
     
@@ -140,8 +139,7 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
         final Double kpiSingleValue =
-                kpiService.getSingleValue(KpiKey.ofKpiName(getKpiNameFromSeverity(_criticity)),
-                        "alert_number");
+                kpiService.getSingleValue(KpiKey.ofKpiName(getKpiNameFromSeverity(_criticity)));
         return kpiSingleValue.intValue();
         
     }
@@ -169,8 +167,7 @@ public class EventStatisticsService implements IEventStatisticsService
     public long getReceivedAlertsIn24LastHours() {
     
     
-        return kpiService.getSingleValue(KpiKey.ofKpiName(ALERT_RECEIVED_IN_ONE_DAY),
-                "alert_number").intValue();
+        return kpiService.getSingleValue(KpiKey.ofKpiName(ALERT_RECEIVED_IN_ONE_DAY)).intValue();
         
     }
     
@@ -189,9 +186,8 @@ public class EventStatisticsService implements IEventStatisticsService
     public List<EventTypeStatistic> getReceivedAlertTypesIn24LastHours() {
     
     
-        final EPStatement statsBreakdownStatement = esperEngine.getStatement(STATS_BREAKDOWN_24H);
-        return EPStatementResult.build(statsBreakdownStatement).mapAPojoPerResultLine(
-                EventTypeStatistic.class);
+        final ICEPQuery statsBreakdownStatement = cepEngine.getStatement(STATS_BREAKDOWN_24H);
+        return statsBreakdownStatement.getResult().asType();
     }
     
     
@@ -228,7 +224,7 @@ public class EventStatisticsService implements IEventStatisticsService
         LOGGER.info("Creating cron for statistics.");
         
         // output snapshot every 1 minute
-        esperEngine
+        cepEngine
                 .createOrUpdateEPLQuery(new QueryDefinition(
                         "SELECT DISTINCT provider.name as provider, eventType.eventKey as type, count(*) as number FROM Event.win:time(24 hour)  GROUP BY provider.name, eventType.name ORDER BY provider.name ASC, eventType.name ASC",
                         STATS_BREAKDOWN_24H));
@@ -254,12 +250,12 @@ public class EventStatisticsService implements IEventStatisticsService
     
     /**
      * @param _esperEngine
-     *            the esperEngine to set
+     *            the cepEngine to set
      */
-    public final void setEsperEngine(final IEsperEngine _esperEngine) {
+    public final void setEsperEngine(final IEventEngineService _esperEngine) {
     
     
-        esperEngine = _esperEngine;
+        cepEngine = _esperEngine;
     }
     
     

@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
 import org.komea.event.factory.SonarEventFactory;
-import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.esper.test.EsperQueryTester;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.kpi.IKPIService;
@@ -31,7 +31,7 @@ public class KpiDemoServiceTest extends AbstractSpringIntegrationTestCase {
 
     private static final SonarEventFactory sonarEventFactory = new SonarEventFactory();
     @Autowired
-    private IEsperEngine engine;
+    private IEventEngineService engine;
 
     @Autowired
     private KpiDemoService kpiDemoService;

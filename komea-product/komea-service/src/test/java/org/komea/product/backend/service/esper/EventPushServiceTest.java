@@ -9,7 +9,7 @@ package org.komea.product.backend.service.esper;
 import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
-import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.EventDtoBuilder;
 import org.komea.product.database.alert.IEvent;
@@ -39,7 +39,7 @@ public class EventPushServiceTest
     
     
         final EventPushService alertPushService = new EventPushService();
-        final IEsperEngine esperEngineMock = Mockito.mock(IEsperEngine.class);
+        final IEventEngineService esperEngineMock = Mockito.mock(IEventEngineService.class);
         alertPushService.setEsperEngine(esperEngineMock);
         final IEventConversionAndValidationService mock =
                 Mockito.mock(IEventConversionAndValidationService.class, Mockito.withSettings()
@@ -66,7 +66,7 @@ public class EventPushServiceTest
     
     
         final EventPushService alertPushService = new EventPushService();
-        final IEsperEngine esperEngineMock = Mockito.mock(IEsperEngine.class);
+        final IEventEngineService esperEngineMock = Mockito.mock(IEventEngineService.class);
         alertPushService.setEsperEngine(esperEngineMock);
         final IEventConversionAndValidationService mock =
                 Mockito.mock(IEventConversionAndValidationService.class, Mockito.withSettings()

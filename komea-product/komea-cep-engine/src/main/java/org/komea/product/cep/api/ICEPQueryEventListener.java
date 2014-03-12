@@ -11,7 +11,7 @@ package org.komea.product.cep.api;
  * 
  * @author sleroy
  */
-public interface ICEPQueryListener extends ICEPEventListener
+public interface ICEPQueryEventListener extends ICEPEventListener
 {
     
     
@@ -34,6 +34,15 @@ public interface ICEPQueryListener extends ICEPEventListener
      *            the query.
      */
     void registerQuery(String _queryName, ICEPQuery _query);
+    
+    
+    /**
+     * Remove the query
+     * 
+     * @param _queryName
+     *            the query name;
+     */
+    void removeQuery(String _queryName);
     
     
 }

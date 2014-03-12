@@ -12,7 +12,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
-import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.esper.test.EsperQueryTester;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.enums.RetentionPeriod;
@@ -34,7 +34,7 @@ public class EventViewerServiceIT extends AbstractSpringIntegrationTestCase
     
     
     @Autowired
-    private IEsperEngine        esperEngine;
+    private IEventEngineService        esperEngine;
     
     @Autowired
     private IEventViewerService service;

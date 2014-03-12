@@ -10,11 +10,9 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.database.alert.IEvent;
 import org.mockito.Mockito;
-
-import com.espertech.esper.client.EPStatement;
 
 
 
@@ -22,36 +20,36 @@ import com.espertech.esper.client.EPStatement;
  * @author sleroy
  * @version $Revision: 1.0 $
  */
-public class EsperEngineBeanTest
+public class EventEngineServiceTest
 {
     
     
-    private IEsperEngine esperEngine = null;
+    private IEventEngineService esperEngine = null;
     
     
     
     /**
-    
      * @throws Exception
-     * @throws java.lang.Exception */
+     * @throws java.lang.Exception
+     */
     @After
     public void closeAfter() throws Exception {
     
     
-        ((EsperEngineBean) esperEngine).destroy();
+        ((EventEngineService) esperEngine).destroy();
         
     }
     
     
     /**
-    
      * @throws Exception
-     * @throws java.lang.Exception */
+     * @throws java.lang.Exception
+     */
     @Before
     public void setUp() throws Exception {
     
     
-        final EsperEngineBean esperEngineBean = new EsperEngineBean();
+        final EventEngineService esperEngineBean = new EventEngineService();
         esperEngine = esperEngineBean;
         esperEngineBean.init();
         
@@ -59,7 +57,7 @@ public class EsperEngineBeanTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.esper.EsperEngineBean#createEPL(java.lang.String, java.lang.String)}.
+     * Test method for {@link org.komea.product.backend.service.esper.EventEngineService#createEPL(java.lang.String, java.lang.String)}.
      */
     @Test
     public final void testCreateEPL() {
@@ -73,7 +71,7 @@ public class EsperEngineBeanTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.esper.EsperEngineBean#existEPL(java.lang.String)}.
+     * Test method for {@link org.komea.product.backend.service.esper.EventEngineService#existEPL(java.lang.String)}.
      */
     @Test
     public final void testExistEPL() {
@@ -88,7 +86,7 @@ public class EsperEngineBeanTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.esper.EsperEngineBean#getEsper()}.
+     * Test method for {@link org.komea.product.backend.service.esper.EventEngineService#getEsper()}.
      */
     @Test
     public final void testGetEsper() {
@@ -99,7 +97,7 @@ public class EsperEngineBeanTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.esper.EsperEngineBean#existEPL(java.lang.String)}.
+     * Test method for {@link org.komea.product.backend.service.esper.EventEngineService#existEPL(java.lang.String)}.
      */
     @Test
     public final void testGetStatementNames() {
@@ -114,13 +112,14 @@ public class EsperEngineBeanTest
     
     
     /**
-         * Test method for {@link org.komea.product.backend.service.esper.EsperEngineBean#sendEvent(org.komea.product.database.alert.IEvent)}.
-         */
-        @Test
-        public final void testSendEvent() {
-        
-        
-            esperEngine.sendEvent(Mockito.mock(IEvent.class));
-        }
+     * Test method for {@link org.komea.product.backend.service.esper.EventEngineService#sendEvent(org.komea.product.database.alert.IEvent)}
+     * .
+     */
+    @Test
+    public final void testSendEvent() {
+    
+    
+        esperEngine.sendEvent(Mockito.mock(IEvent.class));
+    }
     
 }

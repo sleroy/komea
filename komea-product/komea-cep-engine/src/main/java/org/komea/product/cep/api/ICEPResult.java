@@ -46,6 +46,19 @@ public interface ICEPResult
     
     
     /**
+     * @return
+     */
+    <T> T asType();
+    
+    
+    /**
+     * @param _key
+     * @return
+     */
+    <T> T asType(Object _key);
+    
+    
+    /**
      * Tests if this result is a map.
      * 
      * @return true if this result is a map.
@@ -57,4 +70,10 @@ public interface ICEPResult
      * Tests if this results ia numerical value;
      */
     boolean isNumericalValue();
+    
+    
+    /**
+     * @return
+     */
+    boolean isSingleValue();
 }

@@ -88,6 +88,22 @@ public class KpiKey
     
     
     /**
+     * Builds a kpi key from a kpi name and the entity key.
+     * 
+     * @param _kpiName
+     *            the kpi name
+     * @param _entityKey
+     *            the entity key
+     * @return the kpi key.
+     */
+    public static KpiKey ofKpiNameAndEntityKey(final String _kpiName, final EntityKey _entityKey) {
+    
+    
+        return new KpiKey(_kpiName, _entityKey);
+    }
+    
+    
+    /**
      * @param _kpiName
      * @param _entity
      * @return
@@ -119,7 +135,6 @@ public class KpiKey
     
     private EntityKey entityKey;
     
-    
     @NotNull
     @Size(min = 0, max = 255)
     private String    kpiName;
@@ -136,6 +151,23 @@ public class KpiKey
     
     
         super();
+    }
+    
+    
+    /**
+     * Kpi Key
+     * 
+     * @param _kpiName
+     *            the kpi name
+     * @param _entityKey
+     *            the entity key.
+     */
+    public KpiKey(final String _kpiName, final EntityKey _entityKey) {
+    
+    
+        super();
+        kpiName = _kpiName;
+        entityKey = _entityKey;
     }
     
     

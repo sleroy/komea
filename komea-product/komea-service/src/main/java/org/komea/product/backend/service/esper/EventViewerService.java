@@ -10,11 +10,12 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.service.ISettingListener;
 import org.komea.product.backend.service.ISettingService;
+import org.komea.product.cep.api.ICEPQuery;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.enums.RetentionPeriod;
 import org.komea.product.database.enums.Severity;
@@ -23,8 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.espertech.esper.client.EPStatement;
 
 
 
@@ -71,7 +70,7 @@ public class EventViewerService implements IEventViewerService, ISettingListener
     private static final Logger     LOGGER                   = LoggerFactory
                                                                      .getLogger("event-viewer");
     @Autowired
-    private IEsperEngine            esperService;
+    private IEventEngineService     esperService;
     
     
     private final RetentionPeriod[] lastRetentionPeriods     = new RetentionPeriod[Severity
@@ -100,9 +99,9 @@ public class EventViewerService implements IEventViewerService, ISettingListener
     /**
      * Method getEsperService.
      * 
-     * @return IEsperEngine
+     * @return IEventEngineService
      */
-    public final IEsperEngine getEsperService() {
+    public final IEventEngineService getEsperService() {
     
     
         return esperService;
@@ -148,8 +147,8 @@ public class EventViewerService implements IEventViewerService, ISettingListener
     public List<IEvent> getInstantView(final String _EplStatement) {
     
     
-        final EPStatement requiredEplStatement = esperService.getStatementOrFail(_EplStatement);
-        return EPStatementResult.build(requiredEplStatement).listUnderlyingObjects();
+        final ICEPQuery requiredEplStatement = esperService.getStatementOrFail(_EplStatement);
+        return CEPQueryResultConvertor.build(requiredEplStatement).listUnderlyingObjects();
     }
     
     
@@ -195,9 +194,9 @@ public class EventViewerService implements IEventViewerService, ISettingListener
      * Method setEsperService.
      * 
      * @param _esperService
-     *            IEsperEngine
+     *            IEventEngineService
      */
-    public final void setEsperService(final IEsperEngine _esperService) {
+    public final void setEsperService(final IEventEngineService _esperService) {
     
     
         esperService = _esperService;

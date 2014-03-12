@@ -40,10 +40,6 @@
 
 
 		<!-- ESPER -->
-		<dependency>
-			<groupId>com.espertech</groupId>
-			<artifactId>esper</artifactId>
-		</dependency>
 
 		<dependency>
 			<groupId>xstream</groupId>

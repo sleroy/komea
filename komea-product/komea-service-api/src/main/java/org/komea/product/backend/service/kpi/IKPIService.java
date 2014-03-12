@@ -56,19 +56,6 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria>
     
     
     /**
-     * Method that returns a single value for the *special* KPI that does not
-     * render a table.
-     * 
-     * @param _kpiKey
-     *            the kpi key.
-     * @param _columnName
-     *            the column name.
-     * @return the kpi single value;
-     */
-    public Double getSingleValue(KpiKey _kpiKey, String _columnName);
-    
-    
-    /**
      * This method return the complete list of KPIs
      * 
      * @return the kpi list

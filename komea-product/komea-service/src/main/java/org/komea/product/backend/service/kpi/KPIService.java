@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.exceptions.EntityNotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundRuntimeException;
@@ -16,11 +16,12 @@ import org.komea.product.backend.exceptions.KpiAlreadyExistingException;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IEntityService;
-import org.komea.product.backend.service.esper.EPStatementResult;
+import org.komea.product.backend.service.esper.CEPQueryResultConvertor;
 import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.utils.CollectionUtil;
+import org.komea.product.cep.api.ICEPQuery;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.KpiDao;
@@ -34,15 +35,12 @@ import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.service.dto.KPIValueTable;
 import org.komea.product.service.dto.KpiKey;
-import org.komea.product.service.dto.KpiLineValue;
 import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.espertech.esper.client.EPStatement;
 
 
 
@@ -71,12 +69,10 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @SuppressWarnings("rawtypes")
     public static <TEntity extends IEntity> KPIValueTable<TEntity> fetchKpiValueTable(
             final Kpi kpiOrFail,
-            final EPStatement epStatement) {
+            final ICEPQuery epStatement) {
     
     
-        final List<KpiLineValue> kpiLinesValues =
-                EPStatementResult.build(epStatement).mapAPojoPerResultLine(KpiLineValue.class);
-        return new KPIValueTable(kpiOrFail, kpiLinesValues);
+        return new KPIValueTable(kpiOrFail, epStatement.getResult().asMap());
     }
     
     
@@ -88,7 +84,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     private IEntityService         entityService;
     
     @Autowired
-    private IEsperEngine           esperEngine;
+    private IEventEngineService    esperEngine;
     
     @Autowired
     private IMeasureHistoryService measureService;
@@ -197,7 +193,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     /**
      * @return the esperEngine
      */
-    public final IEsperEngine getEsperEngine() {
+    public final IEventEngineService getEsperEngine() {
     
     
         return esperEngine;
@@ -307,7 +303,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         final Kpi kpiOrFail = findKPIOrFail(_kpiKey);
         if (kpiOrFail.isGlobal()) { throw new IllegalArgumentException(
                 "Global KPI cannot returns values for associated entities"); }
-        final EPStatement epStatement = getEsperQueryFromKpi(kpiOrFail);
+        final ICEPQuery epStatement = getEsperQueryFromKpi(kpiOrFail);
         
         return fetchKpiValueTable(kpiOrFail, epStatement);
         
@@ -339,32 +335,9 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
     
         final Kpi kpiOrFail = findKPIOrFail(_kpiKey);
-        final EPStatement epStatement = getEsperQueryFromKpi(kpiOrFail);
+        final ICEPQuery epStatement = getEsperQueryFromKpi(kpiOrFail);
         
-        final Number number = EPStatementResult.build(epStatement).singleResult();
-        return number == null ? 0 : number.doubleValue();
-    }
-    
-    
-    /**
-     * Returns the single value of a kpi with a column name.
-     * 
-     * @param _kpiKey
-     *            KpiKey
-     * @param _columnName
-     *            String
-     * @return Double
-     * @see org.komea.product.backend.service.kpi.IKPIService#getSingleValue(KpiKey, String)
-     */
-    @Override
-    public Double getSingleValue(final KpiKey _kpiKey, final String _columnName) {
-    
-    
-        final Kpi kpiOrFail = findKPIOrFail(_kpiKey);
-        final EPStatement epStatement = getEsperQueryFromKpi(kpiOrFail);
-        
-        final Number number = EPStatementResult.build(epStatement).singleResult(_columnName);
-        return number == null ? Double.valueOf(0) : number.doubleValue();
+        return epStatement.getResult().asNumber().doubleValue();
     }
     
     
@@ -386,12 +359,11 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         if (kpiOrFail.isGlobal()) { throw new IllegalArgumentException("Not work on global kpis"); }
         
         
-        final Map<EntityKey, Double> realTimeValues = getRealTimeValues(_measureKey).convertIdMap();
+        final Map<EntityKey, Double> realTimeValues = getRealTimeValues(_measureKey).convertMap();
         LOGGER.debug("Kpi {}, Received {} values from esper to compute tendancy", _measureKey,
                 realTimeValues.size());
         LOGGER.trace("Real values for {}", realTimeValues);
-        final Map<EntityKey, Double> lastMeasuresMap =
-                getKpiLastMeasures(_measureKey).convertIdMap();
+        final Map<EntityKey, Double> lastMeasuresMap = getKpiLastMeasures(_measureKey).convertMap();
         LOGGER.debug("Kpi {}, Received {} values from history to compute tendancy", _measureKey,
                 lastMeasuresMap.size());
         LOGGER.trace("Last values for {}", lastMeasuresMap);
@@ -502,7 +474,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      * @param _esperEngine
      *            the esperEngine to set
      */
-    public final void setEsperEngine(final IEsperEngine _esperEngine) {
+    public final void setEsperEngine(final IEventEngineService _esperEngine) {
     
     
         esperEngine = _esperEngine;
@@ -587,17 +559,17 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
     
         final Kpi kpi = findKPIOrFail(_kpiKey);
-        final EPStatement epStatement = getEsperQueryFromKpi(kpi);
+        final ICEPQuery epStatement = getEsperQueryFromKpi(kpi);
         
         if (kpi.isGlobal()) {
-            final Number singleResult = EPStatementResult.build(epStatement).singleResult();
+            final Number singleResult = CEPQueryResultConvertor.build(epStatement).singleResult();
             storeMeasureOfAKpiInDatabase(_kpiKey, singleResult.doubleValue());
         } else {
             final KPIValueTable<IEntity> kpiRealTimeValues = fetchKpiValueTable(kpi, epStatement);
-            for (final KpiLineValue<IEntity> kpiLineValue : kpiRealTimeValues.getValues()) {
+            for (final java.util.Map.Entry<EntityKey, Double> kpiLineValue : kpiRealTimeValues
+                    .convertMap().entrySet()) {
                 final KpiKey kpiKeyWithEntity =
-                        KpiKey.ofKpiNameAndEntityOrNull(_kpiKey.getKpiName(),
-                                kpiLineValue.getEntity());
+                        KpiKey.ofKpiNameAndEntityKey(_kpiKey.getKpiName(), kpiLineValue.getKey());
                 storeMeasureOfAKpiInDatabase(kpiKeyWithEntity, kpiLineValue.getValue());
                 
             }
@@ -649,7 +621,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      *            the kpi
      * @return the statement or null.
      */
-    private EPStatement getEsperQueryFromKpi(final Kpi _kpi) {
+    private ICEPQuery getEsperQueryFromKpi(final Kpi _kpi) {
     
     
         return esperEngine.getStatementOrFail(_kpi.computeKPIEsperKey());
@@ -677,7 +649,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
                     CollectionUtil.singleOrNull(measureService
                             .getFilteredHistory(hKey, 1, criteria));
             LOGGER.debug("Returning value {}", valueMeasure);
-            kpiValueTable.addLine(entity, valueMeasure == null ? null : valueMeasure.getValue());
+            kpiValueTable.addMeasure(entity, valueMeasure == null ? null : valueMeasure.getValue());
         }
         LOGGER.debug("#####################################################################################");
         return kpiValueTable;

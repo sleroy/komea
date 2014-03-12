@@ -3,7 +3,6 @@ package org.komea.product.database.model;
 
 
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
@@ -15,7 +14,7 @@ import org.komea.product.service.dto.EntityKey;
 
 
 
-public class Measure implements Serializable, IHasKey
+public class Measure implements IHasKey
 
 {
     

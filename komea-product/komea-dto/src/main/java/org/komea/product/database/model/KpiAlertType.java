@@ -3,7 +3,6 @@ package org.komea.product.database.model;
 
 
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
@@ -16,7 +15,7 @@ import org.komea.product.database.enums.Severity;
 
 
 
-public class KpiAlertType implements Serializable, IHasKey
+public class KpiAlertType implements IHasKey
 {
     
     

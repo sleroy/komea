@@ -11,9 +11,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.junit.Assert;
-import org.komea.product.backend.api.IEsperEngine;
-import org.komea.product.backend.service.esper.EPStatementResult;
-import org.komea.product.backend.service.esper.EsperEngineBean;
+import org.komea.product.backend.api.IEventEngineService;
+import org.komea.product.backend.service.esper.CEPQueryResultConvertor;
+import org.komea.product.backend.service.esper.EventEngineService;
 import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.backend.service.kpi.IEsperLineTestPredicate;
 import org.komea.product.backend.service.kpi.IEsperTestPredicate;
@@ -76,7 +76,7 @@ public class EsperQueryTester
         
         
             final List<Map<String, Object>> listMapResult =
-                    EPStatementResult.build(_epStatement).listMapResult();
+                    CEPQueryResultConvertor.build(_epStatement).listMapResult();
             Assert.assertEquals("Expected same number of rows", array.length, listMapResult.size());
             for (int i = 0; i < listMapResult.size(); ++i) {
                 
@@ -177,7 +177,7 @@ public class EsperQueryTester
         
         
             Assert.assertEquals("Expected " + expectedValue + "  for " + columnName, expectedValue,
-                    EPStatementResult.build(_epStatement).singleResult(columnName));
+                    CEPQueryResultConvertor.build(_epStatement).singleResult(columnName));
             
         }
     }
@@ -252,12 +252,12 @@ public class EsperQueryTester
     /**
      * Method newEngine.
      * 
-     * @return EsperEngineBean
+     * @return EventEngineService
      */
-    public static EsperEngineBean newEngine() {
+    public static EventEngineService newEngine() {
     
     
-        final EsperEngineBean esperEngineBean = new EsperEngineBean();
+        final EventEngineService esperEngineBean = new EventEngineService();
         esperEngineBean.init();
         return esperEngineBean;
     }
@@ -610,9 +610,9 @@ public class EsperQueryTester
      * Method prepareAlerts.
      * 
      * @param esperEngineBean
-     *            IEsperEngine
+     *            IEventEngineService
      */
-    public void prepareAlerts(final IEsperEngine esperEngineBean) {
+    public void prepareAlerts(final IEventEngineService esperEngineBean) {
     
     
         for (final IEvent event : events) {
@@ -626,9 +626,9 @@ public class EsperQueryTester
      * Method prepareQuery.
      * 
      * @param esperEngineBean
-     *            IEsperEngine
+     *            IEventEngineService
      */
-    public void prepareQuery(final IEsperEngine esperEngineBean) {
+    public void prepareQuery(final IEventEngineService esperEngineBean) {
     
     
         if (epStatement == null) {
@@ -640,7 +640,7 @@ public class EsperQueryTester
     public void runTest() {
     
     
-        final EsperEngineBean newEngine = newEngine();
+        final EventEngineService newEngine = newEngine();
         runTest(newEngine);
         newEngine.destroy();
     }
@@ -650,9 +650,9 @@ public class EsperQueryTester
      * Method runTest.
      * 
      * @param esperEngineBean
-     *            IEsperEngine
+     *            IEventEngineService
      */
-    public void runTest(final IEsperEngine esperEngineBean) {
+    public void runTest(final IEventEngineService esperEngineBean) {
     
     
         prepareQuery(esperEngineBean);
@@ -718,7 +718,7 @@ public class EsperQueryTester
         if (!hasEventList) {
             if (!esperPredicates.isEmpty()) { return; }
             final List<Map<String, Object>> listMapResult =
-                    EPStatementResult.build(epStatement).listMapResult();
+                    CEPQueryResultConvertor.build(epStatement).listMapResult();
             
             int i = 0;
             for (final Map<String, Object> value : listMapResult) {
@@ -735,7 +735,7 @@ public class EsperQueryTester
             }
         } else {
             final List<Object> resultsList =
-                    EPStatementResult.build(epStatement).listUnderlyingObjects();
+                    CEPQueryResultConvertor.build(epStatement).listUnderlyingObjects();
             if (matchingList != null) {
                 Assert.assertEquals("Expected same result size", matchingList.size(),
                         resultsList.size());
@@ -778,7 +778,7 @@ public class EsperQueryTester
     
         int i = 0;
         final List<Object> listUnderlyingObjects =
-                EPStatementResult.build(epStatement).listUnderlyingObjects();
+                CEPQueryResultConvertor.build(epStatement).listUnderlyingObjects();
         for (final Object object : listUnderlyingObjects) {
             LOGGER.debug("[{}] Received {}", i++, object);
         }

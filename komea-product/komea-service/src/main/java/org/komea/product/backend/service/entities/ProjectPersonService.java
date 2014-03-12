@@ -10,10 +10,9 @@ import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Project;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.espertech.esper.client.annotation.Audit;
 
 
 
@@ -27,9 +26,23 @@ public class ProjectPersonService implements IProjectPersonService
     
     private static final Logger LOGGER = LoggerFactory.getLogger(ProjectPersonService.class);
     
-    @Audit
+    @Autowired
     private HasProjectPersonDao projectPersonDAO;
     
+    
+    
+    public HasProjectPersonDao getProjectPersonDAO() {
+    
+    
+        return projectPersonDAO;
+    }
+    
+    
+    public void setProjectPersonDAO(final HasProjectPersonDao _projectPersonDAO) {
+    
+    
+        projectPersonDAO = _projectPersonDAO;
+    }
     
     
     @Override

@@ -6,6 +6,8 @@ package org.komea.product.cep.api;
 
 
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.io.Serializable;
 
 
@@ -15,8 +17,32 @@ import java.io.Serializable;
  * 
  * @author sleroy
  */
-public interface ICEPEngine
+public interface ICEPEngine extends Closeable
 {
+    
+    
+    /**
+     * Returns the engine configuration.
+     * 
+     * @return the engine configuration.
+     */
+    ICEPConfiguration getConfiguration();
+    
+    
+    /**
+     * Returns the query administration
+     * 
+     * @return the query administrator
+     */
+    IQueryAdministrator getQueryAdministration();
+    
+    
+    /**
+     * Initializes / restarts the CEP Engine.
+     * 
+     * @throws IOException
+     */
+    void initialize() throws IOException;
     
     
     /**
@@ -28,22 +54,4 @@ public interface ICEPEngine
     void pushEvent(Serializable _event);
     
     
-    /**
-     * Register a event listener
-     * 
-     * @param _name
-     *            the event name
-     * @param _listener
-     *            the vent listener.
-     */
-    void registerEventListener(String _name, ICEPEventListener _listener);
-    
-    
-    /**
-     * Remove the event listener
-     * 
-     * @param _name
-     *            the listener name.
-     */
-    void removeEventListener(String _name);
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.enums.EntityType;
@@ -59,8 +59,8 @@ public class KPIServiceTest
         final MeasureDao measureDAOMock =
                 Mockito.mock(MeasureDao.class, Mockito.withSettings().verboseLogging());
         
-        final IEsperEngine esperEngine =
-                Mockito.mock(IEsperEngine.class, Mockito.withSettings().verboseLogging());
+        final IEventEngineService esperEngine =
+                Mockito.mock(IEventEngineService.class, Mockito.withSettings().verboseLogging());
         
         final EPStatement epStatementMock =
                 Mockito.mock(EPStatement.class, Mockito.withSettings().verboseLogging());

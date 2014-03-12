@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
-import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.api.IEntity;
@@ -132,7 +132,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
     
     
     @Autowired
-    private IEsperEngine esperEngine;
+    private IEventEngineService esperEngine;
     
     
     @Autowired
@@ -169,9 +169,9 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
     /**
      * Method getEsperEngine.
      * 
-     * @return IEsperEngine
+     * @return IEventEngineService
      */
-    public final IEsperEngine getEsperEngine() {
+    public final IEventEngineService getEsperEngine() {
     
     
         return esperEngine;
@@ -315,9 +315,9 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
      * Method setEsperEngine.
      * 
      * @param _esperEngine
-     *            IEsperEngine
+     *            IEventEngineService
      */
-    public void setEsperEngine(final IEsperEngine _esperEngine) {
+    public void setEsperEngine(final IEventEngineService _esperEngine) {
     
     
         esperEngine = _esperEngine;

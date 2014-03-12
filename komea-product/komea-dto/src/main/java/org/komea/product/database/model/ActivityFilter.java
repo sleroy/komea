@@ -3,8 +3,6 @@ package org.komea.product.database.model;
 
 
 
-import java.io.Serializable;
-
 import javax.validation.constraints.NotNull;
 
 import org.komea.product.database.api.IHasKey;
@@ -14,7 +12,7 @@ import org.komea.product.database.enums.RetentionPeriod;
 
 
 
-public class ActivityFilter implements Serializable, IHasKey
+public class ActivityFilter implements IHasKey
 {
     
     

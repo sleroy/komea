@@ -9,15 +9,54 @@ package org.komea.product.cep.query;
 import java.util.Collections;
 import java.util.Map;
 
+import org.komea.product.cep.api.CEPResultType;
 import org.komea.product.cep.api.ICEPResult;
 
 
 
 /**
+ * This class returns the result expected from a query
+ * 
  * @author sleroy
  */
-public class CEPResult implements ICEPResult
+public class CEPResult
 {
+    
+    
+    /**
+     * Returns a CEP Result as a number.
+     * 
+     * @param _value
+     *            the number
+     * @return the result
+     */
+    public static ICEPResult buildFromCustomType(final Object _value) {
+    
+    
+        final CEPCustomTypeResult cepResult = new CEPCustomTypeResult(_value);
+        
+        return cepResult;
+    }
+    
+    
+    /**
+     * Creates the result wrapper from its definition.
+     */
+    public static ICEPResult buildFromDefinition(
+            final CEPResultType _resultType,
+            final Object _value) {
+    
+    
+        switch (_resultType) {
+            case NUMERICAL:
+                return buildFromNumber((Number) _value);
+            case TABLE:
+                return buildFromMap((Map<Object, Object>) _value);
+            case CUSTOM:
+                return buildFromCustomType(_value);
+        }
+        return null;
+    }
     
     
     /**
@@ -28,8 +67,7 @@ public class CEPResult implements ICEPResult
     public static ICEPResult buildFromMap(final Map<Object, Object> _map) {
     
     
-        final CEPResult cepResult = new CEPResult();
-        cepResult.resultMap = Collections.unmodifiableMap(_map);
+        final CEPMapResult cepResult = new CEPMapResult(Collections.unmodifiableMap(_map));
         return cepResult;
     }
     
@@ -37,86 +75,22 @@ public class CEPResult implements ICEPResult
     /**
      * Returns a CEP Result as a number.
      * 
-     * @param _size
+     * @param _value
      *            the number
      * @return
      */
-    public static ICEPResult buildFromNumber(final Number _size) {
+    public static ICEPResult buildFromNumber(final Number _value) {
     
     
-        final CEPResult cepResult = new CEPResult();
-        cepResult.value = _size;
+        final CEPNumericalResult cepResult = new CEPNumericalResult(_value);
+        
         return cepResult;
     }
     
     
-    
-    private Map<Object, Object> resultMap = null;
-    
-    
-    private Number              value     = null;
+    private CEPResult() {
     
     
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPResult#asMap()
-     */
-    @Override
-    public Map<Object, Object> asMap() {
-    
-    
-        if (value != null) { throw new IllegalArgumentException(); }
-        return resultMap;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPResult#asNumber()
-     */
-    @Override
-    public Number asNumber() {
-    
-    
-        return value;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPResult#asNumber(java.lang.Object)
-     */
-    @Override
-    public Number asNumber(final Object _key) {
-    
-    
-        if (resultMap != null) { throw new IllegalArgumentException(); }
-        return Number.class.cast(resultMap.get(_key));
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPResult#isMap()
-     */
-    @Override
-    public boolean isMap() {
-    
-    
-        return resultMap != null;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPResult#isNumericalValue()
-     */
-    @Override
-    public boolean isNumericalValue() {
-    
-    
-        return value != null;
     }
     
 }

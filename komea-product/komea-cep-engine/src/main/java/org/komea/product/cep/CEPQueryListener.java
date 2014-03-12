@@ -12,7 +12,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 import org.komea.product.cep.api.ICEPQuery;
-import org.komea.product.cep.api.ICEPQueryListener;
+import org.komea.product.cep.api.ICEPQueryEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author sleroy
  */
-public class CEPQueryListener implements ICEPQueryListener
+public class CEPQueryListener implements ICEPQueryEventListener
 {
     
     
@@ -80,6 +80,22 @@ public class CEPQueryListener implements ICEPQueryListener
         if (queriesMap.containsKey(_query)) { throw new IllegalArgumentException(
                 "Query already defined : " + _query); }
         queriesMap.put(_queryName, _query);
+        
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.api.ICEPQueryEventListener#removeQuery(java.lang.String)
+     */
+    @Override
+    public void removeQuery(final String _queryName) {
+    
+    
+        Validate.notNull(_queryName);
+        LOGGER.debug("Removes the query {}", _queryName);
+        
+        queriesMap.remove(_queryName);
         
     }
 }

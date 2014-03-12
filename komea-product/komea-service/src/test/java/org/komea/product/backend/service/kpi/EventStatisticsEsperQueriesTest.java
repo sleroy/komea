@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.esper.test.EsperQueryTester;
 import org.komea.product.database.alert.EventBuilder;
 import org.komea.product.database.alert.IEvent;
@@ -55,7 +55,7 @@ public class EventStatisticsEsperQueriesTest
         final IEvent alert3 =
                 EventBuilder.newAlert().eventType(newEventType("BLA3"))
                         .provided(newProvider("PROV3")).build();
-        final IEsperEngine esperEngine = EsperQueryTester.newEngine();
+        final IEventEngineService esperEngine = EsperQueryTester.newEngine();
         
         final EsperQueryTester test1 =
                 EsperQueryTester.newTest("ALERT_NUMBER")

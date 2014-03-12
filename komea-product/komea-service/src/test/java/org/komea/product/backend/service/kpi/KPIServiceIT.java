@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
-import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.esper.test.EsperQueryTester;
 import org.komea.product.backend.exceptions.KpiAlreadyExistingException;
 import org.komea.product.backend.service.ISystemProjectBean;
@@ -46,7 +46,7 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
     private static final String     TEST_QUERY = "testQuery";
     
     @Autowired
-    private IEsperEngine            esperEngine;
+    private IEventEngineService            esperEngine;
     
     @Autowired
     private IEventPushService       eventPushService;

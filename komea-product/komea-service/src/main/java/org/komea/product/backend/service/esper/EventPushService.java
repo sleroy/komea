@@ -5,7 +5,7 @@ package org.komea.product.backend.service.esper;
 
 import java.util.Date;
 
-import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ public class EventPushService implements IEventPushService
     
     
     @Autowired
-    private IEsperEngine                         esperEngine;
+    private IEventEngineService                         esperEngine;
     
     
     @Autowired
@@ -102,9 +102,9 @@ public class EventPushService implements IEventPushService
      * Method setEsperEngine.
      * 
      * @param _esperEngine
-     *            IEsperEngine
+     *            IEventEngineService
      */
-    public void setEsperEngine(final IEsperEngine _esperEngine) {
+    public void setEsperEngine(final IEventEngineService _esperEngine) {
     
     
         esperEngine = _esperEngine;

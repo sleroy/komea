@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.product.backend.api.IEsperEngine;
+import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.genericservice.DAOEventRegistry;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.dao.MeasureDao;
@@ -40,7 +40,7 @@ public class MeasureHistoryServiceTest
     
     
     @Mock
-    private IEsperEngine          esperEngine;
+    private IEventEngineService          esperEngine;
     
     
     @Mock
