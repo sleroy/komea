@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.komea.backend.kpi.tests.SequenceStep;
 import org.komea.product.cep.api.IEventFilter;
 import org.komea.product.cep.api.IEventTransformer;
 import org.komea.product.cep.api.TransformedEvent;
@@ -71,7 +70,7 @@ public class SequenceTransformer implements IEventTransformer
      * @see org.komea.product.cep.api.IEventTransformer#transform(java.io.Serializable)
      */
     @Override
-    public TransformedEvent transform(final Serializable _event) {
+    public TransformedEvent<IEventSequence<Serializable>> transform(final Serializable _event) {
     
     
         if (sequenceStepEvaluator.evaluate(_event)) { return sequenceStepEvaluator
