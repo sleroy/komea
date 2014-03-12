@@ -12,6 +12,7 @@ public class SearchMeasuresDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @NotNull
     private List<String> entityKeys = new ArrayList<String>(0);
     @NotNull
     private EntityType entityType;
