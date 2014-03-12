@@ -36,7 +36,7 @@ public class KpisController {
         return service.listAllKpis();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/get", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = "/get", produces = "application/json")
     @ResponseBody
     public List<Kpi> getKpis(@RequestBody EntityType entityType) {
 
