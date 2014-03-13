@@ -12,7 +12,7 @@ import org.junit.rules.TestRule;
 import org.komea.event.factory.JenkinsEventFactory;
 import org.komea.product.backend.esper.test.EsperQueryTester;
 import org.komea.product.backend.service.esper.stats.EventStatisticsService;
-import org.komea.product.cep.api.IQueryDefinition;
+import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +45,7 @@ public class EventStatisticsServicePerformanceTest
     public void testBuildProviderEventFrequencyQuery() {
     
     
-        final IQueryDefinition buildProviderEventFrequencyQuery =
+        final ICEPQueryImplementation buildProviderEventFrequencyQuery =
                 new EventStatisticsService().buildProviderEventFrequencyQuery();
         
         

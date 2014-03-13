@@ -6,7 +6,6 @@ package org.komea.product.backend.service.settings;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
@@ -20,7 +19,6 @@ import org.komea.product.backend.service.ISettingProxy;
 import org.komea.product.backend.service.ISettingService;
 import org.komea.product.backend.service.proxy.SettingProxy;
 import org.komea.product.backend.utils.CollectionUtil;
-import org.komea.product.backend.utils.SpringUtils;
 import org.komea.product.database.dao.SettingDao;
 import org.komea.product.database.model.Setting;
 import org.komea.product.database.model.SettingCriteria;
@@ -29,8 +27,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class SettingService implements ISettingService, ApplicationContextAware
+public class SettingService implements ISettingService, BeanPostProcessor
 {
     
     
@@ -226,6 +224,46 @@ public class SettingService implements ISettingService, ApplicationContextAware
     
     /*
      * (non-Javadoc)
+     * @see org.springframework.beans.factory.config.BeanPostProcessor#postProcessAfterInitialization(java.lang.Object, java.lang.String)
+     */
+    @Override
+    public Object postProcessAfterInitialization(final Object _bean, final String _beanName)
+            throws BeansException {
+    
+    
+        final Properties annotation =
+                AnnotationUtils.findAnnotation(_bean.getClass(), Properties.class);
+        if (annotation != null) {
+            LOGGER.info("Bean {} defines custom server settings", _beanName);
+            for (final Property property : annotation.value()) {
+                create(property.key(), property.value(), property.type().getName(),
+                        property.description());
+            }
+            
+            injectSettings(_bean);
+            LOGGER.info("-----------------------------------------------------------------------");
+        }
+        
+        
+        return _bean;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.beans.factory.config.BeanPostProcessor#postProcessBeforeInitialization(java.lang.Object, java.lang.String)
+     */
+    @Override
+    public Object postProcessBeforeInitialization(final Object _bean, final String _beanName)
+            throws BeansException {
+    
+    
+        return _bean;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.backend.service.ISettingService#registerListener(java.lang.String,
      * org.komea.product.backend.service.ISettingListener)
      */
@@ -235,42 +273,6 @@ public class SettingService implements ISettingService, ApplicationContextAware
     
         settingListenerContainer.register(_propertyName, _listener);
         
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
-     */
-    @Override
-    public void setApplicationContext(final ApplicationContext _applicationContext)
-            throws BeansException {
-    
-    
-        LOGGER.info("INITIALISATION OF SETTINGS---------------------------------------------");
-        LOGGER.info("Creating new Properties.");
-        final Map<String, Object> propertiesBeansMap =
-                _applicationContext.getBeansWithAnnotation(Properties.class);
-        LOGGER.info("Properties created.");
-        LOGGER.info("Found {} custom properties annotations", propertiesBeansMap.size());
-        
-        for (final Properties properties : SpringUtils.findAnnotations(_applicationContext,
-                Properties.class)) {
-            for (final Property property : properties.value()) {
-                create(property.key(), property.value(), property.type().getName(),
-                        property.description());
-            }
-        }
-        /**
-         * Injection de settings
-         */
-        for (final String beanName : _applicationContext.getBeanDefinitionNames()) {
-            final Object bean = _applicationContext.getBean(beanName);
-            injectSettings(bean);
-            
-        }
-        
-        LOGGER.info("-----------------------------------------------------------------------");
     }
     
     

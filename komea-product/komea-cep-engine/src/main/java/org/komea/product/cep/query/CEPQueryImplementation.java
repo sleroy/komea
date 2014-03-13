@@ -12,15 +12,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.komea.product.cep.api.ICEPFormula;
+import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.cep.api.IFilterDefinition;
-import org.komea.product.cep.api.IQueryDefinition;
 
 
 
 /**
+ * This class defines the implementation necessary to instantiate a cep query
+ * 
  * @author sleroy
  */
-public class QueryDefinition implements IQueryDefinition
+public class CEPQueryImplementation implements ICEPQueryImplementation
 {
     
     
@@ -32,18 +34,16 @@ public class QueryDefinition implements IQueryDefinition
     
     private Map<String, Object>           parameters        = Collections.EMPTY_MAP;
     
-    private String                        queryName;
-    
     
     
     /**
      * @param _queryName
      *            the query name.
      */
-    public QueryDefinition(final String _queryName) {
+    public CEPQueryImplementation() {
     
     
-        queryName = _queryName;
+        super();
     }
     
     
@@ -60,7 +60,7 @@ public class QueryDefinition implements IQueryDefinition
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.api.IQueryDefinition#getFilterDefinitions()
+     * @see org.komea.product.cep.api.ICEPQueryImplementation#getFilterDefinitions()
      */
     @Override
     public List<IFilterDefinition> getFilterDefinitions() {
@@ -78,14 +78,6 @@ public class QueryDefinition implements IQueryDefinition
     
     
         return formula;
-    }
-    
-    
-    @Override
-    public String getName() {
-    
-    
-        return queryName;
     }
     
     
@@ -123,13 +115,6 @@ public class QueryDefinition implements IQueryDefinition
     }
     
     
-    public void setQueryName(final String _queryName) {
-    
-    
-        queryName = _queryName;
-    }
-    
-    
     /*
      * (non-Javadoc)
      * @see java.lang.Object#toString()
@@ -138,9 +123,8 @@ public class QueryDefinition implements IQueryDefinition
     public String toString() {
     
     
-        return "QueryDefinition [filterDefinitions="
-                + filterDefinitions + ", formula=" + formula + ", parameters=" + parameters
-                + ", queryName=" + queryName + "]";
+        return "CEPQueryImplementation [filterDefinitions="
+                + filterDefinitions + ", formula=" + formula + ", parameters=" + parameters + "]";
     }
     
     

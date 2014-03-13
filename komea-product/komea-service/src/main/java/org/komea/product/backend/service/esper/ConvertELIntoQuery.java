@@ -6,7 +6,7 @@ package org.komea.product.backend.service.esper;
 
 
 
-import org.komea.product.cep.api.IQueryDefinition;
+import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.cep.formula.ElFormula;
 
 
@@ -27,11 +27,11 @@ public class ConvertELIntoQuery
      *            the formula
      * @return the query.
      */
-    public static IQueryDefinition parseEL(final String _formula) {
+    public static ICEPQueryImplementation parseEL(final String _formula) {
     
     
-        final ElFormula<IQueryDefinition> elFormula =
-                new ElFormula<IQueryDefinition>(_formula, IQueryDefinition.class);
+        final ElFormula<ICEPQueryImplementation> elFormula =
+                new ElFormula<ICEPQueryImplementation>(_formula, ICEPQueryImplementation.class);
         return elFormula.getValue(null);
     }
     

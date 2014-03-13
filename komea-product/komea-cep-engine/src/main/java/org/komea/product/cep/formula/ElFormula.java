@@ -91,8 +91,12 @@ public class ElFormula<T> implements IElFormula<T>
     public T getValue(final Object _context, final Map<String, Object> _parameters) {
     
     
-        Validate.notNull(_context);
-        final StandardEvaluationContext context = new StandardEvaluationContext(_context);
+        Object valuecontext = _context;
+        if (_context == null) {
+            valuecontext = new Object();
+        }
+        final StandardEvaluationContext context = new StandardEvaluationContext(valuecontext);
+        
         prepareCustomMethods(context);
         if (_parameters != null) {
             for (final Entry<String, Object> entry : _parameters.entrySet()) {

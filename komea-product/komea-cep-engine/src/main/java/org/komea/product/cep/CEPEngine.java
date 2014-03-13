@@ -16,6 +16,8 @@ import org.komea.product.cep.api.ICEPQueryEventListener;
 import org.komea.product.cep.api.IQueryAdministrator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 
 
 
@@ -24,7 +26,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author sleroy
  */
-
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class CEPEngine implements ICEPEngine
 {
     
@@ -37,7 +39,7 @@ public class CEPEngine implements ICEPEngine
     
     private static final Logger    LOGGER        = LoggerFactory.getLogger("cep-engine");
     
-    private final CEPConfiguration cepConfiguration;
+    private ICEPConfiguration      cepConfiguration;
     private ICEPQueryEventListener eventListener = null;
     
     
@@ -53,10 +55,10 @@ public class CEPEngine implements ICEPEngine
      * @param _cepConfiguration
      *            the cep configuration/
      */
-    public CEPEngine(final CEPConfiguration _cepConfiguration) {
+    public CEPEngine() {
     
     
-        cepConfiguration = _cepConfiguration;
+        cepConfiguration = new CEPConfiguration();
         
         
     }
@@ -109,9 +111,11 @@ public class CEPEngine implements ICEPEngine
      * @see org.komea.product.cep.api.ICEPEngine#initialize()
      */
     @Override
-    public void initialize() throws IOException {
+    public void initialize(final ICEPConfiguration _configuration) throws IOException {
     
     
+        Validate.notNull(_configuration);
+        cepConfiguration = _configuration;
         if (isInitialized()) {
             close();
         }

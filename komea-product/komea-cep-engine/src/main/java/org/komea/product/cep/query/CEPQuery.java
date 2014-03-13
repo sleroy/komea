@@ -16,7 +16,7 @@ import org.komea.product.cep.api.ICEPQuery;
 import org.komea.product.cep.api.ICEPResult;
 import org.komea.product.cep.api.ICEPStatement;
 import org.komea.product.cep.api.IFilterDefinition;
-import org.komea.product.cep.api.IQueryDefinition;
+import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +47,7 @@ public class CEPQuery implements ICEPQuery
      * @param _queryDefinition
      *            the definition of the query
      */
-    public CEPQuery(final IQueryDefinition _queryDefinition) {
+    public CEPQuery(final ICEPQueryImplementation _queryDefinition) {
     
     
         final CEPStatement<Serializable> initStatement = new CEPStatement<Serializable>();

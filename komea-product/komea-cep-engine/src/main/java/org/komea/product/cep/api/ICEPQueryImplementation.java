@@ -16,7 +16,7 @@ import java.util.Map;
  * 
  * @author sleroy
  */
-public interface IQueryDefinition
+public interface ICEPQueryImplementation
 {
     
     
@@ -34,14 +34,6 @@ public interface IQueryDefinition
      * @return the formula
      */
     ICEPFormula getFormula();
-    
-    
-    /**
-     * Returns the name of the query
-     * 
-     * @return the name of the query.
-     */
-    String getName();
     
     
     /**

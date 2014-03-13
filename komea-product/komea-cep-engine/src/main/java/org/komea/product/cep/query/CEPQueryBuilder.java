@@ -43,7 +43,7 @@ public class CEPQueryBuilder
     
     
     
-    private final QueryDefinition cepQueryDefinition = new QueryDefinition("default");
+    private final CEPQueryImplementation cepQueryDefinition = new CEPQueryImplementation();
     
     
     
@@ -188,26 +188,11 @@ public class CEPQueryBuilder
     /**
      * Returns the CEP Query.
      */
-    public QueryDefinition getDefinition() {
+    public CEPQueryImplementation getDefinition() {
     
     
         return cepQueryDefinition;
         
-    }
-    
-    
-    /**
-     * Defines a custom name for the query
-     * 
-     * @param _queryName
-     *            the name
-     * @return the builder;
-     */
-    public CEPQueryBuilder withName(final String _queryName) {
-    
-    
-        cepQueryDefinition.setQueryName(_queryName);
-        return this;
     }
     
     

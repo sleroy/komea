@@ -4,7 +4,6 @@ package org.komea.product.backend.api;
 
 
 import org.komea.product.cep.api.ICEPQuery;
-import org.komea.product.cep.api.IQueryDefinition;
 import org.komea.product.database.alert.IEvent;
 
 
@@ -19,7 +18,7 @@ public interface IEventEngineService
      * Registers a esper query.
      * 
      * @param _queryDefinition
-     *            IQueryDefinition
+     *            ICEPQueryImplementation
      */
     void createOrUpdateQuery(IQueryDefinition _queryDefinition);
     
@@ -28,7 +27,7 @@ public interface IEventEngineService
      * Creates esper Statement.
      * 
      * @param _queryDefinition
-     *            IQueryDefinition
+     *            ICEPQueryImplementation
      * @return the esper compiled statement.
      */
     ICEPQuery createQuery(IQueryDefinition _queryDefinition);

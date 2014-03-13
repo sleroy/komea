@@ -13,13 +13,13 @@ import javax.annotation.PreDestroy;
 
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.api.IEventEngineService;
+import org.komea.product.backend.api.IQueryDefinition;
 import org.komea.product.backend.exceptions.CEPQueryNotFoundException;
 import org.komea.product.backend.exceptions.InvalidQueryDefinitionException;
 import org.komea.product.cep.CEPConfiguration;
 import org.komea.product.cep.CEPEngine;
 import org.komea.product.cep.api.ICEPEngine;
 import org.komea.product.cep.api.ICEPQuery;
-import org.komea.product.cep.api.IQueryDefinition;
 import org.komea.product.cep.query.CEPQuery;
 import org.komea.product.database.alert.IEvent;
 import org.slf4j.Logger;
@@ -58,13 +58,13 @@ public final class EventEngineService implements IEventEngineService
     
     
         Validate.notNull(_definition);
-        LOGGER.debug("Registering an esper query  {}", _definition.getName());
-        if (existQuery(_definition.getName())) {
-            LOGGER.debug("--> Replacing an esper query  {}", _definition.getName());
+        LOGGER.debug("Registering an esper query  {}", _definition.getQueryName());
+        if (existQuery(_definition.getQueryName())) {
+            LOGGER.debug("--> Replacing an esper query  {}", _definition.getQueryName());
             createQuery(_definition);
             return;
         }
-        LOGGER.debug("--> Creating a new esper query  {}", _definition.getName());
+        LOGGER.debug("--> Creating a new esper query  {}", _definition.getQueryName());
         createQuery(_definition);
     }
     
@@ -90,12 +90,13 @@ public final class EventEngineService implements IEventEngineService
         Validate.notNull(_queryDefinition);
         LOGGER.debug("Creation of a new EPL Statement {}", _queryDefinition);
         try {
-            final ICEPQuery query = new CEPQuery(_queryDefinition);
-            cepEngine.getQueryAdministration().registerQuery(_queryDefinition.getName(), query);
+            final ICEPQuery query = new CEPQuery(_queryDefinition.getImplementation());
+            cepEngine.getQueryAdministration()
+                    .registerQuery(_queryDefinition.getQueryName(), query);
             return query;
         } catch (final Exception e) {
             LOGGER.error("Query invalid : " + _queryDefinition, e);
-            throw new InvalidQueryDefinitionException(_queryDefinition, e);
+            throw new InvalidQueryDefinitionException(_queryDefinition.getImplementation(), e);
         }
         
     }
@@ -203,10 +204,10 @@ public final class EventEngineService implements IEventEngineService
     public void init() {
     
     
+        cepEngine = new CEPEngine();
         LOGGER.debug("Initialization of CEP Engine");
-        cepEngine = new CEPEngine(new CEPConfiguration());
         try {
-            cepEngine.initialize();
+            cepEngine.initialize(new CEPConfiguration());
         } catch (final IOException e) {
             throw new FatalBeanException("CEP Engine could not started, it crashed");
         }

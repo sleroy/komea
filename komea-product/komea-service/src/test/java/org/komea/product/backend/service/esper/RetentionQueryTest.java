@@ -26,7 +26,7 @@ public class RetentionQueryTest
     
     
         final EsperQueryTester newTest = EsperQueryTester.newTest();
-        newTest.withQuery(new RetentionQuery(Severity.BLOCKER, RetentionPeriod.ONE_HOUR, "test"))
+        newTest.withQuery(new RetentionQuery(Severity.BLOCKER, RetentionPeriod.ONE_HOUR))
                 .sendEvent(new JenkinsEventFactory().sendBuildComplete("bla", 12, "truc"), 3)
                 .sendEvent(new JenkinsEventFactory().sendBuildFailed("bla", 12, "truc"), 2).dump()
                 .expectStorageSize(2);

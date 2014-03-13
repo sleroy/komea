@@ -6,7 +6,7 @@ package org.komea.product.backend.exceptions;
 
 
 
-import org.komea.product.cep.api.IQueryDefinition;
+import org.komea.product.cep.api.ICEPQueryImplementation;
 
 
 
@@ -22,7 +22,7 @@ public class InvalidQueryDefinitionException extends RuntimeException
 {
     
     
-    public InvalidQueryDefinitionException(final IQueryDefinition _query, final Exception _e) {
+    public InvalidQueryDefinitionException(final ICEPQueryImplementation _query, final Exception _e) {
     
     
         super("The query definition " + _query + " could not be registered.", _e);

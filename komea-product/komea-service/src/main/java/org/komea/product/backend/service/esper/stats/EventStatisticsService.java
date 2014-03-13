@@ -16,6 +16,7 @@ import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
+import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
@@ -23,8 +24,8 @@ import org.komea.product.cep.api.ICEPQuery;
 import org.komea.product.cep.cache.CacheConfigurationBuilder;
 import org.komea.product.cep.formula.tuple.TupleCountFormula;
 import org.komea.product.cep.formula.tuple.TuplerFormula;
+import org.komea.product.cep.query.CEPQueryImplementation;
 import org.komea.product.cep.query.FilterDefinition;
-import org.komea.product.cep.query.QueryDefinition;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.enums.Severity;
@@ -98,8 +99,8 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
         return "new "
-                + AlertPerSeverityPerDay.class.getName() + "(" + Severity.class.getName() + "."
-                + _criticity + ")";
+                + AlertPerSeverityPerDay.class.getName() + "(T("
+                + Severity.class.getCanonicalName() + ")." + _criticity + ")";
     }
     
     
@@ -108,10 +109,10 @@ public class EventStatisticsService implements IEventStatisticsService
      * 
      * @return
      */
-    public QueryDefinition buildProviderEventFrequencyQuery() {
+    public CEPQueryImplementation buildProviderEventFrequencyQuery() {
     
     
-        final QueryDefinition cepQueryDefinition = new QueryDefinition(STATS_BREAKDOWN_24H);
+        final CEPQueryImplementation cepQueryDefinition = new CEPQueryImplementation();
         cepQueryDefinition.setParameters(Collections.EMPTY_MAP);
         cepQueryDefinition.addFilterDefinition(new FilterDefinition(CacheConfigurationBuilder
                 .expirationTimeCache(24, TimeUnit.HOURS)));
@@ -272,7 +273,8 @@ public class EventStatisticsService implements IEventStatisticsService
         
         
         // output snapshot every 1 minute
-        cepEngine.createOrUpdateQuery(buildProviderEventFrequencyQuery());
+        cepEngine.createOrUpdateQuery(new QueryDefinition(STATS_BREAKDOWN_24H,
+                buildProviderEventFrequencyQuery()));
         
         if (alertPerDay != null) {
             kpiService.storeValueInHistory(kpiKey);

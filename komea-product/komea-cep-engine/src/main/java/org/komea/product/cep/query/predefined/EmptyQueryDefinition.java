@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.komea.product.cep.api.ICEPFormula;
+import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.cep.api.IFilterDefinition;
-import org.komea.product.cep.api.IQueryDefinition;
 import org.komea.product.cep.formula.CountFormula;
 
 
@@ -23,13 +23,13 @@ import org.komea.product.cep.formula.CountFormula;
  * 
  * @author sleroy
  */
-public class EmptyQueryDefinition implements IQueryDefinition
+public class EmptyQueryDefinition implements ICEPQueryImplementation
 {
     
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.api.IQueryDefinition#getFilterDefinitions()
+     * @see org.komea.product.cep.api.ICEPQueryImplementation#getFilterDefinitions()
      */
     @Override
     public List<IFilterDefinition> getFilterDefinitions() {
@@ -41,7 +41,7 @@ public class EmptyQueryDefinition implements IQueryDefinition
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.api.IQueryDefinition#getFormula()
+     * @see org.komea.product.cep.api.ICEPQueryImplementation#getFormula()
      */
     @Override
     public ICEPFormula getFormula() {
@@ -53,19 +53,7 @@ public class EmptyQueryDefinition implements IQueryDefinition
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.api.IQueryDefinition#getName()
-     */
-    @Override
-    public String getName() {
-    
-    
-        return "emptyQuery";
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.IQueryDefinition#getParameters()
+     * @see org.komea.product.cep.api.ICEPQueryImplementation#getParameters()
      */
     @Override
     public Map<String, Object> getParameters() {

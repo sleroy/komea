@@ -42,7 +42,7 @@ public interface ICEPEngine extends Closeable
      * 
      * @throws IOException
      */
-    void initialize() throws IOException;
+    void initialize(ICEPConfiguration _configuration) throws IOException;
     
     
     /**

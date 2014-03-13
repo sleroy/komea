@@ -16,7 +16,7 @@ import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.service.ISettingListener;
 import org.komea.product.backend.service.ISettingService;
 import org.komea.product.cep.api.ICEPQuery;
-import org.komea.product.cep.api.IQueryDefinition;
+import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.enums.RetentionPeriod;
 import org.komea.product.database.enums.Severity;
@@ -88,13 +88,12 @@ public class EventViewerService implements IEventViewerService, ISettingListener
      * 
      * @param _severity
      *            the severity
-     * @param _queryName
      * @return the esper query.
      */
-    public IQueryDefinition buildRetentionQuery(final Severity _severity, final String _queryName) {
+    public ICEPQueryImplementation buildRetentionQuery(final Severity _severity) {
     
     
-        return new RetentionQuery(_severity, getRetentionTime(_severity), _queryName);
+        return new RetentionQuery(_severity, getRetentionTime(_severity));
     }
     
     
@@ -178,10 +177,28 @@ public class EventViewerService implements IEventViewerService, ISettingListener
     }
     
     
+    /**
+     * Interrogate server settings base.
+     * 
+     * @param _retentionEventBlocker
+     *            the setting key
+     * @return the retention period.
+     */
+    public RetentionPeriod interrogateServerSettingsBase(final String _retentionEventBlocker) {
+    
+    
+        return settingService.<RetentionPeriod> getValueOrNull(_retentionEventBlocker);
+        
+    }
+    
+    
     @Override
     public void notifyPropertyChanged(final Setting _setting) {
     
     
+        // TODO : improvement possible, autodetect previous modifications, do not replace statement by only chaning cache configuration.
+        
+        LOGGER.info("Settings changed, requires updating of retention periods for events");
         updateIfNecessaryEventStream(Severity.BLOCKER, RETENTION_EVENT_BLOCKER);
         updateIfNecessaryEventStream(Severity.CRITICAL, RETENTION_EVENT_CRITICAL);
         updateIfNecessaryEventStream(Severity.MAJOR, RETENTION_EVENT_MAJOR);
@@ -256,21 +273,14 @@ public class EventViewerService implements IEventViewerService, ISettingListener
     }
     
     
-    private RetentionPeriod interrogateServerSettingsBase(final String _retentionEventBlocker) {
-    
-    
-        return settingService.<RetentionPeriod> getValueOrNull(_retentionEventBlocker);
-        
-    }
-    
-    
     private void updateIfNecessaryEventStream(final Severity _severity, final String _queryName) {
     
     
         if (hasChanged(_severity)) {
             lastRetentionPeriods[_severity.ordinal()] = getRetentionTime(_severity);
             LOGGER.info("Upgrading Stream of events {} with new retention policy", _severity);
-            esperService.createQuery(buildRetentionQuery(_severity, _queryName));
+            esperService
+                    .createQuery(new QueryDefinition(_queryName, buildRetentionQuery(_severity)));
         }
     }
 }

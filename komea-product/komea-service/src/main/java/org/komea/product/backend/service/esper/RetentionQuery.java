@@ -12,8 +12,8 @@ import java.util.concurrent.TimeUnit;
 import org.komea.product.cep.api.cache.ICacheConfiguration;
 import org.komea.product.cep.cache.CacheConfigurationBuilder;
 import org.komea.product.cep.formula.NoCEPFormula;
+import org.komea.product.cep.query.CEPQueryImplementation;
 import org.komea.product.cep.query.FilterDefinition;
-import org.komea.product.cep.query.QueryDefinition;
 import org.komea.product.database.enums.RetentionPeriod;
 import org.komea.product.database.enums.Severity;
 
@@ -24,7 +24,7 @@ import org.komea.product.database.enums.Severity;
  * 
  * @author sleroy
  */
-public class RetentionQuery extends QueryDefinition
+public class RetentionQuery extends CEPQueryImplementation
 {
     
     
@@ -37,13 +37,10 @@ public class RetentionQuery extends QueryDefinition
      * @param _severity
      * @param _retentionTime
      */
-    public RetentionQuery(
-            final Severity _severity,
-            final RetentionPeriod _retentionTime,
-            final String _queryName) {
+    public RetentionQuery(final Severity _severity, final RetentionPeriod _retentionTime) {
     
     
-        super(_queryName);
+        super();
         severity = _severity;
         retentionTime = _retentionTime;
         setParameters(new HashMap<String, Object>());

@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.komea.product.backend.api.IEventEngineService;
+import org.komea.product.backend.api.IQueryDefinition;
 import org.komea.product.backend.exceptions.EntityNotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundRuntimeException;
@@ -17,11 +18,12 @@ import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.esper.ConvertELIntoQuery;
+import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.cep.api.ICEPQuery;
-import org.komea.product.cep.api.IQueryDefinition;
+import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.KpiDao;
@@ -95,6 +97,24 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Autowired
     private KpiDao                 requiredDAO;
     
+    
+    
+    /**
+     * This methods registers in the CEP Engine a new query from a kpi.
+     * 
+     * @param _kpi
+     *            the kpi
+     * @return the query definition.
+     */
+    public IQueryDefinition createEsperQueryFromKPI(final Kpi _kpi) {
+    
+    
+        final ICEPQueryImplementation queryImplementation =
+                ConvertELIntoQuery.parseEL(_kpi.getEsperRequest());
+        LOGGER.debug("Updating Esper with the query {}", queryImplementation);
+        
+        return new QueryDefinition(_kpi.computeKPIEsperKey(), queryImplementation);
+    }
     
     
     /**
@@ -408,7 +428,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
     
         LOGGER.debug("Refreshing Esper with KPI {}", _kpi.getKpiKey());
-        createEsperQueryFromKPI(_kpi);
+        esperEngine.createOrUpdateQuery(createEsperQueryFromKPI(_kpi));
         IEntity entity = null;
         if (_kpi.isAssociatedToEntity()) {
             
@@ -575,15 +595,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
             }
         }
         
-    }
-    
-    
-    private void createEsperQueryFromKPI(final Kpi _kpi) {
-    
-    
-        final IQueryDefinition queryDefinition = ConvertELIntoQuery.parseEL(_kpi.getEsperRequest());
-        LOGGER.debug("Updating Esper with the query {}", queryDefinition);
-        esperEngine.createOrUpdateQuery(queryDefinition);
     }
     
     

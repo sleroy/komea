@@ -87,8 +87,9 @@ public class EventViewerServiceIT extends AbstractSpringIntegrationTestCase
     
         for (final RetentionPeriod retentionPeriod : RetentionPeriod.values()) {
             final RetentionQuery retentionQueryBuilder =
-                    new RetentionQuery(Severity.INFO, retentionPeriod, retentionPeriod.name());
-            esperEngine.createQuery(retentionQueryBuilder);
+                    new RetentionQuery(Severity.INFO, retentionPeriod);
+            esperEngine.createQuery(new QueryDefinition(retentionPeriod.name(),
+                    retentionQueryBuilder));
         }
     }
 }

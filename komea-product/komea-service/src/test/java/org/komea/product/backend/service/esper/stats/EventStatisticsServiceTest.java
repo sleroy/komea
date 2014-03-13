@@ -10,8 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
 import org.komea.product.backend.esper.test.EsperQueryTester;
-import org.komea.product.cep.api.IQueryDefinition;
-import org.komea.product.cep.formula.ElFormula;
+import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.database.enums.Severity;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +37,7 @@ public class EventStatisticsServiceTest
     public void testBuildProviderEventFrequencyQuery() {
     
     
-        final IQueryDefinition buildProviderEventFrequencyQuery =
+        final ICEPQueryImplementation buildProviderEventFrequencyQuery =
                 new EventStatisticsService().buildProviderEventFrequencyQuery();
         
         
@@ -54,39 +53,21 @@ public class EventStatisticsServiceTest
     public void testELQuery() {
     
     
-        Assert.assertEquals("new "
-                + AlertPerSeverityPerDay.class.getName()
-                + "(org.komea.product.database.enums.Severity.BLOCKER)",
+        Assert.assertEquals(
+                "new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).BLOCKER)",
                 new EventStatisticsService().buildELForAlertCriticityKpi(Severity.BLOCKER));
-        Assert.assertEquals("new "
-                + AlertPerSeverityPerDay.class.getName()
-                + "(org.komea.product.database.enums.Severity.CRITICAL)",
+        Assert.assertEquals(
+                "new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).CRITICAL)",
                 new EventStatisticsService().buildELForAlertCriticityKpi(Severity.CRITICAL));
-        Assert.assertEquals("new "
-                + AlertPerSeverityPerDay.class.getName()
-                + "(org.komea.product.database.enums.Severity.MAJOR)",
+        Assert.assertEquals(
+                "new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).MAJOR)",
                 new EventStatisticsService().buildELForAlertCriticityKpi(Severity.MAJOR));
-        Assert.assertEquals("new "
-                + AlertPerSeverityPerDay.class.getName()
-                + "(org.komea.product.database.enums.Severity.MINOR)",
+        Assert.assertEquals(
+                "new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).MINOR)",
                 new EventStatisticsService().buildELForAlertCriticityKpi(Severity.MINOR));
-        Assert.assertEquals("new "
-                + AlertPerSeverityPerDay.class.getName()
-                + "(org.komea.product.database.enums.Severity.INFO)",
+        Assert.assertEquals(
+                "new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).INFO)",
                 new EventStatisticsService().buildELForAlertCriticityKpi(Severity.INFO));
-        
-    }
-    
-    
-    @Test
-    public void testELQueryCreation() {
-    
-    
-        final ElFormula<IQueryDefinition> elFormula =
-                new ElFormula<IQueryDefinition>(
-                        new EventStatisticsService().buildELForAlertCriticityKpi(Severity.BLOCKER),
-                        null);
-        Assert.assertNotNull(elFormula);
         
     }
     

@@ -15,6 +15,7 @@ import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
 import org.komea.product.backend.service.esper.IEventViewerService;
+import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.cep.filter.NoEventFilter;
 import org.komea.product.cep.formula.CountFormula;
 import org.komea.product.cep.query.CEPQueryBuilder;
@@ -181,8 +182,8 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
     public void testifAlertStatisticsKPIAreWorking() {
     
     
-        esperEngine.createQuery(CEPQueryBuilder.create(new CountFormula())
-                .defineFilter(new NoEventFilter()).getDefinition());
+        esperEngine.createQuery(new QueryDefinition("alertstatistics", CEPQueryBuilder
+                .create(new CountFormula()).defineFilter(new NoEventFilter()).getDefinition()));
         
         
         final IEvent eventToSend =

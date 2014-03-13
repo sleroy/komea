@@ -14,10 +14,11 @@ import org.apache.commons.lang.Validate;
 import org.junit.Assert;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.service.esper.EventEngineService;
+import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.backend.service.kpi.IEsperLineTestPredicate;
 import org.komea.product.backend.service.kpi.IEsperTestPredicate;
 import org.komea.product.cep.api.ICEPQuery;
-import org.komea.product.cep.api.IQueryDefinition;
+import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.cep.api.formula.tuple.ITuple;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
@@ -254,7 +255,7 @@ public class EsperQueryTester
                                                                             new ArrayList<IEsperTestPredicate>();
     
     
-    private IQueryDefinition                    esperQuery;
+    private ICEPQueryImplementation             esperQuery;
     
     private final List<IEvent>                  events              = new ArrayList<IEvent>();
     
@@ -586,7 +587,9 @@ public class EsperQueryTester
     
     
         if (epStatement == null) {
-            epStatement = esperEngineBean.createQuery(esperQuery);
+            epStatement =
+                    esperEngineBean.createQuery(new QueryDefinition(esperQuery.toString(),
+                            esperQuery));
         }
     }
     
@@ -726,7 +729,7 @@ public class EsperQueryTester
      *            String
      * @return EsperQueryTester
      */
-    public EsperQueryTester withQuery(final IQueryDefinition _queryDefinition) {
+    public EsperQueryTester withQuery(final ICEPQueryImplementation _queryDefinition) {
     
     
         esperQuery = _queryDefinition;
