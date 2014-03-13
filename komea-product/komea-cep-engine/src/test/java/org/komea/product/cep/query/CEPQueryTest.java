@@ -38,6 +38,7 @@ public class CEPQueryTest
     
     
         final ICEPQuery cepQuery = CEPQueryBuilder.create(new CountFormula()).build();
+        
         cepQuery.getFormula();
     }
     

@@ -14,7 +14,6 @@ import org.komea.event.factory.JenkinsEventFactory;
 import org.komea.product.backend.esper.test.EsperQueryTester;
 import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.esper.EventEngineService;
-import org.komea.product.backend.service.esper.stats.EventStatisticsService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.enums.Severity;

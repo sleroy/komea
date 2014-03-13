@@ -13,10 +13,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import jodd.bean.BeanUtil;
-import jodd.introspector.FieldDescriptor;
 
 import org.apache.commons.lang.Validate;
-import org.komea.product.backend.utils.KomeaEntry;
 import org.komea.product.cep.api.ITupleResultMap;
 import org.komea.product.cep.api.formula.tuple.ITuple;
 import org.springframework.beans.BeanUtils;
@@ -47,13 +45,12 @@ public class TupleResultMap<TRes> implements ITupleResultMap<TRes>
      * @see org.komea.product.cep.api.ITupleResultMap#asPojoMap(java.lang.Class)
      */
     @Override
-    public <T> Map<T, TRes> asPojoMap(final Class<T> _pojoClass) {
+    public <T> Map<T, TRes> asPojoMap(final String[] _fieldSet, final Class<T> _pojoClass) {
     
     
-        final String[] fieldNameStrings = buildMapDescriptor(_pojoClass);
         final Map<T, TRes> map = new HashMap<T, TRes>(resultMap.size());
         for (final Entry<ITuple, TRes> entry : resultMap.entrySet()) {
-            map.put(instantiatePojoFromTuple(_pojoClass, fieldNameStrings, entry.getKey()),
+            map.put(instantiatePojoFromTuple(_pojoClass, _fieldSet, entry.getKey()),
                     entry.getValue());
         }
         
@@ -66,13 +63,12 @@ public class TupleResultMap<TRes> implements ITupleResultMap<TRes>
      * @see org.komea.product.cep.api.ITupleResultMap#asPojoRows(java.lang.Class)
      */
     @Override
-    public <T> List<T> asPojoRows(final Class<T> _rowPojo) {
+    public <T> List<T> asPojoRows(final String[] _fieldSet, final Class<T> _rowPojo) {
     
     
-        final String[] fieldNameStrings = buildMapDescriptor(_rowPojo);
         final List<T> arrayList = new ArrayList<T>(resultMap.size());
         for (final ITuple entry : asTupleRows()) {
-            arrayList.add(instantiatePojoFromTuple(_rowPojo, fieldNameStrings, entry));
+            arrayList.add(instantiatePojoFromTuple(_rowPojo, _fieldSet, entry));
         }
         
         return arrayList;
@@ -120,27 +116,9 @@ public class TupleResultMap<TRes> implements ITupleResultMap<TRes>
         final List<ITuple> tuples = new ArrayList<ITuple>(resultMap.size());
         for (final Entry<ITuple, TRes> entry : resultMap.entrySet()) {
             final ITuple tuple = entry.getKey();
-            tuples.add(tuple.append(new KomeaEntry(VALUE, entry.getValue())));
+            tuples.add(tuple.append(entry.getValue()));
         }
         return tuples;
-    }
-    
-    
-    /**
-     * @param _pojoClass
-     * @return
-     */
-    public <T> String[] buildMapDescriptor(final Class<T> _pojoClass) {
-    
-    
-        final FieldDescriptor[] allFieldDescriptors =
-                BeanUtil.getBeanUtilBean().getIntrospector().lookup(_pojoClass)
-                        .getAllFieldDescriptors();
-        final String[] fieldNameStrings = new String[allFieldDescriptors.length];
-        for (int i = 0; i < allFieldDescriptors.length; ++i) {
-            fieldNameStrings[i] = allFieldDescriptors[i].getField().getName();
-        }
-        return fieldNameStrings;
     }
     
     

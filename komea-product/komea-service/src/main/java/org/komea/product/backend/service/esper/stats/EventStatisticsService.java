@@ -236,7 +236,8 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
         final ICEPQuery statsBreakdownStatement = cepEngine.getQuery(STATS_BREAKDOWN_24H);
-        return statsBreakdownStatement.getResult().asMap().asPojoRows(EventTypeStatistic.class);
+        return statsBreakdownStatement.getResult().asMap().asPojoRows(new String[] {
+                "provider", "type", "value" }, EventTypeStatistic.class);
     }
     
     

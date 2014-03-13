@@ -12,8 +12,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.cep.query.CEPQuery;
-import org.komea.product.cep.query.predefined.EmptyQueryDefinition;
+import org.komea.product.cep.filter.NoEventFilter;
+import org.komea.product.cep.formula.CountFormula;
+import org.komea.product.cep.query.CEPQueryBuilder;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.enums.EntityType;
@@ -97,7 +98,8 @@ public class KPIServiceTest
                 .thenReturn(kpiList);
         
         Mockito.when(cepEngine.getQueryOrFail(KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12)).thenReturn(
-                new CEPQuery(new EmptyQueryDefinition()));
+                CEPQueryBuilder.create(new CountFormula()).defineFilter(new NoEventFilter())
+                        .build());
         
         final Kpi findKPIFacade =
                 kpiService.findKPI(KpiKey.ofKpiNameAndEntity("PERSON_PRODUCTIVITY", person));
@@ -106,5 +108,4 @@ public class KPIServiceTest
         Assert.assertEquals(person.getId(), kpi.getEntityID());
         
     }
-    
 }

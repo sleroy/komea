@@ -37,7 +37,9 @@ public class CEPQueryBuilder
     public static CEPQueryBuilder create(final ICEPFormula _formula) {
     
     
-        return new CEPQueryBuilder(_formula);
+        final CEPQueryBuilder cepQueryBuilder = new CEPQueryBuilder(_formula);
+        cepQueryBuilder.defineFilter(new NoEventFilter());
+        return cepQueryBuilder;
         
     }
     

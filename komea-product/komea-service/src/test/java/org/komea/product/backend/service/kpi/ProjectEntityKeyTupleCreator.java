@@ -28,7 +28,6 @@ public class ProjectEntityKeyTupleCreator implements ITupleCreator<IEvent>
     public ITuple create(final IEvent _event) {
     
     
-        return new ArrayListTuple(new String[] {
-            "entity" }, _event.getProject().getEntityKey());
+        return new ArrayListTuple(_event.getProject().getEntityKey());
     }
 }

@@ -29,7 +29,7 @@ public interface ITupleResultMap<TRes>
      *            the pojo class
      * @return the hash map
      */
-    public <T> Map<T, TRes> asPojoMap(Class<T> _pojoClass);
+    public <T> Map<T, TRes> asPojoMap(String[] _fieldSet, Class<T> _pojoClass);
     
     
     /**
@@ -38,7 +38,7 @@ public interface ITupleResultMap<TRes>
      * 
      * @return the list of pojo.
      */
-    public <T> List<T> asPojoRows(Class<T> _rowPojo);
+    public <T> List<T> asPojoRows(String[] _fieldSet, Class<T> _rowPojo);
     
     
     /**

@@ -16,7 +16,7 @@ public class EventTypeStatistic implements Serializable
     
     private String type;
     
-    private long   value;
+    private int    value;
     
     
     
@@ -50,7 +50,7 @@ public class EventTypeStatistic implements Serializable
     /**
      * @return the value
      */
-    public long getValue() {
+    public int getValue() {
     
     
         return value;
@@ -83,7 +83,7 @@ public class EventTypeStatistic implements Serializable
      * @param _value
      *            the value to set
      */
-    public void setValue(final long _value) {
+    public void setValue(final int _value) {
     
     
         value = _value;

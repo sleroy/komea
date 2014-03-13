@@ -304,7 +304,10 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         final IEntity entity = CollectionUtil.singleOrNull(entitiesAssociatedToKpiKey);
         measureKey.setEntity(entity.entityType(), entity.getId());
         final ITupleResultMap<Number> map = queryOrFail.getResult().asMap();
-        measureKey.setValue(map.get(entity.getEntityKey()).doubleValue());
+        final Number number = map.get(entity.getEntityKey());
+        if (number != null) {
+            measureKey.setValue(number.doubleValue());
+        }
         LOGGER.debug("Obtain the real time measure : {} result = {}", _key, measureKey.getValue());
         return measureKey;
     }

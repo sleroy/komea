@@ -6,7 +6,7 @@ package org.komea.product.cep.formula.tuple;
 
 
 
-import java.util.Map;
+import java.util.List;
 
 import org.komea.product.cep.api.formula.tuple.ITuple;
 
@@ -21,17 +21,17 @@ public class TupleFactory
 {
     
     
-    public static ITuple newTuple(final Map<String, Object> _propertiesMap) {
+    public static ITuple newTuple(final List<Object> _values) {
     
     
-        return new ArrayListTuple(_propertiesMap);
+        return new ArrayListTuple(_values);
         
     }
     
     
-    public static ITuple newTuple(final String[] _strings, final Object... _values) {
+    public static ITuple newTuple(final Object _value, final Object... _values) {
     
     
-        return new ArrayListTuple(_strings, _values);
+        return new ArrayListTuple(_value, _values);
     }
 }
