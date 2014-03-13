@@ -2,7 +2,7 @@ package org.komea.product.backend.service.entities;
 
 import java.util.List;
 import org.komea.product.backend.service.generic.IGenericService;
-import org.komea.product.database.dto.BaseEntity;
+import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.ProjectDto;
 import org.komea.product.database.model.Link;
 import org.komea.product.database.model.Project;
@@ -58,9 +58,9 @@ public interface IProjectService extends IGenericService<Project, Integer, Proje
      * Method projectsToBaseEntities.
      *
      * @param projects List<Project>
-     * @return List<BaseEntity>
+     * @return List<BaseEntityDto>
      */
-    List<BaseEntity> projectsToBaseEntities(List<Project> projects);
+    List<BaseEntityDto> projectsToBaseEntities(List<Project> projects);
 
     /**
      * get projects of a personGroup

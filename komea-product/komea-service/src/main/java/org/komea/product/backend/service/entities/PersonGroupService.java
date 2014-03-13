@@ -6,7 +6,7 @@ import java.util.List;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.database.dao.HasProjectPersonGroupDao;
 import org.komea.product.database.dao.PersonGroupDao;
-import org.komea.product.database.dto.BaseEntity;
+import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.DepartmentDto;
 import org.komea.product.database.dto.Pair;
 import org.komea.product.database.dto.TeamDto;
@@ -49,20 +49,20 @@ public final class PersonGroupService extends
      *
      * @param personGroups List<PersonGroup>
      * @param entityType EntityType
-     * @return List<BaseEntity>
+     * @return List<BaseEntityDto>
      * @see
      * org.komea.product.backend.service.entities.IPersonGroupService#personGroupsToBaseEntities(List<PersonGroup>,
      * EntityType)
      */
     @Override
-    public List<BaseEntity> convertPersonGroupsToBaseEntities(
+    public List<BaseEntityDto> convertPersonGroupsToBaseEntities(
             final List<PersonGroup> personGroups,
             final EntityType entityType) {
 
-        final List<BaseEntity> entities = new ArrayList<BaseEntity>(personGroups.size());
+        final List<BaseEntityDto> entities = new ArrayList<BaseEntityDto>(personGroups.size());
         for (final PersonGroup personGroup : personGroups) {
-            final BaseEntity entity
-                    = new BaseEntity(entityType, personGroup.getId(),
+            final BaseEntityDto entity
+                    = new BaseEntityDto(entityType, personGroup.getId(),
                             personGroup.getPersonGroupKey(), personGroup.getName(),
                             personGroup.getDescription());
             entities.add(entity);

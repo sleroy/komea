@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import jodd.bean.BeanUtil;
+import jodd.introspector.FieldDescriptor;
 
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.utils.KomeaEntry;
@@ -49,11 +50,11 @@ public class TupleResultMap<TRes> implements ITupleResultMap<TRes>
     public <T> Map<T, TRes> asPojoMap(final Class<T> _pojoClass) {
     
     
+        final String[] fieldNameStrings = buildMapDescriptor(_pojoClass);
         final Map<T, TRes> map = new HashMap<T, TRes>(resultMap.size());
         for (final Entry<ITuple, TRes> entry : resultMap.entrySet()) {
-            final T pojo = BeanUtils.instantiate(_pojoClass);
-            BeanUtil.populateBean(pojo, entry.getKey().asMap());
-            map.put(pojo, entry.getValue());
+            map.put(instantiatePojoFromTuple(_pojoClass, fieldNameStrings, entry.getKey()),
+                    entry.getValue());
         }
         
         return map;
@@ -68,11 +69,10 @@ public class TupleResultMap<TRes> implements ITupleResultMap<TRes>
     public <T> List<T> asPojoRows(final Class<T> _rowPojo) {
     
     
+        final String[] fieldNameStrings = buildMapDescriptor(_rowPojo);
         final List<T> arrayList = new ArrayList<T>(resultMap.size());
         for (final ITuple entry : asTupleRows()) {
-            final T pojo = BeanUtils.instantiate(_rowPojo);
-            BeanUtil.populateBean(pojo, resultMap);
-            arrayList.add(pojo);
+            arrayList.add(instantiatePojoFromTuple(_rowPojo, fieldNameStrings, entry));
         }
         
         return arrayList;
@@ -90,7 +90,7 @@ public class TupleResultMap<TRes> implements ITupleResultMap<TRes>
         final Map<T, TRes> simplfiedMap = new HashMap<T, TRes>();
         for (final Entry<ITuple, TRes> entry : resultMap.entrySet()) {
             final ITuple tuple = entry.getKey();
-            Validate.isTrue(tuple.isSingleton(), "HashMapTuple must contains only one property");
+            Validate.isTrue(tuple.isSingleton(), "Tuple must contains only one property");
             simplfiedMap.put(tuple.<T> getFirst(), entry.getValue());
         }
         return simplfiedMap;
@@ -126,6 +126,48 @@ public class TupleResultMap<TRes> implements ITupleResultMap<TRes>
     }
     
     
+    /**
+     * @param _pojoClass
+     * @return
+     */
+    public <T> String[] buildMapDescriptor(final Class<T> _pojoClass) {
+    
+    
+        final FieldDescriptor[] allFieldDescriptors =
+                BeanUtil.getBeanUtilBean().getIntrospector().lookup(_pojoClass)
+                        .getAllFieldDescriptors();
+        final String[] fieldNameStrings = new String[allFieldDescriptors.length];
+        for (int i = 0; i < allFieldDescriptors.length; ++i) {
+            fieldNameStrings[i] = allFieldDescriptors[i].getField().getName();
+        }
+        return fieldNameStrings;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.api.ITupleResultMap#get(java.lang.Object)
+     */
+    @Override
+    public TRes get(final Object _key) {
+    
+    
+        return resultMap.get(new ArrayListTuple(new String[] {}, _key));
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.api.ITupleResultMap#getValue(org.komea.product.service.dto.EntityKey)
+     */
+    @Override
+    public TRes getValue(final ITuple _valueInTuple) {
+    
+    
+        return resultMap.get(_valueInTuple);
+    }
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.cep.api.ITupleResultMap#insertEntry(org.komea.product.cep.api.formula.tuple.ITuple, java.lang.Object)
@@ -135,6 +177,28 @@ public class TupleResultMap<TRes> implements ITupleResultMap<TRes>
     
     
         resultMap.put(_key, _result);
+        
+    }
+    
+    
+    /**
+     * Instantiate a pojo from a tuple.
+     * 
+     * @param _rowPojo
+     * @param fieldNameStrings
+     * @param arrayList
+     * @param entry
+     * @return the new pojo.
+     */
+    public <T> T instantiatePojoFromTuple(
+            final Class<T> _rowPojo,
+            final String[] fieldNameStrings,
+            final ITuple entry) {
+    
+    
+        final T pojo = BeanUtils.instantiate(_rowPojo);
+        BeanUtil.populateBean(pojo, entry.asMap(fieldNameStrings));
+        return pojo;
         
     }
     
@@ -163,5 +227,4 @@ public class TupleResultMap<TRes> implements ITupleResultMap<TRes>
         }
         return sBuilder.toString();
     }
-    
 }

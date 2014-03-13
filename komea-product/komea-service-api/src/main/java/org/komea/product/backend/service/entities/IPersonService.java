@@ -2,7 +2,7 @@ package org.komea.product.backend.service.entities;
 
 import java.util.List;
 import org.komea.product.backend.service.generic.IGenericService;
-import org.komea.product.database.dto.BaseEntity;
+import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.PersonDto;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonCriteria;
@@ -32,9 +32,9 @@ public interface IPersonService extends IGenericService<Person, Integer, PersonC
      * Method personsToBaseEntities.
      *
      * @param persons List<Person>
-     * @return List<BaseEntity>
+     * @return List<BaseEntityDto>
      */
-    List<BaseEntity> convertPersonsToBaseEntities(List<Person> persons);
+    List<BaseEntityDto> convertPersonsToBaseEntities(List<Person> persons);
 
     /**
      * Find or create an user based on an email.

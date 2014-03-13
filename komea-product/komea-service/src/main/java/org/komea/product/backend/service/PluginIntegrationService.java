@@ -3,9 +3,6 @@ package org.komea.product.backend.service;
 
 
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 import javax.validation.Valid;
 
 import org.komea.product.backend.exceptions.InvalidProviderDescriptionException;
@@ -24,8 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,14 +36,12 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class PluginIntegrationService implements IPluginIntegrationService, ApplicationContextAware
+public class PluginIntegrationService implements IPluginIntegrationService, BeanPostProcessor
 {
     
     
     private static final Logger          LOGGER = LoggerFactory.getLogger("plugin-loader");
     
-    @Autowired
-    private ApplicationContext           context;
     
     @Autowired
     private IEventTypeService            eventTypeService;
@@ -82,18 +77,6 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     
         final int existingProvider = providerMapper.countByCriteria(criteria);
         return existingProvider > 0;
-    }
-    
-    
-    /**
-     * Method getContext.
-     * 
-     * @return ApplicationContext
-     */
-    public ApplicationContext getContext() {
-    
-    
-        return context;
     }
     
     
@@ -145,30 +128,36 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
     }
     
     
-    /**
-     * Load provider configuration from beans.
-     * 
-     * @param _providerPluginBeansMap
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.beans.factory.config.BeanPostProcessor#postProcessAfterInitialization(java.lang.Object, java.lang.String)
      */
-    public void loadProviderConfigurationFromBeans(final Map<String, Object> _providerPluginBeansMap) {
+    @Override
+    public Object postProcessAfterInitialization(final Object _bean, final String _beanName)
+            throws BeansException {
     
     
-        LOGGER.info("Found {} plugins", _providerPluginBeansMap.size());
-        
-        for (final Entry<String, Object> providerDesc : _providerPluginBeansMap.entrySet()) {
-            LOGGER.debug("With bean {}", providerDesc.getKey());
-            try {
-                final ProviderDto loadProviderDTO =
-                        providerAPIService.loadProviderDTO(context.findAnnotationOnBean(
-                                providerDesc.getKey(), ProviderPlugin.class));
-                registerProvider(loadProviderDTO);
-            } catch (final Exception e) {
-                LOGGER.error("Cannot load the provider with bean {}, has failed : ",
-                        providerDesc.getKey(), e);
-            }
+        final ProviderPlugin findAnnotation =
+                AnnotationUtils.findAnnotation(_bean.getClass(), ProviderPlugin.class);
+        if (findAnnotation != null) {
+            LOGGER.info("Registering new provider plugin {}", _beanName);
+            final ProviderDto loadProviderDTO = providerAPIService.loadProviderDTO(findAnnotation);
+            registerProvider(loadProviderDTO);
         }
-        
-        LOGGER.info("Registration finished.");
+        return _bean;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.beans.factory.config.BeanPostProcessor#postProcessBeforeInitialization(java.lang.Object, java.lang.String)
+     */
+    @Override
+    public Object postProcessBeforeInitialization(final Object _bean, final String _beanName)
+            throws BeansException {
+    
+    
+        return _bean;
     }
     
     
@@ -220,45 +209,6 @@ public class PluginIntegrationService implements IPluginIntegrationService, Appl
         eventTypeCriteria.createCriteria().andIdProviderEqualTo(provider.getId());
         eventTypeService.deleteByCriteria(eventTypeCriteria);
         
-    }
-    
-    
-    /**
-     * Method setApplicationContext.
-     * 
-     * @param _applicationContext
-     *            ApplicationContext
-     * @throws BeansException
-     * @see org.springframework.context.ApplicationContextAware#setApplicationContext(ApplicationContext)
-     */
-    @Override
-    public void setApplicationContext(final ApplicationContext _applicationContext)
-            throws BeansException {
-    
-    
-        context = _applicationContext;
-        LOGGER.info("-----------------------------------------------------------------------");
-        LOGGER.info("Initializing the plugin loader");
-        final Map<String, Object> providerPluginBeansMap =
-                context.getBeansWithAnnotation(ProviderPlugin.class);
-        
-        loadProviderConfigurationFromBeans(providerPluginBeansMap);
-        
-        
-        LOGGER.info("-----------------------------------------------------------------------");
-    }
-    
-    
-    /**
-     * Method setContext.
-     * 
-     * @param _context
-     *            ApplicationContext
-     */
-    public void setContext(final ApplicationContext _context) {
-    
-    
-        context = _context;
     }
     
     

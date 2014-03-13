@@ -7,18 +7,18 @@ package org.komea.product.cep.formula.tuple;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import jodd.bean.BeanUtil;
 
 import org.apache.commons.lang.Validate;
-import org.komea.product.backend.utils.KomeaEntry;
 import org.komea.product.cep.api.formula.tuple.ITuple;
 import org.springframework.beans.BeanUtils;
+
+import com.google.common.collect.Lists;
 
 
 
@@ -31,64 +31,35 @@ public class ArrayListTuple implements ITuple
 {
     
     
-    private final List<Entry<String, Object>> propertyMap;
+    private final List<Object> propertyMap;
     
-    
-    
-    /**
-     * Builds an tuple from its own data implementation.
-     * 
-     * @param _propertyMapValues
-     *            the data.
-     */
-    public ArrayListTuple(final ArrayList<Entry<String, Object>> _propertyMapValues) {
-    
-    
-        propertyMap = _propertyMapValues;
-        
-    }
     
     
     /**
      * Properties map
      * 
-     * @param _propertiesMap
+     * @param _values
      *            the properties map.
      */
-    public ArrayListTuple(final Map<String, Object> _propertiesMap) {
+    public ArrayListTuple(final List<Object> _values) {
     
     
         super();
         
-        Validate.notNull(_propertiesMap);
-        propertyMap = new ArrayList<Map.Entry<String, Object>>(_propertiesMap.size());
-        for (final Entry<String, Object> entry : _propertiesMap.entrySet()) {
-            propertyMap.add(new KomeaEntry(entry.getKey(), entry.getValue()));
-        }
+        Validate.notNull(_values);
+        propertyMap = Collections.unmodifiableList(_values);
+        
     }
     
     
     /**
-     * Defines a tuple
-     * 
-     * @param _strings
-     *            the strings
-     * @param _name
-     *            the name
-     * @param _eventType
-     *            the event type
+     * Defines a tuple from an array.
      */
-    public ArrayListTuple(final String[] _strings, final Object... _values) {
+    public ArrayListTuple(final Object value, final Object... _values) {
     
     
-        Validate.notNull(_strings);
         Validate.notNull(_values);
-        Validate.isTrue(_strings.length == _values.length, "expected "
-                + _strings.length + " values in both parameters");
-        propertyMap = new ArrayList<Map.Entry<String, Object>>(_strings.length);
-        for (int i = 0; i < _strings.length; ++i) {
-            propertyMap.add(new KomeaEntry(_strings[i], _values[i]));
-        }
+        propertyMap = Lists.asList(value, _values);
         
     }
     
@@ -98,11 +69,10 @@ public class ArrayListTuple implements ITuple
      * @see org.komea.product.cep.api.formula.tuple.ITuple#append(java.util.Map.Entry)
      */
     @Override
-    public ITuple append(final Entry<String, Object> _entry) {
+    public ITuple append(final Object _entry) {
     
     
-        final ArrayList<Entry<String, Object>> propertyMap2 =
-                new ArrayList<Map.Entry<String, Object>>(propertyMap.size() + 1);
+        final ArrayList<Object> propertyMap2 = new ArrayList<Object>(propertyMap.size() + 1);
         propertyMap2.addAll(propertyMap);
         propertyMap2.add(_entry);
         return new ArrayListTuple(propertyMap2);
@@ -110,11 +80,12 @@ public class ArrayListTuple implements ITuple
     
     
     @Override
-    public <T> T asBean(final Class<T> _pojoClass) {
+    public <T> T asBean(final String[] _keySet, final Class<T> _pojoClass) {
     
     
+        Validate.isTrue(_keySet.length == propertyMap.size());
         final T beanPojo = BeanUtils.instantiate(_pojoClass);
-        BeanUtil.populateBean(beanPojo, asMap());
+        BeanUtil.populateBean(beanPojo, asMap(_keySet));
         return beanPojo;
     }
     
@@ -124,12 +95,13 @@ public class ArrayListTuple implements ITuple
      * @see org.komea.product.cep.formula.tuple.ITuple#asMap()
      */
     @Override
-    public Map<String, Object> asMap() {
+    public Map<String, Object> asMap(final String[] _keySet) {
     
     
+        Validate.isTrue(_keySet.length == propertyMap.size());
         final Map<String, Object> hashMap = new HashMap<String, Object>();
-        for (final Entry<String, Object> entry : propertyMap) {
-            hashMap.put(entry.getKey(), entry.getValue());
+        for (int i = 0; i < _keySet.length; ++i) {
+            hashMap.put(_keySet[i], propertyMap.get(i));
         }
         return hashMap;
     }
@@ -156,29 +128,13 @@ public class ArrayListTuple implements ITuple
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.formula.tuple.ITuple#getProperty(java.lang.String)
-     */
-    @Override
-    public <T2> T2 get(final String _propertyName) {
-    
-    
-        Validate.notEmpty(_propertyName);
-        for (final Entry<String, Object> entry : propertyMap) {
-            if (_propertyName.equals(entry.getKey())) { return (T2) entry.getValue(); }
-        }
-        return null;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
      * @see org.komea.product.cep.api.formula.tuple.ITuple#getByIndex(int)
      */
     @Override
     public <T> T getFirst() {
     
     
-        return (T) propertyMap.get(0).getValue();
+        return (T) propertyMap.get(0);
     }
     
     
@@ -211,6 +167,18 @@ public class ArrayListTuple implements ITuple
     
     /*
      * (non-Javadoc)
+     * @see org.komea.product.cep.api.formula.tuple.ITuple#isSingleton(java.lang.Object)
+     */
+    @Override
+    public boolean isSingleton(final Object _valueInTuple) {
+    
+    
+        return isSingleton() && this.getFirst().equals(_valueInTuple);
+    }
+    
+    
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.cep.api.formula.tuple.ITuple#size()
      */
     @Override
@@ -229,13 +197,7 @@ public class ArrayListTuple implements ITuple
     public String toString() {
     
     
-        final StringBuilder sBuilder = new StringBuilder();
-        for (final Entry<String, Object> entry : propertyMap) {
-            sBuilder.append("\n\t").append(entry.getKey()).append(" -> ").append(entry.getValue())
-                    .append("");
-        }
-        
-        return "HashMapTuple [" + sBuilder.toString() + "]";
+        return "ArrayListTuple [propertyMap=" + propertyMap + "]";
     }
     
     
@@ -244,13 +206,9 @@ public class ArrayListTuple implements ITuple
      * @see org.komea.product.cep.api.formula.tuple.ITuple#values()
      */
     @Override
-    public Collection<Object> values() {
+    public List<Object> values() {
     
     
-        final List<Object> aList = new ArrayList<Object>();
-        for (final Entry<String, Object> entry : propertyMap) {
-            aList.add(entry.getValue());
-        }
-        return aList;
+        return propertyMap;
     }
 }

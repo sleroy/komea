@@ -2,7 +2,7 @@ package org.komea.product.backend.service.entities;
 
 import java.util.List;
 import org.komea.product.backend.service.generic.IGenericService;
-import org.komea.product.database.dto.BaseEntity;
+import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.DepartmentDto;
 import org.komea.product.database.dto.TeamDto;
 import org.komea.product.database.enums.EntityType;
@@ -71,9 +71,9 @@ public interface IPersonGroupService extends
      *
      * @param personGroups List<PersonGroup>
      * @param entityType EntityType
-     * @return List<BaseEntity>
+     * @return List<BaseEntityDto>
      */
-    List<BaseEntity> convertPersonGroupsToBaseEntities(
+    List<BaseEntityDto> convertPersonGroupsToBaseEntities(
             List<PersonGroup> personGroups,
             EntityType entityType);
 

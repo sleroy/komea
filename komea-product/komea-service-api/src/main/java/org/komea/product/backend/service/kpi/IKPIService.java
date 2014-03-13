@@ -7,13 +7,11 @@ import java.util.List;
 
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.generic.IGenericService;
-import org.komea.product.database.api.IEntity;
-import org.komea.product.database.dto.KpiTendancyDto;
+import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.Measure;
-import org.komea.product.service.dto.KPIValueTable;
 import org.komea.product.service.dto.KpiKey;
 
 
@@ -45,6 +43,20 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria>
     
     
     /**
+     * Returns a list of measures from a list of kpi and a list of entities.
+     * 
+     * @param _kpis
+     *            the list of kpis
+     * @param _entities
+     *            the entities.
+     * @return the list of measures.
+     */
+    public List<Measure> getRealTimeMeasuresFromEntities(
+            List<Kpi> _kpis,
+            List<BaseEntityDto> _entities);
+    
+    
+    /**
      * Method that returns a single value for the *special* KPI that does not
      * render a table.
      * 
@@ -52,7 +64,7 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria>
      *            the kpi key.
      * @return the kpi single value;
      */
-    public Double getSingleValue(KpiKey _kpiKey);
+    public Number getSingleValue(KpiKey _kpiKey);
     
     
     /**
@@ -108,27 +120,6 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria>
     
     
     /**
-     * Returns the kPI double value.
-     * 
-     * @param _kpiKey
-     *            KpiKey
-     * @return the kpi double value. * @throws KPINotFoundException
-     */
-    <T extends IEntity> KPIValueTable<T> getRealTimeValues(KpiKey _kpiKey)
-            throws KPINotFoundException;
-    
-    
-    /**
-     * Returns the tendancy for a KPI.
-     * 
-     * @param _measureKey
-     *            the measure key.
-     * @return the kpi tendancy.
-     */
-    KpiTendancyDto getTendancy(KpiKey _measureKey);
-    
-    
-    /**
      * Refresh esper with a KPI. The esper statement will be either created or updated and the cron job updated as well.
      * 
      * @param _kpi
@@ -145,6 +136,6 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria>
      * @param _kpiValue
      *            the value.
      */
-    void storeMeasureOfAKpiInDatabase(KpiKey _kpiKey, Double _kpiValue);
+    void storeMeasureOfAKpiInDatabase(KpiKey _kpiKey, Number _kpiValue);
     
 }

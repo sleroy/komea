@@ -5,9 +5,7 @@ package org.komea.product.backend.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -109,18 +107,6 @@ public class PluginIntegrationServiceTest
         // // Add missing mocking
         // initPluginIntegrationService.injectSettings(beanWithInjection);
         // Assert.assertEquals(beanWithInjection.getStorage_path(), mock);
-        
-    }
-    
-    
-    @Test
-    public void testLoadProviderFromBean() {
-    
-    
-        final PluginIntegrationService pluginIntegrationService = initPluginIntegrationService();
-        // Should work without beans
-        final Map<String, Object> map = new HashMap<String, Object>();
-        pluginIntegrationService.loadProviderConfigurationFromBeans(map);
         
     }
     
@@ -255,7 +241,6 @@ public class PluginIntegrationServiceTest
     
     
         final PluginIntegrationService pluginService = new PluginIntegrationService();
-        pluginService.setContext(appContextMock);
         pluginService.setProviderMapper(providerMapperMock);
         pluginService.setProviderAPIService(providerAPIService);
         pluginService.setEventTypeService(eventTypeService);

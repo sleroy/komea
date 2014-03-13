@@ -99,8 +99,8 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
         return "new "
-                + AlertPerSeverityPerDay.class.getName() + "(T("
-                + Severity.class.getCanonicalName() + ")." + _criticity + ")";
+                + AlertPerSeverityPerDay.class.getName() + "(T(" + Severity.class.getName() + ")."
+                + _criticity + ")";
     }
     
     
@@ -187,7 +187,8 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
         final Double kpiSingleValue =
-                kpiService.getSingleValue(KpiKey.ofKpiName(getKpiNameFromSeverity(_criticity)));
+                kpiService.getSingleValue(KpiKey.ofKpiName(getKpiNameFromSeverity(_criticity)))
+                        .doubleValue();
         return kpiSingleValue.intValue();
         
     }

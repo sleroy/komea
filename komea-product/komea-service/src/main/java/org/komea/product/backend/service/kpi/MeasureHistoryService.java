@@ -14,7 +14,7 @@ import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.MeasureDao;
-import org.komea.product.database.dto.BaseEntity;
+import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.SearchMeasuresDto;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
@@ -265,19 +265,19 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
      * @param kpis
      *            List<Kpi>
      * @param entities
-     *            List<BaseEntity>
+     *            List<BaseEntityDto>
      * @param searchMeasuresDto
      *            SearchMeasuresDto
      * @return List<Measure>
      * @see
      *      org.komea.product.backend.service.measure.IMeasureService#getMeasures(List<Kpi>,
-     *      List<BaseEntity>, SearchMeasuresDto)
+     *      List<BaseEntityDto>, SearchMeasuresDto)
      */
     @Override
     @SuppressWarnings("unchecked")
     public List<Measure> getMeasures(
             final List<Kpi> kpis,
-            final List<BaseEntity> entities,
+            final List<BaseEntityDto> entities,
             final SearchMeasuresDto searchMeasuresDto) {
     
     

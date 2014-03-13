@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.lang.Validate;
 import org.junit.Assert;
@@ -104,57 +103,12 @@ public class EsperQueryTester
     
     /**
      */
-    private static class MapLinePredicate implements IEsperLineTestPredicate
-    {
-        
-        
-        private final Map<String, Object> objects;
-        
-        
-        
-        /**
-         * @param _objects
-         *            Map<String,Object>
-         */
-        public MapLinePredicate(final Map<String, Object> _objects) {
-        
-        
-            super();
-            objects = _objects;
-            
-        }
-        
-        
-        /**
-         * Method evaluate.
-         * 
-         * @param _bean
-         *            Map<String,Object>
-         * @see org.komea.product.backend.service.kpi.IEsperLineTestPredicate#evaluate(Map<String,Object>)
-         */
-        @Override
-        public void evaluate(final ITuple _bean) {
-        
-        
-            for (final Entry<String, Object> entry : objects.entrySet()) {
-                Assert.assertEquals("Expected " + entry.getValue() + "  for " + entry.getKey(),
-                        entry.getValue(), _bean.get(entry.getKey()));
-            }
-            
-            
-        }
-    }
-    
-    
-    
-    /**
-     */
     private static class SingleLinePredicate implements IEsperLineTestPredicate
     {
         
         
-        private final String columnName;
         private final Object expectedValue;
+        private final int    number;
         
         
         
@@ -162,11 +116,12 @@ public class EsperQueryTester
          * @param _columnName
          * @param _expectedValue
          */
-        public SingleLinePredicate(final String _columnName, final Object _expectedValue) {
+        public SingleLinePredicate(final int _number, final Object _expectedValue) {
         
         
             super();
-            columnName = _columnName;
+            number = _number;
+            
             expectedValue = _expectedValue;
         }
         
@@ -174,16 +129,16 @@ public class EsperQueryTester
         /**
          * Method evaluate.
          * 
-         * @param _bean
+         * @param _tuple
          *            Map<String,Object>
          * @see org.komea.product.backend.service.kpi.IEsperLineTestPredicate#evaluate(Map<String,Object>)
          */
         @Override
-        public void evaluate(final ITuple _bean) {
+        public void evaluate(final ITuple _tuple) {
         
         
-            Assert.assertEquals("Expected " + expectedValue + "  for " + columnName, expectedValue,
-                    _bean.get(columnName));
+            Assert.assertEquals("Expected " + expectedValue + "  for " + number, expectedValue,
+                    _tuple.values().get(number));
             
             
         }
@@ -488,40 +443,6 @@ public class EsperQueryTester
     
         esperLinePredicates.add(_testPredicate);
         return this;
-    }
-    
-    
-    /**
-     * Method hasLineResult.
-     * 
-     * @param _map
-     *            Map<String,Object>
-     * @return EsperQueryTester
-     */
-    public EsperQueryTester hasLineResult(final Map<String, Object> _map) {
-    
-    
-        esperLinePredicates.add(new MapLinePredicate(_map));
-        return this;
-    }
-    
-    
-    /**
-     * Method hasLineResult.
-     * 
-     * @param _columnName
-     *            String
-     * @param _expectedValue
-     *            Object
-     * @return EsperQueryTester
-     */
-    public EsperQueryTester hasLineResult(final String _columnName, final Object _expectedValue) {
-    
-    
-        esperLinePredicates.add(new SingleLinePredicate(_columnName, _expectedValue));
-        return this;
-        
-        
     }
     
     

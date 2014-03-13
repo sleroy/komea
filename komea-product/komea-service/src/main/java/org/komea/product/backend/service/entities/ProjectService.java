@@ -11,7 +11,7 @@ import org.komea.product.database.dao.HasProjectTagDao;
 import org.komea.product.database.dao.LinkDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dao.TagDao;
-import org.komea.product.database.dto.BaseEntity;
+import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.ProjectDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Customer;
@@ -248,17 +248,17 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
      * Method projectsToBaseEntities.
      *
      * @param projects List<Project>
-     * @return List<BaseEntity>
+     * @return List<BaseEntityDto>
      * @see
      * org.komea.product.backend.service.entities.IProjectService#projectsToBaseEntities(List<Project>)
      */
     @Override
-    public List<BaseEntity> projectsToBaseEntities(final List<Project> projects) {
+    public List<BaseEntityDto> projectsToBaseEntities(final List<Project> projects) {
 
-        final List<BaseEntity> entities = new ArrayList<BaseEntity>(projects.size());
+        final List<BaseEntityDto> entities = new ArrayList<BaseEntityDto>(projects.size());
         for (final Project project : projects) {
-            final BaseEntity entity
-                    = new BaseEntity(EntityType.PROJECT, project.getId(), project.getProjectKey(),
+            final BaseEntityDto entity
+                    = new BaseEntityDto(EntityType.PROJECT, project.getId(), project.getProjectKey(),
                             project.getName(), project.getDescription());
             entities.add(entity);
         }

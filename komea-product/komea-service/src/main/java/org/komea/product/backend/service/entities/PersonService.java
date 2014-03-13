@@ -9,7 +9,7 @@ import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.HasProjectPersonDao;
 import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.PersonDao;
-import org.komea.product.database.dto.BaseEntity;
+import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.Pair;
 import org.komea.product.database.dto.PersonDto;
 import org.komea.product.database.enums.EntityType;
@@ -111,17 +111,17 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
      * Convert a person into base entity (its a dto)
      *
      * @param persons List<Person>
-     * @return List<BaseEntity>
+     * @return List<BaseEntityDto>
      * @see
      * org.komea.product.backend.service.entities.IPersonService#personsToBaseEntities(List<Person>)
      */
     @Override
-    public List<BaseEntity> convertPersonsToBaseEntities(final List<Person> persons) {
+    public List<BaseEntityDto> convertPersonsToBaseEntities(final List<Person> persons) {
 
-        final List<BaseEntity> entities = new ArrayList<BaseEntity>(persons.size());
+        final List<BaseEntityDto> entities = new ArrayList<BaseEntityDto>(persons.size());
         for (final Person person : persons) {
-            final BaseEntity entity
-                    = new BaseEntity(EntityType.PERSON, person.getId(), person.getLogin(),
+            final BaseEntityDto entity
+                    = new BaseEntityDto(EntityType.PERSON, person.getId(), person.getLogin(),
                             person.getFirstName() + " " + person.getLastName(),
                             person.getPassword());
             entities.add(entity);

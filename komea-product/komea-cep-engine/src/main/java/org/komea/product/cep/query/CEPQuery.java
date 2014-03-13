@@ -13,10 +13,10 @@ import java.util.Map;
 import org.apache.commons.lang.Validate;
 import org.komea.product.cep.api.ICEPFormula;
 import org.komea.product.cep.api.ICEPQuery;
+import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.cep.api.ICEPResult;
 import org.komea.product.cep.api.ICEPStatement;
 import org.komea.product.cep.api.IFilterDefinition;
-import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +59,8 @@ public class CEPQuery implements ICEPQuery
         formula = _queryDefinition.getFormula();
         Validate.notNull(formula);
         Validate.notNull(parameters);
+        Validate.isTrue(!cepStatement.getEventStorages().isEmpty(),
+                "A Query must defines at least one filter");
         
     }
     

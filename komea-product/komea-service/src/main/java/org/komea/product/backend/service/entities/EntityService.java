@@ -9,7 +9,7 @@ import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dao.ProjectDao;
-import org.komea.product.database.dto.BaseEntity;
+import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonCriteria;
@@ -57,12 +57,12 @@ public final class EntityService implements IEntityService {
      *
      * @param _entityType EntityType
      * @param _entityKeys List<String>
-     * @return List<BaseEntity>
+     * @return List<BaseEntityDto>
      */
     @Override
-    public List<BaseEntity> getEntities(final EntityType _entityType, final List<String> _entityKeys) {
+    public List<BaseEntityDto> getEntities(final EntityType _entityType, final List<String> _entityKeys) {
 
-        final List<BaseEntity> entities = Lists.newArrayList();
+        final List<BaseEntityDto> entities = Lists.newArrayList();
         if (_entityKeys == null) {
             return entities;
         }

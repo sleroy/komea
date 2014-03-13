@@ -69,6 +69,26 @@ public interface ITupleResultMap<TRes>
     
     
     /**
+     * Returns the value.
+     * 
+     * @param _key
+     *            the key.
+     * @return the value.
+     */
+    public TRes get(Object _key);
+    
+    
+    /**
+     * Returns the value.
+     * 
+     * @param _key
+     *            the key.
+     * @return the value.
+     */
+    public TRes getValue(ITuple _key);
+    
+    
+    /**
      * Inserts an entry into the result map
      * 
      * @param _key

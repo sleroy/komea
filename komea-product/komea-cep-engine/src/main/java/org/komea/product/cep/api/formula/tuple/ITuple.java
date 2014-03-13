@@ -6,9 +6,8 @@ package org.komea.product.cep.api.formula.tuple;
 
 
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 
 
@@ -16,7 +15,6 @@ import java.util.Map.Entry;
  * This interface defines a tuple.
  * 
  * @author sleroy
- * @param <T>
  */
 public interface ITuple
 {
@@ -27,7 +25,7 @@ public interface ITuple
      * 
      * @return the tuple as a bean
      */
-    public <T> T asBean(Class<T> _pojoClass);
+    public <T> T asBean(String[] _keySet, Class<T> _pojoClass);
     
     
     /**
@@ -35,7 +33,7 @@ public interface ITuple
      * 
      * @return the map.
      */
-    public Map<String, Object> asMap();
+    public Map<String, Object> asMap(String[] _keySet);
     
     
     /*
@@ -44,16 +42,6 @@ public interface ITuple
      */
     @Override
     public boolean equals(Object obj);
-    
-    
-    /**
-     * Returns the property
-     * 
-     * @param _propertyName
-     *            the property name
-     * @return the property.
-     */
-    public <T2> T2 get(String _propertyName);
     
     
     /**
@@ -79,6 +67,15 @@ public interface ITuple
     
     
     /**
+     * Returns true if the value in parameter is the singleton of this tuple.
+     * 
+     * @param _valueInTuple
+     *            the value.
+     */
+    public boolean isSingleton(Object _valueInTuple);
+    
+    
+    /**
      * Returns the number of properties
      * 
      * @return the number of properties.
@@ -99,7 +96,7 @@ public interface ITuple
      * 
      * @return the list of values
      */
-    public Collection<Object> values();
+    public List<Object> values();
     
     
     /**
@@ -109,5 +106,5 @@ public interface ITuple
      *            the entry
      * @return the new tuple;
      */
-    ITuple append(Entry<String, Object> _entry);
+    ITuple append(Object _entry);
 }

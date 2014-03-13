@@ -10,7 +10,7 @@ import org.komea.product.service.dto.EntityKey;
 
 
 
-public class BaseEntity implements IEntity
+public class BaseEntityDto implements IEntity
 {
     
     
@@ -24,13 +24,13 @@ public class BaseEntity implements IEntity
     
     
     
-    public BaseEntity() {
+    public BaseEntityDto() {
     
     
     }
     
     
-    public BaseEntity(
+    public BaseEntityDto(
             final EntityType entityType,
             final Integer id,
             final String key,
@@ -76,8 +76,8 @@ public class BaseEntity implements IEntity
     
         if (this == obj) { return true; }
         if (obj == null) { return false; }
-        if (!(obj instanceof BaseEntity)) { return false; }
-        final BaseEntity other = (BaseEntity) obj;
+        if (!(obj instanceof BaseEntityDto)) { return false; }
+        final BaseEntityDto other = (BaseEntityDto) obj;
         if (id == null) {
             if (other.id != null) { return false; }
         } else if (!id.equals(other.id)) { return false; }
@@ -196,7 +196,7 @@ public class BaseEntity implements IEntity
     public String toString() {
     
     
-        return "BaseEntity{"
+        return "BaseEntityDto{"
                 + "entityType=" + entityType + ", id=" + id + ", key=" + key + ", name=" + name
                 + ", description=" + description + '}';
     }

@@ -7,11 +7,13 @@ package org.komea.product.cep.query;
 
 
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
 
 import org.komea.product.cep.api.IEventFilter;
 import org.komea.product.cep.api.IEventTransformer;
 import org.komea.product.cep.api.IFilterDefinition;
 import org.komea.product.cep.api.cache.ICacheConfiguration;
+import org.komea.product.cep.cache.CacheConfigurationBuilder;
 import org.komea.product.cep.filter.NoEventFilter;
 
 
@@ -30,10 +32,17 @@ public class FilterDefinition implements IFilterDefinition
     
     
     
+    /**
+     * Builds a default filter definition.
+     */
     public FilterDefinition() {
     
     
         super();
+        cacheConfiguration = CacheConfigurationBuilder.expirationTimeCache(1, TimeUnit.HOURS);
+        filter = new NoEventFilter();
+        filterName = "none";
+        transformer = null;
     }
     
     

@@ -6,7 +6,7 @@ package org.komea.product.database.dto;
 
 
 
-import org.komea.product.database.api.IEntity;
+import org.komea.product.service.dto.EntityKey;
 
 
 
@@ -17,28 +17,29 @@ public class TendancyLineValueDto
 {
     
     
-    private IEntity entity;
+    private EntityKey entity;
     
     
-    private Double  previousValue;
+    private Number    previousValue;
     
     
-    private Double  realValue;
+    private Number    realValue;
     
     
     
-    public TendancyLineValueDto(final IEntity _entity) {
+    public TendancyLineValueDto(final EntityKey _entity) {
     
     
         super();
+        
         entity = _entity;
     }
     
     
     public TendancyLineValueDto(
-            final IEntity _entity,
-            final Double _realValue,
-            final Double _previousValue) {
+            final EntityKey _entity,
+            final Number _realValue,
+            final Number _previousValue) {
     
     
         super();
@@ -48,42 +49,42 @@ public class TendancyLineValueDto
     }
     
     
-    public IEntity getEntity() {
+    public EntityKey getEntity() {
     
     
         return entity;
     }
     
     
-    public Double getPastValue() {
+    public Number getPastValue() {
     
     
         return previousValue;
     }
     
     
-    public Double getRealValue() {
+    public Number getRealValue() {
     
     
         return realValue;
     }
     
     
-    public void setEntity(final IEntity _entity) {
+    public void setEntity(final EntityKey _entity) {
     
     
         entity = _entity;
     }
     
     
-    public void setPastValue(final Double _pastValue) {
+    public void setPastValue(final Number _pastValue) {
     
     
         previousValue = _pastValue;
     }
     
     
-    public void setRealValue(final Double _realValue) {
+    public void setRealValue(final Number _realValue) {
     
     
         realValue = _realValue;

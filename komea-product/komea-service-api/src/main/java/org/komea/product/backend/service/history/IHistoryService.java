@@ -6,7 +6,7 @@ package org.komea.product.backend.service.history;
 import java.util.List;
 
 import org.komea.product.backend.service.generic.IGenericService;
-import org.komea.product.database.dto.BaseEntity;
+import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.SearchMeasuresDto;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
@@ -62,14 +62,14 @@ public interface IHistoryService extends IGenericService<Measure, Integer, Measu
      * @param kpis
      *            List<Kpi>
      * @param entities
-     *            List<BaseEntity>
+     *            List<BaseEntityDto>
      * @param searchMeasuresDto
      *            SearchMeasuresDto
      * @return List<Measure>
      */
     List<Measure> getMeasures(
             List<Kpi> kpis,
-            List<BaseEntity> entities,
+            List<BaseEntityDto> entities,
             SearchMeasuresDto searchMeasuresDto);
     
     

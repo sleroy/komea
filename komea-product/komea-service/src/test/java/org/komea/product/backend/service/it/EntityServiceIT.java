@@ -2,6 +2,7 @@
 package org.komea.product.backend.service.it;
 
 
+
 import java.util.List;
 
 import org.junit.Assert;
@@ -21,43 +22,55 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
+
+
 /**
  */
 @TestExecutionListeners({
-        DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class })
-public class EntityServiceIT extends AbstractSpringIntegrationTestCase {
+public class EntityServiceIT extends AbstractSpringIntegrationTestCase
+{
     
-    @Autowired
-    private IPersonService      personService;
     
     @Autowired
     private IPersonGroupService groupService;
     
     @Autowired
+    private IPersonService      personService;
+    
+    @Autowired
     private IProjectService     projectService;
+    
+    
     
     @Test
     @DatabaseSetup("database.xml")
     public void testGetAllDepartments() {
     
-        List<DepartmentDto> departments = groupService.getAllDepartments();
-        Assert.assertEquals(1, departments.size());
+    
+        final List<DepartmentDto> departments = groupService.getAllDepartments();
+        Assert.assertEquals(0, departments.size());
     }
+    
     
     @Test
     @DatabaseSetup("database.xml")
     public void testGetPersonList() {
     
-        List<PersonDto> personList = personService.convertAllPersonsIntoPersonDTO();
+    
+        final List<PersonDto> personList = personService.convertAllPersonsIntoPersonDTO();
         Assert.assertEquals(2, personList.size());
     }
+    
     
     @Test
     @DatabaseSetup("database.xml")
     public void testGetProjectList() {
     
-        List<ProjectDto> projectList = projectService.getAllProjects();
+    
+        final List<ProjectDto> projectList = projectService.getAllProjects();
         Assert.assertEquals(1, projectList.size());
     }
     

@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang.Validate;
 import org.komea.product.cep.api.ITupleResultMap;
-import org.komea.product.cep.api.formula.tuple.ICEPTuplerFormula;
+import org.komea.product.cep.api.formula.tuple.ITuplerFormula;
 import org.komea.product.cep.api.formula.tuple.IEventGroup;
 import org.komea.product.cep.api.formula.tuple.ITuple;
 import org.komea.product.cep.api.formula.tuple.ITupleMap;
@@ -23,13 +23,13 @@ import org.komea.product.cep.api.formula.tuple.ITupleMap;
  * 
  * @author sleroy
  */
-public class TupleCountFormula implements ICEPTuplerFormula<Integer>
+public class TupleCountFormula implements ITuplerFormula<Integer>
 {
     
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.api.formula.tuple.ICEPTuplerFormula#processMap(org.komea.product.cep.api.formula.tuple.ITupleMap,
+     * @see org.komea.product.cep.api.formula.tuple.ITuplerFormula#processMap(org.komea.product.cep.api.formula.tuple.ITupleMap,
      * java.util.Map)
      */
     @Override

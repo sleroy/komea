@@ -14,14 +14,14 @@ public class MeasuresDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private EntityType entityType;
-    private List<BaseEntity> entities = new ArrayList<BaseEntity>();
+    private List<BaseEntityDto> entities = new ArrayList<BaseEntityDto>();
     private List<Kpi> kpis = new ArrayList<Kpi>();
     private List<Measure> measures = new ArrayList<Measure>();
 
     public MeasuresDto() {
     }
 
-    public MeasuresDto(EntityType entityType, List<BaseEntity> entities,
+    public MeasuresDto(EntityType entityType, List<BaseEntityDto> entities,
             List<Kpi> kpis, List<Measure> measures) {
         this.entityType = entityType;
         this.entities = entities;
@@ -37,11 +37,11 @@ public class MeasuresDto implements Serializable {
         this.entityType = entityType;
     }
 
-    public List<BaseEntity> getEntities() {
+    public List<BaseEntityDto> getEntities() {
         return entities;
     }
 
-    public void setEntities(List<BaseEntity> entities) {
+    public void setEntities(List<BaseEntityDto> entities) {
         this.entities = entities;
     }
 
@@ -71,7 +71,7 @@ public class MeasuresDto implements Serializable {
 
     public Map<String, List<Number>> getSeries() {
         final Map<String, List<Number>> series = new HashMap<String, List<Number>>(entities.size());
-        for (final BaseEntity entity : entities) {
+        for (final BaseEntityDto entity : entities) {
             final List<Number> numbers = new ArrayList<Number>();
             series.put(entity.getDisplayName(), numbers);
             for (final Kpi kpi : kpis) {

@@ -6,7 +6,7 @@ package org.komea.product.backend.service.entities;
 import java.util.List;
 
 import org.komea.product.database.api.IEntity;
-import org.komea.product.database.dto.BaseEntity;
+import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.service.dto.KpiKey;
@@ -26,9 +26,9 @@ public interface IEntityService
      *            EntityType
      * @param entityKeys
      *            List<String>
-     * @return List<BaseEntity>
+     * @return List<BaseEntityDto>
      */
-    List<BaseEntity> getEntities(final EntityType entityType, final List<String> entityKeys);
+    List<BaseEntityDto> getEntities(final EntityType entityType, final List<String> entityKeys);
     
     
     /**

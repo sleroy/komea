@@ -14,7 +14,7 @@ import org.komea.product.cep.api.ICEPFormula;
 import org.komea.product.cep.api.ICEPResult;
 import org.komea.product.cep.api.ICEPStatement;
 import org.komea.product.cep.api.ITupleResultMap;
-import org.komea.product.cep.api.formula.tuple.ICEPTuplerFormula;
+import org.komea.product.cep.api.formula.tuple.ITuplerFormula;
 import org.komea.product.cep.api.formula.tuple.IEventTupler;
 import org.komea.product.cep.api.formula.tuple.ITupleCreator;
 import org.komea.product.cep.api.formula.tuple.ITupleMap;
@@ -37,7 +37,7 @@ public class TuplerFormula implements ICEPFormula<Serializable>
     private static final Logger        LOGGER = LoggerFactory.getLogger("tupler-formula");
     
     
-    private final ICEPTuplerFormula<?> formulaTupler;
+    private final ITuplerFormula<?> formulaTupler;
     
     
     private final ITupleCreator        tupleCreator;
@@ -47,7 +47,7 @@ public class TuplerFormula implements ICEPFormula<Serializable>
     /**
      * @param _parameters
      */
-    public TuplerFormula(final ITupleCreator _tupleCreator, final ICEPTuplerFormula _formulaTupler) {
+    public TuplerFormula(final ITupleCreator _tupleCreator, final ITuplerFormula _formulaTupler) {
     
     
         super();

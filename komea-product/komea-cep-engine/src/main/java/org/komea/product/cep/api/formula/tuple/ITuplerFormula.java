@@ -19,7 +19,7 @@ import org.komea.product.cep.api.ITupleResultMap;
  *            the type of result produced by the formula
  * @author sleroy
  */
-public interface ICEPTuplerFormula<Result>
+public interface ITuplerFormula<Result>
 {
     
     
