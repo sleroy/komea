@@ -28,12 +28,11 @@ public class GitRepositoryService implements IGitRepositoryService
 {
     
     
-    private final Map<String, String>                  cronTasks = new HashMap();
-    private IDAOObjectStorage<GitRepositoryDefinition> daoStorage;
+    private final Map<String, String> cronTasks = new HashMap();
     
     
     @Autowired
-    private IPluginStorageService                      pluginStorageService;
+    private IPluginStorageService     pluginStorageService;
     
     
     
@@ -41,7 +40,7 @@ public class GitRepositoryService implements IGitRepositoryService
     public GitRepositoryDefinition findByName(final String _feedName) {
     
     
-        for (final GitRepositoryDefinition feed : daoStorage.selectAll()) {
+        for (final GitRepositoryDefinition feed : getDAO().selectAll()) {
             if (_feedName.equals(feed.getRepoName())) { return feed; }
         }
         return null;
@@ -69,7 +68,8 @@ public class GitRepositoryService implements IGitRepositoryService
     public IDAOObjectStorage<GitRepositoryDefinition> getDAO() {
     
     
-        return daoStorage;
+        return pluginStorageService.registerDAOStorage("git_plugin", GitRepositoryDefinition.class);
+        
     }
     
     
@@ -79,7 +79,7 @@ public class GitRepositoryService implements IGitRepositoryService
     public IDAOObjectStorage<GitRepositoryDefinition> getDaoStorage() {
     
     
-        return daoStorage;
+        return getDAO();
     }
     
     
@@ -94,15 +94,14 @@ public class GitRepositoryService implements IGitRepositoryService
     public void init() {
     
     
-        daoStorage =
-                pluginStorageService
-                        .registerDAOStorage("git_plugin", GitRepositoryDefinition.class);
+        //
     }
     
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.git.repositories.api.IGitRepositoryService#initializeCronName(org.komea.product.plugins.repository.model.
+     * @see
+     * org.komea.product.plugins.git.repositories.api.IGitRepositoryService#initializeCronName(org.komea.product.plugins.repository.model.
      * GitRepositoryDefinition)
      */
     @Override
@@ -118,7 +117,8 @@ public class GitRepositoryService implements IGitRepositoryService
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.git.repositories.api.IGitRepositoryService#isAssociatedToCron(org.komea.product.plugins.repository.model.
+     * @see
+     * org.komea.product.plugins.git.repositories.api.IGitRepositoryService#isAssociatedToCron(org.komea.product.plugins.repository.model.
      * GitRepositoryDefinition)
      */
     @Override
