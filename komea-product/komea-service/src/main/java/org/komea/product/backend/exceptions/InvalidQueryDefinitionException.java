@@ -4,9 +4,13 @@
 
 package org.komea.product.backend.exceptions;
 
-import org.komea.product.backend.service.esper.IQueryDefinition;
-;
 
+
+import org.komea.product.cep.api.IQueryDefinition;
+
+
+
+;
 
 
 /**

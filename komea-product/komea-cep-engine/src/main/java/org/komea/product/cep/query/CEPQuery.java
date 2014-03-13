@@ -15,6 +15,8 @@ import org.komea.product.cep.api.ICEPFormula;
 import org.komea.product.cep.api.ICEPQuery;
 import org.komea.product.cep.api.ICEPResult;
 import org.komea.product.cep.api.ICEPStatement;
+import org.komea.product.cep.api.IFilterDefinition;
+import org.komea.product.cep.api.IQueryDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +33,7 @@ public class CEPQuery implements ICEPQuery
     
     
     private static final Logger LOGGER       = LoggerFactory.getLogger(CEPQuery.class);
-    private ICEPStatement       cepStatement = new CEPStatement<Serializable>();
+    private ICEPStatement<?>    cepStatement = new CEPStatement<Serializable>();
     
     
     private ICEPFormula         formula;
@@ -40,15 +42,32 @@ public class CEPQuery implements ICEPQuery
     
     
     /**
-     * @param _cepStatement
+     * Builds a cep query
+     * 
+     * @param _queryDefinition
+     *            the definition of the query
      */
-    public CEPQuery(final CEPStatement _cepStatement) {
+    public CEPQuery(final IQueryDefinition _queryDefinition) {
     
     
-        cepStatement = _cepStatement;
+        final CEPStatement<Serializable> initStatement = new CEPStatement<Serializable>();
+        for (final IFilterDefinition definition : _queryDefinition.getFilterDefinitions()) {
+            initStatement.add(new CEPEventStorage<Serializable>(definition));
+        }
+        cepStatement = initStatement;
+        parameters = _queryDefinition.getParameters();
+        formula = _queryDefinition.getFormula();
+        Validate.notNull(formula);
+        Validate.notNull(parameters);
+        
     }
     
     
+    /**
+     * Returns the CEP Statement
+     * 
+     * @return the cep statement
+     */
     public ICEPStatement getCepStatement() {
     
     
@@ -60,7 +79,6 @@ public class CEPQuery implements ICEPQuery
      * (non-Javadoc)
      * @see org.komea.product.cep.api.ICEPQuery#getFormula()
      */
-    
     @Override
     public <T extends Serializable> ICEPFormula<T> getFormula() {
     

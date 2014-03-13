@@ -18,12 +18,19 @@
 			<artifactId>komea-dto</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>komea-cep-engine</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>komea-utils</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
 
 
 		<dependency>

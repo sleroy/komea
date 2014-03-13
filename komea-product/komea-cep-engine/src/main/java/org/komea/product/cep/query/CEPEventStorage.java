@@ -11,6 +11,7 @@ import java.io.Serializable;
 import org.komea.product.cep.api.ICEPEventStorage;
 import org.komea.product.cep.api.IEventFilter;
 import org.komea.product.cep.api.IEventTransformer;
+import org.komea.product.cep.api.IFilterDefinition;
 import org.komea.product.cep.api.TransformedEvent;
 import org.komea.product.cep.api.cache.ICacheConfiguration;
 import org.komea.product.cep.api.cache.ICacheStorage;
@@ -48,20 +49,16 @@ public class CEPEventStorage<T extends Serializable> implements ICEPEventStorage
      * @param _eventFilter
      *            the event filter;
      */
-    public CEPEventStorage(
-            final String _filterName,
-            final ICacheConfiguration _cacheConfiguration,
-            final IEventFilter<T> _eventFilter,
-            final IEventTransformer<?, T> _transformer) {
+    public CEPEventStorage(final IFilterDefinition _filterDefinition) {
     
     
         super();
-        LOGGER = LoggerFactory.getLogger("cepevent-storage-" + _filterName);
-        filterName = _filterName;
-        cacheConfiguration = _cacheConfiguration;
-        eventFilter = _eventFilter;
+        LOGGER = LoggerFactory.getLogger("cepevent-storage-" + _filterDefinition.getFilterName());
+        filterName = _filterDefinition.getFilterName();
+        cacheConfiguration = _filterDefinition.getCacheConfiguration();
+        eventFilter = _filterDefinition.getEventFilter();
         storage = new GoogleCacheStorage<T>(cacheConfiguration);
-        eventTransfomer = (IEventTransformer) _transformer;
+        eventTransfomer = _filterDefinition.getEventTransformer();
         
         
     }
@@ -125,13 +122,13 @@ public class CEPEventStorage<T extends Serializable> implements ICEPEventStorage
     
     
         if (eventFilter.isFiltered((T) _event)) {
-            LOGGER.debug("[FILTER-ACCEPT] {}", _event);
+            LOGGER.debug("[FILTER-ACCEPT] --- {}", _event);
             Serializable eventToStore = _event;
             if (eventTransfomer != null) {
-                LOGGER.debug("[REQUIRES-TRANSFORMATION]  {}", _event);
+                LOGGER.debug("[REQUIRES-TRANSFORMATION]] ---  {}", _event);
                 final TransformedEvent<T> transform = eventTransfomer.transform(_event);
                 if (transform.isValid()) {
-                    LOGGER.debug("[TRANSFORMATION-PERFORMED] {}", transform);
+                    LOGGER.debug("[TRANSFORMATION-PERFORMED] ] --- {}", transform);
                     eventToStore = transform.getData();
                 } else {
                     LOGGER.debug("[TRANSFORMATION-IGNORED]");

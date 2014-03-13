@@ -6,9 +6,8 @@ package org.komea.product.cep.query;
 
 
 
-import java.util.Map;
-
 import org.komea.product.cep.api.ICEPResult;
+import org.komea.product.cep.api.ITupleResultMap;
 
 
 
@@ -21,15 +20,15 @@ public class CEPMapResult implements ICEPResult
 {
     
     
-    private Map value = null;
+    private ITupleResultMap value = null;
     
     
     
-    public CEPMapResult(final Map<?, ?> _value) {
+    public CEPMapResult(final ITupleResultMap _iResultMap) {
     
     
         super();
-        value = _value;
+        value = _iResultMap;
     }
     
     
@@ -38,7 +37,7 @@ public class CEPMapResult implements ICEPResult
      * @see org.komea.product.cep.api.ICEPResult#asMap()
      */
     @Override
-    public Map<Object, Object> asMap() {
+    public <TRes> ITupleResultMap<TRes> asMap() {
     
     
         return value;
@@ -59,18 +58,6 @@ public class CEPMapResult implements ICEPResult
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPResult#asNumber(java.lang.Object)
-     */
-    @Override
-    public Number asNumber(final Object _key) {
-    
-    
-        return Number.class.cast(value.get(_key));
-    }
-    
-    
-    /*
-     * (non-Javadoc)
      * @see org.komea.product.cep.api.ICEPResult#asNumber()
      */
     @Override
@@ -78,18 +65,6 @@ public class CEPMapResult implements ICEPResult
     
     
         throw new IllegalArgumentException("Invalid type requested");
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPResult#asNumber()
-     */
-    @Override
-    public <T> T asType(final Object _key) {
-    
-    
-        return (T) value.get(_key);
     }
     
     
@@ -126,6 +101,18 @@ public class CEPMapResult implements ICEPResult
     
     
         return false;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+    
+    
+        return "CEPMapResult [value=" + value + "]";
     }
     
     

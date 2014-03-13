@@ -16,7 +16,7 @@ import java.util.Map;
  * 
  * @author sleroy
  */
-public interface ICEPFormula<T extends Serializable>
+public interface ICEPFormula<TEvent extends Serializable>
 {
     
     
@@ -29,19 +29,7 @@ public interface ICEPFormula<T extends Serializable>
      *            parameters
      * @return the result.
      */
-    ICEPResult compute(ICEPStatement<T> _statement, Map<String, Object> _parameters);
+    ICEPResult compute(ICEPStatement<TEvent> _statement, Map<String, Object> _parameters);
     
     
-    /**
-     * Returns the default parameters
-     * 
-     * @return the default parameters.
-     */
-    Map<String, Object> getDefaultParameters();
-    
-    
-    /**
-     * Defines the type of results expected by the formula.
-     */
-    CEPResultType getResultType();
 }

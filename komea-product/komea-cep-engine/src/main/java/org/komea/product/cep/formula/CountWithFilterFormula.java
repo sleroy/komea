@@ -7,11 +7,9 @@ package org.komea.product.cep.formula;
 
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.Map;
 
 import org.hamcrest.Matcher;
-import org.komea.product.cep.api.CEPResultType;
 import org.komea.product.cep.api.ICEPFormula;
 import org.komea.product.cep.api.ICEPResult;
 import org.komea.product.cep.api.ICEPStatement;
@@ -60,28 +58,5 @@ public class CountWithFilterFormula<T extends Serializable> implements ICEPFormu
                 .retain(matcher).size());
     }
     
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPFormula#getDefaultParameters()
-     */
-    @Override
-    public Map<String, Object> getDefaultParameters() {
-    
-    
-        return Collections.emptyMap();
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPFormula#getResultType()
-     */
-    @Override
-    public CEPResultType getResultType() {
-    
-    
-        return CEPResultType.NUMERICAL;
-    }
     
 }

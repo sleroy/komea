@@ -3,8 +3,8 @@ package org.komea.product.backend.api;
 
 
 
-import org.komea.product.backend.service.esper.IQueryDefinition;
 import org.komea.product.cep.api.ICEPQuery;
+import org.komea.product.cep.api.IQueryDefinition;
 import org.komea.product.database.alert.IEvent;
 
 
@@ -16,22 +16,22 @@ public interface IEventEngineService
     
     
     /**
+     * Registers a esper query.
+     * 
+     * @param _queryDefinition
+     *            IQueryDefinition
+     */
+    void createOrUpdateQuery(IQueryDefinition _queryDefinition);
+    
+    
+    /**
      * Creates esper Statement.
      * 
      * @param _queryDefinition
      *            IQueryDefinition
      * @return the esper compiled statement.
      */
-    ICEPQuery createEPL(IQueryDefinition _queryDefinition);
-    
-    
-    /**
-     * Registers a esper query.
-     * 
-     * @param _queryDefinition
-     *            IQueryDefinition
-     */
-    void createOrUpdateEPLQuery(IQueryDefinition _queryDefinition);
+    ICEPQuery createQuery(IQueryDefinition _queryDefinition);
     
     
     /**
@@ -41,7 +41,7 @@ public interface IEventEngineService
      *            the statement key.
      * @return boolean
      */
-    boolean existEPL(String _statementKey);
+    boolean existQuery(String _statementKey);
     
     
     /**
@@ -50,7 +50,7 @@ public interface IEventEngineService
      * @param _statementName
      * @return EPStatement
      */
-    ICEPQuery getStatement(String _statementName);
+    ICEPQuery getQuery(String _statementName);
     
     
     /**
@@ -58,7 +58,7 @@ public interface IEventEngineService
      * 
      * @return the statement names.
      */
-    String[] getStatementNames();
+    String[] getQueryNames();
     
     
     /**
@@ -68,14 +68,16 @@ public interface IEventEngineService
      *            the statement name
      * @return the esper statement
      */
-    ICEPQuery getStatementOrFail(String _statement);
+    ICEPQuery getQueryOrFail(String _statement);
     
     
     /**
      * Push alerts
      * 
      * @param _event
+     *            the event
      */
     void sendEvent(IEvent _event);
+    
     
 }

@@ -6,8 +6,8 @@ package org.komea.product.backend.esper.test.factories;
 import java.io.File;
 import java.io.IOException;
 
-import org.komea.product.backend.esper.test.DSLEventBuilder;
-import org.komea.product.backend.esper.test.EventFactoryBuilder;
+import org.komea.product.backend.event.test.DSLEventBuilder;
+import org.komea.product.backend.event.test.EventFactoryBuilder;
 
 
 

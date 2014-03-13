@@ -12,6 +12,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.api.IEventEngineService;
+import org.komea.product.cep.query.CEPQuery;
+import org.komea.product.cep.query.predefined.EmptyQueryDefinition;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.enums.EntityType;
@@ -23,8 +25,6 @@ import org.komea.product.database.model.Person;
 import org.komea.product.service.dto.KpiKey;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
-
-import com.espertech.esper.client.EPStatement;
 
 
 
@@ -59,18 +59,16 @@ public class KPIServiceTest
         final MeasureDao measureDAOMock =
                 Mockito.mock(MeasureDao.class, Mockito.withSettings().verboseLogging());
         
-        final IEventEngineService esperEngine =
+        final IEventEngineService cepEngine =
                 Mockito.mock(IEventEngineService.class, Mockito.withSettings().verboseLogging());
         
-        final EPStatement epStatementMock =
-                Mockito.mock(EPStatement.class, Mockito.withSettings().verboseLogging());
         
         final MeasureHistoryService measureService = new MeasureHistoryService();
-        measureService.setEsperEngine(esperEngine);
+        measureService.setEsperEngine(cepEngine);
         measureService.setMeasureDAO(measureDAOMock);
         
         final KPIService kpiService = new KPIService();
-        kpiService.setEsperEngine(esperEngine);
+        kpiService.setEsperEngine(cepEngine);
         
         kpiService.setMeasureService(measureService);
         kpiService.setKpiDAO(kpiDAOMock);
@@ -98,8 +96,8 @@ public class KPIServiceTest
         Mockito.when(kpiDAOMock.selectByCriteriaWithBLOBs(Matchers.any(KpiCriteria.class)))
                 .thenReturn(kpiList);
         
-        Mockito.when(esperEngine.getStatementOrFail(KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12))
-                .thenReturn(epStatementMock);
+        Mockito.when(cepEngine.getQueryOrFail(KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12)).thenReturn(
+                new CEPQuery(new EmptyQueryDefinition()));
         
         final Kpi findKPIFacade =
                 kpiService.findKPI(KpiKey.ofKpiNameAndEntity("PERSON_PRODUCTIVITY", person));

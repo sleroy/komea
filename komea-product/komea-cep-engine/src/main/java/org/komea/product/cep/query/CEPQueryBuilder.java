@@ -13,7 +13,8 @@ import org.komea.product.cep.api.ICEPQuery;
 import org.komea.product.cep.api.IEventFilter;
 import org.komea.product.cep.api.IEventTransformer;
 import org.komea.product.cep.api.cache.ICacheConfiguration;
-import org.komea.product.cep.filter.FilterChainBuilder;
+import org.komea.product.cep.cache.CacheConfigurationBuilder;
+import org.komea.product.cep.filter.EventFilterBuilder;
 import org.komea.product.cep.filter.NoEventFilter;
 
 
@@ -42,9 +43,7 @@ public class CEPQueryBuilder
     
     
     
-    private final CEPQuery     cepQuery;
-    
-    private final CEPStatement cepStatement;
+    private final QueryDefinition cepQueryDefinition = new QueryDefinition("default");
     
     
     
@@ -60,9 +59,8 @@ public class CEPQueryBuilder
     
     
         super();
-        cepStatement = new CEPStatement();
-        cepQuery = new CEPQuery(cepStatement);
-        cepQuery.setFormula(_formula);
+        
+        cepQueryDefinition.setFormula(_formula);
     }
     
     
@@ -72,8 +70,24 @@ public class CEPQueryBuilder
     public ICEPQuery build() {
     
     
-        return cepQuery;
+        return new CEPQuery(cepQueryDefinition);
         
+    }
+    
+    
+    /**
+     * Defines a filter without cache configuration strategy.
+     * 
+     * @param _noEventFilter
+     *            the filter
+     * @return the query definition.
+     */
+    public CEPQueryBuilder defineFilter(final IEventFilter _noEventFilter) {
+    
+    
+        cepQueryDefinition.addFilterDefinition(new FilterDefinition(_noEventFilter.toString(),
+                CacheConfigurationBuilder.noConfiguration(), _noEventFilter, null));
+        return this;
     }
     
     
@@ -89,7 +103,7 @@ public class CEPQueryBuilder
             final ICacheConfiguration _cacheConfiguration) {
     
     
-        cepStatement.add(new CEPEventStorage("stream" + cepStatement.getEventStorages().size(),
+        cepQueryDefinition.addFilterDefinition(new FilterDefinition("stream" + numberOfFilters(),
                 _cacheConfiguration, _filter, null));
         return this;
     }
@@ -108,7 +122,8 @@ public class CEPQueryBuilder
     public CEPQueryBuilder defineFilter(final String _filter, final ICacheConfiguration _build) {
     
     
-        cepStatement.add(new CEPEventStorage(_filter, _build, new NoEventFilter(), null));
+        cepQueryDefinition.addFilterDefinition(new FilterDefinition(_filter, _build,
+                new NoEventFilter(), null));
         return this;
     }
     
@@ -132,7 +147,8 @@ public class CEPQueryBuilder
             final ICacheConfiguration _build) {
     
     
-        cepStatement.add(new CEPEventStorage(_filter, _build, _eventFilter, null));
+        cepQueryDefinition.addFilterDefinition(new FilterDefinition(_filter, _build, _eventFilter,
+                null));
         return this;
     }
     
@@ -147,7 +163,7 @@ public class CEPQueryBuilder
             final ICacheConfiguration _cacheConfiguration) {
     
     
-        cepStatement.add(new CEPEventStorage("stream" + cepStatement.getEventStorages().size(),
+        cepQueryDefinition.addFilterDefinition(new FilterDefinition("stream" + numberOfFilters(),
                 _cacheConfiguration, _filter, _transformer));
         return this;
     }
@@ -163,16 +179,56 @@ public class CEPQueryBuilder
     public CEPQueryBuilder defineIEventFilter(final ICacheConfiguration _cacheConfiguration) {
     
     
-        cepStatement.add(new CEPEventStorage("stream" + cepStatement.getEventStorages().size(),
-                _cacheConfiguration, FilterChainBuilder.create().onlyIEvents().build(), null));
+        cepQueryDefinition.addFilterDefinition(new FilterDefinition("stream" + numberOfFilters(),
+                _cacheConfiguration, EventFilterBuilder.create().onlyIEvents().build(), null));
         return this;
     }
     
     
+    /**
+     * Returns the CEP Query.
+     */
+    public QueryDefinition getDefinition() {
+    
+    
+        return cepQueryDefinition;
+        
+    }
+    
+    
+    /**
+     * Defines a custom name for the query
+     * 
+     * @param _queryName
+     *            the name
+     * @return the builder;
+     */
+    public CEPQueryBuilder withName(final String _queryName) {
+    
+    
+        cepQueryDefinition.setQueryName(_queryName);
+        return this;
+    }
+    
+    
+    /**
+     * With parametes
+     * 
+     * @param _parameters
+     *            the parametes
+     * @return the parameters
+     */
     public CEPQueryBuilder withParams(final Map<String, Object> _parameters) {
     
     
-        cepQuery.setParameters(_parameters);
+        cepQueryDefinition.setParameters(_parameters);
         return this;
+    }
+    
+    
+    private int numberOfFilters() {
+    
+    
+        return cepQueryDefinition.getFilterDefinitions().size();
     }
 }

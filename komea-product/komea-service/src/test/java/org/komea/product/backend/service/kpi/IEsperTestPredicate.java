@@ -1,6 +1,11 @@
+
 package org.komea.product.backend.service.kpi;
 
-import com.espertech.esper.client.EPStatement;
+
+
+import org.komea.product.cep.api.ICEPQuery;
+
+
 
 /**
  */
@@ -10,7 +15,9 @@ public interface IEsperTestPredicate
     
     /**
      * Method evaluate.
-     * @param _epStatement EPStatement
+     * 
+     * @param _epStatement
+     *            EPStatement
      */
-    void evaluate(final EPStatement _epStatement);
+    void evaluate(final ICEPQuery _epStatement);
 }

@@ -10,13 +10,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.Validate;
 import org.junit.Assert;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.service.esper.CEPQueryResultConvertor;
 import org.komea.product.backend.service.esper.EventEngineService;
-import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.backend.service.kpi.IEsperLineTestPredicate;
 import org.komea.product.backend.service.kpi.IEsperTestPredicate;
+import org.komea.product.cep.api.ICEPQuery;
+import org.komea.product.cep.api.IQueryDefinition;
+import org.komea.product.cep.api.formula.tuple.ITuple;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;
@@ -30,7 +32,6 @@ import org.komea.product.database.model.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.espertech.esper.client.EPStatement;
 import com.google.common.base.Strings;
 
 
@@ -72,22 +73,26 @@ public class EsperQueryTester
          * @see org.komea.product.backend.service.kpi.IEsperTestPredicate#evaluate(EPStatement)
          */
         @Override
-        public void evaluate(final EPStatement _epStatement) {
+        public void evaluate(final ICEPQuery _epStatement) {
         
         
-            final List<Map<String, Object>> listMapResult =
-                    CEPQueryResultConvertor.build(_epStatement).listMapResult();
+            final List<ITuple> listMapResult = _epStatement.getResult().asMap().asTupleRows();
+            LOGGER.debug(listMapResult.toString());
             Assert.assertEquals("Expected same number of rows", array.length, listMapResult.size());
             for (int i = 0; i < listMapResult.size(); ++i) {
                 
                 LOGGER.debug("Evaluating line {} of esper request", i);
-                final ArrayList arrayList = new ArrayList(listMapResult.get(i).values());
+                final ITuple tuple = listMapResult.get(i);
+                final List<Object> arrayList = new ArrayList<Object>(tuple.values());
                 Assert.assertEquals("Expected same number of cols for iteration " + i,
                         array[i].length, arrayList.size());
                 for (int j = 0; j < arrayList.size(); j++) {
-                    LOGGER.debug("Array[{}][{}]={} and should be {}", i, j, arrayList.get(j),
-                            array[i][j]);
-                    Assert.assertEquals(array[i][j], arrayList.get(j));
+                    final Object thisProperty = arrayList.get(j);
+                    final Object expectedValue = array[i][j];
+                    LOGGER.debug("Array[{}][{}]={} and should be {}", i, j, thisProperty,
+                            expectedValue);
+                    Assert.assertEquals(expectedValue, thisProperty);
+                    
                 }
             }
             
@@ -127,7 +132,7 @@ public class EsperQueryTester
          * @see org.komea.product.backend.service.kpi.IEsperLineTestPredicate#evaluate(Map<String,Object>)
          */
         @Override
-        public void evaluate(final Map<String, Object> _bean) {
+        public void evaluate(final ITuple _bean) {
         
         
             for (final Entry<String, Object> entry : objects.entrySet()) {
@@ -135,49 +140,6 @@ public class EsperQueryTester
                         entry.getValue(), _bean.get(entry.getKey()));
             }
             
-            
-        }
-    }
-    
-    
-    
-    /**
-     */
-    private static class SingleColumnPredicate implements IEsperTestPredicate
-    {
-        
-        
-        private final String columnName;
-        private final Object expectedValue;
-        
-        
-        
-        /**
-         * @param _columnName
-         * @param _expectedValue
-         */
-        public SingleColumnPredicate(final String _columnName, final Object _expectedValue) {
-        
-        
-            super();
-            columnName = _columnName;
-            expectedValue = _expectedValue;
-        }
-        
-        
-        /**
-         * Method evaluate.
-         * 
-         * @param _epStatement
-         *            EPStatement
-         * @see org.komea.product.backend.service.kpi.IEsperTestPredicate#evaluate(EPStatement)
-         */
-        @Override
-        public void evaluate(final EPStatement _epStatement) {
-        
-        
-            Assert.assertEquals("Expected " + expectedValue + "  for " + columnName, expectedValue,
-                    CEPQueryResultConvertor.build(_epStatement).singleResult(columnName));
             
         }
     }
@@ -216,7 +178,7 @@ public class EsperQueryTester
          * @see org.komea.product.backend.service.kpi.IEsperLineTestPredicate#evaluate(Map<String,Object>)
          */
         @Override
-        public void evaluate(final Map<String, Object> _bean) {
+        public void evaluate(final ITuple _bean) {
         
         
             Assert.assertEquals("Expected " + expectedValue + "  for " + columnName, expectedValue,
@@ -242,7 +204,7 @@ public class EsperQueryTester
     public static IEvent convertToEventDTO(final EventSimpleDto _eventDTO) {
     
     
-        final EsperQueryTester esperQueryTester = new EsperQueryTester("TRUC");
+        final EsperQueryTester esperQueryTester = new EsperQueryTester();
         return esperQueryTester.convertDto(_eventDTO);
         
         
@@ -266,14 +228,14 @@ public class EsperQueryTester
     /**
      * Method newTest.
      * 
-     * @param _string
+     * @param _testName
      *            String
      * @return EsperQueryTester
      */
-    public static EsperQueryTester newTest(final String _string) {
+    public static EsperQueryTester newTest() {
     
     
-        return new EsperQueryTester(_string);
+        return new EsperQueryTester();
     }
     
     
@@ -281,36 +243,31 @@ public class EsperQueryTester
     private boolean                             dump;
     
     
-    private EPStatement                         epStatement;
+    private ICEPQuery                           epStatement;
     
     
     private final List<IEsperLineTestPredicate> esperLinePredicates =
                                                                             new ArrayList<IEsperLineTestPredicate>();
-    
-    private final String                        esperName;
     
     
     private final List<IEsperTestPredicate>     esperPredicates     =
                                                                             new ArrayList<IEsperTestPredicate>();
     
     
-    private String                              esperQuery;
+    private IQueryDefinition                    esperQuery;
     
     private final List<IEvent>                  events              = new ArrayList<IEvent>();
     
     private int                                 expectedRows        = -1;
     
     
-    private boolean                             hasEventList        = false;
-    
-    
-    private List<?>                             matchingList;
-    
-    
+    private Integer                             expectedStorageSize;
     private final Map<String, EventType>        mockEventTypes      =
                                                                             new HashMap<String, EventType>();
     private final Map<String, PersonGroup>      mockGroup           =
                                                                             new HashMap<String, PersonGroup>();
+    
+    
     private final Map<String, Person>           mockPerson          = new HashMap<String, Person>();
     
     
@@ -322,6 +279,9 @@ public class EsperQueryTester
                                                                             new HashMap<String, Provider>();
     
     
+    private Object                              singleResult;
+    
+    
     
     /**
      * Constructor for EsperQueryTester.
@@ -329,11 +289,11 @@ public class EsperQueryTester
      * @param _statementName
      *            String
      */
-    private EsperQueryTester(final String _statementName) {
+    private EsperQueryTester() {
     
     
         super();
-        esperName = _statementName;
+        
         
     }
     
@@ -447,6 +407,17 @@ public class EsperQueryTester
     
     
     /**
+     * @param _i
+     */
+    public void expectStorageSize(final int _i) {
+    
+    
+        expectedStorageSize = _i;
+        
+    }
+    
+    
+    /**
      * Method getEvents.
      * 
      * @return List<IEvent>
@@ -505,17 +476,6 @@ public class EsperQueryTester
     
     
     /**
-     * @return
-     */
-    public EsperQueryTester hasEventList() {
-    
-    
-        hasEventList = true;
-        return this;
-    }
-    
-    
-    /**
      * Method hasLineResult.
      * 
      * @param _testPredicate
@@ -564,11 +524,18 @@ public class EsperQueryTester
     }
     
     
+    public boolean hasMapPredicates() {
+    
+    
+        return !esperLinePredicates.isEmpty() || expectedRows != -1;
+    }
+    
+    
     /**
      * Tests results against an array.
      * 
      * @param _objects
-     * @return
+     * @return the query tester
      */
     public EsperQueryTester hasResults(final Object[][] _objects) {
     
@@ -579,29 +546,16 @@ public class EsperQueryTester
     
     
     /**
-     * Method hasSingleResult.
+     * Creates a predicate based on the expectation the query will provide a single value.
      * 
-     * @param _columnName
-     *            String
-     * @param _expectedValue
-     *            Object
-     * @return EsperQueryTester
-     */
-    public EsperQueryTester hasSingleResult(final String _columnName, final Object _expectedValue) {
-    
-    
-        esperPredicates.add(new SingleColumnPredicate(_columnName, _expectedValue));
-        return this;
-    }
-    
-    
-    /**
+     * @param _singleResult
+     *            the single result.
      * @return
      */
-    public EsperQueryTester matchList(final List<?> _objects) {
+    public EsperQueryTester hasSingleResult(final Object _singleResult) {
     
     
-        matchingList = _objects;
+        singleResult = _singleResult;
         return this;
     }
     
@@ -632,7 +586,7 @@ public class EsperQueryTester
     
     
         if (epStatement == null) {
-            epStatement = esperEngineBean.createEPL(new QueryDefinition(esperQuery, esperName));
+            epStatement = esperEngineBean.createQuery(esperQuery);
         }
     }
     
@@ -702,26 +656,48 @@ public class EsperQueryTester
     public EsperQueryTester sendEvent(final EventSimpleDto _eventDTO) {
     
     
-        send(convertDto(_eventDTO));
+        send(convertDto(_eventDTO), 1);
         return this;
+    }
+    
+    
+    public EsperQueryTester sendEvent(final EventSimpleDto _eventDTO, final int _numberOfTimes) {
+    
+    
+        send(convertDto(_eventDTO), _numberOfTimes);
+        return this;
+    }
+    
+    
+    /**
+     * 
+     */
+    public void validateQueryPredicates() {
+    
+    
+        for (final IEsperTestPredicate testPred : esperPredicates) {
+            testPred.evaluate(epStatement);
+        }
     }
     
     
     public void validPredicates() {
     
     
-        if (esperLinePredicates.isEmpty() && esperPredicates.isEmpty() && expectedRows == -1) { return; }
-        for (final IEsperTestPredicate testPred : esperPredicates) {
-            testPred.evaluate(epStatement);
+        if (expectedStorageSize != null) {
+            Assert.assertEquals("Expected storage size", expectedStorageSize,
+                    Integer.valueOf(epStatement.getStatement().getDefaultStorage().size()));
         }
+        if (esperPredicates.isEmpty() && !hasMapPredicates() && singleResult == null) { return; }
+        validateQueryPredicates();
         
-        if (!hasEventList) {
-            if (!esperPredicates.isEmpty()) { return; }
-            final List<Map<String, Object>> listMapResult =
-                    CEPQueryResultConvertor.build(epStatement).listMapResult();
-            
+        if (!epStatement.getResult().isMap() && hasMapPredicates()) { throw new ClassCastException(
+                "We were expecting a map but the query returned a single value"); }
+        if (epStatement.getResult().isMap()) {
+            final List<ITuple> tuples = epStatement.getResult().asMap().asTupleRows();
+            Validate.notNull(tuples);
             int i = 0;
-            for (final Map<String, Object> value : listMapResult) {
+            for (final ITuple value : tuples) {
                 
                 LOGGER.debug("Testing line {} -> {}", i, value);
                 if (i < esperLinePredicates.size()) {
@@ -733,22 +709,10 @@ public class EsperQueryTester
             if (expectedRows != -1) {
                 Assert.assertEquals("Expected fixed number of rows", expectedRows, i);
             }
-        } else {
-            final List<Object> resultsList =
-                    CEPQueryResultConvertor.build(epStatement).listUnderlyingObjects();
-            if (matchingList != null) {
-                Assert.assertEquals("Expected same result size", matchingList.size(),
-                        resultsList.size());
-                int i = 0;
-                for (final Object object : matchingList) {
-                    Assert.assertEquals("expected[" + i + "]", object, resultsList.get(i));
-                    ++i;
-                }
-            }
-            if (expectedRows != -1) {
-                Assert.assertEquals("Expected fixed number of rows", expectedRows,
-                        resultsList.size());
-            }
+        } else if (epStatement.getResult().isSingleValue() && singleResult != null) {
+            Assert.assertEquals("Expected value from query : ", singleResult, epStatement
+                    .getResult().asType());
+            
         }
         
         
@@ -758,14 +722,14 @@ public class EsperQueryTester
     /**
      * Method withQuery.
      * 
-     * @param _string
+     * @param _queryDefinition
      *            String
      * @return EsperQueryTester
      */
-    public EsperQueryTester withQuery(final String _string) {
+    public EsperQueryTester withQuery(final IQueryDefinition _queryDefinition) {
     
     
-        esperQuery = _string;
+        esperQuery = _queryDefinition;
         return this;
     }
     
@@ -776,12 +740,7 @@ public class EsperQueryTester
     private void dumpInfos() {
     
     
-        int i = 0;
-        final List<Object> listUnderlyingObjects =
-                CEPQueryResultConvertor.build(epStatement).listUnderlyingObjects();
-        for (final Object object : listUnderlyingObjects) {
-            LOGGER.debug("[{}] Received {}", i++, object);
-        }
+        LOGGER.info("Received  : \n\t{}", epStatement.getResult().toString());
         
     }
     

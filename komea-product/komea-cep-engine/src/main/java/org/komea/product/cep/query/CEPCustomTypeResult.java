@@ -6,9 +6,8 @@ package org.komea.product.cep.query;
 
 
 
-import java.util.Map;
-
 import org.komea.product.cep.api.ICEPResult;
+import org.komea.product.cep.api.ITupleResultMap;
 
 
 
@@ -38,7 +37,7 @@ public class CEPCustomTypeResult<T> implements ICEPResult
      * @see org.komea.product.cep.api.ICEPResult#asMap()
      */
     @Override
-    public Map<Object, Object> asMap() {
+    public <Tres> ITupleResultMap<Tres> asMap() {
     
     
         throw new IllegalArgumentException("Invalid type requested");
@@ -59,18 +58,6 @@ public class CEPCustomTypeResult<T> implements ICEPResult
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPResult#asNumber(java.lang.Object)
-     */
-    @Override
-    public Number asNumber(final Object _key) {
-    
-    
-        throw new IllegalArgumentException("Invalid type requested");
-    }
-    
-    
-    /*
-     * (non-Javadoc)
      * @see org.komea.product.cep.api.ICEPResult#asNumber()
      */
     @Override
@@ -78,18 +65,6 @@ public class CEPCustomTypeResult<T> implements ICEPResult
     
     
         return (T2) value;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPResult#asNumber()
-     */
-    @Override
-    public <T> T asType(final Object _key) {
-    
-    
-        throw new IllegalArgumentException("Invalid type requested");
     }
     
     
@@ -126,6 +101,18 @@ public class CEPCustomTypeResult<T> implements ICEPResult
     
     
         return true;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+    
+    
+        return "CEPCustomTypeResult [value=" + value + "]";
     }
     
     

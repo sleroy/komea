@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
-import org.komea.product.cep.api.CEPResultType;
 import org.komea.product.cep.api.ICEPFormula;
 import org.komea.product.cep.api.ICEPResult;
 import org.komea.product.cep.api.ICEPStatement;
@@ -171,18 +170,6 @@ public class ElNumericalFormula<T extends Serializable> implements ICEPFormula<T
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPFormula#getDefaultParameters()
-     */
-    @Override
-    public Map<String, Object> getDefaultParameters() {
-    
-    
-        return parameters;
-    }
-    
-    
     /**
      * Returns the spring formula.
      * 
@@ -194,15 +181,4 @@ public class ElNumericalFormula<T extends Serializable> implements ICEPFormula<T
         return elFormula.getFormula();
     }
     
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPFormula#getResultType()
-     */
-    @Override
-    public CEPResultType getResultType() {
-    
-    
-        return CEPResultType.NUMERICAL;
-    }
 }

@@ -9,6 +9,8 @@ package org.komea.product.cep.query;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
+import org.komea.product.cep.api.ICEPQuery;
+import org.komea.product.cep.formula.CountFormula;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
@@ -35,7 +37,7 @@ public class CEPQueryTest
     public final void testCEPQuery() throws Exception {
     
     
-        final CEPQuery cepQuery = new CEPQuery(new CEPStatement());
+        final ICEPQuery cepQuery = CEPQueryBuilder.create(new CountFormula()).build();
         cepQuery.getFormula();
     }
     

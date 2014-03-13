@@ -129,7 +129,7 @@ public class CEPStatement<T extends Serializable> implements ICEPStatement<T>
          */
         LOGGER.debug("Transmitting event to the storages ");
         for (final ICEPEventStorage<? extends Serializable> storage : storages) {
-            LOGGER.debug("Transmit to {} ", storage.getFilterName());
+            LOGGER.debug("Event transmitted to {} ", storage.getFilterName());
             storage.notifyEvent(_event);
         }
         

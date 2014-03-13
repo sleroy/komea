@@ -28,18 +28,23 @@ public class KomeaFSTest
     /**
      * Tests the functionalities of Komea FS.
      * 
-    
      * @throws Exception
-     * @throws java.lang.Exception */
+     * @throws java.lang.Exception
+     */
     @SuppressWarnings("resource")
     @Test
     public void testKomeaFS() throws Exception {
     
     
         final KomeaFS komeaFS = new KomeaFS();
+        final ISettingService settingService = Mockito.mock(ISettingService.class);
+        komeaFS.setSettingService(settingService);
+        
+        
         final ISettingProxy mock = Mockito.mock(ISettingProxy.class);
+        Mockito.when(settingService.getProxy(KomeaFS.STORAGE_PATH_KEY)).thenReturn(mock);
         Mockito.when(mock.getValue()).thenReturn(new File("src/test/resources/fakeS"));
-        komeaFS.setStorage_path(mock);
+        
         final IPluginFileSystem fileSystem = komeaFS.getFileSystem("truc");
         Assert.assertNotNull(fileSystem);
         Assert.assertTrue(fileSystem.existResource("example.txt"));

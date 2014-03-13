@@ -16,6 +16,7 @@ import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.service.ISettingListener;
 import org.komea.product.backend.service.ISettingService;
 import org.komea.product.cep.api.ICEPQuery;
+import org.komea.product.cep.api.IQueryDefinition;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.enums.RetentionPeriod;
 import org.komea.product.database.enums.Severity;
@@ -87,12 +88,13 @@ public class EventViewerService implements IEventViewerService, ISettingListener
      * 
      * @param _severity
      *            the severity
+     * @param _queryName
      * @return the esper query.
      */
-    public String buildRetentionQuery(final Severity _severity) {
+    public IQueryDefinition buildRetentionQuery(final Severity _severity, final String _queryName) {
     
     
-        return new RetentionQueryBuilder(_severity, getRetentionTime(_severity)).build();
+        return new RetentionQuery(_severity, getRetentionTime(_severity), _queryName);
     }
     
     
@@ -147,8 +149,8 @@ public class EventViewerService implements IEventViewerService, ISettingListener
     public List<IEvent> getInstantView(final String _EplStatement) {
     
     
-        final ICEPQuery requiredEplStatement = esperService.getStatementOrFail(_EplStatement);
-        return CEPQueryResultConvertor.build(requiredEplStatement).listUnderlyingObjects();
+        final ICEPQuery requiredEplStatement = esperService.getQueryOrFail(_EplStatement);
+        return requiredEplStatement.<IEvent> getStatement().getDefaultStorage();
     }
     
     
@@ -268,7 +270,7 @@ public class EventViewerService implements IEventViewerService, ISettingListener
         if (hasChanged(_severity)) {
             lastRetentionPeriods[_severity.ordinal()] = getRetentionTime(_severity);
             LOGGER.info("Upgrading Stream of events {} with new retention policy", _severity);
-            esperService.createEPL(new QueryDefinition(buildRetentionQuery(_severity), _queryName));
+            esperService.createQuery(buildRetentionQuery(_severity, _queryName));
         }
     }
 }

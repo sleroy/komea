@@ -13,7 +13,7 @@ import org.komea.product.cep.api.ICEPQuery;
 import org.komea.product.cep.api.IEventFilter;
 import org.komea.product.cep.api.cache.ICacheConfiguration;
 import org.komea.product.cep.cache.CacheConfigurationBuilder;
-import org.komea.product.cep.filter.FilterChainBuilder;
+import org.komea.product.cep.filter.EventFilterBuilder;
 import org.komea.product.cep.formula.CountFormula;
 import org.komea.product.database.alert.EventBuilder;
 import org.komea.product.database.enums.Severity;
@@ -34,7 +34,7 @@ public class CEPQueryBuilderTest
     
         final CEPQueryBuilder create = CEPQueryBuilder.create(new CountFormula());
         final IEventFilter eventFilter =
-                FilterChainBuilder.create().onlyIEvents().chain(new BlockingEventFilter()).build();
+                EventFilterBuilder.create().onlyIEvents().chain(new BlockingEventFilter()).build();
         
         final ICacheConfiguration hours24CacheConfig =
                 CacheConfigurationBuilder.create().expirationTime(24, TimeUnit.HOURS).build();

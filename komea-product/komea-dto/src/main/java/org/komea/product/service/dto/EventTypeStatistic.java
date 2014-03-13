@@ -1,6 +1,8 @@
 
 package org.komea.product.service.dto;
 
+
+
 import java.io.Serializable;
 
 
@@ -9,12 +11,12 @@ public class EventTypeStatistic implements Serializable
 {
     
     
-    private String type;
-    
-    
     private String provider;
     
-    private long   number;
+    
+    private String type;
+    
+    private long   value;
     
     
     
@@ -22,31 +24,6 @@ public class EventTypeStatistic implements Serializable
     
     
         super();
-    }
-    
-    
-    /**
-     * @param _type
-     * @param _provider
-     * @param _number
-     */
-    public EventTypeStatistic(final String _type, final String _provider, final long _number) {
-    
-    
-        super();
-        type = _type;
-        provider = _provider;
-        number = _number;
-    }
-    
-    
-    /**
-     * @return the number
-     */
-    public long getNumber() {
-    
-    
-        return number;
     }
     
     
@@ -71,13 +48,12 @@ public class EventTypeStatistic implements Serializable
     
     
     /**
-     * @param _number
-     *            the number to set
+     * @return the value
      */
-    public void setNumber(final long _number) {
+    public long getValue() {
     
     
-        number = _number;
+        return value;
     }
     
     
@@ -103,6 +79,17 @@ public class EventTypeStatistic implements Serializable
     }
     
     
+    /**
+     * @param _value
+     *            the value to set
+     */
+    public void setValue(final long _value) {
+    
+    
+        value = _value;
+    }
+    
+    
     /*
      * (non-Javadoc)
      * @see java.lang.Object#toString()
@@ -111,7 +98,7 @@ public class EventTypeStatistic implements Serializable
     public String toString() {
     
     
-        return "AlertTypeStatistic [type="
-                + type + ", provider=" + provider + ", number=" + number + "]";
+        return "EventTypeStatistic [provider="
+                + provider + ", type=" + type + ", value=" + value + "]";
     }
 }

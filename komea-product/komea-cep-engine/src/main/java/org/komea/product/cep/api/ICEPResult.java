@@ -6,10 +6,6 @@ package org.komea.product.cep.api;
 
 
 
-import java.util.Map;
-
-
-
 /**
  * This interface provides methods to acccess to the result of a CEP Query.
  * 
@@ -24,7 +20,7 @@ public interface ICEPResult
      * 
      * @return the results into a map.
      */
-    Map<Object, Object> asMap();
+    <Tres> ITupleResultMap<Tres> asMap();
     
     
     /**
@@ -36,26 +32,11 @@ public interface ICEPResult
     
     
     /**
-     * Returns a number when a map result has been computed, with a number in parameter.
+     * Returns the single value as an object for the given type;
      * 
-     * @param _key
-     *            the key
-     * @return the number
-     */
-    Number asNumber(Object _key);
-    
-    
-    /**
-     * @return
+     * @return converts the single value as a type.
      */
     <T> T asType();
-    
-    
-    /**
-     * @param _key
-     * @return
-     */
-    <T> T asType(Object _key);
     
     
     /**

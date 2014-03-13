@@ -6,11 +6,10 @@ package org.komea.product.cep.query;
 
 
 
-import java.util.Collections;
-import java.util.Map;
-
+import org.apache.commons.lang.Validate;
 import org.komea.product.cep.api.CEPResultType;
 import org.komea.product.cep.api.ICEPResult;
+import org.komea.product.cep.api.ITupleResultMap;
 
 
 
@@ -33,9 +32,7 @@ public class CEPResult
     public static ICEPResult buildFromCustomType(final Object _value) {
     
     
-        final CEPCustomTypeResult cepResult = new CEPCustomTypeResult(_value);
-        
-        return cepResult;
+        return new CEPCustomTypeResult(_value);
     }
     
     
@@ -51,7 +48,7 @@ public class CEPResult
             case NUMERICAL:
                 return buildFromNumber((Number) _value);
             case TABLE:
-                return buildFromMap((Map<Object, Object>) _value);
+                return buildFromMap((ITupleResultMap) _value);
             case CUSTOM:
                 return buildFromCustomType(_value);
         }
@@ -64,11 +61,11 @@ public class CEPResult
      * 
      * @return
      */
-    public static ICEPResult buildFromMap(final Map<Object, Object> _map) {
+    public static ICEPResult buildFromMap(final ITupleResultMap _iResultMap) {
     
     
-        final CEPMapResult cepResult = new CEPMapResult(Collections.unmodifiableMap(_map));
-        return cepResult;
+        Validate.notNull(_iResultMap);
+        return new CEPMapResult(_iResultMap);
     }
     
     
@@ -77,14 +74,13 @@ public class CEPResult
      * 
      * @param _value
      *            the number
-     * @return
+     * @return the cep result.
      */
     public static ICEPResult buildFromNumber(final Number _value) {
     
     
-        final CEPNumericalResult cepResult = new CEPNumericalResult(_value);
-        
-        return cepResult;
+        Validate.notNull(_value);
+        return new CEPNumericalResult(_value);
     }
     
     

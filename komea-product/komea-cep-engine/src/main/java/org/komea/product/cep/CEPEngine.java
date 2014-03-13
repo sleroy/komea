@@ -38,7 +38,7 @@ public class CEPEngine implements ICEPEngine
     private static final Logger    LOGGER        = LoggerFactory.getLogger("cep-engine");
     
     private final CEPConfiguration cepConfiguration;
-    private ICEPQueryEventListener      eventListener = null;
+    private ICEPQueryEventListener eventListener = null;
     
     
     private CEPEngineMode          mode          = CEPEngineMode.NOT_STARTED;
@@ -133,7 +133,7 @@ public class CEPEngine implements ICEPEngine
     
         Validate.notNull(_event);
         
-        eventListener.notify(mode);
+        eventListener.notify(_event);
     }
     
     

@@ -19,10 +19,11 @@ import org.komea.product.cep.CEPConfiguration;
 import org.komea.product.cep.CEPEngine;
 import org.komea.product.cep.api.ICEPEngine;
 import org.komea.product.cep.api.ICEPQuery;
+import org.komea.product.cep.api.IQueryDefinition;
+import org.komea.product.cep.query.CEPQuery;
 import org.komea.product.database.alert.IEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.stereotype.Service;
 
@@ -46,31 +47,25 @@ public final class EventEngineService implements IEventEngineService
     
     
     /**
-     * Method createEPL.
+     * Method createOrUpdateEPLQuery.
      * 
-     * @param _queryDefinition
+     * @param _definition
      *            IQueryDefinition
-     * @return EPStatement
-     * @throws RuntimeException
-     * @see org.komea.product.backend.api.IEventEngineService#createEPL(IQueryDefinition)
+     * @see org.komea.product.backend.api.IEventEngineService#createOrUpdateQuery(IQueryDefinition)
      */
     @Override
-    public ICEPQuery createEPL(final IQueryDefinition _queryDefinition) throws RuntimeException {
+    public void createOrUpdateQuery(final IQueryDefinition _definition) {
     
     
-        Validate.notNull(_queryDefinition);
-        LOGGER.debug("Creation of a new EPL Statement {}", _queryDefinition);
-        try {
-            final ICEPQuery query =
-                    (ICEPQuery) BeanUtils.instantiateClass(Thread.currentThread()
-                            .getContextClassLoader().loadClass(_queryDefinition.getQuery()));
-            cepEngine.getQueryAdministration().registerQuery(_queryDefinition.getName(), query);
-            return query;
-        } catch (final Exception e) {
-            LOGGER.error("Query invalid : " + _queryDefinition, e);
-            throw new InvalidQueryDefinitionException(_queryDefinition, e);
+        Validate.notNull(_definition);
+        LOGGER.debug("Registering an esper query  {}", _definition.getName());
+        if (existQuery(_definition.getName())) {
+            LOGGER.debug("--> Replacing an esper query  {}", _definition.getName());
+            createQuery(_definition);
+            return;
         }
-        
+        LOGGER.debug("--> Creating a new esper query  {}", _definition.getName());
+        createQuery(_definition);
     }
     
     
@@ -80,29 +75,29 @@ public final class EventEngineService implements IEventEngineService
      */
     
     /**
-     * Method createOrUpdateEPLQuery.
+     * Method createEPL.
      * 
-     * @param _definition
+     * @param _queryDefinition
      *            IQueryDefinition
-     * @see org.komea.product.backend.api.IEventEngineService#createOrUpdateEPLQuery(IQueryDefinition)
+     * @return EPStatement
+     * @throws RuntimeException
+     * @see org.komea.product.backend.api.IEventEngineService#createQuery(IQueryDefinition)
      */
     @Override
-    public void createOrUpdateEPLQuery(final IQueryDefinition _definition) {
+    public ICEPQuery createQuery(final IQueryDefinition _queryDefinition) throws RuntimeException {
     
     
-        Validate.notNull(_definition);
-        
-        LOGGER.debug("Registering an esper query {} : {}", _definition.getQuery(),
-                _definition.getName());
-        if (existEPL(_definition.getQuery())) {
-            LOGGER.debug("--> Replacing an esper query {} : {}", _definition.getQuery(),
-                    _definition.getName());
-            createEPL(_definition);
-            return;
+        Validate.notNull(_queryDefinition);
+        LOGGER.debug("Creation of a new EPL Statement {}", _queryDefinition);
+        try {
+            final ICEPQuery query = new CEPQuery(_queryDefinition);
+            cepEngine.getQueryAdministration().registerQuery(_queryDefinition.getName(), query);
+            return query;
+        } catch (final Exception e) {
+            LOGGER.error("Query invalid : " + _queryDefinition, e);
+            throw new InvalidQueryDefinitionException(_queryDefinition, e);
         }
-        LOGGER.debug("--> Creating a new esper query {} : {}", _definition.getQuery(),
-                _definition.getName());
-        createEPL(_definition);
+        
     }
     
     
@@ -127,10 +122,10 @@ public final class EventEngineService implements IEventEngineService
      * @param _metricKey
      *            String
      * @return boolean
-     * @see org.komea.product.backend.api.IEventEngineService#existEPL(String)
+     * @see org.komea.product.backend.api.IEventEngineService#existQuery(String)
      */
     @Override
-    public boolean existEPL(final String _metricKey) {
+    public boolean existQuery(final String _metricKey) {
     
     
         return cepEngine.getQueryAdministration().existQuery(_metricKey);
@@ -155,10 +150,10 @@ public final class EventEngineService implements IEventEngineService
      * @param _statementName
      *            String
      * @return EPStatement
-     * @see org.komea.product.backend.api.IEventEngineService#getStatement(String)
+     * @see org.komea.product.backend.api.IEventEngineService#getQuery(String)
      */
     @Override
-    public ICEPQuery getStatement(final String _statementName) {
+    public ICEPQuery getQuery(final String _statementName) {
     
     
         LOGGER.trace("Requesting esper statement {}", _statementName);
@@ -171,10 +166,10 @@ public final class EventEngineService implements IEventEngineService
      * Method getStatementNames.
      * 
      * @return String[]
-     * @see org.komea.product.backend.api.IEventEngineService#getStatementNames()
+     * @see org.komea.product.backend.api.IEventEngineService#getQueryNames()
      */
     @Override
-    public String[] getStatementNames() {
+    public String[] getQueryNames() {
     
     
         return cepEngine.getQueryAdministration().getQueryNames().toArray(null);
@@ -187,14 +182,14 @@ public final class EventEngineService implements IEventEngineService
      * @param _measureName
      *            String
      * @return EPStatement
-     * @see org.komea.product.backend.api.IEventEngineService#getStatementOrFail(String)
+     * @see org.komea.product.backend.api.IEventEngineService#getQueryOrFail(String)
      */
     @Override
-    public ICEPQuery getStatementOrFail(final String _measureName) {
+    public ICEPQuery getQueryOrFail(final String _measureName) {
     
     
         Validate.notEmpty(_measureName);
-        final ICEPQuery statement = getStatement(_measureName);
+        final ICEPQuery statement = getQuery(_measureName);
         if (statement == null) { throw new CEPQueryNotFoundException(_measureName); }
         return statement;
     }

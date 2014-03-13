@@ -42,15 +42,19 @@ public class KPIValueTable<T extends IEntity> implements Serializable
     
     
     /**
+     * Builds the kpi value table.
+     * 
      * @param _kpi
-     * @param _map
+     *            the kpi
+     * @param _iTupleResultMap
+     *            the kpi value table;
      */
-    public KPIValueTable(final Kpi _kpi, final Map<EntityKey, Double> _map) {
+    public KPIValueTable(final Kpi _kpi, final Map<EntityKey, Double> _iTupleResultMap) {
     
     
         super();
         kpi = _kpi;
-        values = _map;
+        values = _iTupleResultMap;
     }
     
     

@@ -1,6 +1,11 @@
+
 package org.komea.product.backend.service.kpi;
 
-import java.util.Map;
+
+
+import org.komea.product.cep.api.formula.tuple.ITuple;
+
+
 
 /**
  */
@@ -10,7 +15,9 @@ public interface IEsperLineTestPredicate
     
     /**
      * Method evaluate.
-     * @param _bean Map<String,Object>
+     * 
+     * @param _value
+     *            Map<String,Object>
      */
-    void evaluate(final Map<String, Object> _bean);
+    void evaluate(final ITuple _value);
 }

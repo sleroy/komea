@@ -16,12 +16,12 @@ import org.komea.product.backend.exceptions.KpiAlreadyExistingException;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IEntityService;
-import org.komea.product.backend.service.esper.CEPQueryResultConvertor;
-import org.komea.product.backend.service.esper.QueryDefinition;
+import org.komea.product.backend.service.esper.ConvertELIntoQuery;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.cep.api.ICEPQuery;
+import org.komea.product.cep.api.IQueryDefinition;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.KpiDao;
@@ -72,7 +72,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
             final ICEPQuery epStatement) {
     
     
-        return new KPIValueTable(kpiOrFail, epStatement.getResult().asMap());
+        return new KPIValueTable(kpiOrFail, epStatement.getResult().asMap().asSimplifiedMap());
     }
     
     
@@ -562,7 +562,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         final ICEPQuery epStatement = getEsperQueryFromKpi(kpi);
         
         if (kpi.isGlobal()) {
-            final Number singleResult = CEPQueryResultConvertor.build(epStatement).singleResult();
+            final Number singleResult = epStatement.getResult().asNumber();
             storeMeasureOfAKpiInDatabase(_kpiKey, singleResult.doubleValue());
         } else {
             final KPIValueTable<IEntity> kpiRealTimeValues = fetchKpiValueTable(kpi, epStatement);
@@ -581,9 +581,9 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     private void createEsperQueryFromKPI(final Kpi _kpi) {
     
     
-        final QueryDefinition queryDefinition = new QueryDefinition(_kpi);
+        final IQueryDefinition queryDefinition = ConvertELIntoQuery.parseEL(_kpi.getEsperRequest());
         LOGGER.debug("Updating Esper with the query {}", queryDefinition);
-        esperEngine.createOrUpdateEPLQuery(queryDefinition);
+        esperEngine.createOrUpdateQuery(queryDefinition);
     }
     
     
@@ -624,7 +624,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     private ICEPQuery getEsperQueryFromKpi(final Kpi _kpi) {
     
     
-        return esperEngine.getStatementOrFail(_kpi.computeKPIEsperKey());
+        return esperEngine.getQueryOrFail(_kpi.computeKPIEsperKey());
     }
     
     

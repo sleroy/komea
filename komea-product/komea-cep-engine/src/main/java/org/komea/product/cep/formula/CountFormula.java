@@ -7,10 +7,8 @@ package org.komea.product.cep.formula;
 
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.Map;
 
-import org.komea.product.cep.api.CEPResultType;
 import org.komea.product.cep.api.ICEPFormula;
 import org.komea.product.cep.api.ICEPResult;
 import org.komea.product.cep.api.ICEPStatement;
@@ -38,28 +36,5 @@ public class CountFormula<T extends Serializable> implements ICEPFormula<T>
         return CEPResult.buildFromNumber(_statement.getDefaultStorage().size());
     }
     
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPFormula#getDefaultParameters()
-     */
-    @Override
-    public Map<String, Object> getDefaultParameters() {
-    
-    
-        return Collections.emptyMap();
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPFormula#getResultType()
-     */
-    @Override
-    public CEPResultType getResultType() {
-    
-    
-        return CEPResultType.NUMERICAL;
-    }
     
 }
