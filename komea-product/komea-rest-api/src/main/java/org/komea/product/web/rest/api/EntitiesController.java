@@ -5,7 +5,7 @@ import java.util.List;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
-import org.komea.product.database.dto.BaseEntity;
+import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.enums.EntityType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ public class EntitiesController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/type")
     @ResponseBody
-    public List<BaseEntity> getEntities(@RequestBody EntityType entityType) {
+    public List<BaseEntityDto> getEntities(@RequestBody EntityType entityType) {
 
         switch (entityType) {
             case DEPARTMENT:
