@@ -124,6 +124,17 @@ public class CEPEngine implements ICEPEngine
         eventListener = new CEPQueryListener();
         
         queryAdministrator = new QueryAdministrator(eventListener);
+        mode = CEPEngineMode.RUNNING;
+    }
+    
+    
+    /**
+     * Returns true if the engine is initialized.
+     */
+    public boolean isInitialized() {
+    
+    
+        return mode == CEPEngineMode.RUNNING;
     }
     
     
@@ -135,19 +146,11 @@ public class CEPEngine implements ICEPEngine
     public void pushEvent(final Serializable _event) {
     
     
+        if (!isInitialized()) { throw new RuntimeException(
+                "The CEP engine has not been initialized, please invoke initialize() method"); }
         Validate.notNull(_event);
         
         eventListener.notify(_event);
-    }
-    
-    
-    /**
-     * Returns true if the engine is initialized.
-     */
-    private boolean isInitialized() {
-    
-    
-        return mode == CEPEngineMode.RUNNING;
     }
     
 }
