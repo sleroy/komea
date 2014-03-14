@@ -10,9 +10,6 @@ import org.komea.product.cep.api.IEventFilter;
 
 
 
-;
-
-
 /**
  * This class is a helper to build a filter chain.
  * 
