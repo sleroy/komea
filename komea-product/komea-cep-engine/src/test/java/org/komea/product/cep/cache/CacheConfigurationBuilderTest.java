@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.cep.api;
+package org.komea.product.cep.cache;
 
 
 
