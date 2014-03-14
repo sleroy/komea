@@ -2,6 +2,7 @@
 package org.komea.product.rest.client;
 
 
+
 import java.net.ConnectException;
 import java.util.List;
 
@@ -11,9 +12,15 @@ import org.komea.product.database.dto.DepartmentDto;
 import org.komea.product.rest.client.api.IDepartmentsAPI;
 import org.komea.product.service.dto.errors.InternalServerException;
 
-public class DepartmentsAPI extends AbstractRestCientAPI implements IDepartmentsAPI {
+
+
+public class DepartmentsAPI extends AbstractRestCientAPI implements IDepartmentsAPI
+{
+    
     
     private static final String DEPARTMENTS_PATH = "departments";
+    
+    
     
     /**
      * (non-Javadoc)
@@ -24,8 +31,11 @@ public class DepartmentsAPI extends AbstractRestCientAPI implements IDepartments
     @Override
     public List<DepartmentDto> allDepartments() throws ConnectException, InternalServerException {
     
-        String url = DEPARTMENTS_PATH + "/all";
-        return get(url, new GenericType<List<DepartmentDto>>() {
+    
+        final String url = DEPARTMENTS_PATH + "/all";
+        return get(url, new GenericType<List<DepartmentDto>>()
+        {
+            //
         });
     }
     //

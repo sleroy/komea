@@ -2,6 +2,7 @@ package org.komea.product.rest.client.api;
 
 import java.net.ConnectException;
 import java.util.List;
+
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.dto.SearchEventDto;

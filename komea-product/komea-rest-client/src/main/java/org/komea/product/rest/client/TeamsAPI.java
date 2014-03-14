@@ -2,6 +2,7 @@
 package org.komea.product.rest.client;
 
 
+
 import java.net.ConnectException;
 import java.util.List;
 
@@ -11,9 +12,15 @@ import org.komea.product.database.dto.TeamDto;
 import org.komea.product.rest.client.api.ITeamsAPI;
 import org.komea.product.service.dto.errors.InternalServerException;
 
-public class TeamsAPI extends AbstractRestCientAPI implements ITeamsAPI {
+
+
+public class TeamsAPI extends AbstractRestCientAPI implements ITeamsAPI
+{
+    
     
     private static final String TEAM_PATH = "teams";
+    
+    
     
     /**
      * (non-Javadoc)
@@ -23,8 +30,11 @@ public class TeamsAPI extends AbstractRestCientAPI implements ITeamsAPI {
     @Override
     public List<TeamDto> allTeams() throws ConnectException, InternalServerException {
     
-        String url = TEAM_PATH + "/all";
-        return get(url, new GenericType<List<TeamDto>>() {
+    
+        final String url = TEAM_PATH + "/all";
+        return get(url, new GenericType<List<TeamDto>>()
+        {
+            //
         });
     }
     //

@@ -71,7 +71,7 @@ public class KomeaServerLauncher implements Runnable
         service = Executors.newSingleThreadExecutor();
         service.execute(this);
         
-        Thread.sleep(10000);
+        Thread.sleep(100000);
         
     }
     
