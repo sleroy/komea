@@ -14,12 +14,13 @@ public class ELFormulaFilterTest
     
     
     @Test
-    public final void testELFormulaFilterString() throws Exception {
+    public final void testELFormula2() throws Exception {
     
     
         final Event event = new Event();
-        
         event.setMessage("truc");
+        
+        
         Assert.assertTrue(new ELFormulaFilter("message == 'truc'").isFiltered(event));
         Assert.assertFalse(new ELFormulaFilter("message != 'truc'").isFiltered(event));
     }
