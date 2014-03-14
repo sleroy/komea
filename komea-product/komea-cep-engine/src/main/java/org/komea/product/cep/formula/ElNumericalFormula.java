@@ -30,7 +30,7 @@ public class ElNumericalFormula<T extends Serializable> implements ICEPFormula<T
 {
     
     
-    private static class Context
+    public static class Context
     {
         
         
@@ -38,6 +38,19 @@ public class ElNumericalFormula<T extends Serializable> implements ICEPFormula<T
         private Map<String, Object> params;
         private Number              previous = 0d;
         
+        
+        
+        /**
+         * Returns the event
+         * 
+         * @return the event.
+         */
+        public Object getEvent() {
+        
+        
+            return event;
+            
+        }
         
         
         public Map<String, Object> getParams() {

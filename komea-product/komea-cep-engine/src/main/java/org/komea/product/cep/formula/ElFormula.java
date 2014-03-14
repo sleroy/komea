@@ -3,11 +3,9 @@ package org.komea.product.cep.formula;
 
 
 
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang.Validate;
 import org.komea.product.cep.api.formula.IElFormula;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +95,7 @@ public class ElFormula<T> implements IElFormula<T>
         }
         final StandardEvaluationContext context = new StandardEvaluationContext(valuecontext);
         
-        prepareCustomMethods(context);
+        // prepareCustomMethods(context);
         if (_parameters != null) {
             for (final Entry<String, Object> entry : _parameters.entrySet()) {
                 context.setVariable(entry.getKey(), entry.getValue());
@@ -116,30 +114,19 @@ public class ElFormula<T> implements IElFormula<T>
         }
     }
     
+    //
+    // private void prepareCustomMethods(final StandardEvaluationContext context) {
+    //
+    //
+    // try {
+    // registerInMethod(context);
+    // } catch (final NoSuchMethodException e) {
+    // LOGGER.error("Error with custom method", e);
+    //
+    // } catch (final SecurityException e) {
+    // LOGGER.error("Error with custom method", e);
+    // }
+    // }
+    //
     
-    private void prepareCustomMethods(final StandardEvaluationContext context) {
-    
-    
-        try {
-            registerInMethod(context);
-        } catch (final NoSuchMethodException e) {
-            LOGGER.error("Error with custom method", e);
-            
-        } catch (final SecurityException e) {
-            LOGGER.error("Error with custom method", e);
-        }
-    }
-    
-    
-    private void registerInMethod(final StandardEvaluationContext context)
-            throws NoSuchMethodException {
-    
-    
-        final Method method = ELOperator.class.getMethod("in", new Class[] {
-                Object.class, Object[].class });
-        Validate.notNull(method);
-        context.registerFunction("in",
-        
-        method);
-    }
 }
