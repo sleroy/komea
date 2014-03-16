@@ -29,9 +29,10 @@ public class CEPEventStorageTest
     
     
         final CEPEventStorage<Serializable> cepEventStorage =
-                new CEPEventStorage<Serializable>(new FilterDefinition(
-                        CacheConfigurationBuilder.noConfiguration(),
-                        Mockito.mock(IEventFilter.class), Mockito.mock(IEventTransformer.class)));
+                new CEPEventStorage<Serializable>(FilterDefinition.create()
+                        .setCacheConfiguration(CacheConfigurationBuilder.noConfiguration())
+                        .setFilter(Mockito.mock(IEventFilter.class))
+                        .setEventTransformer(Mockito.mock(IEventTransformer.class)));
         Assert.assertNotNull(cepEventStorage.getEventFilter());
         Assert.assertNotNull(cepEventStorage.getEventTransformer());
         Assert.assertNotNull(cepEventStorage.getCache());
@@ -48,8 +49,10 @@ public class CEPEventStorageTest
         final IEventFilter mock = Mockito.mock(IEventFilter.class);
         final IEventTransformer mock2 = Mockito.mock(IEventTransformer.class);
         final CEPEventStorage<Serializable> cepEventStorage =
-                new CEPEventStorage<Serializable>(new FilterDefinition(
-                        CacheConfigurationBuilder.noConfiguration(), mock, mock2));
+                new CEPEventStorage<Serializable>(FilterDefinition.create()
+                        .setCacheConfiguration(CacheConfigurationBuilder.noConfiguration())
+                        .setFilter(mock).setEventTransformer(mock2));
+        
         final String event = "glouglougla";
         // Enable filtering
         Mockito.when(mock.isFiltered(event)).thenReturn(true);
@@ -78,8 +81,10 @@ public class CEPEventStorageTest
         final IEventFilter mock = Mockito.mock(IEventFilter.class);
         final IEventTransformer mock2 = Mockito.mock(IEventTransformer.class);
         final CEPEventStorage<Serializable> cepEventStorage =
-                new CEPEventStorage<Serializable>(new FilterDefinition(
-                        CacheConfigurationBuilder.noConfiguration(), mock, mock2));
+                new CEPEventStorage<Serializable>(FilterDefinition.create()
+                        .setCacheConfiguration(CacheConfigurationBuilder.noConfiguration())
+                        .setFilter(mock).setEventTransformer(mock2));
+        
         final String event = "glouglougla";
         // Enable filtering
         Mockito.when(mock.isFiltered(event)).thenReturn(true);
@@ -107,8 +112,10 @@ public class CEPEventStorageTest
         final IEventFilter mock = Mockito.mock(IEventFilter.class);
         final IEventTransformer mock2 = Mockito.mock(IEventTransformer.class);
         final CEPEventStorage<Serializable> cepEventStorage =
-                new CEPEventStorage<Serializable>(new FilterDefinition(
-                        CacheConfigurationBuilder.noConfiguration(), mock, mock2));
+                new CEPEventStorage<Serializable>(FilterDefinition.create()
+                        .setCacheConfiguration(CacheConfigurationBuilder.noConfiguration())
+                        .setFilter(mock).setEventTransformer(mock2));
+        
         final String event = "glouglougla";
         cepEventStorage.notifyEvent(event);
         Mockito.verify(mock, Mockito.times(1)).isFiltered(event);

@@ -22,7 +22,7 @@ import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.cep.api.ICEPQuery;
 import org.komea.product.cep.cache.CacheConfigurationBuilder;
-import org.komea.product.cep.formula.tuple.TupleCountFormula;
+import org.komea.product.cep.formula.tuple.EventCountFormula;
 import org.komea.product.cep.formula.tuple.GroupByFormula;
 import org.komea.product.cep.query.CEPQueryImplementation;
 import org.komea.product.cep.query.FilterDefinition;
@@ -117,7 +117,7 @@ public class EventStatisticsService implements IEventStatisticsService
         cepQueryDefinition.addFilterDefinition(new FilterDefinition(CacheConfigurationBuilder
                 .expirationTimeCache(24, TimeUnit.HOURS)));
         cepQueryDefinition.setFormula(new GroupByFormula(new ProviderEventTypeTupleCreator(),
-                new TupleCountFormula()));
+                new EventCountFormula()));
         
         return cepQueryDefinition;
     }

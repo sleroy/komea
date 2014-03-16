@@ -87,8 +87,10 @@ public class CEPQueryBuilder
     public CEPQueryBuilder defineFilter(final IEventFilter _noEventFilter) {
     
     
-        cepQueryDefinition.addFilterDefinition(new FilterDefinition(_noEventFilter.toString(),
-                CacheConfigurationBuilder.noConfiguration(), _noEventFilter, null));
+        cepQueryDefinition.addFilterDefinition(FilterDefinition.create()
+                .setFilterName(_noEventFilter.toString())
+                .setCacheConfiguration(CacheConfigurationBuilder.noConfiguration())
+                .setFilter(_noEventFilter));
         return this;
     }
     
@@ -105,8 +107,9 @@ public class CEPQueryBuilder
             final ICacheConfiguration _cacheConfiguration) {
     
     
-        cepQueryDefinition.addFilterDefinition(new FilterDefinition("stream" + numberOfFilters(),
-                _cacheConfiguration, _filter, null));
+        cepQueryDefinition.addFilterDefinition(FilterDefinition.create()
+                .setFilterName("stream" + numberOfFilters())
+                .setCacheConfiguration(_cacheConfiguration).setFilter(_filter));
         return this;
     }
     
@@ -124,8 +127,8 @@ public class CEPQueryBuilder
     public CEPQueryBuilder defineFilter(final String _filter, final ICacheConfiguration _build) {
     
     
-        cepQueryDefinition.addFilterDefinition(new FilterDefinition(_filter, _build,
-                new NoEventFilter(), null));
+        cepQueryDefinition.addFilterDefinition(FilterDefinition.create().setFilterName(_filter)
+                .setCacheConfiguration(_build).setFilter(new NoEventFilter()));
         return this;
     }
     
@@ -149,8 +152,9 @@ public class CEPQueryBuilder
             final ICacheConfiguration _build) {
     
     
-        cepQueryDefinition.addFilterDefinition(new FilterDefinition(_filter, _build, _eventFilter,
-                null));
+        cepQueryDefinition.addFilterDefinition(FilterDefinition.create().setFilterName(_filter)
+                .setCacheConfiguration(_build).setFilter(_eventFilter));
+        
         return this;
     }
     
@@ -165,8 +169,11 @@ public class CEPQueryBuilder
             final ICacheConfiguration _cacheConfiguration) {
     
     
-        cepQueryDefinition.addFilterDefinition(new FilterDefinition("stream" + numberOfFilters(),
-                _cacheConfiguration, _filter, _transformer));
+        cepQueryDefinition.addFilterDefinition(FilterDefinition.create()
+                .setFilterName("stream" + numberOfFilters())
+                .setCacheConfiguration(_cacheConfiguration).setFilter(_filter)
+                .setEventTransformer(_transformer));
+        
         return this;
     }
     
@@ -181,8 +188,10 @@ public class CEPQueryBuilder
     public CEPQueryBuilder defineIEventFilter(final ICacheConfiguration _cacheConfiguration) {
     
     
-        cepQueryDefinition.addFilterDefinition(new FilterDefinition("stream" + numberOfFilters(),
-                _cacheConfiguration, EventFilterBuilder.create().onlyIEvents().build(), null));
+        cepQueryDefinition.addFilterDefinition(FilterDefinition.create()
+                .setFilterName("stream" + numberOfFilters())
+                .setCacheConfiguration(_cacheConfiguration)
+                .setFilter(EventFilterBuilder.create().onlyIEvents().build()));
         return this;
     }
     

@@ -17,7 +17,7 @@ import org.mockito.Mockito;
 
 
 
-public class TupleCountFormulaTest
+public class EventCountFormulaTest
 {
     
     
@@ -25,7 +25,7 @@ public class TupleCountFormulaTest
     public void testProcessMapWithoutParameters() throws Exception {
     
     
-        final TupleCountFormula tupleCountFormula = new TupleCountFormula();
+        final EventCountFormula tupleCountFormula = new EventCountFormula();
         final IEventTable eventTable = Mockito.mock(IEventTable.class);
         // Map
         final Map<ITuple, IEventGroup> map = new HashMap<ITuple, IEventGroup>();

@@ -259,31 +259,6 @@ public class DemoDataBean
     }
     
     
-    // public void scheduleAlerts() {
-    //
-    // final JobDataMap properties = new JobDataMap();
-    // properties.put("esper", eventPushService);
-    // registry.registerCronTask("ALERT_DEMO_STAT", "0/10 * * * * ?", AlertJobDemo.class,
-    // properties);
-    //
-    // }
-    //
-    // @Scheduled(fixedRate = 60000)
-    // public void sendAlert() {
-    //
-    // for (int i = 0; i < 10; ++i) {
-    // final EventSimpleDto event
-    // = EventDtoBuilder
-    // .newAlert()
-    // .message(
-    // "Event sent by Demonstration DemoDataBean"
-    // + new Random().nextInt(12)).project("SYSTEM")
-    // .provided("/demoProvider").eventType("event-demo").build();
-    // eventPushService.sendEventDto(event);
-    //
-    // }
-    // }
-    
     /**
      * Method setPersonGroupDao.
      * 

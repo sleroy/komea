@@ -38,11 +38,16 @@ public class LdapUserService implements ILdapUserService
     
     
     /**
-     * 
+     * <!--
+     * <bean id="contextSource"
+     * class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+     * <constructor-arg value="ldap://localhost:389/dc=tocea,dc=com" />
+     * </bean>
+     * <bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+     * <constructor-arg ref="contextSource" />
+     * </bean> -->
      */
-    private static final String LDAP_CRON_REFRESH = "LDAP-CRON-REFRESH";
-
-
+    
     private static class UserAttributesMapper implements AttributesMapper
     {
         
@@ -73,10 +78,16 @@ public class LdapUserService implements ILdapUserService
     /**
      * 
      */
-    private static final String  CRON_LDAP        = "0 0/5 * * * ?";
+    private static final String  CRON_LDAP         = "0 0/5 * * * ?";
     
     
-    private static final long    serialVersionUID = 4889152297004460837L;
+    /**
+     * 
+     */
+    private static final String  LDAP_CRON_REFRESH = "LDAP-CRON-REFRESH";
+    
+    
+    private static final long    serialVersionUID  = 4889152297004460837L;
     
     @Autowired
     private IPersonGroupService  groupService;

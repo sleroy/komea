@@ -22,19 +22,18 @@
 
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>WEB-INF/dispatcher-servlet.xml</param-value>
+			<param-value>classpath:/spring/dispatcher-servlet.xml</param-value>
 		</init-param>
 
 	</servlet>
-	<!-- <servlet-mapping> <servlet-name>dispatcher</servlet-name> <url-pattern>/p/*</url-pattern> 
-		</servlet-mapping> -->
+
 	<servlet>
 		<servlet-name>rest</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>WEB-INF/rest-servlet.xml</param-value>
+			<param-value>classpath:/spring/rest-servlet.xml</param-value>
 		</init-param>
 
 	</servlet>
@@ -48,13 +47,10 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 
-
-
-
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-		
+
 	</filter>
 	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
@@ -75,7 +71,7 @@
 		<filter-name>wicket.komea</filter-name>
 		<url-pattern>/p/*</url-pattern>
 	</filter-mapping>
-	
+
 	<filter>
 		<filter-name>cors</filter-name>
 		<filter-class>org.komea.product.web.rest.api.CorsFilter</filter-class>

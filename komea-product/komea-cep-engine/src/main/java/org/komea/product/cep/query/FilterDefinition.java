@@ -6,7 +6,6 @@ package org.komea.product.cep.query;
 
 
 
-import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 import org.komea.product.cep.api.IEventFilter;
@@ -25,6 +24,24 @@ public class FilterDefinition implements IFilterDefinition
 {
     
     
+    /**
+     * Builds a default filter definition.
+     */
+    public static FilterDefinition create() {
+    
+    
+        final FilterDefinition filterDefinition = new FilterDefinition();
+        filterDefinition.cacheConfiguration =
+                CacheConfigurationBuilder.expirationTimeCache(1, TimeUnit.HOURS);
+        filterDefinition.filter = new NoEventFilter();
+        filterDefinition.filterName = "none";
+        filterDefinition.eventTransformer = null;
+        return filterDefinition;
+        
+    }
+    
+    
+    
     private ICacheConfiguration     cacheConfiguration;
     
     
@@ -38,65 +55,10 @@ public class FilterDefinition implements IFilterDefinition
     
     
     
-    /**
-     * Builds a default filter definition.
-     */
-    public FilterDefinition() {
+    private FilterDefinition() {
     
     
         super();
-        cacheConfiguration = CacheConfigurationBuilder.expirationTimeCache(1, TimeUnit.HOURS);
-        filter = new NoEventFilter();
-        filterName = "none";
-        eventTransformer = null;
-    }
-    
-    
-    /**
-     * @param _expirationTimeCache
-     */
-    public FilterDefinition(final ICacheConfiguration _expirationTimeCache) {
-    
-    
-        this("filter", _expirationTimeCache, new NoEventFilter(), null);
-    }
-    
-    
-    /**
-     * @param _expirationTimeCache
-     * @param _eventFilter
-     * @param _object
-     */
-    public FilterDefinition(
-            final ICacheConfiguration _expirationTimeCache,
-            final IEventFilter<?> _eventFilter,
-            final IEventTransformer<Serializable, Serializable> _object) {
-    
-    
-        this("filter", _expirationTimeCache, _eventFilter, _object);
-    }
-    
-    
-    /**
-     * @param _string
-     * @param _cacheConfiguration
-     * @param _filter
-     * @param _transformer
-     */
-    public FilterDefinition(
-            final String _filterName,
-            final ICacheConfiguration _cacheConfiguration,
-            @SuppressWarnings("rawtypes")
-            final IEventFilter _filter,
-            final IEventTransformer<?, ?> _transformer) {
-    
-    
-        filterName = _filterName;
-        cacheConfiguration = _cacheConfiguration;
-        filter = _filter;
-        eventTransformer = _transformer;
-        
-        
     }
     
     
@@ -147,44 +109,52 @@ public class FilterDefinition implements IFilterDefinition
     /**
      * @param _cacheConfiguration
      *            the cacheConfiguration to set
+     * @return
      */
-    public void setCacheConfiguration(final ICacheConfiguration _cacheConfiguration) {
+    public FilterDefinition setCacheConfiguration(final ICacheConfiguration _cacheConfiguration) {
     
     
         cacheConfiguration = _cacheConfiguration;
+        return this;
     }
     
     
     /**
      * @param _eventTransformer
      *            the eventTransformer to set
+     * @return
      */
-    public void setEventTransformer(final IEventTransformer<?, ?> _eventTransformer) {
+    public FilterDefinition setEventTransformer(final IEventTransformer<?, ?> _eventTransformer) {
     
     
         eventTransformer = _eventTransformer;
+        return this;
     }
     
     
     /**
      * @param _filter
      *            the filter to set
+     * @return
      */
-    public void setFilter(final IEventFilter _filter) {
+    public FilterDefinition setFilter(final IEventFilter _filter) {
     
     
         filter = _filter;
+        return this;
     }
     
     
     /**
      * @param _filterName
      *            the filterName to set
+     * @return
      */
-    public void setFilterName(final String _filterName) {
+    public FilterDefinition setFilterName(final String _filterName) {
     
     
         filterName = _filterName;
+        return this;
     }
     
     

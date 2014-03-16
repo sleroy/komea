@@ -157,7 +157,7 @@
 		<!-- rest api -->
 		<module>komea-rest-api</module>
 		<module>komea-rest-client</module>
-
+		<module>komea-standard-kpis</module>
 
 		<!-- packaging -->
 		<module>komea-packaging-war</module>
@@ -167,3 +167,4 @@
 		<module>komea-integration-tests</module>
 	</modules>
 </project>
+

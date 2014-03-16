@@ -74,6 +74,14 @@
 			<artifactId>komea-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.komea.plugins</groupId>
+			<artifactId>komea-standard-kpis</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.komea.plugins</groupId>
 			<artifactId>komea-rss-plugin</artifactId>

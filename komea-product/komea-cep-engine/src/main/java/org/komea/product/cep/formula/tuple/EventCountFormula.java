@@ -23,7 +23,7 @@ import org.komea.product.cep.api.formula.tuple.IEventTable;
  * 
  * @author sleroy
  */
-public class TupleCountFormula implements ITuplerFormula<Integer>
+public class EventCountFormula implements ITuplerFormula<Integer>
 {
     
     
