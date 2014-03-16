@@ -9,7 +9,7 @@ package org.komea.product.cep.sequence;
 import java.io.Serializable;
 import java.util.List;
 
-import org.komea.product.cep.api.TransformedEvent;
+import org.komea.product.cep.api.ITransformedEvent;
 
 
 
@@ -45,7 +45,7 @@ public class SequenceStepEvaluator
     /**
      * @return
      */
-    public TransformedEvent extractSequence() {
+    public ITransformedEvent extractSequence() {
     
     
         // TODO Auto-generated method stub

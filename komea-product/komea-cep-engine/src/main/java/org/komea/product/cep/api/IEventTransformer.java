@@ -28,5 +28,5 @@ public interface IEventTransformer<T extends Serializable, R extends Serializabl
      *            the event.
      * @return the transformed information.
      */
-    TransformedEvent<R> transform(T _event);
+    ITransformedEvent<R> transform(T _event);
 }

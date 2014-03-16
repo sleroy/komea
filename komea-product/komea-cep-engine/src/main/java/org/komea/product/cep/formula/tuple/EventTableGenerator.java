@@ -9,9 +9,9 @@ package org.komea.product.cep.formula.tuple;
 import java.io.Serializable;
 import java.util.List;
 
-import org.komea.product.cep.api.formula.tuple.IEventTupler;
+import org.komea.product.cep.api.formula.tuple.IEventTable;
+import org.komea.product.cep.api.formula.tuple.IEventTableGenerator;
 import org.komea.product.cep.api.formula.tuple.ITupleCreator;
-import org.komea.product.cep.api.formula.tuple.ITupleMap;
 
 
 
@@ -20,11 +20,11 @@ import org.komea.product.cep.api.formula.tuple.ITupleMap;
  * 
  * @author sleroy
  */
-public class EventStreamToTupleMapProcessor implements IEventTupler
+public class EventTableGenerator implements IEventTableGenerator
 {
     
     
-    private final ITupleCreator tupleCreator;
+    private final ITupleCreator<Serializable> tupleCreator;
     
     
     
@@ -32,7 +32,7 @@ public class EventStreamToTupleMapProcessor implements IEventTupler
      * @param _tupleCreator
      */
     @SuppressWarnings("rawtypes")
-    public EventStreamToTupleMapProcessor(final ITupleCreator _tupleCreator) {
+    public EventTableGenerator(final ITupleCreator _tupleCreator) {
     
     
         tupleCreator = _tupleCreator;
@@ -42,13 +42,13 @@ public class EventStreamToTupleMapProcessor implements IEventTupler
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.api.formula.tuple.IEventTupler#generateTupleMap(java.util.List)
+     * @see org.komea.product.cep.api.formula.tuple.IEventTableGenerator#generateTupleMap(java.util.List)
      */
     @Override
-    public ITupleMap generateTupleMap(final List<? extends Serializable> _events) {
+    public IEventTable generateTable(final List<? extends Serializable> _events) {
     
     
-        final ITupleMap tupleMap = new TupleMap(tupleCreator);
+        final IEventTable tupleMap = new EventTable(tupleCreator);
         for (final Serializable event : _events) {
             tupleMap.groupEvent(event);
         }

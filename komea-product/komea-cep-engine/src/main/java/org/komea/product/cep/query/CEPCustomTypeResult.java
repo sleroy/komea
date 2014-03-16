@@ -20,7 +20,7 @@ public class CEPCustomTypeResult<T> implements ICEPResult
 {
     
     
-    private final T value = null;
+    private T value = null;
     
     
     
@@ -28,6 +28,7 @@ public class CEPCustomTypeResult<T> implements ICEPResult
     
     
         super();
+        value = _value;
         
     }
     

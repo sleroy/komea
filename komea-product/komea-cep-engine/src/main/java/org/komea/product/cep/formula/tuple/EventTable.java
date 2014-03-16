@@ -16,7 +16,7 @@ import org.apache.commons.lang.Validate;
 import org.komea.product.cep.api.formula.tuple.IEventGroup;
 import org.komea.product.cep.api.formula.tuple.ITuple;
 import org.komea.product.cep.api.formula.tuple.ITupleCreator;
-import org.komea.product.cep.api.formula.tuple.ITupleMap;
+import org.komea.product.cep.api.formula.tuple.IEventTable;
 
 
 
@@ -25,20 +25,20 @@ import org.komea.product.cep.api.formula.tuple.ITupleMap;
  * 
  * @author sleroy
  */
-public class TupleMap implements ITupleMap
+public class EventTable implements IEventTable
 {
     
     
     private final ITupleCreator<Serializable> tupleCreator;
     
-    private final Map<ITuple, IEventGroup>    tupleMap = new HashMap<ITuple, IEventGroup>();
+    private final Map<ITuple, IEventGroup>    tupleEventTable = new HashMap<ITuple, IEventGroup>();
     
     
     
     /**
      * @param _tupleCreator
      */
-    public TupleMap(@SuppressWarnings("rawtypes")
+    public EventTable(@SuppressWarnings("rawtypes")
     final ITupleCreator _tupleCreator) {
     
     
@@ -51,7 +51,7 @@ public class TupleMap implements ITupleMap
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.api.formula.tuple.ITupleMap#groupEvent(java.io.Serializable)
+     * @see org.komea.product.cep.api.formula.tuple.IEventTable#groupEvent(java.io.Serializable)
      */
     @Override
     public void groupEvent(final Serializable _event) {
@@ -60,9 +60,9 @@ public class TupleMap implements ITupleMap
         Validate.notNull(_event);
         final ITuple tuple = tupleCreator.create(_event);
         Validate.notNull(_event);
-        IEventGroup iEventGroup = tupleMap.get(tuple);
+        IEventGroup iEventGroup = tupleEventTable.get(tuple);
         if (iEventGroup == null) {
-            tupleMap.put(tuple, iEventGroup = new EventGroup());
+            tupleEventTable.put(tuple, iEventGroup = new EventGroup());
         }
         iEventGroup.addEvent(_event);
         
@@ -71,13 +71,13 @@ public class TupleMap implements ITupleMap
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.api.formula.tuple.ITupleMap#iterator()
+     * @see org.komea.product.cep.api.formula.tuple.IEventTable#iterator()
      */
     @Override
     public Iterable<Entry<ITuple, IEventGroup>> iterator() {
     
     
-        return Collections.unmodifiableSet(tupleMap.entrySet());
+        return Collections.unmodifiableSet(tupleEventTable.entrySet());
     }
     
     
@@ -89,7 +89,7 @@ public class TupleMap implements ITupleMap
     public String toString() {
     
     
-        return "TupleMap [tupleCreator=" + tupleCreator + ", tupleMap=" + tupleMap + "]";
+        return "EventTable [tupleCreator=" + tupleCreator + ", tupleEventTable=" + tupleEventTable + "]";
     }
     
 }

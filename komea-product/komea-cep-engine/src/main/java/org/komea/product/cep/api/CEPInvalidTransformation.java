@@ -9,13 +9,13 @@ package org.komea.product.cep.api;
 /**
  * @author sleroy
  */
-public enum CEPInvalidTransformation implements TransformedEvent {
-    ;
+public enum CEPInvalidTransformation implements ITransformedEvent {
+    INVALID_TRANSFORMATION;
     
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.api.TransformedEvent#getData()
+     * @see org.komea.product.cep.api.ITransformedEvent#getData()
      */
     @Override
     public Object getData() {
@@ -27,7 +27,7 @@ public enum CEPInvalidTransformation implements TransformedEvent {
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.api.TransformedEvent#isValid()
+     * @see org.komea.product.cep.api.ITransformedEvent#isValid()
      */
     @Override
     public boolean isValid() {

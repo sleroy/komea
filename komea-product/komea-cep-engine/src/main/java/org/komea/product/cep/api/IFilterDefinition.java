@@ -20,26 +20,27 @@ public interface IFilterDefinition
     
     
     /**
-     * @return the cache configuration (cannot be null)
+     * @return
      */
     ICacheConfiguration getCacheConfiguration();
     
     
     /**
-     * @return the event filter (cannot be null)
-     */
-    IEventFilter getEventFilter();
-    
-    
-    /**
-     * @return the event transformer or null
+     * Returns the event transformer or null.
      */
     IEventTransformer getEventTransformer();
     
     
     /**
-     * Returns the filter name
+     * @return
+     */
+    IEventFilter getFilter();
+    
+    
+    /**
+     * @return
      */
     String getFilterName();
+    
     
 }

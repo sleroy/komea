@@ -7,6 +7,7 @@ package org.komea.product.cep.formula.tuple;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,14 +31,18 @@ public class TupleResultMap<TRes> implements ITupleResultMap<TRes>
 {
     
     
-    /**
-     * 
-     */
     private static final String     VALUE     = "value";
     
     
     private final Map<ITuple, TRes> resultMap = new HashMap<ITuple, TRes>();
     
+    
+    
+    public TupleResultMap() {
+    
+    
+        super();
+    }
     
     
     /*
@@ -95,18 +100,6 @@ public class TupleResultMap<TRes> implements ITupleResultMap<TRes>
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.api.ITupleResultMap#asTupleMap()
-     */
-    @Override
-    public <T> Map<ITuple, TRes> asTupleMap() {
-    
-    
-        return resultMap;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
      * @see org.komea.product.cep.api.ITupleResultMap#asTupleRows()
      */
     @Override
@@ -130,7 +123,19 @@ public class TupleResultMap<TRes> implements ITupleResultMap<TRes>
     public TRes get(final Object _key) {
     
     
-        return resultMap.get(new ArrayListTuple(new String[] {}, _key));
+        return resultMap.get(new ArrayListTuple(Collections.singletonList(_key)));
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.api.ITupleResultMap#getTable()
+     */
+    @Override
+    public <T> Map<ITuple, TRes> getTable() {
+    
+    
+        return this.resultMap;
     }
     
     

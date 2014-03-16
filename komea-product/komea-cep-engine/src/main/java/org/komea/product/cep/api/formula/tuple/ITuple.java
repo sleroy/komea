@@ -72,7 +72,7 @@ public interface ITuple
      * @param _valueInTuple
      *            the value.
      */
-    public boolean isSingleton(Object _valueInTuple);
+    public boolean hasSingletonValue(Object _valueInTuple);
     
     
     /**

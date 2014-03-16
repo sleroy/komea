@@ -26,9 +26,15 @@ public class FilterDefinition implements IFilterDefinition
     
     
     private ICacheConfiguration     cacheConfiguration;
+    
+    
+    private IEventTransformer<?, ?> eventTransformer;
+    
+    
     private IEventFilter            filter;
+    
+    
     private String                  filterName;
-    private IEventTransformer<?, ?> transformer;
     
     
     
@@ -42,7 +48,7 @@ public class FilterDefinition implements IFilterDefinition
         cacheConfiguration = CacheConfigurationBuilder.expirationTimeCache(1, TimeUnit.HOURS);
         filter = new NoEventFilter();
         filterName = "none";
-        transformer = null;
+        eventTransformer = null;
     }
     
     
@@ -88,7 +94,7 @@ public class FilterDefinition implements IFilterDefinition
         filterName = _filterName;
         cacheConfiguration = _cacheConfiguration;
         filter = _filter;
-        transformer = _transformer;
+        eventTransformer = _transformer;
         
         
     }
@@ -106,25 +112,24 @@ public class FilterDefinition implements IFilterDefinition
     
     
     /**
-     * @return the filter
+     * @return the eventTransformer
      */
     @Override
-    public IEventFilter getEventFilter() {
+    public IEventTransformer<?, ?> getEventTransformer() {
     
     
-        return filter;
+        return eventTransformer;
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.IFilterDefinition#getEventTransformer()
+    /**
+     * @return the filter
      */
     @Override
-    public IEventTransformer getEventTransformer() {
+    public IEventFilter getFilter() {
     
     
-        return transformer;
+        return filter;
     }
     
     
@@ -151,6 +156,17 @@ public class FilterDefinition implements IFilterDefinition
     
     
     /**
+     * @param _eventTransformer
+     *            the eventTransformer to set
+     */
+    public void setEventTransformer(final IEventTransformer<?, ?> _eventTransformer) {
+    
+    
+        eventTransformer = _eventTransformer;
+    }
+    
+    
+    /**
      * @param _filter
      *            the filter to set
      */
@@ -172,17 +188,6 @@ public class FilterDefinition implements IFilterDefinition
     }
     
     
-    /**
-     * @param _transformer
-     *            the transformer to set
-     */
-    public void setTransformer(final IEventTransformer<?, ?> _transformer) {
-    
-    
-        transformer = _transformer;
-    }
-    
-    
     /*
      * (non-Javadoc)
      * @see java.lang.Object#toString()
@@ -193,7 +198,7 @@ public class FilterDefinition implements IFilterDefinition
     
         return "FilterDefinition [cacheConfiguration="
                 + cacheConfiguration + ", filter=" + filter + ", filterName=" + filterName
-                + ", transformer=" + transformer + "]";
+                + ", eventTransformer=" + eventTransformer + "]";
     }
     
 }

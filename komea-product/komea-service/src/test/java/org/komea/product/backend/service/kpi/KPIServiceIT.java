@@ -24,7 +24,7 @@ import org.komea.product.cep.api.IFilterDefinition;
 import org.komea.product.cep.filter.NoEventFilter;
 import org.komea.product.cep.formula.CountFormula;
 import org.komea.product.cep.formula.tuple.TupleCountFormula;
-import org.komea.product.cep.formula.tuple.TuplerFormula;
+import org.komea.product.cep.formula.tuple.GroupByFormula;
 import org.komea.product.cep.query.CEPQueryBuilder;
 import org.komea.product.cep.query.FilterDefinition;
 import org.komea.product.database.alert.IEvent;
@@ -81,7 +81,7 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
         public ICEPFormula getFormula() {
         
         
-            return new TuplerFormula(new ProjectEntityKeyTupleCreator(), new TupleCountFormula());
+            return new GroupByFormula(new ProjectEntityKeyTupleCreator(), new TupleCountFormula());
         }
         
         

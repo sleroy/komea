@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.komea.product.cep.api.formula.tuple.ITuple;
 
+import com.google.common.collect.Lists;
+
 
 
 /**
@@ -21,7 +23,7 @@ public class TupleFactory
 {
     
     
-    public static ITuple newTuple(final List<Object> _values) {
+    public static ITuple newTuple(final List<?> _values) {
     
     
         return new ArrayListTuple(_values);
@@ -29,9 +31,9 @@ public class TupleFactory
     }
     
     
-    public static ITuple newTuple(final Object _value, final Object... _values) {
+    public static <T> ITuple newTuple(final T _value, final T... _values) {
     
     
-        return new ArrayListTuple(_value, _values);
+        return new ArrayListTuple(Lists.asList(_value, _values));
     }
 }

@@ -40,13 +40,13 @@ public class CEPStatement<T extends Serializable> implements ICEPStatement<T>
     /**
      * add an CEP Event storage.
      * 
-     * @param _cepEventStorage
+     * @param _mock
      *            the CEP event sto
      */
-    public void add(final CEPEventStorage<T> _cepEventStorage) {
+    public void add(final ICEPEventStorage _mock) {
     
     
-        storages.add(_cepEventStorage);
+        storages.add(_mock);
         
     }
     

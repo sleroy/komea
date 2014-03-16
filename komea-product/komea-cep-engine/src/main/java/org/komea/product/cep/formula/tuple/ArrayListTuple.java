@@ -18,8 +18,6 @@ import org.apache.commons.lang.Validate;
 import org.komea.product.cep.api.formula.tuple.ITuple;
 import org.springframework.beans.BeanUtils;
 
-import com.google.common.collect.Lists;
-
 
 
 /**
@@ -36,30 +34,29 @@ public class ArrayListTuple implements ITuple
     
     
     /**
+     * Builds a tuple;
+     */
+    public ArrayListTuple() {
+    
+    
+        super();
+        propertyMap = Collections.emptyList();
+    }
+    
+    
+    /**
      * Properties map
      * 
      * @param _values
      *            the properties map.
      */
-    public ArrayListTuple(final List<Object> _values) {
+    public ArrayListTuple(final List<?> _values) {
     
     
         super();
         
         Validate.notNull(_values);
         propertyMap = Collections.unmodifiableList(_values);
-        
-    }
-    
-    
-    /**
-     * Defines a tuple from an array.
-     */
-    public ArrayListTuple(final Object value, final Object... _values) {
-    
-    
-        Validate.notNull(_values);
-        propertyMap = Lists.asList(value, _values);
         
     }
     
@@ -134,6 +131,7 @@ public class ArrayListTuple implements ITuple
     public <T> T getFirst() {
     
     
+        if (propertyMap.isEmpty()) { return null; }
         return (T) propertyMap.get(0);
     }
     
@@ -155,6 +153,18 @@ public class ArrayListTuple implements ITuple
     
     /*
      * (non-Javadoc)
+     * @see org.komea.product.cep.api.formula.tuple.ITuple#isSingleton(java.lang.Object)
+     */
+    @Override
+    public boolean hasSingletonValue(final Object _valueInTuple) {
+    
+    
+        return isSingleton() && this.getFirst().equals(_valueInTuple);
+    }
+    
+    
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.cep.api.formula.tuple.ITuple#isSingleton()
      */
     @Override
@@ -162,18 +172,6 @@ public class ArrayListTuple implements ITuple
     
     
         return propertyMap.size() == 1;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.formula.tuple.ITuple#isSingleton(java.lang.Object)
-     */
-    @Override
-    public boolean isSingleton(final Object _valueInTuple) {
-    
-    
-        return isSingleton() && this.getFirst().equals(_valueInTuple);
     }
     
     

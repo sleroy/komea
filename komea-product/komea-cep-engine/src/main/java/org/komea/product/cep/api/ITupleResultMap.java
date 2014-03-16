@@ -51,15 +51,6 @@ public interface ITupleResultMap<TRes>
     
     
     /**
-     * Converts the result into a tuple map.
-     * Costs(O(1))
-     * 
-     * @return the results into a tuple map.
-     */
-    public <T> Map<ITuple, TRes> asTupleMap();
-    
-    
-    /**
      * Converts the result into a list of tuples where the result is added a the value property.
      * Costs(n) : number of items in the map + n inserts in an hashmap (amortized)
      * 
@@ -76,6 +67,15 @@ public interface ITupleResultMap<TRes>
      * @return the value.
      */
     public TRes get(Object _key);
+    
+    
+    /**
+     * Converts the result into a tuple map.
+     * Costs(O(1))
+     * 
+     * @return the results into a tuple map.
+     */
+    public <T> Map<ITuple, TRes> getTable();
     
     
     /**

@@ -32,6 +32,6 @@ public interface ITuplerFormula<Result>
      *            the tuple map.
      * @return the results
      */
-    ITupleResultMap<Result> processMap(ITupleMap _tupleMap, Map<String, Object> _ownParameters);
+    ITupleResultMap<Result> processMap(IEventTable _tupleMap, Map<String, Object> _ownParameters);
     
 }

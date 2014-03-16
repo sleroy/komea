@@ -9,7 +9,7 @@ package org.komea.product.cep.filter;
 import java.io.Serializable;
 
 import org.komea.product.cep.api.IEventTransformer;
-import org.komea.product.cep.api.TransformedEvent;
+import org.komea.product.cep.api.ITransformedEvent;
 
 
 
@@ -25,7 +25,7 @@ public class SequenceTransformer implements IEventTransformer
      * @see org.komea.product.cep.api.IEventTransformer#transform(java.io.Serializable)
      */
     @Override
-    public TransformedEvent transform(final Serializable _event) {
+    public ITransformedEvent transform(final Serializable _event) {
     
     
         // TODO Auto-generated method stub

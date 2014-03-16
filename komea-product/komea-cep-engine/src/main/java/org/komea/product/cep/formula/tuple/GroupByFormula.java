@@ -14,10 +14,10 @@ import org.komea.product.cep.api.ICEPFormula;
 import org.komea.product.cep.api.ICEPResult;
 import org.komea.product.cep.api.ICEPStatement;
 import org.komea.product.cep.api.ITupleResultMap;
-import org.komea.product.cep.api.formula.tuple.ITuplerFormula;
-import org.komea.product.cep.api.formula.tuple.IEventTupler;
+import org.komea.product.cep.api.formula.tuple.IEventTable;
+import org.komea.product.cep.api.formula.tuple.IEventTableGenerator;
 import org.komea.product.cep.api.formula.tuple.ITupleCreator;
-import org.komea.product.cep.api.formula.tuple.ITupleMap;
+import org.komea.product.cep.api.formula.tuple.ITuplerFormula;
 import org.komea.product.cep.query.CEPResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,24 +30,24 @@ import org.slf4j.LoggerFactory;
  * @author sleroy
  */
 @SuppressWarnings("rawtypes")
-public class TuplerFormula implements ICEPFormula<Serializable>
+public class GroupByFormula implements ICEPFormula<Serializable>
 {
     
     
-    private static final Logger        LOGGER = LoggerFactory.getLogger("tupler-formula");
+    private static final Logger     LOGGER = LoggerFactory.getLogger("tupler-formula");
     
     
     private final ITuplerFormula<?> formulaTupler;
     
     
-    private final ITupleCreator        tupleCreator;
+    private final ITupleCreator     tupleCreator;
     
     
     
     /**
      * @param _parameters
      */
-    public TuplerFormula(final ITupleCreator _tupleCreator, final ITuplerFormula _formulaTupler) {
+    public GroupByFormula(final ITupleCreator _tupleCreator, final ITuplerFormula _formulaTupler) {
     
     
         super();
@@ -67,10 +67,10 @@ public class TuplerFormula implements ICEPFormula<Serializable>
     
     
         LOGGER.debug("preparing events to grouping...");
-        final IEventTupler eventTupler = new EventStreamToTupleMapProcessor(tupleCreator);
+        final IEventTableGenerator eventTupler = new EventTableGenerator(tupleCreator);
         final List<Serializable> defaultStorage = _statement.getDefaultStorage();
         LOGGER.debug("grouping {} events", defaultStorage.size());
-        final ITupleMap tupleMap = eventTupler.generateTupleMap(defaultStorage);
+        final IEventTable tupleMap = eventTupler.generateTable(defaultStorage);
         LOGGER.debug("tuple map produced {}", tupleMap);
         final ITupleResultMap<?> resultMap = formulaTupler.processMap(tupleMap, _parameters);
         LOGGER.debug("resultMap produced {}", resultMap);
@@ -86,7 +86,7 @@ public class TuplerFormula implements ICEPFormula<Serializable>
     public String toString() {
     
     
-        return "TuplerFormula [formulaTupler="
+        return "GroupByFormula [formulaTupler="
                 + formulaTupler + ", tupleCreator=" + tupleCreator + "]";
     }
     

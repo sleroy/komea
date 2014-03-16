@@ -17,7 +17,7 @@ import java.util.Map.Entry;
  * 
  * @author sleroy
  */
-public interface ITupleMap
+public interface IEventTable
 {
     
     

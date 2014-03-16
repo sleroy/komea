@@ -11,7 +11,7 @@ package org.komea.product.cep.api;
  * @param S
  *            the type of the transformed event.
  */
-public interface TransformedEvent<S>
+public interface ITransformedEvent<S>
 {
     
     

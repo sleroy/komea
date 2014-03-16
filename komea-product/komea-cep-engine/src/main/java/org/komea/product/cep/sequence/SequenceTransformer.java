@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.komea.product.cep.api.IEventFilter;
 import org.komea.product.cep.api.IEventTransformer;
-import org.komea.product.cep.api.TransformedEvent;
+import org.komea.product.cep.api.ITransformedEvent;
 import org.komea.product.cep.api.sequence.IEventSequence;
 
 import com.google.common.collect.Lists;
@@ -71,7 +71,7 @@ public class SequenceTransformer implements IEventTransformer
      * @see org.komea.product.cep.api.IEventTransformer#transform(java.io.Serializable)
      */
     @Override
-    public TransformedEvent<IEventSequence<Serializable>> transform(final Serializable _event) {
+    public ITransformedEvent<IEventSequence<Serializable>> transform(final Serializable _event) {
     
     
         if (sequenceStepEvaluator.evaluate(_event)) { return sequenceStepEvaluator

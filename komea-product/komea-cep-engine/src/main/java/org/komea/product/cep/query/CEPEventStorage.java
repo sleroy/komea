@@ -12,7 +12,7 @@ import org.komea.product.cep.api.ICEPEventStorage;
 import org.komea.product.cep.api.IEventFilter;
 import org.komea.product.cep.api.IEventTransformer;
 import org.komea.product.cep.api.IFilterDefinition;
-import org.komea.product.cep.api.TransformedEvent;
+import org.komea.product.cep.api.ITransformedEvent;
 import org.komea.product.cep.api.cache.ICacheConfiguration;
 import org.komea.product.cep.api.cache.ICacheStorage;
 import org.komea.product.cep.cache.GoogleCacheStorage;
@@ -56,7 +56,7 @@ public class CEPEventStorage<T extends Serializable> implements ICEPEventStorage
         LOGGER = LoggerFactory.getLogger("cepevent-storage-" + _filterDefinition.getFilterName());
         filterName = _filterDefinition.getFilterName();
         cacheConfiguration = _filterDefinition.getCacheConfiguration();
-        eventFilter = _filterDefinition.getEventFilter();
+        eventFilter = _filterDefinition.getFilter();
         storage = new GoogleCacheStorage<T>(cacheConfiguration);
         eventTransfomer = _filterDefinition.getEventTransformer();
         
@@ -126,7 +126,7 @@ public class CEPEventStorage<T extends Serializable> implements ICEPEventStorage
             Serializable eventToStore = _event;
             if (eventTransfomer != null) {
                 LOGGER.debug("[REQUIRES-TRANSFORMATION]] ---  {}", _event);
-                final TransformedEvent<T> transform = eventTransfomer.transform(_event);
+                final ITransformedEvent<T> transform = eventTransfomer.transform(_event);
                 if (transform.isValid()) {
                     LOGGER.debug("[TRANSFORMATION-PERFORMED] ] --- {}", transform);
                     eventToStore = transform.getData();
