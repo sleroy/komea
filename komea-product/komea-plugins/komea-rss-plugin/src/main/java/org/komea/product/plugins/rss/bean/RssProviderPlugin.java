@@ -3,7 +3,6 @@ package org.komea.product.plugins.rss.bean;
 
 
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.komea.product.backend.api.IWicketAdminService;
@@ -60,24 +59,24 @@ public class RssProviderPlugin
 {
     
     
-    private static final Logger   LOGGER                  = LoggerFactory.getLogger("rss-provider");
+    private static final Logger   LOGGER                 = LoggerFactory.getLogger("rss-provider");
     
     /**
      *
      */
-    protected static final String RSS_CRON_JOB            = "rss_cron_job";
+    protected static final String RSS_CRON_JOB           = "rss_cron_job";
+    
+    protected static final String RSS_SETTING_CRON_NAME  = "rss_refresh_period";
     
     /**
      *
      */
-    protected static final String RSS_SETTING_CRON_VALUE          = "0 0/5 * * * ?";
-    
-    protected static final String RSS_SETTING_CRON_NAME = "rss_refresh_period";
+    protected static final String RSS_SETTING_CRON_VALUE = "0 0/5 * * * ?";
     
     /**
      * Rss Provider plugin name;
      */
-    static final String           RSS_PROVIDER_PLUGIN     = "Rss Provider plugin";
+    static final String           RSS_PROVIDER_PLUGIN    = "Rss Provider plugin";
     
     @Autowired
     private ICronRegistryService  cronRegistryService;
@@ -186,24 +185,15 @@ public class RssProviderPlugin
     public void initializePluginWithProperties() {
     
     
-        cronRegistryService.updateCronFrequency(RSS_SETTING_CRON_NAME,
-                registry.getProxy(RSS_SETTING_CRON_NAME).getStringValue());
-        
-    }
-    
-    
-    @PostConstruct
-    public void initializeProvider() {
-    
-    
         LOGGER.info("Initialisation du plugin RSS");
         
         final JobDataMap properties = prepareJobMapForCron();
         
-        
-        cronRegistryService.registerCronTask(RSS_CRON_JOB, RSS_SETTING_CRON_VALUE, RssCronJob.class,
-                properties);
-        
+        cronRegistryService.removeCronTask(RSS_CRON_JOB);
+        cronRegistryService.registerCronTask(RSS_CRON_JOB, RSS_SETTING_CRON_VALUE,
+                RssCronJob.class, properties);
+        cronRegistryService.updateCronFrequency(RSS_CRON_JOB,
+                registry.getProxy(RSS_SETTING_CRON_NAME).getStringValue());
     }
     
     
