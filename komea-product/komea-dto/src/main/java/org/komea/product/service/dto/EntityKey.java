@@ -18,7 +18,7 @@ import org.komea.product.database.enums.EntityType;
  * 
  * @author sleroy
  */
-public class EntityKey implements Serializable
+public class EntityKey implements Serializable, Comparable<EntityKey>
 {
     
     
@@ -70,6 +70,21 @@ public class EntityKey implements Serializable
         super();
         entityType = _entityType;
         id = _id;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    @Override
+    public int compareTo(final EntityKey _o) {
+    
+    
+        if (this == _o) { return 0; }
+        final int res = Integer.valueOf(id).compareTo(_o.getId());
+        if (res != 0) { return res; }
+        return entityType.compareTo(_o.getEntityType());
     }
     
     

@@ -53,6 +53,6 @@ public class SuccessfulBuildRateFunction implements Treatment<IEvent>
     
     
         if (buildStarted == 0) { return 0.0f; }
-        return buildStarted * 100.0f / buildComplete;
+        return Math.min(100.0f, buildComplete * 100.0f / buildStarted);
     }
 }

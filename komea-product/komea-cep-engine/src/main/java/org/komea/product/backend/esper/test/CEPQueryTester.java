@@ -6,7 +6,6 @@ package org.komea.product.backend.esper.test;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +26,6 @@ import org.komea.product.cep.api.formula.tuple.ITuple;
 import org.komea.product.cep.query.CEPQuery;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
-import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
@@ -36,7 +34,6 @@ import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.database.model.Provider;
-import org.komea.product.service.dto.EntityKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,27 +82,10 @@ public class CEPQueryTester
         
         
             final List<ITuple> listMapResult = _epStatement.getResult().asMap().asTupleRows();
-            LOGGER.debug(listMapResult.toString());
+            Collections.sort(listMapResult);
+            LOGGER.info("Sorted table : {}", listMapResult.toString());
             checkIfisEquals(array.length, listMapResult.size(), "Expected same number of rows");
-            Collections.sort(listMapResult, new Comparator<ITuple>()
-            {
-                
-                
-                @Override
-                public int compare(final ITuple _o1, final ITuple _o2) {
-                
-                
-                    if (_o1.isSingleton() && _o1.getFirst() instanceof EntityKey) {
-                        return ((EntityKey) _o1.getFirst()).getId()
-                                - ((EntityKey) _o2.getFirst()).getId();
-                    } else if (_o1.isSingleton() && _o1.getFirst() instanceof IHasKey) {
-                        return ((IHasKey) _o1.getFirst()).getId()
-                                - ((IHasKey) _o2.getFirst()).getId();
-                    } else {
-                        return _o1.hashCode() - _o2.hashCode();
-                    }
-                }
-            });
+            
             for (int i = 0; i < listMapResult.size(); ++i) {
                 
                 LOGGER.debug("Evaluating line {} of esper request", i);

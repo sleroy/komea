@@ -106,6 +106,31 @@ public class ArrayListTuple implements ITuple
     
     /*
      * (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    @Override
+    public int compareTo(final ITuple _o) {
+    
+    
+        if (this == _o) { return 0; }
+        if (_o == null) { return 1; }
+        for (int i = 0; i < propertyMap.size(); ++i) {
+            int res = 0;
+            final Object object = propertyMap.get(i);
+            if (object instanceof Comparable) {
+                res = ((Comparable) object).compareTo(_o.values().get(i));
+            } else {
+                res = object.hashCode() - _o.values().hashCode();
+            }
+            if (res != 0) { return res; }
+        }
+        
+        return propertyMap.isEmpty() ? hashCode() - _o.hashCode() : 0;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -195,7 +220,7 @@ public class ArrayListTuple implements ITuple
     public String toString() {
     
     
-        return "ArrayListTuple [propertyMap=" + propertyMap + "]";
+        return "ArrayListTuple <propertyMap=" + propertyMap + ">";
     }
     
     

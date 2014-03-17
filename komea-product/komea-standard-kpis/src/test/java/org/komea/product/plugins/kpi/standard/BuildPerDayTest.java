@@ -19,14 +19,15 @@ public class BuildPerDayTest
     
         final BuildPerDay buildPerDay = new BuildPerDay();
         final CEPQueryTester newTest = CEPQueryTester.newTest();
+        final JenkinsEventFactory jenkinsEventFactory = new JenkinsEventFactory();
         newTest.withQuery(buildPerDay).sendEvent(
-                new JenkinsEventFactory().sendBuildStarted("SCERTIFY", 1, "TRUC"));
+                jenkinsEventFactory.sendBuildStarted("SCERTIFY", 1, "TRUC"));
         newTest.withQuery(buildPerDay).sendEvent(
-                new JenkinsEventFactory().sendBuildStarted("KOMEA", 1, "TRUC"));
+                jenkinsEventFactory.sendBuildStarted("KOMEA", 1, "TRUC"));
         newTest.withQuery(buildPerDay).sendEvent(
-                new JenkinsEventFactory().sendBuildStarted("ALBRAND", 1, "TRUC"));
+                jenkinsEventFactory.sendBuildStarted("ALBRAND", 1, "TRUC"));
         newTest.withQuery(buildPerDay).sendEvent(
-                new JenkinsEventFactory().sendBuildStarted("KOMEA", 1, "TRUC"));
+                jenkinsEventFactory.sendBuildStarted("KOMEA", 1, "TRUC"));
         newTest.dump().hasResults(new Object[][] {
                 {
                         newTest.getMockProject().get("SCERTIFY").getEntityKey(), 1 }, {

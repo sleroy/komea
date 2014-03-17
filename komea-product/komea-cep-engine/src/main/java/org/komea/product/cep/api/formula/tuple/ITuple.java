@@ -16,7 +16,7 @@ import java.util.Map;
  * 
  * @author sleroy
  */
-public interface ITuple
+public interface ITuple extends Comparable<ITuple>
 {
     
     
@@ -61,18 +61,18 @@ public interface ITuple
     
     
     /**
-     * Returns true if the tuple contains only one property.
-     */
-    public boolean isSingleton();
-    
-    
-    /**
      * Returns true if the value in parameter is the singleton of this tuple.
      * 
      * @param _valueInTuple
      *            the value.
      */
     public boolean hasSingletonValue(Object _valueInTuple);
+    
+    
+    /**
+     * Returns true if the tuple contains only one property.
+     */
+    public boolean isSingleton();
     
     
     /**

@@ -9,15 +9,15 @@ import org.komea.product.backend.esper.test.CEPQueryTester;
 
 
 
-public class SuccessfulBuildPerDayTest
+public class SuccessfulBuildPerMonthTest
 {
     
     
     @Test
-    public final void testSuccessfulBuildPerDay() throws Exception {
+    public final void testSuccessfulBuildPerMonth() throws Exception {
     
     
-        final SuccessfulBuildPerDay buildPerDay = new SuccessfulBuildPerDay();
+        final SuccessfulBuildPerMonth buildPerDay = new SuccessfulBuildPerMonth();
         
         final CEPQueryTester newTest = CEPQueryTester.newTest();
         
@@ -35,4 +35,5 @@ public class SuccessfulBuildPerDayTest
         
         ).runTest();
     }
+    
 }
