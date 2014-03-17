@@ -11,11 +11,11 @@ import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.komea.event.factory.JenkinsEventFactory;
 import org.komea.product.backend.esper.test.CEPQueryTester;
-import org.komea.product.backend.service.esper.stats.EventStatisticsService;
 import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.slf4j.LoggerFactory;
 
+import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
 
@@ -24,6 +24,7 @@ import com.carrotsearch.junitbenchmarks.BenchmarkRule;
  * @author sleroy
  * @version $Revision: 1.0 $
  */
+@BenchmarkOptions(warmupRounds = 5, benchmarkRounds = 10)
 public class EventStatisticsServicePerformanceTest
 {
     
