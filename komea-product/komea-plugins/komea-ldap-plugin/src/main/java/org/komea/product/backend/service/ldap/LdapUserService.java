@@ -260,7 +260,7 @@ public class LdapUserService implements ILdapUserService
             registryService.removeCronTask(LDAP_CRON_REFRESH);
             registryService.registerCronTask(LDAP_CRON_REFRESH, CRON_LDAP,
                     LdapCronRefreshJob.class, properties);
-            registryService.forceNow(LDAP_CRON_REFRESH);
+            // registryService.forceNow(LDAP_CRON_REFRESH);
         } catch (final Exception e) {
             throw new IllegalArgumentException(e);
         }

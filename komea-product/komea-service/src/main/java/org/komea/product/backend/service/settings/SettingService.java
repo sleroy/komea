@@ -349,7 +349,9 @@ public class SettingService implements ISettingService, BeanPostProcessor
     
         for (final Method method : _bean.getClass().getMethods()) {
             if (AnnotationUtils.findAnnotation(method, PostSettingRegistration.class) != null) {
-                LOGGER.info("Bean  {} requires additional step of initialization once settings are registered");
+                LOGGER.info(
+                        "Bean  {} requires additional step of initialization once settings are registered",
+                        _beanName);
                 try {
                     method.invoke(_bean);
                 } catch (final Exception e) {
