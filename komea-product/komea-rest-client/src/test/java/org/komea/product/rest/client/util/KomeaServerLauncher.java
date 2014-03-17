@@ -71,7 +71,12 @@ public class KomeaServerLauncher implements Runnable
         service = Executors.newSingleThreadExecutor();
         service.execute(this);
         
-        Thread.sleep(100000);
+        while (!server.isRunning() && !server.isFailed()) {
+            Thread.sleep(1000);
+            System.out.println("Waiting initialization of Jetty");
+        }
+        Thread.sleep(40000);
+        
         
     }
     

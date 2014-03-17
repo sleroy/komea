@@ -24,24 +24,6 @@ public class ServerMethodRule implements TestRule
     
     
     
-    public static void setAfterClass() throws Exception {
-    
-    
-        komeaServerLauncher.stopServer();
-        
-    }
-    
-    
-    public static void setBeforeClass() throws Exception {
-    
-    
-        komeaServerLauncher = new KomeaServerLauncher();
-        komeaServerLauncher.startServer();
-        
-        
-    }
-    
-    
     /*
      * (non-Javadoc)
      * @see org.junit.rules.TestRule#apply(org.junit.runners.model.Statement, org.junit.runner.Description)
@@ -92,7 +74,7 @@ public class ServerMethodRule implements TestRule
             
             
                 try {
-                    setAfterClass();
+                    komeaServerLauncher.stopServer();
                 } catch (final Exception e) {
                     LOGGER.error(e.getMessage(), e);
                     Assert.fail(e.getMessage());
@@ -104,7 +86,9 @@ public class ServerMethodRule implements TestRule
             
             
                 try {
-                    setBeforeClass();
+                    
+                    komeaServerLauncher = new KomeaServerLauncher();
+                    komeaServerLauncher.startServer();
                 } catch (final Exception e) {
                     LOGGER.error(e.getMessage(), e);
                     Assert.fail(e.getMessage());
