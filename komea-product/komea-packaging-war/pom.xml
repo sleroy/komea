@@ -76,7 +76,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.komea.plugins</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>komea-standard-kpis</artifactId>
 			<version>${project.version}</version>
 		</dependency>
