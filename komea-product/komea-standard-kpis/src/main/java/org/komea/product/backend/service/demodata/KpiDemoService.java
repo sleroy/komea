@@ -10,9 +10,16 @@ import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.kpi.IKPIService;
+import org.komea.product.backend.service.kpi.KpiBuilder;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.model.Kpi;
+import org.komea.product.plugins.kpi.standard.BuildPerDay;
+import org.komea.product.plugins.kpi.standard.BuildPerMonth;
+import org.komea.product.plugins.kpi.standard.SonarMetricKpi;
+import org.komea.product.plugins.kpi.standard.SuccessfulBuildPerDay;
+import org.komea.product.plugins.kpi.standard.SuccessfulBuildPerMonth;
+import org.komea.product.plugins.kpi.standard.SuccessfulBuildRatePerWeek;
 import org.komea.product.service.dto.KpiKey;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -92,7 +99,8 @@ public class KpiDemoService
         saveOrUpdate(buildSonarMetricKpi("Blocker violation progression", "new_blocker_violations"));
         saveOrUpdate(buildSonarMetricKpi("Violation progression", "new_violations"));
         saveOrUpdate(buildSonarMetricKpi("Business value", "business_value"));
-        saveOrUpdate(successRateJenkins());
+        saveOrUpdate(successRateJenkinsPerWeekKpi());
+        saveOrUpdate(successRateJenkinsPerMonthKpi());
     }
     
     
@@ -112,12 +120,8 @@ public class KpiDemoService
     public Kpi numberBuildPerMonth() {
     
     
-        return KpiBuilder
-                .createAscending()
-                .nameAndKeyDescription("Number of build per month")
-                .entityType(EntityType.PROJECT)
-                .expirationYear()
-                .query("SELECT project as entity, COUNT(*) as value FROM Event.win:time(1 month) WHERE eventType.eventKey='build_started' GROUP BY project")
+        return KpiBuilder.createAscending().nameAndKeyDescription("Number of build per month")
+                .entityType(EntityType.PROJECT).expirationYear().query(BuildPerMonth.class)
                 .cronWeek().build();
         
     }
@@ -126,42 +130,47 @@ public class KpiDemoService
     public Kpi numberSuccessBuildPerDay() {
     
     
-        return KpiBuilder
-                .createAscending()
+        return KpiBuilder.createAscending()
                 .nameAndKeyDescription("Number of successful build per day")
-                .entityType(EntityType.PROJECT)
-                .expirationMonth()
-                .query("SELECT project as entity, COUNT(*) as value FROM Event.win:time(1 day) WHERE eventType.eventKey='build_complete' GROUP BY project")
-                .cronSixHours().build();
+                .entityType(EntityType.PROJECT).expirationMonth()
+                .query(SuccessfulBuildPerDay.class).cronSixHours().build();
     }
     
     
     public Kpi numberSuccessBuildPerWeek() {
     
     
-        return KpiBuilder
-                .createAscending()
+        return KpiBuilder.createAscending()
                 .nameAndKeyDescription("Number of successful build per week")
-                .entityType(EntityType.PROJECT)
-                .expirationYear()
-                .query("SELECT project as entity, COUNT(*) as value FROM Event.win:time(1 week) WHERE eventType.eventKey='build_complete' GROUP BY project")
-                .cronThreeDays().build();
+                .entityType(EntityType.PROJECT).expirationYear()
+                .query(SuccessfulBuildPerMonth.class).cronThreeDays().build();
     }
     
     
     /**
      * @return
      */
-    public Kpi successRateJenkins() {
+    public Kpi successRateJenkinsPerMonthKpi() {
     
     
-        return KpiBuilder
-                .createAscending()
+        return KpiBuilder.createAscending()
                 .nameAndKeyDescription("Success build rate in Jenkins per week")
-                .entityType(EntityType.PROJECT)
-                .expirationYear()
-                .query("SELECT project as entity,  100*(SELECT COUNT(*) as value FROM Event.win:time(1 week) as B WHERE B.project = A.project AND eventType.eventKey='build_complete' GROUP BY project )/ COUNT(*) as value FROM Event.win:time(1 week) as A WHERE eventType.eventKey='build_started' GROUP BY project")
-                .cronDays(1).build();
+                .entityType(EntityType.PROJECT).expirationYear()
+                .query(SuccessfulBuildPerMonth.class).cronDays(1).build();
+        
+    }
+    
+    
+    /**
+     * @return
+     */
+    public Kpi successRateJenkinsPerWeekKpi() {
+    
+    
+        return KpiBuilder.createAscending()
+                .nameAndKeyDescription("Success build rate in Jenkins per week")
+                .entityType(EntityType.PROJECT).expirationYear()
+                .query(SuccessfulBuildRatePerWeek.class).cronDays(1).build();
         
     }
     
@@ -169,16 +178,10 @@ public class KpiDemoService
     private Kpi buildSonarMetricKpi(final String _title, final String _metricName) {
     
     
-        return KpiBuilder
-                .createAscending()
-                .nameAndKeyDescription(_title)
-                .entityType(EntityType.PROJECT)
-                .expirationYear()
-                .query("SELECT project as entity, last(value) as value FROM Event WHERE eventType.eventKey='metric_value' "
-                        + "AND properties('metricName') = '"
-                        + _metricName
-                        + "' "
-                        + "GROUP BY project").cronDays(1).build();
+        return KpiBuilder.createAscending().nameAndKeyDescription(_title)
+                .entityType(EntityType.PROJECT).expirationYear()
+                .query("new " + SonarMetricKpi.class + "('" + _metricName + "')").cronDays(1)
+                .build();
     }
     
     

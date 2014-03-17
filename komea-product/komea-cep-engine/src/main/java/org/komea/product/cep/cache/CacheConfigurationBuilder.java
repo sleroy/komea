@@ -9,6 +9,7 @@ package org.komea.product.cep.cache;
 import java.util.concurrent.TimeUnit;
 
 import org.komea.product.cep.api.cache.ICacheConfiguration;
+import org.komea.product.cep.api.cache.ICacheIndexer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -32,6 +33,10 @@ public class CacheConfigurationBuilder
         private static final long serialVersionUID = 4722910638471754852L;
         
         
+        @SuppressWarnings("rawtypes")
+        private ICacheIndexer     customIndexer    = null;
+        
+        
         private boolean           enableStats      = false;
         
         
@@ -49,6 +54,18 @@ public class CacheConfigurationBuilder
         
         
             super();
+        }
+        
+        
+        /*
+         * (non-Javadoc)
+         * @see org.komea.product.cep.api.cache.ICacheConfiguration#getCustomIndexer()
+         */
+        @Override
+        public ICacheIndexer getCustomIndexer() {
+        
+        
+            return customIndexer;
         }
         
         
@@ -85,6 +102,18 @@ public class CacheConfigurationBuilder
         
         
             return timeUnit;
+        }
+        
+        
+        /*
+         * (non-Javadoc)
+         * @see org.komea.product.cep.api.cache.ICacheConfiguration#hasCustomIndexer()
+         */
+        @Override
+        public boolean hasCustomIndexer() {
+        
+        
+            return customIndexer != null;
         }
         
         
@@ -130,6 +159,13 @@ public class CacheConfigurationBuilder
         
         
             return enableStats;
+        }
+        
+        
+        public void setCustomIndexer(final ICacheIndexer _customIndexer) {
+        
+        
+            customIndexer = _customIndexer;
         }
         
         
@@ -245,6 +281,21 @@ public class CacheConfigurationBuilder
     
     
         cacheConfiguration.maximumSize = _maximumSize;
+        return this;
+    }
+    
+    
+    /**
+     * Defines a custom cache indexer
+     * 
+     * @param _indexer
+     *            the indexer
+     * @return the configuration builder
+     */
+    public CacheConfigurationBuilder withCustomIndexer(final ICacheIndexer _indexer) {
+    
+    
+        cacheConfiguration.setCustomIndexer(_indexer);
         return this;
     }
     

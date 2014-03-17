@@ -6,6 +6,9 @@ package org.komea.product.plugins.kpi.filters;
 
 
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.komea.product.cep.api.IEventFilter;
 import org.komea.product.database.alert.IEvent;
 
@@ -20,14 +23,17 @@ public class EventTypeFilter implements IEventFilter<IEvent>
 {
     
     
-    private final String eventKey;
+    private final Set<String> eventKeys;
     
     
     
-    public EventTypeFilter(final String _eventKey) {
+    public EventTypeFilter(final String... _eventKeys) {
     
     
-        eventKey = _eventKey;
+        eventKeys = new HashSet<String>();
+        for (final String it : _eventKeys) {
+            eventKeys.add(it);
+        }
         
     }
     
@@ -40,7 +46,7 @@ public class EventTypeFilter implements IEventFilter<IEvent>
     public boolean isFiltered(final IEvent _event) {
     
     
-        return eventKey.equals(_event.getEventType().getEventKey());
+        return eventKeys.contains(_event.getEventType().getEventKey());
     }
     
 }

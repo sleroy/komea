@@ -19,6 +19,14 @@ public interface ICacheConfiguration extends Serializable
     
     
     /**
+     * Returns the custom indexer or null.
+     * 
+     * @return the customer indexer
+     */
+    public ICacheIndexer getCustomIndexer();
+    
+    
+    /**
      * Returns the maximum size allowed in the cache.
      * 
      * @return the maximumSize
@@ -36,6 +44,12 @@ public interface ICacheConfiguration extends Serializable
      * Retruns the time unit used by expiration time policy
      */
     public TimeUnit getTimeUnit();
+    
+    
+    /**
+     * @return Returns true if this configuration defines a custom indexer.
+     */
+    public boolean hasCustomIndexer();
     
     
     /**

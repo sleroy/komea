@@ -12,6 +12,24 @@ public class CollectionUtil
     
     
     /**
+     * Iterate on a container and apply a treatment/ function.
+     * 
+     * @param _iterableContainer
+     * @param _treatment
+     */
+    public static <T> void iterate(
+            final Iterable<T> _iterableContainer,
+            final Treatment<T> _treatment) {
+    
+    
+        for (final T valueT : _iterableContainer) {
+            _treatment.apply(valueT);
+        }
+        
+    }
+    
+    
+    /**
      * Returns the first element of a list of only one elemnt or null.
      * 
      * @param _elements

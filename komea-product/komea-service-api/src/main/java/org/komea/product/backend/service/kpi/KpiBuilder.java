@@ -263,4 +263,16 @@ public class KpiBuilder
         return this;
     }
     
+    
+    /**
+     * @param _query
+     * @return
+     */
+    public KpiBuilder query(final String _query) {
+    
+    
+        kpi.setEsperRequest(_query);
+        return this;
+    }
+    
 }

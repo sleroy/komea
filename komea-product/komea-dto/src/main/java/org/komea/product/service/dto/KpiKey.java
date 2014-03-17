@@ -187,6 +187,28 @@ public class KpiKey
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(final Object obj) {
+    
+    
+        if (this == obj) { return true; }
+        if (obj == null) { return false; }
+        if (getClass() != obj.getClass()) { return false; }
+        final KpiKey other = (KpiKey) obj;
+        if (entityKey == null) {
+            if (other.entityKey != null) { return false; }
+        } else if (!entityKey.equals(other.entityKey)) { return false; }
+        if (kpiName == null) {
+            if (other.kpiName != null) { return false; }
+        } else if (!kpiName.equals(other.kpiName)) { return false; }
+        return true;
+    }
+    
+    
     public EntityKey getEntityKey() {
     
     
@@ -198,6 +220,22 @@ public class KpiKey
     
     
         return kpiName;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+    
+    
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (entityKey == null ? 0 : entityKey.hashCode());
+        result = prime * result + (kpiName == null ? 0 : kpiName.hashCode());
+        return result;
     }
     
     

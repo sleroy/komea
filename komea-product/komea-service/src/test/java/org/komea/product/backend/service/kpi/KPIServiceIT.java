@@ -11,7 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.esper.test.EsperQueryTester;
+import org.komea.product.backend.esper.test.CEPQueryTester;
 import org.komea.product.backend.exceptions.KpiAlreadyExistingException;
 import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.esper.IEventPushService;
@@ -225,7 +225,7 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
         
         
         final IEvent eventToSend =
-                EsperQueryTester.convertToEventDTO(new JenkinsEventFactory().sendBuildComplete(
+                CEPQueryTester.convertToEventDTO(new JenkinsEventFactory().sendBuildComplete(
                         "SCERTIFY", 12, "TRUC"));
         for (int i = 0; i < 10; ++i) {
             

@@ -119,6 +119,7 @@ public class HistoryKey
     
     private EntityKey     entityKey;
     
+    
     private final Integer kpiID;
     
     
@@ -156,6 +157,28 @@ public class HistoryKey
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(final Object obj) {
+    
+    
+        if (this == obj) { return true; }
+        if (obj == null) { return false; }
+        if (getClass() != obj.getClass()) { return false; }
+        final HistoryKey other = (HistoryKey) obj;
+        if (entityKey == null) {
+            if (other.entityKey != null) { return false; }
+        } else if (!entityKey.equals(other.entityKey)) { return false; }
+        if (kpiID == null) {
+            if (other.kpiID != null) { return false; }
+        } else if (!kpiID.equals(other.kpiID)) { return false; }
+        return true;
+    }
+    
+    
     public EntityKey getEntityKey() {
     
     
@@ -185,6 +208,22 @@ public class HistoryKey
     
     
         return entityKey != null && entityKey.isEntityReferenceKey();
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+    
+    
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (entityKey == null ? 0 : entityKey.hashCode());
+        result = prime * result + (kpiID == null ? 0 : kpiID.hashCode());
+        return result;
     }
     
     

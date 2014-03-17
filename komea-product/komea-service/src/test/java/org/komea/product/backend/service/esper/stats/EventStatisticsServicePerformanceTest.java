@@ -10,7 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.komea.event.factory.JenkinsEventFactory;
-import org.komea.product.backend.esper.test.EsperQueryTester;
+import org.komea.product.backend.esper.test.CEPQueryTester;
 import org.komea.product.backend.service.esper.stats.EventStatisticsService;
 import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.database.dto.EventSimpleDto;
@@ -51,7 +51,7 @@ public class EventStatisticsServicePerformanceTest
         
         final EventSimpleDto sendBuildComplete =
                 new JenkinsEventFactory().sendBuildComplete("bla", 12, "truc");
-        EsperQueryTester.newTest().withQuery(buildProviderEventFrequencyQuery)
+        CEPQueryTester.newTest().withQuery(buildProviderEventFrequencyQuery)
                 .sendEvent(sendBuildComplete, 40000).runTest();
     }
     
@@ -62,31 +62,31 @@ public class EventStatisticsServicePerformanceTest
     
         //
         //
-        // EsperQueryTester
+        // CEPQueryTester
         // .newTest("SEVERITY_QUERY")
         // .withQuery(
         // "SELECT COUNT(*) as res FROM Event(eventType.severity=Severity.MAJOR).win:time(24 hour)")
         // .sendEvent(new JenkinsEventFactory().sendBuildComplete("bla", 12, "truc"))
         // .expectRows(1).hasSingleResult("res", 0L).runTest();
-        // EsperQueryTester
+        // CEPQueryTester
         // .newTest("SEVERITY_QUERY")
         // .withQuery(
         // "SELECT COUNT(*) as res FROM Event(eventType.severity=Severity.INFO).win:time(24 hour)")
         // .sendEvent(new JenkinsEventFactory().sendBuildComplete("bla", 12, "truc"))
         // .expectRows(1).hasSingleResult("res", 1L).runTest();
-        // EsperQueryTester
+        // CEPQueryTester
         // .newTest("SEVERITY_QUERY")
         // .withQuery(
         // "SELECT COUNT(*) as res FROM Event(eventType.severity=Severity.MINOR).win:time(24 hour)")
         // .sendEvent(new JenkinsEventFactory().sendBuildComplete("bla", 12, "truc"))
         // .expectRows(1).hasSingleResult("res", 0L).runTest();
-        // EsperQueryTester
+        // CEPQueryTester
         // .newTest("SEVERITY_QUERY")
         // .withQuery(
         // "SELECT COUNT(*) as res FROM Event(eventType.severity=Severity.CRITICAL).win:time(24 hour)")
         // .sendEvent(new JenkinsEventFactory().sendBuildComplete("bla", 12, "truc"))
         // .expectRows(1).hasSingleResult("res", 0L).runTest();
-        // EsperQueryTester
+        // CEPQueryTester
         // .newTest("SEVERITY_QUERY")
         // .withQuery(
         // "SELECT COUNT(*) as res FROM Event(eventType.severity=Severity.BLOCKER).win:time(24 hour)")

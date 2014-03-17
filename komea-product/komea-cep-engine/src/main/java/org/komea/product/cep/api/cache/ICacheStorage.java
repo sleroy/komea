@@ -52,6 +52,14 @@ public interface ICacheStorage<T>
     
     
     /**
+     * Removes an event out this cache.
+     * 
+     * @param _event
+     */
+    void remove(T _event);
+    
+    
+    /**
      * Returns the number of items.
      * 
      * @return the number of items.

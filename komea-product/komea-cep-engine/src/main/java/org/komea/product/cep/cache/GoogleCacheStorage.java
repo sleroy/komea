@@ -10,7 +10,9 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.commons.lang.Validate;
 import org.komea.product.cep.api.cache.ICacheConfiguration;
+import org.komea.product.cep.api.cache.ICacheIndexer;
 import org.komea.product.cep.api.cache.ICacheStorage;
 
 import com.google.common.cache.Cache;
@@ -27,10 +29,11 @@ public final class GoogleCacheStorage<T extends Serializable> implements ICacheS
 {
     
     
-    private Cache<Long, T> cacheBuilder = null;
+    private Cache<Object, T>    cacheBuilder = null;
     
+    private final long          id           = 0;
     
-    private long           id           = 0;
+    private ICacheIndexer<T, ?> indexer      = new HashCodeCacheIndexer<T>();
     
     
     
@@ -92,7 +95,20 @@ public final class GoogleCacheStorage<T extends Serializable> implements ICacheS
     public synchronized void push(final T _item) {
     
     
-        cacheBuilder.put(id++, _item);
+        cacheBuilder.put(getKeyFromEvent(_item), _item);
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.api.cache.ICacheStorage#remove(java.lang.Object)
+     */
+    @Override
+    public void remove(final T _event) {
+    
+    
+        this.cacheBuilder.invalidate(getKeyFromEvent(_event));
+        
     }
     
     
@@ -140,6 +156,17 @@ public final class GoogleCacheStorage<T extends Serializable> implements ICacheS
         if (_cacheConfiguration.isEnableStats()) {
             builder.recordStats();
         }
+        if (_cacheConfiguration.hasCustomIndexer()) {
+            indexer = _cacheConfiguration.getCustomIndexer();
+        }
         cacheBuilder = builder.build();
+    }
+    
+    
+    private Object getKeyFromEvent(final T _event) {
+    
+    
+        Validate.notNull(_event);
+        return indexer.getKey(_event);
     }
 }

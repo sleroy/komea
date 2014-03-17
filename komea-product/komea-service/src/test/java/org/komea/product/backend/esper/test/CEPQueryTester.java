@@ -38,7 +38,7 @@ import com.google.common.base.Strings;
 
 /**
  */
-public class EsperQueryTester
+public class CEPQueryTester
 {
     
     
@@ -160,7 +160,7 @@ public class EsperQueryTester
     public static IEvent convertToEventDTO(final EventSimpleDto _eventDTO) {
     
     
-        final EsperQueryTester esperQueryTester = new EsperQueryTester();
+        final CEPQueryTester esperQueryTester = new CEPQueryTester();
         return esperQueryTester.convertDto(_eventDTO);
         
         
@@ -186,12 +186,12 @@ public class EsperQueryTester
      * 
      * @param _testName
      *            String
-     * @return EsperQueryTester
+     * @return CEPQueryTester
      */
-    public static EsperQueryTester newTest() {
+    public static CEPQueryTester newTest() {
     
     
-        return new EsperQueryTester();
+        return new CEPQueryTester();
     }
     
     
@@ -240,12 +240,12 @@ public class EsperQueryTester
     
     
     /**
-     * Constructor for EsperQueryTester.
+     * Constructor for CEPQueryTester.
      * 
      * @param _statementName
      *            String
      */
-    private EsperQueryTester() {
+    private CEPQueryTester() {
     
     
         super();
@@ -259,7 +259,7 @@ public class EsperQueryTester
      * 
      * @param _eventDto
      *            the event dto
-     * @return EsperQueryTester
+     * @return CEPQueryTester
      */
     public IEvent convertDto(final EventSimpleDto _eventDto) {
     
@@ -335,9 +335,9 @@ public class EsperQueryTester
     /**
      * Method dump.
      * 
-     * @return EsperQueryTester
+     * @return CEPQueryTester
      */
-    public EsperQueryTester dump() {
+    public CEPQueryTester dump() {
     
     
         dump = true;
@@ -351,9 +351,9 @@ public class EsperQueryTester
      * 
      * @param _numberRows
      *            int
-     * @return EsperQueryTester
+     * @return CEPQueryTester
      */
-    public EsperQueryTester expectRows(final int _numberRows) {
+    public CEPQueryTester expectRows(final int _numberRows) {
     
     
         expectedRows = _numberRows;
@@ -436,9 +436,9 @@ public class EsperQueryTester
      * 
      * @param _testPredicate
      *            IEsperLineTestPredicate
-     * @return EsperQueryTester
+     * @return CEPQueryTester
      */
-    public EsperQueryTester hasLineResult(final IEsperLineTestPredicate _testPredicate) {
+    public CEPQueryTester hasLineResult(final IEsperLineTestPredicate _testPredicate) {
     
     
         esperLinePredicates.add(_testPredicate);
@@ -459,7 +459,7 @@ public class EsperQueryTester
      * @param _objects
      * @return the query tester
      */
-    public EsperQueryTester hasResults(final Object[][] _objects) {
+    public CEPQueryTester hasResults(final Object[][] _objects) {
     
     
         esperPredicates.add(new ArrayPredicate(_objects));
@@ -474,7 +474,7 @@ public class EsperQueryTester
      *            the single result.
      * @return
      */
-    public EsperQueryTester hasSingleResult(final Object _singleResult) {
+    public CEPQueryTester hasSingleResult(final Object _singleResult) {
     
     
         singleResult = _singleResult;
@@ -548,9 +548,9 @@ public class EsperQueryTester
      * 
      * @param _alert1
      *            IEvent
-     * @return EsperQueryTester
+     * @return CEPQueryTester
      */
-    public EsperQueryTester send(final IEvent _alert1) {
+    public CEPQueryTester send(final IEvent _alert1) {
     
     
         events.add(_alert1);
@@ -565,9 +565,9 @@ public class EsperQueryTester
      *            IEvent
      * @param _numberTimes
      *            int
-     * @return EsperQueryTester
+     * @return CEPQueryTester
      */
-    public EsperQueryTester send(final IEvent _alert1, int _numberTimes) {
+    public CEPQueryTester send(final IEvent _alert1, int _numberTimes) {
     
     
         while (_numberTimes-- > 0) {
@@ -577,7 +577,7 @@ public class EsperQueryTester
     }
     
     
-    public EsperQueryTester sendEvent(final EventSimpleDto _eventDTO) {
+    public CEPQueryTester sendEvent(final EventSimpleDto _eventDTO) {
     
     
         send(convertDto(_eventDTO), 1);
@@ -585,7 +585,7 @@ public class EsperQueryTester
     }
     
     
-    public EsperQueryTester sendEvent(final EventSimpleDto _eventDTO, final int _numberOfTimes) {
+    public CEPQueryTester sendEvent(final EventSimpleDto _eventDTO, final int _numberOfTimes) {
     
     
         send(convertDto(_eventDTO), _numberOfTimes);
@@ -648,9 +648,9 @@ public class EsperQueryTester
      * 
      * @param _queryDefinition
      *            String
-     * @return EsperQueryTester
+     * @return CEPQueryTester
      */
-    public EsperQueryTester withQuery(final ICEPQueryImplementation _queryDefinition) {
+    public CEPQueryTester withQuery(final ICEPQueryImplementation _queryDefinition) {
     
     
         esperQuery = _queryDefinition;

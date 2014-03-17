@@ -9,7 +9,7 @@ package org.komea.product.backend.service.esper.stats;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
-import org.komea.product.backend.esper.test.EsperQueryTester;
+import org.komea.product.backend.esper.test.CEPQueryTester;
 import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.database.enums.Severity;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,7 @@ public class EventStatisticsServiceTest
                 new EventStatisticsService().buildProviderEventFrequencyQuery();
         
         
-        EsperQueryTester.newTest().withQuery(buildProviderEventFrequencyQuery)
+        CEPQueryTester.newTest().withQuery(buildProviderEventFrequencyQuery)
                 .sendEvent(new JenkinsEventFactory().sendBuildComplete("bla", 12, "truc"), 2)
                 .expectRows(1).hasResults(new Object[][] {
                     {
@@ -76,7 +76,7 @@ public class EventStatisticsServiceTest
     public void testQuerySeverityBlocker() {
     
     
-        final EsperQueryTester newTest = EsperQueryTester.newTest();
+        final CEPQueryTester newTest = CEPQueryTester.newTest();
         newTest.withQuery(new AlertPerSeverityPerDay(Severity.BLOCKER))
                 .sendEvent(new JenkinsEventFactory().sendBuildComplete("bla", 12, "truc"), 3)
                 .sendEvent(new JenkinsEventFactory().sendBuildFailed("bla", 12, "truc"), 2).dump()
@@ -90,7 +90,7 @@ public class EventStatisticsServiceTest
     public void testQuerySeverityInfo() {
     
     
-        final EsperQueryTester newTest = EsperQueryTester.newTest();
+        final CEPQueryTester newTest = CEPQueryTester.newTest();
         newTest.withQuery(new AlertPerSeverityPerDay(Severity.INFO))
                 .sendEvent(new JenkinsEventFactory().sendBuildComplete("bla", 12, "truc"), 3)
                 .sendEvent(new JenkinsEventFactory().sendBuildFailed("bla", 12, "truc"), 2).dump()

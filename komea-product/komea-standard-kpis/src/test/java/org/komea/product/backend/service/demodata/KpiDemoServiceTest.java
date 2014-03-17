@@ -167,7 +167,7 @@ public class KpiDemoServiceTest extends AbstractSpringIntegrationTestCase {
                 = kpiService.getRealTimeValues(KpiKey.ofKpi(kpiDemoService.numberBuildPerDay()))
                 .getValueOfEntity(mockProject);
 
-        final Kpi kpi = kpiDemoService.successRateJenkins();
+        final Kpi kpi = kpiDemoService.successRateJenkinsPerWeekKpi();
         final KPIValueTable<Project> valueTable = kpiService.getRealTimeValues(KpiKey.ofKpi(kpi));
         valueTable.dump();
         kpiService.storeValueInHistory(KpiKey.ofKpi(kpi));

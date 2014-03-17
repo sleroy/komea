@@ -13,7 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.esper.test.EsperQueryTester;
+import org.komea.product.backend.esper.test.CEPQueryTester;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.enums.RetentionPeriod;
 import org.komea.product.database.enums.Severity;
@@ -49,7 +49,7 @@ public class EventViewerServiceIT extends AbstractSpringIntegrationTestCase
     
     
         final IEvent convertEventDTO =
-                EsperQueryTester.convertToEventDTO(new JenkinsEventFactory().sendBuildComplete(
+                CEPQueryTester.convertToEventDTO(new JenkinsEventFactory().sendBuildComplete(
                         "SCERTIFY", 12, "TRUC"));
         convertEventDTO.setDate(new Date());
         esperEngine.sendEvent(convertEventDTO);

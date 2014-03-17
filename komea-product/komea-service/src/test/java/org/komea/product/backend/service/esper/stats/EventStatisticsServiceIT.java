@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
-import org.komea.product.backend.esper.test.EsperQueryTester;
+import org.komea.product.backend.esper.test.CEPQueryTester;
 import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.esper.EventEngineService;
 import org.komea.product.backend.service.kpi.IKPIService;
@@ -59,7 +59,7 @@ public class EventStatisticsServiceIT extends AbstractSpringIntegrationTestCase
     
         final JenkinsEventFactory jenkinsEventFactory = new JenkinsEventFactory();
         final IEvent convertEventDTO =
-                EsperQueryTester.convertToEventDTO(jenkinsEventFactory.sendBuildFailed("SCERTIFY",
+                CEPQueryTester.convertToEventDTO(jenkinsEventFactory.sendBuildFailed("SCERTIFY",
                         448, "truc"));
         convertEventDTO.getEventType().setSeverity(Severity.INFO);
         LOGGER.info("EVENT SENT {}", convertEventDTO);
