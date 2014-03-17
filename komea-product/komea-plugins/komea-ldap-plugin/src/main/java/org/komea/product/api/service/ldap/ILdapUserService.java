@@ -32,4 +32,10 @@ public interface ILdapUserService
     
     List<LdapUser> getUsers(final String pattern);
     
+    
+    /**
+     * Refresh the plugin since properties have been modified.
+     */
+    void refreshPlugin();
+    
 }

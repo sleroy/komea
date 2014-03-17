@@ -71,16 +71,16 @@ public class RssProviderPluginTest
     
     
     /**
-     * Test method for
-     * {@link org.komea.product.plugins.rss.bean.RssProviderPlugin#notifyPropertyChanged(org.komea.product.database.model.Setting)}.
-     */
-    @Test
-    public final void testNotifyPropertyChanged() throws Exception {
-    
-    
-        // TODO
-        // throw new RuntimeException("not yet implemented");
-    }
+         * Test method for
+         * {@link org.komea.product.plugins.rss.bean.RssProviderPlugin#notifyPropertyChanged(org.komea.product.database.model.Setting)}.
+         */
+        @Test
+        public final void testInitializePluginWithProperties() throws Exception {
+        
+        
+            // TODO
+            // throw new RuntimeException("not yet implemented");
+        }
     
     
     /**

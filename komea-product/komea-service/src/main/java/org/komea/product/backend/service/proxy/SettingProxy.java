@@ -113,7 +113,7 @@ public class SettingProxy<T> implements ISettingProxy<T>
         final Setting providerSetting = (Setting) getSetting();
         try {
             SpringUtils.reifySetting(providerSetting.getType(), _value);
-            
+            providerSetting.setValue(_value);
             this.settingService.update(providerSetting);
         } catch (final Exception e) {
             throw new IllegalArgumentException(e);

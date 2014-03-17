@@ -8,19 +8,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.komea.product.backend.api.IEventEngineService;
+import org.komea.product.backend.plugin.api.PostSettingRegistration;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
-import org.komea.product.backend.service.ISettingListener;
 import org.komea.product.backend.service.ISettingService;
 import org.komea.product.cep.api.ICEPQuery;
 import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.enums.RetentionPeriod;
 import org.komea.product.database.enums.Severity;
-import org.komea.product.database.model.Setting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +54,7 @@ import org.springframework.stereotype.Service;
                 description = "The retention time for events with severity BLOCKER",
                 type = RetentionPeriod.class,
                 value = "ONE_MONTH") })
-public class EventViewerService implements IEventViewerService, ISettingListener
+public class EventViewerService implements IEventViewerService
 {
     
     
@@ -160,20 +157,20 @@ public class EventViewerService implements IEventViewerService, ISettingListener
     }
     
     
-    /**
-     * Initialize the service.
-     */
-    @PostConstruct
-    public void initialize() {
+    @PostSettingRegistration
+    public void initializeRetention() {
     
     
-        settingService.registerListener(RETENTION_EVENT_BLOCKER, this);
-        settingService.registerListener(RETENTION_EVENT_CRITICAL, this);
-        settingService.registerListener(RETENTION_EVENT_MAJOR, this);
-        settingService.registerListener(RETENTION_EVENT_MINOR, this);
-        settingService.registerListener(RETENTION_EVENT_INFO, this);
-        // Force update at least the first time
-        notifyPropertyChanged(null);
+        // TODO : improvement possible, autodetect previous modifications, do not replace statement by only chaning cache configuration.
+        
+        LOGGER.info("Settings changed, requires updating of retention periods for events");
+        updateIfNecessaryEventStream(Severity.BLOCKER, RETENTION_EVENT_BLOCKER);
+        updateIfNecessaryEventStream(Severity.CRITICAL, RETENTION_EVENT_CRITICAL);
+        updateIfNecessaryEventStream(Severity.MAJOR, RETENTION_EVENT_MAJOR);
+        updateIfNecessaryEventStream(Severity.MINOR, RETENTION_EVENT_MINOR);
+        updateIfNecessaryEventStream(Severity.INFO, RETENTION_EVENT_INFO);
+        
+        
     }
     
     
@@ -188,23 +185,6 @@ public class EventViewerService implements IEventViewerService, ISettingListener
     
     
         return settingService.<RetentionPeriod> getValueOrNull(_retentionEventBlocker);
-        
-    }
-    
-    
-    @Override
-    public void notifyPropertyChanged(final Setting _setting) {
-    
-    
-        // TODO : improvement possible, autodetect previous modifications, do not replace statement by only chaning cache configuration.
-        
-        LOGGER.info("Settings changed, requires updating of retention periods for events");
-        updateIfNecessaryEventStream(Severity.BLOCKER, RETENTION_EVENT_BLOCKER);
-        updateIfNecessaryEventStream(Severity.CRITICAL, RETENTION_EVENT_CRITICAL);
-        updateIfNecessaryEventStream(Severity.MAJOR, RETENTION_EVENT_MAJOR);
-        updateIfNecessaryEventStream(Severity.MINOR, RETENTION_EVENT_MINOR);
-        updateIfNecessaryEventStream(Severity.INFO, RETENTION_EVENT_INFO);
-        
         
     }
     

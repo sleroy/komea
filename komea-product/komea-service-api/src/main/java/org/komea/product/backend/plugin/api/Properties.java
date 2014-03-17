@@ -28,7 +28,16 @@ public @interface Properties {
     
     
     /**
+     * Provides a name to the group of properties
+     * 
+     * @return a name.
+     */
+    String group() default "";
+    
+    
+    /**
      * Method value.
+     * 
      * @return Property[]
      */
     Property[] value();

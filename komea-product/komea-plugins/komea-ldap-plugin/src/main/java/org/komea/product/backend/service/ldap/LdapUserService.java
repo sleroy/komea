@@ -13,12 +13,12 @@ import org.komea.product.api.service.ldap.LdapUser;
 import org.komea.product.backend.plugin.api.PostSettingRegistration;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
-import org.komea.product.backend.service.ISettingListener;
+import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.ISettingService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
-import org.komea.product.database.model.Setting;
+import org.komea.product.database.enums.ProviderType;
 import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,6 @@ import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.ldap.filter.LikeFilter;
 import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
-import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
 
@@ -45,7 +44,12 @@ import com.google.common.base.Strings;
  * @author JavaChap
  * @author sleroy
  */
-@Service
+@ProviderPlugin(
+        name = "LDAP Plugin",
+        icon = "ldap",
+        eventTypes = {},
+        type = ProviderType.LDAP,
+        url = "/ldap")
 @Properties(value = {
         @Property(
                 key = LdapUserService.LDAP_SERVER,
@@ -64,10 +68,10 @@ import com.google.common.base.Strings;
                 description = "Specify the LDAP userDn"),
         @Property(
                 key = LdapUserService.LDAP_BASE,
-                value = "dc=jbcpcalendar,dc=com",
+                value = "dc=tocea,dc=com",
                 type = String.class,
                 description = "Specify the LDAP Base url") })
-public class LdapUserService implements ILdapUserService, ISettingListener
+public class LdapUserService implements ILdapUserService
 {
     
     
@@ -214,8 +218,9 @@ public class LdapUserService implements ILdapUserService, ISettingListener
     }
     
     
+    @Override
     @PostSettingRegistration
-    public void initializeCron() throws Exception {
+    public void refreshPlugin() {
     
     
         LOGGER.info("LDAP - LDAP");
@@ -244,38 +249,20 @@ public class LdapUserService implements ILdapUserService, ISettingListener
         contextSource.setUserDn(ldapUserDN);
         contextSource.setPassword(password);
         contextSource.setBase(ldapBase);
-        contextSource.afterPropertiesSet();
-        
-        ldapTemplate = new LdapTemplate(contextSource);
-        
-        final JobDataMap properties = initializeDataForCron();
-        LOGGER.info("Initialization of lDAP Cron.");
-        registryService.removeCronTask(LDAP_CRON_REFRESH);
-        registryService.registerCronTask(LDAP_CRON_REFRESH, CRON_LDAP, LdapCronRefreshJob.class,
-                properties);
-        
-        
-        settingService.registerListener(LDAP_SERVER, this);
-        settingService.registerListener(LDAP_PASSWORD, this);
-        settingService.registerListener(LDAP_USER_DN, this);
-        settingService.registerListener(LDAP_BASE, this);
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.ISettingListener#notifyPropertyChanged(org.komea.product.database.model.Setting)
-     */
-    @Override
-    public void notifyPropertyChanged(final Setting _setting) {
-    
-    
         try {
-            initializeCron();
+            contextSource.afterPropertiesSet();
+            
+            
+            ldapTemplate = new LdapTemplate(contextSource);
+            ldapTemplate.afterPropertiesSet();
+            final JobDataMap properties = initializeDataForCron();
+            LOGGER.info("Initialization of lDAP Cron.");
+            registryService.removeCronTask(LDAP_CRON_REFRESH);
+            registryService.registerCronTask(LDAP_CRON_REFRESH, CRON_LDAP,
+                    LdapCronRefreshJob.class, properties);
         } catch (final Exception e) {
-            throw new IllegalArgumentException("Could not initialize the ldap connection", e);
+            throw new IllegalArgumentException(e);
         }
-        
         
     }
     

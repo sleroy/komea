@@ -54,7 +54,7 @@ public class LdapUserServiceTest extends AbstractSpringIntegrationTestCase
         service.getProxy(LdapUserService.LDAP_PASSWORD).setStringValue("");
         service.getProxy(LdapUserService.LDAP_USER_DN).setStringValue("");
         service.getProxy(LdapUserService.LDAP_BASE).setStringValue("dc=jbcpcalendar,dc=com");
-        
+        userService.refreshPlugin();
         final List<LdapUser> users = userService.getUsers(null);
         System.out.println(users);
         final LdapUser user = userService.getUser("user2@example.com");

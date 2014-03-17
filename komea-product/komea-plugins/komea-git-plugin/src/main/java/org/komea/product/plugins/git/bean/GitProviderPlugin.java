@@ -9,6 +9,9 @@ import javax.annotation.PreDestroy;
 import org.komea.product.backend.api.PluginAdminPages;
 import org.komea.product.backend.api.PluginMountPage;
 import org.komea.product.backend.plugin.api.EventTypeDef;
+import org.komea.product.backend.plugin.api.PostSettingRegistration;
+import org.komea.product.backend.plugin.api.Properties;
+import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.ISettingService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
@@ -17,7 +20,6 @@ import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
-import org.komea.product.database.model.Setting;
 import org.komea.product.plugins.git.cron.GitScheduleCronJob;
 import org.komea.product.plugins.git.repositories.api.IGitClonerService;
 import org.komea.product.plugins.git.repositories.api.IGitRepositoryService;
@@ -90,12 +92,7 @@ import org.springframework.beans.factory.annotation.Autowired;
                         entityType = EntityType.PROJECT,
                         key = "scm-branch-numbers",
                         name = "Number of branches.",
-                        severity = Severity.INFO)
-        
-        
-        },
-        
-        
+                        severity = Severity.INFO) },
         icon = "git",
         name = GitProviderPlugin.GIT_PROVIDER_PLUGIN,
         type = ProviderType.NEWS,
@@ -103,51 +100,57 @@ import org.springframework.beans.factory.annotation.Autowired;
 @PluginAdminPages(@PluginMountPage(
         pluginName = GitProviderPlugin.GIT_PROVIDER_PLUGIN,
         page = GitRepositoryPage.class))
-public class GitProviderPlugin implements org.komea.product.backend.service.ISettingListener
+@Properties(group = "Git Plugin", value = {
+    @Property(
+            description = "Refresh period of GIT job",
+            key = GitProviderPlugin.GIT_CRON_JOB,
+            type = String.class,
+            value = GitProviderPlugin.GIT_CRON_VALUE) })
+public class GitProviderPlugin
 {
-    
-    
-    private static final String  GIT_CRON_JOB        = "git_cron_job";
-    
-    
-    /**
-     * Cron value for GIT Provider.
-     */
-    private static final String  GIT_CRON_VALUE      = "0 0/1 * * * ?";
-    
-    
-    private static final String  GIT_PROVIDER_PERIOD = "git_refresh_period";
-    
-    
-    private static final Logger  LOGGER              = LoggerFactory.getLogger("git-provider");
     
     
     /**
      * Rss Provider plugin name;
      */
-    static final String          GIT_PROVIDER_PLUGIN = "GIT Provider plugin";
+    public static final String    GIT_PROVIDER_PLUGIN = "GIT Provider plugin";
+    
+    
+    private static final String   GIT_PROVIDER_PERIOD = "git_refresh_period";
+    
+    
+    private static final Logger   LOGGER              = LoggerFactory.getLogger("git-provider");
+    
+    
+    protected static final String GIT_CRON_JOB        = "git_cron_job";
+    
+    
+    /**
+     * Cron value for GIT Provider.
+     */
+    protected static final String GIT_CRON_VALUE      = "0 0/1 * * * ?";
     
     
     @Autowired
-    private ICronRegistryService cronRegistryService;
+    private ICronRegistryService  cronRegistryService;
     
     
     @Autowired
-    private IEventPushService    esperEngine;
+    private IEventPushService     esperEngine;
     
     @Autowired
-    private IGitClonerService    gitClonerService;
-    
-    
-    @Autowired
-    private IGitRepositoryService       gitRepository;
+    private IGitClonerService     gitClonerService;
     
     
     @Autowired
-    private IPersonService       personService;
+    private IGitRepositoryService gitRepository;
+    
     
     @Autowired
-    private ISettingService      registry;
+    private IPersonService        personService;
+    
+    @Autowired
+    private ISettingService       registry;
     
     
     
@@ -218,14 +221,12 @@ public class GitProviderPlugin implements org.komea.product.backend.service.ISet
     public void initializeProvider() {
     
     
-        LOGGER.info("Initialisation du plugin RSS");
+        LOGGER.info("Initialisation du plugin GIT");
         
         
         final JobDataMap properties = prepareJobMapForCron();
-        //
-        registry.create(GIT_PROVIDER_PERIOD, GIT_CRON_VALUE, "java.lang.String",
-                "Defines the cron value to fetch rss feeds");
-        registry.registerListener(GIT_PROVIDER_PERIOD, this);
+        
+        
         cronRegistryService.registerCronTask(GIT_CRON_JOB, GIT_CRON_VALUE,
                 GitScheduleCronJob.class, properties);
         
@@ -236,11 +237,12 @@ public class GitProviderPlugin implements org.komea.product.backend.service.ISet
      * (non-Javadoc)
      * @see org.komea.product.backend.service.ISettingListener#notifyPropertyChanged(org.komea.product.database.model.Setting)
      */
-    @Override
-    public void notifyPropertyChanged(final Setting _setting) {
+    @PostSettingRegistration
+    public void notifyPropertyChanged() {
     
     
-        cronRegistryService.updateCronFrequency(GIT_CRON_JOB, _setting.getValue());
+        cronRegistryService.updateCronFrequency(GIT_CRON_JOB, registry
+                .getProxy(GIT_PROVIDER_PERIOD).getStringValue());
         
     }
     
