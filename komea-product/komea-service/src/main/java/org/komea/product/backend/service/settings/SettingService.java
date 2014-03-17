@@ -251,25 +251,6 @@ public class SettingService implements ISettingService, BeanPostProcessor
         
         return _bean;
     }
-
-
-    private void triggerPostSettingMethod(final Object _bean, final String _beanName) {
-    
-    
-        for (final Method method : _bean.getClass().getMethods()) {
-            if (AnnotationUtils.findAnnotation(method, PostSettingRegistration.class) != null) {
-                LOGGER.info("Bean  {} requires additional step of initialization once settings are registered");
-                try {
-                    method.invoke(_bean);
-                } catch (final Exception e) {
-                    throw new FatalBeanException(
-                            "Could not perform initialization of the bean "
-                                    + _beanName + " once the settings are registered", e);
-                }
-                
-            }
-        }
-    }
     
     
     /*
@@ -324,7 +305,7 @@ public class SettingService implements ISettingService, BeanPostProcessor
     
     
         LOGGER.debug("Updated setting {}", _setting);
-        ;
+        
         settingDAO.updateByPrimaryKey(_setting);
         settingListenerContainer.notifyUpdate(_setting);
         
@@ -360,6 +341,24 @@ public class SettingService implements ISettingService, BeanPostProcessor
         return setting;
         
         
+    }
+    
+    
+    private void triggerPostSettingMethod(final Object _bean, final String _beanName) {
+    
+    
+        for (final Method method : _bean.getClass().getMethods()) {
+            if (AnnotationUtils.findAnnotation(method, PostSettingRegistration.class) != null) {
+                LOGGER.info("Bean  {} requires additional step of initialization once settings are registered");
+                try {
+                    method.invoke(_bean);
+                } catch (final Exception e) {
+                    throw new FatalBeanException("Could not perform initialization of the bean "
+                            + _beanName + " once the settings are registered", e);
+                }
+                
+            }
+        }
     }
     
 }

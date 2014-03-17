@@ -48,24 +48,6 @@ public class SettingProxy<T> implements ISettingProxy<T>
     
     
     /**
-     * Method get.
-     * 
-     * @return T
-     * @see org.komea.product.backend.service.ISettingProxy#getValue()
-     */
-    @Override
-    public T getValue() {
-    
-    
-        LOGGER.trace("Get property {}", key);
-        
-        final Setting providerSetting = (Setting) getSetting();
-        if (providerSetting == null) { return null; }
-        return SpringUtils.reifySetting(providerSetting.getType(), providerSetting.getValue());
-    }
-    
-    
-    /**
      * Method getSetting.
      * 
      * @return Object
@@ -98,6 +80,24 @@ public class SettingProxy<T> implements ISettingProxy<T>
     
     
     /**
+     * Method get.
+     * 
+     * @return T
+     * @see org.komea.product.backend.service.ISettingProxy#getValue()
+     */
+    @Override
+    public T getValue() {
+    
+    
+        LOGGER.trace("Get property {}", key);
+        
+        final Setting providerSetting = (Setting) getSetting();
+        if (providerSetting == null) { return null; }
+        return SpringUtils.reifySetting(providerSetting.getType(), providerSetting.getValue());
+    }
+    
+    
+    /**
      * Method setValue.
      * 
      * @param _value
@@ -113,8 +113,8 @@ public class SettingProxy<T> implements ISettingProxy<T>
         final Setting providerSetting = (Setting) getSetting();
         try {
             SpringUtils.reifySetting(providerSetting.getType(), _value);
-            providerSetting.setValue(_value);
-            this.settingService.getSettingDAO().updateByPrimaryKey(providerSetting);
+            
+            this.settingService.update(providerSetting);
         } catch (final Exception e) {
             throw new IllegalArgumentException(e);
         }

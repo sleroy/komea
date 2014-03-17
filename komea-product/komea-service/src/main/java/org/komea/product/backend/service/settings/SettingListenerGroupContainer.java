@@ -48,7 +48,10 @@ public class SettingListenerGroupContainer
         final ListenerOnSettingContainer listenerOnSettingContainer =
                 listeners.get(_setting.getSettingKey());
         if (listenerOnSettingContainer != null) {
-            listenerOnSettingContainer.notify(_setting);
+            synchronized (listenerOnSettingContainer) {
+                listenerOnSettingContainer.notify(_setting);
+            }
+            
         }
     }
     

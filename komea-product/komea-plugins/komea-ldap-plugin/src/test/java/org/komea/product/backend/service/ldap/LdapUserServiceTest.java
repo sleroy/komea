@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.api.service.ldap.ILdapUserService;
 import org.komea.product.api.service.ldap.LdapUser;
+import org.komea.product.backend.service.ISettingService;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -37,6 +38,10 @@ public class LdapUserServiceTest extends AbstractSpringIntegrationTestCase
     
     
     @Autowired
+    private ISettingService  service;
+    
+    
+    @Autowired
     private ILdapUserService userService;
     
     
@@ -45,6 +50,11 @@ public class LdapUserServiceTest extends AbstractSpringIntegrationTestCase
     public void testLdap() {
     
     
+        service.getProxy(LdapUserService.LDAP_SERVER).setStringValue("ldap://localhost:33389");
+        service.getProxy(LdapUserService.LDAP_PASSWORD).setStringValue("");
+        service.getProxy(LdapUserService.LDAP_USER_DN).setStringValue("");
+        service.getProxy(LdapUserService.LDAP_BASE).setStringValue("dc=jbcpcalendar,dc=com");
+        
         final List<LdapUser> users = userService.getUsers(null);
         System.out.println(users);
         final LdapUser user = userService.getUser("user2@example.com");

@@ -3,7 +3,6 @@ package org.komea.product.backend.service.ldap;
 
 
 
-import java.net.URL;
 import java.util.List;
 
 import javax.naming.NamingException;
@@ -50,8 +49,8 @@ import com.google.common.base.Strings;
 @Properties(value = {
         @Property(
                 key = LdapUserService.LDAP_SERVER,
-                value = "ldap://localhost:33389",
-                type = URL.class,
+                value = "ldap://ares.tocea:389",
+                type = String.class,
                 description = "Specify the location of the LDAP Server"),
         @Property(
                 key = LdapUserService.LDAP_PASSWORD,
