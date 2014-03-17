@@ -68,7 +68,7 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
         public List<IFilterDefinition> getFilterDefinitions() {
         
         
-            final IFilterDefinition filterDefinition = new FilterDefinition();
+            final IFilterDefinition filterDefinition = FilterDefinition.create();
             return Collections.singletonList(filterDefinition);
         }
         

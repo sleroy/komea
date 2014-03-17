@@ -5,8 +5,6 @@ package org.komea.backend.kpi.tests;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.komea.event.factory.JenkinsEventFactory;
-import org.komea.product.backend.esper.test.EsperQueryTester;
 
 
 

@@ -3,6 +3,7 @@ package org.komea.product.backend.esper.test;
 
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,14 +12,15 @@ import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 import org.junit.Assert;
-import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.service.esper.EventEngineService;
-import org.komea.product.backend.service.esper.QueryDefinition;
-import org.komea.product.backend.service.kpi.IEsperLineTestPredicate;
-import org.komea.product.backend.service.kpi.IEsperTestPredicate;
+import org.komea.product.backend.service.kpi.ICEPQueryLineTestPredicate;
+import org.komea.product.backend.service.kpi.ICEPQueryTestPredicate;
+import org.komea.product.cep.CEPConfiguration;
+import org.komea.product.cep.CEPEngine;
+import org.komea.product.cep.api.ICEPEngine;
 import org.komea.product.cep.api.ICEPQuery;
 import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.cep.api.formula.tuple.ITuple;
+import org.komea.product.cep.query.CEPQuery;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;
@@ -44,7 +46,7 @@ public class CEPQueryTester
     
     /**
      */
-    private static class ArrayPredicate implements IEsperTestPredicate
+    private static class ArrayPredicate implements ICEPQueryTestPredicate
     {
         
         
@@ -70,7 +72,7 @@ public class CEPQueryTester
          * 
          * @param _epStatement
          *            EPStatement
-         * @see org.komea.product.backend.service.kpi.IEsperTestPredicate#evaluate(EPStatement)
+         * @see org.komea.product.backend.service.kpi.ICEPQueryTestPredicate#evaluate(EPStatement)
          */
         @Override
         public void evaluate(final ICEPQuery _epStatement) {
@@ -103,7 +105,7 @@ public class CEPQueryTester
     
     /**
      */
-    private static class SingleLinePredicate implements IEsperLineTestPredicate
+    private static class SingleLinePredicate implements ICEPQueryLineTestPredicate
     {
         
         
@@ -131,7 +133,7 @@ public class CEPQueryTester
          * 
          * @param _tuple
          *            Map<String,Object>
-         * @see org.komea.product.backend.service.kpi.IEsperLineTestPredicate#evaluate(Map<String,Object>)
+         * @see org.komea.product.backend.service.kpi.ICEPQueryLineTestPredicate#evaluate(Map<String,Object>)
          */
         @Override
         public void evaluate(final ITuple _tuple) {
@@ -170,13 +172,17 @@ public class CEPQueryTester
     /**
      * Method newEngine.
      * 
-     * @return EventEngineService
+     * @return ICEPEngine
      */
-    public static EventEngineService newEngine() {
+    public static ICEPEngine newEngine() {
     
     
-        final EventEngineService esperEngineBean = new EventEngineService();
-        esperEngineBean.init();
+        final ICEPEngine esperEngineBean = new CEPEngine();
+        try {
+            esperEngineBean.initialize(new CEPConfiguration());
+        } catch (final IOException e) {
+            Assert.fail(e.getMessage());
+        }
         return esperEngineBean;
     }
     
@@ -196,46 +202,47 @@ public class CEPQueryTester
     
     
     
-    private boolean                             dump;
+    private boolean                                dump;
     
     
-    private ICEPQuery                           epStatement;
+    private ICEPQuery                              cepQuery;
     
     
-    private final List<IEsperLineTestPredicate> esperLinePredicates =
-                                                                            new ArrayList<IEsperLineTestPredicate>();
+    private final List<ICEPQueryLineTestPredicate> esperLinePredicates =
+                                                                               new ArrayList<ICEPQueryLineTestPredicate>();
     
     
-    private final List<IEsperTestPredicate>     esperPredicates     =
-                                                                            new ArrayList<IEsperTestPredicate>();
+    private final List<ICEPQueryTestPredicate>     esperPredicates     =
+                                                                               new ArrayList<ICEPQueryTestPredicate>();
     
     
-    private ICEPQueryImplementation             esperQuery;
+    private ICEPQueryImplementation                queryImplementationDefinition;
     
-    private final List<IEvent>                  events              = new ArrayList<IEvent>();
+    private final List<IEvent>                     events              = new ArrayList<IEvent>();
     
-    private int                                 expectedRows        = -1;
-    
-    
-    private Integer                             expectedStorageSize;
-    private final Map<String, EventType>        mockEventTypes      =
-                                                                            new HashMap<String, EventType>();
-    private final Map<String, PersonGroup>      mockGroup           =
-                                                                            new HashMap<String, PersonGroup>();
+    private int                                    expectedRows        = -1;
     
     
-    private final Map<String, Person>           mockPerson          = new HashMap<String, Person>();
+    private Integer                                expectedStorageSize;
+    private final Map<String, EventType>           mockEventTypes      =
+                                                                               new HashMap<String, EventType>();
+    private final Map<String, PersonGroup>         mockGroup           =
+                                                                               new HashMap<String, PersonGroup>();
     
     
-    private final Map<String, Project>          mockProject         =
-                                                                            new HashMap<String, Project>();
+    private final Map<String, Person>              mockPerson          =
+                                                                               new HashMap<String, Person>();
     
     
-    private final Map<String, Provider>         mockProviders       =
-                                                                            new HashMap<String, Provider>();
+    private final Map<String, Project>             mockProject         =
+                                                                               new HashMap<String, Project>();
     
     
-    private Object                              singleResult;
+    private final Map<String, Provider>            mockProviders       =
+                                                                               new HashMap<String, Provider>();
+    
+    
+    private Object                                 singleResult;
     
     
     
@@ -435,10 +442,10 @@ public class CEPQueryTester
      * Method hasLineResult.
      * 
      * @param _testPredicate
-     *            IEsperLineTestPredicate
+     *            ICEPQueryLineTestPredicate
      * @return CEPQueryTester
      */
-    public CEPQueryTester hasLineResult(final IEsperLineTestPredicate _testPredicate) {
+    public CEPQueryTester hasLineResult(final ICEPQueryLineTestPredicate _testPredicate) {
     
     
         esperLinePredicates.add(_testPredicate);
@@ -486,14 +493,14 @@ public class CEPQueryTester
      * Method prepareAlerts.
      * 
      * @param esperEngineBean
-     *            IEventEngineService
+     *            ICEPEngine
      */
-    public void prepareAlerts(final IEventEngineService esperEngineBean) {
+    public void prepareAlerts(final ICEPEngine esperEngineBean) {
     
     
         for (final IEvent event : events) {
             LOGGER.debug("Sending alert : " + event);
-            esperEngineBean.sendEvent(event);
+            esperEngineBean.pushEvent(event);
         }
     }
     
@@ -502,15 +509,13 @@ public class CEPQueryTester
      * Method prepareQuery.
      * 
      * @param esperEngineBean
-     *            IEventEngineService
+     *            ICEPEngine
      */
-    public void prepareQuery(final IEventEngineService esperEngineBean) {
+    public void prepareQuery(final ICEPEngine esperEngineBean) {
     
     
-        if (epStatement == null) {
-            epStatement =
-                    esperEngineBean.createQuery(new QueryDefinition(esperQuery.toString(),
-                            esperQuery));
+        if (cepQuery == null) {
+            cepQuery = new CEPQuery(queryImplementationDefinition);
         }
     }
     
@@ -518,23 +523,28 @@ public class CEPQueryTester
     public void runTest() {
     
     
-        final EventEngineService newEngine = newEngine();
+        final ICEPEngine newEngine = newEngine();
         runTest(newEngine);
-        newEngine.destroy();
+        try {
+            newEngine.close();
+        } catch (final IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     
     
     /**
      * Method runTest.
      * 
-     * @param esperEngineBean
-     *            IEventEngineService
+     * @param _cepEngine
+     *            ICEPEngine
      */
-    public void runTest(final IEventEngineService esperEngineBean) {
+    public void runTest(final ICEPEngine _cepEngine) {
     
     
-        prepareQuery(esperEngineBean);
-        prepareAlerts(esperEngineBean);
+        prepareQuery(_cepEngine);
+        prepareAlerts(_cepEngine);
         if (dump) {
             dumpInfos();
         }
@@ -599,8 +609,8 @@ public class CEPQueryTester
     public void validateQueryPredicates() {
     
     
-        for (final IEsperTestPredicate testPred : esperPredicates) {
-            testPred.evaluate(epStatement);
+        for (final ICEPQueryTestPredicate testPred : esperPredicates) {
+            testPred.evaluate(cepQuery);
         }
     }
     
@@ -610,15 +620,15 @@ public class CEPQueryTester
     
         if (expectedStorageSize != null) {
             Assert.assertEquals("Expected storage size", expectedStorageSize,
-                    Integer.valueOf(epStatement.getStatement().getDefaultStorage().size()));
+                    Integer.valueOf(cepQuery.getStatement().getDefaultStorage().size()));
         }
         if (esperPredicates.isEmpty() && !hasMapPredicates() && singleResult == null) { return; }
         validateQueryPredicates();
         
-        if (!epStatement.getResult().isMap() && hasMapPredicates()) { throw new ClassCastException(
+        if (!cepQuery.getResult().isMap() && hasMapPredicates()) { throw new ClassCastException(
                 "We were expecting a map but the query returned a single value"); }
-        if (epStatement.getResult().isMap()) {
-            final List<ITuple> tuples = epStatement.getResult().asMap().asTupleRows();
+        if (cepQuery.getResult().isMap()) {
+            final List<ITuple> tuples = cepQuery.getResult().asMap().asTupleRows();
             Validate.notNull(tuples);
             int i = 0;
             for (final ITuple value : tuples) {
@@ -633,8 +643,8 @@ public class CEPQueryTester
             if (expectedRows != -1) {
                 Assert.assertEquals("Expected fixed number of rows", expectedRows, i);
             }
-        } else if (epStatement.getResult().isSingleValue() && singleResult != null) {
-            Assert.assertEquals("Expected value from query : ", singleResult, epStatement
+        } else if (cepQuery.getResult().isSingleValue() && singleResult != null) {
+            Assert.assertEquals("Expected value from query : ", singleResult, cepQuery
                     .getResult().asType());
             
         }
@@ -653,7 +663,7 @@ public class CEPQueryTester
     public CEPQueryTester withQuery(final ICEPQueryImplementation _queryDefinition) {
     
     
-        esperQuery = _queryDefinition;
+        queryImplementationDefinition = _queryDefinition;
         return this;
     }
     
@@ -664,7 +674,7 @@ public class CEPQueryTester
     private void dumpInfos() {
     
     
-        LOGGER.info("Received  : \n\t{}", epStatement.getResult().toString());
+        LOGGER.info("Received  : \n\t{}", cepQuery.getResult().toString());
         
     }
     

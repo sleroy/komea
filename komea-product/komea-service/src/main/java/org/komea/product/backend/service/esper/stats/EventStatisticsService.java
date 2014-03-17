@@ -113,9 +113,9 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
         final CEPQueryImplementation cepQueryDefinition = new CEPQueryImplementation();
-        cepQueryDefinition.setParameters(Collections.EMPTY_MAP);
-        cepQueryDefinition.addFilterDefinition(new FilterDefinition(CacheConfigurationBuilder
-                .expirationTimeCache(24, TimeUnit.HOURS)));
+        cepQueryDefinition.setParameters(Collections.<String, Object> emptyMap());
+        cepQueryDefinition.addFilterDefinition(FilterDefinition.create().setCacheConfiguration(
+                CacheConfigurationBuilder.expirationTimeCache(24, TimeUnit.HOURS)));
         cepQueryDefinition.setFormula(new GroupByFormula(new ProviderEventTypeTupleCreator(),
                 new EventCountFormula()));
         

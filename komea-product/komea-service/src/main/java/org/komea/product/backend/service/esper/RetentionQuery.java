@@ -45,8 +45,9 @@ public class RetentionQuery extends CEPQueryImplementation
         retentionTime = _retentionTime;
         setParameters(new HashMap<String, Object>());
         setFormula(new NoCEPFormula());
-        addFilterDefinition(new FilterDefinition(buildCacheRetention(retentionTime),
-                new EventSeverityFilter(severity), null));
+        addFilterDefinition(FilterDefinition.create()
+                .setCacheConfiguration(buildCacheRetention(retentionTime))
+                .setFilter(new EventSeverityFilter(severity)));
         
     }
     

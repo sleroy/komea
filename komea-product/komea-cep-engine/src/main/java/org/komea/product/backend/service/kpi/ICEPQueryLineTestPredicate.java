@@ -9,7 +9,7 @@ import org.komea.product.cep.api.formula.tuple.ITuple;
 
 /**
  */
-public interface IEsperLineTestPredicate
+public interface ICEPQueryLineTestPredicate
 {
     
     

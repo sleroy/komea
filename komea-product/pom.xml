@@ -135,7 +135,12 @@
 			<groupId>junit</groupId>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>com.googlecode.openpojo</groupId>
+			<artifactId>openpojo</artifactId>
+			<version>0.4.9</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<modules>

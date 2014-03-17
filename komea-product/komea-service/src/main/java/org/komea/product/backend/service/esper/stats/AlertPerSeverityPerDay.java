@@ -41,7 +41,8 @@ public class AlertPerSeverityPerDay extends CEPQueryImplementation
         final IEventFilter<?> eventFilter =
                 EventFilterBuilder.create().onlyIEvents().chain(new EventSeverityFilter(_severity))
                         .build();
-        addFilterDefinition(new FilterDefinition(expirationTimeCache, eventFilter, null));
+        addFilterDefinition(FilterDefinition.create().setCacheConfiguration(expirationTimeCache)
+                .setFilter(eventFilter));
         
     }
 }

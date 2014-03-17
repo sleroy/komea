@@ -9,7 +9,7 @@ import org.komea.product.cep.api.ICEPQuery;
 
 /**
  */
-public interface IEsperTestPredicate
+public interface ICEPQueryTestPredicate
 {
     
     

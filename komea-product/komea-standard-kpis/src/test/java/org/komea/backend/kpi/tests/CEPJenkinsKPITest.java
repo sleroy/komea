@@ -15,7 +15,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.komea.event.factory.JenkinsEventFactory;
-import org.komea.product.backend.esper.test.EsperQueryTester;
 import org.komea.product.backend.utils.MapPopulation;
 import org.komea.product.cep.api.ICEPQuery;
 import org.komea.product.cep.api.IEventFilter;
@@ -26,6 +25,7 @@ import org.komea.product.cep.filter.NoEventFilter;
 import org.komea.product.cep.formula.CountFormula;
 import org.komea.product.cep.formula.ElNumericalFormula;
 import org.komea.product.cep.query.CEPQueryBuilder;
+import org.komea.product.cep.query.CEPQueryTest;
 import org.komea.product.database.alert.IEvent;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
@@ -49,7 +49,7 @@ public class CEPJenkinsKPITest
     private static IEvent              a3;
     private static IEvent              a4;
     private static JenkinsEventFactory jenkinsEventFactory;
-    private static EsperQueryTester    newTest;
+    private static CEPQueryTest        newTest;
     
     
     
@@ -57,7 +57,7 @@ public class CEPJenkinsKPITest
     public static void initialize() {
     
     
-        newTest = EsperQueryTester.newTest("bla");
+        newTest = CEPQueryTester.newTest("bla");
         jenkinsEventFactory = new JenkinsEventFactory();
         a1 = newTest.convertDto(jenkinsEventFactory.sendBuildComplete("SCERTIFY", 908, "SPRINT"));
         a2 = newTest.convertDto(jenkinsEventFactory.sendBuildComplete("KOMEA", 909, "SPRINT"));

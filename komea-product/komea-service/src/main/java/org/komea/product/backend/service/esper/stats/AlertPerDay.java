@@ -35,7 +35,7 @@ public class AlertPerDay extends CEPQueryImplementation
         final ICacheConfiguration expirationTimeCache =
                 CacheConfigurationBuilder.expirationTimeCache(24, TimeUnit.HOURS);
         final IEventFilter<?> eventFilter = EventFilterBuilder.create().onlyIEvents().build();
-        addFilterDefinition(new FilterDefinition(expirationTimeCache, eventFilter, null));
-        
+        addFilterDefinition(FilterDefinition.create().setCacheConfiguration(expirationTimeCache)
+                .setFilter(eventFilter));
     }
 }
