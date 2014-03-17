@@ -132,7 +132,7 @@ public class StatPage extends LayoutPage
         final DataTable<EventTypeStatistic, String> table =
                 DataTableBuilder.<EventTypeStatistic, String> newTable("table")
                         .addColumn("Event type", "type").addColumn("Provider", "provider")
-                        .addColumn("Number", "number").displayRows(10)
+                        .addColumn("Number", "value").displayRows(10)
                         .withListData(statService.getReceivedAlertTypesIn24LastHours()).build();
         add(table);
         
@@ -149,7 +149,8 @@ public class StatPage extends LayoutPage
             @Override
             protected Long load() {
             
-                           return statService.getNumberOfAlerts(criticity);
+            
+                return statService.getNumberOfAlerts(criticity);
                 
             }
             
