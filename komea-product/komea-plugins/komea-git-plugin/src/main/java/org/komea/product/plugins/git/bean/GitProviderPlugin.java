@@ -3,7 +3,6 @@ package org.komea.product.plugins.git.bean;
 
 
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.komea.product.backend.api.PluginAdminPages;
@@ -103,7 +102,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Properties(group = "Git Plugin", value = {
     @Property(
             description = "Refresh period of GIT job",
-            key = GitProviderPlugin.GIT_CRON_JOB,
+            key = GitProviderPlugin.SETTING_PROVIDER_PERIOD_NAME,
             type = String.class,
             value = GitProviderPlugin.GIT_CRON_VALUE) })
 public class GitProviderPlugin
@@ -113,22 +112,23 @@ public class GitProviderPlugin
     /**
      * Rss Provider plugin name;
      */
-    public static final String    GIT_PROVIDER_PLUGIN = "GIT Provider plugin";
+    public static final String    GIT_PROVIDER_PLUGIN          = "GIT Provider plugin";
     
     
-    private static final String   GIT_PROVIDER_PERIOD = "git_refresh_period";
+    private static final Logger   LOGGER                       = LoggerFactory
+                                                                       .getLogger("git-provider");
     
     
-    private static final Logger   LOGGER              = LoggerFactory.getLogger("git-provider");
-    
-    
-    protected static final String GIT_CRON_JOB        = "git_cron_job";
+    protected static final String GIT_CRON_JOB                 = "git_cron_job";
     
     
     /**
      * Cron value for GIT Provider.
      */
-    protected static final String GIT_CRON_VALUE      = "0 0/1 * * * ?";
+    protected static final String GIT_CRON_VALUE               = "0 0/1 * * * ?";
+    
+    
+    protected static final String SETTING_PROVIDER_PERIOD_NAME = "git_refresh_period";
     
     
     @Autowired
@@ -217,22 +217,6 @@ public class GitProviderPlugin
     }
     
     
-    @PostConstruct
-    public void initializeProvider() {
-    
-    
-        LOGGER.info("Initialisation du plugin GIT");
-        
-        
-        final JobDataMap properties = prepareJobMapForCron();
-        
-        
-        cronRegistryService.registerCronTask(GIT_CRON_JOB, GIT_CRON_VALUE,
-                GitScheduleCronJob.class, properties);
-        
-    }
-    
-    
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.service.ISettingListener#notifyPropertyChanged(org.komea.product.database.model.Setting)
@@ -241,8 +225,16 @@ public class GitProviderPlugin
     public void notifyPropertyChanged() {
     
     
-        cronRegistryService.updateCronFrequency(GIT_CRON_JOB, registry
-                .getProxy(GIT_PROVIDER_PERIOD).getStringValue());
+        LOGGER.info("Initialisation du plugin GIT");
+        
+        
+        final JobDataMap properties = prepareJobMapForCron();
+        cronRegistryService.removeCronTask(GIT_CRON_JOB);
+        
+        cronRegistryService.registerCronTask(GIT_CRON_JOB, GIT_CRON_VALUE,
+                GitScheduleCronJob.class, properties);
+        cronRegistryService.updateCronFrequency(GIT_CRON_JOB,
+                registry.getProxy(SETTING_PROVIDER_PERIOD_NAME).getStringValue());
         
     }
     
