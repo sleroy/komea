@@ -180,8 +180,8 @@ public class KpiDemoService
     
         return KpiBuilder.createAscending().nameAndKeyDescription(_title)
                 .entityType(EntityType.PROJECT).expirationYear()
-                .query("new " + SonarMetricKpi.class + "('" + _metricName + "')").cronDays(1)
-                .build();
+                .query("new " + SonarMetricKpi.class.getName() + "('" + _metricName + "')")
+                .cronDays(1).build();
     }
     
     

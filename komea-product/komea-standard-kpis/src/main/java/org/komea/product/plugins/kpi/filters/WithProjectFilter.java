@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.plugins.kpi.standard;
+package org.komea.product.plugins.kpi.filters;
 
 
 

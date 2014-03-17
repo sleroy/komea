@@ -21,6 +21,7 @@ import org.komea.product.cep.formula.tuple.EventCountFormula;
 import org.komea.product.cep.formula.tuple.GroupByFormula;
 import org.komea.product.cep.query.FilterDefinition;
 import org.komea.product.plugins.kpi.filters.EventTypeFilter;
+import org.komea.product.plugins.kpi.filters.WithProjectFilter;
 import org.komea.product.plugins.kpi.tuplecreator.ProjectTupleCreator;
 
 
