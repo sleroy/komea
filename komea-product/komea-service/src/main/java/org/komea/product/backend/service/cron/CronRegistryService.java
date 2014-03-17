@@ -67,7 +67,9 @@ public class CronRegistryService implements ICronRegistryService
     
     /**
      * Method disableCronTask.
-     * @param _cronName String
+     * 
+     * @param _cronName
+     *            String
      * @see org.komea.product.backend.service.cron.ICronRegistryService#disableCronTask(String)
      */
     @Override
@@ -87,7 +89,9 @@ public class CronRegistryService implements ICronRegistryService
     
     /**
      * Method enableCronTask.
-     * @param _cronName String
+     * 
+     * @param _cronName
+     *            String
      * @see org.komea.product.backend.service.cron.ICronRegistryService#enableCronTask(String)
      */
     @Override
@@ -106,7 +110,9 @@ public class CronRegistryService implements ICronRegistryService
     
     /**
      * Method existCron.
-     * @param _jobName String
+     * 
+     * @param _jobName
+     *            String
      * @return boolean
      * @see org.komea.product.backend.service.cron.ICronRegistryService#existCron(String)
      */
@@ -122,8 +128,26 @@ public class CronRegistryService implements ICronRegistryService
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.cron.ICronRegistryService#forceNow(java.lang.String)
+     */
+    @Override
+    public void forceNow(final String _jobName) {
+    
+    
+        try {
+            schedulerFactory.getScheduler().triggerJob(JobKey.jobKey(_jobName));
+        } catch (final SchedulerException e) {
+            throw new CronRuntimeException(e);
+        }
+        
+    }
+    
+    
     /**
      * Method getCronTasks.
+     * 
      * @return List<CronDetails>
      * @see org.komea.product.backend.service.cron.ICronRegistryService#getCronTasks()
      */
@@ -170,10 +194,15 @@ public class CronRegistryService implements ICronRegistryService
     // For more informations : http://quartz-scheduler.org/documentation/quartz-2.x/tutorials/tutorial-lesson-02
     /**
      * Method registerCronTask.
-     * @param _cronName String
-     * @param _cronExpression String
-     * @param _runnable Class<? extends Job>
-     * @param _properties JobDataMap
+     * 
+     * @param _cronName
+     *            String
+     * @param _cronExpression
+     *            String
+     * @param _runnable
+     *            Class<? extends Job>
+     * @param _properties
+     *            JobDataMap
      * @see org.komea.product.backend.service.cron.ICronRegistryService#registerCronTask(String, String, Class<? extends Job>, JobDataMap)
      */
     @Override
@@ -203,7 +232,9 @@ public class CronRegistryService implements ICronRegistryService
     
     /**
      * Method removeCronTask.
-     * @param _cronName String
+     * 
+     * @param _cronName
+     *            String
      * @see org.komea.product.backend.service.cron.ICronRegistryService#removeCronTask(String)
      */
     @Override
@@ -221,8 +252,11 @@ public class CronRegistryService implements ICronRegistryService
     
     /**
      * Method updateCronFrequency.
-     * @param _cronName String
-     * @param _cronExpression String
+     * 
+     * @param _cronName
+     *            String
+     * @param _cronExpression
+     *            String
      * @see org.komea.product.backend.service.cron.ICronRegistryService#updateCronFrequency(String, String)
      */
     @Override

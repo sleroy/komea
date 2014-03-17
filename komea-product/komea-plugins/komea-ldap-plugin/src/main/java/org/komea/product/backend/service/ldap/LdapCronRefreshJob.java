@@ -6,6 +6,8 @@ package org.komea.product.backend.service.ldap;
 
 
 
+import java.util.Collections;
+
 import org.apache.commons.lang.Validate;
 import org.komea.product.api.service.ldap.ILdapUserService;
 import org.komea.product.api.service.ldap.LdapUser;
@@ -13,8 +15,8 @@ import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.Person;
-import org.komea.product.database.model.PersonCriteria;
 import org.komea.product.database.model.PersonGroup;
+import org.komea.product.database.model.Project;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -102,7 +104,8 @@ public class LdapCronRefreshJob implements Job
         personRequested.setPassword(ldapUser.getPassword());
         final String ldapDepartment = ldapUser.getDepartment();
         final PersonGroup department = createMissingDepartment(personGroupService, ldapDepartment);
-        _personService.saveOrUpdatePerson(personRequested, null, null, department);
+        _personService.saveOrUpdatePerson(personRequested, Collections.<Project> emptyList(), null,
+                department);
         
     }
     
@@ -143,9 +146,8 @@ public class LdapCronRefreshJob implements Job
                     continue;
                 }
                 // Test if the person exists in DB
-                final PersonCriteria personCriteria = new PersonCriteria();
-                personCriteria.createCriteria().andEmailEqualTo(ldapUser.getEmail());
-                if (personService.selectByCriteria(personCriteria).isEmpty()) {
+                
+                if (personService.findUserByEmail(ldapUser.getEmail()) != null) {
                     
                     createMissingLdapUser(ldapService, personService, personGroupService, ldapUser);
                     

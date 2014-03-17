@@ -43,16 +43,24 @@ public interface ICronRegistryService
      * 
      * @param _jobName
      *            the job name
-    
-     * @return true if the job is existing. */
+     * @return true if the job is existing.
+     */
     boolean existCron(String _jobName);
+    
+    
+    /**
+     * Force execution of a job now
+     * 
+     * @param _jobName
+     */
+    void forceNow(String _jobName);
     
     
     /**
      * Returns the list of cron tasks.
      * 
-    
-     * @return the list of cron tasks. */
+     * @return the list of cron tasks.
+     */
     List<CronDetails> getCronTasks();
     
     
@@ -65,7 +73,8 @@ public interface ICronRegistryService
      *            the cron expression
      * @param _runnable
      *            runnable script.
-     * @param _properties JobDataMap
+     * @param _properties
+     *            JobDataMap
      */
     void registerCronTask(
             String _cronName,

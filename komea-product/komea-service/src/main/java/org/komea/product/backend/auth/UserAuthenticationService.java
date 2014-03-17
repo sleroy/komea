@@ -29,14 +29,14 @@ public class UserAuthenticationService implements UserDetailsService
 {
     
     
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserAuthenticationService.class);
+    
     @Autowired
     private PersonDao           personDAO;
     
+    
     @Autowired
     private PersonRoleDao       personRoleDAO;
-    
-    
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserAuthenticationService.class);
     
     
     
@@ -49,7 +49,9 @@ public class UserAuthenticationService implements UserDetailsService
     
     /**
      * Method loadUserByUsername.
-     * @param _username String
+     * 
+     * @param _username
+     *            String
      * @return UserDetails
      * @throws UsernameNotFoundException
      * @see org.springframework.security.core.userdetails.UserDetailsService#loadUserByUsername(String)
@@ -75,7 +77,7 @@ public class UserAuthenticationService implements UserDetailsService
         } else {
             throw new UsernameNotFoundException("Invalid username/password.");
         }
-        LOGGER.info("-----AUTH----- LdapUser authentication requested {}", _username);
+        LOGGER.trace("-----AUTH----- LdapUser authentication requested {}", _username);
         return new User(requestedLoginUsers.getLogin(), requestedLoginUsers.getPassword(),
                 AuthorityUtils.createAuthorityList(right));
     }
