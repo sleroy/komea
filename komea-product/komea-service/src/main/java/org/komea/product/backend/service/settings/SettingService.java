@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 import org.komea.product.backend.exceptions.DAOException;
 import org.komea.product.backend.plugin.api.InjectSetting;
+import org.komea.product.backend.plugin.api.PostSettingRegistration;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.service.ISettingListener;
@@ -26,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -241,11 +243,32 @@ public class SettingService implements ISettingService, BeanPostProcessor
             }
             
             injectSettings(_bean);
+            triggerPostSettingMethod(_bean, _beanName);
+            
             LOGGER.info("-----------------------------------------------------------------------");
         }
         
         
         return _bean;
+    }
+
+
+    private void triggerPostSettingMethod(final Object _bean, final String _beanName) {
+    
+    
+        for (final Method method : _bean.getClass().getMethods()) {
+            if (AnnotationUtils.findAnnotation(method, PostSettingRegistration.class) != null) {
+                LOGGER.info("Bean  {} requires additional step of initialization once settings are registered");
+                try {
+                    method.invoke(_bean);
+                } catch (final Exception e) {
+                    throw new FatalBeanException(
+                            "Could not perform initialization of the bean "
+                                    + _beanName + " once the settings are registered", e);
+                }
+                
+            }
+        }
     }
     
     
@@ -301,7 +324,7 @@ public class SettingService implements ISettingService, BeanPostProcessor
     
     
         LOGGER.debug("Updated setting {}", _setting);
-        
+        ;
         settingDAO.updateByPrimaryKey(_setting);
         settingListenerContainer.notifyUpdate(_setting);
         

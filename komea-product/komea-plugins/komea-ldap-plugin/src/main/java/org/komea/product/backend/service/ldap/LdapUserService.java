@@ -3,50 +3,74 @@ package org.komea.product.backend.service.ldap;
 
 
 
+import java.net.URL;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
 import org.komea.product.api.service.ldap.ILdapUserService;
 import org.komea.product.api.service.ldap.LdapUser;
+import org.komea.product.backend.plugin.api.PostSettingRegistration;
+import org.komea.product.backend.plugin.api.Properties;
+import org.komea.product.backend.plugin.api.Property;
+import org.komea.product.backend.service.ISettingListener;
+import org.komea.product.backend.service.ISettingService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
+import org.komea.product.database.model.Setting;
 import org.quartz.JobDataMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.ldap.filter.LikeFilter;
+import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
 import org.springframework.stereotype.Service;
+
+import com.google.common.base.Strings;
 
 
 
 /**
  * ILdapUserService Implementation
+ * Requires three properties to work (ldap url ,userDN, password)
+ * <property name="userDn" value="cn=manager,dc=example,dc=com" /> <property
+ * name="password" value="password" />
  * 
  * @author JavaChap
+ * @author sleroy
  */
 @Service
-public class LdapUserService implements ILdapUserService
+@Properties(value = {
+        @Property(
+                key = LdapUserService.LDAP_SERVER,
+                value = "ldap://localhost:33389",
+                type = URL.class,
+                description = "Specify the location of the LDAP Server"),
+        @Property(
+                key = LdapUserService.LDAP_PASSWORD,
+                value = "",
+                type = String.class,
+                description = "Specify the LDAP Server password required to authenticate"),
+        @Property(
+                key = LdapUserService.LDAP_USER_DN,
+                value = "",
+                type = String.class,
+                description = "Specify the LDAP userDn"),
+        @Property(
+                key = LdapUserService.LDAP_BASE,
+                value = "dc=jbcpcalendar,dc=com",
+                type = String.class,
+                description = "Specify the LDAP Base url") })
+public class LdapUserService implements ILdapUserService, ISettingListener
 {
     
-    
-    /**
-     * <!--
-     * <bean id="contextSource"
-     * class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
-     * <constructor-arg value="ldap://localhost:389/dc=tocea,dc=com" />
-     * </bean>
-     * <bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
-     * <constructor-arg ref="contextSource" />
-     * </bean> -->
-     */
     
     private static class UserAttributesMapper implements AttributesMapper
     {
@@ -75,46 +99,52 @@ public class LdapUserService implements ILdapUserService
     
     
     
-    /**
-     * 
-     */
-    private static final String  CRON_LDAP         = "0 0/5 * * * ?";
+    public static final String    LDAP_PASSWORD     = "ldap_password";
+    
+    
+    public static final String    LDAP_USER_DN      = "ldap_userDn";
+    
+    
+    private static final String   CRON_LDAP         = "0 0/5 * * * ?";
+    
+    
+    private static final String   LDAP_CRON_REFRESH = "LDAP-CRON-REFRESH";
+    
+    
+    private static final Logger   LOGGER            = LoggerFactory
+                                                            .getLogger(LdapUserService.class);
+    
+    private static final long     serialVersionUID  = 4889152297004460837L;
     
     
     /**
      * 
      */
-    private static final String  LDAP_CRON_REFRESH = "LDAP-CRON-REFRESH";
+    protected static final String LDAP_BASE         = "ldap_base";
     
-    
-    private static final long    serialVersionUID  = 4889152297004460837L;
-    
-    @Autowired
-    private IPersonGroupService  groupService;
-    
-    
-    @Autowired
-    @Qualifier("ldapTemplate")
-    private LdapTemplate         ldapTemplate;
+    /**
+     * 
+     */
+    protected static final String LDAP_SERVER       = "ldap-server";
     
     
     @Autowired
-    private IPersonService       personService;
+    private IPersonGroupService   groupService;
+    
+    
+    private LdapTemplate          ldapTemplate;
     
     
     @Autowired
-    private ICronRegistryService registryService;
+    private IPersonService        personService;
+    
+    @Autowired
+    private ICronRegistryService  registryService;
     
     
+    @Autowired
+    private ISettingService       settingService;
     
-    //
-    // @Override
-    // public void delete(final LdapUser user) {
-    //
-    //
-    // final Name dn = buildDn(user);
-    // ldapTemplate.unbind(dn);
-    // }
     
     
     @Override
@@ -139,31 +169,6 @@ public class LdapUserService implements ILdapUserService
         return groupService;
     }
     
-    
-    //
-    // @Override
-    // public LdapUser save(final LdapUser user) {
-    //
-    //
-    // final Name dn = buildDn(user);
-    // ldapTemplate.bind(dn, null, buildAttributes(user));
-    //
-    // // Update Groups
-    // for (final String group : user.getGroups()) {
-    // try {
-    // final DistinguishedName groupDn = new DistinguishedName();
-    // groupDn.add("ou", "Groups");
-    // groupDn.add("cn", group);
-    // final DirContextOperations context = ldapTemplate.lookupContext(groupDn);
-    // context.addAttributeValue("memberUid", user.getUserName());
-    // ldapTemplate.modifyAttributes(context);
-    // } catch (final Exception e) {
-    // e.printStackTrace();
-    // }
-    // }
-    // return user;
-    // }
-    //
     
     public IPersonService getPersonService() {
     
@@ -210,17 +215,68 @@ public class LdapUserService implements ILdapUserService
     }
     
     
-    @PostConstruct
-    public void initialize() {
+    @PostSettingRegistration
+    public void initializeCron() throws Exception {
     
     
-        final JobDataMap properties = new JobDataMap();
-        properties.put("ldap", this);
-        properties.put("person", personService);
-        properties.put("group", groupService);
+        LOGGER.info("LDAP - LDAP");
+        /**
+         * Initialisation of the connexion to the ldap server
+         */
+        LOGGER.info("Creation of the LDAP connection.");
+        final String ldapUrl = settingService.getProxy(LDAP_SERVER).getStringValue();
+        final String ldapUserDN = settingService.getProxy(LDAP_USER_DN).getStringValue();
+        final String password = settingService.getProxy(LDAP_PASSWORD).getStringValue();
+        final String ldapBase = settingService.getProxy(LDAP_BASE).getStringValue();
         
+        LOGGER.info("LDAP Url : {}", ldapUrl);
+        LOGGER.info("LDAP Base : {}", ldapBase);
+        LOGGER.info("LDAP UserDN {}", ldapUserDN);
+        
+        final DefaultSpringSecurityContextSource contextSource =
+                new org.springframework.security.ldap.DefaultSpringSecurityContextSource(ldapUrl);
+        
+        
+        // LDAP Anonymous access
+        if (Strings.isNullOrEmpty(ldapUserDN) && Strings.isNullOrEmpty(password)) {
+            
+            contextSource.setAnonymousReadOnly(true);
+        }
+        contextSource.setUserDn(ldapUserDN);
+        contextSource.setPassword(password);
+        contextSource.setBase(ldapBase);
+        contextSource.afterPropertiesSet();
+        
+        ldapTemplate = new LdapTemplate(contextSource);
+        
+        final JobDataMap properties = initializeDataForCron();
+        LOGGER.info("Initialization of lDAP Cron.");
+        registryService.removeCronTask(LDAP_CRON_REFRESH);
         registryService.registerCronTask(LDAP_CRON_REFRESH, CRON_LDAP, LdapCronRefreshJob.class,
                 properties);
+        
+        
+        settingService.registerListener(LDAP_SERVER, this);
+        settingService.registerListener(LDAP_PASSWORD, this);
+        settingService.registerListener(LDAP_USER_DN, this);
+        settingService.registerListener(LDAP_BASE, this);
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.ISettingListener#notifyPropertyChanged(org.komea.product.database.model.Setting)
+     */
+    @Override
+    public void notifyPropertyChanged(final Setting _setting) {
+    
+    
+        try {
+            initializeCron();
+        } catch (final Exception e) {
+            throw new IllegalArgumentException("Could not initialize the ldap connection", e);
+        }
+        
         
     }
     
@@ -253,61 +309,14 @@ public class LdapUserService implements ILdapUserService
     }
     
     
-    // public LdapUser update(final LdapUser user) {
-    //
-    //
-    // final Name dn = buildDn(user);
-    // ldapTemplate.rebind(dn, null, buildAttributes(user));
-    // return user;
-    // }
+    private JobDataMap initializeDataForCron() {
     
     
-    // private Attributes buildAttributes(final LdapUser user) {
-    //
-    //
-    // final Attributes attrs = new BasicAttributes();
-    // final BasicAttribute ocattr = new BasicAttribute("objectclass");
-    // ocattr.add("person");
-    // ocattr.add("inetOrgPerson");
-    // attrs.put(ocattr);
-    // attrs.put("cn", user.getFirstName());
-    // attrs.put("sn", user.getLastName());
-    // attrs.put("userPassword", "{SHA}" + encrypt(user.getPassword()));
-    // attrs.put("mail", user.getEmail());
-    //
-    // return attrs;
-    // }
-    //
-    //
-    // private Name buildDn(final LdapUser user) {
-    //
-    //
-    // final DistinguishedName dn = new DistinguishedName();
-    // dn.add("ou", "People");
-    // if (user.getDepartment() != null) {
-    // dn.add("ou", user.getDepartment());
-    // }
-    // dn.add("uid", user.getUserName());
-    // return dn;
-    // }
-    //
-    //
-    // private String encrypt(final String plaintext) {
-    //
-    //
-    // MessageDigest md = null;
-    // try {
-    // md = MessageDigest.getInstance("SHA");
-    // } catch (final NoSuchAlgorithmException e) {
-    // throw new RuntimeException(e.getMessage());
-    // }
-    // try {
-    // md.update(plaintext.getBytes("UTF-8"));
-    // } catch (final UnsupportedEncodingException e) {
-    // throw new RuntimeException(e.getMessage());
-    // }
-    // final byte raw[] = md.digest();
-    // final String hash = new String(Base64.encode(raw));
-    // return hash;
-    // }
+        final JobDataMap properties = new JobDataMap();
+        properties.put("ldap", this);
+        properties.put("person", personService);
+        properties.put("group", groupService);
+        return properties;
+    }
+    
 }
