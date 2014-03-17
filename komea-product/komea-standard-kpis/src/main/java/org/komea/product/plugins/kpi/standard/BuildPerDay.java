@@ -54,7 +54,7 @@ public class BuildPerDay implements ICEPQueryImplementation
     
     
         final IEventFilter<?> eventFilter =
-                EventFilterBuilder.create().onlyIEvents()
+                EventFilterBuilder.create().onlyIEvents().chain(new WithProjectFilter())
                         .chain(new EventTypeFilter("build_started")).build();
         final IFilterDefinition filterDefinition =
                 FilterDefinition

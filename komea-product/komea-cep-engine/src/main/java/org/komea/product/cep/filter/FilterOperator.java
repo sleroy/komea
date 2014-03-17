@@ -45,6 +45,18 @@ public class FilterOperator
             
                 return _filter1.isFiltered(_event) && _filter2.isFiltered(_event);
             }
+            
+            
+            /*
+             * (non-Javadoc)
+             * @see java.lang.Object#toString()
+             */
+            @Override
+            public String toString() {
+            
+            
+                return "And Operator" + _filter1 + " &  " + _filter2;
+            }
         };
         
     }
@@ -72,6 +84,18 @@ public class FilterOperator
             
             
                 return !_filter1.isFiltered(_event);
+            }
+            
+            
+            /*
+             * (non-Javadoc)
+             * @see java.lang.Object#toString()
+             */
+            @Override
+            public String toString() {
+            
+            
+                return "Not Operator" + _filter1;
             }
         };
         
@@ -103,6 +127,18 @@ public class FilterOperator
                 final boolean b1 = _filter1.isFiltered(_event);
                 if (b1) { return b1; }
                 return _filter2.isFiltered(_event);
+            }
+            
+            
+            /*
+             * (non-Javadoc)
+             * @see java.lang.Object#toString()
+             */
+            @Override
+            public String toString() {
+            
+            
+                return "Or Operator" + _filter1 + " &  " + _filter2;
             }
         };
         

@@ -74,6 +74,7 @@ public class GroupByFormula implements ICEPFormula<Serializable>
         LOGGER.debug("tuple map produced {}", tupleMap);
         final ITupleResultMap<?> resultMap = formulaTupler.processMap(tupleMap, _parameters);
         LOGGER.debug("resultMap produced {}", resultMap);
+        
         return CEPResult.buildFromMap(resultMap);
     }
     

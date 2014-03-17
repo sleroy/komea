@@ -5,10 +5,13 @@ package org.komea.product.backend.esper.test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.service.kpi.ICEPQueryLineTestPredicate;
@@ -18,10 +21,13 @@ import org.komea.product.cep.CEPEngine;
 import org.komea.product.cep.api.ICEPEngine;
 import org.komea.product.cep.api.ICEPQuery;
 import org.komea.product.cep.api.ICEPQueryImplementation;
+import org.komea.product.cep.api.ICEPResult;
+import org.komea.product.cep.api.ITupleResultMap;
 import org.komea.product.cep.api.formula.tuple.ITuple;
 import org.komea.product.cep.query.CEPQuery;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
+import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
@@ -30,6 +36,7 @@ import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.database.model.Provider;
+import org.komea.product.service.dto.EntityKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,7 +87,25 @@ public class CEPQueryTester
             final List<ITuple> listMapResult = _epStatement.getResult().asMap().asTupleRows();
             LOGGER.debug(listMapResult.toString());
             checkIfisEquals(array.length, listMapResult.size(), "Expected same number of rows");
-            
+            Collections.sort(listMapResult, new Comparator<ITuple>()
+            {
+                
+                
+                @Override
+                public int compare(final ITuple _o1, final ITuple _o2) {
+                
+                
+                    if (_o1.isSingleton() && _o1.getFirst() instanceof EntityKey) {
+                        return ((EntityKey) _o1.getFirst()).getId()
+                                - ((EntityKey) _o2.getFirst()).getId();
+                    } else if (_o1.isSingleton() && _o1.getFirst() instanceof IHasKey) {
+                        return ((IHasKey) _o1.getFirst()).getId()
+                                - ((IHasKey) _o2.getFirst()).getId();
+                    } else {
+                        return _o1.hashCode() - _o2.hashCode();
+                    }
+                }
+            });
             for (int i = 0; i < listMapResult.size(); ++i) {
                 
                 LOGGER.debug("Evaluating line {} of esper request", i);
@@ -286,28 +311,8 @@ public class CEPQueryTester
             _eventDto.setDate(new Date());
             
         }
-        final String providerName = _eventDto.getProvider();
-        if (getMockProviders().get(providerName) == null) {
-            final Provider provider = new Provider();
-            provider.setName(providerName);
-            provider.setProviderType(ProviderType.CI_BUILD);
-            provider.setIcon("");
-            provider.setUrl("");
-            provider.setId(providerName.hashCode());
-            getMockProviders().put(providerName, provider);
-        }
-        final String eventTypeName = _eventDto.getEventType();
-        if (mockEventTypes.get(eventTypeName) == null) {
-            final EventType eventType = new EventType();
-            eventType.setName(eventTypeName);
-            eventType.setEventKey(eventTypeName);
-            eventType.setCategory("");
-            eventType.setDescription(eventTypeName);
-            eventType.setEnabled(true);
-            eventType.setSeverity(Severity.INFO);
-            eventType.setId(eventTypeName.hashCode());
-            mockEventTypes.put(eventTypeName, eventType);
-        }
+        buildProviderMock(_eventDto);
+        final String eventTypeName = buildEventTypeMock(_eventDto);
         
         final Event event = new Event();
         event.setDate(_eventDto.getDate());
@@ -315,31 +320,13 @@ public class CEPQueryTester
         event.setProvider(getMockProviders().get(_eventDto.getProvider()));
         event.setMessage(_eventDto.getMessage());
         
-        final String user = _eventDto.getPerson();
-        if (!Strings.isNullOrEmpty(user) && mockPerson.get(user) == null) {
-            final Person person = new Person();
-            person.setLogin(user);
-            person.setId(user.hashCode());
-            mockPerson.put(user, person);
-        }
+        final String user = buildUserMock(_eventDto);
         event.setPerson(mockPerson.get(user));
         
-        if (!Strings.isNullOrEmpty(_eventDto.getPersonGroup())
-                && mockGroup.get(_eventDto.getPersonGroup()) == null) {
-            final PersonGroup group = new PersonGroup();
-            group.setName(_eventDto.getPersonGroup());
-            group.setId(group.getName().hashCode());
-            mockGroup.put(_eventDto.getPersonGroup(), group);
-        }
+        buildPersonGroupMock(_eventDto);
         final String projectName = _eventDto.getProject();
         event.setPersonGroup(mockGroup.get(projectName));
-        if (!Strings.isNullOrEmpty(projectName) && mockProject.get(projectName) == null) {
-            final Project group = new Project();
-            group.setName(projectName);
-            group.setId(projectName.hashCode());
-            group.setProjectKey(projectName);
-            mockProject.put(projectName, group);
-        }
+        buildProjectMock(projectName);
         event.setProject(mockProject.get(projectName));
         event.setValue(_eventDto.getValue());
         event.setUrl(_eventDto.getUrl());
@@ -668,14 +655,100 @@ public class CEPQueryTester
     }
     
     
+    private String buildEventTypeMock(final EventSimpleDto _eventDto) {
+    
+    
+        final String eventTypeName = _eventDto.getEventType();
+        if (mockEventTypes.get(eventTypeName) == null) {
+            final EventType eventType = new EventType();
+            eventType.setName(eventTypeName);
+            eventType.setEventKey(eventTypeName);
+            eventType.setCategory("");
+            eventType.setDescription(eventTypeName);
+            eventType.setEnabled(true);
+            eventType.setSeverity(Severity.INFO);
+            eventType.setId(mockEventTypes.size());
+            mockEventTypes.put(eventTypeName, eventType);
+        }
+        return eventTypeName;
+    }
+    
+    
+    private void buildPersonGroupMock(final EventSimpleDto _eventDto) {
+    
+    
+        if (!Strings.isNullOrEmpty(_eventDto.getPersonGroup())
+                && mockGroup.get(_eventDto.getPersonGroup()) == null) {
+            final PersonGroup group = new PersonGroup();
+            group.setName(_eventDto.getPersonGroup());
+            group.setId(mockGroup.size());
+            mockGroup.put(_eventDto.getPersonGroup(), group);
+        }
+    }
+    
+    
+    private void buildProjectMock(final String projectName) {
+    
+    
+        if (!Strings.isNullOrEmpty(projectName) && mockProject.get(projectName) == null) {
+            final Project group = new Project();
+            group.setName(projectName);
+            group.setId(mockProject.size());
+            group.setProjectKey(projectName);
+            mockProject.put(projectName, group);
+        }
+    }
+    
+    
+    private void buildProviderMock(final EventSimpleDto _eventDto) {
+    
+    
+        final String providerName = _eventDto.getProvider();
+        if (getMockProviders().get(providerName) == null) {
+            final Provider provider = new Provider();
+            provider.setName(providerName);
+            provider.setProviderType(ProviderType.CI_BUILD);
+            provider.setIcon("");
+            provider.setUrl("");
+            provider.setId(getMockProviders().size());
+            getMockProviders().put(providerName, provider);
+        }
+    }
+    
+    
+    private String buildUserMock(final EventSimpleDto _eventDto) {
+    
+    
+        final String user = _eventDto.getPerson();
+        if (!Strings.isNullOrEmpty(user) && mockPerson.get(user) == null) {
+            final Person person = new Person();
+            person.setLogin(user);
+            person.setId(mockPerson.size());
+            mockPerson.put(user, person);
+        }
+        return user;
+    }
+    
+    
     /**
      * 
      */
     private void dumpInfos() {
     
     
-        LOGGER.info("Received  : \n\t{}", cepQuery.getResult().toString());
+        final ICEPResult result = cepQuery.getResult();
+        if (result.isSingleValue()) {
+            LOGGER.info("RESULT : Received unique value : \n\t{}", result.asType());
+        } else if (result.isMap()) {
+            final ITupleResultMap<Object> asMap = result.asMap();
+            LOGGER.info("RESULT : Received a table : {}", result);
+            for (final Entry<ITuple, Object> entry : asMap.getTable().entrySet()) {
+                LOGGER.info("RESULT : {} = {}", entry.getKey(), entry.getValue());
+            }
+        } else {
+            LOGGER.info("RESULT : {}", result);
+        }
+        
         
     }
-    
 }
