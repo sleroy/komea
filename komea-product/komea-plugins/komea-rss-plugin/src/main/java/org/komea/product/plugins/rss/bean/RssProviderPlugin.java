@@ -53,31 +53,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Properties(group = "RSS Plugin", value = {
     @Property(
             description = "Defines the cron value to fetch rss feeds",
-            key = RssProviderPlugin.RSS_PROVIDER_PERIOD,
+            key = RssProviderPlugin.RSS_SETTING_CRON_NAME,
             type = String.class,
-            value = RssProviderPlugin.RSS_CRON_VALUE) })
+            value = RssProviderPlugin.RSS_SETTING_CRON_VALUE) })
 public class RssProviderPlugin
 {
     
     
-    private static final Logger   LOGGER              = LoggerFactory.getLogger("rss-provider");
+    private static final Logger   LOGGER                  = LoggerFactory.getLogger("rss-provider");
     
     /**
      *
      */
-    protected static final String RSS_CRON_JOB        = "rss_cron_job";
+    protected static final String RSS_CRON_JOB            = "rss_cron_job";
     
     /**
      *
      */
-    protected static final String RSS_CRON_VALUE      = "0 0/5 * * * ?";
+    protected static final String RSS_SETTING_CRON_VALUE          = "0 0/5 * * * ?";
     
-    protected static final String RSS_PROVIDER_PERIOD = "rss_refresh_period";
+    protected static final String RSS_SETTING_CRON_NAME = "rss_refresh_period";
     
     /**
      * Rss Provider plugin name;
      */
-    static final String           RSS_PROVIDER_PLUGIN = "Rss Provider plugin";
+    static final String           RSS_PROVIDER_PLUGIN     = "Rss Provider plugin";
     
     @Autowired
     private ICronRegistryService  cronRegistryService;
@@ -186,8 +186,8 @@ public class RssProviderPlugin
     public void initializePluginWithProperties() {
     
     
-        cronRegistryService.updateCronFrequency(RSS_PROVIDER_PERIOD,
-                registry.getProxy(RSS_CRON_VALUE).getStringValue());
+        cronRegistryService.updateCronFrequency(RSS_SETTING_CRON_NAME,
+                registry.getProxy(RSS_SETTING_CRON_NAME).getStringValue());
         
     }
     
@@ -201,7 +201,7 @@ public class RssProviderPlugin
         final JobDataMap properties = prepareJobMapForCron();
         
         
-        cronRegistryService.registerCronTask(RSS_CRON_JOB, RSS_CRON_VALUE, RssCronJob.class,
+        cronRegistryService.registerCronTask(RSS_CRON_JOB, RSS_SETTING_CRON_VALUE, RssCronJob.class,
                 properties);
         
     }
