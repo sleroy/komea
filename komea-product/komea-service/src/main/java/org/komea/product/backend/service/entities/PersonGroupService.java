@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
 import org.komea.product.backend.genericservice.AbstractService;
+import org.komea.product.backend.service.kpi.IMeasureHistoryService;
 import org.komea.product.database.dao.HasProjectPersonGroupDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dto.BaseEntityDto;
@@ -14,6 +15,7 @@ import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.HasProjectPersonGroupCriteria;
 import org.komea.product.database.model.HasProjectPersonGroupKey;
+import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.PersonGroupCriteria;
@@ -40,6 +42,9 @@ public final class PersonGroupService extends
 
     @Autowired
     private IProjectService projectService;
+
+    @Autowired
+    private IMeasureHistoryService measureService;
 
     @Autowired
     private PersonGroupDao requiredDAO;
@@ -277,5 +282,72 @@ public final class PersonGroupService extends
         final PersonGroupCriteria criteria = new PersonGroupCriteria();
         criteria.createCriteria().andPersonGroupKeyEqualTo(key);
         return criteria;
+    }
+
+    @Override
+    public void saveOrUpdatePersonGroup(final PersonGroup personGroup, final List<PersonGroup> children,
+            final List<Project> projects, final List<Person> persons) {
+        saveOrUpdate(personGroup);
+        final Integer idPersonGroup = personGroup.getId();
+
+        final List<PersonGroup> oldChildren = getChildren(idPersonGroup);
+        for (final PersonGroup child : oldChildren) {
+            child.setIdPersonGroupParent(null);
+            saveOrUpdate(child);
+        }
+        if (children != null) {
+            for (final PersonGroup child : children) {
+                child.setIdPersonGroupParent(idPersonGroup);
+                saveOrUpdate(child);
+            }
+        }
+
+        final List<Person> oldPersons = personService.getPersonsOfPersonGroup(idPersonGroup);
+        for (final Person person : oldPersons) {
+            person.setIdPersonGroup(null);
+            personService.saveOrUpdate(person);
+        }
+        if (persons != null) {
+            for (final Person person : persons) {
+                person.setIdPersonGroup(idPersonGroup);
+                personService.saveOrUpdate(person);
+            }
+        }
+
+        final HasProjectPersonGroupCriteria hasProjectPersonGroupCriteria = new HasProjectPersonGroupCriteria();
+        hasProjectPersonGroupCriteria.createCriteria().andIdPersonGroupEqualTo(idPersonGroup);
+        projectPersonGroupDao.deleteByCriteria(hasProjectPersonGroupCriteria);
+        if (projects != null) {
+            for (final Project project : projects) {
+                projectPersonGroupDao.insert(new HasProjectPersonGroupKey(project.getId(), idPersonGroup));
+            }
+        }
+    }
+
+    @Override
+    public void deletePersonGroup(final PersonGroup personGroup) {
+        final Integer idPersonGroup = personGroup.getId();
+
+        final List<PersonGroup> children = getChildren(idPersonGroup);
+        for (final PersonGroup child : children) {
+            child.setIdPersonGroupParent(null);
+            saveOrUpdate(child);
+        }
+
+        final MeasureCriteria measureCriteria = new MeasureCriteria();
+        measureCriteria.createCriteria().andIdPersonGroupEqualTo(idPersonGroup);
+        measureService.deleteByCriteria(measureCriteria);
+
+        final List<Person> persons = personService.getPersonsOfPersonGroup(idPersonGroup);
+        for (final Person person : persons) {
+            person.setIdPersonGroup(null);
+            personService.saveOrUpdate(person);
+        }
+
+        final HasProjectPersonGroupCriteria hasProjectPersonGroupCriteria = new HasProjectPersonGroupCriteria();
+        hasProjectPersonGroupCriteria.createCriteria().andIdPersonGroupEqualTo(idPersonGroup);
+        projectPersonGroupDao.deleteByCriteria(hasProjectPersonGroupCriteria);
+
+        delete(personGroup);
     }
 }

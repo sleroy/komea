@@ -5,8 +5,11 @@ import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.ProjectDto;
 import org.komea.product.database.model.Link;
+import org.komea.product.database.model.Person;
+import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.database.model.ProjectCriteria;
+import org.komea.product.database.model.Tag;
 
 /**
  * Komeap projects manager
@@ -77,5 +80,23 @@ public interface IProjectService extends IGenericService<Project, Integer, Proje
      * @return list of projects
      */
     List<Project> getProjectsOfPerson(final Integer _personId);
+
+    /**
+     * delete project
+     *
+     * @param _project project
+     */
+    void deleteProject(final Project _project);
+
+    /**
+     *
+     * @param _project
+     * @param _tags
+     * @param _persons
+     * @param _links
+     * @param _teams
+     */
+    void saveOrUpdateProject(Project _project, List<Tag> _tags,
+            List<Person> _persons, List<Link> _links, List<PersonGroup> _teams);
 
 }

@@ -54,13 +54,13 @@ public interface IPersonService extends IGenericService<Person, Integer, PersonC
      * Save or update information of a person.
      *
      * @param _person
-     * @param _selectedProject
+     * @param _projects
      * @param _selectedRole
      * @param _personGroup
      */
-    void saveOrUpdate(
+    void saveOrUpdatePerson(
             Person _person,
-            Project _selectedProject,
+            List<Project> _projects,
             PersonRole _selectedRole,
             PersonGroup _personGroup);
 
@@ -71,5 +71,12 @@ public interface IPersonService extends IGenericService<Person, Integer, PersonC
      * @return list of persons
      */
     List<Person> getPersonsOfProject(final Integer _projectId);
+
+    /**
+     * delete person
+     *
+     * @param _person person
+     */
+    void deletePerson(final Person _person);
 
 }

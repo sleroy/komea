@@ -2,11 +2,12 @@ package org.komea.product.backend.service.entities;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.esper.IEventConversionAndValidationService;
+import org.komea.product.backend.service.kpi.IMeasureHistoryService;
 import org.komea.product.backend.utils.CollectionUtil;
-import org.komea.product.database.dao.HasProjectPersonDao;
 import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dto.BaseEntityDto;
@@ -15,8 +16,8 @@ import org.komea.product.database.dto.PersonDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.enums.UserBdd;
-import org.komea.product.database.model.HasProjectPersonCriteria;
 import org.komea.product.database.model.HasProjectPersonKey;
+import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonCriteria;
 import org.komea.product.database.model.PersonGroup;
@@ -48,8 +49,6 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     private IProjectService projectService;
 
     @Autowired
-    private HasProjectPersonDao projectPersonDao;
-    @Autowired
     private IProjectPersonService projectPersonService;
 
     @Autowired
@@ -57,6 +56,9 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
 
     @Autowired
     private IPersonRoleService personRoleService;
+
+    @Autowired
+    private IMeasureHistoryService measureService;
 
     /**
      *
@@ -177,30 +179,33 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
         return requiredDAO;
     }
 
-    /**
-     * Method saveOrUpdate.
-     *
-     * @param _person Person
-     * @param _selectedProject Project
-     * @param _personRole PersonRole
-     * @param _personGroup PersonGroup
-     */
     @Override
-    public void saveOrUpdate(
+    public void deletePerson(final Person _person) {
+        projectPersonService.updateProjectsOfPerson(Collections.<Project>emptyList(), _person);
+        final MeasureCriteria measureCriteria = new MeasureCriteria();
+        measureCriteria.createCriteria().andIdPersonEqualTo(_person.getId());
+        measureService.deleteByCriteria(measureCriteria);
+        delete(_person);
+    }
+
+    @Override
+    public void saveOrUpdatePerson(
             final Person _person,
-            final Project _selectedProject,
+            final List<Project> _projects,
             final PersonRole _personRole,
             final PersonGroup _personGroup) {
 
         getDaoEventRegistry().notifyUpdated(_person);
-        getDaoEventRegistry().notifyUpdated(_selectedProject);
+        for (final Project project : _projects) {
+            getDaoEventRegistry().notifyUpdated(project);
+        }
         getDaoEventRegistry().notifyUpdated(_personRole);
         getDaoEventRegistry().notifyUpdated(_personGroup);
         _person.setIdPersonRoleOrNull(_personRole);
         _person.setIdPersonGroupOrNull(_personGroup);
 
         this.saveOrUpdate(_person);
-        projectPersonService.updatePersonToProjectLink(_selectedProject, _person);
+        projectPersonService.updateProjectsOfPerson(_projects, _person);
 
     }
 
@@ -216,14 +221,6 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     public void setGroupService(final IPersonGroupService _groupService) {
 
         groupService = _groupService;
-    }
-
-    /**
-     * @param _projectPersonDao the projectPersonDao to set
-     */
-    public void setProjectPersonDao(final HasProjectPersonDao _projectPersonDao) {
-
-        projectPersonDao = _projectPersonDao;
     }
 
     /**
@@ -249,9 +246,7 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
 
     @Override
     public List<Person> getPersonsOfProject(final Integer _projectId) {
-        final HasProjectPersonCriteria criteria = new HasProjectPersonCriteria();
-        criteria.createCriteria().andIdProjectEqualTo(_projectId);
-        final List<HasProjectPersonKey> result = projectPersonDao.selectByCriteria(criteria);
+        final List<HasProjectPersonKey> result = projectPersonService.getPersonIdsOfProject(_projectId);
         final List<Person> persons = new ArrayList<Person>(result.size());
         for (final HasProjectPersonKey hasProjectPersonKey : result) {
             final Person person = selectByPrimaryKey(hasProjectPersonKey.getIdPerson());

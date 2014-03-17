@@ -129,7 +129,7 @@ public class TeamForm extends Form<PersonGroup> {
                 selectedPerson.setIdPersonGroup(null);
                 personsOfGroup.remove(selectedPerson);
                 personNeedUpdate.add(selectedPerson);
-//               personService.saveOrUpdate(selectedPerson);
+//               personService.saveOrUpdateProject(selectedPerson);
                 art.add(getCustom());
             }
         });

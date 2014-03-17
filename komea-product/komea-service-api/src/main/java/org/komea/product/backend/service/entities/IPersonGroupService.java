@@ -6,8 +6,10 @@ import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.DepartmentDto;
 import org.komea.product.database.dto.TeamDto;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.PersonGroupCriteria;
+import org.komea.product.database.model.Project;
 
 /**
  * Komea service to manage person groupŝ
@@ -100,5 +102,21 @@ public interface IPersonGroupService extends
      * @return list of teams
      */
     List<PersonGroup> getTeamsOfProject(Integer _projectId);
+
+    /**
+     *
+     * @param personGroup
+     */
+    void deletePersonGroup(final PersonGroup personGroup);
+
+    /**
+     *
+     * @param personGroup
+     * @param children
+     * @param projects
+     * @param persons
+     */
+    void saveOrUpdatePersonGroup(final PersonGroup personGroup, final List<PersonGroup> children,
+            final List<Project> projects, final List<Person> persons);
 
 }

@@ -1,11 +1,9 @@
 /**
  *
  */
-
 package org.komea.product.backend.service.ldap;
 
-
-
+import com.google.common.base.Strings;
 import org.apache.commons.lang.Validate;
 import org.komea.product.api.service.ldap.ILdapUserService;
 import org.komea.product.api.service.ldap.LdapUser;
@@ -23,37 +21,27 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Strings;
-
-
-
 /**
  * This class defines a cron job for ldap server that populate user database.
- * 
+ *
  * @author sleroy
  */
 @DisallowConcurrentExecution
-public class LdapCronRefreshJob implements Job
-{
-    
-    
+public class LdapCronRefreshJob implements Job {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(LdapCronRefreshJob.class);
-    
-    
-    
+
     /**
      * Ldap Cron refresh job.
      */
     public LdapCronRefreshJob() {
-    
-    
+
         super();
     }
-    
-    
+
     /**
      * Generate missing department.
-     * 
+     *
      * @param _personGroupService
      * @param _ldapDepartment
      * @return
@@ -61,10 +49,9 @@ public class LdapCronRefreshJob implements Job
     public PersonGroup createMissingDepartment(
             final IPersonGroupService _personGroupService,
             final String _ldapDepartment) {
-    
-    
+
         PersonGroup department = _personGroupService.selectByKey(_ldapDepartment);
-        
+
         if (department == null) {
             LOGGER.info("Creation of the department from ldap {}", _ldapDepartment);
             department = new PersonGroup();
@@ -76,11 +63,10 @@ public class LdapCronRefreshJob implements Job
         }
         return department;
     }
-    
-    
+
     /**
      * Create missing ldap users.
-     * 
+     *
      * @param _ldapService
      * @param _personGroupService
      * @param _personGroupService2
@@ -91,8 +77,7 @@ public class LdapCronRefreshJob implements Job
             final IPersonService _personService,
             final IPersonGroupService personGroupService,
             final LdapUser ldapUser) {
-    
-    
+
         LOGGER.info("Creation of the user {} from LDAP", ldapUser);
         final Person personRequested = new Person();
         personRequested.setFirstName(ldapUser.getFirstName());
@@ -101,38 +86,33 @@ public class LdapCronRefreshJob implements Job
         personRequested.setPassword(ldapUser.getPassword());
         final String ldapDepartment = ldapUser.getDepartment();
         final PersonGroup department = createMissingDepartment(personGroupService, ldapDepartment);
-        _personService.saveOrUpdate(personRequested, null, null, department);
-        
+        _personService.saveOrUpdatePerson(personRequested, null, null, department);
+
     }
-    
-    
+
     /*
      * (non-Javadoc)
      * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
      */
     @Override
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
-    
-    
+
         final JobDataMap jobDataMap = _context.getMergedJobDataMap();
         launchCronTask(jobDataMap);
     }
-    
-    
+
     /**
      * Executes the cron job.
-     * 
-     * @param _jobDataMap
-     *            the job datamap provided in argument to obtain
-     *            informations (spring services)
+     *
+     * @param _jobDataMap the job datamap provided in argument to obtain
+     * informations (spring services)
      */
     public void launchCronTask(final JobDataMap _jobDataMap) {
-    
-    
+
         final ILdapUserService ldapService = (ILdapUserService) _jobDataMap.get("ldap");
         final IPersonService personService = (IPersonService) _jobDataMap.get("person");
-        final IPersonGroupService personGroupService =
-                (IPersonGroupService) _jobDataMap.get("group");
+        final IPersonGroupService personGroupService
+                = (IPersonGroupService) _jobDataMap.get("group");
         Validate.notNull(personGroupService);
         Validate.notNull(personService);
         Validate.notNull(ldapService);
@@ -145,16 +125,16 @@ public class LdapCronRefreshJob implements Job
                 final PersonCriteria personCriteria = new PersonCriteria();
                 personCriteria.createCriteria().andEmailEqualTo(ldapUser.getEmail());
                 if (personService.selectByCriteria(personCriteria).isEmpty()) {
-                    
+
                     createMissingLdapUser(ldapService, personService, personGroupService, ldapUser);
-                    
+
                 }
-                
+
             }
         } catch (final Exception e) {
             LOGGER.error("LDAP connection is failing for the reason {}", e.getMessage(), e);
         }
-        
+
     }
-    
+
 }

@@ -2,10 +2,11 @@ package org.komea.product.backend.service.entities;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.komea.product.backend.genericservice.AbstractService;
+import org.komea.product.backend.service.kpi.IMeasureHistoryService;
 import org.komea.product.database.dao.CustomerDao;
-import org.komea.product.database.dao.HasProjectPersonDao;
 import org.komea.product.database.dao.HasProjectPersonGroupDao;
 import org.komea.product.database.dao.HasProjectTagDao;
 import org.komea.product.database.dao.LinkDao;
@@ -15,7 +16,6 @@ import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.ProjectDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Customer;
-import org.komea.product.database.model.HasProjectPersonCriteria;
 import org.komea.product.database.model.HasProjectPersonGroupCriteria;
 import org.komea.product.database.model.HasProjectPersonGroupKey;
 import org.komea.product.database.model.HasProjectPersonKey;
@@ -23,6 +23,9 @@ import org.komea.product.database.model.HasProjectTagCriteria;
 import org.komea.product.database.model.HasProjectTagKey;
 import org.komea.product.database.model.Link;
 import org.komea.product.database.model.LinkCriteria;
+import org.komea.product.database.model.MeasureCriteria;
+import org.komea.product.database.model.Person;
+import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.database.model.ProjectCriteria;
 import org.komea.product.database.model.Tag;
@@ -50,7 +53,10 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
     private IPersonService personService;
 
     @Autowired
-    private HasProjectPersonDao projectPersonDAO;
+    private IMeasureHistoryService measureService;
+
+    @Autowired
+    private IProjectPersonService projectPersonService;
 
     @Autowired
     private HasProjectPersonGroupDao projectPersonGroupDAO;
@@ -154,14 +160,6 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
     }
 
     /**
-     * @return the projectPersonDAO
-     */
-    public HasProjectPersonDao getProjectPersonDAO() {
-
-        return projectPersonDAO;
-    }
-
-    /**
      * @return the projectPersonGroupDAO
      */
     public HasProjectPersonGroupDao getProjectPersonGroupDAO() {
@@ -171,10 +169,7 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
 
     @Override
     public List<Project> getProjectsOfPerson(final Integer _personId) {
-
-        final HasProjectPersonCriteria criteria = new HasProjectPersonCriteria();
-        criteria.createCriteria().andIdPersonEqualTo(_personId);
-        final List<HasProjectPersonKey> result = projectPersonDAO.selectByCriteria(criteria);
+        final List<HasProjectPersonKey> result = projectPersonService.getPersonIdsOfProject(_personId);
         final List<Project> projects = Lists.newArrayList();
         for (final HasProjectPersonKey hasProjectPersonKey : result) {
             final Project project = selectByPrimaryKey(hasProjectPersonKey.getIdProject());
@@ -282,14 +277,6 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
     }
 
     /**
-     * @param _projectPersonDAO the projectPersonDAO to set
-     */
-    public void setProjectPersonDAO(final HasProjectPersonDao _projectPersonDAO) {
-
-        projectPersonDAO = _projectPersonDAO;
-    }
-
-    /**
      * @param _projectPersonGroupDAO the projectPersonGroupDAO to set
      */
     public void setProjectPersonGroupDAO(final HasProjectPersonGroupDao _projectPersonGroupDAO) {
@@ -325,4 +312,68 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         criteria.createCriteria().andProjectKeyEqualTo(key);
         return criteria;
     }
+
+    @Override
+    public void saveOrUpdateProject(final Project _project, final List<Tag> _tags,
+            final List<Person> _persons, final List<Link> _links, final List<PersonGroup> _teams) {
+        saveOrUpdate(_project);
+        final Integer idProject = _project.getId();
+
+        projectPersonService.updatePersonsOfProject(_persons, _project);
+
+        final HasProjectTagCriteria hasProjectTagCriteria = new HasProjectTagCriteria();
+        hasProjectTagCriteria.createCriteria().andIdProjectEqualTo(idProject);
+        projectTagsDAO.deleteByCriteria(hasProjectTagCriteria);
+        if (_tags != null) {
+            for (final Tag tag : _tags) {
+                projectTagsDAO.insert(new HasProjectTagKey(idProject, tag.getId()));
+            }
+        }
+
+        final HasProjectPersonGroupCriteria hasProjectPersonGroupCriteria = new HasProjectPersonGroupCriteria();
+        hasProjectPersonGroupCriteria.createCriteria().andIdProjectEqualTo(idProject);
+        projectPersonGroupDAO.deleteByCriteria(hasProjectPersonGroupCriteria);
+        if (_teams != null) {
+            for (final PersonGroup team : _teams) {
+                projectPersonGroupDAO.insert(new HasProjectPersonGroupKey(idProject, team.getId()));
+            }
+        }
+
+        final LinkCriteria linkCriteria = new LinkCriteria();
+        linkCriteria.createCriteria().andIdProjectEqualTo(idProject);
+        linkDAO.deleteByCriteria(linkCriteria);
+        if (_links != null) {
+            for (final Link link : _links) {
+                linkDAO.insert(link);
+            }
+        }
+
+        delete(_project);
+    }
+
+    @Override
+    public void deleteProject(final Project _project) {
+        final Integer idProject = _project.getId();
+
+        final MeasureCriteria measureCriteria = new MeasureCriteria();
+        measureCriteria.createCriteria().andIdProjectEqualTo(idProject);
+        measureService.deleteByCriteria(measureCriteria);
+
+        projectPersonService.updatePersonsOfProject(Collections.<Person>emptyList(), _project);
+
+        final HasProjectTagCriteria hasProjectTagCriteria = new HasProjectTagCriteria();
+        hasProjectTagCriteria.createCriteria().andIdProjectEqualTo(idProject);
+        projectTagsDAO.deleteByCriteria(hasProjectTagCriteria);
+
+        final HasProjectPersonGroupCriteria hasProjectPersonGroupCriteria = new HasProjectPersonGroupCriteria();
+        hasProjectPersonGroupCriteria.createCriteria().andIdProjectEqualTo(idProject);
+        projectPersonGroupDAO.deleteByCriteria(hasProjectPersonGroupCriteria);
+
+        final LinkCriteria linkCriteria = new LinkCriteria();
+        linkCriteria.createCriteria().andIdProjectEqualTo(idProject);
+        linkDAO.deleteByCriteria(linkCriteria);
+
+        delete(_project);
+    }
+
 }
