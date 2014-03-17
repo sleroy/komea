@@ -76,7 +76,7 @@ public class BaseEntityDto implements IEntity
     
         if (this == obj) { return true; }
         if (obj == null) { return false; }
-        if (!(obj instanceof BaseEntityDto)) { return false; }
+        if (getClass() != obj.getClass()) { return false; }
         final BaseEntityDto other = (BaseEntityDto) obj;
         if (id == null) {
             if (other.id != null) { return false; }

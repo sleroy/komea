@@ -15,6 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.komea.event.factory.JenkinsEventFactory;
+import org.komea.product.backend.esper.test.CEPQueryTester;
 import org.komea.product.backend.utils.MapPopulation;
 import org.komea.product.cep.api.ICEPQuery;
 import org.komea.product.cep.api.IEventFilter;
@@ -25,7 +26,6 @@ import org.komea.product.cep.filter.NoEventFilter;
 import org.komea.product.cep.formula.CountFormula;
 import org.komea.product.cep.formula.ElNumericalFormula;
 import org.komea.product.cep.query.CEPQueryBuilder;
-import org.komea.product.cep.query.CEPQueryTest;
 import org.komea.product.database.alert.IEvent;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
@@ -49,7 +49,7 @@ public class CEPJenkinsKPITest
     private static IEvent              a3;
     private static IEvent              a4;
     private static JenkinsEventFactory jenkinsEventFactory;
-    private static CEPQueryTest        newTest;
+    private static CEPQueryTester      newTest;
     
     
     
@@ -57,7 +57,7 @@ public class CEPJenkinsKPITest
     public static void initialize() {
     
     
-        newTest = CEPQueryTester.newTest("bla");
+        newTest = CEPQueryTester.newTest();
         jenkinsEventFactory = new JenkinsEventFactory();
         a1 = newTest.convertDto(jenkinsEventFactory.sendBuildComplete("SCERTIFY", 908, "SPRINT"));
         a2 = newTest.convertDto(jenkinsEventFactory.sendBuildComplete("KOMEA", 909, "SPRINT"));
@@ -173,7 +173,6 @@ public class CEPJenkinsKPITest
                         .defineFilter(filter,
                                 CacheConfigurationBuilder.expirationTimeCache(30, TimeUnit.DAYS))
                         .build();
-        
         query.notifyEvent(a1);
         query.notifyEvent(a2);
         query.notifyEvent(a3);
@@ -267,7 +266,7 @@ public class CEPJenkinsKPITest
     }
     
     
-    @Test
+    @Test(timeout = 1000 * 5)
     public void testSendingEvents() {
     
     

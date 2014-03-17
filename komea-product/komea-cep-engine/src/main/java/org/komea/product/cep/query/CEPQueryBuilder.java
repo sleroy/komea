@@ -38,7 +38,7 @@ public class CEPQueryBuilder
     
     
         final CEPQueryBuilder cepQueryBuilder = new CEPQueryBuilder(_formula);
-        cepQueryBuilder.defineFilter(new NoEventFilter());
+        
         return cepQueryBuilder;
         
     }

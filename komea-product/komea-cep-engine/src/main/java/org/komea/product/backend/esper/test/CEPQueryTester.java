@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
-import org.junit.Assert;
 import org.komea.product.backend.service.kpi.ICEPQueryLineTestPredicate;
 import org.komea.product.backend.service.kpi.ICEPQueryTestPredicate;
 import org.komea.product.cep.CEPConfiguration;
@@ -80,20 +79,21 @@ public class CEPQueryTester
         
             final List<ITuple> listMapResult = _epStatement.getResult().asMap().asTupleRows();
             LOGGER.debug(listMapResult.toString());
-            Assert.assertEquals("Expected same number of rows", array.length, listMapResult.size());
+            if (array.length != listMapResult.size()) { throw new IllegalArgumentException(
+                    "Expected same number of rows"); }
             for (int i = 0; i < listMapResult.size(); ++i) {
                 
                 LOGGER.debug("Evaluating line {} of esper request", i);
                 final ITuple tuple = listMapResult.get(i);
                 final List<Object> arrayList = new ArrayList<Object>(tuple.values());
-                Assert.assertEquals("Expected same number of cols for iteration " + i,
-                        array[i].length, arrayList.size());
+                Validate.isTrue(array[i].length == arrayList.size(),
+                        "Expected same number of cols for iteration " + i);
                 for (int j = 0; j < arrayList.size(); j++) {
                     final Object thisProperty = arrayList.get(j);
                     final Object expectedValue = array[i][j];
                     LOGGER.debug("Array[{}][{}]={} and should be {}", i, j, thisProperty,
                             expectedValue);
-                    Assert.assertEquals(expectedValue, thisProperty);
+                    Validate.isTrue(expectedValue.equals(thisProperty));
                     
                 }
             }
@@ -139,8 +139,8 @@ public class CEPQueryTester
         public void evaluate(final ITuple _tuple) {
         
         
-            Assert.assertEquals("Expected " + expectedValue + "  for " + number, expectedValue,
-                    _tuple.values().get(number));
+            Validate.isTrue(expectedValue.equals(_tuple.values().get(number)), "Expected "
+                    + expectedValue + "  for " + number);
             
             
         }
@@ -181,7 +181,7 @@ public class CEPQueryTester
         try {
             esperEngineBean.initialize(new CEPConfiguration());
         } catch (final IOException e) {
-            Assert.fail(e.getMessage());
+            throw new IllegalArgumentException(e);
         }
         return esperEngineBean;
     }
@@ -202,10 +202,10 @@ public class CEPQueryTester
     
     
     
-    private boolean                                dump;
-    
-    
     private ICEPQuery                              cepQuery;
+    
+    
+    private boolean                                dump;
     
     
     private final List<ICEPQueryLineTestPredicate> esperLinePredicates =
@@ -216,20 +216,17 @@ public class CEPQueryTester
                                                                                new ArrayList<ICEPQueryTestPredicate>();
     
     
-    private ICEPQueryImplementation                queryImplementationDefinition;
-    
     private final List<IEvent>                     events              = new ArrayList<IEvent>();
     
     private int                                    expectedRows        = -1;
     
-    
     private Integer                                expectedStorageSize;
+    
+    
     private final Map<String, EventType>           mockEventTypes      =
                                                                                new HashMap<String, EventType>();
     private final Map<String, PersonGroup>         mockGroup           =
                                                                                new HashMap<String, PersonGroup>();
-    
-    
     private final Map<String, Person>              mockPerson          =
                                                                                new HashMap<String, Person>();
     
@@ -240,6 +237,9 @@ public class CEPQueryTester
     
     private final Map<String, Provider>            mockProviders       =
                                                                                new HashMap<String, Provider>();
+    
+    
+    private ICEPQueryImplementation                queryImplementationDefinition;
     
     
     private Object                                 singleResult;
@@ -619,8 +619,9 @@ public class CEPQueryTester
     
     
         if (expectedStorageSize != null) {
-            Assert.assertEquals("Expected storage size", expectedStorageSize,
-                    Integer.valueOf(cepQuery.getStatement().getDefaultStorage().size()));
+            Validate.isTrue(
+                    expectedStorageSize.equals(Integer.valueOf(cepQuery.getStatement()
+                            .getDefaultStorage().size())), "Expected storage size");
         }
         if (esperPredicates.isEmpty() && !hasMapPredicates() && singleResult == null) { return; }
         validateQueryPredicates();
@@ -641,11 +642,13 @@ public class CEPQueryTester
                 
             }
             if (expectedRows != -1) {
-                Assert.assertEquals("Expected fixed number of rows", expectedRows, i);
+                Validate.isTrue(expectedRows == i, "Expected fixed number of rows");
+                
             }
         } else if (cepQuery.getResult().isSingleValue() && singleResult != null) {
-            Assert.assertEquals("Expected value from query : ", singleResult, cepQuery
-                    .getResult().asType());
+            Validate.isTrue(singleResult.equals(cepQuery.getResult().asType()),
+                    "Expected value from query : ");
+            
             
         }
         

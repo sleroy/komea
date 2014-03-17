@@ -223,13 +223,11 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
         esperEngine.createQuery(new QueryDefinition(TEST_QUERY, CEPQueryBuilder
                 .create(new CountFormula()).defineFilter(new NoEventFilter()).getDefinition()));
         
-        
-        final IEvent eventToSend =
-                CEPQueryTester.convertToEventDTO(new JenkinsEventFactory().sendBuildComplete(
-                        "SCERTIFY", 12, "TRUC"));
+        final CEPQueryTester newTest = CEPQueryTester.newTest();
         for (int i = 0; i < 10; ++i) {
             
-            eventPushService.sendEvent(eventToSend);
+            eventPushService.sendEvent(newTest.convertDto(new JenkinsEventFactory()
+                    .sendBuildComplete("SCERTIFY", 12, "TRUC")));
         }
         
         final long numberAlerts = eventStatisticsService.getReceivedAlertsIn24LastHours();
@@ -245,17 +243,17 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
         boolean found = false;
         for (final IEvent event : instantView) {
             found |=
-                    eventToSend.getEventType().getEventKey()
+                    newTest.convertDto(
+                            new JenkinsEventFactory().sendBuildComplete("SCERTIFY", 12, "TRUC"))
+                            .getEventType().getEventKey()
                             .equals(event.getEventType().getEventKey());
         }
         Assert.assertTrue("We received alerts from the corresponding type", found);
         found = false;
         for (final EventTypeStatistic stat : receivedAlertTypesIn24LastHours) {
-            found |= eventToSend.getEventType().getEventKey().equals(stat.getType());
+            found |= "build_complete".equals(stat.getType());
         }
         Assert.assertTrue("Event is not found", found);
         
     }
-    
-    
 }

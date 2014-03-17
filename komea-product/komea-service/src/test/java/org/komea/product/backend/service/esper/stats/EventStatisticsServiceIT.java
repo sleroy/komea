@@ -58,15 +58,20 @@ public class EventStatisticsServiceIT extends AbstractSpringIntegrationTestCase
     
     
         final JenkinsEventFactory jenkinsEventFactory = new JenkinsEventFactory();
-        final IEvent convertEventDTO =
-                CEPQueryTester.convertToEventDTO(jenkinsEventFactory.sendBuildFailed("SCERTIFY",
-                        448, "truc"));
-        convertEventDTO.getEventType().setSeverity(Severity.INFO);
-        LOGGER.info("EVENT SENT {}", convertEventDTO);
-        esperEngine.sendEvent(convertEventDTO);
-        esperEngine.sendEvent(convertEventDTO);
-        esperEngine.sendEvent(convertEventDTO);
-        esperEngine.sendEvent(convertEventDTO);
+        final CEPQueryTester newTest = CEPQueryTester.newTest();
+        
+        LOGGER.info("EVENT SENT {}",
+                newTest.convertDto(jenkinsEventFactory.sendBuildFailed("SCERTIFY", 448, "truc")));
+        final IEvent convertDto =
+                newTest.convertDto(jenkinsEventFactory.sendBuildFailed("SCERTIFY", 448, "truc"));
+        newTest.getMockEventTypes().get("build_failed").setSeverity(Severity.INFO);
+        esperEngine.sendEvent(convertDto);
+        esperEngine.sendEvent(newTest.convertDto(jenkinsEventFactory.sendBuildFailed("SCERTIFY",
+                448, "truc")));
+        esperEngine.sendEvent(newTest.convertDto(jenkinsEventFactory.sendBuildFailed("SCERTIFY",
+                448, "truc")));
+        esperEngine.sendEvent(newTest.convertDto(jenkinsEventFactory.sendBuildFailed("SCERTIFY",
+                448, "truc")));
         
         final List<EventTypeStatistic> receivedAlertTypesIn24Hours =
                 alertStats.getReceivedAlertTypesIn24LastHours();
@@ -77,7 +82,7 @@ public class EventStatisticsServiceIT extends AbstractSpringIntegrationTestCase
         
         boolean found = false;
         for (final EventTypeStatistic stat : receivedAlertTypesIn24Hours) {
-            found |= convertEventDTO.getEventType().getEventKey().equals(stat.getType());
+            found |= stat.getType().equals("build_failed");
         }
         Assert.assertEquals(4L, alertStats.getNumberOfAlerts(Severity.INFO));
         Assert.assertEquals(0L, alertStats.getNumberOfAlerts(Severity.MAJOR));

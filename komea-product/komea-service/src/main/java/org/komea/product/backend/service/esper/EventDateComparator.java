@@ -27,6 +27,8 @@ public class EventDateComparator implements Comparator<IEvent>
     public int compare(final IEvent _arg0, final IEvent _arg1) {
     
     
+        if (_arg0.getDate() == null) { return -1; }
+        if (_arg1.getDate() == null) { return 1; }
         return _arg0.getDate().compareTo(_arg1.getDate());
     }
     

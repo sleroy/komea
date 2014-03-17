@@ -32,7 +32,7 @@ public class EventFilterBuilder
     
     
     
-    private IEventFilter<?> filter = new NoEventFilter();
+    private IEventFilter filter = new NoEventFilter();
     
     
     
@@ -55,18 +55,19 @@ public class EventFilterBuilder
     }
     
     
-    public EventFilterBuilder chain(final IEventFilter<?> _filter) {
+    public EventFilterBuilder chain(final IEventFilter _filter) {
     
     
-        filter = new JoinFilter(filter, _filter);
+        filter = FilterOperator.and(filter, _filter);
         return this;
+        
     }
     
     
     public EventFilterBuilder onlyIEvents() {
     
     
-        filter = new JoinFilter(filter, new EventOnlyFilter());
+        filter = FilterOperator.and(filter, new EventOnlyFilter());
         return this;
     }
 }

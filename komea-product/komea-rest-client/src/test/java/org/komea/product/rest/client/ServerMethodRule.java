@@ -54,14 +54,6 @@ public class ServerMethodRule implements TestRule
     }
     
     
-    // @Override
-    // public Statement apply(final Statement base, final FrameworkMethod arg1, final Object arg2) {
-    //
-    //
-    // return serverStatement(base);
-    // }
-    //
-    
     public String getAddress() {
     
     

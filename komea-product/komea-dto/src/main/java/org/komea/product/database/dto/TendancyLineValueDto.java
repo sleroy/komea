@@ -63,6 +63,13 @@ public class TendancyLineValueDto
     }
     
     
+    public Number getPreviousValue() {
+    
+    
+        return previousValue;
+    }
+    
+    
     public Number getRealValue() {
     
     
@@ -81,6 +88,13 @@ public class TendancyLineValueDto
     
     
         previousValue = _pastValue;
+    }
+    
+    
+    public void setPreviousValue(final Number _previousValue) {
+    
+    
+        previousValue = _previousValue;
     }
     
     

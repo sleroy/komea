@@ -31,12 +31,14 @@ public class CEPEventStorage<T extends Serializable> implements ICEPEventStorage
     
     
     private final ICacheConfiguration                cacheConfiguration;
+    
+    
     private final IEventFilter<T>                    eventFilter;
     private final IEventTransformer<Serializable, T> eventTransfomer;
     private final String                             filterName;
-    
-    
     private final Logger                             LOGGER;
+    
+    
     private final ICacheStorage<T>                   storage;
     
     
@@ -140,5 +142,20 @@ public class CEPEventStorage<T extends Serializable> implements ICEPEventStorage
         } else {
             LOGGER.debug("[FILTER-DENIED] {} -> {}", filterName, _event);
         }
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+    
+    
+        return "CEPEventStorage [cacheConfiguration="
+                + cacheConfiguration + ", eventFilter=" + eventFilter + ", eventTransfomer="
+                + eventTransfomer + ", filterName=" + filterName + ", LOGGER=" + LOGGER
+                + ", storage=" + storage + "]";
     }
 }

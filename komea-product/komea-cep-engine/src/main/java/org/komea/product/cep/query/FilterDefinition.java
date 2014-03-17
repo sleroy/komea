@@ -13,7 +13,7 @@ import org.komea.product.cep.api.IEventTransformer;
 import org.komea.product.cep.api.IFilterDefinition;
 import org.komea.product.cep.api.cache.ICacheConfiguration;
 import org.komea.product.cep.cache.CacheConfigurationBuilder;
-import org.komea.product.cep.filter.NoEventFilter;
+import org.komea.product.cep.filter.EventOnlyFilter;
 
 
 
@@ -33,7 +33,7 @@ public class FilterDefinition implements IFilterDefinition
         final FilterDefinition filterDefinition = new FilterDefinition();
         filterDefinition.cacheConfiguration =
                 CacheConfigurationBuilder.expirationTimeCache(1, TimeUnit.HOURS);
-        filterDefinition.filter = new NoEventFilter();
+        filterDefinition.filter = new EventOnlyFilter();
         filterDefinition.filterName = "none";
         filterDefinition.eventTransformer = null;
         return filterDefinition;
@@ -55,7 +55,7 @@ public class FilterDefinition implements IFilterDefinition
     
     
     
-    private FilterDefinition() {
+    public FilterDefinition() {
     
     
         super();
