@@ -69,6 +69,9 @@ public class ProjectServiceTest {
     private HasProjectPersonDao projectPersonDAOmock;
 
     @Mock
+    private IProjectPersonService projectPersonService;
+
+    @Mock
     private HasProjectPersonGroupDao projectPersonGroupDAOmock;
 
     @InjectMocks
@@ -252,6 +255,7 @@ public class ProjectServiceTest {
                 .thenReturn(projectPersonList);
 
         Mockito.when(projectDAOmock.selectByPrimaryKey(1)).thenReturn(getProject().get(0));
+        Mockito.when(projectPersonService.getPersonIdsOfProject(1)).thenReturn(projectPersonList);
 
         final List<Project> projects = projectService.getProjectsOfPerson(1);
 
@@ -261,9 +265,6 @@ public class ProjectServiceTest {
         Assert.assertEquals("KOMEA", project.getProjectKey());
         Assert.assertEquals("komea kpi", project.getDescription());
         Assert.assertEquals(1, project.getIdCustomer().intValue());
-
-        Mockito.verify(projectPersonDAOmock, Mockito.times(1)).selectByCriteria(
-                Matchers.any(HasProjectPersonCriteria.class));
 
         Mockito.verify(projectDAOmock, Mockito.times(1)).selectByPrimaryKey(1);
 
@@ -440,7 +441,7 @@ public class ProjectServiceTest {
 
         List<HasProjectPersonKey> projectPersonList = Lists.newArrayList(new HasProjectPersonKey(1, 1));
         Mockito.when(projectPersonDAOmock.selectByCriteria(Matchers.any(HasProjectPersonCriteria.class))).thenReturn(projectPersonList);
-
+        Mockito.when(projectPersonService.getPersonIdsOfProject(1)).thenReturn(projectPersonList);
         Mockito.when(projectDAOmock.selectByPrimaryKey(1)).thenReturn(getProject().get(0));
 
         List<Project> projects = projectService.getProjectsOfPerson(1);
@@ -451,8 +452,6 @@ public class ProjectServiceTest {
         Assert.assertEquals("KOMEA", project.getProjectKey());
         Assert.assertEquals("komea kpi", project.getDescription());
         Assert.assertEquals(1, project.getIdCustomer().intValue());
-
-        Mockito.verify(projectPersonDAOmock, Mockito.times(1)).selectByCriteria(Matchers.any(HasProjectPersonCriteria.class));
 
         Mockito.verify(projectDAOmock, Mockito.times(1)).selectByPrimaryKey(1);
 
