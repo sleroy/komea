@@ -79,21 +79,21 @@ public class CEPQueryTester
         
             final List<ITuple> listMapResult = _epStatement.getResult().asMap().asTupleRows();
             LOGGER.debug(listMapResult.toString());
-            if (array.length != listMapResult.size()) { throw new IllegalArgumentException(
-                    "Expected same number of rows"); }
+            checkIfisEquals(array.length, listMapResult.size(), "Expected same number of rows");
+            
             for (int i = 0; i < listMapResult.size(); ++i) {
                 
                 LOGGER.debug("Evaluating line {} of esper request", i);
                 final ITuple tuple = listMapResult.get(i);
                 final List<Object> arrayList = new ArrayList<Object>(tuple.values());
-                Validate.isTrue(array[i].length == arrayList.size(),
-                        "Expected same number of cols for iteration " + i);
+                checkIfisEquals(array[i].length, arrayList.size(),
+                        "Comparison number of columns at the line " + i);
                 for (int j = 0; j < arrayList.size(); j++) {
                     final Object thisProperty = arrayList.get(j);
                     final Object expectedValue = array[i][j];
                     LOGGER.debug("Array[{}][{}]={} and should be {}", i, j, thisProperty,
                             expectedValue);
-                    Validate.isTrue(expectedValue.equals(thisProperty));
+                    checkIfisEquals(expectedValue, thisProperty, "Array value");
                     
                 }
             }
@@ -139,7 +139,7 @@ public class CEPQueryTester
         public void evaluate(final ITuple _tuple) {
         
         
-            Validate.isTrue(expectedValue.equals(_tuple.values().get(number)), "Expected "
+            checkIfisEquals(expectedValue, _tuple.values().get(number), "Expected "
                     + expectedValue + "  for " + number);
             
             
@@ -148,8 +148,19 @@ public class CEPQueryTester
     
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger("[Esper Query Test]");
+    private static final Logger LOGGER = LoggerFactory.getLogger("[CEP Query Test]");
     
+    
+    
+    public static void checkIfisEquals(
+            final Object _object,
+            final Object _object2,
+            final String _string) {
+    
+    
+        if (!_object.equals(_object2)) { throw new IllegalArgumentException(_string
+                + ": expected " + _object + " received " + _object2); }
+    }
     
     
     /**
@@ -215,18 +226,18 @@ public class CEPQueryTester
     private final List<ICEPQueryTestPredicate>     esperPredicates     =
                                                                                new ArrayList<ICEPQueryTestPredicate>();
     
-    
     private final List<IEvent>                     events              = new ArrayList<IEvent>();
     
     private int                                    expectedRows        = -1;
     
+    
     private Integer                                expectedStorageSize;
-    
-    
     private final Map<String, EventType>           mockEventTypes      =
                                                                                new HashMap<String, EventType>();
     private final Map<String, PersonGroup>         mockGroup           =
                                                                                new HashMap<String, PersonGroup>();
+    
+    
     private final Map<String, Person>              mockPerson          =
                                                                                new HashMap<String, Person>();
     
@@ -516,6 +527,7 @@ public class CEPQueryTester
     
         if (cepQuery == null) {
             cepQuery = new CEPQuery(queryImplementationDefinition);
+            esperEngineBean.getQueryAdministration().registerQuery("query-test", cepQuery);
         }
     }
     
@@ -568,29 +580,10 @@ public class CEPQueryTester
     }
     
     
-    /**
-     * Method send.
-     * 
-     * @param _alert1
-     *            IEvent
-     * @param _numberTimes
-     *            int
-     * @return CEPQueryTester
-     */
-    public CEPQueryTester send(final IEvent _alert1, int _numberTimes) {
-    
-    
-        while (_numberTimes-- > 0) {
-            events.add(_alert1);
-        }
-        return this;
-    }
-    
-    
     public CEPQueryTester sendEvent(final EventSimpleDto _eventDTO) {
     
     
-        send(convertDto(_eventDTO), 1);
+        send(convertDto(_eventDTO));
         return this;
     }
     
@@ -598,7 +591,10 @@ public class CEPQueryTester
     public CEPQueryTester sendEvent(final EventSimpleDto _eventDTO, final int _numberOfTimes) {
     
     
-        send(convertDto(_eventDTO), _numberOfTimes);
+        for (int i = 0; i < _numberOfTimes; ++i) {
+            
+            send(convertDto(_eventDTO));
+        }
         return this;
     }
     
@@ -619,9 +615,9 @@ public class CEPQueryTester
     
     
         if (expectedStorageSize != null) {
-            Validate.isTrue(
-                    expectedStorageSize.equals(Integer.valueOf(cepQuery.getStatement()
-                            .getDefaultStorage().size())), "Expected storage size");
+            final int size = cepQuery.getStatement().getDefaultStorage().size();
+            checkIfisEquals(expectedStorageSize, Integer.valueOf(size),
+                    "Expected storage size equals to " + expectedStorageSize + " with  " + size);
         }
         if (esperPredicates.isEmpty() && !hasMapPredicates() && singleResult == null) { return; }
         validateQueryPredicates();
@@ -642,11 +638,12 @@ public class CEPQueryTester
                 
             }
             if (expectedRows != -1) {
-                Validate.isTrue(expectedRows == i, "Expected fixed number of rows");
+                checkIfisEquals(expectedRows, i, "Expected fixed number of rows");
                 
             }
         } else if (cepQuery.getResult().isSingleValue() && singleResult != null) {
-            Validate.isTrue(singleResult.equals(cepQuery.getResult().asType()),
+            
+            checkIfisEquals(singleResult, cepQuery.getResult().asType(),
                     "Expected value from query : ");
             
             

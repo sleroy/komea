@@ -55,13 +55,10 @@ public class KPIServiceTest
     public final void testFindKPIFacade() {
     
     
-        final KpiDao kpiDAOMock =
-                Mockito.mock(KpiDao.class, Mockito.withSettings().verboseLogging());
-        final MeasureDao measureDAOMock =
-                Mockito.mock(MeasureDao.class, Mockito.withSettings().verboseLogging());
+        final KpiDao kpiDAOMock = Mockito.mock(KpiDao.class);
+        final MeasureDao measureDAOMock = Mockito.mock(MeasureDao.class);
         
-        final IEventEngineService cepEngine =
-                Mockito.mock(IEventEngineService.class, Mockito.withSettings().verboseLogging());
+        final IEventEngineService cepEngine = Mockito.mock(IEventEngineService.class);
         
         
         final MeasureHistoryService measureService = new MeasureHistoryService();

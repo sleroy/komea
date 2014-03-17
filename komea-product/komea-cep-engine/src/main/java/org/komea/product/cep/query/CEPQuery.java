@@ -32,7 +32,7 @@ public class CEPQuery implements ICEPQuery
 {
     
     
-    private static final Logger LOGGER       = LoggerFactory.getLogger(CEPQuery.class);
+    private static final Logger LOGGER       = LoggerFactory.getLogger("cep-query");
     private ICEPStatement<?>    cepStatement = new CEPStatement<Serializable>();
     
     
@@ -50,12 +50,18 @@ public class CEPQuery implements ICEPQuery
     public CEPQuery(final ICEPQueryImplementation _queryDefinition) {
     
     
+        LOGGER.debug(">---- new cep query :");
+        
         final CEPStatement<Serializable> initStatement = new CEPStatement<Serializable>();
+        LOGGER.debug(">---- filters defined : {}", _queryDefinition.getFilterDefinitions().size());
         for (final IFilterDefinition definition : _queryDefinition.getFilterDefinitions()) {
+            LOGGER.debug(">---- filter choose : {}", definition);
             initStatement.add(new CEPEventStorage<Serializable>(definition));
         }
         cepStatement = initStatement;
+        LOGGER.debug(">---- parameters defined : {}", _queryDefinition.getParameters());
         parameters = _queryDefinition.getParameters();
+        LOGGER.debug(">---- formula defined : {}", _queryDefinition.getFormula());
         formula = _queryDefinition.getFormula();
         Validate.notNull(formula);
         Validate.notNull(parameters);
@@ -174,6 +180,19 @@ public class CEPQuery implements ICEPQuery
         parameters = _parameters;
         
         
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+    
+    
+        return "CEPQuery [cepStatement="
+                + cepStatement + ", formula=" + formula + ", parameters=" + parameters + "]";
     }
     
     
