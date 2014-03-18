@@ -179,9 +179,10 @@ public class KomeaNotifier extends Notifier implements Serializable {
     }
 
     private boolean buildBroken(final AbstractBuild<?, ?> build) {
-        return !Result.SUCCESS.equals(build.getResult())
-                && build.getPreviousBuild() != null
-                && Result.SUCCESS.equals(build.getPreviousBuild().getResult());
+//        return !Result.SUCCESS.equals(build.getResult())
+//                && build.getPreviousBuild() != null
+//                && Result.SUCCESS.equals(build.getPreviousBuild().getResult());
+        return !Result.SUCCESS.equals(build.getResult());
     }
 
     @Override
@@ -220,6 +221,15 @@ public class KomeaNotifier extends Notifier implements Serializable {
         }
         pushEvents(listener, events);
         return true;
+    }
+
+    private List<String> getStartedByUserCommits(final AbstractBuild<?, ?> build, final BuildListener listener) {
+        for (Cause cause : build.getCauses()) {
+            listener.getLogger().println("cause : " + cause.getClass().getName() + " : " + cause.getShortDescription());
+//            if (cause.getClass().equals(Cause..class)) {
+//            }
+        }
+        return null;
     }
 
     private String getStartedByUser(final AbstractBuild<?, ?> build) {
@@ -270,6 +280,7 @@ public class KomeaNotifier extends Notifier implements Serializable {
             events.add(EventsBuilder.createCodeChangedEvent(buildDate, buildNumber, jenkinsProjectName,
                     provider.getUrl(), commiters.get(commiter), commiter, projectKey, branch));
         }
+        final List<String> users = getStartedByUserCommits(build, listener);
         final String user = getStartedByUser(build);
         if (user != null) {
             events.add(EventsBuilder.createStartedByUser(buildDate, buildNumber,
