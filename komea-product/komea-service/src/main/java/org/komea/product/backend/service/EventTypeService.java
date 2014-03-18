@@ -1,17 +1,15 @@
-
 package org.komea.product.backend.service;
 
-
-
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import org.komea.product.backend.exceptions.AlreadyExistingEventTypeException;
 import org.komea.product.backend.exceptions.InvalidEventTypeDescriptionException;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.database.dao.EventTypeDao;
 import org.komea.product.database.dao.IGenericDAO;
+import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.EventTypeCriteria;
 import org.komea.product.database.model.Provider;
@@ -21,59 +19,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 /**
  */
 @Service
 @Transactional
 public class EventTypeService extends AbstractService<EventType, Integer, EventTypeCriteria>
-        implements IEventTypeService
-{
-    
-    
+        implements IEventTypeService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger("event-type-service");
-    
-    
+
     @Autowired
-    private EventTypeDao        requiredDAO;
-    
-    
-    
+    private EventTypeDao requiredDAO;
+
     public EventTypeService() {
-    
-    
+
         super();
     }
-    
-    
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.genericservice.AbstractService#getRequiredDAO()
      */
     @Override
     public IGenericDAO<EventType, Integer, EventTypeCriteria> getRequiredDAO() {
-    
-    
+
         return requiredDAO;
     }
-    
-    
+
     /**
      * Builds a new criteria with the name.
-     * 
+     *
      * @param _eventType
      * @return EventTypeCriteria
      */
     public EventTypeCriteria newCriteriaSelectByName(final EventType _eventType) {
-    
-    
+
         final EventTypeCriteria selectEventTypeByName = new EventTypeCriteria();
         selectEventTypeByName.createCriteria().andNameEqualTo(_eventType.getEventKey());
         return selectEventTypeByName;
     }
-    
-    
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.service.IEventTypeService#registerEvent(org.komea.product.database.model.Provider,
@@ -81,34 +66,42 @@ public class EventTypeService extends AbstractService<EventType, Integer, EventT
      */
     @Override
     public void registerEvent(@NotNull
-    final Provider _provider, @Valid
-    final EventType _eventType) {
-    
-    
+            final Provider _provider, @Valid
+            final EventType _eventType) {
+
         LOGGER.debug("Registering event type '{}' from provider {}", _eventType.getName(),
                 _provider.getName());
         final EventTypeCriteria selectByName = newCriteriaSelectByName(_eventType);
         final int existingProvider = requiredDAO.countByCriteria(selectByName);
-        if (existingProvider > 0) { throw new AlreadyExistingEventTypeException(_eventType); }
-        if (_eventType.getId() != null) { throw new InvalidEventTypeDescriptionException(
-                "EventType DTO should not register primary key"); }
+        if (existingProvider > 0) {
+            throw new AlreadyExistingEventTypeException(_eventType);
+        }
+        if (_eventType.getId() != null) {
+            throw new InvalidEventTypeDescriptionException(
+                    "EventType DTO should not register primary key");
+        }
         _eventType.setIdProvider(_provider.getId());
         saveOrUpdate(_eventType);
-        
+
     }
-    
-    
+
     public void setRequiredDAO(final EventTypeDao _requiredDAO) {
-    
-    
+
         requiredDAO = _requiredDAO;
     }
-	
-	@Override
+
+    @Override
     protected EventTypeCriteria createPersonCriteriaOnLogin(String key) {
         final EventTypeCriteria criteria = new EventTypeCriteria();
         criteria.createCriteria().andEventKeyEqualTo(key);
         return criteria;
     }
-    
+
+    @Override
+    public List<EventType> getEventTypes(EntityType entityType) {
+        final EventTypeCriteria eventTypeCriteria = new EventTypeCriteria();
+        eventTypeCriteria.createCriteria().andEntityTypeEqualTo(entityType);
+        return requiredDAO.selectByCriteria(eventTypeCriteria);
+    }
+
 }

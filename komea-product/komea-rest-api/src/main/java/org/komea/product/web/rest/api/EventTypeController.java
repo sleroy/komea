@@ -1,7 +1,7 @@
 package org.komea.product.web.rest.api;
 
 import java.util.List;
-import org.komea.product.backend.service.event.IEventTypeService;
+import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.EventType;
 import org.slf4j.Logger;
