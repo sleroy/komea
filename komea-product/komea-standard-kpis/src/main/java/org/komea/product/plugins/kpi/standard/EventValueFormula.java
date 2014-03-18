@@ -17,6 +17,8 @@ import org.komea.product.cep.api.formula.tuple.ITuple;
 import org.komea.product.cep.api.formula.tuple.ITuplerFormula;
 import org.komea.product.cep.formula.tuple.TupleResultMap;
 import org.komea.product.database.alert.IEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -27,6 +29,10 @@ import org.komea.product.database.alert.IEvent;
  */
 public class EventValueFormula implements ITuplerFormula<Number>
 {
+    
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(EventValueFormula.class);
+    
     
     
     /*
@@ -43,11 +49,15 @@ public class EventValueFormula implements ITuplerFormula<Number>
         final ITupleResultMap<Number> resultMap = new TupleResultMap<Number>();
         
         for (final Entry<ITuple, IEventGroup> entry : _tupleMap.iterator()) {
+            if (entry.getValue().getEvents().isEmpty()) {
+                LOGGER.error("No event to return a value, may have a filter problem with tuple {}",
+                        entry);
+                continue;
+            }
             Validate.isTrue(entry.getValue().getEvents().size() == 1);
             final IEvent iEvent = entry.getValue().getFirstEvent();
             resultMap.insertEntry(entry.getKey(), iEvent.getValue());
         }
         return resultMap;
     }
-    
 }
