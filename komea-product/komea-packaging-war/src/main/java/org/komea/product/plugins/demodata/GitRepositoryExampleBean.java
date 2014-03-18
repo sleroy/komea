@@ -1,5 +1,5 @@
 
-package org.komea.product.plugins.git.bean;
+package org.komea.product.plugins.demodata;
 
 
 
@@ -39,21 +39,14 @@ public class GitRepositoryExampleBean
     public void initRssFeed() {
     
     
-        if (!settingsService.existProperty(GIT_REPOSITORY_SAMPLES)) {
-            settingsService.create(GIT_REPOSITORY_SAMPLES, DEFAULT_VALUE, String.class.getName(),
-                    "Initialize the rss plugin with default rss feeds");
-            
-            registerRepo("XStream Fedora GIT", "http://pkgs.fedoraproject.org/cgit/xstream.git",
-                    "XSTREAM");
-            registerRepo("Maven GIT", "https://git-wip-us.apache.org/repos/asf/maven.git", "MAVEN");
-            registerRepo("Scertify GIT", "http://sleroy@zeus:8080/scm/git/scertify", "SCERTIFY");
-            registerRepo("SRA GIT", "http://sleroy@zeus:8080/scm/git/web-applications", "SRA");
-            registerRepo("CIFlow prototype", "http://sleroy@zeus:8080/scm/git/scertify-ciflow",
-                    "CIFLOW");
-            
-            settingsService.<String> getProxy(GIT_REPOSITORY_SAMPLES).setStringValue("1");
-            
-        }
+        registerRepo("XStream Fedora GIT", "http://pkgs.fedoraproject.org/cgit/xstream.git",
+                "XSTREAM");
+        registerRepo("Maven GIT", "https://git-wip-us.apache.org/repos/asf/maven.git", "MAVEN");
+        registerRepo("Scertify GIT", "http://sleroy@zeus:8080/scm/git/scertify", "SCERTIFY");
+        registerRepo("SRA GIT", "http://sleroy@zeus:8080/scm/git/web-applications", "SRA");
+        registerRepo("CIFlow prototype", "http://sleroy@zeus:8080/scm/git/scertify-ciflow",
+                "CIFLOW");
+        
     }
     
     
