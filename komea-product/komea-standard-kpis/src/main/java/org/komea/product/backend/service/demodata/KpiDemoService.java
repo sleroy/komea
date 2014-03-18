@@ -64,6 +64,16 @@ public class KpiDemoService
     }
     
     
+    public Kpi buildSonarMetricKpi(final String _title, final String _metricName) {
+    
+    
+        return KpiBuilder.createAscending().nameAndKeyDescription(_title)
+                .entityType(EntityType.PROJECT).expirationYear()
+                .query("new " + SonarMetricKpi.class.getName() + "('" + _metricName + "')")
+                .cronDays(1).build();
+    }
+    
+    
     @PostConstruct
     public void initialize() {
     
@@ -172,16 +182,6 @@ public class KpiDemoService
                 .entityType(EntityType.PROJECT).expirationYear()
                 .query(SuccessfulBuildRatePerWeek.class).cronDays(1).build();
         
-    }
-    
-    
-    private Kpi buildSonarMetricKpi(final String _title, final String _metricName) {
-    
-    
-        return KpiBuilder.createAscending().nameAndKeyDescription(_title)
-                .entityType(EntityType.PROJECT).expirationYear()
-                .query("new " + SonarMetricKpi.class.getName() + "('" + _metricName + "')")
-                .cronDays(1).build();
     }
     
     
