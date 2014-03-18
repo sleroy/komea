@@ -146,6 +146,17 @@ public class PersonServiceTest
     
     
     @Test
+    public void testFindLoginWithoutDuplicate() throws Exception {
+    
+    
+        Assert.assertEquals("test", service.findLoginWithoutDuplicate("test"));
+        
+        // Assert.assertEquals("test.1", service.findLoginWithoutDuplicate("test"));
+        // Assert.assertEquals("test.2", service.findLoginWithoutDuplicate("test.1"));
+    }
+    
+    
+    @Test
     public void testStripLoginFromEmail() throws Exception {
     
     

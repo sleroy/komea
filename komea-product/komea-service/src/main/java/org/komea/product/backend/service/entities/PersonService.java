@@ -178,6 +178,24 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     }
     
     
+    /**
+     * Find a login without duplicate.
+     * 
+     * @param loginFromEmail
+     *            the original requested login.
+     */
+    public String findLoginWithoutDuplicate(final String loginFromEmail) {
+    
+    
+        int tries = 1;
+        String testLogin = loginFromEmail;
+        while (existLogin(testLogin)) {
+            testLogin = loginFromEmail + tries++;
+        }
+        return testLogin;
+    }
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.service.entities.IPersonService#findOrCreatePersonByEmail(java.lang.String)
@@ -189,13 +207,13 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
         final PersonCriteria criteria = new PersonCriteria();
         criteria.createCriteria().andEmailEqualTo(_email);
         Person personRequested = CollectionUtil.singleOrNull(selectByCriteria(criteria));
-        
+        stripLoginFromEmail(_email);
         if (personRequested == null) {
             LOGGER.debug("Create a person by its email since it does not exist : {}", _email);
             personRequested = new Person();
             personRequested.setEmail(_email);
-            final String email = personRequested.getEmail();
-            personRequested.setLogin(stripLoginFromEmail(email));
+            
+            personRequested.setLogin(findLoginWithoutDuplicate(_email));
             personRequested.setFirstName(personRequested.getLogin());
             personRequested.setLastName("");
             personRequested.setPassword("");
@@ -350,6 +368,20 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     }
     
     
+    /**
+     * Tests if the login is already present
+     * 
+     * @param _loginFromEmail
+     *            the login
+     * @return true if the login is alread present
+     */
+    private boolean existLogin(final String _loginFromEmail) {
+    
+    
+        return !selectByCriteria(createPersonCriteriaOnLogin(_loginFromEmail)).isEmpty();
+    }
+    
+    
     @Override
     protected PersonCriteria createPersonCriteriaOnLogin(final String key) {
     
@@ -358,4 +390,5 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
         criteria.createCriteria().andLoginEqualTo(key);
         return criteria;
     }
+    
 }

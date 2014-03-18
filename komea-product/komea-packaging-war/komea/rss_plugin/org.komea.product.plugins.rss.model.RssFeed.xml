@@ -1,0 +1,84 @@
+<org.komea.product.backend.storage.DAOStorageIndex>
+  <objectIndex>
+    <org.komea.product.plugins.rss.model.RssFeed>
+      <defaultCriticity>MINOR</defaultCriticity>
+      <feedName>Techcrunch RSS</feedName>
+      <projectAssociated>SCERTIFY</projectAssociated>
+      <teamAssociated></teamAssociated>
+      <url>http://feeds.feedburner.com/TechCrunch/</url>
+      <userAssociated></userAssociated>
+    </org.komea.product.plugins.rss.model.RssFeed>
+    <org.komea.product.plugins.rss.model.RssFeed>
+      <defaultCriticity reference="../../org.komea.product.plugins.rss.model.RssFeed/defaultCriticity"/>
+      <feedName>Java Lobby Zone</feedName>
+      <projectAssociated>SCERTIFY</projectAssociated>
+      <teamAssociated></teamAssociated>
+      <url>http://feeds.dzone.com/dzone/frontpage?format=xml</url>
+      <userAssociated></userAssociated>
+    </org.komea.product.plugins.rss.model.RssFeed>
+    <org.komea.product.plugins.rss.model.RssFeed>
+      <defaultCriticity reference="../../org.komea.product.plugins.rss.model.RssFeed/defaultCriticity"/>
+      <feedName>Martin Fowler Blog</feedName>
+      <projectAssociated>SCERTIFY</projectAssociated>
+      <teamAssociated></teamAssociated>
+      <url>http://martinfowler.com/feed.atom</url>
+      <userAssociated></userAssociated>
+    </org.komea.product.plugins.rss.model.RssFeed>
+    <org.komea.product.plugins.rss.model.RssFeed>
+      <defaultCriticity reference="../../org.komea.product.plugins.rss.model.RssFeed/defaultCriticity"/>
+      <feedName>Coding Horror</feedName>
+      <projectAssociated>SRA</projectAssociated>
+      <teamAssociated></teamAssociated>
+      <url>http://feeds.feedburner.com/codinghorror?format=xml</url>
+      <userAssociated></userAssociated>
+    </org.komea.product.plugins.rss.model.RssFeed>
+    <org.komea.product.plugins.rss.model.RssFeed>
+      <defaultCriticity reference="../../org.komea.product.plugins.rss.model.RssFeed/defaultCriticity"/>
+      <feedName>WebAppers</feedName>
+      <projectAssociated>SRA</projectAssociated>
+      <teamAssociated></teamAssociated>
+      <url>http://feeds.feedburner.com/Webappers?format=xml</url>
+      <userAssociated></userAssociated>
+    </org.komea.product.plugins.rss.model.RssFeed>
+    <org.komea.product.plugins.rss.model.RssFeed>
+      <defaultCriticity reference="../../org.komea.product.plugins.rss.model.RssFeed/defaultCriticity"/>
+      <feedName>Digg</feedName>
+      <projectAssociated></projectAssociated>
+      <teamAssociated></teamAssociated>
+      <url>http://digg.com/rss/popular.rss</url>
+      <userAssociated></userAssociated>
+    </org.komea.product.plugins.rss.model.RssFeed>
+    <org.komea.product.plugins.rss.model.RssFeed>
+      <defaultCriticity reference="../../org.komea.product.plugins.rss.model.RssFeed/defaultCriticity"/>
+      <feedName>Ibm</feedName>
+      <projectAssociated>SCERTIFY</projectAssociated>
+      <teamAssociated></teamAssociated>
+      <url>http://www.ibm.com/developerworks/views/java/rss/libraryview.jsp</url>
+      <userAssociated></userAssociated>
+    </org.komea.product.plugins.rss.model.RssFeed>
+    <org.komea.product.plugins.rss.model.RssFeed>
+      <defaultCriticity reference="../../org.komea.product.plugins.rss.model.RssFeed/defaultCriticity"/>
+      <feedName>Oreilly Java</feedName>
+      <projectAssociated>SCERTIFY</projectAssociated>
+      <teamAssociated></teamAssociated>
+      <url>http://feeds.feedburner.com/oreilly/java?format=xml</url>
+      <userAssociated></userAssociated>
+    </org.komea.product.plugins.rss.model.RssFeed>
+    <org.komea.product.plugins.rss.model.RssFeed>
+      <defaultCriticity reference="../../org.komea.product.plugins.rss.model.RssFeed/defaultCriticity"/>
+      <feedName>How to do it in java : Design patterns</feedName>
+      <projectAssociated>SRA</projectAssociated>
+      <teamAssociated></teamAssociated>
+      <url>http://howtodoinjava.com/category/design-patterns/feed/</url>
+      <userAssociated></userAssociated>
+    </org.komea.product.plugins.rss.model.RssFeed>
+    <org.komea.product.plugins.rss.model.RssFeed>
+      <defaultCriticity reference="../../org.komea.product.plugins.rss.model.RssFeed/defaultCriticity"/>
+      <feedName>How to do it in java : For fun only</feedName>
+      <projectAssociated>SCERTIFY</projectAssociated>
+      <teamAssociated></teamAssociated>
+      <url>http://howtodoinjava.com/category/for-fun-only/feed/</url>
+      <userAssociated></userAssociated>
+    </org.komea.product.plugins.rss.model.RssFeed>
+  </objectIndex>
+</org.komea.product.backend.storage.DAOStorageIndex>

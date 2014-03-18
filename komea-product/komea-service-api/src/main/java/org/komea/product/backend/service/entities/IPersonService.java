@@ -39,6 +39,15 @@ public interface IPersonService extends IGenericService<Person, Integer, PersonC
     
     
     /**
+     * Find a login without duplication (inserts a trailing number in case of duplication)
+     * 
+     * @param _loginName
+     * @return
+     */
+    public String findLoginWithoutDuplicate(String _loginName);
+    
+    
+    /**
      * Find a user by its email.
      * 
      * @param _email
