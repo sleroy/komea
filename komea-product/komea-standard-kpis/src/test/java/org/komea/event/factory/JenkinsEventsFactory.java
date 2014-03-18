@@ -1,9 +1,7 @@
 
-package org.komea.providers.jenkins;
+package org.komea.event.factory;
 
 
-
-import hudson.model.Result;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -14,8 +12,12 @@ import org.komea.product.database.enums.BuildIndustrialization;
 
 
 
-public abstract class EventsBuilder
+public class JenkinsEventsFactory
 {
+    
+    
+    private static final String URL_JENKINS = "http://";
+    
     
     
     public static EventSimpleDto createBuildBroken(
@@ -45,7 +47,7 @@ public abstract class EventsBuilder
         event.setProject(projectKey);
         event.setProperties(properties);
         event.setProvider(providerUrl);
-        event.setUrl(KomeaComputerListener.getProjectBuildUrl(jenkinsProjectName, buildNumber));
+        event.setUrl(URL_JENKINS);
         event.setValue(start);
         return event;
     }
@@ -78,7 +80,7 @@ public abstract class EventsBuilder
         event.setProject(projectKey);
         event.setProperties(properties);
         event.setProvider(providerUrl);
-        event.setUrl(KomeaComputerListener.getProjectBuildUrl(jenkinsProjectName, buildNumber));
+        event.setUrl(URL_JENKINS);
         event.setValue(start);
         return event;
     }
@@ -114,7 +116,7 @@ public abstract class EventsBuilder
         event.setProject(projectKey);
         event.setProperties(properties);
         event.setProvider(providerUrl);
-        event.setUrl(KomeaComputerListener.getProjectBuildUrl(jenkinsProjectName, buildNumber));
+        event.setUrl(URL_JENKINS);
         event.setValue(nbCommits);
         return event;
     }
@@ -148,7 +150,7 @@ public abstract class EventsBuilder
         event.setProject(projectKey);
         event.setProperties(properties);
         event.setProvider(providerUrl);
-        event.setUrl(KomeaComputerListener.getProjectBuildUrl(jenkinsProjectName, buildNumber));
+        event.setUrl(URL_JENKINS);
         event.setValue(indus.ordinal());
         return event;
     }
@@ -177,58 +179,8 @@ public abstract class EventsBuilder
         event.setProject(projectKey);
         event.setProperties(properties);
         event.setProvider(providerUrl);
-        event.setUrl(KomeaComputerListener.getProjectConfigurationUrl(jenkinsProjectName));
+        event.setUrl(URL_JENKINS);
         event.setValue(new Date().getTime());
-        return event;
-    }
-    
-    
-    public static EventSimpleDto createResultEvent(
-            final long start,
-            final long end,
-            final int buildNumber,
-            final Result result,
-            final String jenkinsProjectName,
-            final String providerUrl,
-            final String projectKey,
-            final String branch) {
-    
-    
-        final long duration = end - start;
-        final Map<String, String> properties = new HashMap<String, String>(0);
-        properties.put("date", String.valueOf(end));
-        properties.put("project", projectKey);
-        properties.put("jenkinsProject", jenkinsProjectName);
-        properties.put("buildNumber", String.valueOf(buildNumber));
-        properties.put("branch", branch);
-        properties.put("duration", String.valueOf(duration));
-        properties.put("result", result.toString());
-        final EventSimpleDto event = new EventSimpleDto();
-        if (Result.ABORTED.equals(result)) {
-            event.setEventType(KomeaComputerListener.BUILD_INTERRUPTED.getEventKey());
-            event.setMessage("Jenkins build interrupted for the project "
-                    + jenkinsProjectName + " in " + duration + "ms.");
-        } else if (Result.FAILURE.equals(result)) {
-            event.setEventType(KomeaComputerListener.BUILD_FAILED.getEventKey());
-            event.setMessage("Jenkins build failed for the project "
-                    + jenkinsProjectName + " in " + duration + "ms.");
-        } else if (Result.SUCCESS.equals(result)) {
-            event.setEventType(KomeaComputerListener.BUILD_COMPLETE.getEventKey());
-            event.setMessage("Jenkins build performed for the project "
-                    + jenkinsProjectName + " in " + duration + "ms.");
-        } else if (Result.UNSTABLE.equals(result)) {
-            event.setEventType(KomeaComputerListener.BUILD_UNSTABLE.getEventKey());
-            event.setMessage("Jenkins build is unstable for the project "
-                    + jenkinsProjectName + " in " + duration + "ms.");
-        } else {
-            return null;
-        }
-        event.setDate(new Date());
-        event.setProject(projectKey);
-        event.setProperties(properties);
-        event.setProvider(providerUrl);
-        event.setUrl(KomeaComputerListener.getProjectBuildUrl(jenkinsProjectName, buildNumber));
-        event.setValue(result.ordinal);
         return event;
     }
     
@@ -259,7 +211,7 @@ public abstract class EventsBuilder
         event.setProject(projectKey);
         event.setProperties(properties);
         event.setProvider(providerUrl);
-        event.setUrl(KomeaComputerListener.getProjectBuildUrl(jenkinsProjectName, buildNumber));
+        event.setUrl(URL_JENKINS);
         event.setValue(start);
         return event;
     }
@@ -288,8 +240,58 @@ public abstract class EventsBuilder
         event.setProject(projectKey);
         event.setProperties(properties);
         event.setProvider(providerUrl);
-        event.setUrl(KomeaComputerListener.getProjectBuildUrl(jenkinsProjectName, buildNumber));
+        event.setUrl(URL_JENKINS);
         event.setValue(start);
+        return event;
+    }
+    
+    
+    public static EventSimpleDto createStringEvent(
+            final long start,
+            final long end,
+            final int buildNumber,
+            final String result,
+            final String jenkinsProjectName,
+            final String providerUrl,
+            final String projectKey,
+            final String branch) {
+    
+    
+        final long duration = end - start;
+        final Map<String, String> properties = new HashMap<String, String>(0);
+        properties.put("date", String.valueOf(end));
+        properties.put("project", projectKey);
+        properties.put("jenkinsProject", jenkinsProjectName);
+        properties.put("buildNumber", String.valueOf(buildNumber));
+        properties.put("branch", branch);
+        properties.put("duration", String.valueOf(duration));
+        properties.put("result", result.toString());
+        final EventSimpleDto event = new EventSimpleDto();
+        if ("ABORTED".equals(result)) {
+            event.setEventType(KomeaComputerListener.BUILD_INTERRUPTED.getEventKey());
+            event.setMessage("Jenkins build interrupted for the project "
+                    + jenkinsProjectName + " in " + duration + "ms.");
+        } else if ("FAILURE".equals(result)) {
+            event.setEventType(KomeaComputerListener.BUILD_FAILED.getEventKey());
+            event.setMessage("Jenkins build failed for the project "
+                    + jenkinsProjectName + " in " + duration + "ms.");
+        } else if ("SUCCESS".equals(result)) {
+            event.setEventType(KomeaComputerListener.BUILD_COMPLETE.getEventKey());
+            event.setMessage("Jenkins build performed for the project "
+                    + jenkinsProjectName + " in " + duration + "ms.");
+        } else if ("UNSTABLE".equals(result)) {
+            event.setEventType(KomeaComputerListener.BUILD_UNSTABLE.getEventKey());
+            event.setMessage("Jenkins build is unstable for the project "
+                    + jenkinsProjectName + " in " + duration + "ms.");
+        } else {
+            return null;
+        }
+        event.setDate(new Date());
+        event.setProject(projectKey);
+        event.setProperties(properties);
+        event.setProvider(providerUrl);
+        event.setUrl(URL_JENKINS);
+        event.setValue(result.hashCode());
         return event;
     }
     
@@ -301,7 +303,118 @@ public abstract class EventsBuilder
     }
     
     
-    private EventsBuilder() {
+    /**
+     * @param _projectName
+     * @param _i
+     * @param _branchName
+     * @param _userName
+     * @return
+     */
+    public static EventSimpleDto sendBuildBroken(
+            final String _projectName,
+            final int _i,
+            final String _branchName,
+            final String _userName) {
+    
+    
+        return createBuildBroken(0, 1, _projectName, "http://", _userName, _projectName,
+                _branchName);
+    }
+    
+    
+    /**
+     * @param _projectName
+     * @param _buildNumber
+     * @param _branchName
+     * @return
+     */
+    public static EventSimpleDto sendBuildComplete(
+            final String _projectName,
+            final int _buildNumber,
+            final String _branchName) {
+    
+    
+        return JenkinsEventsFactory.createStringEvent(0, 10, 1, "SUCCESS", _projectName, "http//",
+                _projectName, _branchName);
+        
+    }
+    
+    
+    /**
+     * @param _projectName
+     * @param _i
+     * @param _branchName
+     * @param _userName
+     * @return
+     */
+    public static EventSimpleDto sendBuildComplete(
+            final String _projectName,
+            final int _i,
+            final String _branchName,
+            final String _userName) {
+    
+    
+        return JenkinsEventsFactory.createStringEvent(0, 10, 1, "SUCCESS", _projectName, "http//",
+                _projectName, _branchName);
+    }
+    
+    
+    /**
+     * @param _string
+     * @param _i
+     * @param _string2
+     * @param _string3
+     * @return
+     */
+    public static EventSimpleDto sendBuildFixed(
+            final String _projectName,
+            final int _i,
+            final String _branchName,
+            final String _userName) {
+    
+    
+        return JenkinsEventsFactory.createBuildFixed(new Date().getTime(), _i, _projectName
+                + " Build", "http://", _userName, _projectName, _branchName);
+    }
+    
+    
+    /**
+     * @param _projectName
+     * @param time
+     * @param _branchName
+     * @return
+     */
+    public static EventSimpleDto sendBuildStarted(
+            final String _projectName,
+            final int _buildNumber,
+            final String _branchName) {
+    
+    
+        return JenkinsEventsFactory.createStartEvent(new Date().getTime(), _buildNumber,
+                _projectName + " Build", "http://", _projectName, _branchName);
+    }
+    
+    
+    /**
+     * @param _projectName
+     * @param _i
+     * @param _branchName
+     * @param _userName
+     * @return
+     */
+    public static EventSimpleDto sendBuildStarted(
+            final String _projectName,
+            final int _i,
+            final String _branchName,
+            final String _userName) {
+    
+    
+        return JenkinsEventsFactory.createStartedByUser(new Date().getTime(), _i, _projectName
+                + " Build", "http://", _userName, _projectName, _branchName);
+    }
+    
+    
+    private JenkinsEventsFactory() {
     
     
     }

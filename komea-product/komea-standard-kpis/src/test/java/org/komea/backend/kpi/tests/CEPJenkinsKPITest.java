@@ -4,6 +4,7 @@ package org.komea.backend.kpi.tests;
 
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -14,7 +15,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
-import org.komea.event.factory.JenkinsEventFactory;
+import org.komea.event.factory.JenkinsEventsFactory;
 import org.komea.product.backend.esper.test.CEPQueryTester;
 import org.komea.product.backend.utils.MapPopulation;
 import org.komea.product.cep.api.ICEPQuery;
@@ -42,14 +43,14 @@ public class CEPJenkinsKPITest
 {
     
     
-    private static IEvent              a1;
+    private static IEvent         a1;
     
     
-    private static IEvent              a2;
-    private static IEvent              a3;
-    private static IEvent              a4;
-    private static JenkinsEventFactory jenkinsEventFactory;
-    private static CEPQueryTester      newTest;
+    private static IEvent         a2;
+    private static IEvent         a3;
+    private static IEvent         a4;
+    
+    private static CEPQueryTester newTest;
     
     
     
@@ -58,13 +59,19 @@ public class CEPJenkinsKPITest
     
     
         newTest = CEPQueryTester.newTest();
-        jenkinsEventFactory = new JenkinsEventFactory();
-        a1 = newTest.convertDto(jenkinsEventFactory.sendBuildComplete("SCERTIFY", 908, "SPRINT"));
-        a2 = newTest.convertDto(jenkinsEventFactory.sendBuildComplete("KOMEA", 909, "SPRINT"));
-        a3 = newTest.convertDto(jenkinsEventFactory.sendBuildFailed("SCERTIFY", 910, "SPRINT"));
+        
+        a1 =
+                newTest.convertDto(JenkinsEventsFactory.createStartEvent(new Date().getTime(), 1,
+                        "SCERTIFY Build", "http://", "SCERTIFY", "BRANCH1"));
+        a2 =
+                newTest.convertDto(JenkinsEventsFactory.createStartEvent(new Date().getTime(), 1,
+                        "SCERTIFY Build", "http://", "KOMEA", "BRANCH1"));
+        a3 =
+                newTest.convertDto(JenkinsEventsFactory.createStartEvent(new Date().getTime(), 1,
+                        "SCERTIFY Build", "http://", "SCERTIFY", "BRANCH1"));
         a4 =
-                newTest.convertDto(jenkinsEventFactory.sendBuildInterrupted("SCERTIFY", 911,
-                        "SPRINT"));
+                newTest.convertDto(JenkinsEventsFactory.createStartEvent(new Date().getTime(), 1,
+                        "SCERTIFY Build", "http://", "SCERTIFY", "BRANCH1"));
         
     }
     
@@ -193,9 +200,8 @@ public class CEPJenkinsKPITest
                 MapPopulation
                         .create()
                         .addEntry("project", "SCERTIFY")
-                        .addEntry(
-                                "expectedEvents",
-                                Arrays.asList("build_complete", "build_failed", "build_interrupted"))
+                        .addEntry("expectedEvents",
+                                Arrays.asList("build_started", "build_failed", "build_interrupted"))
                         .build();
         final IEventFilter<?> filter =
                 EventFilterBuilder
@@ -229,7 +235,7 @@ public class CEPJenkinsKPITest
     
     
         final List<String> eventList =
-                Arrays.asList("build_complete", "build_failed", "build_interrupted");
+                Arrays.asList("build_started", "build_failed", "build_interrupted");
         
         final IEventFilter<?> filter =
                 EventFilterBuilder.create().onlyIEvents().chain(new IEventFilter<IEvent>()

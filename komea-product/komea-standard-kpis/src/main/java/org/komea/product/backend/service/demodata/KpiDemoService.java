@@ -16,6 +16,9 @@ import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.plugins.kpi.standard.BuildPerDay;
 import org.komea.product.plugins.kpi.standard.BuildPerMonth;
+import org.komea.product.plugins.kpi.standard.NumberOfBrokenBuildPerUser;
+import org.komea.product.plugins.kpi.standard.NumberOfFixedBuildPerUser;
+import org.komea.product.plugins.kpi.standard.ProjectHealthInfluencePerUser;
 import org.komea.product.plugins.kpi.standard.SonarMetricKpi;
 import org.komea.product.plugins.kpi.standard.SuccessfulBuildPerDay;
 import org.komea.product.plugins.kpi.standard.SuccessfulBuildPerMonth;
@@ -71,6 +74,20 @@ public class KpiDemoService
                 .entityType(EntityType.PROJECT).expirationYear()
                 .query("new " + SonarMetricKpi.class.getName() + "('" + _metricName + "')")
                 .cronDays(1).build();
+    }
+    
+    
+    /**
+     * @return
+     */
+    public Kpi healthRateOfUserActions() {
+    
+    
+        return KpiBuilder.createAscending()
+                .nameAndKeyDescription("Project Health influence of a developer")
+                .entityType(EntityType.PROJECT).expirationYear()
+                .query(ProjectHealthInfluencePerUser.class).cronDays(1).build();
+        
     }
     
     
@@ -133,6 +150,34 @@ public class KpiDemoService
         return KpiBuilder.createAscending().nameAndKeyDescription("Number of build per month")
                 .entityType(EntityType.PROJECT).expirationYear().query(BuildPerMonth.class)
                 .cronWeek().build();
+        
+    }
+    
+    
+    /**
+     * @return
+     */
+    public Kpi numberOfBuildBrokenPerUser() {
+    
+    
+        return KpiBuilder.createAscending()
+                .nameAndKeyDescription("Number of broken  builds in a month")
+                .entityType(EntityType.PROJECT).expirationMonth()
+                .query(NumberOfBrokenBuildPerUser.class).cronDays(1).build();
+        
+    }
+    
+    
+    /**
+     * @return
+     */
+    public Kpi numberOfFixedBuildPerUser() {
+    
+    
+        return KpiBuilder.createAscending()
+                .nameAndKeyDescription("Number of fixed builds in a month")
+                .entityType(EntityType.PROJECT).expirationMonth()
+                .query(NumberOfFixedBuildPerUser.class).cronDays(1).build();
         
     }
     

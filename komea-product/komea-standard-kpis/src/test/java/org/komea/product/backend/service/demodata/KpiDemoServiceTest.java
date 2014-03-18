@@ -72,6 +72,14 @@ public class KpiDemoServiceTest
     }
     
     
+    @Test
+    public void testNumberOfBuildBrokenPerUser() throws Exception {
+    
+    
+        testKpi(kpiDemoService.numberOfBuildBrokenPerUser());
+    }
+    
+    
     /**
      * Test method for {@link org.komea.product.backend.service.demodata.KpiDemoService#numberSuccessBuildPerDay()}.
      */
