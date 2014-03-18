@@ -49,10 +49,10 @@ public abstract class LayoutPage extends WebPage
                         .getContainerRequest(), "");
         
         if (securityContextHolderAwareRequestWrapper.isUserInRole("ADMIN")) {
-            add(new Fragment("signinpanel", "signin", this));
+            add(new WebMarkupContainer("signinpanel"));
             add(new Fragment("personalpanel", "personal", this));
         } else {
-            add(new WebMarkupContainer("signinpanel"));
+            add(new Fragment("signinpanel", "signin", this));
             add(new WebMarkupContainer("personalpanel"));
         }
         buildBreadCrumb();

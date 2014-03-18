@@ -9,13 +9,14 @@ import org.komea.product.backend.auth.IPasswordEncoder;
 import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.cron.ICronRegistryService;
+import org.komea.product.backend.service.entities.IPersonGroupService;
+import org.komea.product.backend.service.entities.IPersonRoleService;
+import org.komea.product.backend.service.entities.IPersonService;
+import org.komea.product.backend.service.entities.IProviderService;
 import org.komea.product.backend.service.esper.IEventPushService;
+import org.komea.product.backend.service.plugins.IEventTypeService;
+import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.CustomerDao;
-import org.komea.product.database.dao.EventTypeDao;
-import org.komea.product.database.dao.PersonDao;
-import org.komea.product.database.dao.PersonGroupDao;
-import org.komea.product.database.dao.PersonRoleDao;
-import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.enums.ProviderType;
@@ -71,19 +72,19 @@ public class DemoDataBean
     private IEventPushService    eventPushService;
     
     @Autowired
-    private EventTypeDao         eventTypeDAO;
+    private IEventTypeService    eventTypeDAO;
     
     @Autowired
-    private PersonDao            personDAO;
+    private IPersonService       personDAO;
     
     @Autowired
-    private PersonGroupDao       personGroupDao;
+    private IPersonGroupService  personGroupDao;
     
     @Autowired
-    private PersonRoleDao        personRoleDao;
+    private IPersonRoleService   personRoleDao;
     
     @Autowired
-    private ProviderDao          providerDao;
+    private IProviderService     providerDao;
     
     @Autowired
     private ICronRegistryService registry;
@@ -91,26 +92,14 @@ public class DemoDataBean
     
     
     /**
-     * Method getPersonGroupDao.
+     * Method getIPersonGroupService.
      * 
-     * @return PersonGroupDao
+     * @return IPersonGroupService
      */
-    public PersonGroupDao getPersonGroupDao() {
+    public IPersonGroupService getIPersonGroupService() {
     
     
         return personGroupDao;
-    }
-    
-    
-    /**
-     * Method getPersonRoleDao.
-     * 
-     * @return PersonRoleDao
-     */
-    public PersonRoleDao getPersonRoleDao() {
-    
-    
-        return personRoleDao;
     }
     
     
@@ -125,19 +114,12 @@ public class DemoDataBean
         customerDao.insert(customer2);
         customerDao.insert(customer3);
         
-        final PersonRole administrator = new PersonRole(null, "ADMIN", "Administrator");
-        PersonRoleCriteria prCriteria = new PersonRoleCriteria();
-        prCriteria.createCriteria().andNameEqualTo("Administrator");
-        if (personRoleDao.countByCriteria(prCriteria) == 0) {
-            personRoleDao.insert(administrator);
-        }
+        final PersonRoleCriteria personRoleCriteria = new PersonRoleCriteria();
+        personRoleCriteria.createCriteria().andRoleKeyEqualTo("ADMIN");
+        final PersonRole administrator =
+                CollectionUtil.singleOrNull(personRoleDao.selectByCriteria(personRoleCriteria));
         
-        final PersonRole userRole = new PersonRole(null, "USER", "Standard user");
-        prCriteria = new PersonRoleCriteria();
-        prCriteria.createCriteria().andNameEqualTo("Standard user");
-        if (personRoleDao.countByCriteria(prCriteria) == 0) {
-            personRoleDao.insert(userRole);
-        }
+        final PersonRole userRole = personRoleDao.getDefaultUserRole();
         
         final Person obiwan =
                 new Person(null, null, null, "Obiwan", "Kenobi", "obiwan@lightforce.net", "obiwan",
@@ -260,28 +242,15 @@ public class DemoDataBean
     
     
     /**
-     * Method setPersonGroupDao.
+     * Method setIPersonGroupService.
      * 
      * @param _personGroupDao
-     *            PersonGroupDao
+     *            IPersonGroupService
      */
-    public void setPersonGroupDao(final PersonGroupDao _personGroupDao) {
+    public void setIPersonGroupService(final IPersonGroupService _personGroupDao) {
     
     
         personGroupDao = _personGroupDao;
-    }
-    
-    
-    /**
-     * Method setPersonRoleDao.
-     * 
-     * @param _personRoleDao
-     *            PersonRoleDao
-     */
-    public void setPersonRoleDao(final PersonRoleDao _personRoleDao) {
-    
-    
-        personRoleDao = _personRoleDao;
     }
     
     

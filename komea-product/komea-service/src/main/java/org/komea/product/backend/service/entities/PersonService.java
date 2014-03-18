@@ -288,6 +288,7 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
         }
         _person.setIdPersonRoleOrNull(_personRole);
         _person.setIdPersonGroupOrNull(_personGroup);
+        
         //
         LOGGER.info("Save or update {}", _person);
         saveOrUpdate(_person);

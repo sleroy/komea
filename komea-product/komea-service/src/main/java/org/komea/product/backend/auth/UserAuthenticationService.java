@@ -3,9 +3,9 @@ package org.komea.product.backend.auth;
 
 
 
+import org.komea.product.backend.service.entities.IPersonRoleService;
+import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.utils.CollectionUtil;
-import org.komea.product.database.dao.PersonDao;
-import org.komea.product.database.dao.PersonRoleDao;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonCriteria;
 import org.komea.product.database.model.PersonRole;
@@ -32,11 +32,11 @@ public class UserAuthenticationService implements UserDetailsService
     private static final Logger LOGGER = LoggerFactory.getLogger(UserAuthenticationService.class);
     
     @Autowired
-    private PersonDao           personDAO;
+    private IPersonService      personDAO;
     
     
     @Autowired
-    private PersonRoleDao       personRoleDAO;
+    private IPersonRoleService  personRoleDAO;
     
     
     

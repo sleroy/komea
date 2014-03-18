@@ -105,7 +105,11 @@ public class LdapCronRefreshJob implements Job
         personRequested.setFirstName(ldapUser.getFirstName());
         personRequested.setLastName(ldapUser.getLastName());
         personRequested.setLogin(ldapUser.getUserName());
-        personRequested.setPassword(ldapUser.getPassword());
+        String password = ldapUser.getPassword();
+        if (password == null) {
+            password = "";
+        }
+        personRequested.setPassword(password);
         personRequested.setEmail(ldapUser.getEmail());
         personRequested.setUserBdd(UserBdd.LDAP);
         final String ldapDepartment = ldapUser.getDepartment();
