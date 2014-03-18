@@ -2,7 +2,7 @@ package org.komea.product.database.dto;
 
 import java.io.Serializable;
 
-public class Pair<K, V> implements Serializable {
+public class Pair<K, V> implements Serializable, Comparable<Pair<K, V>> {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,6 +35,12 @@ public class Pair<K, V> implements Serializable {
 
     public void setValue(V value) {
         this.value = value;
+    }
+
+    @Override
+    public int compareTo(Pair<K, V> o) {
+        return this.getValue().toString().toLowerCase().compareTo(
+                o.getValue().toString().toLowerCase());
     }
 
 }
