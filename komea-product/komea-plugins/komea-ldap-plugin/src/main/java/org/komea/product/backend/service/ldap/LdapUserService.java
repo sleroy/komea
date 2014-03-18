@@ -51,27 +51,24 @@ import com.google.common.base.Strings;
         eventTypes = {},
         type = ProviderType.LDAP,
         url = "/ldap")
-@Properties(value = {
-        @Property(
-                key = LdapUserService.LDAP_SERVER,
-                value = "ldap://ares.tocea:389",
-                type = String.class,
-                description = "Specify the location of the LDAP Server"),
-        @Property(
-                key = LdapUserService.LDAP_PASSWORD,
-                value = "",
-                type = String.class,
-                description = "Specify the LDAP Server password required to authenticate"),
-        @Property(
-                key = LdapUserService.LDAP_USER_DN,
-                value = "",
-                type = String.class,
-                description = "Specify the LDAP userDn"),
-        @Property(
-                key = LdapUserService.LDAP_BASE,
-                value = "dc=tocea,dc=com",
-                type = String.class,
-                description = "Specify the LDAP Base url") })
+@Properties(value =
+    { @Property(
+            key = LdapUserService.LDAP_SERVER,
+            value = "ldap://192.168.1.134:389",
+            type = String.class,
+            description = "Specify the location of the LDAP Server"), @Property(
+            key = LdapUserService.LDAP_PASSWORD,
+            value = "",
+            type = String.class,
+            description = "Specify the LDAP Server password required to authenticate"), @Property(
+            key = LdapUserService.LDAP_USER_DN,
+            value = "",
+            type = String.class,
+            description = "Specify the LDAP userDn"), @Property(
+            key = LdapUserService.LDAP_BASE,
+            value = "dc=tocea,dc=com",
+            type = String.class,
+            description = "Specify the LDAP Base url") })
 public class LdapUserService implements ILdapUserService
 {
     
