@@ -35,63 +35,57 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author sleroy
  */
 @ProviderPlugin(
-        eventTypes = {
-                @EventTypeDef(
-                        category = "SCM",
-                        description = "A new commit has been pushed on a GIT Server",
-                        enabled = true,
-                        entityType = EntityType.PROJECT,
-                        key = "scm-new-commit",
-                        name = "New commit on git server",
-                        severity = Severity.INFO),
-                @EventTypeDef(
-                        category = "SCM",
-                        description = "Fetch on git server has failed",
-                        enabled = true,
-                        entityType = EntityType.PROJECT,
-                        key = "scm-fetch-failed",
-                        name = "Fetch on git server has failed.",
-                        severity = Severity.INFO),
-                @EventTypeDef(
-                        category = "SCM",
-                        description = "Number of tags in a git branch. The plugin will try to detect how many tags are present on the git branch.",
-                        enabled = true,
-                        entityType = EntityType.PROJECT,
-                        key = "scm-tag-perbranch-numbers",
-                        name = "Number of tags per branch.",
-                        severity = Severity.INFO),
-                @EventTypeDef(
-                        category = "SCM",
-                        description = "Event sent when a git repository is fetched.",
-                        enabled = true,
-                        entityType = EntityType.PROJECT,
-                        key = "scm-fetch-repository",
-                        name = "Number of tags per branch.",
-                        severity = Severity.INFO),
-                @EventTypeDef(
-                        category = "SCM",
-                        description = "Number of customer tags . This plugin will try to detect custom tags present on a git repository.",
-                        enabled = true,
-                        entityType = EntityType.PROJECT,
-                        key = "scm-customer-tag-numbers",
-                        name = "Number of customer tags.",
-                        severity = Severity.INFO),
-                @EventTypeDef(
-                        category = "SCM",
-                        description = "Number of customer branches . This plugin will try to detect the number of customer branches present on a git repository.",
-                        enabled = true,
-                        entityType = EntityType.PROJECT,
-                        key = "scm-customer-branch-numbers",
-                        name = "Number of customer branches.",
-                        severity = Severity.INFO),
-                @EventTypeDef(
-                        category = "SCM",
-                        description = "Number of branches . This plugin will try to detect the number of branches present on a git repository.",
-                        enabled = true,
-                        entityType = EntityType.PROJECT,
-                        key = "scm-branch-numbers",
-                        name = "Number of branches.",
-                        severity = Severity.INFO) },
+        eventTypes =
+            { @EventTypeDef(
+                    category = "SCM",
+                    description = "A new commit has been pushed on a GIT Server",
+                    enabled = true,
+                    entityType = EntityType.PROJECT,
+                    key = "scm-new-commit",
+                    name = "New commit on git server",
+                    severity = Severity.INFO), @EventTypeDef(
+                    category = "SCM",
+                    description = "Fetch on git server has failed",
+                    enabled = true,
+                    entityType = EntityType.PROJECT,
+                    key = "scm-fetch-failed",
+                    name = "Fetch on git server has failed.",
+                    severity = Severity.INFO), @EventTypeDef(
+                    category = "SCM",
+                    description = "Number of tags in a git branch. The plugin will try to detect how many tags are present on the git branch.",
+                    enabled = true,
+                    entityType = EntityType.PROJECT,
+                    key = "scm-tag-perbranch-numbers",
+                    name = "Number of tags per branch.",
+                    severity = Severity.INFO), @EventTypeDef(
+                    category = "SCM",
+                    description = "Event sent when a git repository is fetched.",
+                    enabled = true,
+                    entityType = EntityType.PROJECT,
+                    key = "scm-fetch-repository",
+                    name = "Number of tags per branch.",
+                    severity = Severity.INFO), @EventTypeDef(
+                    category = "SCM",
+                    description = "Number of customer tags . This plugin will try to detect custom tags present on a git repository.",
+                    enabled = true,
+                    entityType = EntityType.PROJECT,
+                    key = "scm-customer-tag-numbers",
+                    name = "Number of customer tags.",
+                    severity = Severity.INFO), @EventTypeDef(
+                    category = "SCM",
+                    description = "Number of customer branches . This plugin will try to detect the number of customer branches present on a git repository.",
+                    enabled = true,
+                    entityType = EntityType.PROJECT,
+                    key = "scm-customer-branch-numbers",
+                    name = "Number of customer branches.",
+                    severity = Severity.INFO), @EventTypeDef(
+                    category = "SCM",
+                    description = "Number of branches . This plugin will try to detect the number of branches present on a git repository.",
+                    enabled = true,
+                    entityType = EntityType.PROJECT,
+                    key = "scm-branch-numbers",
+                    name = "Number of branches.",
+                    severity = Severity.INFO) },
         icon = "git",
         name = GitProviderPlugin.GIT_PROVIDER_PLUGIN,
         type = ProviderType.NEWS,
@@ -99,8 +93,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 @PluginAdminPages(@PluginMountPage(
         pluginName = GitProviderPlugin.GIT_PROVIDER_PLUGIN,
         page = GitRepositoryPage.class))
-@Properties(group = "Git Plugin", value = {
-    @Property(
+@Properties(group = "Git Plugin", value =
+    { @Property(
             description = "Refresh period of GIT job",
             key = GitProviderPlugin.SETTING_PROVIDER_PERIOD_NAME,
             type = String.class,
@@ -235,6 +229,7 @@ public class GitProviderPlugin
                 GitScheduleCronJob.class, properties);
         cronRegistryService.updateCronFrequency(GIT_CRON_JOB,
                 registry.getProxy(SETTING_PROVIDER_PERIOD_NAME).getStringValue());
+        cronRegistryService.forceNow(GIT_CRON_JOB);
         
     }
     

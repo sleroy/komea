@@ -5,7 +5,6 @@ package org.komea.product.plugins.demodata;
 
 import javax.annotation.PostConstruct;
 
-import org.komea.product.plugins.rss.bean.IRssExampleFeedBean;
 import org.komea.product.plugins.rss.model.RssFeed;
 import org.komea.product.plugins.rss.repositories.api.IRssRepositories;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @author sleroy
  */
 @Component
-public class RssExampleFeedBean implements IRssExampleFeedBean
+public class RssExampleFeedBean
 {
     
     
@@ -43,7 +42,7 @@ public class RssExampleFeedBean implements IRssExampleFeedBean
      * (non-Javadoc)
      * @see org.komea.product.plugins.rss.bean.IRssExampleFeedBean#initRssFeed()
      */
-    @Override
+    
     @PostConstruct
     public void initRssFeed() {
     

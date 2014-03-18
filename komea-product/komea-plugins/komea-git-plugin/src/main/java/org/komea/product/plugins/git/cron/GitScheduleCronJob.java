@@ -61,8 +61,8 @@ public class GitScheduleCronJob implements Job
     public static String[] requiredKeys() {
     
     
-        return new String[] {
-                "esperEngine", KEY_REPOSITORY, "gitcloner", "personService", KEY_CRON };
+        return new String[]
+            { "esperEngine", KEY_REPOSITORY, "gitcloner", "personService", KEY_CRON };
     }
     
     
@@ -85,9 +85,11 @@ public class GitScheduleCronJob implements Job
     
         LOGGER.info("@@@@@ GIT CRON SCHEDULER @@@@@@@");
         final List<GitRepositoryDefinition> feeds = repository.getAllRepositories();
+        int processed = 0;
         for (final GitRepositoryDefinition fetch : feeds) {
             Validate.notNull(fetch);
             if (!repository.isAssociatedToCron(fetch)) {
+                processed++;
                 LOGGER.info("Creating Cron for the git repository {}", fetch.getRepoName());
                 final String cronName = repository.initializeCronName(fetch);
                 cronRegistryService.registerCronTask(cronName, GIT_CRON_VALUE, GitCronJob.class,
@@ -97,7 +99,7 @@ public class GitScheduleCronJob implements Job
             }
         }
         
-        LOGGER.info("@@@@@                     @@@@@@@");
+        LOGGER.info("@@@@@      {}               @@@@@@@", processed);
     }
     
     
