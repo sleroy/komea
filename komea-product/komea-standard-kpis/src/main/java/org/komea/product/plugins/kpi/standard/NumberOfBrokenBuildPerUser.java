@@ -60,7 +60,7 @@ public class NumberOfBrokenBuildPerUser implements ICEPQueryImplementation
                 FilterDefinition
                         .create()
                         .setCacheConfiguration(
-                                CacheConfigurationBuilder.expirationTimeCache(31, TimeUnit.DAYS))
+                                CacheConfigurationBuilder.expirationTimeCache(7, TimeUnit.DAYS))
                         .setFilter(eventFilter).setFilterName("jenkins-brokenbuilder-filter");
         
         return Collections.singletonList(filterDefinition);
