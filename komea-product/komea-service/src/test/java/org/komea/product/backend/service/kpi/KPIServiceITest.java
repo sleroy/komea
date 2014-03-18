@@ -42,7 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  */
-public class KPIServiceIT extends AbstractSpringIntegrationTestCase
+public class KPIServiceITest extends AbstractSpringIntegrationTestCase
 {
     
     
@@ -100,7 +100,7 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
     
     
     
-    private static Logger           LOGGER     = LoggerFactory.getLogger(KPIServiceIT.class);
+    private static Logger           LOGGER     = LoggerFactory.getLogger(KPIServiceITest.class);
     
     private static final String     TEST_QUERY = "testQuery";
     
@@ -126,7 +126,7 @@ public class KPIServiceIT extends AbstractSpringIntegrationTestCase
     
     
     
-    public KPIServiceIT() {
+    public KPIServiceITest() {
     
     
         super();

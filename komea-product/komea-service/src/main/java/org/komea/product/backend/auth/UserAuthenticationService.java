@@ -31,6 +31,7 @@ public class UserAuthenticationService implements UserDetailsService
     
     private static final Logger LOGGER = LoggerFactory.getLogger(UserAuthenticationService.class);
     
+    
     @Autowired
     private IPersonService      personDAO;
     
@@ -80,5 +81,27 @@ public class UserAuthenticationService implements UserDetailsService
         LOGGER.trace("-----AUTH----- LdapUser authentication requested {}", _username);
         return new User(requestedLoginUsers.getLogin(), requestedLoginUsers.getPassword(),
                 AuthorityUtils.createAuthorityList(right));
+    }
+    
+    
+    /**
+     * @param _personDAO
+     *            the personDAO to set
+     */
+    public void setPersonDAO(final IPersonService _personDAO) {
+    
+    
+        personDAO = _personDAO;
+    }
+    
+    
+    /**
+     * @param _personRoleDAO
+     *            the personRoleDAO to set
+     */
+    public void setPersonRoleDAO(final IPersonRoleService _personRoleDAO) {
+    
+    
+        personRoleDAO = _personRoleDAO;
     }
 }

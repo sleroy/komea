@@ -30,7 +30,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class })
-public class EntityServiceIT extends AbstractSpringIntegrationTestCase
+public class EntityServiceTest extends AbstractSpringIntegrationTestCase
 {
     
     

@@ -13,7 +13,7 @@ import org.komea.product.rest.client.api.IPersonsAPI;
 import org.komea.product.rest.client.api.IProjectsAPI;
 import org.komea.product.rest.client.api.ITeamsAPI;
 
-public class DepartmentsAPIIT {
+public class DepartmentsAPIITest {
 
     @Rule
     public ServerMethodRule serverInit = new ServerMethodRule();

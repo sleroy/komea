@@ -29,7 +29,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class })
-public class EntitiesControllerIT extends AbstractSpringWebIntegrationTestCase
+public class EntitiesControllerITest extends AbstractSpringWebIntegrationTestCase
 {
     
     

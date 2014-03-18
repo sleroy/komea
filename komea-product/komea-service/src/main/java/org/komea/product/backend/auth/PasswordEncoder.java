@@ -12,17 +12,18 @@ import org.springframework.stereotype.Service;
 
 
 /**
+ * This service defines the way to encode passwords.
  */
 @Service
 public class PasswordEncoder implements IPasswordEncoder
 {
     
     
+    private static final Logger LOGGER = LoggerFactory.getLogger(PasswordEncoder.class);
+    
+    
     @Value("#{authProperties.salt}")
     private String              salt;
-    
-    
-    private static final Logger LOGGER = LoggerFactory.getLogger(PasswordEncoder.class);
     
     
     
@@ -33,7 +34,8 @@ public class PasswordEncoder implements IPasswordEncoder
     }
     
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.backend.auth.IPasswordEncoder#encodePassword(java.lang.String)
      */
     @Override
@@ -46,6 +48,7 @@ public class PasswordEncoder implements IPasswordEncoder
     
     /**
      * Method getSalt.
+     * 
      * @return String
      */
     public String getSalt() {
@@ -65,7 +68,9 @@ public class PasswordEncoder implements IPasswordEncoder
     
     /**
      * Method setSalt.
-     * @param _salt String
+     * 
+     * @param _salt
+     *            String
      */
     public void setSalt(final String _salt) {
     

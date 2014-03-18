@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 
-public class CustomerDAOIT extends AbstractSpringIntegrationTestCase
+public class CustomerDAOITest extends AbstractSpringIntegrationTestCase
 {
     
     
