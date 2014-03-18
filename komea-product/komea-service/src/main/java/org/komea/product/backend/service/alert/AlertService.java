@@ -109,6 +109,9 @@ public final class AlertService implements IAlertService {
     }
 
     private boolean alertActivated(final KpiAlertType alertType, final Number value) {
+        if (value == null) {
+            return false;
+        }
         final int compareTo = Double.compare(value.doubleValue(), alertType.getValue());
         switch (alertType.getOperator()) {
             case DISTINCT:
