@@ -191,7 +191,7 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
         Person personRequested = CollectionUtil.singleOrNull(selectByCriteria(criteria));
         
         if (personRequested == null) {
-            LOGGER.info("Create a person by its email since it does not exist : {}", _email);
+            LOGGER.debug("Create a person by its email since it does not exist : {}", _email);
             personRequested = new Person();
             personRequested.setEmail(_email);
             personRequested.setLogin(personRequested.getEmail().substring(0,
@@ -290,7 +290,7 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
         _person.setIdPersonGroupOrNull(_personGroup);
         
         //
-        LOGGER.info("Save or update {}", _person);
+        LOGGER.trace("Save or update person {}", _person);
         saveOrUpdate(_person);
         projectPersonService.updateProjectsOfPerson(_projects, _person);
         
