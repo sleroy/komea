@@ -17,7 +17,6 @@ import org.komea.product.cep.api.IEventFilter;
 import org.komea.product.cep.api.IFilterDefinition;
 import org.komea.product.cep.cache.CacheConfigurationBuilder;
 import org.komea.product.cep.filter.EventFilterBuilder;
-import org.komea.product.cep.formula.tuple.EventCountFormula;
 import org.komea.product.cep.formula.tuple.GroupByFormula;
 import org.komea.product.cep.query.FilterDefinition;
 import org.komea.product.plugins.kpi.filters.SonarMetricEventFilter;
@@ -85,7 +84,7 @@ public class SonarMetricKpi implements ICEPQueryImplementation
     public ICEPFormula getFormula() {
     
     
-        return new GroupByFormula(new ProjectTupleCreator(), new EventCountFormula());
+        return new GroupByFormula(new ProjectTupleCreator(), new EventValueFormula());
     }
     
     

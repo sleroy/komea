@@ -54,6 +54,19 @@ public class EventGroup implements IEventGroup
     
     /*
      * (non-Javadoc)
+     * @see org.komea.product.cep.api.formula.tuple.IEventGroup#getFirstEvent()
+     */
+    @Override
+    public <T extends Serializable> T getFirstEvent() {
+    
+    
+        if (events.isEmpty()) { return null; }
+        return (T) events.get(0);
+    }
+    
+    
+    /*
+     * (non-Javadoc)
      * @see java.lang.Object#toString()
      */
     @Override

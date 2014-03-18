@@ -35,4 +35,14 @@ public interface IEventGroup
      * @return the list of events.
      */
     <T extends Serializable> List<T> getEvents();
+    
+    
+    /**
+     * Returns the first element or null
+     * 
+     * @return the first element or null.
+     */
+    <T extends Serializable> T getFirstEvent();
+    
+    
 }

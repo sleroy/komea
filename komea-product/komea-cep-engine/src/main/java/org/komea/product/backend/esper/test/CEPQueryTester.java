@@ -83,7 +83,7 @@ public class CEPQueryTester
         
             final List<ITuple> listMapResult = _epStatement.getResult().asMap().asTupleRows();
             Collections.sort(listMapResult);
-            LOGGER.info("Sorted table : {}", listMapResult.toString());
+            LOGGER.debug("Sorted table : {}", listMapResult.toString());
             checkIfisEquals(array.length, listMapResult.size(), "Expected same number of rows");
             
             for (int i = 0; i < listMapResult.size(); ++i) {

@@ -35,6 +35,20 @@ public class EventGroupTest
     
     
     @Test
+    public void testGetFirstEvent() throws Exception {
+    
+    
+        final EventGroup eventGroup = new EventGroup();
+        Assert.assertTrue(eventGroup.getEvents().isEmpty());
+        Assert.assertNull(eventGroup.getFirstEvent());
+        eventGroup.addEvent("truc");
+        Assert.assertEquals("truc", eventGroup.getFirstEvent());
+        Assert.assertTrue(eventGroup.getEvents().contains("truc"));
+        
+    }
+    
+    
+    @Test
     public final void testToString() throws Exception {
     
     
