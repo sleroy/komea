@@ -12,6 +12,7 @@ import org.apache.commons.lang.Validate;
 import org.komea.product.api.service.ldap.ILdapUserService;
 import org.komea.product.api.service.ldap.LdapUser;
 import org.komea.product.backend.service.entities.IPersonGroupService;
+import org.komea.product.backend.service.entities.IPersonRoleService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.Person;
@@ -39,7 +40,7 @@ public class LdapCronRefreshJob implements Job
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(LdapCronRefreshJob.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("ldap-cron");
     
     
     
@@ -58,7 +59,7 @@ public class LdapCronRefreshJob implements Job
      * 
      * @param _personGroupService
      * @param _ldapDepartment
-     * @return
+     * @return the person group.
      */
     public PersonGroup createMissingDepartment(
             final IPersonGroupService _personGroupService,
@@ -84,6 +85,7 @@ public class LdapCronRefreshJob implements Job
     /**
      * Create missing ldap users.
      * 
+     * @param _personRole
      * @param _ldapService
      * @param _personGroupService
      * @param _personGroupService2
@@ -93,7 +95,8 @@ public class LdapCronRefreshJob implements Job
             final ILdapUserService ldapService,
             final IPersonService _personService,
             final IPersonGroupService personGroupService,
-            final LdapUser ldapUser) {
+            final LdapUser ldapUser,
+            final IPersonRoleService _personRole) {
     
     
         LOGGER.info("Creation of the user {} from LDAP", ldapUser);
@@ -104,8 +107,8 @@ public class LdapCronRefreshJob implements Job
         personRequested.setPassword(ldapUser.getPassword());
         final String ldapDepartment = ldapUser.getDepartment();
         final PersonGroup department = createMissingDepartment(personGroupService, ldapDepartment);
-        _personService.saveOrUpdatePerson(personRequested, Collections.<Project> emptyList(), null,
-                department);
+        _personService.saveOrUpdatePerson(personRequested, Collections.<Project> emptyList(),
+                _personRole.getDefaultUserRole(), department);
         
     }
     
@@ -118,8 +121,11 @@ public class LdapCronRefreshJob implements Job
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
     
     
+        LOGGER.info("-@-@-@-@-@-@-@-@-@-@-@-@-@-@-@-@-");
+        LOGGER.info("> Refreshing user and group database from LDAP");
         final JobDataMap jobDataMap = _context.getMergedJobDataMap();
         launchCronTask(jobDataMap);
+        LOGGER.info("-@-@-@-@-@-@-@-@-@-@-@-@-@-@-@-@-");
     }
     
     
@@ -137,9 +143,11 @@ public class LdapCronRefreshJob implements Job
         final IPersonService personService = (IPersonService) _jobDataMap.get("person");
         final IPersonGroupService personGroupService =
                 (IPersonGroupService) _jobDataMap.get("group");
+        final IPersonRoleService personRoleService = (IPersonRoleService) _jobDataMap.get("role");
         Validate.notNull(personGroupService);
         Validate.notNull(personService);
         Validate.notNull(ldapService);
+        Validate.notNull(personRoleService);
         try {
             for (final LdapUser ldapUser : ldapService.getUsers(null)) {
                 if (Strings.isNullOrEmpty(ldapUser.getEmail())) {
@@ -147,9 +155,10 @@ public class LdapCronRefreshJob implements Job
                 }
                 // Test if the person exists in DB
                 
-                if (personService.findUserByEmail(ldapUser.getEmail()) != null) {
+                if (!personService.existUserByEmail(ldapUser.getEmail())) {
                     
-                    createMissingLdapUser(ldapService, personService, personGroupService, ldapUser);
+                    createMissingLdapUser(ldapService, personService, personGroupService, ldapUser,
+                            personRoleService);
                     
                 }
                 

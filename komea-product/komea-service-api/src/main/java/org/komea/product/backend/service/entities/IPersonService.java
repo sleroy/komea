@@ -29,6 +29,16 @@ public interface IPersonService extends IGenericService<Person, Integer, PersonC
     
     
     /**
+     * Tests if the user is existing (from his email)
+     * 
+     * @param _email
+     *            the email
+     * @return true if this user is present in the database
+     */
+    public boolean existUserByEmail(String _email);
+    
+    
+    /**
      * Find a user by its email.
      * 
      * @param _email

@@ -17,6 +17,7 @@ import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.ISettingService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IPersonGroupService;
+import org.komea.product.backend.service.entities.IPersonRoleService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.enums.ProviderType;
 import org.quartz.JobDataMap;
@@ -139,11 +140,14 @@ public class LdapUserService implements ILdapUserService
     
     
     @Autowired
+    private IPersonRoleService    personRoleService;
+    
+    @Autowired
     private IPersonService        personService;
+    
     
     @Autowired
     private ICronRegistryService  registryService;
-    
     
     @Autowired
     private ISettingService       settingService;
@@ -170,6 +174,13 @@ public class LdapUserService implements ILdapUserService
     
     
         return groupService;
+    }
+    
+    
+    public IPersonRoleService getPersonRoleService() {
+    
+    
+        return personRoleService;
     }
     
     
@@ -260,7 +271,7 @@ public class LdapUserService implements ILdapUserService
             registryService.removeCronTask(LDAP_CRON_REFRESH);
             registryService.registerCronTask(LDAP_CRON_REFRESH, CRON_LDAP,
                     LdapCronRefreshJob.class, properties);
-            // registryService.forceNow(LDAP_CRON_REFRESH);
+            registryService.forceNow(LDAP_CRON_REFRESH);
         } catch (final Exception e) {
             throw new IllegalArgumentException(e);
         }
@@ -279,6 +290,13 @@ public class LdapUserService implements ILdapUserService
     
     
         this.ldapTemplate = ldapTemplate;
+    }
+    
+    
+    public void setPersonRoleService(final IPersonRoleService _personRoleService) {
+    
+    
+        personRoleService = _personRoleService;
     }
     
     
@@ -303,6 +321,7 @@ public class LdapUserService implements ILdapUserService
         properties.put("ldap", this);
         properties.put("person", personService);
         properties.put("group", groupService);
+        properties.put("role", personRoleService);
         return properties;
     }
     

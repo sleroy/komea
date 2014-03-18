@@ -165,6 +165,18 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     
     /*
      * (non-Javadoc)
+     * @see org.komea.product.backend.service.entities.IPersonService#existUserByEmail(java.lang.String)
+     */
+    @Override
+    public boolean existUserByEmail(final String _email) {
+    
+    
+        return findUserByEmail(_email) != null;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.backend.service.entities.IPersonService#findOrCreatePersonByEmail(java.lang.String)
      */
     @Override
@@ -259,18 +271,21 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
         Validate.notNull(_person);
         
         Validate.notNull(_projects);
-        Validate.notNull(_personRole);
+        
         getDaoEventRegistry().notifyUpdated(_person);
         for (final Project project : _projects) {
             getDaoEventRegistry().notifyUpdated(project);
         }
-        getDaoEventRegistry().notifyUpdated(_personRole);
+        if (_personRole != null) {
+            getDaoEventRegistry().notifyUpdated(_personRole);
+        }
         if (_personGroup != null) {
             getDaoEventRegistry().notifyUpdated(_personGroup);
         }
         _person.setIdPersonRoleOrNull(_personRole);
         _person.setIdPersonGroupOrNull(_personGroup);
         //
+        LOGGER.info("Save or update {}", _person);
         saveOrUpdate(_person);
         projectPersonService.updateProjectsOfPerson(_projects, _person);
         
