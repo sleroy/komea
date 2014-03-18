@@ -33,8 +33,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author sleroy
  */
 @ProviderPlugin(
-        eventTypes = {
-            @EventTypeDef(
+        eventTypes =
+            { @EventTypeDef(
                     category = "NEWS",
                     description = "Rss provider plugin",
                     enabled = true,
@@ -49,8 +49,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 @PluginAdminPages(@PluginMountPage(
         pluginName = RssProviderPlugin.RSS_PROVIDER_PLUGIN,
         page = RssRepositoryPage.class))
-@Properties(group = "RSS Plugin", value = {
-    @Property(
+@Properties(group = "RSS Plugin", value =
+    { @Property(
             description = "Defines the cron value to fetch rss feeds",
             key = RssProviderPlugin.RSS_SETTING_CRON_NAME,
             type = String.class,
@@ -83,9 +83,6 @@ public class RssProviderPlugin
     
     @Autowired
     private IEventPushService     esperEngine;
-    
-    @Autowired
-    private IRssExampleFeedBean   feed;
     
     @Autowired
     private IWicketAdminService   pluginAdminService;
@@ -134,16 +131,6 @@ public class RssProviderPlugin
     
     
         return esperEngine;
-    }
-    
-    
-    /**
-     * @return the feed
-     */
-    public IRssExampleFeedBean getFeed() {
-    
-    
-        return feed;
     }
     
     
@@ -232,17 +219,6 @@ public class RssProviderPlugin
     
     
         esperEngine = _esperEngine;
-    }
-    
-    
-    /**
-     * @param _feed
-     *            the feed to set
-     */
-    public void setFeed(final IRssExampleFeedBean _feed) {
-    
-    
-        feed = _feed;
     }
     
     

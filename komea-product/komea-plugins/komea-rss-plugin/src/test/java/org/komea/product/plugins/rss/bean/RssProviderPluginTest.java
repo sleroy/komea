@@ -40,10 +40,6 @@ public class RssProviderPluginTest
     
     
     @Mock
-    private IRssExampleFeedBean  feed;
-    
-    
-    @Mock
     private IWicketAdminService  pluginAdminService;
     
     
@@ -52,10 +48,23 @@ public class RssProviderPluginTest
     
     
     @InjectMocks
-    private RssProviderPlugin      rssProviderBean;
+    private RssProviderPlugin    rssProviderBean;
     @Mock
     private IRssRepositories     rssRepository;
     
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.plugins.rss.bean.RssProviderPlugin#notifyPropertyChanged(org.komea.product.database.model.Setting)}.
+     */
+    @Test
+    public final void testInitializePluginWithProperties() throws Exception {
+    
+    
+        // TODO
+        // throw new RuntimeException("not yet implemented");
+    }
     
     
     /**
@@ -68,19 +77,6 @@ public class RssProviderPluginTest
         // TODO
         // throw new RuntimeException("not yet implemented");
     }
-    
-    
-    /**
-         * Test method for
-         * {@link org.komea.product.plugins.rss.bean.RssProviderPlugin#notifyPropertyChanged(org.komea.product.database.model.Setting)}.
-         */
-        @Test
-        public final void testInitializePluginWithProperties() throws Exception {
-        
-        
-            // TODO
-            // throw new RuntimeException("not yet implemented");
-        }
     
     
     /**

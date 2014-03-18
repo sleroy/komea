@@ -5,7 +5,6 @@ package org.komea.product.plugins.rss;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.komea.product.plugins.rss.bean.IRssExampleFeedBean;
 import org.komea.product.plugins.rss.repositories.api.IRssRepositories;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +17,9 @@ public class RssFeederIT extends AbstractSpringIntegrationTestCase
     
     
     @Autowired
-    private IRssExampleFeedBean feedBean;
+    private RssExampleFeedBean feedBean;
     @Autowired
-    private IRssRepositories     repository;
+    private IRssRepositories   repository;
     
     
     
