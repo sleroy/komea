@@ -21,6 +21,8 @@ import org.komea.product.database.alert.IEvent;
 
 
 /**
+ * This formula returns the value contained in the first element of the event group.
+ * 
  * @author sleroy
  */
 public class EventValueFormula implements ITuplerFormula<Number>
