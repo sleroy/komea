@@ -30,6 +30,12 @@ public class KomeaFS implements IKomeaFS
     /**
      * 
      */
+    private static final String     KOMEA            = ".komea";
+    
+    
+    /**
+     * 
+     */
     private static final String     KOMEA_DIR        = "KOMEA_DIR";
     
     
@@ -88,7 +94,7 @@ public class KomeaFS implements IKomeaFS
     
         String storage_path = System.getProperty(KOMEA_DIR);
         if (storage_path == null) {
-            storage_path = "komea";
+            storage_path = KOMEA;
         }
         LOGGER.info("Storage path for plugins is " + storage_path);
         if (storage_path == null) { throw new BeanCreationException(
