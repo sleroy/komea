@@ -3,18 +3,12 @@ package org.komea.product.backend.service.esper;
 
 
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.annotation.PostConstruct;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
 
-import org.komea.product.backend.exceptions.KomeaConstraintViolationException;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.backend.service.entities.ProjectService;
 import org.komea.product.backend.utils.CollectionUtil;
+import org.komea.product.backend.utils.ObjectValidation;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dao.EventTypeDao;
@@ -58,7 +52,7 @@ public class EventConversionAndValidationService implements IEventConversionAndV
     private ProviderDao         providerDAO;
     
     
-    private Validator           validator;
+    private ObjectValidation    validator;
     
     
     
@@ -181,7 +175,7 @@ public class EventConversionAndValidationService implements IEventConversionAndV
     public void initialize() {
     
     
-        validator = Validation.buildDefaultValidatorFactory().getValidator();
+        validator = new ObjectValidation();
         
     }
     
@@ -276,13 +270,6 @@ public class EventConversionAndValidationService implements IEventConversionAndV
     public <T> void validateObject(final T _object) {
     
     
-        final Set<ConstraintViolation<T>> constraintViolationException =
-                validator.validate(_object);
-        
-        if (!constraintViolationException.isEmpty()) {
-            LOGGER.error("Invalid event has been received : {}", _object);
-            throw new KomeaConstraintViolationException(new HashSet<ConstraintViolation<?>>(
-                    constraintViolationException));
-        }
+        validator.validateObject(_object);
     }
 }
