@@ -209,7 +209,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     public List<Kpi> getKpis(final EntityType entityType, final List<String> kpiKeys) {
 
         final KpiCriteria kpiCriteria = new KpiCriteria();
-        if (kpiKeys.isEmpty()) {
+        if (kpiKeys == null || kpiKeys.isEmpty()) {
             kpiCriteria.createCriteria().andEntityTypeEqualTo(entityType);
         } else {
             for (final String kpiKey : kpiKeys) {

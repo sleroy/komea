@@ -1,9 +1,9 @@
 package org.komea.product.web.rest.api;
 
 import java.util.List;
-import org.komea.product.backend.service.alert.IAlertTypeService;
+import org.komea.product.backend.service.event.IEventTypeService;
 import org.komea.product.database.enums.EntityType;
-import org.komea.product.database.model.KpiAlertType;
+import org.komea.product.database.model.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,24 +14,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value = "/alerttypes")
-public class AlertTypeController {
+@RequestMapping(value = "/eventtypes")
+public class EventTypeController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AlertTypeController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EventTypeController.class);
 
     @Autowired
-    private IAlertTypeService alertTypeService;
+    private IEventTypeService eventTypeService;
 
-    /**
-     * This method return the alert type list
-     *
-     * @param entityType
-     * @return the alert type list
-     */
     @RequestMapping(method = RequestMethod.POST, value = "/all")
     @ResponseBody
-    public List<KpiAlertType> allAlertTypes(@RequestBody EntityType entityType) {
-        return alertTypeService.getAlertTypes(entityType);
+    public List<EventType> allEventTypes(@RequestBody EntityType entityType) {
+        return eventTypeService.getEventTypes(entityType);
     }
 
 }
