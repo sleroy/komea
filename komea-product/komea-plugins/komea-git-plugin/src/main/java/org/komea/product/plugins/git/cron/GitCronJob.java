@@ -46,8 +46,8 @@ public class GitCronJob implements Job
     public static String[] requiredKeys() {
     
     
-        return new String[] {
-                KEY_ESPER_ENGINE, KEY_REPOSITORY, KEY_GITCLONER, KEY_PERSON_SERVICE, KEY_CRON };
+        return new String[]
+            { KEY_ESPER_ENGINE, KEY_REPOSITORY, KEY_GITCLONER, KEY_PERSON_SERVICE, KEY_CRON };
     }
     
     
@@ -96,11 +96,12 @@ public class GitCronJob implements Job
         
         try {
             
-            LOGGER.debug("Fetching git repository : {} {}", gitRepositoryDefinition.getRepoName(),
+            LOGGER.info("Fetching git repository : {} {}", gitRepositoryDefinition.getRepoName(),
                     gitRepositoryDefinition.getUrl());
             final IGitCloner gitCloner = gitcloner.getOrCreate(gitRepositoryDefinition);
             
-            
+            LOGGER.info("Read repository : {} {}", gitRepositoryDefinition.getRepoName(),
+                    gitRepositoryDefinition.getUrl());
             new GitRepositoryReader(gitRepositoryDefinition, esperEngine, gitCloner, _personService)
                     .feed();
         } catch (final Exception e) {

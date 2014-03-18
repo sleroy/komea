@@ -128,6 +128,9 @@ public class KpiDemoService
         saveOrUpdate(buildSonarMetricKpi("Business value", "business_value"));
         saveOrUpdate(successRateJenkinsPerWeekKpi());
         saveOrUpdate(successRateJenkinsPerMonthKpi());
+        saveOrUpdate(numberOfBuildBrokenPerUser());
+        saveOrUpdate(numberOfFixedBuildPerUser());
+        saveOrUpdate(healthRateOfUserActions());
     }
     
     

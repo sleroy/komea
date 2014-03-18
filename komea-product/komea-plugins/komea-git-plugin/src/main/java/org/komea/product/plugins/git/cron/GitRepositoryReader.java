@@ -293,6 +293,7 @@ public class GitRepositoryReader implements IGitRepositoryReader
             
             // Begin gitRepositoryDefinition
             esperEngine.sendEventDto(eventFactory.sendFetchRepository(gitRepositoryDefinition));
+            LOGGER.info("Analysis of git repository {}", gitRepositoryDefinition.getRepoName());
             analysisGitRepository(revWalk);
             
         } catch (final Throwable e) {
