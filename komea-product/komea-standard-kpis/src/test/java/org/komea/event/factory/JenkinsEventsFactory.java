@@ -360,6 +360,25 @@ public class JenkinsEventsFactory
     
     
     /**
+     * @param _string
+     * @param _i
+     * @param _string2
+     * @param _string3
+     * @return
+     */
+    public static EventSimpleDto sendBuildFixed(
+            final String _projectName,
+            final int _i,
+            final String _branchName,
+            final String _userName) {
+    
+    
+        return JenkinsEventsFactory.createBuildFixed(new Date().getTime(), _i, _projectName
+                + " Build", "http://", _userName, _projectName, _branchName);
+    }
+    
+    
+    /**
      * @param _projectName
      * @param time
      * @param _branchName
