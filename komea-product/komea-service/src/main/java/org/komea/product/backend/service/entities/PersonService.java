@@ -194,8 +194,8 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
             LOGGER.debug("Create a person by its email since it does not exist : {}", _email);
             personRequested = new Person();
             personRequested.setEmail(_email);
-            personRequested.setLogin(personRequested.getEmail().substring(0,
-                    personRequested.getEmail().indexOf('@')));
+            final String email = personRequested.getEmail();
+            personRequested.setLogin(stripLoginFromEmail(email));
             personRequested.setFirstName(personRequested.getLogin());
             personRequested.setLastName("");
             personRequested.setPassword("");
@@ -331,6 +331,22 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     
     
         requiredDAO = _requiredDAO;
+    }
+    
+    
+    /**
+     * Strip login from email.
+     * 
+     * @param email
+     *            the email
+     * @return the login.
+     */
+    public String stripLoginFromEmail(final String email) {
+    
+    
+        final int indexOf = email.indexOf('@');
+        if (indexOf == -1) { return email; }
+        return email.substring(0, indexOf);
     }
     
     

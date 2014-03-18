@@ -64,13 +64,12 @@ public class SonarMetricKpi implements ICEPQueryImplementation
         final IEventFilter<?> eventFilter =
                 EventFilterBuilder.create().onlyIEvents().chain(new WithProjectFilter())
                         .chain(new SonarMetricEventFilter(metricName)).build();
-        final ProjectCacheIndexer projectCacheIndexer = new ProjectCacheIndexer();
         final IFilterDefinition filterDefinition =
                 FilterDefinition
                         .create()
                         .setCacheConfiguration(
                                 CacheConfigurationBuilder.create().expirationTime(1, TimeUnit.DAYS)
-                                        .withCustomIndexer(projectCacheIndexer).build())
+                                        .withCustomIndexer(new ProjectCacheIndexer()).build())
                         .setFilter(eventFilter).setFilterName("jenkins-filter");
         
         return Collections.singletonList(filterDefinition);

@@ -12,7 +12,7 @@ import org.komea.product.wicket.LayoutPage;
 
 
 /**
- * Rss Repository Page
+ * GIT Repository Page
  * 
  * @author sleroy
  */
