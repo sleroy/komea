@@ -7,7 +7,7 @@ import org.komea.product.backend.business.IDAOObjectStorage;
 import org.komea.product.backend.service.fs.IKomeaFS;
 import org.komea.product.backend.service.fs.IObjectStorage;
 import org.komea.product.backend.service.plugins.IPluginStorageService;
-import org.komea.product.backend.storage.DAOStorage;
+import org.komea.product.backend.storage.DAOObjectStorage;
 import org.komea.product.backend.storage.ObjectStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,7 +54,7 @@ public class PluginStorageService implements IPluginStorageService
             final Class<T> _pojoStorageClass) {
     
     
-        return new DAOStorage(registerStorage(_pluginName, _pojoStorageClass));
+        return new DAOObjectStorage(registerStorage(_pluginName, _pojoStorageClass));
     }
     
     

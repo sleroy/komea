@@ -17,7 +17,7 @@ import org.komea.product.backend.utils.SearchFilter;
  * @author sleroy
  * @version $Revision: 1.0 $
  */
-public class DAOStorageTest
+public class DAOObjectStorageTest
 {
     
     
@@ -71,7 +71,7 @@ public class DAOStorageTest
     
         final ObjectStorageStub<DAOStorageIndex<String>> registerStorage =
                 new ObjectStorageStub<DAOStorageIndex<String>>();
-        final DAOStorage<String> daoStorage = new DAOStorage<String>(registerStorage);
+        final DAOObjectStorage<String> daoStorage = new DAOObjectStorage<String>(registerStorage);
         daoStorage.enableSaveOnChange();
         daoStorage.saveOrUpdate("A");
         daoStorage.saveOrUpdate("B");

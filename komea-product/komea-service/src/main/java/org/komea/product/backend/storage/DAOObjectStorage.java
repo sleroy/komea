@@ -18,7 +18,7 @@ import org.komea.product.backend.utils.SearchFilter;
  * @author sleroy
  * @version $Revision: 1.0 $
  */
-public class DAOStorage<T> implements IDAOObjectStorage<T>
+public class DAOObjectStorage<T> implements IDAOObjectStorage<T>
 {
     
     
@@ -29,12 +29,12 @@ public class DAOStorage<T> implements IDAOObjectStorage<T>
     
     
     /**
-     * Constructor for DAOStorage.
+     * Constructor for DAOObjectStorage.
      * 
      * @param _registerStorage
      *            IObjectStorage<DAOStorageIndex<T>>
      */
-    public DAOStorage(final IObjectStorage<DAOStorageIndex<T>> _registerStorage) {
+    public DAOObjectStorage(final IObjectStorage<DAOStorageIndex<T>> _registerStorage) {
     
     
         super();
