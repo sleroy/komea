@@ -302,7 +302,8 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
                         measures.add(measure);
                     }
                 } catch (Exception ex) {
-                    LOGGER.error(ex.getMessage(), ex);
+                    LOGGER.error("Error with getRealTimeMeasure(kpiKey) where kpiKey="
+                            + KpiKey.ofKpiAndEntity(kpi, entity), ex);
                 }
             }
         }
