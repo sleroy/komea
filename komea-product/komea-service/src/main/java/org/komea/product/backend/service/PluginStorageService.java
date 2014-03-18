@@ -3,6 +3,8 @@ package org.komea.product.backend.service;
 
 
 
+import java.util.Map;
+
 import org.komea.product.backend.business.IDAOObjectStorage;
 import org.komea.product.backend.service.fs.IKomeaFS;
 import org.komea.product.backend.service.fs.IObjectStorage;
@@ -11,6 +13,8 @@ import org.komea.product.backend.storage.DAOObjectStorage;
 import org.komea.product.backend.storage.ObjectStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.Maps;
 
 
 
@@ -26,12 +30,15 @@ public class PluginStorageService implements IPluginStorageService
     
     
     @Autowired
-    private IKomeaFS komeaFS;
+    private IKomeaFS                  komeaFS;
+    
+    private final Map<String, Object> storages = Maps.newConcurrentMap();
     
     
     
     /**
      * Method getKomeaFS.
+     * 
      * @return IKomeaFS
      */
     public IKomeaFS getKomeaFS() {
@@ -43,8 +50,11 @@ public class PluginStorageService implements IPluginStorageService
     
     /**
      * Method registerDAOStorage.
-     * @param _pluginName String
-     * @param _pojoStorageClass Class<T>
+     * 
+     * @param _pluginName
+     *            String
+     * @param _pojoStorageClass
+     *            Class<T>
      * @return IDAOObjectStorage<T>
      * @see org.komea.product.backend.service.IPluginStorageService#registerDAOStorage(String, Class<T>)
      */
@@ -54,14 +64,22 @@ public class PluginStorageService implements IPluginStorageService
             final Class<T> _pojoStorageClass) {
     
     
-        return new DAOObjectStorage(registerStorage(_pluginName, _pojoStorageClass));
+        IDAOObjectStorage<T> object = (IDAOObjectStorage<T>) storages.get(_pluginName);
+        if (object == null) {
+            object = new DAOObjectStorage(registerStorage(_pluginName, _pojoStorageClass));
+            storages.put(_pluginName + _pojoStorageClass.getName(), object);
+        }
+        return object;
     }
     
     
     /**
      * Method registerStorage.
-     * @param _pluginName String
-     * @param _pojoStorageClass Class<T>
+     * 
+     * @param _pluginName
+     *            String
+     * @param _pojoStorageClass
+     *            Class<T>
      * @return IObjectStorage<T>
      * @see org.komea.product.backend.service.IPluginStorageService#registerStorage(String, Class<T>)
      */
@@ -71,13 +89,20 @@ public class PluginStorageService implements IPluginStorageService
             final Class<T> _pojoStorageClass) {
     
     
-        return new ObjectStorage(komeaFS.getFileSystem(_pluginName), _pojoStorageClass);
+        IObjectStorage<T> object = (IObjectStorage<T>) storages.get(_pluginName);
+        if (object == null) {
+            object = new ObjectStorage<T>(komeaFS.getFileSystem(_pluginName), _pojoStorageClass);
+            storages.put(_pluginName + _pojoStorageClass.getName(), object);
+        }
+        return object;
     }
     
     
     /**
      * Method setKomeaFS.
-     * @param _komeaFS IKomeaFS
+     * 
+     * @param _komeaFS
+     *            IKomeaFS
      */
     public void setKomeaFS(final IKomeaFS _komeaFS) {
     

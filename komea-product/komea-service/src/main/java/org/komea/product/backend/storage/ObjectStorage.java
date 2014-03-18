@@ -54,7 +54,7 @@ public class ObjectStorage<T> implements IObjectStorage<T>
      * @see org.komea.product.backend.service.fs.IObjectStorage#get()
      */
     @Override
-    public T get() {
+    public synchronized T get() {
     
     
         final String resourceName = getResource();
@@ -73,7 +73,7 @@ public class ObjectStorage<T> implements IObjectStorage<T>
      * @see org.komea.product.backend.service.fs.IObjectStorage#set(T)
      */
     @Override
-    public void set(final T _object) {
+    public synchronized void set(final T _object) {
     
     
         final ByteArrayOutputStream out = new ByteArrayOutputStream(10000);
