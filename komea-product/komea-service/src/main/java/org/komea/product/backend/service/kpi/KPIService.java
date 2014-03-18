@@ -296,9 +296,13 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         final List<Measure> measures = new ArrayList<Measure>(kpis.size() * entities.size());
         for (final BaseEntityDto entity : entities) {
             for (final Kpi kpi : kpis) {
-                final Measure measure = getRealTimeMeasure(KpiKey.ofKpiAndEntity(kpi, entity));
-                if (measure != null) {
-                    measures.add(measure);
+                try {
+                    final Measure measure = getRealTimeMeasure(KpiKey.ofKpiAndEntity(kpi, entity));
+                    if (measure != null) {
+                        measures.add(measure);
+                    }
+                } catch (Exception ex) {
+                    LOGGER.error(ex.getMessage(), ex);
                 }
             }
         }
