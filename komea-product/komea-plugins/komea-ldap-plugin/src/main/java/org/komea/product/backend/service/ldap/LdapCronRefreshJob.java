@@ -15,6 +15,7 @@ import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonRoleService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.enums.PersonGroupType;
+import org.komea.product.database.enums.UserBdd;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
@@ -105,6 +106,8 @@ public class LdapCronRefreshJob implements Job
         personRequested.setLastName(ldapUser.getLastName());
         personRequested.setLogin(ldapUser.getUserName());
         personRequested.setPassword(ldapUser.getPassword());
+        personRequested.setEmail(ldapUser.getEmail());
+        personRequested.setUserBdd(UserBdd.LDAP);
         final String ldapDepartment = ldapUser.getDepartment();
         final PersonGroup department = createMissingDepartment(personGroupService, ldapDepartment);
         _personService.saveOrUpdatePerson(personRequested, Collections.<Project> emptyList(),
