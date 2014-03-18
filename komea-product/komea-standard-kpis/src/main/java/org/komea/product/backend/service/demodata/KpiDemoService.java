@@ -16,6 +16,7 @@ import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.plugins.kpi.standard.BuildPerDay;
 import org.komea.product.plugins.kpi.standard.BuildPerMonth;
+import org.komea.product.plugins.kpi.standard.NumberOfBrokenBuildPerUser;
 import org.komea.product.plugins.kpi.standard.SonarMetricKpi;
 import org.komea.product.plugins.kpi.standard.SuccessfulBuildPerDay;
 import org.komea.product.plugins.kpi.standard.SuccessfulBuildPerMonth;
@@ -133,6 +134,20 @@ public class KpiDemoService
         return KpiBuilder.createAscending().nameAndKeyDescription("Number of build per month")
                 .entityType(EntityType.PROJECT).expirationYear().query(BuildPerMonth.class)
                 .cronWeek().build();
+        
+    }
+    
+    
+    /**
+     * @return
+     */
+    public Kpi numberOfBuildBrokenPerUser() {
+    
+    
+        return KpiBuilder.createAscending()
+                .nameAndKeyDescription("Number of builds broken in a month")
+                .entityType(EntityType.PROJECT).expirationYear()
+                .query(NumberOfBrokenBuildPerUser.class).cronDays(1).build();
         
     }
     

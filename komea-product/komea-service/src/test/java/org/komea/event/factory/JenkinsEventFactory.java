@@ -11,7 +11,7 @@ public class JenkinsEventFactory
 {
     
     
-    public EventSimpleDto sendBuildComplete(
+    public static EventSimpleDto sendBuildComplete(
             final String _projectName,
             final double _value,
             final java.lang.String _branch) {
@@ -29,7 +29,7 @@ public class JenkinsEventFactory
     }
     
     
-    public EventSimpleDto sendBuildFailed(
+    public static EventSimpleDto sendBuildFailed(
             final String _projectName,
             final double _value,
             final java.lang.String _branch) {
@@ -47,7 +47,7 @@ public class JenkinsEventFactory
     }
     
     
-    public EventSimpleDto sendBuildInterrupted(
+    public static EventSimpleDto sendBuildInterrupted(
             final String _projectName,
             final double _value,
             final java.lang.String _branch) {
@@ -65,7 +65,7 @@ public class JenkinsEventFactory
     }
     
     
-    public EventSimpleDto sendBuildStarted(
+    public static EventSimpleDto sendBuildStarted(
             final String _projectName,
             final double _value,
             final java.lang.String _branch) {
@@ -83,7 +83,7 @@ public class JenkinsEventFactory
     }
     
     
-    public EventSimpleDto sendBuildUnstable(
+    public static EventSimpleDto sendBuildUnstable(
             final String _projectName,
             final double _value,
             final java.lang.String _branch) {
@@ -101,7 +101,9 @@ public class JenkinsEventFactory
     }
     
     
-    public EventSimpleDto sendLevelIndustrialisation(final String _projectName, final double _value) {
+    public static EventSimpleDto sendLevelIndustrialisation(
+            final String _projectName,
+            final double _value) {
     
     
         final EventSimpleDto event = new EventSimpleDto();

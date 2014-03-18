@@ -4,7 +4,7 @@ package org.komea.product.plugins.kpi.standard;
 
 
 import org.junit.Test;
-import org.komea.event.factory.JenkinsEventFactory;
+import org.komea.event.factory.JenkinsEventsFactory;
 import org.komea.product.backend.esper.test.CEPQueryTester;
 
 
@@ -22,16 +22,16 @@ public class SuccessfulBuildPerDayTest
         final CEPQueryTester newTest = CEPQueryTester.newTest();
         
         newTest.withQuery(buildPerDay).sendEvent(
-                new JenkinsEventFactory().sendBuildStarted("SCERTIFY", 1, "TRUC"));
+                JenkinsEventsFactory.sendBuildStarted("SCERTIFY", 1, "TRUC"));
         newTest.withQuery(buildPerDay).sendEvent(
-                new JenkinsEventFactory().sendBuildComplete("KOMEA", 1, "TRUC"));
+                JenkinsEventsFactory.sendBuildComplete("KOMEA", 1, "TRUC"));
         newTest.withQuery(buildPerDay).sendEvent(
-                new JenkinsEventFactory().sendBuildStarted("ALBRAND", 1, "TRUC"));
+                JenkinsEventsFactory.sendBuildStarted("ALBRAND", 1, "TRUC"));
         newTest.withQuery(buildPerDay).sendEvent(
-                new JenkinsEventFactory().sendBuildStarted("KOMEA", 1, "TRUC"));
-        newTest.dump().hasResults(new Object[][] {
+                JenkinsEventsFactory.sendBuildStarted("KOMEA", 1, "TRUC"));
+        newTest.dump().hasResults(new Object[][]
             {
-                    newTest.getMockProject().get("KOMEA").getEntityKey(), 1 } }
+                { newTest.getMockProject().get("KOMEA").getEntityKey(), 1 } }
         
         ).runTest();
     }
