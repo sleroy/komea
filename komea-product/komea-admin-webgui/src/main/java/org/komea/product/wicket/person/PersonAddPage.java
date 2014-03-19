@@ -44,6 +44,9 @@ public class PersonAddPage extends LayoutPage {
 
     @SpringBean
     private IPersonGroupService personGroupService;
+    
+    @SpringBean
+    private IProjectService projectService;
 
     public PersonAddPage(final PageParameters _parameters) {
 
@@ -59,7 +62,7 @@ public class PersonAddPage extends LayoutPage {
 
         final PersonFormData newPersonForm = formularService.newPersonForm();
         final PersonForm personForm
-                = new PersonForm(personDAO, newPersonForm, "form",
+                = new PersonForm(personDAO,projectService, newPersonForm, "form",
                         new CompoundPropertyModel<Person>(_person), this, personGroupService);
         add(personForm);
 
