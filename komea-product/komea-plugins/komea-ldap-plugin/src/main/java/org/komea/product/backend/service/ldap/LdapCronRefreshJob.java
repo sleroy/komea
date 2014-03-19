@@ -1,13 +1,10 @@
 /**
  *
  */
-
 package org.komea.product.backend.service.ldap;
 
-
-
+import com.google.common.base.Strings;
 import java.util.Collections;
-
 import org.apache.commons.lang.Validate;
 import org.komea.product.api.service.ldap.ILdapUserService;
 import org.komea.product.api.service.ldap.LdapUser;
@@ -18,6 +15,7 @@ import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.enums.UserBdd;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
+import org.komea.product.database.model.PersonRole;
 import org.komea.product.database.model.Project;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
@@ -27,37 +25,27 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Strings;
-
-
-
 /**
  * This class defines a cron job for ldap server that populate user database.
- * 
+ *
  * @author sleroy
  */
 @DisallowConcurrentExecution
-public class LdapCronRefreshJob implements Job
-{
-    
-    
+public class LdapCronRefreshJob implements Job {
+
     private static final Logger LOGGER = LoggerFactory.getLogger("ldap-cron");
-    
-    
-    
+
     /**
      * Ldap Cron refresh job.
      */
     public LdapCronRefreshJob() {
-    
-    
+
         super();
     }
-    
-    
+
     /**
      * Generate missing department.
-     * 
+     *
      * @param _personGroupService
      * @param _ldapDepartment
      * @return the person group.
@@ -65,11 +53,12 @@ public class LdapCronRefreshJob implements Job
     public PersonGroup createMissingDepartment(
             final IPersonGroupService _personGroupService,
             final String _ldapDepartment) {
-    
-    
-        if (Strings.isNullOrEmpty(_ldapDepartment)) { return null; }
+
+        if (Strings.isNullOrEmpty(_ldapDepartment)) {
+            return null;
+        }
         PersonGroup department = _personGroupService.selectByKey(_ldapDepartment);
-        
+
         if (department == null) {
             LOGGER.info("Creation of the department from ldap {}", _ldapDepartment);
             department = new PersonGroup();
@@ -81,11 +70,10 @@ public class LdapCronRefreshJob implements Job
         }
         return department;
     }
-    
-    
+
     /**
      * Create missing ldap users.
-     * 
+     *
      * @param _personRole
      * @param _ldapService
      * @param _personGroupService
@@ -98,8 +86,7 @@ public class LdapCronRefreshJob implements Job
             final IPersonGroupService personGroupService,
             final LdapUser ldapUser,
             final IPersonRoleService _personRole) {
-    
-    
+
         LOGGER.info("Creation of the user {} from LDAP", ldapUser);
         final Person personRequested = new Person();
         personRequested.setFirstName(ldapUser.getFirstName());
@@ -112,44 +99,45 @@ public class LdapCronRefreshJob implements Job
         personRequested.setPassword(password);
         personRequested.setEmail(ldapUser.getEmail());
         personRequested.setUserBdd(UserBdd.LDAP);
+        final PersonRole defaultUserRole = _personRole.getDefaultUserRole();
+        if (defaultUserRole != null) {
+            personRequested.setIdPersonRole(defaultUserRole.getId());
+        }
         final String ldapDepartment = ldapUser.getDepartment();
         final PersonGroup department = createMissingDepartment(personGroupService, ldapDepartment);
-        _personService.saveOrUpdatePerson(personRequested, Collections.<Project> emptyList(),
-                _personRole.getDefaultUserRole(), department);
-        
+        if (department != null) {
+            personRequested.setIdPersonGroup(department.getId());
+        }
+        _personService.saveOrUpdatePerson(personRequested, Collections.<Project>emptyList());
+
     }
-    
-    
+
     /*
      * (non-Javadoc)
      * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
      */
     @Override
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
-    
-    
+
         LOGGER.info("-@-@-@-@-@-@-@-@-@-@-@-@-@-@-@-@-");
         LOGGER.info("> Refreshing user and group database from LDAP");
         final JobDataMap jobDataMap = _context.getMergedJobDataMap();
         launchCronTask(jobDataMap);
         LOGGER.info("-@-@-@-@-@-@-@-@-@-@-@-@-@-@-@-@-");
     }
-    
-    
+
     /**
      * Executes the cron job.
-     * 
-     * @param _jobDataMap
-     *            the job datamap provided in argument to obtain
-     *            informations (spring services)
+     *
+     * @param _jobDataMap the job datamap provided in argument to obtain
+     * informations (spring services)
      */
     public void launchCronTask(final JobDataMap _jobDataMap) {
-    
-    
+
         final ILdapUserService ldapService = (ILdapUserService) _jobDataMap.get("ldap");
         final IPersonService personService = (IPersonService) _jobDataMap.get("person");
-        final IPersonGroupService personGroupService =
-                (IPersonGroupService) _jobDataMap.get("group");
+        final IPersonGroupService personGroupService
+                = (IPersonGroupService) _jobDataMap.get("group");
         final IPersonRoleService personRoleService = (IPersonRoleService) _jobDataMap.get("role");
         Validate.notNull(personGroupService);
         Validate.notNull(personService);
@@ -161,19 +149,19 @@ public class LdapCronRefreshJob implements Job
                     continue;
                 }
                 // Test if the person exists in DB
-                
+
                 if (!personService.existUserByEmail(ldapUser.getEmail())) {
-                    
+
                     createMissingLdapUser(ldapService, personService, personGroupService, ldapUser,
                             personRoleService);
-                    
+
                 }
-                
+
             }
         } catch (final Exception e) {
             LOGGER.error("LDAP connection is failing for the reason {}", e.getMessage(), e);
         }
-        
+
     }
-    
+
 }
