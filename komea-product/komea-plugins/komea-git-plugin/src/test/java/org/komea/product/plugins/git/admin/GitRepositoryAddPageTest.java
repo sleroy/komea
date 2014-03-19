@@ -96,16 +96,8 @@ public class GitRepositoryAddPageTest
     public final void testGitRepositoryAddPagePageParameters() throws Exception {
     
     
-        final WicketTester newWicketTester = wicketRule.newWicketTester();
-        try {
-            
-            newWicketTester.startPage(GitRepositoryAddPage.class);
-            newWicketTester.assertNoErrorMessage(); // No bug at starting
-            
-            
-        } finally {
-            newWicketTester.destroy();
-        }
+        wicketRule.testStart(GitRepositoryAddPage.class);
+        
     }
     
     

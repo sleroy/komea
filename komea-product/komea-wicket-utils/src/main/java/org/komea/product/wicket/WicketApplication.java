@@ -11,6 +11,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.settings.IExceptionSettings;
 import org.apache.wicket.settings.IExceptionSettings.ThreadDumpStrategy;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.apache.wicket.spring.test.ApplicationContextMock;
 import org.komea.product.backend.api.IWicketAdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +30,28 @@ public class WicketApplication extends WebApplication
 {
     
     
-    private static Logger LOGGER = LoggerFactory.getLogger(WicketApplication.class);
+    private static Logger                LOGGER      = LoggerFactory
+                                                             .getLogger(WicketApplication.class);
+    private final ApplicationContextMock contextMock = new ApplicationContextMock();
+    private boolean                      debugMode;
     
+    
+    
+    /**
+     * Builds the wicket application
+     */
+    public WicketApplication() {
+    
+    
+        super();
+    }
+    
+    
+    public WicketApplication(final boolean _debugMode) {
+    
+    
+        debugMode = _debugMode;
+    }
     
     
     /**
@@ -41,7 +62,15 @@ public class WicketApplication extends WebApplication
     public ApplicationContext getAppCtx() {
     
     
+        if (isDebugMode()) { return getContextMock(); }
         return WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+    }
+    
+    
+    public ApplicationContextMock getContextMock() {
+    
+    
+        return contextMock;
     }
     
     
@@ -65,17 +94,21 @@ public class WicketApplication extends WebApplication
     
         super.init();
         
-        // Bootstrap.install(Application.get(), new BootstrapSettings());
+        getDebugSettings().setAjaxDebugModeEnabled(isDebugMode());
+        getDebugSettings().setOutputComponentPath(isDebugMode());
+        getDebugSettings().setOutputMarkupContainerClassName(isDebugMode());
+        getDebugSettings().setLinePreciseReportingOnNewComponentEnabled(isDebugMode());
+        getDebugSettings().setLinePreciseReportingOnAddComponentEnabled(isDebugMode());
+        getDebugSettings().setDevelopmentUtilitiesEnabled(isDebugMode());
+        getDebugSettings().setComponentUseCheck(isDebugMode());
         
-        getComponentInstantiationListeners().add(new SpringComponentInjector(this));
-        // don't throw exceptions for missing translations
+        if (!isDebugMode()) {
+            getComponentInstantiationListeners().add(new SpringComponentInjector(this));
+        } else {
+            getComponentInstantiationListeners()
+                    .add(new SpringComponentInjector(this, contextMock));
+        }
         getResourceSettings().setThrowExceptionOnMissingResource(false);
-        
-        // enable ajax debug etc.
-        getDebugSettings().setDevelopmentUtilitiesEnabled(true);
-        // getDebugSettings().setComponentUseCheck(false);
-        // make markup friendly as in deployment-mode
-        
         getMarkupSettings().setStripWicketTags(true);
         
         
@@ -95,6 +128,20 @@ public class WicketApplication extends WebApplication
         getExceptionSettings().setThreadDumpStrategy(ThreadDumpStrategy.ALL_THREADS);
         getExceptionSettings()
                 .setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_EXCEPTION_PAGE);
+    }
+    
+    
+    public boolean isDebugMode() {
+    
+    
+        return debugMode;
+    }
+    
+    
+    public void setDebugMode(final boolean _debugMode) {
+    
+    
+        debugMode = _debugMode;
     }
     
     

@@ -1,5 +1,5 @@
 
-package org.komea.product.wicket.utils;
+package org.komea.product.wicket;
 
 
 
@@ -10,7 +10,6 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.komea.product.backend.WicketAdminService;
-import org.komea.product.wicket.WicketApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
