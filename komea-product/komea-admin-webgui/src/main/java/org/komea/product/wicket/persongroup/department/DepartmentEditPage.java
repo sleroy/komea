@@ -22,8 +22,6 @@ public final class DepartmentEditPage extends LayoutPage {
 
     @SpringBean
     private IPersonGroupService prService;
-    @SpringBean
-    private IPersonService personService;
 
     public DepartmentEditPage(PageParameters _parameters) {
         this(_parameters, new PersonGroup());
@@ -37,7 +35,7 @@ public final class DepartmentEditPage extends LayoutPage {
         add(feedbackPanel);
 
         final DepartmentForm departmentForm = new DepartmentForm("form", prService,
-                feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this, personService);
+                feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this);
         add(departmentForm);
     }
 

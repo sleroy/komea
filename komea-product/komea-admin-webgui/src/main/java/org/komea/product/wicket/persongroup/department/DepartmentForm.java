@@ -5,20 +5,28 @@
  */
 package org.komea.product.wicket.persongroup.department;
 
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.PropertyModel;
 import org.komea.product.backend.service.entities.IPersonGroupService;
-import org.komea.product.backend.service.entities.IPersonService;
+import org.komea.product.backend.service.entities.IProjectService;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.PersonGroupType;
-import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
+import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
-import org.komea.product.wicket.widget.GridViewEntities;
+import org.komea.product.wicket.project.ProjectPage;
+import org.komea.product.wicket.utils.DialogFactory;
+import org.komea.product.wicket.utils.SelectMultipleDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
@@ -33,14 +41,18 @@ public class DepartmentForm extends Form<PersonGroup> {
     private final Component feedBack;
     private final LayoutPage page;
     private final PersonGroup personGroup;
+    private List<PersonGroup> currentEntityList;
+    private List<PersonGroup> selectedEntity;
+    private List<PersonGroup> entityNeedUpdate;
 
-    DepartmentForm(String form, IPersonGroupService personGroupService, FeedbackPanel feedbackPanel,
-            CompoundPropertyModel<PersonGroup> compoundPropertyModel, DepartmentEditPage aThis, IPersonService personService) {
+    DepartmentForm(String form, IPersonGroupService personGroupService, FeedbackPanel feedbackPanel, CompoundPropertyModel<PersonGroup> compoundPropertyModel, DepartmentEditPage aThis) {
         super(form, compoundPropertyModel);
         this.prService = personGroupService;
         this.feedBack = feedbackPanel;
         this.page = aThis;
         this.personGroup = compoundPropertyModel.getObject();
+        entityNeedUpdate = new ArrayList<PersonGroup>();
+        selectedEntity = new ArrayList<PersonGroup>();
         feedBack.setVisible(false);
         //field
         add(TextFieldBuilder.<String>createRequired("name", this.personGroup, "name").highlightOnErrors()
@@ -54,16 +66,6 @@ public class DepartmentForm extends Form<PersonGroup> {
 
 //        add(TextFieldBuilder.<String>create("idCustomer", this.project, "idCustomer").withTooltip("customer can be affected")
 //                .build());
-        final List<Person> associatedPersons = personService.getPersonsOfPersonGroup(this.personGroup.getId());
-        final GridViewEntities<Person> personsView = new GridViewEntities<Person>(
-                "personsTable", associatedPersons);
-        add(personsView);
-
-        final List<PersonGroup> associatedTeams = personGroupService.getChildren(this.personGroup.getId());
-        final GridViewEntities<PersonGroup> teamsView = new GridViewEntities<PersonGroup>(
-                "teamsTable", associatedTeams);
-        add(teamsView);
-
         //button
         add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
 
@@ -73,7 +75,72 @@ public class DepartmentForm extends Form<PersonGroup> {
                 page.setResponsePage(new DepartmentPage(page.getPageParameters()));
             }
         });
+        // team component
+        List<PersonGroup> allTeamsPG = prService.getAllTeamsPG();
+        this.currentEntityList = new ArrayList<PersonGroup>();
+        for (PersonGroup personGroup1 : allTeamsPG) {
+            if (personGroup.getId() != null && personGroup.getId().equals(personGroup1.getIdPersonGroupParent())) {
+                currentEntityList.add(personGroup1);
+            }
+        }
+        IChoiceRenderer<IEntity> displayGroup = DialogFactory.getChoiceRendenerEntity();
 
+        final ListMultipleChoice<IEntity> listEntite = new ListMultipleChoice<IEntity>("table", new PropertyModel<List<IEntity>>(this, "selectedEntity"), currentEntityList);
+        listEntite.setChoiceRenderer(displayGroup);
+        listEntite.setMaxRows(8);
+        listEntite.setOutputMarkupId(true);
+        add(listEntite);
+
+
+        final SelectMultipleDialog<IEntity> dialogPersonGroup = new SelectMultipleDialog<IEntity>("dialogAddPerson", "Choose teams", (List<IEntity>) (List<?>)allTeamsPG) {
+
+            @Override
+            public void onClose(AjaxRequestTarget target, DialogButton button) {
+            }
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                List<IEntity> selected = getSelected();
+                for (IEntity iEntity : selected) {
+                    if (iEntity != null) {
+                        PersonGroup selectByPrimaryKey1 = prService.selectByPrimaryKey(iEntity.getId());
+                        if (!currentEntityList.contains(selectByPrimaryKey1)) {
+                            selectByPrimaryKey1.setIdPersonGroupParent(personGroup.getId());
+                            entityNeedUpdate.add(selectByPrimaryKey1);
+                            currentEntityList.add(selectByPrimaryKey1);
+                        }
+                        target.add(listEntite);
+                    }
+                }
+
+            }
+
+        };
+        add(dialogPersonGroup);
+        dialogPersonGroup.setFilter((List<IEntity>) (List<?>) currentEntityList);
+        add(new AjaxLinkLayout<Object>("btnAddPerson", null) {
+
+            @Override
+            public void onClick(final AjaxRequestTarget art) {
+                dialogPersonGroup.open(art);
+            }
+        });
+
+        add(new AjaxButton("btnDelPerson") {
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                for (PersonGroup person : selectedEntity) {
+                    person.setIdPersonGroupParent(null);
+                    currentEntityList.remove(person);
+                    entityNeedUpdate.add(person);
+                }
+
+                target.add(listEntite);
+            }
+        });
+
+        //button
         add(new AjaxButton("submit", this) {
 
             @Override
@@ -90,31 +157,51 @@ public class DepartmentForm extends Form<PersonGroup> {
 
                 feedBack.setVisible(false);
                 info("Submitted information");
-                // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
+                final PersonGroup insertPr = new PersonGroup();
+                insertPr.setId(personGroup.getId());
+                insertPr.setDescription(personGroup.getDescription());
+                insertPr.setName(personGroup.getName());
+                insertPr.setPersonGroupKey(personGroup.getPersonGroupKey());
+                insertPr.setType(PersonGroupType.DEPARTMENT);
+
+                if (insertPr.getId() != null) {
+                    prService.updateByPrimaryKey(insertPr);
+
+                } else {
+                    prService.insert(insertPr);
+                }
+                for (PersonGroup personGroup : entityNeedUpdate) {
+                    prService.updateByPrimaryKey(personGroup);
+                }
+                page.setResponsePage(new DepartmentPage(page.getPageParameters()));
 
             }
         });
     }
 
-    @Override
-    protected void onSubmit() {
-
-        final PersonGroup insertPr = new PersonGroup();
-        insertPr.setId(this.personGroup.getId());
-        insertPr.setDescription(this.personGroup.getDescription());
-//                insertPr.setIdPersonGroupParent(this.personGroup.getIdPersonGroupParent());
-        insertPr.setName(this.personGroup.getName());
-        insertPr.setPersonGroupKey(this.personGroup.getPersonGroupKey());
-        insertPr.setType(PersonGroupType.DEPARTMENT);
-
-        if (insertPr.getId() != null) {
-            this.prService.updateByPrimaryKey(insertPr);
-
-        } else {
-            this.prService.insert(insertPr);
-        }
-        page.setResponsePage(new DepartmentPage(page.getPageParameters()));
-
+    public List<PersonGroup> getCurrentEntityList() {
+        return currentEntityList;
     }
+
+    public void setCurrentEntityList(List<PersonGroup> currentEntityList) {
+        this.currentEntityList = currentEntityList;
+    }
+
+    public List<PersonGroup> getSelectedEntity() {
+        return selectedEntity;
+    }
+
+    public void setSelectedEntity(List<PersonGroup> selectedEntity) {
+        this.selectedEntity = selectedEntity;
+    }
+
+    public List<PersonGroup> getEntityNeedUpdate() {
+        return entityNeedUpdate;
+    }
+
+    public void setEntityNeedUpdate(List<PersonGroup> entityNeedUpdate) {
+        this.entityNeedUpdate = entityNeedUpdate;
+    }
+
 }

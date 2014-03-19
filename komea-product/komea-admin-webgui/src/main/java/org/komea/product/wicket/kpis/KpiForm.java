@@ -218,7 +218,6 @@ public final class KpiForm extends Form<Kpi> {
         kpiInsert.setValueType(this.kpi.getValueType());
 
         kpiInsert.setEsperRequest(this.kpi.getEsperRequest());
-        IKPIService service;
         if (kpiInsert.getId() != null) {
             kpiService.updateByPrimaryKey(kpiInsert);
         } else {

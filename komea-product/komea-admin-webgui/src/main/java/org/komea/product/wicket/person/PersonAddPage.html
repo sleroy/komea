@@ -29,12 +29,13 @@
                         <wicket:extend>
                             <div wicket:id="dialogGroup"></div>
 
-                            <div class="alert alert-danger" wicket:id="feedback"></div>
+
                             <form class="form" wicket:id="form" role="form">
+                                <div class="alert alert-danger" wicket:id="feedback"></div>
                                 <legend>Editing a user</legend>
-                                <div class="form-group">
+                                <div wicket:id="class_login" class="form-group">
                                     <div class="row">
-                                        <label class="col-md-2" for="inputEmail1">Login</label>
+                                        <label  class="col-md-2 control-label" for="login">Login</label>
                                         <div class="col-md-4">
                                             <input id="login" name="login" type="text" placeholder="login"
                                                    class="form-control" required="required" wicket:id="login">
@@ -44,10 +45,10 @@
                                 <!-- Text input-->
                                 <div class="form-group">
                                     <div class="row">
-                                        <label class="col-md-2" for="inputEmail1">First name</label>
+                                        <label class="col-md-2" for="firstName">First name</label>
                                         <div class="col-md-4">
                                             <input id="firstName" name="firstName" type="text"
-                                                   placeholder="firstName" class="form-control"
+                                                   placeholder="firstName" class="form-control "
                                                    required="required" wicket:id="firstname">
                                         </div>
                                     </div>
@@ -73,6 +74,18 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-md-2" for="inputOrigin">User origin</label>
+                                        <div class="col-md-4">
+                                            <select disabled id="userBdd" name="userBdd" class="form-control"
+                                                    wicket:id="userBdd">
+                                            </select> 
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- Text input-->
                                 <div class="form-group">
                                     <div class="row">
@@ -87,7 +100,7 @@
                                 </div>
 
                                 <!-- Text input-->
-<!--                                <div class="form-group">
+                                <div class="form-group">
                                     <div class="row">
                                         <label class="col-md-2" for="inputEmail1">Choose a
                                             project.</label>
@@ -97,8 +110,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>-->
-                                <!--
+                                </div><!--
                                  Text input
                                 <div class="form-group">
                                     <div class="row">
@@ -111,18 +123,6 @@
                                         </div>
                                     </div>
                                 </div>-->
-                                <div class="form-group">
-                                    <div class="row">
-                                        <label class="col-md-3" for="inputEmail1">Projects</label>
-                                        <div class="col-md-4">
-                                            <table cellspacing="0" cellpadding="2" border="0">
-                                                <tr wicket:id="projectsTable">
-                                                    <td wicket:id="cols"><span wicket:id="projectsTableElement">[projectsTableElement]</span></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
                                 <!-- Text input-->
                                 <div class="form-group">
                                     <div class="row">

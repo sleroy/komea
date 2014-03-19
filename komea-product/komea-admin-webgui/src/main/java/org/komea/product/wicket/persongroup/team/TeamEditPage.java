@@ -32,8 +32,6 @@ public class TeamEditPage extends LayoutPage {
 
     @SpringBean
     private IPersonService personService;
-    @SpringBean
-    private IProjectService projectService;
 
     public TeamEditPage(PageParameters _parameters) {
         this(_parameters, new PersonGroup());
@@ -47,7 +45,7 @@ public class TeamEditPage extends LayoutPage {
         add(feedbackPanel);
 
         final TeamForm teamForm = new TeamForm("form", personService, prService,
-                feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this, projectService);
+                feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this);
         add(teamForm);
 
         IChoiceRenderer<PersonGroup> iChoiceRenderer = new IChoiceRenderer<PersonGroup>() {
@@ -67,18 +65,16 @@ public class TeamEditPage extends LayoutPage {
         final SelectDialog<PersonGroup> dialogPersonGroup = new SelectDialog<PersonGroup>("dialogParent", "Choose a department", allDepartmentsPG, iChoiceRenderer) {
 
             @Override
-            public void onClose(AjaxRequestTarget target, DialogButton button) {
-//                target.add(kpiForm);
-            }
-
-            @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                PersonGroup selectedPersonGroup = getSelectedProvider();
+                PersonGroup selectedPersonGroup = getSelected();
                 if (selectedPersonGroup != null) {
                     teamForm.getPersonGroup().setIdPersonGroupParent(selectedPersonGroup.getId());
                     teamForm.getParentName().setName(selectedPersonGroup.getName());
-                    target.add(teamForm.getParentField());
+                } else {
+                    teamForm.getPersonGroup().setIdPersonGroupParent(null);
+                    teamForm.getParentName().setName("");
                 }
+                target.add(teamForm.getParentField());
             }
 
         };

@@ -39,7 +39,7 @@ public final class PersonDataModel extends SortableDataProvider<Person, String>
         final PersonCriteria example = new PersonCriteria();
         final List<Person> selectByCriteria = personDAO.selectByCriteria(example);
         
-        return selectByCriteria.subList((int) _first, (int) _count).iterator();
+        return selectByCriteria.subList((int) _first, (int) _first+(int) _count).iterator();
     }
     
     

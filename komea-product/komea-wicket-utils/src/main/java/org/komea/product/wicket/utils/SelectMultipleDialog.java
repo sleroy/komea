@@ -8,23 +8,27 @@ package org.komea.product.wicket.utils;
 import com.googlecode.wicket.jquery.ui.panel.JQueryFeedbackPanel;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListChoice;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.database.api.IEntity;
+import org.komea.product.database.model.Person;
 
 /**
  *
  * @author rgalerme
  */
-public abstract class SelectDialog<T> extends AbstractFormDialog<String> {
+public abstract class SelectMultipleDialog<T> extends AbstractFormDialog<String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,30 +37,33 @@ public abstract class SelectDialog<T> extends AbstractFormDialog<String> {
 
     private Form form;
     private FeedbackPanel feedback;
-    private List<T> list;
+    private List<T> listUsed;
+    private List<T> listSave;
 
-    private T selectedItem;
+    private List<T> selectedItems;
+    private List<T> filter;
 
-    public SelectDialog(String id, String title, IGenericService service) {
+    public SelectMultipleDialog(String id, String title, IGenericService service) {
         this(id, title, (List<T>) service.selectAll(), null);
     }
 
-    public SelectDialog(String id, String title, List<T> objectList) {
+    public SelectMultipleDialog(String id, String title, List<T> objectList) {
         this(id, title, objectList, null);
+
     }
 
-    public SelectDialog(String id, String title, IGenericService service, IChoiceRenderer<T> rendener) {
+    public SelectMultipleDialog(String id, String title, IGenericService service, IChoiceRenderer<T> rendener) {
         this(id, title, (List<T>) service.selectAll(), rendener);
     }
 
-    public SelectDialog(String id, String title, List<T> objectList, IChoiceRenderer<T> _rendener) {
+    public SelectMultipleDialog(String id, String title, List<T> objectList, IChoiceRenderer<T> _rendener) {
         super(id, title, true);
         this.form = new Form<String>("form");
-        list = objectList;
+        this.listSave = objectList;
+        this.listUsed = new ArrayList<T>();
+        this.filter = new ArrayList<T>();
         IChoiceRenderer<T> rendener = _rendener;
-        if (!list.isEmpty()) {
-            selectedItem = list.get(0);
-        }
+
         if (rendener == null) {
             rendener = new IChoiceRenderer<T>() {
                 @Override
@@ -70,30 +77,42 @@ public abstract class SelectDialog<T> extends AbstractFormDialog<String> {
                 }
             };
         }
-        ListChoice<T> listEntite = new ListChoice<T>("table",
-                new PropertyModel<T>(this, "selectedItem"), list);
+        ListMultipleChoice<T> listEntite = new ListMultipleChoice<T>("table",
+                new PropertyModel<List<T>>(this, "selectedItems"), listUsed);
         listEntite.setChoiceRenderer(rendener);
-        listEntite.setNullValid(true);
         listEntite.setMaxRows(8);
         this.form.add(listEntite);
         this.feedback = new JQueryFeedbackPanel("feedback");
         this.add(this.form);
     }
 
+    public void setFilter(List<T> personsOfGroup) {
+        this.filter = personsOfGroup;
+    }
+
+    private void filtre() {
+        this.listUsed.clear();
+        for (T type : listSave) {
+            if (!filter.contains(type)) {
+                this.listUsed.add(type);
+            }
+        }
+    }
+
     public List<T> getList() {
-        return list;
+        return listUsed;
     }
 
     public void setList(List<T> list) {
-        this.list = list;
+        this.listUsed = list;
     }
 
-    public T getSelected() {
-        return selectedItem;
+    public List<T> getSelected() {
+        return selectedItems;
     }
 
-    public void setSelected(T selectedProvider) {
-        this.selectedItem = selectedProvider;
+    public void setSelected(List<T> selectedProvider) {
+        this.selectedItems = selectedProvider;
     }
 
     @Override
@@ -124,6 +143,7 @@ public abstract class SelectDialog<T> extends AbstractFormDialog<String> {
     // Events //
     @Override
     protected void onOpen(AjaxRequestTarget target) {
+        filtre();
         target.add(this.form);
     }
 

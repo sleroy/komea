@@ -28,22 +28,28 @@ public class KpiDataModel extends SortableDataProvider<Kpi, String> {
 
     @Override
     public Iterator<? extends Kpi> iterator(long l, long l1) {
-        List<Kpi> listAllKpis = this.kpiService.listAllKpis();
-        List<Kpi> listKpisResult = new ArrayList<Kpi>();
+        List<Kpi> listAllKpis = getKpiToDisplay(this.kpiService.listAllKpis()) ;
+      
+        return listAllKpis.subList((int) l, (int) l+(int) l1).iterator();
+    }
+
+    @Override
+    public long size() {
+        return getKpiToDisplay(this.kpiService.listAllKpis()).size();
+    }
+
+    private List<Kpi> getKpiToDisplay(List<Kpi> listAllKpis)
+    {
+      List<Kpi> listKpisResult = new ArrayList<Kpi>();
         for (Kpi kpi : listAllKpis) {
            if(!kpi.isGlobal()) 
            {
            listKpisResult.add(kpi);
            }
         }
-        return listKpisResult.subList((int) l, (int) l1).iterator();
+        return listKpisResult;
     }
-
-    @Override
-    public long size() {
-        return this.kpiService.listAllKpis().size();
-    }
-
+    
     @Override
     public IModel<Kpi> model(Kpi t) {
         return Model.of(t);

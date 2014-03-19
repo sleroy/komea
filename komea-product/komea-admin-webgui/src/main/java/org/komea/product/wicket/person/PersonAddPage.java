@@ -1,15 +1,12 @@
-
 package org.komea.product.wicket.person;
 
-
-
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
+
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -26,222 +23,160 @@ import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.SelectDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-
-
-
 /**
  * Person admin page
- * 
+ *
  * @author sleroy
  */
-public class PersonAddPage extends LayoutPage
-{
-    
-    
+public class PersonAddPage extends LayoutPage {
+
     @SpringBean
-    private IFormularService    formularService;
-    
+    private IFormularService formularService;
+
     @SpringBean
-    private IPersonService      personDAO;
-    
+    private IPersonService personDAO;
+
+    @SpringBean
+    private IPersonRoleService personRoleDAO;
+
+    @SpringBean
+    private IProjectService projectDAO;
+
     @SpringBean
     private IPersonGroupService personGroupService;
-    
-    @SpringBean
-    private IPersonRoleService  personRoleDAO;
-    
-    @SpringBean
-    private IProjectService     projectDAO;
-    
-    
-    
+
     public PersonAddPage(final PageParameters _parameters) {
-    
-    
+
         this(_parameters, new Person());
-        
+
     }
-    
-    
+
     public PersonAddPage(final PageParameters _parameters, final Person _person) {
-    
-    
+
         super(_parameters);
-        
-        final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
-        feedbackPanel.setOutputMarkupId(true);
-        add(feedbackPanel);
+
+
+
         final PersonFormData newPersonForm = formularService.newPersonForm();
-        final PersonForm personForm =
-                new PersonForm(personDAO, newPersonForm, "form", feedbackPanel,
-                        new CompoundPropertyModel<Person>(_person), this, personGroupService,
-                        projectDAO);
+        final PersonForm personForm
+                = new PersonForm(personDAO, newPersonForm, "form",
+                        new CompoundPropertyModel<Person>(_person), this, personGroupService);
         add(personForm);
-        
-        final IChoiceRenderer<PersonGroup> iChoiceRenderer = new IChoiceRenderer<PersonGroup>()
-        {
-            
-            
+
+        IChoiceRenderer<PersonGroup> iChoiceRenderer = new IChoiceRenderer<PersonGroup>() {
+
             @Override
-            public Object getDisplayValue(final PersonGroup t) {
-            
-            
+            public Object getDisplayValue(PersonGroup t) {
                 return t.getName();
             }
-            
-            
+
             @Override
-            public String getIdValue(final PersonGroup t, final int i) {
-            
-            
+            public String getIdValue(PersonGroup t, int i) {
                 return String.valueOf(t.getId());
             }
-            
+
         };
-        
-        final SelectDialog<PersonGroup> dialogPersonGroup =
-                new SelectDialog<PersonGroup>("dialogGroup", "Choose a team or department",
-                        personGroupService, iChoiceRenderer)
-                {
-                    
-                    
-                    @Override
-                    public void onClose(final AjaxRequestTarget target, final DialogButton button) {
-                    
-                    
-                        // target.add(kpiForm);
-                    }
-                    
-                    
-                    @Override
-                    protected void onSubmit(final AjaxRequestTarget target) {
-                    
-                    
-                        final PersonGroup selectedPersonGroup = getSelectedProvider();
-                        if (selectedPersonGroup != null) {
-                            personForm.getPerson().setIdPersonGroup(selectedPersonGroup.getId());
-                            personForm.getGroupName().setName(selectedPersonGroup.getName());
-                            target.add(personForm.getGroupField());
-                        }
-                    }
-                    
-                };
+
+        final SelectDialog<PersonGroup> dialogPersonGroup = new SelectDialog<PersonGroup>("dialogGroup", "Choose a team or department", personGroupService, iChoiceRenderer) {
+
+            @Override
+            public void onClose(AjaxRequestTarget target, DialogButton button) {
+//                target.add(kpiForm);
+            }
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                PersonGroup selectedPersonGroup = getSelected();
+                if (selectedPersonGroup != null) {
+                    personForm.getPerson().setIdPersonGroup(selectedPersonGroup.getId());
+                    personForm.getGroupName().setName(selectedPersonGroup.getName());
+                    target.add(personForm.getGroupField());
+                }
+            }
+
+        };
         add(dialogPersonGroup);
-        personForm.add(new AjaxLinkLayout<LayoutPage>("btnGroup", this)
-        {
-            
-            
+        personForm.add(new AjaxLinkLayout<LayoutPage>("btnGroup", this) {
+
             @Override
             public void onClick(final AjaxRequestTarget art) {
-            
-            
                 dialogPersonGroup.open(art);
-                
+
             }
         });
-        
+
     }
-    
-    
+
     /**
      * @return the formularService
      */
     public IFormularService getFormularService() {
-    
-    
+
         return formularService;
     }
-    
-    
+
     @Override
     public List<? extends Entry<String, Class>> getMiddleLevelPages() {
-    
-    
+
         return Collections.singletonList(new KomeaEntry<String, Class>(
                 getString("PersonPage.title"), PersonPage.class));
-        
+
     }
-    
-    
+
     /**
      * @return the personDAO
      */
     public IPersonService getPersonDAO() {
-    
-    
+
         return personDAO;
     }
-    
-    
+
     /**
      * @return the personRoleDAO
      */
     public IPersonRoleService getPersonRoleDAO() {
-    
-    
+
         return personRoleDAO;
     }
-    
-    
+
     /**
      * @return the projectDAO
      */
     public IProjectService getProjectDAO() {
-    
-    
+
         return projectDAO;
     }
-    
-    
-    @Override
-    public String getTitle() {
-    
-    
-        return getString("PersonAddPage.title");
-    }
-    
-    
+
     /**
-     * @param _formularService
-     *            the formularService to set
+     * @param _formularService the formularService to set
      */
     public void setFormularService(final IFormularService _formularService) {
-    
-    
+
         formularService = _formularService;
     }
-    
-    
+
     /**
-     * @param _personDAO
-     *            the personDAO to set
+     * @param _personDAO the personDAO to set
      */
     public void setPersonDAO(final IPersonService _personDAO) {
-    
-    
+
         personDAO = _personDAO;
     }
-    
-    
+
     /**
-     * @param _personRoleDAO
-     *            the personRoleDAO to set
+     * @param _personRoleDAO the personRoleDAO to set
      */
     public void setPersonRoleDAO(final IPersonRoleService _personRoleDAO) {
-    
-    
+
         personRoleDAO = _personRoleDAO;
     }
-    
-    
+
     /**
-     * @param _projectDAO
-     *            the projectDAO to set
+     * @param _projectDAO the projectDAO to set
      */
     public void setProjectDAO(final IProjectService _projectDAO) {
-    
-    
+
         projectDAO = _projectDAO;
     }
+
 }

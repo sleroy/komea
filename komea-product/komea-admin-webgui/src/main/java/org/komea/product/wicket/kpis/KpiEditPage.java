@@ -86,13 +86,16 @@ public class KpiEditPage extends LayoutPage {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                Provider selectedProvider = getSelectedProvider();
+                Provider selectedProvider = getSelected();
                 if (selectedProvider != null) {
                     kpiForm.getKpi().setIdProvider(selectedProvider.getId());
                     kpiForm.getNameProvider().setName(selectedProvider.getName());
-                    target.add(kpiForm.getProviderField());
+
+                } else {
+                    kpiForm.getKpi().setIdProvider(null);
+                    kpiForm.getNameProvider().setName("");
                 }
-//                this.info(String.format("The model object is: '%s'", this.getModelObject()));
+                target.add(kpiForm.getProviderField());
             }
 
         };
@@ -141,7 +144,7 @@ public class KpiEditPage extends LayoutPage {
 //
 //            @Override
 //            protected void onSubmit(AjaxRequestTarget target) {
-//                IEntity entity = getSelectedProvider();
+//                IEntity entity = getSelected();
 //                if (entity != null) {
 //                    kpiForm.getKpi().setEntityID(entity.getId());
 //                    kpiForm.getNameEntity().setName(entity.getDisplayName());

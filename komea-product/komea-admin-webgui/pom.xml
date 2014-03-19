@@ -105,7 +105,6 @@
 		</dependency>
 
 
-
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>komea-wicket-utils</artifactId>
@@ -124,6 +123,31 @@
 			<scope>test</scope>
 		</dependency>
 		
+
+
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>komea-standard-kpis</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.komea.plugins</groupId>
+			<artifactId>komea-rss-plugin</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.komea.plugins</groupId>
+			<artifactId>komea-git-plugin</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.komea.plugins</groupId>
+			<artifactId>komea-ldap-plugin</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>

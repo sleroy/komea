@@ -5,6 +5,7 @@
  */
 package org.komea.product.wicket.persongroup.team;
 
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.wicket.Component;
@@ -13,20 +14,22 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListChoice;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
-import org.komea.product.backend.service.entities.IProjectService;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
-import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.utils.DialogFactory;
 import org.komea.product.wicket.utils.NameGeneric;
-import org.komea.product.wicket.widget.GridViewEntities;
+import org.komea.product.wicket.utils.SelectDialog;
+import org.komea.product.wicket.utils.SelectMultipleDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
@@ -44,16 +47,14 @@ public class TeamForm extends Form<PersonGroup> {
     private final NameGeneric parentName;
     private final TextField parentField;
     private final IPersonService personService;
-    private Person selectedPerson;
+    private List<Person> selectedPerson;
     private List<Person> personsOfGroup;
     private List<Person> personNeedUpdate;
 
-    TeamForm(String form, IPersonService _personService, IPersonGroupService prService,
-            FeedbackPanel feedbackPanel, CompoundPropertyModel<PersonGroup> compoundPropertyModel,
-            TeamEditPage aThis, IProjectService projectService) {
+    TeamForm(String form, IPersonService _personService, IPersonGroupService _prService, FeedbackPanel feedbackPanel, CompoundPropertyModel<PersonGroup> compoundPropertyModel, TeamEditPage aThis) {
 
         super(form, compoundPropertyModel);
-        this.prService = prService;
+        this.prService = _prService;
         this.feedBack = feedbackPanel;
         this.page = aThis;
         this.personGroup = compoundPropertyModel.getObject();
@@ -61,6 +62,9 @@ public class TeamForm extends Form<PersonGroup> {
         parentName = new NameGeneric("");
         personService = _personService;
         personNeedUpdate = new ArrayList<Person>();
+        selectedPerson = new ArrayList<Person>();
+        personsOfGroup = new ArrayList<Person>();
+
         add(TextFieldBuilder.<String>createRequired("name", this.personGroup, "name").highlightOnErrors()
                 .simpleValidator(0, 255).withTooltip("Departement requires a name").build());
 
@@ -70,67 +74,74 @@ public class TeamForm extends Form<PersonGroup> {
         add(TextAreaBuilder.<String>create("description", this.personGroup, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("Description can be add").build());
 
-        personsOfGroup = personService.getPersonsOfPersonGroup(this.personGroup.getId());
-        IChoiceRenderer<Person> displayGroup = new IChoiceRenderer<Person>() {
-            @Override
-            public Object getDisplayValue(Person t) {
-                return t.getFirstName() + " " + t.getLastName();
+        if (this.personGroup.getIdPersonGroupParent() != null) {
+            PersonGroup selectByPrimaryKey = this.prService.selectByPrimaryKey(this.personGroup.getIdPersonGroupParent());
+            if (selectByPrimaryKey != null) {
+                this.parentName.setName(selectByPrimaryKey.getName());
             }
-
-            @Override
-            public String getIdValue(Person t, int i) {
-                return String.valueOf(t.getId());
-            }
-        };
-        if (!personsOfGroup.isEmpty()) {
-            this.selectedPerson = personsOfGroup.get(0);
         }
-        ListChoice<Person> listEntite = new ListChoice<Person>("table",
-                new PropertyModel<Person>(this, "selectedPerson"), personsOfGroup) {
+        this.parentField = TextFieldBuilder.<String>create("parent", this.parentName, "name").withTooltip("Parent can be affected").build();
+        add(this.parentField);
 
-                    @Override
-                    protected String getNullKeyDisplayValue() {
-                        return " ";//To change body of generated methods, choose Tools | Templates.
-                    }
-                };
+        if (this.personGroup.getId() != null) {
+            personsOfGroup = personService.getPersonsOfPersonGroup(this.personGroup.getId());
+        }
+        IChoiceRenderer<IEntity> displayGroup = DialogFactory.getChoiceRendenerEntity();
+
+        final ListMultipleChoice<IEntity> listEntite = new ListMultipleChoice<IEntity>("table", new PropertyModel<List<IEntity>>(this, "selectedPerson"), personsOfGroup);
         listEntite.setChoiceRenderer(displayGroup);
-        listEntite.setNullValid(false);
         listEntite.setMaxRows(8);
         listEntite.setOutputMarkupId(true);
 
         add(listEntite);
+        //button 
+        IChoiceRenderer<IEntity> iChoiceRenderer = DialogFactory.getChoiceRendenerEntity();
 
-        final List<Project> associatedProjects = projectService.getProjectsOfPersonGroup(this.personGroup.getId());
-        final GridViewEntities<Project> projectsView = new GridViewEntities<Project>(
-                "projectsTable", associatedProjects);
-        add(projectsView);
+        final SelectMultipleDialog<IEntity> dialogPersonGroup = new SelectMultipleDialog<IEntity>("dialogAddPerson", "Choose a person", this.personService, iChoiceRenderer) {
 
-        PersonGroup selectByPrimaryKey = this.prService.selectByPrimaryKey(this.personGroup.getIdPersonGroupParent());
-        if (selectByPrimaryKey != null) {
-            this.parentName.setName(selectByPrimaryKey.getName());
-        }
-        this.parentField = TextFieldBuilder.<String>create("parent", this.parentName, "name").withTooltip("Parent can be affected").build();
-        add(this.parentField);
-        //button
-        add(new AjaxLinkLayout<ListChoice>("btnAddPerson", listEntite) {
+            @Override
+            public void onClose(AjaxRequestTarget target, DialogButton button) {
+            }
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                List<IEntity> selected = getSelected();
+                for (IEntity iEntity : selected) {
+                    if (iEntity != null) {
+                        Person selectByPrimaryKey1 = personService.selectByPrimaryKey(iEntity.getId());
+                        if (!personsOfGroup.contains(selectByPrimaryKey1)) {
+                            selectByPrimaryKey1.setIdPersonGroup(personGroup.getId());
+                            personNeedUpdate.add(selectByPrimaryKey1);
+                            personsOfGroup.add(selectByPrimaryKey1);
+                        }
+                        target.add(listEntite);
+                    }
+                }
+
+            }
+
+        };
+        add(dialogPersonGroup);
+        dialogPersonGroup.setFilter((List<IEntity>) (List<?>) personsOfGroup);
+        add(new AjaxLinkLayout<Object>("btnAddPerson", null) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
-
-                art.add(getCustom());
+                dialogPersonGroup.open(art);
             }
         });
 
-        add(new AjaxLinkLayout<ListChoice>("btnDelPerson", listEntite) {
+        add(new AjaxButton("btnDelPerson") {
 
             @Override
-            public void onClick(final AjaxRequestTarget art) {
-                art.add(getCustom());
-                selectedPerson.setIdPersonGroup(null);
-                personsOfGroup.remove(selectedPerson);
-                personNeedUpdate.add(selectedPerson);
-//               personService.saveOrUpdateProject(selectedPerson);
-                art.add(getCustom());
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                for (Person person : selectedPerson) {
+                    person.setIdPersonGroup(null);
+                    personsOfGroup.remove(person);
+                    personNeedUpdate.add(person);
+                }
+
+                target.add(listEntite);
             }
         });
 
@@ -161,16 +172,33 @@ public class TeamForm extends Form<PersonGroup> {
                 info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
+                final PersonGroup insertPr = new PersonGroup();
+                insertPr.setId(personGroup.getId());
+                insertPr.setDescription(personGroup.getDescription());
+                insertPr.setIdPersonGroupParent(personGroup.getIdPersonGroupParent());
+                insertPr.setName(personGroup.getName());
+                insertPr.setPersonGroupKey(personGroup.getPersonGroupKey());
+                insertPr.setType(PersonGroupType.TEAM);
+                if (insertPr.getId() != null) {
+                    prService.updateByPrimaryKey(insertPr);
+
+                } else {
+                    prService.insert(insertPr);
+                }
+                for (Person peson : personNeedUpdate) {
+                    personService.saveOrUpdate(peson);
+                }
+                page.setResponsePage(new TeamPage(page.getPageParameters()));
 
             }
         });
     }
 
-    public Person getSelectedPerson() {
+    public List<Person> getSelectedPerson() {
         return selectedPerson;
     }
 
-    public void setSelectedPerson(Person selectedPerson) {
+    public void setSelectedPerson(List<Person> selectedPerson) {
         this.selectedPerson = selectedPerson;
     }
 
@@ -186,28 +214,4 @@ public class TeamForm extends Form<PersonGroup> {
         return parentField;
     }
 
-    @Override
-    protected void onSubmit() {
-
-        final PersonGroup insertPr = new PersonGroup();
-        insertPr.setId(this.personGroup.getId());
-        insertPr.setDescription(this.personGroup.getDescription());
-        insertPr.setIdPersonGroupParent(this.personGroup.getIdPersonGroupParent());
-        insertPr.setName(this.personGroup.getName());
-        insertPr.setPersonGroupKey(this.personGroup.getPersonGroupKey());
-        insertPr.setType(PersonGroupType.TEAM);
-
-        if (insertPr.getId() != null) {
-            this.prService.updateByPrimaryKey(insertPr);
-
-        } else {
-            this.prService.insert(insertPr);
-        }
-        for (Person peson : this.personNeedUpdate) {
-            personService.saveOrUpdate(peson);
-        }
-
-        page.setResponsePage(new TeamPage(page.getPageParameters()));
-
-    }
 }
