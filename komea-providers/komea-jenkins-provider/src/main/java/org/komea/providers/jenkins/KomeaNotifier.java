@@ -13,6 +13,7 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
 import hudson.tasks.Publisher;
+import hudson.triggers.SCMTrigger.SCMTriggerCause;
 import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
 import java.io.IOException;
@@ -223,13 +224,13 @@ public class KomeaNotifier extends Notifier implements Serializable {
         return true;
     }
 
-    private List<String> getStartedByUserCommits(final AbstractBuild<?, ?> build, final BuildListener listener) {
+    private boolean isStartedByUserCommits(final AbstractBuild<?, ?> build) {
         for (Cause cause : build.getCauses()) {
-            listener.getLogger().println("cause : " + cause.getClass().getName() + " : " + cause.getShortDescription());
-//            if (cause.getClass().equals(Cause..class)) {
-//            }
+            if (cause.getClass().equals(SCMTriggerCause.class)) {
+                return true;
+            }
         }
-        return null;
+        return false;
     }
 
     private String getStartedByUser(final AbstractBuild<?, ?> build) {
@@ -280,7 +281,12 @@ public class KomeaNotifier extends Notifier implements Serializable {
             events.add(EventsBuilder.createCodeChangedEvent(buildDate, buildNumber, jenkinsProjectName,
                     provider.getUrl(), commiters.get(commiter), commiter, projectKey, branch));
         }
-        final List<String> users = getStartedByUserCommits(build, listener);
+        if (isStartedByUserCommits(build)) {
+            for (final String commiter : commiters.keySet()) {
+                events.add(EventsBuilder.createStartedByUser(buildDate, buildNumber,
+                        jenkinsProjectName, provider.getUrl(), commiter, projectKey, branch));
+            }
+        }
         final String user = getStartedByUser(build);
         if (user != null) {
             events.add(EventsBuilder.createStartedByUser(buildDate, buildNumber,
