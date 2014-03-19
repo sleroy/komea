@@ -53,6 +53,15 @@ public interface IGitRepositoryService
     
     
     /**
+     * Removes the object.
+     * 
+     * @param _object
+     *            the object to remove
+     */
+    void remove(GitRepositoryDefinition _object);
+    
+    
+    /**
      * Save or update the git repository.
      * 
      * @param _gitRepository

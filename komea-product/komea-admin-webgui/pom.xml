@@ -113,6 +113,13 @@
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>komea-wicket-test</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>komea-rest-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>

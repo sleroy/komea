@@ -4,7 +4,9 @@ package org.komea.product.wicket.widget.builders;
 
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
@@ -22,7 +24,7 @@ public class TextFieldBuilder<T>
     
     
     /**
-     * Builds a textfield from a pojo and its field.
+     * Builds a password field from a pojo and its field.
      * 
      * @param _wicketId
      * @param _data
@@ -35,7 +37,25 @@ public class TextFieldBuilder<T>
             final String _field) {
     
     
-        return new TextFieldBuilder<T>(_wicketId, _data, _field, false);
+        return new TextFieldBuilder<T>(_wicketId, _data, _field, false, false);
+    }
+    
+    
+    /**
+     * Builds a textfield from a pojo and its field.
+     * 
+     * @param _wicketId
+     * @param _data
+     * @param _field
+     * @return
+     */
+    public static <T> TextFieldBuilder<T> createPassword(
+            final String _wicketId,
+            final Object _data,
+            final String _field) {
+    
+    
+        return new TextFieldBuilder<T>(_wicketId, _data, _field, false, true);
     }
     
     
@@ -53,12 +73,12 @@ public class TextFieldBuilder<T>
             final String _field) {
     
     
-        return new TextFieldBuilder<T>(_wicketId, _data, _field, true);
+        return new TextFieldBuilder<T>(_wicketId, _data, _field, true, false);
     }
     
     
     
-    private final TextField<T> textField;
+    private final Component textField;
     
     
     
@@ -66,11 +86,14 @@ public class TextFieldBuilder<T>
             final String _wicketId,
             final Object _data,
             final String _field,
-            final boolean _isRequired) {
+            final boolean _isRequired,
+            final boolean _isPassword) {
     
     
         super();
-        if (_isRequired) {
+        if (_isPassword) {
+            textField = new PasswordTextField(_wicketId, new PropertyModel<String>(_data, _field));
+        } else if (_isRequired) {
             textField = new RequiredTextField<T>(_wicketId, new PropertyModel<T>(_data, _field));
         } else {
             textField = new TextField<T>(_wicketId, new PropertyModel<T>(_data, _field));
@@ -86,10 +109,17 @@ public class TextFieldBuilder<T>
     }
     
     
-    public TextField<T> build() {
+    public Component build() {
     
     
         return textField;
+    }
+    
+    
+    public TextField<T> buildTextField() {
+    
+    
+        return (TextField<T>) textField;
     }
     
     
@@ -147,9 +177,8 @@ public class TextFieldBuilder<T>
     public TextFieldBuilder<T> withValidation(final IValidator<T> _validator) {
     
     
-        textField.add(_validator);
+        ((TextField<T>) textField).add(_validator);
         return this;
     }
-    
     
 }

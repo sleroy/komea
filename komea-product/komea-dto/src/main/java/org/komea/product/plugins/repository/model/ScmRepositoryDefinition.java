@@ -6,6 +6,8 @@ package org.komea.product.plugins.repository.model;
 
 
 
+import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -21,7 +23,7 @@ import com.google.common.base.Strings;
  * 
  * @author sleroy
  */
-public class ScmRepositoryDefinition
+public class ScmRepositoryDefinition implements Serializable
 {
     
     
@@ -59,15 +61,17 @@ public class ScmRepositoryDefinition
     private String                              key;
     
     
+    private Date                                lastDateCheckout;
+    
     private String                              password             = "";
     
     private String                              projectForRepository = "";
+    
     
     private String                              repoName             = "";
     
     
     private String                              url                  = "";
-    
     
     private String                              userName             = "";
     
@@ -118,6 +122,13 @@ public class ScmRepositoryDefinition
     
     
         return branchDefinitions.keySet();
+    }
+    
+    
+    public Date getLastDateCheckout() {
+    
+    
+        return lastDateCheckout;
     }
     
     
@@ -242,6 +253,13 @@ public class ScmRepositoryDefinition
     
     
         key = _key;
+    }
+    
+    
+    public void setLastDateCheckout(final Date _lastDateCheckout) {
+    
+    
+        lastDateCheckout = _lastDateCheckout;
     }
     
     

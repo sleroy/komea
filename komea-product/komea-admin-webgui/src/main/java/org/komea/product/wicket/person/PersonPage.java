@@ -9,7 +9,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.entities.IPersonRoleService;
 import org.komea.product.backend.service.entities.IPersonService;
-import org.komea.product.database.dto.PersonDto;
 import org.komea.product.database.model.Person;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.widget.api.IDeleteAction;
@@ -36,15 +35,6 @@ public class PersonPage extends LayoutPage
     
     
     public PersonPage(final PageParameters _parameters) {
-    
-    
-        this(_parameters, new PersonDto());
-        
-        
-    }
-    
-    
-    public PersonPage(final PageParameters _parameters, final PersonDto _personDTO) {
     
     
         super(_parameters);

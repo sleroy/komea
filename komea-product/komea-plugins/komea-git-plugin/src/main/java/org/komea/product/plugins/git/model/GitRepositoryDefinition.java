@@ -6,6 +6,7 @@ package org.komea.product.plugins.git.model;
 
 
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ public class GitRepositoryDefinition extends ScmRepositoryDefinition
         gitRepo.setRepoName(_name);
         gitRepo.setKey(transformNameInKey(_name));
         gitRepo.setUrl(_url);
+        gitRepo.setLastDateCheckout(new Date());
         return gitRepo;
     }
     
@@ -51,7 +53,7 @@ public class GitRepositoryDefinition extends ScmRepositoryDefinition
     /**
      * Git repository definition.
      */
-    private GitRepositoryDefinition() {
+    public GitRepositoryDefinition() {
     
     
         super();

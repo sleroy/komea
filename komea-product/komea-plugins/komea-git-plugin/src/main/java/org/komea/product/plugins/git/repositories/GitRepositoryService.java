@@ -131,6 +131,21 @@ public class GitRepositoryService implements IGitRepositoryService
     
     /*
      * (non-Javadoc)
+     * @see
+     * org.komea.product.plugins.git.repositories.api.IGitRepositoryService#remove(org.komea.product.plugins.git.model.GitRepositoryDefinition
+     * )
+     */
+    @Override
+    public void remove(final GitRepositoryDefinition _object) {
+    
+    
+        getDAO().delete(_object);
+        
+    }
+    
+    
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.git.repositories.api.IGitRepositoryService#saveOrUpdate(org.komea.product.plugins.repository.model.
      * GitRepositoryDefinition)
      */

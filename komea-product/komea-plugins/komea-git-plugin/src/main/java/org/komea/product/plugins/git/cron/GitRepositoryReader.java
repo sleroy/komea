@@ -21,6 +21,7 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.transport.FetchResult;
+import org.joda.time.DateTime;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.dto.EventSimpleDto;
@@ -60,6 +61,8 @@ public class GitRepositoryReader implements IGitRepositoryReader
     
     private final IPersonService          personService;
     
+    private final DateTime                previousTime;
+    
     
     
     /**
@@ -85,6 +88,8 @@ public class GitRepositoryReader implements IGitRepositoryReader
         personService = _personService;
         Validate.notNull(_gitCloner, "Problem to initialize git repository");
         Validate.notNull(_fetch, "Problem to obtain GIT repository definition.");
+        Validate.notNull(gitRepositoryDefinition.getLastDateCheckout());
+        previousTime = new DateTime(gitRepositoryDefinition.getLastDateCheckout());
         
     }
     
@@ -98,8 +103,12 @@ public class GitRepositoryReader implements IGitRepositoryReader
     public void alertNewCommit(final RevWalk revWalk, final RevCommit parseCommit) {
     
     
+        final DateTime dateTime = new DateTime(parseCommit.getCommitTime());
+        if (previousTime.isAfter(dateTime)) { return; }
+        
         final PersonIdent authorIdent = parseCommit.getAuthorIdent();
         final PersonIdent committerIdent = parseCommit.getCommitterIdent();
+        
         
         final String revisionName = parseCommit.getId().name();
         if (!Strings.isNullOrEmpty(authorIdent.getName())) {

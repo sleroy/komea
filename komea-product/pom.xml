@@ -168,6 +168,7 @@
 		<module>komea-service</module>
 		<module>komea-admin-webgui</module>
 		<module>komea-wicket-utils</module>
+		<module>komea-wicket-test</module>
 		<!-- plugins -->
 		<module>komea-plugins</module>
 

@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.backend.service;
+package org.komea.product.backend.storage;
 
 
 

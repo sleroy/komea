@@ -19,6 +19,7 @@ import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
+import org.komea.product.plugins.git.admin.GitRepositoryPage;
 import org.komea.product.plugins.git.cron.GitScheduleCronJob;
 import org.komea.product.plugins.git.repositories.api.IGitClonerService;
 import org.komea.product.plugins.git.repositories.api.IGitRepositoryService;

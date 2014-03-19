@@ -95,4 +95,12 @@ public class PluginFileSystemTest
         Assert.assertEquals("bla.txt", received);
         
     }
+
+
+    @Test
+    public void testExistResource() throws Exception {
+    
+    
+        throw new RuntimeException("not yet implemented");
+    }
 }
