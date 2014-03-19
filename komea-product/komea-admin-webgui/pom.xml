@@ -122,17 +122,20 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+                
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 
-
+<!--
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>komea-standard-kpis</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
-
 		<dependency>
 			<groupId>org.komea.plugins</groupId>
 			<artifactId>komea-rss-plugin</artifactId>
@@ -147,13 +150,9 @@
 			<groupId>org.komea.plugins</groupId>
 			<artifactId>komea-ldap-plugin</artifactId>
 			<version>${project.version}</version>
-		</dependency>
+		</dependency>-->
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
+		
 
 
 
