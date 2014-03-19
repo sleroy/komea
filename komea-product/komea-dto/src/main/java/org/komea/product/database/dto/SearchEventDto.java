@@ -95,4 +95,10 @@ public class SearchEventDto implements Serializable {
         this.eventTypeKeys = eventTypeKeys;
     }
 
+    @Override
+    public String toString() {
+        return "SearchEventDto{" + "severityMin=" + severityMin + ", maxEvents=" + maxEvents
+                + ", entityType=" + entityType + ", entityKeys=" + entityKeys + ", eventTypeKeys=" + eventTypeKeys + '}';
+    }
+
 }
