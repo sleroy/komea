@@ -6,8 +6,6 @@ import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.PersonDto;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonCriteria;
-import org.komea.product.database.model.PersonGroup;
-import org.komea.product.database.model.PersonRole;
 import org.komea.product.database.model.Project;
 
 /**
@@ -86,13 +84,7 @@ public interface IPersonService extends IGenericService<Person, Integer, PersonC
      *
      * @param _person
      * @param _projects
-     * @param _selectedRole
-     * @param _personGroup
      */
-    void saveOrUpdatePerson(
-            Person _person,
-            List<Project> _projects,
-            PersonRole _selectedRole,
-            PersonGroup _personGroup);
+    void saveOrUpdatePerson(Person _person, List<Project> _projects);
 
 }

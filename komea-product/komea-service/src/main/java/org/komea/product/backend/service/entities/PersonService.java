@@ -4,13 +4,10 @@ import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.validation.Valid;
-import org.apache.commons.lang.Validate;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.esper.IEventConversionAndValidationService;
 import org.komea.product.backend.service.kpi.IMeasureHistoryService;
 import org.komea.product.backend.utils.CollectionUtil;
-import org.komea.product.backend.utils.ObjectValidation;
 import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dto.BaseEntityDto;
@@ -235,35 +232,9 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     }
 
     @Override
-    public void saveOrUpdatePerson(
-            @Valid
-            final Person _person,
-            final List<Project> _projects,
-            final PersonRole _personRole,
-            final PersonGroup _personGroup) {
-
-        Validate.notNull(_person);
-        Validate.notNull(_projects);
-        new ObjectValidation().validateObject(_person);
-
-        getDaoEventRegistry().notifyUpdated(_person);
-        for (final Project project : _projects) {
-            getDaoEventRegistry().notifyUpdated(project);
-        }
-        if (_personRole != null) {
-            getDaoEventRegistry().notifyUpdated(_personRole);
-        }
-        if (_personGroup != null) {
-            getDaoEventRegistry().notifyUpdated(_personGroup);
-        }
-        _person.setIdPersonRoleOrNull(_personRole);
-        _person.setIdPersonGroupOrNull(_personGroup);
-
-        //
-        LOGGER.trace("Save or update person {}", _person);
+    public void saveOrUpdatePerson(final Person _person, final List<Project> _projects) {
         saveOrUpdate(_person);
         projectPersonService.updateProjectsOfPerson(_projects, _person);
-
     }
 
     public void setEventConversionAndValidationService(
