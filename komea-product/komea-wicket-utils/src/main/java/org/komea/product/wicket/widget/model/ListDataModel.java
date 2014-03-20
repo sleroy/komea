@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.komea.product.wicket.utils.IteratorUtil;
 
 
 
@@ -32,7 +33,7 @@ public final class ListDataModel<T extends Serializable> extends SortableDataPro
     public Iterator<? extends T> iterator(final long _first, final long _count) {
     
     
-        return modelList.subList((int) _first, (int) (_first + _count)).iterator();
+        return IteratorUtil.buildIterator(modelList, _first, _count);
     }
     
     

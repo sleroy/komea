@@ -20,11 +20,11 @@ import org.slf4j.LoggerFactory;
  * 
  * @author sleroy
  */
-public class WicketTesterMethodRule implements TestRule
+class TesterMethodRule implements TestRule
 {
     
     
-    private static final Logger    LOGGER = LoggerFactory.getLogger(WicketTesterMethodRule.class);
+    private static final Logger    LOGGER = LoggerFactory.getLogger(TesterMethodRule.class);
     private ApplicationContextMock applicationContextMock;
     
     private WicketAdminService     wicketAdminService;

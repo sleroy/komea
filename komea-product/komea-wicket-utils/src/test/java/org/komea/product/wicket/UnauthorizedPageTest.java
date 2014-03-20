@@ -13,7 +13,7 @@ public class UnauthorizedPageTest
     
     
     @Rule
-    public final WicketTesterMethodRule wicketRule = new WicketTesterMethodRule();
+    public final TesterMethodRule wicketRule = new TesterMethodRule();
     
     
     

@@ -16,6 +16,7 @@ import org.apache.wicket.model.Model;
 import org.komea.product.backend.service.entities.IProviderService;
 import org.komea.product.database.model.Provider;
 import org.komea.product.database.model.ProviderCriteria;
+import org.komea.product.wicket.utils.IteratorUtil;
 
 
 
@@ -38,11 +39,10 @@ public class ProviderDataModel extends SortableDataProvider<Provider, String>
     
     
     @Override
-    public Iterator<? extends Provider> iterator(final long l, final long l1) {
+    public Iterator<? extends Provider> iterator(final long _first, final long _count) {
     
     
-        return providerService.selectByCriteria(new ProviderCriteria()).subList((int) l, (int) l1)
-                .iterator();
+        return IteratorUtil.buildIterator(providerService.selectAll(), _first, _count);
     }
     
     

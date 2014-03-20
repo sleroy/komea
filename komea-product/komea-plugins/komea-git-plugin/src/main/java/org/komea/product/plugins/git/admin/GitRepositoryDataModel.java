@@ -3,7 +3,6 @@ package org.komea.product.plugins.git.admin;
 
 
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.komea.product.plugins.git.model.GitRepositoryDefinition;
 import org.komea.product.plugins.git.repositories.api.IGitRepositoryService;
+import org.komea.product.wicket.utils.IteratorUtil;
 
 
 
@@ -37,12 +37,8 @@ public final class GitRepositoryDataModel extends
     public Iterator<? extends GitRepositoryDefinition> iterator(final long _first, final long _count) {
     
     
-        final List<GitRepositoryDefinition> allRepositories =
-                gitRepositoryService.getAllRepositories();
-        if (_first < 0) { return Collections.EMPTY_LIST.iterator(); }
-        if (_first >= allRepositories.size()) { return Collections.EMPTY_LIST.iterator(); }
-        final int toIndex = Math.min(allRepositories.size(), (int) (_first + _count));
-        return allRepositories.subList((int) _first, toIndex).iterator();
+        return IteratorUtil
+                .buildIterator(gitRepositoryService.getAllRepositories(), _first, _count);
     }
     
     
