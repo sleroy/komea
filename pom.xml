@@ -6,7 +6,7 @@
 
 	<groupId>org.komea</groupId>
 	<artifactId>komea</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.12</version>
 
 	<packaging>pom</packaging>
 

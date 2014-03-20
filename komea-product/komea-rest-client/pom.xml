@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.komea.product</groupId>
         <artifactId>komea-product</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.12</version>
     </parent>
 
 
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>org.komea.product</groupId>
             <artifactId>komea-rest-api</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.12</version>
             <scope>test</scope>
             <exclusions>
             	<exclusion>
@@ -54,7 +54,7 @@
         <dependency>
             <groupId>org.komea.product</groupId>
             <artifactId>komea-testspring</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.12</version>
             <scope>test</scope>
             <exclusions>
             	<exclusion>
