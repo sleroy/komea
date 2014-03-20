@@ -31,8 +31,8 @@ public class KomeaServerLauncher implements Runnable
     
         server = new Server();
         connector = new ServerConnector(server);
-        server.setConnectors(new Connector[] {
-            connector });
+        server.setConnectors(new Connector[]
+            { connector });
         final File file = new File("../komea-packaging-war/src/main/webapp");
         System.out.println(file.getCanonicalPath());
         webAppContext = new WebAppContext("src/test/resources/webapp", "/komea");
@@ -75,7 +75,7 @@ public class KomeaServerLauncher implements Runnable
             Thread.sleep(1000);
             System.out.println("Waiting initialization of Jetty");
         }
-        Thread.sleep(40000);
+        Thread.sleep(10000);
         
         
     }
