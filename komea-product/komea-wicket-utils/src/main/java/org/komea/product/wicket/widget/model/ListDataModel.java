@@ -18,14 +18,11 @@ public final class ListDataModel<T extends Serializable> extends ListDataProvide
 {
     
     
-    private final List<T> modelList;
-    
-    
-    
     public ListDataModel(final List<T> _modelList) {
     
     
-        modelList = _modelList;
+        super(_modelList);
+        
     }
     
     
