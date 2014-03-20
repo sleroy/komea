@@ -1,112 +1,109 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:wicket="http://wicket.apache.org">
-    <head>
-        <meta charset="utf-8"></meta>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
-        <meta content="Komea administration site" name="description"></meta>
-        <meta content="Komea" name="author"></meta>
-        <title>Komea Administration</title>
-        <link rel="stylesheet" href="../../../../../../../main/webapp/static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
-        <link rel="stylesheet" href="../../../../../../../main/webapp/static/css/style.css" type="text/css"></link>
-        <link rel="stylesheet" type="text/css" href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
-    </head>
-    <body>
-        <div class="container">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <span class="glyphicon cicon-user"></span> Manage Population of developers inside Komea
-                </div>
-                <div class="panel-body">
-                    <div class="container">
-                        <!--  begin here -->
-                        <wicket:extend>
-                            <div class="alert alert-danger" wicket:id="feedback"></div>
-                            <form class="form" wicket:id="form" role="form">
-                                <legend>Editing a project</legend>
+<head>
+<meta charset="utf-8"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+<meta content="Komea administration site" name="description"></meta>
+<meta content="Komea" name="author"></meta>
+<title>Komea Administration</title>
+<link rel="stylesheet" href="../../../../../../../main/webapp/static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
+<link rel="stylesheet" href="../../../../../../../main/webapp/static/css/style.css" type="text/css"></link>
+<link rel="stylesheet" type="text/css" href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
+</head>
+<body>
+	<div class="container">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<span class="glyphicon cicon-user"></span> Manage Population of developers inside Komea
+			</div>
+			<div class="panel-body">
+				<div class="container">
+					<!--  begin here -->
+					<wicket:extend>
+						<div class="alert alert-danger" wicket:id="feedback"></div>
+						<form class="form" wicket:id="form" role="form">
+							<legend>Editing a project</legend>
 
 
-                                <!-- Text input-->
-                                <div class="form-group">
-                                    <div class="row">
-                                        <label class="col-md-3" for="inputEmail1">Project Key</label>
-                                        <div class="col-md-6">
-                                            <input id="projectkey" name="projectkey" type="text" placeholder="projectkey" class="form-control" required="required" wicket:id="projectKey">
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Text input-->
-                                <div class="form-group">
-                                    <div class="row">
-                                        <label class="col-md-3" for="inputEmail1">Name</label>
-                                        <div class="col-md-6">
-                                            <input id="firstName" name="name" type="text" placeholder="name" class="form-control" required="required" wicket:id="name">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <label class="col-md-3" for="inputEmail1">Description</label>
-                                        <div class="col-md-6">
-                                            <textarea  style="resize: none;"  class="form-control" rows="4" wicket:id="description"></textarea>
-                                            <!--<textarea  rows="6" cols="40"></textarea>-->
-                                            <!--<textarea rows="4" cols="50" wicket:id="description"></textarea>-->
-                                            <!--<input id="surename" name="description" type="text" placeholder="description" class="form-control" required="required" wicket:id="description">-->
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <label class="col-md-3" for="inputEmail1">Customer</label>
-                                        <div class="col-md-4">
-                                            <input id="customer" readonly="readonly" name="customer" type="text" placeholder="customer" class="form-control"  wicket:id="idCustomer">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <button id="btnIdProvider" type="button" class="btn btn-small btn-info col-md-5" wicket:id="openDialogCustomer">...</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                       
+							<!-- Text input-->
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-3" for="inputEmail1">Project Key</label>
+									<div class="col-md-6">
+										<input id="projectkey" name="projectkey" type="text" placeholder="projectkey" class="form-control" required="required" wicket:id="projectKey" />
+									</div>
+								</div>
+							</div>
+							<!-- Text input-->
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-3" for="inputEmail1">Name</label>
+									<div class="col-md-6">
+										<input id="firstName" name="name" type="text" placeholder="name" class="form-control" required="required" wicket:id="name" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-3" for="inputEmail1">Description</label>
+									<div class="col-md-6">
+										<textarea style="resize: none;" class="form-control" rows="4" wicket:id="description"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-3" for="inputEmail1">Customer</label>
+									<div class="col-md-4">
+										<input id="customer" readonly="readonly" name="customer" type="text" placeholder="customer" class="form-control" wicket:id="idCustomer" />
+									</div>
+									<div class="col-md-3">
+										<button id="btnIdProvider" type="button" class="btn btn-small btn-info col-md-5" wicket:id="openDialogCustomer">...</button>
+									</div>
+								</div>
+							</div>
 
-                                <div class="form-group">
-                                    <div class="row">
-                                        <label class="col-md-3" for="inputEmail1">Teams</label>
-                                        <div class="col-md-4">
-                                            <select style="height: 150px" class="form-control col-md-12" wicket:id="table"></select>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <button type="button" style="margin-bottom:5px" class="btn btn-small btn-info col-md-5" wicket:id="btnAddPerson" >Add</button>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="btnDelPerson" >Delete</button>
 
-                                            </div>
-                                        </div>
-                                        <div wicket:id="dialogAddPerson">[dialog]</div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <button id="addedit" name="addedit" class="btn btn-primary" wicket:id="submit">Save</button>
-                                            <button id="cancel" name="cancel" class="btn btn-primary" wicket:id="cancel">Cancel</button>
-                                        </div>
-                                    </div>
-                                </div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-3" for="inputEmail1">Teams</label>
+									<div class="col-md-4">
+										<select style="height: 150px" class="form-control col-md-12" wicket:id="table"></select>
+									</div>
+									<div class="row">
+										<div class="col-md-3">
+											<button type="button" style="margin-bottom: 5px" class="btn btn-small btn-info col-md-5" wicket:id="btnAddPerson">Add</button>
+										</div>
+										<div class="col-md-3">
+											<button type="button" class="btn btn-small btn-info col-md-5" wicket:id="btnDelPerson">Delete</button>
 
-                            </form>
-                            <div wicket:id="dialogCustomer">[dialog]</div>
+										</div>
+									</div>
+									<div wicket:id="dialogAddPerson">[dialog]</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-4">
+										<button id="addedit" name="addedit" class="btn btn-primary" wicket:id="submit">Save</button>
+										<button id="cancel" name="cancel" class="btn btn-primary" wicket:id="cancel">Cancel</button>
+									</div>
+								</div>
+							</div>
 
-                        </wicket:extend>
+						</form>
+						<div wicket:id="dialogCustomer">[dialog]</div>
 
-                    </div>
-                </div>
-            </div>
-        </div>
-        <footer class="tocea-footer">
-            <p>&copy; Komea.org</p>
-        </footer>
-    </body>
+					</wicket:extend>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer class="tocea-footer">
+	<p>&copy; Komea.org</p>
+	</footer>
+</body>
 </html>
 
