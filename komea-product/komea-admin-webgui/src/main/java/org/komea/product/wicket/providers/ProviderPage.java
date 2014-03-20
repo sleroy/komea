@@ -13,6 +13,7 @@ import org.komea.product.backend.service.entities.IProviderService;
 import org.komea.product.database.model.Provider;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
+import org.komea.product.wicket.widget.model.ListDataModel;
 
 
 
@@ -39,7 +40,7 @@ public class ProviderPage extends LayoutPage
         super(_parameters);
         
         final ISortableDataProvider<Provider, String> dataProvider =
-                new ProviderDataModel(providerService);
+                new ListDataModel(providerService.selectAll());
         
         
         add(DataTableBuilder

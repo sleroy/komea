@@ -18,6 +18,7 @@ import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
+import org.komea.product.wicket.widget.model.ListDataModel;
 
 
 
@@ -42,7 +43,7 @@ public class ProjectPage extends LayoutPage
         final IEditAction<Project> projectEditAction = new ProjectEditAction(this);
         
         final ISortableDataProvider<Project, String> dataProvider =
-                new ProjectDataModel(projectService);
+                new ListDataModel(projectService.getAllProjectsEntities());
         final DataTable<Project, String> build =
                 DataTableBuilder.<Project, String> newTable("table")
                         .addColumn("Project key", "ProjectKey").addColumn("Name", "Name")

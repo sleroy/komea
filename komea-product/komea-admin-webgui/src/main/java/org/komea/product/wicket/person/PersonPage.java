@@ -14,7 +14,7 @@ import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
-import org.komea.product.wicket.widget.model.PersonDataModel;
+import org.komea.product.wicket.widget.model.ListDataModel;
 
 
 
@@ -43,7 +43,8 @@ public class PersonPage extends LayoutPage
         final IDeleteAction<Person> personDeleteAction = new PersonDeleteAction(personDAO);
         
         final IEditAction<Person> personEditAction = new PersonEditAction(this, personRoleDAO);
-        final ISortableDataProvider<Person, String> dataProvider = new PersonDataModel(personDAO);
+        final ISortableDataProvider<Person, String> dataProvider =
+                new ListDataModel(personDAO.selectAll());
         add(DataTableBuilder.<Person, String> newTable("table")
                 .addColumn(new LoginColumn(Model.of("Login"))).addColumn("Last name", "lastName")
                 .addColumn("First name", "firstName").addColumn("Email", "email")

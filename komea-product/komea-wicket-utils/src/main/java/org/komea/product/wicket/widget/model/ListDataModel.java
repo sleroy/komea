@@ -4,17 +4,17 @@ package org.komea.product.wicket.widget.model;
 
 
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.komea.product.wicket.utils.IteratorUtil;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
+import org.apache.wicket.extensions.markup.html.repeater.util.SingleSortState;
+import org.apache.wicket.markup.repeater.data.ListDataProvider;
 
 
 
-public final class ListDataModel<T extends Serializable> extends SortableDataProvider<T, String>
+public final class ListDataModel<T extends Serializable> extends ListDataProvider<T> implements
+        ISortableDataProvider<T, String>
 {
     
     
@@ -29,26 +29,16 @@ public final class ListDataModel<T extends Serializable> extends SortableDataPro
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator#getSortState()
+     */
     @Override
-    public Iterator<? extends T> iterator(final long _first, final long _count) {
+    public ISortState<String> getSortState() {
     
     
-        return IteratorUtil.buildIterator(modelList, _first, _count);
+        return new SingleSortState<String>();
     }
     
     
-    @Override
-    public IModel<T> model(final T _object) {
-    
-    
-        return Model.of(_object);
-    }
-    
-    
-    @Override
-    public long size() {
-    
-    
-        return modelList.size();
-    }
 }

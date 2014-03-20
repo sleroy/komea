@@ -12,6 +12,7 @@ import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
+import org.komea.product.wicket.widget.model.ListDataModel;
 
 
 
@@ -41,7 +42,7 @@ public class GitRepositoryPage extends LayoutPage
         final IEditAction<GitRepositoryDefinition> gitEditAction =
                 new GitEditAction(this, getGitRepositories());
         final ISortableDataProvider<GitRepositoryDefinition, String> dataProvider =
-                new GitRepositoryDataModel(gitRepositories);
+                new ListDataModel(gitRepositories.getAllRepositories());
         add(DataTableBuilder.<GitRepositoryDefinition, String> newTable("table")
                 .addColumn("Repository name", "repoName").addColumn("User name", "userName")
                 .addColumn("Project associated", "projectForRepository").addColumn("URL", "url")

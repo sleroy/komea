@@ -19,6 +19,7 @@ import org.komea.product.wicket.persongroup.PersonGroupDeleteAction;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
+import org.komea.product.wicket.widget.model.ListDataModel;
 
 
 
@@ -44,7 +45,7 @@ public class TeamPage extends LayoutPage
         final IEditAction<PersonGroup> personGroupEditAction = new TeamEditAction(this);
         
         final ISortableDataProvider<PersonGroup, String> dataProvider =
-                new TeamDataModel(personGroupService);
+                new ListDataModel(personGroupService.getAllTeamsPG());
         final DataTable<PersonGroup, String> build =
                 DataTableBuilder.<PersonGroup, String> newTable("table")
                         .addColumn("Team Key", "PersonGroupKey").addColumn("Name", "Name")
@@ -53,5 +54,4 @@ public class TeamPage extends LayoutPage
                         .displayRows(10).withData(dataProvider).build();
         add(build);
     }
-    
 }
