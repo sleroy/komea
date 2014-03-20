@@ -9,6 +9,8 @@ import java.io.InputStream;
 
 import org.komea.product.backend.service.fs.IObjectStorage;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -24,6 +26,7 @@ public class ObjectStorage<T> implements IObjectStorage<T>
 {
     
     
+    private static final Logger     LOGGER   = LoggerFactory.getLogger(ObjectStorage.class);
     private final Class<?>          className;
     private final IPluginFileSystem service;
     private final XStream           X_STREAM = new XStream();
@@ -58,9 +61,15 @@ public class ObjectStorage<T> implements IObjectStorage<T>
     
     
         final String resourceName = getResource();
-        if (!service.existResource(resourceName)) { return null; }
-        final InputStream open = service.open(resourceName);
-        return (T) X_STREAM.fromXML(open);
+        try {
+            
+            if (!service.existResource(resourceName)) { return null; }
+            final InputStream open = service.open(resourceName);
+            return (T) X_STREAM.fromXML(open);
+        } catch (final Exception e) {
+            LOGGER.error("Could not retrieve data from file {}", resourceName, e);
+        }
+        return null;
         
     }
     

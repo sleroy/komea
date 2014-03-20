@@ -38,6 +38,15 @@
 							<ignore>org.komea.product.database.alert.enums.*</ignore>
 							<ignore>org.komea.product.database.dto.errors.*</ignore>
 						</ignores>
+						<excludes>
+							<exclude>org/komea/product/database/dto/**/*.class</exclude>
+							<exclude>org/komea/product/database/model/**/*.class</exclude>
+							<exclude>org/komea/product/database/enums/**/*.class</exclude>
+							<exclude>org/komea/product/plugins/repository/model/**/*.class</exclude>
+							<exclude>org/komea/product/database/api/**/*.class</exclude>
+							<exclude>org/komea/product/database/alert/enums/**/*.class</exclude>
+							<exclude>org/komea/product/database/dto/errors/**/*.class</exclude>
+						</excludes>
 					</instrumentation>
 					
 					<aggregate>true</aggregate>
