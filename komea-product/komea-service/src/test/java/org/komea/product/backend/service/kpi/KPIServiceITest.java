@@ -56,7 +56,7 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
         public DemoKPI() {
         
         
-            // TODO Auto-generated constructor stub
+            //
         }
         
         
@@ -226,8 +226,9 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
         final CEPQueryTester newTest = CEPQueryTester.newTest();
         for (int i = 0; i < 10; ++i) {
             
-            eventPushService.sendEvent(newTest.convertDto(new JenkinsEventFactory()
-                    .sendBuildComplete("SCERTIFY", 12, "TRUC")));
+            new JenkinsEventFactory();
+            eventPushService.sendEvent(newTest.convertDto(JenkinsEventFactory.sendBuildComplete(
+                    "SCERTIFY", 12, "TRUC")));
         }
         
         final long numberAlerts = eventStatisticsService.getReceivedAlertsIn24LastHours();
@@ -242,9 +243,10 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
         final List<IEvent> instantView = viewerService.getInstantView(TEST_QUERY);
         boolean found = false;
         for (final IEvent event : instantView) {
+            new JenkinsEventFactory();
             found |=
                     newTest.convertDto(
-                            new JenkinsEventFactory().sendBuildComplete("SCERTIFY", 12, "TRUC"))
+                            JenkinsEventFactory.sendBuildComplete("SCERTIFY", 12, "TRUC"))
                             .getEventType().getEventKey()
                             .equals(event.getEventType().getEventKey());
         }
