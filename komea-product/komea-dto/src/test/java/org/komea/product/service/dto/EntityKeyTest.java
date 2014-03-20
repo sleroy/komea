@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.komea.product.database.enums.EntityType;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -113,6 +114,19 @@ public class EntityKeyTest
         assertTrue(e2.isEntityTypeKey());
         final EntityKey e3 = EntityKey.of(EntityType.DEPARTMENT, 1);
         Assert.assertFalse(e3.isEntityTypeKey());
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.service.dto.EntityKey#isUncompleteKey()}.
+     */
+    @Test
+    public void testIsUncompleteKey() throws Exception {
+    
+    
+        final EntityKey e2 = EntityKey.of(EntityType.DEPARTMENT);
+        assertFalse(e2.isUncompleteKey());
+        assertTrue(new EntityKey(null, null).isUncompleteKey());
     }
     
     

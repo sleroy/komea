@@ -6,9 +6,12 @@ package org.komea.product.wicket.statistics;
 
 
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.komea.product.backend.service.esper.IEventStatisticsService;
 import org.komea.product.wicket.utils.WicketTesterMethodRule;
+import org.mockito.Mockito;
 
 
 
@@ -22,6 +25,15 @@ public class StatPageTest
     @Rule
     public final WicketTesterMethodRule wicketRule = new WicketTesterMethodRule();
     
+    
+    
+    @Before
+    public void before() {
+    
+    
+        wicketRule.getApplicationContextMock().putBean(Mockito.mock(IEventStatisticsService.class));
+        
+    }
     
     
     /**

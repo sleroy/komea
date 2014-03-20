@@ -8,7 +8,6 @@ package org.komea.product.service.dto;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang.Validate;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.komea.product.database.enums.EntityType;
 
@@ -83,7 +82,6 @@ public class EntityKey implements Serializable, Comparable<EntityKey>
     
     
         super();
-        Validate.notNull(_entityType);
         entityType = _entityType;
         id = _id;
     }
@@ -180,11 +178,22 @@ public class EntityKey implements Serializable, Comparable<EntityKey>
     }
     
     
+    /**
+     * Tests if this key refers to an entity type only.
+     * 
+     * @return true if this key refers to entity type.
+     */
+    @JsonIgnore
+    public boolean isUncompleteKey() {
+    
+    
+        return !isEntityReferenceKey() && !isEntityTypeKey();
+    }
+    
+    
     public void setEntityType(final EntityType _entityType) {
     
     
-        Validate.notNull(_entityType);
-        
         entityType = _entityType;
     }
     
@@ -206,5 +215,4 @@ public class EntityKey implements Serializable, Comparable<EntityKey>
     
         return "EntityKey [entityType=" + entityType + ", id=" + id + "]";
     }
-    
 }
