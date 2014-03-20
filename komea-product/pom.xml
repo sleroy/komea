@@ -30,13 +30,13 @@
 				<configuration>
 					<instrumentation>
 						<ignores>
-							<ignore>org.komea.product.database.dto</ignore>
-							<ignore>org.komea.product.database.model</ignore>
-							<ignore>org.komea.product.database.enums</ignore>
-							<ignore>org.komea.product.plugins.repository.model</ignore>
-							<ignore>org.komea.product.database.api</ignore>
-							<ignore>org.komea.product.database.alert.enums</ignore>
-							<ignore>org.komea.product.database.dto.errors</ignore>
+							<ignore>org.komea.product.database.dto.*</ignore>
+							<ignore>org.komea.product.database.model.*</ignore>
+							<ignore>org.komea.product.database.enums.*</ignore>
+							<ignore>org.komea.product.plugins.repository.model.*</ignore>
+							<ignore>org.komea.product.database.api.*</ignore>
+							<ignore>org.komea.product.database.alert.enums.*</ignore>
+							<ignore>org.komea.product.database.dto.errors.*</ignore>
 						</ignores>
 					</instrumentation>
 					
