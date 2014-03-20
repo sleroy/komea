@@ -13,6 +13,8 @@
 	<name>Komea : GIT plugin</name>
 	<description>Komea GIT plugin</description>
 
+
+
 	<dependencies>
 		<!-- JGIT -->
 
