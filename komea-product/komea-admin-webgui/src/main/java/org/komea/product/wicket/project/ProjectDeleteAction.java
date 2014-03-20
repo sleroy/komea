@@ -26,7 +26,7 @@ public class ProjectDeleteAction implements IDeleteAction<Project> {
     
     @Override
     public void delete(Project _object) {
-        projectService.deleteByPrimaryKey(_object.getId());
+        projectService.delete(_object);
     }
     
 }

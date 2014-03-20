@@ -161,7 +161,7 @@ public final class PersonForm extends Form<Person> {
                 nPerson.setIdPersonRole(person.getIdPersonRole());
                 nPerson.setId(person.getId());
                 
-                personService.saveOrUpdatePerson(person, currentEntityList, null, personGroup);
+                personService.saveOrUpdatePerson(person, currentEntityList);
                 
                 if (nPerson.getId() == null) {
                     personService.insert(nPerson);

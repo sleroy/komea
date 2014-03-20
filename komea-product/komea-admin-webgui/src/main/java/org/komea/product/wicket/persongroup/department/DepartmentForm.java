@@ -19,6 +19,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IProjectService;
+import org.komea.product.backend.service.entities.PersonService;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.PersonGroup;
@@ -41,9 +42,8 @@ public class DepartmentForm extends Form<PersonGroup> {
     private final Component feedBack;
     private final LayoutPage page;
     private final PersonGroup personGroup;
-    private List<PersonGroup> currentEntityList;
-    private List<PersonGroup> selectedEntity;
-    private List<PersonGroup> entityNeedUpdate;
+    private List<IEntity> currentEntityList;
+    private List<IEntity> selectedEntity;
 
     DepartmentForm(String form, IPersonGroupService personGroupService, FeedbackPanel feedbackPanel, CompoundPropertyModel<PersonGroup> compoundPropertyModel, DepartmentEditPage aThis) {
         super(form, compoundPropertyModel);
@@ -51,8 +51,7 @@ public class DepartmentForm extends Form<PersonGroup> {
         this.feedBack = feedbackPanel;
         this.page = aThis;
         this.personGroup = compoundPropertyModel.getObject();
-        entityNeedUpdate = new ArrayList<PersonGroup>();
-        selectedEntity = new ArrayList<PersonGroup>();
+        selectedEntity = new ArrayList<IEntity>();
         feedBack.setVisible(false);
         //field
         add(TextFieldBuilder.<String>createRequired("name", this.personGroup, "name").highlightOnErrors()
@@ -77,7 +76,7 @@ public class DepartmentForm extends Form<PersonGroup> {
         });
         // team component
         List<PersonGroup> allTeamsPG = prService.getAllTeamsPG();
-        this.currentEntityList = new ArrayList<PersonGroup>();
+        this.currentEntityList = new ArrayList<IEntity>();
         for (PersonGroup personGroup1 : allTeamsPG) {
             if (personGroup.getId() != null && personGroup.getId().equals(personGroup1.getIdPersonGroupParent())) {
                 currentEntityList.add(personGroup1);
@@ -91,8 +90,7 @@ public class DepartmentForm extends Form<PersonGroup> {
         listEntite.setOutputMarkupId(true);
         add(listEntite);
 
-
-        final SelectMultipleDialog<IEntity> dialogPersonGroup = new SelectMultipleDialog<IEntity>("dialogAddPerson", "Choose teams", (List<IEntity>) (List<?>)allTeamsPG) {
+        final SelectMultipleDialog<IEntity> dialogPersonGroup = new SelectMultipleDialog<IEntity>("dialogAddPerson", "Choose teams", (List<IEntity>) (List<?>) allTeamsPG) {
 
             @Override
             public void onClose(AjaxRequestTarget target, DialogButton button) {
@@ -103,10 +101,8 @@ public class DepartmentForm extends Form<PersonGroup> {
                 List<IEntity> selected = getSelected();
                 for (IEntity iEntity : selected) {
                     if (iEntity != null) {
-                        PersonGroup selectByPrimaryKey1 = prService.selectByPrimaryKey(iEntity.getId());
+                        IEntity selectByPrimaryKey1 = prService.selectByPrimaryKey(iEntity.getId());
                         if (!currentEntityList.contains(selectByPrimaryKey1)) {
-                            selectByPrimaryKey1.setIdPersonGroupParent(personGroup.getId());
-                            entityNeedUpdate.add(selectByPrimaryKey1);
                             currentEntityList.add(selectByPrimaryKey1);
                         }
                         target.add(listEntite);
@@ -130,10 +126,8 @@ public class DepartmentForm extends Form<PersonGroup> {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                for (PersonGroup person : selectedEntity) {
-                    person.setIdPersonGroupParent(null);
+                for (IEntity person : selectedEntity) {
                     currentEntityList.remove(person);
-                    entityNeedUpdate.add(person);
                 }
 
                 target.add(listEntite);
@@ -158,50 +152,29 @@ public class DepartmentForm extends Form<PersonGroup> {
                 feedBack.setVisible(false);
                 info("Submitted information");
                 target.add(feedBack);
-                final PersonGroup insertPr = new PersonGroup();
-                insertPr.setId(personGroup.getId());
-                insertPr.setDescription(personGroup.getDescription());
-                insertPr.setName(personGroup.getName());
-                insertPr.setPersonGroupKey(personGroup.getPersonGroupKey());
-                insertPr.setType(PersonGroupType.DEPARTMENT);
-
-                if (insertPr.getId() != null) {
-                    prService.updateByPrimaryKey(insertPr);
-
-                } else {
-                    prService.insert(insertPr);
-                }
-                for (PersonGroup personGroup : entityNeedUpdate) {
-                    prService.updateByPrimaryKey(personGroup);
-                }
+                personGroup.setType(PersonGroupType.DEPARTMENT);
+               
+                prService.saveOrUpdatePersonGroup(personGroup, (List<PersonGroup>)(List)currentEntityList, null, null);
                 page.setResponsePage(new DepartmentPage(page.getPageParameters()));
 
             }
         });
     }
 
-    public List<PersonGroup> getCurrentEntityList() {
+    public List<IEntity> getCurrentEntityList() {
         return currentEntityList;
     }
 
-    public void setCurrentEntityList(List<PersonGroup> currentEntityList) {
+    public void setCurrentEntityList(List<IEntity> currentEntityList) {
         this.currentEntityList = currentEntityList;
     }
 
-    public List<PersonGroup> getSelectedEntity() {
+    public List<IEntity> getSelectedEntity() {
         return selectedEntity;
     }
 
-    public void setSelectedEntity(List<PersonGroup> selectedEntity) {
+    public void setSelectedEntity(List<IEntity> selectedEntity) {
         this.selectedEntity = selectedEntity;
-    }
-
-    public List<PersonGroup> getEntityNeedUpdate() {
-        return entityNeedUpdate;
-    }
-
-    public void setEntityNeedUpdate(List<PersonGroup> entityNeedUpdate) {
-        this.entityNeedUpdate = entityNeedUpdate;
     }
 
 }

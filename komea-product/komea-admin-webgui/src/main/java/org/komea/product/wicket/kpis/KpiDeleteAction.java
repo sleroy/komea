@@ -35,8 +35,7 @@ public class KpiDeleteAction implements IDeleteAction<Kpi>
     @Override
     public void delete(final Kpi _kpi) {
     
-    
-        kpiDao.deleteByPrimaryKey(_kpi.getId());
+        kpiDao.deleteKpi(_kpi);
     }
     
 }
