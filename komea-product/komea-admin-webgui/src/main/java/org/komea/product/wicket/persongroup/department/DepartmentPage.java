@@ -19,6 +19,7 @@ import org.komea.product.wicket.persongroup.PersonGroupDeleteAction;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
+import org.komea.product.wicket.widget.model.ListDataModel;
 
 
 
@@ -44,13 +45,14 @@ public final class DepartmentPage extends LayoutPage
         final IEditAction<PersonGroup> personGroupEditAction = new DepartmentEditAction(this);
         
         final ISortableDataProvider<PersonGroup, String> dataProvider =
-                new DepartmentDataModel(personGroupService);
+                new ListDataModel<PersonGroup>(personGroupService.getAllDepartmentsPG());
+        
         final DataTable<PersonGroup, String> build =
                 DataTableBuilder.<PersonGroup, String> newTable("table")
                         .addColumn("Department Key", "PersonGroupKey").addColumn("Name", "Name")
                         .addColumn("Description", "Description")
                         .withEditDeleteColumn(personGroupDeleteAction, personGroupEditAction)
-                        .displayRows(10).withData(dataProvider).build();
+                        .displayRows(50).withData(dataProvider).build();
         add(build);
         
     }
