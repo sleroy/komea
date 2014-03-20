@@ -29,8 +29,11 @@ public class KPINotFoundRuntimeException extends RuntimeException
     
     /**
      * Constructor for KPINotFoundRuntimeException.
-     * @param _entity IEntity
-     * @param _kpiName String
+     * 
+     * @param _entity
+     *            IEntity
+     * @param _kpiName
+     *            String
      */
     public KPINotFoundRuntimeException(final IEntity _entity, final String _kpiName) {
     
@@ -44,9 +47,13 @@ public class KPINotFoundRuntimeException extends RuntimeException
     
     /**
      * Constructor for KPINotFoundRuntimeException.
-     * @param _entity IEntity
-     * @param _kpiName String
-     * @param _e Throwable
+     * 
+     * @param _entity
+     *            IEntity
+     * @param _kpiName
+     *            String
+     * @param _e
+     *            Throwable
      */
     public KPINotFoundRuntimeException(
             final IEntity _entity,
@@ -63,18 +70,21 @@ public class KPINotFoundRuntimeException extends RuntimeException
     
     /**
      * Constructor for KPINotFoundRuntimeException.
-     * @param _kpiName String
+     * 
+     * @param _kpiName
+     *            String
      */
     public KPINotFoundRuntimeException(final String _kpiName) {
     
     
-        kpiName = _kpiName;
-        entity = null;
+        this(null, _kpiName, null);
+        
     }
     
     
     /**
      * Method getEntity.
+     * 
      * @return Object
      */
     public Object getEntity() {
@@ -86,6 +96,7 @@ public class KPINotFoundRuntimeException extends RuntimeException
     
     /**
      * Method getKpiName.
+     * 
      * @return String
      */
     public String getKpiName() {

@@ -15,7 +15,6 @@ import java.io.StringBufferInputStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.komea.product.backend.storage.PluginFileSystem;
 
 
 
@@ -58,9 +57,9 @@ public class PluginFileSystemTest
     /**
      * Test method for {@link org.komea.product.backend.storage.PluginFileSystem#FileSystemService(java.io.File)}.
      * 
-    
-    
-     * @throws FileNotFoundException * @throws IOException */
+     * @throws FileNotFoundException
+     *             * @throws IOException
+     */
     @Test
     public final void testFileSystemServiceOpen() throws FileNotFoundException, IOException {
     
@@ -78,29 +77,22 @@ public class PluginFileSystemTest
     /**
      * Test method for {@link org.komea.product.backend.storage.PluginFileSystem#FileSystemService(java.io.File)}.
      * 
-    
-    
-     * @throws FileNotFoundException * @throws IOException */
+     * @throws FileNotFoundException
+     *             * @throws IOException
+     */
     @Test
     public final void testFileSystemServiceStore() throws FileNotFoundException, IOException {
     
     
         final PluginFileSystem fileSystemService =
                 new PluginFileSystem(new File("src/test/resources/fakeS/truc").getAbsoluteFile());
-        final String original =
-                IOUtils.toString(new FileInputStream("src/test/resources/fakeS/truc/example.txt"));
+        IOUtils.toString(new FileInputStream("src/test/resources/fakeS/truc/example.txt"));
         
         fileSystemService.store("example.txt", new StringBufferInputStream("bla.txt"));
         final String received = IOUtils.toString(fileSystemService.open("example.txt"));
         Assert.assertEquals("bla.txt", received);
         
     }
-
-
-    @Test
-    public void testExistResource() throws Exception {
     
     
-        throw new RuntimeException("not yet implemented");
-    }
 }

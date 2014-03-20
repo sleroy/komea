@@ -57,8 +57,7 @@ public class SonarMetricKpiTest
         
         newTest.dump().hasResults(new Object[][]
             {
-                { newTest.getMockProject().get("SCERTIFY").getEntityKey(), 50.0d },
-                { newTest.getMockProject().get("KOMEA").getEntityKey(), 20.0d } }
+                { newTest.getMockProject().get("SCERTIFY").getEntityKey(), 50.0d } }
         
         ).runTest();
         
