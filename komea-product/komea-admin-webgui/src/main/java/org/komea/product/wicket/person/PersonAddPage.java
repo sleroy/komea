@@ -182,4 +182,10 @@ public class PersonAddPage extends LayoutPage {
         projectDAO = _projectDAO;
     }
 
+      @Override
+    public String getTitle() {
+    
+    
+        return getString("PersonAddPage.title");
+    }
 }

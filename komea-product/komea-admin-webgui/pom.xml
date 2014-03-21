@@ -137,8 +137,8 @@
 		</dependency>
 
 
-<!--
-		<dependency>
+
+<!--		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>komea-standard-kpis</artifactId>
 			<version>${project.version}</version>

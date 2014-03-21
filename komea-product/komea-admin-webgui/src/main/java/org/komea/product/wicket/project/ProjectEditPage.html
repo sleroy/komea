@@ -69,7 +69,25 @@
 								<div class="row">
 									<label class="col-md-3" for="inputEmail1">Teams</label>
 									<div class="col-md-4">
-										<select style="height: 150px" class="form-control col-md-12" wicket:id="table"></select>
+                                            <select style="height: 150px" class="form-control col-md-12" wicket:id="tablePersonGroup"></select>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <button type="button" style="margin-bottom:5px" class="btn btn-small btn-info col-md-5" wicket:id="btnAddPersonGroup" >Add</button>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="btnDelPersonGroup" >Delete</button>
+
+                                            </div>
+                                        </div>
+                                        <div wicket:id="dialogAddPersonGroup">[dialog]</div>
+                                    </div>
+                                </div>
+                                     <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-md-3" for="inputEmail1">Person</label>
+                                        <div class="col-md-4">
+                                            <select style="height: 150px" class="form-control col-md-12" wicket:id="tablePerson"></select>
 									</div>
 									<div class="row">
 										<div class="col-md-3">

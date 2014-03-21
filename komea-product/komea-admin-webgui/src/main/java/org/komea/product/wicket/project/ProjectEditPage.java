@@ -14,15 +14,13 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.entities.IPersonGroupService;
+import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.model.Customer;
 import org.komea.product.database.model.CustomerCriteria;
-import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Project;
-import org.komea.product.database.model.Provider;
 import org.komea.product.wicket.LayoutPage;
-import org.komea.product.wicket.kpis.KpiForm;
 import org.komea.product.wicket.utils.SelectDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 
@@ -37,8 +35,11 @@ public class ProjectEditPage extends LayoutPage {
 
     @SpringBean
     private CustomerDao customerDao;
-    
-     @SpringBean
+
+    @SpringBean
+    private IPersonService personService;
+
+    @SpringBean
     private IPersonGroupService personGroupService;
 
     public ProjectEditPage(PageParameters _parameters) {
@@ -54,7 +55,7 @@ public class ProjectEditPage extends LayoutPage {
 //        final KpiForm KpiForm = null;
 //        new KpiForm(PARENT_PATH, _kpi, feedbackPanel, null)
 
-        final ProjectForm projectForm = new ProjectForm("form",personGroupService, this.projectService, customerDao, feedbackPanel, new CompoundPropertyModel<Project>(_object), this);
+        final ProjectForm projectForm = new ProjectForm("form", personService, personGroupService, this.projectService, customerDao, feedbackPanel, new CompoundPropertyModel<Project>(_object), this);
         add(projectForm);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

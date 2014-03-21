@@ -1,3 +1,5 @@
+
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -31,6 +33,9 @@ public class TeamEditPage extends LayoutPage {
     private IPersonGroupService prService;
 
     @SpringBean
+    private IProjectService projectService;
+
+    @SpringBean
     private IPersonService personService;
 
     public TeamEditPage(PageParameters _parameters) {
@@ -44,7 +49,7 @@ public class TeamEditPage extends LayoutPage {
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
 
-        final TeamForm teamForm = new TeamForm("form", personService, prService,
+        final TeamForm teamForm = new TeamForm("form", projectService, personService, prService,
                 feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this);
         add(teamForm);
 

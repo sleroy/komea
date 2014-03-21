@@ -170,7 +170,7 @@ public final class PersonGroupService extends
             final PersonGroupCriteria departmentCriteria = new PersonGroupCriteria();
             departmentCriteria.createCriteria()
                     .andIdEqualTo(hasProjectPersonGroupKey.getIdPersonGroup())
-                    .andTypeEqualTo(PersonGroupType.DEPARTMENT);
+                    .andTypeEqualTo(PersonGroupType.TEAM);
             groupList.addAll(selectByCriteria(departmentCriteria));
         }
         return groupList;
