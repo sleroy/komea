@@ -8,14 +8,14 @@ package org.komea.product.plugins.kpi.standard;
 
 import org.komea.product.cep.api.cache.ICacheIndexer;
 import org.komea.product.database.alert.IEvent;
-import org.komea.product.database.model.Project;
+import org.komea.product.service.dto.EntityKey;
 
 
 
 /**
  * @author sleroy
  */
-public class ProjectCacheIndexer implements ICacheIndexer<IEvent, Project>
+public class ProjectCacheIndexer implements ICacheIndexer<IEvent, EntityKey>
 {
     
     
@@ -34,10 +34,11 @@ public class ProjectCacheIndexer implements ICacheIndexer<IEvent, Project>
      * @see org.komea.product.cep.api.cache.ICacheIndexer#getKey(java.io.Serializable)
      */
     @Override
-    public Project getKey(final IEvent _event) {
+    public EntityKey getKey(final IEvent _event) {
     
     
-        return _event.getProject();
+        if (_event.getProject() == null) { return new EntityKey(); }
+        return _event.getProject().getEntityKey();
     }
     
 }
