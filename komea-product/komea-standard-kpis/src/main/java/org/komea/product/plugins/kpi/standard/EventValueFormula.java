@@ -50,8 +50,10 @@ public class EventValueFormula implements ITuplerFormula<Number>
         
         for (final Entry<ITuple, IEventGroup> entry : _tupleMap.iterator()) {
             if (entry.getValue().getEvents().isEmpty()) {
-                LOGGER.error("No event to return a value, may have a filter problem with tuple {}",
-                        entry);
+                LOGGER.error(
+                        "No event to return a value, may have a filter problem with tuple {} events {}",
+                        entry, entry.getValue().getEvents());
+                
                 continue;
             }
             Validate.isTrue(entry.getValue().getEvents().size() == 1);
