@@ -81,7 +81,7 @@ public class SonarMetricKpi implements ICEPQueryImplementation
      * @see org.komea.product.cep.api.ICEPQueryImplementation#getFormula()
      */
     @Override
-    public ICEPFormula getFormula() {
+    public ICEPFormula<?> getFormula() {
     
     
         return new GroupByFormula(new ProjectTupleCreator(), new EventValueFormula());
@@ -96,7 +96,7 @@ public class SonarMetricKpi implements ICEPQueryImplementation
     public Map<String, Object> getParameters() {
     
     
-        return Collections.EMPTY_MAP;
+        return Collections.emptyMap();
     }
     
 }

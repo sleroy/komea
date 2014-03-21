@@ -13,6 +13,8 @@ import org.komea.product.service.dto.EntityKey;
 
 
 /**
+ * This class indexes events by project entity key, no duplicate with project should be found.
+ * 
  * @author sleroy
  */
 public class ProjectCacheIndexer implements ICacheIndexer<IEvent, EntityKey>
