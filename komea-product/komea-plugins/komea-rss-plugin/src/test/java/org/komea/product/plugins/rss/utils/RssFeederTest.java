@@ -9,6 +9,7 @@ package org.komea.product.plugins.rss.utils;
 import java.io.File;
 import java.net.MalformedURLException;
 
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.service.esper.IEventPushService;
@@ -41,7 +42,10 @@ public class RssFeederTest
         feed.setProjectAssociated("");
         feed.setTeamAssociated("");
         feed.setUserAssociated("");
+        DateTime dateTime = new DateTime();
         
+        dateTime = dateTime.withDate(1000, 1, 1);
+        feed.setLastFetchDate(dateTime.toDate());
         final IEventPushService eventPushEngine =
                 Mockito.mock(IEventPushService.class, Mockito.withSettings().verboseLogging());
         final RssFeeder rssFeeder = new RssFeeder(feed, eventPushEngine);
@@ -63,5 +67,4 @@ public class RssFeederTest
             
         }
     }
-    
 }
