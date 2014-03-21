@@ -53,15 +53,13 @@ public class RssFeeder
      *            the last fetched date.
      */
     
-    public RssFeeder(
-            final RssFeed _fetch,
-            final Date _lastDate,
-            final IEventPushService _esperEngine) {
+    public RssFeeder(final RssFeed _fetch, final IEventPushService _esperEngine) {
     
     
         fetch = _fetch;
-        lastDate = _lastDate;
+        lastDate = _fetch.getLastFetchDate();
         esperEngine = _esperEngine;
+        _fetch.setLastFetchDate(new Date());
         
     }
     
@@ -77,7 +75,7 @@ public class RssFeeder
         LOGGER.info("Checking update from {}", fetch.getFeedName());
         
         XmlReader reader = null;
-        final DateTime fromTime = lastDate == null ? null : new DateTime(lastDate);
+        final DateTime lastFetchTime = lastDate == null ? null : new DateTime(lastDate);
         try {
             final URL url = new URL(fetch.getUrl());
             reader = new XmlReader(url);
@@ -96,9 +94,9 @@ public class RssFeeder
                 /**
                  * Only posterior events will be published.
                  */
-                final DateTime dateTime = new DateTime(publishedDate);
+                final DateTime articleTime = new DateTime(publishedDate);
                 
-                if (fromTime != null && dateTime.isBefore(fromTime)) {
+                if (articleTime.isBefore(lastFetchTime)) {
                     continue; /* We skip older events */
                 }
                 

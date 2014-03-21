@@ -6,6 +6,8 @@ package org.komea.product.plugins.rss.model;
 
 
 
+import java.util.Date;
+
 import org.komea.product.database.alert.enums.Criticity;
 
 
@@ -17,11 +19,13 @@ public class RssFeed
 {
     
     
-    private Criticity defaultCriticity  = Criticity.MINOR;
+    private Criticity defaultCriticity  = Criticity.INFO;
     
     private String    feedName          = "";
     
     private Long      id;
+    
+    private Date      lastFetchDate;
     
     private String    projectAssociated = "";
     
@@ -104,6 +108,13 @@ public class RssFeed
     }
     
     
+    public Date getLastFetchDate() {
+    
+    
+        return lastFetchDate;
+    }
+    
+    
     public String getProjectAssociated() {
     
     
@@ -168,6 +179,13 @@ public class RssFeed
     
     
         id = _id;
+    }
+    
+    
+    public void setLastFetchDate(final Date _lastFetchDate) {
+    
+    
+        lastFetchDate = _lastFetchDate;
     }
     
     
