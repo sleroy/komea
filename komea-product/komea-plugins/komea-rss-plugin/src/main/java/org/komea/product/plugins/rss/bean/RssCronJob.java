@@ -47,7 +47,7 @@ public class RssCronJob implements Job
     
     
         final JobDataMap mergedJobDataMap = _context.getMergedJobDataMap();
-        Date lastDate = (Date) mergedJobDataMap.get("lastDate");
+        mergedJobDataMap.get("lastDate");
         final IEventPushService esperEngine =
                 (IEventPushService) mergedJobDataMap.get("esperEngine");
         final IRssRepositories repository = (IRssRepositories) mergedJobDataMap.get("repository");
@@ -58,10 +58,12 @@ public class RssCronJob implements Job
         
         for (final RssFeed fetch : feeds) {
             LOGGER.debug("Fetching RSS feed  : {} {}", fetch.getFeedName(), fetch.getUrl());
-            
-            new RssFeeder(fetch, lastDate, esperEngine).feed();
+            try {
+                new RssFeeder(fetch, esperEngine).feed();
+            } finally {
+                repository.getDAO().saveOrUpdate(fetch);
+            }
         }
-        lastDate = launched;
         _context.put("lastDate", launched);
     }
     
