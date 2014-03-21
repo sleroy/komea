@@ -44,7 +44,7 @@ public class RssFeederTest
         
         final IEventPushService eventPushEngine =
                 Mockito.mock(IEventPushService.class, Mockito.withSettings().verboseLogging());
-        final RssFeeder rssFeeder = new RssFeeder(feed, null, eventPushEngine);
+        final RssFeeder rssFeeder = new RssFeeder(feed, eventPushEngine);
         final ArgumentCaptor<EventSimpleDto> argumentCaptor =
                 ArgumentCaptor.forClass(EventSimpleDto.class);
         Assert.assertTrue("Fetching a local rss feed should work", rssFeeder.feed());
