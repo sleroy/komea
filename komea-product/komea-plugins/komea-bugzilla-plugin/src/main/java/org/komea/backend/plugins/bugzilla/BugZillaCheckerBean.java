@@ -23,6 +23,7 @@ import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 
 
@@ -30,6 +31,7 @@ import org.springframework.scheduling.annotation.Scheduled;
  * @author rgalerme
  * @version $Revision: 1.0 $
  */
+@Service
 public class BugZillaCheckerBean
 {
     

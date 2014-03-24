@@ -17,9 +17,11 @@ import org.komea.product.backend.service.entities.IPersonRoleService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.backend.utils.KomeaEntry;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.utils.DialogFactory;
 import org.komea.product.wicket.utils.SelectDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 
@@ -44,7 +46,7 @@ public class PersonAddPage extends LayoutPage {
 
     @SpringBean
     private IPersonGroupService personGroupService;
-    
+
     @SpringBean
     private IProjectService projectService;
 
@@ -58,11 +60,9 @@ public class PersonAddPage extends LayoutPage {
 
         super(_parameters);
 
-
-
         final PersonFormData newPersonForm = formularService.newPersonForm();
         final PersonForm personForm
-                = new PersonForm(personDAO,projectService, newPersonForm, "form",
+                = new PersonForm(personDAO, projectService, newPersonForm, "form",
                         new CompoundPropertyModel<Person>(_person), this, personGroupService);
         add(personForm);
 
@@ -83,18 +83,16 @@ public class PersonAddPage extends LayoutPage {
         final SelectDialog<PersonGroup> dialogPersonGroup = new SelectDialog<PersonGroup>("dialogGroup", "Choose a team or department", personGroupService, iChoiceRenderer) {
 
             @Override
-            public void onClose(AjaxRequestTarget target, DialogButton button) {
-//                target.add(kpiForm);
-            }
-
-            @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 PersonGroup selectedPersonGroup = getSelected();
                 if (selectedPersonGroup != null) {
                     personForm.getPerson().setIdPersonGroup(selectedPersonGroup.getId());
                     personForm.getGroupName().setName(selectedPersonGroup.getName());
-                    target.add(personForm.getGroupField());
+                } else {
+                    personForm.getPerson().setIdPersonGroup(null);
+                    personForm.getGroupName().setName("");
                 }
+                target.add(personForm.getGroupField());
             }
 
         };
@@ -182,10 +180,9 @@ public class PersonAddPage extends LayoutPage {
         projectDAO = _projectDAO;
     }
 
-      @Override
+    @Override
     public String getTitle() {
-    
-    
+
         return getString("PersonAddPage.title");
     }
 }

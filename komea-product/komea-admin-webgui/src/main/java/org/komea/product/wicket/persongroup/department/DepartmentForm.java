@@ -79,13 +79,12 @@ public class DepartmentForm extends Form<PersonGroup> {
                 "dialogAddPerson",
                 "btnAddPerson",
                 "btnDelPerson",
-                "selectedEntity", 
-                "Choose team", 
+                "selectedEntity",
+                "Choose team",
                 currentEntityList,
                 selectedEntity,
                 (List<IEntity>) (List<?>) allTeamsPG,
                 prService);
-
 
         //button
         add(new AjaxButton("submit", this) {
@@ -106,7 +105,6 @@ public class DepartmentForm extends Form<PersonGroup> {
                 info("Submitted information");
                 target.add(feedBack);
                 personGroup.setType(PersonGroupType.DEPARTMENT);
-
                 prService.saveOrUpdatePersonGroup(personGroup, (List<PersonGroup>) (List) currentEntityList, null, null);
                 page.setResponsePage(new DepartmentPage(page.getPageParameters()));
 

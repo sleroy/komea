@@ -18,6 +18,7 @@ import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.api.IEntity;
+import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
@@ -141,6 +142,7 @@ public class TeamForm extends Form<PersonGroup> {
                 info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
+                personGroup.setType(PersonGroupType.TEAM);
                 prService.saveOrUpdatePersonGroup(personGroup, null, (List<Project>) (List<?>) currentProjectList, (List<Person>) (List<?>) currentPersonList);
                 page.setResponsePage(new TeamPage(page.getPageParameters()));
 
