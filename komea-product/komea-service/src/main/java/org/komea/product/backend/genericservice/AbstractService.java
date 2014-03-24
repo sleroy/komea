@@ -47,8 +47,7 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
     @Override
     public void delete(final TEntity _entity) {
 
-        daoEventRegistry.notifyDeleted(_entity);
-
+        deleteByPrimaryKey((PK) _entity.getId());
     }
 
     /*
