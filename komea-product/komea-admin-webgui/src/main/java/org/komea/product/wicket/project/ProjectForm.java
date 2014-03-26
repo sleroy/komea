@@ -71,7 +71,7 @@ public class ProjectForm extends Form<Project> {
         this.project = compoundPropertyModel.getObject();
         this.personGroupService = _personGroupService;
         this.personService = _personService;
-        feedBack.setVisible(false);
+//        feedBack.setVisible(false);
         selectedPersonGroup = new ArrayList<IEntity>();
         currentPersonGroupList = new ArrayList<IEntity>();
         selectedPerson = new ArrayList<IEntity>();
@@ -92,6 +92,7 @@ public class ProjectForm extends Form<Project> {
             customerName.setName(selectByPrimaryKey.getName());
         }
         this.customerFiel = TextFieldBuilder.<String>create("idCustomer", customerName, "name").withTooltip("customer can be affected").buildTextField();
+        this.customerFiel.setOutputMarkupId(true);
         add(customerFiel);
 
         if (this.project.getId() != null) {

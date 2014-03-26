@@ -93,6 +93,7 @@ public class ProjectEditPage extends LayoutPage {
                     projectForm.getProject().setIdCustomer(null);
                     projectForm.getCustomerName().setName("");
                 }
+                projectForm.getCustomerFiel().clearInput();
                 target.add(projectForm.getCustomerFiel());
             }
 

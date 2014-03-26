@@ -9,9 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.PropertyModel;
-import org.komea.product.database.enums.ValueType;
 
 /**
  *
@@ -23,14 +21,27 @@ public class SelectBoxBuilder<T> {
 
     public static <T> SelectBoxBuilder<T> createWithEnum(final String _wicketId,
             final Object _data, Class<T> type) {
-        return new SelectBoxBuilder<T>(_wicketId, _data, type);
+        return new SelectBoxBuilder<T>(_wicketId, _data, type, false);
     }
-    private SelectBoxBuilder(String _wicketId, Object _data, Class<T> type) {
+
+    public static <T> SelectBoxBuilder<T> createWithEnumRequire(final String _wicketId,
+            final Object _data, Class<T> type) {
+        return new SelectBoxBuilder<T>(_wicketId, _data, type, true);
+    }
+
+    private SelectBoxBuilder(String _wicketId, Object _data, Class<T> type, boolean _require) {
 
         final List<T> selectPersonRoles = Arrays.asList(type.getEnumConstants());
         final PropertyModel<T> selectionRoleModel
                 = new PropertyModel<T>(_data, _wicketId);
         this.dropDownChoice = new DropDownChoice<T>(_wicketId, selectionRoleModel, selectPersonRoles, new ChoiceRenderer<T>("toString"));
+
+        if (!_require) {
+            this.dropDownChoice.setRequired(true);
+            this.dropDownChoice.setNullValid(false);
+        } else {
+            this.dropDownChoice.setNullValid(true);
+        }
 
     }
 

@@ -79,7 +79,7 @@ public final class PersonForm extends Form<Person> {
         feedBack = new FeedbackPanel("feedback");
         add(feedBack);
         feedBack.setOutputMarkupId(true);
-        feedBack.setVisible(false);
+//        feedBack.setVisible(false);
         this.groupName = new NameGeneric("");
 
 //        final WebMarkupContainer classLogin = new WebMarkupContainer("class_login");
@@ -104,7 +104,7 @@ public final class PersonForm extends Form<Person> {
             person.setUserBdd(UserBdd.KOMEA);
         }
         savUserBdd = person.getUserBdd();
-        add(SelectBoxBuilder.<UserBdd>createWithEnum("userBdd", person,
+        add(SelectBoxBuilder.<UserBdd>createWithEnumRequire("userBdd", person,
                 UserBdd.class).build());
 
         if (this.person.getId() != null) {
@@ -148,6 +148,10 @@ public final class PersonForm extends Form<Person> {
             @Override
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
 //                errorModel.setObject("has-error");
+                    feedBack.setVisible(true);
+                error("error found");
+                // repaint the feedback panel so errors are shown
+                target.add(feedBack);
 
             }
 

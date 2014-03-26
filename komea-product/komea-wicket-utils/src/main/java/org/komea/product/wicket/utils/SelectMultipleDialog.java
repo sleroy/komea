@@ -84,7 +84,7 @@ public abstract class SelectMultipleDialog<T> extends AbstractFormDialog<String>
     
     
         super(id, title, true);
-        this.form = new Form<String>("form");
+        this.form = new Form<String>("formMult");
         this.listSave = objectList;
         this.listUsed = new ArrayList<T>();
         this.filter = new ArrayList<T>();
@@ -112,7 +112,7 @@ public abstract class SelectMultipleDialog<T> extends AbstractFormDialog<String>
             };
         }
         final ListMultipleChoice<T> listEntite =
-                new ListMultipleChoice<T>("table",
+                new ListMultipleChoice<T>("tableMult",
                         new PropertyModel<List<T>>(this, "selectedItems"), listUsed);
         listEntite.setChoiceRenderer(rendener);
         listEntite.setMaxRows(8);

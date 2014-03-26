@@ -53,45 +53,7 @@ public class TeamEditPage extends LayoutPage {
                 feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this);
         add(teamForm);
 
-        IChoiceRenderer<PersonGroup> iChoiceRenderer = new IChoiceRenderer<PersonGroup>() {
 
-            @Override
-            public Object getDisplayValue(PersonGroup t) {
-                return t.getName();
-            }
-
-            @Override
-            public String getIdValue(PersonGroup t, int i) {
-                return String.valueOf(t.getId());
-            }
-
-        };
-        List<PersonGroup> allDepartmentsPG = prService.getAllDepartmentsPG();
-        final SelectDialog<PersonGroup> dialogPersonGroup = new SelectDialog<PersonGroup>("dialogParent", "Choose a department", allDepartmentsPG, iChoiceRenderer) {
-
-            @Override
-            protected void onSubmit(AjaxRequestTarget target) {
-                PersonGroup selectedPersonGroup = getSelected();
-                if (selectedPersonGroup != null) {
-                    teamForm.getPersonGroup().setIdPersonGroupParent(selectedPersonGroup.getId());
-                    teamForm.getParentName().setName(selectedPersonGroup.getName());
-                } else {
-                    teamForm.getPersonGroup().setIdPersonGroupParent(null);
-                    teamForm.getParentName().setName("");
-                }
-                target.add(teamForm.getParentField());
-            }
-
-        };
-        add(dialogPersonGroup);
-        teamForm.add(new AjaxLinkLayout<LayoutPage>("btnParent", this) {
-
-            @Override
-            public void onClick(final AjaxRequestTarget art) {
-                dialogPersonGroup.open(art);
-
-            }
-        });
     }
 
 }

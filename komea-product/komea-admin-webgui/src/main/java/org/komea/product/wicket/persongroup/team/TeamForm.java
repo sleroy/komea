@@ -11,6 +11,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -25,6 +26,7 @@ import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.DialogFactory;
 import org.komea.product.wicket.utils.NameGeneric;
+import org.komea.product.wicket.utils.SelectDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
@@ -57,7 +59,7 @@ public class TeamForm extends Form<PersonGroup> {
         this.feedBack = feedbackPanel;
         this.page = aThis;
         this.personGroup = compoundPropertyModel.getObject();
-        feedBack.setVisible(false);
+//        feedBack.setVisible(false);
         parentName = new NameGeneric("");
         personService = _personService;
         this.projectService = _projectService;
@@ -83,14 +85,16 @@ public class TeamForm extends Form<PersonGroup> {
                 this.parentName.setName(selectByPrimaryKey.getName());
             }
         }
+        
         this.parentField = TextFieldBuilder.<String>create("parent", this.parentName, "name").withTooltip("Parent can be affected").buildTextField();
+       this.parentField.setOutputMarkupId(true);
         add(this.parentField);
 
         if (this.personGroup.getId() != null) {
             currentPersonList = (List<IEntity>) (List<?>) personService.getPersonsOfPersonGroup(this.personGroup.getId());
             currentProjectList = (List<IEntity>) (List<?>) projectService.getProjectsOfPersonGroup(this.personGroup.getId());
         }
-
+        initSelectDepartment();
         DialogFactory.addListWithSelectDialog(this,
                 "table",
                 "dialogAddPerson",
@@ -149,6 +153,50 @@ public class TeamForm extends Form<PersonGroup> {
             }
         });
     }
+    
+    public void initSelectDepartment()
+    {
+            IChoiceRenderer<PersonGroup> iChoiceRenderer = new IChoiceRenderer<PersonGroup>() {
+
+            @Override
+            public Object getDisplayValue(PersonGroup t) {
+                return t.getName();
+            }
+
+            @Override
+            public String getIdValue(PersonGroup t, int i) {
+                return String.valueOf(t.getId());
+            }
+
+        };
+        List<PersonGroup> allDepartmentsPG = prService.getAllDepartmentsPG();
+        final SelectDialog<PersonGroup> dialogPersonGroup = new SelectDialog<PersonGroup>("dialogParent", "Choose a department", allDepartmentsPG, iChoiceRenderer) {
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                PersonGroup selectedPersonGroup = getSelected();
+                if (selectedPersonGroup != null) {
+                    personGroup.setIdPersonGroupParent(selectedPersonGroup.getId());
+                    parentName.setName(selectedPersonGroup.getName());
+                } else {
+                    personGroup.setIdPersonGroupParent(null);
+                    parentName.setName("");
+                }
+                parentField.clearInput();
+                target.add(parentField);
+            }
+
+        };
+        add(dialogPersonGroup);
+        add(new AjaxLinkLayout<LayoutPage>("btnParent", null) {
+
+            @Override
+            public void onClick(final AjaxRequestTarget art) {
+                dialogPersonGroup.open(art);
+
+            }
+        });
+    }
 
     public List<IEntity> getSelectedPerson() {
         return selectedPerson;
@@ -177,5 +225,6 @@ public class TeamForm extends Form<PersonGroup> {
     public TextField getParentField() {
         return parentField;
     }
+    
 
 }

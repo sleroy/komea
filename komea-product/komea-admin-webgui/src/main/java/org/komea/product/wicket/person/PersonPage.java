@@ -44,6 +44,7 @@ public class PersonPage extends LayoutPage
         
         final IEditAction<Person> personEditAction = new PersonEditAction(this, personRoleDAO);
         final ISortableDataProvider<Person, String> dataProvider =
+//                new PersonDataModel(personDAO.selectAll());
                 new ListDataModel(personDAO.selectAll());
         add(DataTableBuilder.<Person, String> newTable("table")
                 .addColumn(new LoginColumn(Model.of("Login"))).addColumn("Last name", "lastName")

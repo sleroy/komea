@@ -209,7 +209,7 @@ public class DataTableBuilder<T, S>
     
     public DataTableBuilder<T, S> withData(final ISortableDataProvider<T, S> _dataProvider) {
     
-    
+        
         dataProvider = _dataProvider;
         return this;
     }

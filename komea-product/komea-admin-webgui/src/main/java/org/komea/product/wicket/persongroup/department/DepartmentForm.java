@@ -43,7 +43,7 @@ public class DepartmentForm extends Form<PersonGroup> {
         this.page = aThis;
         this.personGroup = compoundPropertyModel.getObject();
         selectedEntity = new ArrayList<IEntity>();
-        feedBack.setVisible(false);
+//        feedBack.setVisible(false);
         //field
         add(TextFieldBuilder.<String>createRequired("name", this.personGroup, "name").highlightOnErrors()
                 .simpleValidator(0, 255).withTooltip("Departement requires a name").build());

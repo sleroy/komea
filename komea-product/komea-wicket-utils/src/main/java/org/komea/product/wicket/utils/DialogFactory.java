@@ -5,7 +5,6 @@
  */
 package org.komea.product.wicket.utils;
 
-
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import java.util.List;
 import org.apache.wicket.MarkupContainer;
@@ -40,10 +39,9 @@ public class DialogFactory {
         };
         return display;
     }
-    
-    public static void addListWithSelectDialog(MarkupContainer page,String idList,String idDialog,String idBtnAdd,String idBtnDel,String nameFieldResult,String displayDialogMessage,final List<IEntity> currentEntityList,final List<IEntity> choiceEntityList, final List<IEntity> selectDialogList,final IGenericService _service)
-    {
-            IChoiceRenderer<IEntity> displayGroup = DialogFactory.getChoiceRendenerEntity();
+
+    public static void addListWithSelectDialog(MarkupContainer page, String idList, String idDialog, String idBtnAdd, String idBtnDel, String nameFieldResult, String displayDialogMessage, final List<IEntity> currentEntityList, final List<IEntity> choiceEntityList, final List<IEntity> selectDialogList, final IGenericService _service) {
+        IChoiceRenderer<IEntity> displayGroup = DialogFactory.getChoiceRendenerEntity();
 
         final ListMultipleChoice<IEntity> listEntite;
         listEntite = new ListMultipleChoice<IEntity>(idList, new PropertyModel<List<IEntity>>(page, nameFieldResult), currentEntityList);
@@ -51,7 +49,6 @@ public class DialogFactory {
         listEntite.setMaxRows(8);
         listEntite.setOutputMarkupId(true);
         page.add(listEntite);
-        
 
         final SelectMultipleDialog<IEntity> dialogPersonGroup = new SelectMultipleDialog<IEntity>(idDialog, displayDialogMessage, (List<IEntity>) (List<?>) selectDialogList) {
 
@@ -86,6 +83,14 @@ public class DialogFactory {
         page.add(new AjaxButton(idBtnDel) {
 
             @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                for (IEntity person : choiceEntityList) {
+                    currentEntityList.remove(person);
+                }
+
+                target.add(listEntite);
+            }
+            @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 for (IEntity person : choiceEntityList) {
                     currentEntityList.remove(person);
@@ -94,9 +99,7 @@ public class DialogFactory {
                 target.add(listEntite);
             }
         });
-        
-        
-    }
 
+    }
 
 }
