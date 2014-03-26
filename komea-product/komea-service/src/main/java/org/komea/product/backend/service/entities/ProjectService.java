@@ -347,8 +347,6 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
                 linkDAO.insert(link);
             }
         }
-
-        delete(_project);
     }
 
     @Override

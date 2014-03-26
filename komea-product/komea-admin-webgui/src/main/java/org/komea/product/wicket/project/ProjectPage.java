@@ -43,7 +43,7 @@ public class ProjectPage extends LayoutPage
         final IEditAction<Project> projectEditAction = new ProjectEditAction(this);
         
         final ISortableDataProvider<Project, String> dataProvider =
-                new ListDataModel(projectService.getAllProjectsEntities());
+                new ListDataModel(projectService.selectAll());
         final DataTable<Project, String> build =
                 DataTableBuilder.<Project, String> newTable("table")
                         .addColumn("Project key", "ProjectKey").addColumn("Name", "Name")
