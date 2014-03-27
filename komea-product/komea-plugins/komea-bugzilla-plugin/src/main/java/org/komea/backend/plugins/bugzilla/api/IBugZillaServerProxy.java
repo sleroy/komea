@@ -7,7 +7,7 @@ package org.komea.backend.plugins.bugzilla.api;
 
 import java.io.Closeable;
 import java.util.List;
-import org.komea.backend.plugins.bugzilla.BugzillaBug;
+import org.komea.backend.plugins.bugzilla.data.BugzillaBug;
 
 /**
  *

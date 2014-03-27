@@ -50,7 +50,7 @@ public class DialogFactory {
         listEntite.setOutputMarkupId(true);
         page.add(listEntite);
 
-        final SelectMultipleDialog<IEntity> dialogPersonGroup = new SelectMultipleDialog<IEntity>(idDialog, displayDialogMessage, (List<IEntity>) (List<?>) selectDialogList) {
+        final SelectMultipleDialog dialogPersonGroup = new SelectMultipleDialog(idDialog, displayDialogMessage, (List<IEntity>) (List<?>) selectDialogList) {
 
             @Override
             public void onClose(AjaxRequestTarget target, DialogButton button) {

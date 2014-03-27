@@ -8,6 +8,10 @@ package org.komea.backend.plugins.bugzilla;
 
 
 
+import org.komea.backend.plugins.bugzilla.data.BugZillaContext;
+import org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService;
+import org.komea.backend.plugins.bugzilla.data.BugzillaBug;
+import org.komea.backend.plugins.bugzilla.data.BugZillaStatus;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,7 +21,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory;
-import org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy;
 import org.komea.product.backend.service.esper.IEventPushService;
@@ -80,7 +83,7 @@ public class BugZillaCheckerBean
                                 filterBugsByStatus.size(), project, stat));
                     }
                 }
-                final List<BugzillaBug> reminderAlert = getReminderAlert(10, listBugs);
+                final List<BugzillaBug> reminderAlert = getReminderAlert(conf.getReminderAlert(), listBugs);
                 alertService.sendEventDto(alertFactory.newReminterBugs(reminderAlert.size(),
                         project));
             }

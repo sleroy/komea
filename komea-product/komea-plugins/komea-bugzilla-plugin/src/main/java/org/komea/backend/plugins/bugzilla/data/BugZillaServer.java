@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.komea.backend.plugins.bugzilla;
+package org.komea.backend.plugins.bugzilla.data;
 
 /**
  *
@@ -16,6 +16,7 @@ public class BugZillaServer {
     private String login;
     private String mdp;
     private BugZillaContext context;
+    private int reminderAlert;
 
     public BugZillaServer() {
     }
@@ -33,7 +34,25 @@ public class BugZillaServer {
         this.mdp = mdp;
         this.context = context;
     }
+    
+     public BugZillaServer(String address, String login, String mdp, BugZillaContext context,int reminder) {
+        this.address = address;
+        this.login = login;
+        this.mdp = mdp;
+        this.context = context;
+        this.reminderAlert = reminder;
+    }
 
+    public int getReminderAlert() {
+        return reminderAlert;
+    }
+
+    public void setReminderAlert(int reminderAlert) {
+        this.reminderAlert = reminderAlert;
+    }
+
+     
+     
     /**
      * Method setAddress.
      * @param address String

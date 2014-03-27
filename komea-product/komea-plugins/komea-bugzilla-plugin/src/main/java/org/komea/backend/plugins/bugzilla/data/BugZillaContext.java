@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.komea.backend.plugins.bugzilla;
+package org.komea.backend.plugins.bugzilla.data;
 
+import org.komea.backend.plugins.bugzilla.data.BugzillaBug;
+import org.komea.backend.plugins.bugzilla.data.BugZillaStatus;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

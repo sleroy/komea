@@ -5,6 +5,7 @@
  */
 package org.komea.backend.plugins.bugzilla;
 
+import org.komea.backend.plugins.bugzilla.data.BugzillaBug;
 import com.j2bugzilla.base.Bug;
 import com.j2bugzilla.base.BugzillaConnector;
 import com.j2bugzilla.base.BugzillaException;

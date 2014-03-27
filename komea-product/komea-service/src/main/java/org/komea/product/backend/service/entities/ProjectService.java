@@ -169,7 +169,7 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
 
     @Override
     public List<Project> getProjectsOfPerson(final Integer _personId) {
-        final List<HasProjectPersonKey> result = projectPersonService.getPersonIdsOfProject(_personId);
+        final List<HasProjectPersonKey> result = projectPersonService.getProjectIdsOfPerson(_personId);
         final List<Project> projects = Lists.newArrayList();
         for (final HasProjectPersonKey hasProjectPersonKey : result) {
             final Project project = selectByPrimaryKey(hasProjectPersonKey.getIdProject());

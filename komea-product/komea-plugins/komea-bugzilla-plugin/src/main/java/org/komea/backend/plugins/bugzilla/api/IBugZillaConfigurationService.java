@@ -6,6 +6,9 @@
 package org.komea.backend.plugins.bugzilla.api;
 
 import java.util.List;
+import org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration;
+import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxyFactory;
+import org.komea.backend.plugins.bugzilla.data.BugZillaServer;
 
 import org.komea.product.backend.service.plugins.IPluginStorageService;
 
@@ -17,15 +20,46 @@ public interface IBugZillaConfigurationService {
 
     /**
      *
+     * @param server
      * @return
+     */
+    public void saveOrUpdate(BugZillaServer server,String oldAddress);
+    
+    /**
+     * 
+     * @return 
+     */
+    public List<BugZillaServer> selectAll();
+    
+    /**
+     * 
+     * @return 
      */
     public List<IBugZillaServerConfiguration> getServers();
 
+    /**
+     * 
+     * @return 
+     */
+           
     public IPluginStorageService getPluginStorage();
 
+    /**
+     * 
+     * @param pluginStorage 
+     */
+            
     public void setPluginStorage(IPluginStorageService pluginStorage);
 
+    /**
+     * 
+     * @return 
+     */
     public IBugZillaServerProxyFactory getServerProxyFactory();
 
+    /**
+     * 
+     * @param serverProxyFactory 
+     */
     public void setServerProxyFactory(IBugZillaServerProxyFactory serverProxyFactory);
 }

@@ -5,7 +5,7 @@
  */
 package org.komea.backend.plugins.bugzilla.api;
 
-import org.komea.backend.plugins.bugzilla.BugZillaContext;
+import org.komea.backend.plugins.bugzilla.data.BugZillaContext;
 
 /**
  *
@@ -24,5 +24,11 @@ public interface IBugZillaServerConfiguration {
      * @return
      */
     public BugZillaContext getBugZillaContext();
+    
+    /**
+     * 
+     * @return 
+     */
+    public int getReminderAlert();
 
 }

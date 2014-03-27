@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package org.komea.backend.plugins.bugzilla;
+package org.komea.backend.plugins.bugzilla.data;
 
 /**
  *

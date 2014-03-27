@@ -7,6 +7,7 @@
 
 package org.komea.backend.plugins.bugzilla;
 
+import org.komea.backend.plugins.bugzilla.data.BugZillaServer;
 import java.util.List;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration;
 

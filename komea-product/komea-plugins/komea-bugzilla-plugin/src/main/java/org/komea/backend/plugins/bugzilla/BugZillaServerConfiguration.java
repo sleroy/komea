@@ -5,6 +5,8 @@
  */
 package org.komea.backend.plugins.bugzilla;
 
+import org.komea.backend.plugins.bugzilla.data.BugZillaContext;
+import org.komea.backend.plugins.bugzilla.data.BugZillaServer;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxyFactory;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy;
@@ -25,6 +27,7 @@ public class BugZillaServerConfiguration implements IBugZillaServerConfiguration
 
     /**
      * Constructor for BugZillaServerConfiguration.
+     *
      * @param server BugZillaServer
      * @param serverProxyFactory IBugZillaServerProxyFactory
      */
@@ -36,8 +39,10 @@ public class BugZillaServerConfiguration implements IBugZillaServerConfiguration
 
     /**
      * Method openProxy.
+     *
      * @return IBugZillaServerProxy
-     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration#openProxy()
+     * @see
+     * org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration#openProxy()
      */
     @Override
     public IBugZillaServerProxy openProxy() {
@@ -49,14 +54,19 @@ public class BugZillaServerConfiguration implements IBugZillaServerConfiguration
 
     /**
      * Method getBugZillaContext.
+     *
      * @return BugZillaContext
-     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration#getBugZillaContext()
+     * @see
+     * org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration#getBugZillaContext()
      */
     @Override
     public BugZillaContext getBugZillaContext() {
         return this.server.getContext();
     }
 
-
+    @Override
+    public int getReminderAlert() {
+        return this.server.getReminderAlert();
+    }
 
 }

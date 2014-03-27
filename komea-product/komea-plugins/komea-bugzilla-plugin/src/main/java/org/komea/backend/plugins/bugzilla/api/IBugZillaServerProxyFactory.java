@@ -6,7 +6,7 @@
 
 package org.komea.backend.plugins.bugzilla.api;
 
-import org.komea.backend.plugins.bugzilla.BugZillaServer;
+import org.komea.backend.plugins.bugzilla.data.BugZillaServer;
 
 /**
  *

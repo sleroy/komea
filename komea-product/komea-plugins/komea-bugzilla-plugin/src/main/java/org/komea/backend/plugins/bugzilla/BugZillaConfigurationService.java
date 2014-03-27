@@ -5,14 +5,18 @@
  */
 package org.komea.backend.plugins.bugzilla;
 
+import org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService;
+import org.komea.backend.plugins.bugzilla.data.BugZillaServer;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import org.komea.backend.plugins.bugzilla.BugZillaConfiguration;
+import org.komea.backend.plugins.bugzilla.BugZillaServerConfiguration;
 
-import org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxyFactory;
+import org.komea.backend.plugins.bugzilla.data.BugZillaServer;
 import org.komea.product.backend.service.fs.IObjectStorage;
 import org.komea.product.backend.service.plugins.IPluginStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +44,14 @@ public class BugZillaConfigurationService implements IBugZillaConfigurationServi
 
     /**
      * Method getServers.
+     *
      * @return List<IBugZillaServerConfiguration>
-     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService#getServers()
+     * @see
+     * org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService#getServers()
      */
     @Override
     public List<IBugZillaServerConfiguration> getServers() {
-        BugZillaConfiguration var = configurationStorage.get();
-        List<BugZillaServer> configurations = var.getConfigurations();
-        configurationStorage.set(var);
+        List<BugZillaServer> configurations = selectAll();
         List<IBugZillaServerConfiguration> result = new ArrayList<IBugZillaServerConfiguration>();
         for (BugZillaServer bugZillaServer : configurations) {
             result.add(new BugZillaServerConfiguration(bugZillaServer, serverProxyFactory));
@@ -56,10 +60,43 @@ public class BugZillaConfigurationService implements IBugZillaConfigurationServi
         return result;
     }
 
+    @Override
+    public void saveOrUpdate(BugZillaServer server, String oldAddress) {
+        BugZillaConfiguration var = configurationStorage.get();
+        List<BugZillaServer> configurations = var.getConfigurations();
+        boolean find = false;
+        for (BugZillaServer bugZillaServer : configurations) {
+            if (bugZillaServer.getAddress().equals(oldAddress)) {
+                bugZillaServer.setAddress(server.getAddress());
+                bugZillaServer.setContext((server.getContext()));
+                bugZillaServer.setLogin(server.getLogin());
+                bugZillaServer.setMdp(server.getMdp());
+                bugZillaServer.setReminderAlert(server.getReminderAlert());
+                find = true;
+                break;
+            }
+
+        }
+        if (!find) {
+            configurations.add(server);
+        }
+        configurationStorage.set(var);
+    }
+
+    @Override
+    public List<BugZillaServer> selectAll() {
+        BugZillaConfiguration var = configurationStorage.get();
+        List<BugZillaServer> configurations = var.getConfigurations();
+        configurationStorage.set(var);
+        return configurations;
+    }
+
     /**
      * Method getServerProxyFactory.
+     *
      * @return IBugZillaServerProxyFactory
-     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService#getServerProxyFactory()
+     * @see
+     * org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService#getServerProxyFactory()
      */
     @Override
     public IBugZillaServerProxyFactory getServerProxyFactory() {
@@ -68,8 +105,10 @@ public class BugZillaConfigurationService implements IBugZillaConfigurationServi
 
     /**
      * Method setServerProxyFactory.
+     *
      * @param serverProxyFactory IBugZillaServerProxyFactory
-     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService#setServerProxyFactory(IBugZillaServerProxyFactory)
+     * @see
+     * org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService#setServerProxyFactory(IBugZillaServerProxyFactory)
      */
     @Override
     public void setServerProxyFactory(IBugZillaServerProxyFactory serverProxyFactory) {
@@ -78,8 +117,10 @@ public class BugZillaConfigurationService implements IBugZillaConfigurationServi
 
     /**
      * Method getPluginStorage.
+     *
      * @return IPluginStorageService
-     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService#getPluginStorage()
+     * @see
+     * org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService#getPluginStorage()
      */
     @Override
     public IPluginStorageService getPluginStorage() {
@@ -88,11 +129,14 @@ public class BugZillaConfigurationService implements IBugZillaConfigurationServi
 
     /**
      * Method setPluginStorage.
+     *
      * @param pluginStorage IPluginStorageService
-     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService#setPluginStorage(IPluginStorageService)
+     * @see
+     * org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService#setPluginStorage(IPluginStorageService)
      */
     @Override
     public void setPluginStorage(IPluginStorageService pluginStorage) {
         this.pluginStorage = pluginStorage;
     }
+
 }
