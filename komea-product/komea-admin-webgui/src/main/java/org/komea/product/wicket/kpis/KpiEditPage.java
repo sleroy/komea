@@ -1,9 +1,6 @@
 package org.komea.product.wicket.kpis;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -13,12 +10,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.entities.IProviderService;
 import org.komea.product.backend.service.kpi.IKPIService;
-import org.komea.product.database.api.IEntity;
-import org.komea.product.database.dao.KpiDao;
-import org.komea.product.database.dao.ProviderDao;
-import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
-import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Provider;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.SelectDialog;
@@ -88,11 +80,11 @@ public class KpiEditPage extends LayoutPage {
             protected void onSubmit(AjaxRequestTarget target) {
                 Provider selectedProvider = getSelected();
                 if (selectedProvider != null) {
-                    kpiForm.getKpi().setIdProvider(selectedProvider.getId());
+//                    kpiForm.getKpi().setIdProvider(selectedProvider.getId());
                     kpiForm.getNameProvider().setName(selectedProvider.getName());
 
                 } else {
-                    kpiForm.getKpi().setIdProvider(null);
+//                    kpiForm.getKpi().setIdProvider(null);
                     kpiForm.getNameProvider().setName("");
                 }
                 target.add(kpiForm.getProviderField());

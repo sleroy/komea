@@ -70,7 +70,7 @@ public final class KpiForm extends Form<Kpi> {
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("").build());
 
         final Provider selectByPrimaryKey
-                = _providerService.selectByPrimaryKey(kpi.getIdProvider());
+                = null;//_providerService.selectByPrimaryKey(kpi.getIdProvider());
         if (selectByPrimaryKey != null) {
             nameProvider.setName(selectByPrimaryKey.getName());
         }
