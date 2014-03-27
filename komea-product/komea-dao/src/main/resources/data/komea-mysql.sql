@@ -80,21 +80,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `komea`.`kom_pvd`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `komea`.`kom_pvd` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `providerType` VARCHAR(255) NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
-  `icon` VARCHAR(255) NOT NULL,
-  `url` VARCHAR(255) NOT NULL,
-  `description` VARCHAR(2048) NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `url_UNIQUE` (`url` ASC))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `komea`.`kom_kpi`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `komea`.`kom_kpi` (
@@ -102,7 +87,6 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `kpiKey` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `description` VARCHAR(2048) NOT NULL,
-  `idProvider` INT NULL,
   `valueMin` DOUBLE NULL,
   `valueMax` DOUBLE NULL,
   `valueDirection` VARCHAR(255) NOT NULL,
@@ -114,9 +98,9 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `evictionRate` INT NOT NULL,
   `evictionType` VARCHAR(255) NOT NULL,
   `objective` DOUBLE NULL,
+  `providerType` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `key_UNIQUE` (`kpiKey` ASC),
-  INDEX `fk_Metric_Plugin1_idx` (`idProvider` ASC))
+  UNIQUE INDEX `key_UNIQUE` (`kpiKey` ASC))
 ENGINE = InnoDB;
 
 
@@ -156,6 +140,21 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_kpia` (
   PRIMARY KEY (`id`),
   INDEX `fk_MetricAlert_Metric1_idx` (`idKpi` ASC),
   UNIQUE INDEX `key_UNIQUE` (`kpiAlertKey` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `komea`.`kom_pvd`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komea`.`kom_pvd` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `providerType` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `icon` VARCHAR(255) NOT NULL,
+  `url` VARCHAR(255) NOT NULL,
+  `description` VARCHAR(2048) NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `url_UNIQUE` (`url` ASC))
 ENGINE = InnoDB;
 
 

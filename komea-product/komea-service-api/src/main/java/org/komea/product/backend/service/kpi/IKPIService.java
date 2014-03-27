@@ -53,13 +53,6 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria> 
     public Number getSingleValue(KpiKey _kpiKey);
 
     /**
-     * This method return the complete list of KPIs
-     *
-     * @return the kpi list
-     */
-    public List<Kpi> listAllKpis();
-
-    /**
      * Creates a new KPI.
      *
      * @param _kpi a new KPI.

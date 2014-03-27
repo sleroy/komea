@@ -55,8 +55,8 @@
         <table tableName="kom_pvd" domainObjectName="Provider">
             <property name="useActualColumnNames" value="true" />
             <generatedKey column="id" sqlStatement="JDBC" identity="true" />
-            <columnOverride column="providerType"
-                            typeHandler="org.apache.ibatis.type.EnumTypeHandler" javaType="org.komea.product.database.enums.ProviderType" />
+            <columnOverride column="providerType" typeHandler="org.apache.ibatis.type.EnumTypeHandler"
+                            javaType="org.komea.product.database.enums.ProviderType" />
         </table>
         <table tableName="kom_kpi" domainObjectName="Kpi">
             <property name="useActualColumnNames" value="true" />
@@ -72,6 +72,8 @@
             <columnOverride column="valueType"
                             typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.ValueType" />
+            <columnOverride column="providerType" typeHandler="org.apache.ibatis.type.EnumTypeHandler"
+                            javaType="org.komea.product.database.enums.ProviderType" />
         </table>
         <table tableName="kom_msr" domainObjectName="Measure">
             <property name="useActualColumnNames" value="true" />

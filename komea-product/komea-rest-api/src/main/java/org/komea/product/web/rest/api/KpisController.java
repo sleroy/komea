@@ -33,7 +33,7 @@ public class KpisController {
     public List<Kpi> allKpis() {
 
         LOGGER.debug("call rest method /kpis/all/");
-        return service.listAllKpis();
+        return service.selectAll();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/get", produces = "application/json")

@@ -338,18 +338,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     }
 
     /**
-     * Method listAllKpis.
-     *
-     * @return List<Kpi>
-     * @see org.komea.product.backend.service.kpi.IKPIService#listAllKpis()
-     */
-    @Override
-    public List<Kpi> listAllKpis() {
-
-        return requiredDAO.selectByCriteriaWithBLOBs(new KpiCriteria());
-    }
-
-    /**
      * Refresh esper with a KPI. The esper statement will be either created or
      * updated and the cron job updated as well.
      *
@@ -591,4 +579,10 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
 
         delete(kpi);
     }
+
+    @Override
+    public List<Kpi> selectAll() {
+        return requiredDAO.selectByCriteriaWithBLOBs(null);
+    }
+
 }
