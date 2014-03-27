@@ -24,7 +24,7 @@ public class KomeaServerStartHandler implements ServerStartHandler {
     public void onServerStart(Server server) {
         final String komeaUrl = KomeaPlugin.getKomeaUrl(settings);
         final String serverUrl = KomeaPlugin.getSonarUrl(settings);
-        if (komeaUrl == null) {
+        if (komeaUrl == null || !KomeaPlugin.isEnabled(settings)) {
             return;
         }
         final ProviderDto providerDto = new ProviderDto();

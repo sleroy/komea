@@ -34,10 +34,12 @@ public class KomeaDecorator implements Decorator {
     private final String komeaUrl;
     private final String sonarUrl;
     private final List<String> projectMetricKeys;
+    private final Settings settings;
 
     public KomeaDecorator(final Settings settings,
             final MetricFinder metricFinder) {
         this.metricFinder = metricFinder;
+        this.settings = settings;
         this.komeaUrl = KomeaPlugin.getKomeaUrl(settings);
         this.sonarUrl = KomeaPlugin.getSonarUrl(settings);
         this.provider = KomeaPlugin.getProvider(sonarUrl);
@@ -47,7 +49,7 @@ public class KomeaDecorator implements Decorator {
 
     @Override
     public void decorate(final Resource resource, final DecoratorContext context) {
-        if (!ResourceUtils.isRootProject(resource) || komeaUrl == null) {
+        if (!ResourceUtils.isRootProject(resource) || komeaUrl == null || !KomeaPlugin.isEnabled(settings)) {
             return;
         }
         Project project = (Project) resource;

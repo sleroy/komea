@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
+import org.sonar.api.PropertyType;
 import org.sonar.api.SonarPlugin;
 import org.sonar.api.config.Settings;
 import org.sonar.api.measures.CoreMetrics;
@@ -30,25 +31,36 @@ import org.sonar.api.measures.Metric;
             name = "Komea Server Url",
             description = "Komea Server Url",
             project = false,
-            global = true),
+            global = true,
+            type = PropertyType.STRING),
     @Property(
             key = KomeaPlugin.ADDITIONAL_METRICS_KEYS,
             name = "Additional metric keys",
             description = "Metric keys to add with SonarQube Core metrics wich will be pushed to Komea. Separate keys with ','",
             project = false,
-            global = true),
+            global = true,
+            type = PropertyType.TEXT),
     @Property(
             key = KomeaPlugin.METRICS_KEYS_BLACKLISTED,
             name = "Metric keys blacklisted",
             description = "Keys of metrics wich will be not pushed to Komea. Separate keys with ','",
             project = false,
-            global = true),
+            global = true,
+            type = PropertyType.TEXT),
     @Property(
             key = KomeaPlugin.PROJECT_KEY,
             name = "Komea Project key",
             description = "Komea Project key",
             project = true,
-            global = false)})
+            global = false,
+            type = PropertyType.STRING),
+    @Property(
+            key = KomeaPlugin.ENABLED,
+            name = "Plugin enabled",
+            description = "Plugin enabled",
+            project = true,
+            global = true,
+            type = PropertyType.BOOLEAN)})
 public class KomeaPlugin extends SonarPlugin {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KomeaPlugin.class.getName());
@@ -56,6 +68,7 @@ public class KomeaPlugin extends SonarPlugin {
     public static final String ADDITIONAL_METRICS_KEYS = "komea.metrics";
     public static final String METRICS_KEYS_BLACKLISTED = "komea.metrics.blacklist";
     public static final String PROJECT_KEY = "komea.project";
+    public static final String ENABLED = "komea.enabled";
     public static final EventType ANALYSIS_STARTED = createEventType(
             "analysis_started", "SonarQube analysis started", "", Severity.INFO);
     public static final EventType ANALYSIS_SUCCESS = createEventType(
@@ -130,6 +143,10 @@ public class KomeaPlugin extends SonarPlugin {
 
     public static String getSonarUrl(final Settings settings) {
         return getUrl(settings, "sonar.core.serverBaseURL");
+    }
+
+    public static boolean isEnabled(final Settings settings) {
+        return settings.getBoolean(ENABLED);
     }
 
     public KomeaPlugin() {
