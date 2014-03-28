@@ -3,7 +3,7 @@ package org.komea.product.backend.service;
 import javax.validation.Valid;
 import org.komea.product.backend.exceptions.InvalidProviderDescriptionException;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
-import org.komea.product.backend.service.entities.ProviderService;
+import org.komea.product.backend.service.entities.IProviderService;
 import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.backend.service.plugins.IPluginIntegrationService;
 import org.komea.product.backend.service.plugins.IProviderDTOConvertorService;
@@ -39,7 +39,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Bean
     private IProviderDTOConvertorService providerAPIService;
 
     @Autowired
-    private ProviderService providerService;
+    private IProviderService providerService;
 
     @Autowired
     private ISettingService settingsService;
@@ -69,6 +69,10 @@ public class PluginIntegrationService implements IPluginIntegrationService, Bean
     public IEventTypeService getEventTypeService() {
 
         return eventTypeService;
+    }
+
+    public IProviderService getProviderService() {
+        return providerService;
     }
 
     /**
@@ -168,6 +172,10 @@ public class PluginIntegrationService implements IPluginIntegrationService, Bean
     public void setEventTypeService(final IEventTypeService _eventTypeService) {
 
         eventTypeService = _eventTypeService;
+    }
+
+    public void setProviderService(IProviderService providerService) {
+        this.providerService = providerService;
     }
 
     /**

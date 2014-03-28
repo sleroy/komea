@@ -12,9 +12,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.plugin.api.InjectSetting;
+import org.komea.product.backend.service.entities.IProviderService;
 import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.backend.service.plugins.IProviderDTOConvertorService;
-import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.dto.PropertyDTO;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.enums.EntityType;
@@ -67,7 +67,7 @@ public class PluginIntegrationServiceTest {
     private IProviderDTOConvertorService providerAPIService;
 
     @Mock
-    private ProviderDao providerMapperMock;
+    private IProviderService providerService;
     @Mock
     private ISettingService settingService;
 
@@ -119,7 +119,7 @@ public class PluginIntegrationServiceTest {
         properties.add(new PropertyDTO("testProp", "value", "java.lang.String", "test prop"));
         providerDTO.setProperties(properties);
         // / Update ID from provider pojo
-        Mockito.when(providerMapperMock.insert(provider)).then(new Answer() {
+        Mockito.when(providerService.insert(provider)).then(new Answer() {
 
             @Override
             public Object answer(final InvocationOnMock _invocation) throws Throwable {
@@ -187,11 +187,11 @@ public class PluginIntegrationServiceTest {
         provider.setProviderType(ProviderType.NEWS);
         provider.setIcon("icon");
         Mockito.when(
-                pluginService.getProviderMapper().selectByCriteria(
+                pluginService.getProviderService().selectByCriteria(
                         Matchers.any(ProviderCriteria.class))).thenReturn(
                         Collections.singletonList(provider));
         pluginService.removeProvider(provider);
-        Mockito.verify(pluginService.getProviderMapper(), Mockito.times(1)).deleteByCriteria(
+        Mockito.verify(pluginService.getProviderService(), Mockito.times(1)).deleteByCriteria(
                 Matchers.any(ProviderCriteria.class));
         final ArgumentCaptor<EventTypeCriteria> eventTypeCriteriaCaptor
                 = ArgumentCaptor.forClass(EventTypeCriteria.class);
@@ -207,7 +207,7 @@ public class PluginIntegrationServiceTest {
     private PluginIntegrationService initPluginIntegrationService() {
 
         final PluginIntegrationService pluginService = new PluginIntegrationService();
-        pluginService.setProviderMapper(providerMapperMock);
+        pluginService.setProviderService(providerService);
         pluginService.setProviderAPIService(providerAPIService);
         pluginService.setEventTypeService(eventTypeService);
         pluginService.setSettingsService(settingService);
