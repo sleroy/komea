@@ -54,7 +54,7 @@ public final class KpiForm extends Form<Kpi> {
         kpi = _dto.getObject();
         page = _kpiPage;
 
-//        feedBack.setVisible(false);
+        feedBack.setVisible(false);
         nameEntity = new NameGeneric("");
 
         add(TextFieldBuilder.<String>createRequired("name", kpi, "name").highlightOnErrors()

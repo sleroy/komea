@@ -59,7 +59,7 @@ public class TeamForm extends Form<PersonGroup> {
         this.feedBack = feedbackPanel;
         this.page = aThis;
         this.personGroup = compoundPropertyModel.getObject();
-//        feedBack.setVisible(false);
+        feedBack.setVisible(false);
         parentName = new NameGeneric("");
         personService = _personService;
         this.projectService = _projectService;

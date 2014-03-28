@@ -47,6 +47,7 @@ public class TeamEditPage extends LayoutPage {
 
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
+        feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
 
         final TeamForm teamForm = new TeamForm("form", projectService, personService, prService,

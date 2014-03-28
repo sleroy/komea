@@ -8,6 +8,7 @@ package org.komea.product.wicket.project;
 
 
 
+import java.util.List;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -38,18 +39,19 @@ public class ProjectPage extends LayoutPage
     
     
         super(_parameters);
-        final IDeleteAction<Project> projectDeleteAction = new ProjectDeleteAction(projectService);
+        List<Project> listAffichage = projectService.selectAll();
+        final IDeleteAction<Project> projectDeleteAction = new ProjectDeleteAction(projectService,listAffichage);
         
         final IEditAction<Project> projectEditAction = new ProjectEditAction(this);
         
         final ISortableDataProvider<Project, String> dataProvider =
-                new ListDataModel(projectService.selectAll());
+                new ListDataModel(listAffichage);
         final DataTable<Project, String> build =
                 DataTableBuilder.<Project, String> newTable("table")
                         .addColumn("Project key", "ProjectKey").addColumn("Name", "Name")
                         .addColumn("Description", "Description")
                         .withEditDeleteColumn(projectDeleteAction, projectEditAction)
-                        .displayRows(10).withData(dataProvider).build();
+                        .displayRows(listAffichage.size()).withData(dataProvider).build();
         add(build);
         
     }

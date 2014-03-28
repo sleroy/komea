@@ -51,6 +51,7 @@ public class ProjectEditPage extends LayoutPage {
 
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
+        feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
 //        final KpiForm KpiForm = null;
 //        new KpiForm(PARENT_PATH, _kpi, feedbackPanel, null)

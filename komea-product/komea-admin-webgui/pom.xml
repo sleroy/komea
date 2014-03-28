@@ -138,7 +138,7 @@
 
 
 
-<!--        <dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>komea-standard-kpis</artifactId>
             <version>${project.version}</version>
@@ -162,7 +162,7 @@
             <groupId>org.komea.plugins</groupId>
             <artifactId>komea-ldap-plugin</artifactId>
             <version>${project.version}</version>
-        </dependency>-->
+        </dependency>
 
 		
 

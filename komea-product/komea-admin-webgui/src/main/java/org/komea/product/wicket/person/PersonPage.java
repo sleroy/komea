@@ -3,6 +3,7 @@ package org.komea.product.wicket.person;
 
 
 
+import java.util.List;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -40,16 +41,18 @@ public class PersonPage extends LayoutPage
         super(_parameters);
         
         
-        final IDeleteAction<Person> personDeleteAction = new PersonDeleteAction(personDAO);
-        
+       
+        List<Person> listAffichage = personDAO.selectAll();
+         final IDeleteAction<Person> personDeleteAction = new PersonDeleteAction(personDAO,listAffichage);
         final IEditAction<Person> personEditAction = new PersonEditAction(this, personRoleDAO);
         final ISortableDataProvider<Person, String> dataProvider =
 //                new PersonDataModel(personDAO.selectAll());
-                new ListDataModel(personDAO.selectAll());
+                new ListDataModel(listAffichage);
+        
         add(DataTableBuilder.<Person, String> newTable("table")
                 .addColumn(new LoginColumn(Model.of("Login"))).addColumn("Last name", "lastName")
                 .addColumn("First name", "firstName").addColumn("Email", "email")
-                .withEditDeleteColumn(personDeleteAction, personEditAction).displayRows(10)
+                .withEditDeleteColumn(personDeleteAction, personEditAction).displayRows(listAffichage.size())
                 .withData(dataProvider).build());
         
         

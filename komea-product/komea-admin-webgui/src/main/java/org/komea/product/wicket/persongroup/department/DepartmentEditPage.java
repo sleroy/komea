@@ -32,6 +32,7 @@ public final class DepartmentEditPage extends LayoutPage {
 
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
+        feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
 
         final DepartmentForm departmentForm = new DepartmentForm("form", prService,

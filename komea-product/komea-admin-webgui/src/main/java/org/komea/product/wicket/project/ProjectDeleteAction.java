@@ -6,7 +6,9 @@
 
 package org.komea.product.wicket.project;
 
+import java.util.List;
 import org.komea.product.backend.service.entities.IProjectService;
+import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 
@@ -17,9 +19,11 @@ import org.komea.product.wicket.widget.api.IDeleteAction;
 public class ProjectDeleteAction implements IDeleteAction<Project> {
 
     private final IProjectService projectService;
+    private final List<Project> projectAffichage;
 
-    public ProjectDeleteAction(IProjectService projectService) {
+    public ProjectDeleteAction(IProjectService projectService , List<Project> _ProjectAffichage) {
         this.projectService = projectService;
+        this.projectAffichage = _ProjectAffichage;
     }
     
     
@@ -27,6 +31,7 @@ public class ProjectDeleteAction implements IDeleteAction<Project> {
     @Override
     public void delete(Project _object) {
         projectService.deleteProject(_object);
+        this.projectAffichage.remove(_object);
     }
     
 }

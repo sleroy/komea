@@ -27,7 +27,7 @@ public class KpiPage extends LayoutPage {
     public KpiPage(final PageParameters _parameters) {
 
         super(_parameters);
-        final IDeleteAction<Kpi> personDeleteAction = new KpiDeleteAction(kpiService);
+        
 
         final IEditAction<Kpi> kpiEditAction = new KpiEditAction(this);
 
@@ -38,12 +38,13 @@ public class KpiPage extends LayoutPage {
                 listKpisResult.add(kpi);
             }
         }
+        final IDeleteAction<Kpi> personDeleteAction = new KpiDeleteAction(kpiService,listKpisResult);
         final ISortableDataProvider<Kpi, String> dataProvider
                 = new ListDataModel<Kpi>(listKpisResult);
         final DataTable<Kpi, String> build
                 = DataTableBuilder.<Kpi, String>newTable("table").addColumn("Kpi key", "KpiKey")
                 .addColumn("Name", "Name").addColumn("Description", "Description")
-                .withEditDeleteColumn(personDeleteAction, kpiEditAction).displayRows(30)
+                .withEditDeleteColumn(personDeleteAction, kpiEditAction).displayRows(listKpisResult.size())
                 .withData(dataProvider).build();
         add(build);
     }

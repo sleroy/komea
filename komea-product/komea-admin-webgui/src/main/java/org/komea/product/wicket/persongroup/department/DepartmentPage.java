@@ -8,6 +8,7 @@ package org.komea.product.wicket.persongroup.department;
 
 
 
+import java.util.List;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -39,20 +40,20 @@ public final class DepartmentPage extends LayoutPage
     
     
         super(_parameters);
-        
+        List<PersonGroup> listAffichage = personGroupService.getAllDepartmentsPG();
         final IDeleteAction<PersonGroup> personGroupDeleteAction =
-                new PersonGroupDeleteAction(personGroupService);
+                new PersonGroupDeleteAction(personGroupService,listAffichage);
         final IEditAction<PersonGroup> personGroupEditAction = new DepartmentEditAction(this);
         
         final ISortableDataProvider<PersonGroup, String> dataProvider =
-                new ListDataModel<PersonGroup>(personGroupService.getAllDepartmentsPG());
+                new ListDataModel<PersonGroup>(listAffichage);
         
         final DataTable<PersonGroup, String> build =
                 DataTableBuilder.<PersonGroup, String> newTable("table")
                         .addColumn("Department Key", "PersonGroupKey").addColumn("Name", "Name")
                         .addColumn("Description", "Description")
                         .withEditDeleteColumn(personGroupDeleteAction, personGroupEditAction)
-                        .displayRows(50).withData(dataProvider).build();
+                        .displayRows(listAffichage.size()).withData(dataProvider).build();
         add(build);
         
     }

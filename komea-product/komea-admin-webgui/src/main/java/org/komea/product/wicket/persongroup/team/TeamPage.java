@@ -8,6 +8,7 @@ package org.komea.product.wicket.persongroup.team;
 
 
 
+import java.util.List;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -39,19 +40,19 @@ public class TeamPage extends LayoutPage
     
     
         super(_parameters);
-        
+          List<PersonGroup> listAffichage = personGroupService.getAllTeamsPG();
         final IDeleteAction<PersonGroup> personGroupDeleteAction =
-                new PersonGroupDeleteAction(personGroupService);
+                new PersonGroupDeleteAction(personGroupService,listAffichage);
         final IEditAction<PersonGroup> personGroupEditAction = new TeamEditAction(this);
         
         final ISortableDataProvider<PersonGroup, String> dataProvider =
-                new ListDataModel(personGroupService.getAllTeamsPG());
+                new ListDataModel(listAffichage);
         final DataTable<PersonGroup, String> build =
                 DataTableBuilder.<PersonGroup, String> newTable("table")
                         .addColumn("Team Key", "PersonGroupKey").addColumn("Name", "Name")
                         .addColumn("Description", "Description")
                         .withEditDeleteColumn(personGroupDeleteAction, personGroupEditAction)
-                        .displayRows(10).withData(dataProvider).build();
+                        .displayRows(listAffichage.size()).withData(dataProvider).build();
         add(build);
     }
 }

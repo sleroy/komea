@@ -71,7 +71,7 @@ public class ProjectForm extends Form<Project> {
         this.project = compoundPropertyModel.getObject();
         this.personGroupService = _personGroupService;
         this.personService = _personService;
-//        feedBack.setVisible(false);
+        feedBack.setVisible(false);
         selectedPersonGroup = new ArrayList<IEntity>();
         currentPersonGroupList = new ArrayList<IEntity>();
         selectedPerson = new ArrayList<IEntity>();

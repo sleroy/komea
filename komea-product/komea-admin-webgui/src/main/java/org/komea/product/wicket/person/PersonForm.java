@@ -56,6 +56,7 @@ public final class PersonForm extends Form<Person> {
     private final UserBdd savUserBdd;
     private List<IEntity> currentEntityList;
     private List<IEntity> selectedEntity;
+  
 
 //    private final TeamSelectorDialog teamDialog;
     public PersonForm(
@@ -77,9 +78,10 @@ public final class PersonForm extends Form<Person> {
         selectedEntity = new ArrayList<IEntity>();
         currentEntityList = new ArrayList<IEntity>();
         feedBack = new FeedbackPanel("feedback");
-        add(feedBack);
         feedBack.setOutputMarkupId(true);
-//        feedBack.setVisible(false);
+        feedBack.setOutputMarkupPlaceholderTag(true);
+        feedBack.setVisible(false);
+        add(feedBack);
         this.groupName = new NameGeneric("");
 
 //        final WebMarkupContainer classLogin = new WebMarkupContainer("class_login");
@@ -109,10 +111,10 @@ public final class PersonForm extends Form<Person> {
 
         if (this.person.getId() != null) {
 
-            currentEntityList = (List<IEntity>)(List<?>)projectService.getProjectsOfPerson(this.person.getId());
+            currentEntityList = (List<IEntity>) (List<?>) projectService.getProjectsOfPerson(this.person.getId());
         }
-        
-           DialogFactory.addListWithSelectDialog(this,
+
+        DialogFactory.addListWithSelectDialog(this,
                 "table",
                 "dialogAddPerson",
                 "btnAddPerson",
@@ -123,7 +125,7 @@ public final class PersonForm extends Form<Person> {
                 selectedEntity,
                 (List<IEntity>) (List<?>) this.projectService.selectAll(),
                 projectService);
-        
+
         initClassicField();
         initSubmitbutton();
         initSimpleButton();
@@ -148,9 +150,7 @@ public final class PersonForm extends Form<Person> {
             @Override
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
 //                errorModel.setObject("has-error");
-                    feedBack.setVisible(true);
-                error("error found");
-                // repaint the feedback panel so errors are shown
+                feedBack.setVisible(true);
                 target.add(feedBack);
 
             }
@@ -163,7 +163,7 @@ public final class PersonForm extends Form<Person> {
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
                 person.setUserBdd(savUserBdd);
-                personService.saveOrUpdatePerson(person, (List<Project>)(List<?>)currentEntityList);
+                personService.saveOrUpdatePerson(person, (List<Project>) (List<?>) currentEntityList);
                 page.setResponsePage(new PersonPage(page.getPageParameters()));
 
             }
