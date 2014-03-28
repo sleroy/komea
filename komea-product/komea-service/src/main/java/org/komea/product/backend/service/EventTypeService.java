@@ -2,7 +2,6 @@ package org.komea.product.backend.service;
 
 import java.util.List;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.komea.product.backend.exceptions.AlreadyExistingEventTypeException;
 import org.komea.product.backend.exceptions.InvalidEventTypeDescriptionException;
 import org.komea.product.backend.genericservice.AbstractService;
@@ -12,7 +11,6 @@ import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.EventTypeCriteria;
-import org.komea.product.database.model.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,12 +63,10 @@ public class EventTypeService extends AbstractService<EventType, Integer, EventT
      * org.komea.product.database.model.EventType)
      */
     @Override
-    public void registerEvent(@NotNull
-            final Provider _provider, @Valid
+    public void registerEvent(@Valid
             final EventType _eventType) {
 
-        LOGGER.debug("Registering event type '{}' from provider {}", _eventType.getName(),
-                _provider.getName());
+        LOGGER.debug("Registering event type '{}'", _eventType.getName());
         final EventTypeCriteria selectByName = newCriteriaSelectByName(_eventType);
         final int existingProvider = requiredDAO.countByCriteria(selectByName);
         if (existingProvider > 0) {
@@ -80,7 +76,6 @@ public class EventTypeService extends AbstractService<EventType, Integer, EventT
             throw new InvalidEventTypeDescriptionException(
                     "EventType DTO should not register primary key");
         }
-        _eventType.setIdProvider(_provider.getId());
         saveOrUpdate(_eventType);
 
     }

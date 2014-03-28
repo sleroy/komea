@@ -61,8 +61,8 @@ public class ProvidersControllerIT {
                 = new Provider(null, ProviderType.CI_BUILD, "MyProvider", "file://", "http://", "");
 
         final EventType eventType
-                = new EventType(null, 1, "EventUN", "MyEvent", Severity.CRITICAL, true,
-                        "a description", "a catogeory", EntityType.PERSON);
+                = new EventType(null, "EventUN", "MyEvent", Severity.CRITICAL, true,
+                        "a description", "a catogeory", EntityType.PERSON, provider.getProviderType());
 
         final List<EventType> eventTypes = new ArrayList<EventType>();
         eventTypes.add(eventType);
