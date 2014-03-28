@@ -176,7 +176,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `komea`.`kom_evt` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `idProvider` INT NOT NULL,
   `eventKey` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `severity` VARCHAR(255) NOT NULL,
@@ -184,8 +183,8 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_evt` (
   `description` VARCHAR(2048) NULL,
   `category` VARCHAR(255) NOT NULL,
   `entityType` VARCHAR(255) NULL,
+  `providerType` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Event_Plugin1_idx` (`idProvider` ASC),
   UNIQUE INDEX `key_UNIQUE` (`eventKey` ASC))
 ENGINE = InnoDB;
 

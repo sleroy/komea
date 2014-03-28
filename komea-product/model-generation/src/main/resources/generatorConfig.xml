@@ -96,11 +96,13 @@
         <table tableName="kom_evt" domainObjectName="EventType">
             <property name="useActualColumnNames" value="true" />
             <generatedKey column="id" sqlStatement="JDBC" identity="true" />
-            <columnOverride column="entityType"
-                            typeHandler="org.apache.ibatis.type.EnumTypeHandler" javaType="org.komea.product.database.enums.EntityType" />
+            <columnOverride column="entityType" typeHandler="org.apache.ibatis.type.EnumTypeHandler"
+                            javaType="org.komea.product.database.enums.EntityType" />
             <columnOverride column="severity"
                             typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                             javaType="org.komea.product.database.enums.Severity" />
+            <columnOverride column="providerType" typeHandler="org.apache.ibatis.type.EnumTypeHandler"
+                            javaType="org.komea.product.database.enums.ProviderType" />
         </table>
         <table tableName="kom_setting" domainObjectName="Setting">
             <property name="useActualColumnNames" value="true" />
