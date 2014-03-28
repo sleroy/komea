@@ -191,8 +191,6 @@ public class PluginIntegrationServiceTest {
                         Matchers.any(ProviderCriteria.class))).thenReturn(
                         Collections.singletonList(provider));
         pluginService.removeProvider(provider);
-        Mockito.verify(pluginService.getProviderService(), Mockito.times(1)).deleteByCriteria(
-                Matchers.any(ProviderCriteria.class));
         final ArgumentCaptor<EventTypeCriteria> eventTypeCriteriaCaptor
                 = ArgumentCaptor.forClass(EventTypeCriteria.class);
         eventTypeCriteriaCaptor.getValue();
