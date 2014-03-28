@@ -36,7 +36,7 @@ public final class AlertTypeService extends AbstractService<KpiAlertType, Intege
     }
 
     @Override
-    protected KpiAlertTypeCriteria createPersonCriteriaOnLogin(String key) {
+    protected KpiAlertTypeCriteria createKeyCriteria(String key) {
         final KpiAlertTypeCriteria criteria = new KpiAlertTypeCriteria();
         criteria.createCriteria().andKpiAlertKeyEqualTo(key);
         return criteria;

@@ -129,12 +129,12 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
         return selectByCriteria(null);
     }
 
-    protected abstract TCriteria createPersonCriteriaOnLogin(String key);
+    protected abstract TCriteria createKeyCriteria(String key);
 
     @Override
     public TEntity selectByKey(String key) {
 
-        return CollectionUtil.singleOrNull(selectByCriteria(createPersonCriteriaOnLogin(key)));
+        return CollectionUtil.singleOrNull(selectByCriteria(createKeyCriteria(key)));
     }
 
     @Override

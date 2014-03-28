@@ -316,7 +316,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
     }
 
     @Override
-    protected MeasureCriteria createPersonCriteriaOnLogin(String key) {
+    protected MeasureCriteria createKeyCriteria(String key) {
         throw new UnsupportedOperationException("Not supported.");
     }
 }

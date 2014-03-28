@@ -306,7 +306,7 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
     }
 
     @Override
-    protected ProjectCriteria createPersonCriteriaOnLogin(final String key) {
+    protected ProjectCriteria createKeyCriteria(final String key) {
 
         final ProjectCriteria criteria = new ProjectCriteria();
         criteria.createCriteria().andProjectKeyEqualTo(key);

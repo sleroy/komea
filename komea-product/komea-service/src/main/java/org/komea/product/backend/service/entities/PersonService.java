@@ -287,11 +287,11 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
      */
     private boolean existLogin(final String _loginFromEmail) {
 
-        return !selectByCriteria(createPersonCriteriaOnLogin(_loginFromEmail)).isEmpty();
+        return !selectByCriteria(createKeyCriteria(_loginFromEmail)).isEmpty();
     }
 
     @Override
-    protected PersonCriteria createPersonCriteriaOnLogin(final String key) {
+    protected PersonCriteria createKeyCriteria(final String key) {
 
         final PersonCriteria criteria = new PersonCriteria();
         criteria.createCriteria().andLoginEqualTo(key);

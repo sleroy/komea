@@ -2,8 +2,6 @@ package org.komea.product.backend.service;
 
 import java.util.List;
 import javax.validation.Valid;
-import org.komea.product.backend.exceptions.AlreadyExistingEventTypeException;
-import org.komea.product.backend.exceptions.InvalidEventTypeDescriptionException;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.database.dao.EventTypeDao;
@@ -45,16 +43,16 @@ public class EventTypeService extends AbstractService<EventType, Integer, EventT
     }
 
     /**
-     * Builds a new criteria with the name.
+     * Builds a new criteria with the key.
      *
      * @param _eventType
      * @return EventTypeCriteria
      */
-    public EventTypeCriteria newCriteriaSelectByName(final EventType _eventType) {
+    public EventTypeCriteria newCriteriaSelectByKey(final EventType _eventType) {
 
-        final EventTypeCriteria selectEventTypeByName = new EventTypeCriteria();
-        selectEventTypeByName.createCriteria().andNameEqualTo(_eventType.getEventKey());
-        return selectEventTypeByName;
+        final EventTypeCriteria selectEventTypeByKey = new EventTypeCriteria();
+        selectEventTypeByKey.createCriteria().andEventKeyEqualTo(_eventType.getEventKey());
+        return selectEventTypeByKey;
     }
 
     /*
@@ -67,16 +65,11 @@ public class EventTypeService extends AbstractService<EventType, Integer, EventT
             final EventType _eventType) {
 
         LOGGER.debug("Registering event type '{}'", _eventType.getName());
-        final EventTypeCriteria selectByName = newCriteriaSelectByName(_eventType);
-        final int existingProvider = requiredDAO.countByCriteria(selectByName);
-        if (existingProvider > 0) {
-            throw new AlreadyExistingEventTypeException(_eventType);
+        final EventTypeCriteria selectByName = newCriteriaSelectByKey(_eventType);
+        final boolean exists = requiredDAO.countByCriteria(selectByName) > 0;
+        if (!exists) {
+            insert(_eventType);
         }
-        if (_eventType.getId() != null) {
-            throw new InvalidEventTypeDescriptionException(
-                    "EventType DTO should not register primary key");
-        }
-        saveOrUpdate(_eventType);
 
     }
 
@@ -86,7 +79,7 @@ public class EventTypeService extends AbstractService<EventType, Integer, EventT
     }
 
     @Override
-    protected EventTypeCriteria createPersonCriteriaOnLogin(String key) {
+    protected EventTypeCriteria createKeyCriteria(String key) {
         final EventTypeCriteria criteria = new EventTypeCriteria();
         criteria.createCriteria().andEventKeyEqualTo(key);
         return criteria;

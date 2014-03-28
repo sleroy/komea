@@ -277,7 +277,7 @@ public final class PersonGroupService extends
     }
 
     @Override
-    protected PersonGroupCriteria createPersonCriteriaOnLogin(final String key) {
+    protected PersonGroupCriteria createKeyCriteria(final String key) {
 
         final PersonGroupCriteria criteria = new PersonGroupCriteria();
         criteria.createCriteria().andPersonGroupKeyEqualTo(key);

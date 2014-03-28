@@ -41,7 +41,7 @@ public class PersonRoleService extends AbstractService<PersonRole, Integer, Pers
     public PersonRole getDefaultUserRole() {
     
     
-        return CollectionUtil.singleOrNull(selectByCriteria(createPersonCriteriaOnLogin("USER")));
+        return CollectionUtil.singleOrNull(selectByCriteria(createKeyCriteria("USER")));
     }
     
     
@@ -65,7 +65,7 @@ public class PersonRoleService extends AbstractService<PersonRole, Integer, Pers
     
     
     @Override
-    protected PersonRoleCriteria createPersonCriteriaOnLogin(final String key) {
+    protected PersonRoleCriteria createKeyCriteria(final String key) {
     
     
         final PersonRoleCriteria criteria = new PersonRoleCriteria();

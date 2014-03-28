@@ -529,7 +529,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     }
 
     @Override
-    protected KpiCriteria createPersonCriteriaOnLogin(final String key) {
+    protected KpiCriteria createKeyCriteria(final String key) {
 
         final KpiCriteria criteria = new KpiCriteria();
         criteria.createCriteria().andKpiKeyEqualTo(key);

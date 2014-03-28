@@ -3,10 +3,10 @@ package org.komea.product.backend.service;
 import javax.validation.Valid;
 import org.komea.product.backend.exceptions.InvalidProviderDescriptionException;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
+import org.komea.product.backend.service.entities.ProviderService;
 import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.backend.service.plugins.IPluginIntegrationService;
 import org.komea.product.backend.service.plugins.IProviderDTOConvertorService;
-import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
@@ -39,7 +39,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Bean
     private IProviderDTOConvertorService providerAPIService;
 
     @Autowired
-    private ProviderDao providerMapper;
+    private ProviderService providerService;
 
     @Autowired
     private ISettingService settingsService;
@@ -57,7 +57,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Bean
      */
     public boolean existSelectedProvider(final ProviderCriteria criteria) {
 
-        final int existingProvider = providerMapper.countByCriteria(criteria);
+        final int existingProvider = providerService.countByCriteria(criteria);
         return existingProvider > 0;
     }
 
@@ -79,16 +79,6 @@ public class PluginIntegrationService implements IPluginIntegrationService, Bean
     public IProviderDTOConvertorService getProviderAPIService() {
 
         return providerAPIService;
-    }
-
-    /**
-     * Method getProviderMapper.
-     *
-     * @return ProviderDao
-     */
-    public ProviderDao getProviderMapper() {
-
-        return providerMapper;
     }
 
     /**
@@ -152,7 +142,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Bean
             throw new InvalidProviderDescriptionException(
                     "Producer DTO should not register primary key");
         }
-        providerMapper.insert(provider);
+        providerService.insert(provider);
 
         // Alertes
         for (final EventType eventType : _providerDTO.getEventTypes()) {
@@ -167,10 +157,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Bean
      */
     public void removeProvider(final Provider _provider) {
 
-        final ProviderCriteria criteria = new ProviderCriteria();
-        criteria.createCriteria().andUrlEqualTo(_provider.getUrl());
-        providerMapper.deleteByCriteria(criteria);
-
+        providerService.removeProvider(_provider);
     }
 
     /**
@@ -191,16 +178,6 @@ public class PluginIntegrationService implements IPluginIntegrationService, Bean
     public void setProviderAPIService(final IProviderDTOConvertorService _providerAPIService) {
 
         providerAPIService = _providerAPIService;
-    }
-
-    /**
-     * Method setProviderMapper.
-     *
-     * @param _providerMapper ProviderDao
-     */
-    public void setProviderMapper(final ProviderDao _providerMapper) {
-
-        providerMapper = _providerMapper;
     }
 
     /**
