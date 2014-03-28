@@ -1,11 +1,16 @@
 package org.komea.product.backend.service.alert;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.dao.KpiAlertTypeDao;
+import org.komea.product.database.dto.AlertTypeDto;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.database.model.KpiAlertTypeCriteria;
@@ -38,8 +43,12 @@ public final class AlertTypeService extends AbstractService<KpiAlertType, Intege
     }
 
     @Override
-    public List<KpiAlertType> getAlertTypes(EntityType entityType) {
+    public List<AlertTypeDto> getAlertTypes(EntityType entityType) {
         final List<Kpi> kpis = kpiService.getKpis(entityType, null);
+        final Map<Integer, Kpi> kpisById = new HashMap<Integer, Kpi>(kpis.size());
+        for (Kpi kpi : kpis) {
+            kpisById.put(kpi.getId(), kpi);
+        }
         if (kpis.isEmpty()) {
             return Collections.emptyList();
         }
@@ -47,7 +56,13 @@ public final class AlertTypeService extends AbstractService<KpiAlertType, Intege
         for (final Kpi kpi : kpis) {
             alertTypeCriteria.or().andIdKpiEqualTo(kpi.getId());
         }
-        return requiredDAO.selectByCriteria(alertTypeCriteria);
+        final List<KpiAlertType> kpiAlertTypes = requiredDAO.selectByCriteria(alertTypeCriteria);
+        final List<AlertTypeDto> alertTypeDtos = new ArrayList<AlertTypeDto>(kpiAlertTypes.size());
+        for (final KpiAlertType kpiAlertType : kpiAlertTypes) {
+            final ProviderType providerType = kpisById.get(kpiAlertType.getIdKpi()).getProviderType();
+            alertTypeDtos.add(new AlertTypeDto(kpiAlertType, providerType));
+        }
+        return alertTypeDtos;
     }
 
 }

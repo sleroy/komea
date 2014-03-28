@@ -57,7 +57,8 @@ import org.sonar.api.measures.Metric;
     @Property(
             key = KomeaPlugin.ENABLED,
             name = "Plugin enabled",
-            description = "Plugin enabled",
+            description = "Plugin enabled. Default value is true.",
+            defaultValue = "true",
             project = true,
             global = true,
             type = PropertyType.BOOLEAN)})
