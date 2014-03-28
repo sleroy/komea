@@ -18,7 +18,6 @@ import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.dto.PropertyDTO;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.enums.EntityType;
-import org.komea.product.database.enums.EventCategory;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.EventType;
@@ -106,7 +105,6 @@ public class PluginIntegrationServiceTest {
 
         final ArrayList<EventType> eventTypes = new ArrayList<EventType>();
         final EventType eventType = new EventType();
-        eventType.setCategory(EventCategory.BUILD.name());
         eventType.setDescription("eventDesc");
         eventType.setEnabled(true);
         eventType.setEntityType(EntityType.PERSON);

@@ -62,7 +62,7 @@ public class ProvidersControllerIT {
 
         final EventType eventType
                 = new EventType(null, "EventUN", "MyEvent", Severity.CRITICAL, true,
-                        "a description", "a catogeory", EntityType.PERSON, provider.getProviderType());
+                        "a description", EntityType.PERSON, provider.getProviderType());
 
         final List<EventType> eventTypes = new ArrayList<EventType>();
         eventTypes.add(eventType);

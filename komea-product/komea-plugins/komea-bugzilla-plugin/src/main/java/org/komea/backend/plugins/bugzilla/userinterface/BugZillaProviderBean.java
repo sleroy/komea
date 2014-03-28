@@ -8,7 +8,6 @@ package org.komea.backend.plugins.bugzilla.userinterface;
 import javax.annotation.PostConstruct;
 import org.komea.product.backend.api.PluginAdminPages;
 import org.komea.product.backend.api.PluginMountPage;
-
 import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
@@ -33,14 +32,14 @@ import org.slf4j.LoggerFactory;
         url = "/bugzilla-provider",
         eventTypes = {
             @EventTypeDef(
-                    category = "BUGTRACKER",
+                    providerType = ProviderType.BUGTRACKER,
                     description = "Total Number of Bugs in BugZilla server",
                     key = "BUGZILLA_TOTAL_BUGS",
                     name = "Bugzilla Total Bugs",
                     entityType = EntityType.PROJECT,
                     severity = Severity.INFO),
             @EventTypeDef(
-                    category = "BUGTRACKER",
+                    providerType = ProviderType.BUGTRACKER,
                     description = "Number of unconfirmed bugs",
                     key = "BUGZILLA_TOTAL_BUGS",
                     name = "BugZilla Unconfirmed bugs",

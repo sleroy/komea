@@ -7,7 +7,6 @@ import java.util.List;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.enums.EntityType;
-import org.komea.product.database.enums.EventCategory;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.EventType;
@@ -82,7 +81,7 @@ public class KomeaPlugin extends SonarPlugin {
     public static EventType createEventType(final String key, final String name,
             final String description, final Severity severity) {
         final EventType eventType = new EventType();
-        eventType.setCategory(EventCategory.QUALITY.name());
+        eventType.setProviderType(ProviderType.QUALITY);
         eventType.setDescription(description);
         eventType.setEnabled(true);
         eventType.setEntityType(EntityType.PROJECT);

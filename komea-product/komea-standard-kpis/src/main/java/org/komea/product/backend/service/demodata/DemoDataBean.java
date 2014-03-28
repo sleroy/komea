@@ -36,7 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @ProviderPlugin(
         eventTypes = {
             @EventTypeDef(
-                    category = "SCM",
+                    providerType = ProviderType.SCM,
                     description = "",
                     enabled = true,
                     entityType = EntityType.PROJECT,
@@ -180,7 +180,7 @@ public class DemoDataBean {
         }
 
         EventType eventType = new EventType();
-        eventType.setCategory("Build step");
+        eventType.setProviderType(ProviderType.CI_BUILD);
         eventType.setDescription("a build has been launched");
         eventType.setEnabled(true);
         eventType.setEventKey("BUILD_LAUNCHED");
@@ -210,7 +210,7 @@ public class DemoDataBean {
         }
 
         eventType = new EventType();
-        eventType.setCategory("DEMO");
+        eventType.setProviderType(ProviderType.OTHER);
         eventType.setDescription("demo alert");
         eventType.setEnabled(true);
         eventType.setEventKey("demo_alert");

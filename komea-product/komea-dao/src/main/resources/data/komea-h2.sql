@@ -148,7 +148,6 @@ CREATE TABLE IF NOT EXISTS `komea`.`kom_evt` (
   `severity` VARCHAR(255) NOT NULL,
   `enabled` TINYINT(1) NOT NULL,
   `description` VARCHAR(2048) NULL,
-  `category` VARCHAR(255) NOT NULL,
   `entityType` VARCHAR(255) NULL,
   `providerType` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`));

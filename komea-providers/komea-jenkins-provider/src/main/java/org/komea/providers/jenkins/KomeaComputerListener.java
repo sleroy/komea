@@ -15,7 +15,6 @@ import jenkins.model.Jenkins;
 import jenkins.model.JenkinsLocationConfiguration;
 import org.komea.product.database.dto.ProviderDto;
 import org.komea.product.database.enums.EntityType;
-import org.komea.product.database.enums.EventCategory;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.EventType;
@@ -69,7 +68,7 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
     public static EventType createEventType(final String key, final String name,
             final String description, final Severity severity, final EntityType entityType) {
         final EventType eventType = new EventType();
-        eventType.setCategory(EventCategory.BUILD.name());
+        eventType.setProviderType(ProviderType.CI_BUILD);
         eventType.setDescription(description);
         eventType.setEnabled(true);
         eventType.setEntityType(entityType);
