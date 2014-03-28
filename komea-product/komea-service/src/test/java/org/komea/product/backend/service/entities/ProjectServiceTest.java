@@ -255,7 +255,7 @@ public class ProjectServiceTest {
                 .thenReturn(projectPersonList);
 
         Mockito.when(projectDAOmock.selectByPrimaryKey(1)).thenReturn(getProject().get(0));
-        Mockito.when(projectPersonService.getPersonIdsOfProject(1)).thenReturn(projectPersonList);
+        Mockito.when(projectPersonService.getProjectIdsOfPerson(1)).thenReturn(projectPersonList);
 
         final List<Project> projects = projectService.getProjectsOfPerson(1);
 
@@ -441,7 +441,7 @@ public class ProjectServiceTest {
 
         List<HasProjectPersonKey> projectPersonList = Lists.newArrayList(new HasProjectPersonKey(1, 1));
         Mockito.when(projectPersonDAOmock.selectByCriteria(Matchers.any(HasProjectPersonCriteria.class))).thenReturn(projectPersonList);
-        Mockito.when(projectPersonService.getPersonIdsOfProject(1)).thenReturn(projectPersonList);
+        Mockito.when(projectPersonService.getProjectIdsOfPerson(1)).thenReturn(projectPersonList);
         Mockito.when(projectDAOmock.selectByPrimaryKey(1)).thenReturn(getProject().get(0));
 
         List<Project> projects = projectService.getProjectsOfPerson(1);
