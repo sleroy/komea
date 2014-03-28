@@ -21,10 +21,8 @@ import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.EventType;
-import org.komea.product.database.model.EventTypeCriteria;
 import org.komea.product.database.model.Provider;
 import org.komea.product.database.model.ProviderCriteria;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -191,9 +189,6 @@ public class PluginIntegrationServiceTest {
                         Matchers.any(ProviderCriteria.class))).thenReturn(
                         Collections.singletonList(provider));
         pluginService.removeProvider(provider);
-        final ArgumentCaptor<EventTypeCriteria> eventTypeCriteriaCaptor
-                = ArgumentCaptor.forClass(EventTypeCriteria.class);
-        eventTypeCriteriaCaptor.getValue();
 
     }
 
