@@ -12,6 +12,7 @@ import org.komea.product.backend.service.entities.IProviderService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.EvictionType;
+import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
@@ -36,10 +37,7 @@ public final class KpiForm extends Form<Kpi> {
     private final Kpi kpi;
     private final IKPIService kpiService;
     private final NameGeneric nameEntity;
-    private final NameGeneric nameProvider;
     private final LayoutPage page;
-
-    private final TextField providerField;
 
     public KpiForm(
             final String _id,
@@ -57,7 +55,6 @@ public final class KpiForm extends Form<Kpi> {
         page = _kpiPage;
 
 //        feedBack.setVisible(false);
-        nameProvider = new NameGeneric("");
         nameEntity = new NameGeneric("");
 
         add(TextFieldBuilder.<String>createRequired("name", kpi, "name").highlightOnErrors()
@@ -69,15 +66,18 @@ public final class KpiForm extends Form<Kpi> {
         add(TextAreaBuilder.<String>create("description", kpi, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("").build());
 
-        final Provider selectByPrimaryKey
-                = null;//_providerService.selectByPrimaryKey(kpi.getIdProvider());
-        if (selectByPrimaryKey != null) {
-            nameProvider.setName(selectByPrimaryKey.getName());
-        }
-        providerField
-                = TextFieldBuilder.<String>create("idProvider", nameProvider, "name")
-                .withTooltip("").buildTextField();
-        add(providerField);
+         add(SelectBoxBuilder.<ProviderType>createWithEnum("providerType", kpi,ProviderType.class)
+                .build());
+  
+//        final Provider selectByPrimaryKey
+//                = null;//_providerService.selectByPrimaryKey(kpi.getIdProvider());
+//        if (selectByPrimaryKey != null) {
+//            nameProvider.setName(selectByPrimaryKey.getName());
+//        }
+//        providerField
+//                = TextFieldBuilder.<String>create("idProvider", nameProvider, "name")
+//                .withTooltip("").buildTextField();
+//        add(providerField);
 
         final TextField<String> textminValue
                 = TextFieldBuilder.<String>create("valueMin", kpi, "valueMin").withTooltip("")
@@ -105,6 +105,8 @@ public final class KpiForm extends Form<Kpi> {
         // target.add(entityTypeField);
         // }
         // });
+        
+        
         add(entityTypeField);
 
         add(TextFieldBuilder.<String>create("cronExpression", kpi, "cronExpression")
@@ -195,15 +197,7 @@ public final class KpiForm extends Form<Kpi> {
         return nameEntity;
     }
 
-    public NameGeneric getNameProvider() {
 
-        return nameProvider;
-    }
-
-    public TextField getProviderField() {
-
-        return providerField;
-    }
 
     /**
      * Validation the formular : settings are updated from the DTO

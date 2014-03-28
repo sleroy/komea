@@ -43,7 +43,7 @@ public class KpiPage extends LayoutPage {
         final DataTable<Kpi, String> build
                 = DataTableBuilder.<Kpi, String>newTable("table").addColumn("Kpi key", "KpiKey")
                 .addColumn("Name", "Name").addColumn("Description", "Description")
-                .withEditDeleteColumn(personDeleteAction, kpiEditAction).displayRows(10)
+                .withEditDeleteColumn(personDeleteAction, kpiEditAction).displayRows(30)
                 .withData(dataProvider).build();
         add(build);
     }

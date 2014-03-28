@@ -10,6 +10,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
@@ -171,8 +172,8 @@ public class DataTableBuilder<T, S>
                     new DefaultTableModelWithCaption<T, S>(id, columns, dataProvider, rowsPerPage,
                             captionName);
         } else {
-            dataTable =
-                    new AjaxFallbackDefaultDataTable<T, S>(id, columns, dataProvider, rowsPerPage);
+            dataTable = new DefaultDataTable<T, S>(id, columns, dataProvider, rowsPerPage);
+//                    new AjaxFallbackDefaultDataTable<T, S>(id, columns, dataProvider, rowsPerPage);
         }
         
         dataTable.add(new AttributeModifier("class",
