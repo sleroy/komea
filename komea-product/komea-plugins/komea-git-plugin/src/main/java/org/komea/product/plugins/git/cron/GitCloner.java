@@ -51,6 +51,7 @@ public class GitCloner implements IGitCloner
         Validate.notNull(_gitRepo.getKey());
         storageFolder = _storageFolder;
         gitRepositoryDefinition = _gitRepo;
+        
     }
     
     
@@ -157,5 +158,6 @@ public class GitCloner implements IGitCloner
                 "Could not create " + gitRepositoryFolder); }
         
         gitRepositoryFolder.deleteOnExit();
+        gitRepositoryDefinition.setCloneDirectory(gitRepositoryFolder);
     }
 }

@@ -6,6 +6,7 @@ package org.komea.product.plugins.git.model;
 
 
 
+import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +44,9 @@ public class GitRepositoryDefinition extends ScmRepositoryDefinition
     
     
     
+    private File                      cloneDirectory;
+    
+    
     /**
      * last references.
      */
@@ -58,6 +62,13 @@ public class GitRepositoryDefinition extends ScmRepositoryDefinition
     
         super();
         
+    }
+    
+    
+    public File getCloneDirectory() {
+    
+    
+        return cloneDirectory;
     }
     
     
@@ -87,6 +98,34 @@ public class GitRepositoryDefinition extends ScmRepositoryDefinition
     }
     
     
+    public void setCloneDirectory(final File _cloneDirectory) {
+    
+    
+        cloneDirectory = _cloneDirectory;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+    
+    
+        return "GitRepositoryDefinition [lastRefs="
+                + lastRefs + ", cloneDirectory=" + cloneDirectory + ", getLastRefs()="
+                + getLastRefs() + ", getCloneDirectory()=" + getCloneDirectory()
+                + ", getCustomerRegExps()=" + getCustomerRegExps() + ", getKey()=" + getKey()
+                + ", getKnownBranches()=" + getKnownBranches() + ", getLastDateCheckout()="
+                + getLastDateCheckout() + ", getPassword()=" + getPassword()
+                + ", getProjectForRepository()=" + getProjectForRepository() + ", getRepoName()="
+                + getRepoName() + ", getUrl()=" + getUrl() + ", getUserName()=" + getUserName()
+                + ", toString()=" + super.toString() + ", getClass()=" + getClass()
+                + ", hashCode()=" + hashCode() + "]";
+    }
+    
+    
     /**
      * Updates the last reference
      * 
@@ -100,6 +139,4 @@ public class GitRepositoryDefinition extends ScmRepositoryDefinition
     
         lastRefs.put(_branchName, _objID);
     }
-    
-    
 }

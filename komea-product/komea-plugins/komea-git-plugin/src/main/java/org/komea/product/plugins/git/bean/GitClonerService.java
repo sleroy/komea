@@ -7,7 +7,6 @@ package org.komea.product.plugins.git.bean;
 
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.komea.product.backend.service.fs.IKomeaFS;
@@ -18,6 +17,8 @@ import org.komea.product.plugins.git.repositories.api.IGitClonerService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.MapMaker;
 
 
 
@@ -33,7 +34,8 @@ public class GitClonerService implements IGitClonerService
     
     private static org.slf4j.Logger      LOGGER            = LoggerFactory.getLogger("git-cloner");
     
-    private final Map<String, GitCloner> clonedDirectories = new HashMap<String, GitCloner>();
+    private final Map<String, GitCloner> clonedDirectories = new MapMaker().initialCapacity(3)
+                                                                   .makeMap();
     
     @Autowired
     private IKomeaFS                     komeaFS;
@@ -52,10 +54,11 @@ public class GitClonerService implements IGitClonerService
      * @see org.komea.product.plugins.git.bean.IGitClonerService#getCloner(java.lang.String)
      */
     @Override
-    public IGitCloner getOrCreate(final GitRepositoryDefinition _gitID) {
+    public synchronized IGitCloner getOrCreate(final GitRepositoryDefinition _gitID) {
     
     
-        if (clonedDirectories.containsKey(_gitID.getKey())) { return clonedDirectories.get(_gitID); }
+        if (clonedDirectories.containsKey(_gitID.getKey())) { return clonedDirectories.get(_gitID
+                .getKey()); }
         LOGGER.info("Cloning workspace for git repo : {}", _gitID.getRepoName());
         final GitCloner gitCloner = new GitCloner(getSystem(), _gitID);
         gitCloner.initRepository();

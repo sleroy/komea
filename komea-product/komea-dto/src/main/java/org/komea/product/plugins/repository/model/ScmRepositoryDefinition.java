@@ -328,8 +328,9 @@ public class ScmRepositoryDefinition implements Serializable
     
         return "ScmRepositoryDefinition [branchDefinitions="
                 + branchDefinitions + ", customerRegExps=" + customerRegExps + ", key=" + key
-                + ", password=" + password + ", projectForRepository=" + projectForRepository
-                + ", repoName=" + repoName + ", url=" + url + ", userName=" + userName + "]";
+                + ", lastDateCheckout=" + lastDateCheckout + ", password=" + password
+                + ", projectForRepository=" + projectForRepository + ", repoName=" + repoName
+                + ", url=" + url + ", userName=" + userName + "]";
     }
     
 }
