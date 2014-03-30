@@ -103,9 +103,6 @@ public class GitRepositoryReader implements IGitRepositoryReader
     public void alertNewCommit(final RevWalk revWalk, final RevCommit parseCommit) {
     
     
-        final DateTime dateTime = new DateTime(parseCommit.getCommitTime());
-        if (previousTime.isAfter(dateTime)) { return; }
-        
         final PersonIdent authorIdent = parseCommit.getAuthorIdent();
         final PersonIdent committerIdent = parseCommit.getCommitterIdent();
         
@@ -261,6 +258,10 @@ public class GitRepositoryReader implements IGitRepositoryReader
         for (final RevCommit commit : commit_log) {
             final RevCommit targetCommit =
                     _revWalk.parseCommit(_repository.resolve(commit.getName()));
+            
+            final DateTime dateTime = new DateTime(targetCommit.getAuthorIdent().getWhen());
+            if (previousTime.isAfter(dateTime)) { return; }
+            
             
             final boolean foundInThisBranch =
                     commitBranchAssociationPredicate.isCommitRelatedToBranch(targetCommit);

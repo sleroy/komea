@@ -55,18 +55,22 @@ public class CreateBranchTest
         git.commit().setAll(true).setAuthor("myself", "a@a.com").setMessage("Example of message")
                 .call();
         git.branchCreate().setName("new_branch").setForce(true).call();
+        git.push().call();
         
         
-        final List<EventSimpleDto> firstEvents =
+        final List<EventSimpleDto> receivedEvents =
                 GitRepoFactory.launchGitCron(eventPushEngine, gitRepository, gitClonerService);
-        assertEquals("Number of events sent the first time", 2, firstEvents.size());
-        assertEquals("Second event is branch number", "scm-branch-numbers", firstEvents.get(1)
+        
+        System.out.println(receivedEvents);
+        assertEquals("Number of events sent the first time", 5, receivedEvents.size());
+        assertEquals("Second event is branch number", "scm-branch-numbers", receivedEvents.get(1)
                 .getEventType());
-        assertEquals("One branch is found", 1.0d, firstEvents.get(1).getValue(), 0);
-        
-        System.out.println(firstEvents.size());
-        System.out.println(firstEvents);
-        
+        assertEquals("Third event is tag per branch", "scm-tag-perbranch-numbers", receivedEvents
+                .get(2).getEventType());
+        assertEquals("One branch is found", 1.0d, receivedEvents.get(1).getValue(), 0);
+        assertEquals("Zero tag for the branch is found", 0.0d, receivedEvents.get(2).getValue(), 0);
+        assertEquals("scm-new-commit", receivedEvents.get(3).getEventType());
+        assertEquals("scm-new-commit", receivedEvents.get(4).getEventType());
         
     }
     

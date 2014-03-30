@@ -42,7 +42,8 @@ public class GitRepoFactory
             throws IOException, MalformedURLException {
     
     
-        final File file = new File("target/fakeRepository/" + new Date().getTime());
+        final long time = new Date().getTime();
+        final File file = new File("target/fakeRepository/" + time);
         file.mkdirs();
         
         
@@ -52,10 +53,10 @@ public class GitRepoFactory
         // ... use the new repository ...
         
         
+        final String name = "dummy-repository-" + time;
         final GitRepositoryDefinition gitRepo =
-                GitRepositoryDefinition.newGitRepository("Dummy repository", gitFile.toURL()
-                        .toString());
-        gitRepo.setProjectForRepository("Dummy repository");
+                GitRepositoryDefinition.newGitRepository(name, gitFile.toURL().toString());
+        gitRepo.setProjectForRepository(name);
         return gitRepo;
     }
     
