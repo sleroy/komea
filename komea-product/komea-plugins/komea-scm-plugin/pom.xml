@@ -8,26 +8,19 @@
 		<version>1.0.13-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>komea-git-plugin</artifactId>
+	<artifactId>komea-scm-plugin</artifactId>
 
-	<name>Komea : GIT plugin</name>
-	<description>Komea GIT plugin</description>
+	<name>Komea : SCM plugin framework</name>
+	<description>Komea SCM plugin framework</description>
 
 
 
 	<dependencies>
-		<!-- JGIT -->
-
-
-		<dependency>
-			<groupId>org.eclipse.jgit</groupId>
-			<artifactId>org.eclipse.jgit</artifactId>
-			<version>3.3.0.201403021825-r</version>
-		</dependency>
+		
 
 		<dependency>
 			<groupId>org.komea.product</groupId>
-			<artifactId>komea-scm-plugin</artifactId>
+			<artifactId>komea-service</artifactId>
 			<version>${project.version}</version>
 
 		</dependency>
