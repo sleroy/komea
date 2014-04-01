@@ -6,7 +6,6 @@ package org.komea.product.backend.service.cron;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.komea.product.backend.exceptions.CronRuntimeException;
@@ -25,6 +24,9 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
 
@@ -32,7 +34,7 @@ import org.springframework.stereotype.Service;
 /**
  */
 @Service
-public class CronRegistryService implements ICronRegistryService
+public class CronRegistryService implements ICronRegistryService, ApplicationContextAware
 {
     
     
@@ -58,6 +60,7 @@ public class CronRegistryService implements ICronRegistryService
     
     
         try {
+            
             schedulerFactory.getScheduler().clear();
         } catch (final SchedulerException e) {
             throw new CronRuntimeException(e);
@@ -177,20 +180,6 @@ public class CronRegistryService implements ICronRegistryService
     }
     
     
-    @PostConstruct
-    public void initSchedulerFactory() {
-    
-    
-        schedulerFactory = new StdSchedulerFactory();
-        try {
-            schedulerFactory.getScheduler().start();
-        } catch (final SchedulerException e) {
-            throw new CronRuntimeException(e);
-        }
-        
-    }
-    
-    
     // For more informations : http://quartz-scheduler.org/documentation/quartz-2.x/tutorials/tutorial-lesson-02
     /**
      * Method registerCronTask.
@@ -243,6 +232,30 @@ public class CronRegistryService implements ICronRegistryService
     
         try {
             schedulerFactory.getScheduler().deleteJob(JobKey.jobKey(_cronName));
+        } catch (final SchedulerException e) {
+            throw new CronRuntimeException(e);
+        }
+        
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
+     */
+    @Override
+    public void setApplicationContext(final ApplicationContext _applicationContext)
+            throws BeansException {
+    
+    
+        try {
+            
+            schedulerFactory = new StdSchedulerFactory();
+            schedulerFactory.getScheduler().setJobFactory(
+                    new JobInjectionFactory(_applicationContext));
+            schedulerFactory.getScheduler().start();
+            
+            
         } catch (final SchedulerException e) {
             throw new CronRuntimeException(e);
         }

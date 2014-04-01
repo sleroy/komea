@@ -14,11 +14,11 @@ import org.komea.product.plugins.rss.repositories.api.IRssRepositories;
 import org.komea.product.plugins.rss.utils.RssFeeder;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
-import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 
@@ -28,6 +28,12 @@ public class RssCronJob implements Job
     
     
     private static final Logger LOGGER = LoggerFactory.getLogger(RssProviderPlugin.class);
+    
+    
+    @Autowired
+    private IEventPushService   esperEngine;
+    @Autowired
+    private IRssRepositories    rssRepositories;
     
     
     
@@ -46,25 +52,49 @@ public class RssCronJob implements Job
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
     
     
-        final JobDataMap mergedJobDataMap = _context.getMergedJobDataMap();
-        mergedJobDataMap.get("lastDate");
-        final IEventPushService esperEngine =
-                (IEventPushService) mergedJobDataMap.get("esperEngine");
-        final IRssRepositories repository = (IRssRepositories) mergedJobDataMap.get("repository");
+        _context.getMergedJobDataMap();
         
         
         final Date launched = new Date();
-        final List<RssFeed> feeds = repository.getDAO().selectAll();
+        final List<RssFeed> feeds = rssRepositories.getDAO().selectAll();
         
         for (final RssFeed fetch : feeds) {
             LOGGER.debug("Fetching RSS feed  : {} {}", fetch.getFeedName(), fetch.getUrl());
             try {
                 new RssFeeder(fetch, esperEngine).feed();
             } finally {
-                repository.getDAO().saveOrUpdate(fetch);
+                rssRepositories.getDAO().saveOrUpdate(fetch);
             }
         }
         _context.put("lastDate", launched);
+    }
+    
+    
+    public IEventPushService getEsperEngine() {
+    
+    
+        return esperEngine;
+    }
+    
+    
+    public IRssRepositories getRssRepositories() {
+    
+    
+        return rssRepositories;
+    }
+    
+    
+    public void setEsperEngine(final IEventPushService _esperEngine) {
+    
+    
+        esperEngine = _esperEngine;
+    }
+    
+    
+    public void setRssRepositories(final IRssRepositories _rssRepositories) {
+    
+    
+        rssRepositories = _rssRepositories;
     }
     
 }

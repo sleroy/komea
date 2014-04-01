@@ -17,6 +17,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 
@@ -32,38 +33,21 @@ public class GitScheduleCronJob implements Job
     /**
      * Cron value for GIT Provider.
      */
-    private static final String GIT_CRON_VALUE = "0 0/2 * * * ?";
+    private static final String   GIT_CRON_VALUE      = "0 0/2 * * * ?";
     
-    /**
-     * 
-     */
-    private static final String KEY_CRON       = "cron";
-    
-    /**
-     * 
-     */
-    private static final String KEY_REPO       = "repo";
-    
-    /**
-     * 
-     */
-    private static final String KEY_REPOSITORY = "repository";
-    
-    private static final Logger LOGGER         = LoggerFactory.getLogger("git-scheduler");
+    private static final String   KEY_REPO            = "repo";
     
     
-    
-    /**
-     * Returns the list of required keys.
-     * 
-     * @return the list of required keys.
-     */
-    public static String[] requiredKeys() {
+    private static final Logger   LOGGER              = LoggerFactory.getLogger("git-scheduler");
     
     
-        return new String[]
-            { "esperEngine", KEY_REPOSITORY, "gitcloner", "personService", KEY_CRON };
-    }
+    @Autowired
+    private ICronRegistryService  cronRegistryService = null;
+    
+    
+    @Autowired
+    private IGitRepositoryService repository          = null;
+    
     
     
     /**
@@ -77,10 +61,7 @@ public class GitScheduleCronJob implements Job
      *            the job data map.
      */
     
-    public void checkIfGitRepositoryHaveJobs(
-            final IGitRepositoryService repository,
-            final ICronRegistryService cronRegistryService,
-            final JobDataMap _jobDataMap) {
+    public void checkIfGitRepositoryHaveJobs(final JobDataMap _jobDataMap) {
     
     
         LOGGER.info("@@@@@ GIT CRON SCHEDULER @@@@@@@");
@@ -111,14 +92,23 @@ public class GitScheduleCronJob implements Job
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
     
     
-        final IGitRepositoryService repository =
-                (IGitRepositoryService) _context.getMergedJobDataMap().get(KEY_REPOSITORY);
-        final ICronRegistryService cronRegistryService =
-                (ICronRegistryService) _context.getMergedJobDataMap().get(KEY_CRON);
         Validate.notNull(repository);
         Validate.notNull(cronRegistryService);
-        checkIfGitRepositoryHaveJobs(repository, cronRegistryService,
-                _context.getMergedJobDataMap());
+        checkIfGitRepositoryHaveJobs(_context.getMergedJobDataMap());
+    }
+    
+    
+    public ICronRegistryService getCronRegistryService() {
+    
+    
+        return cronRegistryService;
+    }
+    
+    
+    public IGitRepositoryService getRepository() {
+    
+    
+        return repository;
     }
     
     
@@ -135,5 +125,19 @@ public class GitScheduleCronJob implements Job
         final JobDataMap properties = new JobDataMap(_parentDataMap.getWrappedMap());
         properties.put(KEY_REPO, _gitRepo);
         return properties;
+    }
+    
+    
+    public void setCronRegistryService(final ICronRegistryService _cronRegistryService) {
+    
+    
+        cronRegistryService = _cronRegistryService;
+    }
+    
+    
+    public void setRepository(final IGitRepositoryService _repository) {
+    
+    
+        repository = _repository;
     }
 }

@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
  * @author sleroy
  */
 @Service
-public class RssRepositories implements IRssRepositories
+public class RssRepositoriesService implements IRssRepositories
 {
     
     
@@ -30,7 +30,7 @@ public class RssRepositories implements IRssRepositories
     
     
     
-    public RssRepositories() {
+    public RssRepositoriesService() {
     
     
         super();

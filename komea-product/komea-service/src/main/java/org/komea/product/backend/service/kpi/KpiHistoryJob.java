@@ -12,6 +12,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 
@@ -24,6 +25,13 @@ public class KpiHistoryJob implements Job
     
     
     private static final Logger LOGGER = LoggerFactory.getLogger(KpiHistoryJob.class);
+    
+    private IEntity             entity;
+    
+    private Kpi                 kpi;
+    
+    @Autowired
+    private IKPIService         kpiService;
     
     
     
@@ -40,16 +48,49 @@ public class KpiHistoryJob implements Job
     
     
         LOGGER.trace("Executing the cron {}", _context.getJobDetail().getKey());
-        // Expected : final JobDataMap properties = new JobDataMap();
-        // properties.put("entity", _entity);
-        // properties.put("kpi", _kpi);
-        // properties.put("service", this);
-        
-        final IEntity entity = (IEntity) _context.getMergedJobDataMap().get("entity");
-        final Kpi kpi = (Kpi) _context.getMergedJobDataMap().get("kpi");
-        final IKPIService kpiService = (IKPIService) _context.getMergedJobDataMap().get("service");
-        
         kpiService.storeValueInHistory(KpiKey.ofKpiAndEntityOrNull(kpi, entity));
+    }
+    
+    
+    public IEntity getEntity() {
+    
+    
+        return entity;
+    }
+    
+    
+    public Kpi getKpi() {
+    
+    
+        return kpi;
+    }
+    
+    
+    public IKPIService getKpiService() {
+    
+    
+        return kpiService;
+    }
+    
+    
+    public void setEntity(final IEntity _entity) {
+    
+    
+        entity = _entity;
+    }
+    
+    
+    public void setKpi(final Kpi _kpi) {
+    
+    
+        kpi = _kpi;
+    }
+    
+    
+    public void setKpiService(final IKPIService _kpiService) {
+    
+    
+        kpiService = _kpiService;
     }
     
 }

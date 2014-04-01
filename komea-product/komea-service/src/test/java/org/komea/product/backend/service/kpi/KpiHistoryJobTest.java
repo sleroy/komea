@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Project;
 import org.mockito.Mockito;
-import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -36,11 +35,12 @@ public class KpiHistoryJobTest
     
         final KpiHistoryJob kpiHistoryJob = new KpiHistoryJob();
         final JobExecutionContext mock = Mockito.mock(JobExecutionContext.class);
-        final JobDataMap value = new JobDataMap();
-        value.put("entity", new Project());
-        value.put("kpi", new Kpi());
-        value.put("service", Mockito.mock(IKPIService.class));
-        Mockito.when(mock.getMergedJobDataMap()).thenReturn(value);
+        
+        kpiHistoryJob.setEntity(new Project());
+        kpiHistoryJob.setKpi(new Kpi());
+        
+        
+        kpiHistoryJob.setKpiService(Mockito.mock(IKPIService.class));
         final JobDetail mock2 = Mockito.mock(JobDetail.class);
         Mockito.when(mock.getJobDetail()).thenReturn(mock2);
         Mockito.when(mock2.getKey()).thenReturn(new JobKey("gni"));
