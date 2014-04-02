@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public final class AlertService implements IAlertService {
 
+    private static final Logger LOGGER = Logger.getLogger(AlertService.class.getName());
     @Autowired
     private IAlertTypeService alertTypeService;
 
@@ -41,10 +43,13 @@ public final class AlertService implements IAlertService {
 
     @Override
     public List<KpiAlertDto> findAlerts(final SearchKpiAlertsDto _searchAlert) {
+        LOGGER.info("findAlerts " + _searchAlert);
         final EntityType entityType = _searchAlert.getEntityType();
         final List<KpiAlertDto> alerts = Lists.newArrayList();
         final List<KpiAlertType> alertTypes = alertTypeService.selectByKeys(_searchAlert.getKpiAlertTypeKeys());
+        LOGGER.info("alertTypes : " + alertTypes);
         final List<BaseEntityDto> entities = entityService.getEntities(entityType, _searchAlert.getEntityKeys());
+        LOGGER.info("entities : " + entities);
         final Map<Integer, Kpi> mapKpis = new HashMap<Integer, Kpi>();
         final Set<String> kpiKeys = Sets.newHashSet();
         for (final KpiAlertType alertType : alertTypes) {
@@ -54,10 +59,13 @@ public final class AlertService implements IAlertService {
         }
         final SearchMeasuresDto searchMeasuresDto = new SearchMeasuresDto(
                 entityType, new ArrayList<String>(kpiKeys), _searchAlert.getEntityKeys());
+        LOGGER.info("searchMeasuresDto : " + searchMeasuresDto);
+        LOGGER.info("mapKpis.values() : " + mapKpis.values());
         final List<Measure> measures = measureService.getMeasures(mapKpis.values(), entities, searchMeasuresDto);
         for (final KpiAlertType alertType : alertTypes) {
             for (final BaseEntityDto entity : entities) {
                 final KpiAlertDto kpiAlert = findAlert(entityType, entity, alertType, measures, mapKpis);
+                LOGGER.info("for " + alertType + " and " + entity + " : kpiAlert = " + kpiAlert);
                 if (kpiAlert != null) {
                     alerts.add(kpiAlert);
                 }
@@ -81,7 +89,7 @@ public final class AlertService implements IAlertService {
         kpiAlert.setEntityName(entity.getDisplayName());
 
         kpiAlert.setValue(measure.getValue());
-        kpiAlert.setEnabled(alertActivated(alertType, measure.getValue()));
+        kpiAlert.setActivated(alertActivated(alertType, measure.getValue()));
         return kpiAlert;
     }
 

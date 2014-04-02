@@ -12,16 +12,16 @@ public class KpiAlertDto implements Serializable {
     private KpiAlertType kpiAlertType;
     private Kpi kpi;
     private String entityName;
-    private Boolean enabled;
+    private Boolean activated;
     private Double value;
     private Date date;
 
     public KpiAlertDto(KpiAlertType kpiAlertType, Kpi kpi, String entityName,
-            Boolean enabled, Double value, Date date) {
+            Boolean activated, Double value, Date date) {
         this.kpiAlertType = kpiAlertType;
         this.kpi = kpi;
         this.entityName = entityName;
-        this.enabled = enabled;
+        this.activated = activated;
         this.value = value;
         this.date = date;
     }
@@ -53,12 +53,12 @@ public class KpiAlertDto implements Serializable {
         this.entityName = entityName;
     }
 
-    public Boolean isEnabled() {
-        return enabled;
+    public Boolean isActivated() {
+        return activated;
     }
 
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
+    public void setActivated(Boolean enabled) {
+        this.activated = enabled;
     }
 
     public Double getValue() {
@@ -75,6 +75,13 @@ public class KpiAlertDto implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "KpiAlertDto{" + "kpiAlertType=" + kpiAlertType + ", kpi=" + kpi
+                + ", entityName=" + entityName + ", activated=" + activated
+                + ", value=" + value + ", date=" + date + '}';
     }
 
 }
