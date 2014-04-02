@@ -38,9 +38,28 @@ public class Pair<K, V> implements Serializable, Comparable<Pair<K, V>> {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Pair<?, ?>)) {
+            return false;
+        }
+        Pair<?, ?> other = (Pair<?, ?>) o;
+        return key.equals(other.getKey()) && value.equals(other.getValue());
+    }
+
+    @Override
+    public int hashCode() {
+        return key.hashCode() * 13 + value.hashCode() * 7;
+    }
+
+    @Override
     public int compareTo(Pair<K, V> o) {
         return this.getValue().toString().toLowerCase().compareTo(
                 o.getValue().toString().toLowerCase());
+    }
+
+    @Override
+    public String toString() {
+        return "Pair{" + "key=" + key + ", value=" + value + '}';
     }
 
 }

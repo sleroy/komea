@@ -61,6 +61,12 @@ public class MeasuresDto implements Serializable {
         this.measures = measures;
     }
 
+    public void changeAccuracy(int nb) {
+        for (final Measure measure : measures) {
+            measure.setValue(Math.round(measure.getValue() * Math.pow(10, nb)) / Math.pow(10, nb));
+        }
+    }
+
     public String[] getKpiNames() {
         final String[] kpiNames = new String[kpis.size()];
         for (int i = 0; i < kpis.size(); i++) {
