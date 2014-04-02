@@ -5,6 +5,8 @@
  */
 package org.komea.product.wicket.widget.builders;
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -28,14 +30,38 @@ public class SelectBoxBuilder<T> {
             final Object _data, Class<T> type) {
         return new SelectBoxBuilder<T>(_wicketId, _data, type, true);
     }
+    
+      public static <T> SelectBoxBuilder<T> createWithBooleanRequire(final String _wicketId,
+            final Object _data) {
+        return new SelectBoxBuilder<T>(_wicketId, _data, false);
+    }
 
     private SelectBoxBuilder(String _wicketId, Object _data, Class<T> type, boolean _require) {
 
         final List<T> selectPersonRoles = Arrays.asList(type.getEnumConstants());
+        
         final PropertyModel<T> selectionRoleModel
                 = new PropertyModel<T>(_data, _wicketId);
         this.dropDownChoice = new DropDownChoice<T>(_wicketId, selectionRoleModel, selectPersonRoles, new ChoiceRenderer<T>("toString"));
 
+        if (!_require) {
+            this.dropDownChoice.setRequired(true);
+            this.dropDownChoice.setNullValid(false);
+        } else {
+            this.dropDownChoice.setNullValid(true);
+        }
+
+    }
+    
+        private SelectBoxBuilder(String _wicketId, Object _data, boolean _require) {
+
+        final List<Boolean> selectPersonRoles = new ArrayList<Boolean>();
+        selectPersonRoles.add(Boolean.FALSE);
+        selectPersonRoles.add(Boolean.TRUE);
+        
+        final PropertyModel<Boolean> selectionRoleModel
+                = new PropertyModel<Boolean>(_data, _wicketId);
+        this.dropDownChoice = (DropDownChoice<T>) new DropDownChoice<Boolean>(_wicketId, selectionRoleModel, selectPersonRoles, new ChoiceRenderer<Boolean>("toString"));
         if (!_require) {
             this.dropDownChoice.setRequired(true);
             this.dropDownChoice.setNullValid(false);

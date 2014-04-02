@@ -52,7 +52,7 @@ public class TeamPage extends LayoutPage
                         .addColumn("Team Key", "PersonGroupKey").addColumn("Name", "Name")
                         .addColumn("Description", "Description")
                         .withEditDeleteColumn(personGroupDeleteAction, personGroupEditAction)
-                        .displayRows(listAffichage.size()).withData(dataProvider).build();
+                        .displayRows(listAffichage.size()+10).withData(dataProvider).build();
         add(build);
     }
 }

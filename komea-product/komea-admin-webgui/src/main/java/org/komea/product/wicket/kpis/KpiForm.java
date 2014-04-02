@@ -66,18 +66,8 @@ public final class KpiForm extends Form<Kpi> {
         add(TextAreaBuilder.<String>create("description", kpi, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("").build());
 
-         add(SelectBoxBuilder.<ProviderType>createWithEnum("providerType", kpi,ProviderType.class)
+        add(SelectBoxBuilder.<ProviderType>createWithEnum("providerType", kpi,ProviderType.class)
                 .build());
-  
-//        final Provider selectByPrimaryKey
-//                = null;//_providerService.selectByPrimaryKey(kpi.getIdProvider());
-//        if (selectByPrimaryKey != null) {
-//            nameProvider.setName(selectByPrimaryKey.getName());
-//        }
-//        providerField
-//                = TextFieldBuilder.<String>create("idProvider", nameProvider, "name")
-//                .withTooltip("").buildTextField();
-//        add(providerField);
 
         final TextField<String> textminValue
                 = TextFieldBuilder.<String>create("valueMin", kpi, "valueMin").withTooltip("")
@@ -95,17 +85,7 @@ public final class KpiForm extends Form<Kpi> {
         add(SelectBoxBuilder.<ValueType>createWithEnum("valueType", kpi, ValueType.class).build());
         entityTypeField
                 = SelectBoxBuilder.<EntityType>createWithEnum("entityType", kpi, EntityType.class)
-                .build();
-
-        // this.entityTypeField.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-        //
-        // @Override
-        // protected void onUpdate(AjaxRequestTarget target) {
-        // System.out.println("ca marche bro");
-        // target.add(entityTypeField);
-        // }
-        // });
-        
+                .build();      
         
         add(entityTypeField);
 

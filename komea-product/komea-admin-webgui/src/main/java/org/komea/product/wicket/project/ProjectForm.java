@@ -5,19 +5,15 @@
  */
 package org.komea.product.wicket.project;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.PropertyModel;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
@@ -28,10 +24,8 @@ import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
-import org.komea.product.wicket.kpis.KpiPage;
 import org.komea.product.wicket.utils.DialogFactory;
 import org.komea.product.wicket.utils.NameGeneric;
-import org.komea.product.wicket.utils.SelectMultipleDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;

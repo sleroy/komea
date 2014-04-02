@@ -52,7 +52,7 @@ public class PersonPage extends LayoutPage
         add(DataTableBuilder.<Person, String> newTable("table")
                 .addColumn(new LoginColumn(Model.of("Login"))).addColumn("Last name", "lastName")
                 .addColumn("First name", "firstName").addColumn("Email", "email")
-                .withEditDeleteColumn(personDeleteAction, personEditAction).displayRows(listAffichage.size())
+                .withEditDeleteColumn(personDeleteAction, personEditAction).displayRows(listAffichage.size()+10)
                 .withData(dataProvider).build());
         
         

@@ -5,7 +5,6 @@
  */
 package org.komea.product.wicket.project;
 
-import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.model.Project;
 import org.komea.product.wicket.widget.api.IEditAction;
 

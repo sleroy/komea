@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
  */
 @ProviderPlugin(
         type = ProviderType.BUGTRACKER,
-        name = "BUGZILLA",
+        name = BugZillaProviderBean.BUGZILLA_PROVIDER_PLUGIN,
         icon = "/bugzilla.gif",
         url = "/bugzilla-provider",
         eventTypes = {

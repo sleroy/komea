@@ -46,12 +46,12 @@ public class ProjectPage extends LayoutPage
         
         final ISortableDataProvider<Project, String> dataProvider =
                 new ListDataModel(listAffichage);
-        final DataTable<Project, String> build =
-                DataTableBuilder.<Project, String> newTable("table")
-                        .addColumn("Project key", "ProjectKey").addColumn("Name", "Name")
-                        .addColumn("Description", "Description")
-                        .withEditDeleteColumn(projectDeleteAction, projectEditAction)
-                        .displayRows(listAffichage.size()).withData(dataProvider).build();
+        final DataTable<Project, String> build
+                = DataTableBuilder.<Project, String>newTable("table")
+                .addColumn("Project key", "ProjectKey").addColumn("Name", "Name")
+                .addColumn("Description", "Description")
+                .withEditDeleteColumn(projectDeleteAction, projectEditAction)
+                .displayRows(listAffichage.size()).withData(dataProvider).build();
         add(build);
         
     }
