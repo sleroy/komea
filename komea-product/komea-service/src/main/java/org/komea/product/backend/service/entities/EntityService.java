@@ -63,23 +63,21 @@ public final class EntityService implements IEntityService {
     public List<BaseEntityDto> getEntities(final EntityType _entityType, final List<String> _entityKeys) {
 
         final List<BaseEntityDto> entities = Lists.newArrayList();
-        if (_entityKeys == null) {
-            return entities;
-        }
+        final boolean all = _entityKeys == null || _entityKeys.isEmpty();
         switch (_entityType) {
             case PERSON:
-                final List<Person> persons = personService.selectByKeys(_entityKeys);
+                final List<Person> persons = all ? personService.selectAll() : personService.selectByKeys(_entityKeys);
                 entities.addAll(personService.convertPersonsToBaseEntities(persons));
                 break;
             case TEAM:
             case DEPARTMENT:
                 final List<PersonGroup> personGroups
-                        = personGroupService.selectByKeys(_entityKeys);
+                        = all ? personGroupService.selectAll() : personGroupService.selectByKeys(_entityKeys);
                 entities.addAll(personGroupService.convertPersonGroupsToBaseEntities(
                         personGroups, _entityType));
                 break;
             case PROJECT:
-                final List<Project> projects = projectService.selectByKeys(_entityKeys);
+                final List<Project> projects = all ? projectService.selectAll() : projectService.selectByKeys(_entityKeys);
                 entities.addAll(projectService.projectsToBaseEntities(projects));
                 break;
         }

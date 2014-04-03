@@ -10,4 +10,6 @@ import org.komea.product.database.model.KpiAlertTypeCriteria;
 public interface IAlertTypeService extends IGenericService<KpiAlertType, Integer, KpiAlertTypeCriteria> {
 
     List<AlertTypeDto> getAlertTypes(EntityType entityType);
+
+    List<KpiAlertType> getAlertTypes(EntityType entityType, List<String> alertTypeKeys);
 }

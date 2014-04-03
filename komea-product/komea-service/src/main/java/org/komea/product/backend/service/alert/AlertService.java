@@ -45,7 +45,7 @@ public final class AlertService implements IAlertService {
     public List<KpiAlertDto> findAlerts(final SearchKpiAlertsDto _searchAlert) {
         final EntityType entityType = _searchAlert.getEntityType();
         final List<KpiAlertDto> alerts = Lists.newArrayList();
-        final List<KpiAlertType> alertTypes = alertTypeService.selectByKeys(_searchAlert.getKpiAlertTypeKeys());
+        final List<KpiAlertType> alertTypes = alertTypeService.getAlertTypes(entityType, _searchAlert.getKpiAlertTypeKeys());
         final List<BaseEntityDto> entities = entityService.getEntities(entityType, _searchAlert.getEntityKeys());
         final Map<Integer, Kpi> mapKpis = new HashMap<Integer, Kpi>();
         final Set<String> kpiKeys = Sets.newHashSet();

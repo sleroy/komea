@@ -43,6 +43,22 @@ public final class AlertTypeService extends AbstractService<KpiAlertType, Intege
     }
 
     @Override
+    public List<KpiAlertType> getAlertTypes(final EntityType entityType, final List<String> alertTypeKeys) {
+        if (alertTypeKeys == null || alertTypeKeys.isEmpty()) {
+            final List<Kpi> kpis = kpiService.getKpis(entityType, null);
+            if (kpis.isEmpty()) {
+                return Collections.emptyList();
+            }
+            final KpiAlertTypeCriteria alertTypeCriteria = new KpiAlertTypeCriteria();
+            for (final Kpi kpi : kpis) {
+                alertTypeCriteria.or().andIdKpiEqualTo(kpi.getId());
+            }
+            return requiredDAO.selectByCriteria(alertTypeCriteria);
+        }
+        return selectByKeys(alertTypeKeys);
+    }
+
+    @Override
     public List<AlertTypeDto> getAlertTypes(EntityType entityType) {
         final List<Kpi> kpis = kpiService.getKpis(entityType, null);
         final Map<Integer, Kpi> kpisById = new HashMap<Integer, Kpi>(kpis.size());
