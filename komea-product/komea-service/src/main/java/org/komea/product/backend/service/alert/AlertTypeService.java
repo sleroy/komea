@@ -11,6 +11,7 @@ import org.komea.product.database.dao.KpiAlertTypeDao;
 import org.komea.product.database.dto.AlertTypeDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
+import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.database.model.KpiAlertTypeCriteria;
@@ -43,7 +44,8 @@ public final class AlertTypeService extends AbstractService<KpiAlertType, Intege
     }
 
     @Override
-    public List<KpiAlertType> getAlertTypes(final EntityType entityType, final List<String> alertTypeKeys) {
+    public List<KpiAlertType> getAlertTypes(final EntityType entityType, final List<String> alertTypeKeys,
+            final Severity severityMin) {
         if (alertTypeKeys == null || alertTypeKeys.isEmpty()) {
             final List<Kpi> kpis = kpiService.getKpis(entityType, null);
             if (kpis.isEmpty()) {
@@ -51,7 +53,8 @@ public final class AlertTypeService extends AbstractService<KpiAlertType, Intege
             }
             final KpiAlertTypeCriteria alertTypeCriteria = new KpiAlertTypeCriteria();
             for (final Kpi kpi : kpis) {
-                alertTypeCriteria.or().andIdKpiEqualTo(kpi.getId()).andEnabledEqualTo(Boolean.TRUE);
+                alertTypeCriteria.or().andIdKpiEqualTo(kpi.getId()).andEnabledEqualTo(Boolean.TRUE)
+                        .andSeverityGreaterThanOrEqualTo(severityMin);
             }
             return requiredDAO.selectByCriteria(alertTypeCriteria);
         }
