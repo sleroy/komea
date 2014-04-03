@@ -51,7 +51,7 @@ public final class AlertTypeService extends AbstractService<KpiAlertType, Intege
             }
             final KpiAlertTypeCriteria alertTypeCriteria = new KpiAlertTypeCriteria();
             for (final Kpi kpi : kpis) {
-                alertTypeCriteria.or().andIdKpiEqualTo(kpi.getId());
+                alertTypeCriteria.or().andIdKpiEqualTo(kpi.getId()).andEnabledEqualTo(Boolean.TRUE);
             }
             return requiredDAO.selectByCriteria(alertTypeCriteria);
         }
@@ -70,7 +70,7 @@ public final class AlertTypeService extends AbstractService<KpiAlertType, Intege
         }
         final KpiAlertTypeCriteria alertTypeCriteria = new KpiAlertTypeCriteria();
         for (final Kpi kpi : kpis) {
-            alertTypeCriteria.or().andIdKpiEqualTo(kpi.getId());
+            alertTypeCriteria.or().andIdKpiEqualTo(kpi.getId()).andEnabledEqualTo(Boolean.TRUE);
         }
         final List<KpiAlertType> kpiAlertTypes = requiredDAO.selectByCriteria(alertTypeCriteria);
         final List<AlertTypeDto> alertTypeDtos = new ArrayList<AlertTypeDto>(kpiAlertTypes.size());
