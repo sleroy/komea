@@ -43,6 +43,14 @@ public final class AlertTypeService extends AbstractService<KpiAlertType, Intege
         return criteria;
     }
 
+    private void andSeverityGreaterThanOrEqualTo(final Severity severity,
+            final KpiAlertTypeCriteria.Criteria criteria) {
+        criteria.andSeverityIsNotNull();
+        for (int i = 0; i < severity.ordinal(); i++) {
+            criteria.andSeverityNotEqualTo(Severity.values()[i]);
+        }
+    }
+
     @Override
     public List<KpiAlertType> getAlertTypes(final EntityType entityType, final List<String> alertTypeKeys,
             final Severity severityMin) {
@@ -53,8 +61,9 @@ public final class AlertTypeService extends AbstractService<KpiAlertType, Intege
             }
             final KpiAlertTypeCriteria alertTypeCriteria = new KpiAlertTypeCriteria();
             for (final Kpi kpi : kpis) {
-                alertTypeCriteria.or().andIdKpiEqualTo(kpi.getId()).andEnabledEqualTo(Boolean.TRUE)
-                        .andSeverityGreaterThanOrEqualTo(severityMin);
+                KpiAlertTypeCriteria.Criteria criteria = alertTypeCriteria.or().
+                        andIdKpiEqualTo(kpi.getId()).andEnabledEqualTo(Boolean.TRUE);
+                andSeverityGreaterThanOrEqualTo(severityMin, criteria);
             }
             return requiredDAO.selectByCriteria(alertTypeCriteria);
         }
