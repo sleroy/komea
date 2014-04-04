@@ -5,12 +5,11 @@
  */
 package org.komea.backend.plugins.bugzilla;
 
-import org.komea.backend.plugins.bugzilla.data.BugZillaContext;
-import org.komea.backend.plugins.bugzilla.data.BugZillaServer;
-import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxyFactory;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerConfiguration;
 import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxyFactory;
+import org.komea.backend.plugins.bugzilla.data.BugZillaContext;
+import org.komea.backend.plugins.bugzilla.data.BugZillaServer;
 
 /**
  *
@@ -67,6 +66,11 @@ public class BugZillaServerConfiguration implements IBugZillaServerConfiguration
     @Override
     public int getReminderAlert() {
         return this.server.getReminderAlert();
+    }
+
+    @Override
+    public BugZillaServer getServer() {
+        return server;
     }
 
 }
