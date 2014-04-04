@@ -16,6 +16,14 @@
 	<context:property-placeholder
 		location="classpath:/config/bdd-${jdbc.bdd.type}.properties" />
 
+
+<!--       load and override external properties -->
+	<context:property-placeholder
+		location="file:${komea.home}/conf//komea.properties"
+		ignore-unresolvable="true" ignore-resource-not-found="true"
+		system-properties-mode="OVERRIDE" order="0" />
+
+
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
 		p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.url}"
@@ -47,7 +55,7 @@
 		enabled="${jdbc.initialize.script.enable}" ignore-failures="NONE">
 		<jdbc:script location="${database_sqlfile}" />
 	</jdbc:initialize-database>
-	
+
 	<bean
 		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 
