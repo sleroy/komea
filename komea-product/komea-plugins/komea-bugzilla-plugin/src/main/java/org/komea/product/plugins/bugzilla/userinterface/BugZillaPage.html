@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:wicket="http://wicket.apache.org">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+<meta content="Komea administration site" name="description"></meta>
+<meta content="Komea" name="author"></meta>
+<title>Komea Administration</title>
+<link rel="stylesheet" href="../../../../../../../main/webapp/static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
+<link rel="stylesheet" href="../../../../../../../main/webapp/static/css/style.css" type="text/css"></link>
+<link rel="stylesheet" type="text/css" href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
+</head>
+<body>
+	<div class="container">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<span class="glyphicon cicon-user"></span> BugZilla Administration plugin
+			</div>
+			<div class="panel-body">
+				<div class="container">
+					<!--  begin here -->
+					<wicket:extend>
+                                                  <button id="addedit" name="addedit"  class="btn btn-lg btn-success" wicket:id="addServer"><span class="glyphicon cicon-user"></span> Add new bugZilla server</button>
+						<p></p>
+						<div class="row">
+							<table wicket:id="table">
+							</table>
+						</div>
+					</wicket:extend>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tocea-footer">
+		<p>&copy; Komea.org</p>
+		<script src="../../../../../../../main/webapp/static/js/ui/jquery.js"></script>
+		<script src="../../../../../../../main/webapp/static/bootstrap/js/bootstrap.min.js"></script>
+	</div>
+</body>
+</html>

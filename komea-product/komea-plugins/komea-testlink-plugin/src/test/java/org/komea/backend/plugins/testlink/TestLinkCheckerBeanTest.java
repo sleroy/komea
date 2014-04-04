@@ -7,12 +7,20 @@
 package org.komea.backend.plugins.testlink;
 
 
+import org.komea.product.plugins.testlink.core.TestLinkStorageConfiguration;
+import org.komea.product.plugins.testlink.core.TestLinkAlertFactory;
+import org.komea.product.plugins.testlink.core.TestLinkCheckerBean;
+import org.komea.product.plugins.testlink.core.TestLinkServer;
+import org.komea.product.plugins.testlink.core.TestLinkTestCase;
+import org.komea.product.plugins.testlink.core.TestLinkServerService;
+import org.komea.product.plugins.testlink.core.TestLinkServerProxyFactory;
+import org.komea.product.plugins.testlink.core.TestLinkProject;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
-import org.komea.backend.plugins.testlink.api.ITestLinkServerManagerService;
-import org.komea.backend.plugins.testlink.api.ITestLinkServerProxy;
+import org.komea.product.plugins.testlink.api.ITestLinkServerService;
+import org.komea.product.plugins.testlink.api.ITestLinkServerProxy;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.backend.service.fs.IObjectStorage;
 import org.komea.product.backend.service.plugins.IPluginStorageService;
@@ -36,7 +44,7 @@ public class TestLinkCheckerBeanTest {
         checkerBean.setAlertService(alertService);
         
         // creation structure internet du plugin
-        ITestLinkServerManagerService serverManager = new TestLinkServerManagerService();
+        ITestLinkServerService serverManager = new TestLinkServerService();
 //         ((TestLinkServerManagerService) serverManager).init();
         // simulation du système de configuration avec injection d'un vrai server testlink de test
         IPluginStorageService pluginStorage = Mockito.mock(IPluginStorageService.class);
@@ -56,7 +64,7 @@ public class TestLinkCheckerBeanTest {
         Mockito.when(pluginStorage.registerStorage("TESTLINK", TestLinkStorageConfiguration.class)).thenReturn(objectStorage);
         
         serverManager.setPluginStorage(pluginStorage);
-        ((TestLinkServerManagerService)serverManager).setConfigurationStorage(pluginStorage.registerStorage("TESTLINK", TestLinkStorageConfiguration.class));
+        ((TestLinkServerService)serverManager).setConfigurationStorage(pluginStorage.registerStorage("TESTLINK", TestLinkStorageConfiguration.class));
         // //////////////////////////////////////////////
         // mock du server testlink
         TestLinkServerProxyFactory testLinkServerProxyFactory = Mockito.mock(TestLinkServerProxyFactory.class);

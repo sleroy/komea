@@ -55,9 +55,6 @@ import org.komea.product.wicket.statistics.StatPage;
     @MountPage(mount = "/customerEdit", page = CustomerEditPage.class),
     @MountPage(mount = "/alerts", page = AlertPage.class),
     @MountPage(mount = "/alertsEdit", page = AlertEditPage.class)
-
-
-
 })
 public class AdministrationWebSite {
     //

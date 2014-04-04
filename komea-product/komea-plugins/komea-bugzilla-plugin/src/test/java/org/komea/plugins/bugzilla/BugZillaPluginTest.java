@@ -13,20 +13,24 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
-import org.komea.backend.plugins.bugzilla.BugZillaAlertFactory;
-import org.komea.backend.plugins.bugzilla.BugZillaCheckerBean;
-import org.komea.backend.plugins.bugzilla.BugZillaConfiguration;
-import org.komea.backend.plugins.bugzilla.BugZillaConfigurationService;
-import org.komea.backend.plugins.bugzilla.api.IBugZillaAlertFactory;
-import org.komea.backend.plugins.bugzilla.api.IBugZillaConfigurationService;
-import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy;
-import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxyFactory;
-import org.komea.backend.plugins.bugzilla.data.BugZillaContext;
-import org.komea.backend.plugins.bugzilla.data.BugZillaServer;
+import org.komea.product.plugins.bugzilla.core.BugZillaAlertFactory;
+import org.komea.product.plugins.bugzilla.core.BugZillaCheckerBean;
+import org.komea.product.plugins.bugzilla.core.BugZillaConfiguration;
+import org.komea.product.plugins.bugzilla.core.BugZillaConfigurationService;
+import org.komea.product.plugins.bugzilla.core.BugZillaServerProxyFactory;
+import org.komea.product.plugins.bugzilla.data.BugZillaContext;
+import org.komea.product.plugins.bugzilla.data.BugZillaServer;
+import org.komea.product.plugins.bugzilla.data.BugzillaBug;
+import org.komea.product.plugins.bugzilla.api.IBugZillaAlertFactory;
+import org.komea.product.plugins.bugzilla.api.IBugZillaConfigurationService;
+import org.komea.product.plugins.bugzilla.api.IBugZillaServerProxy;
+import org.komea.product.plugins.bugzilla.api.IBugZillaServerProxyFactory;
+import org.komea.product.backend.service.alert.IAlertService;
 import org.komea.backend.plugins.bugzilla.data.BugzillaBug;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.backend.service.fs.IObjectStorage;
 import org.komea.product.backend.service.plugins.IPluginStorageService;
+import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.mockito.ArgumentCaptor;
@@ -36,7 +40,7 @@ import org.mockito.Mockito;
  * @author rgalerme
  */
 // @RunWith(SpringJUnit4ClassRunner.class)
-public class BugZillaPluginTest extends AbstractSpringIntegrationTestCase {
+public class BugZillaPluginTest {
 
     // @Mock
     // private IBugZillaConfigurationService conf;
@@ -97,19 +101,25 @@ public class BugZillaPluginTest extends AbstractSpringIntegrationTestCase {
 
         // ///////////////////////////////////////////
         bugZillaConfiguration.setServerProxyFactory(bzfact);
+//        bugZillaConfiguration.setServerProxyFactory(new BugZillaServerProxyFactory());
+
 
         final IObjectStorage<BugZillaConfiguration> storage = Mockito.mock(IObjectStorage.class);
         final BugZillaConfiguration bconf = Mockito.mock(BugZillaConfiguration.class);
         final BugZillaServer idServer = Mockito.mock(BugZillaServer.class);
 
         final BugZillaContext bc = new BugZillaContext();
+
         Mockito.when(idServer.getAddress()).thenReturn("http://192.168.1.88/bugzilla/");
         Mockito.when(idServer.getLogin()).thenReturn("raphael.galerme@tocea.com");
         Mockito.when(idServer.getMdp()).thenReturn("rgalerme");
         Mockito.when(idServer.getContext()).thenReturn(bc);
 
+//        final BugZillaServer realServer = new BugZillaServer("http://eos/bugzilla/", "jeremie.guidoux@tocea.com", "tocea35", new BugZillaContext());
+
         final List<BugZillaServer> listBServ = new ArrayList<BugZillaServer>();
         listBServ.add(idServer);
+//        listBServ.add(realServer);
 
         Mockito.when(bconf.getConfigurations()).thenReturn(listBServ);
         Mockito.when(storage.get()).thenReturn(bconf);
@@ -129,45 +139,4 @@ public class BugZillaPluginTest extends AbstractSpringIntegrationTestCase {
 
     }
 
-    /*
-     * @Test
-     * public void testPluginWithBugZilla() {
-     * System.out.println("Debut du test");
-     * // Mockito.when(conf.getServers()).then(new Answer<List<I>)
-     * final BugZillaCheckerBean bbean = new BugZillaCheckerBean();
-     * // bbean.setAlertFactory(Mockito.mock(IBugZillaAlertFactory.class));
-     * //mock du server bugzilla
-     * /////////////////////////////////////////////
-     * IBugZillaAlertFactory alertFactory = new BugZillaAlertFactory();
-     * bbean.setAlertFactory(alertFactory);
-     * IAlertService mockAlertService = Mockito.mock(IAlertService.class);
-     * ArgumentCaptor<IEvent> forClass = ArgumentCaptor.forClass(IEvent.class);
-     * bbean.setAlertService(mockAlertService);
-     * IBugZillaConfigurationService bugZillaConfiguration = new BugZillaConfigurationService();
-     * IPluginStorageService plService = Mockito.mock(IPluginStorageService.class);
-     * bugZillaConfiguration.setPluginStorage(plService);
-     * IBugZillaServerProxyFactory fac = new BugZillaServerProxyFactory();
-     * bugZillaConfiguration.setServerProxyFactory(fac);
-     * IObjectStorage<BugZillaConfiguration> storage = Mockito.mock(IObjectStorage.class);
-     * BugZillaConfiguration bconf = Mockito.mock(BugZillaConfiguration.class);
-     * BugZillaServer idServer = Mockito.mock(BugZillaServer.class);
-     * BugZillaContext bc = new BugZillaContext();
-     * Mockito.when(idServer.getAddress()).thenReturn("http://192.168.1.88/bugzilla/");
-     * Mockito.when(idServer.getLogin()).thenReturn("raphael.galerme@tocea.com");
-     * Mockito.when(idServer.getMdp()).thenReturn("rgalerme");
-     * Mockito.when(idServer.getContext()).thenReturn(bc);
-     * List<BugZillaServer> listBServ = new ArrayList<BugZillaServer>();
-     * listBServ.add(idServer);
-     * Mockito.when(bconf.getConfigurations()).thenReturn(listBServ);
-     * Mockito.when(storage.get()).thenReturn(bconf);
-     * Mockito.when(plService.registerStorage("BUGZILLA", BugZillaConfiguration.class)).thenReturn(storage);
-     * ((BugZillaConfigurationService) bugZillaConfiguration).init();
-     * bbean.setBugZillaConfiguration(bugZillaConfiguration);
-     * bbean.checkServers();
-     * Mockito.verify(mockAlertService, Mockito.times(13)).sendEvent(forClass.capture());
-     * System.out.println("forClass" + forClass.getAllValues());
-     * bbean.checkServers();
-     * System.out.println("Fin du test");
-     * }
-     */
 }

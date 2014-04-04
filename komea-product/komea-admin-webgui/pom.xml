@@ -163,6 +163,11 @@
             <artifactId>komea-ldap-plugin</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.komea.plugins</groupId>
+            <artifactId>komea-testlink-plugin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
 		
 
