@@ -1,10 +1,10 @@
-package org.komea.backend.plugins.bugzilla.sah;
+package org.komea.product.plugins.bugzilla.sah;
 
 import java.util.Date;
 import java.util.HashMap;
-import org.komea.backend.plugins.bugzilla.sah.model.BugPriority;
-import org.komea.backend.plugins.bugzilla.sah.model.BugSeverity;
-import org.komea.backend.plugins.bugzilla.sah.model.BugStatus;
+import org.komea.product.plugins.bugzilla.sah.model.BugPriority;
+import org.komea.product.plugins.bugzilla.sah.model.BugSeverity;
+import org.komea.product.plugins.bugzilla.sah.model.BugStatus;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.model.EventType;
 

@@ -1,12 +1,12 @@
-package org.komea.backend.plugins.bugzilla.sah;
+package org.komea.product.plugins.bugzilla.sah;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.komea.backend.plugins.bugzilla.data.BugzillaBug;
-import org.komea.backend.plugins.bugzilla.sah.model.Bug;
-import org.komea.backend.plugins.bugzilla.sah.model.BugPriority;
-import org.komea.backend.plugins.bugzilla.sah.model.BugSeverity;
-import org.komea.backend.plugins.bugzilla.sah.model.BugStatus;
+import org.komea.product.plugins.bugzilla.data.BugzillaBug;
+import org.komea.product.plugins.bugzilla.sah.model.Bug;
+import org.komea.product.plugins.bugzilla.sah.model.BugPriority;
+import org.komea.product.plugins.bugzilla.sah.model.BugSeverity;
+import org.komea.product.plugins.bugzilla.sah.model.BugStatus;
 
 public abstract class BugUtils {
 

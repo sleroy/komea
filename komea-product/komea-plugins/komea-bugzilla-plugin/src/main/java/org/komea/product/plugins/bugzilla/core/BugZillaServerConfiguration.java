@@ -10,9 +10,6 @@ import org.komea.product.plugins.bugzilla.data.BugZillaServer;
 import org.komea.product.plugins.bugzilla.api.IBugZillaServerProxyFactory;
 import org.komea.product.plugins.bugzilla.api.IBugZillaServerConfiguration;
 import org.komea.product.plugins.bugzilla.api.IBugZillaServerProxy;
-import org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxyFactory;
-import org.komea.backend.plugins.bugzilla.data.BugZillaContext;
-import org.komea.backend.plugins.bugzilla.data.BugZillaServer;
 
 /**
  *

@@ -1,14 +1,14 @@
-package org.komea.backend.plugins.bugzilla.sah;
+package org.komea.product.plugins.bugzilla.sah;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.logging.Logger;
-import org.komea.backend.plugins.bugzilla.sah.model.Bug;
-import org.komea.backend.plugins.bugzilla.sah.model.BugPriority;
-import org.komea.backend.plugins.bugzilla.sah.model.BugSeverity;
-import org.komea.backend.plugins.bugzilla.sah.model.BugStatus;
+import org.komea.product.plugins.bugzilla.sah.model.Bug;
+import org.komea.product.plugins.bugzilla.sah.model.BugPriority;
+import org.komea.product.plugins.bugzilla.sah.model.BugSeverity;
+import org.komea.product.plugins.bugzilla.sah.model.BugStatus;
 
 public final class BugsCalculator {
 

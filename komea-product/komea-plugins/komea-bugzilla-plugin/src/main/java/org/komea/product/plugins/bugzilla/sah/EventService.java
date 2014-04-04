@@ -1,8 +1,8 @@
-package org.komea.backend.plugins.bugzilla.sah;
+package org.komea.product.plugins.bugzilla.sah;
 
-import org.komea.backend.plugins.bugzilla.data.BugZillaServer;
-import org.komea.backend.plugins.bugzilla.sah.model.BugSeverity;
+import org.komea.product.plugins.bugzilla.sah.model.BugSeverity;
 import org.komea.product.backend.service.esper.IEventPushService;
+import org.komea.product.plugins.bugzilla.data.BugZillaServer;
 
 public abstract class EventService {
 
