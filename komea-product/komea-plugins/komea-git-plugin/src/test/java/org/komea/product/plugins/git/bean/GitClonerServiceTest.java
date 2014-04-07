@@ -40,21 +40,21 @@ public class GitClonerServiceTest
     
     
     /**
-     * Test method for
-     * {@link org.komea.product.plugins.git.bean.GitClonerService#getOrCreate(org.komea.product.plugins.repository.model.GitRepositoryDefinition)}.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testGetOrCreate() throws Exception {
-    
-    
-        // Should create a git cloner but fail on initializeation.
-        final GitRepositoryDefinition gitID =
-                GitRepositoryDefinition.newGitRepository("DEMO1", "http://");
-        gitID.setKey("DEMO");
-        Mockito.when(gitClonerService.getSystem()).thenReturn(new File("target/tmp"));
+         * Test method for
+         * {@link org.komea.product.plugins.git.bean.GitClonerService#cloneOrRetrieveClonedRepository(org.komea.product.plugins.repository.model.GitRepositoryDefinition)}.
+         */
+        @Test(expected = IllegalArgumentException.class)
+        public final void testCloneOrRetrieveClonedRepository() throws Exception {
         
-        gitClonerService.getOrCreate(gitID);
-    }
+        
+            // Should create a git cloner but fail on initializeation.
+            final GitRepositoryDefinition gitID =
+                    GitRepositoryDefinition.newGitRepository("DEMO1", "http://");
+            gitID.setKey("DEMO");
+            Mockito.when(gitClonerService.getSystem()).thenReturn(new File("target/tmp"));
+            
+            gitClonerService.cloneOrRetrieveClonedRepository(gitID);
+        }
     
     
     /**

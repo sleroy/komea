@@ -26,7 +26,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.komea.product</groupId>
+			<groupId>org.komea.plugins</groupId>
 			<artifactId>komea-scm-plugin</artifactId>
 			<version>${project.version}</version>
 

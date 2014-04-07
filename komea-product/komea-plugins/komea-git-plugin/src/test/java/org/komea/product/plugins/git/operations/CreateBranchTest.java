@@ -48,7 +48,7 @@ public class CreateBranchTest
         final IEventPushService eventPushEngine = GitRepoFactory.initEsperEngine();
         final IGitClonerService gitClonerService =
                 GitRepoFactory.newGitClonerService(gitRepository);
-        final IGitCloner gitCloner = gitClonerService.getOrCreate(gitRepository);
+        final IGitCloner gitCloner = gitClonerService.cloneOrRetrieveClonedRepository(gitRepository);
         final Git git = gitCloner.getGit();
         new File(gitRepository.getCloneDirectory(), "truc.txt").createNewFile();
         git.add().addFilepattern("truc.txt").call();

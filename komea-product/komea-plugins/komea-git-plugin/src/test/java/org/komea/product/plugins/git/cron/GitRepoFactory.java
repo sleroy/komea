@@ -23,6 +23,8 @@ import org.komea.product.plugins.git.bean.GitClonerService;
 import org.komea.product.plugins.git.model.GitRepositoryDefinition;
 import org.komea.product.plugins.git.repositories.api.IGitClonerService;
 import org.komea.product.plugins.git.repositories.api.IGitRepositoryService;
+import org.komea.product.plugins.scm.api.plugin.IScmCloner;
+import org.komea.product.plugins.scm.cron.ScmCronJob;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
@@ -84,7 +86,7 @@ public class GitRepoFactory
     
     
         final IGitRepositoryService repository = Mockito.mock(IGitRepositoryService.class);
-        final GitCronJob gitCronJob = new GitCronJob();
+        final ScmCronJob gitCronJob = new ScmCronJob();
         
         final IPersonService personService =
                 Mockito.mock(IPersonService.class, Mockito.withSettings());
@@ -105,7 +107,13 @@ public class GitRepoFactory
                         return person;
                     }
                 });
-        gitCronJob.executeGitCron(_eventPushEngine, repository, gitcloner, gitRepo, personService);
+        gitCronJob.setEsperEngine(_eventPushEngine);
+        gitCronJob.setFetch(gitRepo);
+        gitCronJob.setPersonService(personService);
+        gitCronJob.setRepository(repository);
+        gitCronJob.setScmCloner(gitcloner);
+        gitCronJob.setScmReader(Mockito.mock(IScmCloner.class));
+        gitCronJob.executeScmCron();
         final ArgumentCaptor<EventSimpleDto> argumentCaptor =
                 ArgumentCaptor.forClass(EventSimpleDto.class);
         Mockito.verify(_eventPushEngine, Mockito.atLeastOnce()).sendEventDto(

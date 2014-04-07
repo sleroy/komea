@@ -3,12 +3,34 @@ package org.komea.product.backend.utils;
 
 
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.core.convert.converter.Converter;
 
 
 
 public class CollectionUtil
 {
+    
+    
+    /**
+     * Iterate on a container and apply a treatment/ function.
+     * 
+     * @param _iterableContainer
+     * @param _treatment
+     */
+    public static <S, R> List<R> convertAll(
+            final Iterable<S> _iterableContainer,
+            final Converter<S, R> _treatment) {
+    
+    
+        final List<R> res = new ArrayList<R>();
+        for (final S valueT : _iterableContainer) {
+            res.add(_treatment.convert(valueT));
+        }
+        return res;
+    }
     
     
     /**

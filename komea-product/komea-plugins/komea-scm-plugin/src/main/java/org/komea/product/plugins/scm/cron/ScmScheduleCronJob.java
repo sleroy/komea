@@ -10,13 +10,15 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
-import org.komea.product.plugins.scm.repositories.api.IScmRepositoryService;
+import org.komea.product.plugins.scm.api.IScmRepositoryProxyFactories;
+import org.komea.product.plugins.scm.api.IScmRepositoryService;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 
@@ -30,78 +32,60 @@ public class ScmScheduleCronJob implements Job
     
     
     /**
-     * Cron value for GIT Provider.
+     * Cron value for SCM Provider.
      */
-    private static final String GIT_CRON_VALUE = "0 0/2 * * * ?";
+    public static final String                 GIT_CRON_VALUE      = "0 0/2 * * * ?";
     
     /**
      * 
      */
-    private static final String KEY_CRON       = "cron";
+    public static final String                 KEY_REPO            = "repo";
     
-    /**
-     * 
-     */
-    private static final String KEY_REPO       = "repo";
+    private static final Logger                LOGGER              =
+                                                                           LoggerFactory
+                                                                                   .getLogger("git-scheduler");
     
-    /**
-     * 
-     */
-    private static final String KEY_REPOSITORY = "repository";
     
-    private static final Logger LOGGER         = LoggerFactory.getLogger("git-scheduler");
+    @Autowired
+    private ICronRegistryService               cronRegistryService = null;
     
-    /**
-     * 
-     */
-    private static final String SCMCLONER      = "scmcloner";
+    
+    @Autowired
+    private final IScmRepositoryProxyFactories factories           = null;
+    
+    @Autowired
+    private final IScmRepositoryService        repositories        = null;
     
     
     
     /**
-     * Returns the list of required keys.
-     * 
-     * @return the list of required keys.
-     */
-    public static String[] requiredKeys() {
-    
-    
-        return new String[]
-            { "esperEngine", KEY_REPOSITORY, SCMCLONER, "personService", KEY_CRON };
-    }
-    
-    
-    /**
-     * Check if a repository has an associated cron job.
+     * Check if a repositories has an associated cron job.
      * 
      * @param _repository
-     *            the repository
+     *            the repositories
      * @param cronRegistryService
      *            the cron registry service.
      * @param _jobDataMap
      *            the job data map.
      */
     
-    public void checkIfGitRepositoryHaveJobs(
+    public void checkIfScmRepositoriesAreAssociatedToAJob(
             final IScmRepositoryService _repository,
-            final ICronRegistryService cronRegistryService,
             final JobDataMap _jobDataMap) {
     
     
         LOGGER.info("@@@@@ SCM CRON SCHEDULER @@@@@@@");
-        final List<ScmRepositoryDefinition> feeds = _repository.getAllRepositories();
+        final List<ScmRepositoryDefinition> feeds = _repository.getRepositoriesNotAssociated();
         int processed = 0;
         for (final ScmRepositoryDefinition fetch : feeds) {
             Validate.notNull(fetch);
-            if (!_repository.isAssociatedToCron(fetch)) {
-                processed++;
-                LOGGER.info("Creating Cron for the scm repository {}", fetch.getRepoName());
-                final String cronName = _repository.initializeCronName(fetch);
-                cronRegistryService.registerCronTask(cronName, GIT_CRON_VALUE, ScmCronJob.class,
-                        prepareJobMapForCron(_jobDataMap, fetch));
-                
-                
-            }
+            processed++;
+            LOGGER.info("Creating Cron for the scm repositories {}", fetch.getRepoName());
+            final String cronName = _repository.registerCronJobOfScm(fetch);
+            cronRegistryService.registerCronTask(cronName, GIT_CRON_VALUE, ScmCronJob.class,
+                    prepareJobMapForCron(_jobDataMap, fetch));
+            
+            
         }
         
         LOGGER.info("@@@@@      {}               @@@@@@@", processed);
@@ -116,15 +100,30 @@ public class ScmScheduleCronJob implements Job
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
     
     
-        final IScmRepositoryService<ScmRepositoryDefinition> repository =
-                (IScmRepositoryService<ScmRepositoryDefinition>) _context.getMergedJobDataMap()
-                        .get(KEY_REPOSITORY);
-        final ICronRegistryService cronRegistryService =
-                (ICronRegistryService) _context.getMergedJobDataMap().get(KEY_CRON);
-        Validate.notNull(repository);
+        Validate.notNull(repositories);
         Validate.notNull(cronRegistryService);
-        checkIfGitRepositoryHaveJobs(repository, cronRegistryService,
-                _context.getMergedJobDataMap());
+        checkIfScmRepositoriesAreAssociatedToAJob(repositories, _context.getMergedJobDataMap());
+    }
+    
+    
+    public ICronRegistryService getCronRegistryService() {
+    
+    
+        return cronRegistryService;
+    }
+    
+    
+    public IScmRepositoryProxyFactories getFactories() {
+    
+    
+        return factories;
+    }
+    
+    
+    public IScmRepositoryService getRepositories() {
+    
+    
+        return repositories;
     }
     
     
@@ -142,4 +141,12 @@ public class ScmScheduleCronJob implements Job
         properties.put(KEY_REPO, _gitRepo);
         return properties;
     }
+    
+    
+    public void setCronRegistryService(final ICronRegistryService _cronRegistryService) {
+    
+    
+        cronRegistryService = _cronRegistryService;
+    }
+    
 }

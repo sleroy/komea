@@ -90,6 +90,8 @@ public class RssProviderPluginTest
         
         final RssProviderPlugin providerBean = new RssProviderPlugin();
         providerBean.setRssRepository(rssRepository);
+        rssCronJob.setEsperEngine(esperEngine);
+        rssCronJob.setRssRepositories(rssRepository);
         
         final JobDataMap prepareJobMapForCron = providerBean.prepareJobMapForCron();
         

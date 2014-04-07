@@ -6,6 +6,7 @@ package org.komea.product.plugins.repository.model;
 
 
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,6 +14,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import org.joda.time.DateTime;
 
 import com.google.common.base.Strings;
 
@@ -25,6 +28,13 @@ import com.google.common.base.Strings;
  */
 public class ScmRepositoryDefinition implements Serializable
 {
+    
+    
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -8687769288271126628L;
+    
     
     
     /**
@@ -55,8 +65,10 @@ public class ScmRepositoryDefinition implements Serializable
                                                                              new HashMap<String, BranchDefinition>();
     
     
-    private Set<String>                         customerRegExps      = new HashSet<String>();
+    private File                                cloneDirectory;
     
+    
+    private Set<String>                         customerRegExps      = new HashSet<String>();
     
     private String                              key;
     
@@ -71,7 +83,10 @@ public class ScmRepositoryDefinition implements Serializable
     private String                              repoName             = "";
     
     
+    private String                              type                 = "";
+    
     private String                              url                  = "";
+    
     
     private String                              userName             = "";
     
@@ -88,6 +103,13 @@ public class ScmRepositoryDefinition implements Serializable
     
     
         return branchDefinitions.get(_branchName);
+    }
+    
+    
+    public File getCloneDirectory() {
+    
+    
+        return cloneDirectory;
     }
     
     
@@ -129,6 +151,17 @@ public class ScmRepositoryDefinition implements Serializable
     
     
         return lastDateCheckout;
+    }
+    
+    
+    /**
+     * Return the date of the last checkout in Joda Time or null.
+     */
+    public DateTime getLastDateCheckoutOrNull() {
+    
+    
+        if (lastDateCheckout == null) { return null; }
+        return new DateTime(lastDateCheckout);
     }
     
     
@@ -179,6 +212,13 @@ public class ScmRepositoryDefinition implements Serializable
     }
     
     
+    public String getType() {
+    
+    
+        return type;
+    }
+    
+    
     /**
      * @return the url
      */
@@ -196,6 +236,18 @@ public class ScmRepositoryDefinition implements Serializable
     
     
         return userName;
+    }
+    
+    
+    /**
+     * Returns true if the repository is cloned.
+     * 
+     * @return true if the repository is cloned.
+     */
+    public boolean isCloned() {
+    
+    
+        return cloneDirectory != null && cloneDirectory.isDirectory() && cloneDirectory.exists();
     }
     
     
@@ -229,6 +281,13 @@ public class ScmRepositoryDefinition implements Serializable
             branchDefinitions.put(_branchName, branchDefinition);
             
         }
+    }
+    
+    
+    public void setCloneDirectory(final File _cloneDirectory) {
+    
+    
+        cloneDirectory = _cloneDirectory;
     }
     
     
@@ -296,6 +355,13 @@ public class ScmRepositoryDefinition implements Serializable
     }
     
     
+    public void setType(final String _type) {
+    
+    
+        type = _type;
+    }
+    
+    
     /**
      * @param _url
      *            the url to set
@@ -327,10 +393,10 @@ public class ScmRepositoryDefinition implements Serializable
     
     
         return "ScmRepositoryDefinition [branchDefinitions="
-                + branchDefinitions + ", customerRegExps=" + customerRegExps + ", key=" + key
-                + ", lastDateCheckout=" + lastDateCheckout + ", password=" + password
-                + ", projectForRepository=" + projectForRepository + ", repoName=" + repoName
-                + ", url=" + url + ", userName=" + userName + "]";
+                + branchDefinitions + ", cloneDirectory=" + cloneDirectory + ", customerRegExps="
+                + customerRegExps + ", key=" + key + ", lastDateCheckout=" + lastDateCheckout
+                + ", password=" + password + ", projectForRepository=" + projectForRepository
+                + ", repoName=" + repoName + ", type=" + type + ", url=" + url + ", userName="
+                + userName + "]";
     }
-    
 }
