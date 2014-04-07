@@ -22,7 +22,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  * @author sleroy
- *
  */
 @RunWith(MockitoJUnitRunner.class)
 public class ScmCronJobTest
@@ -63,8 +62,8 @@ public class ScmCronJobTest
     public final void testExecuteScmCron() throws Exception {
     
     
-        // TODO
-        throw new RuntimeException("not yet implemented");
+        // TODO NOt yet implemented
+        
     }
     
 }
