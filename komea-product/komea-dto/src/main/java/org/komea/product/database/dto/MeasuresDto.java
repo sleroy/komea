@@ -67,6 +67,14 @@ public class MeasuresDto implements Serializable {
         }
     }
 
+    public String[] getEntityNames() {
+        final String[] entityNames = new String[entities.size()];
+        for (int i = 0; i < entities.size(); i++) {
+            entityNames[i] = entities.get(i).getDisplayName();
+        }
+        return entityNames;
+    }
+
     public String[] getKpiNames() {
         final String[] kpiNames = new String[kpis.size()];
         for (int i = 0; i < kpis.size(); i++) {
@@ -75,7 +83,47 @@ public class MeasuresDto implements Serializable {
         return kpiNames;
     }
 
-    public Map<String, List<Number>> getSeries() {
+    public Map<String, List<Number>> getEntitySeries() {
+        final Map<String, List<Number>> series = new HashMap<String, List<Number>>(kpis.size());
+        for (final Kpi kpi : kpis) {
+            final List<Number> numbers = new ArrayList<Number>();
+            series.put(kpi.getName(), numbers);
+            for (final BaseEntityDto entity : entities) {
+                Number number = null;
+                for (final Measure measure : measures) {
+                    if (measureMatches(kpi, entity, measure)) {
+                        number = measure.getValue();
+                        break;
+                    }
+                }
+                numbers.add(number);
+            }
+        }
+        return series;
+    }
+
+    public Integer getId(final Measure measure) {
+        return getId(entityType, measure);
+    }
+
+    public static Integer getId(final EntityType entityType, final Measure measure) {
+        switch (entityType) {
+            case PERSON:
+                return measure.getIdPerson();
+            case TEAM:
+            case DEPARTMENT:
+                return measure.getIdPersonGroup();
+            case PROJECT:
+                return measure.getIdProject();
+        }
+        return null;
+    }
+
+    private boolean measureMatches(final Kpi kpi, final BaseEntityDto entity, final Measure measure) {
+        return kpi.getId().equals(measure.getIdKpi()) && entity.getId().equals(getId(measure));
+    }
+
+    public Map<String, List<Number>> getKpiSeries() {
         final Map<String, List<Number>> series = new HashMap<String, List<Number>>(entities.size());
         for (final BaseEntityDto entity : entities) {
             final List<Number> numbers = new ArrayList<Number>();
@@ -83,8 +131,7 @@ public class MeasuresDto implements Serializable {
             for (final Kpi kpi : kpis) {
                 Number number = null;
                 for (final Measure measure : measures) {
-                    if (kpi.getId().equals(measure.getIdKpi())
-                            && entity.getId().equals(measure.getIdProject())) {
+                    if (measureMatches(kpi, entity, measure)) {
                         number = measure.getValue();
                         break;
                     }
