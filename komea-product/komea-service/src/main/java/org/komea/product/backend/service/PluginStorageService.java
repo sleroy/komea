@@ -84,7 +84,7 @@ public class PluginStorageService implements IPluginStorageService
      * @see org.komea.product.backend.service.IPluginStorageService#registerStorage(String, Class<T>)
      */
     @Override
-    public <T> IObjectStorage<T> registerStorage(
+    public synchronized <T> IObjectStorage<T> registerStorage(
             final String _pluginName,
             final Class<T> _pojoStorageClass) {
     

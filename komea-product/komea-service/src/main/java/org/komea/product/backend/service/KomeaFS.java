@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Strings;
+
 
 
 /**
@@ -25,6 +27,12 @@ public class KomeaFS implements IKomeaFS
      * 
      */
     public static final String      STORAGE_PATH_KEY = "storage_path";
+    
+    
+    /**
+     * 
+     */
+    private static final String     ENV_KOMEA_HOME   = "ENV_KOMEA_HOME";
     
     
     /**
@@ -92,11 +100,18 @@ public class KomeaFS implements IKomeaFS
     public File getStorage_path() {
     
     
-        String storage_path = System.getProperty(KOMEA_DIR);
-        if (storage_path == null) {
+        final String komeaHome = System.getenv(ENV_KOMEA_HOME);
+        String storage_path = "";
+        if (!Strings.isNullOrEmpty(komeaHome)) {
+            storage_path = komeaHome + "/kdata";
+        }
+        if (Strings.isNullOrEmpty(storage_path)) {
+            storage_path = System.getProperty(KOMEA_DIR);
+        }
+        if (Strings.isNullOrEmpty(storage_path)) {
             storage_path = KOMEA;
         }
-        LOGGER.info("Storage path for plugins is " + storage_path);
+        LOGGER.info("Storage path for plugins is {}", storage_path);
         if (storage_path == null) { throw new BeanCreationException(
                 "Storage path was not initialized"); }
         

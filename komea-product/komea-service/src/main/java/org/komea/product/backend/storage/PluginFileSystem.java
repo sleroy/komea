@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.Validate;
 import org.komea.product.backend.service.InvalidKomeaFileSystemException;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
 import org.slf4j.Logger;
@@ -50,6 +51,8 @@ public class PluginFileSystem implements IPluginFileSystem
     
         super();
         fileSystemFolder = _folder;
+        Validate.isTrue(_folder.isDirectory());
+        
         if (!fileSystemFolder.exists() && !fileSystemFolder.mkdirs()) { throw new InvalidKomeaFileSystemException(
                 "Could not initialize Plugin Filesystem : folder could not be created",
                 fileSystemFolder); }
