@@ -6,8 +6,8 @@ package org.komea.product.plugins.demodata;
 import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.service.ISettingService;
-import org.komea.product.plugins.git.model.GitRepositoryDefinition;
-import org.komea.product.plugins.git.repositories.api.IGitRepositoryService;
+import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
+import org.komea.product.plugins.scm.api.IScmRepositoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class GitRepositoryExampleBean
                                                                          .getLogger(GitRepositoryExampleBean.class);
     
     @Autowired
-    private IGitRepositoryService repository;
+    private IScmRepositoryService repository;
     
     
     @Autowired
@@ -43,7 +43,7 @@ public class GitRepositoryExampleBean
     
     
     @PostConstruct
-    public void initRssFeed() {
+    public void initGitFeed() {
     
     
         registerRepo("XStream Fedora GIT", "http://pkgs.fedoraproject.org/cgit/xstream.git",
@@ -57,12 +57,28 @@ public class GitRepositoryExampleBean
     }
     
     
+    /**
+     * @param _feedName
+     * @param _url
+     * @return
+     */
+    private ScmRepositoryDefinition newGitRepository(final String _feedName, final String _url) {
+    
+    
+        final ScmRepositoryDefinition scmRepositoryDefinition = new ScmRepositoryDefinition();
+        scmRepositoryDefinition.setType("GIT");
+        scmRepositoryDefinition.setRepoName(_feedName);
+        scmRepositoryDefinition.setKey(ScmRepositoryDefinition.transformNameInKey(_feedName));
+        scmRepositoryDefinition.setUrl(_url);
+        return scmRepositoryDefinition;
+    }
+    
+    
     private void registerRepo(final String _feedName, final String _url, final String _project) {
     
     
         LOGGER.info("Registering demo GIT repositories {} {} {}", _feedName, _url, _project);
-        final GitRepositoryDefinition gitRepository =
-                GitRepositoryDefinition.newGitRepository(_feedName, _url);
+        final ScmRepositoryDefinition gitRepository = newGitRepository(_feedName, _url);
         gitRepository.setProjectForRepository(_project);
         repository.saveOrUpdate(gitRepository);
         
