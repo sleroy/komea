@@ -27,7 +27,8 @@ public class JobInjectionFactory extends SimpleJobFactory
 {
     
     
-    private static final Logger      LOGGER = LoggerFactory.getLogger(JobInjectionFactory.class);
+    private static final Logger      LOGGER = LoggerFactory
+                                                    .getLogger("quartzjob-injection-factory");
     
     
     private final ApplicationContext applicationContext;
@@ -57,7 +58,7 @@ public class JobInjectionFactory extends SimpleJobFactory
     
         final Job newJob = super.newJob(_bundle, _scheduler);
         
-        LOGGER.info("Weaving Job data properties to the bean {}", newJob);
+        LOGGER.debug("Weaving Job data properties to the bean {}", newJob);
         final JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.putAll(_scheduler.getContext());
         jobDataMap.putAll(_bundle.getJobDetail().getJobDataMap());

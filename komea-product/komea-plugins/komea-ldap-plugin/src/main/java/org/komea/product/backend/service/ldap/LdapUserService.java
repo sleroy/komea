@@ -315,10 +315,6 @@ public class LdapUserService implements ILdapUserService
     
     
         final JobDataMap properties = new JobDataMap();
-        properties.put("ldap", this);
-        properties.put("person", personService);
-        properties.put("group", groupService);
-        properties.put("role", personRoleService);
         return properties;
     }
     

@@ -53,9 +53,10 @@ public class SpringService implements ApplicationContextAware, ISpringService
         Validate.notNull(_pojo);
         Validate.notNull(applicationContext, "Spring application has not been initialized");
         LOGGER.trace("Autowiring pojo {}", _pojo.getClass());
-        applicationContext.getAutowireCapableBeanFactory().autowireBeanProperties(_pojo,
-                AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, true);
-        
+        final AutowireCapableBeanFactory autowireCapableBeanFactory =
+                applicationContext.getAutowireCapableBeanFactory();
+        autowireCapableBeanFactory.autowireBean(_pojo);
+        autowireCapableBeanFactory.initializeBean(autowireCapableBeanFactory, "custombean");
     }
     
     
