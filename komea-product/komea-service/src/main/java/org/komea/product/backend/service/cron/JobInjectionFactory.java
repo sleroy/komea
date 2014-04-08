@@ -14,7 +14,6 @@ import org.quartz.simpl.SimpleJobFactory;
 import org.quartz.spi.TriggerFiredBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 
 
@@ -65,8 +64,7 @@ public class JobInjectionFactory extends SimpleJobFactory
         jobDataMap.putAll(_bundle.getTrigger().getJobDataMap());
         
         jodd.bean.BeanUtil.getBeanUtilBean().populateBean(newJob, jobDataMap);
-        applicationContext.getAutowireCapableBeanFactory().autowireBeanProperties(newJob,
-                AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, true);
+        applicationContext.getAutowireCapableBeanFactory().autowireBean(newJob);
         return newJob;
     }
 }
