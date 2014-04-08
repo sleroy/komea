@@ -48,11 +48,14 @@
 							<exclude>org/komea/product/database/dto/errors/**/*.class</exclude>
 						</excludes>
 					</instrumentation>
-					
+
 					<aggregate>true</aggregate>
-					<formats><format>xml</format><format>html</format></formats>
+					<formats>
+						<format>xml</format>
+						<format>html</format>
+					</formats>
 				</configuration>
-				</plugin>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -72,6 +75,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 		</profile>
+
 		<profile>
 			<id>mysql</id>
 			<properties>
@@ -83,6 +87,13 @@
 					<artifactId>mysql-connector-java</artifactId>
 				</dependency>
 			</dependencies>
+		</profile>
+
+		<profile>
+			<id>test</id>
+			<properties>
+				<komea.home></komea.home>
+			</properties>
 		</profile>
 
 	</profiles>

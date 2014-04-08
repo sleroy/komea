@@ -19,7 +19,7 @@
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <!-- variabe initialisé à vide pour eviter des conflits de resolution--> 
         <!-- cette variable correspond à l'emplacement du serveur komea sur la machine de deploiement --> 
-        <komea.home></komea.home>
+       <!-- <komea.home></komea.home> -->
     </properties>
 
 
