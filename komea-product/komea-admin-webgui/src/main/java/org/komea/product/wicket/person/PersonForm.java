@@ -11,12 +11,14 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
+import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.komea.product.backend.auth.IPasswordEncoder;
 import org.komea.product.backend.forms.PersonFormData;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
@@ -56,10 +58,12 @@ public final class PersonForm extends Form<Person> {
     private final UserBdd savUserBdd;
     private List<IEntity> currentEntityList;
     private List<IEntity> selectedEntity;
-  
+    private String savPassword;
+    private final IPasswordEncoder passEncoder;
 
 //    private final TeamSelectorDialog teamDialog;
     public PersonForm(
+            final IPasswordEncoder _passEncoder,
             final IPersonService _personService,
             final IProjectService _projectService,
             final PersonFormData _personFormData,
@@ -71,6 +75,7 @@ public final class PersonForm extends Form<Person> {
 
         super(_id, _compoundPropertyModel);
         this.page = _page;
+        this.passEncoder = _passEncoder;
         this.prService = _prService;
         projectService = _projectService;
         personService = _personService;
@@ -83,7 +88,6 @@ public final class PersonForm extends Form<Person> {
         feedBack.setVisible(false);
         add(feedBack);
         this.groupName = new NameGeneric("");
-
 
         add(TextFieldBuilder.<String>createRequired("login", person, "login")
                 .simpleValidator(3, 255).withTooltip("User requires a login.").highlightOnErrors()
@@ -129,10 +133,21 @@ public final class PersonForm extends Form<Person> {
     public void initClassicField() {
         add(TextFieldBuilder.<String>createRequired("firstname", person, "firstName")
                 .simpleValidator(2, 255).withTooltip("User requires a first name.")
-                .highlightOnErrors().simpleValidator(2, 255).build());
+                .highlightOnErrors().build());
         add(TextFieldBuilder.<String>createRequired("lastname", person, "lastName")
                 .simpleValidator(2, 255).highlightOnErrors()
                 .withTooltip("User requires a last name.").build());
+        savPassword = person.getPassword();
+        if (!"".equals(savPassword) && savPassword != null) {
+            person.setPassword("00000");
+        }
+        PasswordTextField password;
+        password = (PasswordTextField) TextFieldBuilder.createPassword("password", person, "password")
+                .simpleValidator(5, 255).withTooltip("User requires a password").highlightOnErrors()
+                .build();
+
+        password.setResetPassword(false);
+        add(password);
         add(TextFieldBuilder.<String>createRequired("email", person, "email")
                 .withTooltip("User requires a valid email.").highlightOnErrors().build());
     }
@@ -157,6 +172,9 @@ public final class PersonForm extends Form<Person> {
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
                 person.setUserBdd(savUserBdd);
+                if (!"00000".equals(person.getPassword())) {
+                    person.setPassword(passEncoder.encodePassword(savPassword));
+                }
                 personService.saveOrUpdatePerson(person, (List<Project>) (List<?>) currentEntityList);
                 page.setResponsePage(new PersonPage(page.getPageParameters()));
 

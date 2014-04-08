@@ -27,8 +27,11 @@ public class BugZillaDeleteAction implements IDeleteAction<BugZillaServer> {
 
     @Override
     public void delete(BugZillaServer _object) {
-        this.serverAffiche.remove(serverAffiche);
-        this.bugZillaService.delete(_object);
+        boolean delete = this.bugZillaService.delete(_object);
+        if (delete) {
+            this.serverAffiche.remove(_object);
+        }
+
     }
 
 }

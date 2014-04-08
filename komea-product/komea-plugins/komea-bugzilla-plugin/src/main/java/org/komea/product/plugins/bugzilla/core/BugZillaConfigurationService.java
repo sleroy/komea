@@ -40,6 +40,11 @@ public class BugZillaConfigurationService implements IBugZillaConfigurationServi
     @PostConstruct
     public void init() {
         configurationStorage = pluginStorage.registerStorage("BUGZILLA", BugZillaConfiguration.class);
+        BugZillaConfiguration var = configurationStorage.get();
+        if (var == null) {
+            var = new BugZillaConfiguration();
+            configurationStorage.set(var);
+        }
     }
 
     /**
@@ -63,7 +68,7 @@ public class BugZillaConfigurationService implements IBugZillaConfigurationServi
     @Override
     public void saveOrUpdate(BugZillaServer server, String oldAddress) {
         BugZillaConfiguration var = configurationStorage.get();
-        List<BugZillaServer> configurations = getAllServer(var);
+        List<BugZillaServer> configurations = var.getConfigurations();
         boolean find = false;
         for (BugZillaServer bugZillaServer : configurations) {
             if (bugZillaServer.getAddress().equals(oldAddress)) {
@@ -84,28 +89,27 @@ public class BugZillaConfigurationService implements IBugZillaConfigurationServi
     }
 
     @Override
-    public void delete(BugZillaServer _object) {
+    public boolean delete(BugZillaServer _object) {
         BugZillaConfiguration var = configurationStorage.get();
-        List<BugZillaServer> selectAll = getAllServer(var);
-        selectAll.remove(_object);
-        configurationStorage.set(var);
+        List<BugZillaServer> selectAll = var.getConfigurations();
+        for (BugZillaServer bugZillaServer : selectAll) {
+            if (bugZillaServer.getAddress().equals(_object.getAddress())
+                    && bugZillaServer.getLogin().equals(_object.getLogin())
+                    && bugZillaServer.getMdp().equals(_object.getMdp())
+                    && bugZillaServer.getReminderAlert().equals(_object.getReminderAlert())) {
+                selectAll.remove(bugZillaServer);
+                configurationStorage.set(var);
+                return true;
+            }
+        }
+        return false;
 
     }
 
     @Override
     public List<BugZillaServer> selectAll() {
         BugZillaConfiguration var = configurationStorage.get();
-        return getAllServer(var);
-    }
-
-    private List<BugZillaServer> getAllServer(BugZillaConfiguration var) {
-        List<BugZillaServer> configurations;
-        if (var != null) {
-            configurations = var.getConfigurations();
-        } else {
-            configurations = new ArrayList<BugZillaServer>();
-        }
-        return configurations;
+        return var.getConfigurations();
     }
 
     /**

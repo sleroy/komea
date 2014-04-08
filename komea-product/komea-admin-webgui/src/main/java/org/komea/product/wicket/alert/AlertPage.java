@@ -37,7 +37,7 @@ public final class AlertPage extends LayoutPage {
                 DataTableBuilder.<KpiAlertType, String> newTable("table")
                         .addColumn("Alert key", "KpiAlertKey")
                         .addColumn("Name", "Name")
-                        .addColumn("Description", "Description")
+                        .addColumn("Enabled", "Enabled")
                         .withEditDeleteColumn(deleteAction, editAction)
                         .displayRows(listAffichage.size()+10).withData(dataProvider).build();
         add(build);

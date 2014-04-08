@@ -9,10 +9,12 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.komea.product.backend.service.alert.IAlertTypeService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.enums.Operator;
@@ -41,6 +43,7 @@ public class AlertForm extends Form<KpiAlertType> {
     private final NameGeneric nameEntity;
     private final TextField customerFiel;
     private final IKPIService kpiService;
+    private Boolean alertEnabled;
 
     public AlertForm(IKPIService _kpiService, IAlertTypeService _alertService, Component _feedBack, LayoutPage _page, KpiAlertType _alert, String id, IModel<KpiAlertType> model) {
         super(id, model);
@@ -71,7 +74,11 @@ public class AlertForm extends Form<KpiAlertType> {
         add(SelectBoxBuilder.<Severity>createWithEnum("severity", this.alert,
                 Severity.class).build());
 
-        add(SelectBoxBuilder.<Boolean>createWithBooleanRequire("enabled", this.alert).build());
+        this.alertEnabled = alert.getEnabled();
+        PropertyModel<Boolean> modelchcekBox = new PropertyModel<Boolean>(this, "alertEnabled");
+        CheckBox checkBox = new CheckBox("enabled", modelchcekBox);
+        add(checkBox);
+//        add(SelectBoxBuilder.<Boolean>createWithBooleanRequire("enabled", this.alert).build());
 
         Kpi selectByPrimaryKey = kpiService.selectByPrimaryKey(this.alert.getIdKpi());
         if (selectByPrimaryKey != null) {
@@ -81,7 +88,7 @@ public class AlertForm extends Form<KpiAlertType> {
         this.customerFiel = TextFieldBuilder.<String>createRequired("idKpi", nameEntity, "name").withTooltip("kpi can be affected").buildTextField();
         this.customerFiel.setOutputMarkupId(true);
         add(customerFiel);
-        
+
         initSelectKpi();
 
         //button
@@ -112,16 +119,16 @@ public class AlertForm extends Form<KpiAlertType> {
                 info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
+                alert.setEnabled(isAlertEnabled());
                 alertService.saveOrUpdate(alert);
                 page.setResponsePage(new AlertPage(page.getPageParameters()));
 
             }
         });
     }
-    
-        public void initSelectKpi()
-    {
-            IChoiceRenderer<Kpi> iChoiceRenderer = new IChoiceRenderer<Kpi>() {
+
+    public void initSelectKpi() {
+        IChoiceRenderer<Kpi> iChoiceRenderer = new IChoiceRenderer<Kpi>() {
 
             @Override
             public Object getDisplayValue(Kpi t) {
@@ -144,7 +151,7 @@ public class AlertForm extends Form<KpiAlertType> {
                     alert.setIdKpi(selectedKpi.getId());
                     nameEntity.setName(selectedKpi.getName());
                 } else {
-                   alert.setIdKpi(null);
+                    alert.setIdKpi(null);
                     nameEntity.setName("");
                 }
                 customerFiel.clearInput();
@@ -161,6 +168,14 @@ public class AlertForm extends Form<KpiAlertType> {
 
             }
         });
+    }
+
+    public Boolean isAlertEnabled() {
+        return alertEnabled;
+    }
+
+    public void setAlertEnabled(Boolean alertEnabled) {
+        this.alertEnabled = alertEnabled;
     }
 
     public NameGeneric getNameEntity() {

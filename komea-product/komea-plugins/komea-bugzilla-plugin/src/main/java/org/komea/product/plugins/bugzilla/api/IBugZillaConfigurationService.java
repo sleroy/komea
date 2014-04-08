@@ -63,5 +63,5 @@ public interface IBugZillaConfigurationService {
      */
     public void setServerProxyFactory(IBugZillaServerProxyFactory serverProxyFactory);
 
-    public void delete(BugZillaServer _object);
+    public boolean delete(BugZillaServer _object);
 }

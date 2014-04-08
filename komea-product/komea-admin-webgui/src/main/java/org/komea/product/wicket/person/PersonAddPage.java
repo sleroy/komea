@@ -11,6 +11,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.api.IFormularService;
+import org.komea.product.backend.auth.IPasswordEncoder;
 import org.komea.product.backend.forms.PersonFormData;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonRoleService;
@@ -49,6 +50,9 @@ public class PersonAddPage extends LayoutPage {
 
     @SpringBean
     private IProjectService projectService;
+    
+    @SpringBean
+    private IPasswordEncoder passEncoder;
 
     public PersonAddPage(final PageParameters _parameters) {
 
@@ -62,7 +66,7 @@ public class PersonAddPage extends LayoutPage {
 
         final PersonFormData newPersonForm = formularService.newPersonForm();
         final PersonForm personForm
-                = new PersonForm(personDAO, projectService, newPersonForm, "form",
+                = new PersonForm(passEncoder,personDAO, projectService, newPersonForm, "form",
                         new CompoundPropertyModel<Person>(_person), this, personGroupService);
         add(personForm);
 

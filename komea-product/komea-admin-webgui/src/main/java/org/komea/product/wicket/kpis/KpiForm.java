@@ -39,7 +39,6 @@ public final class KpiForm extends Form<Kpi> {
     private final IKPIService kpiService;
     private final NameGeneric nameEntity;
     private final LayoutPage page;
-    private String entityTypeSelected;
 
     public KpiForm(
             final String _id,
@@ -85,15 +84,9 @@ public final class KpiForm extends Form<Kpi> {
                 ValueDirection.class).build());
 
         add(SelectBoxBuilder.<ValueType>createWithEnum("valueType", kpi, ValueType.class).build());
-        
 
-        if (kpi.getEntityType() != null) {
-            entityTypeSelected = kpi.getEntityType().toString();
-        } else {
-            entityTypeSelected = "";
-        }
-        add(SelectBoxBuilder.createSelectNotRequire("entityType", "typeSelected", this, EntityType.values()));
-
+        add(SelectBoxBuilder.<EntityType>createWithEnum("entityType", kpi, EntityType.class)
+                .build());
 
         add(TextFieldBuilder.<String>create("cronExpression", kpi, "cronExpression")
                 .simpleValidator(0, 60).highlightOnErrors().withTooltip("").build());
@@ -159,11 +152,6 @@ public final class KpiForm extends Form<Kpi> {
                 info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
-                if (!"".equals(entityTypeSelected)) {
-                    kpi.setEntityType(EntityType.valueOf(entityTypeSelected));
-                } else {
-                    kpi.setEntityType(null);
-                }
                 kpiService.saveOrUpdate(kpi);
                 page.setResponsePage(new KpiPage(page.getPageParameters()));
 
@@ -174,13 +162,6 @@ public final class KpiForm extends Form<Kpi> {
         // ///////////////////////////////////////////////////////////////////////////////////
     }
 
-    public String getTypeSelected() {
-        return entityTypeSelected;
-    }
-
-    public void setTypeSelected(String typeSelected) {
-        this.entityTypeSelected = typeSelected;
-    }
 
     public Kpi getKpi() {
 
@@ -195,6 +176,4 @@ public final class KpiForm extends Form<Kpi> {
     /**
      * Validation the formular : settings are updated from the DTO
      */
-
-
 }
