@@ -23,8 +23,8 @@
                                 default-target-url="/p/" authentication-failure-url="/p/accessdenied" />
         <sec:logout logout-success-url="/p/logout" />
         <!--		<sec:session-management>
-                <sec:concurrency-control max-sessions="2"
-                        error-if-maximum-exceeded="true" />
+<!-- 			<sec:concurrency-control max-sessions="2" -->
+<!-- 				error-if-maximum-exceeded="true" /> -->
         </sec:session-management>-->
     </sec:http>
 
