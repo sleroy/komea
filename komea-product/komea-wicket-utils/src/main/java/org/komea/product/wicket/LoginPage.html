@@ -27,33 +27,18 @@ margin-top:30px;
 						<span class="glyphicon glyphicon-lock"></span> Login
 					</div>
 					<div class="panel-body">
-						<form wicket:id="loginForm">
-							<span wicket:id="usernameLabel">Username</span>:
-							<br />
-							<input type="text" wicket:id="username" />
-							<br />
-							<br />
-							<span wicket:id="passwordLabel">Username</span>:
-							<br />
-							<input type="password" wicket:id="password" />
-							<br />
-							<br />
-							<input type="submit" wicket:message="value:login.submit.label" />
-
-							<div id="errorMessages" wicket:id="feedback"></div>
-						</form>
-
-						<form class="form-horizontal" role="form">
+						<!-- wicket:message="value:login.submit.label" -->
+						<form class="form-horizontal" role="form" wicket:id="loginForm">
 							<div class="form-group">
 								<label for="inputEmail3" class="col-sm-3 control-label"> Login</label>
 								<div class="col-sm-9">
-									<input class="form-control" id="username" name="j_username" placeholder="Login" autofocus="autofocus" />
+									<input class="form-control" id="username" wicket:id="username" placeholder="Login" autofocus="autofocus" />
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="inputPassword3" class="col-sm-3 control-label"> Password</label>
 								<div class="col-sm-9">
-									<input type="password" id="password" name="j_password" class="form-control" placeholder="Password" />
+									<input type="password" id="password" wicket:id="password" class="form-control" placeholder="Password" />
 								</div>
 							</div>
 							<div class="form-group">
@@ -67,9 +52,9 @@ margin-top:30px;
 							<div class="form-group last">
 								<div class="col-sm-offset-3 col-sm-9">
 									<button type="submit" class="btn btn-success btn-sm">Sign in</button>
-									<button type="reset" class="btn btn-default btn-sm">Reset</button>
 								</div>
 							</div>
+							<div id="errorMessages" wicket:id="feedback" class="help-block"></div>
 						</form>
 					</div>
 				</div>

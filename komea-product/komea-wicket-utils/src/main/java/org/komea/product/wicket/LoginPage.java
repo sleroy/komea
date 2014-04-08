@@ -4,7 +4,6 @@ package org.komea.product.wicket;
 
 
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -39,9 +38,9 @@ public class LoginPage extends LayoutPage
         
             super(id);
             setModel(new CompoundPropertyModel(this));
-            add(new Label("usernameLabel", getString("login.username.label", null, "Username")));
+            // add(new Label("usernameLabel", getString("login.username.label", null, "Username")));
             add(new RequiredTextField("username"));
-            add(new Label("passwordLabel", getString("login.password.label", null, "Username")));
+            // add(new Label("passwordLabel", getString("login.password.label", null, "Username")));
             add(new PasswordTextField("password"));
             add(new FeedbackPanel("feedback"));
             
