@@ -125,11 +125,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         if (cronRegistry.existCron(kpiCronName)) {
             cronRegistry.updateCronFrequency(kpiCronName, _kpi.getCronExpression());
         } else {
-            final JobDataMap properties = new JobDataMap();
-            properties.put("entity", _entity);
-            properties.put("kpi", _kpi);
-            cronRegistry.registerCronTask(kpiCronName, _kpi.getCronExpression(),
-                    KpiHistoryJob.class, properties);
+            prepareKpiHistoryJob(_kpi, _entity, kpiCronName);
         }
         
     }
@@ -400,6 +396,27 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         final ICEPQuery epStatement = getEsperQueryFromKpi(kpiOrFail);
         
         return epStatement.getResult().asNumber().doubleValue();
+    }
+    
+    
+    /**
+     * Prepare Kpi History Job
+     * 
+     * @param _kpi
+     *            the kpi
+     * @param _entity
+     *            the entity
+     * @param kpiCronName
+     *            the kpi cron name;
+     */
+    public void prepareKpiHistoryJob(final Kpi _kpi, final IEntity _entity, final String kpiCronName) {
+    
+    
+        final JobDataMap properties = new JobDataMap();
+        properties.put("entity", _entity);
+        properties.put("kpi", _kpi);
+        cronRegistry.registerCronTask(kpiCronName, _kpi.getCronExpression(), KpiHistoryJob.class,
+                properties);
     }
     
     

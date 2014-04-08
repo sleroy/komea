@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.api.IEventEngineService;
@@ -98,6 +99,18 @@ public class KPIServiceTest
     
     
     /**
+     * Test method for {@link org.komea.product.backend.service.kpi.KPIService#deleteKpi(org.komea.product.database.model.Kpi)}.
+     */
+    @Test
+    @Ignore
+    public void testDeleteKpi() throws Exception {
+    
+    
+        throw new RuntimeException("not yet implemented");
+    }
+    
+    
+    /**
      * Test method for
      * {@link org.komea.product.backend.service.kpi.KPIService#findKPIFacade(org.komea.product.backend.business.IEntityWithKPIFacade, java.lang.String)}
      * This test initialises all the requested services to obtain a KPI Facade.
@@ -144,5 +157,27 @@ public class KPIServiceTest
         Assert.assertEquals(person.getId(), kpi.getEntityID());
         
     }
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.backend.service.kpi.KPIService#prepareKpiHistoryJob(org.komea.product.database.model.Kpi, org.komea.product.database.api.IEntity, java.lang.String)}
+     * .
+     */
+    @Test
+    public void testPrepareKpiHistoryJob() throws Exception {
+    
+    
+        kpiService.prepareKpiHistoryJob(new Kpi(), null, "KPI_CRON_NAME");
+        final ArgumentCaptor<JobDataMap> argumentCaptor = ArgumentCaptor.forClass(JobDataMap.class);
+        final ArgumentCaptor<Class> classCaptor = ArgumentCaptor.forClass(Class.class);
+        verify(kpiService.getCronRegistry(), times(1)).registerCronTask(Matchers.anyString(),
+                Matchers.anyString(), classCaptor.capture(), argumentCaptor.capture());
+        
+        
+        CronInstantiatorFactory.testCronInstantiation(classCaptor.getValue(),
+                argumentCaptor.getValue());
+    }
+    
     
 }

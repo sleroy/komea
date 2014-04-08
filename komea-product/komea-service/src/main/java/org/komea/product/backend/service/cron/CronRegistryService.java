@@ -10,6 +10,7 @@ import javax.annotation.PreDestroy;
 
 import org.komea.product.backend.exceptions.CronRuntimeException;
 import org.quartz.CronScheduleBuilder;
+import org.quartz.CronTrigger;
 import org.quartz.Job;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
@@ -38,13 +39,10 @@ public class CronRegistryService implements ICronRegistryService, ApplicationCon
 {
     
     
-    private static final String CRON_EXP = "cronExp";
+    private static Logger    LOGGER = LoggerFactory.getLogger(CronRegistryService.class);
     
     
-    private static Logger       LOGGER   = LoggerFactory.getLogger(CronRegistryService.class);
-    
-    
-    private SchedulerFactory    schedulerFactory;
+    private SchedulerFactory schedulerFactory;
     
     
     
@@ -162,12 +160,15 @@ public class CronRegistryService implements ICronRegistryService, ApplicationCon
         try {
             for (final JobKey jobKey : schedulerFactory.getScheduler().getJobKeys(
                     GroupMatcher.anyJobGroup())) {
-                final JobDetail jobDetail = schedulerFactory.getScheduler().getJobDetail(jobKey);
+                schedulerFactory.getScheduler().getJobDetail(jobKey);
                 final CronDetails cronDetails = new CronDetails();
                 cronDetails.setCronName(jobKey.getName());
-                cronDetails.setCronExpression(jobDetail.getJobDataMap().getString(CRON_EXP));
+                
                 final TriggerKey triggerKey = TriggerKey.triggerKey(jobKey.getName());
                 final Trigger trigger = schedulerFactory.getScheduler().getTrigger(triggerKey);
+                if (trigger instanceof CronTrigger) {
+                    cronDetails.setCronExpression(((CronTrigger) trigger).getCronExpression());
+                }
                 cronDetails.setNextTime(trigger.getNextFireTime());
                 cronDetails.setStatus(schedulerFactory.getScheduler().getTriggerState(triggerKey));
                 cronDetailsList.add(cronDetails);
@@ -202,7 +203,6 @@ public class CronRegistryService implements ICronRegistryService, ApplicationCon
             final JobDataMap _properties) {
     
     
-        _properties.put(CRON_EXP, _cronExpression);
         final JobDetail jobDetail =
                 JobBuilder.newJob(_runnable).withIdentity(_cronName).withDescription(_cronName)
                         .usingJobData(_properties).build();
@@ -281,7 +281,7 @@ public class CronRegistryService implements ICronRegistryService, ApplicationCon
                     schedulerFactory.getScheduler().getJobDetail(JobKey.jobKey(_cronName));
             
             final JobDataMap jobDataMap = jobDetail.getJobDataMap();
-            jobDataMap.put(CRON_EXP, _cronExpression);
+            
             final Trigger trigger =
                     TriggerBuilder.newTrigger().forJob(_cronExpression).usingJobData(jobDataMap)
                             .withIdentity(_cronName).startNow()
