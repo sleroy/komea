@@ -84,13 +84,7 @@ public final class PersonForm extends Form<Person> {
         add(feedBack);
         this.groupName = new NameGeneric("");
 
-//        final WebMarkupContainer classLogin = new WebMarkupContainer("class_login");
-//        add(classLogin);
-//        errorModel = new Model<String>("");
-////        errorModel.setObject("has-error");
-////        final Model<String> successModel = new Model<String>("has-success");
-//        classLogin.add(AttributeModifier.append("class", errorModel));
-//        classLogin.setOutputMarkupId(true);
+
         add(TextFieldBuilder.<String>createRequired("login", person, "login")
                 .simpleValidator(3, 255).withTooltip("User requires a login.").highlightOnErrors()
                 .build());

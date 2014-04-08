@@ -1,5 +1,7 @@
 package org.komea.product.wicket.kpis;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -7,6 +9,7 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.entities.IProviderService;
 import org.komea.product.backend.service.kpi.IKPIService;
@@ -16,7 +19,6 @@ import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
-import org.komea.product.database.model.Provider;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.NameGeneric;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
@@ -32,12 +34,12 @@ import org.komea.product.wicket.widget.builders.TextFieldBuilder;
 public final class KpiForm extends Form<Kpi> {
 
     private static final long serialVersionUID = 1L;
-    private final DropDownChoice entityTypeField;
     private final Component feedBack;
     private final Kpi kpi;
     private final IKPIService kpiService;
     private final NameGeneric nameEntity;
     private final LayoutPage page;
+    private String entityTypeSelected;
 
     public KpiForm(
             final String _id,
@@ -66,7 +68,7 @@ public final class KpiForm extends Form<Kpi> {
         add(TextAreaBuilder.<String>create("description", kpi, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("").build());
 
-        add(SelectBoxBuilder.<ProviderType>createWithEnum("providerType", kpi,ProviderType.class)
+        add(SelectBoxBuilder.<ProviderType>createWithEnum("providerType", kpi, ProviderType.class)
                 .build());
 
         final TextField<String> textminValue
@@ -83,11 +85,15 @@ public final class KpiForm extends Form<Kpi> {
                 ValueDirection.class).build());
 
         add(SelectBoxBuilder.<ValueType>createWithEnum("valueType", kpi, ValueType.class).build());
-        entityTypeField
-                = SelectBoxBuilder.<EntityType>createWithEnum("entityType", kpi, EntityType.class)
-                .build();      
         
-        add(entityTypeField);
+
+        if (kpi.getEntityType() != null) {
+            entityTypeSelected = kpi.getEntityType().toString();
+        } else {
+            entityTypeSelected = "";
+        }
+        add(SelectBoxBuilder.createSelectNotRequire("entityType", "typeSelected", this, EntityType.values()));
+
 
         add(TextFieldBuilder.<String>create("cronExpression", kpi, "cronExpression")
                 .simpleValidator(0, 60).highlightOnErrors().withTooltip("").build());
@@ -141,7 +147,6 @@ public final class KpiForm extends Form<Kpi> {
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
 
                 feedBack.setVisible(true);
-                error("error found");
                 // repaint the feedback panel so errors are shown
                 target.add(feedBack);
             }
@@ -154,6 +159,13 @@ public final class KpiForm extends Form<Kpi> {
                 info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
+                if (!"".equals(entityTypeSelected)) {
+                    kpi.setEntityType(EntityType.valueOf(entityTypeSelected));
+                } else {
+                    kpi.setEntityType(null);
+                }
+                kpiService.saveOrUpdate(kpi);
+                page.setResponsePage(new KpiPage(page.getPageParameters()));
 
             }
         });
@@ -162,9 +174,12 @@ public final class KpiForm extends Form<Kpi> {
         // ///////////////////////////////////////////////////////////////////////////////////
     }
 
-    public DropDownChoice getEntityTypeField() {
+    public String getTypeSelected() {
+        return entityTypeSelected;
+    }
 
-        return entityTypeField;
+    public void setTypeSelected(String typeSelected) {
+        this.entityTypeSelected = typeSelected;
     }
 
     public Kpi getKpi() {
@@ -177,17 +192,9 @@ public final class KpiForm extends Form<Kpi> {
         return nameEntity;
     }
 
-
-
     /**
      * Validation the formular : settings are updated from the DTO
      */
-    @Override
-    protected void onSubmit() {
 
-        kpiService.saveOrUpdate(kpi);
-        page.setResponsePage(new KpiPage(page.getPageParameters()));
-
-    }
 
 }

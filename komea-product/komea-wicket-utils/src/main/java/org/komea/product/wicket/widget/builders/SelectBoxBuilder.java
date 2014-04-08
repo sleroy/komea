@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.PropertyModel;
+import org.komea.product.database.enums.EntityType;
 
 /**
  *
@@ -30,8 +31,17 @@ public class SelectBoxBuilder<T> {
             final Object _data, Class<T> type) {
         return new SelectBoxBuilder<T>(_wicketId, _data, type, true);
     }
-    
-      public static <T> SelectBoxBuilder<T> createWithBooleanRequire(final String _wicketId,
+
+    public static DropDownChoice<String> createSelectNotRequire(final String _wicketId, final String _idFielResult, Object _ModelObject, Object[] _listValue) {
+        List<String> valueStr = new ArrayList<String>();
+        valueStr.add("");
+        for (Object valueType : _listValue) {
+            valueStr.add(valueType.toString());
+        }
+        return new DropDownChoice<String>(_wicketId, new PropertyModel<String>(_ModelObject, _idFielResult), valueStr);
+    }
+
+    public static <T> SelectBoxBuilder<T> createWithBooleanRequire(final String _wicketId,
             final Object _data) {
         return new SelectBoxBuilder<T>(_wicketId, _data, false);
     }
@@ -39,7 +49,7 @@ public class SelectBoxBuilder<T> {
     private SelectBoxBuilder(String _wicketId, Object _data, Class<T> type, boolean _require) {
 
         final List<T> selectPersonRoles = Arrays.asList(type.getEnumConstants());
-        
+
         final PropertyModel<T> selectionRoleModel
                 = new PropertyModel<T>(_data, _wicketId);
         this.dropDownChoice = new DropDownChoice<T>(_wicketId, selectionRoleModel, selectPersonRoles, new ChoiceRenderer<T>("toString"));
@@ -52,13 +62,13 @@ public class SelectBoxBuilder<T> {
         }
 
     }
-    
-        private SelectBoxBuilder(String _wicketId, Object _data, boolean _require) {
+
+    private SelectBoxBuilder(String _wicketId, Object _data, boolean _require) {
 
         final List<Boolean> selectPersonRoles = new ArrayList<Boolean>();
         selectPersonRoles.add(Boolean.FALSE);
         selectPersonRoles.add(Boolean.TRUE);
-        
+
         final PropertyModel<Boolean> selectionRoleModel
                 = new PropertyModel<Boolean>(_data, _wicketId);
         this.dropDownChoice = (DropDownChoice<T>) new DropDownChoice<Boolean>(_wicketId, selectionRoleModel, selectPersonRoles, new ChoiceRenderer<Boolean>("toString"));

@@ -51,7 +51,7 @@ public class ProjectPage extends LayoutPage
                 .addColumn("Project key", "ProjectKey").addColumn("Name", "Name")
                 .addColumn("Description", "Description")
                 .withEditDeleteColumn(projectDeleteAction, projectEditAction)
-                .displayRows(listAffichage.size()).withData(dataProvider).build();
+                .displayRows(listAffichage.size()+10).withData(dataProvider).build();
         add(build);
         
     }
