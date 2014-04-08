@@ -45,7 +45,6 @@ import org.komea.product.wicket.statistics.StatPage;
     @MountPage(mount = "/stats", page = StatPage.class),
     @MountPage(mount = "/login", page = LoginPage.class),
     @MountPage(mount = "/cronpage", page = CronPage.class),
-    @MountPage(mount = "/logout", page = LoginPage.class),
     @MountPage(mount = "/accessdenied", page = UnauthorizedPage.class),
     @MountPage(mount = "/users", page = PersonPage.class),
     @MountPage(mount = "/useradd", page = PersonAddPage.class),

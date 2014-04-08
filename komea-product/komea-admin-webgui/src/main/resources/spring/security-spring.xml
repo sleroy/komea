@@ -17,12 +17,11 @@
 		<sec:remember-me />
 		<sec:intercept-url pattern="/p/login" access="permitAll" />
 		<sec:intercept-url pattern="/p/accessdenied" access="permitAll" />
-		<sec:intercept-url pattern="/p/logout" access="permitAll" />
 		<sec:intercept-url pattern="/p/**" access="hasRole('ADMIN')" />
 		<sec:intercept-url pattern="/rest/**" access="permitAll" />
 		<sec:form-login login-page="/p/login"
 			default-target-url="/p/" authentication-failure-url="/p/accessdenied" />
-		<sec:logout logout-success-url="/p/logout" />
+		<sec:logout logout-success-url="/p/login" />
 		<!-- <sec:session-management> -->
 		<!-- <sec:concurrency-control max-sessions="2" -->
 		<!-- error-if-maximum-exceeded="true" /> -->
