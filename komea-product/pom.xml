@@ -77,12 +77,12 @@
 			</properties>
 		</profile>
 
-		<profile>
-			<id>test</id>
-			<properties>
-				<komea.home></komea.home>
-			</properties>
-		</profile>
+<!-- 		<profile> -->
+<!-- 			<id>test</id> -->
+<!-- 			<properties> -->
+<!-- 				<komea.home></komea.home> -->
+<!-- 			</properties> -->
+<!-- 		</profile> -->
 
 	</profiles>
 
@@ -207,7 +207,9 @@
 		<module>komea-standard-kpis</module>
 
 		<!-- packaging -->
-		<module>komea-packaging-war</module>
+		<module>komea-packaging-full</module>
+		<module>komea-packaging-bundle</module>
+		<module>komea-packaging-nude</module>
 
 
 		<!-- test -->

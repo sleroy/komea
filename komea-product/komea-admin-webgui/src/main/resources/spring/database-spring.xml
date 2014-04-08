@@ -12,15 +12,10 @@
                                                    http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
                                                 http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
 
-	<context:property-placeholder
-		location="classpath:/config/bdd-${jdbc.bdd.type}.properties" />
 
 
-<!--       load and override external properties -->
-	<context:property-placeholder
-		location="file:${komea.home}/conf/komea.properties"
-		ignore-unresolvable="true" ignore-resource-not-found="true"
-		system-properties-mode="OVERRIDE" order="0" />
+
+	<import resource="configuration-spring.xml" />
 
 
 	<bean id="dataSource"

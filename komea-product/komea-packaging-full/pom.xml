@@ -10,9 +10,9 @@
         <version>1.0.13-SNAPSHOT</version>
     </parent>
 
-    <artifactId>komea-packaging-war</artifactId>
-    <name>Komea : War Archive</name>
-    <description>Komea : War archive build</description>
+    <artifactId>komea-packaging-full</artifactId>
+    <name>Komea : War standalone with all plugins</name>
+    <description>Komea : War standalone with all plugins</description>
     <packaging>war</packaging>
 
 

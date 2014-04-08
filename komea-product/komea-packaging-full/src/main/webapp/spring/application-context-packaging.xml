@@ -11,36 +11,16 @@
 			    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd">
 
 
-
-	<import resource="database-spring.xml" />
-	<import resource="security-spring.xml" />
+	<!--       load and override external properties -->
+	<context:property-placeholder
+		location="file:${komea.home}/conf/komea.properties"
+		ignore-unresolvable="true" ignore-resource-not-found="true"
+		system-properties-mode="OVERRIDE" order="0" />
+		
+	<import resource="classpath*:spring/application-context.xml" />
+	
 	
 
-
-
-	<cache:annotation-driven />
-
-	<tasks:annotation-driven />
-
-	<!-- generic cache manager -->
-	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
-		<property name="caches">
-			<set>
-				<bean
-					class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
-					name="default" />
-				<bean
-					class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
-					name="software-settings" />
-			</set>
-		</property>
-
-	</bean>
-
-	<context:component-scan base-package="org.komea.product" />
-
-
-
-
-	<context:annotation-config />
+	
+	
 </beans>
