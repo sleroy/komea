@@ -18,6 +18,6 @@
 		ignore-unresolvable="false" ignore-resource-not-found="false"
 		system-properties-mode="OVERRIDE" order="1" />
 	<!-- SALT FOR PASSWORDS -->
-	<util:properties id="authProperties" location="file:${komea.home}/conf/secret.properties">
+	<util:properties id="authProperties" location="file:${KOMEA_HOME}/conf/secret.properties">
 	</util:properties>
 </beans>
