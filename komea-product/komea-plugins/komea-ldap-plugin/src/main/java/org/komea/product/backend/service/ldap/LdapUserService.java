@@ -112,8 +112,7 @@ public class LdapUserService implements ILdapUserService
     private static final String   LDAP_CRON_REFRESH = "LDAP-CRON-REFRESH";
     
     
-    private static final Logger   LOGGER            = LoggerFactory
-                                                            .getLogger(LdapUserService.class);
+    private static final Logger   LOGGER            = LoggerFactory.getLogger("ldap-plugin");
     
     private static final long     serialVersionUID  = 4889152297004460837L;
     

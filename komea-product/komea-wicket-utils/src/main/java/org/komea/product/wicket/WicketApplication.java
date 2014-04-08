@@ -31,10 +31,9 @@ public class WicketApplication extends AuthenticatedWebApplication
 {
     
     
-    private static Logger                LOGGER      = LoggerFactory
-                                                             .getLogger(WicketApplication.class);
-    private final ApplicationContextMock contextMock = new ApplicationContextMock();
-    private boolean                      debugMode;
+    private static transient final Logger LOGGER      = LoggerFactory.getLogger("komea-wicketapp");
+    private final ApplicationContextMock  contextMock = new ApplicationContextMock();
+    private boolean                       debugMode;
     
     
     
