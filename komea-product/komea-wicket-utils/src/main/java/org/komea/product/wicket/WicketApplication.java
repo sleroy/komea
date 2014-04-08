@@ -6,8 +6,9 @@ package org.komea.product.wicket;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.settings.IExceptionSettings;
 import org.apache.wicket.settings.IExceptionSettings.ThreadDumpStrategy;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
@@ -26,7 +27,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * 
  * @see com.mycompany.Start#main(String[])
  */
-public class WicketApplication extends WebApplication
+public class WicketApplication extends AuthenticatedWebApplication
 {
     
     
@@ -154,6 +155,30 @@ public class WicketApplication extends WebApplication
     
     
         return getAppCtx().getBean(IWicketAdminService.class);
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.apache.wicket.authroles.authentication.AuthenticatedWebApplication#getSignInPageClass()
+     */
+    @Override
+    protected Class<? extends WebPage> getSignInPageClass() {
+    
+    
+        return LoginPage.class;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.apache.wicket.authroles.authentication.AuthenticatedWebApplication#getWebSessionClass()
+     */
+    @Override
+    protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
+    
+    
+        return SecureWicketAuthenticatedWebSession.class;
     }
     
     

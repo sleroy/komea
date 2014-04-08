@@ -27,7 +27,23 @@ margin-top:30px;
 						<span class="glyphicon glyphicon-lock"></span> Login
 					</div>
 					<div class="panel-body">
-						<form class="form-horizontal" role="form" method="post" action="j_spring_security_check">
+						<form wicket:id="loginForm">
+							<span wicket:id="usernameLabel">Username</span>:
+							<br />
+							<input type="text" wicket:id="username" />
+							<br />
+							<br />
+							<span wicket:id="passwordLabel">Username</span>:
+							<br />
+							<input type="password" wicket:id="password" />
+							<br />
+							<br />
+							<input type="submit" wicket:message="value:login.submit.label" />
+
+							<div id="errorMessages" wicket:id="feedback"></div>
+						</form>
+
+						<form class="form-horizontal" role="form">
 							<div class="form-group">
 								<label for="inputEmail3" class="col-sm-3 control-label"> Login</label>
 								<div class="col-sm-9">
