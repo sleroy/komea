@@ -19,6 +19,7 @@ import org.komea.product.database.model.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 
@@ -34,6 +35,9 @@ public class AdminCheckerBean
     
     @Autowired
     private CustomerDao          customerDao;
+    
+    @Value("#{authProperties.defaultAdminPassword}")
+    private String               defaultPassword;
     
     @Autowired
     private IPasswordEncoder     encoder;
@@ -56,10 +60,9 @@ public class AdminCheckerBean
     @Autowired
     private IProviderService     providerDao;
     
+    
     @Autowired
     private ICronRegistryService registry;
-    
-    
     @Autowired
     private UserRoleDataBean     userRoleDataBean;
     
@@ -89,7 +92,7 @@ public class AdminCheckerBean
             admin.setFirstName("admin");
             admin.setLastName("admin");
             admin.setLogin("admin");
-            admin.setPassword(encoder.encodePassword("admin"));
+            admin.setPassword(encoder.encodePassword(defaultPassword));
             admin.setUserBdd(UserBdd.KOMEA);
             admin.setIdPersonRoleOrNull(personRoleDao.getAdminRole());
             personDAO.saveOrUpdate(admin);
