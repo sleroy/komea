@@ -59,7 +59,7 @@ public class KpiDemoService {
                 .entityType(EntityType.PROJECT).expirationYear()
                 .providerType(ProviderType.QUALITY)
                 .query("new " + SonarMetricKpi.class.getName() + "('" + _metricName + "')")
-                .cronDays(1).build();
+                .cronSixHours().build();
     }
 
     /**
@@ -124,7 +124,7 @@ public class KpiDemoService {
         return KpiBuilder.createAscending().nameAndKeyDescription("Number of build per day")
                 .providerType(ProviderType.CI_BUILD)
                 .entityType(EntityType.PROJECT).expirationMonth().query(BuildPerDay.class)
-                .cronFiveMinutes().build();
+                .cronSixHours().build();
 
     }
 
