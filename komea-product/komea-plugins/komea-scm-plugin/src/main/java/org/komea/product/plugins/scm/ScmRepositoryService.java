@@ -173,7 +173,7 @@ public final class ScmRepositoryService implements IScmRepositoryService
         
         cronRegistryService.registerCronTask(SCM_AUTOUPDATING_CRON, CRON_DEFAULT_EXPRESSION,
                 ScmScheduleCronJob.class, new JobDataMap());
-        cronRegistryService.forceNow(SCM_AUTOUPDATING_CRON);
+        updateRepositories();
     }
     
     
@@ -260,6 +260,18 @@ public final class ScmRepositoryService implements IScmRepositoryService
     
     
         pluginStorageService = _pluginStorageService;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.scm.api.IScmRepositoryService#updateRepositories()
+     */
+    @Override
+    public void updateRepositories() {
+    
+    
+        cronRegistryService.forceNow(SCM_AUTOUPDATING_CRON);
     }
     
 }

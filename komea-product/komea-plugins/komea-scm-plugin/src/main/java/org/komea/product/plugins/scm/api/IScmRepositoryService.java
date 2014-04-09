@@ -45,6 +45,12 @@ public interface IScmRepositoryService
     
     
     /**
+     * Returns true if the git repository has an associated cron task.
+     */
+    boolean isAssociatedToCron(ScmRepositoryDefinition _fetch);
+    
+    
+    /**
      * Initialize a cron name for the repository and saves it
      * 
      * @param _fetch
@@ -52,12 +58,6 @@ public interface IScmRepositoryService
      * @return the cron name.
      */
     String registerCronJobOfScm(ScmRepositoryDefinition _fetch);
-    
-    
-    /**
-     * Returns true if the git repository has an associated cron task.
-     */
-    boolean isAssociatedToCron(ScmRepositoryDefinition _fetch);
     
     
     /**
@@ -76,4 +76,10 @@ public interface IScmRepositoryService
      *            the git repository.
      */
     void saveOrUpdate(ScmRepositoryDefinition _gitRepository);
+    
+    
+    /**
+     * Update the repositories by forcing cron.
+     */
+    void updateRepositories();
 }
