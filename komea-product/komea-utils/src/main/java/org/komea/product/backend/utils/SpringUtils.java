@@ -7,12 +7,45 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 
 
 public class SpringUtils
 {
+    
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpringUtils.class);
+    
+    
+    
+    /**
+     * Find annotation
+     * 
+     * @param _context
+     *            the context
+     * @param _beanName
+     *            the bean name
+     * @param _annotation
+     *            the annotation
+     * @return the annotation.
+     */
+    public static <A extends Annotation> A findAnnotation(
+            final ApplicationContext _context,
+            final String _beanName,
+            final Class<A> _annotation) {
+    
+    
+        A findAnnotationOnBean = null;
+        try {
+            findAnnotationOnBean = _context.findAnnotationOnBean(_beanName, _annotation);
+        } catch (final Exception e) {
+            LOGGER.debug(e.getMessage(), e);
+        }
+        return findAnnotationOnBean;
+    }
     
     
     public static <A extends Annotation> List<A> findAnnotations(

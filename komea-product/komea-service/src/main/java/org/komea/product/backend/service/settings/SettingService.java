@@ -20,6 +20,7 @@ import org.komea.product.backend.service.ISettingProxy;
 import org.komea.product.backend.service.ISettingService;
 import org.komea.product.backend.service.proxy.SettingProxy;
 import org.komea.product.backend.utils.CollectionUtil;
+import org.komea.product.backend.utils.SpringUtils;
 import org.komea.product.database.dao.SettingDao;
 import org.komea.product.database.model.Setting;
 import org.komea.product.database.model.SettingCriteria;
@@ -30,6 +31,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,16 +44,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class SettingService implements ISettingService, BeanPostProcessor
+public class SettingService implements ISettingService, BeanPostProcessor, ApplicationContextAware
 {
     
     
     private static final Logger                 LOGGER                   =
                                                                                  LoggerFactory
                                                                                          .getLogger("server_settings");
+    private ApplicationContext                  applicationContext;
+    
     @Autowired
     private SettingDao                          settingDAO;
-    
     private final SettingListenerGroupContainer settingListenerContainer =
                                                                                  new SettingListenerGroupContainer();
     
@@ -234,7 +238,7 @@ public class SettingService implements ISettingService, BeanPostProcessor
     
     
         final Properties annotation =
-                AnnotationUtils.findAnnotation(_bean.getClass(), Properties.class);
+                SpringUtils.findAnnotation(applicationContext, _beanName, Properties.class);
         if (annotation != null) {
             LOGGER.info("Bean {} defines custom server settings", _beanName);
             for (final Property property : annotation.value()) {
@@ -276,6 +280,21 @@ public class SettingService implements ISettingService, BeanPostProcessor
     
     
         settingListenerContainer.register(_propertyName, _listener);
+        
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
+     */
+    @Override
+    public void setApplicationContext(final ApplicationContext _applicationContext)
+            throws BeansException {
+    
+    
+        applicationContext = _applicationContext;
+        
         
     }
     
