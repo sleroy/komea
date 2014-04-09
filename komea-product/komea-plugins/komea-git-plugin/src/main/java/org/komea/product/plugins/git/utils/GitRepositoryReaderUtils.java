@@ -67,8 +67,7 @@ public class GitRepositoryReaderUtils
         
         FileRepository fileRepository;
         try {
-            fileRepository =
-                    new FileRepository(_repositoryDefinition.getCloneDirectory() + "/.git");
+            fileRepository = new FileRepository(_repositoryDefinition.getCloneDirectory());
             return new Git(fileRepository);
         } catch (final IOException e) {
             throw new ScmCannotObtainGitProxyException("Could not create Git proxy on repository "

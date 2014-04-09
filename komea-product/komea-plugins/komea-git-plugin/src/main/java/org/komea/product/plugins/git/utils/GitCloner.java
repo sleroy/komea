@@ -152,18 +152,4 @@ public class GitCloner implements IScmCloner
         scmClonedDirectory.deleteOnExit();
         scmRepositoryDefinition.setCloneDirectory(new File(scmClonedDirectory + "/.git"));
     }
-
-
-    public Git getGit() {
-    
-    
-        return git;
-    }
-
-
-    public void setGit(Git _git) {
-    
-    
-        git = _git;
-    }
 }
