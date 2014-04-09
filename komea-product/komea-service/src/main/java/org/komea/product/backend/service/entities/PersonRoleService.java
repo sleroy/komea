@@ -6,6 +6,7 @@ package org.komea.product.backend.service.entities;
 
 
 
+import org.apache.commons.lang.Validate;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.IGenericDAO;
@@ -38,6 +39,23 @@ public class PersonRoleService extends AbstractService<PersonRole, Integer, Pers
      * 
      * @return the default user role.
      */
+    @Override
+    public PersonRole getAdminRole() {
+    
+    
+        final PersonRole singleOrNull =
+                CollectionUtil.singleOrNull(selectByCriteria(createKeyCriteria("ADMIN")));
+        Validate.notNull(singleOrNull);
+        return singleOrNull;
+    }
+    
+    
+    /**
+     * Returns the default user role
+     * 
+     * @return the default user role.
+     */
+    @Override
     public PersonRole getDefaultUserRole() {
     
     

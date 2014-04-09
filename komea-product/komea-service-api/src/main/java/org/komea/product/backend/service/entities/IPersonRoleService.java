@@ -23,6 +23,14 @@ public interface IPersonRoleService extends
     
     
     /**
+     * Returns the admin role
+     * 
+     * @return the admin role.
+     */
+    PersonRole getAdminRole();
+    
+    
+    /**
      * Returns the default user role
      * 
      * @return the default user role.
