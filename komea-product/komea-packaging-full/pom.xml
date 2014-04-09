@@ -42,6 +42,12 @@
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<configuration>
+				  <systemProperties>
+				      <systemProperty>
+					 <name>komea.home</name>
+					 <value>target/komea_dir</value>
+				       </systemProperty>
+				    </systemProperties>
 					<webAppConfig>
 						<allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
 						<resourceBases>
