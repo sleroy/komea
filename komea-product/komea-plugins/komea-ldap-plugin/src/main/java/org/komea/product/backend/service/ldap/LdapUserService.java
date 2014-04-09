@@ -44,7 +44,7 @@ import org.springframework.ldap.core.AttributesMapper;
 @Properties(value =
     { @Property(
             key = LdapUserService.LDAP_SERVER,
-            value = "ldap://",
+            value = "",
             type = String.class,
             description = "Specify the location of the LDAP Server"), @Property(
             key = LdapUserService.LDAP_PASSWORD,

@@ -16,7 +16,6 @@ import org.komea.product.api.service.ldap.ILdapUserService;
 import org.komea.product.api.service.ldap.LdapUser;
 import org.komea.product.backend.plugin.api.PostSettingRegistration;
 import org.komea.product.backend.service.ISettingService;
-import org.komea.product.database.utils.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,15 +174,14 @@ public class LdapConnector implements Closeable, ILdapConnector
                     settingService.getProxy(ILdapUserService.LDAP_SERVER).getStringValue();
             
             
-            final String[] schemes =
-                { "ldaps", "ldap" };
-            final UrlValidator urlValidator = new UrlValidator(schemes);
-            if (!urlValidator.isValid(ldapUrl)) {
+            if (Strings.isNullOrEmpty(ldapUrl)) {
                 LOGGER.error(
                         "Cannot connect to the LDAP server, please indicates a valid url -> {}",
                         ldapUrl);
                 throw new IllegalArgumentException(
-                        "Invalid url is provided or ldap is not configured. If you do not wish to configure LDAP Plugin, you may ignore this exception.");
+                        "Invalid url "
+                                + ldapUrl
+                                + " is provided or ldap is not configured. If you do not wish to configure LDAP Plugin, you may ignore this exception.");
             }
             
             final String ldapUserDN =
