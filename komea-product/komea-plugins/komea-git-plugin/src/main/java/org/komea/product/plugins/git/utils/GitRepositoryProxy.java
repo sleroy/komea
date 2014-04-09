@@ -39,14 +39,14 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author sleroy
  */
 
-public class GItRepositoryProxy implements IScmRepositoryProxy
+public class GitRepositoryProxy implements IScmRepositoryProxy
 {
     
     
     private static final Logger           LOGGER = LoggerFactory.getLogger("git-repository-reader");
     
     
-    private final Git                     git;
+    private Git                           git;
     
     
     @Autowired
@@ -67,7 +67,7 @@ public class GItRepositoryProxy implements IScmRepositoryProxy
      * Builds the GIT repositor proxy, an exception may be thrown when creating the GIT Proxy.
      */
     
-    public GItRepositoryProxy(
+    public GitRepositoryProxy(
             final ScmRepositoryDefinition _repositoryDefinition,
             final File _storageFolder) {
     
@@ -75,7 +75,6 @@ public class GItRepositoryProxy implements IScmRepositoryProxy
         super();
         repositoryDefinition = _repositoryDefinition;
         storageFolder = _storageFolder;
-        git = GitRepositoryReaderUtils.getGit(_repositoryDefinition);
         scmEventFactory = new ScmEventFactory(repositoryDefinition);
     }
     
@@ -88,9 +87,11 @@ public class GItRepositoryProxy implements IScmRepositoryProxy
     public void close() throws IOException {
     
     
-        git.gc();
-        git.close();
-        
+        if (git != null) {
+            git.gc();
+            
+            git.close();
+        }
     }
     
     
@@ -125,7 +126,7 @@ public class GItRepositoryProxy implements IScmRepositoryProxy
     
         Validate.notEmpty(_branchName);
         Validate.notNull(_previousTime);
-        GitRepositoryReaderUtils.switchBranch(git, _branchName);
+        GitRepositoryReaderUtils.switchBranch(getGit(), _branchName);
         final List<IScmCommit> commits = new ArrayList<IScmCommit>(100);
         RevWalk revWalk = null;
         try {
@@ -133,12 +134,13 @@ public class GItRepositoryProxy implements IScmRepositoryProxy
             /**
              * Produce the log configuration
              */
-            final org.eclipse.jgit.api.LogCommand logcmd = git.log();
+            final org.eclipse.jgit.api.LogCommand logcmd = getGit().log();
             final Map<String, Ref> mapRefs =
-                    GitRepositoryReaderUtils.obtainBranchRefsFromARepository(git.getRepository());
+                    GitRepositoryReaderUtils.obtainBranchRefsFromARepository(getGit()
+                            .getRepository());
             
             GitRepositoryReaderUtils.initializeLogWalkWithBranchNames(logcmd, mapRefs);
-            revWalk = new RevWalk(git.getRepository());
+            revWalk = new RevWalk(getGit().getRepository());
             
             final DoesCommitOwnToThisBranchPredicate predicate =
                     newBranchPredicate(_branchName, revWalk);
@@ -181,8 +183,8 @@ public class GItRepositoryProxy implements IScmRepositoryProxy
     public Set<String> getAllTagsFromABranch(final String _branchName) {
     
     
-        GitRepositoryReaderUtils.switchBranch(git, _branchName);
-        return git.getRepository().getTags().keySet();
+        GitRepositoryReaderUtils.switchBranch(getGit(), _branchName);
+        return getGit().getRepository().getTags().keySet();
     }
     
     
@@ -194,7 +196,7 @@ public class GItRepositoryProxy implements IScmRepositoryProxy
     public List<String> getBranches() {
     
     
-        final List<Ref> branches = GitRepositoryReaderUtils.listRemoteBranches(git);
+        final List<Ref> branches = GitRepositoryReaderUtils.listRemoteBranches(getGit());
         return CollectionUtil.convertAll(branches, new GitRefToBranchNameConverter());
     }
     
@@ -210,6 +212,23 @@ public class GItRepositoryProxy implements IScmRepositoryProxy
     
     
         return scmEventFactory;
+    }
+    
+    
+    /**
+     * Returns the git
+     * 
+     * @return the git object.
+     */
+    public Git getGit() {
+    
+    
+        if (git == null) {
+            git = GitRepositoryReaderUtils.getGit(repositoryDefinition);
+            
+        }
+        
+        return git;
     }
     
     
@@ -277,7 +296,8 @@ public class GItRepositoryProxy implements IScmRepositoryProxy
     
     
         final DoesCommitOwnToThisBranchPredicate doesCommitOwnToThisBranchPredicate =
-                new DoesCommitOwnToThisBranchPredicate(_branchName, git.getRepository(), revWalk);
+                new DoesCommitOwnToThisBranchPredicate(_branchName, getGit().getRepository(),
+                        revWalk);
         return doesCommitOwnToThisBranchPredicate;
     }
     

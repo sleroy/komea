@@ -62,9 +62,12 @@ public class GitRepositoryReaderUtils
     public static Git getGit(final ScmRepositoryDefinition _repositoryDefinition) {
     
     
+        if (!_repositoryDefinition.getCloneDirectory().exists()) { throw new IllegalArgumentException(
+                "GIT Repository should be cloned before"); }
         FileRepository fileRepository;
         try {
-            fileRepository = new FileRepository(_repositoryDefinition.getCloneDirectory());
+            fileRepository =
+                    new FileRepository(_repositoryDefinition.getCloneDirectory() + "/.git");
             return new Git(fileRepository);
         } catch (final IOException e) {
             throw new ScmCannotObtainGitProxyException("Could not create Git proxy on repository "
