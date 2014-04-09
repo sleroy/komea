@@ -10,7 +10,8 @@ import java.util.List;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
-import org.apache.directory.shared.ldap.exception.LdapConfigurationException;
+import org.komea.product.api.service.errors.KomeaLdapConfigurationException;
+import org.komea.product.api.service.ldap.ILdapConnector;
 import org.komea.product.api.service.ldap.ILdapUserService;
 import org.komea.product.api.service.ldap.LdapUser;
 import org.komea.product.backend.plugin.api.PostSettingRegistration;
@@ -161,7 +162,7 @@ public class LdapConnector implements Closeable, ILdapConnector
     
     
     @PostSettingRegistration
-    public void initConnector() throws LdapConfigurationException {
+    public void initConnector() throws KomeaLdapConfigurationException {
     
     
         LOGGER.info("LDAP - LDAP");
@@ -219,7 +220,7 @@ public class LdapConnector implements Closeable, ILdapConnector
             LOGGER.error("----------LDAP ERROR-------------");
             LOGGER.error(e.getMessage(), e);
             LOGGER.error("----------LDAP ERROR-------------");
-            throw new LdapConfigurationException(e.getMessage(), e);
+            throw new KomeaLdapConfigurationException(e.getMessage(), e);
         }
         
     }

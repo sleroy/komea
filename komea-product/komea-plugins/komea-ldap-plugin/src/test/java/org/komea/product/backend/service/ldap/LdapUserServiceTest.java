@@ -9,10 +9,10 @@ package org.komea.product.backend.service.ldap;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.directory.shared.ldap.exception.LdapConfigurationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.komea.product.api.service.errors.KomeaLdapConfigurationException;
 import org.komea.product.api.service.ldap.ILdapUserService;
 import org.komea.product.api.service.ldap.LdapUser;
 import org.komea.product.backend.service.ISettingService;
@@ -67,13 +67,16 @@ public class LdapUserServiceTest extends AbstractSpringIntegrationTestCase
             Assert.assertNotNull(user);
             
             ldapConnector.close();
-        } catch (final LdapConfigurationException e) {
+        } catch (final KomeaLdapConfigurationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            Assert.fail(e.getMessage());
         } catch (final IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            Assert.fail(e.getMessage());
         }
+        
         
     }
     

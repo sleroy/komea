@@ -8,6 +8,7 @@ import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
 import org.apache.directory.shared.ldap.exception.LdapConfigurationException;
+import org.komea.product.api.service.ldap.ILdapConnector;
 import org.komea.product.api.service.ldap.ILdapUserService;
 import org.komea.product.api.service.ldap.LdapUser;
 import org.komea.product.backend.plugin.api.Properties;

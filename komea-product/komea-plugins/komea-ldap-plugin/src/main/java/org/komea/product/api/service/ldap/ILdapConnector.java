@@ -2,14 +2,12 @@
  * 
  */
 
-package org.komea.product.backend.service.ldap;
+package org.komea.product.api.service.ldap;
 
 
 
 import java.io.IOException;
 import java.util.List;
-
-import org.komea.product.api.service.ldap.LdapUser;
 
 
 
