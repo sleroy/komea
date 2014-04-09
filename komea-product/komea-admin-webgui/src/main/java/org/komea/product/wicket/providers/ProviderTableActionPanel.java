@@ -47,6 +47,8 @@ public class ProviderTableActionPanel extends Panel
         adminLinkExtension.setVisible(pluginPageClass != null);
         add(adminLinkExtension);
         
-        add(new LinkExtension("jump", model.getObject()));
+        final LinkExtension linkExtension = new LinkExtension("jump", model.getObject());
+        linkExtension.setVisible(model.getObject().isValidURL());
+        add(linkExtension);
     }
 }
