@@ -4,21 +4,25 @@ package org.komea.product.plugins.scm;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.business.IDAOObjectStorage;
+import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.plugins.IPluginStorageService;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.komea.product.plugins.scm.api.IScmRepositoryService;
+import org.komea.product.plugins.scm.cron.ScmScheduleCronJob;
+import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 
@@ -28,16 +32,28 @@ import org.springframework.stereotype.Service;
  * @author sleroy
  */
 @Service
+@Transactional
 public final class ScmRepositoryService implements IScmRepositoryService
 {
     
     
-    private static final Logger                        LOGGER    =
-                                                                         LoggerFactory
-                                                                                 .getLogger(ScmRepositoryService.class);
+    /**
+     * Repository cron.
+     */
+    private static final String                        CRON_DEFAULT_EXPRESSION = "0 0/2 * * * ?";
     
     
-    private final Map<String, String>                  cronTasks = new HashMap();
+    private static final Logger                        LOGGER                  =
+                                                                                       LoggerFactory
+                                                                                               .getLogger(ScmRepositoryService.class);
+    
+    
+    @Autowired
+    private ICronRegistryService                       cronRegistryService;
+    
+    
+    private final Map<String, String>                  cronTasks               =
+                                                                                       new ConcurrentHashMap<String, String>();
     
     
     private IDAOObjectStorage<ScmRepositoryDefinition> daoStorage;
@@ -89,6 +105,13 @@ public final class ScmRepositoryService implements IScmRepositoryService
     }
     
     
+    public ICronRegistryService getCronRegistryService() {
+    
+    
+        return cronRegistryService;
+    }
+    
+    
     /**
      * Returns the dao
      * 
@@ -119,7 +142,7 @@ public final class ScmRepositoryService implements IScmRepositoryService
     
         final List<ScmRepositoryDefinition> gitRepositoryDefinitions =
                 new ArrayList<ScmRepositoryDefinition>();
-        for (final ScmRepositoryDefinition gitRepositoryDefinition : gitRepositoryDefinitions) {
+        for (final ScmRepositoryDefinition gitRepositoryDefinition : getAllRepositories()) {
             if (!isAssociatedToCron(gitRepositoryDefinition)) {
                 gitRepositoryDefinitions.add(gitRepositoryDefinition);
             }
@@ -138,24 +161,9 @@ public final class ScmRepositoryService implements IScmRepositoryService
                         ScmRepositoryDefinition.class);
         Validate.notNull(daoStorage);
         
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.plugins.git.repositories.api.IGitRepositoryService#initializeCronName(org.komea.product.plugins.repository.model.
-     * ScmRepositoryDefinition)
-     */
-    @Override
-    public synchronized String registerCronJobOfScm(
-            final ScmRepositoryDefinition _repositoryDefinition) {
-    
-    
-        final String cronName = _repositoryDefinition.getRepoName();
-        cronTasks.put(_repositoryDefinition.getKey(), cronName);
-        getDAO().saveOrUpdate(_repositoryDefinition);
-        return cronName;
+        
+        cronRegistryService.registerCronTask("SCM_AUTOUPDATING_CRON", CRON_DEFAULT_EXPRESSION,
+                ScmScheduleCronJob.class, new JobDataMap());
     }
     
     
@@ -170,6 +178,26 @@ public final class ScmRepositoryService implements IScmRepositoryService
     
     
         return cronTasks.containsKey(_repositoryDefinition.getKey());
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.komea.product.plugins.git.repositories.api.IGitRepositoryService#initializeCronName(org.komea.product.plugins.repository.model.
+     * ScmRepositoryDefinition)
+     */
+    @Override
+    public synchronized String registerCronJobOfScm(
+            final ScmRepositoryDefinition _repositoryDefinition) {
+    
+    
+        Validate.notNull(_repositoryDefinition);
+        Validate.notEmpty(_repositoryDefinition.getKey());
+        final String cronName = _repositoryDefinition.getRepoName();
+        cronTasks.put(_repositoryDefinition.getKey(), cronName);
+        getDAO().saveOrUpdate(_repositoryDefinition);
+        return cronName;
     }
     
     
@@ -199,6 +227,13 @@ public final class ScmRepositoryService implements IScmRepositoryService
     
         getDAO().saveOrUpdate(_gitRepository);
         
+    }
+    
+    
+    public void setCronRegistryService(final ICronRegistryService _cronRegistryService) {
+    
+    
+        cronRegistryService = _cronRegistryService;
     }
     
     

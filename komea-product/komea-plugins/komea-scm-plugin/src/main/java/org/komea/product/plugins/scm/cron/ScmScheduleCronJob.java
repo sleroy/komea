@@ -43,7 +43,7 @@ public class ScmScheduleCronJob implements Job
     
     private static final Logger                LOGGER              =
                                                                            LoggerFactory
-                                                                                   .getLogger("git-scheduler");
+                                                                                   .getLogger("scm-scheduler");
     
     
     @Autowired

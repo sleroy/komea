@@ -91,8 +91,8 @@
 			<artifactId>komea-rss-plugin</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- <dependency> <groupId>org.komea.plugins</groupId> <artifactId>komea-git-plugin</artifactId> 
-			<version>${project.version}</version> </dependency> -->
+		 <dependency> <groupId>org.komea.plugins</groupId> <artifactId>komea-git-plugin</artifactId> 
+			<version>${project.version}</version> </dependency> 
 		<dependency>
 			<groupId>org.komea.plugins</groupId>
 			<artifactId>komea-bugzilla-plugin</artifactId>

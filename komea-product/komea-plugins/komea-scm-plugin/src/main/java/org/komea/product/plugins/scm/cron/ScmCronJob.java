@@ -38,7 +38,7 @@ public class ScmCronJob implements Job
     
     
     private static final Logger           LOGGER            = LoggerFactory
-                                                                    .getLogger("git-cron-fetch");
+                                                                    .getLogger("scm-cron-fetch");
     
     
     @Autowired
@@ -78,7 +78,7 @@ public class ScmCronJob implements Job
     
     
     /**
-     * Executes the git cron
+     * Executes the scm cron
      */
     public void executeScmCron() {
     
