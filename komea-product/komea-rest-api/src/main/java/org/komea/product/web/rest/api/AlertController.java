@@ -32,9 +32,7 @@ public class AlertController {
     @RequestMapping(method = RequestMethod.POST, value = "/find")
     @ResponseBody
     public List<KpiAlertDto> findAlerts(@Valid @RequestBody final SearchKpiAlertsDto _searchAlert) {
-        System.out.println("findAlerts : " + _searchAlert);
         List<KpiAlertDto> findAlerts = alertService.findAlerts(_searchAlert);
-        System.out.println("alerts result : " + findAlerts);
         return findAlerts;
     }
 

@@ -67,4 +67,11 @@ public class SearchKpiAlertsDto implements Serializable {
         this.activatedOnly = activatedOnly;
     }
 
+    @Override
+    public String toString() {
+        return "SearchKpiAlertsDto{" + "entityType=" + entityType + ", kpiAlertTypeKeys="
+                + kpiAlertTypeKeys + ", entityKeys=" + entityKeys + ", severityMin="
+                + severityMin + ", activatedOnly=" + activatedOnly + '}';
+    }
+
 }
