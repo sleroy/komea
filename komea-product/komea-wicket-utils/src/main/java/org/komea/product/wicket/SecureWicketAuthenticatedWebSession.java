@@ -63,6 +63,7 @@ public class SecureWicketAuthenticatedWebSession extends AuthenticatedWebSession
             logger.warn(String.format("User &#039;%s&#039; failed to login. Reason: %s", username,
                     e.getMessage()));
             authenticated = false;
+            logger.error("Exception was thrown from : " + e.getMessage(), e);
         }
         return authenticated;
     }

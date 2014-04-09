@@ -29,7 +29,7 @@ public class UserAuthenticationService implements UserDetailsService
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserAuthenticationService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("userauth");
     
     
     @Autowired
@@ -61,25 +61,35 @@ public class UserAuthenticationService implements UserDetailsService
     public UserDetails loadUserByUsername(final String _username) throws UsernameNotFoundException {
     
     
+        LOGGER.debug("Lookup on username : {}", _username);
         final PersonCriteria personByLoginCriteria = new PersonCriteria();
         personByLoginCriteria.createCriteria().andLoginEqualTo(_username);
-        final Person requestedLoginUsers =
+        final Person requestedPerson =
                 CollectionUtil.singleOrNull(personDAO.selectByCriteria(personByLoginCriteria));
         
-        if (requestedLoginUsers == null) { throw new UsernameNotFoundException(
-                "Invalid username/password."); }
+        if (requestedPerson == null) {
+            LOGGER.warn("User {} does not exist.", _username);
+            throw new UsernameNotFoundException("Invalid username/password.");
+        }
+        if (!requestedPerson.isAssociatedToRole()) {
+            LOGGER.error("User {} is without any role.", _username);
+            throw new UsernameNotFoundException(
+                    "An user without priviledge cannot be authenticated");
+        }
+        
         final PersonRoleCriteria personRoleCriteria = new PersonRoleCriteria();
-        personRoleCriteria.createCriteria().andIdEqualTo(requestedLoginUsers.getIdPersonRole());
+        personRoleCriteria.createCriteria().andIdEqualTo(requestedPerson.getIdPersonRole());
         final PersonRole personRole =
                 CollectionUtil.singleOrNull(personRoleDAO.selectByCriteria(personRoleCriteria));
         String right = "";
         if (personRole != null) {
             right = personRole.getRoleKey();
         } else {
-            throw new UsernameNotFoundException("Invalid username/password.");
+            throw new UsernameNotFoundException(
+                    "Invalid username/password, this user does not have role.");
         }
         LOGGER.trace("-----AUTH----- LdapUser authentication requested {}", _username);
-        return new User(requestedLoginUsers.getLogin(), requestedLoginUsers.getPassword(),
+        return new User(requestedPerson.getLogin(), requestedPerson.getPassword(),
                 AuthorityUtils.createAuthorityList(right));
     }
     
