@@ -37,6 +37,16 @@ public interface IPersonService extends IGenericService<Person, Integer, PersonC
     
     
     /**
+     * Find or create lazily the person based on its login.
+     * 
+     * @param _person
+     *            the person login
+     * @return the person.
+     */
+    public Person findOrCreatePersonByLogin(String _person);
+    
+    
+    /**
      * Find a user by its email.
      * 
      * @param _email

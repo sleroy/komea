@@ -5,6 +5,7 @@ package org.komea.product.backend.service.esper;
 
 import javax.annotation.PostConstruct;
 
+import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.backend.service.entities.PersonService;
 import org.komea.product.backend.service.entities.ProjectService;
@@ -45,7 +46,7 @@ public class EventConversionAndValidationService implements IEventConversionAndV
     @Autowired
     private PersonGroupDao      personGroupDAO;
     @Autowired
-    private PersonService       personService;
+    private IPersonService      personService;
     @Autowired
     private IProjectService     projectService;
     
@@ -145,7 +146,7 @@ public class EventConversionAndValidationService implements IEventConversionAndV
      * 
      * @return PersonDao
      */
-    public PersonService getPersonService() {
+    public IPersonService getPersonService() {
     
     
         return personService;
