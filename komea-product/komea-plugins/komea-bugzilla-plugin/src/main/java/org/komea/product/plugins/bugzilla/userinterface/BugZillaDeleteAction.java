@@ -8,7 +8,6 @@ package org.komea.product.plugins.bugzilla.userinterface;
 import java.util.List;
 import org.komea.product.plugins.bugzilla.api.IBugZillaConfigurationService;
 import org.komea.product.plugins.bugzilla.data.BugZillaServer;
-import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 
 /**

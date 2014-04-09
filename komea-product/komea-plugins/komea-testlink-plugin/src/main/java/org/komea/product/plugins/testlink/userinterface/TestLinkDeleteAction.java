@@ -27,8 +27,11 @@ public class TestLinkDeleteAction implements IDeleteAction<TestLinkServer> {
 
     @Override
     public void delete(TestLinkServer _object) {
-        this.serverAffiche.remove(serverAffiche);
-        this.testlinkService.delete(_object);
+        boolean delete = this.testlinkService.delete(_object);
+        if (delete) {
+            this.serverAffiche.remove(_object);
+        }
+
     }
 
 }

@@ -53,6 +53,9 @@ public class PersonAddPage extends LayoutPage {
     
     @SpringBean
     private IPasswordEncoder passEncoder;
+    
+    @SpringBean
+    private IPersonRoleService personRole;
 
     public PersonAddPage(final PageParameters _parameters) {
 
@@ -66,7 +69,7 @@ public class PersonAddPage extends LayoutPage {
 
         final PersonFormData newPersonForm = formularService.newPersonForm();
         final PersonForm personForm
-                = new PersonForm(passEncoder,personDAO, projectService, newPersonForm, "form",
+                = new PersonForm(personRole,passEncoder,personDAO, projectService, newPersonForm, "form",
                         new CompoundPropertyModel<Person>(_person), this, personGroupService);
         add(personForm);
 
