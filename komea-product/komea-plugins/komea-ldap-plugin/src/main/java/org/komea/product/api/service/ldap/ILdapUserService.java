@@ -3,7 +3,8 @@ package org.komea.product.api.service.ldap;
 
 
 
-import java.util.List;
+import org.apache.directory.shared.ldap.exception.LdapConfigurationException;
+import org.komea.product.backend.service.ldap.ILdapConnector;
 
 
 
@@ -46,24 +47,12 @@ public interface ILdapUserService
     
     
     /**
-     * Method to test authentication for an ldap user.
+     * Returns a ldap connector
      * 
-     * @param userName
-     * @param password
-     * @return
+     * @return the ldap connector.
+     * @throws LdapConfigurationException
      */
-    boolean authenticate(final String userName, final String password);
+    ILdapConnector newConnector() throws LdapConfigurationException;
     
-    
-    LdapUser getUser(final String email);
-    
-    
-    List<LdapUser> getUsers(final String pattern);
-    
-    
-    /**
-     * Refresh the plugin since properties have been modified.
-     */
-    void refreshPlugin();
     
 }

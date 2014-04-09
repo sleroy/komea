@@ -16,8 +16,6 @@ import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.enums.UserBdd;
 import org.komea.product.database.model.Person;
-import org.komea.product.database.model.PersonCriteria;
-import org.komea.product.database.model.PersonRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -57,6 +55,9 @@ public class DemoDataBean
     @Autowired
     private ICronRegistryService registry;
     
+    @Autowired
+    private UserRoleDataBean     userRoleDataBean;
+    
     
     
     /**
@@ -75,13 +76,13 @@ public class DemoDataBean
     public void init() {
     
     
-        final PersonRole administrator = personRoleDao.getAdminRole();
         if (personDAO.selectAll().isEmpty()) {
             
             final Person admin =
                     new Person(null, null, null, "admin", "admin", "admin@admin", "admin",
                             encoder.encodePassword("admin"), UserBdd.KOMEA);
-            createUser(admin, administrator);
+            admin.setIdPersonRoleOrNull(personRoleDao.getAdminRole());
+            personDAO.saveOrUpdate(admin);
         }
         
     }
@@ -99,27 +100,5 @@ public class DemoDataBean
         personGroupDao = _personGroupDao;
     }
     
-    
-    /**
-     * Method createUser.
-     * 
-     * @param record
-     *            Person
-     * @param userRole
-     *            PersonRole
-     * @return Person
-     */
-    private Person createUser(final Person record, final PersonRole userRole) {
-    
-    
-        record.setIdPersonRole(userRole.getId());
-        final PersonCriteria pCriteria = new PersonCriteria();
-        pCriteria.createCriteria().andLoginEqualTo(record.getLogin());
-        if (personDAO.countByCriteria(pCriteria) == 0) {
-            personDAO.insert(record);
-            
-        }
-        return record;
-    }
     
 }

@@ -3,36 +3,25 @@ package org.komea.product.backend.service.ldap;
 
 
 
-import java.util.List;
-
+import javax.annotation.PostConstruct;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
+import org.apache.directory.shared.ldap.exception.LdapConfigurationException;
 import org.komea.product.api.service.ldap.ILdapUserService;
 import org.komea.product.api.service.ldap.LdapUser;
-import org.komea.product.backend.plugin.api.PostSettingRegistration;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.ISettingService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
-import org.komea.product.backend.service.entities.IPersonGroupService;
-import org.komea.product.backend.service.entities.IPersonRoleService;
-import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.enums.ProviderType;
 import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.AttributesMapper;
-import org.springframework.ldap.core.DistinguishedName;
-import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.filter.AndFilter;
-import org.springframework.ldap.filter.EqualsFilter;
-import org.springframework.ldap.filter.LikeFilter;
-import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
-
-import com.google.common.base.Strings;
 
 
 
@@ -106,62 +95,11 @@ public class LdapUserService implements ILdapUserService
     
     
     @Autowired
-    private IPersonGroupService  groupService;
-    
-    
-    private LdapTemplate         ldapTemplate;
-    
-    
-    @Autowired
-    private IPersonRoleService   personRoleService;
-    
-    @Autowired
-    private IPersonService       personService;
-    
-    
-    @Autowired
     private ICronRegistryService registryService;
     
     @Autowired
     private ISettingService      settingService;
     
-    
-    
-    @Override
-    public boolean authenticate(final String userName, final String password) {
-    
-    
-        final AndFilter filter = new AndFilter();
-        filter.and(new EqualsFilter("objectclass", "person"))
-                .and(new EqualsFilter("uid", userName));
-        return ldapTemplate.authenticate(DistinguishedName.EMPTY_PATH, filter.toString(), password);
-    }
-    
-    
-    /**
-     * Return the group service
-     * 
-     * @return the group service.
-     */
-    public IPersonGroupService getGroupService() {
-    
-    
-        return groupService;
-    }
-    
-    
-    public IPersonRoleService getPersonRoleService() {
-    
-    
-        return personRoleService;
-    }
-    
-    
-    public IPersonService getPersonService() {
-    
-    
-        return personService;
-    }
     
     
     public ICronRegistryService getRegistryService() {
@@ -171,74 +109,13 @@ public class LdapUserService implements ILdapUserService
     }
     
     
-    @Override
-    public LdapUser getUser(final String userName) {
-    
-    
-        final AndFilter filter = new AndFilter();
-        filter.and(new EqualsFilter("objectclass", "person"))
-                .and(new EqualsFilter("uid", userName));
-        final List<LdapUser> users =
-                ldapTemplate.search(DistinguishedName.EMPTY_PATH, filter.encode(),
-                        new UserAttributesMapper());
-        if (!users.isEmpty()) { return users.get(0); }
-        return null;
-    }
-    
-    
-    @Override
-    public List<LdapUser> getUsers(final String pattern) {
-    
-    
-        final AndFilter filter = new AndFilter();
-        filter.and(new EqualsFilter("objectclass", "person"));
-        if (pattern != null) {
-            filter.and(new LikeFilter("uid", pattern));
-        }
-        final List<LdapUser> users =
-                ldapTemplate.search(DistinguishedName.EMPTY_PATH, filter.encode(),
-                        new UserAttributesMapper());
-        return users;
-    }
-    
-    
-    @Override
-    @PostSettingRegistration
-    public void refreshPlugin() {
+    @PostConstruct
+    public void init() {
     
     
         LOGGER.info("LDAP - LDAP");
-        /**
-         * Initialisation of the connexion to the ldap server
-         */
-        LOGGER.info("Creation of the LDAP connection.");
-        final String ldapUrl = settingService.getProxy(LDAP_SERVER).getStringValue();
-        final String ldapUserDN = settingService.getProxy(LDAP_USER_DN).getStringValue();
-        final String password = settingService.getProxy(LDAP_PASSWORD).getStringValue();
-        final String ldapBase = settingService.getProxy(LDAP_BASE).getStringValue();
-        
-        LOGGER.info("LDAP Url : {}", ldapUrl);
-        LOGGER.info("LDAP Base : {}", ldapBase);
-        LOGGER.info("LDAP UserDN {}", ldapUserDN);
-        
-        final DefaultSpringSecurityContextSource contextSource =
-                new org.springframework.security.ldap.DefaultSpringSecurityContextSource(ldapUrl);
-        
-        
-        // LDAP Anonymous access
-        if (Strings.isNullOrEmpty(ldapUserDN) && Strings.isNullOrEmpty(password)) {
-            
-            contextSource.setAnonymousReadOnly(true);
-        }
-        contextSource.setUserDn(ldapUserDN);
-        contextSource.setPassword(password);
-        contextSource.setBase(ldapBase);
         try {
-            contextSource.afterPropertiesSet();
             
-            
-            ldapTemplate = new LdapTemplate(contextSource);
-            ldapTemplate.afterPropertiesSet();
             final JobDataMap properties = initializeDataForCron();
             LOGGER.info("Initialization of lDAP Cron.");
             registryService.removeCronTask(LDAP_CRON_REFRESH);
@@ -246,37 +123,25 @@ public class LdapUserService implements ILdapUserService
                     LdapCronRefreshJob.class, properties);
             registryService.forceNow(LDAP_CRON_REFRESH);
         } catch (final Exception e) {
-            throw new IllegalArgumentException(e);
+            
+            throw new BeanCreationException(e.getMessage(), e);
         }
         
     }
     
     
-    public void setGroupService(final IPersonGroupService _groupService) {
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.api.service.ldap.ILdapUserService#newConnector()
+     */
+    @Override
+    public ILdapConnector newConnector() throws LdapConfigurationException {
     
     
-        groupService = _groupService;
-    }
-    
-    
-    public void setLdapTemplate(final LdapTemplate ldapTemplate) {
-    
-    
-        this.ldapTemplate = ldapTemplate;
-    }
-    
-    
-    public void setPersonRoleService(final IPersonRoleService _personRoleService) {
-    
-    
-        personRoleService = _personRoleService;
-    }
-    
-    
-    public void setPersonService(final IPersonService _personService) {
-    
-    
-        personService = _personService;
+        final LdapConnector ldapConnector = new LdapConnector();
+        ldapConnector.setSettingService(settingService);
+        ldapConnector.initConnector();
+        return ldapConnector;
     }
     
     
@@ -291,6 +156,7 @@ public class LdapUserService implements ILdapUserService
     
     
         final JobDataMap properties = new JobDataMap();
+        
         return properties;
     }
     

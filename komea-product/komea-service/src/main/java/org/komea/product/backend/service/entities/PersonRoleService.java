@@ -43,8 +43,7 @@ public class PersonRoleService extends AbstractService<PersonRole, Integer, Pers
     public PersonRole getAdminRole() {
     
     
-        final PersonRole singleOrNull =
-                CollectionUtil.singleOrNull(selectByCriteria(createKeyCriteria("ADMIN")));
+        final PersonRole singleOrNull = selectByKey("ADMIN");
         Validate.notNull(singleOrNull);
         return singleOrNull;
     }
