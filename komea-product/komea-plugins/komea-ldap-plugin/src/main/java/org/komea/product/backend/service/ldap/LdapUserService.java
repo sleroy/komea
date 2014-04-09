@@ -41,28 +41,29 @@ import org.springframework.ldap.core.AttributesMapper;
         eventTypes = {},
         type = ProviderType.LDAP,
         url = "/ldap")
-@Properties(value =
-    { @Property(
-            key = LdapUserService.LDAP_SERVER,
-            value = "",
-            type = String.class,
-            description = "Specify the location of the LDAP Server"), @Property(
-            key = LdapUserService.LDAP_PASSWORD,
-            value = "",
-            type = String.class,
-            description = "Specify the LDAP Server password required to authenticate"), @Property(
-            key = LdapUserService.LDAP_USER_DN,
-            value = "",
-            type = String.class,
-            description = "Specify the LDAP userDn"), @Property(
-            key = LdapUserService.LDAP_BASE,
-            value = "dc=company,dc=com",
-            type = String.class,
-            description = "Specify the LDAP Base url"), @Property(
-            key = ILdapUserService.LDAP_AUTH_TYPE,
-            value = "SIMPLE",
-            type = LdapAuthTypeEnum.class,
-            description = "Specify the type of authentication used") })
+@Properties(
+        value =
+            { @Property(
+                    key = LdapUserService.LDAP_SERVER,
+                    value = "",
+                    type = String.class,
+                    description = "Specify the location of the LDAP Server"), @Property(
+                    key = LdapUserService.LDAP_PASSWORD,
+                    value = "",
+                    type = String.class,
+                    description = "Specify the LDAP Server password required to authenticate"), @Property(
+                    key = LdapUserService.LDAP_USER_DN,
+                    value = "",
+                    type = String.class,
+                    description = "Specify the LDAP userDn"), @Property(
+                    key = LdapUserService.LDAP_BASE,
+                    value = "dc=company,dc=com",
+                    type = String.class,
+                    description = "Specify the LDAP Base url"), @Property(
+                    key = ILdapUserService.LDAP_AUTH_TYPE,
+                    value = "SIMPLE",
+                    type = LdapAuthTypeEnum.class,
+                    description = "Specify the type of authentication used (DIGEST_MD5, SIMPLE, SIMPLE_TLS, TLS_CERTIFICATE)") })
 public class LdapUserService implements ILdapUserService
 {
     
