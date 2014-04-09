@@ -12,27 +12,26 @@ import java.util.List;
 
 
 /**
- * This class defines the ldap connector.
- * 
  * @author sleroy
+ *
  */
 public interface ILdapConnector
 {
     
     
-    public boolean authenticate(String userName, String password);
+    public abstract boolean authenticate(String userName, String password);
     
     
     /*
      * (non-Javadoc)
      * @see java.io.Closeable#close()
      */
-    public void close() throws IOException;
+    public abstract void close() throws IOException;
     
     
-    public LdapUser getUser(String userName);
+    public abstract LdapUser getUser(String userName);
     
     
-    public List<LdapUser> getUsers(String pattern);
+    public abstract List<LdapUser> getUsers(String pattern);
     
 }
