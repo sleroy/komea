@@ -56,13 +56,16 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
 
         final MeasureCriteria measureCriteria = new MeasureCriteria();
         measureCriteria.setOrderByClause(DATE_ORDER_DESC);
+        LOGGER.info("setOrderByClause: " + DATE_ORDER_DESC);
 
         final Criteria criteria = initMeasureCriteria(_historyK, measureCriteria);
         // Add ored criterias
         if (searchMeasuresDto.hasFromDate()) {
+            LOGGER.info("andDateGreaterThanOrEqualTo: " + searchMeasuresDto.getFromDate());
             criteria.andDateGreaterThanOrEqualTo(searchMeasuresDto.getFromDate());
         }
         if (searchMeasuresDto.hasToDate()) {
+            LOGGER.info("andDateLessThanOrEqualTo: " + searchMeasuresDto.getToDate());
             criteria.andDateLessThanOrEqualTo(searchMeasuresDto.getToDate());
         }
 
@@ -75,13 +78,16 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
 
         switch (_entityKey.getEntityType()) {
             case PERSON:
+                LOGGER.info("andIdPersonEqualTo: " + _entityKey.getId());
                 criteria.andIdPersonEqualTo(_entityKey.getId());
                 break;
             case PROJECT:
+                LOGGER.info("andIdProjectEqualTo: " + _entityKey.getId());
                 criteria.andIdProjectEqualTo(_entityKey.getId());
                 break;
             case TEAM:
             case DEPARTMENT:
+                LOGGER.info("andIdPersonGroupEqualTo: " + _entityKey.getId());
                 criteria.andIdPersonGroupEqualTo(_entityKey.getId());
                 break;
             default:
@@ -101,6 +107,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
             final MeasureCriteria measureCriteria) {
 
         final Criteria createCriteria = measureCriteria.createCriteria();
+        LOGGER.info("andIdKpiEqualTo: " + _kpiKey.getKpiID());
         createCriteria.andIdKpiEqualTo(_kpiKey.getKpiID());
         if (_kpiKey.hasEntityReference()) {
             createEntityCriteriaForMeasure(_kpiKey.getEntityKey(), createCriteria);
@@ -242,15 +249,21 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
         final Integer limit = searchMeasuresDto.getNbMeasures();
         final RowBounds rowBounds = new RowBounds(0, limit == null ? Integer.MAX_VALUE : limit);
         final List<Measure> measures = new ArrayList<Measure>(1000);
+        LOGGER.info("getMeasures");
         for (final IEntity entity : entities) {
-            entity.getId();
+            LOGGER.info("rntity: " + entity);
             for (final Kpi kpi : kpis) {
+                LOGGER.info("kpi: " + kpi);
                 final MeasureCriteria measureCriteria
                         = buildMeasureCriteriaFromSearchFilter(searchMeasuresDto,
                                 HistoryKey.of(kpi.getId(), entity.getEntityKey()));
-                measures.addAll(getListOfMeasures(rowBounds, measureCriteria));
+                LOGGER.info("rowBounds: " + rowBounds.getOffset() + " - " + rowBounds.getLimit());
+                final List<Measure> listOfMeasures = getListOfMeasures(rowBounds, measureCriteria);
+                LOGGER.info("criteria results: " + listOfMeasures);
+                measures.addAll(listOfMeasures);
             }
         }
+        LOGGER.info("result measures : " + measures);
         Collections.sort(measures, new DateComparator());
         return measures;
     }
