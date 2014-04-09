@@ -43,5 +43,5 @@ public interface ITestLinkServerService {
      *
      * @param server
      */
-    public void delete(TestLinkServer server);
+    public boolean delete(TestLinkServer server);
 }

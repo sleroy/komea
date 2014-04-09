@@ -36,32 +36,20 @@ public class TestLinkServerService implements ITestLinkServerService {
     @PostConstruct
     public void init() {
         configurationStorage = pluginStorage.registerStorage("TESTLINK", TestLinkStorageConfiguration.class);
-
         TestLinkStorageConfiguration var = configurationStorage.get();
-        List<TestLinkServer> configurations = getAllServer(var);
-
-        TestLinkServer testLinkServer = new TestLinkServer("http://ares.tocea/testlink/lib/api/xmlrpc.php",
-                "2dec70df08045278463817fb15d79c4d");
-        configurations.add(testLinkServer);
-//        var.setConfigurations(configurations);
-//        configurationStorage.set(var);
-    }
-
-    private List<TestLinkServer> getAllServer(TestLinkStorageConfiguration var) {
-        List<TestLinkServer> configurations;
-        if (var != null) {
-            configurations = var.getConfigurations();
-        } else {
-            configurations = new ArrayList<TestLinkServer>();
+        if (var == null) {
+            var = new TestLinkStorageConfiguration();
+            configurationStorage.set(var);
         }
-        return configurations;
+//        TestLinkServer testLinkServer = new TestLinkServer("http://ares.tocea/testlink/lib/api/xmlrpc.php",
+//                "2dec70df08045278463817fb15d79c4d");
+
     }
 
     @Override
     public List<ITestLinkServerConfiguration> getServers() {
         TestLinkStorageConfiguration var = configurationStorage.get();
-        List<TestLinkServer> configurations = getAllServer(var);
-//        configurationStorage.set(var);
+        List<TestLinkServer> configurations = var.getConfigurations();
         List<ITestLinkServerConfiguration> result = new ArrayList<ITestLinkServerConfiguration>();
         for (TestLinkServer testLinkServer : configurations) {
             result.add(new TestLinkServerConfiguration(testLinkServer, serverProxyFactory));
@@ -99,17 +87,43 @@ public class TestLinkServerService implements ITestLinkServerService {
 
     @Override
     public void saveOrUpdate(TestLinkServer server, String oldAddress) {
+        TestLinkStorageConfiguration var = configurationStorage.get();
+        List<TestLinkServer> selectAll = var.getConfigurations();
+        boolean find = false;
+        for (TestLinkServer testLinkServer : selectAll) {
+            if (testLinkServer.getAddress().equals(oldAddress)) {
+                testLinkServer.setAddress(server.getAddress());
+                testLinkServer.setKey(server.getKey());
+                find = true;
+                break;
+            }
+        }
+        if (!find) {
+            selectAll.add(server);
+        }
+        configurationStorage.set(var);
     }
 
     @Override
     public List<TestLinkServer> selectAll() {
         TestLinkStorageConfiguration var = configurationStorage.get();
-        return getAllServer(var);
+        return var.getConfigurations();
 
     }
 
     @Override
-    public void delete(TestLinkServer server) {
+    public boolean delete(TestLinkServer _server) {
+        TestLinkStorageConfiguration var = configurationStorage.get();
+        List<TestLinkServer> selectAll = var.getConfigurations();
+        for (TestLinkServer testlinkServer : selectAll) {
+            if (testlinkServer.getAddress().equals(_server.getAddress())
+                    && testlinkServer.getKey().equals(_server.getKey())) {
+                selectAll.remove(testlinkServer);
+                configurationStorage.set(var);
+                return true;
+            }
+        }
+        return false;
     }
 
 }
