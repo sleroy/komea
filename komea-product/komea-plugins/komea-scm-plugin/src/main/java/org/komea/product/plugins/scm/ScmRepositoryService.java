@@ -48,6 +48,13 @@ public final class ScmRepositoryService implements IScmRepositoryService
                                                                                                .getLogger(ScmRepositoryService.class);
     
     
+    /**
+     * 
+     */
+    private static final String                        SCM_AUTOUPDATING_CRON   =
+                                                                                       "SCM_AUTOUPDATING_CRON";
+    
+    
     @Autowired
     private ICronRegistryService                       cronRegistryService;
     
@@ -140,9 +147,11 @@ public final class ScmRepositoryService implements IScmRepositoryService
     public List<ScmRepositoryDefinition> getRepositoriesNotAssociated() {
     
     
+        final List<ScmRepositoryDefinition> allRepositories = getAllRepositories();
+        
         final List<ScmRepositoryDefinition> gitRepositoryDefinitions =
-                new ArrayList<ScmRepositoryDefinition>();
-        for (final ScmRepositoryDefinition gitRepositoryDefinition : getAllRepositories()) {
+                new ArrayList<ScmRepositoryDefinition>(allRepositories.size());
+        for (final ScmRepositoryDefinition gitRepositoryDefinition : allRepositories) {
             if (!isAssociatedToCron(gitRepositoryDefinition)) {
                 gitRepositoryDefinitions.add(gitRepositoryDefinition);
             }
@@ -162,8 +171,9 @@ public final class ScmRepositoryService implements IScmRepositoryService
         Validate.notNull(daoStorage);
         
         
-        cronRegistryService.registerCronTask("SCM_AUTOUPDATING_CRON", CRON_DEFAULT_EXPRESSION,
+        cronRegistryService.registerCronTask(SCM_AUTOUPDATING_CRON, CRON_DEFAULT_EXPRESSION,
                 ScmScheduleCronJob.class, new JobDataMap());
+        cronRegistryService.forceNow(SCM_AUTOUPDATING_CRON);
     }
     
     
@@ -194,7 +204,7 @@ public final class ScmRepositoryService implements IScmRepositoryService
     
         Validate.notNull(_repositoryDefinition);
         Validate.notEmpty(_repositoryDefinition.getKey());
-        final String cronName = _repositoryDefinition.getRepoName();
+        final String cronName = _repositoryDefinition.getKey();
         cronTasks.put(_repositoryDefinition.getKey(), cronName);
         getDAO().saveOrUpdate(_repositoryDefinition);
         return cronName;
@@ -225,6 +235,9 @@ public final class ScmRepositoryService implements IScmRepositoryService
     public void saveOrUpdate(final ScmRepositoryDefinition _gitRepository) {
     
     
+        if (!getDAO().exists(_gitRepository)
+                && !getDAO().find(new ScmKeySearchFilter(_gitRepository)).isEmpty()) { throw new IllegalArgumentException(
+                "The key must be unique for a scm repository."); }
         getDAO().saveOrUpdate(_gitRepository);
         
     }

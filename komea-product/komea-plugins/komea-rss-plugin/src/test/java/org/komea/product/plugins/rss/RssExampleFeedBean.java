@@ -65,7 +65,8 @@ public class RssExampleFeedBean
     
     
         repository.getDAO().enableSaveOnChange();
-        if (!settingsService.existProperty(RSS_SAMPLE_FEEDS)) {
+        if (!settingsService.existProperty(RSS_SAMPLE_FEEDS)
+                && repository.getDAO().selectAll().isEmpty()) {
             settingsService.create(RSS_SAMPLE_FEEDS, DEFAULT_VALUE, String.class.getName(),
                     "Initialize the rss plugin with default rss feeds");
         }

@@ -54,7 +54,7 @@ public class DAOObjectStorage<T> implements IDAOObjectStorage<T>
      * @see org.komea.product.backend.business.IDAOObjectStorage#delete(T)
      */
     @Override
-    public void delete(final T _object) {
+    public synchronized void delete(final T _object) {
     
     
         daoStorageIndex.getObjectIndex().remove(_object);
@@ -71,7 +71,7 @@ public class DAOObjectStorage<T> implements IDAOObjectStorage<T>
      * @see org.komea.product.backend.business.IDAOObjectStorage#deleteAll()
      */
     @Override
-    public void deleteAll() {
+    public synchronized void deleteAll() {
     
     
         daoStorageIndex.getObjectIndex().clear();
@@ -111,6 +111,18 @@ public class DAOObjectStorage<T> implements IDAOObjectStorage<T>
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.business.IDAOObjectStorage#exists(java.lang.Object)
+     */
+    @Override
+    public boolean exists(final T _object) {
+    
+    
+        return daoStorageIndex.getObjectIndex().contains(_object);
+    }
+    
+    
     /**
      * Method find.
      * 
@@ -120,7 +132,7 @@ public class DAOObjectStorage<T> implements IDAOObjectStorage<T>
      * @see org.komea.product.backend.business.IDAOObjectStorage#find(SearchFilter<T>)
      */
     @Override
-    public List<T> find(final SearchFilter<T> _filter) {
+    public synchronized List<T> find(final SearchFilter<T> _filter) {
     
     
         final List<T> res = new ArrayList<T>(daoStorageIndex.getObjectIndex().size());
@@ -155,7 +167,7 @@ public class DAOObjectStorage<T> implements IDAOObjectStorage<T>
      * @see org.komea.product.backend.business.IDAOObjectStorage#saveOrUpdate(T)
      */
     @Override
-    public void saveOrUpdate(final T _object) {
+    public synchronized void saveOrUpdate(final T _object) {
     
     
         final int indexOf = daoStorageIndex.getObjectIndex().indexOf(_object);
@@ -178,7 +190,7 @@ public class DAOObjectStorage<T> implements IDAOObjectStorage<T>
      * @see org.komea.product.backend.business.IDAOObjectStorage#selectAll()
      */
     @Override
-    public List<T> selectAll() {
+    public synchronized List<T> selectAll() {
     
     
         return daoStorageIndex.getObjectIndex();

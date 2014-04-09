@@ -203,16 +203,24 @@ public class CronRegistryService implements ICronRegistryService, ApplicationCon
             final JobDataMap _properties) {
     
     
-        final JobDetail jobDetail =
-                JobBuilder.newJob(_runnable).withIdentity(_cronName).withDescription(_cronName)
-                        .usingJobData(_properties).build();
-        final Trigger trigger =
-                TriggerBuilder.newTrigger().forJob(jobDetail).usingJobData(_properties)
-                        .withIdentity(_cronName)
-                        .withSchedule(CronScheduleBuilder.cronSchedule(_cronExpression)).build();
         try {
+            
+            
+            final JobDetail jobDetail =
+                    JobBuilder.newJob(_runnable).withIdentity(_cronName).withDescription(_cronName)
+                            .usingJobData(_properties).build();
+            final Trigger trigger =
+                    TriggerBuilder.newTrigger().forJob(jobDetail).usingJobData(_properties)
+                            .withIdentity(_cronName)
+                            .withSchedule(CronScheduleBuilder.cronSchedule(_cronExpression))
+                            .build();
             schedulerFactory.getScheduler().scheduleJob(jobDetail, trigger);
         } catch (final SchedulerException e) {
+            try {
+                schedulerFactory.getScheduler().deleteJob(JobKey.jobKey(_cronName));
+            } catch (final SchedulerException e1) {
+                throw new CronRuntimeException("Impossible to create the cron task", e);
+            }
             throw new CronRuntimeException("Impossible to create the cron task", e);
         }
         

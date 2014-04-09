@@ -76,11 +76,11 @@ public class ScmScheduleCronJob implements Job
     
         LOGGER.info("@@@@@ SCM CRON SCHEDULER @@@@@@@");
         final List<ScmRepositoryDefinition> feeds = _repository.getRepositoriesNotAssociated();
-        int processed = 0;
+        LOGGER.info("@@@@@  Processed repositories {}  @@@@@@@", feeds.size());
         for (final ScmRepositoryDefinition fetch : feeds) {
             Validate.notNull(fetch);
-            processed++;
-            LOGGER.info("Creating Cron for the scm repositories {}", fetch.getRepoName());
+            LOGGER.info("Creating Cron for the scm repository {} of type {}", fetch.getRepoName(),
+                    fetch.getType());
             final String cronName = _repository.registerCronJobOfScm(fetch);
             cronRegistryService.registerCronTask(cronName, GIT_CRON_VALUE, ScmCronJob.class,
                     prepareJobMapForCron(_jobDataMap, fetch));
@@ -88,7 +88,7 @@ public class ScmScheduleCronJob implements Job
             
         }
         
-        LOGGER.info("@@@@@      {}               @@@@@@@", processed);
+        LOGGER.info("@@@@@                     @@@@@@@");
     }
     
     
