@@ -20,6 +20,8 @@ public interface ILdapUserService
     
     String CRON_LDAP         = "0 0/5 * * * ?";
     
+    String LDAP_AUTH_TYPE    = "ldap_authType";
+    
     /**
      * Ldap base path
      */

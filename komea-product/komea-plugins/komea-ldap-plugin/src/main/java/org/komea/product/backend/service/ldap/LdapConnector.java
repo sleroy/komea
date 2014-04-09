@@ -22,6 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.ldap.core.support.DefaultTlsDirContextAuthenticationStrategy;
+import org.springframework.ldap.core.support.DigestMd5DirContextAuthenticationStrategy;
+import org.springframework.ldap.core.support.ExternalTlsDirContextAuthenticationStrategy;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.ldap.filter.LikeFilter;
@@ -71,15 +74,15 @@ public class LdapConnector implements Closeable, ILdapConnector
     
     
     
-    private static final Logger LOGGER           = LoggerFactory.getLogger("ldap-connector");
+    private static final long serialVersionUID = 4889152297004460837L;
     
-    private static final long   serialVersionUID = 4889152297004460837L;
+    static final Logger       LOGGER           = LoggerFactory.getLogger("ldap-connector");
     
     
-    private LdapTemplate        ldapTemplate;
+    private LdapTemplate      ldapTemplate;
     
     @Autowired
-    private ISettingService     settingService;
+    private ISettingService   settingService;
     
     
     
@@ -190,7 +193,9 @@ public class LdapConnector implements Closeable, ILdapConnector
                     settingService.getProxy(ILdapUserService.LDAP_PASSWORD).getStringValue();
             final String ldapBase =
                     settingService.getProxy(ILdapUserService.LDAP_BASE).getStringValue();
-            
+            final LdapAuthTypeEnum ldapAuthTypeEnum =
+                    settingService.<LdapAuthTypeEnum> getProxy(ILdapUserService.LDAP_AUTH_TYPE)
+                            .getValue();
             LOGGER.info("LDAP Url : {}", ldapUrl);
             LOGGER.info("LDAP Base : {}", ldapBase);
             LOGGER.info("LDAP UserDN {}", ldapUserDN);
@@ -198,7 +203,9 @@ public class LdapConnector implements Closeable, ILdapConnector
             final DefaultSpringSecurityContextSource contextSource =
                     new org.springframework.security.ldap.DefaultSpringSecurityContextSource(
                             ldapUrl);
-            
+            LOGGER.info("Authentication strategy employed to connect on LDAP Server : {} ",
+                    ldapAuthTypeEnum);
+            initializeAuthenticationStrategy(ldapUserDN, ldapAuthTypeEnum, contextSource);
             
             // LDAP Anonymous access
             if (Strings.isNullOrEmpty(ldapUserDN) && Strings.isNullOrEmpty(password)) {
@@ -235,6 +242,44 @@ public class LdapConnector implements Closeable, ILdapConnector
     
     
         settingService = _settingService;
+    }
+    
+    
+    /**
+     * Initialize the authentication strategy.
+     * 
+     * @param ldapUserDN
+     *            the user
+     * @param ldapAuthTypeEnum
+     *            the type of auth.
+     * @param contextSource
+     *            the context source.
+     */
+    private void initializeAuthenticationStrategy(
+            final String ldapUserDN,
+            final LdapAuthTypeEnum ldapAuthTypeEnum,
+            final DefaultSpringSecurityContextSource contextSource) {
+    
+    
+        switch (ldapAuthTypeEnum) {
+            case SIMPLE:
+            default:
+                contextSource
+                        .setAuthenticationStrategy(new SimpleAuthenticationStrategy(ldapUserDN));
+                break;
+            case DIGEST_MD5:
+                contextSource
+                        .setAuthenticationStrategy(new DigestMd5DirContextAuthenticationStrategy());
+                break;
+            case SIMPLE_TLS:
+                contextSource
+                        .setAuthenticationStrategy(new DefaultTlsDirContextAuthenticationStrategy());
+                break;
+            case TLS_CERTIFICATE:
+                contextSource
+                        .setAuthenticationStrategy(new ExternalTlsDirContextAuthenticationStrategy());
+                break;
+        }
     }
     
     

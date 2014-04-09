@@ -58,7 +58,11 @@ import org.springframework.ldap.core.AttributesMapper;
             key = LdapUserService.LDAP_BASE,
             value = "dc=company,dc=com",
             type = String.class,
-            description = "Specify the LDAP Base url") })
+            description = "Specify the LDAP Base url"), @Property(
+            key = ILdapUserService.LDAP_AUTH_TYPE,
+            value = "SIMPLE",
+            type = LdapAuthTypeEnum.class,
+            description = "Specify the type of authentication used") })
 public class LdapUserService implements ILdapUserService
 {
     
