@@ -3,6 +3,7 @@ package org.komea.product.backend.auth;
 
 
 
+import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,6 +43,8 @@ public class PasswordEncoder implements IPasswordEncoder
     public String encodePassword(final String _rawPassword) {
     
     
+        Validate.notEmpty(salt);
+        Validate.notNull(_rawPassword);
         return new LdapShaPasswordEncoder().encodePassword(_rawPassword, salt.getBytes());
     }
     

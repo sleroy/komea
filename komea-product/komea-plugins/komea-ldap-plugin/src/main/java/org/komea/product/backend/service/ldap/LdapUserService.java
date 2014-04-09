@@ -54,7 +54,7 @@ import com.google.common.base.Strings;
 @Properties(value =
     { @Property(
             key = LdapUserService.LDAP_SERVER,
-            value = "ldap://192.168.1.134:389",
+            value = "ldap://",
             type = String.class,
             description = "Specify the location of the LDAP Server"), @Property(
             key = LdapUserService.LDAP_PASSWORD,
@@ -66,7 +66,7 @@ import com.google.common.base.Strings;
             type = String.class,
             description = "Specify the LDAP userDn"), @Property(
             key = LdapUserService.LDAP_BASE,
-            value = "dc=tocea,dc=com",
+            value = "dc=company,dc=com",
             type = String.class,
             description = "Specify the LDAP Base url") })
 public class LdapUserService implements ILdapUserService
@@ -100,53 +100,30 @@ public class LdapUserService implements ILdapUserService
     
     
     
-    public static final String    LDAP_PASSWORD     = "ldap_password";
+    private static final Logger  LOGGER           = LoggerFactory.getLogger("ldap-plugin");
     
-    
-    public static final String    LDAP_USER_DN      = "ldap_userDn";
-    
-    
-    private static final String   CRON_LDAP         = "0 0/5 * * * ?";
-    
-    
-    private static final String   LDAP_CRON_REFRESH = "LDAP-CRON-REFRESH";
-    
-    
-    private static final Logger   LOGGER            = LoggerFactory.getLogger("ldap-plugin");
-    
-    private static final long     serialVersionUID  = 4889152297004460837L;
-    
-    
-    /**
-     * 
-     */
-    protected static final String LDAP_BASE         = "ldap_base";
-    
-    /**
-     * 
-     */
-    protected static final String LDAP_SERVER       = "ldap-server";
+    private static final long    serialVersionUID = 4889152297004460837L;
     
     
     @Autowired
-    private IPersonGroupService   groupService;
+    private IPersonGroupService  groupService;
     
     
-    private LdapTemplate          ldapTemplate;
-    
-    
-    @Autowired
-    private IPersonRoleService    personRoleService;
-    
-    @Autowired
-    private IPersonService        personService;
+    private LdapTemplate         ldapTemplate;
     
     
     @Autowired
-    private ICronRegistryService  registryService;
+    private IPersonRoleService   personRoleService;
     
     @Autowired
-    private ISettingService       settingService;
+    private IPersonService       personService;
+    
+    
+    @Autowired
+    private ICronRegistryService registryService;
+    
+    @Autowired
+    private ISettingService      settingService;
     
     
     
