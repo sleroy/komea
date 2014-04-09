@@ -32,6 +32,8 @@ public class RssCronJob implements Job
     
     @Autowired
     private IEventPushService   esperEngine;
+    private Date                lastDate;
+    
     @Autowired
     private IRssRepositories    rssRepositories;
     
@@ -77,6 +79,13 @@ public class RssCronJob implements Job
     }
     
     
+    public Date getLastDate() {
+    
+    
+        return lastDate;
+    }
+    
+    
     public IRssRepositories getRssRepositories() {
     
     
@@ -88,6 +97,13 @@ public class RssCronJob implements Job
     
     
         esperEngine = _esperEngine;
+    }
+    
+    
+    public void setLastDate(final Date _lastDate) {
+    
+    
+        lastDate = _lastDate;
     }
     
     
