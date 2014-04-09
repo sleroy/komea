@@ -6,17 +6,18 @@ package org.komea.product.backend.service.esper;
 import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.service.entities.IProjectService;
+import org.komea.product.backend.service.entities.PersonService;
 import org.komea.product.backend.service.entities.ProjectService;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.backend.utils.ObjectValidation;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dao.EventTypeDao;
-import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.model.EventTypeCriteria;
+import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonCriteria;
 import org.komea.product.database.model.PersonGroupCriteria;
 import org.komea.product.database.model.ProviderCriteria;
@@ -42,9 +43,9 @@ public class EventConversionAndValidationService implements IEventConversionAndV
     private EventTypeDao        eventTypeDAO;
     
     @Autowired
-    private PersonDao           personDAO;
-    @Autowired
     private PersonGroupDao      personGroupDAO;
+    @Autowired
+    private PersonService       personService;
     @Autowired
     private IProjectService     projectService;
     
@@ -103,8 +104,12 @@ public class EventConversionAndValidationService implements IEventConversionAndV
         if (!Strings.isNullOrEmpty(_dto.getPerson())) {
             final PersonCriteria personCriteria = new PersonCriteria();
             personCriteria.or().andLoginEqualTo(_dto.getPerson());
-            
-            event.setPerson(CollectionUtil.singleOrNull(personDAO.selectByCriteria(personCriteria)));
+            Person person =
+                    CollectionUtil.singleOrNull(personService.selectByCriteria(personCriteria));
+            if (person == null) {
+                person = personService.findOrCreatePersonByLogin(_dto.getPerson());
+            }
+            event.setPerson(person);
         }
         
         return event;
@@ -124,18 +129,6 @@ public class EventConversionAndValidationService implements IEventConversionAndV
     
     
     /**
-     * Method getPersonDAO.
-     * 
-     * @return PersonDao
-     */
-    public PersonDao getPersonDAO() {
-    
-    
-        return personDAO;
-    }
-    
-    
-    /**
      * Method getPersonGroupDAO.
      * 
      * @return PersonGroupDao
@@ -144,6 +137,18 @@ public class EventConversionAndValidationService implements IEventConversionAndV
     
     
         return personGroupDAO;
+    }
+    
+    
+    /**
+     * Method getPersonDAO.
+     * 
+     * @return PersonDao
+     */
+    public PersonService getPersonService() {
+    
+    
+        return personService;
     }
     
     
@@ -199,10 +204,10 @@ public class EventConversionAndValidationService implements IEventConversionAndV
      * @param _personDAO
      *            PersonDao
      */
-    public void setPersonDAO(final PersonDao _personDAO) {
+    public void setPersonDAO(final PersonService _personDAO) {
     
     
-        personDAO = _personDAO;
+        personService = _personDAO;
     }
     
     
