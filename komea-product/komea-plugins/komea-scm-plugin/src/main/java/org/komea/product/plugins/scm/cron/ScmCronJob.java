@@ -48,14 +48,14 @@ public class ScmCronJob implements Job
     @Autowired
     private IEventPushService             esperEngine       = null;
     
-    private ScmRepositoryDefinition       repo             = null;
-    
-    
     @Autowired
     private IPersonService                personService     = null;
     
     
-    @SuppressWarnings("rawtypes")
+    private ScmRepositoryDefinition       repo              = null;
+    
+    
+    @Autowired
     private IScmRepositoryService         repository        = null;
     
     @Autowired
@@ -135,17 +135,17 @@ public class ScmCronJob implements Job
     }
     
     
-    public ScmRepositoryDefinition getRepo() {
-    
-    
-        return repo;
-    }
-    
-    
     public IPersonService getPersonService() {
     
     
         return personService;
+    }
+    
+    
+    public ScmRepositoryDefinition getRepo() {
+    
+    
+        return repo;
     }
     
     
@@ -177,17 +177,17 @@ public class ScmCronJob implements Job
     }
     
     
-    public void setRepo(final ScmRepositoryDefinition _fetch) {
-    
-    
-        repo = _fetch;
-    }
-    
-    
     public void setPersonService(final IPersonService _personService) {
     
     
         personService = _personService;
+    }
+    
+    
+    public void setRepo(final ScmRepositoryDefinition _fetch) {
+    
+    
+        repo = _fetch;
     }
     
     
