@@ -91,6 +91,8 @@ public class GitProviderPlugin
      */
     public static final String           GIT_PROVIDER_PLUGIN = "GIT Provider plugin";
     
+    public static final String           GIT_TYPE            = "GIT";
+    
     private static final Logger          LOGGER              = LoggerFactory
                                                                      .getLogger("git-provider");
     
@@ -161,7 +163,7 @@ public class GitProviderPlugin
     public void init() {
     
     
-        proxyFactories.registerFactory("git", new GitRepositoryProxyFactory());
+        proxyFactories.registerFactory(GIT_TYPE, new GitRepositoryProxyFactory());
     }
     
     
