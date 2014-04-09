@@ -138,9 +138,7 @@ public final class PersonForm extends Form<Person> {
                 .simpleValidator(2, 255).highlightOnErrors()
                 .withTooltip("User requires a last name.").build());
         savPassword = person.getPassword();
-        if (!"".equals(savPassword) && savPassword != null) {
-            person.setPassword("00000");
-        }
+        person.setPassword("00000");
         PasswordTextField password;
         password = (PasswordTextField) TextFieldBuilder.createPassword("password", person, "password")
                 .simpleValidator(5, 255).withTooltip("User requires a password").highlightOnErrors()
@@ -172,8 +170,10 @@ public final class PersonForm extends Form<Person> {
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
                 person.setUserBdd(savUserBdd);
-                if (!"00000".equals(person.getPassword())) {
-                    person.setPassword(passEncoder.encodePassword(savPassword));
+                if ("00000".equals(person.getPassword())) {
+                    person.setPassword(savPassword);
+                } else {
+                    person.setPassword(passEncoder.encodePassword(person.getPassword()));
                 }
                 personService.saveOrUpdatePerson(person, (List<Project>) (List<?>) currentEntityList);
                 page.setResponsePage(new PersonPage(page.getPageParameters()));
