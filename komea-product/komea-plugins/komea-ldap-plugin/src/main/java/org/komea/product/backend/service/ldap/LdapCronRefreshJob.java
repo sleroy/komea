@@ -9,8 +9,10 @@ package org.komea.product.backend.service.ldap;
 import java.util.Collections;
 
 import org.apache.commons.lang.Validate;
+import org.komea.product.api.service.ldap.ILdapConnector;
 import org.komea.product.api.service.ldap.ILdapUserService;
 import org.komea.product.api.service.ldap.LdapUser;
+import org.komea.product.backend.service.ISettingService;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonRoleService;
 import org.komea.product.backend.service.entities.IPersonService;
@@ -43,18 +45,21 @@ public class LdapCronRefreshJob implements Job
 {
     
     
-    private static final Logger LOGGER             = LoggerFactory.getLogger("ldap-cron");
+    private static final Logger   LOGGER             = LoggerFactory.getLogger("ldap-cron");
     @Autowired
-    private ILdapUserService    ldapService        = null;
+    private ILdapUserService      ldapService        = null;
     
     @Autowired
-    private IPersonGroupService personGroupService = null;
+    private IPersonGroupService   personGroupService = null;
     
     @Autowired
-    private IPersonRoleService  personRoleService  = null;
+    private IPersonRoleService    personRoleService  = null;
     
     @Autowired
-    private IPersonService      personService      = null;
+    private IPersonService        personService      = null;
+    
+    @Autowired
+    private final ISettingService settingService     = null;
     
     
     
@@ -203,8 +208,11 @@ public class LdapCronRefreshJob implements Job
         Validate.notNull(personService);
         Validate.notNull(ldapService);
         Validate.notNull(personRoleService);
+        
+        
         try {
-            for (final LdapUser ldapUser : ldapService.getUsers(null)) {
+            final ILdapConnector connector = ldapService.newConnector();
+            for (final LdapUser ldapUser : connector.getUsers(null)) {
                 if (Strings.isNullOrEmpty(ldapUser.getEmail())) {
                     continue;
                 }
@@ -217,6 +225,7 @@ public class LdapCronRefreshJob implements Job
                 }
                 
             }
+            connector.close();
         } catch (final Exception e) {
             LOGGER.error("LDAP connection is failing for the reason {}", e.getMessage(), e);
         }

@@ -15,12 +15,14 @@ import org.komea.product.backend.api.IWicketAdminService;
 import org.komea.product.backend.api.MountAdminPages;
 import org.komea.product.backend.api.PluginAdminPages;
 import org.komea.product.backend.api.PluginMountPage;
+import org.komea.product.backend.utils.SpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
 
@@ -31,13 +33,16 @@ import org.springframework.stereotype.Service;
  * @author sleroy
  */
 @Service
-public class WicketAdminService implements IWicketAdminService, BeanPostProcessor
+public class WicketAdminService implements IWicketAdminService, BeanPostProcessor,
+        ApplicationContextAware
 {
     
     
     private static final Logger                         LOGGER      =
                                                                             LoggerFactory
                                                                                     .getLogger(WicketAdminService.class);
+    
+    private ApplicationContext                          applicationContext;
     
     private final Map<String, Class<? extends WebPage>> mountPages  =
                                                                             new HashMap<String, Class<? extends WebPage>>();
@@ -130,14 +135,14 @@ public class WicketAdminService implements IWicketAdminService, BeanPostProcesso
     
     
         final MountAdminPages mountAdminPages =
-                AnnotationUtils.findAnnotation(_bean.getClass(), MountAdminPages.class);
+                SpringUtils.findAnnotation(applicationContext, _beanName, MountAdminPages.class);
         if (mountAdminPages != null) {
             for (final org.komea.product.backend.api.MountPage page : mountAdminPages.value()) {
                 register(page.mount(), page.page());
             }
         }
         final PluginAdminPages pluginAdminPages =
-                AnnotationUtils.findAnnotation(_bean.getClass(), PluginAdminPages.class);
+                SpringUtils.findAnnotation(applicationContext, _beanName, PluginAdminPages.class);
         if (pluginAdminPages != null) {
             for (final PluginMountPage page : pluginAdminPages.value()) {
                 registerPlugin(page.pluginName(), page.page());
@@ -186,6 +191,21 @@ public class WicketAdminService implements IWicketAdminService, BeanPostProcesso
         LOGGER.debug("Register a new plugin {} -> {}", _pluginName, _webPageClass.getName());
         pluginPages.put(_pluginName, _webPageClass);
         register("/plugin" + _pluginName.hashCode(), _webPageClass);
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
+     */
+    @Override
+    public void setApplicationContext(final ApplicationContext _applicationContext)
+            throws BeansException {
+    
+    
+        applicationContext = _applicationContext;
+        
+        
     }
     
 }

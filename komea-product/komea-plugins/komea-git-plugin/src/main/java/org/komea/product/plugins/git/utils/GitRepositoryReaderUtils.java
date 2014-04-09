@@ -62,6 +62,9 @@ public class GitRepositoryReaderUtils
     public static Git getGit(final ScmRepositoryDefinition _repositoryDefinition) {
     
     
+        if (!_repositoryDefinition.getCloneDirectory().exists()) { throw new IllegalArgumentException(
+                "GIT Repository should be cloned before"); }
+        
         FileRepository fileRepository;
         try {
             fileRepository = new FileRepository(_repositoryDefinition.getCloneDirectory());

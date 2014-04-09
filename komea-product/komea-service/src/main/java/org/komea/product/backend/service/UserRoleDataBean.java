@@ -5,9 +5,8 @@ package org.komea.product.backend.service;
 
 import javax.annotation.PostConstruct;
 
-import org.komea.product.database.dao.PersonRoleDao;
+import org.komea.product.backend.service.entities.IPersonRoleService;
 import org.komea.product.database.model.PersonRole;
-import org.komea.product.database.model.PersonRoleCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +18,7 @@ public class UserRoleDataBean
     
     
     @Autowired
-    private PersonRoleDao personRoleDao;
+    private IPersonRoleService personRoleDao;
     
     
     
@@ -28,7 +27,7 @@ public class UserRoleDataBean
      * 
      * @return PersonRoleDao
      */
-    public PersonRoleDao getPersonRoleDao() {
+    public IPersonRoleService getPersonRoleDao() {
     
     
         return personRoleDao;
@@ -40,16 +39,12 @@ public class UserRoleDataBean
     
     
         final PersonRole administrator = new PersonRole(null, "ADMIN", "Administrator");
-        PersonRoleCriteria prCriteria = new PersonRoleCriteria();
-        prCriteria.createCriteria().andNameEqualTo("Administrator");
-        if (getPersonRoleDao().countByCriteria(prCriteria) == 0) {
+        if (getPersonRoleDao().selectByKey("ADMIN") == null) {
             getPersonRoleDao().insert(administrator);
         }
         
         final PersonRole userRole = new PersonRole(null, "USER", "Standard user");
-        prCriteria = new PersonRoleCriteria();
-        prCriteria.createCriteria().andNameEqualTo("Standard user");
-        if (getPersonRoleDao().countByCriteria(prCriteria) == 0) {
+        if (getPersonRoleDao().selectByKey("USER") == null) {
             getPersonRoleDao().insert(userRole);
         }
         
@@ -57,7 +52,7 @@ public class UserRoleDataBean
     }
     
     
-    public void setPersonRoleDao(final PersonRoleDao _personRoleDao) {
+    public void setPersonRoleDao(final IPersonRoleService _personRoleDao) {
     
     
         personRoleDao = _personRoleDao;

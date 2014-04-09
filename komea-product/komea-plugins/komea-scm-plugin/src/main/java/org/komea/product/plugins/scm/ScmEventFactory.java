@@ -29,7 +29,8 @@ public class ScmEventFactory implements IScmEventFactory
     }
     
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.scm.IScmEventFactory#sendBranchAssociated(java.lang.String)
      */
     @Override
@@ -45,7 +46,8 @@ public class ScmEventFactory implements IScmEventFactory
     }
     
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.scm.IScmEventFactory#sendBranchNumbers(int)
      */
     @Override
@@ -62,7 +64,8 @@ public class ScmEventFactory implements IScmEventFactory
     }
     
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.scm.IScmEventFactory#sendCustomerBranches(int)
      */
     @Override
@@ -80,7 +83,8 @@ public class ScmEventFactory implements IScmEventFactory
     }
     
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.scm.IScmEventFactory#sendCustomerTags(int)
      */
     @Override
@@ -96,22 +100,8 @@ public class ScmEventFactory implements IScmEventFactory
     }
     
     
-    /* (non-Javadoc)
-     * @see org.komea.product.plugins.scm.IScmEventFactory#sendFetchRepository()
-     */
-    @Override
-    public EventSimpleDto sendFetchRepository() {
-    
-    
-        final EventSimpleDto event = initializeScmEvent();
-        event.setEventType("scm-fetch-repository");
-        event.setMessage("Git Repository "
-                + scmRepositoryDefinition.getRepoName() + " is controlling...");
-        return event;
-    }
-    
-    
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.scm.IScmEventFactory#sendGitFetchFailed()
      */
     @Override
@@ -126,8 +116,26 @@ public class ScmEventFactory implements IScmEventFactory
     }
     
     
-    /* (non-Javadoc)
-     * @see org.komea.product.plugins.scm.IScmEventFactory#sendNewCommit(java.lang.String, org.komea.product.database.model.Person, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.scm.IScmEventFactory#sendFetchRepository()
+     */
+    @Override
+    public EventSimpleDto sendFetchRepository() {
+    
+    
+        final EventSimpleDto event = initializeScmEvent();
+        event.setEventType("scm-fetch-repository");
+        event.setMessage("Git Repository "
+                + scmRepositoryDefinition.getRepoName() + " is controlling...");
+        return event;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.scm.IScmEventFactory#sendNewCommit(java.lang.String, org.komea.product.database.model.Person,
+     * java.lang.String)
      */
     @Override
     public EventSimpleDto sendNewCommit(
@@ -146,7 +154,8 @@ public class ScmEventFactory implements IScmEventFactory
     }
     
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.scm.IScmEventFactory#sendNumberTagPerBranch(int, java.lang.String)
      */
     @Override
@@ -167,7 +176,7 @@ public class ScmEventFactory implements IScmEventFactory
     
     
         final EventSimpleDto event = new EventSimpleDto();
-        event.setProvider(scmRepositoryDefinition.getType());
+        event.setProvider(ScmRepositoryService.SCM_URL);
         event.setProject(scmRepositoryDefinition.getProjectForRepository());
         return event;
     }

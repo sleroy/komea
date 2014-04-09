@@ -224,6 +224,7 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
      *            the person login
      * @return the entity (previously created if not).
      */
+    @Override
     public Person findOrCreatePersonByLogin(final String _login) {
     
     
@@ -248,6 +249,22 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
         final PersonCriteria personCriteria = new PersonCriteria();
         personCriteria.createCriteria().andEmailEqualTo(_email);
         return CollectionUtil.singleOrNull(selectByCriteria(personCriteria));
+    }
+    
+    
+    /**
+     * Returns the list of administrators
+     * 
+     * @return the list of administrators
+     */
+    @Override
+    public List<Person> getAdministrators() {
+    
+    
+        final PersonCriteria personCriteria = new PersonCriteria();
+        personCriteria.createCriteria().andIdPersonRoleEqualTo(
+                personRoleService.getAdminRole().getId());
+        return selectByCriteria(personCriteria);
     }
     
     

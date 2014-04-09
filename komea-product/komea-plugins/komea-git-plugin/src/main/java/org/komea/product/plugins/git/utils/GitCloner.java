@@ -97,6 +97,20 @@ public class GitCloner implements IScmCloner
     }
     
     
+    public Git getGit() {
+    
+    
+        return git;
+    }
+    
+    
+    public void setGit(final Git _git) {
+    
+    
+        git = _git;
+    }
+    
+    
     public void setScmClonedDirectory(final File _gitRepositoryFolder) {
     
     
@@ -136,6 +150,6 @@ public class GitCloner implements IScmCloner
                 "Could not create " + scmClonedDirectory); }
         
         scmClonedDirectory.deleteOnExit();
-        scmRepositoryDefinition.setCloneDirectory(scmClonedDirectory);
+        scmRepositoryDefinition.setCloneDirectory(new File(scmClonedDirectory + "/.git"));
     }
 }

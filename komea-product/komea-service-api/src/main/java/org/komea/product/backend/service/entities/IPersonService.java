@@ -110,6 +110,14 @@ public interface IPersonService extends IGenericService<Person, Integer, PersonC
     
     
     /**
+     * Returns the list of administrators
+     * 
+     * @return the list of administrators
+     */
+    List<Person> getAdministrators();
+    
+    
+    /**
      * get persons of a project
      * 
      * @param _projectId

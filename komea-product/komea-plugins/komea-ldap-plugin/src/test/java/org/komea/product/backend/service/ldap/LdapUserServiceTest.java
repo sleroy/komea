@@ -6,11 +6,13 @@ package org.komea.product.backend.service.ldap;
 
 
 
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.komea.product.api.service.errors.KomeaLdapConfigurationException;
 import org.komea.product.api.service.ldap.ILdapUserService;
 import org.komea.product.api.service.ldap.LdapUser;
 import org.komea.product.backend.service.ISettingService;
@@ -28,10 +30,9 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
  * @author sleroy
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-        "classpath*:/spring/application-context-test.xml",
-        "classpath*:/spring/security-spring-test.xml",
-        "classpath*:/spring/ldap-spring-test.xml" })
+@ContextConfiguration(
+        locations =
+            { "classpath*:/spring/application-context-test.xml", "classpath*:/spring/security-spring-test.xml", "classpath*:/spring/ldap-spring-test.xml" })
 @TransactionConfiguration(defaultRollback = true)
 public class LdapUserServiceTest extends AbstractSpringIntegrationTestCase
 {
@@ -50,15 +51,32 @@ public class LdapUserServiceTest extends AbstractSpringIntegrationTestCase
     public void testLdap() {
     
     
-        service.getProxy(LdapUserService.LDAP_SERVER).setStringValue("ldap://localhost:33389");
-        service.getProxy(LdapUserService.LDAP_PASSWORD).setStringValue("");
-        service.getProxy(LdapUserService.LDAP_USER_DN).setStringValue("");
-        service.getProxy(LdapUserService.LDAP_BASE).setStringValue("dc=jbcpcalendar,dc=com");
-        userService.refreshPlugin();
-        final List<LdapUser> users = userService.getUsers(null);
-        System.out.println(users);
-        final LdapUser user = userService.getUser("user2@example.com");
-        Assert.assertNotNull(user);
+        service.getProxy(ILdapUserService.LDAP_SERVER).setStringValue("ldap://localhost:33389");
+        service.getProxy(ILdapUserService.LDAP_PASSWORD).setStringValue("");
+        service.getProxy(ILdapUserService.LDAP_USER_DN).setStringValue("");
+        service.getProxy(ILdapUserService.LDAP_BASE).setStringValue("dc=jbcpcalendar,dc=com");
+        
+        try {
+            final LdapConnector ldapConnector = new LdapConnector();
+            ldapConnector.setSettingService(service);
+            ldapConnector.initConnector();
+            
+            final List<LdapUser> users = ldapConnector.getUsers(null);
+            System.out.println(users);
+            final LdapUser user = ldapConnector.getUser("user2@example.com");
+            Assert.assertNotNull(user);
+            
+            ldapConnector.close();
+        } catch (final KomeaLdapConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        } catch (final IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+        
         
     }
     

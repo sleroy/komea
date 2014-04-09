@@ -8,7 +8,7 @@ package org.komea.product.plugins.git.bean;
 
 import java.io.File;
 
-import org.komea.product.plugins.git.utils.GItRepositoryProxy;
+import org.komea.product.plugins.git.utils.GitRepositoryProxy;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy;
 import org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxyFactory;
@@ -33,7 +33,7 @@ public class GitRepositoryProxyFactory implements IScmRepositoryProxyFactory
             final File _storageFolder) {
     
     
-        return new GItRepositoryProxy(_repositoryDefinition, _storageFolder);
+        return new GitRepositoryProxy(_repositoryDefinition, _storageFolder);
     }
     
 }

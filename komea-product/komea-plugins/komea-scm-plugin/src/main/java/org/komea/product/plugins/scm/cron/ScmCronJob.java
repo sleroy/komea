@@ -38,7 +38,7 @@ public class ScmCronJob implements Job
     
     
     private static final Logger           LOGGER            = LoggerFactory
-                                                                    .getLogger("git-cron-fetch");
+                                                                    .getLogger("scm-cron-repo");
     
     
     @Autowired
@@ -48,14 +48,14 @@ public class ScmCronJob implements Job
     @Autowired
     private IEventPushService             esperEngine       = null;
     
-    private ScmRepositoryDefinition       fetch             = null;
-    
-    
     @Autowired
     private IPersonService                personService     = null;
     
     
-    @SuppressWarnings("rawtypes")
+    private ScmRepositoryDefinition       repo              = null;
+    
+    
+    @Autowired
     private IScmRepositoryService         repository        = null;
     
     @Autowired
@@ -78,7 +78,7 @@ public class ScmCronJob implements Job
     
     
     /**
-     * Executes the git cron
+     * Executes the scm cron
      */
     public void executeScmCron() {
     
@@ -86,28 +86,28 @@ public class ScmCronJob implements Job
         Validate.notNull(esperEngine);
         Validate.notNull(repository);
         Validate.notNull(repositoryFactory);
-        Validate.notNull(fetch);
+        Validate.notNull(repo);
         Validate.notNull(personService);
         IScmRepositoryProxy newProxy = null;
         final Date newTime = new Date();
         try {
             
-            newProxy = repositoryFactory.newProxy(fetch);
+            newProxy = repositoryFactory.newProxy(repo);
             LOGGER.info("Verify if the repository has been cloned on the local disk.");
-            if (!fetch.isCloned()) {
+            if (!repo.isCloned()) {
                 LOGGER.info("A cloning is required.");
                 newProxy.getScmCloner().cloneRepository();
             }
-            Validate.isTrue(fetch.isCloned(), "Repository should have been cloned");
+            Validate.isTrue(repo.isCloned(), "Repository should have been cloned");
             
-            LOGGER.info("Analysis of the repository : {} {}", fetch.getRepoName(), fetch.getUrl());
+            LOGGER.info("Analysis of the repository : {} {}", repo.getRepoName(), repo.getUrl());
             analysisService.analysis(newProxy);
         } catch (final Exception e) {
             LOGGER.error(e.getMessage(), e);
             
         } finally {
-            fetch.setLastDateCheckout(newTime);
-            repository.saveOrUpdate(fetch);
+            repo.setLastDateCheckout(newTime);
+            repository.saveOrUpdate(repo);
             try {
                 if (newProxy != null) {
                     newProxy.close();
@@ -135,17 +135,17 @@ public class ScmCronJob implements Job
     }
     
     
-    public ScmRepositoryDefinition getFetch() {
-    
-    
-        return fetch;
-    }
-    
-    
     public IPersonService getPersonService() {
     
     
         return personService;
+    }
+    
+    
+    public ScmRepositoryDefinition getRepo() {
+    
+    
+        return repo;
     }
     
     
@@ -177,17 +177,17 @@ public class ScmCronJob implements Job
     }
     
     
-    public void setFetch(final ScmRepositoryDefinition _fetch) {
-    
-    
-        fetch = _fetch;
-    }
-    
-    
     public void setPersonService(final IPersonService _personService) {
     
     
         personService = _personService;
+    }
+    
+    
+    public void setRepo(final ScmRepositoryDefinition _fetch) {
+    
+    
+        repo = _fetch;
     }
     
     

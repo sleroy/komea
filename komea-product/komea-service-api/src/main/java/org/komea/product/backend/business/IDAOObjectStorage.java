@@ -13,7 +13,6 @@ import org.komea.product.backend.utils.SearchFilter;
  * Returns an interface to manipulate entities as DAO.
  * 
  * @author sleroy
-
  * @version $Revision: 1.0 $
  */
 public interface IDAOObjectStorage<T>
@@ -47,12 +46,20 @@ public interface IDAOObjectStorage<T>
     
     
     /**
+     * Tests if the object is present in the dao.
+     * 
+     * @param _object
+     */
+    boolean exists(T _object);
+    
+    
+    /**
      * Finds all the entities corresponding the the filter.
      * 
      * @param _filter
      *            the filter
-    
-     * @return the entities. */
+     * @return the entities.
+     */
     List<T> find(SearchFilter<T> _filter);
     
     
@@ -63,18 +70,18 @@ public interface IDAOObjectStorage<T>
     
     
     /**
-     * Returns all the entities
-     * 
-    
-     * @return the entities */
-    List<T> selectAll();
-    
-    
-    /**
      * Inserts/Updates the object
      * 
      * @param _object
      *            the object
      */
     void saveOrUpdate(T _object);
+    
+    
+    /**
+     * Returns all the entities
+     * 
+     * @return the entities
+     */
+    List<T> selectAll();
 }

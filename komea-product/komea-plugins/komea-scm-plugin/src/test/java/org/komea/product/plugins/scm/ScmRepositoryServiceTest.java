@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.business.IDAOObjectStorage;
+import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.plugins.IPluginStorageService;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.mockito.InjectMocks;
@@ -40,9 +41,12 @@ public class ScmRepositoryServiceTest
 {
     
     
+    @Mock
+    private ICronRegistryService  cronRegistryService;
     private IDAOObjectStorage     daoMock;
     @Mock
     private IPluginStorageService pluginStorageService;
+    
     @InjectMocks
     private ScmRepositoryService  scmRepositoryService;
     
@@ -117,7 +121,9 @@ public class ScmRepositoryServiceTest
     
     
         final ScmRepositoryDefinition scmRepositoryDefinition = new ScmRepositoryDefinition();
+        scmRepositoryDefinition.setKey("A");
         final ScmRepositoryDefinition scmRepositoryDefinition2 = new ScmRepositoryDefinition();
+        scmRepositoryDefinition2.setKey("B");
         scmRepositoryService.registerCronJobOfScm(scmRepositoryDefinition2);
         when(scmRepositoryService.getDAO().selectAll()).thenReturn(
                 Lists.newArrayList(scmRepositoryDefinition));
@@ -137,6 +143,7 @@ public class ScmRepositoryServiceTest
     
     
         final ScmRepositoryDefinition scmRepositoryDefinition2 = new ScmRepositoryDefinition();
+        scmRepositoryDefinition2.setKey("A");
         assertFalse(scmRepositoryService.isAssociatedToCron(scmRepositoryDefinition2));
         scmRepositoryService.registerCronJobOfScm(scmRepositoryDefinition2);
         assertTrue(scmRepositoryService.isAssociatedToCron(scmRepositoryDefinition2));

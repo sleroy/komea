@@ -16,9 +16,10 @@ import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.enums.UserBdd;
 import org.komea.product.database.model.Person;
-import org.komea.product.database.model.PersonCriteria;
-import org.komea.product.database.model.PersonRole;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 
@@ -26,12 +27,17 @@ import org.springframework.stereotype.Component;
 /**
  */
 @Component
-public class DemoDataBean
+public class AdminCheckerBean
 {
     
     
+    private static final Logger  LOGGER = LoggerFactory.getLogger("admin-controller");
+    
     @Autowired
     private CustomerDao          customerDao;
+    
+    @Value("#{authProperties.defaultAdminPassword}")
+    private String               defaultPassword;
     
     @Autowired
     private IPasswordEncoder     encoder;
@@ -54,8 +60,11 @@ public class DemoDataBean
     @Autowired
     private IProviderService     providerDao;
     
+    
     @Autowired
     private ICronRegistryService registry;
+    @Autowired
+    private UserRoleDataBean     userRoleDataBean;
     
     
     
@@ -75,13 +84,19 @@ public class DemoDataBean
     public void init() {
     
     
-        final PersonRole administrator = personRoleDao.getAdminRole();
-        if (personDAO.selectAll().isEmpty()) {
-            
-            final Person admin =
-                    new Person(null, null, null, "admin", "admin", "admin@admin", "admin",
-                            encoder.encodePassword("admin"), UserBdd.KOMEA);
-            createUser(admin, administrator);
+        if (personDAO.getAdministrators().isEmpty()) {
+            LOGGER.info("------- ALERT");
+            LOGGER.info("------- No admin has been found, auto-generation of a default admin 'admin'");
+            final Person admin = new Person();
+            admin.setEmail("admin@admin");
+            admin.setFirstName("admin");
+            admin.setLastName("admin");
+            admin.setLogin("admin");
+            admin.setPassword(encoder.encodePassword(defaultPassword));
+            admin.setUserBdd(UserBdd.KOMEA);
+            admin.setIdPersonRoleOrNull(personRoleDao.getAdminRole());
+            personDAO.saveOrUpdate(admin);
+            LOGGER.info("------- ALERT");
         }
         
     }
@@ -99,27 +114,5 @@ public class DemoDataBean
         personGroupDao = _personGroupDao;
     }
     
-    
-    /**
-     * Method createUser.
-     * 
-     * @param record
-     *            Person
-     * @param userRole
-     *            PersonRole
-     * @return Person
-     */
-    private Person createUser(final Person record, final PersonRole userRole) {
-    
-    
-        record.setIdPersonRole(userRole.getId());
-        final PersonCriteria pCriteria = new PersonCriteria();
-        pCriteria.createCriteria().andLoginEqualTo(record.getLogin());
-        if (personDAO.countByCriteria(pCriteria) == 0) {
-            personDAO.insert(record);
-            
-        }
-        return record;
-    }
     
 }

@@ -8,7 +8,6 @@ package org.komea.product.backend.service.entities;
 
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.genericservice.AbstractService;
-import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.PersonRoleDao;
 import org.komea.product.database.model.PersonRole;
@@ -43,8 +42,7 @@ public class PersonRoleService extends AbstractService<PersonRole, Integer, Pers
     public PersonRole getAdminRole() {
     
     
-        final PersonRole singleOrNull =
-                CollectionUtil.singleOrNull(selectByCriteria(createKeyCriteria("ADMIN")));
+        final PersonRole singleOrNull = selectByKey("ADMIN");
         Validate.notNull(singleOrNull);
         return singleOrNull;
     }
@@ -59,7 +57,9 @@ public class PersonRoleService extends AbstractService<PersonRole, Integer, Pers
     public PersonRole getDefaultUserRole() {
     
     
-        return CollectionUtil.singleOrNull(selectByCriteria(createKeyCriteria("USER")));
+        final PersonRole selectByKey = selectByKey("USER");
+        Validate.notNull(selectByKey);
+        return selectByKey;
     }
     
     
