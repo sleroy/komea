@@ -5,11 +5,11 @@
     <parent>
         <groupId>org.komea.plugins</groupId>
         <artifactId>komea-plugins</artifactId>
-        <version>1.0.13-SNAPSHOT</version>
+        <version>1.1.RC1</version>
     </parent>
     <groupId>org.komea.plugins</groupId>
     <artifactId>komea-testlink-plugin</artifactId>
-    <version>1.0.13-SNAPSHOT</version>
+    <version>1.1.RC1</version>
     <name>Komea : Testlink plugin</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -24,23 +24,23 @@
         <dependency>
             <groupId>org.komea.product</groupId>
             <artifactId>komea-service</artifactId>            
-            <version>1.0.13-SNAPSHOT</version>
+            <version>1.1.RC1</version>
         </dependency>
         <dependency>
             <groupId>org.komea.product</groupId>
             <artifactId>komea-service-api</artifactId>            
-            <version>1.0.13-SNAPSHOT</version>
+            <version>1.1.RC1</version>
         </dependency>
         <dependency>
             <groupId>org.komea.product</groupId>
             <artifactId>komea-testspring</artifactId>            
-            <version>1.0.13-SNAPSHOT</version>
+            <version>1.1.RC1</version>
 	    <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.komea.product</groupId>
             <artifactId>komea-utils</artifactId>            
-            <version>1.0.13-SNAPSHOT</version>
+            <version>1.1.RC1</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
