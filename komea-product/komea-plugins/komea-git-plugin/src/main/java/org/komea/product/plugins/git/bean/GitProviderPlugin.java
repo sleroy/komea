@@ -5,19 +5,15 @@ package org.komea.product.plugins.git.bean;
 
 import javax.annotation.PostConstruct;
 
-import org.komea.product.backend.plugin.api.EventTypeDef;
-import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.ISettingService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.esper.IEventPushService;
-import org.komea.product.database.enums.EntityType;
-import org.komea.product.database.enums.ProviderType;
-import org.komea.product.database.enums.Severity;
 import org.komea.product.plugins.scm.api.IScmRepositoryProxyFactories;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
 
@@ -26,62 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  * @author sleroy
  */
-@ProviderPlugin(
-        eventTypes =
-            { @EventTypeDef(
-                    providerType = ProviderType.SCM,
-                    description = "A new commit has been pushed on a GIT Server",
-                    enabled = true,
-                    entityType = EntityType.PROJECT,
-                    key = "scm-new-commit",
-                    name = "New commit on git server",
-                    severity = Severity.INFO), @EventTypeDef(
-                    providerType = ProviderType.SCM,
-                    description = "Fetch on git server has failed",
-                    enabled = true,
-                    entityType = EntityType.PROJECT,
-                    key = "scm-fetch-failed",
-                    name = "Fetch on git server has failed.",
-                    severity = Severity.INFO), @EventTypeDef(
-                    providerType = ProviderType.SCM,
-                    description = "Number of tags in a git branch. The plugin will try to detect how many tags are present on the git branch.",
-                    enabled = true,
-                    entityType = EntityType.PROJECT,
-                    key = "scm-tag-perbranch-numbers",
-                    name = "Number of tags per branch.",
-                    severity = Severity.INFO), @EventTypeDef(
-                    providerType = ProviderType.SCM,
-                    description = "Event sent when a git repository is fetched.",
-                    enabled = true,
-                    entityType = EntityType.PROJECT,
-                    key = "scm-fetch-repository",
-                    name = "Number of tags per branch.",
-                    severity = Severity.INFO), @EventTypeDef(
-                    providerType = ProviderType.SCM,
-                    description = "Number of customer tags . This plugin will try to detect custom tags present on a git repository.",
-                    enabled = true,
-                    entityType = EntityType.PROJECT,
-                    key = "scm-customer-tag-numbers",
-                    name = "Number of customer tags.",
-                    severity = Severity.INFO), @EventTypeDef(
-                    providerType = ProviderType.SCM,
-                    description = "Number of customer branches . This plugin will try to detect the number of customer branches present on a git repository.",
-                    enabled = true,
-                    entityType = EntityType.PROJECT,
-                    key = "scm-customer-branch-numbers",
-                    name = "Number of customer branches.",
-                    severity = Severity.INFO), @EventTypeDef(
-                    providerType = ProviderType.SCM,
-                    description = "Number of branches . This plugin will try to detect the number of branches present on a git repository.",
-                    enabled = true,
-                    entityType = EntityType.PROJECT,
-                    key = "scm-branch-numbers",
-                    name = "Number of branches.",
-                    severity = Severity.INFO) },
-        icon = "git",
-        name = GitProviderPlugin.GIT_PROVIDER_PLUGIN,
-        type = ProviderType.NEWS,
-        url = "/git-provider")
+@Service
 public class GitProviderPlugin
 {
     
