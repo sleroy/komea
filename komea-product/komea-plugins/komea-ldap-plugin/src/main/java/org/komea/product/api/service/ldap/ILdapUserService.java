@@ -3,7 +3,8 @@ package org.komea.product.api.service.ldap;
 
 
 
-import org.apache.directory.shared.ldap.exception.LdapConfigurationException;
+
+import org.komea.product.api.service.errors.KomeaLdapConfigurationException;
 
 
 
@@ -51,7 +52,7 @@ public interface ILdapUserService
      * @return the ldap connector.
      * @throws LdapConfigurationException
      */
-    ILdapConnector newConnector() throws LdapConfigurationException;
+    ILdapConnector newConnector() throws KomeaLdapConfigurationException;
     
     
 }

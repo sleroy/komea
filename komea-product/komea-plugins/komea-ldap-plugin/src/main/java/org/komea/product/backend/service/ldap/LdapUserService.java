@@ -7,7 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
-import org.apache.directory.shared.ldap.exception.LdapConfigurationException;
+import org.komea.product.api.service.errors.KomeaLdapConfigurationException;
 import org.komea.product.api.service.ldap.ILdapConnector;
 import org.komea.product.api.service.ldap.ILdapUserService;
 import org.komea.product.api.service.ldap.LdapUser;
@@ -122,7 +122,6 @@ public class LdapUserService implements ILdapUserService
             registryService.removeCronTask(LDAP_CRON_REFRESH);
             registryService.registerCronTask(LDAP_CRON_REFRESH, CRON_LDAP,
                     LdapCronRefreshJob.class, properties);
-            registryService.forceNow(LDAP_CRON_REFRESH);
         } catch (final Exception e) {
             
             throw new BeanCreationException(e.getMessage(), e);
@@ -136,7 +135,7 @@ public class LdapUserService implements ILdapUserService
      * @see org.komea.product.api.service.ldap.ILdapUserService#newConnector()
      */
     @Override
-    public ILdapConnector newConnector() throws LdapConfigurationException {
+    public ILdapConnector newConnector() throws KomeaLdapConfigurationException {
     
     
         final LdapConnector ldapConnector = new LdapConnector();
