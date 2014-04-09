@@ -16,6 +16,10 @@ import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.enums.UserBdd;
 import org.komea.product.database.model.Person;
+import org.komea.product.database.model.PersonCriteria;
+import org.komea.product.database.model.PersonRole;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +31,8 @@ import org.springframework.stereotype.Component;
 public class DemoDataBean
 {
     
+    
+    private static final Logger  LOGGER = LoggerFactory.getLogger("admin-controller");
     
     @Autowired
     private CustomerDao          customerDao;
@@ -55,6 +61,7 @@ public class DemoDataBean
     @Autowired
     private ICronRegistryService registry;
     
+    
     @Autowired
     private UserRoleDataBean     userRoleDataBean;
     
@@ -76,13 +83,23 @@ public class DemoDataBean
     public void init() {
     
     
-        if (personDAO.selectAll().isEmpty()) {
-            
-            final Person admin =
-                    new Person(null, null, null, "admin", "admin", "admin@admin", "admin",
-                            encoder.encodePassword("admin"), UserBdd.KOMEA);
+        final PersonRole adminRole = personRoleDao.getAdminRole();
+        
+        final PersonCriteria personCriteria = new PersonCriteria();
+        personCriteria.createCriteria().andIdPersonRoleEqualTo(adminRole.getId());
+        if (personDAO.selectByCriteria(personCriteria).isEmpty()) {
+            LOGGER.info("------- ALERT");
+            LOGGER.info("------- No admin has been found, auto-generation of a default admin 'admin'");
+            final Person admin = new Person();
+            admin.setEmail("admin@admin");
+            admin.setFirstName("admin");
+            admin.setLastName("admin");
+            admin.setLogin("admin");
+            admin.setPassword(encoder.encodePassword("admin"));
+            admin.setUserBdd(UserBdd.KOMEA);
             admin.setIdPersonRoleOrNull(personRoleDao.getAdminRole());
             personDAO.saveOrUpdate(admin);
+            LOGGER.info("------- ALERT");
         }
         
     }
