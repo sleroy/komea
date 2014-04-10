@@ -10,6 +10,10 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.ValidationError;
+import org.komea.product.backend.service.cron.CronUtils;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.entities.IProviderService;
 import org.komea.product.backend.service.kpi.IKPIService;
@@ -97,9 +101,24 @@ public final class KpiForm extends Form<Kpi> {
 
         add(SelectBoxBuilder.<EntityType>createWithEnum("entityType", kpi, EntityType.class)
                 .build());
+        TextField<String> buildCronField = TextFieldBuilder.<String>create("cronExpression", kpi, "cronExpression")
+                .simpleValidator(0, 60).highlightOnErrors().withTooltip("").buildTextField();
 
-        add(TextFieldBuilder.<String>create("cronExpression", kpi, "cronExpression")
-                .simpleValidator(0, 60).highlightOnErrors().withTooltip("").build());
+        buildCronField.add(new IValidator<String>() {
+
+            @Override
+            public void validate(IValidatable<String> validatable) {
+                String value = validatable.getValue();
+                if (!CronUtils.isValidCronExpression(value)) {
+                    ValidationError error = new ValidationError();
+                    error.setMessage("Cron expression is invalid");
+                    validatable.error(error);
+                }
+            }
+        }
+        );
+
+        add(buildCronField);
 
         add(TextFieldBuilder.<String>createRequired("evictionRate", kpi, "evictionRate")
                 .withTooltip("").build());

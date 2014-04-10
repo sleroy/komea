@@ -69,7 +69,7 @@ public class KpiEditPage extends LayoutPage {
 
     public String getTitle() {
 
-        return "Add a kpi";
+         return getString("KpiEditPage.title");
     }
 
 }
