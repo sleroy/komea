@@ -6,7 +6,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
-import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -19,7 +18,7 @@ import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonRoleService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
-import org.komea.product.database.api.IEntity;
+import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.enums.UserBdd;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
@@ -51,8 +50,8 @@ public final class PersonForm extends Form<Person> {
     private final NameGeneric groupName;
     private final TextField groupField;
     private final UserBdd savUserBdd;
-    private List<IEntity> currentEntityList;
-    private List<IEntity> selectedEntity;
+    private List<IHasKey> currentEntityList;
+    private List<IHasKey> selectedEntity;
     private String savPassword;
     private final IPasswordEncoder passEncoder;
     private PasswordTextField password;
@@ -80,8 +79,8 @@ public final class PersonForm extends Form<Person> {
         projectService = _projectService;
         personService = _personService;
         person = _compoundPropertyModel.getObject();
-        selectedEntity = new ArrayList<IEntity>();
-        currentEntityList = new ArrayList<IEntity>();
+        selectedEntity = new ArrayList<IHasKey>();
+        currentEntityList = new ArrayList<IHasKey>();
         feedBack = new FeedbackPanel("feedback");
         feedBack.setOutputMarkupId(true);
         feedBack.setOutputMarkupPlaceholderTag(true);
@@ -109,7 +108,7 @@ public final class PersonForm extends Form<Person> {
         
         if (this.person.getId() != null) {
             
-            currentEntityList = (List<IEntity>) (List<?>) projectService.getProjectsOfPerson(this.person.getId());
+            currentEntityList = (List<IHasKey>) (List<?>) projectService.getProjectsOfPerson(this.person.getId());
         }
         
         DialogFactory.addListWithSelectDialog(this,
@@ -121,7 +120,7 @@ public final class PersonForm extends Form<Person> {
                 "Choose person",
                 currentEntityList,
                 selectedEntity,
-                (List<IEntity>) (List<?>) this.projectService.selectAll(),
+                (List<IHasKey>) (List<?>) this.projectService.selectAll(),
                 projectService);
         
         initClassicField();
@@ -236,11 +235,11 @@ public final class PersonForm extends Form<Person> {
         });
     }
     
-    public List<IEntity> getSelectedEntity() {
+    public List<IHasKey> getSelectedEntity() {
         return selectedEntity;
     }
     
-    public void setSelectedEntity(List<IEntity> selectedEntity) {
+    public void setSelectedEntity(List<IHasKey> selectedEntity) {
         this.selectedEntity = selectedEntity;
     }
     

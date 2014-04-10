@@ -1,11 +1,9 @@
 package org.komea.product.wicket.person;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -18,11 +16,9 @@ import org.komea.product.backend.service.entities.IPersonRoleService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.backend.utils.KomeaEntry;
-import org.komea.product.database.api.IEntity;
+import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.model.Person;
-import org.komea.product.database.model.PersonGroup;
 import org.komea.product.wicket.LayoutPage;
-import org.komea.product.wicket.utils.DialogFactory;
 import org.komea.product.wicket.utils.SelectDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 
@@ -73,28 +69,14 @@ public class PersonAddPage extends LayoutPage {
                         new CompoundPropertyModel<Person>(_person), this, personGroupService);
         add(personForm);
 
-        IChoiceRenderer<PersonGroup> iChoiceRenderer = new IChoiceRenderer<PersonGroup>() {
-
-            @Override
-            public Object getDisplayValue(PersonGroup t) {
-                return t.getName();
-            }
-
-            @Override
-            public String getIdValue(PersonGroup t, int i) {
-                return String.valueOf(t.getId());
-            }
-
-        };
-
-        final SelectDialog<PersonGroup> dialogPersonGroup = new SelectDialog<PersonGroup>("dialogGroup", "Choose a team or department", personGroupService, iChoiceRenderer) {
+        final SelectDialog dialogPersonGroup = new SelectDialog("dialogGroup", "Choose a team or department", (List<IHasKey>)(List<?>)personGroupService.selectAll()) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                PersonGroup selectedPersonGroup = getSelected();
+                IHasKey selectedPersonGroup = getSelected();
                 if (selectedPersonGroup != null) {
                     personForm.getPerson().setIdPersonGroup(selectedPersonGroup.getId());
-                    personForm.getGroupName().setName(selectedPersonGroup.getName());
+                    personForm.getGroupName().setName(selectedPersonGroup.getDisplayName());
                 } else {
                     personForm.getPerson().setIdPersonGroup(null);
                     personForm.getGroupName().setName("");

@@ -17,12 +17,13 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 import org.komea.product.backend.service.generic.IGenericService;
-import org.komea.product.database.api.IEntity;
 
 import com.googlecode.wicket.jquery.ui.panel.JQueryFeedbackPanel;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import org.apache.wicket.Component;
+import java.util.Collections;
+import java.util.Comparator;
+import org.komea.product.database.api.IHasKey;
 
 /**
  * @author rgalerme
@@ -32,12 +33,12 @@ public abstract class SelectMultipleDialog extends AbstractFormDialog<String> {
     private static final long serialVersionUID = 1L;
 
     private FeedbackPanel feedback;
-    private List<IEntity> filter;
+    private List<IHasKey> filter;
 
     private Form form;
-    private List<IEntity> listSave;
-    private List<IEntity> listUsed;
-    private List<IEntity> selectedItems;
+    private List<IHasKey> listSave;
+    private List<IHasKey> listUsed;
+    private List<IHasKey> selectedItems;
 
     protected final DialogButton btnCancel = new DialogButton("Cancel");
     protected final DialogButton btnSelect = new DialogButton("Select"); // with a customized text
@@ -51,12 +52,12 @@ public abstract class SelectMultipleDialog extends AbstractFormDialog<String> {
             final String id,
             final String title,
             final IGenericService service,
-            final IChoiceRenderer<IEntity> rendener) {
+            final IChoiceRenderer<IHasKey> rendener) {
 
         this(id, title, service.selectAll(), rendener);
     }
 
-    public SelectMultipleDialog(final String id, final String title, final List<IEntity> objectList) {
+    public SelectMultipleDialog(final String id, final String title, final List<IHasKey> objectList) {
 
         this(id, title, objectList, null);
 
@@ -65,35 +66,36 @@ public abstract class SelectMultipleDialog extends AbstractFormDialog<String> {
     public SelectMultipleDialog(
             final String id,
             final String title,
-            final List<IEntity> objectList,
-            final IChoiceRenderer<IEntity> _rendener) {
+            final List<IHasKey> objectList,
+            final IChoiceRenderer<IHasKey> _rendener) {
 
         super(id, title, true);
         this.form = new Form<String>("formMult");
         this.listSave = objectList;
-        this.listUsed = new ArrayList<IEntity>();
-        this.filter = new ArrayList<IEntity>();
-        IChoiceRenderer<IEntity> rendener = _rendener;
+        this.listUsed = new ArrayList<IHasKey>();
+        this.filter = new ArrayList<IHasKey>();
+        IChoiceRenderer<IHasKey> rendener = _rendener;
 
         if (rendener == null) {
-            rendener = new IChoiceRenderer<IEntity>() {
+            rendener = new IChoiceRenderer<IHasKey>() {
 
                 @Override
-                public Object getDisplayValue(final IEntity t) {
+                public Object getDisplayValue(final IHasKey t) {
 
                     return t.getDisplayName();
                 }
 
                 @Override
-                public String getIdValue(final IEntity t, final int i) {
+                public String getIdValue(final IHasKey t, final int i) {
 
-                    return String.valueOf( t.getId());
+                    return String.valueOf(t.getId());
                 }
             };
         }
-        final ListMultipleChoice<IEntity> listEntite
-                = new ListMultipleChoice<IEntity>("tableMult",
-                        new PropertyModel<List<IEntity>>(this, "selectedItems"), listUsed);
+
+        final ListMultipleChoice<IHasKey> listEntite
+                = new ListMultipleChoice<IHasKey>("tableMult",
+                        new PropertyModel<List<IHasKey>>(this, "selectedItems"), listUsed);
         listEntite.setChoiceRenderer(rendener);
         listEntite.setMaxRows(8);
         this.form.add(listEntite);
@@ -107,12 +109,12 @@ public abstract class SelectMultipleDialog extends AbstractFormDialog<String> {
         return this.form;
     }
 
-    public List<IEntity> getList() {
+    public List<IHasKey> getList() {
 
         return listUsed;
     }
 
-    public List<IEntity> getSelected() {
+    public List<IHasKey> getSelected() {
 
         return selectedItems;
     }
@@ -120,7 +122,7 @@ public abstract class SelectMultipleDialog extends AbstractFormDialog<String> {
     @Override
     public boolean isResizable() {
 
-        return true;
+        return false;
     }
 
     @Override
@@ -129,12 +131,12 @@ public abstract class SelectMultipleDialog extends AbstractFormDialog<String> {
         // FIXME complete the method
     }
 
-    public void setFilter(final List<IEntity> personsOfGroup) {
+    public void setFilter(final List<IHasKey> personsOfGroup) {
 
         this.filter = personsOfGroup;
     }
 
-    public void setList(final List<IEntity> list) {
+    public void setList(final List<IHasKey> list) {
 
         this.listUsed = list;
     }
@@ -145,7 +147,7 @@ public abstract class SelectMultipleDialog extends AbstractFormDialog<String> {
         setDefaultModel(new CompoundPropertyModel<String>(user));
     }
 
-    public void setSelected(final List<IEntity> selectedProvider) {
+    public void setSelected(final List<IHasKey> selectedProvider) {
 
         this.selectedItems = selectedProvider;
     }
@@ -153,9 +155,9 @@ public abstract class SelectMultipleDialog extends AbstractFormDialog<String> {
     private void filtre() {
 
         this.listUsed.clear();
-        for (final IEntity type1 : listSave) {
+        for (final IHasKey type1 : listSave) {
             boolean found = false;
-            for (final IEntity type2 : filter) {
+            for (final IHasKey type2 : filter) {
                 if (type1.getId() == type2.getId()) {
                     found = true;
                     break;
@@ -184,6 +186,12 @@ public abstract class SelectMultipleDialog extends AbstractFormDialog<String> {
     protected void onOpen(final AjaxRequestTarget target) {
 
         filtre();
+        Collections.sort(listUsed, new Comparator<IHasKey>() {
+            @Override
+            public int compare(IHasKey o1, IHasKey o2) {
+                return o1.getDisplayName().compareTo(o2.getDisplayName());
+            }
+        });
         target.add(this.form);
     }
 
