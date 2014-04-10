@@ -5,10 +5,6 @@
  */
 package org.komea.product.plugins.bugzilla.core;
 
-import org.komea.product.plugins.bugzilla.data.BugZillaContext;
-import org.komea.product.plugins.bugzilla.api.IBugZillaConfigurationService;
-import org.komea.product.plugins.bugzilla.data.BugzillaBug;
-import org.komea.product.plugins.bugzilla.data.BugZillaStatus;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,15 +12,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.plugins.bugzilla.api.IBugZillaAlertFactory;
+import org.komea.product.plugins.bugzilla.api.IBugZillaConfigurationService;
 import org.komea.product.plugins.bugzilla.api.IBugZillaServerConfiguration;
 import org.komea.product.plugins.bugzilla.api.IBugZillaServerProxy;
-import org.komea.product.plugins.bugzilla.sah.BugUtils;
-import org.komea.product.plugins.bugzilla.sah.BugsCalculator;
-import org.komea.product.plugins.bugzilla.sah.EventService;
-import org.komea.product.plugins.bugzilla.sah.model.Bug;
-import org.komea.product.backend.service.esper.IEventPushService;
+import org.komea.product.plugins.bugzilla.data.BugZillaContext;
 import org.komea.product.plugins.bugzilla.data.BugZillaServer;
+import org.komea.product.plugins.bugzilla.data.BugZillaStatus;
+import org.komea.product.plugins.bugzilla.data.BugzillaBug;
+import org.komea.product.plugins.bugzilla.sah.BugsCalculator;
+import org.komea.product.plugins.bugzilla.sah.BugzillaServerConfiguration;
+import org.komea.product.plugins.bugzilla.sah.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -49,8 +48,8 @@ public class BugZillaCheckerBean {
 
     private void swMaturity(final List<BugzillaBug> bugzillaBugs,
             final String project, final BugZillaServer server) {
-        final List<Bug> bugs = BugUtils.convert(bugzillaBugs);
-        final BugsCalculator bugsCalculator = new BugsCalculator(bugs);
+        final BugzillaServerConfiguration configuration = new BugzillaServerConfiguration();
+        final BugsCalculator bugsCalculator = new BugsCalculator(configuration, bugzillaBugs);
         EventService.sendAllEvents(bugsCalculator, alertService, project, server);
     }
 

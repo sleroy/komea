@@ -1,10 +1,7 @@
 package org.komea.product.plugins.bugzilla.sah;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.List;
-import org.komea.product.plugins.bugzilla.sah.model.BugPriority;
-import org.komea.product.plugins.bugzilla.sah.model.BugSeverity;
-import org.komea.product.plugins.bugzilla.sah.model.BugStatus;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
@@ -33,64 +30,50 @@ public abstract class EventTypeBuilder {
         return baseEventType("total_bugs");
     }
 
-    public static EventType closedBugs() {
-        return baseEventType("closed_bugs");
+    public static EventType statusGroupBugs(BugStatusGroup group) {
+        return baseEventType(group.name().toLowerCase() + "_bugs");
     }
 
-    public static EventType openBugs() {
-        return baseEventType("open_bugs");
+    public static EventType statusBugs(final String status) {
+        return baseEventType(status.toLowerCase() + "_status_bugs");
     }
 
-    public static EventType openNotFixedBugs() {
-        return baseEventType("open_not_fixed_bugs");
+    public static EventType severityBugs(final String severity) {
+        return baseEventType(severity.toLowerCase() + "_severity_bugs");
     }
 
-    public static EventType statusBugs(final BugStatus status) {
-        return baseEventType(status.name().toLowerCase() + "_status_bugs");
+    public static EventType priorityBugs(final String priority) {
+        return baseEventType(priority.toLowerCase() + "_priority_bugs");
     }
 
-    public static EventType severityBugs(final BugSeverity severity) {
-        return baseEventType(severity.name().toLowerCase() + "_severity_bugs");
+    public static EventType priorityStatusGroupBugs(final String priority, final BugStatusGroup group) {
+        return baseEventType(group.name().toLowerCase() + "_" + priority.toLowerCase() + "_priority_bugs");
     }
 
-    public static EventType priorityBugs(final BugPriority priority) {
-        return baseEventType(priority.name().toLowerCase() + "_priority_bugs");
+    public static EventType severityStatusGroupBugs(final String severity, final BugStatusGroup group) {
+        return baseEventType(group.name().toLowerCase() + "_" + severity.toLowerCase() + "_severity_bugs");
     }
 
-    public static EventType priorityOpenBugs(final BugPriority priority) {
-        return baseEventType("open_" + priority.name().toLowerCase() + "_priority_bugs");
-    }
-
-    public static EventType severityOpenBugs(final BugSeverity severity) {
-        return baseEventType("open_" + severity.name().toLowerCase() + "_severity_bugs");
-    }
-
-    public static EventType priorityOpenNotFixedBugs(final BugPriority priority) {
-        return baseEventType("open_not_fixed_" + priority.name().toLowerCase() + "_priority_bugs");
-    }
-
-    public static EventType severityOpenNotFixedBugs(final BugSeverity severity) {
-        return baseEventType("open_not_fixed_" + severity.name().toLowerCase() + "_severity_bugs");
-    }
-
-    public static List<EventType> allEventTypes() {
-        final List<EventType> eventTypes = new ArrayList<EventType>(22);
+    public static List<EventType> allEventTypes(final BugzillaServerConfiguration configuration) {
+        final List<EventType> eventTypes = Lists.newArrayList();
         eventTypes.add(totalBugs());
-        eventTypes.add(closedBugs());
-        eventTypes.add(openBugs());
-        eventTypes.add(openNotFixedBugs());
-        for (final BugStatus status : BugStatus.values()) {
+        for (final String status : configuration.getStatutes()) {
             eventTypes.add(statusBugs(status));
         }
-        for (final BugSeverity severity : BugSeverity.values()) {
+        for (final String severity : configuration.getSeverities()) {
             eventTypes.add(severityBugs(severity));
-            eventTypes.add(severityOpenBugs(severity));
-            eventTypes.add(severityOpenNotFixedBugs(severity));
         }
-        for (final BugPriority priority : BugPriority.values()) {
+        for (final String priority : configuration.getPriorities()) {
             eventTypes.add(priorityBugs(priority));
-            eventTypes.add(priorityOpenBugs(priority));
-            eventTypes.add(priorityOpenNotFixedBugs(priority));
+        }
+        for (final BugStatusGroup group : BugStatusGroup.values()) {
+            eventTypes.add(statusGroupBugs(group));
+            for (final String severity : configuration.getSeverities()) {
+                eventTypes.add(severityStatusGroupBugs(severity, group));
+            }
+            for (final String priority : configuration.getPriorities()) {
+                eventTypes.add(priorityStatusGroupBugs(priority, group));
+            }
         }
         return eventTypes;
     }

@@ -1,55 +1,44 @@
 package org.komea.product.plugins.bugzilla.sah;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
-import org.komea.product.plugins.bugzilla.sah.model.Bug;
-import org.komea.product.plugins.bugzilla.sah.model.BugPriority;
-import org.komea.product.plugins.bugzilla.sah.model.BugSeverity;
-import org.komea.product.plugins.bugzilla.sah.model.BugStatus;
+import org.komea.product.plugins.bugzilla.data.BugzillaBug;
 
 public final class BugsCalculator {
 
     private static final Logger LOGGER = Logger.getLogger(BugsCalculator.class.getName());
-    private final List<Bug> bugs;
+    private final BugzillaServerConfiguration configuration;
+    private final List<BugzillaBug> bugs;
     private final int total;
-    private final int closed;
-    private final int open;
-    private final int openNotFixed;
-    private final BugStatus[] closedSatutes = {BugStatus.CLOSED, BugStatus.DELIVERED, BugStatus.RESOLVED};
-    private final BugStatus[] openSatutes = reverse(closedSatutes);
-    private final BugStatus[] openNotFixedSatutes = {BugStatus.NEW, BugStatus.UNCONFIRMED, BugStatus.ACCEPTED,
-        BugStatus.ASSIGNED, BugStatus.REOPENED, BugStatus.ONHOLD, BugStatus.OPENED};
-    private final EnumMap<BugSeverity, Integer> severityMap = new EnumMap<BugSeverity, Integer>(BugSeverity.class);
-    private final EnumMap<BugPriority, Integer> priorityMap = new EnumMap<BugPriority, Integer>(BugPriority.class);
-    private final EnumMap<BugSeverity, Integer> openBySeverityMap = new EnumMap<BugSeverity, Integer>(BugSeverity.class);
-    private final EnumMap<BugPriority, Integer> openByPriorityMap = new EnumMap<BugPriority, Integer>(BugPriority.class);
-    private final EnumMap<BugSeverity, Integer> openNotFixedBySeverityMap = new EnumMap<BugSeverity, Integer>(BugSeverity.class);
-    private final EnumMap<BugPriority, Integer> openNotFixedByPriorityMap = new EnumMap<BugPriority, Integer>(BugPriority.class);
-    private final EnumMap<BugStatus, Integer> statusMap = new EnumMap<BugStatus, Integer>(BugStatus.class);
+    private final Map<String, Integer> severityMap = new HashMap<String, Integer>();
+    private final Map<String, Integer> priorityMap = new HashMap<String, Integer>();
+    private final Map<String, Integer> statusMap = new HashMap<String, Integer>();
+    private final Map<BugStatusGroup, Integer> statusGroupMap = new EnumMap<BugStatusGroup, Integer>(BugStatusGroup.class);
+    private final Map<BugStatusGroup, Map<String, Integer>> statusGroupBySeverityMap
+            = new EnumMap<BugStatusGroup, Map<String, Integer>>(BugStatusGroup.class);
+    private final Map<BugStatusGroup, Map<String, Integer>> statusGroupByPriorityMap
+            = new EnumMap<BugStatusGroup, Map<String, Integer>>(BugStatusGroup.class);
 
-    public BugsCalculator(List<Bug> bugs) {
+    public BugsCalculator(final BugzillaServerConfiguration configuration, final List<BugzillaBug> bugs) {
         this.bugs = bugs;
+        this.configuration = configuration;
         this.total = bugs.size();
-        for (final BugSeverity bugSeverity : BugSeverity.values()) {
+        for (final String bugSeverity : configuration.getSeverities()) {
             severityMap.put(bugSeverity, 0);
-            openBySeverityMap.put(bugSeverity, countBySeverityAndStatutes(bugSeverity, openSatutes));
-            openNotFixedBySeverityMap.put(bugSeverity, countBySeverityAndStatutes(bugSeverity, openNotFixedSatutes));
         }
-        for (final BugStatus bugStatus : BugStatus.values()) {
+        for (final String bugStatus : configuration.getStatutes()) {
             statusMap.put(bugStatus, 0);
         }
-        for (final BugPriority bugPriority : BugPriority.values()) {
+        for (final String bugPriority : configuration.getPriorities()) {
             priorityMap.put(bugPriority, 0);
-            openByPriorityMap.put(bugPriority, countByPriorityAndStatutes(bugPriority, openSatutes));
-            openNotFixedByPriorityMap.put(bugPriority, countByPriorityAndStatutes(bugPriority, openNotFixedSatutes));
         }
-        for (final Bug bug : bugs) {
-            final BugPriority bugPriority = bug.getPriority();
-            final BugSeverity bugSeverity = bug.getSeverity();
-            final BugStatus bugStatus = bug.getStatus();
+        for (final BugzillaBug bug : bugs) {
+            final String bugPriority = bug.getPriority();
+            final String bugSeverity = bug.getSeverity();
+            final String bugStatus = bug.getStatus();
             if (bugSeverity != null) {
                 severityMap.put(bugSeverity, severityMap.get(bugSeverity) + 1);
             }
@@ -60,124 +49,98 @@ public final class BugsCalculator {
                 statusMap.put(bugStatus, statusMap.get(bugStatus) + 1);
             }
         }
-        closed = countByStatutes(closedSatutes);
-        open = total - closed;
-        openNotFixed = countByStatutes(openNotFixedSatutes);
+        for (final BugStatusGroup statusGroup : BugStatusGroup.values()) {
+            statusGroupMap.put(statusGroup,
+                    countByStatutes(configuration.getStatusGroups().get(statusGroup)));
+            statusGroupBySeverityMap.put(statusGroup, new HashMap<String, Integer>());
+            statusGroupByPriorityMap.put(statusGroup, new HashMap<String, Integer>());
+            for (final String bugSeverity : configuration.getSeverities()) {
+                statusGroupBySeverityMap.get(statusGroup).put(bugSeverity,
+                        countBySeverityAndStatutes(bugSeverity, configuration.getStatusGroups().get(statusGroup)));
+            }
+            for (final String bugPriority : configuration.getPriorities()) {
+                statusGroupByPriorityMap.get(statusGroup).put(bugPriority,
+                        countByPriorityAndStatutes(bugPriority, configuration.getStatusGroups().get(statusGroup)));
+            }
+        }
     }
 
-    private int countByPriorityAndStatutes(final BugPriority bugPriority, final BugStatus... bugStatutes) {
+    public int countByPriorityAndStatutes(final String bugPriority, final List<String> bugStatutes) {
         int count = 0;
-        final List<BugStatus> statutes = Arrays.asList(bugStatutes);
-        for (final Bug bug : bugs) {
-            if (bugPriority.equals(bug.getPriority()) && statutes.contains(bug.getStatus())) {
+        for (final BugzillaBug bug : bugs) {
+            if (bugPriority.equals(bug.getPriority()) && bugStatutes.contains(bug.getStatus())) {
                 count++;
             }
         }
         return count;
     }
 
-    private int countBySeverityAndStatutes(final BugSeverity bugSeverity, final BugStatus... bugStatutes) {
+    public int countBySeverityAndStatutes(final String bugSeverity, final List<String> bugStatutes) {
         int count = 0;
-        final List<BugStatus> statutes = Arrays.asList(bugStatutes);
-        for (final Bug bug : bugs) {
-            if (bugSeverity.equals(bug.getSeverity()) && statutes.contains(bug.getStatus())) {
+        for (final BugzillaBug bug : bugs) {
+            if (bugSeverity.equals(bug.getSeverity()) && bugStatutes.contains(bug.getStatus())) {
                 count++;
             }
         }
         return count;
     }
 
-    private int countByStatutes(final BugStatus... bugStatutes) {
+    public int countByStatutes(final List<String> bugStatutes) {
         int count = 0;
-        for (final BugStatus bugStatus : bugStatutes) {
+        for (final String bugStatus : bugStatutes) {
             count += statusMap.get(bugStatus);
         }
         return count;
     }
 
-    private BugStatus[] reverse(final BugStatus... bugStatutes) {
-        final List<BugStatus> result = new ArrayList<BugStatus>();
-        final List<BugStatus> bugStatutesList = Arrays.asList(bugStatutes);
-        for (final BugStatus bugStatus : BugStatus.values()) {
-            if (!bugStatutesList.contains(bugStatus)) {
-                result.add(bugStatus);
-            }
-        }
-        return result.toArray(new BugStatus[result.size()]);
-    }
-
-    public int countClosedBugs() {
-        return closed;
-    }
-
-    public int countOpenBugs() {
-        return open;
-    }
-
-    public int countOpenNotFixedBugs() {
-        return openNotFixed;
+    public int countStatusGroupBugs(BugStatusGroup group) {
+        return statusGroupMap.get(group);
     }
 
     public int countTotalBugs() {
         return total;
     }
 
-    public int countBugsByStatus(final BugStatus status) {
+    public int countBugsByStatus(final String status) {
         return statusMap.get(status);
     }
 
-    public int countBugsBySeverity(final BugSeverity severity) {
+    public int countBugsBySeverity(final String severity) {
         return severityMap.get(severity);
     }
 
-    public int countBugsByPriority(final BugPriority priority) {
+    public int countBugsByPriority(final String priority) {
         return priorityMap.get(priority);
-    }
-
-    public int countOpenBugsBySeverity(final BugSeverity severity) {
-        return openBySeverityMap.get(severity);
-    }
-
-    public int countOpenBugsByPriority(final BugPriority priority) {
-        return openByPriorityMap.get(priority);
-    }
-
-    public int countOpenNotFixedBugsBySeverity(final BugSeverity severity) {
-        return openNotFixedBySeverityMap.get(severity);
-    }
-
-    public int countOpenNotFixedBugsByPriority(final BugPriority priority) {
-        return openNotFixedByPriorityMap.get(priority);
     }
 
     @Override
     public String toString() {
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Total: ").append(total).append("\n");
-        stringBuilder.append("Open: ").append(open).append("\n");
-        stringBuilder.append("Open NOT fixed: ").append(openNotFixed).append("\n");
-        stringBuilder.append("Closed: ").append(closed).append("\n");
-        stringBuilder.append("\n");
-        for (final BugSeverity severity : BugSeverity.values()) {
-            stringBuilder.append("Open ").append(severity.name()).append(": ")
-                    .append(openBySeverityMap.get(severity)).append("\n");
+        for (final BugStatusGroup group : BugStatusGroup.values()) {
+            stringBuilder.append("StatusGroup ").append(group.name()).append(": ")
+                    .append(statusGroupMap.get(group)).append("\n");
         }
         stringBuilder.append("\n");
-        for (final BugPriority priority : BugPriority.values()) {
-            stringBuilder.append("Open ").append(priority.name()).append(": ")
-                    .append(openByPriorityMap.get(priority)).append("\n");
+        for (final String status : configuration.getStatutes()) {
+            stringBuilder.append("Status ").append(status).append(": ")
+                    .append(statusMap.get(status)).append("\n");
         }
         stringBuilder.append("\n");
-        for (final BugSeverity severity : BugSeverity.values()) {
-            stringBuilder.append("Open NOT fixed ").append(severity.name()).append(": ")
-                    .append(openNotFixedBySeverityMap.get(severity)).append("\n");
+        for (final String severity : configuration.getSeverities()) {
+            stringBuilder.append("Severity ").append(severity).append(": ")
+                    .append(severityMap.get(severity)).append("\n");
         }
         stringBuilder.append("\n");
-        for (final BugPriority priority : BugPriority.values()) {
-            stringBuilder.append("Open NOT fiexd").append(priority.name()).append(": ")
-                    .append(openNotFixedByPriorityMap.get(priority)).append("\n");
+        for (final String priority : configuration.getPriorities()) {
+            stringBuilder.append("Priority ").append(priority).append(": ")
+                    .append(priorityMap.get(priority)).append("\n");
         }
         return stringBuilder.toString();
+    }
+
+    public BugzillaServerConfiguration getConfiguration() {
+        return configuration;
     }
 
 }

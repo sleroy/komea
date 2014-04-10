@@ -9,12 +9,10 @@ import org.komea.product.plugins.bugzilla.data.BugzillaBug;
 import com.j2bugzilla.base.Bug;
 import com.j2bugzilla.base.BugzillaConnector;
 import com.j2bugzilla.base.BugzillaException;
-import com.j2bugzilla.base.ConnectionException;
 import com.j2bugzilla.base.Product;
 import com.j2bugzilla.rpc.BugSearch;
 import com.j2bugzilla.rpc.GetAccessibleProducts;
 import com.j2bugzilla.rpc.GetProduct;
-import com.j2bugzilla.rpc.LogIn;
 import com.j2bugzilla.rpc.LogOut;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +33,7 @@ public class J2BugZillaServerProxy implements IBugZillaServerProxy {
 
     /**
      * Constructor for J2BugZillaServerProxy.
+     *
      * @param conn BugzillaConnector
      */
     public J2BugZillaServerProxy(BugzillaConnector conn) {
@@ -43,8 +42,10 @@ public class J2BugZillaServerProxy implements IBugZillaServerProxy {
 
     /**
      * Method getListProjects.
+     *
      * @return List<String>
-     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy#getListProjects()
+     * @see
+     * org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy#getListProjects()
      */
     @Override
     public List<String> getListProjects() {
@@ -58,9 +59,11 @@ public class J2BugZillaServerProxy implements IBugZillaServerProxy {
 
     /**
      * Method getListBugs.
+     *
      * @param Project String
      * @return List<BugzillaBug>
-     * @see org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy#getListBugs(String)
+     * @see
+     * org.komea.backend.plugins.bugzilla.api.IBugZillaServerProxy#getListBugs(String)
      */
     @Override
     public List<BugzillaBug> getListBugs(String Project) {
@@ -81,7 +84,8 @@ public class J2BugZillaServerProxy implements IBugZillaServerProxy {
                 if ("".equals(assign)) {
                     is_assign = false;
                 }
-                bugZillaBugs.add(new BugzillaBug(bug.getID(), bug.getStatus(), isOpen.booleanValue(), dateCreation, is_assign));
+                bugZillaBugs.add(new BugzillaBug(bug.getID(), bug.getStatus(), isOpen.booleanValue(),
+                        dateCreation, is_assign, bug.getSeverity(), bug.getPriority()));
             }
 
         } catch (BugzillaException ex) {
@@ -92,6 +96,7 @@ public class J2BugZillaServerProxy implements IBugZillaServerProxy {
 
     /**
      * Method getProduct.
+     *
      * @return List<Product>
      */
     private List<Product> getProduct() {
@@ -116,6 +121,7 @@ public class J2BugZillaServerProxy implements IBugZillaServerProxy {
 
     /**
      * Method close.
+     *
      * @see java.io.Closeable#close()
      */
     @Override

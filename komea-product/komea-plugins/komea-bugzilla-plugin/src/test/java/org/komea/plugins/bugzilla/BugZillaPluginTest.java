@@ -13,6 +13,14 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
+import org.komea.product.backend.service.esper.IEventPushService;
+import org.komea.product.backend.service.fs.IObjectStorage;
+import org.komea.product.backend.service.plugins.IPluginStorageService;
+import org.komea.product.database.dto.EventSimpleDto;
+import org.komea.product.plugins.bugzilla.api.IBugZillaAlertFactory;
+import org.komea.product.plugins.bugzilla.api.IBugZillaConfigurationService;
+import org.komea.product.plugins.bugzilla.api.IBugZillaServerProxy;
+import org.komea.product.plugins.bugzilla.api.IBugZillaServerProxyFactory;
 import org.komea.product.plugins.bugzilla.core.BugZillaAlertFactory;
 import org.komea.product.plugins.bugzilla.core.BugZillaCheckerBean;
 import org.komea.product.plugins.bugzilla.core.BugZillaConfiguration;
@@ -20,14 +28,6 @@ import org.komea.product.plugins.bugzilla.core.BugZillaConfigurationService;
 import org.komea.product.plugins.bugzilla.data.BugZillaContext;
 import org.komea.product.plugins.bugzilla.data.BugZillaServer;
 import org.komea.product.plugins.bugzilla.data.BugzillaBug;
-import org.komea.product.plugins.bugzilla.api.IBugZillaAlertFactory;
-import org.komea.product.plugins.bugzilla.api.IBugZillaConfigurationService;
-import org.komea.product.plugins.bugzilla.api.IBugZillaServerProxy;
-import org.komea.product.plugins.bugzilla.api.IBugZillaServerProxyFactory;
-import org.komea.product.backend.service.esper.IEventPushService;
-import org.komea.product.backend.service.fs.IObjectStorage;
-import org.komea.product.backend.service.plugins.IPluginStorageService;
-import org.komea.product.database.dto.EventSimpleDto;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
@@ -81,15 +81,15 @@ public class BugZillaPluginTest {
             Logger.getLogger(BugZillaPluginTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        listMakeb.add(new BugzillaBug(1, "NEW", true, d, true)); // id , status, ouvert, date creation , assigne
-        listMakeb.add(new BugzillaBug(2, "CONFIRMED", true, d, false));
-        listMakeb.add(new BugzillaBug(3, "UNCONFIRMED", true, d2, false));
-        listMakeb.add(new BugzillaBug(4, "REOPENED", true, d2, false));
-        listMakeb.add(new BugzillaBug(5, "RESOLVED", false, d1, true));
-        listMakeb.add(new BugzillaBug(6, "VERIFIED", false, d1, true));
+        listMakeb.add(new BugzillaBug(1, "NEW", true, d, true, "", "")); // id , status, ouvert, date creation , assigne
+        listMakeb.add(new BugzillaBug(2, "CONFIRMED", true, d, false, "", ""));
+        listMakeb.add(new BugzillaBug(3, "UNCONFIRMED", true, d2, false, "", ""));
+        listMakeb.add(new BugzillaBug(4, "REOPENED", true, d2, false, "", ""));
+        listMakeb.add(new BugzillaBug(5, "RESOLVED", false, d1, true, "", ""));
+        listMakeb.add(new BugzillaBug(6, "VERIFIED", false, d1, true, "", ""));
 
         final List<BugzillaBug> listCornelia = new ArrayList<BugzillaBug>();
-        listCornelia.add(new BugzillaBug(7, "REOPENED", false, d2, false));
+        listCornelia.add(new BugzillaBug(7, "REOPENED", false, d2, false, "", ""));
 
         Mockito.when(j2connector.getListBugs("Makeb")).thenReturn(listMakeb);
         Mockito.when(j2connector.getListBugs("Cornelia")).thenReturn(listCornelia);
@@ -97,7 +97,6 @@ public class BugZillaPluginTest {
         // ///////////////////////////////////////////
         bugZillaConfiguration.setServerProxyFactory(bzfact);
 //        bugZillaConfiguration.setServerProxyFactory(new BugZillaServerProxyFactory());
-
 
         final IObjectStorage<BugZillaConfiguration> storage = Mockito.mock(IObjectStorage.class);
         final BugZillaConfiguration bconf = Mockito.mock(BugZillaConfiguration.class);
@@ -111,7 +110,6 @@ public class BugZillaPluginTest {
         Mockito.when(idServer.getContext()).thenReturn(bc);
 
 //        final BugZillaServer realServer = new BugZillaServer("http://eos/bugzilla/", "jeremie.guidoux@tocea.com", "tocea35", new BugZillaContext());
-
         final List<BugZillaServer> listBServ = new ArrayList<BugZillaServer>();
         listBServ.add(idServer);
 //        listBServ.add(realServer);
