@@ -36,11 +36,15 @@ public class KpiEditPage extends LayoutPage {
 
     public KpiEditPage(final PageParameters _parameters) {
 
-        this(_parameters, new Kpi());
+        this(_parameters, new Kpi(), true);
 
     }
 
     public KpiEditPage(final PageParameters _parameters, final Kpi _kpi) {
+        this(_parameters, _kpi, false);
+    }
+
+    private KpiEditPage(final PageParameters _parameters, final Kpi _kpi, boolean isNew) {
 
         super(_parameters);
 
@@ -49,7 +53,7 @@ public class KpiEditPage extends LayoutPage {
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
 
-        final KpiForm kpiForm = new KpiForm("form", kpiService, entityService, providerService, feedbackPanel, new CompoundPropertyModel<Kpi>(_kpi), this);
+        final KpiForm kpiForm = new KpiForm(isNew, "form", kpiService, entityService, providerService, feedbackPanel, new CompoundPropertyModel<Kpi>(_kpi), this);
         add(kpiForm);
     }
 

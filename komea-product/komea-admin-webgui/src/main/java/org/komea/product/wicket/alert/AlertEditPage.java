@@ -28,22 +28,26 @@ public final class AlertEditPage extends LayoutPage {
     private IKPIService kpiService;
 
     public AlertEditPage(PageParameters _parameters) {
-        this(_parameters, new KpiAlertType());
+        this(_parameters, new KpiAlertType(), true);
     }
 
     public AlertEditPage(PageParameters _parameters, KpiAlertType _alertType) {
+        this(_parameters, _alertType, false);
+    }
+
+    public AlertEditPage(PageParameters _parameters, KpiAlertType _alertType, boolean isNew) {
         super(_parameters);
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
-        AlertForm alertForm = new AlertForm(kpiService, alertService, feedbackPanel, this, _alertType, "form", new CompoundPropertyModel<KpiAlertType>(_alertType));
+        AlertForm alertForm = new AlertForm(isNew,kpiService, alertService, feedbackPanel, this, _alertType, "form", new CompoundPropertyModel<KpiAlertType>(_alertType));
         add(alertForm);
     }
-      @Override
+
+    @Override
     public String getTitle() {
-    
-    
+
         return getString("AlertEditPage.title");
     }
 }

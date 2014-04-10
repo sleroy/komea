@@ -1,5 +1,3 @@
-
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -39,10 +37,14 @@ public class TeamEditPage extends LayoutPage {
     private IPersonService personService;
 
     public TeamEditPage(PageParameters _parameters) {
-        this(_parameters, new PersonGroup());
+        this(_parameters, new PersonGroup(), true);
     }
 
     public TeamEditPage(PageParameters _parameters, PersonGroup _personGroup) {
+        this(_parameters, _personGroup, false);
+    }
+
+    private TeamEditPage(PageParameters _parameters, PersonGroup _personGroup, boolean isNew) {
         super(_parameters);
 
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
@@ -50,10 +52,9 @@ public class TeamEditPage extends LayoutPage {
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
 
-        final TeamForm teamForm = new TeamForm("form", projectService, personService, prService,
+        final TeamForm teamForm = new TeamForm(isNew,"form", projectService, personService, prService,
                 feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this);
         add(teamForm);
-
 
     }
 
