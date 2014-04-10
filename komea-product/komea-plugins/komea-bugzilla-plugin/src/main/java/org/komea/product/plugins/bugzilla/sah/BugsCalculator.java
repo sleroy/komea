@@ -39,13 +39,13 @@ public final class BugsCalculator {
             final String bugPriority = bug.getPriority();
             final String bugSeverity = bug.getSeverity();
             final String bugStatus = bug.getStatus();
-            if (bugSeverity != null) {
+            if (bugSeverity != null && severityMap.containsKey(bugSeverity)) {
                 severityMap.put(bugSeverity, severityMap.get(bugSeverity) + 1);
             }
-            if (bugPriority != null) {
+            if (bugPriority != null && priorityMap.containsKey(bugPriority)) {
                 priorityMap.put(bugPriority, priorityMap.get(bugPriority) + 1);
             }
-            if (bugStatus != null) {
+            if (bugStatus != null && statusMap.containsKey(bugStatus)) {
                 statusMap.put(bugStatus, statusMap.get(bugStatus) + 1);
             }
         }

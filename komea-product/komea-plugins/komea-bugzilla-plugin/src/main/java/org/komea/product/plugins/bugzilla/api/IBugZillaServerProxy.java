@@ -13,7 +13,7 @@ import org.komea.product.plugins.bugzilla.data.BugzillaBug;
  *
  * @author rgalerme
  */
-public interface IBugZillaServerProxy  extends Closeable {
+public interface IBugZillaServerProxy extends Closeable {
 
     /**
      *
@@ -29,5 +29,8 @@ public interface IBugZillaServerProxy  extends Closeable {
      */
     public List<BugzillaBug> getListBugs(String Project);
 
-   
+    public List<String> getSeverities();
+
+    public List<String> getPriorities();
+
 }

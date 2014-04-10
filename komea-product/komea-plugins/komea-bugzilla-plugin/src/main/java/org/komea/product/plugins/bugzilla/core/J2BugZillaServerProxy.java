@@ -5,22 +5,24 @@
  */
 package org.komea.product.plugins.bugzilla.core;
 
-import org.komea.product.plugins.bugzilla.data.BugzillaBug;
+import com.google.common.collect.Lists;
 import com.j2bugzilla.base.Bug;
 import com.j2bugzilla.base.BugzillaConnector;
 import com.j2bugzilla.base.BugzillaException;
 import com.j2bugzilla.base.Product;
 import com.j2bugzilla.rpc.BugSearch;
 import com.j2bugzilla.rpc.GetAccessibleProducts;
+import com.j2bugzilla.rpc.GetLegalValues;
 import com.j2bugzilla.rpc.GetProduct;
 import com.j2bugzilla.rpc.LogOut;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.komea.product.plugins.bugzilla.api.IBugZillaServerProxy;
+import org.komea.product.plugins.bugzilla.data.BugzillaBug;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -29,6 +31,7 @@ import org.komea.product.plugins.bugzilla.api.IBugZillaServerProxy;
  */
 public class J2BugZillaServerProxy implements IBugZillaServerProxy {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(J2BugZillaServerProxy.class);
     private BugzillaConnector conn;
 
     /**
@@ -55,6 +58,27 @@ public class J2BugZillaServerProxy implements IBugZillaServerProxy {
             projects.add(product.getName());
         }
         return projects;
+    }
+
+    private List<String> GetLegalValues(final GetLegalValues.Fields field) {
+        try {
+            final GetLegalValues legalValues = new GetLegalValues(field);
+            conn.executeMethod(legalValues);
+            return new ArrayList<String>(legalValues.getLegalValues());
+        } catch (BugzillaException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        }
+        return Lists.newArrayList();
+    }
+
+    @Override
+    public List<String> getSeverities() {
+        return GetLegalValues(GetLegalValues.Fields.SEVERITY);
+    }
+
+    @Override
+    public List<String> getPriorities() {
+        return GetLegalValues(GetLegalValues.Fields.PRIORITY);
     }
 
     /**
@@ -89,7 +113,7 @@ public class J2BugZillaServerProxy implements IBugZillaServerProxy {
             }
 
         } catch (BugzillaException ex) {
-            Logger.getLogger(J2BugZillaServerProxy.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
         return bugZillaBugs;
     }
@@ -114,7 +138,7 @@ public class J2BugZillaServerProxy implements IBugZillaServerProxy {
             }
 
         } catch (BugzillaException ex) {
-            Logger.getLogger(J2BugZillaServerProxy.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
         return products;
     }
@@ -129,7 +153,7 @@ public class J2BugZillaServerProxy implements IBugZillaServerProxy {
         try {
             conn.executeMethod(new LogOut());
         } catch (BugzillaException ex) {
-            Logger.getLogger(J2BugZillaServerProxy.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
     }
 }

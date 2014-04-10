@@ -5,7 +5,12 @@
  */
 package org.komea.product.plugins.bugzilla.data;
 
+import com.google.common.collect.Lists;
 import java.io.Serializable;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import org.komea.product.plugins.bugzilla.sah.BugStatusGroup;
 
 /**
  *
@@ -19,30 +24,42 @@ public class BugZillaServer implements Serializable {
     private String mdp;
     private BugZillaContext context;
     private Integer reminderAlert;
+    private final List<String> statutes = Lists.newArrayList();
+    private final List<String> severities = Lists.newArrayList();
+    private final List<String> priorities = Lists.newArrayList();
+    private final Map<BugStatusGroup, List<String>> statusGroups
+            = new EnumMap<BugStatusGroup, List<String>>(BugStatusGroup.class);
 
     public BugZillaServer() {
     }
 
-    /**
-     * Constructor for BugZillaServer.
-     * @param address String
-     * @param login String
-     * @param mdp String
-     * @param context BugZillaContext
-     */
     public BugZillaServer(String address, String login, String mdp, BugZillaContext context) {
         this.address = address;
         this.login = login;
         this.mdp = mdp;
         this.context = context;
     }
-    
-     public BugZillaServer(String address, String login, String mdp, BugZillaContext context,int reminder) {
+
+    public BugZillaServer(String address, String login, String mdp, BugZillaContext context, int reminder) {
         this.address = address;
         this.login = login;
         this.mdp = mdp;
         this.context = context;
         this.reminderAlert = reminder;
+    }
+
+    public BugZillaServer(String address, String login, String mdp, BugZillaContext context,
+            int reminder, final List<String> statutes, final List<String> severities,
+            List<String> priorities, final Map<BugStatusGroup, List<String>> statusGroups) {
+        this.address = address;
+        this.login = login;
+        this.mdp = mdp;
+        this.context = context;
+        this.reminderAlert = reminder;
+        this.statutes.addAll(statutes);
+        this.severities.addAll(severities);
+        this.priorities.addAll(priorities);
+        this.statusGroups.putAll(statusGroups);
     }
 
     public Integer getReminderAlert() {
@@ -53,10 +70,9 @@ public class BugZillaServer implements Serializable {
         this.reminderAlert = reminderAlert;
     }
 
-     
-     
     /**
      * Method setAddress.
+     *
      * @param address String
      */
     public void setAddress(String address) {
@@ -65,6 +81,7 @@ public class BugZillaServer implements Serializable {
 
     /**
      * Method setLogin.
+     *
      * @param login String
      */
     public void setLogin(String login) {
@@ -73,6 +90,7 @@ public class BugZillaServer implements Serializable {
 
     /**
      * Method setMdp.
+     *
      * @param mdp String
      */
     public void setMdp(String mdp) {
@@ -81,6 +99,7 @@ public class BugZillaServer implements Serializable {
 
     /**
      * Method setContext.
+     *
      * @param context BugZillaContext
      */
     public void setContext(BugZillaContext context) {
@@ -89,6 +108,7 @@ public class BugZillaServer implements Serializable {
 
     /**
      * Method getAddress.
+     *
      * @return String
      */
     public String getAddress() {
@@ -97,6 +117,7 @@ public class BugZillaServer implements Serializable {
 
     /**
      * Method getLogin.
+     *
      * @return String
      */
     public String getLogin() {
@@ -105,6 +126,7 @@ public class BugZillaServer implements Serializable {
 
     /**
      * Method getMdp.
+     *
      * @return String
      */
     public String getMdp() {
@@ -113,10 +135,27 @@ public class BugZillaServer implements Serializable {
 
     /**
      * Method getContext.
+     *
      * @return BugZillaContext
      */
     public BugZillaContext getContext() {
         return context;
+    }
+
+    public List<String> getStatutes() {
+        return statutes;
+    }
+
+    public List<String> getSeverities() {
+        return severities;
+    }
+
+    public List<String> getPriorities() {
+        return priorities;
+    }
+
+    public Map<BugStatusGroup, List<String>> getStatusGroups() {
+        return statusGroups;
     }
 
 }

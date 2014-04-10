@@ -5,6 +5,7 @@
  */
 package org.komea.product.plugins.bugzilla.userinterface;
 
+import java.io.IOException;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import org.komea.product.backend.api.PluginAdminPages;
@@ -15,6 +16,10 @@ import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.model.EventType;
+import org.komea.product.plugins.bugzilla.api.IBugZillaConfigurationService;
+import org.komea.product.plugins.bugzilla.api.IBugZillaServerConfiguration;
+import org.komea.product.plugins.bugzilla.api.IBugZillaServerProxy;
+import org.komea.product.plugins.bugzilla.data.BugZillaServer;
 import org.komea.product.plugins.bugzilla.sah.BugzillaServerConfiguration;
 import org.komea.product.plugins.bugzilla.sah.EventTypeBuilder;
 import org.slf4j.Logger;
@@ -61,15 +66,29 @@ public class BugZillaProviderPlugin {
     protected static final String SETTING_PROVIDER_PERIOD_NAME = "bugzilla_refresh_period";
     @Autowired
     private IEventTypeService evenTypeService;
+    @Autowired
+    private IBugZillaConfigurationService bugZillaConfiguration;
 
     @PostConstruct
     public void init() {
-        final BugzillaServerConfiguration configuration = new BugzillaServerConfiguration();
-        final List<EventType> eventTypes = EventTypeBuilder.allEventTypes(configuration);
-        for (final EventType eventType : eventTypes) {
-            evenTypeService.registerEvent(eventType);
-        }
         LOGGER.info("Loading bugZilla plugin");
+        for (final IBugZillaServerConfiguration conf : bugZillaConfiguration.getServers()) {
+            final IBugZillaServerProxy bugzillaProxy = conf.openProxy();
+            if (bugzillaProxy != null) {
+                final BugZillaServer server = conf.getServer();
+                final BugzillaServerConfiguration configuration = new BugzillaServerConfiguration(
+                        server.getStatutes(), server.getSeverities(), server.getPriorities(), server.getStatusGroups());
+                final List<EventType> eventTypes = EventTypeBuilder.allEventTypes(configuration);
+                for (final EventType eventType : eventTypes) {
+                    evenTypeService.registerEvent(eventType);
+                }
+                try {
+                    bugzillaProxy.close();
+                } catch (final IOException ex) {
+                    LOGGER.error(ex.getMessage(), ex);
+                }
+            }
+        }
     }
 
 }
