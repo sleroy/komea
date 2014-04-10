@@ -396,4 +396,14 @@ public class EventType implements IHasKey {
         sb.append("]");
         return sb.toString();
     }
+
+    @Override
+    public String getKey() {
+        return eventKey;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return name;
+    }
 }

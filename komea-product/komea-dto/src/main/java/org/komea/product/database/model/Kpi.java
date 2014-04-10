@@ -719,4 +719,14 @@ public class Kpi implements IHasKey {
         return sb.toString();
     }
 
+    @Override
+    public String getKey() {
+        return kpiKey;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return name;
+    }
+
 }

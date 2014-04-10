@@ -26,8 +26,4 @@ public interface IEntity extends IHasKey {
      */
     EntityKey getEntityKey();
 
-    String getKey();
-
-    String getDisplayName();
-
 }

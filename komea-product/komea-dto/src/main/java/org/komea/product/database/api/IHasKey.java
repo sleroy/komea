@@ -25,4 +25,8 @@ public interface IHasKey extends Serializable {
      * @return the key.
      */
     Integer getId();
+
+    String getKey();
+
+    String getDisplayName();
 }
