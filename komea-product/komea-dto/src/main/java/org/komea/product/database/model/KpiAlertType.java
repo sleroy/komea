@@ -3,6 +3,7 @@ package org.komea.product.database.model;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.api.IKeyVisitor;
 import org.komea.product.database.enums.Operator;
@@ -468,11 +469,13 @@ public class KpiAlertType implements IHasKey {
     }
 
     @Override
+    @JsonIgnore
     public String getKey() {
         return kpiAlertKey;
     }
 
     @Override
+    @JsonIgnore
     public String getDisplayName() {
         return name;
     }

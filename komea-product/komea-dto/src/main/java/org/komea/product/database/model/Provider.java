@@ -328,11 +328,13 @@ public class Provider implements IHasKey {
     }
 
     @Override
+    @JsonIgnore
     public String getKey() {
         return url;
     }
 
     @Override
+    @JsonIgnore
     public String getDisplayName() {
         return name;
     }

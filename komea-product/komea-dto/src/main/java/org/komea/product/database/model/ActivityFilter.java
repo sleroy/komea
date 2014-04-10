@@ -1,6 +1,7 @@
 package org.komea.product.database.model;
 
 import javax.validation.constraints.NotNull;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.api.IKeyVisitor;
 import org.komea.product.database.enums.EntityType;
@@ -415,11 +416,13 @@ public class ActivityFilter implements IHasKey {
     }
 
     @Override
+    @JsonIgnore
     public String getKey() {
         return "";
     }
 
     @Override
+    @JsonIgnore
     public String getDisplayName() {
         return "";
     }

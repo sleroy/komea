@@ -720,11 +720,13 @@ public class Kpi implements IHasKey {
     }
 
     @Override
+    @JsonIgnore
     public String getKey() {
         return kpiKey;
     }
 
     @Override
+    @JsonIgnore
     public String getDisplayName() {
         return name;
     }
