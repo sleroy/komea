@@ -85,32 +85,36 @@ public final class BugsCalculator {
         return count;
     }
 
-    public int countByStatutes(final List<String> bugStatutes) {
+    private int countByStatutes(final List<String> bugStatutes) {
         int count = 0;
         for (final String bugStatus : bugStatutes) {
-            count += statusMap.get(bugStatus);
+            count += getValue(statusMap.get(bugStatus));
         }
         return count;
     }
 
     public int countStatusGroupBugs(BugStatusGroup group) {
-        return statusGroupMap.get(group);
+        return getValue(statusGroupMap.get(group));
     }
 
     public int countTotalBugs() {
         return total;
     }
 
+    private int getValue(Integer value) {
+        return value == null ? 0 : value;
+    }
+
     public int countBugsByStatus(final String status) {
-        return statusMap.get(status);
+        return getValue(statusMap.get(status));
     }
 
     public int countBugsBySeverity(final String severity) {
-        return severityMap.get(severity);
+        return getValue(severityMap.get(severity));
     }
 
     public int countBugsByPriority(final String priority) {
-        return priorityMap.get(priority);
+        return getValue(priorityMap.get(priority));
     }
 
     @Override
