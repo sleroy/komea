@@ -18,10 +18,10 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.model.PropertyModel;
 import org.komea.product.backend.service.generic.IGenericService;
-import org.komea.product.database.api.IEntity;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import org.komea.product.database.api.IHasKey;
 
 
 
@@ -40,17 +40,17 @@ public class DialogFactory
             final String idBtnDel,
             final String nameFieldResult,
             final String displayDialogMessage,
-            final List<IEntity> currentEntityList,
-            final List<IEntity> choiceEntityList,
-            final List<IEntity> selectDialogList,
+            final List<IHasKey> currentEntityList,
+            final List<IHasKey> choiceEntityList,
+            final List<IHasKey> selectDialogList,
             final IGenericService _service) {
     
     
-        final IChoiceRenderer<IEntity> displayGroup = DialogFactory.getChoiceRendenerEntity();
+        final IChoiceRenderer<IHasKey> displayGroup = DialogFactory.getChoiceRendenerEntity();
         
-        final ListMultipleChoice<IEntity> listEntite;
+        final ListMultipleChoice<IHasKey> listEntite;
         listEntite =
-                new ListMultipleChoice<IEntity>(idList, new PropertyModel<List<IEntity>>(page,
+                new ListMultipleChoice<IHasKey>(idList, new PropertyModel<List<IHasKey>>(page,
                         nameFieldResult), currentEntityList);
         listEntite.setChoiceRenderer(displayGroup);
         listEntite.setMaxRows(8);
@@ -59,7 +59,7 @@ public class DialogFactory
         
         final SelectMultipleDialog dialogPersonGroup =
                 new SelectMultipleDialog(idDialog, displayDialogMessage,
-                        (List<IEntity>) (List<?>) selectDialogList)
+                        (List<IHasKey>) (List<?>) selectDialogList)
                 {
                     
                     
@@ -75,11 +75,11 @@ public class DialogFactory
                     protected void onSubmit(final AjaxRequestTarget target) {
                     
                     
-                        final List<IEntity> selected = getSelected();
-                        for (final IEntity iEntity : selected) {
+                        final List<IHasKey> selected = getSelected();
+                        for (final IHasKey iEntity : selected) {
                             if (iEntity != null) {
-                                final IEntity selectByPrimaryKey1 =
-                                        (IEntity) _service.selectByPrimaryKey(iEntity.getId());
+                                final IHasKey selectByPrimaryKey1 =
+                                        (IHasKey) _service.selectByPrimaryKey(iEntity.getId());
                                 if (!currentEntityList.contains(selectByPrimaryKey1)) {
                                     currentEntityList.add(selectByPrimaryKey1);
                                 }
@@ -110,7 +110,7 @@ public class DialogFactory
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
             
             
-                for (final IEntity person : choiceEntityList) {
+                for (final IHasKey person : choiceEntityList) {
                     currentEntityList.remove(person);
                 }
                 
@@ -122,7 +122,7 @@ public class DialogFactory
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
             
             
-                for (final IEntity person : choiceEntityList) {
+                for (final IHasKey person : choiceEntityList) {
                     currentEntityList.remove(person);
                 }
                 
@@ -133,15 +133,15 @@ public class DialogFactory
     }
     
     
-    public static IChoiceRenderer<IEntity> getChoiceRendenerEntity() {
+    public static IChoiceRenderer<IHasKey> getChoiceRendenerEntity() {
     
     
-        final IChoiceRenderer<IEntity> display = new IChoiceRenderer<IEntity>()
+        final IChoiceRenderer<IHasKey> display = new IChoiceRenderer<IHasKey>()
         {
             
             
             @Override
-            public Object getDisplayValue(final IEntity t) {
+            public Object getDisplayValue(final IHasKey t) {
             
             
                 return t.getDisplayName();
@@ -149,7 +149,7 @@ public class DialogFactory
             
             
             @Override
-            public String getIdValue(final IEntity t, final int i) {
+            public String getIdValue(final IHasKey t, final int i) {
             
             
                 return String.valueOf(t.getId());

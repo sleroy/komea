@@ -3,10 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.komea.product.wicket.utils;
-
-
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,191 +12,155 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListChoice;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 import org.komea.product.backend.service.generic.IGenericService;
-import org.komea.product.database.api.IEntity;
 
-import com.googlecode.wicket.jquery.ui.panel.JQueryFeedbackPanel;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-
-
+import java.util.Collections;
+import java.util.Comparator;
+import org.komea.product.database.api.IHasKey;
 
 /**
  * @author rgalerme
  */
-public abstract class SelectDialog<T> extends AbstractFormDialog<String>
-{
-    
-    
-    private static final long    serialVersionUID = 1L;
-    
-    private FeedbackPanel        feedback;
-    private Form                 form;
-    
-    private List<T>              list;
-    private T                    selectedItem;
-    protected final DialogButton btnCancel        = new DialogButton("Cancel");
-    
-    protected final DialogButton btnSelect        = new DialogButton("Select"); // with a customized text
-                                                                                
-                                                                                
-    
+public abstract class SelectDialog extends AbstractFormDialog<String> {
+
+    private static final long serialVersionUID = 1L;
+
+    private Form form;
+
+    private List<IHasKey> list;
+    private IHasKey selectedItem;
+    protected final DialogButton btnCancel = new DialogButton("Cancel");
+
+    protected final DialogButton btnSelect = new DialogButton("Select"); // with a customized text
+
     public SelectDialog(final String id, final String title, final IGenericService service) {
-    
-    
+
         this(id, title, service.selectAll(), null);
     }
-    
-    
+
     public SelectDialog(
             final String id,
             final String title,
             final IGenericService service,
-            final IChoiceRenderer<T> rendener) {
-    
-    
+            final IChoiceRenderer<IHasKey> rendener) {
+
         this(id, title, service.selectAll(), rendener);
     }
-    
-    
-    public SelectDialog(final String id, final String title, final List<T> objectList) {
-    
-    
+
+    public SelectDialog(final String id, final String title, final List<IHasKey> objectList) {
+
         this(id, title, objectList, null);
     }
-    
-    
+
     public SelectDialog(
             final String id,
             final String title,
-            final List<T> objectList,
-            final IChoiceRenderer<T> _rendener) {
-    
-    
+            final List<IHasKey> objectList,
+            final IChoiceRenderer<IHasKey> _rendener) {
+
         super(id, title, true);
         this.form = new Form<String>("form");
         list = objectList;
-        IChoiceRenderer<T> rendener = _rendener;
+        IChoiceRenderer<IHasKey> rendener = _rendener;
         if (!list.isEmpty()) {
             selectedItem = list.get(0);
         }
         if (rendener == null) {
-            rendener = new IChoiceRenderer<T>()
-            {
-                
-                
+            rendener = new IChoiceRenderer<IHasKey>() {
+
                 @Override
-                public Object getDisplayValue(final T t) {
-                
-                
-                    return ((IEntity) t).getDisplayName();
+                public Object getDisplayValue(final IHasKey t) {
+
+                    return t.getDisplayName();
                 }
-                
-                
+
                 @Override
-                public String getIdValue(final T t, final int i) {
-                
-                
-                    return String.valueOf(((IEntity) t).getId());
+                public String getIdValue(final IHasKey t, final int i) {
+
+                    return String.valueOf(t.getId());
                 }
             };
         }
-        final ListChoice<T> listEntite =
-                new ListChoice<T>("table", new PropertyModel<T>(this, "selectedItem"), list);
+        final ListChoice<IHasKey> listEntite
+                = new ListChoice<IHasKey>("table", new PropertyModel<IHasKey>(this, "selectedItem"), list);
         listEntite.setChoiceRenderer(rendener);
         listEntite.setNullValid(true);
         listEntite.setMaxRows(8);
         this.form.add(listEntite);
-        this.feedback = new JQueryFeedbackPanel("feedback");
         this.add(this.form);
     }
-    
-    
+
     @Override
     public Form<?> getForm() {
-    
-    
+
         return this.form;
     }
-    
-    
-    public List<T> getList() {
-    
-    
+
+    public List<IHasKey> getList() {
+
         return list;
     }
-    
-    
-    public T getSelected() {
-    
-    
+
+    public IHasKey getSelected() {
+
         return selectedItem;
     }
-    
-    
+
     @Override
     public boolean isResizable() {
-    
-    
-        return true;
+
+        return false;
     }
-    
-    
+
     @Override
     public void onError(final AjaxRequestTarget target) {
-    
-    
+
         // FIXME complete the method
     }
-    
-    
-    public void setList(final List<T> list) {
-    
-    
+
+    public void setList(final List<IHasKey> list) {
+
         this.list = list;
     }
-    
-    
+
     @Override
     public void setModelObject(final String user) {
-    
-    
+
         setDefaultModel(new CompoundPropertyModel<String>(user));
     }
-    
-    
-    public void setSelected(final T selectedProvider) {
-    
-    
+
+    public void setSelected(final IHasKey selectedProvider) {
+
         this.selectedItem = selectedProvider;
     }
-    
-    
+
     @Override
     protected List<DialogButton> getButtons() {
-    
-    
+
         return Arrays.asList(this.btnSelect, this.btnCancel);
     }
-    
-    
+
     @Override
     protected DialogButton getSubmitButton() {
-    
-    
+
         return this.btnSelect;
     }
-    
-    
+
     // Events //
     @Override
     protected void onOpen(final AjaxRequestTarget target) {
-    
-    
+
+        Collections.sort(list, new Comparator<IHasKey>() {
+            @Override
+            public int compare(IHasKey o1, IHasKey o2) {
+                return o1.getDisplayName().compareTo(o2.getDisplayName());
+            }
+        });
         target.add(this.form);
     }
-    
+
 }

@@ -11,17 +11,16 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.komea.product.backend.service.alert.IAlertTypeService;
 import org.komea.product.backend.service.kpi.IKPIService;
+import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.enums.Operator;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
-import org.komea.product.database.model.PersonGroup;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.NameGeneric;
 import org.komea.product.wicket.utils.SelectDialog;
@@ -107,7 +106,6 @@ public class AlertForm extends Form<KpiAlertType> {
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
 
                 feedBack.setVisible(true);
-                error("error found");
                 // repaint the feedback panel so errors are shown
                 target.add(feedBack);
             }
@@ -128,28 +126,15 @@ public class AlertForm extends Form<KpiAlertType> {
     }
 
     public void initSelectKpi() {
-        IChoiceRenderer<Kpi> iChoiceRenderer = new IChoiceRenderer<Kpi>() {
-
-            @Override
-            public Object getDisplayValue(Kpi t) {
-                return t.getName();
-            }
-
-            @Override
-            public String getIdValue(Kpi t, int i) {
-                return String.valueOf(t.getId());
-            }
-
-        };
-        List<Kpi> allKpi = kpiService.selectAll();
-        final SelectDialog<Kpi> DialogKpi = new SelectDialog<Kpi>("kpiDialog", "Choose a kpi", allKpi, iChoiceRenderer) {
+        List<IHasKey> allKpi = (List<IHasKey>)(List<?>)kpiService.selectAll();
+        final SelectDialog DialogKpi = new SelectDialog("kpiDialog", "Choose a kpi", allKpi) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                Kpi selectedKpi = getSelected();
+                IHasKey selectedKpi = getSelected();
                 if (selectedKpi != null) {
                     alert.setIdKpi(selectedKpi.getId());
-                    nameEntity.setName(selectedKpi.getName());
+                    nameEntity.setName(selectedKpi.getDisplayName());
                 } else {
                     alert.setIdKpi(null);
                     nameEntity.setName("");

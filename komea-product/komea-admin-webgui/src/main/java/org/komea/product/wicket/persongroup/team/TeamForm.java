@@ -11,14 +11,13 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
-import org.komea.product.database.api.IEntity;
+import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
@@ -46,11 +45,11 @@ public class TeamForm extends Form<PersonGroup> {
     private final IPersonService personService;
     private final IProjectService projectService;
 
-    private List<IEntity> selectedPerson;
-    private List<IEntity> currentPersonList;
+    private List<IHasKey> selectedPerson;
+    private List<IHasKey> currentPersonList;
 
-    private List<IEntity> selectedProject;
-    private List<IEntity> currentProjectList;
+    private List<IHasKey> selectedProject;
+    private List<IHasKey> currentProjectList;
 
     TeamForm(String form, IProjectService _projectService, IPersonService _personService, IPersonGroupService _prService, FeedbackPanel feedbackPanel, CompoundPropertyModel<PersonGroup> compoundPropertyModel, TeamEditPage aThis) {
 
@@ -64,11 +63,11 @@ public class TeamForm extends Form<PersonGroup> {
         personService = _personService;
         this.projectService = _projectService;
 
-        selectedPerson = new ArrayList<IEntity>();
-        currentPersonList = new ArrayList<IEntity>();
+        selectedPerson = new ArrayList<IHasKey>();
+        currentPersonList = new ArrayList<IHasKey>();
 
-        selectedProject = new ArrayList<IEntity>();
-        currentProjectList = new ArrayList<IEntity>();
+        selectedProject = new ArrayList<IHasKey>();
+        currentProjectList = new ArrayList<IHasKey>();
 
         add(TextFieldBuilder.<String>createRequired("name", this.personGroup, "name").highlightOnErrors()
                 .simpleValidator(0, 255).withTooltip("Departement requires a name").build());
@@ -91,8 +90,8 @@ public class TeamForm extends Form<PersonGroup> {
         add(this.parentField);
 
         if (this.personGroup.getId() != null) {
-            currentPersonList = (List<IEntity>) (List<?>) personService.getPersonsOfPersonGroup(this.personGroup.getId());
-            currentProjectList = (List<IEntity>) (List<?>) projectService.getProjectsOfPersonGroup(this.personGroup.getId());
+            currentPersonList = (List<IHasKey>) (List<?>) personService.getPersonsOfPersonGroup(this.personGroup.getId());
+            currentProjectList = (List<IHasKey>) (List<?>) projectService.getProjectsOfPersonGroup(this.personGroup.getId());
         }
         initSelectDepartment();
         DialogFactory.addListWithSelectDialog(this,
@@ -104,7 +103,7 @@ public class TeamForm extends Form<PersonGroup> {
                 "Choose person",
                 currentPersonList,
                 selectedPerson,
-                (List<IEntity>) (List<?>) this.personService.selectAll(),
+                (List<IHasKey>) (List<?>) this.personService.selectAll(),
                 personService);
 
         DialogFactory.addListWithSelectDialog(this,
@@ -116,7 +115,7 @@ public class TeamForm extends Form<PersonGroup> {
                 "Choose Project",
                 currentProjectList,
                 selectedProject,
-                (List<IEntity>) (List<?>) this.projectService.selectAll(),
+                (List<IHasKey>) (List<?>) this.projectService.selectAll(),
                 projectService);
 
         add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
@@ -134,7 +133,6 @@ public class TeamForm extends Form<PersonGroup> {
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
 
                 feedBack.setVisible(true);
-                error("error found");
                 // repaint the feedback panel so errors are shown
                 target.add(feedBack);
             }
@@ -156,28 +154,15 @@ public class TeamForm extends Form<PersonGroup> {
     
     public void initSelectDepartment()
     {
-            IChoiceRenderer<PersonGroup> iChoiceRenderer = new IChoiceRenderer<PersonGroup>() {
-
-            @Override
-            public Object getDisplayValue(PersonGroup t) {
-                return t.getName();
-            }
-
-            @Override
-            public String getIdValue(PersonGroup t, int i) {
-                return String.valueOf(t.getId());
-            }
-
-        };
-        List<PersonGroup> allDepartmentsPG = prService.getAllDepartmentsPG();
-        final SelectDialog<PersonGroup> dialogPersonGroup = new SelectDialog<PersonGroup>("dialogParent", "Choose a department", allDepartmentsPG, iChoiceRenderer) {
+        List<IHasKey> allDepartmentsPG = (List<IHasKey>)(List<?>) prService.getAllDepartmentsPG();
+        final SelectDialog dialogPersonGroup = new SelectDialog("dialogParent", "Choose a department", allDepartmentsPG) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                PersonGroup selectedPersonGroup = getSelected();
+                IHasKey selectedPersonGroup = getSelected();
                 if (selectedPersonGroup != null) {
                     personGroup.setIdPersonGroupParent(selectedPersonGroup.getId());
-                    parentName.setName(selectedPersonGroup.getName());
+                    parentName.setName(selectedPersonGroup.getDisplayName());
                 } else {
                     personGroup.setIdPersonGroupParent(null);
                     parentName.setName("");
@@ -198,19 +183,19 @@ public class TeamForm extends Form<PersonGroup> {
         });
     }
 
-    public List<IEntity> getSelectedPerson() {
+    public List<IHasKey> getSelectedPerson() {
         return selectedPerson;
     }
 
-    public void setSelectedPerson(List<IEntity> selectedPerson) {
+    public void setSelectedPerson(List<IHasKey> selectedPerson) {
         this.selectedPerson = selectedPerson;
     }
 
-    public List<IEntity> getSelectedProject() {
+    public List<IHasKey> getSelectedProject() {
         return selectedProject;
     }
 
-    public void setSelectedProject(List<IEntity> selectedProject) {
+    public void setSelectedProject(List<IHasKey> selectedProject) {
         this.selectedProject = selectedProject;
     }
 

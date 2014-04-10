@@ -14,7 +14,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.komea.product.backend.service.entities.IPersonGroupService;
-import org.komea.product.database.api.IEntity;
+import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.wicket.LayoutPage;
@@ -33,8 +33,8 @@ public class DepartmentForm extends Form<PersonGroup> {
     private final Component feedBack;
     private final LayoutPage page;
     private final PersonGroup personGroup;
-    private List<IEntity> currentEntityList;
-    private List<IEntity> selectedEntity;
+    private List<IHasKey> currentEntityList;
+    private List<IHasKey> selectedEntity;
 
     DepartmentForm(String form, IPersonGroupService personGroupService, FeedbackPanel feedbackPanel, CompoundPropertyModel<PersonGroup> compoundPropertyModel, DepartmentEditPage aThis) {
         super(form, compoundPropertyModel);
@@ -42,7 +42,7 @@ public class DepartmentForm extends Form<PersonGroup> {
         this.feedBack = feedbackPanel;
         this.page = aThis;
         this.personGroup = compoundPropertyModel.getObject();
-        selectedEntity = new ArrayList<IEntity>();
+        selectedEntity = new ArrayList<IHasKey>();
         feedBack.setVisible(false);
         //field
         add(TextFieldBuilder.<String>createRequired("name", this.personGroup, "name").highlightOnErrors()
@@ -67,7 +67,7 @@ public class DepartmentForm extends Form<PersonGroup> {
         });
         // team component
         List<PersonGroup> allTeamsPG = prService.getAllTeamsPG();
-        this.currentEntityList = new ArrayList<IEntity>();
+        this.currentEntityList = new ArrayList<IHasKey>();
         for (PersonGroup personGroup1 : allTeamsPG) {
             if (personGroup.getId() != null && personGroup.getId().equals(personGroup1.getIdPersonGroupParent())) {
                 currentEntityList.add(personGroup1);
@@ -83,7 +83,7 @@ public class DepartmentForm extends Form<PersonGroup> {
                 "Choose team",
                 currentEntityList,
                 selectedEntity,
-                (List<IEntity>) (List<?>) allTeamsPG,
+                (List<IHasKey>) (List<?>) allTeamsPG,
                 prService);
 
         //button
@@ -93,7 +93,6 @@ public class DepartmentForm extends Form<PersonGroup> {
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
 
                 feedBack.setVisible(true);
-                error("error found");
                 // repaint the feedback panel so errors are shown
                 target.add(feedBack);
             }
@@ -112,19 +111,19 @@ public class DepartmentForm extends Form<PersonGroup> {
         });
     }
 
-    public List<IEntity> getCurrentEntityList() {
+    public List<IHasKey> getCurrentEntityList() {
         return currentEntityList;
     }
 
-    public void setCurrentEntityList(List<IEntity> currentEntityList) {
+    public void setCurrentEntityList(List<IHasKey> currentEntityList) {
         this.currentEntityList = currentEntityList;
     }
 
-    public List<IEntity> getSelectedEntity() {
+    public List<IHasKey> getSelectedEntity() {
         return selectedEntity;
     }
 
-    public void setSelectedEntity(List<IEntity> selectedEntity) {
+    public void setSelectedEntity(List<IHasKey> selectedEntity) {
         this.selectedEntity = selectedEntity;
     }
 
