@@ -44,7 +44,7 @@ public class KomeaFS implements IKomeaFS
     /**
      * 
      */
-    private static final String     KOMEA_DIR        = "KOMEA_DIR";
+    private static final String     KOMEA_DIR        = "komea.home";
     
     
     private static org.slf4j.Logger LOGGER           = LoggerFactory.getLogger("komea-filesystem");

@@ -244,10 +244,7 @@ public class Provider implements IHasKey
     public boolean isAbsoluteURL() {
     
     
-        final String[] schemes = {
-                "http", "https" }; // DEFAULT schemes = "http", "https", "ftp"
-        final UrlValidator urlValidator = new UrlValidator(schemes);
-        return urlValidator.isValid(url);
+        return isValidURL();
     }
     
     
@@ -260,8 +257,8 @@ public class Provider implements IHasKey
     public boolean isValidURL() {
     
     
-        final String[] schemes = {
-                "http", "https" }; // DEFAULT schemes = "http", "https", "ftp"
+        final String[] schemes =
+            { "http", "https" }; // DEFAULT schemes = "http", "https", "ftp"
         final UrlValidator urlValidator = new UrlValidator(schemes);
         return urlValidator.isValid(url);
     }
