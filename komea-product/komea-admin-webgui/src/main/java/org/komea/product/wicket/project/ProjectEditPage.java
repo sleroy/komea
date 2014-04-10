@@ -8,6 +8,7 @@ package org.komea.product.wicket.project;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import java.util.List;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -60,6 +61,13 @@ public class ProjectEditPage extends LayoutPage {
 //        new KpiForm(PARENT_PATH, _kpi, feedbackPanel, null)
 
         final ProjectForm projectForm = new ProjectForm(_isNew, "form", personService, personGroupService, this.projectService, customerDao, feedbackPanel, new CompoundPropertyModel<Project>(_object), this);
+                String message;
+        if (_isNew) {
+            message = "Add project";
+        } else {
+            message = "Edit project";
+        }
+        projectForm.add(new Label("legend", message));
         add(projectForm);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -71,6 +72,13 @@ public class PersonAddPage extends LayoutPage {
         final PersonForm personForm
                 = new PersonForm(isNew, personRole, passEncoder, personDAO, projectService, newPersonForm, "form",
                         new CompoundPropertyModel<Person>(_person), this, personGroupService);
+                String message;
+        if (isNew) {
+            message = "Add user";
+        } else {
+            message = "Edit user";
+        }
+        personForm.add(new Label("legend", message));
         add(personForm);
 
         final SelectDialog dialogPersonGroup = new SelectDialog("dialogGroup", "Choose a team or department", (List<IHasKey>) (List<?>) personGroupService.selectAll()) {

@@ -8,6 +8,7 @@ package org.komea.product.wicket.persongroup.team;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import java.util.List;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -54,6 +55,13 @@ public class TeamEditPage extends LayoutPage {
 
         final TeamForm teamForm = new TeamForm(isNew,"form", projectService, personService, prService,
                 feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this);
+                String message;
+        if (isNew) {
+            message = "Add team";
+        } else {
+            message = "Edit team";
+        }
+        teamForm.add(new Label("legend", message));
         add(teamForm);
 
     }

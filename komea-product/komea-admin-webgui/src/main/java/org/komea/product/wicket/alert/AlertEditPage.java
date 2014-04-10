@@ -5,6 +5,7 @@
  */
 package org.komea.product.wicket.alert;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -41,7 +42,15 @@ public final class AlertEditPage extends LayoutPage {
         feedbackPanel.setOutputMarkupId(true);
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
-        AlertForm alertForm = new AlertForm(isNew,kpiService, alertService, feedbackPanel, this, _alertType, "form", new CompoundPropertyModel<KpiAlertType>(_alertType));
+
+        AlertForm alertForm = new AlertForm(isNew, kpiService, alertService, feedbackPanel, this, _alertType, "form", new CompoundPropertyModel<KpiAlertType>(_alertType));
+        String message;
+        if (isNew) {
+            message = "Add alert";
+        } else {
+            message = "Edit alert";
+        }
+        alertForm.add(new Label("legend", message));
         add(alertForm);
     }
 

@@ -5,6 +5,7 @@
  */
 package org.komea.product.wicket.customer;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -38,6 +39,13 @@ public final class CustomerEditPage extends LayoutPage {
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
         CustomerForm customerForm = new CustomerForm(isNew,"form", new CompoundPropertyModel<Customer>(_customer), customerService, feedbackPanel, this, _customer);
+                String message;
+        if (isNew) {
+            message = "Add customer";
+        } else {
+            message = "Edit customer";
+        }
+        customerForm.add(new Label("legend", message));
         add(customerForm);
     }
 

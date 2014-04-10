@@ -2,6 +2,7 @@ package org.komea.product.wicket.kpis;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -54,6 +55,13 @@ public class KpiEditPage extends LayoutPage {
         add(feedbackPanel);
 
         final KpiForm kpiForm = new KpiForm(isNew, "form", kpiService, entityService, providerService, feedbackPanel, new CompoundPropertyModel<Kpi>(_kpi), this);
+                String message;
+        if (isNew) {
+            message = "Add kpi";
+        } else {
+            message = "Edit kpi";
+        }
+        kpiForm.add(new Label("legend", message));
         add(kpiForm);
     }
 

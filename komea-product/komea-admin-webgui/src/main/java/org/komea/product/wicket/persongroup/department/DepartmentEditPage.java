@@ -5,6 +5,7 @@
  */
 package org.komea.product.wicket.persongroup.department;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -41,6 +42,13 @@ public final class DepartmentEditPage extends LayoutPage {
 
         final DepartmentForm departmentForm = new DepartmentForm(isNew,"form", prService,
                 feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this);
+                String message;
+        if (isNew) {
+            message = "Add department";
+        } else {
+            message = "Edit department";
+        }
+        departmentForm.add(new Label("legend", message));
         add(departmentForm);
     }
 
