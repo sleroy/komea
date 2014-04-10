@@ -74,6 +74,11 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
         return getRequiredDAO().deleteByPrimaryKey(_id);
     }
 
+    @Override
+    public boolean exists(final String key) {
+        return getRequiredDAO().countByCriteria(createKeyCriteria(key)) > 0;
+    }
+
     public DAOEventRegistry getDaoEventRegistry() {
 
         return daoEventRegistry;
