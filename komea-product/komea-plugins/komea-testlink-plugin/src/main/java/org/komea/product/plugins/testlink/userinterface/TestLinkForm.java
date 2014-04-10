@@ -10,8 +10,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
-import org.komea.product.plugins.testlink.api.ITestLinkServerService;
-import org.komea.product.plugins.testlink.core.TestLinkServer;
+import org.komea.product.plugins.testlink.api.ITestLinkServerDAO;
+import org.komea.product.plugins.testlink.model.TestLinkServer;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
@@ -25,10 +25,10 @@ public class TestLinkForm extends Form<TestLinkServer> {
     private final LayoutPage page;
     private final String oldAdress;
     private final TestLinkServer testServer;
-    private final ITestLinkServerService testlinkService;
+    private final ITestLinkServerDAO testlinkService;
     private final Component feedBack;
 
-    public TestLinkForm(LayoutPage _page, TestLinkServer _testServer, ITestLinkServerService _testlinkService, Component _feedBack, String id, IModel<TestLinkServer> model) {
+    public TestLinkForm(LayoutPage _page, TestLinkServer _testServer, ITestLinkServerDAO _testlinkService, Component _feedBack, String id, IModel<TestLinkServer> model) {
         super(id, model);
         this.page = _page;
         this.testServer = _testServer;

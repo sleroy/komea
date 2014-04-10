@@ -4,30 +4,24 @@
  * and open the template in the editor.
  */
 
-package org.komea.product.plugins.testlink.core;
+package org.komea.product.plugins.testlink.business;
 
 
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.komea.product.plugins.testlink.model.TestLinkRequirement;
+
 
 
 /**
+ * This class is a filter that obtains the list of all requirements inside a Testlink server.
+ * 
  * @author rgalerme
  */
 public class RequirementFilter
 {
-    
-    
-    static RequirementFilter filter(final List<TestLinkRequirement> requirements) {
-    
-    
-        final RequirementFilter requirement = new RequirementFilter(requirements);
-        requirement.updateData();
-        return requirement;
-    }
-    
     
     
     private final List<TestLinkRequirement> testedRequirements;
@@ -37,7 +31,7 @@ public class RequirementFilter
     
     
     
-    private RequirementFilter(final List<TestLinkRequirement> requirements) {
+    public RequirementFilter(final List<TestLinkRequirement> requirements) {
     
     
         totalRequirements = requirements;
@@ -53,16 +47,21 @@ public class RequirementFilter
     }
     
     
+    /**
+     * Returns the list of total requirements
+     * 
+     * @return
+     */
+    public List<TestLinkRequirement> getTotalRequirements() {
+    
+    
+        return totalRequirements;
+    }
+    
+    
     public List<TestLinkRequirement> getUntestedRequirements(final String _project) {
     
     
         return untestedRequirements;
-    }
-    
-    
-    private void updateData() {
-    
-    
-        //
     }
 }

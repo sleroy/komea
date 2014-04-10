@@ -54,13 +54,15 @@ public class DAOObjectStorage<T> implements IDAOObjectStorage<T>
      * @see org.komea.product.backend.business.IDAOObjectStorage#delete(T)
      */
     @Override
-    public synchronized void delete(final T _object) {
+    public synchronized boolean delete(final T _object) {
     
     
-        daoStorageIndex.getObjectIndex().remove(_object);
+        boolean res = false;
+        res = daoStorageIndex.getObjectIndex().remove(_object);
         if (saveOnChangeFlag) {
             saveChanges();
         }
+        return res;
         
     }
     

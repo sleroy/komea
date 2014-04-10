@@ -6,8 +6,9 @@
 package org.komea.product.plugins.testlink.userinterface;
 
 import java.util.List;
-import org.komea.product.plugins.testlink.api.ITestLinkServerService;
-import org.komea.product.plugins.testlink.core.TestLinkServer;
+
+import org.komea.product.plugins.testlink.api.ITestLinkServerDAO;
+import org.komea.product.plugins.testlink.model.TestLinkServer;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
 
@@ -18,9 +19,9 @@ import org.komea.product.wicket.widget.api.IEditAction;
 public class TestLinkDeleteAction implements IDeleteAction<TestLinkServer> {
 
     private final List<TestLinkServer> serverAffiche;
-    private final ITestLinkServerService testlinkService;
+    private final ITestLinkServerDAO testlinkService;
 
-    public TestLinkDeleteAction(List<TestLinkServer> serverAffiche, ITestLinkServerService testLinkService) {
+    public TestLinkDeleteAction(List<TestLinkServer> serverAffiche, ITestLinkServerDAO testLinkService) {
         this.serverAffiche = serverAffiche;
         this.testlinkService = testLinkService;
     }

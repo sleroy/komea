@@ -24,7 +24,7 @@ public interface IDAOObjectStorage<T>
      * 
      * @param _object
      */
-    void delete(T _object);
+    boolean delete(T _object);
     
     
     /**

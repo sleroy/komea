@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package org.komea.product.plugins.testlink.core;
+package org.komea.product.plugins.testlink.model;
 
 
 

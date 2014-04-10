@@ -6,14 +6,21 @@
 
 package org.komea.product.plugins.testlink.api;
 
-import org.komea.product.plugins.testlink.core.TestLinkServer;
+
+
+import org.komea.product.plugins.testlink.model.TestLinkServer;
+
+
 
 /**
- *
+ * This interface defines the factory to build a testlink proxy.
+ * 
  * @author rgalerme
  */
-public interface ITestLinkServerProxyFactory {
-
+public interface ITestLinkServerProxyFactory
+{
+    
+    
     public ITestLinkServerProxy newConnector(TestLinkServer testLinkServer);
     
 }
