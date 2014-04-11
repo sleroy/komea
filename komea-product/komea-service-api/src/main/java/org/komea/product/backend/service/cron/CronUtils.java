@@ -8,4 +8,7 @@ public abstract class CronUtils {
         return CronExpression.isValidExpression(cronExpression);
     }
 
+    private CronUtils() {
+    }
+
 }
