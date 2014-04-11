@@ -1,5 +1,3 @@
-
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,6 +8,7 @@ package org.komea.product.wicket.persongroup.team;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import java.util.List;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -39,10 +38,14 @@ public class TeamEditPage extends LayoutPage {
     private IPersonService personService;
 
     public TeamEditPage(PageParameters _parameters) {
-        this(_parameters, new PersonGroup());
+        this(_parameters, new PersonGroup(), true);
     }
 
     public TeamEditPage(PageParameters _parameters, PersonGroup _personGroup) {
+        this(_parameters, _personGroup, false);
+    }
+
+    private TeamEditPage(PageParameters _parameters, PersonGroup _personGroup, boolean isNew) {
         super(_parameters);
 
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
@@ -50,10 +53,16 @@ public class TeamEditPage extends LayoutPage {
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
 
-        final TeamForm teamForm = new TeamForm("form", projectService, personService, prService,
+        final TeamForm teamForm = new TeamForm(isNew,"form", projectService, personService, prService,
                 feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this);
+                String message;
+        if (isNew) {
+            message = "Add team";
+        } else {
+            message = "Edit team";
+        }
+        teamForm.add(new Label("legend", message));
         add(teamForm);
-
 
     }
 

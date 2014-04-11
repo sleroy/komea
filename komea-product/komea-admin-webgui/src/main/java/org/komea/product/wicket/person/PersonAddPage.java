@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -46,30 +47,41 @@ public class PersonAddPage extends LayoutPage {
 
     @SpringBean
     private IProjectService projectService;
-    
+
     @SpringBean
     private IPasswordEncoder passEncoder;
-    
+
     @SpringBean
     private IPersonRoleService personRole;
 
     public PersonAddPage(final PageParameters _parameters) {
 
-        this(_parameters, new Person());
+        this(_parameters, new Person(), true);
 
     }
 
     public PersonAddPage(final PageParameters _parameters, final Person _person) {
+        this(_parameters, _person, false);
+    }
+
+    private PersonAddPage(final PageParameters _parameters, final Person _person, boolean isNew) {
 
         super(_parameters);
 
         final PersonFormData newPersonForm = formularService.newPersonForm();
         final PersonForm personForm
-                = new PersonForm(personRole,passEncoder,personDAO, projectService, newPersonForm, "form",
+                = new PersonForm(isNew, personRole, passEncoder, personDAO, projectService, newPersonForm, "form",
                         new CompoundPropertyModel<Person>(_person), this, personGroupService);
+                String message;
+        if (isNew) {
+            message = "Add user";
+        } else {
+            message = "Edit user";
+        }
+        personForm.add(new Label("legend", message));
         add(personForm);
 
-        final SelectDialog dialogPersonGroup = new SelectDialog("dialogGroup", "Choose a team or department", (List<IHasKey>)(List<?>)personGroupService.selectAll()) {
+        final SelectDialog dialogPersonGroup = new SelectDialog("dialogGroup", "Choose a team or department", (List<IHasKey>) (List<?>) personGroupService.selectAll()) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {

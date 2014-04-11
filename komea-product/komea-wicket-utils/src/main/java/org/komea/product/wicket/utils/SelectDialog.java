@@ -157,7 +157,7 @@ public abstract class SelectDialog extends AbstractFormDialog<String> {
         Collections.sort(list, new Comparator<IHasKey>() {
             @Override
             public int compare(IHasKey o1, IHasKey o2) {
-                return o1.getDisplayName().compareTo(o2.getDisplayName());
+                return o1.getDisplayName().toLowerCase().compareTo(o2.getDisplayName().toLowerCase());
             }
         });
         target.add(this.form);

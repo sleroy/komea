@@ -33,24 +33,33 @@ public class DepartmentForm extends Form<PersonGroup> {
     private final Component feedBack;
     private final LayoutPage page;
     private final PersonGroup personGroup;
+    private final boolean isNew;
     private List<IHasKey> currentEntityList;
     private List<IHasKey> selectedEntity;
 
-    DepartmentForm(String form, IPersonGroupService personGroupService, FeedbackPanel feedbackPanel, CompoundPropertyModel<PersonGroup> compoundPropertyModel, DepartmentEditPage aThis) {
+    DepartmentForm(boolean _isNew, String form, IPersonGroupService personGroupService, FeedbackPanel feedbackPanel, CompoundPropertyModel<PersonGroup> compoundPropertyModel, DepartmentEditPage aThis) {
         super(form, compoundPropertyModel);
         this.prService = personGroupService;
         this.feedBack = feedbackPanel;
         this.page = aThis;
+        this.isNew = _isNew;
         this.personGroup = compoundPropertyModel.getObject();
         selectedEntity = new ArrayList<IHasKey>();
         feedBack.setVisible(false);
         //field
         add(TextFieldBuilder.<String>createRequired("name", this.personGroup, "name").highlightOnErrors()
                 .simpleValidator(0, 255).withTooltip("Departement requires a name").build());
-
-        add(TextFieldBuilder.<String>createRequired("personGroupKey", this.personGroup, "personGroupKey")
-                .simpleValidator(0, 255).highlightOnErrors().withTooltip("Departement requires a Key").build());
-
+        
+        TextFieldBuilder<String> keyFieldBuilder = TextFieldBuilder.<String>createRequired("personGroupKey", this.personGroup, "personGroupKey")
+                .simpleValidator(0, 255).highlightOnErrors().withTooltip("Departement requires a Key");
+        
+         if (isNew) {
+            keyFieldBuilder.UniqueStringValidator("Department key", prService);
+        } else {
+            keyFieldBuilder.buildTextField().setEnabled(false);
+        }
+         
+        add(keyFieldBuilder.build());
         add(TextAreaBuilder.<String>create("description", this.personGroup, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("Description can be add").build());
 

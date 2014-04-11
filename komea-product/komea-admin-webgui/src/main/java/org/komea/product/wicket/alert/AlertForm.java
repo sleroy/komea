@@ -43,9 +43,11 @@ public class AlertForm extends Form<KpiAlertType> {
     private final TextField customerFiel;
     private final IKPIService kpiService;
     private Boolean alertEnabled;
+    private final boolean isNew;
 
-    public AlertForm(IKPIService _kpiService, IAlertTypeService _alertService, Component _feedBack, LayoutPage _page, KpiAlertType _alert, String id, IModel<KpiAlertType> model) {
+    public AlertForm(boolean _isNew, IKPIService _kpiService, IAlertTypeService _alertService, Component _feedBack, LayoutPage _page, KpiAlertType _alert, String id, IModel<KpiAlertType> model) {
         super(id, model);
+        this.isNew = _isNew;
         this.alertService = _alertService;
         this.feedBack = _feedBack;
         this.page = _page;
@@ -58,8 +60,16 @@ public class AlertForm extends Form<KpiAlertType> {
         add(TextFieldBuilder.<String>createRequired("name", this.alert, "name").highlightOnErrors()
                 .simpleValidator(0, 255).withTooltip("Alert requires a name").build());
 
-        add(TextFieldBuilder.<String>createRequired("alertKey", this.alert, "kpiAlertKey").highlightOnErrors()
-                .simpleValidator(0, 255).withTooltip("Alert requires a key").build());
+        TextFieldBuilder<String> keyField = TextFieldBuilder.<String>createRequired("alertKey", this.alert, "kpiAlertKey").highlightOnErrors()
+                .simpleValidator(0, 255).withTooltip("Alert requires a key");
+
+        if (isNew) {
+            keyField.UniqueStringValidator("Alert key", alertService);
+        } else {
+            keyField.buildTextField().setEnabled(false);
+        }
+
+        add(keyField.build());
 
         add(TextFieldBuilder.<String>createRequired("value", this.alert, "value").highlightOnErrors()
                 .withTooltip("Alert requires a value").build());
@@ -126,7 +136,7 @@ public class AlertForm extends Form<KpiAlertType> {
     }
 
     public void initSelectKpi() {
-        List<IHasKey> allKpi = (List<IHasKey>)(List<?>)kpiService.selectAll();
+        List<IHasKey> allKpi = (List<IHasKey>) (List<?>) kpiService.selectAll();
         final SelectDialog DialogKpi = new SelectDialog("kpiDialog", "Choose a kpi", allKpi) {
 
             @Override

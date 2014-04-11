@@ -44,12 +44,14 @@ public class ProjectForm extends Form<Project> {
     private final TextField customerFiel;
     private final IPersonService personService;
     private final IPersonGroupService personGroupService;
+    private final boolean isNew;
     private List<IHasKey> currentPersonGroupList;
     private List<IHasKey> selectedPersonGroup;
     private List<IHasKey> currentPersonList;
     private List<IHasKey> selectedPerson;
 
-    public ProjectForm(String form,
+    public ProjectForm(boolean _isNew,
+            String form,
             IPersonService _personService,
             IPersonGroupService _personGroupService,
             IProjectService projectService,
@@ -60,6 +62,7 @@ public class ProjectForm extends Form<Project> {
 
         super(form, compoundPropertyModel);
         this.prService = projectService;
+        this.isNew = _isNew;
         this.feedBack = feedbackPanel;
         this.page = aThis;
         this.project = compoundPropertyModel.getObject();
@@ -75,8 +78,16 @@ public class ProjectForm extends Form<Project> {
         add(TextFieldBuilder.<String>createRequired("name", this.project, "name").highlightOnErrors()
                 .simpleValidator(0, 255).withTooltip("Project requires a name").build());
 
-        add(TextFieldBuilder.<String>createRequired("projectKey", this.project, "projectKey")
-                .simpleValidator(0, 255).highlightOnErrors().withTooltip("Project requires a Key").build());
+        TextFieldBuilder<String> keyField = TextFieldBuilder.<String>createRequired("projectKey", this.project, "projectKey")
+                .simpleValidator(0, 255).highlightOnErrors().withTooltip("Project requires a Key");
+
+        if (isNew) {
+            keyField.UniqueStringValidator("Project key", prService);
+        } else {
+            keyField.buildTextField().setEnabled(false);
+        }
+
+        add(keyField.build());
 
         add(TextAreaBuilder.<String>create("description", this.project, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("Description can be add").build());
@@ -91,7 +102,7 @@ public class ProjectForm extends Form<Project> {
 
         if (this.project.getId() != null) {
             currentPersonGroupList = (List<IHasKey>) (List<?>) personGroupService.getTeamsOfProject(this.project.getId());
-            currentPersonList =(List<IHasKey>) (List<?>)personService.getPersonsOfProject(this.project.getId());
+            currentPersonList = (List<IHasKey>) (List<?>) personService.getPersonsOfProject(this.project.getId());
         }
 
         DialogFactory.addListWithSelectDialog(this,
@@ -145,7 +156,7 @@ public class ProjectForm extends Form<Project> {
                 info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
-                
+
                 prService.saveOrUpdateProject(project, null, (List<Person>) (List<?>) currentPersonList, null, (List<PersonGroup>) (List<?>) currentPersonGroupList);
                 page.setResponsePage(new ProjectPage(page.getPageParameters()));
 

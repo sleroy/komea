@@ -44,6 +44,7 @@ public class TeamForm extends Form<PersonGroup> {
     private final TextField parentField;
     private final IPersonService personService;
     private final IProjectService projectService;
+    private final boolean isNew;
 
     private List<IHasKey> selectedPerson;
     private List<IHasKey> currentPersonList;
@@ -51,13 +52,14 @@ public class TeamForm extends Form<PersonGroup> {
     private List<IHasKey> selectedProject;
     private List<IHasKey> currentProjectList;
 
-    TeamForm(String form, IProjectService _projectService, IPersonService _personService, IPersonGroupService _prService, FeedbackPanel feedbackPanel, CompoundPropertyModel<PersonGroup> compoundPropertyModel, TeamEditPage aThis) {
+    TeamForm(boolean _isNew, String form, IProjectService _projectService, IPersonService _personService, IPersonGroupService _prService, FeedbackPanel feedbackPanel, CompoundPropertyModel<PersonGroup> compoundPropertyModel, TeamEditPage aThis) {
 
         super(form, compoundPropertyModel);
         this.prService = _prService;
         this.feedBack = feedbackPanel;
         this.page = aThis;
         this.personGroup = compoundPropertyModel.getObject();
+        isNew = _isNew;
         feedBack.setVisible(false);
         parentName = new NameGeneric("");
         personService = _personService;
@@ -70,10 +72,18 @@ public class TeamForm extends Form<PersonGroup> {
         currentProjectList = new ArrayList<IHasKey>();
 
         add(TextFieldBuilder.<String>createRequired("name", this.personGroup, "name").highlightOnErrors()
-                .simpleValidator(0, 255).withTooltip("Departement requires a name").build());
+                .simpleValidator(0, 255).withTooltip("Team requires a name").build());
+        TextFieldBuilder<String> keyFieldBuilder = TextFieldBuilder.<String>createRequired("personGroupKey", this.personGroup, "personGroupKey")
+                .simpleValidator(0, 255)
+                .highlightOnErrors()
+                .withTooltip("Team requires a Key");
+        if (isNew) {
+            keyFieldBuilder.UniqueStringValidator("Team key", prService);
+        } else {
+            keyFieldBuilder.buildTextField().setEnabled(false);
+        }
 
-        add(TextFieldBuilder.<String>createRequired("personGroupKey", this.personGroup, "personGroupKey")
-                .simpleValidator(0, 255).highlightOnErrors().withTooltip("Departement requires a Key").build());
+        add(keyFieldBuilder.build());
 
         add(TextAreaBuilder.<String>create("description", this.personGroup, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("Description can be add").build());
@@ -84,9 +94,9 @@ public class TeamForm extends Form<PersonGroup> {
                 this.parentName.setName(selectByPrimaryKey.getName());
             }
         }
-        
+
         this.parentField = TextFieldBuilder.<String>create("parent", this.parentName, "name").withTooltip("Parent can be affected").buildTextField();
-       this.parentField.setOutputMarkupId(true);
+        this.parentField.setOutputMarkupId(true);
         add(this.parentField);
 
         if (this.personGroup.getId() != null) {
@@ -151,10 +161,9 @@ public class TeamForm extends Form<PersonGroup> {
             }
         });
     }
-    
-    public void initSelectDepartment()
-    {
-        List<IHasKey> allDepartmentsPG = (List<IHasKey>)(List<?>) prService.getAllDepartmentsPG();
+
+    public void initSelectDepartment() {
+        List<IHasKey> allDepartmentsPG = (List<IHasKey>) (List<?>) prService.getAllDepartmentsPG();
         final SelectDialog dialogPersonGroup = new SelectDialog("dialogParent", "Choose a department", allDepartmentsPG) {
 
             @Override
@@ -210,6 +219,5 @@ public class TeamForm extends Form<PersonGroup> {
     public TextField getParentField() {
         return parentField;
     }
-    
 
 }

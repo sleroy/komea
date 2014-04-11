@@ -5,6 +5,7 @@
  */
 package org.komea.product.wicket.persongroup.department;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -24,10 +25,14 @@ public final class DepartmentEditPage extends LayoutPage {
     private IPersonGroupService prService;
 
     public DepartmentEditPage(PageParameters _parameters) {
-        this(_parameters, new PersonGroup());
+        this(_parameters, new PersonGroup(), true);
     }
 
     public DepartmentEditPage(PageParameters _parameters, PersonGroup _personGroup) {
+        this(_parameters, _personGroup, false);
+    }
+
+    private DepartmentEditPage(PageParameters _parameters, PersonGroup _personGroup, boolean isNew) {
         super(_parameters);
 
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
@@ -35,8 +40,15 @@ public final class DepartmentEditPage extends LayoutPage {
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
 
-        final DepartmentForm departmentForm = new DepartmentForm("form", prService,
+        final DepartmentForm departmentForm = new DepartmentForm(isNew,"form", prService,
                 feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this);
+                String message;
+        if (isNew) {
+            message = "Add department";
+        } else {
+            message = "Edit department";
+        }
+        departmentForm.add(new Label("legend", message));
         add(departmentForm);
     }
 

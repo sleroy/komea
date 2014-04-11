@@ -39,8 +39,10 @@ public final class KpiForm extends Form<Kpi> {
     private final IKPIService kpiService;
     private final NameGeneric nameEntity;
     private final LayoutPage page;
+    private final boolean isNew;
 
     public KpiForm(
+            final boolean _isNew,
             final String _id,
             final IKPIService _kpi,
             final IEntityService _entity,
@@ -50,6 +52,7 @@ public final class KpiForm extends Form<Kpi> {
             final LayoutPage _kpiPage) {
 
         super(_id, _dto);
+        this.isNew = _isNew;
         kpiService = _kpi;
         feedBack = _feedBack;
         kpi = _dto.getObject();
@@ -60,9 +63,16 @@ public final class KpiForm extends Form<Kpi> {
 
         add(TextFieldBuilder.<String>createRequired("name", kpi, "name").highlightOnErrors()
                 .simpleValidator(0, 255).build());
+        TextFieldBuilder<String> keyField = TextFieldBuilder.<String>createRequired("kpiKey", kpi, "kpiKey")
+                .simpleValidator(0, 255).highlightOnErrors().withTooltip("");
 
-        add(TextFieldBuilder.<String>createRequired("kpiKey", kpi, "kpiKey")
-                .simpleValidator(0, 255).highlightOnErrors().withTooltip("").build());
+        if (isNew) {
+            keyField.UniqueStringValidator("Kpi key", kpiService);
+        } else {
+            keyField.buildTextField().setEnabled(false);
+        }
+
+        add(keyField.build());
 
         add(TextAreaBuilder.<String>create("description", kpi, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("").build());
@@ -161,7 +171,6 @@ public final class KpiForm extends Form<Kpi> {
         // ///////////////////////////////////////////////////////////////////////////////////
         // ///////////////////////////////////////////////////////////////////////////////////
     }
-
 
     public Kpi getKpi() {
 
