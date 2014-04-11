@@ -31,7 +31,7 @@ public class CEPQueryListener implements ICEPQueryEventListener
                                                             .getLogger(CEPQueryListener.class);
     
     
-    private final Map<String, ICEPQuery> queriesMap = new HashMap<String, ICEPQuery>();
+    private final Map<String, ICEPQuery> queriesMap = new HashMap<String, ICEPQuery>(100);
     
     
     

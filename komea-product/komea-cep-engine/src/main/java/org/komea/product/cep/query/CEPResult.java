@@ -84,6 +84,27 @@ public class CEPResult
     }
     
     
+    /**
+     * Convert the given value into a cep result based on its type.
+     * 
+     * @param _value
+     *            the value
+     * @return the cep result.
+     */
+    public static ICEPResult guessResultType(final Object _value) {
+    
+    
+        if (_value instanceof Number) {
+            buildFromNumber((Number) _value);
+        }
+        if (_value instanceof ITupleResultMap) {
+            buildFromMap((ITupleResultMap) _value);
+        }
+        
+        return buildFromCustomType(_value);
+    }
+    
+    
     private CEPResult() {
     
     
