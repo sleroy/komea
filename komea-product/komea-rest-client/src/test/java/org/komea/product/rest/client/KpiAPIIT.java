@@ -24,7 +24,7 @@ public class KpiAPIIT
     
     //
     
-    @Test @Ignore
+    @Test 
     public void testGetAllKpis() throws Exception {
     
     

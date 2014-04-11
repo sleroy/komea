@@ -167,7 +167,7 @@ public class WellFormedXmlTest
     /**
      * Checks xml well formedness of html markup files under the current working directory.
      */
-    @Test @Ignore
+    @Test 
     public void markupFiles() {
     
     

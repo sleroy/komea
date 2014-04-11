@@ -31,7 +31,7 @@ public class BZServerConfiguration implements Serializable, IHasId
 {
     
     
-    private URL                                     address;
+    private URL                                     address      = null;
     
     
     private Integer                                 id;

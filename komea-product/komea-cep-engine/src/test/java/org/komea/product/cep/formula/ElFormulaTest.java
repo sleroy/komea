@@ -21,7 +21,7 @@ public class ElFormulaTest
     /**
      * Test method for {@link org.komea.product.cep.formula.ElFormula#getFormula()}.
      */
-    @Test @Ignore
+    @Test 
     public final void testGetFormula() throws Exception {
     
     
@@ -33,7 +33,7 @@ public class ElFormulaTest
     /**
      * Test method for {@link org.komea.product.cep.formula.ElFormula#getValue(java.lang.Object)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testGetValueObject() throws Exception {
     
     

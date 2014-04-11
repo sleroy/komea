@@ -40,7 +40,7 @@ public class ProviderPageTest
      * Test method for
      * {@link org.komea.product.wicket.providers.ProviderPage#ProviderPage(org.apache.wicket.request.mapper.parameter.PageParameters)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testProviderPage() throws Exception {
     
     

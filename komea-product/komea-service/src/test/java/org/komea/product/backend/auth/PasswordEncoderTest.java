@@ -21,7 +21,7 @@ public class PasswordEncoderTest extends AbstractSpringIntegrationTestCase
     
     
     
-    @Test @Ignore
+    @Test 
     public final void testEncodePassword() {
     
     

@@ -27,7 +27,7 @@ public class EventTableTest
     
     
     
-    @Test @Ignore
+    @Test 
     public void testEventTable() throws Exception {
     
     
@@ -35,7 +35,7 @@ public class EventTableTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public void testGroupEvent() throws Exception {
     
     
@@ -47,7 +47,7 @@ public class EventTableTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public void testIterator() throws Exception {
     
     

@@ -15,7 +15,7 @@ public class XpathQueryTest
 {
     
     
-    @Test @Ignore
+    @Test
     @Ignore
     public final void testBuildPerDay() throws Exception {
     

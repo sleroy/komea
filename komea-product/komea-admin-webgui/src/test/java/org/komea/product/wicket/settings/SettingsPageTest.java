@@ -55,7 +55,7 @@ public class SettingsPageTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public final void testForm() {
     
     
@@ -92,7 +92,7 @@ public class SettingsPageTest
      * Test method for
      * {@link org.komea.product.wicket.settings.SettingsPage#SettingsPage(org.apache.wicket.request.mapper.parameter.PageParameters)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testSettingsPage() throws Exception {
     
     

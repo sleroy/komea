@@ -29,7 +29,7 @@ public class KpiHistoryJobTest
      * 
      * @throws JobExecutionException
      */
-    @Test @Ignore
+    @Test 
     public final void testExecute() throws JobExecutionException {
     
     

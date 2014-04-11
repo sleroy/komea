@@ -17,7 +17,7 @@ public class UnauthorizedPageTest
     
     
     
-    @Test @Ignore
+    @Test 
     public void testPage() throws Exception {
     
     

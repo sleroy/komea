@@ -21,7 +21,7 @@ public class GroupByFormulaTest
      * Test method for
      * {@link org.komea.product.cep.formula.tuple.GroupByFormula#compute(org.komea.product.cep.api.ICEPStatement, java.util.Map)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testCompute() throws Exception {
     
     

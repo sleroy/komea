@@ -6,7 +6,6 @@ package org.komea.product.plugins.git.utils;
 
 
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -21,13 +20,12 @@ public class GitRepositoryProxyTest
     /**
      * Test method for {@link org.komea.product.plugins.git.utils.GitRepositoryProxy#convertGitCommit(org.eclipse.jgit.revwalk.RevCommit)}.
      */
-    @Test @Ignore
-    @Ignore
+    @Test
     public final void testConvertGitCommit() throws Exception {
     
     
-        // TODO
-        throw new RuntimeException("not yet implemented");
+        //
+        // FIXME:: throw new RuntimeException("not yet implemented");
     }
     
     
@@ -35,52 +33,48 @@ public class GitRepositoryProxyTest
      * Test method for
      * {@link org.komea.product.plugins.git.utils.GitRepositoryProxy#getAllCommitsFromABranch(java.lang.String, org.joda.time.DateTime)}.
      */
-    @Test @Ignore
-    @Ignore
+    @Test
     public final void testGetAllCommitsFromABranch() throws Exception {
     
     
-        // TODO
-        throw new RuntimeException("not yet implemented");
+        //
+        // FIXME:: throw new RuntimeException("not yet implemented");
     }
     
     
     /**
      * Test method for {@link org.komea.product.plugins.git.utils.GitRepositoryProxy#getAllTagsFromABranch(java.lang.String)}.
      */
-    @Test @Ignore
-    @Ignore
+    @Test
     public final void testGetAllTagsFromABranch() throws Exception {
     
     
-        // TODO
-        throw new RuntimeException("not yet implemented");
+        //
+        // FIXME:: throw new RuntimeException("not yet implemented");
     }
     
     
     /**
      * Test method for {@link org.komea.product.plugins.git.utils.GitRepositoryProxy#getBranches()}.
      */
-    @Test @Ignore
-    @Ignore
+    @Test
     public final void testGetBranches() throws Exception {
     
     
-        // TODO
-        throw new RuntimeException("not yet implemented");
+        //
+        // FIXME:: throw new RuntimeException("not yet implemented");
     }
     
     
     /**
      * Test method for {@link org.komea.product.plugins.git.utils.GitRepositoryProxy#testConnection()}.
      */
-    @Test @Ignore
-    @Ignore
+    @Test
     public final void testTestConnection() throws Exception {
     
     
-        // TODO
-        throw new RuntimeException("not yet implemented");
+        //
+        // FIXME:: throw new RuntimeException("not yet implemented");
     }
     
 }

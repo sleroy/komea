@@ -13,7 +13,7 @@ public class SuccessfulBuildPerDayTest
 {
     
     
-    @Test @Ignore
+    @Test 
     public final void testSuccessfulBuildPerDay() throws Exception {
     
     

@@ -47,7 +47,7 @@ public class BugZillaPageTest
      * {@link org.komea.product.plugins.bugzilla.userinterface.BugZillaPage#BugZillaPage(org.apache.wicket.request.mapper.parameter.PageParameters)}
      * .
      */
-    @Test @Ignore
+    @Test 
     public final void testBugZillaPage() throws Exception {
     
     

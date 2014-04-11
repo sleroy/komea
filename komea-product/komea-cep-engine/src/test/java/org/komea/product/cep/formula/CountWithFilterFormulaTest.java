@@ -21,7 +21,7 @@ public class CountWithFilterFormulaTest
 {
     
     
-    @Test @Ignore
+    @Test 
     public final void testCountWithFilterFormula() throws Exception {
     
     

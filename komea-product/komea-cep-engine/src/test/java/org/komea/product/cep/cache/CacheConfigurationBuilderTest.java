@@ -25,7 +25,7 @@ public class CacheConfigurationBuilderTest
     /**
      * Test method for {@link org.komea.product.cep.cache.CacheConfigurationBuilder#expirationTime(int, java.util.concurrent.TimeUnit)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testExpirationTime() throws Exception {
     
     
@@ -45,7 +45,7 @@ public class CacheConfigurationBuilderTest
     /**
      * Test method for {@link org.komea.product.cep.cache.CacheConfigurationBuilder#maximumSize(int)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testMaximumSize() throws Exception {
     
     
@@ -63,7 +63,7 @@ public class CacheConfigurationBuilderTest
     /**
      * Test method for {@link org.komea.product.cep.cache.CacheConfigurationBuilder#build()}.
      */
-    @Test @Ignore
+    @Test 
     public final void testNoConfiguration() throws Exception {
     
     

@@ -13,7 +13,7 @@ public class NumberOfFixedBuildPerUserTest
 {
     
     
-    @Test @Ignore
+    @Test 
     public final void NumberOfFixedBuildPerUserTest() throws Exception {
     
     

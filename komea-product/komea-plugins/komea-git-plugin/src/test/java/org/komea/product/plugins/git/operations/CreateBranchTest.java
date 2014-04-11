@@ -36,7 +36,7 @@ public class CreateBranchTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public void testCreationRepositoryAndScan() throws Exception {
     
     

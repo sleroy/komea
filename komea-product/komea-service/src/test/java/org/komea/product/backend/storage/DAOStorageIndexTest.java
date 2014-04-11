@@ -14,7 +14,7 @@ public class DAOStorageIndexTest
 {
     
     
-    @Test @Ignore
+    @Test 
     public final void testGetObjectIndex() throws Exception {
     
     

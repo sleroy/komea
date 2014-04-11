@@ -29,7 +29,7 @@ public class PluginFileSystemTest
     /**
      * Test method for {@link org.komea.product.backend.storage.PluginFileSystem#FileSystemService(java.io.File)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testFileSystemServiceExist() {
     
     
@@ -43,7 +43,7 @@ public class PluginFileSystemTest
     /**
      * Test method for {@link org.komea.product.backend.storage.PluginFileSystem#FileSystemService(java.io.File)}.
      */
-    @Test @Ignore(expected = IllegalArgumentException.class)
+    @Test (expected = IllegalArgumentException.class)
     public final void testFileSystemServiceFail() {
     
     
@@ -60,7 +60,7 @@ public class PluginFileSystemTest
      * @throws FileNotFoundException
      *             * @throws IOException
      */
-    @Test @Ignore
+    @Test 
     public final void testFileSystemServiceOpen() throws FileNotFoundException, IOException {
     
     
@@ -80,7 +80,7 @@ public class PluginFileSystemTest
      * @throws FileNotFoundException
      *             * @throws IOException
      */
-    @Test @Ignore
+    @Test 
     public final void testFileSystemServiceStore() throws FileNotFoundException, IOException {
     
     

@@ -33,7 +33,7 @@ public class EventStatisticsServiceTest
     /**
      * Tests the query.
      */
-    @Test @Ignore
+    @Test 
     public void testBuildProviderEventFrequencyQuery() {
     
     
@@ -49,7 +49,7 @@ public class EventStatisticsServiceTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public void testELQuery() {
     
     
@@ -72,7 +72,7 @@ public class EventStatisticsServiceTest
     }
     
     
-    @Test @Ignore()
+    @Test ()
     public void testQuerySeverityBlocker() {
     
     
@@ -86,7 +86,7 @@ public class EventStatisticsServiceTest
     }
     
     
-    @Test @Ignore()
+    @Test ()
     public void testQuerySeverityInfo() {
     
     

@@ -46,7 +46,7 @@ public class KpiEditPageTest
      * Test method for
      * {@link org.komea.product.wicket.kpis.KpiEditPage#KpiEditPage(org.apache.wicket.request.mapper.parameter.PageParameters)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testKpiEditPagePageParameters() throws Exception {
     
     
@@ -59,7 +59,7 @@ public class KpiEditPageTest
      * {@link org.komea.product.wicket.kpis.KpiEditPage#KpiEditPage(org.apache.wicket.request.mapper.parameter.PageParameters, org.komea.product.database.model.Kpi)}
      * .
      */
-    @Test @Ignore
+    @Test 
     public void testKpiEditPagePageParametersKpi() throws Exception {
     
     

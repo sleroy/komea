@@ -50,7 +50,7 @@ public class BugZillaForm extends Form<BZServerConfiguration>
         bugServer = _bugServer;
         feedBack = _feedBack;
         page = _page;
-        oldAdress = bugServer.getAddress().toString();
+        oldAdress = bugServer.getAddress() == null ? "" : bugServer.getAddress().toString();
         feedBack.setVisible(false);
         
         add(TextFieldBuilder.<String> createRequired("address", bugServer, "address")
@@ -58,7 +58,7 @@ public class BugZillaForm extends Form<BZServerConfiguration>
         add(TextFieldBuilder.<String> createRequired("login", bugServer, "login")
                 .highlightOnErrors().simpleValidator(0, 255).withTooltip("Server need a login")
                 .build());
-        add(TextFieldBuilder.<String> createRequired("password", bugServer, "mdp")
+        add(TextFieldBuilder.<String> createRequired("password", bugServer, "password")
                 .highlightOnErrors().simpleValidator(0, 255).withTooltip("Server need a password")
                 .build());
         add(TextFieldBuilder.<String> createRequired("reminderAlert", bugServer, "reminderAlert")

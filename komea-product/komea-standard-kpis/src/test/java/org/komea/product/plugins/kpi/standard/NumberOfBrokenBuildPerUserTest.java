@@ -13,7 +13,7 @@ public class NumberOfBrokenBuildPerUserTest
 {
     
     
-    @Test @Ignore
+    @Test 
     public final void numberBrokenBuildPerTest() throws Exception {
     
     

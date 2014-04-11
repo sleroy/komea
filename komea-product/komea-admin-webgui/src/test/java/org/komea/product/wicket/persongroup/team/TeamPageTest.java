@@ -40,7 +40,7 @@ public class TeamPageTest
      * Test method for
      * {@link org.komea.product.wicket.persongroup.team.TeamPage#TeamPage(org.apache.wicket.request.mapper.parameter.PageParameters)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testTeamPage() throws Exception {
     
     

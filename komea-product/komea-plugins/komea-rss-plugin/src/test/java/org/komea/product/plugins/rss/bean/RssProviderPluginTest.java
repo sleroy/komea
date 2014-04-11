@@ -54,7 +54,7 @@ public class RssProviderPluginTest
      * Test method for
      * {@link org.komea.product.plugins.rss.bean.RssProviderPlugin#notifyPropertyChanged(org.komea.product.database.model.Setting)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testInitializePluginWithProperties() throws Exception {
     
     
@@ -66,7 +66,7 @@ public class RssProviderPluginTest
     /**
      * Test method for {@link org.komea.product.plugins.rss.bean.RssProviderPlugin#initializeProvider()}.
      */
-    @Test @Ignore
+    @Test 
     public final void testInitializeProvider() throws Exception {
     
     

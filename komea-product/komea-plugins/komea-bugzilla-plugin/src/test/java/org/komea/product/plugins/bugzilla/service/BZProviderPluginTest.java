@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 
 /**
  * @author sleroy
- *
  */
 @RunWith(MockitoJUnitRunner.class)
 public class BZProviderPluginTest
@@ -29,28 +28,29 @@ public class BZProviderPluginTest
     
     
     @Mock
-    private IBZConfigurationDAO bugZillaConfiguration;
+    private IBZConfigurationDAO  bugZillaConfiguration;
     
     
-    @Mock
-    private IEventTypeService       evenTypeService;
-    
-    
-    @Mock
-    private Logger                  logger;
-    
-    
-    @Mock
-    private ICronRegistryService    registryService;
     @InjectMocks
-    private BZProviderPlugin  bZProviderPlugin;
+    private BZProviderPlugin     bZProviderPlugin;
+    
+    
+    @Mock
+    private IEventTypeService    evenTypeService;
+    
+    
+    @Mock
+    private Logger               logger;
+    @Mock
+    private ICronRegistryService registryService;
     
     
     
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.service.BZProviderPlugin#init()}.
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testInit() throws Exception {
     
     

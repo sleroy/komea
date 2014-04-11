@@ -31,7 +31,7 @@ public class SettingServiceTest extends AbstractSpringIntegrationTestCase
      * {@link org.komea.product.backend.service.settings.SettingService#create(java.lang.String, java.lang.String, java.lang.String, java.lang.String)}
      * .
      */
-    @Test @Ignore
+    @Test 
     public final void testCreate() {
     
     

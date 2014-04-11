@@ -43,7 +43,7 @@ public class DepartmentEditPageTest
      * {@link org.komea.product.wicket.persongroup.department.DepartmentEditPage#DepartmentEditPage(org.apache.wicket.request.mapper.parameter.PageParameters)}
      * .
      */
-    @Test @Ignore
+    @Test 
     public final void testDepartmentEditPagePageParameters() throws Exception {
     
     
@@ -60,7 +60,7 @@ public class DepartmentEditPageTest
      * {@link org.komea.product.wicket.persongroup.department.DepartmentEditPage#DepartmentEditPage(org.apache.wicket.request.mapper.parameter.PageParameters, org.komea.product.database.model.PersonGroup)}
      * .
      */
-    @Test @Ignore
+    @Test 
     public void testDepartmentEditPagePageParametersPersonGroup() throws Exception {
     
     

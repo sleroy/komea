@@ -21,7 +21,7 @@ public class EventCountFormulaTest
 {
     
     
-    @Test @Ignore
+    @Test 
     public void testProcessMapWithoutParameters() throws Exception {
     
     

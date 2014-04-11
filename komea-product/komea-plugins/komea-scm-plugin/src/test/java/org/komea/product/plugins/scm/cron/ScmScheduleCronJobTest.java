@@ -48,7 +48,7 @@ public class ScmScheduleCronJobTest
      * {@link org.komea.product.plugins.scm.cron.ScmScheduleCronJob#checkIfScmRepositoriesAreAssociatedToAJob(org.komea.product.plugins.scm.api.IScmRepositoryService, org.quartz.JobDataMap)}
      * .
      */
-    @Test @Ignore
+    @Test 
     public final void testCheckIfScmRepositoriesAreAssociatedToAJob() throws Exception {
     
     
@@ -71,7 +71,7 @@ public class ScmScheduleCronJobTest
      * {@link org.komea.product.plugins.scm.cron.ScmScheduleCronJob#prepareJobMapForCron(org.quartz.JobDataMap, org.komea.product.plugins.repository.model.ScmRepositoryDefinition)}
      * .
      */
-    @Test @Ignore
+    @Test 
     public final void testPrepareJobMapForCron() throws Exception {
     
     

@@ -14,7 +14,7 @@ public class BuildPerDayTest
 {
     
     
-    @Test @Ignore
+    @Test 
     public final void testBuildPerDay() throws Exception {
     
     

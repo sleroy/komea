@@ -25,7 +25,7 @@ public class EventConversionAndValidationServiceTest
      * {@link org.komea.product.backend.service.esper.EventConversionAndValidationService#validate(org.komea.product.database.alert.IEvent)}
      * .
      */
-    @Test @Ignore(expected = IllegalArgumentException.class)
+    @Test (expected = IllegalArgumentException.class)
     public final void testValidate() {
     
     

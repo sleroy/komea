@@ -50,7 +50,7 @@ public class EntityServiceTest
     
     
     
-    @Test @Ignore
+    @Test
     public void testGetGroup() {
     
     
@@ -76,7 +76,7 @@ public class EntityServiceTest
     
     
     //
-    @Test @Ignore
+    @Test
     public void testGetPerson() {
     
     
@@ -100,7 +100,7 @@ public class EntityServiceTest
     }
     
     
-    @Test @Ignore
+    @Test
     public void testGetProject() {
     
     
@@ -125,7 +125,7 @@ public class EntityServiceTest
     }
     
     
-    @Test @Ignore
+    @Test
     public void testGetProjectNoExistingID() {
     
     
@@ -138,7 +138,7 @@ public class EntityServiceTest
     }
     
     
-    @Test @Ignore
+    @Test
     public void testLoadEntities() {
     
     

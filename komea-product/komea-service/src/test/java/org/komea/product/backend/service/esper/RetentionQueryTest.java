@@ -21,7 +21,7 @@ public class RetentionQueryTest
 {
     
     
-    @Test @Ignore()
+    @Test ()
     public void testQueryRetention() {
     
     

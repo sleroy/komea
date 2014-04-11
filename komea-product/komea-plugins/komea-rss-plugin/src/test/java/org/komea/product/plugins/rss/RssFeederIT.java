@@ -29,7 +29,7 @@ public class RssFeederIT extends AbstractSpringIntegrationTestCase
      * @throws Exception
      */
     @Transactional
-    @Test @Ignore
+    @Test 
     public void verifFeeds() throws Exception {
     
     

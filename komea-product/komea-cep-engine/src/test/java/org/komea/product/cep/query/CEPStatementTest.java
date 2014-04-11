@@ -18,7 +18,7 @@ public class CEPStatementTest
 {
     
     
-    @Test @Ignore
+    @Test 
     public final void testAdd() throws Exception {
     
     
@@ -33,7 +33,7 @@ public class CEPStatementTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public final void testGetAggregateView() throws Exception {
     
     
@@ -60,7 +60,7 @@ public class CEPStatementTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public final void testGetDefaultStorage() throws Exception {
     
     
@@ -78,7 +78,7 @@ public class CEPStatementTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public final void testGetEventStorage() throws Exception {
     
     
@@ -94,7 +94,7 @@ public class CEPStatementTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public final void testGetEventStorages() throws Exception {
     
     
@@ -109,7 +109,7 @@ public class CEPStatementTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public final void testNotifyEvent() throws Exception {
     
     
@@ -122,7 +122,7 @@ public class CEPStatementTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public final void testToString() throws Exception {
     
     

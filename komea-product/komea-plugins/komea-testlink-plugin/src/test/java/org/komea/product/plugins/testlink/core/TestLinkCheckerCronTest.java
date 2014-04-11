@@ -63,7 +63,7 @@ public class TestLinkCheckerCronTest
     /**
      * Test method for {@link org.komea.product.plugins.testlink.core.TestLinkCheckerCron#checkServers()}.
      */
-    @Test @Ignore
+    @Test 
     public final void testCheckServers() throws Exception {
     
     
@@ -89,7 +89,7 @@ public class TestLinkCheckerCronTest
      * {@link org.komea.product.plugins.testlink.core.TestLinkCheckerCron#checkTestLinkServer(org.komea.product.plugins.testlink.model.TestLinkServer)}
      * .
      */
-    @Test @Ignore
+    @Test 
     public void testCheckTestLinkServer() throws Exception {
     
     

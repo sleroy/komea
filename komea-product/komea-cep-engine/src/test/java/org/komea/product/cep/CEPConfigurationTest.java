@@ -22,7 +22,7 @@ public class CEPConfigurationTest
     /**
      * Test method for {@link org.komea.product.cep.CEPConfiguration#getMode()}.
      */
-    @Test @Ignore
+    @Test 
     public final void testGetMode() throws Exception {
     
     
@@ -35,7 +35,7 @@ public class CEPConfigurationTest
     /**
      * Test method for {@link org.komea.product.cep.CEPConfiguration#getNumberQueryListeners()}.
      */
-    @Test @Ignore
+    @Test 
     public final void testGetNumberQueryListeners() throws Exception {
     
     

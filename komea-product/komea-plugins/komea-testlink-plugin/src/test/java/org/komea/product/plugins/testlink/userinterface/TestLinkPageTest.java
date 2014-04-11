@@ -36,7 +36,7 @@ public class TestLinkPageTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public void testHomePage() throws Exception {
     
     

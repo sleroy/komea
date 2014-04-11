@@ -11,7 +11,7 @@ public class FilterDefinitionTest
 {
     
     
-    @Test @Ignore
+    @Test 
     public final void testFilterDefinition() throws Exception {
     
     

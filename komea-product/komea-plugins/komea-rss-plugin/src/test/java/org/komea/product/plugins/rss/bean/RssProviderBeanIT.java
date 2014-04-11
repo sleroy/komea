@@ -24,7 +24,7 @@ public class RssProviderBeanIT extends AbstractSpringIntegrationTestCase
     
     
     
-    @Test @Ignore
+    @Test 
     public void testSPring() {
     
     

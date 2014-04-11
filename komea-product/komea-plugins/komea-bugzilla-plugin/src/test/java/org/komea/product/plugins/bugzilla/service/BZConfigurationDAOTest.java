@@ -19,28 +19,30 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  * @author sleroy
- *
  */
 @RunWith(MockitoJUnitRunner.class)
 public class BZConfigurationDAOTest
 {
     
     
-    @Mock
-    private IPluginStorageService        pluginStorage;
-    
-    
-    @Mock
-    private IBZServerProxyFactory        serverProxyFactory;
     @InjectMocks
-    private BZConfigurationDAO bZConfigurationDAO;
+    private BZConfigurationDAO    bZConfigurationDAO;
+    
+    
+    @Mock
+    private IPluginStorageService pluginStorage;
+    @Mock
+    private IBZServerProxyFactory serverProxyFactory;
     
     
     
     /**
-     * Test method for {@link org.komea.product.plugins.bugzilla.service.BZConfigurationDAO#delete(org.komea.product.plugins.bugzilla.model.BZServerConfiguration)}.
+     * Test method for
+     * {@link org.komea.product.plugins.bugzilla.service.BZConfigurationDAO#delete(org.komea.product.plugins.bugzilla.model.BZServerConfiguration)}
+     * .
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testDelete() throws Exception {
     
     
@@ -52,7 +54,8 @@ public class BZConfigurationDAOTest
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.service.BZConfigurationDAO#getPluginStorage()}.
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testGetPluginStorage() throws Exception {
     
     
@@ -64,7 +67,8 @@ public class BZConfigurationDAOTest
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.service.BZConfigurationDAO#getServerProxyFactory()}.
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testGetServerProxyFactory() throws Exception {
     
     
@@ -74,9 +78,12 @@ public class BZConfigurationDAOTest
     
     
     /**
-     * Test method for {@link org.komea.product.plugins.bugzilla.service.BZConfigurationDAO#saveOrUpdate(org.komea.product.plugins.bugzilla.model.BZServerConfiguration, java.lang.String)}.
+     * Test method for
+     * {@link org.komea.product.plugins.bugzilla.service.BZConfigurationDAO#saveOrUpdate(org.komea.product.plugins.bugzilla.model.BZServerConfiguration, java.lang.String)}
+     * .
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testSaveOrUpdate() throws Exception {
     
     
@@ -88,7 +95,8 @@ public class BZConfigurationDAOTest
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.service.BZConfigurationDAO#selectAll()}.
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testSelectAll() throws Exception {
     
     

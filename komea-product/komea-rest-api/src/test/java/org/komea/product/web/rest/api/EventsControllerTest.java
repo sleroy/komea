@@ -51,7 +51,7 @@ public class EventsControllerTest extends AbstractSpringWebIntegrationTestCase
     
     
     
-    // @Test @Ignore
+    // @Test
     // public void findEventsTest() throws Exception {
     //
     // Mockito.when(eventService.findEvents(Matchers.any(SearchEventDto.class))).thenReturn(getEvents());
@@ -74,7 +74,7 @@ public class EventsControllerTest extends AbstractSpringWebIntegrationTestCase
     // Mockito.verify(eventService, Mockito.times(1)).findEvents(Matchers.any(SearchEventDto.class));
     // }
     //
-    // @Test @Ignore
+    // @Test
     // public void getEventsTest() throws Exception {
     //
     // Mockito.when(eventService.getEvents("MINOR", 1)).thenReturn(getEvents());
@@ -92,7 +92,7 @@ public class EventsControllerTest extends AbstractSpringWebIntegrationTestCase
     // }
     
     
-    @Test @Ignore
+    @Test
     public void pushEventTest() throws Exception {
     
     

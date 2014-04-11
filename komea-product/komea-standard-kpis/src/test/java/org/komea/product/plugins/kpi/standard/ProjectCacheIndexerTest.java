@@ -43,7 +43,7 @@ public class ProjectCacheIndexerTest
     /**
      * Test method for {@link org.komea.product.plugins.kpi.standard.ProjectCacheIndexer#getKey(org.komea.product.database.alert.IEvent)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testfAIL() throws Exception {
     
     
@@ -68,7 +68,7 @@ public class ProjectCacheIndexerTest
     /**
      * Test method for {@link org.komea.product.plugins.kpi.standard.ProjectCacheIndexer#getKey(org.komea.product.database.alert.IEvent)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testGetKey() throws Exception {
     
     

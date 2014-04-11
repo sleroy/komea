@@ -32,7 +32,7 @@ public class ObjectStorageTest
      * {@link org.komea.product.backend.storage.ObjectStorage#ObjectStorage(org.komea.product.backend.service.fs.IPluginFileSystem, java.lang.Class)}
      * .
      */
-    @Test @Ignore
+    @Test 
     public final void testObjectStorage() {
     
     

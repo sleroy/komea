@@ -30,7 +30,7 @@ public class SystemProjectBeanTest
     
     
     
-    @Test @Ignore
+    @Test 
     public void testSystemProjectBean() throws Exception {
     
     

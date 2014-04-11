@@ -16,7 +16,7 @@ public class CEPResultTest
 {
     
     
-    @Test @Ignore
+    @Test 
     public final void testBuildFromCustomType() throws Exception {
     
     
@@ -28,7 +28,7 @@ public class CEPResultTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public final void testBuildFromDefinition() throws Exception {
     
     
@@ -41,7 +41,7 @@ public class CEPResultTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public final void testBuildFromMap() throws Exception {
     
     
@@ -54,7 +54,7 @@ public class CEPResultTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public final void testBuildFromNumber() throws Exception {
     
     

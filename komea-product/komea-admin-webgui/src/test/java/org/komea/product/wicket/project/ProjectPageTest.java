@@ -52,7 +52,7 @@ public class ProjectPageTest
      * Test method for
      * {@link org.komea.product.wicket.project.ProjectPage#ProjectPage(org.apache.wicket.request.mapper.parameter.PageParameters)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testProjectPage() throws Exception {
     
     

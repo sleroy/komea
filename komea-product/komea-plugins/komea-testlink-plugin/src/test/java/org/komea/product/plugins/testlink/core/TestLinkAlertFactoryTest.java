@@ -34,7 +34,7 @@ public class TestLinkAlertFactoryTest extends AbstractSpringIntegrationTestCase
     /**
      * Test method for {@link org.komea.product.plugins.testlink.core.TestLinkAlertFactory#newBlockedTests(long, java.lang.String)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testNewBlockedTests() throws Exception {
     
     
@@ -45,7 +45,7 @@ public class TestLinkAlertFactoryTest extends AbstractSpringIntegrationTestCase
     /**
      * Test method for {@link org.komea.product.plugins.testlink.core.TestLinkAlertFactory#newFailedTests(long, java.lang.String)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testNewFailedTests() throws Exception {
     
     
@@ -56,7 +56,7 @@ public class TestLinkAlertFactoryTest extends AbstractSpringIntegrationTestCase
     /**
      * Test method for {@link org.komea.product.plugins.testlink.core.TestLinkAlertFactory#newRequirements(long, java.lang.String)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testNewRequirements() throws Exception {
     
     
@@ -67,7 +67,7 @@ public class TestLinkAlertFactoryTest extends AbstractSpringIntegrationTestCase
     /**
      * Test method for {@link org.komea.product.plugins.testlink.core.TestLinkAlertFactory#newSuccessfultest(long, java.lang.String)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testNewSuccessfultest() throws Exception {
     
     
@@ -78,7 +78,7 @@ public class TestLinkAlertFactoryTest extends AbstractSpringIntegrationTestCase
     /**
      * Test method for {@link org.komea.product.plugins.testlink.core.TestLinkAlertFactory#newTested(long, java.lang.String)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testNewTested() throws Exception {
     
     
@@ -89,7 +89,7 @@ public class TestLinkAlertFactoryTest extends AbstractSpringIntegrationTestCase
     /**
      * Test method for {@link org.komea.product.plugins.testlink.core.TestLinkAlertFactory#newTotalTests(long, java.lang.String)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testNewTotalTests() throws Exception {
     
     
@@ -100,7 +100,7 @@ public class TestLinkAlertFactoryTest extends AbstractSpringIntegrationTestCase
     /**
      * Test method for {@link org.komea.product.plugins.testlink.core.TestLinkAlertFactory#newUnassociedTest(long, java.lang.String)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testNewUnassociedTest() throws Exception {
     
     
@@ -111,7 +111,7 @@ public class TestLinkAlertFactoryTest extends AbstractSpringIntegrationTestCase
     /**
      * Test method for {@link org.komea.product.plugins.testlink.core.TestLinkAlertFactory#newUnexecutedTest(long, java.lang.String)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testNewUnexecutedTest() throws Exception {
     
     
@@ -122,7 +122,7 @@ public class TestLinkAlertFactoryTest extends AbstractSpringIntegrationTestCase
     /**
      * Test method for {@link org.komea.product.plugins.testlink.core.TestLinkAlertFactory#newUntested(long, java.lang.String)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testNewUntested() throws Exception {
     
     

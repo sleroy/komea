@@ -13,7 +13,7 @@ public class ProjectHealthInfluencePerUserTest
 {
     
     
-    @Test @Ignore
+    @Test 
     public final void ProjectHealthInfluencePerUserTest() throws Exception {
     
     

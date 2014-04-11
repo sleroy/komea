@@ -33,7 +33,8 @@ public class BugsCalculatorTest
      * {@link org.komea.product.plugins.bugzilla.core.BugsCalculator#BugsCalculator(org.komea.product.plugins.bugzilla.model.BZServerConfiguration, java.util.List)}
      * .
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testBugsCalculator() throws Exception {
     
     
@@ -45,7 +46,8 @@ public class BugsCalculatorTest
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.core.BugsCalculator#countBugsByPriority(java.lang.String)}.
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testCountBugsByPriority() throws Exception {
     
     
@@ -57,7 +59,8 @@ public class BugsCalculatorTest
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.core.BugsCalculator#countBugsBySeverity(java.lang.String)}.
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testCountBugsBySeverity() throws Exception {
     
     
@@ -69,7 +72,8 @@ public class BugsCalculatorTest
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.core.BugsCalculator#countBugsByStatus(java.lang.String)}.
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testCountBugsByStatus() throws Exception {
     
     
@@ -82,7 +86,8 @@ public class BugsCalculatorTest
      * Test method for
      * {@link org.komea.product.plugins.bugzilla.core.BugsCalculator#countByPriorityAndStatutes(java.lang.String, java.util.List)}.
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testCountByPriorityAndStatutes() throws Exception {
     
     
@@ -95,7 +100,8 @@ public class BugsCalculatorTest
      * Test method for
      * {@link org.komea.product.plugins.bugzilla.core.BugsCalculator#countBySeverityAndStatutes(java.lang.String, java.util.List)}.
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testCountBySeverityAndStatutes() throws Exception {
     
     
@@ -107,7 +113,8 @@ public class BugsCalculatorTest
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.core.BugsCalculator#countByStatutes(java.util.List)}.
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testCountByStatutes() throws Exception {
     
     
@@ -121,7 +128,8 @@ public class BugsCalculatorTest
      * {@link org.komea.product.plugins.bugzilla.core.BugsCalculator#countStatusGroupBugs(org.komea.product.plugins.bugzilla.api.BugStatusGroup)}
      * .
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testCountStatusGroupBugs() throws Exception {
     
     
@@ -133,7 +141,8 @@ public class BugsCalculatorTest
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.core.BugsCalculator#countTotalBugs()}.
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testCountTotalBugs() throws Exception {
     
     

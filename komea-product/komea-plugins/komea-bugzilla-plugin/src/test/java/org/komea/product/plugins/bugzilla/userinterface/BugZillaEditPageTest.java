@@ -47,7 +47,7 @@ public class BugZillaEditPageTest
      * {@link org.komea.product.plugins.bugzilla.userinterface.BugZillaEditPage#BugZillaEditPage(org.apache.wicket.request.mapper.parameter.PageParameters)}
      * .
      */
-    @Test @Ignore
+    @Test 
     public final void testBugZillaEditPagePageParameters() throws Exception {
     
     
@@ -60,7 +60,7 @@ public class BugZillaEditPageTest
      * {@link org.komea.product.plugins.bugzilla.userinterface.BugZillaEditPage#BugZillaEditPage(org.apache.wicket.request.mapper.parameter.PageParameters, org.komea.product.plugins.bugzilla.model.BZServerConfiguration)}
      * .
      */
-    @Test @Ignore
+    @Test 
     public final void testBugZillaEditPagePageParametersBZServerConfiguration() throws Exception {
     
     

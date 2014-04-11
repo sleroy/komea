@@ -24,11 +24,13 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 
 
-@TransactionConfiguration(defaultRollback = true)
-@Test @IgnoreExecutionListeners({
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionDbUnitTestExecutionListener.class })
+@TransactionConfiguration(
+    defaultRollback = true)
+@TestExecutionListeners(
+    {
+            DependencyInjectionTestExecutionListener.class,
+                DirtiesContextTestExecutionListener.class,
+                TransactionDbUnitTestExecutionListener.class })
 public class EntitiesControllerITest extends AbstractSpringWebIntegrationTestCase
 {
     
@@ -49,7 +51,7 @@ public class EntitiesControllerITest extends AbstractSpringWebIntegrationTestCas
     
     
     //
-    @Test @Ignore
+    @Test
     @DatabaseSetup("database.xml")
     public void testAllDepartments() throws Exception {
     
@@ -64,7 +66,7 @@ public class EntitiesControllerITest extends AbstractSpringWebIntegrationTestCas
     }
     
     
-    @Test @Ignore
+    @Test
     @DatabaseSetup("database.xml")
     public void testAllPersons() throws Exception {
     
@@ -81,7 +83,7 @@ public class EntitiesControllerITest extends AbstractSpringWebIntegrationTestCas
     }
     
     
-    @Test @Ignore
+    @Test
     @DatabaseSetup("database.xml")
     public void testAllProjects() throws Exception {
     
@@ -98,7 +100,7 @@ public class EntitiesControllerITest extends AbstractSpringWebIntegrationTestCas
     }
     
     
-    @Test @Ignore
+    @Test
     @DatabaseSetup("database.xml")
     public void testAllTeams() throws Exception {
     

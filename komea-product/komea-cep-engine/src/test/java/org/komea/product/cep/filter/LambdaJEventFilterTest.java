@@ -27,7 +27,7 @@ public class LambdaJEventFilterTest
     /**
      * Test method for {@link org.komea.product.cep.filter.LambdaJEventFilter#LambdaJEventFilter(org.komea.product.cep.api.IEventFilter)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testLambdaJEventFilter() throws Exception {
     
     

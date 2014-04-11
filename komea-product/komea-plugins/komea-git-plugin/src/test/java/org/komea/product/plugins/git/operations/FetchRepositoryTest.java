@@ -26,7 +26,7 @@ public class FetchRepositoryTest
     }
     //
     //
-    // @Test @Ignore
+    // @Test 
     // public void testCreationRepositoryAndScan() throws Exception {
     //
     //

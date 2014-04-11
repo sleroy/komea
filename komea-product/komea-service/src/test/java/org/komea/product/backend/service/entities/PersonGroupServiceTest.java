@@ -57,7 +57,7 @@ public class PersonGroupServiceTest
     
     
     
-    @Test @Ignore
+    @Test 
     public void testGetAllDepartments() {
     
     
@@ -79,7 +79,7 @@ public class PersonGroupServiceTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public void testGetAllTeams() {
     
     
@@ -103,7 +103,7 @@ public class PersonGroupServiceTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public void testGetDepartment() {
     
     
@@ -121,7 +121,7 @@ public class PersonGroupServiceTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public void testGetDepartmentByTeam() {
     
     
@@ -141,7 +141,7 @@ public class PersonGroupServiceTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public void testGetDepartmentNull() {
     
     
@@ -152,7 +152,7 @@ public class PersonGroupServiceTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public void testGetprojectTeams() {
     
     
@@ -182,7 +182,7 @@ public class PersonGroupServiceTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public void testGetTeam() {
     
     
@@ -200,7 +200,7 @@ public class PersonGroupServiceTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public void testGetTeamButIsDepartment() {
     
     
@@ -214,7 +214,7 @@ public class PersonGroupServiceTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public void testGetTeamNull() {
     
     

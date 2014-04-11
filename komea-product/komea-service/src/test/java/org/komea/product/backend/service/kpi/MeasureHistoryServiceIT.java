@@ -38,7 +38,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase {
      * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, int, org.komea.product.database.model.MeasureCriteria)}
      * .
      */
-    @Test @Ignore
+    @Test 
     public final void testGetFilteredHistoryHistoryKeyIntMeasureCriteria() {
 
         final Kpi exampleKPI = buildFakeKpi("DEMO_FILTER1");
@@ -71,7 +71,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase {
      * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, org.komea.product.database.model.MeasureCriteria)}
      * .
      */
-    @Test @Ignore
+    @Test 
     public final void testGetFilteredHistoryHistoryKeyMeasureCriteria() {
 
         final Kpi exampleKPI = buildFakeKpi("DEMO_FILTER2");
@@ -92,7 +92,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase {
      * Test method for
      * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getHistory(org.komea.product.backend.service.history.HistoryKey)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testGetHistory() {
 
         final Kpi exampleKPI = buildFakeKpi("DEMO_FILTER3");
@@ -113,7 +113,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase {
      * Test method for
      * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#storeMeasure(org.komea.product.database.model.Measure)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testStoreMeasure() {
 
         final Kpi exampleKPI = buildFakeKpi("DEMO_FILTER4");
@@ -129,7 +129,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase {
      * Test method for
      * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#buildHistoryPurgeAction(org.komea.product.database.model.Kpi)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testUnitBuildHistoryPurgeAction() {
 
         final MeasureHistoryService buildMeasureHistoryComponent = buildMeasureHistoryComponent();

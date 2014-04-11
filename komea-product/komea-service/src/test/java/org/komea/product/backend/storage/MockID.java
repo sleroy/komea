@@ -1,9 +1,14 @@
 /**
  * 
  */
+
 package org.komea.product.backend.storage;
 
+
+
 import org.komea.product.database.api.IHasId;
+
+
 
 public class MockID implements IHasId
 {
@@ -33,6 +38,13 @@ public class MockID implements IHasId
     }
     
     
+    public String getStr() {
+    
+    
+        return str;
+    }
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.database.api.IHasId#setId(int)
@@ -43,12 +55,5 @@ public class MockID implements IHasId
     
         id = _value;
         
-    }
-
-
-    public String getStr() {
-    
-    
-        return str;
     }
 }

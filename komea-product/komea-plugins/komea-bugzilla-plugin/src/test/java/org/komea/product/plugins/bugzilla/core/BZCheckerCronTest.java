@@ -28,21 +28,21 @@ public class BZCheckerCronTest
     
     
     @Mock
-    private IEventPushService       alertService;
+    private IEventPushService     alertService;
+    
+    
+    @Mock
+    private IBZConfigurationDAO   bugZillaConfiguration;
     
     
     @InjectMocks
-    private BZCheckerCron     bZCheckerCron;
+    private BZCheckerCron         bZCheckerCron;
     
     
     @Mock
-    private IBZConfigurationDAO bugZillaConfiguration;
-    
-    
+    private IBZEventService       eventService;
     @Mock
-    private IBZEventService         eventService;
-    @Mock
-    private IBZServerProxyFactory   proxyFactory;
+    private IBZServerProxyFactory proxyFactory;
     
     
     
@@ -51,7 +51,8 @@ public class BZCheckerCronTest
      * {@link org.komea.product.plugins.bugzilla.core.BZCheckerCron#buildBugZillaStatistics(java.util.List, java.lang.String, org.komea.product.plugins.bugzilla.model.BZServerConfiguration)}
      * .
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testBuildBugZillaStatistics() throws Exception {
     
     
@@ -65,7 +66,8 @@ public class BZCheckerCronTest
      * {@link org.komea.product.plugins.bugzilla.core.BZCheckerCron#buildEventTypes(org.komea.product.plugins.bugzilla.model.BZServerConfiguration, org.komea.product.plugins.bugzilla.api.IBZServerProxy, java.lang.String)}
      * .
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testBuildEventTypes() throws Exception {
     
     
@@ -79,7 +81,8 @@ public class BZCheckerCronTest
      * {@link org.komea.product.plugins.bugzilla.core.BZCheckerCron#buildStatisticsPerProject(org.komea.product.plugins.bugzilla.model.BZServerConfiguration, org.komea.product.plugins.bugzilla.api.IBZServerProxy, java.lang.String)}
      * .
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testBuildStatisticsPerProject() throws Exception {
     
     
@@ -91,7 +94,8 @@ public class BZCheckerCronTest
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.core.BZCheckerCron#checkServers()}.
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testCheckServers() throws Exception {
     
     

@@ -21,7 +21,7 @@ public class SpringTest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test @Ignore
+    @Test 
     public void test() {
     
     

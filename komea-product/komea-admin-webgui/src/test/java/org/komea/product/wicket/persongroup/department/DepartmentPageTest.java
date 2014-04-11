@@ -41,7 +41,7 @@ public class DepartmentPageTest
      * {@link org.komea.product.wicket.persongroup.department.DepartmentPage#DepartmentPage(org.apache.wicket.request.mapper.parameter.PageParameters)}
      * .
      */
-    @Test @Ignore
+    @Test 
     public final void testDepartmentPage() throws Exception {
     
     

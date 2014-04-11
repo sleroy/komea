@@ -48,7 +48,7 @@ public class TeamEditPageTest
      * {@link org.komea.product.wicket.persongroup.team.TeamEditPage#TeamEditPage(org.apache.wicket.request.mapper.parameter.PageParameters)}
      * .
      */
-    @Test @Ignore
+    @Test 
     public final void testTeamEditPagePageParameters() throws Exception {
     
     
@@ -61,7 +61,7 @@ public class TeamEditPageTest
      * {@link org.komea.product.wicket.persongroup.team.TeamEditPage#TeamEditPage(org.apache.wicket.request.mapper.parameter.PageParameters, org.komea.product.database.model.PersonGroup)}
      * .
      */
-    @Test @Ignore
+    @Test 
     public final void testTeamEditPagePageParametersPersonGroup() throws Exception {
     
     

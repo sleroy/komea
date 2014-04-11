@@ -25,9 +25,9 @@ public class BZEventServiceTest
     
     
     @InjectMocks
-    private BZEventService bZEventService;
+    private BZEventService    bZEventService;
     @Mock
-    private IEventPushService    service;
+    private IEventPushService service;
     
     
     
@@ -36,7 +36,8 @@ public class BZEventServiceTest
      * {@link org.komea.product.plugins.bugzilla.service.BZEventService#sendAllEvents(org.komea.product.plugins.bugzilla.core.BugsCalculator, java.lang.String, org.komea.product.plugins.bugzilla.model.BZServerConfiguration)}
      * .
      */
-    @Test @Ignore
+    @Test
+    @Ignore
     public final void testSendAllEvents() throws Exception {
     
     

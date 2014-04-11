@@ -21,7 +21,7 @@ public class NoEventFilterTest
     /**
      * Test method for {@link org.komea.product.cep.filter.NoEventFilter#isFiltered(java.io.Serializable)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testIsFiltered() throws Exception {
     
     

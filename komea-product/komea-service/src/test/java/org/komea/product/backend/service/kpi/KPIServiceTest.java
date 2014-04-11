@@ -80,7 +80,7 @@ public class KPIServiceTest
      * {@link org.komea.product.backend.service.kpi.KPIService#createOrUpdateHistoryCronJob(org.komea.product.database.model.Kpi, org.komea.product.database.api.IEntity)}
      * .
      */
-    @Test @Ignore
+    @Test
     public void testCreateOrUpdateHistoryCronJob() throws Exception {
     
     
@@ -101,7 +101,7 @@ public class KPIServiceTest
     /**
      * Test method for {@link org.komea.product.backend.service.kpi.KPIService#deleteKpi(org.komea.product.database.model.Kpi)}.
      */
-    @Test @Ignore
+    @Test
     @Ignore
     public void testDeleteKpi() throws Exception {
     
@@ -117,7 +117,7 @@ public class KPIServiceTest
      * Esper Engine is Mocked. The objective is to obtain the requested entity
      * with its KPI through a facade. .
      */
-    @Test @Ignore
+    @Test
     public final void testFindKpi() {
     
     
@@ -164,7 +164,7 @@ public class KPIServiceTest
      * {@link org.komea.product.backend.service.kpi.KPIService#prepareKpiHistoryJob(org.komea.product.database.model.Kpi, org.komea.product.database.api.IEntity, java.lang.String)}
      * .
      */
-    @Test @Ignore
+    @Test
     public void testPrepareKpiHistoryJob() throws Exception {
     
     

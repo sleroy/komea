@@ -20,7 +20,7 @@ public class CEPNumericalResultTest
     }
     
     
-    @Test @Ignore(expected = IllegalArgumentException.class)
+    @Test (expected = IllegalArgumentException.class)
     public void testCEPNumericalResulttoMap() throws Exception {
     
     

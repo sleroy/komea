@@ -23,7 +23,7 @@ public class ElNumericalFormulaTest
 {
     
     
-    @Test @Ignore
+    @Test 
     public final void testElNumericalFormulaString() throws Exception {
     
     
@@ -41,7 +41,7 @@ public class ElNumericalFormulaTest
     }
     
     
-    @Test @Ignore
+    @Test 
     public final void testGetFormula() throws Exception {
     
     

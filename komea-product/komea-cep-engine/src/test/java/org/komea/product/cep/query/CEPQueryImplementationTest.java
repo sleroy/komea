@@ -17,7 +17,7 @@ public class CEPQueryImplementationTest
 {
     
     
-    @Test @Ignore
+    @Test 
     public void testGetterAndSetter() {
     
     

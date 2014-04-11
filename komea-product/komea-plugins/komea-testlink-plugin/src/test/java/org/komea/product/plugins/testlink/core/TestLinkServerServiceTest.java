@@ -42,7 +42,7 @@ public class TestLinkServerServiceTest
      * {@link org.komea.product.plugins.testlink.core.TestLinkServerService#saveOrUpdate(org.komea.product.plugins.testlink.model.TestLinkServer)}
      * .
      */
-    @Test @Ignore
+    @Test
     @Ignore
     public final void testSaveOrUpdateTestLinkServer() throws Exception {
     
@@ -57,7 +57,7 @@ public class TestLinkServerServiceTest
      * {@link org.komea.product.plugins.testlink.core.TestLinkServerService#saveOrUpdate(org.komea.product.plugins.testlink.model.TestLinkServer, java.lang.String)}
      * .
      */
-    @Test @Ignore
+    @Test
     @Ignore
     public final void testSaveOrUpdateTestLinkServerString() throws Exception {
     
@@ -70,8 +70,8 @@ public class TestLinkServerServiceTest
     /**
      * Test method for {@link org.komea.product.plugins.testlink.core.TestLinkServerService#selectAll()}.
      */
-    @Test @Ignore
     @Ignore
+    @Test
     public final void testSelectAll() throws Exception {
     
     

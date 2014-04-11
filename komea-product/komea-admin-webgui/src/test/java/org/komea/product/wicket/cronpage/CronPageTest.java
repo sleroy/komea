@@ -56,7 +56,7 @@ public class CronPageTest
      * Test method for
      * {@link org.komea.product.wicket.cronpage.CronPage#CronPage(org.apache.wicket.request.mapper.parameter.PageParameters)}.
      */
-    @Test @Ignore
+    @Test 
     public final void testCronPage() throws Exception {
     
     

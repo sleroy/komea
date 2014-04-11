@@ -13,7 +13,7 @@ public class BuildPerMonthTest
 {
     
     
-    @Test @Ignore
+    @Test 
     public final void testBuildPerMonth() throws Exception {
     
     

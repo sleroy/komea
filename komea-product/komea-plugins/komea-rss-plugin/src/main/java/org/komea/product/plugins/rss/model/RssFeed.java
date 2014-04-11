@@ -24,7 +24,7 @@ public class RssFeed implements IHasId
     
     private String    feedName          = "";
     
-    private int       id;
+    private Integer   id;
     
     private Date      lastFetchDate;
     
@@ -77,7 +77,7 @@ public class RssFeed implements IHasId
     
     
     @Override
-    public int getId() {
+    public Integer getId() {
     
     
         return id;
@@ -134,7 +134,7 @@ public class RssFeed implements IHasId
     
     
     @Override
-    public void setId(final int _id) {
+    public void setId(final Integer _id) {
     
     
         id = _id;

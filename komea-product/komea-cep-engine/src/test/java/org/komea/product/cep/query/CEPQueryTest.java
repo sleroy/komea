@@ -34,7 +34,7 @@ public class CEPQueryTest
      * Test method for {@link org.komea.product.cep.query.CEPQuery#CEPQuery(org.komea.product.cep.query.CEPStatement)}.
      */
     @BenchmarkOptions(benchmarkRounds = 200, warmupRounds = 30)
-    @Test @Ignore
+    @Test 
     public final void testCEPQuery() throws Exception {
     
     
