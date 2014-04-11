@@ -37,13 +37,15 @@ public class TestLinkForm extends Form<TestLinkServer> {
         this.oldAdress = testServer.getAddress();
 
         feedBack.setVisible(false);
-
+       
+        add(TextFieldBuilder.<String>createRequired("name", this.testServer, "name").highlightOnErrors()
+                .withTooltip("Serva need a name").build());
         add(TextFieldBuilder.<String>createRequired("address", this.testServer, "address").highlightOnErrors()
                 .withTooltip("Server need a address").build());
         add(TextFieldBuilder.<String>createRequired("key", this.testServer, "key").highlightOnErrors()
                 .simpleValidator(0, 255).withTooltip("Server need key for connexion").build());
-        
-                //button
+
+        //button
         add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
 
             @Override
@@ -72,7 +74,7 @@ public class TestLinkForm extends Form<TestLinkServer> {
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
                 testlinkService.saveOrUpdate(testServer, oldAdress);
-                 page.setResponsePage(new TestLinkPage(page.getPageParameters()));
+                page.setResponsePage(new TestLinkPage(page.getPageParameters()));
 
             }
         });

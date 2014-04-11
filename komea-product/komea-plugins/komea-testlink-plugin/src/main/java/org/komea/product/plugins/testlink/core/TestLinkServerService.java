@@ -129,7 +129,6 @@ public class TestLinkServerService implements ITestLinkServerDAO
         Validate.notNull(server);
         Validate.notNull(oldAddress);
         server.setAddress(oldAddress);
-        
         daoStorage.saveOrUpdate(server);
     }
     

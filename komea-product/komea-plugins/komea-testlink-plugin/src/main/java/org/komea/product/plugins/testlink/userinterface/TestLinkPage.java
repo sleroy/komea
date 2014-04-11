@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.komea.product.plugins.testlink.userinterface;
 
 import java.util.List;
@@ -28,17 +27,18 @@ import org.komea.product.wicket.widget.model.ListDataModel;
  */
 public final class TestLinkPage extends LayoutPage {
 
-     @SpringBean
+    @SpringBean
     private ITestLinkServerDAO TestLinkService;
-    
+
     public TestLinkPage(PageParameters params) {
         super(params);
-             List<TestLinkServer> listAffichage = TestLinkService.selectAll();
+        List<TestLinkServer> listAffichage = TestLinkService.selectAll();
         final IDeleteAction<TestLinkServer> deleteAction = new TestLinkDeleteAction(listAffichage, TestLinkService);
         final IEditAction<TestLinkServer> editAction = new TestLinkEditAction(this);
         final ISortableDataProvider<TestLinkServer, String> dataProvider = new ListDataModel(listAffichage);
         final DataTable<TestLinkServer, String> build
                 = DataTableBuilder.<TestLinkServer, String>newTable("table")
+                .addColumn("Name", "Name")
                 .addColumn("Address", "Address")
                 .withEditDeleteColumn(deleteAction, editAction)
                 .displayRows(listAffichage.size() + 10).withData(dataProvider).build();
@@ -53,7 +53,8 @@ public final class TestLinkPage extends LayoutPage {
             }
         });
     }
-        @Override
+
+    @Override
     public String getTitle() {
 
         return getString("TestLinkPage.title");
