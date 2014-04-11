@@ -28,7 +28,7 @@ public class EventTableGeneratorTest
     /**
      * Test method for {@link org.komea.product.cep.formula.tuple.EventTableGenerator#generateTable(java.util.List)}.
      */
-    @Test
+    @Test @Ignore
     public final void testGenerateTable() throws Exception {
     
     

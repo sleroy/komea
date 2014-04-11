@@ -22,7 +22,7 @@ import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 @TransactionConfiguration(defaultRollback = true)
-@TestExecutionListeners({
+@Test @IgnoreExecutionListeners({
         DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class })
 public class KpiControllerIT extends AbstractSpringWebIntegrationTestCase {
@@ -39,7 +39,7 @@ public class KpiControllerIT extends AbstractSpringWebIntegrationTestCase {
     }
     
     //
-    @Test
+    @Test @Ignore
     @DatabaseSetup("database.xml")
     public void testAllDepartments() throws Exception {
     

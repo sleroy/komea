@@ -72,7 +72,7 @@ public class PluginIntegrationServiceTest {
     /**
      * This test validates the injection of setting in a bean.
      */
-    @Test
+    @Test @Ignore
     @Ignore("Regressions on component")
     public void testInjectionSettings() {
 
@@ -90,7 +90,7 @@ public class PluginIntegrationServiceTest {
     /**
      * Test : registering provider action
      */
-    @Test
+    @Test @Ignore
     public void testRegisterProvider() {
 
         final PluginIntegrationService pluginService = initPluginIntegrationService();
@@ -143,7 +143,7 @@ public class PluginIntegrationServiceTest {
     /**
      * Test : Validation of a invalid provider.
      */
-    @Test
+    @Test @Ignore
     public void testRegisterWrongProvider() {
 
         initPluginIntegrationService();
@@ -174,7 +174,7 @@ public class PluginIntegrationServiceTest {
     /**
      * Method removeProvider.
      */
-    @Test
+    @Test @Ignore
     public void testRemoveProvider() {
 
         final PluginIntegrationService pluginService = initPluginIntegrationService();

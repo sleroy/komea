@@ -26,7 +26,7 @@ public class RequirementFilterTest
     /**
      * Test method for {@link org.komea.product.plugins.testlink.business.RequirementFilter#RequirementFilter(java.util.List)}.
      */
-    @Test
+    @Test @Ignore
     public void testRequirementFilter() throws Exception {
     
     

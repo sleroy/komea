@@ -24,7 +24,7 @@ public class CEPEventStorageTest
 {
     
     
-    @Test
+    @Test @Ignore
     public final void testCEPEventStorage() throws Exception {
     
     
@@ -41,7 +41,7 @@ public class CEPEventStorageTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testNotifyEventWithFilteringAndTransformationWithoutValidTransformation()
             throws Exception {
     
@@ -73,7 +73,7 @@ public class CEPEventStorageTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testNotifyEventWithFilteringAndTransformationWithValidTransformation()
             throws Exception {
     
@@ -105,7 +105,7 @@ public class CEPEventStorageTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testNotifyEventWithoutFiltering() throws Exception {
     
     

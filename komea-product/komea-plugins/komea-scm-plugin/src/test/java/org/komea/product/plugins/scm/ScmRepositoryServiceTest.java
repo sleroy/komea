@@ -68,7 +68,7 @@ public class ScmRepositoryServiceTest
     /**
      * Test method for {@link org.komea.product.plugins.scm.ScmRepositoryService#findByName(java.lang.String)}.
      */
-    @Test
+    @Test @Ignore
     public final void testFindByName() throws Exception {
     
     
@@ -88,7 +88,7 @@ public class ScmRepositoryServiceTest
     /**
      * Test method for {@link org.komea.product.plugins.scm.ScmRepositoryService#getAllRepositories()}.
      */
-    @Test
+    @Test @Ignore
     public final void testGetAllRepositories() throws Exception {
     
     
@@ -105,7 +105,7 @@ public class ScmRepositoryServiceTest
     /**
      * Test method for {@link org.komea.product.plugins.scm.ScmRepositoryService#getPluginStorageService()}.
      */
-    @Test
+    @Test @Ignore
     public final void testGetPluginStorageService() throws Exception {
     
     
@@ -116,7 +116,7 @@ public class ScmRepositoryServiceTest
     /**
      * Test method for {@link org.komea.product.plugins.scm.ScmRepositoryService#getRepositoriesNotAssociated()}.
      */
-    @Test
+    @Test @Ignore
     public final void testGetRepositoriesNotAssociated() throws Exception {
     
     
@@ -138,7 +138,7 @@ public class ScmRepositoryServiceTest
      * {@link org.komea.product.plugins.scm.ScmRepositoryService#isAssociatedToCron(org.komea.product.plugins.repository.model.ScmRepositoryDefinition)}
      * .
      */
-    @Test
+    @Test @Ignore
     public final void testIsAssociatedToCron() throws Exception {
     
     
@@ -156,7 +156,7 @@ public class ScmRepositoryServiceTest
      * {@link org.komea.product.plugins.scm.ScmRepositoryService#remove(org.komea.product.plugins.repository.model.ScmRepositoryDefinition)}
      * .
      */
-    @Test
+    @Test @Ignore
     public final void testRemove() throws Exception {
     
     
@@ -169,7 +169,7 @@ public class ScmRepositoryServiceTest
      * {@link org.komea.product.plugins.scm.ScmRepositoryService#saveOrUpdate(org.komea.product.plugins.repository.model.ScmRepositoryDefinition)}
      * .
      */
-    @Test
+    @Test @Ignore
     public final void testSaveOrUpdate() throws Exception {
     
     

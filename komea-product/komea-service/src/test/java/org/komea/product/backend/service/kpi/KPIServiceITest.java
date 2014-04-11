@@ -124,7 +124,7 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test
+    @Test @Ignore
     public void testBug() {
     
     
@@ -145,7 +145,7 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test
+    @Test @Ignore
     public void testBug2() {
     
     
@@ -164,7 +164,7 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test(expected = KpiAlreadyExistingException.class)
+    @Test @Ignore(expected = KpiAlreadyExistingException.class)
     public void testBugAlreadyExistingKPI() {
     
     
@@ -186,7 +186,7 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test
+    @Test @Ignore
     public void testBugForIndividualKPI() {
     
     
@@ -211,7 +211,7 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
     }
     //
     //
-    // @Test
+    // @Test @Ignore
     // public void testifAlertStatisticsKPIAreWorking() {
     //
     //

@@ -82,7 +82,7 @@ public class ProjectServiceTest {
     @Mock
     private TagDao tagDAOmock;
 
-    @Test
+    @Test @Ignore
     public void testGetAllProjects() {
 
         Mockito.when(projectDAOmock.selectByCriteria(Matchers.any(ProjectCriteria.class)))
@@ -117,7 +117,7 @@ public class ProjectServiceTest {
 
     }
 
-    @Test
+    @Test @Ignore
     public void testGetAllProjectsComplete() {
 
         Mockito.when(projectDAOmock.selectByCriteria(Matchers.any(ProjectCriteria.class)))
@@ -197,7 +197,7 @@ public class ProjectServiceTest {
 
     }
 
-    @Test
+    @Test @Ignore
     public void testGetProjectLinks() {
 
         Mockito.when(linkDAOmock.selectByCriteria(Matchers.any(LinkCriteria.class))).thenReturn(
@@ -217,7 +217,7 @@ public class ProjectServiceTest {
 
     }
 
-    @Test
+    @Test @Ignore
     public void testGetProjectLinksNoLinks() {
 
         Mockito.when(linkDAOmock.selectByCriteria(Matchers.any(LinkCriteria.class))).thenReturn(
@@ -232,7 +232,7 @@ public class ProjectServiceTest {
 
     }
 
-    @Test
+    @Test @Ignore
     public void testGetprojectNoTeams() {
 
         final List<HasProjectPersonGroupKey> projectGroups = Lists.newArrayList();
@@ -245,7 +245,7 @@ public class ProjectServiceTest {
         Assert.assertEquals(0, teams.size());
     }
 
-    @Test
+    @Test @Ignore
     public void testGetProjectsAssociateToAPerson() {
 
         final List<HasProjectPersonKey> projectPersonList
@@ -270,7 +270,7 @@ public class ProjectServiceTest {
 
     }
 
-    @Test
+    @Test @Ignore
     public void testGetProjectTags() {
 
         final List<HasProjectTagKey> projectTags = Lists.newArrayList(new HasProjectTagKey(1, 1));
@@ -291,7 +291,7 @@ public class ProjectServiceTest {
         Mockito.verify(tagDAOmock, Mockito.times(1)).selectByPrimaryKey(1);
     }
 
-    @Test
+    @Test @Ignore
     public void testGetProjectTagsNoTags() {
 
         final List<HasProjectTagKey> projectTags = Lists.newArrayList();
@@ -308,7 +308,7 @@ public class ProjectServiceTest {
         Mockito.verify(tagDAOmock, Mockito.times(0)).selectByPrimaryKey(1);
     }
 
-    @Test
+    @Test @Ignore
     public void testGetProjectTagsNullTags() {
 
         final List<HasProjectTagKey> projectTags = Lists.newArrayList(new HasProjectTagKey(1, 1));
@@ -327,7 +327,7 @@ public class ProjectServiceTest {
         Mockito.verify(tagDAOmock, Mockito.times(1)).selectByPrimaryKey(1);
     }
 
-    @Test
+    @Test @Ignore
     public void testGetprojectTeamsNullTeams() {
 
         final List<HasProjectPersonGroupKey> projectGroups
@@ -436,7 +436,7 @@ public class ProjectServiceTest {
         return Lists.newArrayList(team);
     }
 
-    @Test
+    @Test @Ignore
     public void testFindProjectsAssociatedToAPerson() {
 
         List<HasProjectPersonKey> projectPersonList = Lists.newArrayList(new HasProjectPersonKey(1, 1));

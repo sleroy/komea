@@ -23,7 +23,7 @@ public class TestLinkAnalysisServiceTest
      * {@link org.komea.product.plugins.testlink.core.TestLinkAnalysisService#checkTestlinkProject(org.komea.product.plugins.testlink.api.ITestLinkServerProxy, org.komea.product.plugins.testlink.model.TestLinkProject)}
      * .
      */
-    @Test
+    @Test @Ignore
     @Ignore
     public final void testCheckTestlinkProject() throws Exception {
     

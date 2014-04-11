@@ -26,7 +26,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 /**
  */
-@TestExecutionListeners({
+@Test @IgnoreExecutionListeners({
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class })
@@ -45,7 +45,7 @@ public class EntityServiceTest extends AbstractSpringIntegrationTestCase
     
     
     
-    @Test
+    @Test @Ignore
     @DatabaseSetup("database.xml")
     public void testGetAllDepartments() {
     
@@ -55,7 +55,7 @@ public class EntityServiceTest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test
+    @Test @Ignore
     @DatabaseSetup("database.xml")
     public void testGetPersonList() {
     
@@ -65,7 +65,7 @@ public class EntityServiceTest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test
+    @Test @Ignore
     @DatabaseSetup("database.xml")
     public void testGetProjectList() {
     

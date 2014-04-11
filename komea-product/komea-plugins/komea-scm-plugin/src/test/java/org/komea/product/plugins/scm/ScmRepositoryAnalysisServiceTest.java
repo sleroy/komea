@@ -76,7 +76,7 @@ public class ScmRepositoryAnalysisServiceTest
      * {@link org.komea.product.plugins.scm.ScmRepositoryAnalysisService#analysis(org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy)}
      * .
      */
-    @Test
+    @Test @Ignore
     public final void testAnalysis() throws Exception {
     
     
@@ -95,7 +95,7 @@ public class ScmRepositoryAnalysisServiceTest
      * {@link org.komea.product.plugins.scm.ScmRepositoryAnalysisService#checkNewCommits(org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy, java.lang.String)}
      * .
      */
-    @Test
+    @Test @Ignore
     public final void testCheckNewCommits() throws Exception {
     
     
@@ -124,7 +124,7 @@ public class ScmRepositoryAnalysisServiceTest
      * {@link org.komea.product.plugins.scm.ScmRepositoryAnalysisService#checkNumberOfBranches(org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy)}
      * .
      */
-    @Test
+    @Test @Ignore
     public final void testCheckNumberOfBranches() throws Exception {
     
     
@@ -145,7 +145,7 @@ public class ScmRepositoryAnalysisServiceTest
      * {@link org.komea.product.plugins.scm.ScmRepositoryAnalysisService#checkNumberOfTagsPerBranch(org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy, java.lang.String)}
      * .
      */
-    @Test
+    @Test @Ignore
     public final void testCheckNumberOfTagsPerBranch() throws Exception {
     
     

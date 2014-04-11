@@ -19,7 +19,7 @@ public class KpiDAOIT extends AbstractSpringIntegrationTestCase {
     @Autowired
     private KpiDao kpiDAO;
 
-    @Test
+    @Test @Ignore
     @Transactional
     public void test() {
 

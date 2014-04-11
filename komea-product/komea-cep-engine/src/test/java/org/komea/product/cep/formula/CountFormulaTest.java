@@ -17,7 +17,7 @@ public class CountFormulaTest
 {
     
     
-    @Test
+    @Test @Ignore
     public final void testCompute() throws Exception {
     
     

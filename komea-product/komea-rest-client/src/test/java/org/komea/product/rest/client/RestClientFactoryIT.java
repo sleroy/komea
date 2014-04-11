@@ -26,7 +26,7 @@ public class RestClientFactoryIT
     
     //
     
-    @Test
+    @Test @Ignore
     public void testCreateEventsAPI() throws ConnectException, URISyntaxException {
     
     
@@ -36,7 +36,7 @@ public class RestClientFactoryIT
     }
     
     
-    @Test
+    @Test @Ignore
     public void testCreateProvidersAPI() throws ConnectException, URISyntaxException {
     
     

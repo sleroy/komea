@@ -58,7 +58,7 @@ public class TestLinkEditPageTest
      * {@link org.komea.product.plugins.testlink.userinterface.TestLinkEditPage#TestLinkEditPage(org.apache.wicket.request.mapper.parameter.PageParameters)}
      * .
      */
-    @Test
+    @Test @Ignore
     public void testTestLinkEditPagePageParameters() throws Exception {
     
     
@@ -71,7 +71,7 @@ public class TestLinkEditPageTest
      * {@link org.komea.product.plugins.testlink.userinterface.TestLinkEditPage#TestLinkEditPage(org.apache.wicket.request.mapper.parameter.PageParameters, org.komea.product.plugins.testlink.model.TestLinkServer)}
      * .
      */
-    @Test
+    @Test @Ignore
     public void testTestLinkEditPagePageParametersTestLinkServer() throws Exception {
     
     

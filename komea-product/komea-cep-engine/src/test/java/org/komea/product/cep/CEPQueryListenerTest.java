@@ -25,7 +25,7 @@ public class CEPQueryListenerTest
     /**
      * Test method for {@link org.komea.product.cep.CEPQueryListener#getQuery(java.lang.String)}.
      */
-    @Test
+    @Test @Ignore
     public final void testGetQuery() throws Exception {
     
     
@@ -39,7 +39,7 @@ public class CEPQueryListenerTest
     /**
      * Test method for {@link org.komea.product.cep.CEPQueryListener#notify(java.io.Serializable)}.
      */
-    @Test
+    @Test @Ignore
     public final void testNotify() throws Exception {
     
     
@@ -54,7 +54,7 @@ public class CEPQueryListenerTest
     /**
      * Test method for {@link org.komea.product.cep.CEPQueryListener#registerQuery(java.lang.String, org.komea.product.cep.api.ICEPQuery)}.
      */
-    @Test
+    @Test @Ignore
     public final void testRegisterQuery() throws Exception {
     
     
@@ -70,7 +70,7 @@ public class CEPQueryListenerTest
     /**
      * Test method for {@link org.komea.product.cep.CEPQueryListener#removeQuery(java.lang.String)}.
      */
-    @Test
+    @Test @Ignore
     public final void testRemoveQuery() throws Exception {
     
     

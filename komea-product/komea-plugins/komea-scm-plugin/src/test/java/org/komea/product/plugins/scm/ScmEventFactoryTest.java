@@ -38,7 +38,7 @@ public class ScmEventFactoryTest extends AbstractSpringIntegrationTestCase
     /**
      * Test method for {@link org.komea.product.plugins.scm.ScmEventFactory#sendFetchFailed()}.
      */
-    @Test
+    @Test @Ignore
     public final void testSendFetchFailed() throws Exception {
     
     

@@ -42,7 +42,7 @@ public class TestLinkJavaAPITest
      * {@link org.komea.product.plugins.testlink.business.TestLinkJavaAPI#connexion(org.komea.product.plugins.testlink.model.TestLinkServer)}
      * .
      */
-    @Test(
+    @Test @Ignore(
         expected = TestLinkException.class)
     public final void testConnexion() throws Exception {
     
@@ -61,7 +61,7 @@ public class TestLinkJavaAPITest
      * {@link org.komea.product.plugins.testlink.business.TestLinkJavaAPI#convertExecutionStatusIntoTestlinkStatus(org.komea.product.plugins.testlink.model.TestCaseStatus, br.eti.kinoshita.testlinkjavaapi.model.Execution)}
      * .
      */
-    @Test
+    @Test @Ignore
     public final void testConvertExecutionStatusIntoTestlinkStatus() throws Exception {
     
     
@@ -85,7 +85,7 @@ public class TestLinkJavaAPITest
      * {@link org.komea.product.plugins.testlink.business.TestLinkJavaAPI#getLastExecutionResult(br.eti.kinoshita.testlinkjavaapi.model.TestPlan, br.eti.kinoshita.testlinkjavaapi.model.TestCase)}
      * .
      */
-    @Test
+    @Test @Ignore
     public final void testGetLastExecutionResult() throws Exception {
     
     
@@ -105,7 +105,7 @@ public class TestLinkJavaAPITest
     /**
      * Test method for {@link org.komea.product.plugins.testlink.business.TestLinkJavaAPI#getListProject()}.
      */
-    @Test
+    @Test @Ignore
     public final void testGetListProject() throws Exception {
     
     
@@ -128,7 +128,7 @@ public class TestLinkJavaAPITest
      * {@link org.komea.product.plugins.testlink.business.TestLinkJavaAPI#getMetricTest(org.komea.product.plugins.testlink.model.TestLinkProject)}
      * .
      */
-    @Test
+    @Test @Ignore
     @Ignore
     public final void testGetMetricTest() throws Exception {
     
@@ -143,7 +143,7 @@ public class TestLinkJavaAPITest
      * {@link org.komea.product.plugins.testlink.business.TestLinkJavaAPI#getRequirements(org.komea.product.plugins.testlink.model.TestLinkProject)}
      * .
      */
-    @Test
+    @Test @Ignore
     @Ignore
     public final void testGetRequirements() throws Exception {
     
@@ -158,7 +158,7 @@ public class TestLinkJavaAPITest
      * {@link org.komea.product.plugins.testlink.business.TestLinkJavaAPI#getTotalTestForATestCase(java.util.List, br.eti.kinoshita.testlinkjavaapi.model.TestPlan, br.eti.kinoshita.testlinkjavaapi.model.TestCase)}
      * .
      */
-    @Test
+    @Test @Ignore
     @Ignore
     public final void testGetTotalTestForATestCase() throws Exception {
     
@@ -173,7 +173,7 @@ public class TestLinkJavaAPITest
      * {@link org.komea.product.plugins.testlink.business.TestLinkJavaAPI#getTotalTestForATestPlan(java.util.List, br.eti.kinoshita.testlinkjavaapi.model.TestPlan)}
      * .
      */
-    @Test
+    @Test @Ignore
     @Ignore
     public final void testGetTotalTestForATestPlan() throws Exception {
     
@@ -188,7 +188,7 @@ public class TestLinkJavaAPITest
      * {@link org.komea.product.plugins.testlink.business.TestLinkJavaAPI#getTotalTestForATestSuite(java.util.List, br.eti.kinoshita.testlinkjavaapi.model.TestPlan, br.eti.kinoshita.testlinkjavaapi.model.TestSuite)}
      * .
      */
-    @Test
+    @Test @Ignore
     @Ignore
     public final void testGetTotalTestForATestSuite() throws Exception {
     
@@ -203,7 +203,7 @@ public class TestLinkJavaAPITest
      * {@link org.komea.product.plugins.testlink.business.TestLinkJavaAPI#getTotalTests(org.komea.product.plugins.testlink.model.TestLinkProject)}
      * .
      */
-    @Test
+    @Test @Ignore
     @Ignore
     public final void testGetTotalTests() throws Exception {
     
@@ -218,7 +218,7 @@ public class TestLinkJavaAPITest
      * {@link org.komea.product.plugins.testlink.business.TestLinkJavaAPI#hasExecutionResult(br.eti.kinoshita.testlinkjavaapi.model.Execution)}
      * .
      */
-    @Test
+    @Test @Ignore
     @Ignore
     public final void testHasExecutionResult() throws Exception {
     

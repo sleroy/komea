@@ -13,7 +13,7 @@ public class SuccessfulBuildRatePerWeekTest
 {
     
     
-    @Test
+    @Test @Ignore
     public final void testSuccessfulBuildRatePerWeek() throws Exception {
     
     

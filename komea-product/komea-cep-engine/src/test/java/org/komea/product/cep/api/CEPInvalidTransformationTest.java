@@ -12,7 +12,7 @@ public class CEPInvalidTransformationTest
 {
     
     
-    @Test
+    @Test @Ignore
     public void testGetData() throws Exception {
     
     
@@ -21,7 +21,7 @@ public class CEPInvalidTransformationTest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testIsValid() throws Exception {
     
     

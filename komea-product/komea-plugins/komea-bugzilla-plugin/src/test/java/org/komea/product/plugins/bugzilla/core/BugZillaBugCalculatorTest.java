@@ -6,6 +6,7 @@ package org.komea.product.plugins.bugzilla.core;
 
 
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -22,7 +23,7 @@ public class BugZillaBugCalculatorTest
      * {@link org.komea.product.plugins.bugzilla.core.BugZillaBugCalculator#filterBugsByProjectAndStatus(java.lang.String, org.komea.product.plugins.bugzilla.api.BZStatus)}
      * .
      */
-    @Test
+    @Test @Ignore
     public final void testFilterBugsByProjectAndStatus() throws Exception {
     
     
@@ -35,7 +36,7 @@ public class BugZillaBugCalculatorTest
          * Test method for
          * {@link org.komea.product.plugins.bugzilla.core.BugZillaBugCalculator#filterBugsByStatusAndProject(java.lang.String, java.lang.String)}.
          */
-        @Test
+        @Test @Ignore
         public final void testFilterBugsByStatusAndProject() throws Exception {
         
         
@@ -47,7 +48,7 @@ public class BugZillaBugCalculatorTest
     /**
          * Test method for {@link org.komea.product.plugins.bugzilla.core.BugZillaBugCalculator#addProjectBugs(java.lang.String, java.util.List)}.
          */
-        @Test
+        @Test @Ignore
         public final void testAddProjectBugs() throws Exception {
         
         

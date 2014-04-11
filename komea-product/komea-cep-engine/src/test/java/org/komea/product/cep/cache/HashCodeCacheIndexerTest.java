@@ -22,7 +22,7 @@ public class HashCodeCacheIndexerTest
     /**
      * Test method for {@link org.komea.product.cep.cache.HashCodeCacheIndexer#getKey(java.io.Serializable)}.
      */
-    @Test
+    @Test @Ignore
     public final void testGetKey() throws Exception {
     
     

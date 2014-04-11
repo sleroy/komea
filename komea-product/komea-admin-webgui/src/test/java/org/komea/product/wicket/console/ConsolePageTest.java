@@ -47,7 +47,7 @@ public class ConsolePageTest
      * Test method for
      * {@link org.komea.product.wicket.console.ConsolePage#ConsolePage(org.apache.wicket.request.mapper.parameter.PageParameters)}.
      */
-    @Test
+    @Test @Ignore
     public final void testConsolePage() throws Exception {
     
     

@@ -31,7 +31,7 @@ public class SpringConfigurationTest {
         // TODO Auto-generated constructor stub
     }
     @Ignore(value = "To move")
-    @Test
+    @Test @Ignore
     public void test() {
     
         //

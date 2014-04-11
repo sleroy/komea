@@ -22,7 +22,7 @@ public class SettingsDTOTest
      *
      * @generatedBy CodePro at 17/02/14 21:27
      */
-    @Test
+    @Test @Ignore
     public void testSettingsDTO_1()
         throws Exception {
 
@@ -39,7 +39,7 @@ public class SettingsDTOTest
      *
      * @generatedBy CodePro at 17/02/14 21:27
      */
-    @Test
+    @Test @Ignore
     public void testGetSettings_1()
         throws Exception {
         SettingsDTO fixture = new SettingsDTO();
@@ -59,7 +59,7 @@ public class SettingsDTOTest
      *
      * @generatedBy CodePro at 17/02/14 21:27
      */
-    @Test
+    @Test @Ignore
     public void testSetSettings_1()
         throws Exception {
         SettingsDTO fixture = new SettingsDTO();

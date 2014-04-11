@@ -33,7 +33,7 @@ public class KpiDemoServiceTest
     /**
      * Test method for {@link org.komea.product.backend.service.demodata.KpiDemoService#actualLineCoverage()}.
      */
-    @Test
+    @Test @Ignore
     public void testActualLineCoverage() throws Exception {
     
     
@@ -42,7 +42,7 @@ public class KpiDemoServiceTest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testBuildSonarMetricKpi() throws Exception {
     
     
@@ -53,7 +53,7 @@ public class KpiDemoServiceTest
     /**
      * Test method for {@link org.komea.product.backend.service.demodata.KpiDemoService#numberBuildPerDay()}.
      */
-    @Test
+    @Test @Ignore
     public void testNumberBuildPerDay() throws Exception {
     
     
@@ -64,7 +64,7 @@ public class KpiDemoServiceTest
     /**
      * Test method for {@link org.komea.product.backend.service.demodata.KpiDemoService#numberBuildPerMonth()}.
      */
-    @Test
+    @Test @Ignore
     public void testNumberBuildPerMonth() throws Exception {
     
     
@@ -72,7 +72,7 @@ public class KpiDemoServiceTest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testNumberOfBuildBrokenPerUser() throws Exception {
     
     
@@ -83,7 +83,7 @@ public class KpiDemoServiceTest
     /**
      * Test method for {@link org.komea.product.backend.service.demodata.KpiDemoService#numberSuccessBuildPerDay()}.
      */
-    @Test
+    @Test @Ignore
     public void testNumberSuccessBuildPerDay() throws Exception {
     
     
@@ -94,7 +94,7 @@ public class KpiDemoServiceTest
     /**
      * Test method for {@link org.komea.product.backend.service.demodata.KpiDemoService#numberSuccessBuildPerWeek()}.
      */
-    @Test
+    @Test @Ignore
     public void testNumberSuccessBuildPerWeek() throws Exception {
     
     
@@ -105,7 +105,7 @@ public class KpiDemoServiceTest
     /**
      * Test method for {@link org.komea.product.backend.service.demodata.KpiDemoService#successRateJenkinsPerMonthKpi()}.
      */
-    @Test
+    @Test @Ignore
     public void testSuccessRateJenkinsPerMonthKpi() throws Exception {
     
     
@@ -116,7 +116,7 @@ public class KpiDemoServiceTest
     /**
      * Test method for {@link org.komea.product.backend.service.demodata.KpiDemoService#successRateJenkinsPerWeekKpi()}.
      */
-    @Test
+    @Test @Ignore
     public void testSuccessRateJenkinsPerWeekKpi() throws Exception {
     
     

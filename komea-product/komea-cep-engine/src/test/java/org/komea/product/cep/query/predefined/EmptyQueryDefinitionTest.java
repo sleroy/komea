@@ -13,7 +13,7 @@ public class EmptyQueryDefinitionTest
 {
     
     
-    @Test
+    @Test @Ignore
     public void testGetFilterDefinitions() throws Exception {
     
     
@@ -21,7 +21,7 @@ public class EmptyQueryDefinitionTest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testGetFormula() throws Exception {
     
     
@@ -29,7 +29,7 @@ public class EmptyQueryDefinitionTest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testGetParameters() throws Exception {
     
     

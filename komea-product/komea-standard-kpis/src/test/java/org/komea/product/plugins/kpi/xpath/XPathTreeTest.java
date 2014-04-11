@@ -37,7 +37,7 @@ public class XPathTreeTest
     /**
      * Test method for {@link org.komea.product.plugins.kpi.xpath.XPathTree#dumpTree()}.
      */
-    @Test
+    @Test @Ignore
     @Ignore
     public void testDumpTree() throws Exception {
     
@@ -49,7 +49,7 @@ public class XPathTreeTest
     /**
      * Test method for {@link org.komea.product.plugins.kpi.xpath.XPathTree#XPathTree(org.komea.product.cep.api.ICEPStatement)}.
      */
-    @Test
+    @Test @Ignore
     public void testXPathTree() throws Exception {
     
     

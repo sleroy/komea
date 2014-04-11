@@ -89,7 +89,7 @@ public class CEPJenkinsKPITest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testCreation() {
     
     
@@ -105,7 +105,7 @@ public class CEPJenkinsKPITest
     }
     
     
-    @Test
+    @Test @Ignore
     @Ignore
     public void testMTBFPerProject() {
     
@@ -140,7 +140,7 @@ public class CEPJenkinsKPITest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testNumberOfBuildPerMonth() {
     
     
@@ -167,7 +167,7 @@ public class CEPJenkinsKPITest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testNumberOfBuildPerMonthWithCountFormula() {
     
     
@@ -192,7 +192,7 @@ public class CEPJenkinsKPITest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testNumberOfBuildPerWeek() {
     
     
@@ -230,7 +230,7 @@ public class CEPJenkinsKPITest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testNumberOfBuildPerWeekFullJava() {
     
     
@@ -272,7 +272,7 @@ public class CEPJenkinsKPITest
     }
     
     
-    @Test(timeout = 1000 * 5)
+    @Test @Ignore(timeout = 1000 * 5)
     public void testSendingEvents() {
     
     

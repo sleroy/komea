@@ -17,7 +17,7 @@ public class HomePageTest
     
     
     
-    @Test
+    @Test @Ignore
     public void testHomePage() throws Exception {
     
     

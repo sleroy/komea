@@ -27,7 +27,7 @@ public class QueryAdministratorTest
     
     
     
-    @Test
+    @Test @Ignore
     public final void testExistQuery() throws Exception {
     
     
@@ -39,7 +39,7 @@ public class QueryAdministratorTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testGetQuery() throws Exception {
     
     
@@ -49,7 +49,7 @@ public class QueryAdministratorTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testGetQueryNames() throws Exception {
     
     
@@ -60,7 +60,7 @@ public class QueryAdministratorTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testQueryAdministrator() throws Exception {
     
     
@@ -68,7 +68,7 @@ public class QueryAdministratorTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testRegisterQuery() throws Exception {
     
     
@@ -82,7 +82,7 @@ public class QueryAdministratorTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testRemoveQuery() throws Exception {
     
     

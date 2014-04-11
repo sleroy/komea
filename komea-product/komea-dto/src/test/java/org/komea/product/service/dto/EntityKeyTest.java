@@ -30,7 +30,7 @@ public class EntityKeyTest
      * Test method for {@link org.komea.product.service.dto.EntityKey#compareTo(org.komea.product.service.dto.EntityKey)}.
      */
     @SuppressWarnings("boxing")
-    @Test
+    @Test @Ignore
     public final void testCompareTo() throws Exception {
     
     
@@ -46,7 +46,7 @@ public class EntityKeyTest
     /**
      * Test method for {@link org.komea.product.service.dto.EntityKey#EntityKey()}.
      */
-    @Test
+    @Test @Ignore
     public final void testEntityKey() throws Exception {
     
     
@@ -60,7 +60,7 @@ public class EntityKeyTest
      * Test method for
      * {@link org.komea.product.service.dto.EntityKey#EntityKey(org.komea.product.database.enums.EntityType, java.lang.Integer)}.
      */
-    @Test
+    @Test @Ignore
     public final void testEntityKeyEntityTypeInteger() throws Exception {
     
     
@@ -75,7 +75,7 @@ public class EntityKeyTest
     /**
      * Test method for {@link org.komea.product.service.dto.EntityKey#equals(java.lang.Object)}.
      */
-    @Test
+    @Test @Ignore
     public final void testEquals() throws Exception {
     
     
@@ -92,7 +92,7 @@ public class EntityKeyTest
     /**
      * Test method for {@link org.komea.product.service.dto.EntityKey#isEntityReferenceKey()}.
      */
-    @Test
+    @Test @Ignore
     public final void testIsEntityReferenceKey() throws Exception {
     
     
@@ -106,7 +106,7 @@ public class EntityKeyTest
     /**
      * Test method for {@link org.komea.product.service.dto.EntityKey#isEntityTypeKey()}.
      */
-    @Test
+    @Test @Ignore
     public final void testIsEntityTypeKey() throws Exception {
     
     
@@ -120,7 +120,7 @@ public class EntityKeyTest
     /**
      * Test method for {@link org.komea.product.service.dto.EntityKey#isUncompleteKey()}.
      */
-    @Test
+    @Test @Ignore
     public void testIsUncompleteKey() throws Exception {
     
     
@@ -133,7 +133,7 @@ public class EntityKeyTest
     /**
      * Test method for {@link org.komea.product.service.dto.EntityKey#toString()}.
      */
-    @Test
+    @Test @Ignore
     public final void testToString() throws Exception {
     
     

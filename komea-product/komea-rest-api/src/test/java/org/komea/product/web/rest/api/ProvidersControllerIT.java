@@ -35,7 +35,7 @@ import org.springframework.web.context.WebApplicationContext;
 @ContextConfiguration(locations = {
     "classpath*:/spring/application-context-test.xml",
     "classpath*:/spring/dispatcher-servlet-test.xml",})
-@TestExecutionListeners({
+@Test @IgnoreExecutionListeners({
     DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class,
     TransactionDbUnitTestExecutionListener.class})
@@ -52,7 +52,7 @@ public class ProvidersControllerIT {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
-    @Test
+    @Test @Ignore
     @ExpectedDatabase(value = "addProvider.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     @Ignore
     public void testRegisterProvider() throws Exception {

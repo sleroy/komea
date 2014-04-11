@@ -28,7 +28,7 @@ public class CEPQueryBuilderTest
 {
     
     
-    @Test
+    @Test @Ignore
     public void testBuildingQuery() {
     
     

@@ -42,7 +42,7 @@ public class EventStatisticsServicePerformanceTest
     /**
      * Tests the query.
      */
-    @Test
+    @Test @Ignore
     public void testBuildProviderEventFrequencyQuery() {
     
     
@@ -57,7 +57,7 @@ public class EventStatisticsServicePerformanceTest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testQuerySeverity() {
     
     

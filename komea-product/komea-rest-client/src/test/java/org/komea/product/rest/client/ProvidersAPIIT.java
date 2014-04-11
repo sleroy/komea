@@ -25,7 +25,7 @@ public class ProvidersAPIIT
     
     
     
-    @Test
+    @Test @Ignore
     public void testRegisterProvider() throws Exception {
     
     

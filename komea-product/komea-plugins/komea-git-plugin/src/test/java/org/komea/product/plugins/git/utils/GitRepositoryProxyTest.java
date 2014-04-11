@@ -21,7 +21,7 @@ public class GitRepositoryProxyTest
     /**
      * Test method for {@link org.komea.product.plugins.git.utils.GitRepositoryProxy#convertGitCommit(org.eclipse.jgit.revwalk.RevCommit)}.
      */
-    @Test
+    @Test @Ignore
     @Ignore
     public final void testConvertGitCommit() throws Exception {
     
@@ -35,7 +35,7 @@ public class GitRepositoryProxyTest
      * Test method for
      * {@link org.komea.product.plugins.git.utils.GitRepositoryProxy#getAllCommitsFromABranch(java.lang.String, org.joda.time.DateTime)}.
      */
-    @Test
+    @Test @Ignore
     @Ignore
     public final void testGetAllCommitsFromABranch() throws Exception {
     
@@ -48,7 +48,7 @@ public class GitRepositoryProxyTest
     /**
      * Test method for {@link org.komea.product.plugins.git.utils.GitRepositoryProxy#getAllTagsFromABranch(java.lang.String)}.
      */
-    @Test
+    @Test @Ignore
     @Ignore
     public final void testGetAllTagsFromABranch() throws Exception {
     
@@ -61,7 +61,7 @@ public class GitRepositoryProxyTest
     /**
      * Test method for {@link org.komea.product.plugins.git.utils.GitRepositoryProxy#getBranches()}.
      */
-    @Test
+    @Test @Ignore
     @Ignore
     public final void testGetBranches() throws Exception {
     
@@ -74,7 +74,7 @@ public class GitRepositoryProxyTest
     /**
      * Test method for {@link org.komea.product.plugins.git.utils.GitRepositoryProxy#testConnection()}.
      */
-    @Test
+    @Test @Ignore
     @Ignore
     public final void testTestConnection() throws Exception {
     

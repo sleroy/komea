@@ -36,7 +36,7 @@ public class GoogleCacheStorageBenchTest
      * {@link org.komea.product.cep.cache.GoogleCacheStorage#GoogleCacheStorage(org.komea.product.cep.api.cache.ICacheConfiguration)}.
      */
     @BenchmarkOptions(warmupRounds = 30, benchmarkRounds = 200)
-    @Test
+    @Test @Ignore
     public final void testGoogleCacheStorage() throws Exception {
     
     

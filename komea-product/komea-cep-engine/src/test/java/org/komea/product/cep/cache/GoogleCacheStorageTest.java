@@ -36,7 +36,7 @@ public class GoogleCacheStorageTest
     /**
      * Test method for {@link org.komea.product.cep.cache.GoogleCacheStorage#clear()}.
      */
-    @Test
+    @Test @Ignore
     public final void testClear() throws Exception {
     
     
@@ -50,7 +50,7 @@ public class GoogleCacheStorageTest
     /**
      * Test method for {@link org.komea.product.cep.cache.GoogleCacheStorage#getAllValues()}.
      */
-    @Test
+    @Test @Ignore
     public final void testGetAllValues() throws Exception {
     
     
@@ -65,7 +65,7 @@ public class GoogleCacheStorageTest
     /**
      * Test method for {@link org.komea.product.cep.cache.GoogleCacheStorage#getIterator()}.
      */
-    @Test
+    @Test @Ignore
     public final void testGetIterator() throws Exception {
     
     
@@ -85,7 +85,7 @@ public class GoogleCacheStorageTest
      * Test method for
      * {@link org.komea.product.cep.cache.GoogleCacheStorage#GoogleCacheStorage(org.komea.product.cep.api.cache.ICacheConfiguration)}.
      */
-    @Test
+    @Test @Ignore
     public final void testGoogleCacheStorage() throws Exception {
     
     
@@ -99,7 +99,7 @@ public class GoogleCacheStorageTest
     /**
      * Test method for {@link org.komea.product.cep.cache.GoogleCacheStorage#push(java.io.Serializable)}.
      */
-    @Test
+    @Test @Ignore
     public final void testPush() throws Exception {
     
     
@@ -113,7 +113,7 @@ public class GoogleCacheStorageTest
     /**
      * Test method for {@link org.komea.product.cep.cache.GoogleCacheStorage#size()}.
      */
-    @Test
+    @Test @Ignore
     public final void testSize() throws Exception {
     
     

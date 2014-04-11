@@ -40,7 +40,7 @@ public class KpiPageTest {
      * Test method for
      * {@link org.komea.product.wicket.kpis.KpiPage#KpiPage(org.apache.wicket.request.mapper.parameter.PageParameters)}.
      */
-    @Test
+    @Test @Ignore
     public final void testKpiPage() throws Exception {
 
         wicketRule.testStart(KpiPage.class);

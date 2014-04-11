@@ -7,6 +7,7 @@ package org.komea.product.plugins.bugzilla.userinterface;
 
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +47,7 @@ public class BugZillaPageTest
      * {@link org.komea.product.plugins.bugzilla.userinterface.BugZillaPage#BugZillaPage(org.apache.wicket.request.mapper.parameter.PageParameters)}
      * .
      */
-    @Test
+    @Test @Ignore
     public final void testBugZillaPage() throws Exception {
     
     

@@ -28,7 +28,7 @@ public class LocalResourceTransferControllerIT extends AbstractSpringWebIntegrat
      * 
      * @throws Exception
      */
-    @Test
+    @Test @Ignore
     public void testRequestPicture() throws Exception {
     
         final MockMvc mockMvc = standaloneSetup(controller).build();

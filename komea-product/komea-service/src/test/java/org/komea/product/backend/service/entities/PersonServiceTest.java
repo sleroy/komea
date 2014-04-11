@@ -76,7 +76,7 @@ public class PersonServiceTest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testConvertAllPersonsIntoPersonDTO() {
     
     
@@ -106,7 +106,7 @@ public class PersonServiceTest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testConvertAllPersonsIntoPersonDTOComplete() {
     
     
@@ -145,7 +145,7 @@ public class PersonServiceTest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testStripLoginFromEmail() throws Exception {
     
     
@@ -154,7 +154,7 @@ public class PersonServiceTest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testStripLoginFromEmailWrong() throws Exception {
     
     
@@ -163,7 +163,7 @@ public class PersonServiceTest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testStripLoginFromEmailWrong2() throws Exception {
     
     

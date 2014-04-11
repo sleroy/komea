@@ -30,7 +30,7 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/spring/application-context-test.xml")
 @TransactionConfiguration(defaultRollback = true)
-@TestExecutionListeners({
+@Test @IgnoreExecutionListeners({
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class })
@@ -46,7 +46,7 @@ public class ProjectDAOTest
     
     
     
-    @Test
+    @Test @Ignore
     @Transactional
     @DatabaseSetup("database.xml")
     @ExpectedDatabase(value = "addCustomer.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)

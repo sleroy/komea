@@ -6,6 +6,7 @@ package org.komea.product.plugins.bugzilla.core;
 
 
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.service.esper.IEventPushService;
@@ -50,7 +51,7 @@ public class BZCheckerCronTest
      * {@link org.komea.product.plugins.bugzilla.core.BZCheckerCron#buildBugZillaStatistics(java.util.List, java.lang.String, org.komea.product.plugins.bugzilla.model.BZServerConfiguration)}
      * .
      */
-    @Test
+    @Test @Ignore
     public final void testBuildBugZillaStatistics() throws Exception {
     
     
@@ -64,7 +65,7 @@ public class BZCheckerCronTest
      * {@link org.komea.product.plugins.bugzilla.core.BZCheckerCron#buildEventTypes(org.komea.product.plugins.bugzilla.model.BZServerConfiguration, org.komea.product.plugins.bugzilla.api.IBZServerProxy, java.lang.String)}
      * .
      */
-    @Test
+    @Test @Ignore
     public final void testBuildEventTypes() throws Exception {
     
     
@@ -78,7 +79,7 @@ public class BZCheckerCronTest
      * {@link org.komea.product.plugins.bugzilla.core.BZCheckerCron#buildStatisticsPerProject(org.komea.product.plugins.bugzilla.model.BZServerConfiguration, org.komea.product.plugins.bugzilla.api.IBZServerProxy, java.lang.String)}
      * .
      */
-    @Test
+    @Test @Ignore
     public final void testBuildStatisticsPerProject() throws Exception {
     
     
@@ -90,7 +91,7 @@ public class BZCheckerCronTest
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.core.BZCheckerCron#checkServers()}.
      */
-    @Test
+    @Test @Ignore
     public final void testCheckServers() throws Exception {
     
     

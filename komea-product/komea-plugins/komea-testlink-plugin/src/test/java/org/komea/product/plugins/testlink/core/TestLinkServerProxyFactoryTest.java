@@ -23,7 +23,7 @@ public class TestLinkServerProxyFactoryTest
      * {@link org.komea.product.plugins.testlink.core.TestLinkServerProxyFactory#newConnector(org.komea.product.plugins.testlink.model.TestLinkServer)}
      * .
      */
-    @Test
+    @Test @Ignore
     @Ignore
     public final void testNewConnector() throws Exception {
     

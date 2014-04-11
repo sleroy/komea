@@ -95,7 +95,7 @@ public class DAOObjectStorageTest
             public boolean match(final MockID _object) {
             
             
-                return "A".equals(_object);
+                return "A".equals(_object.getStr());
             }
         }).size());
         daoStorage.deleteAll();

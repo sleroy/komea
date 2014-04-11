@@ -45,7 +45,7 @@ public class PersonAddPageTest {
      * Test method for
      * {@link org.komea.product.wicket.person.PersonAddPage#PersonAddPage(org.apache.wicket.request.mapper.parameter.PageParameters)}.
      */
-    @Test
+    @Test @Ignore
     public final void testPersonAddPagePageParameters() throws Exception {
     
         wicketRule.testStart(PersonAddPage.class);
@@ -56,7 +56,7 @@ public class PersonAddPageTest {
      * {@link org.komea.product.wicket.person.PersonAddPage#PersonAddPage(org.apache.wicket.request.mapper.parameter.PageParameters, org.komea.product.database.model.Person)}
      * .
      */
-    @Test
+    @Test @Ignore
     public final void testPersonAddPagePageParametersPerson() throws Exception {
     
         final WicketTester newWicketTester = wicketRule.newWicketTester();

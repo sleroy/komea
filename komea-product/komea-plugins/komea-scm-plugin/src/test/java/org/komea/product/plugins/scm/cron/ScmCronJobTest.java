@@ -58,7 +58,7 @@ public class ScmCronJobTest
     /**
      * Test method for {@link org.komea.product.plugins.scm.cron.ScmCronJob#executeScmCron()}.
      */
-    @Test
+    @Test @Ignore
     public final void testExecuteScmCron() throws Exception {
     
     

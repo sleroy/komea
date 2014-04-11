@@ -15,7 +15,7 @@ public class TupleFactoryTest
 {
     
     
-    @Test
+    @Test @Ignore
     public final void testNewTupleArrayList() throws Exception {
     
     
@@ -25,7 +25,7 @@ public class TupleFactoryTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testNewTupleObjectObjectArray() throws Exception {
     
     

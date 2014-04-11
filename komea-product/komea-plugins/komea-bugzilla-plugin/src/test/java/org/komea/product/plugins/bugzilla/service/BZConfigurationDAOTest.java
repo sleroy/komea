@@ -6,6 +6,7 @@ package org.komea.product.plugins.bugzilla.service;
 
 
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.service.plugins.IPluginStorageService;
@@ -39,7 +40,7 @@ public class BZConfigurationDAOTest
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.service.BZConfigurationDAO#delete(org.komea.product.plugins.bugzilla.model.BZServerConfiguration)}.
      */
-    @Test
+    @Test @Ignore
     public final void testDelete() throws Exception {
     
     
@@ -51,7 +52,7 @@ public class BZConfigurationDAOTest
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.service.BZConfigurationDAO#getPluginStorage()}.
      */
-    @Test
+    @Test @Ignore
     public final void testGetPluginStorage() throws Exception {
     
     
@@ -63,7 +64,7 @@ public class BZConfigurationDAOTest
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.service.BZConfigurationDAO#getServerProxyFactory()}.
      */
-    @Test
+    @Test @Ignore
     public final void testGetServerProxyFactory() throws Exception {
     
     
@@ -75,7 +76,7 @@ public class BZConfigurationDAOTest
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.service.BZConfigurationDAO#saveOrUpdate(org.komea.product.plugins.bugzilla.model.BZServerConfiguration, java.lang.String)}.
      */
-    @Test
+    @Test @Ignore
     public final void testSaveOrUpdate() throws Exception {
     
     
@@ -87,7 +88,7 @@ public class BZConfigurationDAOTest
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.service.BZConfigurationDAO#selectAll()}.
      */
-    @Test
+    @Test @Ignore
     public final void testSelectAll() throws Exception {
     
     

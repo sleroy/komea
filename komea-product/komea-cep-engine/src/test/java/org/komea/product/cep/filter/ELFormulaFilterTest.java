@@ -13,7 +13,7 @@ public class ELFormulaFilterTest
 {
     
     
-    @Test
+    @Test @Ignore
     public final void testELFormula2() throws Exception {
     
     
@@ -26,7 +26,7 @@ public class ELFormulaFilterTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testELFormulaFilterString() throws Exception {
     
     

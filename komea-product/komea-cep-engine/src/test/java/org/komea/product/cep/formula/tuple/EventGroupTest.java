@@ -13,7 +13,7 @@ public class EventGroupTest
 {
     
     
-    @Test
+    @Test @Ignore
     public final void testAddEvent() throws Exception {
     
     
@@ -23,7 +23,7 @@ public class EventGroupTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testGetEvents() throws Exception {
     
     
@@ -34,7 +34,7 @@ public class EventGroupTest
     }
     
     
-    @Test
+    @Test @Ignore
     public void testGetFirstEvent() throws Exception {
     
     
@@ -48,7 +48,7 @@ public class EventGroupTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testToString() throws Exception {
     
     

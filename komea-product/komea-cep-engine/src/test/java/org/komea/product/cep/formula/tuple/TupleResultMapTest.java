@@ -72,7 +72,7 @@ public class TupleResultMapTest
     
     
     
-    @Test
+    @Test @Ignore
     public final void testAsPojoMap() throws Exception {
     
     
@@ -88,7 +88,7 @@ public class TupleResultMapTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testAsPojoRows() throws Exception {
     
     
@@ -103,7 +103,7 @@ public class TupleResultMapTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testAsSimplifiedMap() throws Exception {
     
     
@@ -111,7 +111,7 @@ public class TupleResultMapTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testAsTupleRows() throws Exception {
     
     
@@ -119,7 +119,7 @@ public class TupleResultMapTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testGet() throws Exception {
     
     
@@ -131,7 +131,7 @@ public class TupleResultMapTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testGetTable() throws Exception {
     
     
@@ -144,7 +144,7 @@ public class TupleResultMapTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testGetValue() throws Exception {
     
     
@@ -156,7 +156,7 @@ public class TupleResultMapTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testInsertEntry() throws Exception {
     
     
@@ -172,7 +172,7 @@ public class TupleResultMapTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testInstantiatePojoFromTuple() throws Exception {
     
     

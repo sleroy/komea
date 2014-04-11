@@ -27,7 +27,7 @@ public class TestFilterTest
     /**
      * Test method for {@link org.komea.product.plugins.testlink.business.TestFilter#getBlockedTests()}.
      */
-    @Test
+    @Test @Ignore
     public final void testGetBlockedTests() throws Exception {
     
     
@@ -41,7 +41,7 @@ public class TestFilterTest
     /**
      * Test method for {@link org.komea.product.plugins.testlink.business.TestFilter#getFailedTests()}.
      */
-    @Test
+    @Test @Ignore
     public final void testGetFailedTests() throws Exception {
     
     
@@ -55,7 +55,7 @@ public class TestFilterTest
     /**
      * Test method for {@link org.komea.product.plugins.testlink.business.TestFilter#getSuccessfulTests()}.
      */
-    @Test
+    @Test @Ignore
     public final void testGetSuccessfulTests() throws Exception {
     
     
@@ -69,7 +69,7 @@ public class TestFilterTest
     /**
      * Test method for {@link org.komea.product.plugins.testlink.business.TestFilter#getUnassociedTest()}.
      */
-    @Test
+    @Test @Ignore
     public final void testGetUnassociedTest() throws Exception {
     
     
@@ -83,7 +83,7 @@ public class TestFilterTest
     /**
      * Test method for {@link org.komea.product.plugins.testlink.business.TestFilter#getUnexecutedTests()}.
      */
-    @Test
+    @Test @Ignore
     public final void testGetUnexecutedTests() throws Exception {
     
     

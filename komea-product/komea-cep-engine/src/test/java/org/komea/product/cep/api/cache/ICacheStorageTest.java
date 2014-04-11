@@ -23,7 +23,7 @@ public class ICacheStorageTest
     /**
          * Test method for {@link org.komea.product.cep.api.cache.ICacheStorage#getIterator()}.
          */
-        @Test
+        @Test @Ignore
         public void testGetIterator() throws Exception {
         
         
@@ -39,7 +39,7 @@ public class ICacheStorageTest
     /**
      * Test method for {@link org.komea.product.cep.api.cache.ICacheStorage#push(java.lang.Object)}.
      */
-    @Test
+    @Test @Ignore
     public void testPushWithMaximumSize1() throws Exception {
     
     

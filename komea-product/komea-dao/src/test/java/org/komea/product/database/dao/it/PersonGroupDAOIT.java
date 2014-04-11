@@ -25,7 +25,7 @@ public class PersonGroupDAOIT extends AbstractSpringIntegrationTestCase
     /**
      * This tests performs the validation of enum.
      */
-    @Test
+    @Test @Ignore
     @Transactional
     public void test() {
     

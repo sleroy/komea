@@ -54,7 +54,7 @@ public class FilterOperatorTest
     
     
     
-    @Test
+    @Test @Ignore
     public final void testAnd() throws Exception {
     
     
@@ -65,7 +65,7 @@ public class FilterOperatorTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testNot() throws Exception {
     
     
@@ -74,7 +74,7 @@ public class FilterOperatorTest
     }
     
     
-    @Test
+    @Test @Ignore
     public final void testOr() throws Exception {
     
     

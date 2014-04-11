@@ -23,7 +23,7 @@ public class PersonTest
 {
     
     
-    @Test
+    @Test @Ignore
     public void testSetIdPersonGroupOrNull() throws Exception {
     
     
@@ -41,7 +41,7 @@ public class PersonTest
     /**
      * Test method for {@link org.komea.product.database.model.Person#setIdPersonRoleOrNull(org.komea.product.database.model.PersonRole)}.
      */
-    @Test
+    @Test @Ignore
     public void testSetIdPersonRoleOrNull() throws Exception {
     
     

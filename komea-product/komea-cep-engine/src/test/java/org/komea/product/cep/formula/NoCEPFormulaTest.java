@@ -24,7 +24,7 @@ public class NoCEPFormulaTest
     
     
     @SuppressWarnings("unchecked")
-    @Test
+    @Test @Ignore
     public void testFormula() {
     
     
