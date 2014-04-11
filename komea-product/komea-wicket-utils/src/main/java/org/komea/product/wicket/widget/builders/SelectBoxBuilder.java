@@ -5,20 +5,19 @@
  */
 package org.komea.product.wicket.widget.builders;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.PropertyModel;
-import org.komea.product.database.enums.EntityType;
 
 /**
  *
  * @author rgalerme
  */
-public class SelectBoxBuilder<T> {
+public class SelectBoxBuilder<T> implements Serializable{
 
     private final DropDownChoice<T> dropDownChoice;
 
@@ -52,7 +51,7 @@ public class SelectBoxBuilder<T> {
 
         final PropertyModel<T> selectionRoleModel
                 = new PropertyModel<T>(_data, _wicketId);
-        this.dropDownChoice = new DropDownChoice<T>(_wicketId, selectionRoleModel, selectPersonRoles, new ChoiceRenderer<T>("toString"));
+        this.dropDownChoice = new DropDownChoice<T>(_wicketId, selectionRoleModel, selectPersonRoles, new ChoiceRendenerLower<T>("toString"));
 
         if (!_require) {
             this.dropDownChoice.setRequired(true);
@@ -83,5 +82,27 @@ public class SelectBoxBuilder<T> {
 
     public DropDownChoice<T> build() {
         return this.dropDownChoice;
+    }
+
+    private static class ChoiceRendenerLower<T> extends ChoiceRenderer<T> implements Serializable {
+
+        public ChoiceRendenerLower(String displayExpression) {
+            super(displayExpression);
+        }
+
+        @Override
+        public Object getDisplayValue(T object) {
+            Object displayValue = super.getDisplayValue(object); //To change body of generated methods, choose Tools | Templates.
+
+            if (displayValue instanceof String) {
+                String chaine = (String) displayValue;
+                chaine = chaine.replace("_", " ");
+                chaine = chaine.substring(0, 1) + chaine.substring(1).toLowerCase();
+                displayValue = chaine;
+            }
+
+            return displayValue;
+
+        }
     }
 }

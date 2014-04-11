@@ -130,6 +130,7 @@ public final class KpiForm extends Form<Kpi> {
                 .build());
 
         final Kpi myKpi = kpi;
+        
 
         add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
 
