@@ -7,6 +7,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -16,6 +17,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.komea.product.backend.service.cron.CronUtils;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.entities.IProviderService;
+import org.komea.product.backend.service.esper.ConvertELIntoQuery;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.EvictionType;
@@ -126,11 +128,25 @@ public final class KpiForm extends Form<Kpi> {
         add(SelectBoxBuilder.<EvictionType>createWithEnum("evictionType", kpi, EvictionType.class)
                 .build());
 
-        add(TextAreaBuilder.<String>create("esperRequest", kpi, "esperRequest").withTooltip("")
-                .build());
+        TextArea<String> formulaField = TextAreaBuilder.<String>create("formula", kpi, "esperRequest").withTooltip("")
+                .build();
+
+        formulaField.add(new IValidator<String>() {
+
+            @Override
+            public void validate(IValidatable<String> validatable) {
+                String value = validatable.getValue();
+                if (!ConvertELIntoQuery.isValidFormula(value)) {
+                    ValidationError error = new ValidationError();
+                    error.setMessage("formula expression is invalid");
+                    validatable.error(error);
+                }
+            }
+        });
+
+        add(formulaField);
 
         final Kpi myKpi = kpi;
-        
 
         add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
 

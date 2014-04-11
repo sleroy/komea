@@ -11,24 +11,30 @@ import java.util.Arrays;
 import java.util.List;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.PropertyModel;
 
 /**
  *
  * @author rgalerme
  */
-public class SelectBoxBuilder<T> implements Serializable{
+public class SelectBoxBuilder<T> implements Serializable {
 
     private final DropDownChoice<T> dropDownChoice;
 
     public static <T> SelectBoxBuilder<T> createWithEnum(final String _wicketId,
             final Object _data, Class<T> type) {
-        return new SelectBoxBuilder<T>(_wicketId, _data, type, false);
+        return new SelectBoxBuilder<T>(_wicketId, _data, type, false, new ChoiceRendenerLower<T>("toString"));
+    }
+
+    public static <T> SelectBoxBuilder<T> createWithEnumCustom(final String _wicketId,
+            final Object _data, Class<T> type, IChoiceRenderer<T> choiceRendener) {
+        return new SelectBoxBuilder<T>(_wicketId, _data, type, false, choiceRendener);
     }
 
     public static <T> SelectBoxBuilder<T> createWithEnumRequire(final String _wicketId,
             final Object _data, Class<T> type) {
-        return new SelectBoxBuilder<T>(_wicketId, _data, type, true);
+        return new SelectBoxBuilder<T>(_wicketId, _data, type, true, new ChoiceRendenerLower<T>("toString"));
     }
 
     public static DropDownChoice<String> createSelectNotRequire(final String _wicketId, final String _idFielResult, Object _ModelObject, Object[] _listValue) {
@@ -40,37 +46,14 @@ public class SelectBoxBuilder<T> implements Serializable{
         return new DropDownChoice<String>(_wicketId, new PropertyModel<String>(_ModelObject, _idFielResult), valueStr);
     }
 
-    public static <T> SelectBoxBuilder<T> createWithBooleanRequire(final String _wicketId,
-            final Object _data) {
-        return new SelectBoxBuilder<T>(_wicketId, _data, false);
-    }
-
-    private SelectBoxBuilder(String _wicketId, Object _data, Class<T> type, boolean _require) {
+    private SelectBoxBuilder(String _wicketId, Object _data, Class<T> type, boolean _require, IChoiceRenderer<T> choiceRendener) {
 
         final List<T> selectPersonRoles = Arrays.asList(type.getEnumConstants());
 
         final PropertyModel<T> selectionRoleModel
                 = new PropertyModel<T>(_data, _wicketId);
-        this.dropDownChoice = new DropDownChoice<T>(_wicketId, selectionRoleModel, selectPersonRoles, new ChoiceRendenerLower<T>("toString"));
+        this.dropDownChoice = new DropDownChoice<T>(_wicketId, selectionRoleModel, selectPersonRoles,choiceRendener);
 
-        if (!_require) {
-            this.dropDownChoice.setRequired(true);
-            this.dropDownChoice.setNullValid(false);
-        } else {
-            this.dropDownChoice.setNullValid(true);
-        }
-
-    }
-
-    private SelectBoxBuilder(String _wicketId, Object _data, boolean _require) {
-
-        final List<Boolean> selectPersonRoles = new ArrayList<Boolean>();
-        selectPersonRoles.add(Boolean.FALSE);
-        selectPersonRoles.add(Boolean.TRUE);
-
-        final PropertyModel<Boolean> selectionRoleModel
-                = new PropertyModel<Boolean>(_data, _wicketId);
-        this.dropDownChoice = (DropDownChoice<T>) new DropDownChoice<Boolean>(_wicketId, selectionRoleModel, selectPersonRoles, new ChoiceRenderer<Boolean>("toString"));
         if (!_require) {
             this.dropDownChoice.setRequired(true);
             this.dropDownChoice.setNullValid(false);

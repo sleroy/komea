@@ -10,7 +10,9 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -77,8 +79,9 @@ public class AlertForm extends Form<KpiAlertType> {
         add(TextAreaBuilder.<String>create("description", this.alert, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("Description can be add").build());
 
-        add(SelectBoxBuilder.<Operator>createWithEnum("operator", this.alert,
-                Operator.class).build());
+        
+        add(SelectBoxBuilder.<Operator>createWithEnumCustom("operator", this.alert,
+                Operator.class,new ChoiceRenderer<Operator>("value")).build());
 
         add(SelectBoxBuilder.<Severity>createWithEnum("severity", this.alert,
                 Severity.class).build());
