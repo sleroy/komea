@@ -156,7 +156,7 @@ public final class KpiForm extends Form<Kpi> {
             @Override
             public void onClick(final AjaxRequestTarget art) {
 
-                myKpi.setValueMin(Double.MAX_VALUE);
+                myKpi.setValueMin(-Double.MAX_VALUE);
                 art.add(getCustom());
             }
 
