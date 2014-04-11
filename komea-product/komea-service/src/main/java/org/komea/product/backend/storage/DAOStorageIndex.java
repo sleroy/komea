@@ -3,20 +3,30 @@ package org.komea.product.backend.storage;
 
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.komea.product.database.api.IHasId;
 
 
 
 /**
  * DAO Object storage index.
  */
-public class DAOStorageIndex<T>
+public class DAOStorageIndex<T extends IHasId>
 {
     
     
-    private List<T> objectIndex = new ArrayList<T>(100);
+    private int             id;
+    private Map<Integer, T> objectIndex = new HashMap<Integer, T>();
     
+    
+    
+    public int getId() {
+    
+    
+        return id;
+    }
     
     
     /**
@@ -24,10 +34,30 @@ public class DAOStorageIndex<T>
      * 
      * @return List<T>
      */
-    public List<T> getObjectIndex() {
+    public Map<Integer, T> getObjectIndex() {
     
     
         return objectIndex;
+    }
+    
+    
+    public void incID() {
+    
+    
+        id++;
+    }
+    
+    
+    /**
+     * Puts a value.
+     * 
+     * @param _object
+     *            the object.
+     */
+    public void put(final T _object) {
+    
+    
+        objectIndex.put(_object.getId(), _object);
     }
     
     
@@ -37,7 +67,7 @@ public class DAOStorageIndex<T>
      * @param _objectIndex
      *            List<T>
      */
-    public void setObjectIndex(final List<T> _objectIndex) {
+    public void setObjectIndex(final Map<Integer, T> _objectIndex) {
     
     
         objectIndex = _objectIndex;

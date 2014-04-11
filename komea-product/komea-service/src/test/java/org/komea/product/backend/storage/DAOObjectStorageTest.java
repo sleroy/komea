@@ -33,6 +33,7 @@ public class DAOObjectStorageTest
         
         /**
          * Method get.
+         * 
          * @return T
          * @see org.komea.product.backend.service.fs.IObjectStorage#get()
          */
@@ -46,7 +47,9 @@ public class DAOObjectStorageTest
         
         /**
          * Method set.
-         * @param _object T
+         * 
+         * @param _object
+         *            T
          * @see org.komea.product.backend.service.fs.IObjectStorage#set(T)
          */
         @Override
@@ -62,32 +65,34 @@ public class DAOObjectStorageTest
     
     
     /**
-    
      * @throws Exception
-     * @throws java.lang.Exception */
+     * @throws java.lang.Exception
+     */
     @Test
     public void testDAO() throws Exception {
     
     
-        final ObjectStorageStub<DAOStorageIndex<String>> registerStorage =
-                new ObjectStorageStub<DAOStorageIndex<String>>();
-        final DAOObjectStorage<String> daoStorage = new DAOObjectStorage<String>(registerStorage);
+        final ObjectStorageStub<DAOStorageIndex<MockID>> registerStorage =
+                new ObjectStorageStub<DAOStorageIndex<MockID>>();
+        final DAOObjectStorage<MockID> daoStorage = new DAOObjectStorage<MockID>(registerStorage);
         daoStorage.enableSaveOnChange();
-        daoStorage.saveOrUpdate("A");
-        daoStorage.saveOrUpdate("B");
-        daoStorage.saveOrUpdate("C");
-        daoStorage.saveOrUpdate("D");
+        daoStorage.saveOrUpdate(new MockID("A"));
+        final MockID bId = new MockID("B");
+        daoStorage.saveOrUpdate(bId);
+        final MockID cId = new MockID("C");
+        daoStorage.saveOrUpdate(cId);
+        daoStorage.saveOrUpdate(new MockID("D"));
         Assert.assertEquals(4, daoStorage.selectAll().size());
-        daoStorage.delete("C");
+        daoStorage.delete(cId);
         Assert.assertEquals(3, daoStorage.selectAll().size());
-        daoStorage.delete("B");
+        daoStorage.delete(bId);
         Assert.assertEquals(2, daoStorage.selectAll().size());
-        Assert.assertEquals(1, daoStorage.find(new SearchFilter<String>()
+        Assert.assertEquals(1, daoStorage.find(new SearchFilter<MockID>()
         {
             
             
             @Override
-            public boolean match(final String _object) {
+            public boolean match(final MockID _object) {
             
             
                 return "A".equals(_object);

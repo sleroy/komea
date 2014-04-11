@@ -10,6 +10,8 @@ package org.komea.product.plugins.testlink.model;
 
 import java.io.Serializable;
 
+import org.komea.product.database.api.IHasId;
+
 
 
 /**
@@ -17,15 +19,16 @@ import java.io.Serializable;
  * 
  * @author rgalerme
  */
-public class TestLinkServer implements Serializable
+public class TestLinkServer implements Serializable, IHasId
 {
     
     
-    private String address = "";
-    private String key     = "";
+    private String  address = "";
+    private Integer id;
     
     
-    private String name;
+    private String  key     = "";
+    private String  name;
     
     
     
@@ -60,6 +63,18 @@ public class TestLinkServer implements Serializable
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.database.api.IHasId#getId()
+     */
+    @Override
+    public Integer getId() {
+    
+    
+        return id;
+    }
+    
+    
     public String getKey() {
     
     
@@ -78,6 +93,19 @@ public class TestLinkServer implements Serializable
     
     
         this.address = address;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.database.api.IHasId#setId(int)
+     */
+    @Override
+    public void setId(final Integer _value) {
+    
+    
+        id = _value;
+        
     }
     
     

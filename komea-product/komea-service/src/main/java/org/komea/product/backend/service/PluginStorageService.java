@@ -11,6 +11,7 @@ import org.komea.product.backend.service.fs.IObjectStorage;
 import org.komea.product.backend.service.plugins.IPluginStorageService;
 import org.komea.product.backend.storage.DAOObjectStorage;
 import org.komea.product.backend.storage.ObjectStorage;
+import org.komea.product.database.api.IHasId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +60,7 @@ public class PluginStorageService implements IPluginStorageService
      * @see org.komea.product.backend.service.IPluginStorageService#registerDAOStorage(String, Class<T>)
      */
     @Override
-    public <T> IDAOObjectStorage<T> registerDAOStorage(
+    public <T extends IHasId> IDAOObjectStorage<T> registerDAOStorage(
             final String _pluginName,
             final Class<T> _pojoStorageClass) {
     
@@ -84,7 +85,7 @@ public class PluginStorageService implements IPluginStorageService
      * @see org.komea.product.backend.service.IPluginStorageService#registerStorage(String, Class<T>)
      */
     @Override
-    public synchronized <T> IObjectStorage<T> registerStorage(
+    public synchronized <T extends IHasId> IObjectStorage<T> registerStorage(
             final String _pluginName,
             final Class<T> _pojoStorageClass) {
     

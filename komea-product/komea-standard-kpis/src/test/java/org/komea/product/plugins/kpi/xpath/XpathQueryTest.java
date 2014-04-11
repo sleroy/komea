@@ -3,11 +3,11 @@ package org.komea.product.plugins.kpi.xpath;
 
 
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventsFactory;
 import org.komea.product.backend.esper.test.CEPQueryTester;
 import org.komea.product.database.dto.EventSimpleDto;
-import org.komea.product.plugins.kpi.xpath.XPathQuery;
 
 
 
@@ -16,6 +16,7 @@ public class XpathQueryTest
     
     
     @Test
+    @Ignore
     public final void testBuildPerDay() throws Exception {
     
     

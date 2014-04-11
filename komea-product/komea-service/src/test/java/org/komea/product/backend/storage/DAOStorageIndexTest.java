@@ -3,8 +3,6 @@ package org.komea.product.backend.storage;
 
 
 
-import java.util.Collections;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -20,13 +18,13 @@ public class DAOStorageIndexTest
     public final void testGetObjectIndex() throws Exception {
     
     
-        final DAOStorageIndex<String> daoStorageIndex = new DAOStorageIndex<String>();
+        final DAOStorageIndex<MockID> daoStorageIndex = new DAOStorageIndex<MockID>();
         assertTrue(daoStorageIndex.getObjectIndex().isEmpty());
-        daoStorageIndex.setObjectIndex(Collections.singletonList("SR"));
+        final MockID object = new MockID("SR");
+        object.setId(0);
+        daoStorageIndex.put(object);
         Assert.assertEquals(1, daoStorageIndex.getObjectIndex().size());
-        Assert.assertEquals("SR", daoStorageIndex.getObjectIndex().get(0));
+        Assert.assertEquals("SR", daoStorageIndex.getObjectIndex().get(0).getStr());
         
     }
-    
-    
 }

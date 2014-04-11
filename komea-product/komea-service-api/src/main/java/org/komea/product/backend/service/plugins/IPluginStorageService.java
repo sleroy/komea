@@ -5,6 +5,7 @@ package org.komea.product.backend.service.plugins;
 
 import org.komea.product.backend.business.IDAOObjectStorage;
 import org.komea.product.backend.service.fs.IObjectStorage;
+import org.komea.product.database.api.IHasId;
 
 
 
@@ -25,9 +26,11 @@ public interface IPluginStorageService
      *            the plugin name
      * @param _pojoStorageClass
      *            the class of the pojo to be stored/retrieved
-    
-     * @return the object stoirage */
-    <T> IDAOObjectStorage<T> registerDAOStorage(String _pluginName, Class<T> _pojoStorageClass);
+     * @return the object stoirage
+     */
+    <T extends IHasId> IDAOObjectStorage<T> registerDAOStorage(
+            String _pluginName,
+            Class<T> _pojoStorageClass);
     
     
     /**
@@ -37,7 +40,9 @@ public interface IPluginStorageService
      *            the plugin name
      * @param _pojoStorageClass
      *            the class of the pojo to be stored/retrieved
-    
-     * @return the object stoirage */
-    <T> IObjectStorage<T> registerStorage(String _pluginName, Class<T> _pojoStorageClass);
+     * @return the object stoirage
+     */
+    <T extends IHasId> IObjectStorage<T> registerStorage(
+            String _pluginName,
+            Class<T> _pojoStorageClass);
 }

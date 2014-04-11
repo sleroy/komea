@@ -6,6 +6,7 @@ package org.komea.product.plugins.kpi.xpath;
 
 
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -23,6 +24,7 @@ public class XPathFormulaTest
      * .
      */
     @Test
+    @Ignore
     public final void testBuildJXpathContext() throws Exception {
     
     
@@ -35,6 +37,7 @@ public class XPathFormulaTest
      * Test method for {@link org.komea.product.plugins.kpi.xpath.XPathFormula#buildXPathVariables(java.util.Map)}.
      */
     @Test
+    @Ignore
     public final void testBuildXPathVariables() throws Exception {
     
     
@@ -48,6 +51,7 @@ public class XPathFormulaTest
      * {@link org.komea.product.plugins.kpi.xpath.XPathFormula#compute(org.komea.product.cep.api.ICEPStatement, java.util.Map)}.
      */
     @Test
+    @Ignore
     public final void testCompute() throws Exception {
     
     
@@ -60,6 +64,7 @@ public class XPathFormulaTest
      * Test method for {@link org.komea.product.plugins.kpi.xpath.XPathFormula#XPathFormula(java.lang.String)}.
      */
     @Test
+    @Ignore
     public final void testXPathFormula() throws Exception {
     
     
