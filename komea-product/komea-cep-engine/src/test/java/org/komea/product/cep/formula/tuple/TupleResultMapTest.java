@@ -15,6 +15,7 @@ import org.mockito.Mockito;
 import com.google.common.collect.Lists;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 
@@ -72,15 +73,17 @@ public class TupleResultMapTest
     
     
     
-    @Test 
+    @Test
     public final void testAsPojoMap() throws Exception {
     
     
         final TupleResultMap<String> tupleResultMap = new TupleResultMap<String>();
         final ITuple tuple = new ArrayListTuple(Lists.newArrayList("field1", "field2"));
         tupleResultMap.insertEntry(tuple, "value");
-        final Map<TuplePojoDemo, String> asPojoMap = tupleResultMap.asPojoMap(new String[] {
-                "f1", "f2" }, TuplePojoDemo.class);
+        final Map<TuplePojoDemo, String> asPojoMap = tupleResultMap.asPojoMap(new String[]
+            {
+                    "f1",
+                    "f2" }, TuplePojoDemo.class);
         Assert.assertEquals("Map should have size of 1", 1, asPojoMap.size());
         Assert.assertTrue("Map should have a bean associated to value",
                 asPojoMap.containsValue("value"));
@@ -88,38 +91,56 @@ public class TupleResultMapTest
     }
     
     
-    @Test 
+    @Test
     public final void testAsPojoRows() throws Exception {
     
     
         final TupleResultMap<String> tupleResultMap = new TupleResultMap<String>();
         final ITuple tuple = new ArrayListTuple(Lists.newArrayList("field1", "field2"));
         tupleResultMap.insertEntry(tuple, "value");
-        final List<TuplePojoDemo2> asPojoMap = tupleResultMap.asPojoRows(new String[] {
-                "f1", "f2", "value" }, TuplePojoDemo2.class);
+        final List<TuplePojoDemo2> asPojoMap = tupleResultMap.asPojoRows(new String[]
+            {
+                    "f1",
+                    "f2",
+                    "value" }, TuplePojoDemo2.class);
         Assert.assertEquals("Map should have size of 1", 1, asPojoMap.size());
-        System.out.println(asPojoMap.get(0));
+        
         
     }
     
     
-    @Test 
+    @Test
     public final void testAsSimplifiedMap() throws Exception {
     
     
-        // TODO :: test throw new RuntimeException("not yet implemented");
+        final TupleResultMap<Integer> tupleResultMap = new TupleResultMap<Integer>();
+        tupleResultMap.insertEntry(TupleFactory.newTuple("field1"), 12);
+        tupleResultMap.insertEntry(TupleFactory.newTuple("field2"), 14);
+        final Map<Object, Integer> asSimplifiedMap = tupleResultMap.asSimplifiedMap();
+        assertEquals(Integer.valueOf(12), asSimplifiedMap.get("field1"));
+        assertEquals(Integer.valueOf(14), asSimplifiedMap.get("field2"));
+        
     }
     
     
-    @Test 
+    @Test
     public final void testAsTupleRows() throws Exception {
     
     
-        // TODO :: test throw new RuntimeException("not yet implemented");
+        final TupleResultMap<Integer> tupleResultMap = new TupleResultMap<Integer>();
+        final ITuple tuple1 = TupleFactory.newTuple("field1");
+        final ITuple tuple2 = TupleFactory.newTuple("field2");
+        tupleResultMap.insertEntry(tuple1, 12);
+        tupleResultMap.insertEntry(tuple2, 14);
+        final List<ITuple> asSimplifiedMap = tupleResultMap.asTupleRows();
+        assertTrue("2 elements", asSimplifiedMap.size() == 2);
+        // TODO more complex assertions
+        
+        
     }
     
     
-    @Test 
+    @Test
     public final void testGet() throws Exception {
     
     
@@ -131,7 +152,7 @@ public class TupleResultMapTest
     }
     
     
-    @Test 
+    @Test
     public final void testGetTable() throws Exception {
     
     
@@ -144,7 +165,7 @@ public class TupleResultMapTest
     }
     
     
-    @Test 
+    @Test
     public final void testGetValue() throws Exception {
     
     
@@ -156,7 +177,7 @@ public class TupleResultMapTest
     }
     
     
-    @Test 
+    @Test
     public final void testInsertEntry() throws Exception {
     
     
@@ -172,15 +193,17 @@ public class TupleResultMapTest
     }
     
     
-    @Test 
+    @Test
     public final void testInstantiatePojoFromTuple() throws Exception {
     
     
         final TupleResultMap<String> tupleResultMap = new TupleResultMap<String>();
         final ITuple tuple = new ArrayListTuple(Lists.newArrayList("field1", "field2"));
         final TuplePojoDemo pojoFromTuple =
-                tupleResultMap.instantiatePojoFromTuple(TuplePojoDemo.class, new String[] {
-                        "f1", "f2" }, tuple);
+                tupleResultMap.instantiatePojoFromTuple(TuplePojoDemo.class, new String[]
+                    {
+                            "f1",
+                            "f2" }, tuple);
         assertEquals("field1", pojoFromTuple.f1);
         assertEquals("field2", pojoFromTuple.f2);
     }

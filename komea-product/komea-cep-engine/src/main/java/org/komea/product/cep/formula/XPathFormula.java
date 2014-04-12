@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.plugins.kpi.xpath;
+package org.komea.product.cep.formula;
 
 
 
@@ -14,6 +14,7 @@ import org.komea.product.cep.api.ICEPFormula;
 import org.komea.product.cep.api.ICEPResult;
 import org.komea.product.cep.api.ICEPStatement;
 import org.komea.product.cep.query.CEPResult;
+import org.komea.product.cep.query.xpath.XPathTree;
 import org.komea.product.database.alert.IEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,7 @@ public class XPathFormula implements ICEPFormula<IEvent>
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(XPathFormula.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("xpath-formula");
     
     
     private final String        xpathFormula;
@@ -96,8 +97,17 @@ public class XPathFormula implements ICEPFormula<IEvent>
     
         final XPathTree xPathTree = new XPathTree(_statement);
         System.out.println(xPathTree.dumpTree());
+        return executeQuery(_parameters, xPathTree);
+    }
+    
+    
+    public ICEPResult executeQuery(final Map<String, Object> _parameters, final XPathTree xPathTree) {
+    
+    
         final JXPathContext newContext = buildJXpathContext(_parameters, xPathTree);
         
-        return CEPResult.guessResultType(newContext.getValue(xpathFormula));
+        final Object value = newContext.getValue(xpathFormula);
+        LOGGER.trace("returns {}", value);
+        return CEPResult.guessResultType(value);
     }
 }

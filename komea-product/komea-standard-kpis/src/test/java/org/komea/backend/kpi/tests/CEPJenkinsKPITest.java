@@ -21,7 +21,7 @@ import org.komea.product.backend.utils.MapPopulation;
 import org.komea.product.cep.api.ICEPQuery;
 import org.komea.product.cep.api.IEventFilter;
 import org.komea.product.cep.cache.CacheConfigurationBuilder;
-import org.komea.product.cep.filter.ELFormulaFilter;
+import org.komea.product.cep.filter.ElEventFilter;
 import org.komea.product.cep.filter.EventFilterBuilder;
 import org.komea.product.cep.filter.NoEventFilter;
 import org.komea.product.cep.formula.CountFormula;
@@ -114,13 +114,13 @@ public class CEPJenkinsKPITest
         
         //
         // final IEventFilter eventFilter1 =
-        // new ELFormulaFilter(
+        // new ElEventFilter(
         // "project.projectKey=='SCERTIFY' && eventType.eventKey='build_complete'");
         // final IEventFilter eventFilter2 =
-        // new ELFormulaFilter(
+        // new ElEventFilter(
         // "project.projectKey=='SCERTIFY' && eventType.eventKey='build_failed'");
         // final IEventFilter eventFilter3 =
-        // new ELFormulaFilter(
+        // new ElEventFilter(
         // "project.projectKey=='SCERTIFY' && eventType.eventKey='build_interrupted'");
         // final ICEPQuery query =
         // CEPQueryBuilder
@@ -146,7 +146,7 @@ public class CEPJenkinsKPITest
     
         final IEventFilter<?> filter =
                 EventFilterBuilder.create().onlyIEvents()
-                        .chain(new ELFormulaFilter("project.projectKey=='SCERTIFY'")).build();
+                        .chain(new ElEventFilter("project.projectKey=='SCERTIFY'")).build();
         final ICEPQuery query =
                 CEPQueryBuilder
                         .create(new ElNumericalFormula("previous + 1"))
@@ -173,7 +173,7 @@ public class CEPJenkinsKPITest
     
         final IEventFilter<?> filter =
                 EventFilterBuilder.create().onlyIEvents()
-                        .chain(new ELFormulaFilter("project.projectKey=='SCERTIFY'")).build();
+                        .chain(new ElEventFilter("project.projectKey=='SCERTIFY'")).build();
         final ICEPQuery query =
                 CEPQueryBuilder
                         .create(new CountFormula())
@@ -207,7 +207,7 @@ public class CEPJenkinsKPITest
                 EventFilterBuilder
                         .create()
                         .onlyIEvents()
-                        .chain(new ELFormulaFilter(
+                        .chain(new ElEventFilter(
                                 "project.projectKey==#project &&  #expectedEvents.contains(eventType.eventKey)",
                                 parameters)).build();
         final ICEPQuery query =

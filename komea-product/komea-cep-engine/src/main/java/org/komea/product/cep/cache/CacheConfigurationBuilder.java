@@ -23,7 +23,7 @@ public class CacheConfigurationBuilder
 {
     
     
-    private static class CacheConfiguration implements ICacheConfiguration
+    public static class CacheConfiguration implements ICacheConfiguration
     {
         
         

@@ -41,7 +41,8 @@ public class CEPCustomTypeResult<T> implements ICEPResult
     public <Tres> ITupleResultMap<Tres> asMap() {
     
     
-        throw new IllegalArgumentException("Invalid type requested");
+        throw new IllegalArgumentException(
+                "Cannot convert to a map, the current result type is undefined/custom.");
     }
     
     
@@ -53,7 +54,8 @@ public class CEPCustomTypeResult<T> implements ICEPResult
     public Number asNumber() {
     
     
-        throw new IllegalArgumentException("Invalid type requested");
+        throw new IllegalArgumentException(
+                "Cannot convert to a number, the current result type is undefined/custom.");
     }
     
     

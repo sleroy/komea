@@ -10,6 +10,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.cep.api.RunningMode;
 
+import static org.junit.Assert.assertNotNull;
+
 
 
 /**
@@ -22,7 +24,7 @@ public class CEPConfigurationTest
     /**
      * Test method for {@link org.komea.product.cep.CEPConfiguration#getMode()}.
      */
-    @Test 
+    @Test
     public final void testGetMode() throws Exception {
     
     
@@ -35,13 +37,24 @@ public class CEPConfigurationTest
     /**
      * Test method for {@link org.komea.product.cep.CEPConfiguration#getNumberQueryListeners()}.
      */
-    @Test 
+    @Test
     public final void testGetNumberQueryListeners() throws Exception {
     
     
         final CEPConfiguration configuration = new CEPConfiguration();
         configuration.setNumberQueryListeners(2);
         Assert.assertEquals(2, configuration.getNumberQueryListeners());
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.cep.CEPConfiguration#toString()}.
+     */
+    @Test
+    public void testToString() throws Exception {
+    
+    
+        assertNotNull(new CEPConfiguration().toString());
     }
     
     

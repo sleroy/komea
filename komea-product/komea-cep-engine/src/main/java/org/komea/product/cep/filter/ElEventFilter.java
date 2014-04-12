@@ -19,7 +19,7 @@ import org.komea.product.cep.formula.ElFormula;
  * 
  * @author sleroy
  */
-public class ELFormulaFilter<T extends Serializable> implements IEventFilter<T>
+public class ElEventFilter<T extends Serializable> implements IEventFilter<T>
 {
     
     
@@ -33,7 +33,7 @@ public class ELFormulaFilter<T extends Serializable> implements IEventFilter<T>
      * 
      * @param _filter
      */
-    public ELFormulaFilter(final String _formula) {
+    public ElEventFilter(final String _formula) {
     
     
         formula = new ElFormula<Boolean>(_formula, Boolean.class);
@@ -45,7 +45,7 @@ public class ELFormulaFilter<T extends Serializable> implements IEventFilter<T>
      * 
      * @param _filterw
      */
-    public ELFormulaFilter(final String _formula, final Map<String, Object> _parameters) {
+    public ElEventFilter(final String _formula, final Map<String, Object> _parameters) {
     
     
         parameters = _parameters;

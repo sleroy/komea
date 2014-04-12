@@ -9,6 +9,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.cep.api.IEventFilter;
 
+import static org.junit.Assert.assertNotNull;
+
 
 
 public class FilterOperatorTest
@@ -54,34 +56,37 @@ public class FilterOperatorTest
     
     
     
-    @Test 
+    @Test
     public final void testAnd() throws Exception {
     
     
         final IEventFilter and = FilterOperator.and(trucFilter, sizeFour);
         Assert.assertTrue(and.isFiltered("truc"));
         Assert.assertFalse(and.isFiltered("trucA"));
-        
+        assertNotNull(and.toString());
     }
     
     
-    @Test 
+    @Test
     public final void testNot() throws Exception {
     
     
         Assert.assertTrue(trucFilter.isFiltered("truc"));
-        Assert.assertFalse(FilterOperator.not(trucFilter).isFiltered("truc"));
+        final IEventFilter notFilter = FilterOperator.not(trucFilter);
+        Assert.assertFalse(notFilter.isFiltered("truc"));
+        assertNotNull(notFilter.toString());
     }
     
     
-    @Test 
+    @Test
     public final void testOr() throws Exception {
     
     
-        final IEventFilter and = FilterOperator.or(trucFilter, sizeFour);
-        Assert.assertTrue(and.isFiltered("truc"));
-        Assert.assertFalse(and.isFiltered("trucA"));
-        Assert.assertTrue(and.isFiltered("ZXYZ"));
+        final IEventFilter orFilter = FilterOperator.or(trucFilter, sizeFour);
+        Assert.assertTrue(orFilter.isFiltered("truc"));
+        Assert.assertFalse(orFilter.isFiltered("trucA"));
+        Assert.assertTrue(orFilter.isFiltered("ZXYZ"));
+        assertNotNull(orFilter.toString());
         
         
     }

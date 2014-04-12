@@ -8,6 +8,7 @@ package org.komea.product.cep.query;
 
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.komea.product.cep.api.ICEPQuery;
 import org.komea.product.cep.api.IEventFilter;
@@ -28,7 +29,7 @@ public class CEPQueryBuilderTest
 {
     
     
-    @Test 
+    @Test
     public void testBuildingQuery() {
     
     
@@ -52,5 +53,70 @@ public class CEPQueryBuilderTest
                 .build());
         
         
+    }
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.cep.query.CEPQueryBuilder#defineFilterAndTransformer(org.komea.product.cep.api.IEventFilter, org.komea.product.cep.api.IEventTransformer, org.komea.product.cep.api.cache.ICacheConfiguration)}
+     * .
+     */
+    @Test
+    @Ignore
+    public void testDefineFilterAndTransformer() throws Exception {
+    
+    
+        throw new RuntimeException("not yet implemented");
+    }
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.cep.query.CEPQueryBuilder#defineFilter(org.komea.product.cep.api.IEventFilter, org.komea.product.cep.api.cache.ICacheConfiguration)}
+     * .
+     */
+    @Test
+    @Ignore
+    public void testDefineFilterIEventFilterICacheConfiguration() throws Exception {
+    
+    
+        throw new RuntimeException("not yet implemented");
+    }
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.cep.query.CEPQueryBuilder#defineIEventFilter(org.komea.product.cep.api.cache.ICacheConfiguration)}.
+     */
+    @Test
+    @Ignore
+    public void testDefineIEventFilter() throws Exception {
+    
+    
+        throw new RuntimeException("not yet implemented");
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.cep.query.CEPQueryBuilder#numberOfFilters()}.
+     */
+    @Test
+    @Ignore
+    public void testNumberOfFilters() throws Exception {
+    
+    
+        throw new RuntimeException("not yet implemented");
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.cep.query.CEPQueryBuilder#withParams(java.util.Map)}.
+     */
+    @Test
+    @Ignore
+    public void testWithParams() throws Exception {
+    
+    
+        throw new RuntimeException("not yet implemented");
     }
 }

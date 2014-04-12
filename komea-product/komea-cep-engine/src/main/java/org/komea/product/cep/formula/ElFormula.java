@@ -3,6 +3,8 @@ package org.komea.product.cep.formula;
 
 
 
+import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -23,15 +25,18 @@ public class ElFormula<T> implements IElFormula<T>
 {
     
     
-    private static final Logger   LOGGER    = LoggerFactory.getLogger(ElFormula.class);
+    private static final Logger       LOGGER    = LoggerFactory.getLogger(ElFormula.class);
     
-    final static ExpressionParser expParser = new SpelExpressionParser();
+    final static ExpressionParser     expParser = new SpelExpressionParser();
     
-    private final String          formula;
+    private final String              formula;
     
-    private Expression            parseExpression;
+    private final Map<String, Method> methods   = new HashMap<String, Method>();
     
-    private final Class<T>        value;
+    private Expression                parseExpression;
+    
+    
+    private final Class<T>            value;
     
     
     
@@ -94,8 +99,10 @@ public class ElFormula<T> implements IElFormula<T>
             valuecontext = new Object();
         }
         final StandardEvaluationContext context = new StandardEvaluationContext(valuecontext);
+        for (final Map.Entry<String, Method> method : methods.entrySet()) {
+            context.registerFunction(method.getKey(), method.getValue());
+        }
         
-        // prepareCustomMethods(context);
         if (_parameters != null) {
             for (final Entry<String, Object> entry : _parameters.entrySet()) {
                 context.setVariable(entry.getKey(), entry.getValue());
@@ -114,19 +121,20 @@ public class ElFormula<T> implements IElFormula<T>
         }
     }
     
-    //
-    // private void prepareCustomMethods(final StandardEvaluationContext context) {
-    //
-    //
-    // try {
-    // registerInMethod(context);
-    // } catch (final NoSuchMethodException e) {
-    // LOGGER.error("Error with custom method", e);
-    //
-    // } catch (final SecurityException e) {
-    // LOGGER.error("Error with custom method", e);
-    // }
-    // }
-    //
+    
+    /**
+     * Register a method
+     * 
+     * @param _name
+     *            the name
+     * @param _method
+     *            the method.
+     */
+    public void registerMethod(final String _name, final Method _method) {
+    
+    
+        methods.put(_name, _method);
+    }
+    
     
 }

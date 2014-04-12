@@ -62,6 +62,20 @@ public class FilterDefinition implements IFilterDefinition
     }
     
     
+    public FilterDefinition(
+            final String _filterName,
+            final IEventFilter _eventFilter,
+            final ICacheConfiguration _cacheConfiguration) {
+    
+    
+        super();
+        filterName = _filterName;
+        filter = _eventFilter;
+        eventTransformer = null;
+        cacheConfiguration = _cacheConfiguration;
+    }
+    
+    
     /**
      * @return the cacheConfiguration
      */

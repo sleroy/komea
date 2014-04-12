@@ -94,12 +94,8 @@ public class CEPResult
     public static ICEPResult guessResultType(final Object _value) {
     
     
-        if (_value instanceof Number) {
-            buildFromNumber((Number) _value);
-        }
-        if (_value instanceof ITupleResultMap) {
-            buildFromMap((ITupleResultMap) _value);
-        }
+        if (_value instanceof Number) { return buildFromNumber((Number) _value); }
+        if (_value instanceof ITupleResultMap) { return buildFromMap((ITupleResultMap) _value); }
         
         return buildFromCustomType(_value);
     }

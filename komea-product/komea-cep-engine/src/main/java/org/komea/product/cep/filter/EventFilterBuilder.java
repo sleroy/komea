@@ -7,6 +7,9 @@ package org.komea.product.cep.filter;
 
 
 import org.komea.product.cep.api.IEventFilter;
+import org.komea.product.cep.api.IFilterDefinition;
+import org.komea.product.cep.api.cache.ICacheConfiguration;
+import org.komea.product.cep.query.FilterDefinition;
 
 
 
@@ -52,6 +55,20 @@ public class EventFilterBuilder
     
     
         return filter;
+    }
+    
+    
+    /**
+     * Returns a filter definition.
+     * 
+     * @return the filter definition.
+     */
+    public IFilterDefinition buildFilterDefinition(
+            final String _filterName,
+            final ICacheConfiguration _cacheConfiguration) {
+    
+    
+        return new FilterDefinition(_filterName, filter, _cacheConfiguration);
     }
     
     

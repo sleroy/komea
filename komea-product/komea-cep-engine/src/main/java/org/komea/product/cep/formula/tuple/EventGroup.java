@@ -15,7 +15,7 @@ import org.komea.product.cep.api.formula.tuple.IEventGroup;
 
 
 /**
- * This class defines the storage of events. Basically it is a simple array list;
+ * This class defines the storage of event. Basically it is a simple array list;
  * 
  * @author sleroy
  */
@@ -23,7 +23,7 @@ public class EventGroup implements IEventGroup
 {
     
     
-    private final List events = new ArrayList<Serializable>();
+    private final List event = new ArrayList<Serializable>();
     
     
     
@@ -35,7 +35,7 @@ public class EventGroup implements IEventGroup
     public void addEvent(final Serializable _event) {
     
     
-        events.add(_event);
+        event.add(_event);
         
     }
     
@@ -48,7 +48,7 @@ public class EventGroup implements IEventGroup
     public <T extends Serializable> List<T> getEvents() {
     
     
-        return events;
+        return event;
     }
     
     
@@ -60,8 +60,8 @@ public class EventGroup implements IEventGroup
     public <T extends Serializable> T getFirstEvent() {
     
     
-        if (events.isEmpty()) { return null; }
-        return (T) events.get(0);
+        if (event.isEmpty()) { return null; }
+        return (T) event.get(0);
     }
     
     
@@ -73,7 +73,7 @@ public class EventGroup implements IEventGroup
     public String toString() {
     
     
-        return "EventGroup [events=" + events + "]";
+        return "EventGroup [event=" + event + "]";
     }
     
 }

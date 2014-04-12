@@ -30,4 +30,15 @@ public class NoEventFilter implements IEventFilter<Serializable>
         return _event != null;
     }
     
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+    
+    
+        return "allow_all eventfilter";
+    }
 }

@@ -55,7 +55,7 @@ public class FilterOperator
             public String toString() {
             
             
-                return "And Operator" + _filter1 + " &  " + _filter2;
+                return "and_operator(filter " + _filter1 + " , filter  " + _filter2 + ")";
             }
         };
         
@@ -95,7 +95,7 @@ public class FilterOperator
             public String toString() {
             
             
-                return "Not Operator" + _filter1;
+                return "not_operator(filter " + _filter1 + ")";
             }
         };
         
@@ -138,7 +138,7 @@ public class FilterOperator
             public String toString() {
             
             
-                return "Or Operator" + _filter1 + " &  " + _filter2;
+                return "or_operator(filter " + _filter1 + " , filter  " + _filter2 + ")";
             }
         };
         

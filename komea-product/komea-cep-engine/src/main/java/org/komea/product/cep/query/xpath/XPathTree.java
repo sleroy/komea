@@ -2,19 +2,17 @@
  * 
  */
 
-package org.komea.product.plugins.kpi.xpath;
+package org.komea.product.cep.query.xpath;
 
 
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.jxpath.JXPathContext;
-import org.apache.commons.jxpath.Pointer;
 import org.apache.commons.lang.Validate;
 import org.komea.product.cep.api.ICEPEventStorage;
 import org.komea.product.cep.api.ICEPStatement;
+import org.komea.product.cep.api.formula.tuple.IEventGroup;
 
 
 
@@ -25,7 +23,11 @@ public class XPathTree
 {
     
     
-    private final List<XPathEventList> eventLists = new ArrayList<XPathEventList>();
+    /**
+     * 
+     */
+    private static final String        DEFAULT = "default";
+    private final List<XPathEventList> streams = new ArrayList<XPathEventList>();
     
     
     
@@ -48,6 +50,19 @@ public class XPathTree
     
     
     /**
+     * Builds an xpath tree from an event group.
+     * 
+     * @param _value
+     *            the value.
+     */
+    public XPathTree(final IEventGroup _value) {
+    
+    
+        addEventList(new XPathEventList(DEFAULT, _value.getEvents()));
+    }
+    
+    
+    /**
      * Adds an event list
      * 
      * @param _xPathEventList
@@ -58,7 +73,7 @@ public class XPathTree
     
         Validate.notNull(_xPathEventList);
         
-        eventLists.add(_xPathEventList);
+        streams.add(_xPathEventList);
     }
     
     
@@ -70,20 +85,19 @@ public class XPathTree
     public String dumpTree() {
     
     
-        final JXPathContext newContext = JXPathContext.newContext(this);
-        final Iterator<Pointer> iterate = newContext.iteratePointers("//*");
-        final StringBuilder sBuilder = new StringBuilder();
-        while (iterate.hasNext()) {
-            sBuilder.append(iterate.next()).append('\n');
-        }
-        return sBuilder.toString();
+        return XPathUtils.dumpXpath(this);
     }
     
     
-    public List<XPathEventList> getEventLists() {
+    /**
+     * Returns the list streams
+     * 
+     * @return the streams.
+     */
+    public List<XPathEventList> getStreams() {
     
     
-        return eventLists;
+        return streams;
     }
     
     
@@ -95,6 +109,6 @@ public class XPathTree
     public String toString() {
     
     
-        return "XPathTree [eventLists=" + eventLists + "]";
+        return "XPathTree [streams=" + streams + "]";
     }
 }

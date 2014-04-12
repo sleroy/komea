@@ -10,13 +10,18 @@ import org.komea.product.cep.api.ICEPResult;
 import org.komea.product.cep.api.ITupleResultMap;
 import org.mockito.Mockito;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static org.mockito.Mockito.mock;
+
 
 
 public class CEPResultTest
 {
     
     
-    @Test 
+    @Test
     public final void testBuildFromCustomType() throws Exception {
     
     
@@ -28,7 +33,7 @@ public class CEPResultTest
     }
     
     
-    @Test 
+    @Test
     public final void testBuildFromDefinition() throws Exception {
     
     
@@ -41,7 +46,7 @@ public class CEPResultTest
     }
     
     
-    @Test 
+    @Test
     public final void testBuildFromMap() throws Exception {
     
     
@@ -54,7 +59,7 @@ public class CEPResultTest
     }
     
     
-    @Test 
+    @Test
     public final void testBuildFromNumber() throws Exception {
     
     
@@ -64,6 +69,21 @@ public class CEPResultTest
         Assert.assertTrue(buildFromCustomType.isSingleValue());
         Assert.assertEquals(12, buildFromCustomType.asNumber());
         Assert.assertEquals(Integer.valueOf(12), buildFromCustomType.asType());
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.cep.query.CEPResult#guessResultType(java.lang.Object)}.
+     */
+    @Test
+    public void testGuessResultType() throws Exception {
+    
+    
+        assertTrue(CEPResult.guessResultType("12").isSingleValue());
+        assertFalse(CEPResult.guessResultType("12").isNumericalValue());
+        assertTrue(CEPResult.guessResultType(12).isNumericalValue());
+        assertTrue(CEPResult.guessResultType(Integer.valueOf(12)).isNumericalValue());
+        assertTrue(CEPResult.guessResultType(mock(ITupleResultMap.class)).isMap());
     }
     
 }
