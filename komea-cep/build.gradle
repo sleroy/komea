@@ -51,21 +51,35 @@ buildscript {
         classpath "net.saliman:gradle-cobertura-plugin:2.2.2"
     }
 }
+apply plugin: 'cobertura'
+cobertura {
+     coverageFormats=['xml', 'html']
+     coverageCheckTotalBranchRate=60
+     coverageCheckTotalLineRate=60
+     coverageMergeDatafiles = [
+      new File("cep-bridge-activemq/build/cobertura/cobertura.ser"),
+      new File("cep-bridge-memory/build/cobertura/cobertura.ser"),
+      new File("cep-engine/build/cobertura/cobertura.ser"),
+      new File("cep-engine-api/build/cobertura/cobertura.ser"),
+      new File("cep-cache-guave/build/cobertura/cobertura.ser"),
+      new File("cep-cache-ehcache/build/cobertura/cobertura.ser"),
+      new File("cep-formula-springel/build/cobertura/cobertura.ser"),
+      new File("cep-formula-xpath/build/cobertura/cobertura.ser")
+    ]
+}
 
 allprojects {
     apply plugin: "java"
     apply plugin: "maven"
     apply plugin: "eclipse"
     apply plugin: "idea"
-
-apply plugin: 'cobertura'
-cobertura {
-    coverageFormats=['xml', 'html']
-    coverageIgnoreTrivial=true;    
-    coverageCheckTotalBranchRate=60
-    coverageCheckTotalLineRate=60
-   
-}
+    apply plugin: "cobertura"
+    cobertura {
+     coverageFormats=['xml', 'html']
+     coverageIgnoreTrivial=true;    
+     coverageCheckTotalBranchRate=60
+     coverageCheckTotalLineRate=60
+    }
 
 
    
