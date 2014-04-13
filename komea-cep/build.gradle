@@ -54,8 +54,8 @@ buildscript {
 apply plugin: 'cobertura'
 cobertura {
      coverageFormats=['xml', 'html']
-     coverageCheckTotalBranchRate=60
-     coverageCheckTotalLineRate=60
+//     coverageCheckTotalBranchRate=60
+//     coverageCheckTotalLineRate=60
      coverageMergeDatafiles = [
       new File("cep-bridge-activemq/build/cobertura/cobertura.ser"),
       new File("cep-bridge-memory/build/cobertura/cobertura.ser"),
@@ -76,9 +76,9 @@ allprojects {
     apply plugin: "cobertura"
     cobertura {
      coverageFormats=['xml', 'html']
-     coverageIgnoreTrivial=true;    
-     coverageCheckTotalBranchRate=60
-     coverageCheckTotalLineRate=60
+//     coverageIgnoreTrivial=true;    
+//     coverageCheckTotalBranchRate=60
+//     coverageCheckTotalLineRate=60
     }
 
 
@@ -87,10 +87,13 @@ allprojects {
     int week = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)
     ext.VERSION_SPRINT="$year$week"
     group =GROUP_ID // From a env variable.
-    version = "$VERSION_PRODUCT.$VERSION_MAJOR.$VERSION_SPRINT"    
+    version = "$VERSION_PRODUCT.$VERSION_MAJOR"    
     if (project.hasProperty("increment")) {
         version = version + "." + project.getProperty("increment")
+    } else {
+	version = version + "." + VERSION_SPRINT
     }
+
     if (project.hasProperty("suffix")) {
         version += "-" + project.getProperty("suffix")
     }
