@@ -10,9 +10,10 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+import org.komea.eventory.cache.CacheConfigurationBuilder;
+import org.komea.eventory.cache.CacheConfigurationBuilder.CacheConfiguration;
 import org.komea.product.cep.api.cache.ICacheConfiguration;
 import org.komea.product.cep.api.cache.ICacheIndexer;
-import org.komea.product.cep.cache.CacheConfigurationBuilder.CacheConfiguration;
 import org.komea.product.cep.formula.ElFormula;
 
 

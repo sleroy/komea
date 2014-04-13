@@ -10,11 +10,11 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import org.apache.commons.lang.Validate;
+import org.komea.eventory.api.bridge.IEventBridge;
+import org.komea.eventory.api.engine.ICEPConfiguration;
+import org.komea.eventory.api.engine.ICEPEngine;
+import org.komea.eventory.api.engine.IQueryAdministrator;
 import org.komea.eventory.utils.PluginUtils;
-import org.komea.product.cep.api.ICEPConfiguration;
-import org.komea.product.cep.api.ICEPEngine;
-import org.komea.product.cep.api.IEventBridge;
-import org.komea.product.cep.api.IQueryAdministrator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

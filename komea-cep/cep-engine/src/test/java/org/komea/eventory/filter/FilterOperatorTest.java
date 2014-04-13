@@ -7,8 +7,8 @@ import java.io.Serializable;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.komea.eventory.api.filters.IEventFilter;
 import org.komea.eventory.filter.FilterOperator;
-import org.komea.product.cep.api.IEventFilter;
 
 import static org.junit.Assert.assertNotNull;
 

@@ -5,10 +5,10 @@ package org.komea.eventory.query;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.komea.eventory.api.engine.CEPResultType;
+import org.komea.eventory.api.formula.ICEPResult;
+import org.komea.eventory.api.formula.ITupleResultMap;
 import org.komea.eventory.query.CEPResult;
-import org.komea.product.cep.api.CEPResultType;
-import org.komea.product.cep.api.ICEPResult;
-import org.komea.product.cep.api.ITupleResultMap;
 import org.mockito.Mockito;
 
 import static org.junit.Assert.assertFalse;

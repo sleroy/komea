@@ -9,7 +9,7 @@ package org.komea.product.cep.filter;
 import java.io.Serializable;
 
 import org.apache.commons.jxpath.JXPathContext;
-import org.komea.product.cep.api.IEventFilter;
+import org.komea.eventory.api.filters.IEventFilter;
 
 
 

@@ -7,9 +7,9 @@ package org.komea.eventory.query;
 
 
 import org.apache.commons.lang.Validate;
-import org.komea.product.cep.api.CEPResultType;
-import org.komea.product.cep.api.ICEPResult;
-import org.komea.product.cep.api.ITupleResultMap;
+import org.komea.eventory.api.engine.CEPResultType;
+import org.komea.eventory.api.formula.ICEPResult;
+import org.komea.eventory.api.formula.ITupleResultMap;
 
 
 

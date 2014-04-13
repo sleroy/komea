@@ -7,7 +7,7 @@ package org.komea.eventory.filter;
 
 
 import org.junit.Test;
-import org.komea.product.cep.api.IEventFilter;
+import org.komea.eventory.api.filters.IEventFilter;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -34,7 +34,7 @@ public class EventFilterBuilderTest
     
     
     /**
-     * Test method for {@link org.komea.eventory.filter.EventFilterBuilder#chain(org.komea.eventory.api.IEventFilter)}.
+     * Test method for {@link org.komea.eventory.filter.EventFilterBuilder#chain(org.komea.eventory.api.filters.IEventFilter)}.
      */
     @Test
     public final void testChain() throws Exception {

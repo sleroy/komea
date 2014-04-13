@@ -8,8 +8,8 @@ package org.komea.eventory.bridge;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.komea.product.cep.api.ICEPConfiguration;
-import org.komea.product.cep.api.ICEPQuery;
+import org.komea.eventory.api.engine.ICEPConfiguration;
+import org.komea.eventory.api.engine.ICEPQuery;
 import org.mockito.Mockito;
 
 import static org.mockito.Mockito.mock;
@@ -56,7 +56,7 @@ public class MemoryBridgeTest
     
     /**
      * Test method for
-     * {@link org.komea.eventory.bridge.MemoryBridge#registerQuery(java.lang.String, org.komea.eventory.bridge.api.ICEPQuery)}.
+     * {@link org.komea.eventory.bridge.MemoryBridge#registerQuery(java.lang.String, org.komea.eventory.api.engine.api.ICEPQuery)}.
      */
     @Test
     public final void testRegisterQuery() throws Exception {

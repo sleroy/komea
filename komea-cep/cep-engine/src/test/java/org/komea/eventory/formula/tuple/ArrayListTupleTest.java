@@ -11,8 +11,8 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.komea.eventory.api.formula.tuple.ITuple;
 import org.komea.eventory.formula.tuple.ArrayListTuple;
-import org.komea.product.cep.api.formula.tuple.ITuple;
 
 import com.google.common.collect.Lists;
 

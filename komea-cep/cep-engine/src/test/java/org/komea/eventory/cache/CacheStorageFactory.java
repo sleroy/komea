@@ -6,9 +6,9 @@ package org.komea.eventory.cache;
 
 
 
+import org.komea.eventory.api.cache.ICacheConfiguration;
+import org.komea.eventory.api.cache.ICacheStorage;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
-import org.komea.product.cep.api.cache.ICacheConfiguration;
-import org.komea.product.cep.api.cache.ICacheStorage;
 
 
 

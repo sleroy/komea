@@ -13,11 +13,11 @@ import java.util.List;
 import org.apache.commons.jxpath.BasicVariables;
 import org.apache.commons.jxpath.JXPathContext;
 import org.junit.Test;
-import org.komea.product.cep.api.ICEPEventStorage;
-import org.komea.product.cep.api.ICEPResult;
-import org.komea.product.cep.api.ICEPStatement;
-import org.komea.product.cep.api.cache.ICacheStorage;
-import org.komea.product.cep.api.formula.tuple.IEventGroup;
+import org.komea.eventory.api.cache.ICacheStorage;
+import org.komea.eventory.api.engine.ICEPEventStorage;
+import org.komea.eventory.api.engine.ICEPStatement;
+import org.komea.eventory.api.formula.ICEPResult;
+import org.komea.eventory.api.formula.tuple.IEventGroup;
 import org.komea.product.cep.filter.Event;
 import org.komea.product.cep.query.xpath.XPathTree;
 import org.komea.product.cep.query.xpath.XPathUtils;
@@ -78,7 +78,7 @@ public class XPathFormulaTest
     
     
     /**
-     * Test method for {@link org.komea.product.cep.formula.XPathFormula#compute(org.komea.product.cep.api.ICEPStatement, java.util.Map)}.
+     * Test method for {@link org.komea.product.cep.formula.XPathFormula#compute(org.komea.eventory.api.engine.ICEPStatement, java.util.Map)}.
      */
     @SuppressWarnings("unchecked")
     @Test

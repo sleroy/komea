@@ -10,10 +10,10 @@ import java.util.Collections;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.komea.eventory.api.cache.ICacheStorage;
+import org.komea.eventory.api.engine.ICEPEventStorage;
+import org.komea.eventory.api.engine.ICEPStatement;
 import org.komea.eventory.formula.tuple.EventGroup;
-import org.komea.product.cep.api.ICEPEventStorage;
-import org.komea.product.cep.api.ICEPStatement;
-import org.komea.product.cep.api.cache.ICacheStorage;
 import org.komea.product.cep.filter.Event;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -62,7 +62,7 @@ public class XPathTreeTest
     
     
     /**
-     * Test method for {@link org.komea.eventory.query.xpath.XPathTree#XPathTree(org.komea.eventory.api.ICEPStatement)}.
+     * Test method for {@link org.komea.eventory.query.xpath.XPathTree#XPathTree(org.komea.eventory.api.engine.ICEPStatement)}.
      */
     @Test
     public void testXPathTree() throws Exception {

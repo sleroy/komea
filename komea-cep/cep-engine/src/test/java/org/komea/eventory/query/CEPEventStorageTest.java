@@ -10,10 +10,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.eventory.CEPEngineTest;
+import org.komea.eventory.api.filters.IEventFilter;
+import org.komea.eventory.api.filters.IEventTransformer;
+import org.komea.eventory.api.filters.ITransformedEvent;
 import org.komea.eventory.cache.CacheConfigurationBuilder;
-import org.komea.product.cep.api.IEventFilter;
-import org.komea.product.cep.api.IEventTransformer;
-import org.komea.product.cep.api.ITransformedEvent;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 

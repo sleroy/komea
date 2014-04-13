@@ -8,13 +8,13 @@ package org.komea.eventory.query;
 
 import java.util.Map;
 
+import org.komea.eventory.api.cache.ICacheConfiguration;
+import org.komea.eventory.api.engine.ICEPQuery;
+import org.komea.eventory.api.filters.IEventFilter;
+import org.komea.eventory.api.filters.IEventTransformer;
+import org.komea.eventory.api.formula.ICEPFormula;
 import org.komea.eventory.cache.CacheConfigurationBuilder;
 import org.komea.eventory.filter.NoEventFilter;
-import org.komea.product.cep.api.ICEPFormula;
-import org.komea.product.cep.api.ICEPQuery;
-import org.komea.product.cep.api.IEventFilter;
-import org.komea.product.cep.api.IEventTransformer;
-import org.komea.product.cep.api.cache.ICacheConfiguration;
 
 
 

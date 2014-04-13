@@ -11,12 +11,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
+import org.komea.eventory.api.formula.ITupleResultMap;
+import org.komea.eventory.api.formula.tuple.IEventGroup;
+import org.komea.eventory.api.formula.tuple.IEventTable;
+import org.komea.eventory.api.formula.tuple.ITuple;
 import org.komea.eventory.formula.tuple.EventGroup;
 import org.komea.eventory.formula.tuple.TupleFactory;
-import org.komea.product.cep.api.ITupleResultMap;
-import org.komea.product.cep.api.formula.tuple.IEventGroup;
-import org.komea.product.cep.api.formula.tuple.IEventTable;
-import org.komea.product.cep.api.formula.tuple.ITuple;
 import org.komea.product.cep.filter.Event;
 
 import static org.junit.Assert.assertEquals;
@@ -35,7 +35,7 @@ public class XPathGroupByFormulaTest
     
     /**
      * Test method for
-     * {@link org.komea.product.cep.query.predefined.XPathGroupByFormula#processMap(org.komea.product.cep.api.formula.tuple.IEventTable, java.util.Map)}
+     * {@link org.komea.product.cep.query.predefined.XPathGroupByFormula#processMap(org.komea.eventory.api.formula.tuple.IEventTable, java.util.Map)}
      * .
      */
     @Test

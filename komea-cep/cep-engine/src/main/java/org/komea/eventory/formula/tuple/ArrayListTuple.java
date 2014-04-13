@@ -15,8 +15,8 @@ import java.util.Map;
 import jodd.bean.BeanUtil;
 
 import org.apache.commons.lang.Validate;
+import org.komea.eventory.api.formula.tuple.ITuple;
 import org.komea.eventory.utils.ClassUtils;
-import org.komea.product.cep.api.formula.tuple.ITuple;
 
 
 

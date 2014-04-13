@@ -7,9 +7,9 @@ package org.komea.eventory.formula.tuple;
 
 
 import org.junit.Test;
+import org.komea.eventory.api.formula.tuple.ITuple;
+import org.komea.eventory.api.formula.tuple.ITupleCreator;
 import org.komea.eventory.formula.tuple.EventTableGenerator;
-import org.komea.product.cep.api.formula.tuple.ITuple;
-import org.komea.product.cep.api.formula.tuple.ITupleCreator;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;

@@ -9,7 +9,7 @@ package org.komea.eventory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.eventory.CEPConfiguration;
-import org.komea.product.cep.api.RunningMode;
+import org.komea.eventory.api.engine.RunningMode;
 
 import static org.junit.Assert.assertNotNull;
 

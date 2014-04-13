@@ -8,6 +8,7 @@ package org.komea.product.cep.api.cache;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.komea.eventory.api.cache.ICacheStorage;
 import org.komea.eventory.cache.GoogleCacheStorageBenchTest;
 import org.komea.product.cep.cache.guava.GoogleCacheStorage;
 

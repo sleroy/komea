@@ -8,8 +8,8 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.komea.product.cep.api.ICEPEventStorage;
-import org.komea.product.cep.api.cache.ICacheStorage;
+import org.komea.eventory.api.cache.ICacheStorage;
+import org.komea.eventory.api.engine.ICEPEventStorage;
 import org.mockito.Mockito;
 
 

@@ -8,8 +8,8 @@ package org.komea.eventory.cache;
 
 import java.util.concurrent.TimeUnit;
 
-import org.komea.product.cep.api.cache.ICacheConfiguration;
-import org.komea.product.cep.api.cache.ICacheIndexer;
+import org.komea.eventory.api.cache.ICacheConfiguration;
+import org.komea.eventory.api.cache.ICacheIndexer;
 
 
 

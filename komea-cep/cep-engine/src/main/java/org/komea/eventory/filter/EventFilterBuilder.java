@@ -6,10 +6,10 @@ package org.komea.eventory.filter;
 
 
 
+import org.komea.eventory.api.cache.ICacheConfiguration;
+import org.komea.eventory.api.filters.IEventFilter;
+import org.komea.eventory.api.filters.IFilterDefinition;
 import org.komea.eventory.query.FilterDefinition;
-import org.komea.product.cep.api.IEventFilter;
-import org.komea.product.cep.api.IFilterDefinition;
-import org.komea.product.cep.api.cache.ICacheConfiguration;
 
 
 

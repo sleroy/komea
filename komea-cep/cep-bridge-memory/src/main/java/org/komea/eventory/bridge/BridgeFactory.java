@@ -6,9 +6,9 @@ package org.komea.eventory.bridge;
 
 
 
+import org.komea.eventory.api.bridge.IEventBridge;
 import org.komea.eventory.api.bridge.IEventBridgeFactory;
-import org.komea.product.cep.api.ICEPConfiguration;
-import org.komea.product.cep.api.IEventBridge;
+import org.komea.eventory.api.engine.ICEPConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

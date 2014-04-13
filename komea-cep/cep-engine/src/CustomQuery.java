@@ -15,7 +15,7 @@ import org.apache.commons.lang.Validate;
 import org.komea.product.cep.api.ICEPFormula;
 import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.cep.api.IFilterDefinition;
-import org.komea.product.cep.api.formula.tuple.ITupleCreator;
+import org.komea.eventory.api.formula.tuple.ITupleCreator;
 import org.komea.product.cep.cache.CacheConfigurationParser;
 import org.komea.product.cep.filter.ELCacheIndexer;
 import org.komea.product.cep.filter.ElEventFilter;

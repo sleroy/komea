@@ -8,13 +8,13 @@ package org.komea.eventory;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.komea.eventory.api.bridge.IEventBridge;
 import org.komea.eventory.api.bridge.IEventBridgeFactory;
+import org.komea.eventory.api.cache.ICacheConfiguration;
+import org.komea.eventory.api.cache.ICacheStorage;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
+import org.komea.eventory.api.engine.ICEPConfiguration;
 import org.komea.eventory.utils.PluginUtils;
-import org.komea.product.cep.api.ICEPConfiguration;
-import org.komea.product.cep.api.IEventBridge;
-import org.komea.product.cep.api.cache.ICacheConfiguration;
-import org.komea.product.cep.api.cache.ICacheStorage;
 import org.mockito.Matchers;
 
 import static org.mockito.Mockito.mock;
@@ -120,7 +120,7 @@ public class CEPEngineTest
     
     
     /**
-     * Test method for {@link org.komea.eventory.CEPEngine#initialize(org.komea.eventory.api.ICEPConfiguration)}.
+     * Test method for {@link org.komea.eventory.CEPEngine#initialize(org.komea.eventory.api.engine.ICEPConfiguration)}.
      */
     @Test
     public final void testInitialize() throws Exception {

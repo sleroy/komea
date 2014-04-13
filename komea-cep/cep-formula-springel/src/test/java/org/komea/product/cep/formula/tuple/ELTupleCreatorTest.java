@@ -7,7 +7,7 @@ package org.komea.product.cep.formula.tuple;
 
 
 import org.junit.Test;
-import org.komea.product.cep.api.formula.tuple.ITuple;
+import org.komea.eventory.api.formula.tuple.ITuple;
 import org.komea.product.cep.filter.Event;
 
 import static org.junit.Assert.assertEquals;

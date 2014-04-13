@@ -7,8 +7,8 @@ import java.util.Collections;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.komea.eventory.api.formula.tuple.ITuple;
 import org.komea.eventory.formula.tuple.TupleFactory;
-import org.komea.product.cep.api.formula.tuple.ITuple;
 
 
 

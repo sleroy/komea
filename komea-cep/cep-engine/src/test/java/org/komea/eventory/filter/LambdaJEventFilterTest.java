@@ -11,8 +11,8 @@ import java.io.Serializable;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.komea.eventory.api.filters.IEventFilter;
 import org.komea.eventory.filter.LambdaJEventFilter;
-import org.komea.product.cep.api.IEventFilter;
 import org.mockito.runners.MockitoJUnitRunner;
 
 
@@ -26,7 +26,7 @@ public class LambdaJEventFilterTest
     
     
     /**
-     * Test method for {@link org.komea.eventory.filter.LambdaJEventFilter#LambdaJEventFilter(org.komea.eventory.api.IEventFilter)}.
+     * Test method for {@link org.komea.eventory.filter.LambdaJEventFilter#LambdaJEventFilter(org.komea.eventory.api.filters.IEventFilter)}.
      */
     @Test 
     public final void testLambdaJEventFilter() throws Exception {

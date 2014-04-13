@@ -11,9 +11,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.komea.product.cep.api.ICEPFormula;
-import org.komea.product.cep.api.ICEPQueryImplementation;
-import org.komea.product.cep.api.IFilterDefinition;
+import org.komea.eventory.api.engine.ICEPQueryImplementation;
+import org.komea.eventory.api.filters.IFilterDefinition;
+import org.komea.eventory.api.formula.ICEPFormula;
 
 
 

@@ -9,7 +9,7 @@ package org.komea.eventory.formula.tuple;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.komea.product.cep.api.formula.tuple.ITuple;
+import org.komea.eventory.api.formula.tuple.ITuple;
 
 
 

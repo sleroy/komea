@@ -10,13 +10,13 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.komea.eventory.api.formula.ICEPResult;
+import org.komea.eventory.api.formula.ITupleResultMap;
+import org.komea.eventory.api.formula.tuple.IEventGroup;
+import org.komea.eventory.api.formula.tuple.IEventTable;
+import org.komea.eventory.api.formula.tuple.ITuple;
+import org.komea.eventory.api.formula.tuple.ITuplerFormula;
 import org.komea.eventory.formula.tuple.TupleResultMap;
-import org.komea.product.cep.api.ICEPResult;
-import org.komea.product.cep.api.ITupleResultMap;
-import org.komea.product.cep.api.formula.tuple.IEventGroup;
-import org.komea.product.cep.api.formula.tuple.IEventTable;
-import org.komea.product.cep.api.formula.tuple.ITuple;
-import org.komea.product.cep.api.formula.tuple.ITuplerFormula;
 import org.komea.product.cep.formula.XPathFormula;
 import org.komea.product.cep.query.xpath.XPathTree;
 
@@ -44,7 +44,7 @@ public class XPathGroupByFormula implements ITuplerFormula
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.api.formula.tuple.ITuplerFormula#processMap(org.komea.product.cep.api.formula.tuple.IEventTable,
+     * @see org.komea.eventory.api.formula.tuple.ITuplerFormula#processMap(org.komea.eventory.api.formula.tuple.IEventTable,
      * java.util.Map)
      */
     @Override

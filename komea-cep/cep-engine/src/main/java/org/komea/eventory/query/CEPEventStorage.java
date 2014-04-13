@@ -8,14 +8,14 @@ package org.komea.eventory.query;
 
 import java.io.Serializable;
 
+import org.komea.eventory.api.cache.ICacheConfiguration;
+import org.komea.eventory.api.cache.ICacheStorage;
+import org.komea.eventory.api.engine.ICEPEventStorage;
+import org.komea.eventory.api.filters.IEventFilter;
+import org.komea.eventory.api.filters.IEventTransformer;
+import org.komea.eventory.api.filters.IFilterDefinition;
+import org.komea.eventory.api.filters.ITransformedEvent;
 import org.komea.eventory.utils.PluginUtils;
-import org.komea.product.cep.api.ICEPEventStorage;
-import org.komea.product.cep.api.IEventFilter;
-import org.komea.product.cep.api.IEventTransformer;
-import org.komea.product.cep.api.IFilterDefinition;
-import org.komea.product.cep.api.ITransformedEvent;
-import org.komea.product.cep.api.cache.ICacheConfiguration;
-import org.komea.product.cep.api.cache.ICacheStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

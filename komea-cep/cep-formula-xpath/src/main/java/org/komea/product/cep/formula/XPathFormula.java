@@ -11,10 +11,10 @@ import java.util.Map;
 
 import org.apache.commons.jxpath.BasicVariables;
 import org.apache.commons.jxpath.JXPathContext;
+import org.komea.eventory.api.engine.ICEPStatement;
+import org.komea.eventory.api.formula.ICEPFormula;
+import org.komea.eventory.api.formula.ICEPResult;
 import org.komea.eventory.query.CEPResult;
-import org.komea.product.cep.api.ICEPFormula;
-import org.komea.product.cep.api.ICEPResult;
-import org.komea.product.cep.api.ICEPStatement;
 import org.komea.product.cep.query.xpath.XPathTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

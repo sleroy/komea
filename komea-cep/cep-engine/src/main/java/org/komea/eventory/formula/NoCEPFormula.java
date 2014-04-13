@@ -9,10 +9,10 @@ package org.komea.eventory.formula;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.komea.eventory.api.engine.ICEPStatement;
+import org.komea.eventory.api.formula.ICEPFormula;
+import org.komea.eventory.api.formula.ICEPResult;
 import org.komea.eventory.query.CEPResult;
-import org.komea.product.cep.api.ICEPFormula;
-import org.komea.product.cep.api.ICEPResult;
-import org.komea.product.cep.api.ICEPStatement;
 
 
 

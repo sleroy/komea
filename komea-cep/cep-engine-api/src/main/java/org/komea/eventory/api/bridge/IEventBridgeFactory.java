@@ -6,8 +6,7 @@ package org.komea.eventory.api.bridge;
 
 
 
-import org.komea.product.cep.api.ICEPConfiguration;
-import org.komea.product.cep.api.IEventBridge;
+import org.komea.eventory.api.engine.ICEPConfiguration;
 
 
 

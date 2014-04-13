@@ -13,10 +13,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.Validate;
-import org.komea.product.cep.api.formula.tuple.IEventGroup;
-import org.komea.product.cep.api.formula.tuple.ITuple;
-import org.komea.product.cep.api.formula.tuple.ITupleCreator;
-import org.komea.product.cep.api.formula.tuple.IEventTable;
+import org.komea.eventory.api.formula.tuple.IEventGroup;
+import org.komea.eventory.api.formula.tuple.IEventTable;
+import org.komea.eventory.api.formula.tuple.ITuple;
+import org.komea.eventory.api.formula.tuple.ITupleCreator;
 
 
 

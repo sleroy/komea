@@ -11,9 +11,9 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.commons.lang.Validate;
-import org.komea.product.cep.api.cache.ICacheConfiguration;
-import org.komea.product.cep.api.cache.ICacheIndexer;
-import org.komea.product.cep.api.cache.ICacheStorage;
+import org.komea.eventory.api.cache.ICacheConfiguration;
+import org.komea.eventory.api.cache.ICacheIndexer;
+import org.komea.eventory.api.cache.ICacheStorage;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;

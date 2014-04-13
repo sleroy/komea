@@ -12,8 +12,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
-import org.komea.product.cep.api.ICEPEventStorage;
-import org.komea.product.cep.api.ICEPStatement;
+import org.komea.eventory.api.engine.ICEPEventStorage;
+import org.komea.eventory.api.engine.ICEPStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

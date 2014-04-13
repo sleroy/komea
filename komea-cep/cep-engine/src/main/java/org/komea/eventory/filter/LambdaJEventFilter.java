@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
-import org.komea.product.cep.api.IEventFilter;
+import org.komea.eventory.api.filters.IEventFilter;
 
 
 

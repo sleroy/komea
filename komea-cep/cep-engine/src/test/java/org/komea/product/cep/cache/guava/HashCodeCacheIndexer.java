@@ -8,7 +8,7 @@ package org.komea.product.cep.cache.guava;
 
 import java.io.Serializable;
 
-import org.komea.product.cep.api.cache.ICacheIndexer;
+import org.komea.eventory.api.cache.ICacheIndexer;
 
 
 

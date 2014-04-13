@@ -5,6 +5,7 @@ package org.komea.product.cep.api;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.komea.eventory.api.engine.CEPInvalidTransformation;
 
 
 

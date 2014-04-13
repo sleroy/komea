@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
-import org.komea.product.cep.api.ICEPEventStorage;
-import org.komea.product.cep.api.ICEPStatement;
-import org.komea.product.cep.api.formula.tuple.IEventGroup;
+import org.komea.eventory.api.engine.ICEPEventStorage;
+import org.komea.eventory.api.engine.ICEPStatement;
+import org.komea.eventory.api.formula.tuple.IEventGroup;
 
 
 

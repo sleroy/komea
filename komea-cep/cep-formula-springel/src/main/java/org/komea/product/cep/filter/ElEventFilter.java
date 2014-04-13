@@ -9,7 +9,7 @@ package org.komea.product.cep.filter;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.komea.product.cep.api.IEventFilter;
+import org.komea.eventory.api.filters.IEventFilter;
 import org.komea.product.cep.formula.ElFormula;
 
 

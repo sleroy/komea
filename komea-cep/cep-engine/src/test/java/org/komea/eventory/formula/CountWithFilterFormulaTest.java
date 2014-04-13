@@ -8,10 +8,10 @@ import java.util.Collections;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.komea.eventory.api.engine.ICEPStatement;
+import org.komea.eventory.api.filters.IEventFilter;
+import org.komea.eventory.api.formula.ICEPResult;
 import org.komea.eventory.formula.CountWithFilterFormula;
-import org.komea.product.cep.api.ICEPResult;
-import org.komea.product.cep.api.ICEPStatement;
-import org.komea.product.cep.api.IEventFilter;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;

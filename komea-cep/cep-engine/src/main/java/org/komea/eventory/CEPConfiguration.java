@@ -6,8 +6,8 @@ package org.komea.eventory;
 
 
 
-import org.komea.product.cep.api.ICEPConfiguration;
-import org.komea.product.cep.api.RunningMode;
+import org.komea.eventory.api.engine.ICEPConfiguration;
+import org.komea.eventory.api.engine.RunningMode;
 
 
 

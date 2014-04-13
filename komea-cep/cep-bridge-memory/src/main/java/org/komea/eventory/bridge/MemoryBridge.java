@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
-import org.komea.product.cep.api.ICEPConfiguration;
-import org.komea.product.cep.api.ICEPQuery;
-import org.komea.product.cep.api.IEventBridge;
+import org.komea.eventory.api.bridge.IEventBridge;
+import org.komea.eventory.api.engine.ICEPConfiguration;
+import org.komea.eventory.api.engine.ICEPQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

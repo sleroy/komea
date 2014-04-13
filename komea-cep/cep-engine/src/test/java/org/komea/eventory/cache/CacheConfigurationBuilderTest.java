@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.komea.eventory.api.cache.ICacheConfiguration;
 import org.komea.eventory.cache.CacheConfigurationBuilder;
-import org.komea.product.cep.api.cache.ICacheConfiguration;
 
 
 

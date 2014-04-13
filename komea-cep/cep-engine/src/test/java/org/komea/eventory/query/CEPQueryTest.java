@@ -9,11 +9,11 @@ package org.komea.eventory.query;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
+import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.cache.CacheStorageFactory;
 import org.komea.eventory.filter.NoEventFilter;
 import org.komea.eventory.formula.CountFormula;
 import org.komea.eventory.utils.PluginUtils;
-import org.komea.product.cep.api.ICEPQuery;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;

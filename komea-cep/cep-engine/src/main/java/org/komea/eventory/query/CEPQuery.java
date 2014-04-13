@@ -11,12 +11,12 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
-import org.komea.product.cep.api.ICEPFormula;
-import org.komea.product.cep.api.ICEPQuery;
-import org.komea.product.cep.api.ICEPQueryImplementation;
-import org.komea.product.cep.api.ICEPResult;
-import org.komea.product.cep.api.ICEPStatement;
-import org.komea.product.cep.api.IFilterDefinition;
+import org.komea.eventory.api.engine.ICEPQuery;
+import org.komea.eventory.api.engine.ICEPQueryImplementation;
+import org.komea.eventory.api.engine.ICEPStatement;
+import org.komea.eventory.api.filters.IFilterDefinition;
+import org.komea.eventory.api.formula.ICEPFormula;
+import org.komea.eventory.api.formula.ICEPResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

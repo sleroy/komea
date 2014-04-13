@@ -9,8 +9,8 @@ package org.komea.eventory.query;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.komea.eventory.api.formula.ITupleResultMap;
 import org.komea.eventory.query.CEPMapResult;
-import org.komea.product.cep.api.ITupleResultMap;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -72,7 +72,7 @@ public class CEPMapResultTest
     
     
     /**
-     * Test method for {@link org.komea.eventory.query.CEPMapResult#CEPMapResult(org.komea.eventory.api.ITupleResultMap)}.
+     * Test method for {@link org.komea.eventory.query.CEPMapResult#CEPMapResult(org.komea.eventory.api.formula.ITupleResultMap)}.
      */
     @Ignore
     @Test

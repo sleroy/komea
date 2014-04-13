@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.komea.product.cep.api.ICEPQuery;
-import org.komea.product.cep.api.IEventBridge;
-import org.komea.product.cep.api.IQueryAdministrator;
+import org.komea.eventory.api.bridge.IEventBridge;
+import org.komea.eventory.api.engine.ICEPQuery;
+import org.komea.eventory.api.engine.IQueryAdministrator;
 
 
 

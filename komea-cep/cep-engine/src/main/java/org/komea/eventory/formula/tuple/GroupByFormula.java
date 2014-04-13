@@ -10,15 +10,15 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import org.komea.eventory.api.engine.ICEPStatement;
+import org.komea.eventory.api.formula.ICEPFormula;
+import org.komea.eventory.api.formula.ICEPResult;
+import org.komea.eventory.api.formula.ITupleResultMap;
+import org.komea.eventory.api.formula.tuple.IEventTable;
+import org.komea.eventory.api.formula.tuple.IEventTableGenerator;
+import org.komea.eventory.api.formula.tuple.ITupleCreator;
+import org.komea.eventory.api.formula.tuple.ITuplerFormula;
 import org.komea.eventory.query.CEPResult;
-import org.komea.product.cep.api.ICEPFormula;
-import org.komea.product.cep.api.ICEPResult;
-import org.komea.product.cep.api.ICEPStatement;
-import org.komea.product.cep.api.ITupleResultMap;
-import org.komea.product.cep.api.formula.tuple.IEventTable;
-import org.komea.product.cep.api.formula.tuple.IEventTableGenerator;
-import org.komea.product.cep.api.formula.tuple.ITupleCreator;
-import org.komea.product.cep.api.formula.tuple.ITuplerFormula;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

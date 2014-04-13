@@ -11,7 +11,7 @@ import java.util.Iterator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.product.cep.api.cache.ICacheConfiguration;
+import org.komea.eventory.api.cache.ICacheConfiguration;
 import org.komea.product.cep.cache.guava.GoogleCacheStorage;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -84,7 +84,7 @@ public class GoogleCacheStorageTest
     
     /**
      * Test method for
-     * {@link org.komea.product.cep.cache.guava.GoogleCacheStorage#GoogleCacheStorage(org.komea.product.cep.api.cache.ICacheConfiguration)}.
+     * {@link org.komea.product.cep.cache.guava.GoogleCacheStorage#GoogleCacheStorage(org.komea.eventory.api.cache.ICacheConfiguration)}.
      */
     @Test 
     public final void testGoogleCacheStorage() throws Exception {

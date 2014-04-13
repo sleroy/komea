@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.komea.product.cep.api.formula.tuple.IEventGroup;
+import org.komea.eventory.api.formula.tuple.IEventGroup;
 
 
 

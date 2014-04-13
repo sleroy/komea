@@ -8,9 +8,9 @@ package org.komea.product.cep.formula.tuple;
 
 import java.io.Serializable;
 
+import org.komea.eventory.api.formula.tuple.ITuple;
+import org.komea.eventory.api.formula.tuple.ITupleCreator;
 import org.komea.eventory.formula.tuple.TupleFactory;
-import org.komea.product.cep.api.formula.tuple.ITuple;
-import org.komea.product.cep.api.formula.tuple.ITupleCreator;
 import org.komea.product.cep.formula.ElFormula;
 
 
@@ -38,7 +38,7 @@ public class ELTupleCreator implements ITupleCreator
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.api.formula.tuple.ITupleCreator#create(java.io.Serializable)
+     * @see org.komea.eventory.api.formula.tuple.ITupleCreator#create(java.io.Serializable)
      */
     @Override
     public ITuple create(final Serializable _event) {

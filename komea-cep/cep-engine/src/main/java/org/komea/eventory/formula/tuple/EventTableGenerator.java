@@ -9,9 +9,9 @@ package org.komea.eventory.formula.tuple;
 import java.io.Serializable;
 import java.util.List;
 
-import org.komea.product.cep.api.formula.tuple.IEventTable;
-import org.komea.product.cep.api.formula.tuple.IEventTableGenerator;
-import org.komea.product.cep.api.formula.tuple.ITupleCreator;
+import org.komea.eventory.api.formula.tuple.IEventTable;
+import org.komea.eventory.api.formula.tuple.IEventTableGenerator;
+import org.komea.eventory.api.formula.tuple.ITupleCreator;
 
 
 
