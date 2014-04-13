@@ -1,0 +1,8 @@
+dependencies {
+        compile project(':cep-engine-api')
+        compile project(':cep-engine')                    
+        compile "org.slf4j:slf4j-api:$LOG_SLF4J"                
+        compile "commons-lang:commons-lang:$APACHE_COMMONLANG"
+        compile "org.springframework:spring-expression:$SPRING_VERSION"
+             
+}

@@ -59,7 +59,6 @@ public class BasicUnitTests
         
         for (final PropertyDescriptor descriptor : propertyDescriptors) {
             if (descriptor.getReadMethod() != null && descriptor.getWriteMethod() != null) {
-                System.out.println(descriptor);
                 final Object parameter =
                         createParameter(descriptor.getWriteMethod().getParameterTypes()[0]);
                 
