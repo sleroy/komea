@@ -9,9 +9,12 @@ package org.komea.eventory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.eventory.api.bridge.IEventBridgeFactory;
+import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.utils.PluginUtils;
 import org.komea.product.cep.api.ICEPConfiguration;
 import org.komea.product.cep.api.IEventBridge;
+import org.komea.product.cep.api.cache.ICacheConfiguration;
+import org.komea.product.cep.api.cache.ICacheStorage;
 import org.mockito.Matchers;
 
 import static org.mockito.Mockito.mock;
@@ -24,6 +27,30 @@ import static org.mockito.Mockito.when;
  */
 public class CEPEngineTest
 {
+    
+    
+    public static void buildFakeBridge() {
+    
+    
+        final IEventBridgeFactory mock = mock(IEventBridgeFactory.class);
+        when(mock.newBridge(Matchers.any(ICEPConfiguration.class))).thenReturn(
+                mock(IEventBridge.class));
+        PluginUtils.setBridgeFactory(mock);
+    }
+    
+    
+    /**
+     * 
+     */
+    public static void buildFakeCache() {
+    
+    
+        final ICacheStorageFactory cacheStorageFactory = mock(ICacheStorageFactory.class);
+        when(cacheStorageFactory.newCacheStorage(Matchers.any(ICacheConfiguration.class)))
+                .thenReturn(mock(ICacheStorage.class));
+        PluginUtils.setCacheStorageFactory(cacheStorageFactory);
+        
+    }
     
     
     /**
@@ -80,10 +107,7 @@ public class CEPEngineTest
     public final void testGetQueryAdministration() throws Exception {
     
     
-        final IEventBridgeFactory mock = mock(IEventBridgeFactory.class);
-        when(mock.newBridge(Matchers.any(ICEPConfiguration.class))).thenReturn(
-                mock(IEventBridge.class));
-        PluginUtils.setBridgeFactory(mock);
+        buildFakeBridge();
         
         final CEPEngine cepEngine = new CEPEngine();
         Assert.assertNull("QueryAdmin is not initialized at begin",

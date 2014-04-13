@@ -6,11 +6,11 @@ package org.komea.eventory.query;
 import java.io.Serializable;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.komea.eventory.CEPEngineTest;
 import org.komea.eventory.cache.CacheConfigurationBuilder;
-import org.komea.eventory.query.CEPEventStorage;
-import org.komea.eventory.query.FilterDefinition;
 import org.komea.product.cep.api.IEventFilter;
 import org.komea.product.cep.api.IEventTransformer;
 import org.komea.product.cep.api.ITransformedEvent;
@@ -26,7 +26,17 @@ public class CEPEventStorageTest
 {
     
     
-    @Test 
+    @Before
+    public void before() {
+    
+    
+        CEPEngineTest.buildFakeBridge();
+        CEPEngineTest.buildFakeCache();
+        
+    }
+    
+    
+    @Test
     public final void testCEPEventStorage() throws Exception {
     
     
@@ -43,7 +53,7 @@ public class CEPEventStorageTest
     }
     
     
-    @Test 
+    @Test
     public final void testNotifyEventWithFilteringAndTransformationWithoutValidTransformation()
             throws Exception {
     
@@ -75,7 +85,7 @@ public class CEPEventStorageTest
     }
     
     
-    @Test 
+    @Test
     public final void testNotifyEventWithFilteringAndTransformationWithValidTransformation()
             throws Exception {
     
@@ -107,7 +117,7 @@ public class CEPEventStorageTest
     }
     
     
-    @Test 
+    @Test
     public final void testNotifyEventWithoutFiltering() throws Exception {
     
     
