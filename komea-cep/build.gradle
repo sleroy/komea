@@ -53,7 +53,6 @@ buildscript {
 }
 apply plugin: 'cobertura'
 cobertura {
-     coverageFormats=['xml', 'html']
 //     coverageCheckTotalBranchRate=60
 //     coverageCheckTotalLineRate=60
      coverageMergeDatafiles = [
@@ -68,17 +67,19 @@ cobertura {
     ]
 }
 
+
 allprojects {
     apply plugin: "java"
     apply plugin: "maven"
     apply plugin: "eclipse"
     apply plugin: "idea"
     apply plugin: "cobertura"
+
     cobertura {
      coverageFormats=['xml', 'html']
-//     coverageIgnoreTrivial=true;    
-//     coverageCheckTotalBranchRate=60
-//     coverageCheckTotalLineRate=60
+     coverageIgnoreTrivial=true;    
+     coverageCheckTotalBranchRate=60
+     coverageCheckTotalLineRate=60
     }
 
 
