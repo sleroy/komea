@@ -26,3 +26,6 @@ xtend-gen/
 
 
 tools/org.komea.events.dsl.ui/bin/org/komea/events/dsl/ui/contentassist/.EventDslProposalProvider.java._trace
+.gradle
+.gradletasknamecache
+build
