@@ -119,8 +119,8 @@ public class CEPEngine implements ICEPEngine
         }
         final int res = cepConfiguration.getNumberQueryListeners();
         LOGGER.debug("CEP Engine starts with {} query listeners", res);
-        eventBridge = PluginUtils.getBridgeFactory().newBridge(cepConfiguration);
-        
+        eventBridge = cepConfiguration.getBridgeFactory().newBridge(cepConfiguration);
+        PluginUtils.setCacheStorageFactory(cepConfiguration.getCacheStorageFactory());
         queryAdministrator = new QueryAdministrator(eventBridge);
         mode = CEPEngineMode.RUNNING;
     }

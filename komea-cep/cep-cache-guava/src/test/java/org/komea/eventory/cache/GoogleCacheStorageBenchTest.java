@@ -13,7 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.komea.eventory.api.cache.ICacheConfiguration;
-import org.komea.product.cep.cache.guava.GoogleCacheStorage;
+import org.komea.eventory.cache.guava.GoogleCacheStorage;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;

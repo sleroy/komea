@@ -6,6 +6,11 @@ package org.komea.eventory.api.engine;
 
 
 
+import org.komea.eventory.api.bridge.IEventBridgeFactory;
+import org.komea.eventory.api.cache.ICacheStorageFactory;
+
+
+
 /**
  * This interface defines the configuration of the CEP Engine.
  * 
@@ -20,15 +25,15 @@ public interface ICEPConfiguration
      * 
      * @return the plugin implementation.
      */
-    String getBridgeImplementation();
+    IEventBridgeFactory getBridgeFactory();
     
     
     /**
-     * Returns the cache implementation
+     * Returns the factory to build cache.
      * 
-     * @return the cache implementation;
+     * @return the factory to build the caches.
      */
-    String getCacheImplementation();
+    ICacheStorageFactory getCacheStorageFactory();
     
     
     /**

@@ -6,6 +6,8 @@ package org.komea.eventory;
 
 
 
+import org.komea.eventory.api.bridge.IEventBridgeFactory;
+import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.api.engine.ICEPConfiguration;
 import org.komea.eventory.api.engine.RunningMode;
 
@@ -20,34 +22,26 @@ public class CEPConfiguration implements ICEPConfiguration
 {
     
     
-    private String      bridgeImplementation;
-    private String      cacheImplementation;
-    private RunningMode mode                 = RunningMode.AGILE;
-    private int         numberQueryListeners = 1;
+    private IEventBridgeFactory  bridgeFactory;
+    private ICacheStorageFactory cacheStorageFactory;
+    private RunningMode          mode                 = RunningMode.AGILE;
+    private int                  numberQueryListeners = 1;
     
     
     
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPConfiguration#getBridgeImplementation()
-     */
     @Override
-    public String getBridgeImplementation() {
+    public IEventBridgeFactory getBridgeFactory() {
     
     
-        return bridgeImplementation;
+        return bridgeFactory;
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.api.ICEPConfiguration#getCacheImplementation()
-     */
     @Override
-    public String getCacheImplementation() {
+    public ICacheStorageFactory getCacheStorageFactory() {
     
     
-        return cacheImplementation;
+        return cacheStorageFactory;
     }
     
     
@@ -75,17 +69,17 @@ public class CEPConfiguration implements ICEPConfiguration
     }
     
     
-    public void setBridgeImplementation(final String _bridgeImplementation) {
+    public void setBridgeFactory(final IEventBridgeFactory _bridgeFactory) {
     
     
-        bridgeImplementation = _bridgeImplementation;
+        bridgeFactory = _bridgeFactory;
     }
     
     
-    public void setCacheImplementation(final String _cacheImplementation) {
+    public void setCacheStorageFactory(final ICacheStorageFactory _cacheStorageFactory) {
     
     
-        cacheImplementation = _cacheImplementation;
+        cacheStorageFactory = _cacheStorageFactory;
     }
     
     

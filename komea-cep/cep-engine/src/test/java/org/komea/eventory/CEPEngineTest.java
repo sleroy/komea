@@ -6,6 +6,8 @@ package org.komea.eventory;
 
 
 
+import java.io.IOException;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.eventory.api.bridge.IEventBridge;
@@ -29,13 +31,17 @@ public class CEPEngineTest
 {
     
     
+    private static IEventBridgeFactory eventBridge;
+    
+    
+    
     public static void buildFakeBridge() {
     
     
-        final IEventBridgeFactory mock = mock(IEventBridgeFactory.class);
-        when(mock.newBridge(Matchers.any(ICEPConfiguration.class))).thenReturn(
+        eventBridge = mock(IEventBridgeFactory.class);
+        when(eventBridge.newBridge(Matchers.any(ICEPConfiguration.class))).thenReturn(
                 mock(IEventBridge.class));
-        PluginUtils.setBridgeFactory(mock);
+        
     }
     
     
@@ -50,6 +56,15 @@ public class CEPEngineTest
                 .thenReturn(mock(ICacheStorage.class));
         PluginUtils.setCacheStorageFactory(cacheStorageFactory);
         
+    }
+    
+    
+    public void initializeConfiguration(final CEPEngine cepEngine) throws IOException {
+    
+    
+        final CEPConfiguration configuration = new CEPConfiguration();
+        configuration.setBridgeFactory(eventBridge);
+        cepEngine.initialize(configuration);
     }
     
     
@@ -92,10 +107,8 @@ public class CEPEngineTest
         final CEPEngine cepEngine = new CEPEngine();
         Assert.assertNotNull("A configuration must be provided on default initialization",
                 cepEngine.getConfiguration());
-        final CEPConfiguration configuration = new CEPConfiguration();
-        cepEngine.initialize(configuration);
-        Assert.assertEquals("Configuration must be initialized with the parameter", configuration,
-                cepEngine.getConfiguration());
+        initializeConfiguration(cepEngine);
+        
         cepEngine.close();
     }
     
@@ -112,7 +125,7 @@ public class CEPEngineTest
         final CEPEngine cepEngine = new CEPEngine();
         Assert.assertNull("QueryAdmin is not initialized at begin",
                 cepEngine.getQueryAdministration());
-        cepEngine.initialize(new CEPConfiguration());
+        initializeConfiguration(cepEngine);
         Assert.assertNotNull("QueryAdmin must be initialized", cepEngine.getQueryAdministration());
         cepEngine.close();
         
@@ -127,9 +140,9 @@ public class CEPEngineTest
     
     
         final CEPEngine cepEngine = new CEPEngine();
-        cepEngine.initialize(new CEPConfiguration()); // Initialisation
+        initializeConfiguration(cepEngine);
         Assert.assertTrue("Engine should be initialized", cepEngine.isInitialized());
-        cepEngine.initialize(new CEPConfiguration());
+        initializeConfiguration(cepEngine);
         Assert.assertTrue("Engine should be initialized again", cepEngine.isInitialized());
         cepEngine.close();
         
@@ -144,7 +157,7 @@ public class CEPEngineTest
     
     
         final CEPEngine cepEngine = new CEPEngine();
-        cepEngine.initialize(new CEPConfiguration());
+        initializeConfiguration(cepEngine);
         cepEngine.pushEvent(new String());
         
         cepEngine.close();

@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.komea.eventory.api.cache.ICacheStorage;
 import org.komea.eventory.cache.GoogleCacheStorageBenchTest;
-import org.komea.product.cep.cache.guava.GoogleCacheStorage;
+import org.komea.eventory.cache.guava.GoogleCacheStorage;
 
 
 
