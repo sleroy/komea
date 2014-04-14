@@ -18,8 +18,8 @@
 
     <bean id="dataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-        p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.url}"
-        p:username="${jdbc.user}" p:password="${jdbc.pass}" />
+        p:driverClassName="${jdbc_driverClassName}" p:url="${jdbc_url}"
+        p:username="${jdbc_user}" p:password="${jdbc_pass}" />
 
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -53,7 +53,7 @@
 
 
     <jdbc:initialize-database data-source="dataSource"
-        enabled="${jdbc.initialize.script.enable}" ignore-failures="NONE">
+        enabled="${jdbc_initialize_script_enable}" ignore-failures="NONE">
         <jdbc:script location="${database_sqlfile}" />
     </jdbc:initialize-database>
 
