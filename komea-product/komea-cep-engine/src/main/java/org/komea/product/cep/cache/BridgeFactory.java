@@ -12,7 +12,6 @@ import javax.annotation.PostConstruct;
 
 import org.komea.eventory.api.bridge.IEventBridge;
 import org.komea.eventory.api.bridge.IEventBridgeFactory;
-import org.komea.eventory.api.cache.ICacheConfiguration;
 import org.komea.eventory.api.engine.ICEPConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +60,7 @@ public class BridgeFactory implements IEventBridgeFactory
         try {
             final Class<?> implemClass =
                     Thread.currentThread().getContextClassLoader().loadClass(implementation);
-            constructor = implemClass.getConstructor(ICacheConfiguration.class);
+            constructor = implemClass.getConstructor(ICEPConfiguration.class);
             
             
         } catch (final Exception e) {

@@ -30,7 +30,7 @@ public class ConvertELIntoQueryTest
     
         assertFalse(ConvertELIntoQuery.isValidFormula("new gni()"));
         assertTrue(ConvertELIntoQuery
-                .isValidFormula("new org.komea.product.cep.query.CEPQueryImplementation()"));
+                .isValidFormula("new org.komea.eventory.query.CEPQueryImplementation()"));
     }
     
     
@@ -42,7 +42,7 @@ public class ConvertELIntoQueryTest
     
     
         assertNotNull(ConvertELIntoQuery
-                .parseEL("new org.komea.product.cep.query.CEPQueryImplementation()"));
+                .parseEL("new org.komea.eventory.query.CEPQueryImplementation()"));
         
     }
     

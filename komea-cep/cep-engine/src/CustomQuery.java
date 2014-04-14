@@ -65,7 +65,7 @@ public class CustomQuery implements ICEPQueryImplementation
     
         filterDefinitions.add(EventFilterBuilder
                 .create()
-                .onlyIEvents()
+                .chain(new OnlyEventFilter())
                 .chain(new ElEventFilter(_elFilter))
                 .buildFilterDefinition(buildStream(),
                         new CacheConfigurationParser().parse(_cacheConfiguration)));
@@ -153,7 +153,7 @@ public class CustomQuery implements ICEPQueryImplementation
     
         filterDefinitions.add(EventFilterBuilder
                 .create()
-                .onlyIEvents()
+                .chain(new OnlyEventFilter())
                 .chain(new ElEventFilter(_filterFormula))
                 .buildFilterDefinition(
                         buildStream(),
@@ -177,7 +177,7 @@ public class CustomQuery implements ICEPQueryImplementation
     
         filterDefinitions.add(EventFilterBuilder
                 .create()
-                .onlyIEvents()
+                .chain(new OnlyEventFilter())
                 .chain(new XPathFilter(_xpathFilter))
                 .buildFilterDefinition(
                         buildStream(),
@@ -198,7 +198,7 @@ public class CustomQuery implements ICEPQueryImplementation
     
         filterDefinitions.add(EventFilterBuilder
                 .create()
-                .onlyIEvents()
+                .chain(new OnlyEventFilter())
                 .chain(new XPathFilter(_xpathFilter))
                 .buildFilterDefinition(buildStream(),
                         new CacheConfigurationParser().parse(_cacheConfiguration)));

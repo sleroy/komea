@@ -4,6 +4,7 @@
 package org.komea.product.backend.service.demodata;
 
 import javax.annotation.PostConstruct;
+
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.KpiBuilder;

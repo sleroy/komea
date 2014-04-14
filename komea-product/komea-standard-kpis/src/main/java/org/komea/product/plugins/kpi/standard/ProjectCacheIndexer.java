@@ -6,7 +6,7 @@ package org.komea.product.plugins.kpi.standard;
 
 
 
-import org.komea.product.cep.api.cache.ICacheIndexer;
+import org.komea.eventory.api.cache.ICacheIndexer;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.service.dto.EntityKey;
 

@@ -11,15 +11,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.komea.product.cep.api.ICEPFormula;
-import org.komea.product.cep.api.ICEPQueryImplementation;
-import org.komea.product.cep.api.IEventFilter;
-import org.komea.product.cep.api.IFilterDefinition;
-import org.komea.product.cep.cache.CacheConfigurationBuilder;
-import org.komea.product.cep.filter.EventFilterBuilder;
-import org.komea.product.cep.formula.tuple.EventCountFormula;
-import org.komea.product.cep.formula.tuple.GroupByFormula;
-import org.komea.product.cep.query.FilterDefinition;
+import org.komea.eventory.api.engine.ICEPQueryImplementation;
+import org.komea.eventory.api.filters.IEventFilter;
+import org.komea.eventory.api.filters.IFilterDefinition;
+import org.komea.eventory.api.formula.ICEPFormula;
+import org.komea.eventory.cache.CacheConfigurationBuilder;
+import org.komea.eventory.filter.EventFilterBuilder;
+import org.komea.eventory.formula.tuple.EventCountFormula;
+import org.komea.eventory.formula.tuple.GroupByFormula;
+import org.komea.eventory.query.FilterDefinition;
+import org.komea.product.cep.filter.OnlyEventFilter;
 import org.komea.product.plugins.kpi.filters.EventTypeFilter;
 import org.komea.product.plugins.kpi.filters.WithProjectFilter;
 import org.komea.product.plugins.kpi.tuplecreator.ProjectTupleCreator;
@@ -55,8 +56,9 @@ public class BuildPerMonth implements ICEPQueryImplementation
     
     
         final IEventFilter<?> eventFilter =
-                EventFilterBuilder.create().onlyIEvents().chain(new WithProjectFilter())
-                        .chain(new EventTypeFilter("build_started")).build();
+                EventFilterBuilder.create().chain(new OnlyEventFilter())
+                        .chain(new WithProjectFilter()).chain(new EventTypeFilter("build_started"))
+                        .build();
         final IFilterDefinition filterDefinition =
                 FilterDefinition
                         .create()

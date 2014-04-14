@@ -13,8 +13,8 @@ import javax.validation.Validation;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.komea.product.cep.api.ICEPQueryImplementation;
-import org.komea.product.cep.formula.ElFormula;
+import org.komea.eventory.api.engine.ICEPQueryImplementation;
+import org.komea.eventory.formula.ElFormula;
 import org.komea.product.database.model.Kpi;
 
 
