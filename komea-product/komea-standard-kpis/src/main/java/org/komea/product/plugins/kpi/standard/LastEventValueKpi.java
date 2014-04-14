@@ -13,6 +13,7 @@ import org.komea.eventory.filter.EventFilterBuilder;
 import org.komea.eventory.formula.tuple.GroupByFormula;
 import org.komea.eventory.query.FilterDefinition;
 import org.komea.product.cep.filter.OnlyEventFilter;
+import org.komea.product.plugins.kpi.filters.EventTypeFilter;
 import org.komea.product.plugins.kpi.filters.WithProjectFilter;
 import org.komea.product.plugins.kpi.tuplecreator.ProjectTupleCreator;
 
@@ -39,7 +40,8 @@ public class LastEventValueKpi implements ICEPQueryImplementation {
     public List<IFilterDefinition> getFilterDefinitions() {
 
         final IEventFilter<?> eventFilter = EventFilterBuilder.create()
-                .chain(new OnlyEventFilter()).chain(new WithProjectFilter()).build();
+                .chain(new OnlyEventFilter()).chain(new WithProjectFilter())
+                .chain(new EventTypeFilter(eventTypeKey)).build();
         final IFilterDefinition filterDefinition
                 = FilterDefinition
                 .create()
