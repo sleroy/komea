@@ -19,8 +19,8 @@
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-		p:driverClassName="#{config.jdbc_driverClassName}" p:url="#{config.jdbc_url}"
-		p:username="#{config.jdbc_user}" p:password="#{config.jdbc_pass}" />
+		p:driverClassName="${jdbc_driverClassName}" p:url="${jdbc_url}"
+		p:username="${jdbc_user}" p:password="${jdbc_pass}" />
 
 
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -54,8 +54,8 @@
 
 
 	<jdbc:initialize-database data-source="dataSource"
-		enabled="#{config.jdbc_initialize_script_enable}" ignore-failures="NONE">
-		<jdbc:script location="#{config.database_sqlfile}" />
+		enabled="${jdbc_initialize_script_enable}" ignore-failures="NONE">
+		<jdbc:script location="${database_sqlfile}" />
 	</jdbc:initialize-database>
 
 	<bean id="validator"

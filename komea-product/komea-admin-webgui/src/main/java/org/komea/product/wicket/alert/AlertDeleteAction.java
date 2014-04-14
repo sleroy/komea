@@ -6,6 +6,7 @@
 package org.komea.product.wicket.alert;
 
 import java.util.List;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.komea.product.backend.service.alert.IAlertTypeService;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.wicket.widget.api.IDeleteAction;
@@ -24,9 +25,10 @@ public class AlertDeleteAction implements IDeleteAction<KpiAlertType> {
         this.alertService = alertService;
     }
 
+
     @Override
-    public void delete(KpiAlertType _alert) {
-        this.alertAffichage.remove(_alert);
+    public void delete(KpiAlertType _alert, AjaxRequestTarget _target) {
+          this.alertAffichage.remove(_alert);
         this.alertService.delete(_alert);
     }
 

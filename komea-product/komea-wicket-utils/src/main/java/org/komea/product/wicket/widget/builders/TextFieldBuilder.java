@@ -99,7 +99,9 @@ public class TextFieldBuilder<T>
         } else if (_isRequired) {
             textField = new RequiredTextField<T>(_wicketId, new PropertyModel<T>(_data, _field));
         } else {
-            textField = new TextField<T>(_wicketId, new PropertyModel<T>(_data, _field));
+            TextField<T> textField1 = new TextField<T>(_wicketId, new PropertyModel<T>(_data, _field));
+            textField1.setConvertEmptyInputStringToNull(false);
+            textField = textField1;            
         }
     }
     
