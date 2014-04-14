@@ -3,7 +3,7 @@ package org.komea.product.backend.service.kpi;
 
 
 
-import org.komea.product.cep.api.ICEPQuery;
+import org.komea.eventory.api.engine.ICEPQuery;
 
 
 

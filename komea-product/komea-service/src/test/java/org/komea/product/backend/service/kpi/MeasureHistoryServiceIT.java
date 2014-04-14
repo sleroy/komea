@@ -5,6 +5,7 @@ package org.komea.product.backend.service.kpi;
 
 import java.util.Date;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.api.IEventEngineService;

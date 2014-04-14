@@ -6,6 +6,8 @@ package org.komea.eventory.api.engine;
 
 
 
+import java.io.File;
+
 import org.komea.eventory.api.bridge.IEventBridgeFactory;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
 
@@ -50,4 +52,10 @@ public interface ICEPConfiguration
      * @return the number of query listeners.
      */
     int getNumberQueryListeners();
+    
+    
+    /**
+     * @return
+     */
+    File getStorageFolder();
 }

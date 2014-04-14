@@ -6,7 +6,7 @@ package org.komea.backend.kpi.tests;
 
 
 
-import org.komea.product.cep.api.IEventFilter;
+import org.komea.eventory.api.filters.IEventFilter;
 
 
 

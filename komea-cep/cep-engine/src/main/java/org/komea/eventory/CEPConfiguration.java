@@ -6,6 +6,8 @@ package org.komea.eventory;
 
 
 
+import java.io.File;
+
 import org.komea.eventory.api.bridge.IEventBridgeFactory;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.api.engine.ICEPConfiguration;
@@ -26,6 +28,7 @@ public class CEPConfiguration implements ICEPConfiguration
     private ICacheStorageFactory cacheStorageFactory;
     private RunningMode          mode                 = RunningMode.AGILE;
     private int                  numberQueryListeners = 1;
+    private File                 storageFolder;
     
     
     
@@ -69,6 +72,14 @@ public class CEPConfiguration implements ICEPConfiguration
     }
     
     
+    @Override
+    public File getStorageFolder() {
+    
+    
+        return storageFolder;
+    }
+    
+    
     public void setBridgeFactory(final IEventBridgeFactory _bridgeFactory) {
     
     
@@ -94,6 +105,13 @@ public class CEPConfiguration implements ICEPConfiguration
     
     
         numberQueryListeners = _numberQueryListeners;
+    }
+    
+    
+    public void setStorageFolder(final File _storageFolder) {
+    
+    
+        storageFolder = _storageFolder;
     }
     
     

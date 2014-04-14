@@ -6,7 +6,7 @@ package org.komea.product.cep.query;
 
 
 
-import org.komea.product.cep.api.IEventFilter;
+import org.komea.eventory.api.filters.IEventFilter;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.enums.Severity;
 

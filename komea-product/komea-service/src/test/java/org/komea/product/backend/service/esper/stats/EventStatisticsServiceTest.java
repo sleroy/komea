@@ -9,8 +9,8 @@ package org.komea.product.backend.service.esper.stats;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
+import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.product.backend.esper.test.CEPQueryTester;
-import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.database.enums.Severity;
 import org.slf4j.LoggerFactory;
 

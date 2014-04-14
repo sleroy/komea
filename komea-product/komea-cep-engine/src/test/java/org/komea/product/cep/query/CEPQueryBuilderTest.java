@@ -10,18 +10,27 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.komea.eventory.api.cache.ICacheConfiguration;
+import org.komea.eventory.api.cache.ICacheStorage;
+import org.komea.eventory.api.cache.ICacheStorageFactory;
+import org.komea.eventory.api.engine.ICEPQuery;
+import org.komea.eventory.api.filters.IEventFilter;
 import org.komea.eventory.cache.CacheConfigurationBuilder;
+import org.komea.eventory.cache.guava.GoogleCacheStorage;
 import org.komea.eventory.filter.EventFilterBuilder;
 import org.komea.eventory.formula.CountFormula;
 import org.komea.eventory.query.CEPQueryBuilder;
 import org.komea.eventory.utils.PluginUtils;
-import org.komea.product.cep.api.ICEPQuery;
-import org.komea.product.cep.api.IEventFilter;
-import org.komea.product.cep.api.cache.ICacheConfiguration;
 import org.komea.product.cep.filter.OnlyEventFilter;
 import org.komea.product.database.alert.EventBuilder;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.EventType;
+import org.mockito.Matchers;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 
@@ -34,8 +43,22 @@ public class CEPQueryBuilderTest
     
     @Test
     public void testBuildingQuery() {
-        PluginUtils.setCacheStorageFactory(new CacheStorageFa);
     
+    
+        final ICacheStorageFactory mock = mock(ICacheStorageFactory.class);
+        final Answer<ICacheStorage> answer = new Answer<ICacheStorage>()
+        {
+            
+            
+            @Override
+            public ICacheStorage answer(final InvocationOnMock _invocation) throws Throwable {
+            
+            
+                return new GoogleCacheStorage((ICacheConfiguration) _invocation.getArguments()[0]);
+            }
+        };
+        when(mock.newCacheStorage(Matchers.any(ICacheConfiguration.class))).thenAnswer(answer);
+        PluginUtils.setCacheStorageFactory(mock);
         final CEPQueryBuilder create = CEPQueryBuilder.create(new CountFormula());
         final IEventFilter eventFilter =
                 EventFilterBuilder.create().chain(new OnlyEventFilter())

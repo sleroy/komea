@@ -5,6 +5,7 @@ package org.komea.product.backend.service.generic;
 
 import java.io.Serializable;
 import java.util.List;
+
 import org.komea.product.database.api.IHasKey;
 
 /**

@@ -3,7 +3,7 @@ package org.komea.product.backend.service.kpi;
 
 
 
-import org.komea.product.cep.api.formula.tuple.ITuple;
+import org.komea.eventory.api.formula.tuple.ITuple;
 
 
 

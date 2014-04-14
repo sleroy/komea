@@ -12,20 +12,20 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
+import org.komea.eventory.api.engine.ICEPQueryImplementation;
+import org.komea.eventory.api.filters.IFilterDefinition;
+import org.komea.eventory.api.formula.ICEPFormula;
+import org.komea.eventory.api.formula.tuple.ITupleCreator;
+import org.komea.eventory.filter.ELCacheIndexer;
+import org.komea.eventory.filter.ElEventFilter;
 import org.komea.eventory.filter.EventFilterBuilder;
+import org.komea.eventory.filter.XPathFilter;
+import org.komea.eventory.formula.XPathFormula;
+import org.komea.eventory.formula.tuple.ELTupleCreator;
 import org.komea.eventory.formula.tuple.GroupByFormula;
-import org.komea.product.cep.api.ICEPFormula;
-import org.komea.product.cep.api.ICEPQueryImplementation;
-import org.komea.product.cep.api.IFilterDefinition;
-import org.komea.product.cep.api.formula.tuple.ITupleCreator;
+import org.komea.eventory.query.predefined.XPathGroupByFormula;
 import org.komea.product.cep.cache.CacheConfigurationParser;
-import org.komea.product.cep.filter.ELCacheIndexer;
-import org.komea.product.cep.filter.ElEventFilter;
 import org.komea.product.cep.filter.OnlyEventFilter;
-import org.komea.product.cep.filter.XPathFilter;
-import org.komea.product.cep.formula.XPathFormula;
-import org.komea.product.cep.formula.tuple.ELTupleCreator;
-import org.komea.product.cep.query.predefined.XPathGroupByFormula;
 
 
 

@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.komea.eventory.api.engine.ICEPQuery;
+import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.plugin.api.PostSettingRegistration;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.service.ISettingService;
-import org.komea.product.cep.api.ICEPQuery;
-import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.enums.RetentionPeriod;
 import org.komea.product.database.enums.Severity;

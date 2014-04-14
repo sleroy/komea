@@ -11,7 +11,6 @@ import java.io.StringBufferInputStream;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
-import org.komea.product.backend.storage.ObjectStorage;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 

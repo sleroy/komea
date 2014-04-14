@@ -1,7 +1,9 @@
 package org.komea.product.backend.service;
 
 import java.util.List;
+
 import javax.validation.Valid;
+
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.database.dao.EventTypeDao;

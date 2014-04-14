@@ -1,6 +1,7 @@
 package org.komea.product.backend.service.customer;
 
 import java.util.List;
+
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.dao.CustomerDao;

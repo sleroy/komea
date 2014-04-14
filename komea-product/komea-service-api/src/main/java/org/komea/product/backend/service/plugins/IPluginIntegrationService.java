@@ -3,10 +3,7 @@ package org.komea.product.backend.service.plugins;
 
 
 
-import javax.validation.Valid;
-
 import org.komea.product.database.dto.ProviderDto;
-import org.springframework.transaction.annotation.Transactional;
 
 
 

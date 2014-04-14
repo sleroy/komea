@@ -1,6 +1,7 @@
 package org.komea.product.backend.service.entities;
 
 import java.util.List;
+
 import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.DepartmentDto;

@@ -9,7 +9,6 @@ package org.komea.product.backend.service.settings;
 import java.util.Collections;
 
 import org.junit.Test;
-import org.komea.product.backend.service.settings.SettingService;
 import org.komea.product.database.dao.SettingDao;
 import org.komea.product.database.model.SettingCriteria;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;

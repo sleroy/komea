@@ -6,6 +6,7 @@ package org.komea.product.backend.genericservice;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.ibatis.session.RowBounds;
 import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.backend.utils.CollectionUtil;

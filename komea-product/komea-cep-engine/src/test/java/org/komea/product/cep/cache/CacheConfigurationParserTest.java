@@ -9,7 +9,7 @@ package org.komea.product.cep.cache;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
-import org.komea.product.cep.api.cache.ICacheConfiguration;
+import org.komea.eventory.api.cache.ICacheConfiguration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

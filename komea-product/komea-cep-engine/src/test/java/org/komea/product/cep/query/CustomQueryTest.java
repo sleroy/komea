@@ -9,8 +9,8 @@ package org.komea.product.cep.query;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
+import org.komea.eventory.api.filters.IFilterDefinition;
 import org.komea.eventory.formula.tuple.GroupByFormula;
-import org.komea.product.cep.api.IFilterDefinition;
 import org.komea.product.database.alert.EventBuilder;
 
 import static org.junit.Assert.assertEquals;

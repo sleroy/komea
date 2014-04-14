@@ -1,9 +1,9 @@
 package org.komea.product.backend.service.entities;
 
-import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import org.komea.product.backend.exceptions.EntityNotFoundException;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.PersonDao;
@@ -22,6 +22,8 @@ import org.komea.product.service.dto.KpiKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
 
 /**
  */
