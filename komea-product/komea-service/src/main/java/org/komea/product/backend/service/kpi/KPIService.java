@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
@@ -405,10 +404,16 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
             requiredDAO.insert(_kpi);
         } else {
             LOGGER.debug("KPI {} updated", _kpi.getKpiKey());
-            requiredDAO.updateByPrimaryKey(_kpi);
+            updateByPrimaryKeyWithBlobs(_kpi);
         }
 
         refreshEsper(_kpi);
+    }
+
+    private void updateByPrimaryKeyWithBlobs(final Kpi _kpi) {
+        final KpiCriteria kpiCriteria = new KpiCriteria();
+        kpiCriteria.createCriteria().andIdEqualTo(_kpi.getId());
+        requiredDAO.updateByCriteriaWithBLOBs(_kpi, kpiCriteria);
     }
 
     @Override
