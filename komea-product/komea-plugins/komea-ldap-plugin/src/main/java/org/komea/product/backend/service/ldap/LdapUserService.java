@@ -36,34 +36,39 @@ import org.springframework.ldap.core.AttributesMapper;
  * @author sleroy
  */
 @ProviderPlugin(
-        name = "LDAP Plugin",
-        icon = "ldap",
-        eventTypes = {},
-        type = ProviderType.LDAP,
-        url = "/ldap")
+    name = "LDAP Plugin",
+    icon = "ldap",
+    eventTypes = {},
+    type = ProviderType.LDAP,
+    url = "/ldap")
 @Properties(
-        value =
-            { @Property(
+    value =
+        {
+                @Property(
                     key = LdapUserService.LDAP_SERVER,
                     value = "",
                     type = String.class,
-                    description = "Specify the location of the LDAP Server"), @Property(
-                    key = LdapUserService.LDAP_PASSWORD,
-                    value = "",
-                    type = String.class,
-                    description = "Specify the LDAP Server password required to authenticate"), @Property(
-                    key = LdapUserService.LDAP_USER_DN,
-                    value = "",
-                    type = String.class,
-                    description = "Specify the LDAP userDn"), @Property(
-                    key = LdapUserService.LDAP_BASE,
-                    value = "dc=company,dc=com",
-                    type = String.class,
-                    description = "Specify the LDAP Base url"), @Property(
-                    key = ILdapUserService.LDAP_AUTH_TYPE,
-                    value = "SIMPLE",
-                    type = LdapAuthTypeEnum.class,
-                    description = "Specify the type of authentication used (DIGEST_MD5, SIMPLE, SIMPLE_TLS, TLS_CERTIFICATE)") })
+                    description = "Specify the location of the LDAP Server"),
+                    @Property(
+                        key = LdapUserService.LDAP_PASSWORD,
+                        value = "",
+                        type = String.class,
+                        description = "Specify the LDAP Server password required to authenticate"),
+                    @Property(
+                        key = LdapUserService.LDAP_USER_DN,
+                        value = "",
+                        type = String.class,
+                        description = "Specify the LDAP userDn"),
+                    @Property(
+                        key = LdapUserService.LDAP_BASE,
+                        value = "dc=company,dc=com",
+                        type = String.class,
+                        description = "Specify the LDAP Base url"),
+                    @Property(
+                        key = ILdapUserService.LDAP_AUTH_TYPE,
+                        value = "SIMPLE",
+                        type = LdapAuthTypeEnum.class,
+                        description = "Specify the type of authentication used (DIGEST_MD5, SIMPLE, SIMPLE_TLS, TLS_CERTIFICATE)") })
 public class LdapUserService implements ILdapUserService
 {
     
@@ -127,6 +132,7 @@ public class LdapUserService implements ILdapUserService
             registryService.removeCronTask(LDAP_CRON_REFRESH);
             registryService.registerCronTask(LDAP_CRON_REFRESH, CRON_LDAP,
                     LdapCronRefreshJob.class, properties);
+            registryService.forceNow(LDAP_CRON_REFRESH);
         } catch (final Exception e) {
             
             throw new BeanCreationException(e.getMessage(), e);

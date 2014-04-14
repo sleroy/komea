@@ -3,7 +3,7 @@ package org.komea.product.api.service.ldap;
 
 
 
-
+import org.apache.directory.shared.ldap.exception.LdapConfigurationException;
 import org.komea.product.api.service.errors.KomeaLdapConfigurationException;
 
 
@@ -18,7 +18,7 @@ public interface ILdapUserService
 {
     
     
-    String CRON_LDAP         = "0 0/5 * * * ?";
+    String CRON_LDAP         = "0 0/10   * * * ?";
     
     String LDAP_AUTH_TYPE    = "ldap_authType";
     
