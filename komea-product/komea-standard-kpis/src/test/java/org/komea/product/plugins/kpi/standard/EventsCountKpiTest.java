@@ -4,12 +4,12 @@ import org.junit.Test;
 import org.komea.event.factory.BugZillaEventFactory;
 import org.komea.product.backend.esper.test.CEPQueryTester;
 
-public class LastEventValueKpiTest {
+public class EventsCountKpiTest {
 
     @Test
     public final void test() throws Exception {
 
-        final LastEventValueKpi kpi = new LastEventValueKpi("closed_status_bugs");
+        final EventsCountKpi kpi = new EventsCountKpi("closed_status_bugs", 1, "DAYS");
 
         final CEPQueryTester newTest = CEPQueryTester.newTest();
         final BugZillaEventFactory eventFactory = new BugZillaEventFactory();
@@ -21,8 +21,8 @@ public class LastEventValueKpiTest {
         newTest.withQuery(kpi).sendEvent(eventFactory.sendEvent("CIFLOW", 20, "ncloc"));
 
         newTest.dump().hasResults(new Object[][]{
-            {newTest.getMockProject().get("SCERTIFY").getEntityKey(), 20.0d},
-            {newTest.getMockProject().get("KOMEA").getEntityKey(), 50.0d}}
+            {newTest.getMockProject().get("SCERTIFY").getEntityKey(), 2d},
+            {newTest.getMockProject().get("KOMEA").getEntityKey(), 1d}}
         ).runTest();
 
     }
