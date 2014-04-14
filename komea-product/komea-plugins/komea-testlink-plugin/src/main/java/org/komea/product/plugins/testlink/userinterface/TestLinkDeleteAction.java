@@ -6,11 +6,11 @@
 package org.komea.product.plugins.testlink.userinterface;
 
 import java.util.List;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.komea.product.plugins.testlink.api.ITestLinkServerDAO;
 import org.komea.product.plugins.testlink.model.TestLinkServer;
 import org.komea.product.wicket.widget.api.IDeleteAction;
-import org.komea.product.wicket.widget.api.IEditAction;
 
 /**
  *
@@ -26,13 +26,13 @@ public class TestLinkDeleteAction implements IDeleteAction<TestLinkServer> {
         this.testlinkService = testLinkService;
     }
 
+
     @Override
-    public void delete(TestLinkServer _object) {
-        boolean delete = this.testlinkService.delete(_object);
+    public void delete(TestLinkServer _object, AjaxRequestTarget _target) {
+         boolean delete = this.testlinkService.delete(_object);
         if (delete) {
             this.serverAffiche.remove(_object);
         }
-
     }
 
 }

@@ -7,6 +7,7 @@
 package org.komea.product.wicket.customer;
 
 import java.util.List;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.model.Customer;
 import org.komea.product.wicket.widget.api.IDeleteAction;
@@ -24,10 +25,11 @@ public class CustomerDeleteAction implements IDeleteAction<Customer> {
         this.customerAffichage = customerAffichage;
         this.customerDao = customerDao;
     }
-    
+
+
     @Override
-    public void delete(Customer _customer) {
-        this.customerDao.deleteByPrimaryKey(_customer.getId());
+    public void delete(Customer _customer, AjaxRequestTarget _target) {
+              this.customerDao.deleteByPrimaryKey(_customer.getId());
         this.customerAffichage.remove(_customer);
     }
     

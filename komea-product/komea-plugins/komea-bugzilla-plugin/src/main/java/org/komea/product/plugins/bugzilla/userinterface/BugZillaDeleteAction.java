@@ -9,6 +9,7 @@ package org.komea.product.plugins.bugzilla.userinterface;
 
 
 import java.util.List;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
@@ -36,17 +37,15 @@ public class BugZillaDeleteAction implements IDeleteAction<BZServerConfiguration
         serverAffiche = _listAffichage;
         this.bugZillaService = bugZillaService;
     }
-    
-    
+
+
     @Override
-    public void delete(final BZServerConfiguration _object) {
-    
-    
+    public void delete(BZServerConfiguration _object, AjaxRequestTarget _target) {
+       
         final boolean delete = bugZillaService.delete(_object);
         if (delete) {
             serverAffiche.remove(_object);
         }
-        
     }
     
 }
