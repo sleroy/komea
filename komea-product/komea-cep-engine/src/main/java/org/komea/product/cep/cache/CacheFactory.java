@@ -10,6 +10,7 @@ import java.lang.reflect.Constructor;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang.Validate;
 import org.komea.eventory.api.cache.ICacheConfiguration;
 import org.komea.eventory.api.cache.ICacheStorage;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
@@ -18,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.google.common.base.Strings;
 
 
 
@@ -36,7 +39,7 @@ public class CacheFactory implements ICacheStorageFactory
     
     
     @Value(
-        value = "#{config.cacheImplementation}")
+        value = "${cacheImplementation}")
     private String              implementation;
     
     
@@ -56,7 +59,7 @@ public class CacheFactory implements ICacheStorageFactory
     
     
         LOGGER.info("Cache Factory implementation is {}", implementation);
-        
+        Validate.isTrue(!Strings.isNullOrEmpty(implementation));
         try {
             final Class<?> implemClass =
                     Thread.currentThread().getContextClassLoader().loadClass(implementation);
