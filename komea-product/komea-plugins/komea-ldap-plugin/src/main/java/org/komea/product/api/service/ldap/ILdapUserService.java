@@ -3,7 +3,7 @@ package org.komea.product.api.service.ldap;
 
 
 
-import org.apache.directory.shared.ldap.exception.LdapConfigurationException;
+
 import org.komea.product.api.service.errors.KomeaLdapConfigurationException;
 
 
