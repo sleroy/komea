@@ -11,8 +11,10 @@
                                                    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
                                                    ">
 
-	<context:property-placeholder
-		location="classpath:/config/bdd-${jdbc.bdd.type}.properties" />
+    <util:properties id="config"
+        location="classpath:/config/bdd-${jdbc.bdd.type}.properties" local-override="true">
+    </util:properties>
+
 	<!-- SALT FOR PASSWORDS -->
 	<util:properties id="authProperties" location="classpath:/config/auth.properties">
 	</util:properties>

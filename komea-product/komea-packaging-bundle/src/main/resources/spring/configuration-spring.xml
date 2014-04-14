@@ -13,11 +13,14 @@
 
 
 	<!-- load and override external properties -->
-	<context:property-placeholder
-		location="file:${KOMEA_HOME}/conf/komea.properties"
-		ignore-unresolvable="false" ignore-resource-not-found="false"
-		system-properties-mode="OVERRIDE" order="1" />
+
+
+	<util:properties id="config"
+		location="file:${KOMEA_HOME}/conf/komea.properties" local-override="true">
+	</util:properties>
+
 	<!-- SALT FOR PASSWORDS -->
-	<util:properties id="authProperties" location="file:${KOMEA_HOME}/conf/secret.properties">
+	<util:properties id="authProperties"
+		location="file:${KOMEA_HOME}/conf/secret.properties">
 	</util:properties>
 </beans>
