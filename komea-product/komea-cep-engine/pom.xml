@@ -11,6 +11,10 @@
 	<name>Komea : Complex Event Processing engine.</name>
 	<description>This layer contains an hand-made complex event processor designed to replace Esper and to provide simpler functionalities.</description>
 
+	<properties>
+		<eventory.version>1.0.19</eventory.version>
+	</properties>
+
 	<dependencies>
 
 
@@ -29,16 +33,29 @@
 
 
 		<dependency>
-			<groupId>com.googlecode.lambdaj</groupId>
-			<artifactId>lambdaj</artifactId>
-			<version>2.3.3</version>
+			<groupId>org.komea</groupId>
+			<artifactId>cep-engine</artifactId>
+			<version>${eventory.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jodd</groupId>
-			<artifactId>jodd-bean</artifactId>
-			<version>3.5</version>
+			<groupId>org.komea</groupId>
+			<artifactId>cep-bridge-memory</artifactId>
+			<version>${eventory.version}</version>
 		</dependency>
-
-
+		<dependency>
+			<groupId>org.komea</groupId>
+			<artifactId>cep-formula-xpath</artifactId>
+			<version>${eventory.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.komea</groupId>
+			<artifactId>cep-formula-springel</artifactId>
+			<version>${eventory.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.komea</groupId>
+			<artifactId>cep-cache-guava</artifactId>
+			<version>${eventory.version}</version>
+		</dependency>
 	</dependencies>
 </project>

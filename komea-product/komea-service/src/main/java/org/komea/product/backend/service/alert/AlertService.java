@@ -1,7 +1,5 @@
 package org.komea.product.backend.service.alert;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
+
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
@@ -23,6 +22,9 @@ import org.komea.product.database.model.Measure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 @Service
 @Transactional

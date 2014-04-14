@@ -18,7 +18,7 @@ public interface ILdapUserService
 {
     
     
-    String CRON_LDAP         = "0 0/5 * * * ?";
+    String CRON_LDAP         = "0 0/10   * * * ?";
     
     String LDAP_AUTH_TYPE    = "ldap_authType";
     

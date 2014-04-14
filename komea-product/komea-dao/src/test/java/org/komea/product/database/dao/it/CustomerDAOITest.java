@@ -23,7 +23,7 @@ public class CustomerDAOITest extends AbstractSpringIntegrationTestCase
     
     
     
-    @Test
+    @Test 
     @Transactional
     public void test() {
     

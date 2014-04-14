@@ -6,8 +6,8 @@ package org.komea.product.backend.service.esper;
 
 
 
+import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.product.backend.api.IQueryDefinition;
-import org.komea.product.cep.api.ICEPQueryImplementation;
 
 
 

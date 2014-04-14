@@ -21,7 +21,7 @@ public class RetentionQueryTest
 {
     
     
-    @Test()
+    @Test ()
     public void testQueryRetention() {
     
     

@@ -18,7 +18,7 @@ public class MeasuresAPIIT
     //
     //
     //
-    // @Test()
+    // @Test ()
     // public void testLastListMeasure() throws Exception {
     //
     //
@@ -33,7 +33,7 @@ public class MeasuresAPIIT
     // }
     //
     //
-    // @Test
+    // @Test 
     // public void testRealtimeMeasure() throws Exception {
     //
     //

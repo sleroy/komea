@@ -6,7 +6,15 @@ package org.komea.product.backend.service.esper.stats;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
 import javax.annotation.PostConstruct;
+
+import org.komea.eventory.api.engine.ICEPQuery;
+import org.komea.eventory.cache.CacheConfigurationBuilder;
+import org.komea.eventory.formula.tuple.EventCountFormula;
+import org.komea.eventory.formula.tuple.GroupByFormula;
+import org.komea.eventory.query.CEPQueryImplementation;
+import org.komea.eventory.query.FilterDefinition;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.esper.IEventPushService;
@@ -15,12 +23,6 @@ import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
-import org.komea.product.cep.api.ICEPQuery;
-import org.komea.product.cep.cache.CacheConfigurationBuilder;
-import org.komea.product.cep.formula.tuple.EventCountFormula;
-import org.komea.product.cep.formula.tuple.GroupByFormula;
-import org.komea.product.cep.query.CEPQueryImplementation;
-import org.komea.product.cep.query.FilterDefinition;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.enums.ProviderType;

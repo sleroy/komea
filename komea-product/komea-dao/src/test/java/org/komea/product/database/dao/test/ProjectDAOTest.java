@@ -29,27 +29,31 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/spring/application-context-test.xml")
-@TransactionConfiguration(defaultRollback = true)
-@TestExecutionListeners({
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionDbUnitTestExecutionListener.class })
+@TransactionConfiguration(
+    defaultRollback = true)
+@TestExecutionListeners(
+    {
+            DependencyInjectionTestExecutionListener.class,
+                DirtiesContextTestExecutionListener.class,
+                TransactionDbUnitTestExecutionListener.class })
 public class ProjectDAOTest
 {
     
     
     @Autowired
-    private ProjectDao  projectDAO;
+    private CustomerDao customerDAO;
     
     @Autowired
-    private CustomerDao customerDAO;
+    private ProjectDao  projectDAO;
     
     
     
     @Test
     @Transactional
     @DatabaseSetup("database.xml")
-    @ExpectedDatabase(value = "addCustomer.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+    @ExpectedDatabase(
+        value = "addCustomer.xml",
+        assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void testInsertProject() {
     
     

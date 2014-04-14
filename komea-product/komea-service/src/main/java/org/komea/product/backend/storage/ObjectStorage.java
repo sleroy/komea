@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.XppDriver;
 
 
 
@@ -29,7 +30,7 @@ public class ObjectStorage<T> implements IObjectStorage<T>
     private static final Logger     LOGGER   = LoggerFactory.getLogger(ObjectStorage.class);
     private final Class<?>          className;
     private final IPluginFileSystem service;
-    private final XStream           X_STREAM = new XStream();
+    private final XStream           X_STREAM = new XStream(new XppDriver());
     
     
     

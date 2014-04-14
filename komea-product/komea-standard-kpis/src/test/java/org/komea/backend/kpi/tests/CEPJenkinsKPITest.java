@@ -3,6 +3,7 @@ package org.komea.backend.kpi.tests;
 
 
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -10,23 +11,29 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.komea.event.factory.JenkinsEventsFactory;
+import org.komea.eventory.api.cache.ICacheConfiguration;
+import org.komea.eventory.api.cache.ICacheStorage;
+import org.komea.eventory.api.cache.ICacheStorageFactory;
+import org.komea.eventory.api.engine.ICEPQuery;
+import org.komea.eventory.api.filters.IEventFilter;
+import org.komea.eventory.cache.CacheConfigurationBuilder;
+import org.komea.eventory.cache.guava.GoogleCacheStorage;
+import org.komea.eventory.filter.ElEventFilter;
+import org.komea.eventory.filter.EventFilterBuilder;
+import org.komea.eventory.filter.NoEventFilter;
+import org.komea.eventory.formula.CountFormula;
+import org.komea.eventory.formula.ElNumericalFormula;
+import org.komea.eventory.query.CEPQueryBuilder;
+import org.komea.eventory.utils.PluginUtils;
 import org.komea.product.backend.esper.test.CEPQueryTester;
 import org.komea.product.backend.utils.MapPopulation;
-import org.komea.product.cep.api.ICEPQuery;
-import org.komea.product.cep.api.IEventFilter;
-import org.komea.product.cep.cache.CacheConfigurationBuilder;
-import org.komea.product.cep.filter.ELFormulaFilter;
-import org.komea.product.cep.filter.EventFilterBuilder;
-import org.komea.product.cep.filter.NoEventFilter;
-import org.komea.product.cep.formula.CountFormula;
-import org.komea.product.cep.formula.ElNumericalFormula;
-import org.komea.product.cep.query.CEPQueryBuilder;
+import org.komea.product.cep.filter.OnlyEventFilter;
 import org.komea.product.database.alert.IEvent;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
@@ -38,7 +45,9 @@ import com.carrotsearch.junitbenchmarks.BenchmarkRule;
  * Defines a test of a jenkins kpi .
  * http://docs.spring.io/spring/docs/3.0.0.M3/reference/html/ch07s02.html
  */
-@BenchmarkOptions(benchmarkRounds = 200, warmupRounds = 30)
+@BenchmarkOptions(
+    benchmarkRounds = 200,
+    warmupRounds = 30)
 public class CEPJenkinsKPITest
 {
     
@@ -89,6 +98,24 @@ public class CEPJenkinsKPITest
     }
     
     
+    @Before
+    public void before() {
+    
+    
+        PluginUtils.setCacheStorageFactory(new ICacheStorageFactory()
+        {
+            
+            
+            @Override
+            public ICacheStorage newCacheStorage(final ICacheConfiguration _arg0) {
+            
+            
+                return new GoogleCacheStorage<Serializable>(_arg0);
+            }
+        });
+    }
+    
+    
     @Test
     public void testCreation() {
     
@@ -106,7 +133,6 @@ public class CEPJenkinsKPITest
     
     
     @Test
-    @Ignore
     public void testMTBFPerProject() {
     
     
@@ -114,19 +140,19 @@ public class CEPJenkinsKPITest
         
         //
         // final IEventFilter eventFilter1 =
-        // new ELFormulaFilter(
+        // new ElEventFilter(
         // "project.projectKey=='SCERTIFY' && eventType.eventKey='build_complete'");
         // final IEventFilter eventFilter2 =
-        // new ELFormulaFilter(
+        // new ElEventFilter(
         // "project.projectKey=='SCERTIFY' && eventType.eventKey='build_failed'");
         // final IEventFilter eventFilter3 =
-        // new ELFormulaFilter(
+        // new ElEventFilter(
         // "project.projectKey=='SCERTIFY' && eventType.eventKey='build_interrupted'");
         // final ICEPQuery query =
         // CEPQueryBuilder
         // .create(new CountFormula())
         // .defineFilterAndTransformer(
-        // EventFilterBuilder.create().onlyIEvents(),
+        // EventFilterBuilder.create().chain(new OnlyEventFilter()),
         // SequenceTransformer.build(eventFilter1,
         // FilterOperator.or(eventFilter2, eventFilter3)),
         // CacheConfigurationBuilder.create()
@@ -145,8 +171,8 @@ public class CEPJenkinsKPITest
     
     
         final IEventFilter<?> filter =
-                EventFilterBuilder.create().onlyIEvents()
-                        .chain(new ELFormulaFilter("project.projectKey=='SCERTIFY'")).build();
+                EventFilterBuilder.create().chain(new OnlyEventFilter())
+                        .chain(new ElEventFilter("project.projectKey=='SCERTIFY'")).build();
         final ICEPQuery query =
                 CEPQueryBuilder
                         .create(new ElNumericalFormula("previous + 1"))
@@ -172,8 +198,8 @@ public class CEPJenkinsKPITest
     
     
         final IEventFilter<?> filter =
-                EventFilterBuilder.create().onlyIEvents()
-                        .chain(new ELFormulaFilter("project.projectKey=='SCERTIFY'")).build();
+                EventFilterBuilder.create().chain(new OnlyEventFilter())
+                        .chain(new ElEventFilter("project.projectKey=='SCERTIFY'")).build();
         final ICEPQuery query =
                 CEPQueryBuilder
                         .create(new CountFormula())
@@ -206,8 +232,8 @@ public class CEPJenkinsKPITest
         final IEventFilter<?> filter =
                 EventFilterBuilder
                         .create()
-                        .onlyIEvents()
-                        .chain(new ELFormulaFilter(
+                        .chain(new OnlyEventFilter())
+                        .chain(new ElEventFilter(
                                 "project.projectKey==#project &&  #expectedEvents.contains(eventType.eventKey)",
                                 parameters)).build();
         final ICEPQuery query =
@@ -238,19 +264,20 @@ public class CEPJenkinsKPITest
                 Arrays.asList("build_started", "build_failed", "build_interrupted");
         
         final IEventFilter<?> filter =
-                EventFilterBuilder.create().onlyIEvents().chain(new IEventFilter<IEvent>()
-                {
-                    
-                    
-                    @Override
-                    public boolean isFiltered(final IEvent _event) {
-                    
-                    
-                        return "SCERTIFY".equals(_event.getProject().getProjectKey())
-                                && eventList.contains(_event.getEventType().getEventKey());
-                        
-                    }
-                }).build();
+                EventFilterBuilder.create().chain(new OnlyEventFilter())
+                        .chain(new IEventFilter<IEvent>()
+                        {
+                            
+                            
+                            @Override
+                            public boolean isFiltered(final IEvent _event) {
+                            
+                            
+                                return "SCERTIFY".equals(_event.getProject().getProjectKey())
+                                        && eventList.contains(_event.getEventType().getEventKey());
+                                
+                            }
+                        }).build();
         
         final ICEPQuery query =
                 CEPQueryBuilder
@@ -272,7 +299,8 @@ public class CEPJenkinsKPITest
     }
     
     
-    @Test(timeout = 1000 * 5)
+    @Test(
+        timeout = 1000 * 5)
     public void testSendingEvents() {
     
     

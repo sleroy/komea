@@ -47,7 +47,7 @@ public class LdapUserServiceTest extends AbstractSpringIntegrationTestCase
     
     
     
-    @Test
+    @Test 
     public void testLdap() {
     
     

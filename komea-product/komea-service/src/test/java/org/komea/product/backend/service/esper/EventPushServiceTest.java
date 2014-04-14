@@ -6,8 +6,6 @@ package org.komea.product.backend.service.esper;
 
 
 
-import static org.mockito.Mockito.verify;
-
 import org.junit.Test;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.database.alert.Event;
@@ -18,6 +16,8 @@ import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
+
+import static org.mockito.Mockito.verify;
 
 
 
@@ -34,7 +34,7 @@ public class EventPushServiceTest
     /**
      * Test method for {@link org.komea.product.backend.service.esper.EventPushService#sendEvent(org.komea.product.database.alert.IEvent)}.
      */
-    @Test
+    @Test 
     public final void testSendEvent() {
     
     
@@ -61,7 +61,7 @@ public class EventPushServiceTest
      * Test method for
      * {@link org.komea.product.backend.service.esper.EventPushService#sendEventWithoutValidation(org.komea.product.database.alert.IEvent)}.
      */
-    @Test
+    @Test 
     public final void testSendEventWithoutValidation() {
     
     

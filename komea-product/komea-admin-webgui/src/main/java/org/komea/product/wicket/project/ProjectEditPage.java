@@ -8,7 +8,7 @@ package org.komea.product.wicket.project;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import java.util.List;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -16,8 +16,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
+import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.dao.CustomerDao;
-import org.komea.product.database.model.Customer;
 import org.komea.product.database.model.CustomerCriteria;
 import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
@@ -43,10 +43,14 @@ public class ProjectEditPage extends LayoutPage {
     private IPersonGroupService personGroupService;
 
     public ProjectEditPage(PageParameters _parameters) {
-        this(_parameters, new Project());
+        this(_parameters, new Project(), true);
     }
 
     public ProjectEditPage(PageParameters pageParameters, Project _object) {
+        this(pageParameters, _object, false);
+    }
+
+    private ProjectEditPage(PageParameters pageParameters, Project _object, boolean _isNew) {
         super(pageParameters);
 
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
@@ -56,28 +60,22 @@ public class ProjectEditPage extends LayoutPage {
 //        final KpiForm KpiForm = null;
 //        new KpiForm(PARENT_PATH, _kpi, feedbackPanel, null)
 
-        final ProjectForm projectForm = new ProjectForm("form", personService, personGroupService, this.projectService, customerDao, feedbackPanel, new CompoundPropertyModel<Project>(_object), this);
+        final ProjectForm projectForm = new ProjectForm(_isNew, "form", personService, personGroupService, this.projectService, customerDao, feedbackPanel, new CompoundPropertyModel<Project>(_object), this);
+                String message;
+        if (_isNew) {
+            message = "Add project";
+        } else {
+            message = "Edit project";
+        }
+        projectForm.add(new Label("legend", message));
         add(projectForm);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Dialog provider //
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        IChoiceRenderer<Customer> iChoiceRenderer = new IChoiceRenderer<Customer>() {
-
-            @Override
-            public Object getDisplayValue(Customer t) {
-                return t.getName();
-            }
-
-            @Override
-            public String getIdValue(Customer t, int i) {
-                return String.valueOf(t.getId());
-            }
-
-        };
-        List<Customer> selectByCriteria = customerDao.selectByCriteria(new CustomerCriteria());
-        final SelectDialog<Customer> dialogCustomer;
-        dialogCustomer = new SelectDialog<Customer>("dialogCustomer", "Choose a customer", selectByCriteria, iChoiceRenderer) {
+        List<IHasKey> selectByCriteria = (List<IHasKey>) (List<?>) customerDao.selectByCriteria(new CustomerCriteria());
+        final SelectDialog dialogCustomer;
+        dialogCustomer = new SelectDialog("dialogCustomer", "Choose a customer", selectByCriteria) {
 
             @Override
             public void onClose(AjaxRequestTarget target, DialogButton button) {
@@ -86,10 +84,10 @@ public class ProjectEditPage extends LayoutPage {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                Customer selectedCustomer = getSelected();
+                IHasKey selectedCustomer = getSelected();
                 if (selectedCustomer != null) {
                     projectForm.getProject().setIdCustomer(selectedCustomer.getId());
-                    projectForm.getCustomerName().setName(selectedCustomer.getName());
+                    projectForm.getCustomerName().setName(selectedCustomer.getDisplayName());
                 } else {
                     projectForm.getProject().setIdCustomer(null);
                     projectForm.getCustomerName().setName("");

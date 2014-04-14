@@ -10,18 +10,42 @@ package org.komea.product.plugins.testlink.core;
 
 import java.util.Date;
 
-import org.komea.product.plugins.testlink.api.ITestLinkAlertFactory;
 import org.komea.product.database.dto.EventSimpleDto;
+import org.komea.product.plugins.testlink.api.ITestLinkAlertFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 
 /**
  * @author rgalerme
  */
+@Transactional
 @Service
 public class TestLinkAlertFactory implements ITestLinkAlertFactory
 {
+    
+    
+    public static final String    TESTLINK_BLOCKED_TESTS      = "testlink_blocked_tests";
+    
+    public static final String    TESTLINK_FAILED_TESTS       = "testlink_failed_tests";
+    
+    public static final String    TESTLINK_REQUIREMENTS       = "testlink_requirements";
+    
+    public static final String    TESTLINK_SUCCESS_TESTS      = "testlink_success_tests";
+    
+    public static final String    TESTLINK_TESTED_CASES       = "testlink_tested_cases";
+    
+    public static final String    TESTLINK_TOTAL_TESTS        = "testlink_total_tests";
+    
+    public static final String    TESTLINK_UNASSOCIATED_TESTS = "testlink_unassociated_tests";
+    
+    public static final String    TESTLINK_UNEXECUTED_TESTS   = "testlink_unexecuted_tests";
+    
+    public static final String    TESTLINK_UNTESTED_TESTS     = "testlink_untested_tests";
+    
+    protected static final String TESTLINK_URL                = "/testlink";
+    
     
     
     @Override
@@ -29,13 +53,12 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
     
     
         final EventSimpleDto event = new EventSimpleDto();
-        event.setProvider("TESTLINK");
+        event.setProvider(TESTLINK_URL);
         event.setMessage("Total number of blocked test in testlink");
-        
         event.setValue(_alert);
         event.setMessage(event.getMessage());
         event.setProject(_project);
-        
+        event.setEventType(TESTLINK_BLOCKED_TESTS);
         event.setDate(new Date());
         
         return event;
@@ -47,9 +70,9 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
     
     
         final EventSimpleDto event = new EventSimpleDto();
-        event.setProvider("TESTLINK");
-        event.setMessage("Total number of failed test in testlink");
-        
+        event.setProvider(TESTLINK_URL);
+        event.setMessage("Total number of failed tests in testlink");
+        event.setEventType(TESTLINK_FAILED_TESTS);
         event.setValue(_alert);
         event.setMessage(event.getMessage());
         event.setProject(_project);
@@ -65,13 +88,14 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
     
     
         final EventSimpleDto event = new EventSimpleDto();
-        event.setProvider("TESTLINK");
-        event.setMessage("Total number of requirements in testlink");
+        event.setProvider(TESTLINK_URL);
+        event.setMessage("Total number of requirements for the project "
+                + _project + " in testlink");
         
         event.setValue(_alert);
         event.setMessage(event.getMessage());
         event.setProject(_project);
-        
+        event.setEventType(TESTLINK_REQUIREMENTS);
         event.setDate(new Date());
         
         return event;
@@ -83,13 +107,13 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
     
     
         final EventSimpleDto event = new EventSimpleDto();
-        event.setProvider("TESTLINK");
+        event.setProvider(TESTLINK_URL);
         event.setMessage("Total number of successful test in testlink");
         
         event.setValue(_alert);
         event.setMessage(event.getMessage());
         event.setProject(_project);
-        
+        event.setEventType(TESTLINK_SUCCESS_TESTS);
         event.setDate(new Date());
         
         return event;
@@ -101,13 +125,13 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
     
     
         final EventSimpleDto event = new EventSimpleDto();
-        event.setProvider("TESTLINK");
-        event.setMessage("Total number of tested in testlink");
+        event.setProvider(TESTLINK_URL);
+        event.setMessage("Total number of tested cases in testlink");
         
         event.setValue(_alert);
         event.setMessage(event.getMessage());
         event.setProject(_project);
-        
+        event.setEventType(TESTLINK_TESTED_CASES);
         event.setDate(new Date());
         
         return event;
@@ -119,13 +143,13 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
     
     
         final EventSimpleDto event = new EventSimpleDto();
-        event.setProvider("TESTLINK");
+        event.setProvider(TESTLINK_URL);
         event.setMessage("Total number of tests in testlink");
         
         event.setValue(_alert);
         event.setMessage(event.getMessage());
         event.setProject(_project);
-        
+        event.setEventType(TESTLINK_TOTAL_TESTS);
         event.setDate(new Date());
         
         return event;
@@ -137,9 +161,9 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
     
     
         final EventSimpleDto event = new EventSimpleDto();
-        event.setProvider("TESTLINK");
-        event.setMessage("Total number of unassocied test in testlink");
-        
+        event.setProvider(TESTLINK_URL);
+        event.setMessage("Total number of unassocied tests in testlink");
+        event.setEventType(TESTLINK_UNASSOCIATED_TESTS);
         event.setValue(_alert);
         event.setMessage(event.getMessage());
         event.setProject(_project);
@@ -153,9 +177,9 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
     
     
         final EventSimpleDto event = new EventSimpleDto();
-        event.setProvider("TESTLINK");
-        event.setMessage("Total number of unexecuted test in testlink");
-        
+        event.setProvider(TESTLINK_URL);
+        event.setMessage("Total number of unexecuted tests in testlink");
+        event.setEventType(TESTLINK_UNEXECUTED_TESTS);
         event.setValue(_alert);
         event.setMessage(event.getMessage());
         event.setProject(_project);
@@ -170,12 +194,13 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
     
     
         final EventSimpleDto event = new EventSimpleDto();
-        event.setProvider("TESTLINK");
-        event.setMessage("Total number of untested in testlink");
+        event.setProvider(TESTLINK_URL);
+        event.setMessage("Total number of untested usecases in testlink");
         event.setValue(_alert);
         event.setMessage(event.getMessage());
         event.setProject(_project);
         event.setDate(new Date());
+        event.setEventType(TESTLINK_UNTESTED_TESTS);
         
         return event;
     }

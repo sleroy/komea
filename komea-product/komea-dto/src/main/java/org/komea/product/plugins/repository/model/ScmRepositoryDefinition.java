@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.joda.time.DateTime;
+import org.komea.product.database.api.IHasId;
 
 import com.google.common.base.Strings;
 
@@ -26,7 +27,7 @@ import com.google.common.base.Strings;
  * 
  * @author sleroy
  */
-public class ScmRepositoryDefinition implements Serializable
+public class ScmRepositoryDefinition implements Serializable, IHasId
 {
     
     
@@ -70,6 +71,10 @@ public class ScmRepositoryDefinition implements Serializable
     
     private Set<String>                         customerRegExps      = new HashSet<String>();
     
+    
+    private Integer                             id;
+    
+    
     private String                              key;
     
     
@@ -77,13 +82,13 @@ public class ScmRepositoryDefinition implements Serializable
     
     private String                              password             = "";
     
-    private String                              projectForRepository = "";
     
+    private String                              projectForRepository = "";
     
     private String                              repoName             = "";
     
-    
     private String                              type                 = "";
+    
     
     private String                              url                  = "";
     
@@ -122,6 +127,17 @@ public class ScmRepositoryDefinition implements Serializable
     
     
         return customerRegExps;
+    }
+    
+    
+    /**
+     * @return the id
+     */
+    @Override
+    public Integer getId() {
+    
+    
+        return id;
     }
     
     
@@ -305,6 +321,18 @@ public class ScmRepositoryDefinition implements Serializable
     
     
     /**
+     * @param _id
+     *            the id to set
+     */
+    @Override
+    public void setId(final Integer _id) {
+    
+    
+        id = _id;
+    }
+    
+    
+    /**
      * @param _key
      *            the key to set
      */
@@ -394,9 +422,9 @@ public class ScmRepositoryDefinition implements Serializable
     
         return "ScmRepositoryDefinition [branchDefinitions="
                 + branchDefinitions + ", cloneDirectory=" + cloneDirectory + ", customerRegExps="
-                + customerRegExps + ", key=" + key + ", lastDateCheckout=" + lastDateCheckout
-                + ", password=" + password + ", projectForRepository=" + projectForRepository
-                + ", repoName=" + repoName + ", type=" + type + ", url=" + url + ", userName="
-                + userName + "]";
+                + customerRegExps + ", id=" + id + ", key=" + key + ", lastDateCheckout="
+                + lastDateCheckout + ", password=" + password + ", projectForRepository="
+                + projectForRepository + ", repoName=" + repoName + ", type=" + type + ", url="
+                + url + ", userName=" + userName + "]";
     }
 }

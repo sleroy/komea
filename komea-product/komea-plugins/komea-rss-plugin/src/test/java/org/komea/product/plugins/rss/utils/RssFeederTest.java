@@ -32,7 +32,7 @@ public class RssFeederTest
      * 
      * @throws MalformedURLException
      */
-    @Test
+    @Test 
     public final void testFeedFetching() throws MalformedURLException {
     
     

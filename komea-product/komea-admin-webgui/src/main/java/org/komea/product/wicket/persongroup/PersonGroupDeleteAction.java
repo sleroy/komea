@@ -6,6 +6,7 @@
 package org.komea.product.wicket.persongroup;
 
 import java.util.List;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.database.dto.DepartmentDto;
 import org.komea.product.database.model.Kpi;
@@ -26,9 +27,9 @@ public class PersonGroupDeleteAction implements IDeleteAction<PersonGroup> {
         this.PersonGroupAffichage = _PersonGroupAffichage;
     }
 
-    @Override
-    public void delete(PersonGroup _object) {
 
+    @Override
+    public void delete(PersonGroup _object, AjaxRequestTarget _target) {
         this.personGroupService.deletePersonGroup(_object);
         this.PersonGroupAffichage.remove(_object);
     }

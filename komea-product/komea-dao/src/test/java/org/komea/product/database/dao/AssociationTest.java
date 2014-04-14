@@ -10,7 +10,7 @@ public class AssociationTest {
         super();
     }
 
-    @Test
+    @Test 
     public void testAssociation() {
         final MeasureDao measureDao = Mockito.mock(MeasureDao.class);
 

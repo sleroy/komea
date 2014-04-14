@@ -7,11 +7,17 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.ValidationError;
+import org.komea.product.backend.service.cron.CronUtils;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.entities.IProviderService;
+import org.komea.product.backend.service.esper.ConvertELIntoQuery;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.EvictionType;
@@ -39,8 +45,10 @@ public final class KpiForm extends Form<Kpi> {
     private final IKPIService kpiService;
     private final NameGeneric nameEntity;
     private final LayoutPage page;
+    private final boolean isNew;
 
     public KpiForm(
+            final boolean _isNew,
             final String _id,
             final IKPIService _kpi,
             final IEntityService _entity,
@@ -50,6 +58,7 @@ public final class KpiForm extends Form<Kpi> {
             final LayoutPage _kpiPage) {
 
         super(_id, _dto);
+        this.isNew = _isNew;
         kpiService = _kpi;
         feedBack = _feedBack;
         kpi = _dto.getObject();
@@ -60,9 +69,16 @@ public final class KpiForm extends Form<Kpi> {
 
         add(TextFieldBuilder.<String>createRequired("name", kpi, "name").highlightOnErrors()
                 .simpleValidator(0, 255).build());
+        TextFieldBuilder<String> keyField = TextFieldBuilder.<String>createRequired("kpiKey", kpi, "kpiKey")
+                .simpleValidator(0, 255).highlightOnErrors().withTooltip("");
 
-        add(TextFieldBuilder.<String>createRequired("kpiKey", kpi, "kpiKey")
-                .simpleValidator(0, 255).highlightOnErrors().withTooltip("").build());
+        if (isNew) {
+            keyField.UniqueStringValidator("Kpi key", kpiService);
+        } else {
+            keyField.buildTextField().setEnabled(false);
+        }
+
+        add(keyField.build());
 
         add(TextAreaBuilder.<String>create("description", kpi, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("").build());
@@ -87,9 +103,24 @@ public final class KpiForm extends Form<Kpi> {
 
         add(SelectBoxBuilder.<EntityType>createWithEnum("entityType", kpi, EntityType.class)
                 .build());
+        TextField<String> buildCronField = TextFieldBuilder.<String>create("cronExpression", kpi, "cronExpression")
+                .simpleValidator(0, 60).highlightOnErrors().withTooltip("").buildTextField();
 
-        add(TextFieldBuilder.<String>create("cronExpression", kpi, "cronExpression")
-                .simpleValidator(0, 60).highlightOnErrors().withTooltip("").build());
+        buildCronField.add(new IValidator<String>() {
+
+            @Override
+            public void validate(IValidatable<String> validatable) {
+                String value = validatable.getValue();
+                if (!CronUtils.isValidCronExpression(value)) {
+                    ValidationError error = new ValidationError();
+                    error.setMessage("Cron expression is invalid");
+                    validatable.error(error);
+                }
+            }
+        }
+        );
+
+        add(buildCronField);
 
         add(TextFieldBuilder.<String>createRequired("evictionRate", kpi, "evictionRate")
                 .withTooltip("").build());
@@ -97,8 +128,23 @@ public final class KpiForm extends Form<Kpi> {
         add(SelectBoxBuilder.<EvictionType>createWithEnum("evictionType", kpi, EvictionType.class)
                 .build());
 
-        add(TextAreaBuilder.<String>create("esperRequest", kpi, "esperRequest").withTooltip("")
-                .build());
+        TextArea<String> formulaField = TextAreaBuilder.<String>create("formula", kpi, "esperRequest").withTooltip("")
+                .build();
+
+        formulaField.add(new IValidator<String>() {
+
+            @Override
+            public void validate(IValidatable<String> validatable) {
+                String value = validatable.getValue();
+                if (!ConvertELIntoQuery.isValidFormula(value)) {
+                    ValidationError error = new ValidationError();
+                    error.setMessage("formula expression is invalid");
+                    validatable.error(error);
+                }
+            }
+        });
+
+        add(formulaField);
 
         final Kpi myKpi = kpi;
 
@@ -127,7 +173,7 @@ public final class KpiForm extends Form<Kpi> {
             @Override
             public void onClick(final AjaxRequestTarget art) {
 
-                myKpi.setValueMin(Double.MAX_VALUE);
+                myKpi.setValueMin(-Double.MAX_VALUE);
                 art.add(getCustom());
             }
 
@@ -161,7 +207,6 @@ public final class KpiForm extends Form<Kpi> {
         // ///////////////////////////////////////////////////////////////////////////////////
         // ///////////////////////////////////////////////////////////////////////////////////
     }
-
 
     public Kpi getKpi() {
 

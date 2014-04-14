@@ -9,6 +9,9 @@ import java.util.List;
 import org.komea.product.backend.business.IDAOObjectStorage;
 import org.komea.product.backend.service.fs.IObjectStorage;
 import org.komea.product.backend.utils.SearchFilter;
+import org.komea.product.database.api.IHasId;
+
+import com.google.common.collect.Lists;
 
 
 
@@ -18,7 +21,7 @@ import org.komea.product.backend.utils.SearchFilter;
  * @author sleroy
  * @version $Revision: 1.0 $
  */
-public class DAOObjectStorage<T> implements IDAOObjectStorage<T>
+public class DAOObjectStorage<T extends IHasId> implements IDAOObjectStorage<T>
 {
     
     
@@ -54,13 +57,15 @@ public class DAOObjectStorage<T> implements IDAOObjectStorage<T>
      * @see org.komea.product.backend.business.IDAOObjectStorage#delete(T)
      */
     @Override
-    public synchronized void delete(final T _object) {
+    public synchronized boolean delete(final T _object) {
     
     
-        daoStorageIndex.getObjectIndex().remove(_object);
+        final boolean res = daoStorageIndex.getObjectIndex().containsKey(_object.getId());
+        daoStorageIndex.getObjectIndex().remove(_object.getId());
         if (saveOnChangeFlag) {
             saveChanges();
         }
+        return res;
         
     }
     
@@ -75,7 +80,7 @@ public class DAOObjectStorage<T> implements IDAOObjectStorage<T>
     
     
         daoStorageIndex.getObjectIndex().clear();
-        ;
+        
         
         if (saveOnChangeFlag) {
             saveChanges();
@@ -119,7 +124,7 @@ public class DAOObjectStorage<T> implements IDAOObjectStorage<T>
     public boolean exists(final T _object) {
     
     
-        return daoStorageIndex.getObjectIndex().contains(_object);
+        return daoStorageIndex.getObjectIndex().containsKey(_object.getId());
     }
     
     
@@ -136,7 +141,7 @@ public class DAOObjectStorage<T> implements IDAOObjectStorage<T>
     
     
         final List<T> res = new ArrayList<T>(daoStorageIndex.getObjectIndex().size());
-        for (final T object : daoStorageIndex.getObjectIndex()) {
+        for (final T object : daoStorageIndex.getObjectIndex().values()) {
             if (_filter.match(object)) {
                 res.add(object);
             }
@@ -170,13 +175,13 @@ public class DAOObjectStorage<T> implements IDAOObjectStorage<T>
     public synchronized void saveOrUpdate(final T _object) {
     
     
-        final int indexOf = daoStorageIndex.getObjectIndex().indexOf(_object);
-        if (indexOf == -1) {
-            daoStorageIndex.getObjectIndex().add(_object);
-            
-        } else {
-            daoStorageIndex.getObjectIndex().set(indexOf, _object);
+        if (_object.getId() == null) {
+            daoStorageIndex.incID();
+            _object.setId(daoStorageIndex.getId());
+            daoStorageIndex.put(_object);
         }
+        
+        
         if (saveOnChangeFlag) {
             saveChanges();
         }
@@ -193,7 +198,7 @@ public class DAOObjectStorage<T> implements IDAOObjectStorage<T>
     public synchronized List<T> selectAll() {
     
     
-        return daoStorageIndex.getObjectIndex();
+        return Lists.newArrayList(daoStorageIndex.getObjectIndex().values());
     }
     
 }

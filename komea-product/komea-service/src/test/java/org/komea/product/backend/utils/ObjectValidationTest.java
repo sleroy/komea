@@ -13,7 +13,7 @@ public class ObjectValidationTest
 {
     
     
-    @Test(expected = KomeaConstraintViolationException.class)
+    @Test (expected = KomeaConstraintViolationException.class)
     public final void testValidateObject() throws Exception {
     
     

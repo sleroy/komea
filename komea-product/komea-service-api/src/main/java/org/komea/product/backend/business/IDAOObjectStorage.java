@@ -6,6 +6,7 @@ package org.komea.product.backend.business;
 import java.util.List;
 
 import org.komea.product.backend.utils.SearchFilter;
+import org.komea.product.database.api.IHasId;
 
 
 
@@ -15,7 +16,7 @@ import org.komea.product.backend.utils.SearchFilter;
  * @author sleroy
  * @version $Revision: 1.0 $
  */
-public interface IDAOObjectStorage<T>
+public interface IDAOObjectStorage<T extends IHasId>
 {
     
     
@@ -24,7 +25,7 @@ public interface IDAOObjectStorage<T>
      * 
      * @param _object
      */
-    void delete(T _object);
+    boolean delete(T _object);
     
     
     /**

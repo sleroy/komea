@@ -3,7 +3,7 @@ package org.komea.product.backend.api;
 
 
 
-import org.komea.product.cep.api.ICEPQuery;
+import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.product.database.alert.IEvent;
 
 

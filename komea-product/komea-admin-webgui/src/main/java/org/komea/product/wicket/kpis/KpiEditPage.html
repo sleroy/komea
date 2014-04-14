@@ -23,13 +23,13 @@
                         <wicket:extend>
                             <div class="alert alert-danger" wicket:id="feedback"></div>
                             <form class="form" wicket:id="form" role="form">
-                                <legend>Editing a kpi</legend>
+                                <legend wicket:id="legend" ></legend>
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">KpiKey</label>
+                                                <label class="col-md-3" for="inputEmail1">Kpi Key *</label>
                                                 <div class="col-md-6">
                                                     <input id="kpiKey" name="kpiKey" type="text" placeholder="kpiKey" class="form-control" required="required" wicket:id="kpiKey" />
                                                 </div>
@@ -38,7 +38,7 @@
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">Name</label>
+                                                <label class="col-md-3" for="inputEmail1">Name *</label>
                                                 <div class="col-md-6">
                                                     <input id="firstName" name="name" type="text" placeholder="name" class="form-control" required="required" wicket:id="name" />
                                                 </div>
@@ -58,7 +58,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">Provider Type</label>
+                                                <label class="col-md-3" for="inputEmail1">Category *</label>
                                                 <div class="col-md-6">
                                                     <select id="idProvider"  name="idProvider" type="text" placeholder="Provider" class="form-control"  wicket:id="providerType" ></select>
                                                 </div>
@@ -68,7 +68,7 @@
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">ValueMin</label>
+                                                <label class="col-md-3" for="inputEmail1">Value Min</label>
                                                 <div class="col-md-4">
                                                     <input id="valueMin" name="valueMin" type="text" placeholder="valueMin" class="form-control"  wicket:id="valueMin" />
                                                 </div>
@@ -81,7 +81,7 @@
 
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">ValueMax</label>
+                                                <label class="col-md-3" for="inputEmail1">Value Max</label>
                                                 <div class="col-md-4">
                                                     <input id="valueMax" name="valueMax" type="text" placeholder="valueMax" class="form-control"  wicket:id="valueMax" />
                                                 </div>
@@ -98,7 +98,7 @@
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">ValueDirection</label>
+                                                <label class="col-md-3" for="inputEmail1">Value Direction *</label>
                                                 <div class="col-md-6">
                                                     <select id="fvalueDirection" name="valueDirection"  class="form-control" wicket:id="valueDirection"></select>
                                                 </div>
@@ -109,7 +109,7 @@
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">ValueType</label>
+                                                <label class="col-md-3" for="inputEmail1">Value Type *</label>
                                                 <div class="col-md-6">
                                                     <select id="valueType" name="valueType" class="form-control" wicket:id="valueType"></select>
                                                     <!--<input id="valueType" name="valueType" type="text" placeholder="valueType" class="form-control" required="required" wicket:id="valueType">-->
@@ -120,7 +120,7 @@
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">EntityType</label>
+                                                <label class="col-md-3" for="inputEmail1">Entity Type *</label>
                                                 <div class="col-md-6">
                                                     <select id="entityType" name="entityType" class="form-control"  wicket:id="entityType"></select>
                                                 </div>
@@ -129,7 +129,7 @@
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">CronExpression</label>
+                                                <label class="col-md-3" for="inputEmail1">Cron Expression *</label>
                                                 <div class="col-md-6">
                                                     <input id="cronExpression" name="cronExpression" type="text" placeholder="cronExpression" class="form-control" required="required" wicket:id="cronExpression" />
                                                 </div>
@@ -139,7 +139,7 @@
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">EvictionRate</label>
+                                                <label class="col-md-3" for="inputEmail1">Eviction Rate *</label>
                                                 <div class="col-md-6">
                                                     <input id="evictionRate" name="evictionRate" type="text" placeholder="evictionRate" class="form-control" required="required" wicket:id="evictionRate" />
                                                 </div>
@@ -149,7 +149,7 @@
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">EvictionType</label>
+                                                <label class="col-md-3" for="inputEmail1">Eviction Type</label>
                                                 <div class="col-md-6">
                                                     <select id="evictionType" name="evictionType"  class="form-control"  wicket:id="evictionType"></select>
                                                 </div>
@@ -165,9 +165,10 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <label class="col-md-2" for="inputEmail1">EsperRequest</label>
+                                        <label class="col-md-2" for="inputEmail1">Formula</label>
                                         <div class="col-md-10">
-                                            <textarea class="form-control" rows="6" wicket:id="esperRequest"></textarea>
+                                            <textarea id="formula" class="form-control" rows="6" wicket:id="formula"></textarea>
+                                            <!--<textarea id="formula" class="form-control codepress java linenumbers-off" rows="6" wicket:id="formula"></textarea>-->
                                         </div>
                                     </div>
                                 </div>

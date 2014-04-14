@@ -4,6 +4,7 @@
 package org.komea.product.backend.service.kpi;
 
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +47,7 @@ public class MeasureHistoryServiceTest {
      * Test method for
      * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#buildHistoryPurgeAction(org.komea.product.database.model.Kpi)}.
      */
-    @Test
+    @Test 
     public final void testBuildHistoryPurgeAction() throws Exception {
 
         // TODO
@@ -58,7 +59,7 @@ public class MeasureHistoryServiceTest {
      * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#buildMeasureCriteriaFromSearchFilter(org.komea.product.database.dto.SearchMeasuresDto, org.komea.product.backend.service.history.HistoryKey)}
      * .
      */
-    @Test
+    @Test 
     public final void testBuildMeasureCriteriaFromSearchFilter() throws Exception {
 
         // TODO
@@ -70,7 +71,7 @@ public class MeasureHistoryServiceTest {
      * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, int, org.komea.product.database.model.MeasureCriteria)}
      * .
      */
-    @Test
+    @Test 
     public final void testGetFilteredHistoryHistoryKeyIntMeasureCriteria() throws Exception {
 
         // TODO
@@ -82,7 +83,7 @@ public class MeasureHistoryServiceTest {
      * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, org.komea.product.database.model.MeasureCriteria)}
      * .
      */
-    @Test
+    @Test 
     public final void testGetFilteredHistoryHistoryKeyMeasureCriteria() throws Exception {
 
         // TODO
@@ -93,7 +94,7 @@ public class MeasureHistoryServiceTest {
      * Test method for
      * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getHistory(org.komea.product.backend.service.history.HistoryKey)}.
      */
-    @Test
+    @Test 
     public final void testGetHistory() throws Exception {
 
         final Kpi kpi
@@ -120,7 +121,7 @@ public class MeasureHistoryServiceTest {
      * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getMeasures(java.util.List, java.util.List, org.komea.product.database.dto.SearchMeasuresDto)}
      * .
      */
-    @Test
+    @Test 
     public final void testGetMeasures() throws Exception {
 
         // TODO

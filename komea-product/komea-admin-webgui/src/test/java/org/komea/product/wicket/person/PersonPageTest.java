@@ -41,7 +41,7 @@ public class PersonPageTest
      * Test method for
      * {@link org.komea.product.wicket.person.PersonPage#PersonPage(org.apache.wicket.request.mapper.parameter.PageParameters)}.
      */
-    @Test
+    @Test 
     public final void testPersonPage() throws Exception {
     
     

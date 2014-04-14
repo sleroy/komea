@@ -7,7 +7,7 @@ import org.junit.Test;
 public class TEst
 {
     
-    @Test
+    @Test 
     public void testName() throws Exception {
     
         String s = "aaa";

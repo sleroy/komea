@@ -77,8 +77,10 @@ public class EventsAPIIT
     
     
     //
-    @Test(expected = Exception.class)
-    public void testPushWithInvalidEvent() throws ConnectException, URISyntaxException, InternalServerException {
+    @Test(
+        expected = Exception.class)
+    public void testPushWithInvalidEvent()
+            throws ConnectException, URISyntaxException, InternalServerException {
     
     
         final IProvidersAPI providersAPI =

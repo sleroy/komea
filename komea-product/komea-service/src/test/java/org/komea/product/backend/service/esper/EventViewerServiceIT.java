@@ -44,7 +44,7 @@ public class EventViewerServiceIT extends AbstractSpringIntegrationTestCase
     /**
      * Test method for {@link org.komea.product.backend.service.esper.EventViewerService#getGlobalActivity()}.
      */
-    @Test
+    @Test 
     public final void testGetGlobalActivity() {
     
     
@@ -81,7 +81,7 @@ public class EventViewerServiceIT extends AbstractSpringIntegrationTestCase
     /**
      * Test method for {@link org.komea.product.backend.service.esper.EventViewerService#getInstantView(java.lang.String)}.
      */
-    @Test
+    @Test 
     public final void testGetInstantView() {
     
     

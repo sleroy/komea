@@ -13,7 +13,7 @@ public class DAOEventRegistryTest
 {
     
     
-    @Test
+    @Test 
     public void testNotifyDeleted() throws Exception {
     
     
@@ -22,7 +22,7 @@ public class DAOEventRegistryTest
     }
     
     
-    @Test
+    @Test 
     public void testNotifyUpdated() throws Exception {
     
     

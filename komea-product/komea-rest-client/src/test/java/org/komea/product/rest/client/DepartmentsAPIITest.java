@@ -29,7 +29,7 @@ public class DepartmentsAPIITest
     
     
     //
-    @Test
+    @Test 
     public void testAllProjects() throws Exception {
     
     
@@ -41,7 +41,7 @@ public class DepartmentsAPIITest
     }
     
     
-    @Test
+    @Test 
     public void testGetAllDepartments() throws Exception {
     
     
@@ -54,7 +54,7 @@ public class DepartmentsAPIITest
     }
     
     
-    @Test
+    @Test 
     public void testGetAllPersons() throws Exception {
     
     
@@ -66,7 +66,7 @@ public class DepartmentsAPIITest
     }
     
     
-    @Test
+    @Test 
     public void testgetallTeams() throws Exception {
     
     

@@ -3,7 +3,7 @@
  */
 package org.komea.product.backend.service.kpi;
 
-import org.komea.product.cep.api.ICEPQueryImplementation;
+import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.enums.ProviderType;

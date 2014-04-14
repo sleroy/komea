@@ -12,19 +12,23 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.commons.lang.Validate;
+import org.komea.eventory.CEPConfiguration;
+import org.komea.eventory.CEPEngine;
+import org.komea.eventory.api.bridge.IEventBridgeFactory;
+import org.komea.eventory.api.cache.ICacheStorageFactory;
+import org.komea.eventory.api.engine.ICEPEngine;
+import org.komea.eventory.api.engine.ICEPQuery;
+import org.komea.eventory.query.CEPQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IQueryDefinition;
 import org.komea.product.backend.exceptions.CEPQueryNotFoundException;
 import org.komea.product.backend.exceptions.InvalidQueryDefinitionException;
-import org.komea.product.cep.CEPConfiguration;
-import org.komea.product.cep.CEPEngine;
-import org.komea.product.cep.api.ICEPEngine;
-import org.komea.product.cep.api.ICEPQuery;
-import org.komea.product.cep.query.CEPQuery;
+import org.komea.product.backend.service.fs.IKomeaFS;
 import org.komea.product.database.alert.IEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -40,9 +44,26 @@ public final class EventEngineService implements IEventEngineService
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger("komea-esper");
+    private static final Logger  LOGGER = LoggerFactory.getLogger("komea-esper");
     
-    private ICEPEngine          cepEngine;
+    @Autowired
+    private ICacheStorageFactory cacheStorageFactory;
+    
+    
+    private ICEPEngine           cepEngine;
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see com.tocea.scertify.ci.flow.bean.IEsperEngine#getEsperEngine()
+     */
+    
+    @Autowired
+    private IEventBridgeFactory  eventBridgeFactory;
+    
+    
+    @Autowired
+    private IKomeaFS             komeaFS;
     
     
     
@@ -68,11 +89,6 @@ public final class EventEngineService implements IEventEngineService
         createQuery(_definition);
     }
     
-    
-    /*
-     * (non-Javadoc)
-     * @see com.tocea.scertify.ci.flow.bean.IEsperEngine#getEsperEngine()
-     */
     
     /**
      * Method createEPL.
@@ -133,6 +149,13 @@ public final class EventEngineService implements IEventEngineService
     }
     
     
+    public ICacheStorageFactory getCacheStorageFactory() {
+    
+    
+        return cacheStorageFactory;
+    }
+    
+    
     /**
      * Returns the cep engine.
      * 
@@ -142,6 +165,20 @@ public final class EventEngineService implements IEventEngineService
     
     
         return cepEngine;
+    }
+    
+    
+    public IEventBridgeFactory getEventBridgeFactory() {
+    
+    
+        return eventBridgeFactory;
+    }
+    
+    
+    public IKomeaFS getKomeaFS() {
+    
+    
+        return komeaFS;
     }
     
     
@@ -207,7 +244,11 @@ public final class EventEngineService implements IEventEngineService
         cepEngine = new CEPEngine();
         LOGGER.debug("Initialization of CEP Engine");
         try {
-            cepEngine.initialize(new CEPConfiguration());
+            final CEPConfiguration cepConfiguration = new CEPConfiguration();
+            cepConfiguration.setBridgeFactory(eventBridgeFactory);
+            cepConfiguration.setCacheStorageFactory(cacheStorageFactory);
+            cepConfiguration.setStorageFolder(komeaFS.getFileSystemFolder("eventory"));
+            cepEngine.initialize(cepConfiguration);
         } catch (final IOException e) {
             throw new FatalBeanException("CEP Engine could not started, it crashed");
         }
@@ -234,10 +275,31 @@ public final class EventEngineService implements IEventEngineService
     }
     
     
+    public void setCacheStorageFactory(final ICacheStorageFactory _cacheStorageFactory) {
+    
+    
+        cacheStorageFactory = _cacheStorageFactory;
+    }
+    
+    
     public void setCepEngine(final ICEPEngine _cepEngine) {
     
     
         cepEngine = _cepEngine;
+    }
+    
+    
+    public void setEventBridgeFactory(final IEventBridgeFactory _eventBridgeFactory) {
+    
+    
+        eventBridgeFactory = _eventBridgeFactory;
+    }
+    
+    
+    public void setKomeaFS(final IKomeaFS _komeaFS) {
+    
+    
+        komeaFS = _komeaFS;
     }
     
 }

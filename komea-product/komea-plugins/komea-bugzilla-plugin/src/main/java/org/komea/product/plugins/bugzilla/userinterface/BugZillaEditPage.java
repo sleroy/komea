@@ -11,8 +11,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.model.KpiAlertType;
-import org.komea.product.plugins.bugzilla.api.IBugZillaConfigurationService;
-import org.komea.product.plugins.bugzilla.data.BugZillaServer;
+import org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO;
+import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.komea.product.wicket.LayoutPage;
 
 /**
@@ -22,19 +22,19 @@ import org.komea.product.wicket.LayoutPage;
 public final class BugZillaEditPage extends LayoutPage {
 
     @SpringBean
-    private IBugZillaConfigurationService bService;
+    private IBZConfigurationDAO bService;
 
     public BugZillaEditPage(PageParameters _parameters) {
-        this(_parameters, new BugZillaServer());
+        this(_parameters, new BZServerConfiguration());
     }
 
-    public BugZillaEditPage(PageParameters params, BugZillaServer _bugServer) {
+    public BugZillaEditPage(PageParameters params, BZServerConfiguration _bugServer) {
         super(params);
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
-        BugZillaForm bform = new BugZillaForm(bService, _bugServer, feedbackPanel, this, "form", new CompoundPropertyModel<BugZillaServer>(_bugServer));
+        BugZillaForm bform = new BugZillaForm(bService, _bugServer, feedbackPanel, this, "form", new CompoundPropertyModel<BZServerConfiguration>(_bugServer));
         add(bform);
     }
     

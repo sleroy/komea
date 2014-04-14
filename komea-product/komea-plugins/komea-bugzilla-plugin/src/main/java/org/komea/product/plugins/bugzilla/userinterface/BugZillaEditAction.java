@@ -6,14 +6,14 @@
 
 package org.komea.product.plugins.bugzilla.userinterface;
 
-import org.komea.product.plugins.bugzilla.data.BugZillaServer;
+import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.komea.product.wicket.widget.api.IEditAction;
 
 /**
  *
  * @author rgalerme
  */
-public class BugZillaEditAction implements IEditAction<BugZillaServer> {
+public class BugZillaEditAction implements IEditAction<BZServerConfiguration> {
     
     private final BugZillaPage bpage;
     
@@ -22,7 +22,7 @@ public class BugZillaEditAction implements IEditAction<BugZillaServer> {
     }
     
     @Override
-    public void selected(BugZillaServer _object) {
+    public void selected(BZServerConfiguration _object) {
         this.bpage.setResponsePage(new BugZillaEditPage(this.bpage.getPageParameters(),_object));
     }
     

@@ -38,7 +38,7 @@ public class KpiPage extends LayoutPage {
                 listKpisResult.add(kpi);
             }
         }
-        final IDeleteAction<Kpi> personDeleteAction = new KpiDeleteAction(kpiService,listKpisResult);
+        final IDeleteAction<Kpi> personDeleteAction = new KpiDeleteAction(kpiService,listKpisResult,this);
         final ISortableDataProvider<Kpi, String> dataProvider
                 = new ListDataModel<Kpi>(listKpisResult);
         final DataTable<Kpi, String> build
@@ -52,7 +52,7 @@ public class KpiPage extends LayoutPage {
     @Override
     public String getTitle() {
 
-        return "KPI / Metrics Administration";
+        return getString("KpiPage.title");
     }
 
 }

@@ -24,11 +24,13 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 
 
-@TransactionConfiguration(defaultRollback = true)
-@TestExecutionListeners({
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionDbUnitTestExecutionListener.class })
+@TransactionConfiguration(
+    defaultRollback = true)
+@TestExecutionListeners(
+    {
+            DependencyInjectionTestExecutionListener.class,
+                DirtiesContextTestExecutionListener.class,
+                TransactionDbUnitTestExecutionListener.class })
 public class EntitiesControllerITest extends AbstractSpringWebIntegrationTestCase
 {
     

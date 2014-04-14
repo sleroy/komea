@@ -6,8 +6,10 @@ package org.komea.product.backend.service.esper;
 
 
 
-import org.komea.product.cep.api.ICEPQueryImplementation;
-import org.komea.product.cep.formula.ElFormula;
+import org.komea.eventory.api.engine.ICEPQueryImplementation;
+import org.komea.eventory.formula.ElFormula;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -18,6 +20,30 @@ import org.komea.product.cep.formula.ElFormula;
  */
 public class ConvertELIntoQuery
 {
+    
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConvertELIntoQuery.class);
+    
+    
+    
+    /**
+     * Parses the formula into a query.
+     * 
+     * @param _formula
+     *            the formula
+     * @return true if the formula is valid.
+     */
+    public static boolean isValidFormula(final String _formula) {
+    
+    
+        try {
+            return parseEL(_formula) != null;
+        } catch (final Exception e) {
+            LOGGER.warn("Invalid formula {}", _formula);
+        }
+        return false;
+        
+    }
     
     
     /**

@@ -40,7 +40,7 @@ public class EventViewerServiceTest
      * {@link org.komea.product.backend.service.esper.EventViewerService#buildRetentionQuery(org.komea.product.database.enums.Severity, java.lang.String)}
      * .
      */
-    @Test
+    @Test 
     public final void testBuildRetentionQuery() throws Exception {
     
     
@@ -52,7 +52,7 @@ public class EventViewerServiceTest
     /**
      * Test method for {@link org.komea.product.backend.service.esper.EventViewerService#getEsperService()}.
      */
-    @Test
+    @Test 
     public final void testGetEsperService() throws Exception {
     
     
@@ -64,7 +64,7 @@ public class EventViewerServiceTest
     /**
      * Test method for {@link org.komea.product.backend.service.esper.EventViewerService#getGlobalActivity()}.
      */
-    @Test
+    @Test 
     public final void testGetGlobalActivity() throws Exception {
     
     
@@ -76,7 +76,7 @@ public class EventViewerServiceTest
     /**
      * Test method for {@link org.komea.product.backend.service.esper.EventViewerService#getInstantView(java.lang.String)}.
      */
-    @Test
+    @Test 
     public final void testGetInstantView() throws Exception {
     
     
@@ -88,7 +88,7 @@ public class EventViewerServiceTest
     /**
      * Test method for {@link org.komea.product.backend.service.esper.EventViewerService#getSettingService()}.
      */
-    @Test
+    @Test 
     public final void testGetSettingService() throws Exception {
     
     
@@ -100,7 +100,7 @@ public class EventViewerServiceTest
     /**
      * Test method for {@link org.komea.product.backend.service.esper.EventViewerService#initialize()}.
      */
-    @Test
+    @Test 
     public final void testInitialize() throws Exception {
     
     
@@ -113,7 +113,7 @@ public class EventViewerServiceTest
      * Test method for
      * {@link org.komea.product.backend.service.esper.EventViewerService#notifyPropertyChanged(org.komea.product.database.model.Setting)}.
      */
-    @Test
+    @Test 
     public final void testNotifyPropertyChanged() throws Exception {
     
     
@@ -127,7 +127,7 @@ public class EventViewerServiceTest
      * {@link org.komea.product.backend.service.esper.EventViewerService#setEsperService(org.komea.product.backend.api.IEventEngineService)}
      * .
      */
-    @Test
+    @Test 
     public final void testSetEsperService() throws Exception {
     
     
@@ -141,7 +141,7 @@ public class EventViewerServiceTest
      * {@link org.komea.product.backend.service.esper.EventViewerService#setSettingService(org.komea.product.backend.service.ISettingService)}
      * .
      */
-    @Test
+    @Test 
     public final void testSetSettingService() throws Exception {
     
     

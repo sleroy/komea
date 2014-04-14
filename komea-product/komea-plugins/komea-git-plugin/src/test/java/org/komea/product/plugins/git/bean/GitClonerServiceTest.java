@@ -33,7 +33,7 @@ public class GitClonerServiceTest
     // * {@link
     // org.komea.product.plugins.git.bean.GitClonerService#cloneOrRetrieveClonedRepository(org.komea.product.plugins.repository.model.GitRepositoryDefinition)}.
     // */
-    // @Test(expected = IllegalArgumentException.class)
+    // @Test (expected = IllegalArgumentException.class)
     // public final void testCloneOrRetrieveClonedRepository() throws Exception {
     //
     //
@@ -50,7 +50,7 @@ public class GitClonerServiceTest
     // /**
     // * Test method for {@link org.komea.product.plugins.git.bean.GitClonerService#initialize()}.
     // */
-    // @Test
+    // @Test 
     // public final void testInitialize() throws Exception {
     //
     //

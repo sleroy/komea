@@ -11,7 +11,6 @@ import java.io.StringBufferInputStream;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
-import org.komea.product.backend.storage.ObjectStorage;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
@@ -32,7 +31,7 @@ public class ObjectStorageTest
      * {@link org.komea.product.backend.storage.ObjectStorage#ObjectStorage(org.komea.product.backend.service.fs.IPluginFileSystem, java.lang.Class)}
      * .
      */
-    @Test
+    @Test 
     public final void testObjectStorage() {
     
     

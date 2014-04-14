@@ -2,9 +2,6 @@
 package org.komea.product.web.rest.api;
 
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
-
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 
@@ -17,6 +14,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
+
 public class LocalResourceTransferControllerIT extends AbstractSpringWebIntegrationTestCase
 {
     
@@ -28,7 +28,7 @@ public class LocalResourceTransferControllerIT extends AbstractSpringWebIntegrat
      * 
      * @throws Exception
      */
-    @Test
+    @Test 
     public void testRequestPicture() throws Exception {
     
         final MockMvc mockMvc = standaloneSetup(controller).build();

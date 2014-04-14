@@ -14,7 +14,7 @@ public class EventOnlyFilterTest
 {
     
     
-    @Test
+    @Test 
     public final void testIsFiltered() throws Exception {
     
     

@@ -6,7 +6,7 @@ package org.komea.product.backend.exceptions;
 
 
 
-import org.komea.product.cep.api.ICEPQueryImplementation;
+import org.komea.eventory.api.engine.ICEPQueryImplementation;
 
 
 

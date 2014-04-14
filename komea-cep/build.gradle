@@ -1,0 +1,188 @@
+/**
+ * Package of dependencies
+ */
+
+//    "ch.qos.logback:logback-classic:$LOG_LOGBACK",
+//    "ch.qos.logback:logback-core:$LOG_LOGBACK",
+
+//TEST FRAMEWORKS DEPENDENCIES
+ext.tests_frameworks = [
+    "junit:junit:$TEST_JUNIT",
+    "org.easymock:easymock:$TEST_EASYMOCK",
+    "org.mockito:mockito-core:$TEST_MOCKITO",
+    "cglib:cglib-nodep:$TEST_CGLIB",
+    "org.hamcrest:hamcrest-core:$TEST_HAMCREST",
+    "org.objenesis:objenesis:$TEST_OBJENESIS",
+    "com.carrotsearch:junit-benchmarks:$TEST_BENCH"            
+]
+
+
+/**
+Version numbers 
+ */
+ext.VERSION_PRODUCT=1
+ext.VERSION_MAJOR=0
+
+
+
+/** GROUP ID */
+ext.GROUP_ID="org.komea"
+
+ 
+apply plugin: "sonar-runner"
+
+
+sonarRunner {
+ sonarProperties {
+  property "sonar.host.url", "http://192.168.1.1:9000"
+  property "sonar.jdbc.url", "jdbc:mysql://192.168.1.1:3306/sonar?useUnicode=true&characterEncoding=utf8"
+  property "sonar.jdbc.driverClassName", "com.mysql.jdbc.Driver"
+  property "sonar.jdbc.username", "sonar"
+  property "sonar.jdbc.password", "sonar"
+}
+} 
+
+/** GLOBAL PROJECT CONFIGURATION */
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "net.saliman:gradle-cobertura-plugin:2.2.2"
+    }
+}
+apply plugin: 'cobertura'
+cobertura {
+//     coverageCheckTotalBranchRate=60
+//     coverageCheckTotalLineRate=60
+     coverageMergeDatafiles = [
+      new File("cep-bridge-activemq/build/cobertura/cobertura.ser"),
+      new File("cep-bridge-memory/build/cobertura/cobertura.ser"),
+      new File("cep-engine/build/cobertura/cobertura.ser"),
+      new File("cep-engine-api/build/cobertura/cobertura.ser"),
+      new File("cep-cache-guave/build/cobertura/cobertura.ser"),
+      new File("cep-cache-ehcache/build/cobertura/cobertura.ser"),
+      new File("cep-formula-springel/build/cobertura/cobertura.ser"),
+      new File("cep-formula-xpath/build/cobertura/cobertura.ser")
+    ]
+}
+
+
+allprojects {
+    apply plugin: "java"
+    apply plugin: "maven"
+    apply plugin: "eclipse"
+    apply plugin: "idea"
+    apply plugin: "cobertura"
+
+    cobertura {
+     coverageFormats=['xml', 'html']
+     coverageIgnoreTrivial=true;    
+     coverageCheckTotalBranchRate=60
+     coverageCheckTotalLineRate=60
+    }
+
+
+   
+    int year = Calendar.getInstance().get(Calendar.YEAR)
+    int week = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)
+    ext.VERSION_SPRINT="$year$week"
+    group =GROUP_ID // From a env variable.
+    version = "$VERSION_PRODUCT.$VERSION_MAJOR"    
+    if (project.hasProperty("increment")) {
+        version = version + "." + project.getProperty("increment")
+    } else {
+	version = version + "." + VERSION_SPRINT
+    }
+
+    if (project.hasProperty("suffix")) {
+        version += "-" + project.getProperty("suffix")
+    }
+    else if (!project.hasProperty("release")) {
+        version += "-SNAPSHOT"
+    }
+       
+    // Jar description in manifest
+    jar {
+        manifest {
+            attributes "Implementation-Title": "Komea Product", "Implementation-Version": version
+        }
+    }
+    if (project.hasProperty("debug")) {
+        tasks.withType(Compile) {
+                options.debug = true
+                options.compilerArgs = ["-g"]
+        }
+    } else {
+        tasks.withType(Compile) {
+                options.debug = false
+        }
+    }    
+    
+    sourceSets {
+        main {
+            java { srcDir "src/main/java" }
+            resources { srcDir "src/main/resources" }
+        }
+        test {
+            java { 
+                srcDir "src/test/java" 
+            }
+            resources { 
+                srcDir "src/test/resources" 
+            }
+        }
+    }
+    repositories {       
+	mavenCentral()
+    }
+    
+    dependencies {
+        testCompile tests_frameworks
+    }
+    
+    uploadArchives.dependsOn ":build"
+    
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                repository(url: "http://zeus:8080/nexus/content/repositories/releases")
+                {
+                    authentication(userName: mavenUser, password: mavenPassword)
+                }
+                snapshotRepository(url: "http://zeus:8080/nexus/content/repositories/snapshots")
+                {
+                    authentication(userName: mavenUser, password: mavenPassword)
+                }
+                 
+
+                pom.project {
+                    licenses {
+                        license {
+                            name 'LGPL licence'
+                            url 'http://www.tocea.com'
+                            distribution 'http://zeus:8080/nexus/content/repositories/releases'
+                        }
+                    }
+                }
+            }
+        }
+    }
+           
+    task "create-dirs" << {
+        sourceSets*.java.srcDirs*.each { it.mkdirs() }
+        sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+    }
+
+    
+
+        
+
+}
+
+/**
+Documentation
+: http://stackoverflow.com/questions/9547170/in-gradle-how-do-i-declare-common-dependencies-in-a-single-place
+: http://gradle.codehaus.org/Cookbook
+: http://stackoverflow.com/questions/8343871/mark-gradle-build-unstable-in-jenkins-when-junit-tests-fail
+ */

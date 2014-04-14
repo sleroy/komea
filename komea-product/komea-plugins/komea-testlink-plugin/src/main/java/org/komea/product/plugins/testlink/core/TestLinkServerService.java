@@ -3,127 +3,157 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.komea.product.plugins.testlink.core;
 
-import java.util.ArrayList;
+
+
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.komea.product.plugins.testlink.api.ITestLinkServerConfiguration;
-import org.komea.product.plugins.testlink.api.ITestLinkServerService;
-import org.komea.product.plugins.testlink.api.ITestLinkServerProxyFactory;
-import org.komea.product.backend.service.fs.IObjectStorage;
+import org.apache.commons.lang.Validate;
+import org.komea.product.backend.business.IDAOObjectStorage;
 import org.komea.product.backend.service.plugins.IPluginStorageService;
+import org.komea.product.backend.utils.CollectionUtil;
+import org.komea.product.backend.utils.SearchFilter;
+import org.komea.product.plugins.testlink.api.ITestLinkServerDAO;
+import org.komea.product.plugins.testlink.model.TestLinkServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+
 /**
- *
  * @author rgalerme
  */
+
 @Service
-public class TestLinkServerService implements ITestLinkServerService {
-
+public class TestLinkServerService implements ITestLinkServerDAO
+{
+    
+    
+    private static final Logger               LOGGER =
+                                                             LoggerFactory
+                                                                     .getLogger(TestLinkServerService.class);
+    
+    private IDAOObjectStorage<TestLinkServer> daoStorage;
+    
     @Autowired
-    private IPluginStorageService pluginStorage;
-
-    @Autowired
-    private ITestLinkServerProxyFactory serverProxyFactory;
-
-    private IObjectStorage<TestLinkStorageConfiguration> configurationStorage;
-
+    private IPluginStorageService             pluginStorageService;
+    
+    
+    
+    @Override
+    public boolean delete(final TestLinkServer _server) {
+    
+    
+        return daoStorage.delete(_server);
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.testlink.api.ITestLinkServerDAO#find(java.lang.String)
+     */
+    @Override
+    public TestLinkServer find(final String _serverName) {
+    
+    
+        Validate.notNull(_serverName);
+        return CollectionUtil.singleOrNull(daoStorage.find(new SearchFilter<TestLinkServer>()
+        {
+            
+            
+            @Override
+            public boolean match(final TestLinkServer _object) {
+            
+            
+                return _serverName.equals(_object.getName());
+            }
+        }));
+        
+        
+    }
+    
+    
+    /**
+     * Returns the configuration storage.
+     * 
+     * @return the configuration storage
+     */
+    public IDAOObjectStorage<TestLinkServer> getDaoStorage() {
+    
+    
+        return daoStorage;
+    }
+    
+    
+    public IPluginStorageService getPluginStorageService() {
+    
+    
+        return pluginStorageService;
+    }
+    
+    
     @PostConstruct
     public void init() {
-        configurationStorage = pluginStorage.registerStorage("TESTLINK", TestLinkStorageConfiguration.class);
-        TestLinkStorageConfiguration var = configurationStorage.get();
-        if (var == null) {
-            var = new TestLinkStorageConfiguration();
-            configurationStorage.set(var);
-        }
-//        TestLinkServer testLinkServer = new TestLinkServer("http://ares.tocea/testlink/lib/api/xmlrpc.php",
-//                "2dec70df08045278463817fb15d79c4d");
-
+    
+    
+        LOGGER.debug("Initialisation of testlink plugin storage.");
+        daoStorage = pluginStorageService.registerDAOStorage("TESTLINK", TestLinkServer.class);
+        
     }
-
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.testlink.api.ITestLinkServerDAO#saveOrUpdate(org.komea.product.plugins.testlink.model.TestLinkServer)
+     */
     @Override
-    public List<ITestLinkServerConfiguration> getServers() {
-        TestLinkStorageConfiguration var = configurationStorage.get();
-        List<TestLinkServer> configurations = var.getConfigurations();
-        List<ITestLinkServerConfiguration> result = new ArrayList<ITestLinkServerConfiguration>();
-        for (TestLinkServer testLinkServer : configurations) {
-            result.add(new TestLinkServerConfiguration(testLinkServer, serverProxyFactory));
-        }
-        return result;
+    public void saveOrUpdate(final TestLinkServer _server) {
+    
+    
+        daoStorage.saveOrUpdate(_server);
+        
+        
     }
-
+    
+    
     @Override
-    public IPluginStorageService getPluginStorage() {
-        return this.pluginStorage;
+    public void saveOrUpdate(final TestLinkServer server, final String oldAddress) {
+    
+    
+        Validate.notNull(server);
+        Validate.notNull(oldAddress);
+        server.setAddress(oldAddress);
+        daoStorage.saveOrUpdate(server);
     }
-
-    @Override
-    public void setPluginStorage(IPluginStorageService pluginStorage) {
-        this.pluginStorage = pluginStorage;
-    }
-
-    @Override
-    public ITestLinkServerProxyFactory getServerProxyFactory() {
-        return this.serverProxyFactory;
-    }
-
-    @Override
-    public void setServerProxyFactory(ITestLinkServerProxyFactory serverProxyFactory) {
-        this.serverProxyFactory = serverProxyFactory;
-    }
-
-    public IObjectStorage<TestLinkStorageConfiguration> getConfigurationStorage() {
-        return configurationStorage;
-    }
-
-    public void setConfigurationStorage(IObjectStorage<TestLinkStorageConfiguration> configurationStorage) {
-        this.configurationStorage = configurationStorage;
-    }
-
-    @Override
-    public void saveOrUpdate(TestLinkServer server, String oldAddress) {
-        TestLinkStorageConfiguration var = configurationStorage.get();
-        List<TestLinkServer> selectAll = var.getConfigurations();
-        boolean find = false;
-        for (TestLinkServer testLinkServer : selectAll) {
-            if (testLinkServer.getAddress().equals(oldAddress)) {
-                testLinkServer.setAddress(server.getAddress());
-                testLinkServer.setKey(server.getKey());
-                find = true;
-                break;
-            }
-        }
-        if (!find) {
-            selectAll.add(server);
-        }
-        configurationStorage.set(var);
-    }
-
+    
+    
     @Override
     public List<TestLinkServer> selectAll() {
-        TestLinkStorageConfiguration var = configurationStorage.get();
-        return var.getConfigurations();
-
+    
+    
+        return daoStorage.selectAll();
+        
     }
-
-    @Override
-    public boolean delete(TestLinkServer _server) {
-        TestLinkStorageConfiguration var = configurationStorage.get();
-        List<TestLinkServer> selectAll = var.getConfigurations();
-        for (TestLinkServer testlinkServer : selectAll) {
-            if (testlinkServer.getAddress().equals(_server.getAddress())
-                    && testlinkServer.getKey().equals(_server.getKey())) {
-                selectAll.remove(testlinkServer);
-                configurationStorage.set(var);
-                return true;
-            }
-        }
-        return false;
+    
+    
+    public void setDaoStorage(final IDAOObjectStorage<TestLinkServer> _configurationStorage) {
+    
+    
+        daoStorage = _configurationStorage;
     }
-
+    
+    
+    public void setPluginStorageService(final IPluginStorageService _pluginStorageService) {
+    
+    
+        pluginStorageService = _pluginStorageService;
+    }
+    
+    
 }

@@ -5,6 +5,7 @@ package org.komea.product.backend.service.kpi;
 
 import java.util.Date;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.api.IEventEngineService;
@@ -38,7 +39,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase {
      * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, int, org.komea.product.database.model.MeasureCriteria)}
      * .
      */
-    @Test
+    @Test 
     public final void testGetFilteredHistoryHistoryKeyIntMeasureCriteria() {
 
         final Kpi exampleKPI = buildFakeKpi("DEMO_FILTER1");
@@ -71,7 +72,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase {
      * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, org.komea.product.database.model.MeasureCriteria)}
      * .
      */
-    @Test
+    @Test 
     public final void testGetFilteredHistoryHistoryKeyMeasureCriteria() {
 
         final Kpi exampleKPI = buildFakeKpi("DEMO_FILTER2");
@@ -92,7 +93,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase {
      * Test method for
      * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getHistory(org.komea.product.backend.service.history.HistoryKey)}.
      */
-    @Test
+    @Test 
     public final void testGetHistory() {
 
         final Kpi exampleKPI = buildFakeKpi("DEMO_FILTER3");
@@ -113,7 +114,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase {
      * Test method for
      * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#storeMeasure(org.komea.product.database.model.Measure)}.
      */
-    @Test
+    @Test 
     public final void testStoreMeasure() {
 
         final Kpi exampleKPI = buildFakeKpi("DEMO_FILTER4");
@@ -129,7 +130,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase {
      * Test method for
      * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#buildHistoryPurgeAction(org.komea.product.database.model.Kpi)}.
      */
-    @Test
+    @Test 
     public final void testUnitBuildHistoryPurgeAction() {
 
         final MeasureHistoryService buildMeasureHistoryComponent = buildMeasureHistoryComponent();

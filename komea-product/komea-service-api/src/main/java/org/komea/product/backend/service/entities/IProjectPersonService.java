@@ -4,6 +4,7 @@
 package org.komea.product.backend.service.entities;
 
 import java.util.List;
+
 import org.komea.product.database.model.HasProjectPersonKey;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Project;

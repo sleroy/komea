@@ -1,6 +1,7 @@
 package org.komea.product.backend.service.entities;
 
 import java.util.List;
+
 import org.komea.product.database.dao.HasProjectPersonDao;
 import org.komea.product.database.model.HasProjectPersonCriteria;
 import org.komea.product.database.model.HasProjectPersonKey;

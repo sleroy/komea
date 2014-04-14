@@ -10,8 +10,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.komea.event.factory.JenkinsEventFactory;
+import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.product.backend.esper.test.CEPQueryTester;
-import org.komea.product.cep.api.ICEPQueryImplementation;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +42,7 @@ public class EventStatisticsServicePerformanceTest
     /**
      * Tests the query.
      */
-    @Test
+    @Test 
     public void testBuildProviderEventFrequencyQuery() {
     
     
@@ -57,7 +57,7 @@ public class EventStatisticsServicePerformanceTest
     }
     
     
-    @Test
+    @Test 
     public void testQuerySeverity() {
     
     

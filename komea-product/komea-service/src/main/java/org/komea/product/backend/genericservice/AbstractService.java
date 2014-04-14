@@ -6,6 +6,7 @@ package org.komea.product.backend.genericservice;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.ibatis.session.RowBounds;
 import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.backend.utils.CollectionUtil;
@@ -72,6 +73,11 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
 
         daoEventRegistry.notifyDeleted(selectByPrimaryKey(_id));
         return getRequiredDAO().deleteByPrimaryKey(_id);
+    }
+
+    @Override
+    public boolean exists(final String key) {
+        return getRequiredDAO().countByCriteria(createKeyCriteria(key)) > 0;
     }
 
     public DAOEventRegistry getDaoEventRegistry() {

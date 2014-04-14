@@ -1,9 +1,9 @@
 package org.komea.product.backend.service.entities;
 
-import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.kpi.IMeasureHistoryService;
 import org.komea.product.database.dao.CustomerDao;
@@ -32,6 +32,8 @@ import org.komea.product.database.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
 
 /**
  */

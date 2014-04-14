@@ -1,9 +1,9 @@
 package org.komea.product.backend.service.entities;
 
-import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +38,8 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.google.common.collect.Lists;
 
 /**
  */
@@ -82,7 +84,7 @@ public class ProjectServiceTest {
     @Mock
     private TagDao tagDAOmock;
 
-    @Test
+    @Test 
     public void testGetAllProjects() {
 
         Mockito.when(projectDAOmock.selectByCriteria(Matchers.any(ProjectCriteria.class)))
@@ -117,7 +119,7 @@ public class ProjectServiceTest {
 
     }
 
-    @Test
+    @Test 
     public void testGetAllProjectsComplete() {
 
         Mockito.when(projectDAOmock.selectByCriteria(Matchers.any(ProjectCriteria.class)))
@@ -197,7 +199,7 @@ public class ProjectServiceTest {
 
     }
 
-    @Test
+    @Test 
     public void testGetProjectLinks() {
 
         Mockito.when(linkDAOmock.selectByCriteria(Matchers.any(LinkCriteria.class))).thenReturn(
@@ -217,7 +219,7 @@ public class ProjectServiceTest {
 
     }
 
-    @Test
+    @Test 
     public void testGetProjectLinksNoLinks() {
 
         Mockito.when(linkDAOmock.selectByCriteria(Matchers.any(LinkCriteria.class))).thenReturn(
@@ -232,7 +234,7 @@ public class ProjectServiceTest {
 
     }
 
-    @Test
+    @Test 
     public void testGetprojectNoTeams() {
 
         final List<HasProjectPersonGroupKey> projectGroups = Lists.newArrayList();
@@ -245,7 +247,7 @@ public class ProjectServiceTest {
         Assert.assertEquals(0, teams.size());
     }
 
-    @Test
+    @Test 
     public void testGetProjectsAssociateToAPerson() {
 
         final List<HasProjectPersonKey> projectPersonList
@@ -270,7 +272,7 @@ public class ProjectServiceTest {
 
     }
 
-    @Test
+    @Test 
     public void testGetProjectTags() {
 
         final List<HasProjectTagKey> projectTags = Lists.newArrayList(new HasProjectTagKey(1, 1));
@@ -291,7 +293,7 @@ public class ProjectServiceTest {
         Mockito.verify(tagDAOmock, Mockito.times(1)).selectByPrimaryKey(1);
     }
 
-    @Test
+    @Test 
     public void testGetProjectTagsNoTags() {
 
         final List<HasProjectTagKey> projectTags = Lists.newArrayList();
@@ -308,7 +310,7 @@ public class ProjectServiceTest {
         Mockito.verify(tagDAOmock, Mockito.times(0)).selectByPrimaryKey(1);
     }
 
-    @Test
+    @Test 
     public void testGetProjectTagsNullTags() {
 
         final List<HasProjectTagKey> projectTags = Lists.newArrayList(new HasProjectTagKey(1, 1));
@@ -327,7 +329,7 @@ public class ProjectServiceTest {
         Mockito.verify(tagDAOmock, Mockito.times(1)).selectByPrimaryKey(1);
     }
 
-    @Test
+    @Test 
     public void testGetprojectTeamsNullTeams() {
 
         final List<HasProjectPersonGroupKey> projectGroups
@@ -436,7 +438,7 @@ public class ProjectServiceTest {
         return Lists.newArrayList(team);
     }
 
-    @Test
+    @Test 
     public void testFindProjectsAssociatedToAPerson() {
 
         List<HasProjectPersonKey> projectPersonList = Lists.newArrayList(new HasProjectPersonKey(1, 1));

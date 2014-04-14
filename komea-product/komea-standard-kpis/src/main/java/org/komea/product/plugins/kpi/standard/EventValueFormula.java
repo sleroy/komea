@@ -10,12 +10,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.Validate;
-import org.komea.product.cep.api.ITupleResultMap;
-import org.komea.product.cep.api.formula.tuple.IEventGroup;
-import org.komea.product.cep.api.formula.tuple.IEventTable;
-import org.komea.product.cep.api.formula.tuple.ITuple;
-import org.komea.product.cep.api.formula.tuple.ITuplerFormula;
-import org.komea.product.cep.formula.tuple.TupleResultMap;
+import org.komea.eventory.api.formula.ITupleResultMap;
+import org.komea.eventory.api.formula.tuple.IEventGroup;
+import org.komea.eventory.api.formula.tuple.IEventTable;
+import org.komea.eventory.api.formula.tuple.ITuple;
+import org.komea.eventory.api.formula.tuple.ITuplerFormula;
+import org.komea.eventory.formula.tuple.TupleResultMap;
 import org.komea.product.database.alert.IEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

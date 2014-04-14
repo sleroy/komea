@@ -1,0 +1,6 @@
+dependencies {
+        compile project(':cep-engine-api')                
+        compile "org.slf4j:slf4j-api:$LOG_SLF4J"                
+        compile "commons-lang:commons-lang:$APACHE_COMMONLANG"
+        compile 'net.sf.ehcache:ehcache:2.8.1' 
+}

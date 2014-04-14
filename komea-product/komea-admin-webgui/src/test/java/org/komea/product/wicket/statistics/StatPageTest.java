@@ -40,7 +40,7 @@ public class StatPageTest
      * Test method for
      * {@link org.komea.product.wicket.statistics.StatPage#StatPage(org.apache.wicket.request.mapper.parameter.PageParameters)}.
      */
-    @Test
+    @Test 
     public final void testStatPage() throws Exception {
     
     

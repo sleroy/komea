@@ -2,6 +2,7 @@ package org.komea.product.database.model;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.api.IKeyVisitor;
 import org.komea.product.database.enums.EntityType;
@@ -395,5 +396,17 @@ public class EventType implements IHasKey {
         sb.append(", providerType=").append(providerType);
         sb.append("]");
         return sb.toString();
+    }
+
+    @Override
+    @JsonIgnore
+    public String getKey() {
+        return eventKey;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getDisplayName() {
+        return name;
     }
 }

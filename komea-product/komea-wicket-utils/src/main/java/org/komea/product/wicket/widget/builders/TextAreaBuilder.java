@@ -34,6 +34,7 @@ public class TextAreaBuilder<T> {
     private TextAreaBuilder(String _wicketId, Object _data, String _field) { 
         super();
            textArea = new TextArea<T>(_wicketId,new PropertyModel<T>(_data, _field));
+           textArea.setConvertEmptyInputStringToNull(false);
         
     }
     

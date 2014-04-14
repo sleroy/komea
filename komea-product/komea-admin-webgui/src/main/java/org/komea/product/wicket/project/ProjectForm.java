@@ -17,7 +17,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
-import org.komea.product.database.api.IEntity;
+import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.model.Customer;
 import org.komea.product.database.model.Person;
@@ -44,12 +44,14 @@ public class ProjectForm extends Form<Project> {
     private final TextField customerFiel;
     private final IPersonService personService;
     private final IPersonGroupService personGroupService;
-    private List<IEntity> currentPersonGroupList;
-    private List<IEntity> selectedPersonGroup;
-    private List<IEntity> currentPersonList;
-    private List<IEntity> selectedPerson;
+    private final boolean isNew;
+    private List<IHasKey> currentPersonGroupList;
+    private List<IHasKey> selectedPersonGroup;
+    private List<IHasKey> currentPersonList;
+    private List<IHasKey> selectedPerson;
 
-    public ProjectForm(String form,
+    public ProjectForm(boolean _isNew,
+            String form,
             IPersonService _personService,
             IPersonGroupService _personGroupService,
             IProjectService projectService,
@@ -60,23 +62,32 @@ public class ProjectForm extends Form<Project> {
 
         super(form, compoundPropertyModel);
         this.prService = projectService;
+        this.isNew = _isNew;
         this.feedBack = feedbackPanel;
         this.page = aThis;
         this.project = compoundPropertyModel.getObject();
         this.personGroupService = _personGroupService;
         this.personService = _personService;
         feedBack.setVisible(false);
-        selectedPersonGroup = new ArrayList<IEntity>();
-        currentPersonGroupList = new ArrayList<IEntity>();
-        selectedPerson = new ArrayList<IEntity>();
-        currentPersonList = new ArrayList<IEntity>();
+        selectedPersonGroup = new ArrayList<IHasKey>();
+        currentPersonGroupList = new ArrayList<IHasKey>();
+        selectedPerson = new ArrayList<IHasKey>();
+        currentPersonList = new ArrayList<IHasKey>();
         this.customerName = new NameGeneric("");
         //field
         add(TextFieldBuilder.<String>createRequired("name", this.project, "name").highlightOnErrors()
                 .simpleValidator(0, 255).withTooltip("Project requires a name").build());
 
-        add(TextFieldBuilder.<String>createRequired("projectKey", this.project, "projectKey")
-                .simpleValidator(0, 255).highlightOnErrors().withTooltip("Project requires a Key").build());
+        TextFieldBuilder<String> keyField = TextFieldBuilder.<String>createRequired("projectKey", this.project, "projectKey")
+                .simpleValidator(0, 255).highlightOnErrors().withTooltip("Project requires a Key");
+
+        if (isNew) {
+            keyField.UniqueStringValidator("Project key", prService);
+        } else {
+            keyField.buildTextField().setEnabled(false);
+        }
+
+        add(keyField.build());
 
         add(TextAreaBuilder.<String>create("description", this.project, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip("Description can be add").build());
@@ -90,8 +101,8 @@ public class ProjectForm extends Form<Project> {
         add(customerFiel);
 
         if (this.project.getId() != null) {
-            currentPersonGroupList = (List<IEntity>) (List<?>) personGroupService.getTeamsOfProject(this.project.getId());
-            currentPersonList =(List<IEntity>) (List<?>)personService.getPersonsOfProject(this.project.getId());
+            currentPersonGroupList = (List<IHasKey>) (List<?>) personGroupService.getTeamsOfProject(this.project.getId());
+            currentPersonList = (List<IHasKey>) (List<?>) personService.getPersonsOfProject(this.project.getId());
         }
 
         DialogFactory.addListWithSelectDialog(this,
@@ -103,7 +114,7 @@ public class ProjectForm extends Form<Project> {
                 "Choose Team",
                 currentPersonGroupList,
                 this.selectedPersonGroup,
-                (List<IEntity>) (List<?>) this.personGroupService.getAllTeamsPG(),
+                (List<IHasKey>) (List<?>) this.personGroupService.getAllTeamsPG(),
                 this.personGroupService);
 
         DialogFactory.addListWithSelectDialog(this,
@@ -115,7 +126,7 @@ public class ProjectForm extends Form<Project> {
                 "Choose Person",
                 currentPersonList,
                 this.selectedPerson,
-                (List<IEntity>) (List<?>) this.personService.selectAll(),
+                (List<IHasKey>) (List<?>) this.personService.selectAll(),
                 this.personService);
 
         //button
@@ -134,7 +145,6 @@ public class ProjectForm extends Form<Project> {
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
 
                 feedBack.setVisible(true);
-                error("error found");
                 // repaint the feedback panel so errors are shown
                 target.add(feedBack);
             }
@@ -146,7 +156,7 @@ public class ProjectForm extends Form<Project> {
                 info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
-                
+
                 prService.saveOrUpdateProject(project, null, (List<Person>) (List<?>) currentPersonList, null, (List<PersonGroup>) (List<?>) currentPersonGroupList);
                 page.setResponsePage(new ProjectPage(page.getPageParameters()));
 
@@ -155,19 +165,19 @@ public class ProjectForm extends Form<Project> {
 
     }
 
-    public List<IEntity> getSelectedPersonGroup() {
+    public List<IHasKey> getSelectedPersonGroup() {
         return selectedPersonGroup;
     }
 
-    public void setSelectedPersonGroup(List<IEntity> selectedPersonGroup) {
+    public void setSelectedPersonGroup(List<IHasKey> selectedPersonGroup) {
         this.selectedPersonGroup = selectedPersonGroup;
     }
 
-    public List<IEntity> getSelectedPerson() {
+    public List<IHasKey> getSelectedPerson() {
         return selectedPerson;
     }
 
-    public void setSelectedPerson(List<IEntity> selectedPerson) {
+    public void setSelectedPerson(List<IHasKey> selectedPerson) {
         this.selectedPerson = selectedPerson;
     }
 

@@ -3,8 +3,6 @@ package org.komea.product.backend.service.entities;
 
 
 
-import static org.mockito.Matchers.any;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,6 +28,8 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
+
+import static org.mockito.Matchers.any;
 
 
 
@@ -57,7 +57,7 @@ public class PersonGroupServiceTest
     
     
     
-    @Test
+    @Test 
     public void testGetAllDepartments() {
     
     
@@ -79,7 +79,7 @@ public class PersonGroupServiceTest
     }
     
     
-    @Test
+    @Test 
     public void testGetAllTeams() {
     
     
@@ -103,7 +103,7 @@ public class PersonGroupServiceTest
     }
     
     
-    @Test
+    @Test 
     public void testGetDepartment() {
     
     
@@ -121,7 +121,7 @@ public class PersonGroupServiceTest
     }
     
     
-    @Test
+    @Test 
     public void testGetDepartmentByTeam() {
     
     
@@ -141,7 +141,7 @@ public class PersonGroupServiceTest
     }
     
     
-    @Test
+    @Test 
     public void testGetDepartmentNull() {
     
     
@@ -152,7 +152,7 @@ public class PersonGroupServiceTest
     }
     
     
-    @Test
+    @Test 
     public void testGetprojectTeams() {
     
     
@@ -182,7 +182,7 @@ public class PersonGroupServiceTest
     }
     
     
-    @Test
+    @Test 
     public void testGetTeam() {
     
     
@@ -200,7 +200,7 @@ public class PersonGroupServiceTest
     }
     
     
-    @Test
+    @Test 
     public void testGetTeamButIsDepartment() {
     
     
@@ -214,7 +214,7 @@ public class PersonGroupServiceTest
     }
     
     
-    @Test
+    @Test 
     public void testGetTeamNull() {
     
     

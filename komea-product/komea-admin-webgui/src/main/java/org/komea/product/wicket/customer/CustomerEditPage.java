@@ -5,10 +5,12 @@
  */
 package org.komea.product.wicket.customer;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.komea.product.backend.service.customer.ICustomerService;
 import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.model.Customer;
 import org.komea.product.wicket.LayoutPage;
@@ -20,28 +22,36 @@ import org.komea.product.wicket.LayoutPage;
 public final class CustomerEditPage extends LayoutPage {
 
     @SpringBean
-    private CustomerDao customerService;
+    private ICustomerService customerService;
 
     public CustomerEditPage(PageParameters _parameters) {
-       this(_parameters, new Customer());
+        this(_parameters, new Customer(), true);
     }
-    
-    
 
     public CustomerEditPage(PageParameters params, Customer _customer) {
+        this(params, _customer, false);
+    }
+
+    public CustomerEditPage(PageParameters params, Customer _customer, boolean isNew) {
         super(params);
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
-        CustomerForm customerForm = new CustomerForm("form", new CompoundPropertyModel<Customer>(_customer), customerService, feedbackPanel, this, _customer);
+        CustomerForm customerForm = new CustomerForm(isNew,"form", new CompoundPropertyModel<Customer>(_customer), customerService, feedbackPanel, this, _customer);
+                String message;
+        if (isNew) {
+            message = "Add customer";
+        } else {
+            message = "Edit customer";
+        }
+        customerForm.add(new Label("legend", message));
         add(customerForm);
     }
-    
-       @Override
+
+    @Override
     public String getTitle() {
-    
-    
+
         return getString("CustomerEditPage.title");
     }
 }

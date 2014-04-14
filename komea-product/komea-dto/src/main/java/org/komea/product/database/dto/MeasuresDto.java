@@ -2,9 +2,7 @@ package org.komea.product.database.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
@@ -83,11 +81,11 @@ public class MeasuresDto implements Serializable {
         return kpiNames;
     }
 
-    public Map<String, List<Number>> getEntitySeries() {
-        final Map<String, List<Number>> series = new HashMap<String, List<Number>>(kpis.size());
+    public List<Pair<String, List<Number>>> getEntitySeries() {
+        final List<Pair<String, List<Number>>> series = new ArrayList<Pair<String, List<Number>>>(kpis.size());
         for (final Kpi kpi : kpis) {
             final List<Number> numbers = new ArrayList<Number>();
-            series.put(kpi.getName(), numbers);
+            series.add(Pair.create(kpi.getName(), numbers));
             for (final BaseEntityDto entity : entities) {
                 Number number = null;
                 for (final Measure measure : measures) {
@@ -123,11 +121,11 @@ public class MeasuresDto implements Serializable {
         return kpi.getId().equals(measure.getIdKpi()) && entity.getId().equals(getId(measure));
     }
 
-    public Map<String, List<Number>> getKpiSeries() {
-        final Map<String, List<Number>> series = new HashMap<String, List<Number>>(entities.size());
+    public List<Pair<String, List<Number>>> getKpiSeries() {
+        final List<Pair<String, List<Number>>> series = new ArrayList<Pair<String, List<Number>>>(entities.size());
         for (final BaseEntityDto entity : entities) {
             final List<Number> numbers = new ArrayList<Number>();
-            series.put(entity.getDisplayName(), numbers);
+            series.add(Pair.create(entity.getDisplayName(), numbers));
             for (final Kpi kpi : kpis) {
                 Number number = null;
                 for (final Measure measure : measures) {

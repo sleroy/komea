@@ -9,7 +9,6 @@ package org.komea.product.backend.service.settings;
 import java.util.Collections;
 
 import org.junit.Test;
-import org.komea.product.backend.service.settings.SettingService;
 import org.komea.product.database.dao.SettingDao;
 import org.komea.product.database.model.SettingCriteria;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
@@ -31,7 +30,7 @@ public class SettingServiceTest extends AbstractSpringIntegrationTestCase
      * {@link org.komea.product.backend.service.settings.SettingService#create(java.lang.String, java.lang.String, java.lang.String, java.lang.String)}
      * .
      */
-    @Test
+    @Test 
     public final void testCreate() {
     
     

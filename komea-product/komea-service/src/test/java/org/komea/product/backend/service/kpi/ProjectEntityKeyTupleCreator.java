@@ -8,9 +8,9 @@ package org.komea.product.backend.service.kpi;
 
 import java.util.Collections;
 
-import org.komea.product.cep.api.formula.tuple.ITuple;
-import org.komea.product.cep.api.formula.tuple.ITupleCreator;
-import org.komea.product.cep.formula.tuple.ArrayListTuple;
+import org.komea.eventory.api.formula.tuple.ITuple;
+import org.komea.eventory.api.formula.tuple.ITupleCreator;
+import org.komea.eventory.formula.tuple.ArrayListTuple;
 import org.komea.product.database.alert.IEvent;
 
 

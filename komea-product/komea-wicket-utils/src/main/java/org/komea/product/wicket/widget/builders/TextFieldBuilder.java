@@ -16,6 +16,9 @@ import org.komea.product.wicket.widget.ErrorHighlighter;
 
 import com.googlecode.wicket.jquery.core.IJQueryWidget.JQueryWidget;
 import com.googlecode.wicket.jquery.ui.widget.tooltip.TooltipBehavior;
+import org.komea.product.backend.genericservice.AbstractService;
+import org.komea.product.backend.service.generic.IGenericService;
+import org.komea.product.wicket.utils.KeyValidator;
 
 
 
@@ -96,7 +99,9 @@ public class TextFieldBuilder<T>
         } else if (_isRequired) {
             textField = new RequiredTextField<T>(_wicketId, new PropertyModel<T>(_data, _field));
         } else {
-            textField = new TextField<T>(_wicketId, new PropertyModel<T>(_data, _field));
+            TextField<T> textField1 = new TextField<T>(_wicketId, new PropertyModel<T>(_data, _field));
+            textField1.setConvertEmptyInputStringToNull(false);
+            textField = textField1;            
         }
     }
     
@@ -140,6 +145,12 @@ public class TextFieldBuilder<T>
     
     
         textField.add(new StringValidator(_minimumLength, _maximumLength));
+        return this;
+    }
+    
+    
+       public TextFieldBuilder<T> UniqueStringValidator(String _fieldName, IGenericService _service) {
+         ((TextField<String>) textField).add(new KeyValidator(_service, _fieldName));
         return this;
     }
     

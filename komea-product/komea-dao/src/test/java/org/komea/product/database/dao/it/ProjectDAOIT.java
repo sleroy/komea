@@ -24,7 +24,7 @@ public class ProjectDAOIT extends AbstractSpringIntegrationTestCase {
     @Autowired
     private CustomerDao customerDAO;
     
-    @Test
+    @Test 
     @Transactional
     public void test() {
     
@@ -53,7 +53,7 @@ public class ProjectDAOIT extends AbstractSpringIntegrationTestCase {
         Assert.assertEquals(1, projectDAO.selectByCriteria(request).size());
     }
     
-    @Test
+    @Test 
     @Transactional
     public void testNoExistringProject() {
     
@@ -65,7 +65,7 @@ public class ProjectDAOIT extends AbstractSpringIntegrationTestCase {
         Assert.assertEquals(0, projectDAO.selectByCriteria(request).size());
     }
     
-    @Test
+    @Test 
     @Transactional
     public void testNoExistringProjectByID() {
     

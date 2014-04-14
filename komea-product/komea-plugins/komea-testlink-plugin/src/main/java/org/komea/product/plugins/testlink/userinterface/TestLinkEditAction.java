@@ -6,7 +6,7 @@
 
 package org.komea.product.plugins.testlink.userinterface;
 
-import org.komea.product.plugins.testlink.core.TestLinkServer;
+import org.komea.product.plugins.testlink.model.TestLinkServer;
 import org.komea.product.wicket.widget.api.IEditAction;
 
 /**

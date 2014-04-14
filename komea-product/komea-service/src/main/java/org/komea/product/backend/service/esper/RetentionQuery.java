@@ -9,11 +9,11 @@ package org.komea.product.backend.service.esper;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import org.komea.product.cep.api.cache.ICacheConfiguration;
-import org.komea.product.cep.cache.CacheConfigurationBuilder;
-import org.komea.product.cep.formula.NoCEPFormula;
-import org.komea.product.cep.query.CEPQueryImplementation;
-import org.komea.product.cep.query.FilterDefinition;
+import org.komea.eventory.api.cache.ICacheConfiguration;
+import org.komea.eventory.cache.CacheConfigurationBuilder;
+import org.komea.eventory.formula.NoCEPFormula;
+import org.komea.eventory.query.CEPQueryImplementation;
+import org.komea.eventory.query.FilterDefinition;
 import org.komea.product.database.enums.RetentionPeriod;
 import org.komea.product.database.enums.Severity;
 

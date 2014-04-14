@@ -4,7 +4,9 @@
 package org.komea.product.backend.service.kpi;
 
 import java.util.List;
+
 import javax.annotation.PostConstruct;
+
 import org.komea.product.database.model.Kpi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

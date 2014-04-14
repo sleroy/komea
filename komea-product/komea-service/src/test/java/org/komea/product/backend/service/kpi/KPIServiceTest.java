@@ -13,11 +13,16 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.komea.eventory.api.cache.ICacheConfiguration;
+import org.komea.eventory.api.cache.ICacheStorage;
+import org.komea.eventory.api.cache.ICacheStorageFactory;
+import org.komea.eventory.cache.guava.GoogleCacheStorage;
+import org.komea.eventory.filter.NoEventFilter;
+import org.komea.eventory.formula.CountFormula;
+import org.komea.eventory.query.CEPQueryBuilder;
+import org.komea.eventory.utils.PluginUtils;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
-import org.komea.product.cep.filter.NoEventFilter;
-import org.komea.product.cep.formula.CountFormula;
-import org.komea.product.cep.query.CEPQueryBuilder;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.enums.EntityType;
@@ -121,6 +126,18 @@ public class KPIServiceTest
     public final void testFindKpi() {
     
     
+        PluginUtils.setCacheStorageFactory(new ICacheStorageFactory()
+        {
+            
+            
+            @Override
+            public ICacheStorage newCacheStorage(final ICacheConfiguration _arg0) {
+            
+            
+                return new GoogleCacheStorage(_arg0);
+            }
+        });
+        
         final Person person = new Person();
         person.setId(12);
         person.setFirstName("John");

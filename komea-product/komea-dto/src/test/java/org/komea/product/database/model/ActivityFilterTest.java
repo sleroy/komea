@@ -30,7 +30,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testActivityFilter_2() throws Exception {
     
     
@@ -62,7 +62,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testGenerateActivityQueryName_1() throws Exception {
     
     
@@ -84,7 +84,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testGenerateActivityQueryName_2() throws Exception {
     
     
@@ -106,7 +106,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testGetBlockerRetention_1() throws Exception {
     
     
@@ -131,7 +131,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testGetCriticalRetention_1() throws Exception {
     
     
@@ -156,7 +156,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testGetEntityType_1() throws Exception {
     
     
@@ -181,7 +181,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testGetId_1() throws Exception {
     
     
@@ -210,7 +210,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testGetIdEntity_1() throws Exception {
     
     
@@ -239,7 +239,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testGetInfoRetention_1() throws Exception {
     
     
@@ -264,7 +264,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testGetMajorRetention_1() throws Exception {
     
     
@@ -289,7 +289,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testGetMinorRetention_1() throws Exception {
     
     
@@ -314,7 +314,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testSetBlockerRetention_1() throws Exception {
     
     
@@ -336,7 +336,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testSetCriticalRetention_1() throws Exception {
     
     
@@ -358,7 +358,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testSetEntityType_1() throws Exception {
     
     
@@ -380,7 +380,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testSetId_1() throws Exception {
     
     
@@ -402,7 +402,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testSetIdEntity_1() throws Exception {
     
     
@@ -424,7 +424,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testSetInfoRetention_1() throws Exception {
     
     
@@ -446,7 +446,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testSetMajorRetention_1() throws Exception {
     
     
@@ -468,7 +468,7 @@ public class ActivityFilterTest
      * @throws Exception
      * @generatedBy CodePro at 19/02/14 16:07
      */
-    @Test
+    @Test 
     public void testSetMinorRetention_1() throws Exception {
     
     

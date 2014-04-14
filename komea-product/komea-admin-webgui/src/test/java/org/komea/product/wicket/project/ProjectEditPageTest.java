@@ -51,7 +51,7 @@ public class ProjectEditPageTest
      * Test method for
      * {@link org.komea.product.wicket.project.ProjectEditPage#ProjectEditPage(org.apache.wicket.request.mapper.parameter.PageParameters)}.
      */
-    @Test
+    @Test 
     public final void testProjectEditPagePageParameters() throws Exception {
     
     
@@ -64,7 +64,7 @@ public class ProjectEditPageTest
      * {@link org.komea.product.wicket.project.ProjectEditPage#ProjectEditPage(org.apache.wicket.request.mapper.parameter.PageParameters, org.komea.product.database.model.Project)}
      * .
      */
-    @Test
+    @Test 
     public final void testProjectEditPagePageParametersProject() throws Exception {
     
     

@@ -6,10 +6,11 @@
 package org.komea.product.plugins.testlink.api;
 
 import java.util.List;
-import org.komea.product.plugins.testlink.core.MetricTest;
-import org.komea.product.plugins.testlink.core.TestLinkProject;
-import org.komea.product.plugins.testlink.core.TestLinkRequirement;
-import org.komea.product.plugins.testlink.core.TestLinkTestCase;
+
+import org.komea.product.plugins.testlink.model.TestLinkMetrics;
+import org.komea.product.plugins.testlink.model.TestLinkProject;
+import org.komea.product.plugins.testlink.model.TestLinkRequirement;
+import org.komea.product.plugins.testlink.model.TestLinkTestCase;
 
 /**
  *
@@ -21,7 +22,7 @@ public interface ITestLinkServerProxy {
 
     public List<TestLinkTestCase> getTotalTests(TestLinkProject _project);
     
-    public MetricTest getMetricTest(TestLinkProject _project);
+    public TestLinkMetrics getMetricTest(TestLinkProject _project);
 
     public List<TestLinkRequirement> getRequirements(TestLinkProject _project);
 

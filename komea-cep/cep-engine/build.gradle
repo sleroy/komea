@@ -1,0 +1,8 @@
+dependencies {
+        compile project(':cep-engine-api')                
+        compile "org.slf4j:slf4j-api:$LOG_SLF4J"                
+        compile "commons-lang:commons-lang:$APACHE_COMMONLANG"
+        compile 'org.jodd:jodd-bean:3.5.1'
+        compile 'com.googlecode.lambdaj:lambdaj:2.3.3'
+        compile "com.google.guava:guava:$GUAVA"              
+}

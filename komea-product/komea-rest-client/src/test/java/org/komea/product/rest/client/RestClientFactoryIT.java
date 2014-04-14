@@ -14,7 +14,7 @@ import org.komea.product.rest.client.api.IProvidersAPI;
 
 
 
-// @Ignore
+// 
 public class RestClientFactoryIT
 {
     
@@ -26,7 +26,7 @@ public class RestClientFactoryIT
     
     //
     
-    @Test
+    @Test 
     public void testCreateEventsAPI() throws ConnectException, URISyntaxException {
     
     
@@ -36,7 +36,7 @@ public class RestClientFactoryIT
     }
     
     
-    @Test
+    @Test 
     public void testCreateProvidersAPI() throws ConnectException, URISyntaxException {
     
     

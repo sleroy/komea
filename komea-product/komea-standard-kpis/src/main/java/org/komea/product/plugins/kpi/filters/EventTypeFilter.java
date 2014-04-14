@@ -9,7 +9,7 @@ package org.komea.product.plugins.kpi.filters;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.komea.product.cep.api.IEventFilter;
+import org.komea.eventory.api.filters.IEventFilter;
 import org.komea.product.database.alert.IEvent;
 
 

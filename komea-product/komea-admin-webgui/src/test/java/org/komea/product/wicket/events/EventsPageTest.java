@@ -67,7 +67,7 @@ public class EventsPageTest
      * Test method for
      * {@link org.komea.product.wicket.events.EventsPage#EventsPage(org.apache.wicket.request.mapper.parameter.PageParameters)}.
      */
-    @Test
+    @Test 
     public final void testEventsPage() throws Exception {
     
     
