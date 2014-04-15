@@ -6,6 +6,7 @@ package org.komea.product.cep.cache;
 
 
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,8 @@ import org.komea.eventory.api.bridge.IEventBridge;
 import org.komea.eventory.api.engine.ICEPConfiguration;
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.bridge.MemoryBridge;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -26,10 +29,20 @@ public class BackupMemoryBridge implements IEventBridge
 {
     
     
+    private static final Logger      LOGGER            = LoggerFactory
+                                                               .getLogger(BackupMemoryBridge.class);
+    
+    
     private final List<Serializable> events            = new ArrayList<Serializable>();
     
     
+    private final int                maxEvents;
+    
+    
     private IEventBridge             memoryEventBridge = null;
+    
+    
+    private final File               storageFolder;
     
     
     
@@ -42,6 +55,11 @@ public class BackupMemoryBridge implements IEventBridge
         super();
         
         memoryEventBridge = new MemoryBridge(_configuration);
+        maxEvents = Integer.parseInt(_configuration.getExtraProperties().get("max-events"));
+        storageFolder = new File(_configuration.getStorageFolder(), "backupevents");
+        storageFolder.mkdirs();
+        LOGGER.info("Storage folder for backup events {}", storageFolder);
+        
     }
     
     
@@ -62,9 +80,15 @@ public class BackupMemoryBridge implements IEventBridge
      * @see org.komea.eventory.api.engine.ICEPEventListener#notify(java.io.Serializable)
      */
     @Override
-    public void notify(final Serializable _arg0) {
+    public synchronized void notify(final Serializable _arg0) {
     
     
+        events.add(_arg0);
+        if (events.size() >= maxEvents) {
+            
+            
+            events.clear();
+        }
         memoryEventBridge.notify(_arg0);
         
         
