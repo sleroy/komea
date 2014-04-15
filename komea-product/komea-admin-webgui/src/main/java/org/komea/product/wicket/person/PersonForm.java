@@ -155,12 +155,16 @@ public final class PersonForm extends Form<Person> {
             }
 
         }
-
-        savPassword = person.getPassword();
+        if (person.getPassword() == null) {
+            savPassword = "";
+        } else {
+            savPassword = person.getPassword();
+        }
         person.setPassword("00000");
         password = (PasswordTextField) TextFieldBuilder.createPassword("password", person, "password")
                 .simpleValidator(5, 255).withTooltip("User requires a password").highlightOnErrors()
                 .build();
+        password.setConvertEmptyInputStringToNull(false);
         password.setResetPassword(false);
         password.setOutputMarkupId(true);
         password.setOutputMarkupPlaceholderTag(true);

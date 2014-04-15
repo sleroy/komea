@@ -69,9 +69,9 @@ public final class KpiForm extends Form<Kpi> {
         nameEntity = new NameGeneric("");
 
         add(TextFieldBuilder.<String>createRequired("name", kpi, "name").highlightOnErrors()
-                .simpleValidator(0, 255).build());
+                .simpleValidator(0, 255).withTooltip("Kpi need a name").build());
         TextFieldBuilder<String> keyField = TextFieldBuilder.<String>createRequired("kpiKey", kpi, "kpiKey")
-                .simpleValidator(0, 255).highlightOnErrors().withTooltip("");
+                .simpleValidator(0, 255).highlightOnErrors().withTooltip("Kpi need a unique key");
 
         if (isNew) {
             keyField.UniqueStringValidator("Kpi key", kpiService);
@@ -82,10 +82,10 @@ public final class KpiForm extends Form<Kpi> {
         add(keyField.build());
 
         add(TextAreaBuilder.<String>create("description", kpi, "description")
-                .simpleValidator(0, 2048).highlightOnErrors().withTooltip("").build());
+                .simpleValidator(0, 2048).highlightOnErrors().withTooltip("Description of kpi").build());
 
         add(SelectBoxBuilder.<ProviderType>createWithEnum("providerType", kpi, ProviderType.class)
-                .build());
+                .withTooltip("Choose a type of provider").build());
 
         textminValue
                 = TextFieldBuilder.<Double>create("valueMin", kpi, "valueMin").withTooltip("Define the minimum value of the kpi")
@@ -119,7 +119,7 @@ public final class KpiForm extends Form<Kpi> {
         add(textMaxValue);
 
         add(SelectBoxBuilder.<ValueDirection>createWithEnum("valueDirection", kpi,
-                ValueDirection.class).build());
+                ValueDirection.class).withTooltip("").build());
 
         add(SelectBoxBuilder.<ValueType>createWithEnum("valueType", kpi, ValueType.class).build());
 

@@ -11,7 +11,6 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.komea.product.backend.service.customer.ICustomerService;
-import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.model.Customer;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
