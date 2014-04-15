@@ -30,7 +30,7 @@ public final class AlertPage extends LayoutPage {
     public AlertPage(PageParameters params) {
         super(params);
           List<KpiAlertType> listAffichage = alertService.selectAll();
-        final IDeleteAction<KpiAlertType> deleteAction = new AlertDeleteAction(listAffichage, alertService);
+        final IDeleteAction<KpiAlertType> deleteAction = new AlertDeleteAction(listAffichage, alertService,this);
         final IEditAction<KpiAlertType> editAction = new AlertEditAction(this);
         final ISortableDataProvider<KpiAlertType, String> dataProvider = new ListDataModel(listAffichage);
           final DataTable<KpiAlertType, String> build =

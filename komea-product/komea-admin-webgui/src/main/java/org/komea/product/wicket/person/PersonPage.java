@@ -43,7 +43,7 @@ public class PersonPage extends LayoutPage
         
        
         List<Person> listAffichage = personDAO.selectAll();
-         final IDeleteAction<Person> personDeleteAction = new PersonDeleteAction(personDAO,listAffichage);
+         final IDeleteAction<Person> personDeleteAction = new PersonDeleteAction(personDAO,listAffichage,this);
         final IEditAction<Person> personEditAction = new PersonEditAction(this, personRoleDAO);
         final ISortableDataProvider<Person, String> dataProvider =
 //                new PersonDataModel(personDAO.selectAll());

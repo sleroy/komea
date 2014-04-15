@@ -97,7 +97,7 @@ public class AlertForm extends Form<KpiAlertType> {
             nameEntity.setName(selectByPrimaryKey.getName());
         }
 
-        this.customerFiel = TextFieldBuilder.<String>createRequired("idKpi", nameEntity, "name").withTooltip("kpi can be affected").buildTextField();
+        this.customerFiel = TextFieldBuilder.<String>createRequired("kpi", nameEntity, "name").withTooltip("kpi can be affected").buildTextField();
         this.customerFiel.setOutputMarkupId(true);
         add(customerFiel);
 

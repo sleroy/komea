@@ -33,7 +33,7 @@ public final class TestLinkPage extends LayoutPage {
     public TestLinkPage(PageParameters params) {
         super(params);
         List<TestLinkServer> listAffichage = TestLinkService.selectAll();
-        final IDeleteAction<TestLinkServer> deleteAction = new TestLinkDeleteAction(listAffichage, TestLinkService);
+        final IDeleteAction<TestLinkServer> deleteAction = new TestLinkDeleteAction(listAffichage, TestLinkService, this);
         final IEditAction<TestLinkServer> editAction = new TestLinkEditAction(this);
         final ISortableDataProvider<TestLinkServer, String> dataProvider = new ListDataModel(listAffichage);
         final DataTable<TestLinkServer, String> build

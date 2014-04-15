@@ -10,10 +10,9 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.komea.product.database.dao.CustomerDao;
+import org.komea.product.backend.service.customer.ICustomerService;
 import org.komea.product.database.model.Customer;
 import org.komea.product.database.model.CustomerCriteria;
-import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
@@ -27,13 +26,13 @@ import org.komea.product.wicket.widget.model.ListDataModel;
 public final class CustomerPage extends LayoutPage {
 
     @SpringBean
-    private CustomerDao customerService;
+    private ICustomerService customerService;
     
     public CustomerPage(PageParameters params) {
         super(params);
         
         List<Customer> listAffichage = customerService.selectByCriteria(new CustomerCriteria());
-        final IDeleteAction<Customer> deleteAction = new CustomerDeleteAction(listAffichage, customerService);
+        final IDeleteAction<Customer> deleteAction = new CustomerDeleteAction(listAffichage, customerService,this);
         final IEditAction<Customer> editAction = new CustomerEditAction(this);
         final ISortableDataProvider<Customer, String> dataProvider = new ListDataModel(listAffichage);
           final DataTable<Customer, String> build =

@@ -6,32 +6,32 @@
 package org.komea.product.plugins.testlink.userinterface;
 
 import java.util.List;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.komea.product.plugins.testlink.api.ITestLinkServerDAO;
 import org.komea.product.plugins.testlink.model.TestLinkServer;
-import org.komea.product.wicket.widget.api.IDeleteAction;
+import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.utils.AbstractDeleteAction;
 
 /**
  *
  * @author rgalerme
  */
-public class TestLinkDeleteAction implements IDeleteAction<TestLinkServer> {
+public class TestLinkDeleteAction extends AbstractDeleteAction<TestLinkServer> {
 
     private final List<TestLinkServer> serverAffiche;
     private final ITestLinkServerDAO testlinkService;
 
-    public TestLinkDeleteAction(List<TestLinkServer> serverAffiche, ITestLinkServerDAO testLinkService) {
+    public TestLinkDeleteAction(List<TestLinkServer> serverAffiche, ITestLinkServerDAO testLinkService, LayoutPage page) {
+        super(page, "dialogdelete");
         this.serverAffiche = serverAffiche;
         this.testlinkService = testLinkService;
     }
 
-
     @Override
-    public void delete(TestLinkServer _object, AjaxRequestTarget _target) {
-         boolean delete = this.testlinkService.delete(_object);
+    public void deleteAction() {
+        boolean delete = this.testlinkService.delete(getObject());
         if (delete) {
-            this.serverAffiche.remove(_object);
+            this.serverAffiche.remove(getObject());
         }
     }
 

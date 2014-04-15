@@ -40,7 +40,7 @@ public class ProjectPage extends LayoutPage
     
         super(_parameters);
         List<Project> listAffichage = projectService.selectAll();
-        final IDeleteAction<Project> projectDeleteAction = new ProjectDeleteAction(projectService,listAffichage);
+        final IDeleteAction<Project> projectDeleteAction = new ProjectDeleteAction(projectService,listAffichage,this);
         
         final IEditAction<Project> projectEditAction = new ProjectEditAction(this);
         

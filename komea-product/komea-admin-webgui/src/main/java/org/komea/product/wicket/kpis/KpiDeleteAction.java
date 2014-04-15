@@ -15,48 +15,31 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.utils.AbstractDeleteAction;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 
 /**
  * @author rgalerme
  */
-public class KpiDeleteAction implements IDeleteAction<Kpi> {
+public class KpiDeleteAction extends AbstractDeleteAction<Kpi> {
 
     private final IKPIService kpiDao;
     private final List<Kpi> kpiAffichage;
-    private final LayoutPage page;
+
     private MessageDialog dialog;
-    private Kpi obKpi;
 
-    public KpiDeleteAction(final IKPIService _kpi, List<Kpi> _kpiAffichage, LayoutPage _page) {
-        this.page = _page;
-        kpiDao = _kpi;
-        this.kpiAffichage = _kpiAffichage;
-
-        dialog = new MessageDialog("dialogdelete", "Warning", "are you sure to remove this element ?",
-                DialogButtons.YES_NO, DialogIcon.WARN) {
-
-                    @Override
-                    public void onClose(AjaxRequestTarget art, DialogButton button) {
-                        if (button != null && button.toString().equals(LBL_YES)) {
-                            delete();
-                            art.add(page);
-                        }
-                    }
-                };
-        page.add(dialog);
+    public KpiDeleteAction(IKPIService kpiDao, List<Kpi> kpiAffichage, LayoutPage _page) {
+        super(_page, "dialogdelete");
+        this.kpiDao = kpiDao;
+        this.kpiAffichage = kpiAffichage;
 
     }
+
 
     @Override
-    public void delete(Kpi _object, AjaxRequestTarget _target) {
-        this.obKpi = _object;
-        dialog.open(_target);
-    }
-
-    private void delete() {
-        kpiDao.deleteKpi(obKpi);
-        kpiAffichage.remove(obKpi);
+    public void deleteAction() {
+        kpiDao.deleteKpi(getObject());
+        kpiAffichage.remove(getObject());
     }
 
 }

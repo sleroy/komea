@@ -45,7 +45,7 @@ public final class BugZillaPage extends LayoutPage
         
         final List<BZServerConfiguration> listAffichage = bugZillaService.selectAll();
         final IDeleteAction<BZServerConfiguration> deleteAction =
-                new BugZillaDeleteAction(listAffichage, bugZillaService);
+                new BugZillaDeleteAction(listAffichage, bugZillaService,this);
         final IEditAction<BZServerConfiguration> editAction = new BugZillaEditAction(this);
         final ISortableDataProvider<BZServerConfiguration, String> dataProvider =
                 new ListDataModel(listAffichage);

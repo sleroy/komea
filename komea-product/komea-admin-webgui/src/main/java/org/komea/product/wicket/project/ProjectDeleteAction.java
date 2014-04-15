@@ -11,26 +11,28 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
+import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.utils.AbstractDeleteAction;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 
 /**
  *
  * @author rgalerme
  */
-public class ProjectDeleteAction implements IDeleteAction<Project> {
+public class ProjectDeleteAction extends AbstractDeleteAction<Project> {
 
     private final IProjectService projectService;
     private final List<Project> projectAffichage;
 
-    public ProjectDeleteAction(IProjectService projectService , List<Project> _ProjectAffichage) {
+    public ProjectDeleteAction(IProjectService projectService , List<Project> _ProjectAffichage,LayoutPage page) {
+         super(page, "dialogdelete");
         this.projectService = projectService;
         this.projectAffichage = _ProjectAffichage;
     }
-
     @Override
-    public void delete(Project _object, AjaxRequestTarget _target) {
-        projectService.deleteProject(_object);
-        this.projectAffichage.remove(_object);
+    public void deleteAction() {
+         projectService.deleteProject(getObject());
+        this.projectAffichage.remove(getObject());
     }
     
 }

@@ -42,7 +42,7 @@ public final class DepartmentPage extends LayoutPage
         super(_parameters);
         List<PersonGroup> listAffichage = personGroupService.getAllDepartmentsPG();
         final IDeleteAction<PersonGroup> personGroupDeleteAction =
-                new PersonGroupDeleteAction(personGroupService,listAffichage);
+                new PersonGroupDeleteAction(personGroupService,listAffichage,this);
         final IEditAction<PersonGroup> personGroupEditAction = new DepartmentEditAction(this);
         
         final ISortableDataProvider<PersonGroup, String> dataProvider =

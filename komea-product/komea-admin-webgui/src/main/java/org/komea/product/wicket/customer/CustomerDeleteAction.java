@@ -7,30 +7,32 @@
 package org.komea.product.wicket.customer;
 
 import java.util.List;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.komea.product.database.dao.CustomerDao;
+import org.komea.product.backend.service.customer.ICustomerService;
 import org.komea.product.database.model.Customer;
-import org.komea.product.wicket.widget.api.IDeleteAction;
+import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.utils.AbstractDeleteAction;
 
 /**
  *
  * @author rgalerme
  */
-public class CustomerDeleteAction implements IDeleteAction<Customer> {
+public class CustomerDeleteAction extends AbstractDeleteAction<Customer> {
 
     private final List<Customer> customerAffichage;
-    private final CustomerDao customerDao;
+    private final ICustomerService customerDao;
 
-    public CustomerDeleteAction(List<Customer> customerAffichage, CustomerDao customerDao) {
+    public CustomerDeleteAction(List<Customer> customerAffichage, ICustomerService customerDao,LayoutPage page) {
+         super(page, "dialogdelete");
         this.customerAffichage = customerAffichage;
         this.customerDao = customerDao;
     }
 
 
+
     @Override
-    public void delete(Customer _customer, AjaxRequestTarget _target) {
-              this.customerDao.deleteByPrimaryKey(_customer.getId());
-        this.customerAffichage.remove(_customer);
+    public void deleteAction() {
+        this.customerDao.deleteCustomer(getObject());
+        this.customerAffichage.remove(getObject());
     }
     
 }
