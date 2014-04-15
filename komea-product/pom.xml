@@ -24,17 +24,6 @@
 
 	<build>
 
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-			<resource>
-				<directory>src/main/webapp</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-
 		<plugins>
 
 
@@ -77,9 +66,12 @@
 	<profiles>
 		<profile>
 			<id>embedded</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<properties>
 				<jdbc.bdd.type>h2</jdbc.bdd.type>
-				<activeByDefault>true</activeByDefault>
+
 			</properties>
 
 		</profile>
