@@ -3,7 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.komea.product.plugins.testlink.userinterface;
+
+
 
 import java.util.List;
 
@@ -21,42 +24,56 @@ import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
 import org.komea.product.wicket.widget.model.ListDataModel;
 
+
+
 /**
- *
  * @author rgalerme
  */
-public final class TestLinkPage extends LayoutPage {
-
+public final class TestLinkPage extends LayoutPage
+{
+    
+    
     @SpringBean
     private ITestLinkServerDAO TestLinkService;
-
-    public TestLinkPage(PageParameters params) {
+    
+    
+    
+    public TestLinkPage(final PageParameters params) {
+    
+    
         super(params);
-        List<TestLinkServer> listAffichage = TestLinkService.selectAll();
-        final IDeleteAction<TestLinkServer> deleteAction = new TestLinkDeleteAction(listAffichage, TestLinkService, this);
+        final List<TestLinkServer> listAffichage = TestLinkService.selectAll();
+        final IDeleteAction<TestLinkServer> deleteAction =
+                new TestLinkDeleteAction(listAffichage, TestLinkService, this);
         final IEditAction<TestLinkServer> editAction = new TestLinkEditAction(this);
-        final ISortableDataProvider<TestLinkServer, String> dataProvider = new ListDataModel(listAffichage);
-        final DataTable<TestLinkServer, String> build
-                = DataTableBuilder.<TestLinkServer, String>newTable("table")
-                .addColumn("Name", "Name")
-                .addColumn("Address", "Address")
-                .withEditDeleteColumn(deleteAction, editAction)
-                .displayRows(listAffichage.size() + 10).withData(dataProvider).build();
+        final ISortableDataProvider<TestLinkServer, String> dataProvider =
+                new ListDataModel(listAffichage);
+        final DataTable<TestLinkServer, String> build =
+                DataTableBuilder.<TestLinkServer, String> newTable("table")
+                        .addColumn("Server name", "name").addColumn("Address", "address")
+                        .withEditDeleteColumn(deleteAction, editAction)
+                        .displayRows(listAffichage.size() + 10).withData(dataProvider).build();
         add(build);
-
-        add(new AjaxLinkLayout<LayoutPage>("addServer", this) {
-
+        
+        add(new AjaxLinkLayout<LayoutPage>("addServer", this)
+        {
+            
+            
             @Override
             public void onClick(final AjaxRequestTarget art) {
-                LayoutPage page = getCustom();
+            
+            
+                final LayoutPage page = getCustom();
                 page.setResponsePage(new TestLinkEditPage(page.getPageParameters()));
             }
         });
     }
-
+    
+    
     @Override
     public String getTitle() {
-
+    
+    
         return getString("TestLinkPage.title");
     }
 }

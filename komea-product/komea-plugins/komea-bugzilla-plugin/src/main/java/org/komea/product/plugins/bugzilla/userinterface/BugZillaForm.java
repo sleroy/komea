@@ -53,16 +53,15 @@ public class BugZillaForm extends Form<BZServerConfiguration>
         oldAdress = bugServer.getAddress() == null ? "" : bugServer.getAddress().toString();
         feedBack.setVisible(false);
         
-        add(TextFieldBuilder.<String> createRequired("address", bugServer, "address")
-                .highlightOnErrors().withTooltip("Server need a address").build());
+        
+        add(TextFieldBuilder.createURL("address", bugServer, "address")
+                .withTooltip("Server requires an URL").simpleValidator(3, 255).build());
         add(TextFieldBuilder.<String> createRequired("login", bugServer, "login")
-                .highlightOnErrors().simpleValidator(0, 255).withTooltip("Server need a login")
-                .build());
+                .simpleValidator(0, 255).withTooltip("Server need a login").build());
         add(TextFieldBuilder.<String> createRequired("password", bugServer, "password")
-                .highlightOnErrors().simpleValidator(0, 255).withTooltip("Server need a password")
-                .build());
+                .simpleValidator(0, 255).withTooltip("Server need a password").build());
         add(TextFieldBuilder.<String> createRequired("reminderAlert", bugServer, "reminderAlert")
-                .highlightOnErrors().withTooltip("").build());
+                .withTooltip("").build());
         
         // button
         add(new AjaxLinkLayout<LayoutPage>("cancel", page)

@@ -35,6 +35,7 @@ public class TestLinkServer implements Serializable, IHasId
     public TestLinkServer() {
     
     
+        super();
     }
     
     

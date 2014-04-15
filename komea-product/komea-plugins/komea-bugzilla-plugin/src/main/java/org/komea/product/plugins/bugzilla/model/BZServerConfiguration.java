@@ -9,7 +9,6 @@ package org.komea.product.plugins.bugzilla.model;
 
 
 import java.io.Serializable;
-import java.net.URL;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +30,7 @@ public class BZServerConfiguration implements Serializable, IHasId
 {
     
     
-    private URL                                     address      = null;
+    private String                                  address      = null;
     
     
     private Integer                                 id;
@@ -59,7 +58,7 @@ public class BZServerConfiguration implements Serializable, IHasId
     }
     
     
-    public BZServerConfiguration(final URL address, final String login, final String mdp) {
+    public BZServerConfiguration(final String address, final String login, final String mdp) {
     
     
         this.address = address;
@@ -69,7 +68,7 @@ public class BZServerConfiguration implements Serializable, IHasId
     
     
     public BZServerConfiguration(
-            final URL address,
+            final String address,
             final String login,
             final String mdp,
             final int _reminder) {
@@ -83,7 +82,7 @@ public class BZServerConfiguration implements Serializable, IHasId
     
     
     public BZServerConfiguration(
-            final URL address,
+            final String address,
             final String login,
             final String mdp,
             final int _reminder,
@@ -109,7 +108,7 @@ public class BZServerConfiguration implements Serializable, IHasId
      * 
      * @return String
      */
-    public URL getAddress() {
+    public String getAddress() {
     
     
         return address;
@@ -192,7 +191,7 @@ public class BZServerConfiguration implements Serializable, IHasId
      * @param address
      *            String
      */
-    public void setAddress(final URL address) {
+    public void setAddress(final String address) {
     
     
         this.address = address;

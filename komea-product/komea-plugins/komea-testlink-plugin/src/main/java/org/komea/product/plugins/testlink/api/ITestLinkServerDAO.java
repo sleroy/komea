@@ -51,15 +51,6 @@ public interface ITestLinkServerDAO
     
     
     /**
-     * Saves the modjification on a testlink server.
-     * 
-     * @param server
-     *            the server
-     */
-    public void saveOrUpdate(TestLinkServer server, String oldAddress);
-    
-    
-    /**
      * Returns the list
      * 
      * @return

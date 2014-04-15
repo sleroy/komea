@@ -3,7 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.komea.product.plugins.testlink.userinterface;
+
+
 
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -13,32 +16,48 @@ import org.komea.product.plugins.testlink.api.ITestLinkServerDAO;
 import org.komea.product.plugins.testlink.model.TestLinkServer;
 import org.komea.product.wicket.LayoutPage;
 
+
+
 /**
- *
  * @author rgalerme
  */
-public final class TestLinkEditPage extends LayoutPage {
-
+public final class TestLinkEditPage extends LayoutPage
+{
+    
+    
     @SpringBean
-    private ITestLinkServerDAO bService;
-
-    public TestLinkEditPage(PageParameters params) {
+    private ITestLinkServerDAO testlinkService;
+    
+    
+    
+    public TestLinkEditPage(final PageParameters params) {
+    
+    
         this(params, new TestLinkServer());
     }
-
-    TestLinkEditPage(PageParameters pageParameters, TestLinkServer _testLinkServer) {
+    
+    
+    public TestLinkEditPage(
+            final PageParameters pageParameters,
+            final TestLinkServer _testLinkServer) {
+    
+    
         super(pageParameters);
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
-        TestLinkForm tform = new TestLinkForm(this, _testLinkServer, bService, feedbackPanel, "form", new CompoundPropertyModel<TestLinkServer>(_testLinkServer));
+        final TestLinkForm tform =
+                new TestLinkForm(this, _testLinkServer, testlinkService, feedbackPanel, "form",
+                        new CompoundPropertyModel<TestLinkServer>(_testLinkServer));
         add(tform);
     }
-
+    
+    
     @Override
     public String getTitle() {
-
+    
+    
         return getString("TestLinkEditPage.title");
     }
 }

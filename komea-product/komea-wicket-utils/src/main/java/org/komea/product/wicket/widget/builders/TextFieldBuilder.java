@@ -9,16 +9,16 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.UrlTextField;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.validator.StringValidator;
+import org.komea.product.backend.service.generic.IGenericService;
+import org.komea.product.wicket.utils.KeyValidator;
 import org.komea.product.wicket.widget.ErrorHighlighter;
 
 import com.googlecode.wicket.jquery.core.IJQueryWidget.JQueryWidget;
 import com.googlecode.wicket.jquery.ui.widget.tooltip.TooltipBehavior;
-import org.komea.product.backend.genericservice.AbstractService;
-import org.komea.product.backend.service.generic.IGenericService;
-import org.komea.product.wicket.utils.KeyValidator;
 
 
 
@@ -80,9 +80,41 @@ public class TextFieldBuilder<T>
     }
     
     
+    /**
+     * Creates an url
+     * 
+     * @param _wicketID
+     *            the wicket id
+     * @param _bugServer
+     *            the bug server
+     * @param _propertyModel
+     *            the property model
+     * @return the textfield builder;
+     */
+    public static <T> TextFieldBuilder<T> createURL(
+            final String _wicketID,
+            final T _bugServer,
+            final String _propertyModel) {
+    
+    
+        final UrlTextField urlTextField =
+                new UrlTextField(_wicketID, new PropertyModel<String>(_bugServer, _propertyModel));
+        
+        return new TextFieldBuilder<T>(urlTextField);
+    }
+    
+    
     
     private final Component textField;
     
+    
+    
+    private TextFieldBuilder(final Component _textField) {
+    
+    
+        super();
+        this.textField = _textField;
+    }
     
     
     private TextFieldBuilder(
@@ -99,9 +131,10 @@ public class TextFieldBuilder<T>
         } else if (_isRequired) {
             textField = new RequiredTextField<T>(_wicketId, new PropertyModel<T>(_data, _field));
         } else {
-            TextField<T> textField1 = new TextField<T>(_wicketId, new PropertyModel<T>(_data, _field));
+            final TextField<T> textField1 =
+                    new TextField<T>(_wicketId, new PropertyModel<T>(_data, _field));
             textField1.setConvertEmptyInputStringToNull(false);
-            textField = textField1;            
+            textField = textField1;
         }
     }
     
@@ -149,8 +182,12 @@ public class TextFieldBuilder<T>
     }
     
     
-       public TextFieldBuilder<T> UniqueStringValidator(String _fieldName, IGenericService _service) {
-         ((TextField<String>) textField).add(new KeyValidator(_service, _fieldName));
+    public TextFieldBuilder<T> UniqueStringValidator(
+            final String _fieldName,
+            final IGenericService _service) {
+    
+    
+        ((TextField<String>) textField).add(new KeyValidator(_service, _fieldName));
         return this;
     }
     

@@ -108,27 +108,11 @@ public class TestLinkServerService implements ITestLinkServerDAO
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.plugins.testlink.api.ITestLinkServerDAO#saveOrUpdate(org.komea.product.plugins.testlink.model.TestLinkServer)
-     */
     @Override
-    public void saveOrUpdate(final TestLinkServer _server) {
-    
-    
-        daoStorage.saveOrUpdate(_server);
-        
-        
-    }
-    
-    
-    @Override
-    public void saveOrUpdate(final TestLinkServer server, final String oldAddress) {
+    public void saveOrUpdate(final TestLinkServer server) {
     
     
         Validate.notNull(server);
-        Validate.notNull(oldAddress);
-        server.setAddress(oldAddress);
         daoStorage.saveOrUpdate(server);
     }
     
