@@ -27,7 +27,6 @@ import org.komea.product.plugins.scm.api.plugin.IScmCloner;
 import org.komea.product.plugins.scm.api.plugin.IScmCommit;
 import org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy;
 import org.komea.product.plugins.scm.api.plugin.ScmCommit;
-import org.omg.stub.java.rmi._Remote_Stub;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,11 +125,12 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
     
     
         Validate.notEmpty(_branchName);
-        if (_previousTime = null) {
-            _previousTime = new DateTime();
-            _previousTime.withYear(1900);
-            _previousTime.withMonthOfYear(1);
-            _previousTime.withDayOfMonth(1);
+        DateTime previousTime = _previousTime;
+        if (_previousTime == null) {
+            previousTime = new DateTime();
+            previousTime.withYear(1900);
+            previousTime.withMonthOfYear(1);
+            previousTime.withDayOfMonth(1);
         }
         GitRepositoryReaderUtils.switchBranch(getGit(), _branchName);
         final List<IScmCommit> commits = new ArrayList<IScmCommit>(100);
@@ -156,7 +156,7 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
              */
             for (final RevCommit commit : logcmd.call()) {
                 final DateTime dateTime = new DateTime(commit.getAuthorIdent().getWhen());
-                if (!_previousTime.isBefore(dateTime)) {
+                if (!previousTime.isBefore(dateTime)) {
                     continue;
                 }
                 
