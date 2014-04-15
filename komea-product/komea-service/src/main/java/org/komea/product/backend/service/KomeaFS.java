@@ -26,28 +26,29 @@ public class KomeaFS implements IKomeaFS
     /**
      * 
      */
-    public static final String      STORAGE_PATH_KEY = "storage_path";
+    public static final String      ENV_KOMEA_HOME        = "KOMEA_HOME";
+    
+    
+    /**
+     * Komea configuration folder
+     */
+    public static final String      KOMEA_FOLDER          = ".komea";
     
     
     /**
      * 
      */
-    private static final String     ENV_KOMEA_HOME   = "ENV_KOMEA_HOME";
+    public static final String      KOMEA_SYSTEM_PROPERTY = "komea.home";
     
     
     /**
      * 
      */
-    private static final String     KOMEA            = ".komea";
+    public static final String      STORAGE_PATH_KEY      = "storage_path";
     
     
-    /**
-     * 
-     */
-    private static final String     KOMEA_DIR        = "komea.home";
-    
-    
-    private static org.slf4j.Logger LOGGER           = LoggerFactory.getLogger("komea-filesystem");
+    private static org.slf4j.Logger LOGGER                = LoggerFactory
+                                                                  .getLogger("komea-filesystem");
     
     
     
@@ -106,10 +107,10 @@ public class KomeaFS implements IKomeaFS
             storage_path = komeaHome + "/kdata";
         }
         if (Strings.isNullOrEmpty(storage_path)) {
-            storage_path = System.getProperty(KOMEA_DIR);
+            storage_path = System.getProperty(KOMEA_SYSTEM_PROPERTY);
         }
         if (Strings.isNullOrEmpty(storage_path)) {
-            storage_path = KOMEA;
+            storage_path = KOMEA_FOLDER;
         }
         LOGGER.info("Storage path for plugins is {}", storage_path);
         if (storage_path == null) { throw new BeanCreationException(

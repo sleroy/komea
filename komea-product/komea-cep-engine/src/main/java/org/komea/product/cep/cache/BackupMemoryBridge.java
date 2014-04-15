@@ -7,8 +7,10 @@ package org.komea.product.cep.cache;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.komea.eventory.api.bridge.IEventBridge;
@@ -17,6 +19,8 @@ import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.bridge.MemoryBridge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.tocea.xml.XmlUtils;
 
 
 
@@ -36,7 +40,7 @@ public class BackupMemoryBridge implements IEventBridge
     private final List<Serializable> events            = new ArrayList<Serializable>();
     
     
-    private final int                maxEvents;
+    private int                      maxEvents;
     
     
     private IEventBridge             memoryEventBridge = null;
@@ -55,7 +59,11 @@ public class BackupMemoryBridge implements IEventBridge
         super();
         
         memoryEventBridge = new MemoryBridge(_configuration);
-        maxEvents = Integer.parseInt(_configuration.getExtraProperties().get("max-events"));
+        try {
+            maxEvents = Integer.parseInt(_configuration.getExtraProperties().get("max-events"));
+        } catch (final Exception exception) {
+            maxEvents = 100;
+        }
         storageFolder = new File(_configuration.getStorageFolder(), "backupevents");
         storageFolder.mkdirs();
         LOGGER.info("Storage folder for backup events {}", storageFolder);
@@ -84,8 +92,20 @@ public class BackupMemoryBridge implements IEventBridge
     
     
         events.add(_arg0);
+        LOGGER.info("Number of events {}.", events.size());
         if (events.size() >= maxEvents) {
             
+            
+            try {
+                final File outputFile =
+                        new File(storageFolder, "events-" + new Date().getTime() + ".xml");
+                LOGGER.warn("Flushing a set of events into {}", outputFile);
+                XmlUtils.serializationXStream(events, outputFile);
+                
+            } catch (final IOException e) {
+                
+                e.printStackTrace();
+            }
             
             events.clear();
         }

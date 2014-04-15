@@ -12,7 +12,7 @@
 	<description>This layer contains an hand-made complex event processor designed to replace Esper and to provide simpler functionalities.</description>
 
 	<properties>
-		<eventory.version>1.0.25</eventory.version>
+		<eventory.version>1.0.26</eventory.version>
 	</properties>
 
 	<dependencies>

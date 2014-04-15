@@ -12,6 +12,8 @@ import org.komea.product.backend.service.plugins.IPluginStorageService;
 import org.komea.product.backend.storage.DAOObjectStorage;
 import org.komea.product.backend.storage.ObjectStorage;
 import org.komea.product.database.api.IHasId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +32,11 @@ public class PluginStorageService implements IPluginStorageService
 {
     
     
+    private static final Logger       LOGGER   = LoggerFactory.getLogger("plugin-storage");
+    
     @Autowired
     private IKomeaFS                  komeaFS;
+    
     
     private final Map<String, Object> storages = Maps.newConcurrentMap();
     
@@ -65,6 +70,9 @@ public class PluginStorageService implements IPluginStorageService
             final Class<T> _pojoStorageClass) {
     
     
+        LOGGER.debug("Registering DAO storage for {} and object of type {}", _pluginName,
+                _pojoStorageClass.getName());
+        
         IDAOObjectStorage<T> object = (IDAOObjectStorage<T>) storages.get(_pluginName);
         if (object == null) {
             object = new DAOObjectStorage(registerStorage(_pluginName, _pojoStorageClass));
@@ -90,6 +98,8 @@ public class PluginStorageService implements IPluginStorageService
             final Class<T> _pojoStorageClass) {
     
     
+        LOGGER.debug("Registering storage for {} and object of type {}", _pluginName,
+                _pojoStorageClass.getName());
         IObjectStorage<T> object = (IObjectStorage<T>) storages.get(_pluginName);
         if (object == null) {
             object = new ObjectStorage<T>(komeaFS.getFileSystem(_pluginName), _pojoStorageClass);

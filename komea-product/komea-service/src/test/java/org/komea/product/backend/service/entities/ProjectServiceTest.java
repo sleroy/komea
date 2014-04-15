@@ -95,7 +95,7 @@ public class ProjectServiceTest {
         Assert.assertEquals(1, projects.size());
         final ProjectDto project = projects.get(0);
         Assert.assertEquals("komea", project.getName());
-        Assert.assertEquals("KOMEA", project.getProjectKey());
+        Assert.assertEquals("KOMEA_FOLDER", project.getProjectKey());
         Assert.assertEquals(0, project.nbAssociatedPerson());
         Assert.assertEquals(0, project.nbTeams());
         Assert.assertEquals(0, project.getTags().size());
@@ -166,7 +166,7 @@ public class ProjectServiceTest {
         Assert.assertEquals(1, projects.size());
         final ProjectDto project = projects.get(0);
         Assert.assertEquals("komea", project.getName());
-        Assert.assertEquals("KOMEA", project.getProjectKey());
+        Assert.assertEquals("KOMEA_FOLDER", project.getProjectKey());
 
         Assert.assertEquals(1, project.nbAssociatedPerson());
         Assert.assertEquals("lskywalker", project.loginList().toArray()[0]);
@@ -264,7 +264,7 @@ public class ProjectServiceTest {
         Assert.assertEquals(1, projects.size());
         final Project project = projects.get(0);
         Assert.assertEquals("komea", project.getName());
-        Assert.assertEquals("KOMEA", project.getProjectKey());
+        Assert.assertEquals("KOMEA_FOLDER", project.getProjectKey());
         Assert.assertEquals("komea kpi", project.getDescription());
         Assert.assertEquals(1, project.getIdCustomer().intValue());
 
@@ -401,7 +401,7 @@ public class ProjectServiceTest {
         team.setId(1);
         team.setName("komea");
         team.setDescription("komea kpi");
-        team.setProjectKey("KOMEA");
+        team.setProjectKey("KOMEA_FOLDER");
         team.setIdCustomer(1);
 
         return Lists.newArrayList(team);
@@ -451,7 +451,7 @@ public class ProjectServiceTest {
         Assert.assertEquals(1, projects.size());
         Project project = projects.get(0);
         Assert.assertEquals("komea", project.getName());
-        Assert.assertEquals("KOMEA", project.getProjectKey());
+        Assert.assertEquals("KOMEA_FOLDER", project.getProjectKey());
         Assert.assertEquals("komea kpi", project.getDescription());
         Assert.assertEquals(1, project.getIdCustomer().intValue());
 

@@ -205,7 +205,7 @@ public class PersonServiceTest
         team.setId(1);
         team.setName("komea");
         team.setDescription("komea kpi");
-        team.setProjectKey("KOMEA");
+        team.setProjectKey("KOMEA_FOLDER");
         team.setIdCustomer(1);
         
         return Lists.newArrayList(team);
