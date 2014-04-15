@@ -1,16 +1,16 @@
 package org.komea.product.wicket.kpis;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.googlecode.wicket.jquery.ui.form.slider.AbstractSlider.SliderBehavior;
+import com.googlecode.wicket.jquery.ui.form.slider.Slider;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -47,6 +47,7 @@ public final class KpiForm extends Form<Kpi> {
     private final LayoutPage page;
     private final boolean isNew;
     final TextField<Double> textminValue;
+    private final TextField<Integer> goal;
 
     public KpiForm(
             final boolean _isNew,
@@ -92,6 +93,22 @@ public final class KpiForm extends Form<Kpi> {
                 .buildTextField();
 
         add(textminValue);
+//        final Form<Integer> form = new Form<Integer>("form", new Model<Integer>(15));
+//        this.add(form);
+        int i = 0;
+        if (kpi.getObjective() != null) {
+            i = kpi.getObjective().intValue();
+        }
+        Model<Integer> model = new Model<Integer>(i);
+        goal = new TextField<Integer>("goal", model, Integer.class);
+//        final Label label = new Label("label", model);
+        add(goal);
+
+//        SliderBehavior slider = new SliderBehavior("objectif", options);
+        Slider slider = new Slider("objectif", model, goal);
+        slider.setMin(kpi.getValueMin().intValue());
+        slider.setMax(kpi.getValueMax().intValue());
+        add(slider);
 
         final TextField<Double> textMaxValue
                 = TextFieldBuilder.<Double>create("valueMax", kpi, "valueMax").withTooltip("Define the maximum value of the kpi")
@@ -103,7 +120,7 @@ public final class KpiForm extends Form<Kpi> {
                 Double valueMax = validatable.getValue();
                 String value = textminValue.getValue();
                 try {
-                   
+
                     Double valueMin = Double.valueOf(value);
                     if (valueMax <= valueMin) {
                         ValidationError error = new ValidationError();
@@ -220,6 +237,20 @@ public final class KpiForm extends Form<Kpi> {
                 info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
+                Double valueOf = kpi.getValueMin();
+                try {
+                    valueOf = Double.valueOf(goal.getValue());
+                    if (valueOf > kpi.getValueMax()) {
+                        valueOf = kpi.getValueMax();
+                    }
+                    if (valueOf < kpi.getValueMin()) {
+                        valueOf = kpi.getValueMin();
+                    }
+
+                } catch (NumberFormatException e) {
+                    //aucun retour a founir
+                }
+                kpi.setObjective(valueOf);
                 kpiService.saveOrUpdate(kpi);
                 page.setResponsePage(new KpiPage(page.getPageParameters()));
 
