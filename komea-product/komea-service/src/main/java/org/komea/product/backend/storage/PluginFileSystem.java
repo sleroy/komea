@@ -3,15 +3,12 @@ package org.komea.product.backend.storage;
 
 
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.service.InvalidKomeaFileSystemException;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
@@ -72,29 +69,38 @@ public class PluginFileSystem implements IPluginFileSystem
     public boolean existResource(final String _resourceName) {
     
     
-        return getResourceInFS(_resourceName).exists();
+        return getResourceFile(_resourceName).exists();
     }
     
     
     /**
-     * Method open.
+     * Returns the location where the resource is stored
      * 
      * @param _resourceName
-     *            String
-     * @return InputStream
-     * @see org.komea.product.backend.service.fs.IPluginFileSystem#open(String)
+     *            the resource name
+     * @return the file.
      */
     @Override
-    public InputStream open(final String _resourceName) {
+    public File getResourceFile(final String _resourceName) {
+    
+    
+        final File file = new File(fileSystemFolder, _resourceName);
+        Validate.isTrue(file.isAbsolute());
+        return file;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.fs.IPluginFileSystem#open(java.lang.String)
+     */
+    @Override
+    public InputStream open(final String _resourceName) throws FileNotFoundException {
     
     
         LOGGER.debug("Open resource in FS {} : {}", fileSystemFolder, _resourceName);
-        try {
-            return new BufferedInputStream(new FileInputStream(new File(fileSystemFolder,
-                    _resourceName)));
-        } catch (final FileNotFoundException e) {
-            throw new IllegalArgumentException(e);
-        }
+        
+        return new FileInputStream(getResourceFile(_resourceName));
     }
     
     
@@ -105,55 +111,19 @@ public class PluginFileSystem implements IPluginFileSystem
      *            String
      * @param _inputStream
      *            InputStream
+     * @throws FileNotFoundException
      * @see org.komea.product.backend.service.fs.IPluginFileSystem#store(String, InputStream)
      */
     @Override
-    public void store(final String _resourceName, final InputStream _inputStream) {
+    public FileOutputStream store(final String _resourceName) throws FileNotFoundException {
     
     
         LOGGER.debug("Store resource in FS {} : {}", fileSystemFolder, _resourceName);
-        final File resource = getResourceInFS(_resourceName);
-        BufferedOutputStream bufferedOuputStream = null;
-        try {
-            bufferedOuputStream = new BufferedOutputStream(new FileOutputStream(resource));
-            IOUtils.copy(_inputStream, bufferedOuputStream);
-        } catch (final Exception e) {
-            throw new IllegalArgumentException("Resource " + resource, e);
-        } finally {
-            IOUtils.closeQuietly(bufferedOuputStream);
-            
-            
-        }
+        
+        final File resource = getResourceFile(_resourceName);
+        return new FileOutputStream(resource);
+        
     }
     
-    
-    /**
-     * Method getResource.
-     * 
-     * @param _file
-     *            File
-     * @return File
-     */
-    private File getResource(final File _file) {
-    
-    
-        if (!_file.isAbsolute()) { throw new IllegalArgumentException(
-                "The path should be absolute " + _file); }
-        return _file;
-    }
-    
-    
-    /**
-     * Method getResourceInFS.
-     * 
-     * @param _resourceName
-     *            String
-     * @return File
-     */
-    private File getResourceInFS(final String _resourceName) {
-    
-    
-        return getResource(new File(fileSystemFolder, _resourceName));
-    }
     
 }

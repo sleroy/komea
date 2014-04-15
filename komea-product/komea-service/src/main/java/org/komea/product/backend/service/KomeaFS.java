@@ -51,11 +51,15 @@ public class KomeaFS implements IKomeaFS
                                                                   .getLogger("komea-filesystem");
     
     
+    private String                  storage_path;
+    
+    
     
     public KomeaFS() {
     
     
         super();
+        initKomeaFS();
     }
     
     
@@ -94,6 +98,24 @@ public class KomeaFS implements IKomeaFS
     
     
     /**
+     * Method getPath.
+     * 
+     * @param _file
+     *            File
+     * @return File
+     */
+    public File getPath(final File _file) {
+    
+    
+        if (!_file.isAbsolute()) { throw new IllegalArgumentException(
+                "File system names should be a directory folder"); }
+        if (!_file.exists() && !_file.mkdirs()) { throw new IllegalArgumentException(
+                "Cannot create the folder for the FS " + _file.getAbsolutePath()); }
+        return _file.getAbsoluteFile();
+    }
+    
+    
+    /**
      * Method getStorage_path.
      * 
      * @return ISettingProxy<File>
@@ -101,8 +123,21 @@ public class KomeaFS implements IKomeaFS
     public File getStorage_path() {
     
     
+        return new File(storage_path);
+    }
+    
+    
+    /**
+     * Initialisation of Komea FS.
+     */
+    
+    public void initKomeaFS() {
+    
+    
+        LOGGER.info("KOMEA Plugin Filesystem >>>>> ");
+        
         final String komeaHome = System.getenv(ENV_KOMEA_HOME);
-        String storage_path = "";
+        storage_path = "";
         if (!Strings.isNullOrEmpty(komeaHome)) {
             storage_path = komeaHome + "/kdata";
         }
@@ -112,11 +147,10 @@ public class KomeaFS implements IKomeaFS
         if (Strings.isNullOrEmpty(storage_path)) {
             storage_path = KOMEA_FOLDER;
         }
-        LOGGER.info("Storage path for plugins is {}", storage_path);
+        LOGGER.info("\nt\t>>>>> Storage path for plugins is {}", storage_path);
         if (storage_path == null) { throw new BeanCreationException(
                 "Storage path was not initialized"); }
         
-        return new File(storage_path);
     }
     
     
@@ -129,24 +163,6 @@ public class KomeaFS implements IKomeaFS
         final String absolutePath = pluginPath.getAbsolutePath();
         
         return new File(absolutePath, _fileSystemName);
-    }
-    
-    
-    /**
-     * Method getPath.
-     * 
-     * @param _file
-     *            File
-     * @return File
-     */
-    private File getPath(final File _file) {
-    
-    
-        if (!_file.isAbsolute()) { throw new IllegalArgumentException(
-                "File system names should be a directory folder"); }
-        if (!_file.exists() && !_file.mkdirs()) { throw new IllegalArgumentException(
-                "Cannot create the folder for the FS " + _file.getAbsolutePath()); }
-        return _file;
     }
     
 }

@@ -3,10 +3,10 @@ package org.komea.product.backend.storage;
 
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+import org.apache.commons.lang.SerializationException;
 import org.komea.product.backend.service.fs.IObjectStorage;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
 import org.slf4j.Logger;
@@ -68,7 +68,7 @@ public class ObjectStorage<T> implements IObjectStorage<T>
             final InputStream open = service.open(resourceName);
             return (T) X_STREAM.fromXML(open);
         } catch (final Exception e) {
-            LOGGER.error("Could not retrieve data from file {}", resourceName, e);
+            LOGGER.error("Could not retrieve data from file {}, invalid format", resourceName, e);
         }
         return null;
         
@@ -86,10 +86,11 @@ public class ObjectStorage<T> implements IObjectStorage<T>
     public synchronized void set(final T _object) {
     
     
-        final ByteArrayOutputStream out = new ByteArrayOutputStream(10000);
-        X_STREAM.toXML(_object, out);
-        final InputStream decodedInput = new ByteArrayInputStream(out.toByteArray());
-        service.store(getResource(), decodedInput);
+        try {
+            X_STREAM.toXML(_object, service.store(getResource()));
+        } catch (final FileNotFoundException e) {
+            throw new SerializationException(e.getMessage(), e);
+        }
         
         
     }

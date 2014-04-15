@@ -6,6 +6,7 @@ package org.komea.product.backend.storage;
 
 
 
+import java.io.FileNotFoundException;
 import java.io.StringBufferInputStream;
 
 import org.junit.Assert;
@@ -30,16 +31,17 @@ public class ObjectStorageTest
      * Test method for
      * {@link org.komea.product.backend.storage.ObjectStorage#ObjectStorage(org.komea.product.backend.service.fs.IPluginFileSystem, java.lang.Class)}
      * .
+     * 
+     * @throws FileNotFoundException
      */
-    @Test 
-    public final void testObjectStorage() {
+    @Test
+    public final void testObjectStorage() throws FileNotFoundException {
     
     
         final IPluginFileSystem mock =
                 Mockito.mock(IPluginFileSystem.class, Mockito.withSettings().verboseLogging());
         
         final ObjectStorage<String> objectStorage = new ObjectStorage<String>(mock, String.class);
-        objectStorage.set("Yoda is a coward");
         Mockito.when(mock.existResource(Matchers.anyString())).thenReturn(Boolean.TRUE);
         Mockito.when(mock.open(Matchers.anyString())).thenReturn(
                 new StringBufferInputStream(new XStream().toXML("Yoda is a coward")));

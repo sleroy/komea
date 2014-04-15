@@ -7,12 +7,18 @@ package org.komea.product.backend.service;
 
 
 import java.io.File;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.komea.product.backend.service.fs.IPluginFileSystem;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 
 
@@ -23,8 +29,12 @@ public class KomeaFSTest
 {
     
     
-    private KomeaFS komeaFS;
-    private String  tempFolder;
+    /**
+     * 
+     */
+    private static final int TEST_VALUE = 1024;
+    private KomeaFS          komeaFS;
+    private String           tempFolder;
     
     
     
@@ -46,8 +56,26 @@ public class KomeaFSTest
     public final void testGetFileSystem() throws Exception {
     
     
-        // TODO
-        throw new RuntimeException("not yet implemented");
+        final IPluginFileSystem fileSystem = komeaFS.getFileSystem("truc");
+        assertNotNull(fileSystem);
+        assertTrue(new File(komeaFS.getStorage_path(), "truc").exists());
+        assertTrue(new File(komeaFS.getStorage_path(), "truc").isDirectory());
+        
+        
+        final OutputStream store = fileSystem.store("resource");
+        final ObjectOutputStream objectOutputStream = new ObjectOutputStream(store);
+        objectOutputStream.writeInt(1024);
+        objectOutputStream.close();
+        store.close();
+        
+        final File resourceFile = fileSystem.getResourceFile("resource");
+        System.out.println(resourceFile);
+        assertTrue(resourceFile.exists());
+        
+        final ObjectInputStream objectInputStream =
+                new ObjectInputStream(fileSystem.open("resource"));
+        assertEquals(TEST_VALUE, objectInputStream.readInt());
+        
     }
     
     
@@ -58,8 +86,11 @@ public class KomeaFSTest
     public final void testGetFileSystemFolder() throws Exception {
     
     
-        // TODO
-        throw new RuntimeException("not yet implemented");
+        final File file = new File(tempFolder, "folder");
+        assertEquals(file.getAbsoluteFile(), komeaFS.getFileSystemFolder("folder")
+                .getAbsoluteFile());
+        assertTrue(file.exists());
+        
     }
     
     

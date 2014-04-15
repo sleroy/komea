@@ -3,7 +3,10 @@ package org.komea.product.backend.service.fs;
 
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 
 
@@ -22,8 +25,8 @@ public interface IPluginFileSystem
      * 
      * @param _resourceName
      *            the name of the resource
-    
-     * @return true if the resource is existing. */
+     * @return true if the resource is existing.
+     */
     public boolean existResource(String _resourceName);
     
     
@@ -32,9 +35,10 @@ public interface IPluginFileSystem
      * 
      * @param _resourceName
      *            the resource name
-    
-     * @return the resource. */
-    public InputStream open(String _resourceName);
+     * @return the resource.
+     * @throws FileNotFoundException
+     */
+    public InputStream open(String _resourceName) throws FileNotFoundException;
     
     
     /**
@@ -42,8 +46,17 @@ public interface IPluginFileSystem
      * 
      * @param _resourceName
      *            the resource name
-     * @param _inputStream
-     *            the input stream.
+     * @throws FileNotFoundException
      */
-    public void store(String _resourceName, InputStream _inputStream);
+    public OutputStream store(String _resourceName) throws FileNotFoundException;
+    
+    
+    /**
+     * Returns the resource name
+     * 
+     * @param _resourceName
+     *            the resource name
+     * @return the resource file.
+     */
+    File getResourceFile(String _resourceName);
 }
