@@ -1,14 +1,5 @@
-/**
- * JavaDistiller Refactoring API.
- * <p>
- * 
- * @author sleroy
- * @version $LastChangedRevision: 1833 $ $LastChangedDate: 2010-07-07 13:50:55 +0200 (mer., 07 juil. 2010) $
- * @since 27 mars 2009
- * @copyright Copyright (C) 2008-2009 IRISA/INRIA Property.
- */
 
-package com.tocea.xml;
+package org.komea.product.cep.cache;
 
 
 

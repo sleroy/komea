@@ -19,7 +19,22 @@
 	<name>Komea : Web Application Product</name>
 	<description>This project contain the core projects of komea to build the war application. </description>
 
+
+
+
 	<build>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/webapp</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
 		<plugins>
 
 
@@ -64,19 +79,16 @@
 			<id>embedded</id>
 			<properties>
 				<jdbc.bdd.type>h2</jdbc.bdd.type>
-			</properties>
-			<activation>
 				<activeByDefault>true</activeByDefault>
-			</activation>
+			</properties>
+
 		</profile>
 		<profile>
-			<id>embedfile</id>
+			<id>h2file</id>
 			<properties>
 				<jdbc.bdd.type>embed</jdbc.bdd.type>
 			</properties>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
+
 		</profile>
 
 		<profile>
@@ -86,12 +98,7 @@
 			</properties>
 		</profile>
 
-<!-- 		<profile> -->
-<!-- 			<id>test</id> -->
-<!-- 			<properties> -->
-<!-- 				<komea.home></komea.home> -->
-<!-- 			</properties> -->
-<!-- 		</profile> -->
+
 
 	</profiles>
 

@@ -13,9 +13,10 @@
 
 	<context:property-placeholder
 		location="classpath:/config/bdd-${jdbc.bdd.type}.properties" />
-		
+	
+
 	<!-- SALT FOR PASSWORDS -->
-	<util:properties id="authProperties" location="classpath:/config/auth.properties"/>
-	
-	
+	<util:properties id="authProperties" location="classpath:/config/auth.properties" />
+
+
 </beans>

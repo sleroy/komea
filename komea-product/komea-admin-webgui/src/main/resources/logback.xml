@@ -27,6 +27,9 @@
 	<logger name="org.quartz">
 		<level value="WARN" />
 	</logger>
+	<logger name="org.apache.wicket">
+        <level value="WARN" />
+    </logger>
 	<logger name="org.komea">
 		<level value="INFO" />
 	</logger>

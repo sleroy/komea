@@ -20,8 +20,6 @@ import org.komea.eventory.bridge.MemoryBridge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tocea.xml.XmlUtils;
-
 
 
 /**
