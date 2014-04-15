@@ -7,7 +7,10 @@ package org.komea.eventory;
 
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.commons.lang.Validate;
 import org.komea.eventory.api.bridge.IEventBridgeFactory;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.api.engine.ICEPConfiguration;
@@ -24,11 +27,12 @@ public class CEPConfiguration implements ICEPConfiguration
 {
     
     
-    private IEventBridgeFactory  bridgeFactory;
-    private ICacheStorageFactory cacheStorageFactory;
-    private RunningMode          mode                 = RunningMode.AGILE;
-    private int                  numberQueryListeners = 1;
-    private File                 storageFolder;
+    private IEventBridgeFactory       bridgeFactory;
+    private ICacheStorageFactory      cacheStorageFactory;
+    private final Map<String, String> extraProperties      = new HashMap<>();
+    private RunningMode               mode                 = RunningMode.AGILE;
+    private int                       numberQueryListeners = 1;
+    private File                      storageFolder;
     
     
     
@@ -45,6 +49,18 @@ public class CEPConfiguration implements ICEPConfiguration
     
     
         return cacheStorageFactory;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.eventory.api.engine.ICEPConfiguration#getExtraProperties()
+     */
+    @Override
+    public Map<String, String> getExtraProperties() {
+    
+    
+        return extraProperties;
     }
     
     
@@ -77,6 +93,22 @@ public class CEPConfiguration implements ICEPConfiguration
     
     
         return storageFolder;
+    }
+    
+    
+    /**
+     * Puts an extra property
+     * 
+     * @param _key
+     *            the key
+     * @param _value
+     *            the value.
+     */
+    public void putExtraProperty(final String _key, final String _value) {
+    
+    
+        Validate.notNull(_key);
+        extraProperties.put(_key, _value);
     }
     
     

@@ -7,6 +7,7 @@ package org.komea.eventory.api.engine;
 
 
 import java.io.File;
+import java.util.Map;
 
 import org.komea.eventory.api.bridge.IEventBridgeFactory;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
@@ -39,6 +40,14 @@ public interface ICEPConfiguration
     
     
     /**
+     * Returns the extra properties.
+     * 
+     * @return the extra properties
+     */
+    Map<String, String> getExtraProperties();
+    
+    
+    /**
      * Returns the running mode of the cep engine.
      * 
      * @return the running mode.
@@ -55,7 +64,10 @@ public interface ICEPConfiguration
     
     
     /**
-     * @return
+     * Returns the storage folder
+     * 
+     * @return the storage folder
      */
     File getStorageFolder();
+    
 }
