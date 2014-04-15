@@ -114,15 +114,14 @@ public class WicketApplication extends AuthenticatedWebApplication
         
         // page mounts / SEO
         mountPage("/home", HomePage.class);
-        LOGGER.info("#############################################################");
+        LOGGER.debug("#############################################################");
         final Set<Entry<String, Class<? extends WebPage>>> entrySet =
                 getPluginAdminPage().getRegisteredPages().entrySet();
-        LOGGER.debug("Wicket startup : {} pages", entrySet.size());
         for (final java.util.Map.Entry<String, Class<? extends WebPage>> entry : entrySet) {
-            LOGGER.info("> mounting {}->{}", entry.getKey(), entry.getValue().getName());
+            LOGGER.debug("> mounting {}->{}", entry.getKey(), entry.getValue().getName());
             mountPage(entry.getKey(), entry.getValue());
         }
-        LOGGER.info("#############################################################");
+        LOGGER.debug("#############################################################");
         
         
         getExceptionSettings().setThreadDumpStrategy(ThreadDumpStrategy.ALL_THREADS);

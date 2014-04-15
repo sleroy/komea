@@ -34,7 +34,7 @@ public class CacheFactory implements ICacheStorageFactory
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(CacheFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("komea-eventcache");
     private Constructor<?>      constructor;
     
     

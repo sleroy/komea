@@ -28,32 +28,33 @@ import org.springframework.stereotype.Service;
 /**
  */
 @Service
-@Properties({
-        @Property(
+@Properties(
+    {
+            @Property(
                 key = EventViewerService.RETENTION_EVENT_INFO,
                 description = "The retention time for events with severity INFO",
                 type = RetentionPeriod.class,
                 value = "ONE_HOUR"),
-        @Property(
-                key = EventViewerService.RETENTION_EVENT_MINOR,
-                description = "The retention time for events with severity MINOR",
-                type = RetentionPeriod.class,
-                value = "SIX_HOURS"),
-        @Property(
-                key = EventViewerService.RETENTION_EVENT_MAJOR,
-                description = "The retention time for events with severity MAJOR",
-                type = RetentionPeriod.class,
-                value = "ONE_DAY"),
-        @Property(
-                key = EventViewerService.RETENTION_EVENT_CRITICAL,
-                description = "The retention time for events with severity CRITICAL",
-                type = RetentionPeriod.class,
-                value = "ONE_WEEK"),
-        @Property(
-                key = EventViewerService.RETENTION_EVENT_BLOCKER,
-                description = "The retention time for events with severity BLOCKER",
-                type = RetentionPeriod.class,
-                value = "ONE_MONTH") })
+                @Property(
+                    key = EventViewerService.RETENTION_EVENT_MINOR,
+                    description = "The retention time for events with severity MINOR",
+                    type = RetentionPeriod.class,
+                    value = "SIX_HOURS"),
+                @Property(
+                    key = EventViewerService.RETENTION_EVENT_MAJOR,
+                    description = "The retention time for events with severity MAJOR",
+                    type = RetentionPeriod.class,
+                    value = "ONE_DAY"),
+                @Property(
+                    key = EventViewerService.RETENTION_EVENT_CRITICAL,
+                    description = "The retention time for events with severity CRITICAL",
+                    type = RetentionPeriod.class,
+                    value = "ONE_WEEK"),
+                @Property(
+                    key = EventViewerService.RETENTION_EVENT_BLOCKER,
+                    description = "The retention time for events with severity BLOCKER",
+                    type = RetentionPeriod.class,
+                    value = "ONE_MONTH") })
 public class EventViewerService implements IEventViewerService
 {
     
@@ -163,7 +164,7 @@ public class EventViewerService implements IEventViewerService
     
         // TODO : improvement possible, autodetect previous modifications, do not replace statement by only chaning cache configuration.
         
-        LOGGER.info("Settings changed, requires updating of retention periods for events");
+        LOGGER.debug("Settings changed, requires updating of retention periods for events");
         updateIfNecessaryEventStream(Severity.BLOCKER, RETENTION_EVENT_BLOCKER);
         updateIfNecessaryEventStream(Severity.CRITICAL, RETENTION_EVENT_CRITICAL);
         updateIfNecessaryEventStream(Severity.MAJOR, RETENTION_EVENT_MAJOR);
@@ -258,7 +259,7 @@ public class EventViewerService implements IEventViewerService
     
         if (hasChanged(_severity)) {
             lastRetentionPeriods[_severity.ordinal()] = getRetentionTime(_severity);
-            LOGGER.info("Upgrading Stream of events {} with new retention policy", _severity);
+            LOGGER.debug("Upgrading Stream of events {} with new retention policy", _severity);
             esperService
                     .createQuery(new QueryDefinition(_queryName, buildRetentionQuery(_severity)));
         }

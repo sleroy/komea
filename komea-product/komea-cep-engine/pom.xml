@@ -57,5 +57,21 @@
 			<artifactId>cep-cache-guava</artifactId>
 			<version>${eventory.version}</version>
 		</dependency>
+
+
+
+		<dependency>
+			<groupId>xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>xpp3</groupId>
+			<artifactId>xpp3</artifactId>
+			<version>1.1.4c</version>
+		</dependency>
+
 	</dependencies>
 </project>

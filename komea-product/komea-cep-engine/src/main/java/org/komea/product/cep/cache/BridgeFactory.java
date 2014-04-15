@@ -34,7 +34,7 @@ public class BridgeFactory implements IEventBridgeFactory
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(BridgeFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("komea-eventbridge");
     private Constructor<?>      constructor;
     
     
