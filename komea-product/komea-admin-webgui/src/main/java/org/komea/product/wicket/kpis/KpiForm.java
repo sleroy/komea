@@ -46,6 +46,7 @@ public final class KpiForm extends Form<Kpi> {
     private final NameGeneric nameEntity;
     private final LayoutPage page;
     private final boolean isNew;
+    final TextField<Double> textminValue;
 
     public KpiForm(
             final boolean _isNew,
@@ -86,14 +87,35 @@ public final class KpiForm extends Form<Kpi> {
         add(SelectBoxBuilder.<ProviderType>createWithEnum("providerType", kpi, ProviderType.class)
                 .build());
 
-        final TextField<String> textminValue
-                = TextFieldBuilder.<String>create("valueMin", kpi, "valueMin").withTooltip("")
+        textminValue
+                = TextFieldBuilder.<Double>create("valueMin", kpi, "valueMin").withTooltip("Define the minimum value of the kpi")
                 .buildTextField();
+
         add(textminValue);
 
-        final TextField<String> textMaxValue
-                = TextFieldBuilder.<String>create("valueMax", kpi, "valueMax").withTooltip("")
+        final TextField<Double> textMaxValue
+                = TextFieldBuilder.<Double>create("valueMax", kpi, "valueMax").withTooltip("Define the maximum value of the kpi")
                 .buildTextField();
+        textMaxValue.add(new IValidator<Double>() {
+
+            @Override
+            public void validate(IValidatable<Double> validatable) {
+                Double valueMax = validatable.getValue();
+                String value = textminValue.getValue();
+                try {
+                   
+                    Double valueMin = Double.valueOf(value);
+                    if (valueMax <= valueMin) {
+                        ValidationError error = new ValidationError();
+                        error.setMessage("Max value must be greater than min value");
+                        validatable.error(error);
+                    }
+                } catch (NumberFormatException e) {
+                    // Si la valeur min n'est pas un double on ne fait simplemnet pas la validation
+                    // l'erreur sera capter par le validateur de la valeur min
+                }
+            }
+        });
         add(textMaxValue);
 
         add(SelectBoxBuilder.<ValueDirection>createWithEnum("valueDirection", kpi,

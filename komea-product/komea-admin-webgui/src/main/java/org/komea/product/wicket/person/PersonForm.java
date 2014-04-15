@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.komea.product.backend.auth.IPasswordEncoder;
 import org.komea.product.backend.forms.PersonFormData;
 import org.komea.product.backend.service.entities.IPersonGroupService;
@@ -186,9 +187,10 @@ public final class PersonForm extends Form<Person> {
         };
 
         add(checkBox);
-
-        add(TextFieldBuilder.<String>createRequired("email", person, "email")
-                .withTooltip("User requires a valid email.").highlightOnErrors().build());
+        TextField<String> emailTextField = TextFieldBuilder.<String>createRequired("email", person, "email")
+                .withTooltip("User requires a valid email.").highlightOnErrors().buildTextField();
+        emailTextField.add(EmailAddressValidator.getInstance());
+        add(emailTextField);
     }
 
     public void initSubmitbutton() {
