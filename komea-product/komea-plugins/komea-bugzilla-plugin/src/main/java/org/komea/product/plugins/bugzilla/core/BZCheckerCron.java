@@ -38,29 +38,29 @@ public class BZCheckerCron implements Job
 {
     
     
-    private static final Logger     LOGGER           = LoggerFactory.getLogger("bugzilla-cron");
+    private static final Logger    LOGGER           = LoggerFactory.getLogger("bugzilla-cron");
     
-    private static final String     REMIDER_DEFAUT   = "10";
-    
-    @Autowired
-    private IEventPushService       alertService;
+    private static final String    REMIDER_DEFAUT   = "10";
     
     @Autowired
-    private IBZConfigurationDAO bugZillaConfiguration;
-    
+    private IEventPushService      alertService;
     
     @Autowired
-    private IBZEventService         eventService;
-    
-    private final EventTypeFactory  eventTypeFactory = new EventTypeFactory();
+    private IBZConfigurationDAO    bugZillaConfiguration;
     
     
     @Autowired
-    private IEventTypeService       eventTypeService;
+    private IBZEventService        eventService;
+    
+    private final EventTypeFactory eventTypeFactory = new EventTypeFactory();
     
     
     @Autowired
-    private IBZServerProxyFactory   proxyFactory;
+    private IEventTypeService      eventTypeService;
+    
+    
+    @Autowired
+    private IBZServerProxyFactory  proxyFactory;
     
     
     
@@ -139,7 +139,8 @@ public class BZCheckerCron implements Job
                 bugzillaProxy.close();
                 
             } catch (final Exception ex) {
-                LOGGER.error("Error during the bugzilla server update {}", conf.getAddress());
+                LOGGER.error("Error during the bugzilla server update {} : reason {}",
+                        conf.getAddress(), ex.getMessage(), ex);
             }
         }
     }

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang.Validate;
 import org.komea.product.plugins.bugzilla.api.BugStatusGroup;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.komea.product.plugins.bugzilla.model.BugzillaBug;
@@ -140,11 +141,12 @@ public final class BugsCalculator
     }
     
     
-    public int countByStatutes(final List<String> bugStatutes) {
+    public int countByStatutes(final List<String> _bugStatutes) {
     
     
+        Validate.notNull(_bugStatutes);
         int count = 0;
-        for (final String bugStatus : bugStatutes) {
+        for (final String bugStatus : _bugStatutes) {
             count += getValue(statusMap.get(bugStatus));
         }
         return count;

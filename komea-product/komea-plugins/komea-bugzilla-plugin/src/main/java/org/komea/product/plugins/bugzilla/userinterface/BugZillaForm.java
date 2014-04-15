@@ -31,7 +31,6 @@ public class BugZillaForm extends Form<BZServerConfiguration>
     private final IBZConfigurationDAO   bService;
     private final BZServerConfiguration bugServer;
     private final Component             feedBack;
-    private final String                oldAdress;
     private final LayoutPage            page;
     
     
@@ -50,7 +49,6 @@ public class BugZillaForm extends Form<BZServerConfiguration>
         bugServer = _bugServer;
         feedBack = _feedBack;
         page = _page;
-        oldAdress = bugServer.getAddress() == null ? "" : bugServer.getAddress().toString();
         feedBack.setVisible(false);
         
         
