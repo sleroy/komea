@@ -6,18 +6,24 @@ package org.komea.product.backend.service;
 
 
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.business.IDAOObjectStorage;
 import org.komea.product.backend.service.fs.IKomeaFS;
 import org.komea.product.backend.service.fs.IObjectStorage;
+import org.komea.product.backend.service.fs.IPluginFileSystem;
 import org.komea.product.database.api.IHasId;
 import org.mockito.InjectMocks;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 
@@ -34,6 +40,14 @@ public class PluginStorageServiceTest
     @InjectMocks
     private PluginStorageService pluginStorageService;
     
+    
+    
+    @Before
+    public void before() {
+    
+    
+        when(komeaFS.getFileSystem(Matchers.anyString())).thenReturn(mock(IPluginFileSystem.class));
+    }
     
     
     /**

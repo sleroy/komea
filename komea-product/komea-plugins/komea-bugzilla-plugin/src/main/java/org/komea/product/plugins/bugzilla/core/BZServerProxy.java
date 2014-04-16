@@ -77,20 +77,20 @@ public class BZServerProxy implements IBZServerProxy
     /**
      * Method getListBugs.
      * 
-     * @param Project
+     * @param _bugZillaProject
      *            String
      * @return List<BugzillaBug>
      * @see org.komea.backend.IBZServerProxy.bugzilla.api.IBugZillaServerProxy#getListBugs(String)
      */
     @Override
-    public List<BugzillaBug> getListBugs(final String Project) {
+    public List<BugzillaBug> getListBugs(final String _bugZillaProject) {
     
     
         final List<BugzillaBug> bugZillaBugs = new ArrayList<BugzillaBug>();
         try {
             final BugSearch search =
                     new BugSearch(new BugSearch.SearchQuery(BugSearch.SearchLimiter.PRODUCT,
-                            Project));
+                            _bugZillaProject));
             // GetBug search = new GetBug(445296);
             conn.executeMethod(search);
             
