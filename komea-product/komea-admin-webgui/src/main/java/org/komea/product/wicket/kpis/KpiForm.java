@@ -46,7 +46,7 @@ public final class KpiForm extends Form<Kpi> {
     private final NameGeneric nameEntity;
     private final LayoutPage page;
     private final boolean isNew;
-    final TextField<Double> textminValue;
+    private final TextField<Double> textminValue;
     private final TextField<Integer> goal;
 
     public KpiForm(
@@ -106,8 +106,13 @@ public final class KpiForm extends Form<Kpi> {
 
 //        SliderBehavior slider = new SliderBehavior("objectif", options);
         Slider slider = new Slider("objectif", model, goal);
-        slider.setMin(kpi.getValueMin().intValue());
-        slider.setMax(kpi.getValueMax().intValue());
+        if (kpi.getValueMin() != null) {
+            slider.setMin(kpi.getValueMin().intValue());
+        }
+        if (kpi.getValueMax() != null) {
+            slider.setMax(kpi.getValueMax().intValue());
+        }
+
         add(slider);
 
         final TextField<Double> textMaxValue
