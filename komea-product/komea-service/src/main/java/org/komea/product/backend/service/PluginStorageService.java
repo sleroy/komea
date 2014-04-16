@@ -77,7 +77,7 @@ public class PluginStorageService implements IPluginStorageService
         IDAOObjectStorage<T> object = getDaoStorage(storageName);
         if (object == null) {
             object = new DAOObjectStorage(registerStorage(_pluginName, _pojoStorageClass));
-            putStorage(storageName, object);
+            putDAOStorage(storageName, object);
         }
         return object;
     }
@@ -105,7 +105,7 @@ public class PluginStorageService implements IPluginStorageService
         IObjectStorage<T> object = getObjectStorage(storageName);
         if (object == null) {
             object = new ObjectStorage<T>(komeaFS.getFileSystem(_pluginName), _pojoStorageClass);
-            setObjectStorage(storageName, object);
+            putObjectStorage(storageName, object);
         }
         return object;
     }
@@ -147,7 +147,7 @@ public class PluginStorageService implements IPluginStorageService
     }
     
     
-    private <T extends IHasId> void putStorage(
+    private <T extends IHasId> void putDAOStorage(
             final String storageName,
             final IDAOObjectStorage<T> object) {
     
@@ -156,7 +156,7 @@ public class PluginStorageService implements IPluginStorageService
     }
     
     
-    private <T extends IHasId> void setObjectStorage(
+    private <T extends IHasId> void putObjectStorage(
             final String storageName,
             final IObjectStorage<T> object) {
     
