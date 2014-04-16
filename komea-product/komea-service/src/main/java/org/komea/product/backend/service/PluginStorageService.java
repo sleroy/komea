@@ -73,10 +73,11 @@ public class PluginStorageService implements IPluginStorageService
         LOGGER.debug("Registering DAO storage for {} and object of type {}", _pluginName,
                 _pojoStorageClass.getName());
         
-        IDAOObjectStorage<T> object = (IDAOObjectStorage<T>) storages.get(_pluginName);
+        final String storageName = getStorageName(_pluginName, _pojoStorageClass);
+        IDAOObjectStorage<T> object = getDaoStorage(storageName);
         if (object == null) {
             object = new DAOObjectStorage(registerStorage(_pluginName, _pojoStorageClass));
-            storages.put(_pluginName + _pojoStorageClass.getName(), object);
+            putStorage(storageName, object);
         }
         return object;
     }
@@ -100,10 +101,11 @@ public class PluginStorageService implements IPluginStorageService
     
         LOGGER.debug("Registering storage for {} and object of type {}", _pluginName,
                 _pojoStorageClass.getName());
-        IObjectStorage<T> object = (IObjectStorage<T>) storages.get(_pluginName);
+        final String storageName = getStorageName(_pluginName, _pojoStorageClass);
+        IObjectStorage<T> object = getObjectStorage(storageName);
         if (object == null) {
             object = new ObjectStorage<T>(komeaFS.getFileSystem(_pluginName), _pojoStorageClass);
-            storages.put(_pluginName + _pojoStorageClass.getName(), object);
+            setObjectStorage(storageName, object);
         }
         return object;
     }
@@ -119,5 +121,46 @@ public class PluginStorageService implements IPluginStorageService
     
     
         komeaFS = _komeaFS;
+    }
+    
+    
+    private IDAOObjectStorage getDaoStorage(final String storageName) {
+    
+    
+        return (IDAOObjectStorage) storages.get(storageName);
+    }
+    
+    
+    private <T extends IHasId> IObjectStorage<T> getObjectStorage(final String storageName) {
+    
+    
+        return (IObjectStorage<T>) storages.get(storageName);
+    }
+    
+    
+    private <T extends IHasId> String getStorageName(
+            final String _pluginName,
+            final Class<T> _pojoStorageClass) {
+    
+    
+        return _pluginName + _pojoStorageClass.getName();
+    }
+    
+    
+    private <T extends IHasId> void putStorage(
+            final String storageName,
+            final IDAOObjectStorage<T> object) {
+    
+    
+        storages.put(storageName, object);
+    }
+    
+    
+    private <T extends IHasId> void setObjectStorage(
+            final String storageName,
+            final IObjectStorage<T> object) {
+    
+    
+        storages.put(storageName, object);
     }
 }

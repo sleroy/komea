@@ -29,6 +29,14 @@ public interface IHasKey extends Serializable
     
     
     /**
+     * Sets the ID (for testing purpose only).
+     * 
+     * @param _id
+     */
+    public void setId(Integer _id);
+    
+    
+    /**
      * Returns the name to display
      * 
      * @return the name to display.

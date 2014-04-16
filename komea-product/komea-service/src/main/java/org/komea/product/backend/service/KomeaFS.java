@@ -5,6 +5,7 @@ package org.komea.product.backend.service;
 
 import java.io.File;
 
+import org.komea.product.backend.exceptions.InvalidKomeaFileSystemException;
 import org.komea.product.backend.service.fs.IKomeaFS;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
 import org.komea.product.backend.storage.PluginFileSystem;

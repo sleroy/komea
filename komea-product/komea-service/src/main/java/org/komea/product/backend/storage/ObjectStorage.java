@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import org.apache.commons.lang.SerializationException;
+import org.apache.commons.lang.Validate;
 import org.komea.product.backend.service.fs.IObjectStorage;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
 import org.slf4j.Logger;
@@ -47,7 +48,8 @@ public class ObjectStorage<T> implements IObjectStorage<T>
     
         service = _service;
         className = _className;
-        
+        Validate.notNull(service);
+        Validate.notNull(_className);
     }
     
     
