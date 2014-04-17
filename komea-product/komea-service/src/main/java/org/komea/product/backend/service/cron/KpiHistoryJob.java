@@ -1,8 +1,9 @@
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.backend.service.cron;
 
 
 
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.service.dto.KpiKey;

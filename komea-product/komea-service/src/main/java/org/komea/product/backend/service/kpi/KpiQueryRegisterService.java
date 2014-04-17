@@ -10,11 +10,13 @@ import org.apache.commons.lang.StringUtils;
 import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.formula.ICEPResult;
+import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.backend.exceptions.KpiProvidesInvalidFormulaException;
 import org.komea.product.backend.service.ISpringService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
+import org.komea.product.backend.service.cron.KpiHistoryJob;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.esper.ConvertELIntoQuery;
 import org.komea.product.backend.service.esper.QueryDefinition;
@@ -27,12 +29,16 @@ import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 
 /**
  * @author sleroy
  */
+@Service
+@Transactional
 public class KpiQueryRegisterService implements IKpiQueryRegisterService
 {
     

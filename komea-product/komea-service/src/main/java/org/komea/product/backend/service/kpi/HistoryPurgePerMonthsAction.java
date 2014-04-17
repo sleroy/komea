@@ -4,6 +4,7 @@ package org.komea.product.backend.service.kpi;
 
 
 import org.joda.time.DateTime;
+import org.komea.product.backend.api.IHistoryPurgeAction;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.MeasureCriteria;
@@ -39,7 +40,7 @@ public class HistoryPurgePerMonthsAction implements IHistoryPurgeAction
     /**
      * Method purgeHistory.
      * @return int
-     * @see org.komea.product.cep.tester.IHistoryPurgeAction#purgeHistory()
+     * @see org.komea.product.backend.api.IHistoryPurgeAction#purgeHistory()
      */
     @Override
     public int purgeHistory() {

@@ -6,6 +6,7 @@ package org.komea.product.backend.service.kpi;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.komea.product.backend.api.IHistoryPurgeAction;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
@@ -42,7 +43,7 @@ public class HistoryPurgePerValuesAction implements IHistoryPurgeAction
     /**
      * Method purgeHistory.
      * @return int
-     * @see org.komea.product.cep.tester.IHistoryPurgeAction#purgeHistory()
+     * @see org.komea.product.backend.api.IHistoryPurgeAction#purgeHistory()
      */
     @Override
     public int purgeHistory() {

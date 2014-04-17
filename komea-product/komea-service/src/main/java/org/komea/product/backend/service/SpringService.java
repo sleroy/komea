@@ -13,6 +13,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Service;
 
 
 
@@ -21,6 +22,7 @@ import org.springframework.context.ApplicationContextAware;
  * 
  * @author sleroy
  */
+@Service
 public class SpringService implements ApplicationContextAware, ISpringService
 {
     

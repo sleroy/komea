@@ -1,10 +1,9 @@
 
-package org.komea.product.backend.service.proxy;
+package org.komea.product.backend.service.settings;
 
 
 
 import org.komea.product.backend.service.ISettingProxy;
-import org.komea.product.backend.service.settings.SettingService;
 import org.komea.product.backend.utils.SpringUtils;
 import org.komea.product.database.model.Setting;
 import org.slf4j.Logger;

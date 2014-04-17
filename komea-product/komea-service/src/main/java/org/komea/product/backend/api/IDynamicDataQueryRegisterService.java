@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.backend.api;
 
 
 

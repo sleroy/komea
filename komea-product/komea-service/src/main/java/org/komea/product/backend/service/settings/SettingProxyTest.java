@@ -2,13 +2,12 @@
  * 
  */
 
-package org.komea.product.backend.service.proxy;
+package org.komea.product.backend.service.settings;
 
 
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.product.backend.service.settings.SettingService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -35,7 +34,7 @@ public class SettingProxyTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.proxy.SettingProxy#getSetting()}.
+     * Test method for {@link org.komea.product.backend.service.settings.SettingProxy#getSetting()}.
      */
     @Test
     public final void testGetSetting() throws Exception {
@@ -47,7 +46,7 @@ public class SettingProxyTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.proxy.SettingProxy#getStringValue()}.
+     * Test method for {@link org.komea.product.backend.service.settings.SettingProxy#getStringValue()}.
      */
     @Test
     public final void testGetStringValue() throws Exception {
@@ -59,7 +58,7 @@ public class SettingProxyTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.proxy.SettingProxy#getValue()}.
+     * Test method for {@link org.komea.product.backend.service.settings.SettingProxy#getValue()}.
      */
     @Test
     public final void testGetValue() throws Exception {
@@ -71,7 +70,7 @@ public class SettingProxyTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.proxy.SettingProxy#setStringValue(java.lang.String)}.
+     * Test method for {@link org.komea.product.backend.service.settings.SettingProxy#setStringValue(java.lang.String)}.
      */
     @Test
     public final void testSetStringValue() throws Exception {
@@ -84,7 +83,7 @@ public class SettingProxyTest
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.proxy.SettingProxy#SettingProxy(org.komea.product.backend.service.settings.SettingService, java.lang.Integer)}
+     * {@link org.komea.product.backend.service.settings.SettingProxy#SettingProxy(org.komea.product.backend.service.settings.SettingService, java.lang.Integer)}
      * .
      */
     @Test
@@ -97,7 +96,7 @@ public class SettingProxyTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.proxy.SettingProxy#setValue(java.lang.Object)}.
+     * Test method for {@link org.komea.product.backend.service.settings.SettingProxy#setValue(java.lang.Object)}.
      */
     @Test
     public final void testSetValue() throws Exception {
