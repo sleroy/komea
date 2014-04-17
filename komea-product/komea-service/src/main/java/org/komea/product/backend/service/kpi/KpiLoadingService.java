@@ -37,9 +37,20 @@ public class KpiLoadingService
     @Autowired
     private IKpiQueryRegisterService kpiRegisterService;
     
+    
     @Autowired
     private IKPIService              kpiService;
     
+    
+    
+    /**
+     * @return the kpiRegisterService
+     */
+    public IKpiQueryRegisterService getKpiRegisterService() {
+    
+    
+        return kpiRegisterService;
+    }
     
     
     public IKPIService getKpiService() {
@@ -64,6 +75,17 @@ public class KpiLoadingService
             kpiRegisterService.registerOrUpdateQueryFromKpi(existingKpi);
         }
         LOGGER.info("----------------------------------------");
+    }
+    
+    
+    /**
+     * @param _kpiRegisterService
+     *            the kpiRegisterService to set
+     */
+    public void setKpiRegisterService(final IKpiQueryRegisterService _kpiRegisterService) {
+    
+    
+        kpiRegisterService = _kpiRegisterService;
     }
     
     
