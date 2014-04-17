@@ -10,6 +10,7 @@ package org.komea.product.plugins.bugzilla.core;
 
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.backend.service.plugins.IEventTypeService;
@@ -127,8 +128,10 @@ public class BZCheckerCron implements Job
         
         
         for (final BZServerConfiguration conf : bugZillaConfiguration.selectAll()) {
+            IBZServerProxy bugzillaProxy = null;
             try {
-                final IBZServerProxy bugzillaProxy = proxyFactory.newConnector(conf);
+                
+                bugzillaProxy = proxyFactory.newConnector(conf);
                 Validate.notNull(bugzillaProxy);
                 
                 final List<String> projectNames = bugzillaProxy.getListProjects();
@@ -136,11 +139,15 @@ public class BZCheckerCron implements Job
                     buildEventTypes(conf, bugzillaProxy, project);
                     buildStatisticsPerProject(conf, bugzillaProxy, project);
                 }
-                bugzillaProxy.close();
+                
                 
             } catch (final Exception ex) {
                 LOGGER.error("Error during the bugzilla server update {} : reason {}",
                         conf.getAddress(), ex.getMessage(), ex);
+            } finally {
+                if (bugzillaProxy != null) {
+                    IOUtils.closeQuietly(bugzillaProxy);
+                }
             }
         }
     }

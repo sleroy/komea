@@ -16,7 +16,7 @@ import org.komea.eventory.formula.tuple.EventCountFormula;
 import org.komea.eventory.formula.tuple.GroupByFormula;
 import org.komea.eventory.query.FilterDefinition;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.exceptions.KpiAlreadyExistingException;
+import org.komea.product.backend.api.exceptions.KpiAlreadyExistingException;
 import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.backend.service.esper.IEventStatisticsService;

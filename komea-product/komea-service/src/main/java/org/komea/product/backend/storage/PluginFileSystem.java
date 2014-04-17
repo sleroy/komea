@@ -10,7 +10,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import org.apache.commons.lang.Validate;
-import org.komea.product.backend.exceptions.InvalidKomeaFileSystemException;
+import org.komea.product.backend.api.exceptions.InvalidKomeaFileSystemException;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.backend.exceptions;
+package org.komea.product.backend.api.exceptions;
 
 
 

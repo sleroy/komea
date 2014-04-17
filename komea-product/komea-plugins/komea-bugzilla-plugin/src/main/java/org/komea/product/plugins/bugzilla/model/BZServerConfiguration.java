@@ -9,7 +9,7 @@ package org.komea.product.plugins.bugzilla.model;
 
 
 import java.io.Serializable;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +30,7 @@ public class BZServerConfiguration implements Serializable, IHasId
 {
     
     
-    private String                                  address      = null;
+    private String                                  address    = null;
     
     
     private Integer                                 id;
@@ -42,64 +42,24 @@ public class BZServerConfiguration implements Serializable, IHasId
     private String                                  password;
     
     
-    private final List<String>                      priorities   = Lists.newArrayList();
+    private final List<String>                      priorities = Lists.newArrayList();
     private Integer                                 reminderAlert;
-    private final List<String>                      severities   = Lists.newArrayList();
-    private final Map<BugStatusGroup, List<String>> statusGroups =
-                                                                         new EnumMap<BugStatusGroup, List<String>>(
-                                                                                 BugStatusGroup.class);
-    private final List<String>                      statutes     = Lists.newArrayList();
+    private final List<String>                      severities = Lists.newArrayList();
+    private final Map<BugStatusGroup, List<String>> statusGroups;
+    private final List<String>                      statutes   = Lists.newArrayList();
     
     
     
     public BZServerConfiguration() {
     
     
-    }
-    
-    
-    public BZServerConfiguration(final String address, final String login, final String mdp) {
-    
-    
-        this.address = address;
-        this.login = login;
-        password = mdp;
-    }
-    
-    
-    public BZServerConfiguration(
-            final String address,
-            final String login,
-            final String mdp,
-            final int _reminder) {
-    
-    
-        this.address = address;
-        this.login = login;
-        password = mdp;
-        reminderAlert = _reminder;
-    }
-    
-    
-    public BZServerConfiguration(
-            final String address,
-            final String login,
-            final String mdp,
-            final int _reminder,
-            final List<String> statutes,
-            final List<String> severities,
-            final List<String> priorities,
-            final Map<BugStatusGroup, List<String>> statusGroups) {
-    
-    
-        this.address = address;
-        this.login = login;
-        password = mdp;
-        reminderAlert = _reminder;
-        this.statutes.addAll(statutes);
-        this.severities.addAll(severities);
-        this.priorities.addAll(priorities);
-        this.statusGroups.putAll(statusGroups);
+        super();
+        statusGroups = new HashMap<BugStatusGroup, List<String>>();
+        
+        // statusGroups.put(BugStatusGroup.OPEN, arg1);
+        // statusGroups.put(BugStatusGroup.CLOSED, arg1);
+        // statusGroups.put(BugStatusGroup.OPEN_NOT_FIXED, arg1);
+        
     }
     
     

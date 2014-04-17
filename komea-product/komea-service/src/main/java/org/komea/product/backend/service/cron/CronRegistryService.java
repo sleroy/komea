@@ -8,7 +8,7 @@ import java.util.List;
 
 import javax.annotation.PreDestroy;
 
-import org.komea.product.backend.exceptions.CronRuntimeException;
+import org.komea.product.backend.api.exceptions.CronRuntimeException;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.Job;

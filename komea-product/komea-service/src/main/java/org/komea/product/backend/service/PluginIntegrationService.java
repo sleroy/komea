@@ -5,7 +5,7 @@ package org.komea.product.backend.service;
 
 import javax.validation.Valid;
 
-import org.komea.product.backend.exceptions.InvalidProviderDescriptionException;
+import org.komea.product.backend.api.exceptions.InvalidProviderDescriptionException;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.entities.IProviderService;
 import org.komea.product.backend.service.plugins.IEventTypeService;

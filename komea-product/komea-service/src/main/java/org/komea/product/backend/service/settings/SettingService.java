@@ -10,7 +10,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.komea.product.backend.exceptions.DAOException;
+import org.komea.product.backend.api.exceptions.DAOException;
 import org.komea.product.backend.plugin.api.InjectSetting;
 import org.komea.product.backend.plugin.api.PostSettingRegistration;
 import org.komea.product.backend.plugin.api.Properties;

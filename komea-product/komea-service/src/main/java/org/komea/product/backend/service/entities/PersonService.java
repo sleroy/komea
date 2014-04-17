@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.esper.IEventConversionAndValidationService;
-import org.komea.product.backend.service.kpi.IMeasureHistoryService;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.PersonDao;

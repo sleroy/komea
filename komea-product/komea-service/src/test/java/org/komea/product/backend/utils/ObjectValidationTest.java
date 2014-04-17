@@ -4,7 +4,7 @@ package org.komea.product.backend.utils;
 
 
 import org.junit.Test;
-import org.komea.product.backend.exceptions.KomeaConstraintViolationException;
+import org.komea.product.backend.api.exceptions.KomeaConstraintViolationException;
 import org.komea.product.database.model.Person;
 
 

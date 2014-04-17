@@ -13,7 +13,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import org.komea.product.backend.exceptions.KomeaConstraintViolationException;
+import org.komea.product.backend.api.exceptions.KomeaConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

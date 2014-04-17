@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.backend.api.IEventEngineService;
+import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.genericservice.DAOEventRegistry;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.dao.KpiDao;

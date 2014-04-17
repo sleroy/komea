@@ -1,9 +1,10 @@
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.backend.api;
 
 
 
 import org.komea.product.backend.service.history.IHistoryService;
+import org.komea.product.backend.service.kpi.IHistoryPurgeAction;
 import org.komea.product.database.model.Kpi;
 
 

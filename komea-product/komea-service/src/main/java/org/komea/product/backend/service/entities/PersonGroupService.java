@@ -3,8 +3,8 @@ package org.komea.product.backend.service.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.genericservice.AbstractService;
-import org.komea.product.backend.service.kpi.IMeasureHistoryService;
 import org.komea.product.database.dao.HasProjectPersonGroupDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dto.BaseEntityDto;

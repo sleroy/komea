@@ -74,8 +74,9 @@ public final class BugsCalculator
             }
         }
         for (final BugStatusGroup statusGroup : BugStatusGroup.values()) {
-            statusGroupMap.put(statusGroup,
-                    countByStatutes(configuration.getStatusGroups().get(statusGroup)));
+            final int byStatus =
+                    countByStatutes(configuration.getStatusGroups().get(statusGroup));
+            statusGroupMap.put(statusGroup, byStatus);
             statusGroupBySeverityMap.put(statusGroup, new HashMap<String, Integer>());
             statusGroupByPriorityMap.put(statusGroup, new HashMap<String, Integer>());
             for (final String bugSeverity : configuration.getSeverities()) {

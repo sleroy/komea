@@ -32,19 +32,12 @@ import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.Person;
-import org.komea.product.database.model.Project;
 import org.komea.product.service.dto.KpiKey;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.quartz.JobDataMap;
-
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 
 
@@ -78,29 +71,6 @@ public class KPIServiceTest
     private final MeasureHistoryService measureService                        =
                                                                                       new MeasureHistoryService();
     
-    
-    
-    /**
-     * Test method for
-     * {@link org.komea.product.backend.service.kpi.KPIService#createOrUpdateHistoryCronJob(org.komea.product.database.model.Kpi, org.komea.product.database.api.IEntity)}
-     * .
-     */
-    @Test
-    public void testCreateOrUpdateHistoryCronJob() throws Exception {
-    
-    
-        final Kpi kpi = new Kpi();
-        kpi.setCronExpression("0 0 0 0 0");
-        
-        kpiService.createOrUpdateHistoryCronJob(kpi, new Project());
-        final ArgumentCaptor<Class> argumentCaptor = ArgumentCaptor.forClass(Class.class);
-        verify(kpiService.getCronRegistry(), atLeastOnce()).registerCronTask(Matchers.anyString(),
-                Matchers.anyString(), argumentCaptor.capture(), Matchers.any(JobDataMap.class));
-        kpiService.createOrUpdateHistoryCronJob(kpi, new Project());
-        verify(kpiService.getCronRegistry(), times(2)).existCron(Matchers.anyString());
-        
-        
-    }
     
     
     /**
@@ -173,27 +143,6 @@ public class KPIServiceTest
         Assert.assertEquals(kpi, findKPIFacade);
         Assert.assertEquals(person.getId(), kpi.getEntityID());
         
-    }
-    
-    
-    /**
-     * Test method for
-     * {@link org.komea.product.backend.service.kpi.KPIService#prepareKpiHistoryJob(org.komea.product.database.model.Kpi, org.komea.product.database.api.IEntity, java.lang.String)}
-     * .
-     */
-    @Test
-    public void testPrepareKpiHistoryJob() throws Exception {
-    
-    
-        kpiService.prepareKpiHistoryJob(new Kpi(), null, "KPI_CRON_NAME");
-        final ArgumentCaptor<JobDataMap> argumentCaptor = ArgumentCaptor.forClass(JobDataMap.class);
-        final ArgumentCaptor<Class> classCaptor = ArgumentCaptor.forClass(Class.class);
-        verify(kpiService.getCronRegistry(), times(1)).registerCronTask(Matchers.anyString(),
-                Matchers.anyString(), classCaptor.capture(), argumentCaptor.capture());
-        
-        
-        CronInstantiatorFactory.testCronInstantiation(classCaptor.getValue(),
-                argumentCaptor.getValue());
     }
     
     
