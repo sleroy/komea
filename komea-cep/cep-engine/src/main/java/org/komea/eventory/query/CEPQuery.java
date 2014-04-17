@@ -65,9 +65,9 @@ public class CEPQuery implements ICEPQuery
         formula = _queryDefinition.getFormula();
         Validate.notNull(formula);
         Validate.notNull(parameters);
-        Validate.isTrue(!cepStatement.getEventStorages().isEmpty(),
-                "A Query must defines at least one filter");
-        
+        if (!cepStatement.getEventStorages().isEmpty()) {
+            LOGGER.warn("Query {} should probably define at least one filter", _queryDefinition);
+        }
     }
     
     

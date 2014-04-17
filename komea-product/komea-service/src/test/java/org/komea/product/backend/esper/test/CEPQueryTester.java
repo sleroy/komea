@@ -162,35 +162,37 @@ public class CEPQueryTester
     
     
     
-    private static IEventBridgeFactory  bridgeFactory       = new IEventBridgeFactory()
-                                                            {
-                                                                
-                                                                
-                                                                @Override
-                                                                public IEventBridge newBridge(
-                                                                        final ICEPConfiguration _arg0) {
-                                                                
-                                                                
-                                                                    return new MemoryBridge(_arg0);
-                                                                }
-                                                            };
+    public static final IEventBridgeFactory  DEFAULT_BRIDGE_FACTORY = new IEventBridgeFactory()
+                                                                    {
+                                                                        
+                                                                        
+                                                                        @Override
+                                                                        public IEventBridge newBridge(
+                                                                                final ICEPConfiguration _arg0) {
+                                                                        
+                                                                        
+                                                                            return new MemoryBridge(
+                                                                                    _arg0);
+                                                                        }
+                                                                    };
     
-    private static ICacheStorageFactory cacheStorageFactory = new ICacheStorageFactory()
-                                                            {
-                                                                
-                                                                
-                                                                @Override
-                                                                public ICacheStorage newCacheStorage(
-                                                                        final ICacheConfiguration _arg0) {
-                                                                
-                                                                
-                                                                    return new GoogleCacheStorage<Serializable>(
-                                                                            _arg0);
-                                                                }
-                                                            };
+    public static final ICacheStorageFactory DEFAULT_CACHE_FACTORY  = new ICacheStorageFactory()
+                                                                    {
+                                                                        
+                                                                        
+                                                                        @Override
+                                                                        public ICacheStorage newCacheStorage(
+                                                                                final ICacheConfiguration _arg0) {
+                                                                        
+                                                                        
+                                                                            return new GoogleCacheStorage<Serializable>(
+                                                                                    _arg0);
+                                                                        }
+                                                                    };
     
-    private static final Logger         LOGGER              = LoggerFactory
-                                                                    .getLogger("[CEP Query Test]");
+    private static final Logger              LOGGER                 =
+                                                                            LoggerFactory
+                                                                                    .getLogger("[CEP Query Test]");
     
     
     
@@ -233,8 +235,8 @@ public class CEPQueryTester
         try {
             final CEPConfiguration cepConfiguration = new CEPConfiguration();
             
-            cepConfiguration.setBridgeFactory(bridgeFactory);
-            cepConfiguration.setCacheStorageFactory(cacheStorageFactory);
+            cepConfiguration.setBridgeFactory(DEFAULT_BRIDGE_FACTORY);
+            cepConfiguration.setCacheStorageFactory(DEFAULT_CACHE_FACTORY);
             esperEngineBean.initialize(cepConfiguration);
         } catch (final IOException e) {
             throw new IllegalArgumentException(e);

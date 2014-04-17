@@ -7,6 +7,7 @@ package org.komea.product.backend.service.esper;
 
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -84,10 +85,10 @@ public final class EventEngineService implements IEventEngineService
         LOGGER.debug("Registering an esper query  {}", _definition.getQueryName());
         if (existQuery(_definition.getQueryName())) {
             LOGGER.debug("--> Replacing an esper query  {}", _definition.getQueryName());
-            createQuery(_definition);
-            return;
+        } else {
+            LOGGER.debug("--> Creating a new esper query  {}", _definition.getQueryName());
         }
-        LOGGER.debug("--> Creating a new esper query  {}", _definition.getQueryName());
+        
         createQuery(_definition);
     }
     
@@ -106,7 +107,7 @@ public final class EventEngineService implements IEventEngineService
     
     
         Validate.notNull(_queryDefinition);
-        LOGGER.debug("Creation of a new EPL Statement {}", _queryDefinition);
+        LOGGER.debug("Instantiating and registering query in the CEP Engine {}", _queryDefinition);
         try {
             final ICEPQuery query = new CEPQuery(_queryDefinition.getImplementation());
             cepEngine.getQueryAdministration()
@@ -212,7 +213,8 @@ public final class EventEngineService implements IEventEngineService
     public String[] getQueryNames() {
     
     
-        return cepEngine.getQueryAdministration().getQueryNames().toArray(null);
+        final List<String> queryNames = cepEngine.getQueryAdministration().getQueryNames();
+        return queryNames.toArray(new String[queryNames.size()]);
     }
     
     

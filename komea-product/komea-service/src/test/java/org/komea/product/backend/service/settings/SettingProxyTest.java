@@ -8,7 +8,6 @@ package org.komea.product.backend.service.settings;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -22,12 +21,6 @@ public class SettingProxyTest
 {
     
     
-    @Mock
-    private Integer        key;
-    
-    
-    @InjectMocks
-    private SettingProxy   settingProxy;
     @Mock
     private SettingService settingService;
     

@@ -7,26 +7,48 @@ package org.komea.product.backend.service;
 
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.context.ApplicationContext;
+import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.Assert.assertNotNull;
 
 
 
 /**
  * @author sleroy
  */
-@RunWith(MockitoJUnitRunner.class)
-public class SpringServiceTest
+
+public class SpringServiceTest extends AbstractSpringIntegrationTestCase
 {
     
     
-    @Mock
-    private ApplicationContext applicationContext;
-    @InjectMocks
-    private SpringService      springService;
+    public class SpringOucha
+    {
+        
+        
+        @Autowired
+        private ISpringService springService;
+        
+        
+        
+        public ISpringService getSpringService() {
+        
+        
+            return springService;
+        }
+        
+        
+        public void setSpringService(final ISpringService _springService) {
+        
+        
+            springService = _springService;
+        }
+    }
+    
+    
+    
+    @Autowired
+    private ISpringService springService;
     
     
     
@@ -37,8 +59,9 @@ public class SpringServiceTest
     public final void testAutowirePojo() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        final SpringOucha pojo = new SpringOucha();
+        springService.autowirePojo(pojo);
+        assertNotNull(pojo);
     }
     
 }
