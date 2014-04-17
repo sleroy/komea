@@ -15,6 +15,7 @@ import org.komea.product.database.model.Provider;
 import org.komea.product.database.model.ProviderCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
  * @author sleroy
  */
 @Service
+@Transactional
 public class ProviderService extends AbstractService<Provider, Integer, ProviderCriteria> implements
         IProviderService
 {

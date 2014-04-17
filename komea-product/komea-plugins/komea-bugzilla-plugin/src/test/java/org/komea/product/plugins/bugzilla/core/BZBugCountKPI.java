@@ -80,7 +80,8 @@ public class BZBugCountKPI implements IDynamicDataQuery
     public ICEPResult getResult() {
     
     
-        return compute(null, null);
+        // return compute(null, null);
+        return null;
     }
     
     

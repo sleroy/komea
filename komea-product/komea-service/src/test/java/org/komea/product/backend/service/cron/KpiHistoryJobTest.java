@@ -2,11 +2,12 @@
  * 
  */
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.backend.service.cron;
 
 
 
 import org.junit.Test;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Project;
 import org.mockito.Mockito;
@@ -25,11 +26,11 @@ public class KpiHistoryJobTest
     
     
     /**
-     * Test method for {@link org.komea.product.cep.tester.KpiHistoryJob#execute(org.quartz.JobExecutionContext)}.
+     * Test method for {@link org.komea.product.backend.service.cron.KpiHistoryJob#execute(org.quartz.JobExecutionContext)}.
      * 
      * @throws JobExecutionException
      */
-    @Test 
+    @Test
     public final void testExecute() throws JobExecutionException {
     
     

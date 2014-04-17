@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author sleroy
  */
+
 public class ConvertELIntoQuery
 {
     

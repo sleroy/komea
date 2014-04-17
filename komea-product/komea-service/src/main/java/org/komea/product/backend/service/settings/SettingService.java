@@ -18,7 +18,6 @@ import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.service.ISettingListener;
 import org.komea.product.backend.service.ISettingProxy;
 import org.komea.product.backend.service.ISettingService;
-import org.komea.product.backend.service.proxy.SettingProxy;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.backend.utils.SpringUtils;
 import org.komea.product.database.dao.SettingDao;

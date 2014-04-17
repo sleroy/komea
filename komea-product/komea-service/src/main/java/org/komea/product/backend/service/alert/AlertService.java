@@ -5,11 +5,8 @@ package org.komea.product.backend.service.alert;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.history.IHistoryService;
@@ -22,22 +19,26 @@ import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.database.model.Measure;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 
 
+/**
+ * @author sleroy
+ */
 @Service
 @Transactional
 public final class AlertService implements IAlertService
 {
     
     
-    private static final Logger LOGGER = Logger.getLogger(AlertService.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(AlertService.class);
     @Autowired
     private IAlertTypeService   alertTypeService;
     
@@ -52,48 +53,26 @@ public final class AlertService implements IAlertService
     
     
     
-    public boolean alertActivated(final KpiAlertType alertType, final Number value) {
+    /**
+     * @param _alertCriteria
+     * @param _mapKpis
+     * @return
+     */
+    public KpiAlertDto findAlert(final AlertCriteria _alertCriteria, final IdKpiMap _mapKpis) {
     
     
-        if (value == null) { return false; }
-        final int compareTo = Double.compare(value.doubleValue(), alertType.getValue());
-        switch (alertType.getOperator()) {
-            case DISTINCT:
-                return compareTo != 0;
-            case GREATER:
-                return compareTo > 0;
-            case GREATER_OR_EQUAL:
-                return compareTo >= 0;
-            case LESSER:
-                return compareTo < 0;
-            case LESSER_OR_EQUAL:
-                return compareTo <= 0;
-            default:
-                return compareTo == 0;
-        }
-    }
-    
-    
-    public KpiAlertDto findAlert(
-            final EntityType entityType,
-            final BaseEntityDto entity,
-            final KpiAlertType alertType,
-            final List<Measure> measures,
-            final Map<Integer, Kpi> mapKpis) {
-    
-    
-        final Measure measure = findMeasure(entityType, entity, alertType, measures);
-        if (measure == null) { return null; }
+        final Measure measure = findMeasure(_alertCriteria);
+        if (measure != null) { return null; } // FIXME:: RETURNS A DTO INSTEAD OF NULL
         
         final KpiAlertDto kpiAlert = new KpiAlertDto();
-        kpiAlert.setKpiAlertType(alertType);
-        final Kpi kpi = mapKpis.get(alertType.getIdKpi());
+        kpiAlert.setKpiAlertType(_alertCriteria.getAlertType());
+        final Kpi kpi = _mapKpis.get(_alertCriteria.getAlertType().getIdKpi());
         kpiAlert.setKpi(kpi);
         kpiAlert.setDate(new Date());
-        kpiAlert.setEntityName(entity.getDisplayName());
-        
+        kpiAlert.setEntityName(_alertCriteria.getEntity().getDisplayName());
         kpiAlert.setValue(measure.getValue());
-        kpiAlert.setActivated(alertActivated(alertType, measure.getValue()));
+        kpiAlert.setActivated(isAlertActivated(_alertCriteria.getAlertType(), measure.getValue()));
+        
         return kpiAlert;
     }
     
@@ -102,68 +81,54 @@ public final class AlertService implements IAlertService
     public List<KpiAlertDto> findAlerts(final SearchKpiAlertsDto _searchAlert) {
     
     
-        LOGGER.info("findAlerts : " + _searchAlert);
+        LOGGER.trace("findAlerts {}", _searchAlert);
         final EntityType entityType = _searchAlert.getEntityType();
-        final List<KpiAlertDto> alerts = Lists.newArrayList();
-        final List<KpiAlertType> alertTypes =
+        final List<KpiAlertType> alertTypesOfKpiAndSeverity =
                 alertTypeService.getAlertTypes(entityType, _searchAlert.getKpiAlertTypeKeys(),
                         _searchAlert.getSeverityMin());
-        LOGGER.info("alertTypes : " + alertTypes);
+        LOGGER.trace("alertTypes :  {}", alertTypesOfKpiAndSeverity);
         final List<BaseEntityDto> entities =
                 entityService.getEntities(entityType, _searchAlert.getEntityKeys());
-        LOGGER.info("entities : " + entities);
-        final Map<Integer, Kpi> mapKpis = new HashMap<Integer, Kpi>();
-        final Set<String> kpiKeys = Sets.newHashSet();
-        for (final KpiAlertType alertType : alertTypes) {
-            final Kpi kpi = kpiService.selectByPrimaryKey(alertType.getIdKpi());
-            mapKpis.put(kpi.getId(), kpi);
-            kpiKeys.add(kpi.getKpiKey());
-        }
+        LOGGER.trace("entities : {}", entities);
+        
+        final IdKpiMap idKpiMap = new IdKpiMap();
+        final Set<String> kpiKeys = idKpiMap.fillIdKpi(alertTypesOfKpiAndSeverity, kpiService);
         final SearchMeasuresDto searchMeasuresDto =
-                new SearchMeasuresDto(entityType, new ArrayList<String>(kpiKeys),
-                        _searchAlert.getEntityKeys());
-        LOGGER.info("searchMeasuresDto : " + searchMeasuresDto);
-        LOGGER.info("mapKpis.values() : " + mapKpis.values());
-        final List<Measure> measures =
-                measureService.getMeasures(mapKpis.values(), entities, searchMeasuresDto);
-        LOGGER.info("measures : " + measures);
-        for (final KpiAlertType alertType : alertTypes) {
+                createMeasureFilterOnKpiKeys(_searchAlert, entityType, kpiKeys);
+        
+        LOGGER.trace("searchMeasuresDto : " + searchMeasuresDto);
+        LOGGER.trace("mapKpis.values() : " + idKpiMap.values());
+        final List<Measure> measuresOfKpi =
+                measureService.getMeasures(idKpiMap.values(), entities, searchMeasuresDto);
+        LOGGER.trace("measures : " + measuresOfKpi);
+        final List<KpiAlertDto> filteredActivatedAlerts = Lists.newArrayList();
+        for (final KpiAlertType alertType : alertTypesOfKpiAndSeverity) {
             for (final BaseEntityDto entity : entities) {
                 final KpiAlertDto kpiAlert =
-                        findAlert(entityType, entity, alertType, measures, mapKpis);
-                LOGGER.info("kpiAlert : " + kpiAlert);
-                if (kpiAlert != null && (!_searchAlert.isActivatedOnly() || kpiAlert.isActivated())) {
-                    alerts.add(kpiAlert);
+                        findAlert(new AlertCriteria(alertType, entity, entityType, measuresOfKpi),
+                                idKpiMap);
+                LOGGER.trace("kpiAlert : " + kpiAlert);
+                if (isAlertFiltered(_searchAlert, kpiAlert)) {
+                    filteredActivatedAlerts.add(kpiAlert);
                 }
             }
         }
-        return alerts;
+        return filteredActivatedAlerts;
     }
     
     
-    public Measure findMeasure(
-            final EntityType entityType,
-            final BaseEntityDto entity,
-            final KpiAlertType alertType,
-            final List<Measure> measures) {
+    /**
+     * @param _criteria
+     * @return
+     */
+    public Measure findMeasure(final AlertCriteria _criteria) {
     
     
-        for (final Measure measure : measures) {
-            if (measure.getIdKpi().equals(alertType.getIdKpi())) {
-                final boolean matches;
-                switch (entityType) {
-                    case PROJECT:
-                        matches = measure.getIdProject().equals(entity.getId());
-                        break;
-                    case PERSON:
-                        matches = measure.getIdPerson().equals(entity.getId());
-                        break;
-                    default:
-                        matches = measure.getIdPersonGroup().equals(entity.getId());
-                }
-                if (matches) { return measure; }
-            }
+        for (final Measure measure : _criteria.getMeasures()) {
+            if (isAlertIdAssociatedToKpi(_criteria, measure)
+                    && isAlertAssociatedToMeasureEntity(_criteria, measure)) { return measure; }
         }
+        
         return null;
     }
     
@@ -209,6 +174,47 @@ public final class AlertService implements IAlertService
     
     
     /**
+     * Cette méthode : est ce que le seuil est franchi ?
+     * 
+     * @param alertType
+     * @param value
+     * @return
+     */
+    public boolean isAlertActivated(final KpiAlertType alertType, final Number value) {
+    
+    
+        if (value == null) { return false; }
+        final int compareTo = Double.compare(value.doubleValue(), alertType.getValue());
+        switch (alertType.getOperator()) {
+            case DISTINCT:
+                return compareTo != 0;
+            case GREATER:
+                return compareTo > 0;
+            case GREATER_OR_EQUAL:
+                return compareTo >= 0;
+            case LESSER:
+                return compareTo < 0;
+            case LESSER_OR_EQUAL:
+                return compareTo <= 0;
+            default:
+                return compareTo == 0;
+        }
+    }
+    
+    
+    /**
+     * @param _filter
+     * @param kpiAlert
+     * @return
+     */
+    public boolean isAlertFiltered(final SearchKpiAlertsDto _filter, final KpiAlertDto kpiAlert) {
+    
+    
+        return kpiAlert != null && (!_filter.isActivatedOnly() || kpiAlert.isActivated());
+    }
+    
+    
+    /**
      * @param _alertTypeService
      *            the alertTypeService to set
      */
@@ -249,5 +255,47 @@ public final class AlertService implements IAlertService
     
     
         measureService = _measureService;
+    }
+    
+    
+    private SearchMeasuresDto createMeasureFilterOnKpiKeys(
+            final SearchKpiAlertsDto _searchAlert,
+            final EntityType entityType,
+            final Set<String> kpiKeys) {
+    
+    
+        final SearchMeasuresDto searchMeasuresDto =
+                new SearchMeasuresDto(entityType, new ArrayList<String>(kpiKeys),
+                        _searchAlert.getEntityKeys());
+        return searchMeasuresDto;
+    }
+    
+    
+    private boolean isAlertAssociatedToMeasureEntity(
+            final AlertCriteria _criteria,
+            final Measure measure) {
+    
+    
+        switch (_criteria.getEntityType()) {
+            case PROJECT:
+                return measure.getIdProject().equals(_criteria.getEntity().getId());
+                
+            case PERSON:
+                return measure.getIdPerson().equals(_criteria.getEntity().getId());
+            case DEPARTMENT:
+            case TEAM:
+                return measure.getIdPersonGroup().equals(_criteria.getEntity().getId());
+            default:
+                throw new UnsupportedOperationException("Entity type not supported "
+                        + _criteria.getEntityType());
+                
+        }
+    }
+    
+    
+    private boolean isAlertIdAssociatedToKpi(final AlertCriteria _criteria, final Measure measure) {
+    
+    
+        return measure.getIdKpi().equals(_criteria.getAlertType().getIdKpi());
     }
 }

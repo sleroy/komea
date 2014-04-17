@@ -46,20 +46,6 @@ public class AlertServiceTest
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.alert.AlertService#alertActivated(org.komea.product.database.model.KpiAlertType, java.lang.Number)}
-     * .
-     */
-    @Test
-    public final void testAlertActivated() throws Exception {
-    
-    
-        // TODO
-        throw new RuntimeException("not yet implemented");
-    }
-    
-    
-    /**
-     * Test method for
      * {@link org.komea.product.backend.service.alert.AlertService#findAlert(org.komea.product.database.enums.EntityType, org.komea.product.database.dto.BaseEntityDto, org.komea.product.database.model.KpiAlertType, java.util.List, java.util.Map)}
      * .
      */
@@ -98,4 +84,44 @@ public class AlertServiceTest
         throw new RuntimeException("not yet implemented");
     }
     
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.backend.service.alert.AlertService#isAlertActivated(org.komea.product.database.model.KpiAlertType, java.lang.Number)}
+     * .
+     */
+    @Test
+    public final void testIsAlertActivated() throws Exception {
+    
+    
+        // TODO
+        throw new RuntimeException("not yet implemented");
+    }
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.backend.service.alert.AlertService#isAlertAssociatedToMeasureEntity(org.komea.product.backend.service.alert.AlertCriteria, org.komea.product.database.model.Measure)}
+     * .
+     */
+    @Test
+    public void testIsAlertAssociatedToMeasureEntity() throws Exception {
+    
+    
+        // alertService.
+    }
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.backend.service.alert.AlertService#isAlertFiltered(org.komea.product.database.dto.SearchKpiAlertsDto, org.komea.product.database.dto.KpiAlertDto)}
+     * .
+     */
+    @Test
+    public void testIsAlertFiltered() throws Exception {
+    
+    
+        // alertService.isAlertFiltered(new SearchKpiAlertsDto(), new KpiAlertDto());
+        
+    }
 }

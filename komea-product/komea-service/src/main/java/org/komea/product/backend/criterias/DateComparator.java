@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.komea.product.backend.service.kpi;
+package org.komea.product.backend.criterias;
 
 import java.util.Comparator;
 
