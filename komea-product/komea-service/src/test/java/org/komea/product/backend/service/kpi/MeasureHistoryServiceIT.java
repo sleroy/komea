@@ -37,7 +37,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase {
 
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, int, org.komea.product.database.model.MeasureCriteria)}
+     * {@link org.komea.product.cep.tester.MeasureHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, int, org.komea.product.database.model.MeasureCriteria)}
      * .
      */
     @Test 
@@ -70,7 +70,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase {
 
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, org.komea.product.database.model.MeasureCriteria)}
+     * {@link org.komea.product.cep.tester.MeasureHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, org.komea.product.database.model.MeasureCriteria)}
      * .
      */
     @Test 
@@ -92,7 +92,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase {
 
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getHistory(org.komea.product.backend.service.history.HistoryKey)}.
+     * {@link org.komea.product.cep.tester.MeasureHistoryService#getHistory(org.komea.product.backend.service.history.HistoryKey)}.
      */
     @Test 
     public final void testGetHistory() {
@@ -113,7 +113,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase {
 
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#storeMeasure(org.komea.product.database.model.Measure)}.
+     * {@link org.komea.product.cep.tester.MeasureHistoryService#storeMeasure(org.komea.product.database.model.Measure)}.
      */
     @Test 
     public final void testStoreMeasure() {
@@ -129,7 +129,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase {
 
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#buildHistoryPurgeAction(org.komea.product.database.model.Kpi)}.
+     * {@link org.komea.product.cep.tester.MeasureHistoryService#buildHistoryPurgeAction(org.komea.product.database.model.Kpi)}.
      */
     @Test 
     public final void testUnitBuildHistoryPurgeAction() {

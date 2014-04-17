@@ -6,15 +6,16 @@ package org.komea.product.plugins.bugzilla.core;
 
 
 
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-import org.komea.eventory.api.engine.ICEPQueryImplementation;
-import org.komea.eventory.api.filters.IFilterDefinition;
-import org.komea.eventory.api.formula.ICEPFormula;
+import org.komea.cep.dynamicdata.IDynamicDataQuery;
+import org.komea.eventory.api.formula.ICEPResult;
 
 import com.j2bugzilla.base.Bug;
+import com.j2bugzilla.base.Flag;
 
 
 
@@ -23,11 +24,13 @@ import com.j2bugzilla.base.Bug;
  * 
  * @author sleroy
  */
-public class BZBugCountKPI implements ICEPQueryImplementation
+public class BZBugCountKPI implements IDynamicDataQuery
 {
     
     
-    private final BZBugCountFormula formula;
+    private final Set<Flag>           flags      = new HashSet<Flag>();
+    
+    private final Map<String, Object> parameters = new HashMap<String, Object>();
     
     
     
@@ -38,51 +41,20 @@ public class BZBugCountKPI implements ICEPQueryImplementation
     
     
         super();
-        formula = new BZBugCountFormula();
+        
     }
     
     
-    // public void addFlag(final String _name, final String _status) {
-    //
-    //
-    // final Flag flag = new Flag(_name, _status);
-    // formula.addFlag(flag);
-    // }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.eventory.api.engine.ICEPQueryImplementation#getFilterDefinitions()
+    /**
+     * Adds a flag
+     * 
+     * @param _flag
+     *            the flag to add
      */
-    @Override
-    public List<IFilterDefinition> getFilterDefinitions() {
+    public void addFlag(final Flag _flag) {
     
     
-        return Collections.EMPTY_LIST;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.eventory.api.engine.ICEPQueryImplementation#getFormula()
-     */
-    @Override
-    public ICEPFormula getFormula() {
-    
-    
-        return formula;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.eventory.api.engine.ICEPQueryImplementation#getParameters()
-     */
-    @Override
-    public Map<String, Object> getParameters() {
-    
-    
-        return Collections.EMPTY_MAP;
+        flags.add(_flag);
     }
     
     
@@ -96,7 +68,19 @@ public class BZBugCountKPI implements ICEPQueryImplementation
     public void getResolution(final String _resolution) {
     
     
-        formula.setParameter("resolution", _resolution);
+        setParameter("resolution", _resolution);
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.cep.dynamicdata.IDynamicDataQuery#getResult()
+     */
+    @Override
+    public ICEPResult getResult() {
+    
+    
+        return compute(null, null);
     }
     
     
@@ -108,15 +92,24 @@ public class BZBugCountKPI implements ICEPQueryImplementation
     public void setOperatingSystem(final String _internalState) {
     
     
-        formula.setParameter("op_sys", _internalState);
+        setParameter("op_sys", _internalState);
         
     }
     
     
+    /**
+     * Set a new parameter
+     * 
+     * @param _key
+     *            the key
+     * @param _value
+     *            the value
+     */
     public void setParameter(final String _key, final Object _value) {
     
     
-        formula.setParameter(_key, _value);
+        parameters.put(_key, _value);
+        
     }
     
     
@@ -129,7 +122,7 @@ public class BZBugCountKPI implements ICEPQueryImplementation
     public void setPlatform(final String _platform) {
     
     
-        formula.setParameter("platform", _platform);
+        setParameter("platform", _platform);
     }
     
     
@@ -143,7 +136,7 @@ public class BZBugCountKPI implements ICEPQueryImplementation
     public void setPriority(final String _priority) {
     
     
-        formula.setParameter("priority", _priority);
+        setParameter("priority", _priority);
     }
     
     
@@ -155,7 +148,7 @@ public class BZBugCountKPI implements ICEPQueryImplementation
     public void setProduct(final String _product) {
     
     
-        formula.setParameter("product", _product);
+        setParameter("product", _product);
     }
     
     
@@ -169,7 +162,7 @@ public class BZBugCountKPI implements ICEPQueryImplementation
     public void setSeverity(final String _severity) {
     
     
-        formula.setParameter("severity", _severity);
+        setParameter("severity", _severity);
     }
     
     
@@ -181,7 +174,7 @@ public class BZBugCountKPI implements ICEPQueryImplementation
     public void setStatus(final String _status) {
     
     
-        formula.setParameter("status", _status);
+        setParameter("status", _status);
     }
     
     
@@ -193,7 +186,7 @@ public class BZBugCountKPI implements ICEPQueryImplementation
     public void setSummary(final String _summary) {
     
     
-        formula.setParameter("summary", _summary);
+        setParameter("summary", _summary);
     }
     
     
@@ -205,8 +198,6 @@ public class BZBugCountKPI implements ICEPQueryImplementation
     public void setVersion(final String _version) {
     
     
-        formula.setParameter("version", _version);
+        setParameter("version", _version);
     }
-    
-    
 }

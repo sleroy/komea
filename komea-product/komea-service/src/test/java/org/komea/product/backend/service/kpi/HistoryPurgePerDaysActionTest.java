@@ -36,7 +36,7 @@ public class HistoryPurgePerDaysActionTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.kpi.HistoryPurgePerDaysAction#purgeHistory()}.
+     * Test method for {@link org.komea.product.cep.tester.HistoryPurgePerDaysAction#purgeHistory()}.
      */
     @Test
     public final void testPurgeHistory() throws Exception {

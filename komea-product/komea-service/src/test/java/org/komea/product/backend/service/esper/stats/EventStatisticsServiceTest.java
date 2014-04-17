@@ -54,19 +54,19 @@ public class EventStatisticsServiceTest
     
     
         Assert.assertEquals(
-                "new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).BLOCKER)",
+                "new org.komea.product.cep.tuples.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).BLOCKER)",
                 new EventStatisticsService().buildELForAlertCriticityKpi(Severity.BLOCKER));
         Assert.assertEquals(
-                "new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).CRITICAL)",
+                "new org.komea.product.cep.tuples.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).CRITICAL)",
                 new EventStatisticsService().buildELForAlertCriticityKpi(Severity.CRITICAL));
         Assert.assertEquals(
-                "new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).MAJOR)",
+                "new org.komea.product.cep.tuples.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).MAJOR)",
                 new EventStatisticsService().buildELForAlertCriticityKpi(Severity.MAJOR));
         Assert.assertEquals(
-                "new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).MINOR)",
+                "new org.komea.product.cep.tuples.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).MINOR)",
                 new EventStatisticsService().buildELForAlertCriticityKpi(Severity.MINOR));
         Assert.assertEquals(
-                "new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).INFO)",
+                "new org.komea.product.cep.tuples.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).INFO)",
                 new EventStatisticsService().buildELForAlertCriticityKpi(Severity.INFO));
         
     }

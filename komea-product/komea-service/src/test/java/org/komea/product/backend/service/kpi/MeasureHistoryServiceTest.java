@@ -45,7 +45,7 @@ public class MeasureHistoryServiceTest {
 
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#buildHistoryPurgeAction(org.komea.product.database.model.Kpi)}.
+     * {@link org.komea.product.cep.tester.MeasureHistoryService#buildHistoryPurgeAction(org.komea.product.database.model.Kpi)}.
      */
     @Test 
     public final void testBuildHistoryPurgeAction() throws Exception {
@@ -56,7 +56,7 @@ public class MeasureHistoryServiceTest {
 
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#buildMeasureCriteriaFromSearchFilter(org.komea.product.database.dto.SearchMeasuresDto, org.komea.product.backend.service.history.HistoryKey)}
+     * {@link org.komea.product.cep.tester.MeasureHistoryService#buildMeasureCriteriaFromSearchFilter(org.komea.product.database.dto.SearchMeasuresDto, org.komea.product.backend.service.history.HistoryKey)}
      * .
      */
     @Test 
@@ -68,7 +68,7 @@ public class MeasureHistoryServiceTest {
 
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, int, org.komea.product.database.model.MeasureCriteria)}
+     * {@link org.komea.product.cep.tester.MeasureHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, int, org.komea.product.database.model.MeasureCriteria)}
      * .
      */
     @Test 
@@ -80,7 +80,7 @@ public class MeasureHistoryServiceTest {
 
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, org.komea.product.database.model.MeasureCriteria)}
+     * {@link org.komea.product.cep.tester.MeasureHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, org.komea.product.database.model.MeasureCriteria)}
      * .
      */
     @Test 
@@ -92,7 +92,7 @@ public class MeasureHistoryServiceTest {
 
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getHistory(org.komea.product.backend.service.history.HistoryKey)}.
+     * {@link org.komea.product.cep.tester.MeasureHistoryService#getHistory(org.komea.product.backend.service.history.HistoryKey)}.
      */
     @Test 
     public final void testGetHistory() throws Exception {
@@ -118,7 +118,7 @@ public class MeasureHistoryServiceTest {
 
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.MeasureHistoryService#getMeasures(java.util.List, java.util.List, org.komea.product.database.dto.SearchMeasuresDto)}
+     * {@link org.komea.product.cep.tester.MeasureHistoryService#getMeasures(java.util.List, java.util.List, org.komea.product.database.dto.SearchMeasuresDto)}
      * .
      */
     @Test 

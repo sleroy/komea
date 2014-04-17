@@ -31,8 +31,8 @@ import org.komea.eventory.api.formula.tuple.ITuple;
 import org.komea.eventory.bridge.MemoryBridge;
 import org.komea.eventory.cache.guava.GoogleCacheStorage;
 import org.komea.eventory.query.CEPQuery;
-import org.komea.product.backend.service.kpi.ICEPQueryLineTestPredicate;
-import org.komea.product.backend.service.kpi.ICEPQueryTestPredicate;
+import org.komea.product.cep.tester.ICEPQueryLineTestPredicate;
+import org.komea.product.cep.tester.ICEPQueryTestPredicate;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;
@@ -84,7 +84,7 @@ public class CEPQueryTester
          * 
          * @param _epStatement
          *            EPStatement
-         * @see org.komea.product.backend.service.kpi.ICEPQueryTestPredicate#evaluate(EPStatement)
+         * @see org.komea.product.cep.tester.ICEPQueryTestPredicate#evaluate(EPStatement)
          */
         @Override
         public void evaluate(final ICEPQuery _epStatement) {
@@ -148,7 +148,7 @@ public class CEPQueryTester
          * @param _tuple
          *            Map<String,Object>
          * @see
-         *      org.komea.product.backend.service.kpi.ICEPQueryLineTestPredicate#evaluate(Map<String,Object>)
+         *      org.komea.product.cep.tester.ICEPQueryLineTestPredicate#evaluate(Map<String,Object>)
          */
         @Override
         public void evaluate(final ITuple _tuple) {

@@ -16,7 +16,7 @@ public class DateComparatorTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.kpi.DateComparator#compare(org.komea.product.database.model.Measure, org.komea.product.database.model.Measure)}.
+     * Test method for {@link org.komea.product.cep.tester.DateComparator#compare(org.komea.product.database.model.Measure, org.komea.product.database.model.Measure)}.
      */
     @Test
     public final void testCompare() throws Exception {

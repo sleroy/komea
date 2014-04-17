@@ -136,8 +136,10 @@ public class BZCheckerCron implements Job
                 
                 final List<String> projectNames = bugzillaProxy.getListProjects();
                 for (final String project : projectNames) {
-                    buildEventTypes(conf, bugzillaProxy, project);
-                    buildStatisticsPerProject(conf, bugzillaProxy, project);
+                    // buildEventTypes(conf, bugzillaProxy, project);
+                    // buildStatisticsPerProject(conf, bugzillaProxy, project);
+                    
+                    // compute open bugs
                 }
                 
                 

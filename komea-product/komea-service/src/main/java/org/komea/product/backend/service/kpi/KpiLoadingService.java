@@ -72,7 +72,7 @@ public class KpiLoadingService
         final List<Kpi> allKpis = kpiService.selectAll();
         LOGGER.info("found kpi in database  {}", allKpis.size());
         for (final Kpi existingKpi : allKpis) {
-            kpiRegisterService.registerOrUpdateQueryFromKpi(existingKpi);
+            kpiRegisterService.createOrUpdateQueryFromKpi(existingKpi);
         }
         LOGGER.info("----------------------------------------");
     }

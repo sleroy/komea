@@ -14,6 +14,7 @@ import org.komea.eventory.cache.CacheConfigurationBuilder;
 import org.komea.eventory.formula.NoCEPFormula;
 import org.komea.eventory.query.CEPQueryImplementation;
 import org.komea.eventory.query.FilterDefinition;
+import org.komea.product.cep.filter.EventSeverityFilter;
 import org.komea.product.database.enums.RetentionPeriod;
 import org.komea.product.database.enums.Severity;
 

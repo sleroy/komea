@@ -25,7 +25,7 @@ public class KpiHistoryJobTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.kpi.KpiHistoryJob#execute(org.quartz.JobExecutionContext)}.
+     * Test method for {@link org.komea.product.cep.tester.KpiHistoryJob#execute(org.quartz.JobExecutionContext)}.
      * 
      * @throws JobExecutionException
      */

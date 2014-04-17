@@ -23,6 +23,7 @@ import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
+import org.komea.product.cep.tuples.ProviderEventTypeTupleCreator;
 import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.enums.ProviderType;
@@ -331,7 +332,7 @@ public class EventStatisticsService implements IEventStatisticsService {
         kpi = new Kpi();
         kpi.setDescription("Provides the number of alerts received under 24 hours");
         kpi.setEntityType(null);
-        kpi.setEsperRequest("new org.komea.product.backend.service.esper.stats.AlertPerDay()");
+        kpi.setEsperRequest("new org.komea.product.cep.tuples.AlertPerDay()");
         kpi.setKpiKey(ALERT_RECEIVED_IN_ONE_DAY);
         kpi.setValueMin(0d);
         kpi.setValueMax(Double.MAX_VALUE);

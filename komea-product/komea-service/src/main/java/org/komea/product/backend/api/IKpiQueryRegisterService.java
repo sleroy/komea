@@ -13,20 +13,12 @@ import org.komea.product.database.model.Kpi;
 
 
 /**
+ * This interface the registry of query.
+ * 
  * @author sleroy
  */
 public interface IKpiQueryRegisterService
 {
-    
-    
-    /**
-     * This methods registers in the CEP Engine a new query from a kpi.
-     * 
-     * @param _kpi
-     *            the kpi
-     * @return the query definition.
-     */
-    public IQueryDefinition createEsperQueryFromKPI(Kpi _kpi);
     
     
     /**
@@ -38,6 +30,26 @@ public interface IKpiQueryRegisterService
      *            its entity.
      */
     public void createOrUpdateHistoryCronJob(Kpi _kpi, IEntity _entity);
+    
+    
+    /**
+     * Refresh esper with a KPI. The esper statement will be either created or
+     * updated and the cron job updated as well.
+     * 
+     * @param _kpi
+     *            the kpi.
+     */
+    public void createOrUpdateQueryFromKpi(Kpi _kpi);
+    
+    
+    /**
+     * This methods registers in the CEP Engine a new query from a kpi.
+     * 
+     * @param _kpi
+     *            the kpi
+     * @return the query definition.
+     */
+    public void evaluateFormulaAndRegisterQuery(Kpi _kpi);
     
     
     /**
@@ -61,15 +73,5 @@ public interface IKpiQueryRegisterService
      *            the kpi cron name;
      */
     public void prepareKpiHistoryJob(Kpi _kpi, IEntity _entity, String kpiCronName);
-    
-    
-    /**
-     * Refresh esper with a KPI. The esper statement will be either created or
-     * updated and the cron job updated as well.
-     * 
-     * @param _kpi
-     *            the kpi.
-     */
-    public void registerOrUpdateQueryFromKpi(Kpi _kpi);
     
 }

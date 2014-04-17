@@ -51,7 +51,7 @@ public class EventStatisticsServiceIT extends AbstractSpringIntegrationTestCase
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.esper.stats.EventStatisticsService#getReceivedAlertTypesIn24LastHours()}.
+     * Test method for {@link org.komea.product.cep.tuples.EventStatisticsService#getReceivedAlertTypesIn24LastHours()}.
      */
     @Test 
     public final void testGetReceivedAlertTypesIn24LastHours() {

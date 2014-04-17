@@ -42,7 +42,7 @@ public class HistoryPurgePerValuesAction implements IHistoryPurgeAction
     /**
      * Method purgeHistory.
      * @return int
-     * @see org.komea.product.backend.service.kpi.IHistoryPurgeAction#purgeHistory()
+     * @see org.komea.product.cep.tester.IHistoryPurgeAction#purgeHistory()
      */
     @Override
     public int purgeHistory() {

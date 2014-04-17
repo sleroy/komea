@@ -57,7 +57,7 @@ public class KPIValueServiceTest
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.KPIValueService#getLastMeasureOfKpi(org.komea.product.database.model.Kpi, org.komea.product.database.api.IEntity)}
+     * {@link org.komea.product.cep.tester.KPIValueService#getLastMeasureOfKpi(org.komea.product.database.model.Kpi, org.komea.product.database.api.IEntity)}
      * .
      */
     @Test
@@ -71,7 +71,7 @@ public class KPIValueServiceTest
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.KPIValueService#getRealTimeMeasure(org.komea.product.service.dto.KpiKey)}.
+     * {@link org.komea.product.cep.tester.KPIValueService#getRealTimeMeasure(org.komea.product.service.dto.KpiKey)}.
      */
     @Test
     public final void testGetRealTimeMeasure() throws Exception {
@@ -84,7 +84,7 @@ public class KPIValueServiceTest
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.KPIValueService#getRealTimeMeasuresFromEntities(java.util.List, java.util.List)}.
+     * {@link org.komea.product.cep.tester.KPIValueService#getRealTimeMeasuresFromEntities(java.util.List, java.util.List)}.
      */
     @Test
     public final void testGetRealTimeMeasuresFromEntities() throws Exception {
@@ -96,7 +96,7 @@ public class KPIValueServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.kpi.KPIValueService#getSingleValue(org.komea.product.service.dto.KpiKey)}.
+     * Test method for {@link org.komea.product.cep.tester.KPIValueService#getSingleValue(org.komea.product.service.dto.KpiKey)}.
      */
     @Test
     public final void testGetSingleValue() throws Exception {
@@ -109,7 +109,7 @@ public class KPIValueServiceTest
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.KPIValueService#storeMeasureOfAKpiInDatabase(org.komea.product.service.dto.KpiKey, java.lang.Number)}
+     * {@link org.komea.product.cep.tester.KPIValueService#storeMeasureOfAKpiInDatabase(org.komea.product.service.dto.KpiKey, java.lang.Number)}
      * .
      */
     @Test
@@ -123,7 +123,7 @@ public class KPIValueServiceTest
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.KPIValueService#storeValueInHistory(org.komea.product.service.dto.KpiKey)}.
+     * {@link org.komea.product.cep.tester.KPIValueService#storeValueInHistory(org.komea.product.service.dto.KpiKey)}.
      */
     @Test
     public final void testStoreValueInHistory() throws Exception {

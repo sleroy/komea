@@ -60,21 +60,21 @@ public class KpiQueryRegisterServiceTest
     
     
     /**
-     * Test method for
-     * {@link org.komea.product.backend.service.kpi.KpiQueryRegisterService#createEsperQueryFromKPI(org.komea.product.database.model.Kpi)}.
-     */
-    @Test
-    public final void testCreateEsperQueryFromKPI() throws Exception {
-    
-    
-        // TODO
-        throw new RuntimeException("not yet implemented");
-    }
+         * Test method for
+         * {@link org.komea.product.cep.tester.KpiQueryRegisterService#evaluateFormulaAndRegisterQuery(org.komea.product.database.model.Kpi)}.
+         */
+        @Test
+        public final void testEvaluateFormulaAndRegisterQuery() throws Exception {
+        
+        
+            // TODO
+            throw new RuntimeException("not yet implemented");
+        }
     
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.KPIService#createOrUpdateHistoryCronJob(org.komea.product.database.model.Kpi, org.komea.product.database.api.IEntity)}
+     * {@link org.komea.product.cep.tester.KPIService#createOrUpdateHistoryCronJob(org.komea.product.database.model.Kpi, org.komea.product.database.api.IEntity)}
      * .
      */
     @Test
@@ -98,7 +98,7 @@ public class KpiQueryRegisterServiceTest
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.KpiQueryRegisterService#getQueryValueFromKpi(org.komea.product.database.model.Kpi)}.
+     * {@link org.komea.product.cep.tester.KpiQueryRegisterService#getQueryValueFromKpi(org.komea.product.database.model.Kpi)}.
      */
     @Test
     public final void testGetQueryValueFromKpi() throws Exception {
@@ -111,7 +111,7 @@ public class KpiQueryRegisterServiceTest
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.KPIService#prepareKpiHistoryJob(org.komea.product.database.model.Kpi, org.komea.product.database.api.IEntity, java.lang.String)}
+     * {@link org.komea.product.cep.tester.KPIService#prepareKpiHistoryJob(org.komea.product.database.model.Kpi, org.komea.product.database.api.IEntity, java.lang.String)}
      * .
      */
     @Test
@@ -132,16 +132,16 @@ public class KpiQueryRegisterServiceTest
     
     
     /**
-     * Test method for
-     * {@link org.komea.product.backend.service.kpi.KpiQueryRegisterService#registerOrUpdateQueryFromKpi(org.komea.product.database.model.Kpi)}
-     * .
-     */
-    @Test
-    public final void testRegisterOrUpdateQueryFromKpi() throws Exception {
-    
-    
-        // TODO
-        throw new RuntimeException("not yet implemented");
-    }
+         * Test method for
+         * {@link org.komea.product.cep.tester.KpiQueryRegisterService#createOrUpdateQueryFromKpi(org.komea.product.database.model.Kpi)}
+         * .
+         */
+        @Test
+        public final void testCreateOrUpdateQueryFromKpi() throws Exception {
+        
+        
+            // TODO
+            throw new RuntimeException("not yet implemented");
+        }
     
 }

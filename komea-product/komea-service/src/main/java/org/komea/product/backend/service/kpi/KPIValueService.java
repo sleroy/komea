@@ -8,10 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.api.formula.ICEPResult;
 import org.komea.eventory.api.formula.ITupleResultMap;
-import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.api.exceptions.EntityNotFoundException;
@@ -53,8 +51,6 @@ public final class KPIValueService implements IKpiValueService
     @Autowired
     private IEntityService           entityService;
     
-    @Autowired
-    private IEventEngineService      esperEngine;
     
     @Autowired
     private KpiDao                   kpiDAO;
@@ -83,16 +79,6 @@ public final class KPIValueService implements IKpiValueService
     
     
     /**
-     * @return the esperEngine
-     */
-    public final IEventEngineService getEsperEngine() {
-    
-    
-        return esperEngine;
-    }
-    
-    
-    /**
      * Method getKpiDAO.
      * 
      * @return KpiDao
@@ -111,8 +97,10 @@ public final class KPIValueService implements IKpiValueService
     }
     
     
-    /* (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKpiValueService#getLastMeasureOfKpi(org.komea.product.database.model.Kpi, org.komea.product.database.api.IEntity)
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.tester.IKpiValueService#getLastMeasureOfKpi(org.komea.product.database.model.Kpi,
+     * org.komea.product.database.api.IEntity)
      */
     @Override
     public Measure getLastMeasureOfKpi(final Kpi findKPIOrFail, final IEntity entity) {
@@ -129,8 +117,9 @@ public final class KPIValueService implements IKpiValueService
     }
     
     
-    /* (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKpiValueService#getMeasureService()
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.tester.IKpiValueService#getMeasureService()
      */
     @Override
     public final IHistoryService getMeasureService() {
@@ -152,39 +141,35 @@ public final class KPIValueService implements IKpiValueService
     }
     
     
-    /* (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKpiValueService#getRealTimeMeasure(org.komea.product.service.dto.KpiKey)
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.tester.IKpiValueService#getRealTimeMeasure(org.komea.product.service.dto.KpiKey)
      */
     @Override
     public Measure getRealTimeMeasure(final KpiKey _key) {
     
     
         LOGGER.debug("Obtain the real time measure for -> {}", _key);
-        final Kpi kpiOrFail = new FindKpiOrFail(_key, kpiDAO).find();
-        final ICEPQuery queryOrFail = esperEngine.getQueryOrFail(kpiOrFail.computeKPIEsperKey());
-        final Measure measureKey =
-                Measure.initializeMeasureFromKPIKey(kpiOrFail.getId(), _key.getEntityKey());
-        //
         final List<IEntity> entitiesAssociatedToKpiKey = getEntitiesAssociatedToKpiKey(_key);
         if (entitiesAssociatedToKpiKey.isEmpty()) { throw new EntityNotFoundException(
                 _key.getEntityKey()); }
         if (entitiesAssociatedToKpiKey.size() > 1) { throw new IllegalArgumentException(
                 "Cannot return a measure, many entities are referenced by the KpiKey " + _key); }
+        
+        
+        final Kpi kpiOrFail = new FindKpiOrFail(_key, kpiDAO).find();
+        final ICEPResult kpiValue = kpiQueryRegistry.getQueryValueFromKpi(kpiOrFail);
         //
         final IEntity entity = CollectionUtil.singleOrNull(entitiesAssociatedToKpiKey);
-        measureKey.setEntity(entity.entityType(), entity.getId());
-        final ITupleResultMap<Number> map = queryOrFail.getResult().asMap();
-        final Number number = map.get(entity.getEntityKey());
-        if (number != null) {
-            measureKey.setValue(number.doubleValue());
-        }
+        final Measure measureKey = initializeMeasure(_key, kpiOrFail, kpiValue, entity);
         LOGGER.debug("Obtain the real time measure : {} result = {}", _key, measureKey.getValue());
         return measureKey;
     }
     
     
-    /* (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKpiValueService#getRealTimeMeasuresFromEntities(java.util.List, java.util.List)
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.tester.IKpiValueService#getRealTimeMeasuresFromEntities(java.util.List, java.util.List)
      */
     @Override
     public List<Measure> getRealTimeMeasuresFromEntities(
@@ -211,10 +196,6 @@ public final class KPIValueService implements IKpiValueService
     }
     
     
-    /* (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKpiValueService#getSingleValue(org.komea.product.service.dto.KpiKey)
-     */
-    
     @Override
     public Number getSingleValue(final KpiKey _kpiKey) {
     
@@ -227,6 +208,11 @@ public final class KPIValueService implements IKpiValueService
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.tester.IKpiValueService#getSingleValue(org.komea.product.service.dto.KpiKey)
+     */
+    
     /**
      * Method setEntityService.
      * 
@@ -237,17 +223,6 @@ public final class KPIValueService implements IKpiValueService
     
     
         entityService = _entityService;
-    }
-    
-    
-    /**
-     * @param _esperEngine
-     *            the esperEngine to set
-     */
-    public final void setEsperEngine(final IEventEngineService _esperEngine) {
-    
-    
-        esperEngine = _esperEngine;
     }
     
     
@@ -288,10 +263,6 @@ public final class KPIValueService implements IKpiValueService
     }
     
     
-    /* (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKpiValueService#storeMeasureOfAKpiInDatabase(org.komea.product.service.dto.KpiKey, java.lang.Number)
-     */
-    
     @Override
     public void storeMeasureOfAKpiInDatabase(final KpiKey _kpiKey, final Number _kpiValue) {
     
@@ -307,8 +278,15 @@ public final class KPIValueService implements IKpiValueService
     }
     
     
-    /* (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKpiValueService#storeValueInHistory(org.komea.product.service.dto.KpiKey)
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.tester.IKpiValueService#storeMeasureOfAKpiInDatabase(org.komea.product.service.dto.KpiKey,
+     * java.lang.Number)
+     */
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.tester.IKpiValueService#storeValueInHistory(org.komea.product.service.dto.KpiKey)
      */
     @Override
     @Transactional
@@ -360,6 +338,28 @@ public final class KPIValueService implements IKpiValueService
         }
         LOGGER.debug("Entities associated to KPI key {}: {}", _kpiKey, entities.size());
         return entities;
+    }
+    
+    
+    private Measure initializeMeasure(
+            final KpiKey _key,
+            final Kpi kpiOrFail,
+            final ICEPResult kpiValue,
+            final IEntity entity) {
+    
+    
+        final Measure measureKey =
+                Measure.initializeMeasureFromKPIKey(kpiOrFail.getId(), _key.getEntityKey());
+        measureKey.setEntity(entity.entityType(), entity.getId());
+        final ITupleResultMap<Number> map = kpiValue.asMap();
+        final Number number = map.get(entity.getEntityKey());
+        if (number != null) {
+            measureKey.setValue(number.doubleValue());
+        } else {
+            measureKey.setValue(Double.NaN);
+            
+        }
+        return measureKey;
     }
     
     

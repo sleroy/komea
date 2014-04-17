@@ -36,7 +36,7 @@ public class KpiLoadingServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.kpi.KpiLoadingService#initLoadingService()}.
+     * Test method for {@link org.komea.product.cep.tester.KpiLoadingService#initLoadingService()}.
      */
     @Test
     public final void testInitLoadingService() throws Exception {

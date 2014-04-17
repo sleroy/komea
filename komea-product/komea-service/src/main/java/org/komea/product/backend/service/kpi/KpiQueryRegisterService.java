@@ -7,11 +7,13 @@ package org.komea.product.backend.service.kpi;
 
 
 import org.apache.commons.lang.StringUtils;
+import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.formula.ICEPResult;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
-import org.komea.product.backend.api.IQueryDefinition;
+import org.komea.product.backend.exceptions.KpiProvidesInvalidFormulaException;
+import org.komea.product.backend.service.ISpringService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.esper.ConvertELIntoQuery;
@@ -35,50 +37,40 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService
 {
     
     
-    private static final Logger  LOGGER = LoggerFactory.getLogger("kpi-query-register");
+    private static final Logger              LOGGER = LoggerFactory.getLogger("kpi-query-register");
     
     
     @Autowired
-    private ICronRegistryService cronRegistry;
+    private ICronRegistryService             cronRegistry;
     
     
     @Autowired
-    private IEntityService       entityService;
+    private IDynamicDataQueryRegisterService dynamicDataQueryRegisterService;
     
     
     @Autowired
-    private IEventEngineService  esperEngine;
+    private IEntityService                   entityService;
     
     
     @Autowired
-    private ProjectDao           projectDao;
+    private IEventEngineService              esperEngine;
     
     
     @Autowired
-    private KpiDao               requiredDAO;
+    private ProjectDao                       projectDao;
     
+    @Autowired
+    private KpiDao                           requiredDAO;
     
+    @Autowired
+    private ISpringService                   springService;
     
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKpiQueryRegisterService#createEsperQueryFromKPI(org.komea.product.database.model.Kpi)
-     */
-    @Override
-    public IQueryDefinition createEsperQueryFromKPI(final Kpi _kpi) {
-    
-    
-        final ICEPQueryImplementation queryImplementation =
-                ConvertELIntoQuery.parseEL(_kpi.getEsperRequest());
-        LOGGER.debug("Updating Esper with the query {}", queryImplementation);
-        
-        return new QueryDefinition(_kpi.computeKPIEsperKey(), queryImplementation);
-    }
     
     
     /*
      * (non-Javadoc)
      * @see
-     * org.komea.product.backend.service.kpi.IKpiQueryRegisterService#createOrUpdateHistoryCronJob(org.komea.product.database.model.Kpi,
+     * org.komea.product.cep.tester.IKpiQueryRegisterService#createOrUpdateHistoryCronJob(org.komea.product.database.model.Kpi,
      * org.komea.product.database.api.IEntity)
      */
     @Override
@@ -96,6 +88,51 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.tester.IKpiQueryRegisterService#refreshEsper(org.komea.product.database.model.Kpi)
+     */
+    @Override
+    public void createOrUpdateQueryFromKpi(final Kpi _kpi) {
+    
+    
+        LOGGER.debug("Refreshing Esper with KPI {}", _kpi.getKpiKey());
+        evaluateFormulaAndRegisterQuery(_kpi);
+        IEntity entity = null;
+        if (_kpi.isAssociatedToEntity()) {
+            
+            entity = entityService.getEntityAssociatedToKpi(KpiKey.ofKpi(_kpi));
+        }
+        createOrUpdateHistoryCronJob(_kpi, entity);
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.tester.IKpiQueryRegisterService#createEsperQueryFromKPI(org.komea.product.database.model.Kpi)
+     */
+    @Override
+    public void evaluateFormulaAndRegisterQuery(final Kpi _kpi) {
+    
+    
+        final Object queryImplementation = ConvertELIntoQuery.parseEL(_kpi.getEsperRequest());
+        final String queryName = _kpi.computeKPIEsperKey();
+        if (queryImplementation instanceof ICEPQueryImplementation) {
+            LOGGER.debug("KPI {} provides an event query {}.", _kpi, queryImplementation);
+            esperEngine.createOrUpdateQuery(new QueryDefinition(queryName,
+                    (ICEPQueryImplementation) queryImplementation));
+            
+        } else if (queryImplementation instanceof IDynamicDataQuery) {
+            springService.autowirePojo(queryImplementation);
+            LOGGER.debug("KPI {} provides an dynamic data query {}.", _kpi, queryImplementation);
+            dynamicDataQueryRegisterService.registerQuery(queryName,
+                    (IDynamicDataQuery) queryImplementation);
+        } else {
+            throw new KpiProvidesInvalidFormulaException(_kpi);
+        }
+    }
+    
+    
     /**
      * @return the cronRegistry
      */
@@ -103,6 +140,13 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService
     
     
         return cronRegistry;
+    }
+    
+    
+    public IDynamicDataQueryRegisterService getDynamicDataQueryRegisterService() {
+    
+    
+        return dynamicDataQueryRegisterService;
     }
     
     
@@ -138,7 +182,7 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKpiQueryRegisterService#getEsperQueryFromKpi(org.komea.product.database.model.Kpi)
+     * @see org.komea.product.cep.tester.IKpiQueryRegisterService#getEsperQueryFromKpi(org.komea.product.database.model.Kpi)
      */
     @Override
     public ICEPResult getQueryValueFromKpi(final Kpi _kpi) {
@@ -158,9 +202,16 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService
     }
     
     
+    public ISpringService getSpringService() {
+    
+    
+        return springService;
+    }
+    
+    
     /*
      * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKpiQueryRegisterService#prepareKpiHistoryJob(org.komea.product.database.model.Kpi,
+     * @see org.komea.product.cep.tester.IKpiQueryRegisterService#prepareKpiHistoryJob(org.komea.product.database.model.Kpi,
      * org.komea.product.database.api.IEntity, java.lang.String)
      */
     @Override
@@ -175,25 +226,6 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKpiQueryRegisterService#refreshEsper(org.komea.product.database.model.Kpi)
-     */
-    @Override
-    public void registerOrUpdateQueryFromKpi(final Kpi _kpi) {
-    
-    
-        LOGGER.debug("Refreshing Esper with KPI {}", _kpi.getKpiKey());
-        esperEngine.createOrUpdateQuery(createEsperQueryFromKPI(_kpi));
-        IEntity entity = null;
-        if (_kpi.isAssociatedToEntity()) {
-            
-            entity = entityService.getEntityAssociatedToKpi(KpiKey.ofKpi(_kpi));
-        }
-        createOrUpdateHistoryCronJob(_kpi, entity);
-    }
-    
-    
     /**
      * @param _cronRegistry
      *            the cronRegistry to set
@@ -202,6 +234,14 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService
     
     
         cronRegistry = _cronRegistry;
+    }
+    
+    
+    public void setDynamicDataQueryRegisterService(
+            final IDynamicDataQueryRegisterService _dynamicDataQueryRegisterService) {
+    
+    
+        dynamicDataQueryRegisterService = _dynamicDataQueryRegisterService;
     }
     
     
@@ -246,6 +286,13 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService
     
     
         requiredDAO = _requiredDAO;
+    }
+    
+    
+    public void setSpringService(final ISpringService _springService) {
+    
+    
+        springService = _springService;
     }
     
     

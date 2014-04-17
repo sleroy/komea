@@ -61,7 +61,7 @@ public interface IKpiValueService
      * @param _kpiKey
      *            KpiKey
      * @return Number
-     * @see org.komea.product.backend.service.kpi.IKPIService#getSingleValue(KpiKey)
+     * @see org.komea.product.cep.tester.IKPIService#getSingleValue(KpiKey)
      */
     
     public abstract Number getSingleValue(KpiKey _kpiKey);
@@ -85,7 +85,7 @@ public interface IKpiValueService
      * @param _kpiKey
      *            KpiKey
      * @throws KPINotFoundException
-     * @see org.komea.product.backend.service.kpi.IKPIService#storeValueInHistory(KpiKey)
+     * @see org.komea.product.cep.tester.IKPIService#storeValueInHistory(KpiKey)
      */
     public abstract void storeValueInHistory(KpiKey _kpiKey) throws KPINotFoundException;
     

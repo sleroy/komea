@@ -122,7 +122,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
      *
      * @param _kpi the kpi
      * @return the history purge action. * @see
-     * org.komea.product.backend.service.kpi.IMeasureHistoryService#buildHistoryPurgeAction(Kpi)
+     * org.komea.product.cep.tester.IMeasureHistoryService#buildHistoryPurgeAction(Kpi)
      */
     @Override
     public IHistoryPurgeAction buildHistoryPurgeAction(final Kpi _kpi) {

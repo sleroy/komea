@@ -15,7 +15,7 @@ import org.komea.eventory.filter.EventFilterBuilder;
 import org.komea.eventory.formula.CountFormula;
 import org.komea.eventory.query.CEPQueryImplementation;
 import org.komea.eventory.query.FilterDefinition;
-import org.komea.product.backend.service.esper.EventSeverityFilter;
+import org.komea.product.cep.filter.EventSeverityFilter;
 import org.komea.product.cep.filter.OnlyEventFilter;
 import org.komea.product.database.enums.Severity;
 
