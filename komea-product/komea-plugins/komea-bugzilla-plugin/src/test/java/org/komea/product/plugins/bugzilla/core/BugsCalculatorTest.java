@@ -39,7 +39,7 @@ public class BugsCalculatorTest
     
     
         // TODO
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -52,7 +52,7 @@ public class BugsCalculatorTest
     
     
         // TODO
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -65,7 +65,7 @@ public class BugsCalculatorTest
     
     
         // TODO
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -78,7 +78,7 @@ public class BugsCalculatorTest
     
     
         // TODO
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -92,7 +92,7 @@ public class BugsCalculatorTest
     
     
         // TODO
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -106,7 +106,7 @@ public class BugsCalculatorTest
     
     
         // TODO
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -119,7 +119,7 @@ public class BugsCalculatorTest
     
     
         // TODO
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -134,7 +134,7 @@ public class BugsCalculatorTest
     
     
         // TODO
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -147,7 +147,7 @@ public class BugsCalculatorTest
     
     
         // TODO
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
 }

@@ -25,7 +25,7 @@ public class GitRepositoryProxyTest
     
     
         //
-        // FIXME:: throw new RuntimeException("not yet implemented");
+        // FIXME:: org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -38,7 +38,7 @@ public class GitRepositoryProxyTest
     
     
         //
-        // FIXME:: throw new RuntimeException("not yet implemented");
+        // FIXME:: org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -50,7 +50,7 @@ public class GitRepositoryProxyTest
     
     
         //
-        // FIXME:: throw new RuntimeException("not yet implemented");
+        // FIXME:: org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -62,7 +62,7 @@ public class GitRepositoryProxyTest
     
     
         //
-        // FIXME:: throw new RuntimeException("not yet implemented");
+        // FIXME:: org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -74,7 +74,7 @@ public class GitRepositoryProxyTest
     
     
         //
-        // FIXME:: throw new RuntimeException("not yet implemented");
+        // FIXME:: org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
 }

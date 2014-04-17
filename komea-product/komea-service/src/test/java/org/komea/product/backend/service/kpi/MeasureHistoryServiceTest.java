@@ -51,7 +51,7 @@ public class MeasureHistoryServiceTest {
     public final void testBuildHistoryPurgeAction() throws Exception {
 
         // TODO
-        // throw new RuntimeException("not yet implemented");
+        // org.junit.Assert.assertTrue("not yet implemented", false);
     }
 
     /**
@@ -63,7 +63,7 @@ public class MeasureHistoryServiceTest {
     public final void testBuildMeasureCriteriaFromSearchFilter() throws Exception {
 
         // TODO
-        // throw new RuntimeException("not yet implemented");
+        // org.junit.Assert.assertTrue("not yet implemented", false);
     }
 
     /**
@@ -75,7 +75,7 @@ public class MeasureHistoryServiceTest {
     public final void testGetFilteredHistoryHistoryKeyIntMeasureCriteria() throws Exception {
 
         // TODO
-        // throw new RuntimeException("not yet implemented");
+        // org.junit.Assert.assertTrue("not yet implemented", false);
     }
 
     /**
@@ -87,7 +87,7 @@ public class MeasureHistoryServiceTest {
     public final void testGetFilteredHistoryHistoryKeyMeasureCriteria() throws Exception {
 
         // TODO
-        // throw new RuntimeException("not yet implemented");
+        // org.junit.Assert.assertTrue("not yet implemented", false);
     }
 
     /**
@@ -125,7 +125,7 @@ public class MeasureHistoryServiceTest {
     public final void testGetMeasures() throws Exception {
 
         // TODO
-        // throw new RuntimeException("not yet implemented");
+        // org.junit.Assert.assertTrue("not yet implemented", false);
     }
 
 }
