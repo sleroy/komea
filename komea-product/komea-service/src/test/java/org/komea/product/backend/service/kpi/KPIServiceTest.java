@@ -81,7 +81,7 @@ public class KPIServiceTest
     public void testDeleteKpi() throws Exception {
     
     
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     

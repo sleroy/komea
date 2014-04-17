@@ -43,7 +43,7 @@ public class KpiLoadingServiceTest
     
     
         // TODO
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
 }

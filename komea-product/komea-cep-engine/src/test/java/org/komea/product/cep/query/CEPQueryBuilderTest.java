@@ -93,7 +93,7 @@ public class CEPQueryBuilderTest
     public void testDefineFilterAndTransformer() throws Exception {
     
     
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -107,7 +107,7 @@ public class CEPQueryBuilderTest
     public void testDefineFilterIEventFilterICacheConfiguration() throws Exception {
     
     
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -120,7 +120,7 @@ public class CEPQueryBuilderTest
     public void testDefineIEventFilter() throws Exception {
     
     
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -132,7 +132,7 @@ public class CEPQueryBuilderTest
     public void testNumberOfFilters() throws Exception {
     
     
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -144,6 +144,6 @@ public class CEPQueryBuilderTest
     public void testWithParams() throws Exception {
     
     
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
 }
