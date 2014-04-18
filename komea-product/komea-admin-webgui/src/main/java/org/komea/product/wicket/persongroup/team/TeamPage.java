@@ -49,10 +49,15 @@ public class TeamPage extends LayoutPage
                 new ListDataModel(listAffichage);
         final DataTable<PersonGroup, String> build =
                 DataTableBuilder.<PersonGroup, String> newTable("table")
-                        .addColumn("Team Key", "PersonGroupKey").addColumn("Name", "Name")
-                        .addColumn("Description", "Description")
+                        .addColumn(getString("global.field.key"), "PersonGroupKey").addColumn(getString("global.field.placeholder.name"), "Name")
+                        .addColumn(getString("global.field.label.description"), "Description")
                         .withEditDeleteColumn(personGroupDeleteAction, personGroupEditAction)
                         .displayRows(listAffichage.size()+10).withData(dataProvider).build();
         add(build);
+    }
+    
+     @Override
+    public String getTitle() {
+        return getString("teampage.main.title");
     }
 }

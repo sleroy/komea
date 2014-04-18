@@ -46,9 +46,9 @@ public final class AlertEditPage extends LayoutPage {
         AlertForm alertForm = new AlertForm(isNew, kpiService, alertService, feedbackPanel, this, _alertType, "form", new CompoundPropertyModel<KpiAlertType>(_alertType));
         String message;
         if (isNew) {
-            message = "Add alert";
+            message = getString("alertpage.save.add.title");
         } else {
-            message = "Edit alert";
+            message = getString("alertpage.save.update.title");
         }
         alertForm.add(new Label("legend", message));
         add(alertForm);
@@ -57,6 +57,6 @@ public final class AlertEditPage extends LayoutPage {
     @Override
     public String getTitle() {
 
-        return getString("AlertEditPage.title");
+        return getString("alertpage.globale.title");
     }
 }

@@ -15,7 +15,7 @@
         <div class="container">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <span class="glyphicon cicon-user"></span> Manage Population of developers inside Komea
+                    <span class="glyphicon glyphicon-stats"></span> 
                 </div>
                 <div class="panel-body">
                     <div class="container">
@@ -29,30 +29,27 @@
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">Kpi Key *</label>
+                                                <label class="col-md-3" for="inputEmail1"><wicket:message key="global.field.label.key"></wicket:message></label>
                                                 <div class="col-md-6">
-                                                    <input id="kpiKey" name="kpiKey" type="text" placeholder="kpiKey" class="form-control" required="required" wicket:id="kpiKey" />
+                                                    <input id="kpiKey" name="kpiKey" type="text" wicket:message="placeholder:global.field.placeholder.key" class="form-control" required="required" wicket:id="kpiKey" />
                                                 </div>
                                             </div>
                                         </div>
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">Name *</label>
+                                                <label class="col-md-3" for="inputEmail1"><wicket:message key="global.field.label.name"></wicket:message></label>
                                                 <div class="col-md-6">
-                                                    <input id="firstName" name="name" type="text" placeholder="name" class="form-control" required="required" wicket:id="name" />
+                                                    <input id="firstName" name="name" type="text" wicket:message="placeholder:global.field.placeholder.name" class="form-control" required="required" wicket:id="name" />
                                                 </div>
                                             </div>
                                         </div>
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">Description</label>
+                                                <label class="col-md-3" for="inputEmail1"><wicket:message key="global.field.label.description"></wicket:message></label>
                                                 <div class="col-md-6">
-                                                    <textarea  style="resize: none;"  class="form-control" rows="4" wicket:id="description"></textarea>
-                                                    <!--<textarea  rows="6" cols="40"></textarea>-->
-                                                    <!--<textarea rows="4" cols="50" wicket:id="description"></textarea>-->
-                                                    <!--<input id="surename" name="description" type="text" placeholder="description" class="form-control" required="required" wicket:id="description">-->
+                                                    <textarea  style="resize: none;" wicket:message="placeholder:global.field.placeholder.description"  class="form-control" rows="4" wicket:id="description"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -61,19 +58,19 @@
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">Value Min</label>
+                                                <label class="col-md-3" for="inputEmail1"><wicket:message key="kpipage.save.form.field.label.minvalue"></wicket:message></label>
                                                 <div class="col-md-4">
-                                                    <input id="valueMin" name="valueMin" type="text" placeholder="valueMin" class="form-control"  wicket:id="valueMin" />
+                                                    <input id="valueMin" name="valueMin" type="text" wicket:message="placeholder:kpipage.save.form.field.placeholder.minvalue" class="form-control"  wicket:id="valueMin" />
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <button type="button" id="btnminvalue" name="btnminvalue" class="btn btn-small btn-info col-md-5"  wicket:id="maxValueMin">Min</button>
+                                                    <button type="button" id="btnminvalue" name="btnminvalue" class="btn btn-small btn-info col-md-5"  wicket:id="maxValueMin"><wicket:message key="kpipage.save.form.field.button.minvalue"></wicket:message></button>
                                                     <!--<button id="btnentity" name="btnentity" class="btn btn-small btn-info col-md-5" wicket:id="btnentity">...</button>-->
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">Goal</label>
+                                                <label class="col-md-3" for="inputEmail1"><wicket:message key="kpipage.save.form.field.label.goal"></wicket:message></label>
                                                 <div class="col-md-4">
                                                     <div  wicket:id="objectif" ></div>
                                                    
@@ -85,12 +82,12 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">Value Max</label>
+                                                <label class="col-md-3" for="inputEmail1"><wicket:message key="kpipage.save.form.field.label.maxvalue"></wicket:message></label>
                                                 <div class="col-md-4">
-                                                    <input id="valueMax" name="valueMax" type="text" placeholder="valueMax" class="form-control"  wicket:id="valueMax" />
+                                                    <input id="valueMax" name="valueMax" type="text" wicket:message="placeholder:kpipage.save.form.field.placeholder.maxvalue" class="form-control"  wicket:id="valueMax" />
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <button type="button" name="btnmaxvalue" id="btnmaxvalue" class="btn btn-small btn-info col-md-5" wicket:id="maxValueMax">Max</button>
+                                                    <button type="button" name="btnmaxvalue" id="btnmaxvalue" class="btn btn-small btn-info col-md-5" wicket:id="maxValueMax"><wicket:message key="kpipage.save.form.field.button.maxvalue"></wicket:message></button>
                                                     <!--<button id="btnentity" name="btnentity" class="btn btn-small btn-info col-md-5" wicket:id="btnentity">...</button>-->
                                                 </div>
 
@@ -102,16 +99,16 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">Category *</label>
+                                                <label class="col-md-3" for="inputEmail1"><wicket:message key="kpipage.save.form.field.label.category"></wicket:message></label>
                                                 <div class="col-md-6">
-                                                    <select id="idProvider"  name="idProvider" type="text" placeholder="Provider" class="form-control"  wicket:id="providerType" ></select>
+                                                    <select id="idProvider"  name="idProvider" type="text" wicket:message="placeholder:kpipage.save.form.field.placeholder.category" class="form-control"  wicket:id="providerType" ></select>
                                                 </div>
                                             </div>
                                         </div>
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">Value Direction *</label>
+                                                <label class="col-md-3" for="inputEmail1"><wicket:message key="kpipage.save.form.field.label.dirvalue"></wicket:message></label>
                                                 <div class="col-md-6">
                                                     <select id="fvalueDirection" name="valueDirection"  class="form-control" wicket:id="valueDirection"></select>
                                                 </div>
@@ -122,7 +119,7 @@
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">Value Type *</label>
+                                                <label class="col-md-3" for="inputEmail1"><wicket:message key="kpipage.save.form.field.label.typvalue"></wicket:message></label>
                                                 <div class="col-md-6">
                                                     <select id="valueType" name="valueType" class="form-control" wicket:id="valueType"></select>
                                                     <!--<input id="valueType" name="valueType" type="text" placeholder="valueType" class="form-control" required="required" wicket:id="valueType">-->
@@ -133,7 +130,7 @@
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">Entity Type *</label>
+                                                <label class="col-md-3" for="inputEmail1"><wicket:message key="kpipage.save.form.field.label.typentity"></wicket:message></label>
                                                 <div class="col-md-6">
                                                     <select id="entityType" name="entityType" class="form-control"  wicket:id="entityType"></select>
                                                 </div>
@@ -142,9 +139,9 @@
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">Cron Expression *</label>
+                                                <label class="col-md-3" for="inputEmail1"><wicket:message key="kpipage.save.form.field.label.cron"></wicket:message></label>
                                                 <div class="col-md-6">
-                                                    <input id="cronExpression" name="cronExpression" type="text" placeholder="cronExpression" class="form-control" required="required" wicket:id="cronExpression" />
+                                                    <input id="cronExpression" name="cronExpression" type="text" wicket:message="placeholder:kpipage.save.form.field.placeholder.cron" class="form-control" required="required" wicket:id="cronExpression" />
                                                 </div>
                                             </div>
                                         </div>
@@ -152,9 +149,9 @@
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">Eviction Rate *</label>
+                                                <label class="col-md-3" for="inputEmail1"><wicket:message key="kpipage.save.form.field.label.evictrate"></wicket:message></label>
                                                 <div class="col-md-6">
-                                                    <input id="evictionRate" name="evictionRate" type="text" placeholder="evictionRate" class="form-control" required="required" wicket:id="evictionRate" />
+                                                    <input id="evictionRate" name="evictionRate" type="text" wicket:message="placeholder:kpipage.save.form.field.placeholder.evictrate" class="form-control" required="required" wicket:id="evictionRate" />
                                                 </div>
                                             </div>
                                         </div>
@@ -162,7 +159,7 @@
                                         <!-- Text input-->
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="col-md-3" for="inputEmail1">Eviction Type</label>
+                                                <label class="col-md-3" for="inputEmail1"><wicket:message key="kpipage.save.form.field.label.evicttype"></wicket:message></label>
                                                 <div class="col-md-6">
                                                     <select id="evictionType" name="evictionType"  class="form-control"  wicket:id="evictionType"></select>
                                                 </div>
@@ -178,9 +175,9 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <label class="col-md-2" for="inputEmail1">Formula *</label>
+                                        <label class="col-md-2" for="inputEmail1"><wicket:message key="kpipage.save.form.field.label.formula"></wicket:message></label>
                                         <div class="col-md-10">
-                                            <textarea id="formula" class="form-control" rows="6" wicket:id="formula"></textarea>
+                                            <textarea id="formula" class="form-control" wicket:message="placeholder:kpipage.save.form.field.tooltip.formula" rows="6" wicket:id="formula"></textarea>
                                             <!--<textarea id="formula" class="form-control codepress java linenumbers-off" rows="6" wicket:id="formula"></textarea>-->
                                         </div>
                                     </div>
@@ -188,8 +185,8 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <button id="addedit" name="addedit" class="btn btn-primary" wicket:id="submit">Save</button>
-                                            <button id="cancel" name="cancel" class="btn btn-primary" wicket:id="cancel">Cancel</button>
+                                            <button id="addedit" name="addedit" class="btn btn-primary" wicket:id="submit"><wicket:message key="global.button.save"></wicket:message></button>
+                                            <button id="cancel" name="cancel" class="btn btn-primary" wicket:id="cancel"><wicket:message key="global.button.cancel"></wicket:message></button>
                                         </div>
                                     </div>
                                 </div>

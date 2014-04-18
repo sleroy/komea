@@ -48,20 +48,20 @@ public class DepartmentForm extends Form<PersonGroup> {
         feedBack.setVisible(false);
         //field
         add(TextFieldBuilder.<String>createRequired("name", this.personGroup, "name").highlightOnErrors()
-                .simpleValidator(0, 255).withTooltip("Departement requires a name").build());
+                .simpleValidator(0, 255).withTooltip(getString("global.field.tooltip.name")).build());
         
         TextFieldBuilder<String> keyFieldBuilder = TextFieldBuilder.<String>createRequired("personGroupKey", this.personGroup, "personGroupKey")
-                .simpleValidator(0, 255).highlightOnErrors().withTooltip("Departement requires a Key");
+                .simpleValidator(0, 255).highlightOnErrors().withTooltip(getString("global.field.tooltip.key"));
         
          if (isNew) {
-            keyFieldBuilder.UniqueStringValidator("Department key", prService);
+            keyFieldBuilder.UniqueStringValidator(getString("global.field.tooltip.key"), prService);
         } else {
             keyFieldBuilder.buildTextField().setEnabled(false);
         }
          
         add(keyFieldBuilder.build());
         add(TextAreaBuilder.<String>create("description", this.personGroup, "description")
-                .simpleValidator(0, 2048).highlightOnErrors().withTooltip("Description can be add").build());
+                .simpleValidator(0, 2048).highlightOnErrors().withTooltip(getString("global.field.tooltip.description")).build());
 
 //        add(TextFieldBuilder.<String>create("idCustomer", this.project, "idCustomer").withTooltip("customer can be affected")
 //                .build());
@@ -89,7 +89,7 @@ public class DepartmentForm extends Form<PersonGroup> {
                 "btnAddPerson",
                 "btnDelPerson",
                 "selectedEntity",
-                "Choose team",
+                getString("departmentpage.save.form.field.popup.title.team"),
                 currentEntityList,
                 selectedEntity,
                 (List<IHasKey>) (List<?>) allTeamsPG,
@@ -110,7 +110,6 @@ public class DepartmentForm extends Form<PersonGroup> {
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
 
                 feedBack.setVisible(false);
-                info("Submitted information");
                 target.add(feedBack);
                 personGroup.setType(PersonGroupType.DEPARTMENT);
                 prService.saveOrUpdatePersonGroup(personGroup, (List<PersonGroup>) (List) currentEntityList, null, null);

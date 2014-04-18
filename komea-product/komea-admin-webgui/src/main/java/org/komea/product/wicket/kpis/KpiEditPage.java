@@ -57,9 +57,9 @@ public class KpiEditPage extends LayoutPage {
         final KpiForm kpiForm = new KpiForm(isNew, "form", kpiService, entityService, providerService, feedbackPanel, new CompoundPropertyModel<Kpi>(_kpi), this);
                 String message;
         if (isNew) {
-            message = "Add kpi";
+            message = getString("kpipage.save.add.title");
         } else {
-            message = "Edit kpi";
+            message = getString("kpipage.save.edit.title");
         }
         kpiForm.add(new Label("legend", message));
         add(kpiForm);
@@ -69,7 +69,7 @@ public class KpiEditPage extends LayoutPage {
 
     public String getTitle() {
 
-         return getString("KpiEditPage.title");
+         return getString("kpipage.main.title");
     }
 
 }

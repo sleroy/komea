@@ -203,7 +203,6 @@ public final class PersonForm extends Form<Person> {
 
             @Override
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
-//                errorModel.setObject("has-error");
                 feedBack.setVisible(true);
                 target.add(feedBack);
 
@@ -213,7 +212,6 @@ public final class PersonForm extends Form<Person> {
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
 
                 feedBack.setVisible(false);
-                info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
                 person.setUserBdd(savUserBdd);

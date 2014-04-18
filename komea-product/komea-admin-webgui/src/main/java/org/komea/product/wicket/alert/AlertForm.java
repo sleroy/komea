@@ -60,13 +60,13 @@ public class AlertForm extends Form<KpiAlertType> {
 
         //field
         add(TextFieldBuilder.<String>createRequired("name", this.alert, "name").highlightOnErrors()
-                .simpleValidator(0, 255).withTooltip("Alert requires a name").build());
+                .simpleValidator(0, 255).withTooltip(getString("global.field.tooltip.name")).build());
 
         TextFieldBuilder<String> keyField = TextFieldBuilder.<String>createRequired("alertKey", this.alert, "kpiAlertKey").highlightOnErrors()
-                .simpleValidator(0, 255).withTooltip("Alert requires a key");
+                .simpleValidator(0, 255).withTooltip(getString("global.field.tooltip.key"));
 
         if (isNew) {
-            keyField.UniqueStringValidator("Alert key", alertService);
+            keyField.UniqueStringValidator(getString("global.field.key"), alertService);
         } else {
             keyField.buildTextField().setEnabled(false);
         }
@@ -74,10 +74,10 @@ public class AlertForm extends Form<KpiAlertType> {
         add(keyField.build());
 
         add(TextFieldBuilder.<String>createRequired("value", this.alert, "value").highlightOnErrors()
-                .withTooltip("Alert requires a value").build());
+                .withTooltip(getString("alertpage.save.form.field.tooltip.condition")).build());
 
         add(TextAreaBuilder.<String>create("description", this.alert, "description")
-                .simpleValidator(0, 2048).highlightOnErrors().withTooltip("Description can be add").build());
+                .simpleValidator(0, 2048).highlightOnErrors().withTooltip(getString("global.field.tooltip.description")).build());
 
         
         add(SelectBoxBuilder.<Operator>createWithEnumCustom("operator", this.alert,
@@ -97,7 +97,7 @@ public class AlertForm extends Form<KpiAlertType> {
             nameEntity.setName(selectByPrimaryKey.getName());
         }
 
-        this.customerFiel = TextFieldBuilder.<String>createRequired("kpi", nameEntity, "name").withTooltip("kpi can be affected").buildTextField();
+        this.customerFiel = TextFieldBuilder.<String>createRequired("kpi", nameEntity, "name").withTooltip(getString("global.field.tooltip.kpi")).buildTextField();
         this.customerFiel.setOutputMarkupId(true);
         add(customerFiel);
 
@@ -127,7 +127,6 @@ public class AlertForm extends Form<KpiAlertType> {
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
 
                 feedBack.setVisible(false);
-                info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
                 alert.setEnabled(isAlertEnabled());
@@ -140,7 +139,7 @@ public class AlertForm extends Form<KpiAlertType> {
 
     public void initSelectKpi() {
         List<IHasKey> allKpi = (List<IHasKey>) (List<?>) kpiService.selectAll();
-        final SelectDialog DialogKpi = new SelectDialog("kpiDialog", "Choose a kpi", allKpi) {
+        final SelectDialog DialogKpi = new SelectDialog("kpiDialog", getString("global.field.popup.kpi"), allKpi) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {

@@ -50,12 +50,16 @@ public final class DepartmentPage extends LayoutPage
         
         final DataTable<PersonGroup, String> build =
                 DataTableBuilder.<PersonGroup, String> newTable("table")
-                        .addColumn("Department Key", "PersonGroupKey").addColumn("Name", "Name")
-                        .addColumn("Description", "Description")
+                        .addColumn(getString("global.field.key"), "PersonGroupKey").addColumn(getString("global.field.name"), "Name")
+                        .addColumn(getString("global.field.label.description"), "Description")
                         .withEditDeleteColumn(personGroupDeleteAction, personGroupEditAction)
                         .displayRows(listAffichage.size()+10).withData(dataProvider).build();
         add(build);
         
+    }
+      @Override
+    public String getTitle() {
+        return getString("departmentpage.main.title");
     }
     
 }

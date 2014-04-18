@@ -35,9 +35,9 @@ public final class AlertPage extends LayoutPage {
         final ISortableDataProvider<KpiAlertType, String> dataProvider = new ListDataModel(listAffichage);
           final DataTable<KpiAlertType, String> build =
                 DataTableBuilder.<KpiAlertType, String> newTable("table")
-                        .addColumn("Alert key", "KpiAlertKey")
-                        .addColumn("Name", "Name")
-                        .addColumn("Enabled", "Enabled")
+                        .addColumn(getString("alertpage.globale.table.column.key"), "KpiAlertKey")
+                        .addColumn(getString("alertpage.globale.table.column.name"), "Name")
+                        .addColumn(getString("alertpage.save.form.field.label.enabled"), "Enabled")
                         .withEditDeleteColumn(deleteAction, editAction)
                         .displayRows(listAffichage.size()+10).withData(dataProvider).build();
         add(build);

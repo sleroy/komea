@@ -44,12 +44,15 @@ public final class DepartmentEditPage extends LayoutPage {
                 feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this);
                 String message;
         if (isNew) {
-            message = "Add department";
+            message = getString("departmentpage.save.add.title");
         } else {
-            message = "Edit department";
+            message = getString("departmentpage.save.edit.title");
         }
         departmentForm.add(new Label("legend", message));
         add(departmentForm);
     }
-
+     @Override
+    public String getTitle() {
+        return getString("departmentpage.main.title");
+    }
 }

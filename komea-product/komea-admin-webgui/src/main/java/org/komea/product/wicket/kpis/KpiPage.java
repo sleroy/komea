@@ -54,8 +54,8 @@ public class KpiPage extends LayoutPage
         final ISortableDataProvider<Kpi, String> dataProvider =
                 new ListDataModel<Kpi>(listKpisResult);
         final DataTable<Kpi, String> build =
-                DataTableBuilder.<Kpi, String> newTable("table").addColumn("Kpi key", "KpiKey")
-                        .addColumn("Name", "Name").addColumn("Description", "Description")
+                DataTableBuilder.<Kpi, String> newTable("table").addColumn(getString("global.field.key"), "KpiKey")
+                        .addColumn(getString("global.field.name"), "Name").addColumn(getString("global.field.description"), "Description")
                         .withEditDeleteColumn(kpiDeleteAction, kpiEditAction)
                         .displayRows(listKpisResult.size() + 10).withData(dataProvider).build();
         add(build);
@@ -66,7 +66,7 @@ public class KpiPage extends LayoutPage
     public String getTitle() {
     
     
-        return getString("KpiPage.title");
+        return getString("kpipage.main.title");
     }
     
 }
