@@ -36,7 +36,7 @@ public final class CustomerPage extends LayoutPage {
         final IEditAction<Customer> editAction = new CustomerEditAction(this);
         final ISortableDataProvider<Customer, String> dataProvider = new ListDataModel(listAffichage);
           final DataTable<Customer, String> build =
-                DataTableBuilder.<Customer, String> newTable("table").addColumn("Name", "Name")
+                DataTableBuilder.<Customer, String> newTable("table").addColumn(getString("global.field.name"), "Name")
                         .withEditDeleteColumn(deleteAction, editAction)
                         .displayRows(listAffichage.size()+10).withData(dataProvider).build();
         add(build);
@@ -48,6 +48,6 @@ public final class CustomerPage extends LayoutPage {
     public String getTitle() {
     
     
-        return getString("CustomerPage.title");
+        return getString("customer.main.title");
     }
 }

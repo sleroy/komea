@@ -41,9 +41,9 @@ public final class CustomerEditPage extends LayoutPage {
         CustomerForm customerForm = new CustomerForm(isNew,"form", new CompoundPropertyModel<Customer>(_customer), customerService, feedbackPanel, this, _customer);
                 String message;
         if (isNew) {
-            message = "Add customer";
+            message = getString("customer.add.title");
         } else {
-            message = "Edit customer";
+            message = getString("customer.edit.title");
         }
         customerForm.add(new Label("legend", message));
         add(customerForm);
@@ -52,6 +52,6 @@ public final class CustomerEditPage extends LayoutPage {
     @Override
     public String getTitle() {
 
-        return getString("CustomerEditPage.title");
+        return getString("customer.main.title");
     }
 }
