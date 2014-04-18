@@ -3,7 +3,6 @@ package org.komea.product.backend.service.ldap;
 
 
 
-import javax.annotation.PostConstruct;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
@@ -11,6 +10,7 @@ import org.komea.product.api.service.errors.KomeaLdapConfigurationException;
 import org.komea.product.api.service.ldap.ILdapConnector;
 import org.komea.product.api.service.ldap.ILdapUserService;
 import org.komea.product.api.service.ldap.LdapUser;
+import org.komea.product.backend.plugin.api.PostSettingRegistration;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
@@ -69,7 +69,7 @@ import org.springframework.ldap.core.AttributesMapper;
                         value = "SIMPLE",
                         type = LdapAuthTypeEnum.class,
                         description = "Specify the type of authentication used (DIGEST_MD5, SIMPLE, SIMPLE_TLS, TLS_CERTIFICATE)") })
-public class LdapUserService implements ILdapUserService
+public class LdapUserService implements ILdapUserService, PostSettingRegistration
 {
     
     
@@ -113,18 +113,15 @@ public class LdapUserService implements ILdapUserService
     
     
     
-    public ICronRegistryService getRegistryService() {
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.plugin.api.PostSettingRegistration#afterSettingInitialisation()
+     */
+    @Override
+    public void afterSettingInitialisation() {
     
     
-        return registryService;
-    }
-    
-    
-    @PostConstruct
-    public void init() {
-    
-    
-        LOGGER.info("LDAP - LDAP");
+        LOGGER.info("LDAP - User service");
         try {
             
             final JobDataMap properties = initializeDataForCron();
@@ -141,6 +138,13 @@ public class LdapUserService implements ILdapUserService
     }
     
     
+    public ICronRegistryService getRegistryService() {
+    
+    
+        return registryService;
+    }
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.api.service.ldap.ILdapUserService#newConnector()
@@ -151,7 +155,7 @@ public class LdapUserService implements ILdapUserService
     
         final LdapConnector ldapConnector = new LdapConnector();
         ldapConnector.setSettingService(settingService);
-        ldapConnector.initConnector();
+        ldapConnector.afterSettingInitialisation();
         return ldapConnector;
     }
     

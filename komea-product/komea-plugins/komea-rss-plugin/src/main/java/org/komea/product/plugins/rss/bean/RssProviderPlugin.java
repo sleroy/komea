@@ -33,29 +33,31 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author sleroy
  */
 @ProviderPlugin(
-        eventTypes =
-            { @EventTypeDef(
-                    providerType = ProviderType.NEWS,
-                    description = "Rss provider plugin",
-                    enabled = true,
-                    entityType = EntityType.PROJECT,
-                    key = "rss-news",
-                    name = "Rss news",
-                    severity = Severity.MINOR) },
-        icon = "rss",
-        name = RssProviderPlugin.RSS_PROVIDER_PLUGIN,
-        type = ProviderType.NEWS,
-        url = "/rssnews")
+    eventTypes =
+        { @EventTypeDef(
+            providerType = ProviderType.NEWS,
+            description = "Rss provider plugin",
+            enabled = true,
+            entityType = EntityType.PROJECT,
+            key = "rss-news",
+            name = "Rss news",
+            severity = Severity.MINOR) },
+    icon = "rss",
+    name = RssProviderPlugin.RSS_PROVIDER_PLUGIN,
+    type = ProviderType.NEWS,
+    url = "/rssnews")
 @PluginAdminPages(@PluginMountPage(
-        pluginName = RssProviderPlugin.RSS_PROVIDER_PLUGIN,
-        page = RssRepositoryPage.class))
-@Properties(group = "RSS Plugin", value =
-    { @Property(
+    pluginName = RssProviderPlugin.RSS_PROVIDER_PLUGIN,
+    page = RssRepositoryPage.class))
+@Properties(
+    group = "RSS Plugin",
+    value =
+        { @Property(
             description = "Defines the cron value to fetch rss feeds",
             key = RssProviderPlugin.RSS_SETTING_CRON_NAME,
             type = String.class,
             value = RssProviderPlugin.RSS_SETTING_CRON_VALUE) })
-public class RssProviderPlugin
+public class RssProviderPlugin implements PostSettingRegistration
 {
     
     
@@ -102,6 +104,27 @@ public class RssProviderPlugin
     
     
         super();
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.plugin.api.PostSettingRegistration#afterSettingInitialisation()
+     */
+    @Override
+    public void afterSettingInitialisation() {
+    
+    
+        LOGGER.info("Initialisation du plugin RSS");
+        
+        final JobDataMap properties = prepareJobMapForCron();
+        
+        cronRegistryService.removeCronTask(RSS_CRON_JOB);
+        cronRegistryService.registerCronTask(RSS_CRON_JOB, RSS_SETTING_CRON_VALUE,
+                RssCronJob.class, properties);
+        cronRegistryService.updateCronFrequency(RSS_CRON_JOB,
+                registry.getProxy(RSS_SETTING_CRON_NAME).getStringValue());
+        
     }
     
     
@@ -161,26 +184,6 @@ public class RssProviderPlugin
     
     
         return rssRepository;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.ISettingListener#notifyPropertyChanged(org.komea.product.database.model.Setting)
-     */
-    @PostSettingRegistration
-    public void initializePluginWithProperties() {
-    
-    
-        LOGGER.info("Initialisation du plugin RSS");
-        
-        final JobDataMap properties = prepareJobMapForCron();
-        
-        cronRegistryService.removeCronTask(RSS_CRON_JOB);
-        cronRegistryService.registerCronTask(RSS_CRON_JOB, RSS_SETTING_CRON_VALUE,
-                RssCronJob.class, properties);
-        cronRegistryService.updateCronFrequency(RSS_CRON_JOB,
-                registry.getProxy(RSS_SETTING_CRON_NAME).getStringValue());
     }
     
     

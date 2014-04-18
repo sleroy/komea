@@ -43,7 +43,7 @@ import com.google.common.base.Strings;
  * @author JavaChap
  * @author sleroy
  */
-public class LdapConnector implements Closeable, ILdapConnector
+public class LdapConnector implements Closeable, ILdapConnector, PostSettingRegistration
 {
     
     
@@ -88,83 +88,10 @@ public class LdapConnector implements Closeable, ILdapConnector
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.backend.service.ldap.ILdapConnector#authenticate(java.lang.String, java.lang.String)
+     * @see org.komea.product.backend.plugin.api.PostSettingRegistration#afterSettingInitialisation()
      */
     @Override
-    public boolean authenticate(final String userName, final String password) {
-    
-    
-        final AndFilter filter = new AndFilter();
-        filter.and(new EqualsFilter("objectclass", "person"))
-                .and(new EqualsFilter("uid", userName));
-        return ldapTemplate.authenticate(DistinguishedName.EMPTY_PATH, filter.toString(), password);
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see java.io.Closeable#close()
-     */
-    
-    
-    @Override
-    public void close() throws IOException {
-    
-    
-        if (ldapTemplate != null) {
-            //
-        }
-    }
-    
-    
-    public ISettingService getSettingService() {
-    
-    
-        return settingService;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.ldap.ILdapConnector#getUser(java.lang.String)
-     */
-    @Override
-    public LdapUser getUser(final String userName) {
-    
-    
-        final AndFilter filter = new AndFilter();
-        filter.and(new EqualsFilter("objectclass", "person"))
-                .and(new EqualsFilter("uid", userName));
-        final List<LdapUser> users =
-                ldapTemplate.search(DistinguishedName.EMPTY_PATH, filter.encode(),
-                        new UserAttributesMapper());
-        if (!users.isEmpty()) { return users.get(0); }
-        return null;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.ldap.ILdapConnector#getUsers(java.lang.String)
-     */
-    @Override
-    public List<LdapUser> getUsers(final String pattern) {
-    
-    
-        final AndFilter filter = new AndFilter();
-        filter.and(new EqualsFilter("objectclass", "person"));
-        if (pattern != null) {
-            filter.and(new LikeFilter("uid", pattern));
-        }
-        final List<LdapUser> users =
-                ldapTemplate.search(DistinguishedName.EMPTY_PATH, filter.encode(),
-                        new UserAttributesMapper());
-        return users;
-    }
-    
-    
-    @PostSettingRegistration
-    public void initConnector() throws KomeaLdapConfigurationException {
+    public void afterSettingInitialisation() {
     
     
         LOGGER.info("LDAP - LDAP");
@@ -228,6 +155,83 @@ public class LdapConnector implements Closeable, ILdapConnector
             throw new KomeaLdapConfigurationException(e.getMessage(), e);
         }
         
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see java.io.Closeable#close()
+     */
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.ldap.ILdapConnector#authenticate(java.lang.String, java.lang.String)
+     */
+    @Override
+    public boolean authenticate(final String userName, final String password) {
+    
+    
+        final AndFilter filter = new AndFilter();
+        filter.and(new EqualsFilter("objectclass", "person"))
+                .and(new EqualsFilter("uid", userName));
+        return ldapTemplate.authenticate(DistinguishedName.EMPTY_PATH, filter.toString(), password);
+    }
+    
+    
+    @Override
+    public void close() throws IOException {
+    
+    
+        if (ldapTemplate != null) {
+            //
+        }
+    }
+    
+    
+    public ISettingService getSettingService() {
+    
+    
+        return settingService;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.ldap.ILdapConnector#getUser(java.lang.String)
+     */
+    @Override
+    public LdapUser getUser(final String userName) {
+    
+    
+        final AndFilter filter = new AndFilter();
+        filter.and(new EqualsFilter("objectclass", "person"))
+                .and(new EqualsFilter("uid", userName));
+        final List<LdapUser> users =
+                ldapTemplate.search(DistinguishedName.EMPTY_PATH, filter.encode(),
+                        new UserAttributesMapper());
+        if (!users.isEmpty()) { return users.get(0); }
+        return null;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.ldap.ILdapConnector#getUsers(java.lang.String)
+     */
+    @Override
+    public List<LdapUser> getUsers(final String pattern) {
+    
+    
+        final AndFilter filter = new AndFilter();
+        filter.and(new EqualsFilter("objectclass", "person"));
+        if (pattern != null) {
+            filter.and(new LikeFilter("uid", pattern));
+        }
+        final List<LdapUser> users =
+                ldapTemplate.search(DistinguishedName.EMPTY_PATH, filter.encode(),
+                        new UserAttributesMapper());
+        return users;
     }
     
     

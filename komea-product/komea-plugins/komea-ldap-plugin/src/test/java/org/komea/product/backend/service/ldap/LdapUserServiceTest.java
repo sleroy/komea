@@ -31,9 +31,13 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
-        locations =
-            { "classpath*:/spring/application-context-test.xml", "classpath*:/spring/security-spring-test.xml", "classpath*:/spring/ldap-spring-test.xml" })
-@TransactionConfiguration(defaultRollback = true)
+    locations =
+        {
+                "classpath*:/spring/application-context-test.xml",
+                    "classpath*:/spring/security-spring-test.xml",
+                    "classpath*:/spring/ldap-spring-test.xml" })
+@TransactionConfiguration(
+    defaultRollback = true)
 public class LdapUserServiceTest extends AbstractSpringIntegrationTestCase
 {
     
@@ -47,7 +51,7 @@ public class LdapUserServiceTest extends AbstractSpringIntegrationTestCase
     
     
     
-    @Test 
+    @Test
     public void testLdap() {
     
     
@@ -59,7 +63,7 @@ public class LdapUserServiceTest extends AbstractSpringIntegrationTestCase
         try {
             final LdapConnector ldapConnector = new LdapConnector();
             ldapConnector.setSettingService(service);
-            ldapConnector.initConnector();
+            ldapConnector.afterSettingInitialisation();
             
             final List<LdapUser> users = ldapConnector.getUsers(null);
             System.out.println(users);

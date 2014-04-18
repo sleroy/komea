@@ -261,9 +261,14 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     public List<Person> getAdministrators() {
     
     
+        final PersonRole adminRole = personRoleService.getAdminRole();
+        if (adminRole == null) {
+            LOGGER.warn("No admin role found, no administrator found");
+            return Collections.EMPTY_LIST;
+        }
         final PersonCriteria personCriteria = new PersonCriteria();
-        personCriteria.createCriteria().andIdPersonRoleEqualTo(
-                personRoleService.getAdminRole().getId());
+        
+        personCriteria.createCriteria().andIdPersonRoleEqualTo(adminRole.getId());
         return selectByCriteria(personCriteria);
     }
     

@@ -57,7 +57,7 @@ import org.springframework.transaction.annotation.Transactional;
                     type = RetentionPeriod.class,
                     value = "ONE_MONTH") })
 @Transactional
-public class EventViewerService implements IEventViewerService
+public class EventViewerService implements IEventViewerService, PostSettingRegistration
 {
     
     
@@ -81,6 +81,26 @@ public class EventViewerService implements IEventViewerService
     @Autowired
     private ISettingService         settingService;
     
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.plugin.api.PostSettingRegistration#afterSettingInitialisation()
+     */
+    @Override
+    public void afterSettingInitialisation() {
+    
+    
+        // TODO : improvement possible, autodetect previous modifications, do not replace statement by only chaning cache configuration.
+        
+        LOGGER.debug("Settings changed, requires updating of retention periods for events");
+        updateIfNecessaryEventStream(Severity.BLOCKER, RETENTION_EVENT_BLOCKER);
+        updateIfNecessaryEventStream(Severity.CRITICAL, RETENTION_EVENT_CRITICAL);
+        updateIfNecessaryEventStream(Severity.MAJOR, RETENTION_EVENT_MAJOR);
+        updateIfNecessaryEventStream(Severity.MINOR, RETENTION_EVENT_MINOR);
+        updateIfNecessaryEventStream(Severity.INFO, RETENTION_EVENT_INFO);
+        
+    }
     
     
     /**
@@ -157,23 +177,6 @@ public class EventViewerService implements IEventViewerService
     
     
         return settingService;
-    }
-    
-    
-    @PostSettingRegistration
-    public void initializeRetention() {
-    
-    
-        // TODO : improvement possible, autodetect previous modifications, do not replace statement by only chaning cache configuration.
-        
-        LOGGER.debug("Settings changed, requires updating of retention periods for events");
-        updateIfNecessaryEventStream(Severity.BLOCKER, RETENTION_EVENT_BLOCKER);
-        updateIfNecessaryEventStream(Severity.CRITICAL, RETENTION_EVENT_CRITICAL);
-        updateIfNecessaryEventStream(Severity.MAJOR, RETENTION_EVENT_MAJOR);
-        updateIfNecessaryEventStream(Severity.MINOR, RETENTION_EVENT_MINOR);
-        updateIfNecessaryEventStream(Severity.INFO, RETENTION_EVENT_INFO);
-        
-        
     }
     
     

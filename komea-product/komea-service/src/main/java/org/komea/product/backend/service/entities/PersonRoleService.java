@@ -12,6 +12,8 @@ import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.PersonRoleDao;
 import org.komea.product.database.model.PersonRole;
 import org.komea.product.database.model.PersonRoleCriteria;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +30,11 @@ public class PersonRoleService extends AbstractService<PersonRole, Integer, Pers
 {
     
     
+    private static final Logger LOGGER = LoggerFactory.getLogger("personrole-service");
+    
+    
     @Autowired
-    private PersonRoleDao requiredDAO;
+    private PersonRoleDao       requiredDAO;
     
     
     
@@ -43,7 +48,10 @@ public class PersonRoleService extends AbstractService<PersonRole, Integer, Pers
     
     
         final PersonRole singleOrNull = selectByKey("ADMIN");
-        Validate.notNull(singleOrNull);
+        if (singleOrNull == null) {
+            LOGGER.warn("No admin role found, may create a problem to generate administrators.");
+            return null;
+        }
         return singleOrNull;
     }
     

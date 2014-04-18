@@ -6,14 +6,9 @@ package org.komea.product.backend.service;
 import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.auth.IPasswordEncoder;
-import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonRoleService;
 import org.komea.product.backend.service.entities.IPersonService;
-import org.komea.product.backend.service.entities.IProviderService;
-import org.komea.product.backend.service.esper.IEventPushService;
-import org.komea.product.backend.service.plugins.IEventTypeService;
-import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.enums.UserBdd;
 import org.komea.product.database.model.Person;
 import org.slf4j.Logger;
@@ -21,52 +16,43 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 
 
 /**
  */
 @Component
+@Transactional
 public class AdminCheckerBean
 {
     
     
-    private static final Logger  LOGGER = LoggerFactory.getLogger("admin-controller");
+    private static final Logger LOGGER = LoggerFactory.getLogger("admin-controller");
     
-    @Autowired
-    private CustomerDao          customerDao;
     
     @Value("#{authProperties.defaultAdminPassword}")
-    private String               defaultAdminPassword;
+    private String              defaultAdminPassword;
     
     @Autowired
-    private IPasswordEncoder     encoder;
+    private IPasswordEncoder    encoder;
     
     @Autowired
-    private IEventPushService    eventPushService;
+    private IPersonService      personDAO;
     
     @Autowired
-    private IEventTypeService    eventTypeDAO;
+    private IPersonGroupService personGroupDao;
     
     @Autowired
-    private IPersonService       personDAO;
-    
-    @Autowired
-    private IPersonGroupService  personGroupDao;
-    
-    @Autowired
-    private IPersonRoleService   personRoleDao;
-    
-    @Autowired
-    private IProviderService     providerDao;
+    private IPersonRoleService  personRoleDao;
     
     
-    @Autowired
-    private ICronRegistryService registry;
     
-    @Autowired
-    private UserRoleDataBean     userRoleDataBean;
+    public IPasswordEncoder getEncoder() {
     
+    
+        return encoder;
+    }
     
     
     /**
@@ -78,6 +64,27 @@ public class AdminCheckerBean
     
     
         return personGroupDao;
+    }
+    
+    
+    public IPersonService getPersonDAO() {
+    
+    
+        return personDAO;
+    }
+    
+    
+    public IPersonGroupService getPersonGroupDao() {
+    
+    
+        return personGroupDao;
+    }
+    
+    
+    public IPersonRoleService getPersonRoleDao() {
+    
+    
+        return personRoleDao;
     }
     
     
@@ -103,6 +110,13 @@ public class AdminCheckerBean
     }
     
     
+    public void setEncoder(final IPasswordEncoder _encoder) {
+    
+    
+        encoder = _encoder;
+    }
+    
+    
     /**
      * Method setIPersonGroupService.
      * 
@@ -113,6 +127,27 @@ public class AdminCheckerBean
     
     
         personGroupDao = _personGroupDao;
+    }
+    
+    
+    public void setPersonDAO(final IPersonService _personDAO) {
+    
+    
+        personDAO = _personDAO;
+    }
+    
+    
+    public void setPersonGroupDao(final IPersonGroupService _personGroupDao) {
+    
+    
+        personGroupDao = _personGroupDao;
+    }
+    
+    
+    public void setPersonRoleDao(final IPersonRoleService _personRoleDao) {
+    
+    
+        personRoleDao = _personRoleDao;
     }
     
     

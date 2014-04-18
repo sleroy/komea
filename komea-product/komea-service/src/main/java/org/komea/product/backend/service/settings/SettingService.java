@@ -27,12 +27,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -365,19 +363,11 @@ public class SettingService implements ISettingService, BeanPostProcessor, Appli
     private void triggerPostSettingMethod(final Object _bean, final String _beanName) {
     
     
-        for (final Method method : _bean.getClass().getMethods()) {
-            if (AnnotationUtils.findAnnotation(method, PostSettingRegistration.class) != null) {
-                LOGGER.info(
-                        "Bean  {} requires additional step of initialization once settings are registered",
-                        _beanName);
-                try {
-                    method.invoke(_bean);
-                } catch (final Exception e) {
-                    throw new FatalBeanException("Could not perform initialization of the bean "
-                            + _beanName + " once the settings are registered", e);
-                }
-                
-            }
+        if (_bean instanceof PostSettingRegistration) {
+            LOGGER.info(
+                    "Bean  {} requires additional step of initialization once settings are registered",
+                    _beanName);
+            ((PostSettingRegistration) _bean).afterSettingInitialisation();
         }
     }
     
