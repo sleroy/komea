@@ -57,7 +57,7 @@ public class CEPStatement<T extends Serializable> implements ICEPStatement<T>
     public List<T> getAggregateView() {
     
     
-        final ArrayList<T> newArrayListWithCapacity = new ArrayList<>(1000);
+        final ArrayList<T> newArrayListWithCapacity = new ArrayList<T>(1000);
         
         for (final ICEPEventStorage<T> storage : storages) {
             newArrayListWithCapacity.addAll(storage.getCache().getAllValues());

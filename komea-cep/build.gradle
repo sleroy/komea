@@ -75,6 +75,12 @@ allprojects {
     apply plugin: "idea"
     apply plugin: "cobertura"
 
+
+    compileJava {
+	sourceCompatibility = 1.6
+	targetCompatibility = 1.6
+     }
+
     cobertura {
      coverageFormats=['xml', 'html']
      coverageIgnoreTrivial=true;    
