@@ -74,14 +74,14 @@ public class PersonAddPage extends LayoutPage {
                         new CompoundPropertyModel<Person>(_person), this, personGroupService);
                 String message;
         if (isNew) {
-            message = "Add user";
+            message = getString("memberpage.save.add.title");
         } else {
-            message = "Edit user";
+            message = getString("memberpage.save.edit.title");
         }
         personForm.add(new Label("legend", message));
         add(personForm);
 
-        final SelectDialog dialogPersonGroup = new SelectDialog("dialogGroup", "Choose a team or department", (List<IHasKey>) (List<?>) personGroupService.selectAll()) {
+        final SelectDialog dialogPersonGroup = new SelectDialog("dialogGroup", getString("memberpage.save.form.field.tooltip.memberof"), (List<IHasKey>) (List<?>) personGroupService.selectAll()) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
@@ -121,7 +121,7 @@ public class PersonAddPage extends LayoutPage {
     public List<? extends Entry<String, Class>> getMiddleLevelPages() {
 
         return Collections.singletonList(new KomeaEntry<String, Class>(
-                getString("PersonPage.title"), PersonPage.class));
+                getString("memberpage.main.title"), PersonPage.class));
 
     }
 
@@ -184,6 +184,6 @@ public class PersonAddPage extends LayoutPage {
     @Override
     public String getTitle() {
 
-        return getString("PersonAddPage.title");
+        return getString("memberpage.main.title");
     }
 }

@@ -92,10 +92,10 @@ public final class PersonForm extends Form<Person> {
         add(feedBack);
         this.groupName = new NameGeneric("");
         TextFieldBuilder<String> keyField = TextFieldBuilder.<String>createRequired("login", person, "login")
-                .simpleValidator(3, 255).withTooltip("User requires a login.").highlightOnErrors();
+                .simpleValidator(3, 255).withTooltip(getString("global.save.form.field.tooltip.login")).highlightOnErrors();
 
         if (isNew) {
-            keyField.UniqueStringValidator("login", personService);
+            keyField.UniqueStringValidator(getString("global.save.form.field.label.login"), personService);
         } else {
             keyField.buildTextField().setEnabled(false);
         }
@@ -105,7 +105,7 @@ public final class PersonForm extends Form<Person> {
         if (selectByPrimaryKey != null) {
             this.groupName.setName(selectByPrimaryKey.getName());
         }
-        groupField = TextFieldBuilder.<String>create("group", this.groupName, "name").withTooltip("Use can be put in group").buildTextField();
+        groupField = TextFieldBuilder.<String>create("group", this.groupName, "name").withTooltip(getString("memberpage.save.form.field.tooltip.memberof")).buildTextField();
         add(groupField);
 
         if (person.getUserBdd() == null) {
@@ -113,7 +113,7 @@ public final class PersonForm extends Form<Person> {
         }
         savUserBdd = person.getUserBdd();
         add(SelectBoxBuilder.<UserBdd>createWithEnumRequire("userBdd", person,
-                UserBdd.class).build());
+                UserBdd.class).withTooltip(getString("memberpage.save.form.field.tooltip.userorigin")).build());
 
         if (this.person.getId() != null) {
 
@@ -126,7 +126,7 @@ public final class PersonForm extends Form<Person> {
                 "btnAddPerson",
                 "btnDelPerson",
                 "selectedEntity",
-                "Choose person",
+                getString("memberpage.save.form.field.tooltip.projects"),
                 currentEntityList,
                 selectedEntity,
                 (List<IHasKey>) (List<?>) this.projectService.selectAll(),
@@ -140,11 +140,11 @@ public final class PersonForm extends Form<Person> {
 
     public void initClassicField() {
         add(TextFieldBuilder.<String>createRequired("firstname", person, "firstName")
-                .simpleValidator(2, 255).withTooltip("User requires a first name.")
+                .simpleValidator(2, 255).withTooltip(getString("memberpage.save.form.field.tooltip.firstn"))
                 .highlightOnErrors().build());
         add(TextFieldBuilder.<String>createRequired("lastname", person, "lastName")
                 .simpleValidator(2, 255).highlightOnErrors()
-                .withTooltip("User requires a last name.").build());
+                .withTooltip(getString("memberpage.save.form.field.tooltip.lastn")).build());
 
         isAdmin = Boolean.FALSE;
         Integer idPersonRole = person.getIdPersonRole();
@@ -162,7 +162,7 @@ public final class PersonForm extends Form<Person> {
         }
         person.setPassword("00000");
         password = (PasswordTextField) TextFieldBuilder.createPassword("password", person, "password")
-                .simpleValidator(5, 255).withTooltip("User requires a password").highlightOnErrors()
+                .simpleValidator(5, 255).withTooltip(getString("global.save.form.field.tooltip.password")).highlightOnErrors()
                 .build();
         password.setConvertEmptyInputStringToNull(false);
         password.setResetPassword(false);
@@ -192,7 +192,7 @@ public final class PersonForm extends Form<Person> {
 
         add(checkBox);
         TextField<String> emailTextField = TextFieldBuilder.<String>createRequired("email", person, "email")
-                .withTooltip("User requires a valid email.").highlightOnErrors().buildTextField();
+                .withTooltip(getString("memberpage.save.form.field.tooltip.email")).highlightOnErrors().buildTextField();
         emailTextField.add(EmailAddressValidator.getInstance());
         add(emailTextField);
     }

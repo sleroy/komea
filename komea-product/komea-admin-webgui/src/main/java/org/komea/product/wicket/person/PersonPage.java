@@ -50,8 +50,8 @@ public class PersonPage extends LayoutPage
                 new ListDataModel(listAffichage);
         
         add(DataTableBuilder.<Person, String> newTable("table")
-                .addColumn(new LoginColumn(Model.of("Login"))).addColumn("Last name", "lastName")
-                .addColumn("First name", "firstName").addColumn("Email", "email")
+                .addColumn(new LoginColumn(Model.of(getString("global.save.form.field.label.login")))).addColumn(getString("memberpage.save.form.field.label.lastn"), "lastName")
+                .addColumn(getString("memberpage.save.form.field.label.firstn"), "firstName").addColumn(getString("memberpage.save.form.field.label.email"), "email")
                 .withEditDeleteColumn(personDeleteAction, personEditAction).displayRows(listAffichage.size()+10)
                 .withData(dataProvider).build());
         
@@ -63,7 +63,7 @@ public class PersonPage extends LayoutPage
     public String getTitle() {
     
     
-        return getString("PersonPage.title");
+        return getString("memberpage.main.title");
     }
     
 }
