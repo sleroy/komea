@@ -7,8 +7,7 @@ package org.komea.product.plugins.bugzilla.api;
 
 import java.io.Closeable;
 import java.util.List;
-
-import org.komea.product.plugins.bugzilla.model.BugzillaBug;
+import org.komea.product.plugins.bugzilla.model.BzBug;
 
 /**
  *
@@ -20,7 +19,7 @@ public interface IBZServerProxy extends Closeable {
      *
      * @return
      */
-    public List<String> getListProjects();
+    public List<String> getProductNames();
 
     /**
      * get list of bugs in bugzilla server
@@ -28,7 +27,7 @@ public interface IBZServerProxy extends Closeable {
      * @param Project
      * @return
      */
-    public List<BugzillaBug> getListBugs(String Project);
+    public List<BzBug> getBugs(String Project);
 
     public List<String> getSeverities();
 
