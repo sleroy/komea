@@ -29,7 +29,10 @@ public class ClassUtils
     
         try {
             return _class.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException  e) {
+            throw new CouldNotCreateBeanException(_class, e);
+            
+	} catch (IllegalAccessException e) {
             throw new CouldNotCreateBeanException(_class, e);
             
         }

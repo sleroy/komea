@@ -29,7 +29,7 @@ public class CEPConfiguration implements ICEPConfiguration
     
     private IEventBridgeFactory       bridgeFactory;
     private ICacheStorageFactory      cacheStorageFactory;
-    private final Map<String, String> extraProperties      = new HashMap<>();
+    private final Map<String, String> extraProperties      = new HashMap<String, String>();
     private RunningMode               mode                 = RunningMode.AGILE;
     private int                       numberQueryListeners = 1;
     private File                      storageFolder;

@@ -28,7 +28,7 @@ public class QueryAdministrator implements IQueryAdministrator
     
     
     private final IEventBridge eventBridge;
-    private final Map<String, ICEPQuery> queryCatalog = new ConcurrentHashMap<>(100);
+    private final Map<String, ICEPQuery> queryCatalog = new ConcurrentHashMap<String, ICEPQuery>(100);
     
     
     
