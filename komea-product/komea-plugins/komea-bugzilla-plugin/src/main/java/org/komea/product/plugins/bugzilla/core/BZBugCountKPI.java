@@ -3,6 +3,7 @@
  */
 package org.komea.product.plugins.bugzilla.core;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
@@ -38,6 +39,7 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
     public static BZBugCountKPI create(final BzSearch... searchs) {
         return new BZBugCountKPI(Arrays.asList(searchs));
     }
+
     private final List<BzSearch> searchs;
 
     @Autowired
@@ -48,6 +50,16 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
 
     @Autowired
     private IBZServerProxyFactory proxyFactory;
+
+    public BZBugCountKPI(final String searchs) {
+        final String[] searchsString = searchs.split("#");
+        final List<BzSearch> bzSearchs = new ArrayList<BzSearch>(searchsString.length);
+        for (final String searchString : searchsString) {
+            final BzSearch bzSearch = BzSearch.fromString(searchString);
+            bzSearchs.add(bzSearch);
+        }
+        this.searchs = bzSearchs;
+    }
 
     public BZBugCountKPI(final List<BzSearch> searchs) {
         super();

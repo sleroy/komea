@@ -1,5 +1,6 @@
 package org.komea.product.plugins.bugzilla.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,6 +12,16 @@ public class BzSearch {
 
     public static BzSearch create(final BzFilter... filters) {
         return new BzSearch(Arrays.asList(filters));
+    }
+
+    public static BzSearch fromString(String searchString) {
+        final String[] filtersString = searchString.split(";");
+        final List<BzFilter> filters = new ArrayList<BzFilter>(filtersString.length);
+        for (final String filterString : filtersString) {
+            final BzFilter bzFilter = BzFilter.fromString(filterString);
+            filters.add(bzFilter);
+        }
+        return new BzSearch(filters);
     }
 
     private final Map<String, BzFilter> filters;
@@ -33,6 +44,11 @@ public class BzSearch {
     public List<String> getValues(final String parameterKey) {
         final BzFilter filter = filters.get(parameterKey);
         return filter == null ? null : filter.getValues();
+    }
+
+    @Override
+    public String toString() {
+        return "BzSearch{" + "filters=" + filters + '}';
     }
 
 }

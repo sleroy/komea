@@ -152,6 +152,18 @@ public class BZBugCountKPITest {
         Assert.assertEquals(Integer.valueOf(3), results.get(1));
     }
 
+    @Test
+    public void testGetResultFromStringFormula() {
+        final BZBugCountKPI kpi = new BZBugCountKPI(
+                "status=open,closed;resolution=fixed#status=closed;resolution=assigned");
+        kpi.setBugZillaConfiguration(bugZillaConfigurationMock);
+        kpi.setProxyFactory(proxyFactoryMock);
+        kpi.setProjectService(projectService);
+        final Map<Integer, Integer> results = getResults(kpi);
+        Assert.assertEquals(1, results.size());
+        Assert.assertEquals(Integer.valueOf(3), results.get(1));
+    }
+
     private Map<Integer, Integer> getResults(final BZBugCountKPI kpi) {
         final ICEPResult result = kpi.getResult();
         final ITupleResultMap<Integer> map = result.asMap();
