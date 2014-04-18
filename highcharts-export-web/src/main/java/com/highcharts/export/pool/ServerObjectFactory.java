@@ -31,6 +31,7 @@ public class ServerObjectFactory implements ObjectFactory<Server> {
     private int maxTimeout;
     private static HashMap<Integer, PortStatus> portUsage = new HashMap<Integer, PortStatus>();
     protected static Logger logger = Logger.getLogger("pool");
+    private static Server server;
 
     private enum PortStatus {
 
@@ -41,10 +42,15 @@ public class ServerObjectFactory implements ObjectFactory<Server> {
     @Override
     public Server create() {
         logger.debug("in makeObject, " + exec + ", " + script + ", " + host);
-        Integer port = this.getAvailablePort();
-        portUsage.put(port, PortStatus.BUSY);
-        final String execLocation = this.getExecLocation();
-        return new Server(execLocation, script, host, port, connectTimeout, readTimeout, maxTimeout);
+        synchronized (this) {
+            if (server == null) {
+                Integer port = this.getAvailablePort();
+                portUsage.put(port, PortStatus.BUSY);
+                final String execLocation = this.getExecLocation();
+                server = new Server(execLocation, script, host, port, connectTimeout, readTimeout, maxTimeout);
+            }
+        }
+        return server;
     }
 
     @Override
