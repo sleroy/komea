@@ -6,11 +6,13 @@ package org.komea.product.backend.service.kpi;
 
 
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.database.dao.MeasureDao;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.junit.Assert.assertTrue;
 
 
 
@@ -22,11 +24,19 @@ public class HistoryPurgePerValuesActionTest
 {
     
     
-    @InjectMocks
-    private HistoryPurgePerValuesAction historyPurgePerValuesAction;
-    
-    
     @Mock
-    private MeasureDao                  measureDAO;
+    private MeasureDao measureDAO;
+    
+    
+    
+    /**
+     * Test method for {@link org.komea.product.backend.service.kpi.HistoryPurgePerValuesAction#purgeHistory()}.
+     */
+    @Test
+    public void testPurgeHistory() throws Exception {
+    
+    
+        assertTrue("Not yet implemented.", false);
+    }
     
 }
