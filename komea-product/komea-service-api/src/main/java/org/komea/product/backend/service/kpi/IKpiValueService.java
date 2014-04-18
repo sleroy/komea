@@ -15,13 +15,11 @@ import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.KpiKey;
-import org.springframework.transaction.annotation.Transactional;
 
 
 
 /**
  * @author sleroy
- *
  */
 public interface IKpiValueService
 {
@@ -38,19 +36,19 @@ public interface IKpiValueService
      *            the entity.
      * @return the measure
      */
-    public abstract Measure getLastMeasureOfKpi(Kpi findKPIOrFail, IEntity entity);
+    public Measure getLastMeasureOfKpi(Kpi findKPIOrFail, IEntity entity);
     
     
     /**
      * @return the measureService
      */
-    public abstract IHistoryService getMeasureService();
+    public IHistoryService getMeasureService();
     
     
-    public abstract Measure getRealTimeMeasure(KpiKey _key);
+    public Measure getRealTimeMeasure(KpiKey _key);
     
     
-    public abstract List<Measure> getRealTimeMeasuresFromEntities(
+    public List<Measure> getRealTimeMeasuresFromEntities(
             List<Kpi> kpis,
             List<BaseEntityDto> entities);
     
@@ -64,7 +62,7 @@ public interface IKpiValueService
      * @see org.komea.product.cep.tester.IKPIService#getSingleValue(KpiKey)
      */
     
-    public abstract Number getSingleValue(KpiKey _kpiKey);
+    public Number getSingleValue(KpiKey _kpiKey);
     
     
     /**
@@ -76,7 +74,7 @@ public interface IKpiValueService
      *            the value.
      */
     
-    public abstract void storeMeasureOfAKpiInDatabase(KpiKey _kpiKey, Number _kpiValue);
+    public void storeMeasureOfAKpiInDatabase(KpiKey _kpiKey, Number _kpiValue);
     
     
     /**
@@ -87,6 +85,6 @@ public interface IKpiValueService
      * @throws KPINotFoundException
      * @see org.komea.product.cep.tester.IKPIService#storeValueInHistory(KpiKey)
      */
-    public abstract void storeValueInHistory(KpiKey _kpiKey) throws KPINotFoundException;
+    public void storeValueInHistory(KpiKey _kpiKey) throws KPINotFoundException;
     
 }

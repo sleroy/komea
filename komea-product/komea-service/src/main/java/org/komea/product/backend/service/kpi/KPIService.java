@@ -5,7 +5,6 @@ package org.komea.product.backend.service.kpi;
 
 import java.util.List;
 
-import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.api.exceptions.KpiAlreadyExistingException;
@@ -62,8 +61,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Autowired
     private IEntityService           entityService;
     
-    @Autowired
-    private IEventEngineService      esperEngine;
     
     @Autowired
     private IKpiQueryRegisterService kpiQueryRegistry;
@@ -157,16 +154,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
     
         return entityService;
-    }
-    
-    
-    /**
-     * @return the esperEngine
-     */
-    public final IEventEngineService getEsperEngine() {
-    
-    
-        return esperEngine;
     }
     
     
@@ -398,17 +385,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
     
         entityService = _entityService;
-    }
-    
-    
-    /**
-     * @param _esperEngine
-     *            the esperEngine to set
-     */
-    public final void setEsperEngine(final IEventEngineService _esperEngine) {
-    
-    
-        esperEngine = _esperEngine;
     }
     
     

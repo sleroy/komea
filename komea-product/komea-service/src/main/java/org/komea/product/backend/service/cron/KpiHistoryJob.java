@@ -3,7 +3,7 @@ package org.komea.product.backend.service.cron;
 
 
 
-import org.komea.product.backend.service.kpi.IKPIService;
+import org.komea.product.backend.service.kpi.IKpiValueService;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.service.dto.KpiKey;
@@ -32,7 +32,7 @@ public class KpiHistoryJob implements Job
     private Kpi                 kpi;
     
     @Autowired
-    private IKPIService         kpiService;
+    private IKpiValueService    kpiService;
     
     
     
@@ -67,7 +67,7 @@ public class KpiHistoryJob implements Job
     }
     
     
-    public IKPIService getKpiService() {
+    public IKpiValueService getKpiService() {
     
     
         return kpiService;
@@ -88,7 +88,7 @@ public class KpiHistoryJob implements Job
     }
     
     
-    public void setKpiService(final IKPIService _kpiService) {
+    public void setKpiService(final IKpiValueService _kpiService) {
     
     
         kpiService = _kpiService;
