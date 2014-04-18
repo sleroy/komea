@@ -45,9 +45,6 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService
     
     private static final Logger              LOGGER = LoggerFactory.getLogger("kpi-query-register");
     
-    private static final Logger              LOGGER =
-                                                            LoggerFactory
-                                                                    .getLogger(KpiQueryRegisterService.class);
     
     @Autowired
     private ICronRegistryService             cronRegistry;
