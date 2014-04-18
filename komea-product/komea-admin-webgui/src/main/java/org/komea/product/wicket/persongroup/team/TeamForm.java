@@ -72,13 +72,13 @@ public class TeamForm extends Form<PersonGroup> {
         currentProjectList = new ArrayList<IHasKey>();
 
         add(TextFieldBuilder.<String>createRequired("name", this.personGroup, "name").highlightOnErrors()
-                .simpleValidator(0, 255).withTooltip("Team requires a name").build());
+                .simpleValidator(0, 255).withTooltip(getString("global.field.tooltip.name")).build());
         TextFieldBuilder<String> keyFieldBuilder = TextFieldBuilder.<String>createRequired("personGroupKey", this.personGroup, "personGroupKey")
                 .simpleValidator(0, 255)
                 .highlightOnErrors()
-                .withTooltip("Team requires a Key");
+                .withTooltip(getString("global.field.tooltip.key"));
         if (isNew) {
-            keyFieldBuilder.UniqueStringValidator("Team key", prService);
+            keyFieldBuilder.UniqueStringValidator(getString("global.field.key"), prService);
         } else {
             keyFieldBuilder.buildTextField().setEnabled(false);
         }
@@ -86,7 +86,7 @@ public class TeamForm extends Form<PersonGroup> {
         add(keyFieldBuilder.build());
 
         add(TextAreaBuilder.<String>create("description", this.personGroup, "description")
-                .simpleValidator(0, 2048).highlightOnErrors().withTooltip("Description can be add").build());
+                .simpleValidator(0, 2048).highlightOnErrors().withTooltip(getString("global.field.tooltip.description")).build());
 
         if (this.personGroup.getIdPersonGroupParent() != null) {
             PersonGroup selectByPrimaryKey = this.prService.selectByPrimaryKey(this.personGroup.getIdPersonGroupParent());
@@ -95,7 +95,7 @@ public class TeamForm extends Form<PersonGroup> {
             }
         }
 
-        this.parentField = TextFieldBuilder.<String>create("parent", this.parentName, "name").withTooltip("Parent can be affected").buildTextField();
+        this.parentField = TextFieldBuilder.<String>create("parent", this.parentName, "name").withTooltip(getString("teampage.save.form.field.tooltip.department")).buildTextField();
         this.parentField.setOutputMarkupId(true);
         add(this.parentField);
 
@@ -110,7 +110,7 @@ public class TeamForm extends Form<PersonGroup> {
                 "btnAddPerson",
                 "btnDelPerson",
                 "selectedPerson",
-                "Choose person",
+                getString("teampage.save.form.field.tooltip.members"),
                 currentPersonList,
                 selectedPerson,
                 (List<IHasKey>) (List<?>) this.personService.selectAll(),
@@ -122,7 +122,7 @@ public class TeamForm extends Form<PersonGroup> {
                 "btnAddProject",
                 "btnDelProject",
                 "selectedProject",
-                "Choose Project",
+                getString("teampage.save.form.field.tooltip.projects"),
                 currentProjectList,
                 selectedProject,
                 (List<IHasKey>) (List<?>) this.projectService.selectAll(),
@@ -151,7 +151,6 @@ public class TeamForm extends Form<PersonGroup> {
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
 
                 feedBack.setVisible(false);
-                info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
                 personGroup.setType(PersonGroupType.TEAM);
@@ -164,7 +163,7 @@ public class TeamForm extends Form<PersonGroup> {
 
     public void initSelectDepartment() {
         List<IHasKey> allDepartmentsPG = (List<IHasKey>) (List<?>) prService.getAllDepartmentsPG();
-        final SelectDialog dialogPersonGroup = new SelectDialog("dialogParent", "Choose a department", allDepartmentsPG) {
+        final SelectDialog dialogPersonGroup = new SelectDialog("dialogParent", getString("teampage.save.form.field.popup.title.department"), allDepartmentsPG) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {

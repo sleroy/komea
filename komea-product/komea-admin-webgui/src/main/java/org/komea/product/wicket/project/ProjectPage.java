@@ -48,12 +48,15 @@ public class ProjectPage extends LayoutPage
                 new ListDataModel(listAffichage);
         final DataTable<Project, String> build
                 = DataTableBuilder.<Project, String>newTable("table")
-                .addColumn("Project key", "ProjectKey").addColumn("Name", "Name")
-                .addColumn("Description", "Description")
+                .addColumn(getString("global.field.key"), "ProjectKey").addColumn(getString("global.field.name"), "Name")
+                .addColumn(getString("global.field.label.description"), "Description")
                 .withEditDeleteColumn(projectDeleteAction, projectEditAction)
                 .displayRows(listAffichage.size()+10).withData(dataProvider).build();
         add(build);
         
     }
-    
+       @Override
+    public String getTitle() {
+        return getString("project.main.title");
+    }
 }

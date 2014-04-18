@@ -63,9 +63,9 @@ public class ProjectEditPage extends LayoutPage {
         final ProjectForm projectForm = new ProjectForm(_isNew, "form", personService, personGroupService, this.projectService, customerDao, feedbackPanel, new CompoundPropertyModel<Project>(_object), this);
                 String message;
         if (_isNew) {
-            message = "Add project";
+            message = getString("project.main.add");
         } else {
-            message = "Edit project";
+            message = getString("project.main.edit");
         }
         projectForm.add(new Label("legend", message));
         add(projectForm);
@@ -75,7 +75,7 @@ public class ProjectEditPage extends LayoutPage {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         List<IHasKey> selectByCriteria = (List<IHasKey>) (List<?>) customerDao.selectByCriteria(new CustomerCriteria());
         final SelectDialog dialogCustomer;
-        dialogCustomer = new SelectDialog("dialogCustomer", "Choose a customer", selectByCriteria) {
+        dialogCustomer = new SelectDialog("dialogCustomer", getString("project.form.popup.customer"), selectByCriteria) {
 
             @Override
             public void onClose(AjaxRequestTarget target, DialogButton button) {
@@ -108,5 +108,9 @@ public class ProjectEditPage extends LayoutPage {
 
             }
         });
+    }
+           @Override
+    public String getTitle() {
+        return getString("project.main.title");
     }
 }

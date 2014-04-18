@@ -37,10 +37,10 @@ public class CustomerForm extends Form<Customer> {
         this.customer = _customer;
         feedBack.setVisible(false);
         TextFieldBuilder<String> keyField = TextFieldBuilder.<String>createRequired("name", this.customer, "name").highlightOnErrors()
-                .simpleValidator(0, 255).withTooltip("Customer requires a name");
+                .simpleValidator(0, 255).withTooltip(getString("global.field.tooltip.name"));
 
         if (isNew) {
-            keyField.UniqueStringValidator("name", customerService);
+            keyField.UniqueStringValidator(getString("global.field.name"), customerService);
         } else {
             keyField.buildTextField().setEnabled(false);
         }
@@ -71,7 +71,6 @@ public class CustomerForm extends Form<Customer> {
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
 
                 feedBack.setVisible(false);
-                info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
                 customerService.saveOrUpdate(customer);

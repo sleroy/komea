@@ -53,17 +53,22 @@ public class TeamEditPage extends LayoutPage {
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
 
-        final TeamForm teamForm = new TeamForm(isNew,"form", projectService, personService, prService,
+        final TeamForm teamForm = new TeamForm(isNew, "form", projectService, personService, prService,
                 feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this);
-                String message;
+        String message;
         if (isNew) {
-            message = "Add team";
+            message = getString("teampage.save.add.title");
         } else {
-            message = "Edit team";
+            message = getString("teampage.save.edit.title");
         }
         teamForm.add(new Label("legend", message));
         add(teamForm);
 
+    }
+
+    @Override
+    public String getTitle() {
+        return getString("teampage.main.title");
     }
 
 }

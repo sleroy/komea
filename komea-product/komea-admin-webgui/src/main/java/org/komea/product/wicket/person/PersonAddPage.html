@@ -15,7 +15,7 @@
         <div class="container">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <span class="glyphicon cicon-user"></span> Manage Population of developers inside Komea
+                    <span class="glyphicon cicon-user"></span>
                 </div>
                 <div class="panel-body">
                     <div class="container">
@@ -29,34 +29,34 @@
                                 <legend wicket:id="legend" ></legend>
                                 <div class="form-group">
                                     <div class="row">
-                                        <label class="col-md-3 control-label" for="login">Login *</label>
+                                        <label class="col-md-3 control-label" for="login"><wicket:message key="global.save.form.field.label.loginr"></wicket:message></label>
                                         <div class="col-md-6">
-                                            <input id="login" name="login" type="text" placeholder="login" class="form-control" required="required" wicket:id="login" />
+                                            <input id="login" name="login" type="text" class="form-control" wicket:message="placeholder:global.save.form.field.placeholder.login" required="required" wicket:id="login" />
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Text input-->
                                 <div class="form-group">
                                     <div class="row">
-                                        <label class="col-md-3" for="firstName">First name *</label>
+                                        <label class="col-md-3" for="firstName"><wicket:message key="memberpage.save.form.field.label.firstn"></wicket:message></label>
                                         <div class="col-md-6">
-                                            <input id="firstName" name="firstName" type="text" placeholder="firstName" class="form-control " required="required" wicket:id="firstname" />
+                                            <input id="firstName" name="firstName" type="text" wicket:message="placeholder:memberpage.save.form.field.placeholder.firstn" class="form-control " required="required" wicket:id="firstname" />
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Text input-->
                                 <div class="form-group">
                                     <div class="row">
-                                        <label class="col-md-3" for="inputEmail1">Last name *</label>
+                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="memberpage.save.form.field.label.lastn"></wicket:message></label>
                                         <div class="col-md-6">
-                                            <input id="surename" name="surename" type="text" placeholder="surename" class="form-control" required="required" wicket:id="lastname" />
+                                            <input id="surename" name="surename" type="text" wicket:message="placeholder:memberpage.save.form.field.placeholder.lastn" class="form-control" required="required" wicket:id="lastname" />
                                         </div>
                                     </div>
                                 </div>
                                 
                                        <div class="form-group">
                                     <div class="row">
-                                        <label class="col-md-3" for="inputEmail1">Admin</label>
+                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="memberpage.save.form.field.label.admin"></wicket:message></label>
                                         <div class="col-md-1">
                                             <input id="admin" name="admin" type="checkbox"  class="form-control"  wicket:id="isAdmin" />
                                         </div>
@@ -68,25 +68,25 @@
                                 
                                 <div class="form-group">
                                     <div class="row">
-                                        <label class="col-md-3" for="inputEmail1">Password</label>
+                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="global.save.form.field.label.password"></wicket:message></label>
                                         <div class="col-md-6">
-                                            <input id="password" name="password" type="password" placeholder="password"  class="form-control" wicket:id="password" />
+                                            <input id="password" name="password" type="password" wicket:message="placeholder:global.save.form.field.placeholder.password"  class="form-control" wicket:id="password" />
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Text input-->
                                 <div class="form-group">
                                     <div class="row">
-                                        <label class="col-md-3" for="inputEmail1">Email *</label>
+                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="memberpage.save.form.field.label.email"></wicket:message></label>
                                         <div class="col-md-6">
-                                            <input id="email" name="email" type="text" placeholder="email" class="form-control" required="required" wicket:id="email" />
+                                            <input id="email" name="email" type="text" wicket:message="placeholder:memberpage.save.form.field.placeholder.email" class="form-control" required="required" wicket:id="email" />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <div class="row">
-                                        <label class="col-md-3" for="inputOrigin">User origin</label>
+                                        <label class="col-md-3" for="inputOrigin"><wicket:message key="memberpage.save.form.field.label.userorigin"></wicket:message></label>
                                         <div class="col-md-6">
                                             <select disabled="disabled" id="userBdd" name="userBdd" class="form-control" wicket:id="userBdd">
                                             </select>
@@ -97,43 +97,28 @@
                                 <!-- Text input-->
                                 <div class="form-group">
                                     <div class="row">
-                                        <label class="col-md-3" for="inputEmail1">Attach the user to a group</label>
+                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="memberpage.save.form.field.label.memberof"></wicket:message></label>
                                         <div class="col-md-4">
-                                            <input id="parent" readonly="readonly" name="parent" type="text" placeholder="team or department" class="form-control" wicket:id="group" />
+                                            <input id="parent" readonly="readonly" name="parent" type="text" wicket:message="placeholder:memberpage.save.form.field.placeholder.memberof" class="form-control" wicket:id="group" />
                                         </div>
                                         <div class="col-md-3">
-                                            <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="btnGroup">...</button>
+                                            <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="btnGroup"><wicket:message key="global.button.choose"></wicket:message></button>
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Text input-->
-                                <!--
-         Text input
-        <div class="form-group">
-            <div class="row">
-                <label class="col-md-2" for="inputEmail1">Choose a
-                    role.</label>
-                <div class="col-md-4">
-                    <select id="userRole" name="userRole" class="form-control"
-                            wicket:id="role">
-                    </select>
-                </div>
-            </div>
-        </div>-->
                                 <!-- Text input-->
                                 <div class="form-group">
                                     <div class="row">
-                                        <label class="col-md-3" for="inputEmail1">Project</label>
+                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="memberpage.save.form.field.label.projects"></wicket:message></label>
                                         <div class="col-md-4">
                                             <select style="height: 150px" class="form-control col-md-12" wicket:id="table"></select>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-3">
-                                                <button type="button" style="margin-bottom: 5px" class="btn btn-small btn-info col-md-5" wicket:id="btnAddPerson">Add</button>
+                                                <button type="button" style="margin-bottom: 5px" class="btn btn-small btn-info col-md-5" wicket:id="btnAddPerson"><wicket:message key="global.button.add"></wicket:message></button>
                                             </div>
                                             <div class="col-md-3">
-                                                <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="btnDelPerson">Delete</button>
+                                                <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="btnDelPerson"><wicket:message key="global.button.delete"></wicket:message></button>
 
                                             </div>
                                         </div>
@@ -143,8 +128,8 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <button id="addedit" name="addedit" class="btn btn-primary" wicket:id="submit">Save</button>
-                                            <button id="cancel" name="cancel" class="btn btn-primary" wicket:id="cancel">Cancel</button>
+                                            <button id="addedit" name="addedit" class="btn btn-primary" wicket:id="submit"><wicket:message key="global.button.save"></wicket:message></button>
+                                            <button id="cancel" name="cancel" class="btn btn-primary" wicket:id="cancel"><wicket:message key="global.button.cancel"></wicket:message></button>
                                         </div>
                                     </div>
                                 </div>

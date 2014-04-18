@@ -76,13 +76,13 @@ public class ProjectForm extends Form<Project> {
         this.customerName = new NameGeneric("");
         //field
         add(TextFieldBuilder.<String>createRequired("name", this.project, "name").highlightOnErrors()
-                .simpleValidator(0, 255).withTooltip("Project requires a name").build());
+                .simpleValidator(0, 255).withTooltip(getString("global.field.tooltip.name")).build());
 
         TextFieldBuilder<String> keyField = TextFieldBuilder.<String>createRequired("projectKey", this.project, "projectKey")
-                .simpleValidator(0, 255).highlightOnErrors().withTooltip("Project requires a Key");
+                .simpleValidator(0, 255).highlightOnErrors().withTooltip(getString("global.field.tooltip.key"));
 
         if (isNew) {
-            keyField.UniqueStringValidator("Project key", prService);
+            keyField.UniqueStringValidator(getString("global.field.key"), prService);
         } else {
             keyField.buildTextField().setEnabled(false);
         }
@@ -90,13 +90,13 @@ public class ProjectForm extends Form<Project> {
         add(keyField.build());
 
         add(TextAreaBuilder.<String>create("description", this.project, "description")
-                .simpleValidator(0, 2048).highlightOnErrors().withTooltip("Description can be add").build());
+                .simpleValidator(0, 2048).highlightOnErrors().withTooltip(getString("global.field.tooltip.description")).build());
 
         Customer selectByPrimaryKey = _customerService.selectByPrimaryKey(this.project.getIdCustomer());
         if (selectByPrimaryKey != null) {
             customerName.setName(selectByPrimaryKey.getName());
         }
-        this.customerFiel = TextFieldBuilder.<String>create("idCustomer", customerName, "name").withTooltip("customer can be affected").buildTextField();
+        this.customerFiel = TextFieldBuilder.<String>create("idCustomer", customerName, "name").withTooltip(getString("project.form.tooltpis.customer")).buildTextField();
         this.customerFiel.setOutputMarkupId(true);
         add(customerFiel);
 
@@ -111,7 +111,7 @@ public class ProjectForm extends Form<Project> {
                 "btnAddPersonGroup",
                 "btnDelPersonGroup",
                 "selectedPersonGroup",
-                "Choose Team",
+                 getString("project.form.field.popup.title.team"),
                 currentPersonGroupList,
                 this.selectedPersonGroup,
                 (List<IHasKey>) (List<?>) this.personGroupService.getAllTeamsPG(),
@@ -123,7 +123,7 @@ public class ProjectForm extends Form<Project> {
                 "btnAddPerson",
                 "btnDelPerson",
                 "selectedPerson",
-                "Choose Person",
+                getString("project.form.field.tooltip.members"),
                 currentPersonList,
                 this.selectedPerson,
                 (List<IHasKey>) (List<?>) this.personService.selectAll(),
@@ -153,7 +153,6 @@ public class ProjectForm extends Form<Project> {
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
 
                 feedBack.setVisible(false);
-                info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
 
