@@ -12,6 +12,7 @@ package com.highcharts.export.controller;
 import com.highcharts.export.converter.SVGConverter;
 import com.highcharts.export.converter.SVGConverterException;
 import com.highcharts.export.pool.PoolException;
+import com.highcharts.export.server.Server;
 import com.highcharts.export.util.MimeType;
 import com.highcharts.export.util.TempDir;
 import java.io.ByteArrayOutputStream;
@@ -333,6 +334,15 @@ public class ExportController extends HttpServlet {
         }
 
         return stream;
+    }
+
+    @Override
+    public void destroy() {
+        final Server server = Server.getInstance();
+        if (server != null) {
+            server.destroy();
+        }
+        super.destroy();
     }
 
 }

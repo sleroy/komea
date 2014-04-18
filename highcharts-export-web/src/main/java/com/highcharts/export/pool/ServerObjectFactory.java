@@ -42,15 +42,10 @@ public class ServerObjectFactory implements ObjectFactory<Server> {
     @Override
     public Server create() {
         logger.debug("in makeObject, " + exec + ", " + script + ", " + host);
-        synchronized (this) {
-            if (server == null) {
-                Integer port = this.getAvailablePort();
-                portUsage.put(port, PortStatus.BUSY);
-                final String execLocation = this.getExecLocation();
-                server = new Server(execLocation, script, host, port, connectTimeout, readTimeout, maxTimeout);
-            }
-        }
-        return server;
+        Integer port = this.getAvailablePort();
+        portUsage.put(port, PortStatus.BUSY);
+        final String execLocation = this.getExecLocation();
+        return Server.getInstance(execLocation, script, host, port, connectTimeout, readTimeout, maxTimeout);
     }
 
     @Override
@@ -77,7 +72,7 @@ public class ServerObjectFactory implements ObjectFactory<Server> {
     @Override
     public void destroy(Server server) {
         ServerObjectFactory.releasePort(server.getPort());
-        server.cleanup();
+        server.destroy();
     }
 
     @Override

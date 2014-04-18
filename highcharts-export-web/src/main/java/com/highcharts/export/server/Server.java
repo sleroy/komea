@@ -26,13 +26,25 @@ public class Server {
     private final int connectTimeout;
     private final int maxTimeout;
     private ServerState state = ServerState.IDLE;
+    private static Server INSTANCE;
 
     protected static final Logger logger = Logger.getLogger("server");
 
-    public Server(String exec, String script, String host, int port, int connectTimeout, int readTimeout, int maxTimeout) {
-        logger.info("highcharts-export-web : CREATE SERVER exec:" + exec + " --- script:" + script + " --- host:" + host
-                + " --- port:" + port + " --- connectTimeout:" + connectTimeout + " --- readTimeout:" + readTimeout + " --- maxTimeout:" + maxTimeout);
+    public static Server getInstance() {
+        return INSTANCE;
+    }
 
+    public static Server getInstance(String exec, String script, String host, int port,
+            int connectTimeout, int readTimeout, int maxTimeout) {
+        synchronized (Server.class) {
+            if (INSTANCE == null) {
+                INSTANCE = new Server(exec, script, host, port, connectTimeout, readTimeout, maxTimeout);
+            }
+        }
+        return INSTANCE;
+    }
+
+    private Server(String exec, String script, String host, int port, int connectTimeout, int readTimeout, int maxTimeout) {
         // assign port and host to this instance
         this.port = port;
         this.host = host;
@@ -64,17 +76,7 @@ public class Server {
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
                 public void run() {
-                    if (process != null) {
-                        logger.log(Level.WARNING, "Shutting down PhantomJS instance, kill process directly, {0}", this.toString());
-                        try {
-                            process.getErrorStream().close();
-                            process.getInputStream().close();
-                            process.getOutputStream().close();
-                        } catch (IOException e) {
-                            logger.log(Level.WARNING, "Error while shutting down process: {0}", e.getMessage());
-                        }
-                        process.destroy();
-                    }
+                    Server.this.destroy();
                 }
             });
         } catch (IOException e) {
@@ -126,21 +128,6 @@ public class Server {
         return response;
     }
 
-    public void cleanup() {
-        try {
-            /* It's not enough to only destroy the process, this helps*/
-            process.getErrorStream().close();
-            process.getInputStream().close();
-            process.getOutputStream().close();
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "Error while shutting down process: {0}", e.getMessage());
-        }
-
-        process.destroy();
-        process = null;
-        logger.log(Level.FINE, "Destroyed phantomJS process running on port {0}", port);
-    }
-
     public int getPort() {
         return port;
     }
@@ -160,5 +147,24 @@ public class Server {
     @Override
     public String toString() {
         return this.getClass().getName() + "listening to port: " + port;
+    }
+
+    public void destroy() {
+        synchronized (this) {
+            if (process != null) {
+                logger.log(Level.WARNING, "Shutting down PhantomJS instance, kill process directly, {0}", this.toString());
+                try {
+                    process.getErrorStream().close();
+                    process.getInputStream().close();
+                    process.getOutputStream().close();
+                } catch (IOException e) {
+                    logger.log(Level.WARNING, "Error while shutting down process: {0}", e.getMessage());
+                }
+                process.destroy();
+                process = null;
+                logger.log(Level.FINE, "Destroyed phantomJS process running on port {0}", port);
+                System.out.println("Destroyed phantomJS process running on port " + port);
+            }
+        }
     }
 }
