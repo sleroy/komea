@@ -7,7 +7,6 @@
 package org.komea.product.plugins.testlink.core;
 
 
-
 import java.util.Date;
 
 import org.komea.product.database.dto.EventSimpleDto;
@@ -15,16 +14,12 @@ import org.komea.product.plugins.testlink.api.ITestLinkAlertFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 /**
  * @author rgalerme
  */
 @Transactional
 @Service
-public class TestLinkAlertFactory implements ITestLinkAlertFactory
-{
-    
+public class TestLinkAlertFactory implements ITestLinkAlertFactory {
     
     public static final String    TESTLINK_BLOCKED_TESTS      = "testlink_blocked_tests";
     
@@ -46,15 +41,12 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
     
     protected static final String TESTLINK_URL                = "/testlink";
     
-    
-    
     @Override
     public EventSimpleDto newBlockedTests(final long _alert, final String _project) {
     
-    
         final EventSimpleDto event = new EventSimpleDto();
         event.setProvider(TESTLINK_URL);
-        event.setMessage("Total number of blocked test in testlink");
+        event.setMessage("{0} tests are unexecuted tests in testlink for project {1}", _alert, _project);
         event.setValue(_alert);
         event.setMessage(event.getMessage());
         event.setProject(_project);
@@ -64,14 +56,12 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
         return event;
     }
     
-    
     @Override
     public EventSimpleDto newFailedTests(final long _alert, final String _project) {
     
-    
         final EventSimpleDto event = new EventSimpleDto();
         event.setProvider(TESTLINK_URL);
-        event.setMessage("Total number of failed tests in testlink");
+        event.setMessage("{0} tests are unexecuted tests in testlink for project {1}", _alert, _project);
         event.setEventType(TESTLINK_FAILED_TESTS);
         event.setValue(_alert);
         event.setMessage(event.getMessage());
@@ -82,15 +72,12 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
         return event;
     }
     
-    
     @Override
     public EventSimpleDto newRequirements(final long _alert, final String _project) {
     
-    
         final EventSimpleDto event = new EventSimpleDto();
         event.setProvider(TESTLINK_URL);
-        event.setMessage("Total number of requirements for the project "
-                + _project + " in testlink");
+        event.setMessage("Total number of requirements for the project {0} in testlink", _project);
         
         event.setValue(_alert);
         event.setMessage(event.getMessage());
@@ -101,14 +88,12 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
         return event;
     }
     
-    
     @Override
     public EventSimpleDto newSuccessfultest(final long _alert, final String _project) {
     
-    
         final EventSimpleDto event = new EventSimpleDto();
         event.setProvider(TESTLINK_URL);
-        event.setMessage("Total number of successful test in testlink");
+        event.setMessage("{0} tests are unexecuted tests in testlink for project {1}", _alert, _project);
         
         event.setValue(_alert);
         event.setMessage(event.getMessage());
@@ -119,14 +104,12 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
         return event;
     }
     
-    
     @Override
     public EventSimpleDto newTested(final long _alert, final String _project) {
     
-    
         final EventSimpleDto event = new EventSimpleDto();
         event.setProvider(TESTLINK_URL);
-        event.setMessage("Total number of tested cases in testlink");
+        event.setMessage("{0} tests are unexecuted tests in testlink for project {1}", _alert, _project);
         
         event.setValue(_alert);
         event.setMessage(event.getMessage());
@@ -137,14 +120,12 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
         return event;
     }
     
-    
     @Override
     public EventSimpleDto newTotalTests(final long _alert, final String _project) {
     
-    
         final EventSimpleDto event = new EventSimpleDto();
         event.setProvider(TESTLINK_URL);
-        event.setMessage("Total number of tests in testlink");
+        event.setMessage("{0} tests are unexecuted tests in testlink for project {1}", _alert, _project);
         
         event.setValue(_alert);
         event.setMessage(event.getMessage());
@@ -155,14 +136,12 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
         return event;
     }
     
-    
     @Override
     public EventSimpleDto newUnassociedTest(final long _alert, final String _project) {
     
-    
         final EventSimpleDto event = new EventSimpleDto();
         event.setProvider(TESTLINK_URL);
-        event.setMessage("Total number of unassocied tests in testlink");
+        event.setMessage("{0} tests are unexecuted tests in testlink for project {1}", _alert, _project);
         event.setEventType(TESTLINK_UNASSOCIATED_TESTS);
         event.setValue(_alert);
         event.setMessage(event.getMessage());
@@ -171,14 +150,12 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
         return event;
     }
     
-    
     @Override
     public EventSimpleDto newUnexecutedTest(final long _alert, final String _project) {
     
-    
         final EventSimpleDto event = new EventSimpleDto();
         event.setProvider(TESTLINK_URL);
-        event.setMessage("Total number of unexecuted tests in testlink");
+        event.setMessage("{0} tests are unexecuted tests in testlink for project {1}", _alert, _project);
         event.setEventType(TESTLINK_UNEXECUTED_TESTS);
         event.setValue(_alert);
         event.setMessage(event.getMessage());
@@ -188,14 +165,12 @@ public class TestLinkAlertFactory implements ITestLinkAlertFactory
         return event;
     }
     
-    
     @Override
     public EventSimpleDto newUntested(final long _alert, final String _project) {
     
-    
         final EventSimpleDto event = new EventSimpleDto();
         event.setProvider(TESTLINK_URL);
-        event.setMessage("Total number of untested usecases in testlink");
+        event.setMessage("{0} tests are unexecuted tests in testlink for project {1}", _alert, _project);
         event.setValue(_alert);
         event.setMessage(event.getMessage());
         event.setProject(_project);
