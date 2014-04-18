@@ -407,4 +407,9 @@ public class Measure implements IHasKey {
     public String getDisplayName() {
         return "";
     }
+
+    @JsonIgnore
+    public boolean isValid() {
+        return value != null && !value.isInfinite() && !value.isNaN();
+    }
 }
