@@ -30,6 +30,8 @@ public class Server {
     protected static final Logger logger = Logger.getLogger("server");
 
     public Server(String exec, String script, String host, int port, int connectTimeout, int readTimeout, int maxTimeout) {
+        logger.info("highcharts-export-web : CREATE SERVER exec:" + exec + " --- script:" + script + " --- host:" + host
+                + " --- port:" + port + " --- connectTimeout:" + connectTimeout + " --- readTimeout:" + readTimeout + " --- maxTimeout:" + maxTimeout);
 
         // assign port and host to this instance
         this.port = port;
