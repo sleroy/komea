@@ -51,7 +51,7 @@ public final class BugZillaPage extends LayoutPage
                 new ListDataModel(listAffichage);
         final DataTable<BZServerConfiguration, String> build =
                 DataTableBuilder.<BZServerConfiguration, String> newTable("table")
-                        .addColumn("Address", "Address").addColumn("Login", "Login")
+                        .addColumn(getString("bugzillapage.main.table.column.address"), "Address").addColumn(getString("global.save.form.field.label.login"), "Login")
                         .withEditDeleteColumn(deleteAction, editAction)
                         .displayRows(listAffichage.size() + 10).withData(dataProvider).build();
         add(build);
@@ -75,6 +75,6 @@ public final class BugZillaPage extends LayoutPage
     public String getTitle() {
     
     
-        return getString("BugZillaPage.title");
+        return getString("bugzillapage.main.title");
     }
 }

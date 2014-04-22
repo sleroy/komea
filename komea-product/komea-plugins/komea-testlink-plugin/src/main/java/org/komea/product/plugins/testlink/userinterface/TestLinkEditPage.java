@@ -58,6 +58,6 @@ public final class TestLinkEditPage extends LayoutPage
     public String getTitle() {
     
     
-        return getString("TestLinkEditPage.title");
+        return getString("testlinkpage.main.title");
     }
 }

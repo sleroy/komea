@@ -27,7 +27,7 @@
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
 				<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="p/home"><img src="static/images/logo.png" alt="logo" width="32" height="32" />&nbsp;Komea Administration</a>
+			<a class="navbar-brand" href="p/home"><img src="static/images/logo.png" alt="logo" width="32" height="32" />&nbsp;<wicket:message key="home.kadmin">Komea Administration</wicket:message></a>
 		</div>
 		<div class="collapse navbar-collapse">
 			<ul wicket:id="signinpanel" class="nav navbar-nav navbar-right">
@@ -35,15 +35,15 @@
 			<ul wicket:id="personalpanel" class="nav navbar-nav navbar-right">
 			</ul>
 			<wicket:fragment wicket:id="signin">
-				<li class="dropdown"><a class="dropdown-toggle" href="p/login" data-toggle="dropdown">Sign In <strong class="caret"></strong></a></li>
+				<li class="dropdown"><a class="dropdown-toggle" href="p/login" data-toggle="dropdown"><wicket:message key="home.signin">Sign In </wicket:message><strong class="caret"></strong></a></li>
 			</wicket:fragment>
 			<wicket:fragment wicket:id="personal">
-				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>Welcome, User <b
+				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i><wicket:message key="home.welcome">Welcome, User</wicket:message> <b
 						class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="https://github.org/sleroy/komea"><i class="glyphicon glyphicon-envelope"></i>Contact Support</a></li>
+						<li><a href="https://github.org/sleroy/komea"><i class="glyphicon glyphicon-envelope"></i><wicket:message key="home.support">Contact Support</wicket:message></a></li>
 						<li class="divider"></li>
-						<li><a href="j_spring_security_logout"><i class="glyphicon glyphicon-off"></i> Logout</a></li>
+						<li><a href="j_spring_security_logout"><i class="glyphicon glyphicon-off"></i><wicket:message key="home.logout">Logout</wicket:message></a></li>
 					</ul></li>
 			</wicket:fragment>
 		</div>
@@ -62,26 +62,26 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon cicon-office "> </span>Company</a>
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon cicon-office "> </span><wicket:message key="home.company">Company</wicket:message></a>
 							</h4>
 						</div>
 						<div id="collapseOne" class="panel-collapse collapse in">
 							<div class="panel-body">
 								<table class="table">
 									<tr>
-										<td><span class="glyphicon glyphicon-user "></span><a href="p/users">Users</a></td>
+										<td><span class="glyphicon glyphicon-user "></span><a href="p/users"><wicket:message key="home.menbers">Members</wicket:message></a></td>
 									</tr>
 									<tr>
-										<td><span class="glyphicon  glyphicon-th-large "></span><a href="p/teams">Teams</a></td>
+										<td><span class="glyphicon  glyphicon-th-large "></span><a href="p/teams"><wicket:message key="home.teams">Teams</wicket:message></a></td>
 									</tr>
 									<tr>
-										<td><span class="glyphicon glyphicon-th"></span><a href="p/departments">Departments</a></td>
+										<td><span class="glyphicon glyphicon-th"></span><a href="p/departments"><wicket:message key="home.departments">Departments</wicket:message></a></td>
 									</tr>
 									<tr>
-										<td><span class="glyphicon glyphicon-usd "></span><a href="p/customers">Customers</a></td>
+										<td><span class="glyphicon glyphicon-usd "></span><a href="p/customers"><wicket:message key="home.customers">Customers</wicket:message></a></td>
 									</tr>
 									<tr>
-										<td><span class="glyphicon glyphicon-briefcase "></span><a href="p/projects">Projects</a></td>
+										<td><span class="glyphicon glyphicon-briefcase "></span><a href="p/projects"><wicket:message key="home.projects">Projects</wicket:message></a></td>
 									</tr>
 								</table>
 							</div>
@@ -90,17 +90,17 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><span class="glyphicon glyphicon-stats"> </span>KPIs</a>
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><span class="glyphicon glyphicon-stats"> </span><wicket:message key="home.kpis">KPIs</wicket:message></a>
 							</h4>
 						</div>
 						<div id="collapseTwo" class="panel-collapse collapse">
 							<div class="panel-body">
 								<table class="table">
 									<tr>
-										<td><span class="glyphicon glyphicon-stats "></span><a href="p/kpis">KPIs</a></td>
+										<td><span class="glyphicon glyphicon-stats "></span><a href="p/kpis"><wicket:message key="home.kpis">KPIs</wicket:message></a></td>
 									</tr>
 									<tr>
-										<td><span class="glyphicon glyphicon-bell "></span><a href="p/alerts">Alerts</a></td>
+										<td><span class="glyphicon glyphicon-bell "></span><a href="p/alerts"><wicket:message key="home.alerts">Alerts</wicket:message></a></td>
 									</tr>
 								</table>
 							</div>
@@ -109,29 +109,29 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"><span class="glyphicon glyphicon-cog"> </span>Administration</a>
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"><span class="glyphicon glyphicon-cog"> </span><wicket:message key="home.administration">Administration</wicket:message></a>
 							</h4>
 						</div>
 						<div id="collapseThree" class="panel-collapse collapse">
 							<div class="panel-body">
 								<table class="table">
 									<tr>
-										<td><span class="glyphicon glyphicon-cog "></span><a href="p/settings">Settings</a></td>
+										<td><span class="glyphicon glyphicon-cog "></span><a href="p/settings"><wicket:message key="home.settings">Settings</wicket:message></a></td>
 									</tr>
 									<tr>
-										<td><span class="glyphicon glyphicon-cloud-download "></span><a href="p/plugins">Plugins</a></td>
+										<td><span class="glyphicon glyphicon-cloud-download "></span><a href="p/plugins"><wicket:message key="home.plugins">Plugins</wicket:message></a></td>
 									</tr>
 									<tr>
-										<td><span class="glyphicon glyphicon-file "></span><a href="p/viewlog">Logs</a></td>
+										<td><span class="glyphicon glyphicon-file "></span><a href="p/viewlog"><wicket:message key="home.logs">Logs</wicket:message></a></td>
 									</tr>
 									<tr>
-										<td><span class="glyphicon glyphicon-stats "></span><a href="p/stats">Statistics</a></td>
+										<td><span class="glyphicon glyphicon-stats "></span><a href="p/stats"><wicket:message key="home.statistics">Statistics</wicket:message></a></td>
 									</tr>
 									<tr>
-										<td><span class="glyphicon glyphicon-log-in "></span><a href="p/events">Events</a></td>
+										<td><span class="glyphicon glyphicon-log-in "></span><a href="p/events"><wicket:message key="home.events">Events</wicket:message></a></td>
 									</tr>
 									<tr>
-										<td><span class="glyphicon glyphicon-repeat "></span><a href="p/cronpage">Crons</a></td>
+										<td><span class="glyphicon glyphicon-repeat "></span><a href="p/cronpage"><wicket:message key="home.crons">Crons<</wicket:message>/a></td>
 									</tr>
 								</table>
 							</div>
@@ -143,7 +143,7 @@
 			<div class="col-sm-10 col-md-10">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title" wicket:id="page_title">Dashboard</h3>
+						<h3 class="panel-title" wicket:id="page_title"><wicket:message key="home.dashboard">Dashboard</wicket:message></h3>
 					</div>
 					<div class="panel-body">
 						<wicket:child />

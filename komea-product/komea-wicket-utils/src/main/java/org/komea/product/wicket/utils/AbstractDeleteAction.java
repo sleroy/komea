@@ -10,6 +10,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
+import com.mysql.jdbc.Messages;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.wicket.LayoutPage;
@@ -27,7 +28,7 @@ public abstract class AbstractDeleteAction<T> implements IDeleteAction<T> {
 
     public AbstractDeleteAction(LayoutPage _page, String wicketId) {
         page = _page;
-        dialog = new MessageDialog(wicketId, "Warning", "are you sure to remove this element ?",
+        dialog = new MessageDialog(wicketId,  Messages.getString("global.popup.warning.title"), Messages.getString("global.popup.warning.delete.confirm"),
                 DialogButtons.OK_CANCEL, DialogIcon.WARN) {
 
                     @Override
