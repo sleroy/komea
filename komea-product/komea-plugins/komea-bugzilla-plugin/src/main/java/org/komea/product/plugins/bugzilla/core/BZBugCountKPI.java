@@ -74,7 +74,6 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
     public BZBugCountKPI(final List<BzSearch> searchs) {
         super();
         this.searchs = searchs;
-        System.out.println("-------------------------------------------------NEW BZBugCountKPI---------------------------------------");
     }
 
 
@@ -84,6 +83,7 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
      */
     @Override
     public ICEPResult getResult() {
+        System.out.println("BZBugCountKPI GET RESULT");
         final TupleResultMap<Integer> tupleResultMap = new TupleResultMap<Integer>();
         for (final BZServerConfiguration conf : bugZillaConfiguration.selectAll()) {
             IBZServerProxy bugzillaProxy = null;
@@ -91,17 +91,13 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
                 bugzillaProxy = proxyFactory.newConnector(conf);
                 Validate.notNull(bugzillaProxy);
                 final List<String> productNames = bugzillaProxy.getProductNames();
-                System.out.println("PRODUCT NAMES : " + productNames);
                 for (final String productName : productNames) {
-                    System.out.println("PRODUCT : " + productName);
                     final Project project = projectService.selectByKey(productName);
                     if (project == null) {
                         continue;
                     }
-                    System.out.println("EXISTS !");
                     final ITuple tuple = TupleFactory.newTuple(project.getEntityKey());
                     final List<BzBug> bugs = bugzillaProxy.getBugs(productName);
-                    System.out.println("BUGS SIZE : " + bugs.size());
                     int cpt = 0;
                     for (final BzBug bug : bugs) {
                         if (isBugMatchesAtLeastOneFilter(bug)) {
