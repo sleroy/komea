@@ -338,6 +338,7 @@ public class ExportController extends HttpServlet {
 
     @Override
     public void destroy() {
+        System.out.println("DESTROY");
         final Server server = Server.getInstance();
         if (server != null) {
             server.destroy();

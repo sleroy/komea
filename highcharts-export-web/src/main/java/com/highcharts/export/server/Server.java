@@ -150,8 +150,10 @@ public class Server {
     }
 
     public void destroy() {
+        System.out.println("DESTROY SERVER-------------------------------------------------------------------------------------------------------------");
         synchronized (this) {
             if (process != null) {
+                System.out.println("DESTROY PROCESS");
                 logger.log(Level.WARNING, "Shutting down PhantomJS instance, kill process directly, {0}", this.toString());
                 try {
                     process.getErrorStream().close();
@@ -166,5 +168,6 @@ public class Server {
                 System.out.println("Destroyed phantomJS process running on port " + port);
             }
         }
+        System.out.println("DESTROY SERVER DONE-------------------------------------------------------------------------------------------------------------");
     }
 }
