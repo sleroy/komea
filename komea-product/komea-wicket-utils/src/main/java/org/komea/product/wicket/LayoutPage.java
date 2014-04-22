@@ -96,7 +96,7 @@ public abstract class LayoutPage extends WebPage
     public String getTitle() {
     
     
-        return getString("title");
+        return getString("layout.title");
     }
     
     

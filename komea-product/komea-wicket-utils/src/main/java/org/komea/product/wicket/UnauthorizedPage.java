@@ -23,5 +23,11 @@ public class UnauthorizedPage extends LayoutPage
         
         
     }
+
+    @Override
+    public String getTitle() {
+        return getString("unauthorized.title");
+    }
+    
     
 }

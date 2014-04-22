@@ -55,14 +55,14 @@ public class TestLinkForm extends Form<TestLinkServer>
         feedBack.setVisible(false);
         
         add(TextFieldBuilder.<String> createRequired("name", testServer, "name")
-                .withTooltip("Server requires a name").simpleValidator(3, 255).build());
+                .withTooltip(getString("testlinkpage.save.add.title")).simpleValidator(3, 255).build());
         add(TextFieldBuilder.<String> createRequired("address", testServer, "address")
-                .simpleValidator(4, 255).withTooltip("Server requires an url").build());
+                .simpleValidator(4, 255).withTooltip(getString("global.save.form.field.tooltip.serverloc")).build());
         add(TextFieldBuilder
                 .<String> createRequired("key", testServer, "key")
                 .simpleValidator(1, 255)
                 .withTooltip(
-                        "Server requires a key for connexion, generates it from your testlink profile.")
+                        getString("testlinkpage.save.tooltip.key"))
                 .build());
         
         // button
@@ -88,7 +88,6 @@ public class TestLinkForm extends Form<TestLinkServer>
             
             
                 feedBack.setVisible(true);
-                error("error found");
                 // repaint the feedback panel so errors are shown
                 target.add(feedBack);
             }
@@ -99,7 +98,6 @@ public class TestLinkForm extends Form<TestLinkServer>
             
             
                 feedBack.setVisible(false);
-                info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
                 testlinkService.saveOrUpdate(testServer);

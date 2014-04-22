@@ -50,7 +50,7 @@ public final class TestLinkPage extends LayoutPage
                 new ListDataModel(listAffichage);
         final DataTable<TestLinkServer, String> build =
                 DataTableBuilder.<TestLinkServer, String> newTable("table")
-                        .addColumn("Server name", "name").addColumn("Address", "address")
+                        .addColumn(getString("testlinkpage.main.table.column.name"), "name").addColumn(getString("testlinkpage.main.table.column.address"), "address")
                         .withEditDeleteColumn(deleteAction, editAction)
                         .displayRows(listAffichage.size() + 10).withData(dataProvider).build();
         add(build);
@@ -74,6 +74,6 @@ public final class TestLinkPage extends LayoutPage
     public String getTitle() {
     
     
-        return getString("TestLinkPage.title");
+        return getString("testlinkpage.main.title");
     }
 }

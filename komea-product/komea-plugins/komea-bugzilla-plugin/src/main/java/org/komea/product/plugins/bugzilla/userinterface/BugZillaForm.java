@@ -53,13 +53,16 @@ public class BugZillaForm extends Form<BZServerConfiguration>
         
         
         add(TextFieldBuilder.createURL("address", bugServer, "address")
-                .withTooltip("Server requires an URL").simpleValidator(3, 255).build());
+                .withTooltip(getString("global.save.form.field.tooltip.serverloc")).simpleValidator(3, 255).build());
+        
         add(TextFieldBuilder.<String> createRequired("login", bugServer, "login")
-                .simpleValidator(0, 255).withTooltip("Server need a login").build());
+                .simpleValidator(0, 255).withTooltip(getString("global.save.form.field.tooltip.login")).build());
+        
         add(TextFieldBuilder.<String> createRequired("password", bugServer, "password")
-                .simpleValidator(0, 255).withTooltip("Server need a password").build());
+                .simpleValidator(0, 255).withTooltip(getString("global.save.form.field.tooltip.password")).build());
+        
         add(TextFieldBuilder.<String> createRequired("reminderAlert", bugServer, "reminderAlert")
-                .withTooltip("").build());
+                .withTooltip(getString("bugzillapage.save.form.field.tooltip.reminder")).build());
         
         // button
         add(new AjaxLinkLayout<LayoutPage>("cancel", page)
@@ -84,7 +87,6 @@ public class BugZillaForm extends Form<BZServerConfiguration>
             
             
                 feedBack.setVisible(true);
-                error("error found");
                 // repaint the feedback panel so errors are shown
                 target.add(feedBack);
             }
@@ -95,7 +97,6 @@ public class BugZillaForm extends Form<BZServerConfiguration>
             
             
                 feedBack.setVisible(false);
-                info("Submitted information");
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
                 bService.saveOrUpdate(bugServer);
