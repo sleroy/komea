@@ -6,20 +6,27 @@ import java.util.List;
 
 public class BzFilter {
 
-    public static BzFilter create(final String parameterKey, final String... values) {
-        return new BzFilter(parameterKey, Arrays.asList(values));
+    public static BzFilter create(final String parameterKey, final boolean accept, final String... values) {
+        return new BzFilter(parameterKey, accept, Arrays.asList(values));
     }
 
     public static BzFilter fromString(String filterString) {
         final String[] split = filterString.split("=");
-        return new BzFilter(split[0], Arrays.asList(split[1].split(",")));
+        String key = split[0];
+        final boolean accept = !key.endsWith("!");
+        if (!accept) {
+            key = key.substring(0, key.length() - 1);
+        }
+        return new BzFilter(key, accept, Arrays.asList(split[1].split(",")));
     }
 
     final String parameterKey;
+    final boolean accept;
     final List<String> values;
 
-    public BzFilter(final String parameterKey, final List<String> values) {
+    public BzFilter(final String parameterKey, final boolean accept, final List<String> values) {
         this.parameterKey = parameterKey;
+        this.accept = accept;
         this.values = values;
     }
 
@@ -31,9 +38,13 @@ public class BzFilter {
         return Collections.unmodifiableList(values);
     }
 
+    public boolean isAccept() {
+        return accept;
+    }
+
     @Override
     public String toString() {
-        return "BzFilter{" + "parameterKey=" + parameterKey + ", values=" + values + '}';
+        return "BzFilter{" + "parameterKey=" + parameterKey + ", accept=" + accept + ", values=" + values + '}';
     }
 
 }

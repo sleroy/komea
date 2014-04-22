@@ -98,9 +98,7 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
                 LOGGER.error("Error during the bugzilla server update {} : reason {}",
                         conf.getAddress(), ex.getMessage(), ex);
             } finally {
-                if (bugzillaProxy != null) {
-                    IOUtils.closeQuietly(bugzillaProxy);
-                }
+                IOUtils.closeQuietly(bugzillaProxy);
             }
         }
         final ICEPResult result = CEPResult.buildFromMap(tupleResultMap);
@@ -111,7 +109,9 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
         for (final String key : search.getParameterkeys()) {
             if (bug.getKeys().contains(key)) {
                 final List<String> values = search.getValues(key);
-                if (!values.contains(bug.getParameter(key))) {
+                final Boolean accept = search.isAccept(key);
+                final String parameter = bug.getParameter(key);
+                if (accept != values.contains(parameter)) {
                     return false;
                 }
             }
@@ -139,4 +139,10 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
     public void setProjectService(IProjectService ProjectService) {
         this.projectService = ProjectService;
     }
+
+    @Override
+    public String toString() {
+        return "BZBugCountKPI{" + "searchs=" + searchs + '}';
+    }
+
 }

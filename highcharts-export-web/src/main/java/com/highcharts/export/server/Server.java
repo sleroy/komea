@@ -28,7 +28,7 @@ public class Server {
     private ServerState state = ServerState.IDLE;
     private static Server INSTANCE;
 
-    protected static final Logger logger = Logger.getLogger("server");
+    private static final Logger LOGGER = Logger.getLogger(Server.class.getName());
 
     public static Server getInstance() {
         return INSTANCE;
@@ -61,7 +61,7 @@ public class Server {
             commands.add("-port");
             commands.add("" + port);
 
-            logger.log(Level.FINE, commands.toString());
+            LOGGER.log(Level.FINE, commands.toString());
 
             process = new ProcessBuilder(commands).start();
             final BufferedReader bufferedReader = new BufferedReader(
@@ -85,7 +85,7 @@ public class Server {
     }
 
     public void initialize() {
-        logger.log(Level.FINE, "Phantom server started on port {0}", port);
+        LOGGER.log(Level.FINE, "Phantom server started on port {0}", port);
     }
 
     public String request(String params) throws SocketTimeoutException, SVGConverterException, TimeoutException {
@@ -150,24 +150,20 @@ public class Server {
     }
 
     public void destroy() {
-        System.out.println("DESTROY SERVER-------------------------------------------------------------------------------------------------------------");
         synchronized (this) {
             if (process != null) {
-                System.out.println("DESTROY PROCESS");
-                logger.log(Level.WARNING, "Shutting down PhantomJS instance, kill process directly, {0}", this.toString());
+                LOGGER.log(Level.WARNING, "Shutting down PhantomJS instance, kill process directly, {0}", this.toString());
                 try {
                     process.getErrorStream().close();
                     process.getInputStream().close();
                     process.getOutputStream().close();
                 } catch (IOException e) {
-                    logger.log(Level.WARNING, "Error while shutting down process: {0}", e.getMessage());
+                    LOGGER.log(Level.WARNING, "Error while shutting down process: {0}", e.getMessage());
                 }
                 process.destroy();
                 process = null;
-                logger.log(Level.FINE, "Destroyed phantomJS process running on port {0}", port);
-                System.out.println("Destroyed phantomJS process running on port " + port);
+                LOGGER.log(Level.FINE, "Destroyed phantomJS process running on port {0}", port);
             }
         }
-        System.out.println("DESTROY SERVER DONE-------------------------------------------------------------------------------------------------------------");
     }
 }

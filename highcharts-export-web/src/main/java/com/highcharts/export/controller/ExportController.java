@@ -53,7 +53,7 @@ public class ExportController {
     private static final long serialVersionUID = 1L;
     private static final Float MAX_WIDTH = 2000.0F;
     private static final Float MAX_SCALE = 4.0F;
-    protected static Logger logger = Logger.getLogger("exporter");
+    private static final Logger LOGGER = Logger.getLogger(ExportController.class.getName());
 
     @Resource(name = "svgConverter")
     private SVGConverter converter;
@@ -137,7 +137,7 @@ public class ExportController {
         try {
             stream.write(FileUtils.readFileToByteArray(new File(path.toString())));
         } catch (IOException ioex) {
-            logger.error("Tried to read file from filesystem: " + ioex.getMessage());
+            LOGGER.error("Tried to read file from filesystem: " + ioex.getMessage());
             throw new SVGConverterException("IOException: cannot find your file to download...");
         }
 
@@ -338,7 +338,6 @@ public class ExportController {
 
     @PreDestroy
     public void destroy() {
-        System.out.println("DESTROY");
         final Server server = Server.getInstance();
         if (server != null) {
             server.destroy();

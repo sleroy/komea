@@ -41,6 +41,11 @@ public class BzSearch {
         return filters.keySet();
     }
 
+    public Boolean isAccept(final String parameterKey) {
+        final BzFilter filter = filters.get(parameterKey);
+        return filter == null ? null : filter.isAccept();
+    }
+
     public List<String> getValues(final String parameterKey) {
         final BzFilter filter = filters.get(parameterKey);
         return filter == null ? null : filter.getValues();
