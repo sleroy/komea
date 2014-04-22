@@ -163,6 +163,28 @@ public class BZBugCountKPITest {
     }
 
     @Test
+    public void testGetResultFromDefaultConstructor() {
+        final BZBugCountKPI kpi = new BZBugCountKPI();
+        kpi.setBugZillaConfiguration(bugZillaConfigurationMock);
+        kpi.setProxyFactory(proxyFactoryMock);
+        kpi.setProjectService(projectService);
+        final Map<Integer, Integer> results = getResults(kpi);
+        Assert.assertEquals(1, results.size());
+        Assert.assertEquals(Integer.valueOf(6), results.get(1));
+    }
+
+    @Test
+    public void testGetResultFromEmptyStringFormula() {
+        final BZBugCountKPI kpi = new BZBugCountKPI("");
+        kpi.setBugZillaConfiguration(bugZillaConfigurationMock);
+        kpi.setProxyFactory(proxyFactoryMock);
+        kpi.setProjectService(projectService);
+        final Map<Integer, Integer> results = getResults(kpi);
+        Assert.assertEquals(1, results.size());
+        Assert.assertEquals(Integer.valueOf(6), results.get(1));
+    }
+
+    @Test
     public void testGetResultFromStringFormula() {
         final BZBugCountKPI kpi = new BZBugCountKPI(
                 "status=open,closed;resolution!=fixed#status!=closed;resolution=assigned");

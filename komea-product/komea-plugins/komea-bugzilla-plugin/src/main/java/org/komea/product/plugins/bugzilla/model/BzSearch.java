@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.komea.product.plugins.bugzilla.service.StringUtils;
 
 public class BzSearch {
 
@@ -15,8 +16,8 @@ public class BzSearch {
     }
 
     public static BzSearch fromString(String searchString) {
-        final String[] filtersString = searchString.split(";");
-        final List<BzFilter> filters = new ArrayList<BzFilter>(filtersString.length);
+        final List<String> filtersString = StringUtils.splitAndTrimWithoutEmpty(searchString, ";");
+        final List<BzFilter> filters = new ArrayList<BzFilter>(filtersString.size());
         for (final String filterString : filtersString) {
             final BzFilter bzFilter = BzFilter.fromString(filterString);
             filters.add(bzFilter);

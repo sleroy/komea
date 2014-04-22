@@ -22,6 +22,7 @@ import org.komea.product.plugins.bugzilla.api.IBZServerProxyFactory;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.komea.product.plugins.bugzilla.model.BzBug;
 import org.komea.product.plugins.bugzilla.model.BzSearch;
+import org.komea.product.plugins.bugzilla.service.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,13 +53,17 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
     private IBZServerProxyFactory proxyFactory;
 
     public BZBugCountKPI(final String searchs) {
-        final String[] searchsString = searchs.split("#");
-        final List<BzSearch> bzSearchs = new ArrayList<BzSearch>(searchsString.length);
+        final List<String> searchsString = StringUtils.splitAndTrimWithoutEmpty(searchs, "#");
+        final List<BzSearch> bzSearchs = new ArrayList<BzSearch>(searchsString.size());
         for (final String searchString : searchsString) {
             final BzSearch bzSearch = BzSearch.fromString(searchString);
             bzSearchs.add(bzSearch);
         }
         this.searchs = bzSearchs;
+    }
+
+    public BZBugCountKPI() {
+        this("");
     }
 
     public BZBugCountKPI(final List<BzSearch> searchs) {

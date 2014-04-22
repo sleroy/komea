@@ -3,6 +3,7 @@ package org.komea.product.plugins.bugzilla.model;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.komea.product.plugins.bugzilla.service.StringUtils;
 
 public class BzFilter {
 
@@ -17,7 +18,7 @@ public class BzFilter {
         if (!accept) {
             key = key.substring(0, key.length() - 1);
         }
-        return new BzFilter(key, accept, Arrays.asList(split[1].split(",")));
+        return new BzFilter(key.trim(), accept, StringUtils.splitAndTrimWithoutEmpty(split[1], ","));
     }
 
     final String parameterKey;
