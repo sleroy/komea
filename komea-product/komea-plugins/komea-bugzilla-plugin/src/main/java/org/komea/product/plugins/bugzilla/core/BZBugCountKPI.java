@@ -71,6 +71,7 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
         this.searchs = searchs;
     }
 
+
     /*
      * (non-Javadoc)
      * @see org.komea.cep.dynamicdata.IDynamicDataQuery#getResult()
@@ -84,13 +85,17 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
                 bugzillaProxy = proxyFactory.newConnector(conf);
                 Validate.notNull(bugzillaProxy);
                 final List<String> productNames = bugzillaProxy.getProductNames();
+                System.out.println("PRODUCT NAMES : " + productNames);
                 for (final String productName : productNames) {
+                    System.out.println("PRODUCT : " + productName);
                     final Project project = projectService.selectByKey(productName);
                     if (project == null) {
                         continue;
                     }
+                    System.out.println("EXISTS !");
                     final ITuple tuple = TupleFactory.newTuple(project.getEntityKey());
                     final List<BzBug> bugs = bugzillaProxy.getBugs(productName);
+                    System.out.println("BUGS SIZE : " + bugs.size());
                     int cpt = 0;
                     for (final BzBug bug : bugs) {
                         if (isBugMatchesAtLeastOneFilter(bug)) {
