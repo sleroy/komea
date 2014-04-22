@@ -23,9 +23,9 @@ import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -48,7 +48,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/")
-public class ExportController extends HttpServlet {
+public class ExportController {
 
     private static final long serialVersionUID = 1L;
     private static final Float MAX_WIDTH = 2000.0F;
@@ -336,14 +336,13 @@ public class ExportController extends HttpServlet {
         return stream;
     }
 
-    @Override
+    @PreDestroy
     public void destroy() {
         System.out.println("DESTROY");
         final Server server = Server.getInstance();
         if (server != null) {
             server.destroy();
         }
-        super.destroy();
     }
 
 }
