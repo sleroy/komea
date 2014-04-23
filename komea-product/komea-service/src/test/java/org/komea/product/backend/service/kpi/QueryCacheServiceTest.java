@@ -39,7 +39,9 @@ public class QueryCacheServiceTest
     
     
         // TODO
-        throw new RuntimeException("not yet implemented");
+        
+        // TODO
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -50,7 +52,8 @@ public class QueryCacheServiceTest
     public void testCall() throws Exception {
     
     
-        throw new RuntimeException("not yet implemented");
+        // TODO
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -62,7 +65,9 @@ public class QueryCacheServiceTest
     
     
         // TODO
-        throw new RuntimeException("not yet implemented");
+        
+        // TODO
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
 }

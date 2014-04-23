@@ -17,21 +17,20 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  * @author sleroy
- *
  */
 @RunWith(MockitoJUnitRunner.class)
 public class CachedDynamicQueryTest
 {
     
     
-    @Mock
-    private IDynamicDataQuery  dynamicDataQuery;
-    
-    
-    @Mock
-    private QueryCacheService  queryCacheService;
     @InjectMocks
     private CachedDynamicQuery cachedDynamicQuery;
+    
+    
+    @Mock
+    private IDynamicDataQuery  dynamicDataQuery;
+    @Mock
+    private QueryCacheService  queryCacheService;
     
     
     
@@ -43,7 +42,7 @@ public class CachedDynamicQueryTest
     
     
         // TODO
-        throw new RuntimeException("not yet implemented");
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
 }
