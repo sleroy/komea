@@ -19,6 +19,7 @@ public class HomePage extends LayoutPage
     
     
         super(parameters);
+        getString("");
         
         
     }
