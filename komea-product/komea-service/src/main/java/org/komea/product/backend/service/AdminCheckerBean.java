@@ -2,7 +2,6 @@
 package org.komea.product.backend.service;
 
 
-
 import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.auth.IPasswordEncoder;
@@ -18,18 +17,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 /**
  */
 @Component
 @Transactional
-public class AdminCheckerBean
-{
-    
+public class AdminCheckerBean {
     
     private static final Logger LOGGER = LoggerFactory.getLogger("admin-controller");
-    
     
     @Value("#{authProperties.defaultAdminPassword}")
     private String              defaultAdminPassword;
@@ -46,14 +40,10 @@ public class AdminCheckerBean
     @Autowired
     private IPersonRoleService  personRoleDao;
     
-    
-    
     public IPasswordEncoder getEncoder() {
-    
     
         return encoder;
     }
-    
     
     /**
      * Method getIPersonGroupService.
@@ -62,39 +52,31 @@ public class AdminCheckerBean
      */
     public IPersonGroupService getIPersonGroupService() {
     
-    
         return personGroupDao;
     }
     
-    
     public IPersonService getPersonDAO() {
-    
     
         return personDAO;
     }
     
-    
     public IPersonGroupService getPersonGroupDao() {
-    
     
         return personGroupDao;
     }
     
-    
     public IPersonRoleService getPersonRoleDao() {
-    
     
         return personRoleDao;
     }
     
-    
     @PostConstruct
     public void init() {
-    
     
         if (personDAO.getAdministrators().isEmpty()) {
             LOGGER.info("------- ALERT");
             LOGGER.info("------- No admin has been found, auto-generation of a default admin 'admin'");
+            
             final Person admin = new Person();
             admin.setEmail("admin@admin");
             admin.setFirstName("admin");
@@ -108,14 +90,10 @@ public class AdminCheckerBean
         }
         
     }
-    
-    
     public void setEncoder(final IPasswordEncoder _encoder) {
-    
     
         encoder = _encoder;
     }
-    
     
     /**
      * Method setIPersonGroupService.
@@ -125,30 +103,22 @@ public class AdminCheckerBean
      */
     public void setIPersonGroupService(final IPersonGroupService _personGroupDao) {
     
-    
         personGroupDao = _personGroupDao;
     }
     
-    
     public void setPersonDAO(final IPersonService _personDAO) {
-    
     
         personDAO = _personDAO;
     }
     
-    
     public void setPersonGroupDao(final IPersonGroupService _personGroupDao) {
-    
     
         personGroupDao = _personGroupDao;
     }
     
-    
     public void setPersonRoleDao(final IPersonRoleService _personRoleDao) {
-    
     
         personRoleDao = _personRoleDao;
     }
-    
     
 }

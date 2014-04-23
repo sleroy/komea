@@ -5,7 +5,6 @@
 package org.komea.product.backend.service.entities;
 
 
-
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.database.dao.IGenericDAO;
@@ -18,25 +17,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 /**
  * @author sleroy
  */
 @Transactional
 @Service
-public class PersonRoleService extends AbstractService<PersonRole, Integer, PersonRoleCriteria>
-        implements IPersonRoleService
-{
+public class PersonRoleService extends AbstractService<PersonRole, Integer, PersonRoleCriteria> implements IPersonRoleService {
     
+    private static final Logger LOGGER     = LoggerFactory.getLogger("personrole-service");
     
-    private static final Logger LOGGER = LoggerFactory.getLogger("personrole-service");
+    private static final String ADMIN_NAME = "admin";
     
+    private static final String ADMIN_ROLE = "ADMIN";
     
     @Autowired
     private PersonRoleDao       requiredDAO;
-    
-    
     
     /**
      * Returns the default user role
@@ -46,15 +41,16 @@ public class PersonRoleService extends AbstractService<PersonRole, Integer, Pers
     @Override
     public PersonRole getAdminRole() {
     
-    
-        final PersonRole singleOrNull = selectByKey("ADMIN");
-        if (singleOrNull == null) {
-            LOGGER.warn("No admin role found, may create a problem to generate administrators.");
-            return null;
+        PersonRole admin = selectByKey(ADMIN_ROLE);
+        if (admin == null) {
+            admin = new PersonRole();
+            admin.setName(ADMIN_NAME);
+            admin.setRoleKey(ADMIN_ROLE);
+            insert(admin);
+            return admin;
         }
-        return singleOrNull;
+        return admin;
     }
-    
     
     /**
      * Returns the default user role
@@ -64,12 +60,10 @@ public class PersonRoleService extends AbstractService<PersonRole, Integer, Pers
     @Override
     public PersonRole getDefaultUserRole() {
     
-    
         final PersonRole selectByKey = selectByKey("USER");
         Validate.notNull(selectByKey);
         return selectByKey;
     }
-    
     
     /*
      * (non-Javadoc)
@@ -78,26 +72,20 @@ public class PersonRoleService extends AbstractService<PersonRole, Integer, Pers
     @Override
     public IGenericDAO<PersonRole, Integer, PersonRoleCriteria> getRequiredDAO() {
     
-    
         return requiredDAO;
     }
     
-    
     public void setRequiredDAO(final PersonRoleDao _requiredDAO) {
-    
     
         requiredDAO = _requiredDAO;
     }
     
-    
     @Override
     protected PersonRoleCriteria createKeyCriteria(final String key) {
-    
     
         final PersonRoleCriteria criteria = new PersonRoleCriteria();
         criteria.createCriteria().andRoleKeyEqualTo(key);
         return criteria;
     }
-    
     
 }
