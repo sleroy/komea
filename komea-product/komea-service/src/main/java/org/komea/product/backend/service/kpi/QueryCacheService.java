@@ -44,12 +44,18 @@ public class QueryCacheService implements IQueryCacheService {
                 return CEPResult.buildFromMap(new TupleResultMap());
             }
         });
+    }
+
+    private synchronized void registerCron() {
         final String className = this.getClass().getName();
-        cronRegistry.registerCronTask(className, "0 0/5 * * * ? *", this.getClass(), new JobDataMap());
+        if (!cronRegistry.existCron(className)) {
+            cronRegistry.registerCronTask(className, "0 0/5 * * * ? *", this.getClass(), new JobDataMap());
+        }
     }
 
     @Override
     public IDynamicDataQuery addQueryInCache(final IDynamicDataQuery dynamicDataQuery) {
+        registerCron();
         final Callable<ICEPResult> call = new Callable<ICEPResult>() {
 
             @Override
