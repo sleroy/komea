@@ -42,6 +42,7 @@ public class QueryCacheService implements IQueryCacheService {
 
             @Override
             public ICEPResult load(String key) throws Exception {
+                System.out.println("QUERY CACHE SERVICE : load");
                 return CEPResult.buildFromMap(new TupleResultMap());
             }
         });
@@ -72,7 +73,10 @@ public class QueryCacheService implements IQueryCacheService {
             public synchronized ICEPResult getResult() {
                 System.out.println("QUERY CACHE SERVICE : getResult");
                 try {
-                    return cache.get(getKey(), call);
+                    System.out.println("CACHE SIZE 1 : " + cache.asMap().size() + " : " + getKey());
+                    final ICEPResult result = cache.get(getKey(), call);
+                    System.out.println("CACHE SIZE  2 : " + cache.asMap().size() + " : " + getKey());
+                    return result;
                 } catch (ExecutionException ex) {
                     LOGGER.error(ex.getMessage(), ex);
                     return CEPResult.buildFromMap(new TupleResultMap());
@@ -87,9 +91,10 @@ public class QueryCacheService implements IQueryCacheService {
     }
 
     @Override
-    public synchronized void execute(JobExecutionContext context) throws JobExecutionException {
+    public void execute(JobExecutionContext context) throws JobExecutionException {
         System.out.println("QUERY CACHE SERVICE : execute");
         final ConcurrentMap<String, ICEPResult> map = cache.asMap();
+        System.out.println("CACHE SIZE  3 : " + cache.asMap().size());
         for (final String queryKey : map.keySet()) {
             System.out.println("QUERY CACHE SERVICE : refresh " + queryKey);
             cache.refresh(queryKey);
