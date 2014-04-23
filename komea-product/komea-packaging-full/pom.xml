@@ -89,7 +89,10 @@
 			<artifactId>komea-standard-kpis</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+                 
 
+
+              <!-- les plugins -->
 
 		<dependency>
 			<groupId>org.komea.plugins</groupId>
