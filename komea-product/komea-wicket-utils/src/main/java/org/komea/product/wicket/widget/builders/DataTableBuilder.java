@@ -99,7 +99,6 @@ public class DataTableBuilder<T, S>
     
         final PropertyColumn<T, S> propertyColumn =
                 new PropertyColumn<T, S>(Model.of(_columName), _property);
-        
         columns.add(propertyColumn);
         return this;
     }
