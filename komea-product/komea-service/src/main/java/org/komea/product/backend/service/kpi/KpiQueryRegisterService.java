@@ -10,6 +10,7 @@ import org.komea.eventory.api.formula.ICEPResult;
 import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
+import org.komea.product.backend.api.IQueryCacheService;
 import org.komea.product.backend.exceptions.KpiProvidesInvalidFormulaException;
 import org.komea.product.backend.service.ISpringService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
@@ -58,6 +59,9 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService {
 
     @Autowired
     private ISpringService springService;
+
+    @Autowired
+    private IQueryCacheService queryCacheService;
 
     /*
      * (non-Javadoc)
@@ -118,9 +122,8 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService {
         } else if (queryImplementation instanceof IDynamicDataQuery) {
             springService.autowirePojo(queryImplementation);
             LOGGER.debug("KPI {} provides an dynamic data query {}.", _kpi, queryImplementation);
-            final DynamicCacheQuery dynamicCacheQuery = new DynamicCacheQuery((IDynamicDataQuery) queryImplementation);
-            // Wraps the current dynamic query into a cache wrapper to avoid slow queries
-            dynamicDataQueryRegisterService.registerQuery(queryName, dynamicCacheQuery);
+            final IDynamicDataQuery cachedQuery = queryCacheService.addQueryInCache((IDynamicDataQuery) queryImplementation);
+            dynamicDataQueryRegisterService.registerQuery(queryName, cachedQuery);
         }
     }
 

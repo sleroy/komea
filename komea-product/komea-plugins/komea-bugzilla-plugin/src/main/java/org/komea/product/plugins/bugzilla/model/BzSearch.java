@@ -57,4 +57,15 @@ public class BzSearch {
         return "BzSearch{" + "filters=" + filters + '}';
     }
 
+    public String getString() {
+        final StringBuilder stringBuilder = new StringBuilder();
+        for (final BzFilter filter : filters.values()) {
+            stringBuilder.append(filter.getString()).append(";");
+        }
+        if (!filters.isEmpty()) {
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        }
+        return stringBuilder.toString();
+    }
+
 }

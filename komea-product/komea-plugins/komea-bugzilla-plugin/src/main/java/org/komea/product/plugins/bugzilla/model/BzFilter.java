@@ -48,4 +48,16 @@ public class BzFilter {
         return "BzFilter{" + "parameterKey=" + parameterKey + ", accept=" + accept + ", values=" + values + '}';
     }
 
+    public String getString() {
+        final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(parameterKey).append(accept ? "=" : "!=");
+        for (final String value : values) {
+            stringBuilder.append(value).append(",");
+        }
+        if (!values.isEmpty()) {
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        }
+        return stringBuilder.toString();
+    }
+
 }

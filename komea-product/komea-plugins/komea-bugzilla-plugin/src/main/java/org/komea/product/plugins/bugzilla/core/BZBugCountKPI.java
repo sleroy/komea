@@ -67,6 +67,17 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
         return bzSearchs;
     }
 
+    private static String convert(final List<BzSearch> bzSearchs) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        for (final BzSearch bzSearch : bzSearchs) {
+            stringBuilder.append(bzSearch.getString()).append("#");
+        }
+        if (!bzSearchs.isEmpty()) {
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        }
+        return stringBuilder.toString();
+    }
+
     public BZBugCountKPI() {
         this(Collections.<BzSearch>emptyList());
     }
@@ -83,7 +94,6 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
      */
     @Override
     public ICEPResult getResult() {
-        System.out.println("BZBugCountKPI GET RESULT");
         final TupleResultMap<Integer> tupleResultMap = new TupleResultMap<Integer>();
         for (final BZServerConfiguration conf : bugZillaConfiguration.selectAll()) {
             IBZServerProxy bugzillaProxy = null;
@@ -155,6 +165,11 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
     @Override
     public String toString() {
         return "BZBugCountKPI{" + "searchs=" + searchs + '}';
+    }
+
+    @Override
+    public String getKey() {
+        return this.getClass().getName() + ":" + convert(searchs);
     }
 
 }
