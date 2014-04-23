@@ -17,6 +17,7 @@ komea.log
 .settings/
 bin/
 xtend-gen/
+WebContent
 
 #temp
 *~
