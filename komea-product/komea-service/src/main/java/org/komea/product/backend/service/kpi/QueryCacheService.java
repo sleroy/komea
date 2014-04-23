@@ -28,6 +28,7 @@ public class QueryCacheService implements IQueryCacheService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("dynamicquery-cache");
     private final LoadingCache<String, ICEPResult> cache;
+    private final static String CRON_KEY = "DYNAMIC_QUERY_CACHE_CRON";
 
     @Autowired
     private ICronRegistryService cronRegistry;
@@ -47,19 +48,21 @@ public class QueryCacheService implements IQueryCacheService {
     }
 
     private synchronized void registerCron() {
-        final String className = this.getClass().getName();
-        if (!cronRegistry.existCron(className)) {
-            cronRegistry.registerCronTask(className, "0 0/5 * * * ? *", this.getClass(), new JobDataMap());
+        if (!cronRegistry.existCron(CRON_KEY)) {
+            System.out.println("QUERY CACHE SERVICE : registerCron");
+            cronRegistry.registerCronTask(CRON_KEY, "0 0/5 * * * ? *", this.getClass(), new JobDataMap());
         }
     }
 
     @Override
     public IDynamicDataQuery addQueryInCache(final IDynamicDataQuery dynamicDataQuery) {
+        System.out.println("QUERY CACHE SERVICE : addQueryInCache");
         registerCron();
         final Callable<ICEPResult> call = new Callable<ICEPResult>() {
 
             @Override
             public ICEPResult call() throws Exception {
+                System.out.println("QUERY CACHE SERVICE : call");
                 return dynamicDataQuery.getResult();
             }
         };
@@ -67,6 +70,7 @@ public class QueryCacheService implements IQueryCacheService {
 
             @Override
             public synchronized ICEPResult getResult() {
+                System.out.println("QUERY CACHE SERVICE : getResult");
                 try {
                     return cache.get(getKey(), call);
                 } catch (ExecutionException ex) {
@@ -84,8 +88,10 @@ public class QueryCacheService implements IQueryCacheService {
 
     @Override
     public synchronized void execute(JobExecutionContext context) throws JobExecutionException {
+        System.out.println("QUERY CACHE SERVICE : execute");
         final ConcurrentMap<String, ICEPResult> map = cache.asMap();
         for (final String queryKey : map.keySet()) {
+            System.out.println("QUERY CACHE SERVICE : refresh " + queryKey);
             cache.refresh(queryKey);
         }
     }
