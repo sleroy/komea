@@ -200,11 +200,7 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
     @Override
     public List<Project> getProjectsOfPersonGroupRecursively(final Integer _personGroupId) {
         final List<Project> projects = getProjectsOfPersonGroup(_personGroupId);
-        final List<Person> persons = personService.getPersonsOfPersonGroupRecursively(_personGroupId);
-        for (final Person person : persons) {
-            projects.addAll(getProjectsOfPerson(person.getId()));
-        }
-        final List<PersonGroup> groups = personGroupService.getChildren(_personGroupId);
+        final List<PersonGroup> groups = personGroupService.getChildrenRecursively(_personGroupId);
         for (final PersonGroup group : groups) {
             projects.addAll(getProjectsOfPersonGroup(group.getId()));
         }
