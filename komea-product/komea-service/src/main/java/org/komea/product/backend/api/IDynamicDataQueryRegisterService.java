@@ -6,6 +6,7 @@ package org.komea.product.backend.api;
 
 
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.komea.cep.dynamicdata.IDynamicDataQuery;
@@ -14,24 +15,50 @@ import org.komea.cep.dynamicdata.IDynamicDataQuery;
 
 /**
  * @author sleroy
- *
  */
 public interface IDynamicDataQueryRegisterService
 {
     
     
-    public abstract boolean existQuery(String _engineKey);
+    /**
+     * Tests if the query exist
+     * 
+     * @param _engineKey
+     *            the query key.
+     * @return true if the query is in the query.
+     */
+    public boolean existQuery(String _engineKey);
     
     
-    public abstract IDynamicDataQuery getQuery(String _query);
+    /**
+     * Returns the list of queries into the registry.
+     * 
+     * @return the list of queries
+     */
+    public Iterator<IDynamicDataQuery> getQueriesIterator();
     
     
-    public abstract List<String> getQueryNames();
+    /**
+     * Returns the query
+     * 
+     * @param _queryKey
+     *            the query key
+     * @return the dynamic query
+     */
+    public IDynamicDataQuery getQuery(String _queryKey);
     
     
-    public abstract void registerQuery(String _queryName, IDynamicDataQuery _query);
+    /**
+     * Returns the query names
+     * 
+     * @return the query names;
+     */
+    public List<String> getQueryNames();
     
     
-    public abstract boolean removeQuery(String _queryName);
+    public void registerQuery(String _queryName, IDynamicDataQuery _query);
+    
+    
+    public boolean removeQuery(String _queryName);
     
 }

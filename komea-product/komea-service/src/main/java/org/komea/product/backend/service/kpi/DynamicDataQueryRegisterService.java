@@ -8,6 +8,7 @@ package org.komea.product.backend.service.kpi;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -58,6 +59,23 @@ public class DynamicDataQueryRegisterService implements IDynamicDataQueryRegiste
     
     /*
      * (non-Javadoc)
+     * @see org.komea.product.backend.api.IDynamicDataQueryRegisterService#getQueriesIterator()
+     */
+    @Override
+    public Iterator<IDynamicDataQuery> getQueriesIterator() {
+    
+    
+        return queryCatalog.values().iterator();
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.eventory.api.IQueryAdministrator#getQueryNames()
+     */
+    
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.backend.service.kpi.IDynamicDataQueryRegisterService#getQuery(java.lang.String)
      */
     @Override
@@ -70,7 +88,7 @@ public class DynamicDataQueryRegisterService implements IDynamicDataQueryRegiste
     
     /*
      * (non-Javadoc)
-     * @see org.komea.eventory.api.IQueryAdministrator#getQueryNames()
+     * @see org.komea.eventory.api.IQueryAdministrator#registerQuery(java.lang.String, org.komea.eventory.api.IDynamicDataQuery)
      */
     
     /*
@@ -87,7 +105,7 @@ public class DynamicDataQueryRegisterService implements IDynamicDataQueryRegiste
     
     /*
      * (non-Javadoc)
-     * @see org.komea.eventory.api.IQueryAdministrator#registerQuery(java.lang.String, org.komea.eventory.api.IDynamicDataQuery)
+     * @see org.komea.eventory.api.IQueryAdministrator#removeQuery(java.lang.String)
      */
     
     /*
@@ -107,19 +125,12 @@ public class DynamicDataQueryRegisterService implements IDynamicDataQueryRegiste
     
     /*
      * (non-Javadoc)
-     * @see org.komea.eventory.api.IQueryAdministrator#removeQuery(java.lang.String)
-     */
-    
-    /*
-     * (non-Javadoc)
      * @see org.komea.product.backend.service.kpi.IDynamicDataQueryRegisterService#removeQuery(java.lang.String)
      */
     @Override
     public boolean removeQuery(final String _queryName) {
     
     
-        final boolean wasPresent = queryCatalog.remove(_queryName) != null;
-        
-        return wasPresent;
+        return queryCatalog.remove(_queryName) != null;
     }
 }

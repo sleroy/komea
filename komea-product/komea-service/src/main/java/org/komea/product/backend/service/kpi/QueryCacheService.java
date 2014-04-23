@@ -1,104 +1,143 @@
+
 package org.komea.product.backend.service.kpi;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutionException;
+
+
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PostConstruct;
+
 import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.eventory.api.formula.ICEPResult;
-import org.komea.eventory.formula.tuple.TupleResultMap;
-import org.komea.eventory.query.CEPResult;
 import org.komea.product.backend.api.IQueryCacheService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.quartz.JobDataMap;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.LoadingCache;
+import com.google.common.collect.Lists;
+
+
+
+/**
+ * This service is designed to produce a wrapper over an dynamic query to avoid consequently loading of the results. The results are cached
+ * and upgraded with a cron job that is polled every fixed interval. This provides a boost in performance.
+ * 
+ * @author sleroy
+ */
 @Service
 @Transactional
-public class QueryCacheService implements IQueryCacheService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger("dynamicquery-cache");
+public class QueryCacheService implements IQueryCacheService
+{
+    
+    
+    private final static String                    CRON_KEY    = "DYNAMIC_QUERY_CACHE_CRON";
+    /**
+     * 
+     */
+    private static final String                    CRON_PERIOD = "0 0/5 * * * ? *";
+    private static final Logger                    LOGGER      =
+                                                                       LoggerFactory
+                                                                               .getLogger("dynamicquery-cache");
     private final LoadingCache<String, ICEPResult> cache;
-    private final static String CRON_KEY = "DYNAMIC_QUERY_CACHE_CRON";
-
+    
     @Autowired
-    private ICronRegistryService cronRegistry;
-
+    private ICronRegistryService                   cronRegistry;
+    
+    
+    
+    /**
+     * Initialize the query cache service.
+     */
     public QueryCacheService() {
+    
+    
         super();
         final CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder();
         cacheBuilder.expireAfterAccess(1, TimeUnit.DAYS);
         cacheBuilder.maximumSize(200);
-        cache = cacheBuilder.build(new CacheLoader<String, ICEPResult>() {
-
-            @Override
-            public ICEPResult load(String key) throws Exception {
-                System.out.println("QUERY CACHE SERVICE : load");
-                return CEPResult.buildFromMap(new TupleResultMap());
-            }
-        });
+        cache = cacheBuilder.build(new DynamicQueryCacheLoader());
     }
-
-    private synchronized void registerCron() {
+    
+    
+    /**
+     * Adds a query in cache. The wrapped query is returned frmo this method.
+     */
+    @Override
+    public IDynamicDataQuery addCacheOnDynamicQuery(final IDynamicDataQuery _dynamicDataQuery) {
+    
+    
+        LOGGER.info("add a query in cache {}", _dynamicDataQuery);
+        
+        return new CachedDynamicQuery(this, _dynamicDataQuery);
+    }
+    
+    
+    /**
+     * Returns the cache.
+     * 
+     * @return the cache.
+     */
+    public LoadingCache<String, ICEPResult> getCache() {
+    
+    
+        return cache;
+    }
+    
+    
+    public ICronRegistryService getCronRegistry() {
+    
+    
+        return cronRegistry;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.api.IQueryCacheService#storedQueryNames()
+     */
+    @Override
+    public List<String> getStoredQueryNames() {
+    
+    
+        return Lists.newArrayList(cache.asMap().keySet());
+    }
+    
+    
+    @PostConstruct
+    public void init() {
+    
+    
+        LOGGER.info("Initialization of cache query engine");
+        registerCron();
+        
+    }
+    
+    
+    /**
+     * Register the cron.
+     */
+    public void registerCron() {
+    
+    
         if (!cronRegistry.existCron(CRON_KEY)) {
             System.out.println("QUERY CACHE SERVICE : registerCron");
-            cronRegistry.registerCronTask(CRON_KEY, "0 0/5 * * * ? *", this.getClass(), new JobDataMap());
+            cronRegistry.registerCronTask(CRON_KEY, CRON_PERIOD, QueryCacheCron.class,
+                    new JobDataMap());
         }
     }
-
-    @Override
-    public IDynamicDataQuery addQueryInCache(final IDynamicDataQuery dynamicDataQuery) {
-        System.out.println("QUERY CACHE SERVICE : addQueryInCache");
-        registerCron();
-        final Callable<ICEPResult> call = new Callable<ICEPResult>() {
-
-            @Override
-            public ICEPResult call() throws Exception {
-                System.out.println("QUERY CACHE SERVICE : call");
-                return dynamicDataQuery.getResult();
-            }
-        };
-        return new IDynamicDataQuery() {
-
-            @Override
-            public synchronized ICEPResult getResult() {
-                System.out.println("QUERY CACHE SERVICE : getResult");
-                try {
-                    System.out.println("CACHE SIZE 1 : " + cache.asMap().size() + " : " + getKey());
-                    final ICEPResult result = cache.get(getKey(), call);
-                    System.out.println("CACHE SIZE  2 : " + cache.asMap().size() + " : " + getKey());
-                    return result;
-                } catch (ExecutionException ex) {
-                    LOGGER.error(ex.getMessage(), ex);
-                    return CEPResult.buildFromMap(new TupleResultMap());
-                }
-            }
-
-            @Override
-            public String getKey() {
-                return dynamicDataQuery.getKey();
-            }
-        };
+    
+    
+    public void setCronRegistry(final ICronRegistryService _cronRegistry) {
+    
+    
+        cronRegistry = _cronRegistry;
     }
-
-    @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
-        System.out.println("QUERY CACHE SERVICE : execute");
-        final ConcurrentMap<String, ICEPResult> map = cache.asMap();
-        System.out.println("CACHE SIZE  3 : " + cache.asMap().size());
-        for (final String queryKey : map.keySet()) {
-            System.out.println("QUERY CACHE SERVICE : refresh " + queryKey);
-            cache.refresh(queryKey);
-        }
-    }
-
+    
 }

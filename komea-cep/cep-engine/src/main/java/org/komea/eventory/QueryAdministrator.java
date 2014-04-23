@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang.Validate;
 import org.komea.eventory.api.bridge.IEventBridge;
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.api.engine.IQueryAdministrator;
@@ -27,8 +28,9 @@ public class QueryAdministrator implements IQueryAdministrator
 {
     
     
-    private final IEventBridge eventBridge;
-    private final Map<String, ICEPQuery> queryCatalog = new ConcurrentHashMap<String, ICEPQuery>(100);
+    private final IEventBridge           eventBridge;
+    private final Map<String, ICEPQuery> queryCatalog = new ConcurrentHashMap<String, ICEPQuery>(
+                                                              100);
     
     
     
@@ -41,8 +43,10 @@ public class QueryAdministrator implements IQueryAdministrator
     public QueryAdministrator(final IEventBridge _eventListener) {
     
     
-        eventBridge = _eventListener;
+        super();
         
+        eventBridge = _eventListener;
+        Validate.notNull(_eventListener);
         
     }
     
@@ -55,6 +59,7 @@ public class QueryAdministrator implements IQueryAdministrator
     public boolean existQuery(final String _engineKey) {
     
     
+        Validate.notEmpty(_engineKey);
         return queryCatalog.containsKey(_engineKey);
     }
     
@@ -67,6 +72,7 @@ public class QueryAdministrator implements IQueryAdministrator
     public ICEPQuery getQuery(final String _query) {
     
     
+        Validate.notEmpty(_query);
         return queryCatalog.get(_query);
     }
     
@@ -91,6 +97,9 @@ public class QueryAdministrator implements IQueryAdministrator
     public void registerQuery(final String _queryName, final ICEPQuery _query) {
     
     
+        Validate.notEmpty(_queryName);
+        Validate.notNull(_query);
+        
         queryCatalog.put(_queryName, _query);
         eventBridge.registerQuery(_queryName, _query);
         
@@ -105,6 +114,8 @@ public class QueryAdministrator implements IQueryAdministrator
     public boolean removeQuery(final String _queryName) {
     
     
+        Validate.notEmpty(_queryName);
+        
         final boolean wasPresent = queryCatalog.remove(_queryName) != null;
         eventBridge.removeQuery(_queryName);
         return wasPresent;
