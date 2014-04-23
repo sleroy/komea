@@ -1,9 +1,12 @@
 package org.komea.product.backend.service.entities;
 
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-
+import java.util.Map;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.database.dao.CustomerDao;
@@ -32,8 +35,6 @@ import org.komea.product.database.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
 
 /**
  */
@@ -194,6 +195,26 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
             projectIds.add(projectPersonGroup.getIdProject());
         }
         return selectByPrimaryKeyList(projectIds);
+    }
+
+    @Override
+    public List<Project> getProjectsOfPersonGroupRecursively(final Integer _personGroupId) {
+        final List<Project> projects = getProjectsOfPersonGroup(_personGroupId);
+        final List<Person> persons = personService.getPersonsOfPersonGroupRecursively(_personGroupId);
+        for (final Person person : persons) {
+            projects.addAll(getProjectsOfPerson(person.getId()));
+        }
+        final List<PersonGroup> groups = personGroupService.getChildren(_personGroupId);
+        for (final PersonGroup group : groups) {
+            projects.addAll(getProjectsOfPersonGroup(group.getId()));
+        }
+        final Map<Integer, Project> projectsMap = new HashMap<Integer, Project>();
+        final Iterator<Project> iterator = projects.iterator();
+        while (iterator.hasNext()) {
+            final Project project = iterator.next();
+            projectsMap.put(project.getId(), project);
+        }
+        return new ArrayList<Project>(projectsMap.values());
     }
 
     /**
