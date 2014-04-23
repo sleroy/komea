@@ -15,12 +15,16 @@ import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.Properties;
 import org.komea.product.backend.plugin.api.Property;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
+import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.plugins.testlink.core.TestLinkAlertFactory;
+import org.komea.product.plugins.testlink.core.TestLinkCheckerCron;
+import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author rgalerme
@@ -40,17 +44,27 @@ import org.slf4j.LoggerFactory;
     @Property(description = "Refresh period of Testlink job", key = TestLinkProviderPlugin.SETTING_PROVIDER_PERIOD_NAME, type = String.class, value = TestLinkProviderPlugin.TESTLINK_CRON_VALUE) })
 public class TestLinkProviderPlugin {
     
+    private static final Logger   LOGGER                       = LoggerFactory.getLogger(TestLinkProviderPlugin.class);
+    
     public static final String    TESTLINK_PROVIDER_PLUGIN     = "TestLink Provider plugin";
     
     protected static final String TESTLINK_CRON_VALUE          = "0 0/1 * * * ?";
     
     protected static final String SETTING_PROVIDER_PERIOD_NAME = "testlink_refresh_period";
     
-    private static final Logger   LOGGER                       = LoggerFactory.getLogger(TestLinkProviderPlugin.class);
+    /**
+     * 
+     */
+    private static final String   TESTLINK_CRON                = "TESTLINK_CRON";
+    
+    @Autowired
+    private ICronRegistryService  registryService;
     
     @PostConstruct
     public void init() {
     
         LOGGER.info("Loading testlink plugin");
+        registryService.removeCronTask(TESTLINK_CRON);
+        registryService.registerCronTask(TESTLINK_CRON, TESTLINK_CRON_VALUE, TestLinkCheckerCron.class, new JobDataMap());
     }
 }
