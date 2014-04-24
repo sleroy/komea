@@ -8,6 +8,7 @@ package org.komea.product.backend.service.alert;
 
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.KpiAlertType;
@@ -22,16 +23,16 @@ public class AlertCriteria
 {
     
     
-    KpiAlertType  alertType;
+    private KpiAlertType  alertType;
     
     
-    BaseEntityDto entity;
+    private BaseEntityDto entity;
     
     
-    EntityType    entityType;
+    private EntityType    entityType;
     
     
-    List<Measure> measures;
+    private List<Measure> measures;
     
     
     
@@ -47,6 +48,8 @@ public class AlertCriteria
         entity = _entity;
         entityType = _entityType;
         measures = _measures;
+        Validate.notNull(_alertType);
+        Validate.notNull(_entity);
     }
     
     

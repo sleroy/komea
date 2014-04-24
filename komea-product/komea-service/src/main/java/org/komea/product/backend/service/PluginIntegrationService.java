@@ -178,7 +178,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Bean
         }
         if (provider.getId() != null) { throw new InvalidProviderDescriptionException(
                 "Producer DTO should not register primary key"); }
-        providerService.insert(provider);
+        providerService.saveOrUpdate(provider);
         
         // Alertes
         for (final EventType eventType : _providerDTO.getEventTypes()) {

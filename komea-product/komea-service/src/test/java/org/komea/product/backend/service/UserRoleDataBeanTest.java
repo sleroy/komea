@@ -9,9 +9,15 @@ package org.komea.product.backend.service;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.service.entities.IPersonRoleService;
+import org.komea.product.database.model.PersonRole;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 
@@ -34,11 +40,30 @@ public class UserRoleDataBeanTest
      * Test method for {@link org.komea.product.backend.service.UserRoleDataBean#init()}.
      */
     @Test
-    public final void testInit() throws Exception {
+    public final void testInitWithAdmin() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        when(personRoleDao.selectByKey("ADMIN")).thenReturn(null);
+        when(personRoleDao.selectByKey("USER")).thenReturn(new PersonRole());
+        
+        userRoleDataBean.init();
+        final ArgumentCaptor<PersonRole> argumentCaptor = ArgumentCaptor.forClass(PersonRole.class);
+        verify(personRoleDao, times(1)).saveOrUpdate(argumentCaptor.capture());
     }
     
+    
+    /**
+     * Test method for {@link org.komea.product.backend.service.UserRoleDataBean#init()}.
+     */
+    @Test
+    public final void testInitWithUser() throws Exception {
+    
+    
+        when(personRoleDao.selectByKey("USER")).thenReturn(null);
+        when(personRoleDao.selectByKey("ADMIN")).thenReturn(new PersonRole());
+        
+        userRoleDataBean.init();
+        final ArgumentCaptor<PersonRole> argumentCaptor = ArgumentCaptor.forClass(PersonRole.class);
+        verify(personRoleDao, times(1)).saveOrUpdate(argumentCaptor.capture());
+    }
 }

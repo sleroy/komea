@@ -30,9 +30,7 @@ import org.komea.product.database.model.ProviderCriteria;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 import org.springframework.context.ApplicationContext;
 
 
@@ -116,19 +114,6 @@ public class PluginIntegrationServiceTest
         final ArrayList<PropertyDTO> properties = new ArrayList<PropertyDTO>();
         properties.add(new PropertyDTO("testProp", "value", "java.lang.String", "test prop"));
         providerDTO.setProperties(properties);
-        // / Update ID from provider pojo
-        Mockito.when(providerService.insert(provider)).then(new Answer()
-        {
-            
-            
-            @Override
-            public Object answer(final InvocationOnMock _invocation) throws Throwable {
-            
-            
-                provider.setId(1);
-                return null;
-            }
-        });
         
         // Validation of the DTO
         final Set<ConstraintViolation<ProviderDto>> constraintViolationException =

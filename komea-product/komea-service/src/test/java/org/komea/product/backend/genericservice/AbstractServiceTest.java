@@ -152,7 +152,7 @@ public class AbstractServiceTest
                     return null;
                 }
             };
-            genericService.setDaoEventRegistry(mock(DAOEventRegistry.class));
+            
             pojo = _pojo;
             
             // when(genericService.getRequiredDAO()).thenReturn((IGenericDAO) genericDAO);
@@ -161,7 +161,7 @@ public class AbstractServiceTest
         }
         
         
-        public void test() {
+        public void testInsertion() {
         
         
             final TEntity entity = (TEntity) ClassUtils.instantiate(pojo);
@@ -169,7 +169,7 @@ public class AbstractServiceTest
             assertTrue(entity.getId() == 1);
             
             final TEntity entity2 = (TEntity) ClassUtils.instantiate(pojo);
-            genericService.insertSelective(entity2);
+            genericService.insert(entity2);
             assertTrue(entity2.getId() == 2);
             
             assertEquals(2, genericService.selectAll().size());
@@ -218,7 +218,7 @@ public class AbstractServiceTest
     
         final GenericServiceTester serviceTester =
                 new GenericServiceTester(new AlertTypeService(), KpiAlertType.class);
-        serviceTester.test();
+        serviceTester.testInsertion();
     }
     
 }

@@ -40,12 +40,12 @@ public class UserRoleDataBean
     
         final PersonRole administrator = new PersonRole(null, "ADMIN", "Administrator");
         if (getPersonRoleDao().selectByKey("ADMIN") == null) {
-            getPersonRoleDao().insert(administrator);
+            getPersonRoleDao().saveOrUpdate(administrator);
         }
         
         final PersonRole userRole = new PersonRole(null, "USER", "Standard user");
         if (getPersonRoleDao().selectByKey("USER") == null) {
-            getPersonRoleDao().insert(userRole);
+            getPersonRoleDao().saveOrUpdate(userRole);
         }
         
         

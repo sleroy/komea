@@ -11,12 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
-import org.komea.product.backend.service.generic.IDAOEventRegistry;
 import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.dao.IGenericDAO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -28,11 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 public abstract class AbstractService<TEntity extends IHasKey, PK extends Serializable, TCriteria>
         implements IGenericService<TEntity, PK, TCriteria>
 {
-    
-    
-    @Autowired
-    private IDAOEventRegistry daoEventRegistry;
-    
     
     
     /**
@@ -49,6 +42,7 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
      * (non-Javadoc)
      * @see org.komea.product.backend.service.IGenericService#countByCriteria(java.lang.Object)
      */
+    
     @Override
     public int countByCriteria(final TCriteria _example) {
     
@@ -61,6 +55,7 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
      * (non-Javadoc)
      * @see org.komea.product.backend.service.IGenericService#delete(java.lang.Object)
      */
+    
     @Override
     public void delete(final TEntity _entity) {
     
@@ -73,13 +68,11 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
      * (non-Javadoc)
      * @see org.komea.product.backend.service.IGenericService#deleteByCriteria(java.lang.Object)
      */
+    
     @Override
     public int deleteByCriteria(final TCriteria _example) {
     
     
-        for (final TEntity entity : getRequiredDAO().selectByCriteria(_example)) {
-            daoEventRegistry.notifyDeleted(entity);
-        }
         return getRequiredDAO().deleteByCriteria(_example);
     }
     
@@ -88,11 +81,11 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
      * (non-Javadoc)
      * @see org.komea.product.backend.service.IGenericService#deleteByPrimaryKey(java.io.Serializable)
      */
+    
     @Override
     public int deleteByPrimaryKey(final PK _id) {
     
     
-        daoEventRegistry.notifyDeleted(selectByPrimaryKey(_id));
         return getRequiredDAO().deleteByPrimaryKey(_id);
     }
     
@@ -102,13 +95,6 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
     
     
         return getRequiredDAO().countByCriteria(createKeyCriteria(key)) > 0;
-    }
-    
-    
-    public IDAOEventRegistry getDaoEventRegistry() {
-    
-    
-        return daoEventRegistry;
     }
     
     
@@ -124,25 +110,11 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
      * (non-Javadoc)
      * @see org.komea.product.backend.service.IGenericService#insert(java.lang.Object)
      */
-    @Override
+    
     public int insert(final TEntity _record) {
     
     
-        daoEventRegistry.notifyUpdated(_record);
         return getRequiredDAO().insert(_record);
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.IGenericService#insertSelective(java.lang.Object)
-     */
-    @Override
-    public int insertSelective(final TEntity _record) {
-    
-    
-        daoEventRegistry.notifyUpdated(_record);
-        return getRequiredDAO().insertSelective(_record);
     }
     
     
@@ -150,6 +122,7 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
      * (non-Javadoc)
      * @see org.komea.product.backend.service.IGenericService#saveOrUpdate(java.lang.Object)
      */
+    
     @Override
     public void saveOrUpdate(final TEntity _tEntity) {
     
@@ -175,6 +148,7 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
      * (non-Javadoc)
      * @see org.komea.product.backend.service.IGenericService#selectByCriteria(java.lang.Object)
      */
+    
     @Override
     public List<TEntity> selectByCriteria(final TCriteria _example) {
     
@@ -187,6 +161,7 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
      * (non-Javadoc)
      * @see org.komea.product.backend.service.IGenericService#selectByCriteriaWithRowbounds(java.lang.Object, int, int)
      */
+    
     @Override
     public List<TEntity> selectByCriteriaWithRowbounds(
             final TCriteria _example,
@@ -226,6 +201,7 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
      * (non-Javadoc)
      * @see org.komea.product.backend.service.IGenericService#selectByPrimaryKey(java.io.Serializable)
      */
+    
     @Override
     public TEntity selectByPrimaryKey(final PK _id) {
     
@@ -249,69 +225,14 @@ public abstract class AbstractService<TEntity extends IHasKey, PK extends Serial
     }
     
     
-    public void setDaoEventRegistry(final IDAOEventRegistry _daoEventRegistry) {
-    
-    
-        daoEventRegistry = _daoEventRegistry;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.IGenericService#updateByCriteria(java.lang.Object, java.lang.Object)
-     */
-    @Override
-    public int updateByCriteria(final TEntity _record, final TCriteria _example) {
-    
-    
-        for (final TEntity entity : getRequiredDAO().selectByCriteria(_example)) {
-            daoEventRegistry.notifyUpdated(entity);
-        }
-        
-        return getRequiredDAO().updateByCriteria(_record, _example);
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.IGenericService#updateByCriteriaSelective(java.lang.Object, java.lang.Object)
-     */
-    @Override
-    public int updateByCriteriaSelective(final TEntity _record, final TCriteria _example) {
-    
-    
-        for (final TEntity entity : getRequiredDAO().selectByCriteria(_example)) {
-            daoEventRegistry.notifyUpdated(entity);
-        }
-        
-        return getRequiredDAO().updateByCriteriaSelective(_record, _example);
-    }
-    
-    
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.service.IGenericService#updateByPrimaryKey(java.lang.Object)
      */
-    @Override
+    
     public int updateByPrimaryKey(final TEntity _record) {
     
     
-        daoEventRegistry.notifyUpdated(_record);
-        
-        return getRequiredDAO().updateByPrimaryKey(_record);
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.IGenericService#updateByPrimaryKeySelective(java.lang.Object)
-     */
-    @Override
-    public int updateByPrimaryKeySelective(final TEntity _record) {
-    
-    
-        daoEventRegistry.notifyUpdated(_record);
-        
         return getRequiredDAO().updateByPrimaryKey(_record);
     }
     
