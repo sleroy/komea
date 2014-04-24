@@ -2,7 +2,6 @@
 package org.komea.product.wicket.console;
 
 
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -17,31 +16,24 @@ import org.komea.product.backend.service.ISettingService;
 import org.komea.product.wicket.LayoutPage;
 import org.slf4j.LoggerFactory;
 
-
-
 /**
  * Person admin page
  * 
  * @author sleroy
  */
-public class ConsolePage extends LayoutPage
-{
-    
+public class ConsolePage extends LayoutPage {
     
     @SpringBean
     private ISettingService settingService;
     
-    
-    
     public ConsolePage(final PageParameters _parameters) {
-    
     
         super(_parameters);
         String consoleLog = "";
         try {
-            final Reader reader =
-                    new BufferedReader(new FileReader(new File(settingService.getProxy(
-                            "logfile_path").getStringValue())));
+            File defaultLogFile = new File(settingService.getProxy("logfile_path").getStringValue());
+            File currentLogFile = LogFilter.getCurrentLogFile(defaultLogFile);
+            final Reader reader = new BufferedReader(new FileReader(currentLogFile));
             consoleLog = IOUtils.toString(reader);
         } catch (final Exception e) {
             LoggerFactory.getLogger(ConsolePage.class).error("Impossible to access to the log.", e);
@@ -50,8 +42,6 @@ public class ConsolePage extends LayoutPage
         textArea.setModel(Model.of(consoleLog));
         add(textArea);
         
-        
     }
-    
     
 }
