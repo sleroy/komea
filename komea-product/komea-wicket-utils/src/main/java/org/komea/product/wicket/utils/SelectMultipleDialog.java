@@ -23,6 +23,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import java.util.Collections;
 import java.util.Comparator;
+import org.apache.wicket.Component;
 import org.komea.product.database.api.IHasKey;
 
 /**
@@ -39,6 +40,7 @@ public abstract class SelectMultipleDialog extends AbstractFormDialog<String> {
     private List<IHasKey> listSave;
     private List<IHasKey> listUsed;
     private List<IHasKey> selectedItems;
+    private List<ICustomFilter> iCustomFilters;
 
     protected final DialogButton btnCancel = new DialogButton("Cancel");
     protected final DialogButton btnSelect = new DialogButton("Select"); // with a customized text
@@ -70,6 +72,7 @@ public abstract class SelectMultipleDialog extends AbstractFormDialog<String> {
             final IChoiceRenderer<IHasKey> _rendener) {
 
         super(id, title, true);
+        this.iCustomFilters = new ArrayList<ICustomFilter>();
         this.form = new Form<String>("formMult");
         this.listSave = objectList;
         this.listUsed = new ArrayList<IHasKey>();
@@ -119,6 +122,10 @@ public abstract class SelectMultipleDialog extends AbstractFormDialog<String> {
         return selectedItems;
     }
 
+    public void addCustomFilter(ICustomFilter filter) {
+        this.iCustomFilters.add(filter);
+    }
+
     @Override
     public boolean isResizable() {
 
@@ -164,7 +171,17 @@ public abstract class SelectMultipleDialog extends AbstractFormDialog<String> {
                 }
             }
             if (!found) {
+                boolean valid = true;
+                for (ICustomFilter filter : iCustomFilters) {
+                    if (filter.isNoDisplay(type1)) {
+                        valid = false;
+                        break;
+                    }
+                }
+                if(valid)
+                {
                 this.listUsed.add(type1);
+                }
             }
         }
     }

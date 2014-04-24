@@ -3,10 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.komea.product.wicket.utils;
-
-
 
 import java.util.List;
 
@@ -23,17 +20,13 @@ import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import org.komea.product.database.api.IHasKey;
 
-
-
 /**
  * @author rgalerme
  */
-public class DialogFactory
-{
-    
-    
-    public static void addListWithSelectDialog(
-            final MarkupContainer page,
+public class DialogFactory {
+
+    @Deprecated
+    public static void addListWithSelectDialog(final MarkupContainer page,
             final String idList,
             final String idDialog,
             final String idBtnAdd,
@@ -43,119 +36,167 @@ public class DialogFactory
             final List<IHasKey> currentEntityList,
             final List<IHasKey> choiceEntityList,
             final List<IHasKey> selectDialogList,
-            final IGenericService _service) {
-    
-    
-        final IChoiceRenderer<IHasKey> displayGroup = DialogFactory.getChoiceRendenerEntity();
+            final IGenericService _service,
+            final CustomUpdater... updaters) {
+
         
+        
+        DataListSelectDialogBuilder data=new DataListSelectDialogBuilder();
+        data.setPage(page);
+        data.setIdList(idList);
+        data.setIdBtnAdd(idBtnAdd);
+        data.setIdBtnDel(idBtnDel);
+        data.setIdDialog(idDialog);
+        data.setNameFieldResult(nameFieldResult);
+        data.setDisplayDialogMessage(displayDialogMessage);
+        data.setChoiceEntityList(choiceEntityList);
+        data.setCurrentEntityList(currentEntityList);
+        data.setSelectDialogList(selectDialogList);
+        data.setService(_service);
+        
+        if(updaters != null)
+        {
+            for (CustomUpdater customUpdater : updaters) {
+                data.addUpdater(customUpdater);
+            }
+        }
+        DialogFactory.addMultipleListDialog(data);
+    }
+
+    public static void addMultipleListDialog(final DataListSelectDialogBuilder data) {
+
+        if(data.getListEntite() == null){
+        final IChoiceRenderer<IHasKey> displayGroup = DialogFactory.getChoiceRendenerEntity();
+
         final ListMultipleChoice<IHasKey> listEntite;
-        listEntite =
-                new ListMultipleChoice<IHasKey>(idList, new PropertyModel<List<IHasKey>>(page,
-                        nameFieldResult), currentEntityList);
+        listEntite
+                = new ListMultipleChoice<IHasKey>(data.getIdList(), new PropertyModel<List<IHasKey>>(data.getPage(),
+                                data.getNameFieldResult()), data.getCurrentEntityList());
         listEntite.setChoiceRenderer(displayGroup);
         listEntite.setMaxRows(8);
         listEntite.setOutputMarkupId(true);
-        page.add(listEntite);
-        
-        final SelectMultipleDialog dialogPersonGroup =
-                new SelectMultipleDialog(idDialog, displayDialogMessage,
-                        (List<IHasKey>) (List<?>) selectDialogList)
-                {
-                    
-                    
+        data.setListEntite(listEntite);
+        }
+        //
+        data.getPage().add(data.getListEntite());
+
+        final SelectMultipleDialog dialogPersonGroup
+                = new SelectMultipleDialog(data.getIdDialog(), data.getDisplayDialogMessage(),
+                        (List<IHasKey>) (List<?>) data.getSelectDialogList()) {
+
                     @Override
                     public void onClose(final AjaxRequestTarget target, final DialogButton button) {
-                    
-                    
+
                         // FIXME
                     }
-                    
-                    
+
                     @Override
                     protected void onSubmit(final AjaxRequestTarget target) {
-                    
-                    
+
                         final List<IHasKey> selected = getSelected();
                         for (final IHasKey iEntity : selected) {
                             if (iEntity != null) {
-                                final IHasKey selectByPrimaryKey1 =
-                                        (IHasKey) _service.selectByPrimaryKey(iEntity.getId());
-                                if (!currentEntityList.contains(selectByPrimaryKey1)) {
-                                    currentEntityList.add(selectByPrimaryKey1);
+                                final IHasKey selectByPrimaryKey1
+                                = (IHasKey) data.getService().selectByPrimaryKey(iEntity.getId());
+                                if (!data.getCurrentEntityList().contains(selectByPrimaryKey1)) {
+                                    data.getCurrentEntityList().add(selectByPrimaryKey1);
                                 }
-                                target.add(listEntite);
+                               
+                                    for (CustomUpdater cupdater : data.getUpdaters()) {
+                                        cupdater.update();
+                                        target.add(cupdater.getComposant());
+                                    }
+                               
+                                target.add(data.getListEntite());
+
                             }
                         }
                     }
                 };
-        page.add(dialogPersonGroup);
-        dialogPersonGroup.setFilter(currentEntityList);
-        page.add(new AjaxLinkLayout<Object>(idBtnAdd, null)
-        {
-            
-            
+        data.getPage().add(dialogPersonGroup);
+        dialogPersonGroup.setFilter(data.getCurrentEntityList());
+        data.getPage().add(new AjaxLinkLayout<Object>(data.getIdBtnAdd(), null) {
+
             @Override
             public void onClick(final AjaxRequestTarget art) {
-            
-            
+
                 dialogPersonGroup.open(art);
             }
         });
-        
-        page.add(new AjaxButton(idBtnDel)
-        {
-            
-            
-            @Override
-            protected void onError(final AjaxRequestTarget target, final Form<?> form) {
-            
-            
-                for (final IHasKey person : choiceEntityList) {
-                    currentEntityList.remove(person);
-                }
-                
-                target.add(listEntite);
-            }
-            
-            
+
+        data.getPage().add(new AjaxButton(data.getIdBtnDel()) {
+
             @Override
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-            
-            
-                for (final IHasKey person : choiceEntityList) {
-                    currentEntityList.remove(person);
+
+                for (final IHasKey person : data.getChoiceEntityList()) {
+                    data.getCurrentEntityList().remove(person);
                 }
                 
-                target.add(listEntite);
+                    for (CustomUpdater cupdater : data.getUpdaters()) {
+                        cupdater.update();
+                        target.add(cupdater.getComposant());
+                    }
+                
+                target.add(data.getListEntite());
             }
         });
+
+    }
+
+    @Deprecated
+    public static void addSelectDialog(
+            final MarkupContainer page,
+            final String idDialog,
+            final String idBtnAdd,
+            final String idBtnDel,
+            final String displayDialogMessage,
+            final List<IHasKey> currentEntityList,
+            final List<IHasKey> choiceEntityList,
+            final List<IHasKey> selectDialogList,
+            final IGenericService _service,
+            final ListMultipleChoice<IHasKey> listEntite,
+            final CustomUpdater... updaters) {
+        
+         DataListSelectDialogBuilder data=new DataListSelectDialogBuilder();
+        data.setPage(page);
+        data.setIdBtnAdd(idBtnAdd);
+        data.setIdBtnDel(idBtnDel);
+        data.setIdDialog(idDialog);
+        data.setListEntite(listEntite);
+        data.setDisplayDialogMessage(displayDialogMessage);
+        data.setChoiceEntityList(choiceEntityList);
+        data.setCurrentEntityList(currentEntityList);
+        data.setSelectDialogList(selectDialogList);
+        data.setService(_service);
+        
+        if(updaters != null)
+        {
+            for (CustomUpdater customUpdater : updaters) {
+                data.addUpdater(customUpdater);
+            }
+        }
+        DialogFactory.addMultipleListDialog(data);
         
     }
-    
-    
+
     public static IChoiceRenderer<IHasKey> getChoiceRendenerEntity() {
-    
-    
-        final IChoiceRenderer<IHasKey> display = new IChoiceRenderer<IHasKey>()
-        {
-            
-            
+
+        final IChoiceRenderer<IHasKey> display = new IChoiceRenderer<IHasKey>() {
+
             @Override
             public Object getDisplayValue(final IHasKey t) {
-            
-            
+
                 return t.getDisplayName();
             }
-            
-            
+
             @Override
             public String getIdValue(final IHasKey t, final int i) {
-            
-            
+
                 return String.valueOf(t.getId());
             }
         };
         return display;
     }
-    
+
 }

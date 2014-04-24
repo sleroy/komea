@@ -24,6 +24,9 @@ public final class DepartmentEditPage extends LayoutPage {
     @SpringBean
     private IPersonGroupService prService;
 
+    @SpringBean
+    private IPersonService personService;
+
     public DepartmentEditPage(PageParameters _parameters) {
         this(_parameters, new PersonGroup(), true);
     }
@@ -40,9 +43,9 @@ public final class DepartmentEditPage extends LayoutPage {
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
 
-        final DepartmentForm departmentForm = new DepartmentForm(isNew,"form", prService,
+        final DepartmentForm departmentForm = new DepartmentForm(personService, isNew, "form", prService,
                 feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this);
-                String message;
+        String message;
         if (isNew) {
             message = getString("departmentpage.save.add.title");
         } else {
@@ -51,7 +54,8 @@ public final class DepartmentEditPage extends LayoutPage {
         departmentForm.add(new Label("legend", message));
         add(departmentForm);
     }
-     @Override
+
+    @Override
     public String getTitle() {
         return getString("departmentpage.main.title");
     }
