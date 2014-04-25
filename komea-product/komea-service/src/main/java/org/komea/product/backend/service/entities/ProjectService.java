@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.Validate;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.database.dao.CustomerDao;
@@ -307,30 +308,29 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
             final List<PersonGroup> _teams) {
     
     
+        Validate.notNull(_tags);
+        Validate.notNull(_persons);
+        Validate.notNull(_links);
+        Validate.notNull(_links);
+        Validate.notNull(_teams);
         saveOrUpdate(_project);
         final Integer idProject = _project.getId();
         
         projectPersonService.updatePersonsOfProject(_persons, _project);
         
         removeTagsAssociatedToAProject(idProject);
-        if (_tags != null) {
-            for (final Tag tag : _tags) {
-                projectTagsDAO.insert(new HasProjectTagKey(idProject, tag.getId()));
-            }
+        for (final Tag tag : _tags) {
+            projectTagsDAO.insert(new HasProjectTagKey(idProject, tag.getId()));
         }
         
         removeTeamsAndDepartmentsAssociatedToAProject(idProject);
-        if (_teams != null) {
-            for (final PersonGroup team : _teams) {
-                projectPersonGroupDAO.insert(new HasProjectPersonGroupKey(idProject, team.getId()));
-            }
+        for (final PersonGroup team : _teams) {
+            projectPersonGroupDAO.insert(new HasProjectPersonGroupKey(idProject, team.getId()));
         }
         
         removeLinksAssociatedToAProject(idProject);
-        if (_links != null) {
-            for (final Link link : _links) {
-                linkDAO.insert(link);
-            }
+        for (final Link link : _links) {
+            linkDAO.insert(link);
         }
     }
     
