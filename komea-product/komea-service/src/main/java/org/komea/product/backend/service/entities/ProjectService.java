@@ -433,7 +433,6 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         project.setName(_projectKey);
         project.setProjectKey(_projectKey);
         saveOrUpdate(project);
-        project = selectByKey(_projectKey);
         return project;
     }
     

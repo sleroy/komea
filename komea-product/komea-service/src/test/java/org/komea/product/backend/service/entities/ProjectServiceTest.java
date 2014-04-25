@@ -5,6 +5,7 @@ package org.komea.product.backend.service.entities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Assert;
@@ -46,8 +47,10 @@ import com.google.common.collect.Lists;
 
 import static org.junit.Assert.assertFalse;
 
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 
@@ -91,11 +94,30 @@ public class ProjectServiceTest
     @InjectMocks
     private final IProjectService    projectService = new ProjectService();
     
+    
     @Mock
     private HasProjectTagDao         projectTagsDAOmock;
     @Mock
     private TagDao                   tagDAOmock;
     
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.backend.service.entities.ProjectService#deleteProject(org.komea.product.database.model.Project)}.
+     */
+    @Test
+    public void testDeleteProject() throws Exception {
+    
+    
+        final Project project = new Project();
+        project.setId(1);
+        
+        projectService.delete(project);
+        verify(projectDAOmock, times(1)).deleteByPrimaryKey(project.getId());
+        
+        
+    }
     
     
     @Test
@@ -270,10 +292,30 @@ public class ProjectServiceTest
      * Test method for {@link org.komea.product.backend.service.entities.ProjectService#getOrCreate(java.lang.String)}.
      */
     @Test
-    public void testGetOrCreate() throws Exception {
+    public void testGetOrCreate_existingProject() throws Exception {
     
     
-        assertFalse("Not yet implemented", true);
+        Project project = new Project();
+        when(projectDAOmock.selectByCriteria(Matchers.any(ProjectCriteria.class))).thenReturn(
+                Collections.singletonList(project));
+        project = projectService.getOrCreate("PROJECT_KEY");
+        verify(projectDAOmock, times(1)).selectByCriteria(Matchers.any(ProjectCriteria.class));
+        verify(projectDAOmock, never()).insert(project);
+        
+        
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.backend.service.entities.ProjectService#getOrCreate(java.lang.String)}.
+     */
+    @Test
+    public void testGetOrCreate_notexistingProject() throws Exception {
+    
+    
+        final Project orCreate = projectService.getOrCreate("PROJECT_KEY");
+        verify(projectDAOmock, times(1)).insert(orCreate);
+        
     }
     
     
