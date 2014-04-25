@@ -13,17 +13,7 @@ def isSubproject = project.parent != null
 def trackCoverage = isSubproject
 
 configurations {
-    web
-    database
-    tools
-    date
-    spring
-    hibernate
-    log
     coverage
-
-    compile.extendsFrom spring, web, date, tools, hibernate
-    runtime.extendsFrom database, log
 }
 
 dependencies {
@@ -45,6 +35,7 @@ class JacocoPluginConvention {
     def append
     def dumponexit
     def output
+    def name
     
     def jacoco(Closure close) {
         close.delegate = this
@@ -61,6 +52,8 @@ class JacocoPluginConvention {
         append = false
         dumponexit = true
         output = 'file'
+        name=project.name
+        
     }
     
     def getParams() {
@@ -108,6 +101,7 @@ if (!isSubproject) {
                 )
         ant.mkdir dir: jacocoConvention.reportPath
         
+        def subprojects = project.subprojects
         ant.jacocoreport {
             executiondata {
                 subprojects.each { subproject ->
@@ -120,9 +114,10 @@ if (!isSubproject) {
                     }
                 }
             }
+            subprojects.each { println "=========== $it.name" }
             structure(name: project.description) {
                 subprojects.each { subproject ->
-                    group(name: subproject.displayName) {
+                    group(name: subproject.name) {
                         classfiles { fileset dir: "${subproject.sourceSets.main.output.classesDir}" }
                         sourcefiles {
                             subproject.sourceSets.main.java.srcDirs.each { fileset dir: it.absolutePath }

@@ -24,6 +24,7 @@ ext.tests_frameworks = [
  */
 ext.VERSION_PRODUCT=1
 ext.VERSION_MAJOR=0
+description="Komea eventory"
 
 
 
