@@ -33,7 +33,7 @@ public class QueryCacheRefreshCron implements Job
                                                             .getLogger(QueryCacheRefreshCron.class);
     
     @Autowired
-    private IDynamicQueryCacheService               dynamicQueryCacheService;
+    private IDynamicQueryCacheService        dynamicQueryCacheService;
     
     
     @Autowired
@@ -58,6 +58,7 @@ public class QueryCacheRefreshCron implements Job
     public void executeCron() {
     
     
+        LOGGER.info("Cron : refreshing values from cache");
         final List<String> queriesIterator = queryRegisterService.getQueryNames();
         for (final String queryKey : queriesIterator) {
             

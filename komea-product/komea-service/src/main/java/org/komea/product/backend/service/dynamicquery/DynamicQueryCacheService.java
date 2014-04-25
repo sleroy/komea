@@ -73,7 +73,7 @@ public class DynamicQueryCacheService implements IDynamicQueryCacheService
             final IDynamicDataQuery _dynamicDataQuery) {
     
     
-        LOGGER.info("add a dynamic query into the cache {}", _queryKey);
+        LOGGER.debug("add a dynamic query into the cache {}", _queryKey);
         
         return new CachedDynamicQuery(this, _dynamicDataQuery, _queryKey);
     }
