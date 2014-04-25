@@ -6,13 +6,10 @@ package org.komea.product.backend.service.dynamicquery;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.PostConstruct;
-
 import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.eventory.api.formula.ICEPResult;
+import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
 import org.komea.product.backend.api.IQueryCacheService;
-import org.komea.product.backend.service.cron.ICronRegistryService;
-import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,36 +30,32 @@ import com.google.common.collect.Lists;
  */
 @Service
 @Transactional
-public class QueryCacheService implements IQueryCacheService
+public class DynamicQueryCacheService implements IQueryCacheService
 {
     
     
-    public final static String                     CRON_KEY    = "DYNAMIC_QUERY_CACHE_CRON";
-    /**
-     * 
-     */
-    private static final String                    CRON_PERIOD = "0 0/5 * * * ? *";
-    private static final Logger                    LOGGER      =
-                                                                       LoggerFactory
-                                                                               .getLogger("dynamicquery-cache");
+    private static final Logger                    LOGGER = LoggerFactory
+                                                                  .getLogger("dynamicquery-cache");
     private final LoadingCache<String, ICEPResult> cache;
     
+    
     @Autowired
-    private ICronRegistryService                   cronRegistry;
+    private IDynamicDataQueryRegisterService       queryRegisterService;
     
     
     
     /**
      * Initialize the query cache service.
      */
-    public QueryCacheService() {
+    public DynamicQueryCacheService() {
     
     
         super();
         final CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder();
-        cacheBuilder.expireAfterAccess(1, TimeUnit.DAYS);
+        cacheBuilder.refreshAfterWrite(6, TimeUnit.HOURS);
         cacheBuilder.maximumSize(200);
-        cache = cacheBuilder.build(new DynamicQueryCacheLoader());
+        cacheBuilder.initialCapacity(50);
+        cache = cacheBuilder.build(new DynamicQueryCacheLoader(queryRegisterService));
     }
     
     
@@ -91,13 +84,6 @@ public class QueryCacheService implements IQueryCacheService
     }
     
     
-    public ICronRegistryService getCronRegistry() {
-    
-    
-        return cronRegistry;
-    }
-    
-    
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.api.IQueryCacheService#storedQueryNames()
@@ -109,35 +95,5 @@ public class QueryCacheService implements IQueryCacheService
         return Lists.newArrayList(cache.asMap().keySet());
     }
     
-    
-    @PostConstruct
-    public void init() {
-    
-    
-        LOGGER.info("Initialization of cache query engine");
-        registerCron();
-        
-    }
-    
-    
-    /**
-     * Register the cron.
-     */
-    public void registerCron() {
-    
-    
-        if (!cronRegistry.existCron(CRON_KEY)) {
-            LOGGER.debug("registering the cron to update cached queries");
-            cronRegistry.registerCronTask(CRON_KEY, CRON_PERIOD, QueryCacheCron.class,
-                    new JobDataMap());
-        }
-    }
-    
-    
-    public void setCronRegistry(final ICronRegistryService _cronRegistry) {
-    
-    
-        cronRegistry = _cronRegistry;
-    }
     
 }

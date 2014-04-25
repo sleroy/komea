@@ -131,6 +131,8 @@ public class StatPage extends LayoutPage
         generateLabelForAlertsWithCriticity(Severity.INFO);
         
         final ChartOptions chartOptions = new ChartOptions();
+        
+        chartOptions.setSpacingRight(20);
         chartOptions.setType(SeriesType.SPLINE);
         chartOptions.setBorderRadius(1);
         chartOptions.setBorderColor(Color.GRAY);
@@ -144,9 +146,9 @@ public class StatPage extends LayoutPage
         final Axis xAxis = new Axis();
         xAxis.setType(AxisType.DATETIME);
         
-        final DateTimeLabelFormat dateTimeLabelFormat =
-                new DateTimeLabelFormat().setProperty(DateTimeProperties.MONTH, "%e. %b")
-                        .setProperty(DateTimeProperties.YEAR, "%b");
+        final DateTimeLabelFormat dateTimeLabelFormat = new DateTimeLabelFormat();
+        dateTimeLabelFormat.setProperty(DateTimeProperties.MONTH, "%e. %b").setProperty(
+                DateTimeProperties.YEAR, "%b");
         xAxis.setDateTimeLabelFormats(dateTimeLabelFormat);
         options.setxAxis(xAxis);
         
@@ -196,19 +198,19 @@ public class StatPage extends LayoutPage
         // of 1970/71 in order to be compared on the same x axis. Note
         // that in JavaScript, months start at 0 for January, 1 for February etc.
         
-        final List<Coordinate<String, Integer>> seriesData1 =
-                new ArrayList<Coordinate<String, Integer>>();
+        final List<Coordinate<Long, Integer>> seriesData1 =
+                new ArrayList<Coordinate<Long, Integer>>();
         
         
         for (final Measure measure : statService.getAllMeasures()) {
-            seriesData1.add(new Coordinate<String, Integer>(measure.getId().toString(), measure
+            seriesData1.add(new Coordinate<Long, Integer>(measure.getDate().getTime(), measure
                     .getValue().intValue()));
         }
         
         
-        final CustomCoordinatesSeries<String, Integer> series1 =
-                new CustomCoordinatesSeries<String, Integer>();
-        series1.setName("Number of alerts per day");
+        final CustomCoordinatesSeries<Long, Integer> series1 =
+                new CustomCoordinatesSeries<Long, Integer>();
+        series1.setName("Number of Alerts received this day");
         series1.setData(seriesData1);
         options.addSeries(series1);
         

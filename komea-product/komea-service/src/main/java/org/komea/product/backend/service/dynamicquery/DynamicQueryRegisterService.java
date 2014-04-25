@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 @Service
-public class DynamicDataQueryRegisterService implements IDynamicDataQueryRegisterService
+public class DynamicQueryRegisterService implements IDynamicDataQueryRegisterService
 {
     
     

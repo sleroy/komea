@@ -30,7 +30,7 @@ public class CachedDynamicQueryTest
     @Mock
     private IDynamicDataQuery  dynamicDataQuery;
     @Mock
-    private QueryCacheService  queryCacheService;
+    private DynamicQueryCacheService  dynamicQueryCacheService;
     
     
     
