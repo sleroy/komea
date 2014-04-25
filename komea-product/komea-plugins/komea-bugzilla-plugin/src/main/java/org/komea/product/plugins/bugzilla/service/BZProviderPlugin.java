@@ -11,7 +11,6 @@ import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.product.backend.api.PluginAdminPages;
 import org.komea.product.backend.api.PluginMountPage;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
-import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.database.enums.EntityType;
@@ -22,11 +21,9 @@ import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO;
 import org.komea.product.plugins.bugzilla.core.BZBugCountKPI;
-import org.komea.product.plugins.bugzilla.core.BZCheckerCron;
 import org.komea.product.plugins.bugzilla.model.BzFilter;
 import org.komea.product.plugins.bugzilla.model.BzSearch;
 import org.komea.product.plugins.bugzilla.userinterface.BugZillaPage;
-import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,16 +49,7 @@ public class BZProviderPlugin {
 
     public static final String BUGZILLA_PROVIDER_PLUGIN = "BugZilla Provider plugin";
 
-    /**
-     *
-     */
-    private static final String BUGZILLA_CRON = "BUGZILLA_CRON";
-
-    private static Logger LOGGER
-            = LoggerFactory
-            .getLogger(BZProviderPlugin.class);
-
-    protected static String BUGZILLA_CRON_VALUE = "0 0/1 * * * ?";
+    private static Logger LOGGER = LoggerFactory.getLogger(BZProviderPlugin.class);
 
     /**
      * @return the logger
@@ -86,9 +74,6 @@ public class BZProviderPlugin {
     private IEventTypeService evenTypeService;
 
     @Autowired
-    private ICronRegistryService registryService;
-
-    @Autowired
     private IKPIService kpiService;
 
     /**
@@ -107,22 +92,10 @@ public class BZProviderPlugin {
         return evenTypeService;
     }
 
-    /**
-     * @return the registryService
-     */
-    public ICronRegistryService getRegistryService() {
-
-        return registryService;
-    }
-
     @PostConstruct
     public void init() {
 
         LOGGER.info("Loading bugZilla plugin");
-        registryService.removeCronTask(BUGZILLA_CRON);
-        registryService.registerCronTask(BUGZILLA_CRON, BUGZILLA_CRON_VALUE,
-                BZCheckerCron.class, new JobDataMap());
-        registryService.forceNow(BUGZILLA_CRON);
 
         addKpi(bzTotalBugs());
         addKpi(bzOpenBugs());
@@ -202,13 +175,5 @@ public class BZProviderPlugin {
     public void setEvenTypeService(final IEventTypeService _evenTypeService) {
 
         evenTypeService = _evenTypeService;
-    }
-
-    /**
-     * @param _registryService the registryService to set
-     */
-    public void setRegistryService(final ICronRegistryService _registryService) {
-
-        registryService = _registryService;
     }
 }
