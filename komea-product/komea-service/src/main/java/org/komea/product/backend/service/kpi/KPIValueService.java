@@ -74,10 +74,14 @@ public final class KPIValueService implements IKpiValueService
     public void backupKpiValuesIntoHistory() {
     
     
+        LOGGER.info("Backup all kpis into the history...");
         for (final Kpi kpi : kpiDAO.selectByCriteria(new KpiCriteria())) {
+            LOGGER.info("Kpi {} is backuping...", kpi.getKey());
             storeValueInHistory(KpiKey.ofKpi(kpi));
+            LOGGER.info("Kpi {} backup finished", kpi.getKey());
             
         }
+        LOGGER.info("Backup finished for all kpis");
         
     }
     

@@ -51,7 +51,6 @@ public class StatPage extends LayoutPage
     
     /**
      * @author sleroy
-     *
      */
     private final class BackupLink extends AjaxLink
     {
@@ -67,7 +66,7 @@ public class StatPage extends LayoutPage
         /**
          * @param _id
          */
-        private BackupLink(String _id) {
+        private BackupLink(final String _id) {
         
         
             super(_id);
@@ -81,11 +80,13 @@ public class StatPage extends LayoutPage
             LOGGER.info("Backup KPI values into the history");
             
             kpiValueService.backupKpiValuesIntoHistory();
+            _target.getPage().setResponsePage(StatPage.class);
             
         }
     }
-
-
+    
+    
+    
     /**
      * @author sleroy
      */
