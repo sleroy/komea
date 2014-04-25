@@ -50,8 +50,7 @@ public final class AlertEditPage extends LayoutPage {
         } else {
             message = getString("alertpage.save.update.title");
         }
-        alertForm.add(new Label("legend", message));
-        add(alertForm);
+        alertForm.add(new Label("legend", message));        add(alertForm);
     }
 
     @Override
