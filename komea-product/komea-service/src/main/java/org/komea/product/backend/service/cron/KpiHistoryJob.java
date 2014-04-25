@@ -22,7 +22,7 @@ public class KpiHistoryJob implements Job
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(KpiHistoryJob.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("kpi-history-job");
     
     
     @Autowired
@@ -42,6 +42,8 @@ public class KpiHistoryJob implements Job
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
     
     
+        LOGGER.info("*** Backup of Kpi values into the history* **");
+        
         kpiValueService.backupKpiValuesIntoHistory();
     }
     

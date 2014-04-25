@@ -7,17 +7,22 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
+import org.komea.product.backend.service.kpi.IKpiValueService;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.EventTypeStatistic;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.wickedcharts.highcharts.options.Axis;
 import com.googlecode.wickedcharts.highcharts.options.AxisType;
@@ -45,9 +50,69 @@ public class StatPage extends LayoutPage
     
     
     /**
+     * @author sleroy
+     *
+     */
+    private final class BackupLink extends AjaxLink
+    {
+        
+        
+        /**
+         * 
+         */
+        private static final long serialVersionUID = -6616588401268566760L;
+        
+        
+        
+        /**
+         * @param _id
+         */
+        private BackupLink(String _id) {
+        
+        
+            super(_id);
+        }
+        
+        
+        @Override
+        public void onClick(final AjaxRequestTarget _target) {
+        
+        
+            LOGGER.info("Backup KPI values into the history");
+            
+            kpiValueService.backupKpiValuesIntoHistory();
+            
+        }
+    }
+
+
+    /**
+     * @author sleroy
+     */
+    private final class LoadableDetachableModelExtension extends LoadableDetachableModel<Long>
+    {
+        
+        
+        @Override
+        protected Long load() {
+        
+        
+            return statService.getReceivedAlertsIn24LastHours();
+            
+        }
+    }
+    
+    
+    
+    private static final Logger     LOGGER           = LoggerFactory.getLogger(StatPage.class);
+    
+    /**
      * 
      */
     private static final long       serialVersionUID = 825152658028992367L;
+    @SpringBean
+    private IKpiValueService        kpiValueService;
+    
     @SpringBean
     private IEventStatisticsService statService;
     
@@ -57,19 +122,7 @@ public class StatPage extends LayoutPage
     
     
         super(_parameters);
-        add(new Label("alert_number", new LoadableDetachableModel<Long>()
-        {
-            
-            
-            @Override
-            protected Long load() {
-            
-            
-                return statService.getReceivedAlertsIn24LastHours();
-                
-            }
-            
-        }));
+        add(new Label("alert_number", new LoadableDetachableModelExtension()));
         generateLabelForAlertsWithCriticity(Severity.BLOCKER);
         generateLabelForAlertsWithCriticity(Severity.CRITICAL);
         generateLabelForAlertsWithCriticity(Severity.MAJOR);
@@ -106,6 +159,38 @@ public class StatPage extends LayoutPage
                 "return '<b>'+ this.series.name +'</b><br/>'+Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' alerts';"));
         options.setTooltip(tooltip);
         
+        buildGraphic(options);
+        
+        add(new BackupLink("backup-values"));
+        
+        
+        final DataTable<EventTypeStatistic, String> table =
+                DataTableBuilder.<EventTypeStatistic, String> newTable("table")
+                        .addColumn("Event type", "type").addColumn("Provider", "provider")
+                        .addColumn("Number", "value").displayRows(10)
+                        .withListData(statService.getReceivedAlertTypesIn24LastHours()).build();
+        add(table);
+        
+    }
+    
+    
+    public IKpiValueService getKpiValueService() {
+    
+    
+        return kpiValueService;
+    }
+    
+    
+    public void setKpiValueService(final IKpiValueService _kpiValueService) {
+    
+    
+        kpiValueService = _kpiValueService;
+    }
+    
+    
+    private void buildGraphic(final Options options) {
+    
+    
         // Define the data points. All series have a dummy year
         // of 1970/71 in order to be compared on the same x axis. Note
         // that in JavaScript, months start at 0 for January, 1 for February etc.
@@ -127,15 +212,6 @@ public class StatPage extends LayoutPage
         options.addSeries(series1);
         
         add(new Chart("chart", options));
-        
-        
-        final DataTable<EventTypeStatistic, String> table =
-                DataTableBuilder.<EventTypeStatistic, String> newTable("table")
-                        .addColumn("Event type", "type").addColumn("Provider", "provider")
-                        .addColumn("Number", "value").displayRows(10)
-                        .withListData(statService.getReceivedAlertTypesIn24LastHours()).build();
-        add(table);
-        
     }
     
     
