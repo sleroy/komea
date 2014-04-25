@@ -54,11 +54,6 @@ public class DynamicQueryRegisterService implements IDynamicDataQueryRegisterSer
     
     /*
      * (non-Javadoc)
-     * @see org.komea.eventory.api.IQueryAdministrator#getQuery(java.lang.String)
-     */
-    
-    /*
-     * (non-Javadoc)
      * @see org.komea.product.backend.api.IDynamicDataQueryRegisterService#getQueriesIterator()
      */
     @Override
@@ -71,11 +66,6 @@ public class DynamicQueryRegisterService implements IDynamicDataQueryRegisterSer
     
     /*
      * (non-Javadoc)
-     * @see org.komea.eventory.api.IQueryAdministrator#getQueryNames()
-     */
-    
-    /*
-     * (non-Javadoc)
      * @see org.komea.product.backend.service.kpi.IDynamicDataQueryRegisterService#getQuery(java.lang.String)
      */
     @Override
@@ -85,11 +75,6 @@ public class DynamicQueryRegisterService implements IDynamicDataQueryRegisterSer
         return queryCatalog.get(_query);
     }
     
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.eventory.api.IQueryAdministrator#registerQuery(java.lang.String, org.komea.eventory.api.IDynamicDataQuery)
-     */
     
     /*
      * (non-Javadoc)

@@ -6,8 +6,6 @@ package org.komea.product.backend.service.dynamicquery;
 
 
 
-import java.util.concurrent.ExecutionException;
-
 import org.apache.commons.lang.Validate;
 import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.eventory.api.formula.ICEPResult;
@@ -79,20 +77,28 @@ public final class CachedDynamicQuery implements IDynamicDataQuery
     public ICEPResult getResult() {
     
     
-        LOGGER.info("Cache state {} values and {}", dynamicQueryCacheService.getCache().size(),
+        LOGGER.debug("Cache state {} values and {}", dynamicQueryCacheService.getCache().size(),
                 queryKey);
-        ICEPResult result = null;
-        try {
-            result = dynamicQueryCacheService.getCache().get(queryKey);
-            
-            LOGGER.info("Cache state after retrieving {} values and {}", dynamicQueryCacheService
-                    .getCache().size(), queryKey);
-        } catch (final ExecutionException e) {
-            LOGGER.error("Could not retrieve value from cache", e);
-            result = CEPResult.buildFromMap(new TupleResultMap());
-        }
-        
+        final ICEPResult result = returnValueFromCacheOrFreshValue();
+        LOGGER.debug("Cache state after retrieving {} values and {}", dynamicQueryCacheService
+                .getCache().size(), queryKey);
         return result;
         
     }
+    
+    
+    private ICEPResult returnValueFromCacheOrFreshValue() {
+    
+    
+        LOGGER.debug("Cache state {} values and {}", dynamicQueryCacheService.getCache().size());
+        ICEPResult result = dynamicQueryCacheService.getCache().getIfPresent(queryKey);
+        if (result == null) {
+            result = dynamicDataQuery.getResult();
+        }
+        if (result == null) { return CEPResult.buildFromMap(new TupleResultMap()); }
+        LOGGER.debug("Cache state after retrieving {} values and {}", dynamicQueryCacheService
+                .getCache().size());
+        return result;
+    }
+    
 }

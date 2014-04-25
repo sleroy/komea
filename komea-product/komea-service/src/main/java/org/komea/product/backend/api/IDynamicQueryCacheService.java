@@ -6,6 +6,7 @@ package org.komea.product.backend.api;
 import java.util.List;
 
 import org.komea.cep.dynamicdata.IDynamicDataQuery;
+import org.komea.eventory.api.formula.ICEPResult;
 
 
 
@@ -14,7 +15,7 @@ import org.komea.cep.dynamicdata.IDynamicDataQuery;
  * 
  * @author sleroy
  */
-public interface IQueryCacheService
+public interface IDynamicQueryCacheService
 {
     
     
@@ -36,6 +37,17 @@ public interface IQueryCacheService
      * @return the stored query names
      */
     List<String> getStoredQueryNames();
+    
+    
+    /**
+     * Refresht the value of a query into the cache.
+     * 
+     * @param _queryKey
+     *            the query
+     * @param _result
+     *            the new value.
+     */
+    void refreshValue(String _queryKey, ICEPResult _result);
     
     
 }
