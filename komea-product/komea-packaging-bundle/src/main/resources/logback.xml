@@ -20,7 +20,7 @@
          <param name="MaxIndex" value="3" />
       </rollingPolicy>
       <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-         <param name="MaxFileSize" value="5MB" />
+         <param name="MaxFileSize" value="1MB" />
       </triggeringPolicy>
       <encoder>
          <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n
