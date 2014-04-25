@@ -63,12 +63,14 @@ public class DynamicQueryCacheService implements IQueryCacheService
      * Adds a query in cache. The wrapped query is returned frmo this method.
      */
     @Override
-    public IDynamicDataQuery addCacheOnDynamicQuery(final IDynamicDataQuery _dynamicDataQuery) {
+    public IDynamicDataQuery addCacheOnDynamicQuery(
+            final String _queryKey,
+            final IDynamicDataQuery _dynamicDataQuery) {
     
     
         LOGGER.info("add a query in cache {}", _dynamicDataQuery);
         
-        return new CachedDynamicQuery(this, _dynamicDataQuery);
+        return new CachedDynamicQuery(this, _dynamicDataQuery, _queryKey);
     }
     
     

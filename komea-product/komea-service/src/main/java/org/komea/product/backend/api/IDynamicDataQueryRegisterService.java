@@ -56,9 +56,24 @@ public interface IDynamicDataQueryRegisterService
     public List<String> getQueryNames();
     
     
+    /**
+     * Registers the query
+     * 
+     * @param _queryName
+     *            the query name
+     * @param _query
+     *            the query.
+     */
     public void registerQuery(String _queryName, IDynamicDataQuery _query);
     
     
+    /**
+     * Removes the query
+     * 
+     * @param _queryName
+     *            the query name
+     * @return the query name;
+     */
     public boolean removeQuery(String _queryName);
     
 }

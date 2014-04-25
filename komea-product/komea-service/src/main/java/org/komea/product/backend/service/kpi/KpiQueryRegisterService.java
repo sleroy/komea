@@ -118,8 +118,8 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService
             springService.autowirePojo(queryImplementation);
             LOGGER.debug("KPI {} provides an dynamic data query {}.", _kpi, queryImplementation);
             final IDynamicDataQuery cachedQuery =
-                    queryCacheService
-                            .addCacheOnDynamicQuery((IDynamicDataQuery) queryImplementation);
+                    queryCacheService.addCacheOnDynamicQuery(queryName,
+                            (IDynamicDataQuery) queryImplementation);
             dynamicDataQueryRegisterService.registerQuery(queryName, cachedQuery);
         }
     }

@@ -6,7 +6,6 @@ package org.komea.product.backend.service.dynamicquery;
 
 
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.lang.Validate;
@@ -24,87 +23,76 @@ import org.slf4j.LoggerFactory;
  * 
  * @author sleroy
  */
-public final class CachedDynamicQuery implements IDynamicDataQuery, Callable<ICEPResult>
+public final class CachedDynamicQuery implements IDynamicDataQuery
 {
     
     
-    private static final Logger     LOGGER = LoggerFactory.getLogger("cached-dynamicquery");
+    private static final Logger            LOGGER = LoggerFactory.getLogger("cached-dynamicquery");
     
-    private final IDynamicDataQuery dynamicDataQuery;
+    private final IDynamicDataQuery        dynamicDataQuery;
     
     private final DynamicQueryCacheService dynamicQueryCacheService;
+    
+    private final String                   queryKey;
     
     
     
     public CachedDynamicQuery(
             final DynamicQueryCacheService _dynamicQueryCacheService,
-            final IDynamicDataQuery _dynamicDataQuery) {
+            final IDynamicDataQuery _dynamicDataQuery,
+            final String _key) {
     
     
         super();
         dynamicQueryCacheService = _dynamicQueryCacheService;
         dynamicDataQuery = _dynamicDataQuery;
+        queryKey = _key;
         Validate.notNull(_dynamicDataQuery);
         Validate.notNull(_dynamicQueryCacheService);
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see java.util.concurrent.Callable#call()
-     */
-    @Override
-    public ICEPResult call() throws Exception {
-    
-    
-        LOGGER.debug("Returning a fresh value from the query");
-        return dynamicDataQuery.getResult();
-    }
-    
-    
-    @Override
-    public String getKey() {
-    
-    
-        return dynamicDataQuery.getKey();
-    }
-    
-    
-    @Override
-    public synchronized ICEPResult getResult() {
-    
-    
-        LOGGER.debug("Request value from query with cached result {}", dynamicDataQuery);
-        try {
-            return returnValueFromCacheOrFreshValue();
-        } catch (final ExecutionException ex) {
-            return returnDefaultValueIfErrors(ex);
-        }
-    }
-    
-    
-    private ICEPResult returnDefaultValueIfErrors(final ExecutionException ex) {
-    
-    
-        LOGGER.error(ex.getMessage(), ex);
-        return CEPResult.buildFromMap(new TupleResultMap());
-    }
-    
-    
-    private ICEPResult returnValueFromCacheOrFreshValue() throws ExecutionException {
-    
-    
-        LOGGER.debug("Cache state {} values and {}", dynamicQueryCacheService.getCache().size(), getKey());
-        final ICEPResult result = dynamicQueryCacheService.getCache().get(getKey(), this);
-        LOGGER.debug("Cache state after retrieving {} values and {}", dynamicQueryCacheService.getCache()
-                .size(), getKey());
-        return result;
-    }
-
-
     public IDynamicDataQuery getDynamicDataQuery() {
     
     
         return dynamicDataQuery;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.cep.dynamicdata.IDynamicDataQuery#getFormula()
+     */
+    @Override
+    public String getFormula() {
+    
+    
+        return dynamicDataQuery.getFormula();
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.cep.dynamicdata.IDynamicDataQuery#getResult()
+     */
+    @Override
+    public ICEPResult getResult() {
+    
+    
+        LOGGER.debug("Cache state {} values and {}", dynamicQueryCacheService.getCache().size(),
+                queryKey);
+        ICEPResult result = null;
+        try {
+            result = dynamicQueryCacheService.getCache().get(queryKey);
+            
+            LOGGER.debug("Cache state after retrieving {} values and {}", dynamicQueryCacheService
+                    .getCache().size(), queryKey);
+        } catch (final ExecutionException e) {
+            LOGGER.error("Could not retrieve value from cache", e);
+            result = CEPResult.buildFromMap(new TupleResultMap());
+        }
+        
+        return result;
+        
     }
 }
