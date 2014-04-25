@@ -1,7 +1,11 @@
+
 package org.komea.product.wicket.person;
+
+
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -32,35 +36,41 @@ import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.SelectBoxBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
 
+
+
 /**
  * Formular to edit properties in the settings page.
- *
+ * 
  * @author sleroy
  */
-public final class PersonForm extends Form<Person> {
-
+public final class PersonForm extends Form<Person>
+{
+    
+    
+    private List<IHasKey>             currentEntityList;
+    private final Component           feedBack;
+    private final TextField           groupField;
+    private final NameGeneric         groupName;
+    private Boolean                   isAdmin;
+    private final boolean             isNew;
+    private final LayoutPage          page;
+    private final IPasswordEncoder    passEncoder;
+    private PasswordTextField         password;
+    private final Person              person;
+    private final IPersonRoleService  personRole;
+    private final IPersonService      personService;
+    private final IProjectService     projectService;
     /**
      * @author sleroy
      */
     private final IPersonGroupService prService;
-    private final Component feedBack;
-    private final Person person;
-    private final LayoutPage page;
-    private final IProjectService projectService;
-    private final IPersonService personService;
-    private final NameGeneric groupName;
-    private final TextField groupField;
-    private final UserBdd savUserBdd;
-    private List<IHasKey> currentEntityList;
-    private List<IHasKey> selectedEntity;
-    private String savPassword;
-    private final IPasswordEncoder passEncoder;
-    private PasswordTextField password;
-    private Boolean isAdmin;
-    private IPersonRoleService personRole;
-    private final boolean isNew;
-
-//    private final TeamSelectorDialog teamDialog;
+    private String                    savPassword;
+    private final UserBdd             savUserBdd;
+    private List<IHasKey>             selectedEntity;
+    
+    
+    
+    // private final TeamSelectorDialog teamDialog;
     public PersonForm(
             final boolean _isNew,
             final IPersonRoleService _personRole,
@@ -71,15 +81,15 @@ public final class PersonForm extends Form<Person> {
             final String _id,
             final CompoundPropertyModel<Person> _compoundPropertyModel,
             final LayoutPage _page,
-            final IPersonGroupService _prService
-    ) {
-
+            final IPersonGroupService _prService) {
+    
+    
         super(_id, _compoundPropertyModel);
-        this.page = _page;
-        this.isNew = _isNew;
-        this.passEncoder = _passEncoder;
-        this.prService = _prService;
-        this.personRole = _personRole;
+        page = _page;
+        isNew = _isNew;
+        passEncoder = _passEncoder;
+        prService = _prService;
+        personRole = _personRole;
         projectService = _projectService;
         personService = _personService;
         person = _compoundPropertyModel.getObject();
@@ -90,70 +100,103 @@ public final class PersonForm extends Form<Person> {
         feedBack.setOutputMarkupPlaceholderTag(true);
         feedBack.setVisible(false);
         add(feedBack);
-        this.groupName = new NameGeneric("");
-        TextFieldBuilder<String> keyField = TextFieldBuilder.<String>createRequired("login", person, "login")
-                .simpleValidator(3, 255).withTooltip(getString("global.save.form.field.tooltip.login")).highlightOnErrors();
-
+        groupName = new NameGeneric("");
+        final TextFieldBuilder<String> keyField =
+                TextFieldBuilder.<String> createRequired("login", person, "login")
+                        .simpleValidator(3, 255)
+                        .withTooltip(getString("global.save.form.field.tooltip.login"))
+                        .highlightOnErrors();
+        
         if (isNew) {
-            keyField.UniqueStringValidator(getString("global.save.form.field.label.login"), personService);
+            keyField.UniqueStringValidator(getString("global.save.form.field.label.login"),
+                    personService);
         } else {
             keyField.buildTextField().setEnabled(false);
         }
-
+        
         add(keyField.build());
-        PersonGroup selectByPrimaryKey = this.prService.selectByPrimaryKey(this.person.getIdPersonGroup());
+        final PersonGroup selectByPrimaryKey =
+                prService.selectByPrimaryKey(person.getIdPersonGroup());
         if (selectByPrimaryKey != null) {
-            this.groupName.setName(selectByPrimaryKey.getName());
+            groupName.setName(selectByPrimaryKey.getName());
         }
-        groupField = TextFieldBuilder.<String>create("group", this.groupName, "name").withTooltip(getString("memberpage.save.form.field.tooltip.memberof")).buildTextField();
+        groupField =
+                TextFieldBuilder.<String> create("group", groupName, "name")
+                        .withTooltip(getString("memberpage.save.form.field.tooltip.memberof"))
+                        .buildTextField();
         add(groupField);
-
+        
         if (person.getUserBdd() == null) {
             person.setUserBdd(UserBdd.KOMEA);
         }
         savUserBdd = person.getUserBdd();
-        add(SelectBoxBuilder.<UserBdd>createWithEnumRequire("userBdd", person,
-                UserBdd.class).withTooltip(getString("memberpage.save.form.field.tooltip.userorigin")).build());
-
-        if (this.person.getId() != null) {
-
-            currentEntityList = (List<IHasKey>) (List<?>) projectService.getProjectsOfPerson(this.person.getId());
+        add(SelectBoxBuilder.<UserBdd> createWithEnumRequire("userBdd", person, UserBdd.class)
+                .withTooltip(getString("memberpage.save.form.field.tooltip.userorigin")).build());
+        
+        if (person.getId() != null) {
+            
+            currentEntityList = (List) projectService.getProjectsOfAMember(person.getId());
         }
-
-        DialogFactory.addListWithSelectDialog(this,
-                "table",
-                "dialogAddPerson",
-                "btnAddPerson",
-                "btnDelPerson",
-                "selectedEntity",
-                getString("memberpage.save.form.field.tooltip.projects"),
-                currentEntityList,
-                selectedEntity,
-                (List<IHasKey>) (List<?>) this.projectService.selectAll(),
-                projectService);
-
+        
+        DialogFactory.addListWithSelectDialog(this, "table", "dialogAddPerson", "btnAddPerson",
+                "btnDelPerson", "selectedEntity",
+                getString("memberpage.save.form.field.tooltip.projects"), currentEntityList,
+                selectedEntity, (List) projectService.selectAll(), projectService);
+        
         initClassicField();
         initSubmitbutton();
         initSimpleButton();
-
+        
     }
-
+    
+    
+    public TextField getGroupField() {
+    
+    
+        return groupField;
+    }
+    
+    
+    public NameGeneric getGroupName() {
+    
+    
+        return groupName;
+    }
+    
+    
+    public Person getPerson() {
+    
+    
+        return person;
+    }
+    
+    
+    public List<IHasKey> getSelectedEntity() {
+    
+    
+        return selectedEntity;
+    }
+    
+    
     public void initClassicField() {
-        add(TextFieldBuilder.<String>createRequired("firstname", person, "firstName")
-                .simpleValidator(2, 255).withTooltip(getString("memberpage.save.form.field.tooltip.firstn"))
+    
+    
+        add(TextFieldBuilder.<String> createRequired("firstname", person, "firstName")
+                .simpleValidator(2, 255)
+                .withTooltip(getString("memberpage.save.form.field.tooltip.firstn"))
                 .highlightOnErrors().build());
-        add(TextFieldBuilder.<String>createRequired("lastname", person, "lastName")
+        add(TextFieldBuilder.<String> createRequired("lastname", person, "lastName")
                 .simpleValidator(2, 255).highlightOnErrors()
                 .withTooltip(getString("memberpage.save.form.field.tooltip.lastn")).build());
-
+        
         isAdmin = Boolean.FALSE;
-        Integer idPersonRole = person.getIdPersonRole();
+        final Integer idPersonRole = person.getIdPersonRole();
         if (idPersonRole != null) {
-            PersonRole adminRole = this.personRole.getAdminRole();
+            final PersonRole adminRole = personRole.getAdminRole();
             if (idPersonRole.equals(adminRole.getId())) {
                 isAdmin = Boolean.TRUE;
             }
-
+            
         }
         if (person.getPassword() == null) {
             savPassword = "";
@@ -161,9 +204,11 @@ public final class PersonForm extends Form<Person> {
             savPassword = person.getPassword();
         }
         person.setPassword("00000");
-        password = (PasswordTextField) TextFieldBuilder.createPassword("password", person, "password")
-                .simpleValidator(5, 255).withTooltip(getString("global.save.form.field.tooltip.password")).highlightOnErrors()
-                .build();
+        password =
+                (PasswordTextField) TextFieldBuilder.createPassword("password", person, "password")
+                        .simpleValidator(5, 255)
+                        .withTooltip(getString("global.save.form.field.tooltip.password"))
+                        .highlightOnErrors().build();
         password.setConvertEmptyInputStringToNull(false);
         password.setResetPassword(false);
         password.setOutputMarkupId(true);
@@ -174,12 +219,16 @@ public final class PersonForm extends Form<Person> {
             password.setVisible(false);
         }
         add(password);
-
-        PropertyModel<Boolean> modelchcekBox = new PropertyModel<Boolean>(this, "isAdmin");
-        AjaxCheckBox checkBox = new AjaxCheckBox("isAdmin", modelchcekBox) {
-
+        
+        final PropertyModel<Boolean> modelchcekBox = new PropertyModel<Boolean>(this, "isAdmin");
+        final AjaxCheckBox checkBox = new AjaxCheckBox("isAdmin", modelchcekBox)
+        {
+            
+            
             @Override
-            protected void onUpdate(AjaxRequestTarget target) {
+            protected void onUpdate(final AjaxRequestTarget target) {
+            
+            
                 if (isAdmin) {
                     password.setVisible(true);
                 } else {
@@ -189,28 +238,56 @@ public final class PersonForm extends Form<Person> {
                 target.add(password);
             }
         };
-
+        
         add(checkBox);
-        TextField<String> emailTextField = TextFieldBuilder.<String>createRequired("email", person, "email")
-                .withTooltip(getString("memberpage.save.form.field.tooltip.email")).highlightOnErrors().buildTextField();
+        final TextField<String> emailTextField =
+                TextFieldBuilder.<String> createRequired("email", person, "email")
+                        .withTooltip(getString("memberpage.save.form.field.tooltip.email"))
+                        .highlightOnErrors().buildTextField();
         emailTextField.add(EmailAddressValidator.getInstance());
         add(emailTextField);
     }
-
+    
+    
+    public void initSimpleButton() {
+    
+    
+        add(new AjaxLinkLayout<LayoutPage>("cancel", page)
+        {
+            
+            
+            @Override
+            public void onClick(final AjaxRequestTarget art) {
+            
+            
+                final LayoutPage page = getCustom();
+                page.setResponsePage(new PersonPage(page.getPageParameters()));
+            }
+        });
+    }
+    
+    
     public void initSubmitbutton() {
-
-        add(new AjaxButton("submit") {
-
+    
+    
+        add(new AjaxButton("submit")
+        {
+            
+            
             @Override
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
+            
+            
                 feedBack.setVisible(true);
                 target.add(feedBack);
-
+                
             }
-
+            
+            
             @Override
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-
+            
+            
                 feedBack.setVisible(false);
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
@@ -225,53 +302,36 @@ public final class PersonForm extends Form<Person> {
                 } else {
                     person.setIdPersonRole(null);
                 }
-
-                personService.saveOrUpdatePerson(person, (List<Project>) (List<?>) currentEntityList);
+                
+                personService.saveOrUpdatePerson(person,
+                        (List<Project>) (List<?>) currentEntityList);
                 page.setResponsePage(new PersonPage(page.getPageParameters()));
-
+                
             }
-
+            
         });
-
+        
     }
-
-    public void initSimpleButton() {
-        add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
-
-            @Override
-            public void onClick(final AjaxRequestTarget art) {
-                LayoutPage page = getCustom();
-                page.setResponsePage(new PersonPage(page.getPageParameters()));
-            }
-        });
-    }
-
-    public List<IHasKey> getSelectedEntity() {
-        return selectedEntity;
-    }
-
-    public void setSelectedEntity(List<IHasKey> selectedEntity) {
-        this.selectedEntity = selectedEntity;
-    }
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public NameGeneric getGroupName() {
-        return groupName;
-    }
-
-    public TextField getGroupField() {
-        return groupField;
-    }
-
+    
+    
     public Boolean isIsAdmin() {
+    
+    
         return isAdmin;
     }
-
-    public void setIsAdmin(Boolean isAdmin) {
+    
+    
+    public void setIsAdmin(final Boolean isAdmin) {
+    
+    
         this.isAdmin = isAdmin;
     }
-
+    
+    
+    public void setSelectedEntity(final List<IHasKey> selectedEntity) {
+    
+    
+        this.selectedEntity = selectedEntity;
+    }
+    
 }
