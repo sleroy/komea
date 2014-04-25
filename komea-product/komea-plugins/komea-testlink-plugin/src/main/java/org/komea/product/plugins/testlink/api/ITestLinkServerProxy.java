@@ -5,12 +5,11 @@
  */
 package org.komea.product.plugins.testlink.api;
 
+import br.eti.kinoshita.testlinkjavaapi.model.TestCase;
 import java.util.List;
-
 import org.komea.product.plugins.testlink.model.TestLinkMetrics;
 import org.komea.product.plugins.testlink.model.TestLinkProject;
 import org.komea.product.plugins.testlink.model.TestLinkRequirement;
-import org.komea.product.plugins.testlink.model.TestLinkTestCase;
 
 /**
  *
@@ -20,11 +19,10 @@ public interface ITestLinkServerProxy {
 
     public List<TestLinkProject> getListProject();
 
-    public List<TestLinkTestCase> getTotalTests(TestLinkProject _project);
-    
+    public List<TestCase> getTotalTests(TestLinkProject _project);
+
     public TestLinkMetrics getMetricTest(TestLinkProject _project);
 
     public List<TestLinkRequirement> getRequirements(TestLinkProject _project);
-
 
 }
