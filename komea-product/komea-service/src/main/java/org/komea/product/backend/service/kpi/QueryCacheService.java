@@ -118,7 +118,7 @@ public class QueryCacheService implements IQueryCacheService {
     public void refreshAll() {
         final List<String> storedQueryNames = getStoredQueryNames();
         for (final String storedQueryName : storedQueryNames) {
-            LOGGER.info("refresh query " + storedQueryName);
+            LOGGER.debug("Refresh the dynamic query {}", storedQueryName);
             cache.refresh(storedQueryName);
         }
     }

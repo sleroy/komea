@@ -25,6 +25,6 @@ public interface IQueryCacheService {
      */
     List<String> getStoredQueryNames();
 
-    public void refreshAll();
+    void refreshAll();
 
 }

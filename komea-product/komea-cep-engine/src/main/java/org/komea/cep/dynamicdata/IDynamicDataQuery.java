@@ -20,5 +20,5 @@ public interface IDynamicDataQuery {
      */
     ICEPResult getResult();
 
-    String getKey();
+    String getFormula();
 }
