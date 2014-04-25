@@ -5,41 +5,32 @@
 package org.komea.eventory.cache.guava;
 
 
-
 import java.util.Iterator;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.eventory.api.cache.ICacheConfiguration;
-import org.komea.eventory.cache.guava.GoogleCacheStorage;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-
 
 /**
  * @author sleroy
  */
 @RunWith(MockitoJUnitRunner.class)
-public class GoogleCacheStorageTest
-{
-    
+public class GoogleCacheStorageTest {
     
     @Mock
-    private ICacheConfiguration cacheConfiguration;
+    private ICacheConfiguration        cacheConfiguration;
     @InjectMocks
-    private GoogleCacheStorage  googleCacheStorage;
-    
-    
+    private GoogleCacheStorage<String> googleCacheStorage;
     
     /**
      * Test method for {@link org.komea.eventory.cache.guava.GoogleCacheStorage#clear()}.
      */
-    @Test 
+    @Test
     public final void testClear() throws Exception {
-    
     
         googleCacheStorage.push("string");
         googleCacheStorage.push("string2");
@@ -47,13 +38,11 @@ public class GoogleCacheStorageTest
         googleCacheStorage.clear();
     }
     
-    
     /**
      * Test method for {@link org.komea.eventory.cache.guava.GoogleCacheStorage#getAllValues()}.
      */
-    @Test 
+    @Test
     public final void testGetAllValues() throws Exception {
-    
     
         googleCacheStorage.push("string");
         googleCacheStorage.push("string2");
@@ -62,17 +51,15 @@ public class GoogleCacheStorageTest
         Assert.assertTrue(googleCacheStorage.getAllValues().contains("string2"));
     }
     
-    
     /**
      * Test method for {@link org.komea.eventory.cache.guava.GoogleCacheStorage#getIterator()}.
      */
-    @Test 
+    @Test
     public final void testGetIterator() throws Exception {
-    
     
         googleCacheStorage.push("string");
         googleCacheStorage.push("string2");
-        final Iterator iterator = googleCacheStorage.getIterator();
+        final Iterator<String> iterator = googleCacheStorage.getIterator();
         int i = 0;
         while (iterator.hasNext()) {
             iterator.next();
@@ -81,14 +68,12 @@ public class GoogleCacheStorageTest
         Assert.assertEquals(2, i);
     }
     
-    
     /**
      * Test method for
      * {@link org.komea.eventory.cache.guava.GoogleCacheStorage#GoogleCacheStorage(org.komea.eventory.api.cache.ICacheConfiguration)}.
      */
-    @Test 
+    @Test
     public final void testGoogleCacheStorage() throws Exception {
-    
     
         Assert.assertTrue(googleCacheStorage.getAllValues().isEmpty());
         Assert.assertFalse(googleCacheStorage.getIterator().hasNext());
@@ -96,13 +81,11 @@ public class GoogleCacheStorageTest
         
     }
     
-    
     /**
      * Test method for {@link org.komea.eventory.cache.guava.GoogleCacheStorage#push(java.io.Serializable)}.
      */
-    @Test 
+    @Test
     public final void testPush() throws Exception {
-    
     
         googleCacheStorage.push("string");
         googleCacheStorage.push("string2");
@@ -110,19 +93,16 @@ public class GoogleCacheStorageTest
         
     }
     
-    
     /**
      * Test method for {@link org.komea.eventory.cache.guava.GoogleCacheStorage#size()}.
      */
-    @Test 
+    @Test
     public final void testSize() throws Exception {
-    
     
         googleCacheStorage.push("string");
         googleCacheStorage.push("string2");
         googleCacheStorage.push("string3");
         Assert.assertEquals(3, googleCacheStorage.getAllValues().size());
     }
-    
     
 }

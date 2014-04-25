@@ -2,9 +2,9 @@ rootProject.name = 'komea-eventory'
 
 include "cep-engine"
 include "cep-bridge-memory"
-include "cep-bridge-activemq"
+//include "cep-bridge-activemq"
 include "cep-cache-guava"
-include "cep-cache-ehcache"
+//include "cep-cache-ehcache"
 include "cep-formula-xpath"
 include "cep-formula-springel"
 include "cep-engine-api"

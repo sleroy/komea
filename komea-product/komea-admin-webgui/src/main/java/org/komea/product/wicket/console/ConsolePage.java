@@ -24,8 +24,12 @@ import org.slf4j.LoggerFactory;
  */
 public class ConsolePage extends LayoutPage {
     
+    /**
+     * This field describes
+     */
+    private static final long serialVersionUID = 1L;
     @SpringBean
-    private ISettingService settingService;
+    private ISettingService   settingService;
     
     public ConsolePage(final PageParameters _parameters) {
     
