@@ -2,13 +2,14 @@
  * 
  */
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.backend.service.dynamicquery;
 
 
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
+import org.komea.product.backend.service.dynamicquery.QueryCacheCron;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -31,7 +32,7 @@ public class QueryCacheCronTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.kpi.QueryCacheCron#updateCacheOfDynamicQueries()}.
+     * Test method for {@link org.komea.product.backend.service.dynamicquery.QueryCacheCron#updateCacheOfDynamicQueries()}.
      */
     @Test
     public final void testUpdateCacheOfDynamicQueries() throws Exception {

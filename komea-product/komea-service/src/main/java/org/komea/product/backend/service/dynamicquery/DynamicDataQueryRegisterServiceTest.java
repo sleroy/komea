@@ -2,12 +2,13 @@
  * 
  */
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.backend.service.dynamicquery;
 
 
 
 import org.junit.Test;
 import org.komea.cep.dynamicdata.IDynamicDataQuery;
+import org.komea.product.backend.service.dynamicquery.DynamicDataQueryRegisterService;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -32,7 +33,7 @@ public class DynamicDataQueryRegisterServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.kpi.DynamicDataQueryRegisterService#existQuery(java.lang.String)}.
+     * Test method for {@link org.komea.product.backend.service.dynamicquery.DynamicDataQueryRegisterService#existQuery(java.lang.String)}.
      */
     @Test
     public final void testExistQuery() throws Exception {
@@ -48,7 +49,7 @@ public class DynamicDataQueryRegisterServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.kpi.DynamicDataQueryRegisterService#getQueriesIterator()}.
+     * Test method for {@link org.komea.product.backend.service.dynamicquery.DynamicDataQueryRegisterService#getQueriesIterator()}.
      */
     @Test
     public final void testGetQueriesIterator() throws Exception {
@@ -62,7 +63,7 @@ public class DynamicDataQueryRegisterServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.kpi.DynamicDataQueryRegisterService#getQuery(java.lang.String)}.
+     * Test method for {@link org.komea.product.backend.service.dynamicquery.DynamicDataQueryRegisterService#getQuery(java.lang.String)}.
      */
     @Test
     public final void testGetQuery() throws Exception {
@@ -77,7 +78,7 @@ public class DynamicDataQueryRegisterServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.kpi.DynamicDataQueryRegisterService#getQueryNames()}.
+     * Test method for {@link org.komea.product.backend.service.dynamicquery.DynamicDataQueryRegisterService#getQueryNames()}.
      */
     @Test
     public final void testGetQueryNames() throws Exception {
@@ -92,7 +93,7 @@ public class DynamicDataQueryRegisterServiceTest
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.kpi.DynamicDataQueryRegisterService#registerQuery(java.lang.String, org.komea.cep.dynamicdata.IDynamicDataQuery)}
+     * {@link org.komea.product.backend.service.dynamicquery.DynamicDataQueryRegisterService#registerQuery(java.lang.String, org.komea.cep.dynamicdata.IDynamicDataQuery)}
      * .
      */
     @Test
@@ -109,7 +110,7 @@ public class DynamicDataQueryRegisterServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.kpi.DynamicDataQueryRegisterService#removeQuery(java.lang.String)}.
+     * Test method for {@link org.komea.product.backend.service.dynamicquery.DynamicDataQueryRegisterService#removeQuery(java.lang.String)}.
      */
     @Test
     public final void testRemoveQuery() throws Exception {

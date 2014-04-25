@@ -280,9 +280,6 @@ public class EventStatisticsService implements IEventStatisticsService
         cepEngine.createOrUpdateQuery(new QueryDefinition(STATS_BREAKDOWN_24H,
                 buildProviderEventFrequencyQuery()));
         
-        if (alertPerDay != null) {
-            kpiService.storeValueInHistory(kpiKey);
-        }
         
     }
     

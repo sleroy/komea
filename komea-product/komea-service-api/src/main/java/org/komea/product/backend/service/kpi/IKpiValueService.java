@@ -9,7 +9,6 @@ package org.komea.product.backend.service.kpi;
 import java.util.List;
 
 import org.komea.product.backend.exceptions.KPINotFoundException;
-import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.model.Kpi;
@@ -26,7 +25,13 @@ public interface IKpiValueService
     
     
     /**
-     * Retuens the last measure of a kpi
+     * Backup the kpi values into the history.
+     */
+    public void backupKpiValuesIntoHistory();
+    
+    
+    /**
+     * Returns the last measure of a kpi
      * 
      * @param _measureKey
      *            the kpi key
@@ -40,14 +45,22 @@ public interface IKpiValueService
     
     
     /**
-     * @return the measureService
+     * Get the real time value of a kpi.
+     * 
+     * @param _key
+     *            the kpi key.
+     * @return
      */
-    public IHistoryService getMeasureService();
-    
-    
     public Measure getRealTimeMeasure(KpiKey _key);
     
     
+    /**
+     * Get the real times measures of some entities;
+     * 
+     * @param kpis
+     * @param entities
+     * @return
+     */
     public List<Measure> getRealTimeMeasuresFromEntities(
             List<Kpi> kpis,
             List<BaseEntityDto> entities);
@@ -66,19 +79,7 @@ public interface IKpiValueService
     
     
     /**
-     * Stores the measure of a kpi in the database
-     * 
-     * @param _kpiKey
-     *            the kpi key (with reference to the entity)
-     * @param _kpiValue
-     *            the value.
-     */
-    
-    public void storeMeasureOfAKpiInDatabase(KpiKey _kpiKey, Number _kpiValue);
-    
-    
-    /**
-     * Method storeValueInHistory.
+     * This method stores the real times values of a kpi (ex table of entity, double values) into the history.
      * 
      * @param _kpiKey
      *            KpiKey

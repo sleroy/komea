@@ -1,9 +1,13 @@
+
 package org.komea.product.backend.service.entities;
+
+
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
 import org.komea.product.backend.api.exceptions.EntityNotFoundException;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.PersonDao;
@@ -11,11 +15,8 @@ import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.enums.EntityType;
-import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonCriteria;
-import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.PersonGroupCriteria;
-import org.komea.product.database.model.Project;
 import org.komea.product.database.model.ProjectCriteria;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.service.dto.KpiKey;
@@ -23,79 +24,72 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
+
 
 /**
  */
 @Service
 @Transactional
-public final class EntityService implements IEntityService {
-
+public final class EntityService implements IEntityService
+{
+    
+    
     @Autowired
-    private PersonDao personDAO;
-
+    private PersonDao           personDAO;
+    
     @Autowired
-    private PersonGroupDao personGroupDao;
-
+    private PersonGroupDao      personGroupDao;
+    
     @Autowired
     private IPersonGroupService personGroupService;
-
+    
     @Autowired
-    private IPersonService personService;
-
+    private IPersonService      personService;
+    
     @Autowired
-    private ProjectDao projectDao;
-
+    private ProjectDao          projectDao;
+    
     @Autowired
-    private IProjectService projectService;
-
+    private IProjectService     projectService;
+    
+    
+    
     public EntityService() {
-
+    
+    
         super();
     }
-
-    /**
-     * Method getEntities.
-     *
-     * @param _entityType EntityType
-     * @param _entityKeys List<String>
-     * @return List<BaseEntityDto>
-     */
-    @Override
-    public List<BaseEntityDto> getEntities(final EntityType _entityType, final List<String> _entityKeys) {
-
-        final List<BaseEntityDto> entities = Lists.newArrayList();
-        final boolean all = _entityKeys == null || _entityKeys.isEmpty();
-        switch (_entityType) {
-            case PERSON:
-                final List<Person> persons = all ? personService.selectAll() : personService.selectByKeys(_entityKeys);
-                entities.addAll(personService.convertPersonsToBaseEntities(persons));
-                break;
-            case TEAM:
-            case DEPARTMENT:
-                final List<PersonGroup> personGroups
-                        = all ? personGroupService.selectAll() : personGroupService.selectByKeys(_entityKeys);
-                entities.addAll(personGroupService.convertPersonGroupsToBaseEntities(
-                        personGroups, _entityType));
-                break;
-            case PROJECT:
-                final List<Project> projects = all ? projectService.selectAll() : projectService.selectByKeys(_entityKeys);
-                entities.addAll(projectService.projectsToBaseEntities(projects));
-                break;
-        }
-        return entities;
-    }
-
+    
+    
     /**
      * (non-Javadoc)
-     *
-     * @param _entityType EntityType
-     * @param _key Integer
+     * 
+     * @see org.komea.product.backend.service.entities.IEntityService#findEntityAssociatedToKpi(org.komea.product.service.dto.KpiKey)
+     */
+    @Override
+    public IEntity findEntityAssociatedToKpi(final KpiKey _kpiKey) {
+    
+    
+        Validate.notNull(_kpiKey);
+        
+        return findEntityByEntityKey(_kpiKey.getEntityKey());
+    }
+    
+    
+    /**
+     * (non-Javadoc)
+     * 
+     * @param _entityType
+     *            EntityType
+     * @param _key
+     *            Integer
      * @return TEntity
      */
     @Override
-    public <TEntity extends IEntity> TEntity getEntity(final EntityKey _entityKey) {
-
+    public <TEntity extends IEntity> TEntity findEntityByEntityKey(final EntityKey _entityKey) {
+    
+    
+        Validate.notNull(_entityKey);
         switch (_entityKey.getEntityType()) {
             case PERSON:
                 return (TEntity) personDAO.selectByPrimaryKey(_entityKey.getId());
@@ -106,185 +100,273 @@ public final class EntityService implements IEntityService {
                 return (TEntity) projectDao.selectByPrimaryKey(_entityKey.getId());
             default:
                 break;
-
+        
         }
         return null;
-
+        
     }
-
+    
+    
     /**
-     * (non-Javadoc)
-     *
-     * @see
-     * org.komea.product.backend.service.entities.IEntityService#getEntityAssociatedToKpi(org.komea.product.service.dto.KpiKey)
+     * Method getEntities.
+     * 
+     * @param _entityType
+     *            EntityType
+     * @param _entityKeys
+     *            List<String>
+     * @return List<BaseEntityDto>
      */
     @Override
-    public IEntity getEntityAssociatedToKpi(final KpiKey _kpiKey) {
-
-        return getEntity(_kpiKey.getEntityKey());
+    public List<BaseEntityDto> getBaseEntityDTOS(
+            final EntityType _entityType,
+            final List<String> _entityKeys) {
+    
+    
+        Validate.notNull(_entityKeys);
+        Validate.notNull(_entityType);
+        final List<? extends IEntity> entitiesWithKeys =
+                findEntitiesByKey(_entityType, _entityKeys);
+        return BaseEntityDto.convertEntities(entitiesWithKeys);
+        
     }
-
-    /**
-     * (non-Javadoc)
-     *
-     * @param _entityType EntityType
-     * @param _entityID Integer
-     * @return IEntity
-     * @see
-     * org.komea.product.backend.service.entities.IEntityService#getEntityOrFail(org.komea.product.database.enums.EntityType,
-     * int)
-     */
-    @Override
-    public IEntity getEntityOrFail(final EntityKey _entityKey) {
-
-        final IEntity entity = getEntity(_entityKey);
-        if (entity == null) {
-            throw new EntityNotFoundException(_entityKey.getId(),
-                    _entityKey.getEntityType());
-        }
-        return entity;
-    }
-
-    /**
-     * @return the personDAO
-     */
-    public PersonDao getPersonDAO() {
-
-        return personDAO;
-    }
-
-    /**
-     * @return the personGroupDao
-     */
-    public PersonGroupDao getPersonGroupDao() {
-
-        return personGroupDao;
-    }
-
-    /**
-     * @return the personGroupService
-     */
-    public IPersonGroupService getPersonGroupService() {
-
-        return personGroupService;
-    }
-
-    /**
-     * @return the personService
-     */
-    public IPersonService getPersonService() {
-
-        return personService;
-    }
-
-    /**
-     * @return the projectDao
-     */
-    public ProjectDao getProjectDao() {
-
-        return projectDao;
-    }
-
-    /**
-     * @return the projectService
-     */
-    public IProjectService getProjectService() {
-
-        return projectService;
-    }
-
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.service.entities.IEntityService#loadEntities(org.komea.product.database.enums.EntityType)
      */
     @Override
-    public List<IEntity> loadEntities(final EntityType _entityType) {
-
+    public List<IEntity> getEntitiesByEntityType(final EntityType _entityType) {
+    
+    
+        Validate.notNull(_entityType);
+        List<IEntity> rEntities = Collections.EMPTY_LIST;
         switch (_entityType) {
             case PERSON:
-                return (List) personDAO.selectByCriteria(new PersonCriteria());
+                rEntities = (List) personDAO.selectByCriteria(new PersonCriteria());
+                break;
             case DEPARTMENT:
             case TEAM:
-                return (List) personGroupDao.selectByCriteria(new PersonGroupCriteria());
+                rEntities = (List) personGroupDao.selectByCriteria(new PersonGroupCriteria());
+                break;
             case PROJECT:
-                return (List) projectDao.selectByCriteria(new ProjectCriteria());
+                rEntities = (List) projectDao.selectByCriteria(new ProjectCriteria());
+                break;
             default:
-                return Collections.EMPTY_LIST;
-
+                break;
+        
         }
+        return Collections.unmodifiableList(rEntities);
     }
-
+    
+    
     /**
      * Method loadEntities.
-     *
-     * @param _entityType EntityType
-     * @param _keys List<Integer>
+     * 
+     * @param _entityType
+     *            EntityType
+     * @param _keys
+     *            List<Integer>
      * @return List<TEntity>
      * @see
-     * org.komea.product.backend.service.entities.IEntityService#loadEntities(EntityType,
-     * List<Integer>)
+     *      org.komea.product.backend.service.entities.IEntityService#loadEntities(EntityType,
+     *      List<Integer>)
      */
     @Override
-    public <TEntity extends IEntity> List<TEntity> loadEntities(
+    public <TEntity extends IEntity> List<TEntity> getEntitiesByPrimaryKey(
             final EntityType _entityType,
             final List<Integer> _keys) {
-
+    
+    
+        Validate.notNull(_entityType);
+        Validate.notNull(_keys);
+        
         final List<TEntity> listOfEntities = new ArrayList<TEntity>(_keys.size());
         for (final Integer key : _keys) {
-            final IEntity entity = getEntity(EntityKey.of(_entityType, key));
+            final IEntity entity = findEntityByEntityKey(EntityKey.of(_entityType, key));
             if (entity != null) {
                 listOfEntities.add((TEntity) entity);
             }
         }
-        return listOfEntities;
+        return Collections.unmodifiableList(listOfEntities);
     }
-
+    
+    
     /**
-     * @param _personDAO the personDAO to set
+     * (non-Javadoc)
+     * 
+     * @param _entityType
+     *            EntityType
+     * @param _entityID
+     *            Integer
+     * @return IEntity
+     * @see org.komea.product.backend.service.entities.IEntityService#getEntityOrFail(org.komea.product.database.enums.EntityType, int)
+     */
+    @Override
+    public IEntity getEntityOrFail(final EntityKey _entityKey) {
+    
+    
+        Validate.notNull(_entityKey);
+        final IEntity entity = findEntityByEntityKey(_entityKey);
+        if (entity == null) { throw new EntityNotFoundException(_entityKey.getId(),
+                _entityKey.getEntityType()); }
+        return entity;
+    }
+    
+    
+    /**
+     * @return the personDAO
+     */
+    public PersonDao getPersonDAO() {
+    
+    
+        return personDAO;
+    }
+    
+    
+    /**
+     * @return the personGroupDao
+     */
+    public PersonGroupDao getPersonGroupDao() {
+    
+    
+        return personGroupDao;
+    }
+    
+    
+    /**
+     * @return the personGroupService
+     */
+    public IPersonGroupService getPersonGroupService() {
+    
+    
+        return personGroupService;
+    }
+    
+    
+    /**
+     * @return the personService
+     */
+    public IPersonService getPersonService() {
+    
+    
+        return personService;
+    }
+    
+    
+    /**
+     * @return the projectDao
+     */
+    public ProjectDao getProjectDao() {
+    
+    
+        return projectDao;
+    }
+    
+    
+    /**
+     * @return the projectService
+     */
+    public IProjectService getProjectService() {
+    
+    
+        return projectService;
+    }
+    
+    
+    /**
+     * @param _personDAO
+     *            the personDAO to set
      */
     public void setPersonDAO(final PersonDao _personDAO) {
-
+    
+    
         personDAO = _personDAO;
     }
-
+    
+    
     /**
-     * @param _personGroupDao the personGroupDao to set
+     * @param _personGroupDao
+     *            the personGroupDao to set
      */
     public void setPersonGroupDao(final PersonGroupDao _personGroupDao) {
-
+    
+    
         personGroupDao = _personGroupDao;
     }
-
+    
+    
     /**
-     * @param _personGroupService the personGroupService to set
+     * @param _personGroupService
+     *            the personGroupService to set
      */
     public void setPersonGroupService(final IPersonGroupService _personGroupService) {
-
+    
+    
         personGroupService = _personGroupService;
     }
-
+    
+    
     /**
-     * @param _personService the personService to set
+     * @param _personService
+     *            the personService to set
      */
     public void setPersonService(final IPersonService _personService) {
-
+    
+    
         personService = _personService;
     }
-
+    
+    
     /**
-     * @param _projectDao the projectDao to set
+     * @param _projectDao
+     *            the projectDao to set
      */
     public void setProjectDao(final ProjectDao _projectDao) {
-
+    
+    
         projectDao = _projectDao;
     }
-
+    
+    
     /**
-     * @param _projectService the projectService to set
+     * @param _projectService
+     *            the projectService to set
      */
     public void setProjectService(final IProjectService _projectService) {
-
+    
+    
         projectService = _projectService;
     }
-
+    
+    
+    /**
+     * Returns the list of entities
+     * 
+     * @param _entityType
+     *            the entity type
+     * @param _entityKeys
+     *            the entity keys
+     * @return the list of entities filtered by entity type and keys.
+     */
+    private List<? extends IEntity> findEntitiesByKey(
+            final EntityType _entityType,
+            final List<String> _entityKeys) {
+    
+    
+        Validate.notNull(_entityKeys);
+        Validate.notNull(_entityKeys);
+        
+        switch (_entityType) {
+            case PERSON:
+                return personService.selectByKeys(_entityKeys);
+            case TEAM:
+            case DEPARTMENT:
+                return personGroupService.selectByKeys(_entityKeys);
+            case PROJECT:
+                return projectService.selectByKeys(_entityKeys);
+            default:
+                return Collections.EMPTY_LIST;
+        }
+    }
 }

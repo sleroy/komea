@@ -33,7 +33,7 @@ public class ProjectsController {
     public List<ProjectDto> allProjects() {
     
         LOGGER.debug("call rest method /projects/all/");
-        return entityService.getAllProjects();
+        return entityService.getAllProjectsAsDtos();
     }
     
 }

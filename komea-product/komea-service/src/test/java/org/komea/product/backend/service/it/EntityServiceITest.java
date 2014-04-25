@@ -62,7 +62,7 @@ public class EntityServiceITest extends AbstractSpringDBunitIntegrationTest
     public void testGetProjectList() {
     
     
-        final List<ProjectDto> projectList = projectService.getAllProjects();
+        final List<ProjectDto> projectList = projectService.getAllProjectsAsDtos();
         Assert.assertEquals(3, projectList.size());
     }
     

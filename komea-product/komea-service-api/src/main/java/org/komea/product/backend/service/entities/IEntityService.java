@@ -28,7 +28,7 @@ public interface IEntityService
      *            List<String>
      * @return List<BaseEntityDto>
      */
-    List<BaseEntityDto> getEntities(final EntityType entityType, final List<String> entityKeys);
+    List<BaseEntityDto> getBaseEntityDTOS(final EntityType entityType, final List<String> entityKeys);
     
     
     /**
@@ -40,7 +40,7 @@ public interface IEntityService
      *            the key
      * @return the entity or null if the entity does not exist
      */
-    <TEntity extends IEntity> TEntity getEntity(EntityKey _entityKey);
+    <TEntity extends IEntity> TEntity findEntityByEntityKey(EntityKey _entityKey);
     
     
     /**
@@ -50,7 +50,7 @@ public interface IEntityService
      *            KpiKey
      * @return IEntity
      */
-    IEntity getEntityAssociatedToKpi(KpiKey _kpiKey);
+    IEntity findEntityAssociatedToKpi(KpiKey _kpiKey);
     
     
     /**
@@ -72,7 +72,7 @@ public interface IEntityService
      *            the entity type.
      * @return the list of entities.
      */
-    List<IEntity> loadEntities(EntityType _entityType);
+    List<IEntity> getEntitiesByEntityType(EntityType _entityType);
     
     
     /**
@@ -84,7 +84,7 @@ public interface IEntityService
      *            the keys
      * @return the entity
      */
-    <TEntity extends IEntity> List<TEntity> loadEntities(EntityType _entityType, List<Integer> _keys);
+    <TEntity extends IEntity> List<TEntity> getEntitiesByPrimaryKey(EntityType _entityType, List<Integer> _keys);
     
     // /**
     // * This method return the complete person list

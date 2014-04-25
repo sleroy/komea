@@ -4,9 +4,6 @@ package org.komea.product.backend.service.cron;
 
 
 import org.komea.product.backend.service.kpi.IKpiValueService;
-import org.komea.product.database.api.IEntity;
-import org.komea.product.database.model.Kpi;
-import org.komea.product.service.dto.KpiKey;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -27,12 +24,9 @@ public class KpiHistoryJob implements Job
     
     private static final Logger LOGGER = LoggerFactory.getLogger(KpiHistoryJob.class);
     
-    private IEntity             entity;
-    
-    private Kpi                 kpi;
     
     @Autowired
-    private IKpiValueService    kpiService;
+    private IKpiValueService    kpiValueService;
     
     
     
@@ -48,50 +42,21 @@ public class KpiHistoryJob implements Job
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
     
     
-        LOGGER.trace("Executing the cron {}", _context.getJobDetail().getKey());
-        kpiService.storeValueInHistory(KpiKey.ofKpiAndEntityOrNull(kpi, entity));
+        kpiValueService.backupKpiValuesIntoHistory();
     }
     
     
-    public IEntity getEntity() {
+    public IKpiValueService getKpiValueService() {
     
     
-        return entity;
+        return kpiValueService;
     }
     
     
-    public Kpi getKpi() {
+    public void setKpiValueService(final IKpiValueService _kpiValueService) {
     
     
-        return kpi;
-    }
-    
-    
-    public IKpiValueService getKpiService() {
-    
-    
-        return kpiService;
-    }
-    
-    
-    public void setEntity(final IEntity _entity) {
-    
-    
-        entity = _entity;
-    }
-    
-    
-    public void setKpi(final Kpi _kpi) {
-    
-    
-        kpi = _kpi;
-    }
-    
-    
-    public void setKpiService(final IKpiValueService _kpiService) {
-    
-    
-        kpiService = _kpiService;
+        kpiValueService = _kpiValueService;
     }
     
 }

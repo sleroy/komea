@@ -45,7 +45,7 @@ public class MeasuresController {
         final EntityType entityType = _searchMeasuresDto.getEntityType();
         final List<Kpi> kpis = kpiService.getKpis(entityType, _searchMeasuresDto.getKpiKeys());
         final List<BaseEntityDto> entities
-                = entityService.getEntities(entityType, _searchMeasuresDto.getEntityKeys());
+                = entityService.getBaseEntityDTOS(entityType, _searchMeasuresDto.getEntityKeys());
         final List<Measure> measures = kpiService.getRealTimeMeasuresFromEntities(kpis, entities);
         measures.addAll(measureService.getMeasures(kpis, entities, _searchMeasuresDto));
         return new MeasuresDto(entityType, entities, kpis, measures);

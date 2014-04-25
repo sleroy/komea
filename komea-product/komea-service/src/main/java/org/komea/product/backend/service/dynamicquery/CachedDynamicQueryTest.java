@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.backend.service.dynamicquery;
 
 
 
@@ -35,7 +35,7 @@ public class CachedDynamicQueryTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.kpi.CachedDynamicQuery#getResult()}.
+     * Test method for {@link org.komea.product.backend.service.dynamicquery.CachedDynamicQuery#getResult()}.
      */
     @Test
     public final void testGetResult() throws Exception {

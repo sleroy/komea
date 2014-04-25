@@ -74,7 +74,7 @@ public final class AlertService implements IAlertService {
                 = alertTypeService.getAlertTypes(entityType, _searchAlert.getKpiAlertTypeKeys(),
                         _searchAlert.getSeverityMin());
         final List<BaseEntityDto> entities
-                = entityService.getEntities(entityType, _searchAlert.getEntityKeys());
+                = entityService.getBaseEntityDTOS(entityType, _searchAlert.getEntityKeys());
 
         final IdKpiMap idKpiMap = new IdKpiMap();
         final Set<String> kpiKeys = idKpiMap.fillIdKpi(alertTypesOfKpiAndSeverity, kpiService);

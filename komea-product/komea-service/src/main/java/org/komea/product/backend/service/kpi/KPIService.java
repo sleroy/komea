@@ -10,7 +10,6 @@ import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.api.exceptions.KpiAlreadyExistingException;
 import org.komea.product.backend.criterias.FindKpi;
 import org.komea.product.backend.criterias.FindKpiOrFail;
-import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IEntityService;
@@ -440,32 +439,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
     
         requiredDAO = _requiredDAO;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKPIService#storeMeasureOfAKpiInDatabase(org.komea.product.service.dto.KpiKey,
-     * java.lang.Number)
-     */
-    @Override
-    public void storeMeasureOfAKpiInDatabase(final KpiKey _kpiKey, final Number _kpiValue) {
-    
-    
-        kpiValueService.storeMeasureOfAKpiInDatabase(_kpiKey, _kpiValue);
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKPIService#storeValueInHistory(org.komea.product.service.dto.KpiKey)
-     */
-    @Override
-    public void storeValueInHistory(final KpiKey _kpiKey) throws KPINotFoundException {
-    
-    
-        kpiValueService.storeValueInHistory(_kpiKey);
-        
     }
     
     

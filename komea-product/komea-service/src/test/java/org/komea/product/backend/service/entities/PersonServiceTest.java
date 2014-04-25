@@ -84,7 +84,7 @@ public class PersonServiceTest
                 .thenReturn(getPersons());
         Mockito.when(groupService.selectByPrimaryKey(2)).thenReturn(getTeam());
         Mockito.when(personRoleService.selectByPrimaryKey(1)).thenReturn(getRole());
-        Mockito.when(projectService.getProjectsOfPerson(1)).thenReturn(Collections.EMPTY_LIST);
+        Mockito.when(projectService.getProjectsOfAMember(1)).thenReturn(Collections.EMPTY_LIST);
         
         final List<PersonDto> personList = service.convertAllPersonsIntoPersonDTO();
         
@@ -124,7 +124,7 @@ public class PersonServiceTest
         Mockito.when(groupService.selectByPrimaryKey(2)).thenReturn(getDepartment());
         
         Mockito.when(personRoleService.selectByPrimaryKey(1)).thenReturn(getRole());
-        Mockito.when(projectService.getProjectsOfPerson(1)).thenReturn(getProjects());
+        Mockito.when(projectService.getProjectsOfAMember(1)).thenReturn(getProjects());
         
         final List<PersonDto> personList = service.convertAllPersonsIntoPersonDTO();
         

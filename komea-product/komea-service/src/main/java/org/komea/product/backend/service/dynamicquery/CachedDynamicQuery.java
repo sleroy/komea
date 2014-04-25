@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.komea.product.backend.service.kpi;
+package org.komea.product.backend.service.dynamicquery;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;

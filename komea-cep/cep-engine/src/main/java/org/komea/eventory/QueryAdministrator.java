@@ -24,6 +24,7 @@ import org.komea.eventory.api.engine.IQueryAdministrator;
  * 
  * @author sleroy
  */
+
 public class QueryAdministrator implements IQueryAdministrator
 {
     

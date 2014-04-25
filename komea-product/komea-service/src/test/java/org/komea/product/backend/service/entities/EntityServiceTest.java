@@ -8,8 +8,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.product.backend.service.entities.EntityService;
-import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dao.PersonGroupDao;
@@ -27,6 +25,8 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
+
+import static org.junit.Assert.assertFalse;
 
 
 
@@ -50,6 +50,71 @@ public class EntityServiceTest
     
     
     
+    /**
+     * Test method for
+     * {@link org.komea.product.backend.service.entities.EntityService#getEntitiesByKey(org.komea.product.database.enums.EntityType, java.util.List)}
+     * .
+     */
+    @Test
+    public void testFindEntitiesByKey() throws Exception {
+    
+    
+        assertFalse("Not yet implemented", true);
+    }
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.backend.service.entities.EntityService#getEntityOrFail(org.komea.product.service.dto.EntityKey)}.
+     */
+    @Test
+    public void testFindEntityByEntityKeyOrFail() throws Exception {
+    
+    
+        assertFalse("Not yet implemented", true);
+    }
+    
+    
+    @Test
+    public void testGetEntitiesByEntityType() {
+    
+    
+        final Person person = new Person();
+        person.setId(12);
+        person.setFirstName("John");
+        person.setLastName("Dalton");
+        final Person person2 = new Person();
+        person2.setId(13);
+        person2.setFirstName("william");
+        person2.setLastName("Dalton");
+        
+        Mockito.when(personDAO.selectByPrimaryKey(Matchers.anyInt())).thenReturn(null);
+        Mockito.when(personDAO.selectByPrimaryKey(12)).thenReturn(person);
+        Mockito.when(personDAO.selectByPrimaryKey(13)).thenReturn(person2);
+        
+        final List<IEntity> entities =
+                entityService.getEntitiesByPrimaryKey(EntityType.PERSON,
+                        Lists.newArrayList(12, 13, 14));
+        
+        Assert.assertEquals(2, entities.size());
+        
+        Assert.assertTrue(entities.get(0) instanceof Person);
+        Person result = (Person) entities.get(0);
+        Assert.assertEquals(12, result.getId().intValue());
+        Assert.assertEquals("John", result.getFirstName());
+        Assert.assertEquals("Dalton", result.getLastName());
+        
+        Assert.assertTrue(entities.get(1) instanceof Person);
+        result = (Person) entities.get(1);
+        Assert.assertEquals(13, result.getId().intValue());
+        Assert.assertEquals("william", result.getFirstName());
+        Assert.assertEquals("Dalton", result.getLastName());
+        
+        Mockito.verify(personDAO, Mockito.times(3)).selectByPrimaryKey(Matchers.anyInt());
+        
+    }
+    
+    
     @Test
     public void testGetGroup() {
     
@@ -62,7 +127,8 @@ public class EntityServiceTest
         
         Mockito.when(personGroupDao.selectByPrimaryKey(12)).thenReturn(group);
         
-        final IEntity entity = entityService.getEntity(EntityKey.of(EntityType.TEAM, 12));
+        final IEntity entity =
+                entityService.findEntityByEntityKey(EntityKey.of(EntityType.TEAM, 12));
         
         Assert.assertTrue(entity instanceof PersonGroup);
         final PersonGroup result = (PersonGroup) entity;
@@ -87,7 +153,8 @@ public class EntityServiceTest
         
         Mockito.when(personDAO.selectByPrimaryKey(12)).thenReturn(person);
         
-        final IEntity entity = entityService.getEntity(EntityKey.of(EntityType.PERSON, 12));
+        final IEntity entity =
+                entityService.findEntityByEntityKey(EntityKey.of(EntityType.PERSON, 12));
         
         Assert.assertTrue(entity instanceof Person);
         final Person result = (Person) entity;
@@ -112,7 +179,8 @@ public class EntityServiceTest
         
         Mockito.when(projectDao.selectByPrimaryKey(12)).thenReturn(project);
         
-        final IEntity entity = entityService.getEntity(EntityKey.of(EntityType.PROJECT, 12));
+        final IEntity entity =
+                entityService.findEntityByEntityKey(EntityKey.of(EntityType.PROJECT, 12));
         
         Assert.assertTrue(entity instanceof Project);
         final Project result = (Project) entity;
@@ -131,48 +199,10 @@ public class EntityServiceTest
     
         Mockito.when(projectDao.selectByPrimaryKey(Matchers.anyInt())).thenReturn(null);
         
-        final IEntity entity = entityService.getEntity(EntityKey.of(EntityType.PROJECT, 12));
+        final IEntity entity =
+                entityService.findEntityByEntityKey(EntityKey.of(EntityType.PROJECT, 12));
         
         Assert.assertEquals(null, entity);
         Mockito.verify(projectDao, Mockito.times(1)).selectByPrimaryKey(Matchers.anyInt());
-    }
-    
-    
-    @Test
-    public void testLoadEntities() {
-    
-    
-        final Person person = new Person();
-        person.setId(12);
-        person.setFirstName("John");
-        person.setLastName("Dalton");
-        final Person person2 = new Person();
-        person2.setId(13);
-        person2.setFirstName("william");
-        person2.setLastName("Dalton");
-        
-        Mockito.when(personDAO.selectByPrimaryKey(Matchers.anyInt())).thenReturn(null);
-        Mockito.when(personDAO.selectByPrimaryKey(12)).thenReturn(person);
-        Mockito.when(personDAO.selectByPrimaryKey(13)).thenReturn(person2);
-        
-        final List<IEntity> entities =
-                entityService.loadEntities(EntityType.PERSON, Lists.newArrayList(12, 13, 14));
-        
-        Assert.assertEquals(2, entities.size());
-        
-        Assert.assertTrue(entities.get(0) instanceof Person);
-        Person result = (Person) entities.get(0);
-        Assert.assertEquals(12, result.getId().intValue());
-        Assert.assertEquals("John", result.getFirstName());
-        Assert.assertEquals("Dalton", result.getLastName());
-        
-        Assert.assertTrue(entities.get(1) instanceof Person);
-        result = (Person) entities.get(1);
-        Assert.assertEquals(13, result.getId().intValue());
-        Assert.assertEquals("william", result.getFirstName());
-        Assert.assertEquals("Dalton", result.getLastName());
-        
-        Mockito.verify(personDAO, Mockito.times(3)).selectByPrimaryKey(Matchers.anyInt());
-        
     }
 }

@@ -2,12 +2,13 @@
  * 
  */
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.backend.service.dynamicquery;
 
 
 
 import org.junit.Test;
 import org.komea.eventory.api.formula.ICEPResult;
+import org.komea.product.backend.service.dynamicquery.DynamicQueryCacheLoader;
 
 import static org.junit.Assert.assertTrue;
 
@@ -21,7 +22,7 @@ public class DynamicQueryCacheLoaderTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.kpi.DynamicQueryCacheLoader#load(java.lang.String)}.
+     * Test method for {@link org.komea.product.backend.service.dynamicquery.DynamicQueryCacheLoader#load(java.lang.String)}.
      */
     @Test
     public final void testLoad() throws Exception {

@@ -5,7 +5,6 @@ package org.komea.product.backend.service.kpi;
 
 import java.util.List;
 
-import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.enums.EntityType;
@@ -80,16 +79,6 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria>
     
     
     /**
-     * Store the real-time value in History
-     * 
-     * @param _kpiKey
-     *            KpiKey
-     * @throws KPINotFoundException
-     */
-    public void storeValueInHistory(KpiKey _kpiKey) throws KPINotFoundException;
-    
-    
-    /**
      * @param kpi
      */
     void deleteKpi(Kpi kpi);
@@ -126,16 +115,5 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria>
      */
     void saveOrUpdateKpi(Kpi kpi, List<KpiAlertType> alertTypes, List<SuccessFactor> successFactors);
     
-    
-    /**
-     * Stores a new value for a kpi in its history. The measure is created at
-     * the current date.
-     * 
-     * @param _kpiKey
-     *            the kpi key
-     * @param _kpiValue
-     *            the value.
-     */
-    void storeMeasureOfAKpiInDatabase(KpiKey _kpiKey, Number _kpiValue);
     
 }

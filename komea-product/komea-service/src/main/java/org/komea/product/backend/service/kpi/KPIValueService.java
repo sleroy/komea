@@ -66,6 +66,22 @@ public final class KPIValueService implements IKpiValueService
     
     
     
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.kpi.IKpiValueService#backupKpiValuesIntoHistory()
+     */
+    @Override
+    public void backupKpiValuesIntoHistory() {
+    
+    
+        for (final Kpi kpi : kpiDAO.selectByCriteria(new KpiCriteria())) {
+            storeValueInHistory(KpiKey.ofKpi(kpi));
+            
+        }
+        
+    }
+    
+    
     /**
      * Method getEntityService.
      * 
@@ -121,7 +137,6 @@ public final class KPIValueService implements IKpiValueService
      * (non-Javadoc)
      * @see org.komea.product.cep.tester.IKpiValueService#getMeasureService()
      */
-    @Override
     public final IHistoryService getMeasureService() {
     
     
@@ -261,14 +276,12 @@ public final class KPIValueService implements IKpiValueService
     }
     
     
-    @Override
     public void storeMeasureOfAKpiInDatabase(final KpiKey _kpiKey, final Number _kpiValue) {
     
     
         final Kpi findKPI = new FindKpiOrFail(_kpiKey, kpiDAO).find();
         final Measure measure =
                 Measure.initializeMeasureFromKPIKey(findKPI.getId(), _kpiKey.getEntityKey());
-        
         measure.setValue(_kpiValue.doubleValue());
         measureService.storeMeasure(measure);
         final int purgeHistory = measureService.buildHistoryPurgeAction(findKPI).purgeHistory();
@@ -276,11 +289,6 @@ public final class KPIValueService implements IKpiValueService
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.tester.IKpiValueService#storeMeasureOfAKpiInDatabase(org.komea.product.service.dto.KpiKey,
-     * java.lang.Number)
-     */
     /*
      * (non-Javadoc)
      * @see org.komea.product.cep.tester.IKpiValueService#storeValueInHistory(org.komea.product.service.dto.KpiKey)
@@ -324,13 +332,13 @@ public final class KPIValueService implements IKpiValueService
         final Kpi findKPIOrFail = new FindKpiOrFail(_kpiKey, kpiDAO).find();
         List<IEntity> entities = null;
         if (_kpiKey.isAssociatedToEntity()) {
-            final IEntity entityAssociatedToKpi = entityService.getEntityAssociatedToKpi(_kpiKey);
+            final IEntity entityAssociatedToKpi = entityService.findEntityAssociatedToKpi(_kpiKey);
             if (entityAssociatedToKpi == null) { throw new EntityNotFoundException(
                     _kpiKey.getEntityKey()); }
             entities = Collections.singletonList(entityAssociatedToKpi);
         } else {
             
-            entities = entityService.loadEntities(findKPIOrFail.getEntityType());
+            entities = entityService.getEntitiesByEntityType(findKPIOrFail.getEntityType());
             
         }
         LOGGER.debug("Entities associated to KPI key {}: {}", _kpiKey, entities.size());
