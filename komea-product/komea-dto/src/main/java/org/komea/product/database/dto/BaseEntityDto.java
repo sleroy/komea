@@ -2,7 +2,6 @@ package org.komea.product.database.dto;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang.Validate;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.api.IKeyVisitor;
 import org.komea.product.database.enums.EntityType;
@@ -75,7 +74,9 @@ public class BaseEntityDto implements IEntity, Comparable<BaseEntityDto> {
      */
     private static BaseEntityDto newFromEntity(final IEntity _entity) {
 
-        Validate.notNull(_entity);
+        if (_entity == null) {
+            throw new IllegalArgumentException("The validated object is null");
+        }
         switch (_entity.getEntityKey().getEntityType()) {
             case PERSON:
                 return newFromMember((Person) _entity);
