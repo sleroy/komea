@@ -79,13 +79,13 @@ public final class CachedDynamicQuery implements IDynamicDataQuery
     public ICEPResult getResult() {
     
     
-        LOGGER.debug("Cache state {} values and {}", dynamicQueryCacheService.getCache().size(),
+        LOGGER.info("Cache state {} values and {}", dynamicQueryCacheService.getCache().size(),
                 queryKey);
         ICEPResult result = null;
         try {
             result = dynamicQueryCacheService.getCache().get(queryKey);
             
-            LOGGER.debug("Cache state after retrieving {} values and {}", dynamicQueryCacheService
+            LOGGER.info("Cache state after retrieving {} values and {}", dynamicQueryCacheService
                     .getCache().size(), queryKey);
         } catch (final ExecutionException e) {
             LOGGER.error("Could not retrieve value from cache", e);

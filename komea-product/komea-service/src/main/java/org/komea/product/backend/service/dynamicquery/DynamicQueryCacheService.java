@@ -6,6 +6,8 @@ package org.komea.product.backend.service.dynamicquery;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
+
 import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.eventory.api.formula.ICEPResult;
 import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
@@ -34,13 +36,12 @@ public class DynamicQueryCacheService implements IQueryCacheService
 {
     
     
-    private static final Logger                    LOGGER = LoggerFactory
-                                                                  .getLogger("dynamicquery-cache");
-    private final LoadingCache<String, ICEPResult> cache;
+    private static final Logger              LOGGER = LoggerFactory.getLogger("dynamicquery-cache");
+    private LoadingCache<String, ICEPResult> cache;
     
     
     @Autowired
-    private IDynamicDataQueryRegisterService       queryRegisterService;
+    private IDynamicDataQueryRegisterService queryRegisterService;
     
     
     
@@ -51,11 +52,7 @@ public class DynamicQueryCacheService implements IQueryCacheService
     
     
         super();
-        final CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder();
-        cacheBuilder.refreshAfterWrite(6, TimeUnit.HOURS);
-        cacheBuilder.maximumSize(200);
-        cacheBuilder.initialCapacity(50);
-        cache = cacheBuilder.build(new DynamicQueryCacheLoader(queryRegisterService));
+        
     }
     
     
@@ -68,7 +65,7 @@ public class DynamicQueryCacheService implements IQueryCacheService
             final IDynamicDataQuery _dynamicDataQuery) {
     
     
-        LOGGER.info("add a query in cache {}", _dynamicDataQuery);
+        LOGGER.info("add a dynamic query into the cache {}", _queryKey);
         
         return new CachedDynamicQuery(this, _dynamicDataQuery, _queryKey);
     }
@@ -86,6 +83,13 @@ public class DynamicQueryCacheService implements IQueryCacheService
     }
     
     
+    public IDynamicDataQueryRegisterService getQueryRegisterService() {
+    
+    
+        return queryRegisterService;
+    }
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.api.IQueryCacheService#storedQueryNames()
@@ -95,6 +99,26 @@ public class DynamicQueryCacheService implements IQueryCacheService
     
     
         return Lists.newArrayList(cache.asMap().keySet());
+    }
+    
+    
+    @PostConstruct
+    public void init() {
+    
+    
+        LOGGER.info("Initializing the cache for queries");
+        final CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder();
+        cacheBuilder.refreshAfterWrite(6, TimeUnit.HOURS);
+        cacheBuilder.maximumSize(200);
+        cacheBuilder.initialCapacity(50);
+        cache = cacheBuilder.build(new DynamicQueryCacheLoader(queryRegisterService));
+    }
+    
+    
+    public void setQueryRegisterService(final IDynamicDataQueryRegisterService _queryRegisterService) {
+    
+    
+        queryRegisterService = _queryRegisterService;
     }
     
     

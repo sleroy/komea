@@ -6,6 +6,7 @@ package org.komea.product.backend.service.dynamicquery;
 
 
 
+import org.apache.commons.lang.Validate;
 import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.eventory.api.formula.ICEPResult;
 import org.komea.eventory.formula.tuple.TupleResultMap;
@@ -40,6 +41,7 @@ public final class DynamicQueryCacheLoader extends CacheLoader<String, ICEPResul
     
         super();
         queryRegisterService = _queryRegisterService;
+        Validate.notNull(_queryRegisterService);
     }
     
     
