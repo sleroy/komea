@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
+import java.text.MessageFormat;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -30,13 +31,18 @@ public class ConsolePage extends LayoutPage {
     
         super(_parameters);
         String consoleLog = "";
+        String logFilePAth = settingService.getProxy("logfile_path").getStringValue();
         try {
-            File defaultLogFile = new File(settingService.getProxy("logfile_path").getStringValue());
-            File currentLogFile = LogFilter.getCurrentLogFile(defaultLogFile);
-            final Reader reader = new BufferedReader(new FileReader(currentLogFile));
+            File logFile = new File(logFilePAth);
+            
+            final Reader reader = new BufferedReader(new FileReader(logFile));
             consoleLog = IOUtils.toString(reader);
         } catch (final Exception e) {
-            LoggerFactory.getLogger(ConsolePage.class).error("Impossible to access to the log.", e);
+            String logErrorMsg = MessageFormat.format("Impossible to access to the log file '{0}'. Please check the log file path.",
+                    logFilePAth);
+            LoggerFactory.getLogger(ConsolePage.class).error(logErrorMsg, e);
+            consoleLog = logErrorMsg;
+            
         }
         final TextArea<String> textArea = new TextArea<String>("console");
         textArea.setModel(Model.of(consoleLog));
