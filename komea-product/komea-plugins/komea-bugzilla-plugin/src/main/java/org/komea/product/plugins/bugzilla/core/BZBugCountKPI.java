@@ -168,8 +168,8 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
     }
 
     @Override
-    public String getKey() {
-        return this.getClass().getName() + ":" + convert(searchs);
+    public String getFormula() {
+        return "new " + this.getClass().getName() + "(\"" + convert(searchs) + "\")";
     }
 
 }

@@ -12,13 +12,10 @@ public class BzFilter {
     }
 
     public static BzFilter fromString(String filterString) {
-        final String[] split = filterString.split("=");
-        String key = split[0];
-        final boolean accept = !key.endsWith("!");
-        if (!accept) {
-            key = key.substring(0, key.length() - 1);
-        }
-        return new BzFilter(key.trim(), accept, StringUtils.splitAndTrimWithoutEmpty(split[1], ","));
+        final boolean accept = !filterString.contains("!=");
+        final String[] split = filterString.split(accept ? "=" : "!=");
+        final String key = split[0].trim();
+        return new BzFilter(key, accept, StringUtils.splitAndTrimWithoutEmpty(split[1], ","));
     }
 
     final String parameterKey;
