@@ -41,11 +41,12 @@ public final class AlertPage extends LayoutPage {
                         .withEditDeleteColumn(deleteAction, editAction)
                         .displayRows(listAffichage.size()+10).withData(dataProvider).build();
         add(build);
+        this.setStatelessHint(true);
 
     }
 
     @Override
     public String getTitle() {
-        return getString("AlertPage.title");
+        return getString("alertpage.globale.title");
     }
 }

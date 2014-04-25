@@ -12,7 +12,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -35,7 +35,7 @@ import org.komea.product.wicket.widget.builders.TextFieldBuilder;
  *
  * @author rgalerme
  */
-public class AlertForm extends Form<KpiAlertType> {
+public class AlertForm extends StatelessForm<KpiAlertType> {
 
     private final IAlertTypeService alertService;
     private final Component feedBack;

@@ -19,6 +19,8 @@ import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import org.komea.product.database.api.IHasKey;
+import org.komea.product.database.model.Person;
+import org.komea.product.database.model.PersonGroup;
 
 /**
  * @author rgalerme
@@ -39,9 +41,7 @@ public class DialogFactory {
             final IGenericService _service,
             final CustomUpdater... updaters) {
 
-        
-        
-        DataListSelectDialogBuilder data=new DataListSelectDialogBuilder();
+        DataListSelectDialogBuilder data = new DataListSelectDialogBuilder();
         data.setPage(page);
         data.setIdList(idList);
         data.setIdBtnAdd(idBtnAdd);
@@ -53,9 +53,8 @@ public class DialogFactory {
         data.setCurrentEntityList(currentEntityList);
         data.setSelectDialogList(selectDialogList);
         data.setService(_service);
-        
-        if(updaters != null)
-        {
+
+        if (updaters != null) {
             for (CustomUpdater customUpdater : updaters) {
                 data.addUpdater(customUpdater);
             }
@@ -65,17 +64,17 @@ public class DialogFactory {
 
     public static void addMultipleListDialog(final DataListSelectDialogBuilder data) {
 
-        if(data.getListEntite() == null){
-        final IChoiceRenderer<IHasKey> displayGroup = DialogFactory.getChoiceRendenerEntity();
+        if (data.getListEntite() == null) {
+            final IChoiceRenderer<IHasKey> displayGroup = DialogFactory.getChoiceRendenerEntity();
 
-        final ListMultipleChoice<IHasKey> listEntite;
-        listEntite
-                = new ListMultipleChoice<IHasKey>(data.getIdList(), new PropertyModel<List<IHasKey>>(data.getPage(),
-                                data.getNameFieldResult()), data.getCurrentEntityList());
-        listEntite.setChoiceRenderer(displayGroup);
-        listEntite.setMaxRows(8);
-        listEntite.setOutputMarkupId(true);
-        data.setListEntite(listEntite);
+            final ListMultipleChoice<IHasKey> listEntite;
+            listEntite
+                    = new ListMultipleChoice<IHasKey>(data.getIdList(), new PropertyModel<List<IHasKey>>(data.getPage(),
+                                    data.getNameFieldResult()), data.getCurrentEntityList());
+            listEntite.setChoiceRenderer(displayGroup);
+            listEntite.setMaxRows(8);
+            listEntite.setOutputMarkupId(true);
+            data.setListEntite(listEntite);
         }
         //
         data.getPage().add(data.getListEntite());
@@ -101,12 +100,12 @@ public class DialogFactory {
                                 if (!data.getCurrentEntityList().contains(selectByPrimaryKey1)) {
                                     data.getCurrentEntityList().add(selectByPrimaryKey1);
                                 }
-                               
-                                    for (CustomUpdater cupdater : data.getUpdaters()) {
-                                        cupdater.update();
-                                        target.add(cupdater.getComposant());
-                                    }
-                               
+
+                                for (CustomUpdater cupdater : data.getUpdaters()) {
+                                    cupdater.update();
+                                    target.add(cupdater.getComposant());
+                                }
+
                                 target.add(data.getListEntite());
 
                             }
@@ -115,6 +114,7 @@ public class DialogFactory {
                 };
         data.getPage().add(dialogPersonGroup);
         dialogPersonGroup.setFilter(data.getCurrentEntityList());
+        dialogPersonGroup.addCustomFilter(data.getFilters());
         data.getPage().add(new AjaxLinkLayout<Object>(data.getIdBtnAdd(), null) {
 
             @Override
@@ -127,17 +127,56 @@ public class DialogFactory {
         data.getPage().add(new AjaxButton(data.getIdBtnDel()) {
 
             @Override
-            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+            public void onError() {
+                System.out.println("----------------------------------------------------------");
+                System.out.println("  on error seul ");
+                System.out.println("----------------------------------------------------------");
+                super.onError(); //To change body of generated methods, choose Tools | Templates.
+            }
 
+            @Override
+            public void onSubmit() {
+                 System.out.println("----------------------------------------------------------");
+                System.out.println("  on submit seul ");
+                System.out.println("----------------------------------------------------------");
+                super.onSubmit(); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            
+            
+            
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                
+                System.out.println("----------------------------------------------------------");
+                System.out.println("  on error code ");
+                System.out.println("----------------------------------------------------------");
                 for (final IHasKey person : data.getChoiceEntityList()) {
                     data.getCurrentEntityList().remove(person);
                 }
-                
-                    for (CustomUpdater cupdater : data.getUpdaters()) {
-                        cupdater.update();
-                        target.add(cupdater.getComposant());
-                    }
-                
+                for (CustomUpdater cupdater : data.getUpdaters()) {
+                    cupdater.update();
+                    target.add(cupdater.getComposant());
+                }
+                target.add(data.getListEntite());
+            }
+            
+            
+            @Override
+            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+
+                System.out.println("----------------------------------------------------------");
+                System.out.println("  on submit code ");
+                System.out.println("----------------------------------------------------------");
+                for (final IHasKey person : data.getChoiceEntityList()) {
+                    data.getCurrentEntityList().remove(person);
+                }
+
+                for (CustomUpdater cupdater : data.getUpdaters()) {
+                    cupdater.update();
+                    target.add(cupdater.getComposant());
+                }
+
                 target.add(data.getListEntite());
             }
         });
@@ -157,8 +196,8 @@ public class DialogFactory {
             final IGenericService _service,
             final ListMultipleChoice<IHasKey> listEntite,
             final CustomUpdater... updaters) {
-        
-         DataListSelectDialogBuilder data=new DataListSelectDialogBuilder();
+
+        DataListSelectDialogBuilder data = new DataListSelectDialogBuilder();
         data.setPage(page);
         data.setIdBtnAdd(idBtnAdd);
         data.setIdBtnDel(idBtnDel);
@@ -169,15 +208,14 @@ public class DialogFactory {
         data.setCurrentEntityList(currentEntityList);
         data.setSelectDialogList(selectDialogList);
         data.setService(_service);
-        
-        if(updaters != null)
-        {
+
+        if (updaters != null) {
             for (CustomUpdater customUpdater : updaters) {
                 data.addUpdater(customUpdater);
             }
         }
         DialogFactory.addMultipleListDialog(data);
-        
+
     }
 
     public static IChoiceRenderer<IHasKey> getChoiceRendenerEntity() {
@@ -197,6 +235,28 @@ public class DialogFactory {
             }
         };
         return display;
+    }
+
+    public static ICustomFilter getPersonWithoutPersonGroupFilter(final Integer obId) {
+        return new ICustomFilter() {
+
+            @Override
+            public boolean isNoDisplay(IHasKey entity) {
+                Person person = (Person) entity;
+                return ((person.getIdPersonGroup() != null) && !person.getIdPersonGroup().equals(obId));
+            }
+        };
+    }
+
+    public static ICustomFilter getPersonGroupWithoutParentFilter(final Integer obId) {
+        return new ICustomFilter() {
+
+            @Override
+            public boolean isNoDisplay(IHasKey entity) {
+                PersonGroup person = (PersonGroup) entity;
+                return ((person.getIdPersonGroupParent() != null) && !person.getIdPersonGroupParent().equals(obId));
+            }
+        };
     }
 
 }

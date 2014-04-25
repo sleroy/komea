@@ -23,6 +23,7 @@ import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.utils.DataListSelectDialogBuilder;
 import org.komea.product.wicket.utils.DialogFactory;
 import org.komea.product.wicket.utils.NameGeneric;
 import org.komea.product.wicket.utils.SelectDialog;
@@ -104,17 +105,21 @@ public class TeamForm extends Form<PersonGroup> {
             currentProjectList = (List<IHasKey>) (List<?>) projectService.getProjectsOfPersonGroup(this.personGroup.getId());
         }
         initSelectDepartment();
-        DialogFactory.addListWithSelectDialog(this,
-                "table",
-                "dialogAddPerson",
-                "btnAddPerson",
-                "btnDelPerson",
-                "selectedPerson",
-                getString("teampage.save.form.field.tooltip.members"),
-                currentPersonList,
-                selectedPerson,
-                (List<IHasKey>) (List<?>) this.personService.selectAll(),
-                personService);
+        
+         DataListSelectDialogBuilder dataPerson = new DataListSelectDialogBuilder();
+        dataPerson.setPage(this);
+        dataPerson.setIdList("table");
+        dataPerson.setIdDialog("dialogAddPerson");
+        dataPerson.setIdBtnAdd("btnAddPerson");
+        dataPerson.setIdBtnDel("btnDelPerson");
+        dataPerson.setNameFieldResult("selectedPerson");
+        dataPerson.setDisplayDialogMessage(getString("teampage.save.form.field.tooltip.members"));
+        dataPerson.setCurrentEntityList(currentPersonList);
+        dataPerson.setChoiceEntityList(selectedPerson);
+        dataPerson.setSelectDialogList((List<IHasKey>) (List<?>)this.personService.selectAll());
+        dataPerson.setService(personService);
+        dataPerson.addFilter(DialogFactory.getPersonWithoutPersonGroupFilter(personGroup.getId()));
+        DialogFactory.addMultipleListDialog(dataPerson);
 
         DialogFactory.addListWithSelectDialog(this,
                 "tableProject",

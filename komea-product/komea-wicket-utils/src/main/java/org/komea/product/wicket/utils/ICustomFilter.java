@@ -5,13 +5,14 @@
  */
 package org.komea.product.wicket.utils;
 
+import java.io.Serializable;
 import org.komea.product.database.api.IHasKey;
 
 /**
  *
  * @author rgalerme
  */
-public interface ICustomFilter {
+public interface ICustomFilter extends Serializable {
 
     public boolean isNoDisplay(IHasKey entity);
 }

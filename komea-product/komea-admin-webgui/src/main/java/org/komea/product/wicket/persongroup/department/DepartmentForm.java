@@ -23,7 +23,9 @@ import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.CustomUpdater;
+import org.komea.product.wicket.utils.DataListSelectDialogBuilder;
 import org.komea.product.wicket.utils.DialogFactory;
+import org.komea.product.wicket.utils.ICustomFilter;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
@@ -62,7 +64,7 @@ public class DepartmentForm extends Form<PersonGroup> {
 
         this.currentMemberList = new ArrayList<IHasKey>();
         teamMemberList = new ArrayList<IHasKey>();
-        depMemberList =new ArrayList<IHasKey>();
+        depMemberList = new ArrayList<IHasKey>();
         List<Person> personsOfPersonGroup;
         if (this.personGroup.getId() != null) {
 
@@ -79,11 +81,10 @@ public class DepartmentForm extends Form<PersonGroup> {
 
             @Override
             protected boolean isDisabled(IHasKey object, int index, String selected) {
-              if(teamMemberList.contains(object))
-              {
-              return true;
-              }
-              return super.isDisabled(object, index, selected);
+                if (teamMemberList.contains(object)) {
+                    return true;
+                }
+                return super.isDisabled(object, index, selected);
             }
 
         };
@@ -109,15 +110,19 @@ public class DepartmentForm extends Form<PersonGroup> {
             }
         };
 
-        DialogFactory.addSelectDialog(this,
-                "dialogAddMember",
-                "btnAddMember",
-                "btnDelMember",
-                getString("departmentpage.save.form.field.popup.title.member"),
-                currentMemberList,
-                selectedMember,
-                (List<IHasKey>) (List<?>) selectAll,
-                personService, listUser);
+        DataListSelectDialogBuilder dataMember = new DataListSelectDialogBuilder();
+        dataMember.setPage(this);
+        dataMember.setIdDialog("dialogAddMember");
+        dataMember.setIdBtnAdd("btnAddMember");
+        dataMember.setIdBtnDel("btnDelMember");
+        dataMember.setDisplayDialogMessage(getString("departmentpage.save.form.field.popup.title.member"));
+        dataMember.setCurrentEntityList(currentMemberList);
+        dataMember.setChoiceEntityList(selectedMember);
+        dataMember.setSelectDialogList((List<IHasKey>) (List<?>) selectAll);
+        dataMember.setService(personService);
+        dataMember.setListEntite(listUser);
+        dataMember.addFilter(DialogFactory.getPersonWithoutPersonGroupFilter(personGroup.getId()));
+        DialogFactory.addMultipleListDialog(dataMember);
 
         add(TextFieldBuilder.<String>createRequired("name", this.personGroup, "name").highlightOnErrors()
                 .simpleValidator(0, 255).withTooltip(getString("global.field.tooltip.name")).build());
@@ -154,19 +159,21 @@ public class DepartmentForm extends Form<PersonGroup> {
                 currentTeamList.add(personGroup1);
             }
         }
-
-        DialogFactory.addListWithSelectDialog(this,
-                "table",
-                "dialogAddPerson",
-                "btnAddPerson",
-                "btnDelPerson",
-                "selectedTeam",
-                getString("departmentpage.save.form.field.popup.title.team"),
-                currentTeamList,
-                selectedTeam,
-                (List<IHasKey>) (List<?>) allTeamsPG,
-                prService, cupdater);
-
+        DataListSelectDialogBuilder dataTeam = new DataListSelectDialogBuilder();
+        dataTeam.setPage(this);
+        dataTeam.setIdList("table");
+        dataTeam.setIdDialog("dialogAddPerson");
+        dataTeam.setIdBtnAdd("btnAddPerson");
+        dataTeam.setIdBtnDel("btnDelPerson");
+        dataTeam.setNameFieldResult("selectedTeam");
+        dataTeam.setDisplayDialogMessage(getString("departmentpage.save.form.field.popup.title.team"));
+        dataTeam.setCurrentEntityList(currentTeamList);
+        dataTeam.setChoiceEntityList(selectedTeam);
+        dataTeam.setSelectDialogList((List<IHasKey>) (List<?>)allTeamsPG);
+        dataTeam.setService(prService);
+        dataTeam.addUpdater(cupdater);
+        dataTeam.addFilter(DialogFactory.getPersonGroupWithoutParentFilter(personGroup.getId()));
+        DialogFactory.addMultipleListDialog(dataTeam);
         //button
         add(new AjaxButton("submit", this) {
 
@@ -185,13 +192,12 @@ public class DepartmentForm extends Form<PersonGroup> {
                 target.add(feedBack);
                 personGroup.setType(PersonGroupType.DEPARTMENT);
                 currentMemberList.removeAll(teamMemberList);
-                prService.saveOrUpdatePersonGroup(personGroup, (List<PersonGroup>) (List) currentTeamList, null, (List<Person>)(List)currentMemberList);
+                prService.saveOrUpdatePersonGroup(personGroup, (List<PersonGroup>) (List) currentTeamList, null, (List<Person>) (List) currentMemberList);
                 page.setResponsePage(new DepartmentPage(page.getPageParameters()));
 
             }
         });
     }
-
 
     public List<IHasKey> getCurrentTeamList() {
         return currentTeamList;

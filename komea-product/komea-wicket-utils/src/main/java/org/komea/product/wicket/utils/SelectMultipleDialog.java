@@ -125,6 +125,10 @@ public abstract class SelectMultipleDialog extends AbstractFormDialog<String> {
     public void addCustomFilter(ICustomFilter filter) {
         this.iCustomFilters.add(filter);
     }
+    
+    public void addCustomFilter(List<ICustomFilter> filters) {
+        this.iCustomFilters.addAll(filters);
+    }
 
     @Override
     public boolean isResizable() {
