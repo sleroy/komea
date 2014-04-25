@@ -125,26 +125,7 @@ public class DialogFactory {
         });
 
         data.getPage().add(new AjaxButton(data.getIdBtnDel()) {
-
-            @Override
-            public void onError() {
-                System.out.println("----------------------------------------------------------");
-                System.out.println("  on error seul ");
-                System.out.println("----------------------------------------------------------");
-                super.onError(); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void onSubmit() {
-                 System.out.println("----------------------------------------------------------");
-                System.out.println("  on submit seul ");
-                System.out.println("----------------------------------------------------------");
-                super.onSubmit(); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            
-            
-            
+      
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 
@@ -164,10 +145,6 @@ public class DialogFactory {
             
             @Override
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-
-                System.out.println("----------------------------------------------------------");
-                System.out.println("  on submit code ");
-                System.out.println("----------------------------------------------------------");
                 for (final IHasKey person : data.getChoiceEntityList()) {
                     data.getCurrentEntityList().remove(person);
                 }

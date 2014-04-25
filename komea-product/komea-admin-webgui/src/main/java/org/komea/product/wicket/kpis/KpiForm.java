@@ -45,7 +45,7 @@ public final class KpiForm extends Form<Kpi> {
     private final LayoutPage page;
     private final boolean isNew;
     private final TextField<Double> textminValue;
-    private final TextField<Integer> goal;
+
 
     public KpiForm(
             final boolean _isNew,
@@ -92,28 +92,10 @@ public final class KpiForm extends Form<Kpi> {
                 .buildTextField();
 
         add(textminValue);
-//        final Form<Integer> form = new Form<Integer>("form", new Model<Integer>(15));
-//        this.add(form);
         int i = 0;
         if (kpi.getObjective() != null) {
             i = kpi.getObjective().intValue();
         }
-        Model<Integer> model = new Model<Integer>(i);
-        goal = new TextField<Integer>("goal", model, Integer.class);
-//        final Label label = new Label("label", model);
-        add(goal);
-
-//        SliderBehavior slider = new SliderBehavior("objectif", options);
-        Slider slider = new Slider("objectif", model, goal);
-        if (kpi.getValueMin() != null) {
-            slider.setMin(kpi.getValueMin().intValue());
-        }
-        if (kpi.getValueMax() != null) {
-            slider.setMax(kpi.getValueMax().intValue());
-        }
-
-        add(slider);
-
         final TextField<Double> textMaxValue
                 = TextFieldBuilder.<Double>create("valueMax", kpi, "valueMax").withTooltip(getString("kpipage.save.form.field.tooltip.maxvalue"))
                 .buildTextField();
@@ -246,18 +228,7 @@ public final class KpiForm extends Form<Kpi> {
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
                 Double valueOf = kpi.getValueMin();
-                try {
-                    valueOf = Double.valueOf(goal.getValue());
-                    if (valueOf > kpi.getValueMax()) {
-                        valueOf = kpi.getValueMax();
-                    }
-                    if (valueOf < kpi.getValueMin()) {
-                        valueOf = kpi.getValueMin();
-                    }
 
-                } catch (NumberFormatException e) {
-                    //aucun retour a founir
-                }
                 kpi.setObjective(valueOf);
                 kpiService.saveOrUpdate(kpi);
                 page.setResponsePage(new KpiPage(page.getPageParameters()));
