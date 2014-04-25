@@ -8,9 +8,11 @@ package org.komea.product.backend.service.dynamicquery;
 
 import org.junit.Test;
 import org.komea.eventory.api.formula.ICEPResult;
-import org.komea.product.backend.service.dynamicquery.DynamicQueryCacheLoader;
+import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
 
 import static org.junit.Assert.assertTrue;
+
+import static org.mockito.Mockito.mock;
 
 
 
@@ -28,7 +30,8 @@ public class DynamicQueryCacheLoaderTest
     public final void testLoad() throws Exception {
     
     
-        final DynamicQueryCacheLoader dynamicQueryCacheLoader = new DynamicQueryCacheLoader();
+        final IDynamicDataQueryRegisterService mock = mock(IDynamicDataQueryRegisterService.class);
+        final DynamicQueryCacheLoader dynamicQueryCacheLoader = new DynamicQueryCacheLoader(mock);
         final ICEPResult load = dynamicQueryCacheLoader.load("test");
         assertTrue(load.asMap().getTable().isEmpty());
     }
