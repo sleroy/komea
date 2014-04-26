@@ -114,7 +114,6 @@ if (!isSubproject) {
                     }
                 }
             }
-            subprojects.each { println "=========== $it.name" }
             structure(name: project.description) {
                 subprojects.each { subproject ->
                     group(name: subproject.name) {

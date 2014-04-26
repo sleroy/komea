@@ -51,7 +51,7 @@ sonarRunner {
 /** GLOBAL PROJECT CONFIGURATION */
 buildscript { repositories { mavenCentral() } }
 
-
+ext.isDebug = false
 
 allprojects {
     apply plugin: "java"
@@ -69,7 +69,6 @@ allprojects {
         targetCompatibility = 1.6
     }
    
-    tasks.withType(Compile) { options.compilerArgs = ["-g:source,lines,vars"]}
     
     int year = Calendar.getInstance().get(Calendar.YEAR)
     int week = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)
@@ -95,7 +94,9 @@ allprojects {
             attributes "Implementation-Title": "Komea Product", "Implementation-Version": version
         }
     }
-    if (project.hasProperty("debug")) {
+    
+    
+    if (isDebug) {
         tasks.withType(Compile) {
             options.debug = true
             options.compilerArgs = ["-g"]
