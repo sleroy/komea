@@ -68,19 +68,7 @@ allprojects {
         sourceCompatibility = 1.6
         targetCompatibility = 1.6
     }
-    //
-    //    jacoco {
-    //        toolVersion = "0.6.2.201302030002"
-    //        // reportsDir = file("$rootProject.buildDir.path/reports/jacoco")
-    //        append = true
-    //    }
-    //
-    //    jacocoTestReport {
-    //        group = "Reporting"
-    //        description = "Generate Jacoco coverage reports after running tests."
-    //        additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
-    //    }
-    //    test.jacoco.append = true
+   
     tasks.withType(Compile) { options.compilerArgs = ["-g:source,lines,vars"]}
     
     int year = Calendar.getInstance().get(Calendar.YEAR)
@@ -167,19 +155,14 @@ allprojects {
     
     dependencies { testRuntime "org.slf4j:slf4j-log4j12:1.7.6" }
     
-    //    jacoco {
-    //        toolVersion = "0.6.2.201302030002"
-    //        reportsDir = file("$rootProject.buildDir.path/reports/jacoco")
-    //    }
-    
-    //    test {
-    //        jacoco {
-    //            append = true
-    //  destinationFile = file("$rootProject.buildDir.path/jacoco/jacocoTest.exec")
-    // classDumpFile = file("$rootProject.buildDir.path/jacoco/classpathdumps")
-    //        }
-    //    }
-    
+
+    // coverage test with sonar and jacoco
+    sonarRunner {
+        sonarProperties {
+          property "sonar.jacoco.reportPath", "$buildDir/tmp/jacoco.exec"
+//          property "sonar.jacoco.itReportPath", "$buildDir/jacoco/jacocoIntegTest.exec"
+        }
+      }
 }
 
 /**
