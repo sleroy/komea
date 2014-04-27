@@ -23,6 +23,9 @@ public interface IScmKpiPlugin
     public Kpi numberOfAddedLinesPerUser();
     
     
+    public Kpi numberOfChangedFilesPerDayPerUser();
+    
+    
     public Kpi numberOfChangedLinesPerDayPerUser();
     
     

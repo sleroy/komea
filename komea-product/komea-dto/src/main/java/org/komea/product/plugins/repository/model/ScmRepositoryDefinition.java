@@ -72,6 +72,9 @@ public class ScmRepositoryDefinition implements Serializable, IHasId
     private Set<String>                         customerRegExps      = new HashSet<String>();
     
     
+    private boolean                             historyGenerated     = false;
+    
+    
     private Integer                             id;
     
     
@@ -267,6 +270,13 @@ public class ScmRepositoryDefinition implements Serializable, IHasId
     }
     
     
+    public boolean isHistoryGenerated() {
+    
+    
+        return historyGenerated;
+    }
+    
+    
     /**
      * Tests if this branch matches a custom regexp.
      * 
@@ -317,6 +327,13 @@ public class ScmRepositoryDefinition implements Serializable, IHasId
     
     
         customerRegExps = _customerRegExps;
+    }
+    
+    
+    public void setHistoryGenerated() {
+    
+    
+        historyGenerated = true;
     }
     
     

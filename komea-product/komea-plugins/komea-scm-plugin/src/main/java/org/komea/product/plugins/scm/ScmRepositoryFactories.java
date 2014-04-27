@@ -71,11 +71,10 @@ public class ScmRepositoryFactories implements IScmRepositoryProxyFactories
     
     
         Validate.notNull(_repositoryDefinition);
-        final IScmRepositoryProxyFactory iScmRepositoryProxyFactory =
-                factoriesMap.get(_repositoryDefinition.getType());
+        final String scmType = _repositoryDefinition.getType().toUpperCase();
+        final IScmRepositoryProxyFactory iScmRepositoryProxyFactory = factoriesMap.get(scmType);
         if (iScmRepositoryProxyFactory == null) { throw new ScmRepositoryProxyTypeNotFoundException(
-                "Scm repository factory not found for this type of scm : "
-                        + _repositoryDefinition.getType()); }
+                "Scm repository factory not found for this type of scm : " + scmType); }
         
         return iScmRepositoryProxyFactory.getProxy(_repositoryDefinition, getWorkspace());
     }
@@ -87,10 +86,11 @@ public class ScmRepositoryFactories implements IScmRepositoryProxyFactories
             final IScmRepositoryProxyFactory _proxyFactory) {
     
     
-        LOGGER.debug("Register a factory for the type of scm {}", _providerType);
-        if (factoriesMap.containsKey(_providerType)) { throw new ScmAlreadyExistingScmRepositoryFactoryException(
-                _providerType); }
-        factoriesMap.put(_providerType, _proxyFactory);
+        final String providerTypeUPCase = _providerType.toUpperCase();
+        LOGGER.debug("Register a factory for the type of scm {}", providerTypeUPCase);
+        if (factoriesMap.containsKey(providerTypeUPCase)) { throw new ScmAlreadyExistingScmRepositoryFactoryException(
+                providerTypeUPCase); }
+        factoriesMap.put(providerTypeUPCase, _proxyFactory);
     }
     
     

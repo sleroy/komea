@@ -6,10 +6,10 @@ package org.komea.product.backend.service;
 
 
 
-import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.komea.eventory.api.formula.tuple.ITuple;
@@ -24,8 +24,14 @@ import org.komea.product.plugins.scm.ScmRepositoryFactories;
 import org.komea.product.plugins.scm.api.IScmKpiPlugin;
 import org.komea.product.plugins.scm.api.IScmRepositoryService;
 import org.komea.product.plugins.scm.api.plugin.IScmCommit;
+import org.komea.product.plugins.scm.kpi.functions.AverageCommitMessageLength;
+import org.komea.product.plugins.scm.kpi.functions.NumberOfAddedLinesPerDay;
 import org.komea.product.plugins.scm.kpi.functions.NumberOfCommitsPerDay;
+import org.komea.product.plugins.scm.kpi.functions.NumberOfDeletedLinesPerDay;
+import org.komea.product.plugins.scm.kpi.functions.NumberOfModifiedFilesPerDay;
+import org.komea.product.plugins.scm.kpi.functions.NumberOfModifiedLinesPerDay;
 import org.komea.product.plugins.scm.kpi.functions.ScmCommitTable;
+import org.komea.product.plugins.scm.kpi.functions.TotalNumberOfModifiedLinesPerDay;
 import org.komea.product.plugins.scm.utils.IScmCommitGroupingFunction;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
@@ -38,29 +44,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * @author sleroy
  */
-public class ScmKpiHistoryBuilder extends AbstractSpringIntegrationTestCase
+public class ScmKpiHistoryBuilderTest extends AbstractSpringIntegrationTestCase
 {
     
     
-    /**
-     * @author sleroy
-     *
-     */
-    private final class IScmCommitGroupingFunctionImplementation implements
-            IScmCommitGroupingFunction<ITuple>
-    {
-        
-        
-        @Override
-        public ITuple getKey(final IScmCommit _commit) {
-        
-        
-            final Person author = _commit.getAuthor();
-            return TupleFactory.newTuple(author.getEntityKey());
-        }
-    }
-
-
     /**
      * @author sleroy
      */
@@ -81,7 +68,26 @@ public class ScmKpiHistoryBuilder extends AbstractSpringIntegrationTestCase
     
     
     
-    private static final Logger    LOGGER = LoggerFactory.getLogger(ScmKpiHistoryBuilder.class);
+    /**
+     * @author sleroy
+     */
+    private final class IScmCommitGroupingFunctionImplementation implements
+            IScmCommitGroupingFunction<ITuple>
+    {
+        
+        
+        @Override
+        public ITuple getKey(final IScmCommit _commit) {
+        
+        
+            final Person author = _commit.getAuthor();
+            return TupleFactory.newTuple(author.getEntityKey());
+        }
+    }
+    
+    
+    
+    private static final Logger    LOGGER = LoggerFactory.getLogger(ScmKpiHistoryBuilderTest.class);
     
     @Autowired
     private IMeasureHistoryService measureHistoryService;
@@ -131,30 +137,32 @@ public class ScmKpiHistoryBuilder extends AbstractSpringIntegrationTestCase
     private void buildScmStatisticsHistory(final ScmRepositoryDefinition scmRepositoryDefinition) {
     
     
-        scmRepositoryDefinition.setCloneDirectory(new File(
-                "/home/sleroy/git/cleancoder-course/.git"));
-        final GitRepositoryProxy proxy =
-                (GitRepositoryProxy) repositoryProxyFactory.newProxy(scmRepositoryDefinition);
-        final String repoName = scmRepositoryDefinition.getRepoName();
-        LOGGER.info("Analyzing repository : {}", repoName);
-        LOGGER.info("Received branches from repository {}", repoName);
+        // scmRepositoryDefinition.setCloneDirectory(new File(
+        // "/home/sleroy/git/cleancoder-course/.git"));
+        GitRepositoryProxy proxy = null;
         
         try {
-            final ScmCommitTable<ITuple> allCommitsFromABranch =
-                    proxy.getCommitMap(dayGrouping());
+            proxy = (GitRepositoryProxy) repositoryProxyFactory.newProxy(scmRepositoryDefinition);
+            proxy.getScmCloner().cloneRepository();
+            final String repoName = scmRepositoryDefinition.getRepoName();
+            LOGGER.info("Analyzing repository : {}", repoName);
+            LOGGER.info("Received branches from repository {}", repoName);
+            final ScmCommitTable<ITuple> allCommitsFromABranch = proxy.getCommitMap(dayGrouping());
             LOGGER.info("SCM Repository {} has {} periods to backup in history",
-                    allCommitsFromABranch.getNumberOfKeys());
+                    scmRepositoryDefinition.getRepoName(), allCommitsFromABranch.getNumberOfKeys());
             for (final ITuple periodDate : allCommitsFromABranch.keys()) {
                 
                 LOGGER.info("Building statistics for the day {}", periodDate);
-                final DateTime analysisDate = buildMeasureTime(periodDate);
                 
-                buildUsersStatistics(allCommitsFromABranch, periodDate, analysisDate);
+                
+                buildUsersStatistics(allCommitsFromABranch, periodDate);
                 
             }
             
         } catch (final Exception exception) {
             LOGGER.error("Exception ", exception);
+        } finally {
+            IOUtils.closeQuietly(proxy);
         }
         
         
@@ -167,12 +175,13 @@ public class ScmKpiHistoryBuilder extends AbstractSpringIntegrationTestCase
     
     private void buildUsersStatistics(
             final ScmCommitTable<ITuple> allCommitsFromABranch,
-            final ITuple periodDate,
-            final DateTime analysisDate) {
+            final ITuple _periodDate) {
     
     
+        final DateTime analysisDate = buildMeasureTime(_periodDate);
         final ScmCommitTable<ITuple> userTable =
-                allCommitsFromABranch.buildTableFromCommitsAndKey(periodDate, groupByUser());
+                ScmCommitTable.buildTableFromCommitsAndKey(
+                        allCommitsFromABranch.getListOfCommitsPerKey(_periodDate), groupByUser());
         for (final ITuple user : userTable.keys()) {
             
             
@@ -190,31 +199,36 @@ public class ScmKpiHistoryBuilder extends AbstractSpringIntegrationTestCase
     
     
         final Collection<IScmCommit> commitsOfTheDay = userTable.getListOfCommitsPerKey(user);
-        final Integer id = scmKpiPlugin.numberOfCommitsPerDayPerUser().getId();
-        final HistoryKey historyKey = buildHistoryKey(user, id);
-        measureHistoryService.storeMeasure(historyKey, new Double(new NumberOfCommitsPerDay(
-                commitsOfTheDay).compute()), analysisDate);
+        measureHistoryService.storeMeasure(
+                buildHistoryKey(user, scmKpiPlugin.numberOfCommitsPerDayPerUser().getId()),
+                new Double(new NumberOfCommitsPerDay().compute(commitsOfTheDay)), analysisDate);
+        measureHistoryService.storeMeasure(
+                buildHistoryKey(user, scmKpiPlugin.numberOfAddedLinesPerUser().getId()),
+                new Double(new NumberOfAddedLinesPerDay().compute(commitsOfTheDay)), analysisDate);
+        measureHistoryService
+                .storeMeasure(
+                        buildHistoryKey(user, scmKpiPlugin.numberofDeletedLinesPerDayPerUser()
+                                .getId()),
+                        new Double(new NumberOfDeletedLinesPerDay().compute(commitsOfTheDay)),
+                        analysisDate);
+        measureHistoryService.storeMeasure(
+                buildHistoryKey(user, scmKpiPlugin.numberOfChangedFilesPerDayPerUser().getId()),
+                new Double(new NumberOfModifiedFilesPerDay().compute(commitsOfTheDay)),
+                analysisDate);
+        measureHistoryService.storeMeasure(
+                buildHistoryKey(user, scmKpiPlugin.numberOfChangedLinesPerDayPerUser().getId()),
+                new Double(new NumberOfModifiedLinesPerDay().compute(commitsOfTheDay)),
+                analysisDate);
+        measureHistoryService
+                .storeMeasure(
+                        buildHistoryKey(user, scmKpiPlugin.averageCommitMessageLength().getId()),
+                        new Double(new AverageCommitMessageLength().compute(commitsOfTheDay)),
+                        analysisDate);
+        measureHistoryService.storeMeasure(
+                buildHistoryKey(user, scmKpiPlugin.numberTotalOfModifiedLinesPerUser().getId()),
+                new Double(new TotalNumberOfModifiedLinesPerDay().compute(commitsOfTheDay)),
+                analysisDate);
         
-        //
-        // measureHistoryService.storeMeasure(KpiKey.ofKpi(scmKpiPlugin.averageCommitMessageLength()),
-        // new AverageCommitMessageLength(commitsOfTheDay).compute(),
-        // (EntityKey) user.getFirst(), analysisDate);
-        //
-        // measureHistoryService.storeMeasure(KpiKey.ofKpi(scmKpiPlugin.numberOfAddedLinesPerUser()),
-        // new NumberOfAddedLinesPerDay(commitsOfTheDay).compute(),
-        // (EntityKey) user.getFirst(), analysisDate);
-        // measureHistoryService.storeMeasure(
-        // KpiKey.ofKpi(scmKpiPlugin.numberofDeletedLinesPerDayPerUser()),
-        // new NumberOfDeletedLinesPerDay(commitsOfTheDay).compute(),
-        // (EntityKey) user.getFirst(), analysisDate);
-        // measureHistoryService.storeMeasure(
-        // KpiKey.ofKpi(scmKpiPlugin.numberOfChangedLinesPerDayPerUser()),
-        // new NumberOfModifiedLinesPerDay(commitsOfTheDay).compute(),
-        // (EntityKey) user.getFirst(), analysisDate);
-        // measureHistoryService.storeMeasure(
-        // KpiKey.ofKpi(scmKpiPlugin.numberTotalOfModifiedLinesPerUser()),
-        // new TotalNumberOfModifiedLinesPerDay(commitsOfTheDay).compute(),
-        // (EntityKey) user.getFirst(), analysisDate);
         
     }
     

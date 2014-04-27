@@ -18,6 +18,7 @@ import org.komea.product.plugins.scm.kpi.functions.AverageCommitMessageLength;
 import org.komea.product.plugins.scm.kpi.functions.NumberOfAddedLinesPerDay;
 import org.komea.product.plugins.scm.kpi.functions.NumberOfCommitsPerDay;
 import org.komea.product.plugins.scm.kpi.functions.NumberOfDeletedLinesPerDay;
+import org.komea.product.plugins.scm.kpi.functions.NumberOfModifiedFilesPerDay;
 import org.komea.product.plugins.scm.kpi.functions.NumberOfModifiedLinesPerDay;
 import org.komea.product.plugins.scm.kpi.functions.TotalNumberOfModifiedLinesPerDay;
 import org.komea.product.service.dto.KpiKey;
@@ -90,9 +91,6 @@ public class ScmKpiPlugin implements IScmKpiPlugin
                                             .entityType(EntityType.PERSON).expirationYear()
                                             .query(NumberOfModifiedLinesPerDay.class).cronDays(1)
                                             .build();
-    /**
-     * 
-     */
     private static final Kpi BUILD6 = KpiBuilder
                                             .createAscending()
                                             .nameAndKeyDescription(
@@ -101,6 +99,15 @@ public class ScmKpiPlugin implements IScmKpiPlugin
                                             .entityType(EntityType.PERSON).expirationYear()
                                             .query(TotalNumberOfModifiedLinesPerDay.class)
                                             .cronDays(1).build();
+    private static final Kpi BUILD7 = KpiBuilder
+                                            .createAscending()
+                                            .nameAndKeyDescription(
+                                                    "Number total of modified files per user")
+                                            .providerType(ProviderType.SCM)
+                                            .entityType(EntityType.PERSON).expirationYear()
+                                            .query(NumberOfModifiedFilesPerDay.class).cronDays(1)
+                                            .build();
+    
     @Autowired
     private IKPIService      kpiService;
     
@@ -127,6 +134,7 @@ public class ScmKpiPlugin implements IScmKpiPlugin
         saveOrUpdate(averageCommitMessageLength());
         saveOrUpdate(numberOfAddedLinesPerUser());
         saveOrUpdate(numberOfChangedLinesPerDayPerUser());
+        saveOrUpdate(numberOfChangedFilesPerDayPerUser());
         saveOrUpdate(numberOfCommitsPerDayPerUser());
         saveOrUpdate(numberofDeletedLinesPerDayPerUser());
         saveOrUpdate(numberTotalOfModifiedLinesPerUser());
@@ -144,6 +152,17 @@ public class ScmKpiPlugin implements IScmKpiPlugin
     
         return BUILD2;
         
+    }
+    
+    
+    /**
+     * @return
+     */
+    @Override
+    public Kpi numberOfChangedFilesPerDayPerUser() {
+    
+    
+        return BUILD7;
     }
     
     
@@ -205,7 +224,11 @@ public class ScmKpiPlugin implements IScmKpiPlugin
     private void saveOrUpdate(final Kpi _kpi) {
     
     
-        if (kpiService.findKPI(KpiKey.ofKpi(_kpi)) != null) { return; }
+        final Kpi findKPI = kpiService.findKPI(KpiKey.ofKpi(_kpi));
+        if (findKPI != null) {
+            _kpi.setId(findKPI.getId());
+            return;
+        }
         kpiService.saveOrUpdate(_kpi);
         
     }
