@@ -6,8 +6,6 @@ package org.komea.product.plugins.scm.kpi.functions;
 
 
 
-import java.io.Serializable;
-
 import org.joda.time.DateTime;
 import org.komea.product.database.enums.UserBdd;
 import org.komea.product.database.model.Person;
@@ -39,7 +37,7 @@ public class ScmKpiTestingData
     /**
      * @return
      */
-    public static Serializable fakeCommit() {
+    public static ScmCommit fakeCommit() {
     
     
         final ScmCommit scmCommit = new ScmCommit();
@@ -48,6 +46,10 @@ public class ScmKpiTestingData
         scmCommit.setId("1");
         scmCommit.setMessage("Test commit");
         scmCommit.setProject(PROJECT);
+        scmCommit.setNumberOfAddedlines(10);
+        scmCommit.setNumberOfChangedLines(10);
+        scmCommit.setNumberofDeletedLines(10);
+        scmCommit.setNumberOfModifiedFiles(10);
         return scmCommit;
     }
     
