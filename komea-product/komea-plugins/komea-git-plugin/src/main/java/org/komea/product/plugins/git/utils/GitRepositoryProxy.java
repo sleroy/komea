@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.Validate;
@@ -18,18 +17,20 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.joda.time.DateTime;
 import org.komea.product.backend.service.entities.IPersonService;
+import org.komea.product.backend.service.tomove.ScmCommitPerDayTable;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.model.Person;
 import org.komea.product.plugins.git.api.errors.ScmCannotObtainCommitListException;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.komea.product.plugins.scm.ScmEventFactory;
-import org.komea.product.plugins.scm.api.plugin.IScmCloner;
 import org.komea.product.plugins.scm.api.plugin.IScmCommit;
 import org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy;
 import org.komea.product.plugins.scm.api.plugin.ScmCommit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.common.base.Strings;
 
 
 
@@ -101,16 +102,31 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
      * @param _commit
      * @return
      */
-    public IScmCommit convertGitCommit(final RevCommit _commit) {
+    public ScmCommit convertGitCommit(final RevCommit _commit) {
     
     
         final PersonIdent authorIdent = _commit.getAuthorIdent();
-        final Person personByEmail =
-                personService.findOrCreatePersonByEmail(authorIdent.getEmailAddress());
+        Person personByEmail = null;
+        if (authorIdent != null) {
+            final String emailAddress = authorIdent.getEmailAddress();
+            if (!Strings.isNullOrEmpty(emailAddress)) {
+                personByEmail = personService.findOrCreatePersonByEmail(emailAddress);
+            } else {
+                LOGGER.warn("Could not find email from the author of this commit {}", _commit);
+            }
+            
+        } else {
+            LOGGER.warn("Could not find information about author of this commit {}", _commit);
+        }
         final String revisionName = _commit.getId().name();
         
-        return new ScmCommit(personByEmail, new DateTime(_commit.getAuthorIdent().getWhen()),
-                revisionName, _commit.getFullMessage());
+        
+        final ScmCommit scmCommit =
+                new ScmCommit(personByEmail, new DateTime(_commit.getAuthorIdent().getWhen()),
+                        revisionName, _commit.getFullMessage());
+        
+        
+        return scmCommit;
     }
     
     
@@ -132,7 +148,6 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
             previousTime.withMonthOfYear(1);
             previousTime.withDayOfMonth(1);
         }
-        GitRepositoryReaderUtils.switchBranch(getGit(), _branchName);
         final List<IScmCommit> commits = new ArrayList<IScmCommit>(100);
         RevWalk revWalk = null;
         try {
@@ -141,11 +156,8 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
              * Produce the log configuration
              */
             final org.eclipse.jgit.api.LogCommand logcmd = getGit().log();
-            final Map<String, Ref> mapRefs =
-                    GitRepositoryReaderUtils.obtainBranchRefsFromARepository(getGit()
-                            .getRepository());
             
-            GitRepositoryReaderUtils.initializeLogWalkWithBranchNames(logcmd, mapRefs);
+            logcmd.all();
             revWalk = new RevWalk(getGit().getRepository());
             
             final DoesCommitOwnToThisBranchPredicate predicate =
@@ -207,8 +219,60 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
     }
     
     
-    // http://stackoverflow.com/questions/12493916/getting-commit-information-from-a-revcommit-object-in-jgit
-    // http://stackoverflow.com/questions/10435377/jgit-how-to-get-branch-when-traversing-repos
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy#getAllCommitsFromABranch(java.lang.String, org.joda.time.DateTime)
+     */
+    public <TGroup> ScmCommitPerDayTable<TGroup> getCommitMap(
+            final String _branchName,
+            final IScmCommitGroupingFunction<TGroup> _groupFunction) {
+    
+    
+        Validate.notEmpty(_branchName);
+        final ScmCommitPerDayTable<TGroup> commitMap = new ScmCommitPerDayTable<TGroup>();
+        RevWalk revWalk = null;
+        try {
+            
+            /**
+             * Produce the log configuration
+             */
+            final org.eclipse.jgit.api.LogCommand logcmd = getGit().log();
+            
+            logcmd.all();
+            revWalk = new RevWalk(getGit().getRepository());
+            
+            final DoesCommitOwnToThisBranchPredicate predicate =
+                    newBranchPredicate(_branchName, revWalk);
+            
+            /**
+             * Browse every commit
+             */
+            for (final RevCommit commit : logcmd.call()) {
+                
+                
+                if (predicate.isCommitRelatedToBranch(commit)) {
+                    final ScmCommit scmCommit = convertGitCommit(commit);
+                    final GitDiffComputation gitDiffComputation =
+                            new GitDiffComputation(git, scmCommit, commit, revWalk);
+                    gitDiffComputation.updateCommitWithDiffInformations();
+                    commitMap.addCommit(scmCommit, _groupFunction.getKey(scmCommit));
+                }
+                
+            }
+        } catch (final Exception e) {
+            throw new ScmCannotObtainCommitListException(
+                    "Could not obtain the list of new commits for the branch " + _branchName, e);
+            
+        } finally {
+            if (revWalk != null) {
+                revWalk.release();
+            }
+        }
+        
+        
+        return commitMap;
+    }
+    
     
     /**
      * @return the eventFactory
@@ -220,6 +284,9 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
         return scmEventFactory;
     }
     
+    
+    // http://stackoverflow.com/questions/12493916/getting-commit-information-from-a-revcommit-object-in-jgit
+    // http://stackoverflow.com/questions/10435377/jgit-how-to-get-branch-when-traversing-repos
     
     /**
      * Returns the git
@@ -265,7 +332,7 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
      * @see org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy#getScmCloner()
      */
     @Override
-    public IScmCloner getScmCloner() {
+    public GitCloner getScmCloner() {
     
     
         return new GitCloner(storageFolder, repositoryDefinition);
@@ -298,7 +365,7 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
     
     private DoesCommitOwnToThisBranchPredicate newBranchPredicate(
             final String _branchName,
-            final RevWalk revWalk) {
+            final RevWalk revWalk) throws Exception {
     
     
         final DoesCommitOwnToThisBranchPredicate doesCommitOwnToThisBranchPredicate =

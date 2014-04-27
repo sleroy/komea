@@ -32,6 +32,17 @@ public class ScmCommit implements IScmCommit
     private String   message;
     
     
+    private int      numberOfAddedlines    = 0;
+    
+    
+    private int      numberOfChangedLines  = 0;
+    
+    
+    private int      numberofDeletedLines  = 0;
+    
+    private int      numberOfModifiedFiles = 0;
+    
+    
     
     /**
      * 
@@ -102,6 +113,76 @@ public class ScmCommit implements IScmCommit
     }
     
     
+    public int getNumberOfAddedlines() {
+    
+    
+        return numberOfAddedlines;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.scm.api.plugin.IScmCommit#getNumberOfAddedLines()
+     */
+    @Override
+    public int getNumberOfAddedLines() {
+    
+    
+        return numberOfAddedlines;
+    }
+    
+    
+    @Override
+    public int getNumberOfChangedLines() {
+    
+    
+        return numberOfChangedLines;
+    }
+    
+    
+    public int getNumberofDeletedLines() {
+    
+    
+        return numberofDeletedLines;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.scm.api.plugin.IScmCommit#getNumberOfDeletedLines()
+     */
+    @Override
+    public int getNumberOfDeletedLines() {
+    
+    
+        return numberofDeletedLines;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.scm.api.plugin.IScmCommit#getNumberOfModifiedFiles()
+     */
+    @Override
+    public int getNumberOfModifiedFiles() {
+    
+    
+        return numberOfModifiedFiles;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.scm.api.plugin.IScmCommit#getTotalNumberOfModifiedLines()
+     */
+    @Override
+    public int getTotalNumberOfModifiedLines() {
+    
+    
+        return getNumberOfAddedLines() + getNumberOfDeletedLines() + getNumberOfChangedLines();
+    }
+    
+    
     /**
      * @param _author
      *            the author to set
@@ -146,6 +227,46 @@ public class ScmCommit implements IScmCommit
     }
     
     
+    /**
+     * @param _numberOfAddedlines
+     *            the numberOfAddedlines to set
+     */
+    public void setNumberOfAddedlines(final int _numberOfAddedlines) {
+    
+    
+        numberOfAddedlines = _numberOfAddedlines;
+    }
+    
+    
+    public void setNumberOfChangedLines(final int _numberOfChangedLines) {
+    
+    
+        numberOfChangedLines = _numberOfChangedLines;
+    }
+    
+    
+    /**
+     * @param _numberofDeletedLines
+     *            the numberofDeletedLines to set
+     */
+    public void setNumberofDeletedLines(final int _numberofDeletedLines) {
+    
+    
+        numberofDeletedLines = _numberofDeletedLines;
+    }
+    
+    
+    /**
+     * @param _numberOfModifiedFiles
+     *            the numberOfModifiedFiles to set
+     */
+    public void setNumberOfModifiedFiles(final int _numberOfModifiedFiles) {
+    
+    
+        numberOfModifiedFiles = _numberOfModifiedFiles;
+    }
+    
+    
     /*
      * (non-Javadoc)
      * @see java.lang.Object#toString()
@@ -156,7 +277,8 @@ public class ScmCommit implements IScmCommit
     
         return "ScmCommit [author="
                 + author + ", commitTime=" + commitTime + ", id=" + id + ", message=" + message
-                + "]";
+                + ", numberOfAddedlines=" + numberOfAddedlines + ", numberofDeletedLines="
+                + numberofDeletedLines + ", numberOfModifiedFiles=" + numberOfModifiedFiles + "]";
     }
     
     

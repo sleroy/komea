@@ -50,4 +50,44 @@ public interface IScmCommit
      * @return the message of the commit.
      */
     String getMessage();
+    
+    
+    /**
+     * Returns the number of added lines in this commit.
+     * 
+     * @return the number of added lines
+     */
+    int getNumberOfAddedLines();
+    
+    
+    /**
+     * Returns the number of changed lines in this commit.
+     * 
+     * @return the number of changed lines
+     */
+    int getNumberOfChangedLines();
+    
+    
+    /**
+     * Returns the number of deleted lines in this commit.
+     * 
+     * @return the number of deleted lines
+     */
+    int getNumberOfDeletedLines();
+    
+    
+    /**
+     * Returns the number of modified lines
+     * 
+     * @return the number of modified lines.
+     */
+    int getNumberOfModifiedFiles();
+    
+    
+    /**
+     * Returns the number of deleted lines + the number of added lines + number of modified lines into this commit.
+     * 
+     * @return the total number of modified lines.
+     */
+    int getTotalNumberOfModifiedLines();
 }

@@ -46,6 +46,9 @@ public class GitProviderPlugin
     
     
     @Autowired
+    private GitRepositoryProxyFactory    gitProxyFactory;
+    
+    @Autowired
     private IPersonService               personService;
     
     @Autowired
@@ -104,7 +107,7 @@ public class GitProviderPlugin
     public void init() {
     
     
-        proxyFactories.registerFactory(GIT_TYPE, new GitRepositoryProxyFactory());
+        proxyFactories.registerFactory(GIT_TYPE, gitProxyFactory);
     }
     
     

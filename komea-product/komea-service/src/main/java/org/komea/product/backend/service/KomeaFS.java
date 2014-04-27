@@ -148,7 +148,7 @@ public class KomeaFS implements IKomeaFS
         if (Strings.isNullOrEmpty(storage_path)) {
             storage_path = KOMEA_FOLDER;
         }
-        LOGGER.info("\nt\t>>>>> Storage path for plugins is {}", storage_path);
+        LOGGER.info("\n\t\t>>>>> Storage path for plugins is {}", storage_path);
         if (storage_path == null) { throw new BeanCreationException(
                 "Storage path was not initialized"); }
         

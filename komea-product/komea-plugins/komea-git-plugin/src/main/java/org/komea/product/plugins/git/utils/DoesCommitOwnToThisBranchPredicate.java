@@ -7,11 +7,9 @@ package org.komea.product.plugins.git.utils;
 
 
 import java.io.IOException;
-import java.util.Map;
 
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
-import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -32,9 +30,11 @@ public class DoesCommitOwnToThisBranchPredicate
     
     private static final Logger LOGGER = LoggerFactory
                                                .getLogger(DoesCommitOwnToThisBranchPredicate.class);
+    private final RevCommit     branchFirstCommit;
     private final String        branchName;
-    private final Repository    repository;
     
+    private final Ref           firstBranchCommit;
+    private final Repository    repository;
     private final RevWalk       revWalk;
     
     
@@ -42,13 +42,16 @@ public class DoesCommitOwnToThisBranchPredicate
     public DoesCommitOwnToThisBranchPredicate(
             final String _branchName,
             final Repository _repository,
-            final RevWalk _revWalk) {
+            final RevWalk _revWalk)
+            throws MissingObjectException, IncorrectObjectTypeException, IOException {
     
     
         super();
         branchName = _branchName;
         repository = _repository;
         revWalk = _revWalk;
+        firstBranchCommit = repository.getAllRefs().get(branchName);
+        branchFirstCommit = revWalk.parseCommit(firstBranchCommit.getObjectId());
         
     }
     
@@ -69,25 +72,19 @@ public class DoesCommitOwnToThisBranchPredicate
      * @throws IncorrectObjectTypeException
      * @throws IOException
      */
-    public boolean isCommitRelatedToBranch(final RevCommit targetCommit) {
+    public boolean isCommitRelatedToBranch(final RevCommit _commit) {
     
     
-        for (final Map.Entry<String, Ref> e : repository.getAllRefs().entrySet()) {
-            
-            if (e.getKey().startsWith(Constants.R_REMOTES)) {
-                try {
-                    if (revWalk.isMergedInto(targetCommit,
-                            revWalk.parseCommit(e.getValue().getObjectId()))) {
-                        final String foundInBranch = e.getValue().getName();
-                        if (branchName.equals(foundInBranch)) { return true; }
-                    }
-                } catch (final Exception e1) {
-                    LOGGER.error(e1.getMessage(), e1);
-                }
-            }
+        // if (e.getKey().startsWith(Constants.R_REMOTES)) {
+        try {
+            final RevCommit targetCommit =
+                    revWalk.parseCommit(repository.resolve(_commit.getName()));
+            return revWalk.isMergedInto(targetCommit, branchFirstCommit);
+        } catch (final Exception e1) {
+            LOGGER.error(e1.getMessage(), e1);
         }
+        // }
         return false;
     }
-    
     
 }

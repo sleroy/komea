@@ -3,15 +3,13 @@ package org.komea.product.backend.service.entities;
 
 
 
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.database.api.IEntity;
-import org.komea.product.database.dao.PersonDao;
-import org.komea.product.database.dao.PersonGroupDao;
-import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.Person;
@@ -26,7 +24,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
 
-import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 
 
@@ -41,12 +40,12 @@ public class EntityServiceTest
     private final IEntityService entityService = new EntityService();
     
     @Mock
-    private PersonDao            personDAO;
+    private IPersonService       personDAO;
     
     @Mock
-    private PersonGroupDao       personGroupDao;
+    private IPersonGroupService  personGroupDao;
     @Mock
-    private ProjectDao           projectDao;
+    private IProjectService      projectDao;
     
     
     
@@ -56,22 +55,53 @@ public class EntityServiceTest
      * .
      */
     @Test
-    public void testFindEntitiesByKey() throws Exception {
+    public void testFindEntitiesByTypeAndKeysTeam() throws Exception {
     
     
-        assertFalse("Not yet implemented", true);
+        entityService.getBaseEntityDTOS(EntityType.TEAM, Collections.EMPTY_LIST);
+        verify(personGroupDao, times(1)).selectByKeys(Matchers.anyList());
     }
     
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.entities.EntityService#getEntityOrFail(org.komea.product.service.dto.EntityKey)}.
+     * {@link org.komea.product.backend.service.entities.EntityService#getEntitiesByKey(org.komea.product.database.enums.EntityType, java.util.List)}
+     * .
      */
     @Test
-    public void testFindEntityByEntityKeyOrFail() throws Exception {
+    public void testgetBaseEntityDTOSDepartment() throws Exception {
     
     
-        assertFalse("Not yet implemented", true);
+        entityService.getBaseEntityDTOS(EntityType.DEPARTMENT, Collections.EMPTY_LIST);
+        verify(personGroupDao, times(1)).selectByKeys(Matchers.anyList());
+    }
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.backend.service.entities.EntityService#getEntitiesByKey(org.komea.product.database.enums.EntityType, java.util.List)}
+     * .
+     */
+    @Test
+    public void testgetBaseEntityDTOSPerson() throws Exception {
+    
+    
+        entityService.getBaseEntityDTOS(EntityType.PERSON, Collections.EMPTY_LIST);
+        verify(personDAO, times(1)).selectByKeys(Matchers.anyList());
+    }
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.backend.service.entities.EntityService#getEntitiesByKey(org.komea.product.database.enums.EntityType, java.util.List)}
+     * .
+     */
+    @Test
+    public void testgetBaseEntityDTOSProject() throws Exception {
+    
+    
+        entityService.getBaseEntityDTOS(EntityType.PROJECT, Collections.EMPTY_LIST);
+        verify(projectDao, times(1)).selectByKeys(Matchers.anyList());
     }
     
     

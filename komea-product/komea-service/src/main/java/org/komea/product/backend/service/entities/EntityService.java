@@ -10,9 +10,6 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.api.exceptions.EntityNotFoundException;
 import org.komea.product.database.api.IEntity;
-import org.komea.product.database.dao.PersonDao;
-import org.komea.product.database.dao.PersonGroupDao;
-import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.PersonCriteria;
@@ -35,19 +32,11 @@ public final class EntityService implements IEntityService
     
     
     @Autowired
-    private PersonDao           personDAO;
-    
-    @Autowired
-    private PersonGroupDao      personGroupDao;
-    
-    @Autowired
     private IPersonGroupService personGroupService;
     
     @Autowired
     private IPersonService      personService;
     
-    @Autowired
-    private ProjectDao          projectDao;
     
     @Autowired
     private IProjectService     projectService;
@@ -92,12 +81,12 @@ public final class EntityService implements IEntityService
         Validate.notNull(_entityKey);
         switch (_entityKey.getEntityType()) {
             case PERSON:
-                return (TEntity) personDAO.selectByPrimaryKey(_entityKey.getId());
+                return (TEntity) personService.selectByPrimaryKey(_entityKey.getId());
             case DEPARTMENT:
             case TEAM:
-                return (TEntity) personGroupDao.selectByPrimaryKey(_entityKey.getId());
+                return (TEntity) personGroupService.selectByPrimaryKey(_entityKey.getId());
             case PROJECT:
-                return (TEntity) projectDao.selectByPrimaryKey(_entityKey.getId());
+                return (TEntity) projectService.selectByPrimaryKey(_entityKey.getId());
             default:
                 break;
         
@@ -125,7 +114,7 @@ public final class EntityService implements IEntityService
         Validate.notNull(_entityKeys);
         Validate.notNull(_entityType);
         final List<? extends IEntity> entitiesWithKeys =
-                findEntitiesByKey(_entityType, _entityKeys);
+                findEntitiesByTypeAndKeys(_entityType, _entityKeys);
         return BaseEntityDto.convertEntities(entitiesWithKeys);
         
     }
@@ -143,14 +132,14 @@ public final class EntityService implements IEntityService
         List<IEntity> rEntities = Collections.EMPTY_LIST;
         switch (_entityType) {
             case PERSON:
-                rEntities = (List) personDAO.selectByCriteria(new PersonCriteria());
+                rEntities = (List) personService.selectByCriteria(new PersonCriteria());
                 break;
             case DEPARTMENT:
             case TEAM:
-                rEntities = (List) personGroupDao.selectByCriteria(new PersonGroupCriteria());
+                rEntities = (List) personGroupService.selectByCriteria(new PersonGroupCriteria());
                 break;
             case PROJECT:
-                rEntities = (List) projectDao.selectByCriteria(new ProjectCriteria());
+                rEntities = (List) projectService.selectByCriteria(new ProjectCriteria());
                 break;
             default:
                 break;
@@ -215,26 +204,6 @@ public final class EntityService implements IEntityService
     
     
     /**
-     * @return the personDAO
-     */
-    public PersonDao getPersonDAO() {
-    
-    
-        return personDAO;
-    }
-    
-    
-    /**
-     * @return the personGroupDao
-     */
-    public PersonGroupDao getPersonGroupDao() {
-    
-    
-        return personGroupDao;
-    }
-    
-    
-    /**
      * @return the personGroupService
      */
     public IPersonGroupService getPersonGroupService() {
@@ -255,44 +224,12 @@ public final class EntityService implements IEntityService
     
     
     /**
-     * @return the projectDao
-     */
-    public ProjectDao getProjectDao() {
-    
-    
-        return projectDao;
-    }
-    
-    
-    /**
      * @return the projectService
      */
     public IProjectService getProjectService() {
     
     
         return projectService;
-    }
-    
-    
-    /**
-     * @param _personDAO
-     *            the personDAO to set
-     */
-    public void setPersonDAO(final PersonDao _personDAO) {
-    
-    
-        personDAO = _personDAO;
-    }
-    
-    
-    /**
-     * @param _personGroupDao
-     *            the personGroupDao to set
-     */
-    public void setPersonGroupDao(final PersonGroupDao _personGroupDao) {
-    
-    
-        personGroupDao = _personGroupDao;
     }
     
     
@@ -319,17 +256,6 @@ public final class EntityService implements IEntityService
     
     
     /**
-     * @param _projectDao
-     *            the projectDao to set
-     */
-    public void setProjectDao(final ProjectDao _projectDao) {
-    
-    
-        projectDao = _projectDao;
-    }
-    
-    
-    /**
      * @param _projectService
      *            the projectService to set
      */
@@ -349,13 +275,13 @@ public final class EntityService implements IEntityService
      *            the entity keys
      * @return the list of entities filtered by entity type and keys.
      */
-    private List<? extends IEntity> findEntitiesByKey(
+    private List<? extends IEntity> findEntitiesByTypeAndKeys(
             final EntityType _entityType,
             final List<String> _entityKeys) {
     
     
         Validate.notNull(_entityKeys);
-        Validate.notNull(_entityKeys);
+        Validate.notNull(_entityType);
         
         switch (_entityType) {
             case PERSON:

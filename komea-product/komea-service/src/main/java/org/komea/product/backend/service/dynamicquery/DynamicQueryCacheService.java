@@ -43,7 +43,7 @@ public class DynamicQueryCacheService implements IDynamicQueryCacheService
     private Cache<String, ICEPResult>        cache;
     
     
-    private final String                     CRON_EXPRESSION = "0 0/5   * * * ?";
+    private final String                     CRON_EXPRESSION = "0 0/5  * * * ?";
     @Autowired
     private ICronRegistryService             cronRegistryService;
     

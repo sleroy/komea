@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand.ListMode;
@@ -22,6 +22,7 @@ import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.RefDatabase;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.FetchResult;
 import org.komea.product.plugins.git.api.errors.ScmCannotObtainGitProxyException;
@@ -91,10 +92,8 @@ public class GitRepositoryReaderUtils
             throws MissingObjectException, IncorrectObjectTypeException {
     
     
-        final Set<String> branchRefNames = mapRefs.keySet();
-        for (final String branchRef : branchRefNames) {
-            final Ref ref = mapRefs.get(branchRef);
-            logcmd.add(ref.getObjectId());
+        for (final Entry<String, Ref> branchRef : mapRefs.entrySet()) {
+            logcmd.add(branchRef.getValue().getObjectId());
         }
     }
     
@@ -131,11 +130,7 @@ public class GitRepositoryReaderUtils
     
     
         final Map<String, Ref> mapRefs =
-                new HashMap<String, Ref>(repository.getRefDatabase().getRefs("refs/heads"));
-        final Map<String, Ref> refs = repository.getRefDatabase().getRefs("refs/remotes");
-        if (refs != null) {
-            mapRefs.putAll(refs);
-        }
+                new HashMap<String, Ref>(repository.getRefDatabase().getRefs(RefDatabase.ALL));
         return mapRefs;
     }
     
