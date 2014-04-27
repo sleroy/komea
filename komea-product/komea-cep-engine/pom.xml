@@ -11,10 +11,7 @@
 	<name>Komea : Complex Event Processing engine.</name>
 	<description>This layer contains an hand-made complex event processor designed to replace Esper and to provide simpler functionalities.</description>
 
-	<properties>
-		<eventory.version>1.0.27</eventory.version>
-	</properties>
-
+	
 	<dependencies>
 
 

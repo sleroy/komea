@@ -10,31 +10,26 @@ import java.util.Collection;
 
 import org.komea.product.plugins.scm.api.plugin.ICommitFunction;
 import org.komea.product.plugins.scm.api.plugin.IScmCommit;
+import org.komea.product.plugins.scm.kpi.ScmUserQueryImplementation;
 
 
 
-public class AverageCommitMessageLength implements ICommitFunction
+public class AverageCommitMessageLength extends ScmUserQueryImplementation implements
+        ICommitFunction
 {
-    
-    
-    private final Collection<IScmCommit> commitsOfTheDay;
-    
     
     
     /**
      * @param _commitsOfTheDay
      */
-    public AverageCommitMessageLength(final Collection<IScmCommit> _commitsOfTheDay) {
+    public AverageCommitMessageLength() {
     
     
-        commitsOfTheDay = _commitsOfTheDay;
-        
-        
     }
     
     
     @Override
-    public double compute() {
+    public double compute(final Collection<IScmCommit> commitsOfTheDay) {
     
     
         long sum = 0L;
@@ -44,6 +39,18 @@ public class AverageCommitMessageLength implements ICommitFunction
         return sum / commitsOfTheDay.size();
         
         
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.scm.kpi.ScmUserQueryImplementation#getCommitFunction()
+     */
+    @Override
+    public ICommitFunction getCommitFunction() {
+    
+    
+        return this;
     }
     
 }

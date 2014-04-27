@@ -1,5 +1,5 @@
 
-package org.komea.product.backend.esper.test;
+package org.komea.product.cep.tester;
 
 
 
@@ -31,8 +31,6 @@ import org.komea.eventory.api.formula.tuple.ITuple;
 import org.komea.eventory.bridge.MemoryBridge;
 import org.komea.eventory.cache.guava.GoogleCacheStorage;
 import org.komea.eventory.query.CEPQuery;
-import org.komea.product.cep.tester.ICEPQueryLineTestPredicate;
-import org.komea.product.cep.tester.ICEPQueryTestPredicate;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;
@@ -270,7 +268,8 @@ public class CEPQueryTester
     private final List<ICEPQueryTestPredicate>     esperPredicates     =
                                                                                new ArrayList<ICEPQueryTestPredicate>();
     
-    private final List<IEvent>                     events              = new ArrayList<IEvent>();
+    private final List<Serializable>               events              =
+                                                                               new ArrayList<Serializable>();
     
     private int                                    expectedRows        = -1;
     
@@ -397,7 +396,7 @@ public class CEPQueryTester
     public List<IEvent> getEvents() {
     
     
-        return events;
+        return (List) events;
     }
     
     
@@ -508,7 +507,7 @@ public class CEPQueryTester
     public void prepareAlerts(final ICEPEngine esperEngineBean) {
     
     
-        for (final IEvent event : events) {
+        for (final Serializable event : events) {
             LOGGER.debug("Sending alert : " + event);
             esperEngineBean.pushEvent(event);
         }
@@ -576,6 +575,17 @@ public class CEPQueryTester
     
         events.add(_alert1);
         return this;
+    }
+    
+    
+    /**
+     * @param _fakeCommit
+     */
+    public void sendCustomEvent(final Serializable _fakeCommit) {
+    
+    
+        events.add(_fakeCommit);
+        
     }
     
     

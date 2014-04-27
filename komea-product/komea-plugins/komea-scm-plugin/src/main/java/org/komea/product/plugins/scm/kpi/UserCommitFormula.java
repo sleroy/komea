@@ -18,7 +18,7 @@ import org.komea.eventory.formula.tuple.TupleResultMap;
 import org.komea.eventory.query.CEPResult;
 import org.komea.product.plugins.scm.api.plugin.ICommitFunction;
 import org.komea.product.plugins.scm.api.plugin.IScmCommit;
-import org.komea.product.plugins.scm.kpi.functions.ScmCommitPerDayTable;
+import org.komea.product.plugins.scm.kpi.functions.ScmCommitTable;
 import org.komea.product.service.dto.EntityKey;
 
 
@@ -56,8 +56,8 @@ public class UserCommitFormula implements ICEPFormula<IScmCommit>
     
     
         final List<IScmCommit> aggregateView = _arg0.getAggregateView();
-        final ScmCommitPerDayTable<EntityKey> scmCommitPerDayTable =
-                ScmCommitPerDayTable.buildTableFromCommitsAndKey(aggregateView,
+        final ScmCommitTable<EntityKey> scmCommitPerDayTable =
+                ScmCommitTable.buildTableFromCommitsAndKey(aggregateView,
                         new ScmUserGroupingFunction());
         
         final TupleResultMap<Double> tupleResultMap = new TupleResultMap<Double>();

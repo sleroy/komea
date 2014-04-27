@@ -8,31 +8,19 @@ package org.komea.product.plugins.scm.kpi.functions;
 
 import java.util.Collection;
 
+import org.komea.product.plugins.scm.api.plugin.ICommitFunction;
 import org.komea.product.plugins.scm.api.plugin.IScmCommit;
+import org.komea.product.plugins.scm.kpi.ScmUserQueryImplementation;
 
 
 
-public class NumberOfModifiedLinesPerDay
+public class NumberOfModifiedLinesPerDay extends ScmUserQueryImplementation implements
+        ICommitFunction
 {
     
     
-    private final Collection<IScmCommit> commitsOfTheDay;
-    
-    
-    
-    /**
-     * @param _commitsOfTheDay
-     */
-    public NumberOfModifiedLinesPerDay(final Collection<IScmCommit> _commitsOfTheDay) {
-    
-    
-        commitsOfTheDay = _commitsOfTheDay;
-        
-        
-    }
-    
-    
-    public int compute() {
+    @Override
+    public double compute(final Collection<IScmCommit> commitsOfTheDay) {
     
     
         int res = 0;
@@ -41,6 +29,18 @@ public class NumberOfModifiedLinesPerDay
         }
         return res;
         
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.scm.kpi.ScmUserQueryImplementation#getCommitFunction()
+     */
+    @Override
+    public ICommitFunction getCommitFunction() {
+    
+    
+        return this;
     }
     
 }

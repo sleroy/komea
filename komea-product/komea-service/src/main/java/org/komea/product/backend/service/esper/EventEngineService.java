@@ -7,6 +7,7 @@ package org.komea.product.backend.service.esper;
 
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -259,6 +260,19 @@ public final class EventEngineService implements IEventEngineService
         
         
         LOGGER.debug("Complex event processing engine created : " + cepEngine);
+        
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.api.IEventEngineService#sendCustomEvent(java.lang.Object)
+     */
+    @Override
+    public void sendCustomEvent(final Serializable _customEvent) {
+    
+    
+        cepEngine.pushEvent(_customEvent);
         
     }
     

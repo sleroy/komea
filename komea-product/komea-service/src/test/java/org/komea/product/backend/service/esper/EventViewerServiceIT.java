@@ -13,7 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.esper.test.CEPQueryTester;
+import org.komea.product.cep.tester.CEPQueryTester;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.enums.RetentionPeriod;
 import org.komea.product.database.enums.Severity;

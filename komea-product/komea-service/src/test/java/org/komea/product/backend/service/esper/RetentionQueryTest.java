@@ -8,7 +8,7 @@ package org.komea.product.backend.service.esper;
 
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
-import org.komea.product.backend.esper.test.CEPQueryTester;
+import org.komea.product.cep.tester.CEPQueryTester;
 import org.komea.product.database.enums.RetentionPeriod;
 import org.komea.product.database.enums.Severity;
 

@@ -21,11 +21,11 @@ import org.komea.product.database.model.Person;
 import org.komea.product.plugins.git.utils.GitRepositoryProxy;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.komea.product.plugins.scm.ScmRepositoryFactories;
+import org.komea.product.plugins.scm.api.IScmKpiPlugin;
 import org.komea.product.plugins.scm.api.IScmRepositoryService;
 import org.komea.product.plugins.scm.api.plugin.IScmCommit;
-import org.komea.product.plugins.scm.kpi.IScmKpiPlugin;
 import org.komea.product.plugins.scm.kpi.functions.NumberOfCommitsPerDay;
-import org.komea.product.plugins.scm.kpi.functions.ScmCommitPerDayTable;
+import org.komea.product.plugins.scm.kpi.functions.ScmCommitTable;
 import org.komea.product.plugins.scm.utils.IScmCommitGroupingFunction;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
@@ -140,7 +140,7 @@ public class ScmKpiHistoryBuilder extends AbstractSpringIntegrationTestCase
         LOGGER.info("Received branches from repository {}", repoName);
         
         try {
-            final ScmCommitPerDayTable<ITuple> allCommitsFromABranch =
+            final ScmCommitTable<ITuple> allCommitsFromABranch =
                     proxy.getCommitMap(dayGrouping());
             LOGGER.info("SCM Repository {} has {} periods to backup in history",
                     allCommitsFromABranch.getNumberOfKeys());
@@ -166,12 +166,12 @@ public class ScmKpiHistoryBuilder extends AbstractSpringIntegrationTestCase
     
     
     private void buildUsersStatistics(
-            final ScmCommitPerDayTable<ITuple> allCommitsFromABranch,
+            final ScmCommitTable<ITuple> allCommitsFromABranch,
             final ITuple periodDate,
             final DateTime analysisDate) {
     
     
-        final ScmCommitPerDayTable<ITuple> userTable =
+        final ScmCommitTable<ITuple> userTable =
                 allCommitsFromABranch.buildTableFromCommitsAndKey(periodDate, groupByUser());
         for (final ITuple user : userTable.keys()) {
             
@@ -185,7 +185,7 @@ public class ScmKpiHistoryBuilder extends AbstractSpringIntegrationTestCase
     
     private void buildUserStatistics(
             final DateTime analysisDate,
-            final ScmCommitPerDayTable<ITuple> userTable,
+            final ScmCommitTable<ITuple> userTable,
             final ITuple user) {
     
     

@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.plugins.scm.kpi;
+package org.komea.product.plugins.scm.api;
 
 
 

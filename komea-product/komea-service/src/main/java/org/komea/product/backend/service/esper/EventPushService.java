@@ -3,6 +3,7 @@ package org.komea.product.backend.service.esper;
 
 
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.komea.product.backend.api.IEventEngineService;
@@ -40,6 +41,19 @@ public class EventPushService implements IEventPushService
     
     
         super();
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.esper.IEventPushService#sendCustomEvent(java.lang.Object)
+     */
+    @Override
+    public void sendCustomEvent(final Serializable _customEvent) {
+    
+    
+        esperEngine.sendCustomEvent(_customEvent);
+        
     }
     
     

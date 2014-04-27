@@ -31,9 +31,9 @@ import org.komea.eventory.formula.CountFormula;
 import org.komea.eventory.formula.ElNumericalFormula;
 import org.komea.eventory.query.CEPQueryBuilder;
 import org.komea.eventory.utils.PluginUtils;
-import org.komea.product.backend.esper.test.CEPQueryTester;
 import org.komea.product.backend.utils.MapPopulation;
 import org.komea.product.cep.filter.OnlyEventFilter;
+import org.komea.product.cep.tester.CEPQueryTester;
 import org.komea.product.database.alert.IEvent;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;

@@ -2,7 +2,7 @@ package org.komea.product.plugins.kpi.standard;
 
 import org.junit.Test;
 import org.komea.event.factory.BugZillaEventFactory;
-import org.komea.product.backend.esper.test.CEPQueryTester;
+import org.komea.product.cep.tester.CEPQueryTester;
 
 public class LastEventValueKpiTest {
 

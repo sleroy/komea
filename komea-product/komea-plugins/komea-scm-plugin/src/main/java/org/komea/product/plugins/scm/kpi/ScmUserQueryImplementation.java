@@ -23,7 +23,7 @@ import org.komea.product.plugins.scm.api.plugin.ICommitFunction;
 /**
  * @author sleroy
  */
-public abstract class ScmQueryImplementation implements ICEPQueryImplementation
+public abstract class ScmUserQueryImplementation implements ICEPQueryImplementation
 {
     
     

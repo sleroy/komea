@@ -3,6 +3,8 @@ package org.komea.product.backend.api;
 
 
 
+import java.io.Serializable;
+
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.product.database.alert.IEvent;
 
@@ -68,6 +70,12 @@ public interface IEventEngineService
      * @return the esper statement
      */
     ICEPQuery getQueryOrFail(String _statement);
+    
+    
+    /**
+     * @param _customEvent
+     */
+    void sendCustomEvent(Serializable _customEvent);
     
     
     /**

@@ -6,6 +6,8 @@ package org.komea.product.backend.service.esper;
 
 
 
+import java.io.Serializable;
+
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;
 
@@ -27,7 +29,7 @@ public interface IEventPushService
      * @param _customEvent
      *            the custom event.
      */
-    void sendCustomEvent(Object _customEvent);
+    void sendCustomEvent(Serializable _customEvent);
     
     
     /**

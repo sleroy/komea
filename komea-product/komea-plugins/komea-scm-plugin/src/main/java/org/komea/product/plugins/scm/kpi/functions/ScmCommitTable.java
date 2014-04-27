@@ -22,7 +22,7 @@ import com.google.common.collect.Multimap;
 /**
  * @author sleroy
  */
-public class ScmCommitPerDayTable<TKey>
+public class ScmCommitTable<TKey>
 {
     
     
@@ -35,12 +35,12 @@ public class ScmCommitPerDayTable<TKey>
      *            the commit function.
      * @return the list of commits;
      */
-    public static <TKey2> ScmCommitPerDayTable<TKey2> buildTableFromCommitsAndKey(
+    public static <TKey2> ScmCommitTable<TKey2> buildTableFromCommitsAndKey(
             final Collection<IScmCommit> _commits,
             final IScmCommitGroupingFunction<TKey2> _commitGroupingFunction) {
     
     
-        final ScmCommitPerDayTable<TKey2> scmCommitPerDayTable = new ScmCommitPerDayTable<TKey2>();
+        final ScmCommitTable<TKey2> scmCommitPerDayTable = new ScmCommitTable<TKey2>();
         for (final IScmCommit commit : _commits) {
             scmCommitPerDayTable.addCommit(commit, _commitGroupingFunction.getKey(commit));
         }
@@ -54,7 +54,7 @@ public class ScmCommitPerDayTable<TKey>
     
     
     
-    public ScmCommitPerDayTable() {
+    public ScmCommitTable() {
     
     
         super();

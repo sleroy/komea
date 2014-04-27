@@ -25,7 +25,7 @@ import org.komea.product.plugins.scm.ScmEventFactory;
 import org.komea.product.plugins.scm.api.plugin.IScmCommit;
 import org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy;
 import org.komea.product.plugins.scm.api.plugin.ScmCommit;
-import org.komea.product.plugins.scm.kpi.functions.ScmCommitPerDayTable;
+import org.komea.product.plugins.scm.kpi.functions.ScmCommitTable;
 import org.komea.product.plugins.scm.utils.IScmCommitGroupingFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -224,12 +224,12 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
      * (non-Javadoc)
      * @see org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy#getAllCommitsFromABranch(java.lang.String, org.joda.time.DateTime)
      */
-    public <TGroup> ScmCommitPerDayTable<TGroup> getCommitMap(
+    public <TGroup> ScmCommitTable<TGroup> getCommitMap(
             final IScmCommitGroupingFunction<TGroup> _groupFunction) {
     
     
         Validate.notNull(_groupFunction);
-        final ScmCommitPerDayTable<TGroup> commitMap = new ScmCommitPerDayTable<TGroup>();
+        final ScmCommitTable<TGroup> commitMap = new ScmCommitTable<TGroup>();
         RevWalk revWalk = null;
         try {
             
