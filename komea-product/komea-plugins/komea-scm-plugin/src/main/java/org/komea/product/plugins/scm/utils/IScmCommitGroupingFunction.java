@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.plugins.git.utils;
+package org.komea.product.plugins.scm.utils;
 
 
 

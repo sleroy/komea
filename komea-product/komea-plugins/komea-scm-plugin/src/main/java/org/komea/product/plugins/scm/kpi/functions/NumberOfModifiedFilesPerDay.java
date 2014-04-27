@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.backend.service.tomove;
+package org.komea.product.plugins.scm.kpi.functions;
 
 
 
@@ -12,7 +12,7 @@ import org.komea.product.plugins.scm.api.plugin.IScmCommit;
 
 
 
-public class NumberOfAddedLinesPerDay
+public class NumberOfModifiedFilesPerDay
 {
     
     
@@ -23,7 +23,7 @@ public class NumberOfAddedLinesPerDay
     /**
      * @param _commitsOfTheDay
      */
-    public NumberOfAddedLinesPerDay(final Collection<IScmCommit> _commitsOfTheDay) {
+    public NumberOfModifiedFilesPerDay(final Collection<IScmCommit> _commitsOfTheDay) {
     
     
         commitsOfTheDay = _commitsOfTheDay;
@@ -37,7 +37,7 @@ public class NumberOfAddedLinesPerDay
     
         int res = 0;
         for (final IScmCommit commit : commitsOfTheDay) {
-            res += commit.getNumberOfAddedLines();
+            res += commit.getNumberOfModifiedFiles();
         }
         return res;
         

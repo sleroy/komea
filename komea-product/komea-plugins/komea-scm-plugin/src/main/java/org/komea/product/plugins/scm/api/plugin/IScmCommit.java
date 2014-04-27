@@ -6,8 +6,11 @@ package org.komea.product.plugins.scm.api.plugin;
 
 
 
+import java.io.Serializable;
+
 import org.joda.time.DateTime;
 import org.komea.product.database.model.Person;
+import org.komea.product.database.model.Project;
 
 
 
@@ -16,7 +19,7 @@ import org.komea.product.database.model.Person;
  * 
  * @author sleroy
  */
-public interface IScmCommit
+public interface IScmCommit extends Serializable
 {
     
     
@@ -85,9 +88,27 @@ public interface IScmCommit
     
     
     /**
+     * Returns the project associated to the commit.
+     */
+    Project getProject();
+    
+    
+    /**
      * Returns the number of deleted lines + the number of added lines + number of modified lines into this commit.
      * 
      * @return the total number of modified lines.
      */
     int getTotalNumberOfModifiedLines();
+    
+    
+    /**
+     * Returns true if an author is associated to this commit.
+     */
+    boolean hasAuthor();
+    
+    
+    /**
+     * Returns true if a project is associated to this commit.
+     */
+    boolean hasProject();
 }

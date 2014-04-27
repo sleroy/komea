@@ -110,6 +110,7 @@ public class ScmRepositoryAnalysisService implements IScmRepositoryAnalysisServi
             Validate.isTrue(lastDate.isBefore(commit.getCommitTime()));
             notifyEvent(_newProxy.getEventFactory().sendNewCommit(commit.getMessage(),
                     commit.getAuthor(), commit.getId()));
+            notifyCommit(commit);
         }
         
     }
@@ -153,10 +154,6 @@ public class ScmRepositoryAnalysisService implements IScmRepositoryAnalysisServi
     }
     
     
-    // http://stackoverflow.com/questions/12493916/getting-commit-information-from-a-revcommit-object-in-jgit
-    // http://stackoverflow.com/questions/10435377/jgit-how-to-get-branch-when-traversing-repos
-    
-    
     /**
      * @return the personService
      */
@@ -165,6 +162,10 @@ public class ScmRepositoryAnalysisService implements IScmRepositoryAnalysisServi
     
         return personService;
     }
+    
+    
+    // http://stackoverflow.com/questions/12493916/getting-commit-information-from-a-revcommit-object-in-jgit
+    // http://stackoverflow.com/questions/10435377/jgit-how-to-get-branch-when-traversing-repos
     
     
     /**
@@ -178,9 +179,6 @@ public class ScmRepositoryAnalysisService implements IScmRepositoryAnalysisServi
     }
     
     
-    // http://stackoverflow.com/questions/12493916/getting-commit-information-from-a-revcommit-object-in-jgit
-    // http://stackoverflow.com/questions/10435377/jgit-how-to-get-branch-when-traversing-repos
-    
     /**
      * @param _personService
      *            the personService to set
@@ -189,6 +187,24 @@ public class ScmRepositoryAnalysisService implements IScmRepositoryAnalysisServi
     
     
         personService = _personService;
+    }
+    
+    
+    // http://stackoverflow.com/questions/12493916/getting-commit-information-from-a-revcommit-object-in-jgit
+    // http://stackoverflow.com/questions/10435377/jgit-how-to-get-branch-when-traversing-repos
+    
+    /**
+     * Notify a commit to the CEP Engine.
+     * 
+     * @param _commit
+     *            the commit
+     */
+    private void notifyCommit(final IScmCommit _commit) {
+    
+    
+        Validate.notNull(_commit);
+        esperEngine.sendCustomEvent(_commit);
+        
     }
     
     

@@ -7,7 +7,7 @@ package org.komea.eventory.query;
 
 
 import org.komea.eventory.api.formula.ICEPResult;
-import org.komea.eventory.api.formula.ITupleResultMap;
+import org.komea.eventory.api.formula.IResultMap;
 
 
 
@@ -37,7 +37,7 @@ public class CEPNumericalResult implements ICEPResult
      * @see org.komea.eventory.api.ICEPResult#asMap()
      */
     @Override
-    public <Tres> ITupleResultMap<Tres> asMap() {
+    public <TKey, Tres> IResultMap<TKey, Tres> asMap() {
     
     
         throw new IllegalArgumentException("Invalid type requested");

@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.backend.service.tomove;
+package org.komea.product.plugins.scm.kpi.functions;
 
 
 
@@ -11,8 +11,8 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.apache.commons.lang.Validate;
-import org.komea.product.plugins.git.utils.IScmCommitGroupingFunction;
 import org.komea.product.plugins.scm.api.plugin.IScmCommit;
+import org.komea.product.plugins.scm.utils.IScmCommitGroupingFunction;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -24,6 +24,30 @@ import com.google.common.collect.Multimap;
  */
 public class ScmCommitPerDayTable<TKey>
 {
+    
+    
+    /**
+     * Returns a table grouped by a key from a commit list.
+     * 
+     * @param _key
+     *            the key
+     * @param _commitGroupingFunction
+     *            the commit function.
+     * @return the list of commits;
+     */
+    public static <TKey2> ScmCommitPerDayTable<TKey2> buildTableFromCommitsAndKey(
+            final Collection<IScmCommit> _commits,
+            final IScmCommitGroupingFunction<TKey2> _commitGroupingFunction) {
+    
+    
+        final ScmCommitPerDayTable<TKey2> scmCommitPerDayTable = new ScmCommitPerDayTable<TKey2>();
+        for (final IScmCommit commit : _commits) {
+            scmCommitPerDayTable.addCommit(commit, _commitGroupingFunction.getKey(commit));
+        }
+        return scmCommitPerDayTable;
+        
+    }
+    
     
     
     private final Multimap<TKey, IScmCommit> commitTable = HashMultimap.create();
@@ -58,7 +82,7 @@ public class ScmCommitPerDayTable<TKey>
      *            the day
      * @return the list of commits or an empty list.
      */
-    public Collection<IScmCommit> getCommitsOfTheDay(final TKey _periodDate) {
+    public Collection<IScmCommit> getListOfCommitsPerKey(final TKey _periodDate) {
     
     
         final Collection<IScmCommit> collection = commitTable.get(_periodDate);
@@ -85,34 +109,10 @@ public class ScmCommitPerDayTable<TKey>
      * 
      * @return the number of days
      */
-    public int getNumberOfDays() {
+    public int getNumberOfKeys() {
     
     
         return commitTable.keys().size();
-    }
-    
-    
-    /**
-     * Returns a table grouped by a key from a commit list.
-     * 
-     * @param _key
-     *            the key
-     * @param _commitGroupingFunction
-     *            the commit function.
-     * @return the list of commits;
-     */
-    public <TKey2> ScmCommitPerDayTable<TKey2> buildTableFromCommitsAndKey(
-            final TKey _key,
-            final IScmCommitGroupingFunction<TKey2> _commitGroupingFunction) {
-    
-    
-        final Collection<IScmCommit> commitList = commitTable.get(_key);
-        final ScmCommitPerDayTable<TKey2> scmCommitPerDayTable = new ScmCommitPerDayTable<TKey2>();
-        for (final IScmCommit commit : commitList) {
-            scmCommitPerDayTable.addCommit(commit, _commitGroupingFunction.getKey(commit));
-        }
-        return scmCommitPerDayTable;
-        
     }
     
     

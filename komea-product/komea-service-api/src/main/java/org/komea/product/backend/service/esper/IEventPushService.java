@@ -22,6 +22,15 @@ public interface IEventPushService
     
     
     /**
+     * Sends a custom event
+     * 
+     * @param _customEvent
+     *            the custom event.
+     */
+    void sendCustomEvent(Object _customEvent);
+    
+    
+    /**
      * Send the event : alerts
      * 
      * @param _event

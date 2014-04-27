@@ -7,6 +7,7 @@ package org.komea.eventory.query;
 
 
 import org.komea.eventory.api.formula.ICEPResult;
+import org.komea.eventory.api.formula.IResultMap;
 import org.komea.eventory.api.formula.ITupleResultMap;
 
 
@@ -20,7 +21,7 @@ public class CEPMapResult implements ICEPResult
 {
     
     
-    private ITupleResultMap value = null;
+    private IResultMap value = null;
     
     
     
@@ -37,7 +38,7 @@ public class CEPMapResult implements ICEPResult
      * @see org.komea.eventory.api.ICEPResult#asMap()
      */
     @Override
-    public <TRes> ITupleResultMap<TRes> asMap() {
+    public <TKey, Tres> IResultMap<TKey, Tres> asMap() {
     
     
         return value;

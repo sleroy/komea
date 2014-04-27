@@ -8,6 +8,7 @@ package org.komea.product.plugins.scm.api.plugin;
 
 import org.joda.time.DateTime;
 import org.komea.product.database.model.Person;
+import org.komea.product.database.model.Project;
 
 
 
@@ -22,14 +23,13 @@ public class ScmCommit implements IScmCommit
     
     private Person   author;
     
-    
     private DateTime commitTime;
     
     
     private String   id;
     
     
-    private String   message;
+    private String   message               = "";
     
     
     private int      numberOfAddedlines    = 0;
@@ -40,7 +40,10 @@ public class ScmCommit implements IScmCommit
     
     private int      numberofDeletedLines  = 0;
     
+    
     private int      numberOfModifiedFiles = 0;
+    
+    private Project  project;
     
     
     
@@ -173,6 +176,18 @@ public class ScmCommit implements IScmCommit
     
     /*
      * (non-Javadoc)
+     * @see org.komea.product.plugins.scm.api.plugin.IScmCommit#getProject()
+     */
+    @Override
+    public Project getProject() {
+    
+    
+        return project;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.scm.api.plugin.IScmCommit#getTotalNumberOfModifiedLines()
      */
     @Override
@@ -180,6 +195,30 @@ public class ScmCommit implements IScmCommit
     
     
         return getNumberOfAddedLines() + getNumberOfDeletedLines() + getNumberOfChangedLines();
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.scm.api.plugin.IScmCommit#hasAuthor()
+     */
+    @Override
+    public boolean hasAuthor() {
+    
+    
+        return author != null;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.scm.api.plugin.IScmCommit#hasProject()
+     */
+    @Override
+    public boolean hasProject() {
+    
+    
+        return project != null;
     }
     
     
@@ -264,6 +303,13 @@ public class ScmCommit implements IScmCommit
     
     
         numberOfModifiedFiles = _numberOfModifiedFiles;
+    }
+    
+    
+    public void setProject(final Project _project) {
+    
+    
+        project = _project;
     }
     
     

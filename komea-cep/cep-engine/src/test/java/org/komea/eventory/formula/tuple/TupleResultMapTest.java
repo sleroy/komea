@@ -10,9 +10,6 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.eventory.api.formula.tuple.ITuple;
-import org.komea.eventory.formula.tuple.ArrayListTuple;
-import org.komea.eventory.formula.tuple.TupleFactory;
-import org.komea.eventory.formula.tuple.TupleResultMap;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;

@@ -17,7 +17,6 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.joda.time.DateTime;
 import org.komea.product.backend.service.entities.IPersonService;
-import org.komea.product.backend.service.tomove.ScmCommitPerDayTable;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.model.Person;
 import org.komea.product.plugins.git.api.errors.ScmCannotObtainCommitListException;
@@ -26,6 +25,8 @@ import org.komea.product.plugins.scm.ScmEventFactory;
 import org.komea.product.plugins.scm.api.plugin.IScmCommit;
 import org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy;
 import org.komea.product.plugins.scm.api.plugin.ScmCommit;
+import org.komea.product.plugins.scm.kpi.functions.ScmCommitPerDayTable;
+import org.komea.product.plugins.scm.utils.IScmCommitGroupingFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -224,11 +225,10 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
      * @see org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy#getAllCommitsFromABranch(java.lang.String, org.joda.time.DateTime)
      */
     public <TGroup> ScmCommitPerDayTable<TGroup> getCommitMap(
-            final String _branchName,
             final IScmCommitGroupingFunction<TGroup> _groupFunction) {
     
     
-        Validate.notEmpty(_branchName);
+        Validate.notNull(_groupFunction);
         final ScmCommitPerDayTable<TGroup> commitMap = new ScmCommitPerDayTable<TGroup>();
         RevWalk revWalk = null;
         try {
@@ -241,8 +241,6 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
             logcmd.all();
             revWalk = new RevWalk(getGit().getRepository());
             
-            final DoesCommitOwnToThisBranchPredicate predicate =
-                    newBranchPredicate(_branchName, revWalk);
             
             /**
              * Browse every commit
@@ -250,18 +248,16 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
             for (final RevCommit commit : logcmd.call()) {
                 
                 
-                if (predicate.isCommitRelatedToBranch(commit)) {
-                    final ScmCommit scmCommit = convertGitCommit(commit);
-                    final GitDiffComputation gitDiffComputation =
-                            new GitDiffComputation(git, scmCommit, commit, revWalk);
-                    gitDiffComputation.updateCommitWithDiffInformations();
-                    commitMap.addCommit(scmCommit, _groupFunction.getKey(scmCommit));
-                }
+                final ScmCommit scmCommit = convertGitCommit(commit);
+                final GitDiffComputation gitDiffComputation =
+                        new GitDiffComputation(git, scmCommit, commit, revWalk);
+                gitDiffComputation.updateCommitWithDiffInformations();
+                commitMap.addCommit(scmCommit, _groupFunction.getKey(scmCommit));
                 
             }
         } catch (final Exception e) {
             throw new ScmCannotObtainCommitListException(
-                    "Could not obtain the list of new commits for the branch " + _branchName, e);
+                    "Could not obtain the list of new commits", e);
             
         } finally {
             if (revWalk != null) {

@@ -2,17 +2,18 @@
  * 
  */
 
-package org.komea.product.backend.service.tomove;
+package org.komea.product.plugins.scm.kpi.functions;
 
 
 
 import java.util.Collection;
 
+import org.komea.product.plugins.scm.api.plugin.ICommitFunction;
 import org.komea.product.plugins.scm.api.plugin.IScmCommit;
 
 
 
-public class AverageCommitMessageLength
+public class AverageCommitMessageLength implements ICommitFunction
 {
     
     
@@ -32,6 +33,7 @@ public class AverageCommitMessageLength
     }
     
     
+    @Override
     public double compute() {
     
     

@@ -18,7 +18,7 @@ import org.komea.eventory.api.formula.tuple.ITuple;
  * 
  * @author sleroy
  */
-public interface ITupleResultMap<TRes>
+public interface ITupleResultMap<TRes> extends IResultMap<ITuple, TRes>
 {
     
     
@@ -59,42 +59,4 @@ public interface ITupleResultMap<TRes>
     public <T> List<ITuple> asTupleRows();
     
     
-    /**
-     * Returns the value.
-     * 
-     * @param _key
-     *            the key.
-     * @return the value.
-     */
-    public TRes get(Object _key);
-    
-    
-    /**
-     * Converts the result into a tuple map.
-     * Costs(O(1))
-     * 
-     * @return the results into a tuple map.
-     */
-    public <T> Map<ITuple, TRes> getTable();
-    
-    
-    /**
-     * Returns the value.
-     * 
-     * @param _key
-     *            the key.
-     * @return the value.
-     */
-    public TRes getValue(ITuple _key);
-    
-    
-    /**
-     * Inserts an entry into the result map
-     * 
-     * @param _key
-     *            the key
-     * @param _result
-     *            the result.
-     */
-    public void insertEntry(ITuple _key, TRes _result);
 }

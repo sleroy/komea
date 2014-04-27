@@ -7,7 +7,6 @@ package org.komea.eventory.formula.tuple;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +26,11 @@ import org.komea.eventory.utils.ClassUtils;
  * 
  * @author sleroy
  */
-public class TupleResultMap<TRes> implements ITupleResultMap<TRes>
+public class TupleResultMap<TRes> extends ResultMap<ITuple, TRes> implements ITupleResultMap<TRes>
 {
     
     
-    private static final String     VALUE     = "value";
-    
-    
-    private final Map<ITuple, TRes> resultMap = new HashMap<ITuple, TRes>();
+    private static final String VALUE = "value";
     
     
     
@@ -98,12 +94,8 @@ public class TupleResultMap<TRes> implements ITupleResultMap<TRes>
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see org.komea.eventory.api.ITupleResultMap#asTupleRows()
-     */
     @Override
-    public <T> List<ITuple> asTupleRows() {
+    public List<ITuple> asTupleRows() {
     
     
         final List<ITuple> tuples = new ArrayList<ITuple>(resultMap.size());
@@ -112,55 +104,6 @@ public class TupleResultMap<TRes> implements ITupleResultMap<TRes>
             tuples.add(tuple.append(entry.getValue()));
         }
         return tuples;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.eventory.api.ITupleResultMap#get(java.lang.Object)
-     */
-    @Override
-    public TRes get(final Object _key) {
-    
-    
-        return resultMap.get(new ArrayListTuple(Collections.singletonList(_key)));
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.eventory.api.ITupleResultMap#getTable()
-     */
-    @Override
-    public <T> Map<ITuple, TRes> getTable() {
-    
-    
-        return this.resultMap;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.eventory.api.ITupleResultMap#getValue(org.komea.product.service.dto.EntityKey)
-     */
-    @Override
-    public TRes getValue(final ITuple _valueInTuple) {
-    
-    
-        return resultMap.get(_valueInTuple);
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.eventory.api.ITupleResultMap#insertEntry(org.komea.eventory.api.formula.tuple.ITuple, java.lang.Object)
-     */
-    @Override
-    public void insertEntry(final ITuple _key, final TRes _result) {
-    
-    
-        resultMap.put(_key, _result);
-        
     }
     
     

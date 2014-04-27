@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.backend.service.tomove;
+package org.komea.product.plugins.scm.kpi.functions;
 
 
 
@@ -12,12 +12,7 @@ import org.komea.product.plugins.scm.api.plugin.IScmCommit;
 
 
 
-/**
- * This methods computes the number of commits performed in a day. It takes the list of commits received for a specific day.
- * 
- * @author sleroy
- */
-public class NumberOfCommitsPerDay
+public class NumberOfDeletedLinesPerDay
 {
     
     
@@ -28,7 +23,7 @@ public class NumberOfCommitsPerDay
     /**
      * @param _commitsOfTheDay
      */
-    public NumberOfCommitsPerDay(final Collection<IScmCommit> _commitsOfTheDay) {
+    public NumberOfDeletedLinesPerDay(final Collection<IScmCommit> _commitsOfTheDay) {
     
     
         commitsOfTheDay = _commitsOfTheDay;
@@ -40,7 +35,11 @@ public class NumberOfCommitsPerDay
     public int compute() {
     
     
-        return commitsOfTheDay.size();
+        int res = 0;
+        for (final IScmCommit commit : commitsOfTheDay) {
+            res += commit.getNumberOfDeletedLines();
+        }
+        return res;
         
     }
     

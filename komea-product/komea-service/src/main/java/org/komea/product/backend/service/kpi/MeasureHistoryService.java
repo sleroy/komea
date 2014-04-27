@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
+import org.joda.time.DateTime;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IHistoryPurgeAction;
 import org.komea.product.backend.api.IMeasureHistoryService;
@@ -342,6 +343,29 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
     
     
         requiredDAO = _requiredDAO;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.api.IMeasureHistoryService#storeMeasure(org.komea.product.service.dto.KpiKey, double,
+     * org.komea.product.service.dto.EntityKey, org.joda.time.DateTime)
+     */
+    @SuppressWarnings("boxing")
+    @Override
+    public void storeMeasure(
+            final HistoryKey _ofKpi,
+            final Double _value,
+            final DateTime _analysisDate) {
+    
+    
+        final Measure measure =
+                Measure.initializeMeasureFromKPIKey(_ofKpi.getKpiID(), _ofKpi.getEntityKey());
+        measure.setValue(_value);
+        measure.setDate(_analysisDate.toDate());
+        saveOrUpdate(measure);
+        
+        
     }
     
     

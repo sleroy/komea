@@ -20,7 +20,7 @@ public interface ICEPResult
      * 
      * @return the results into a map.
      */
-    <Tres> ITupleResultMap<Tres> asMap();
+    <TKey, TRes> IResultMap<TKey, TRes> asMap();
     
     
     /**
