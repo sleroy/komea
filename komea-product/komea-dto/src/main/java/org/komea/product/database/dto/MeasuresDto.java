@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 
@@ -11,7 +12,7 @@ public class MeasuresDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private EntityType entityType;
+    private ExtendedEntityType extendedEntityType;
     private List<BaseEntityDto> entities = new ArrayList<BaseEntityDto>();
     private List<Kpi> kpis = new ArrayList<Kpi>();
     private List<Measure> measures = new ArrayList<Measure>();
@@ -19,20 +20,20 @@ public class MeasuresDto implements Serializable {
     public MeasuresDto() {
     }
 
-    public MeasuresDto(EntityType entityType, List<BaseEntityDto> entities,
+    public MeasuresDto(ExtendedEntityType entityType, List<BaseEntityDto> entities,
             List<Kpi> kpis, List<Measure> measures) {
-        this.entityType = entityType;
+        this.extendedEntityType = entityType;
         this.entities = entities;
         this.kpis = kpis;
         this.measures = measures;
     }
 
-    public EntityType getEntityType() {
-        return entityType;
+    public ExtendedEntityType getExtendedEntityType() {
+        return extendedEntityType;
     }
 
-    public void setEntityType(EntityType entityType) {
-        this.entityType = entityType;
+    public void setExtendedEntityType(ExtendedEntityType entityType) {
+        this.extendedEntityType = entityType;
     }
 
     public List<BaseEntityDto> getEntities() {
@@ -101,7 +102,7 @@ public class MeasuresDto implements Serializable {
     }
 
     public Integer getId(final Measure measure) {
-        return getId(entityType, measure);
+        return getId(extendedEntityType.getEntityType(), measure);
     }
 
     public static Integer getId(final EntityType entityType, final Measure measure) {
@@ -142,7 +143,7 @@ public class MeasuresDto implements Serializable {
 
     @Override
     public String toString() {
-        return "MeasuresDto{" + "entityType=" + entityType + ", entities="
+        return "MeasuresDto{" + "extendedEntityType=" + extendedEntityType + ", entities="
                 + entities + ", kpis=" + kpis + ", measures=" + measures + '}';
     }
 

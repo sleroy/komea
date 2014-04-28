@@ -2,22 +2,22 @@ package org.komea.product.database.dto;
 
 import java.io.Serializable;
 import java.util.List;
-import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.enums.Severity;
 
 public class SearchKpiAlertsDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private EntityType entityType;
+    private ExtendedEntityType extendedEntityType;
     private List<String> kpiAlertTypeKeys;
     private List<String> entityKeys;
     private Severity severityMin;
     private boolean activatedOnly;
 
-    public SearchKpiAlertsDto(EntityType entityType, List<String> kpiAlertTypeKeys,
+    public SearchKpiAlertsDto(ExtendedEntityType entityType, List<String> kpiAlertTypeKeys,
             List<String> entityKeys, Severity severityMin, boolean activatedOnly) {
-        this.entityType = entityType;
+        this.extendedEntityType = entityType;
         this.kpiAlertTypeKeys = kpiAlertTypeKeys;
         this.entityKeys = entityKeys;
         this.severityMin = severityMin;
@@ -43,12 +43,12 @@ public class SearchKpiAlertsDto implements Serializable {
         this.entityKeys = entityKeys;
     }
 
-    public EntityType getEntityType() {
-        return entityType;
+    public ExtendedEntityType getExtendedEntityType() {
+        return extendedEntityType;
     }
 
-    public void setEntityType(EntityType entityType) {
-        this.entityType = entityType;
+    public void setExtendedEntityType(ExtendedEntityType entityType) {
+        this.extendedEntityType = entityType;
     }
 
     public Severity getSeverityMin() {
@@ -69,7 +69,7 @@ public class SearchKpiAlertsDto implements Serializable {
 
     @Override
     public String toString() {
-        return "SearchKpiAlertsDto{" + "entityType=" + entityType + ", kpiAlertTypeKeys="
+        return "SearchKpiAlertsDto{" + "extendedEntityType=" + extendedEntityType + ", kpiAlertTypeKeys="
                 + kpiAlertTypeKeys + ", entityKeys=" + entityKeys + ", severityMin="
                 + severityMin + ", activatedOnly=" + activatedOnly + '}';
     }

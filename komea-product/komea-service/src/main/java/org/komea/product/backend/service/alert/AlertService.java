@@ -13,6 +13,7 @@ import org.komea.product.database.dto.KpiAlertDto;
 import org.komea.product.database.dto.SearchKpiAlertsDto;
 import org.komea.product.database.dto.SearchMeasuresDto;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.database.model.Measure;
@@ -69,7 +70,8 @@ public final class AlertService implements IAlertService {
     @Override
     public List<KpiAlertDto> findAlerts(final SearchKpiAlertsDto _searchAlert) {
 
-        final EntityType entityType = _searchAlert.getEntityType();
+        final ExtendedEntityType extendedEntityType = _searchAlert.getExtendedEntityType();
+        final EntityType entityType = extendedEntityType.getEntityType();
         final List<KpiAlertType> alertTypesOfKpiAndSeverity
                 = alertTypeService.getAlertTypes(entityType, _searchAlert.getKpiAlertTypeKeys(),
                         _searchAlert.getSeverityMin());
@@ -79,7 +81,7 @@ public final class AlertService implements IAlertService {
         final IdKpiMap idKpiMap = new IdKpiMap();
         final Set<String> kpiKeys = idKpiMap.fillIdKpi(alertTypesOfKpiAndSeverity, kpiService);
         final SearchMeasuresDto searchMeasuresDto
-                = createMeasureFilterOnKpiKeys(_searchAlert, entityType, kpiKeys);
+                = createMeasureFilterOnKpiKeys(_searchAlert, extendedEntityType, kpiKeys);
 
         final List<Measure> measuresOfKpi
                 = measureService.getMeasures(idKpiMap.values(), entities, searchMeasuresDto);
@@ -218,7 +220,7 @@ public final class AlertService implements IAlertService {
 
     private SearchMeasuresDto createMeasureFilterOnKpiKeys(
             final SearchKpiAlertsDto _searchAlert,
-            final EntityType entityType,
+            final ExtendedEntityType entityType,
             final Set<String> kpiKeys) {
 
         final SearchMeasuresDto searchMeasuresDto
