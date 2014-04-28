@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
+import org.komea.product.backend.service.kpi.IKpiValueService;
 import org.komea.product.wicket.utils.WicketTesterMethodRule;
 import org.mockito.Mockito;
 
@@ -31,6 +32,7 @@ public class StatPageTest
     public void before() {
     
     
+        wicketRule.getApplicationContextMock().putBean(Mockito.mock(IKpiValueService.class));
         wicketRule.getApplicationContextMock().putBean(Mockito.mock(IEventStatisticsService.class));
         
     }
