@@ -5,17 +5,17 @@ package org.komea.product.plugins.scm.cron;
 
 // https://forums.terracotta.org/forums/posts/list/2768.page
 
-import java.io.IOException;
 import java.util.Date;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.esper.IEventPushService;
+import org.komea.product.plugins.repository.model.ScmExecutionStatus;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.komea.product.plugins.scm.api.IScmRepositoryAnalysisService;
 import org.komea.product.plugins.scm.api.IScmRepositoryProxyFactories;
 import org.komea.product.plugins.scm.api.IScmRepositoryService;
-import org.komea.product.plugins.scm.api.error.ScmCronJobException;
 import org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
@@ -90,6 +90,7 @@ public class ScmCronJob implements Job
         Validate.notNull(personService);
         IScmRepositoryProxy newProxy = null;
         final Date newTime = new Date();
+        final ScmExecutionStatus scmExecutionStatus = new ScmExecutionStatus();
         try {
             
             newProxy = repositoryFactory.newProxy(repo);
@@ -104,18 +105,15 @@ public class ScmCronJob implements Job
             analysisService.analysis(newProxy);
         } catch (final Exception e) {
             LOGGER.error(e.getMessage(), e);
-            
+            scmExecutionStatus.setLastError(e);
         } finally {
             repo.setLastDateCheckout(newTime);
+            repo.setLastExecutionStatus(scmExecutionStatus);
             repository.saveOrUpdate(repo);
-            try {
-                if (newProxy != null) {
-                    newProxy.close();
-                }
-            } catch (final IOException e) {
-                throw new ScmCronJobException("Error during the execution of a scm cron :"
-                        + e.getMessage(), e);
-            }
+            IOUtils.closeQuietly(newProxy);
+            LOGGER.info("SCM Repository analysis [{}]", repo.getLastExecutionStatus().isSuccess()
+                    ? "OK"
+                        : "FAILED");
             
         }
     }

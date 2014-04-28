@@ -11,6 +11,7 @@ import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.plugins.scm.api.IScmRepositoryAnalysisService;
+import org.komea.product.plugins.scm.api.error.ScmCronJobException;
 import org.komea.product.plugins.scm.api.plugin.IScmCommit;
 import org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy;
 import org.slf4j.Logger;
@@ -75,11 +76,12 @@ public class ScmRepositoryAnalysisService implements IScmRepositoryAnalysisServi
         try {
             // Begin gitRepositoryDefinition
             esperEngine.sendEventDto(_newProxy.getEventFactory().sendFetchRepository());
-            
+            LOGGER.info("Checking number of branches");
             checkNumberOfBranches(_newProxy);
             for (final String branchName : _newProxy.getBranches()) {
+                LOGGER.info("Checking number of tags for the branch {}", branchName);
                 checkNumberOfTagsPerBranch(_newProxy, branchName);
-                
+                LOGGER.info("Checking new commits {}", branchName);
                 checkNewCommits(_newProxy, branchName);
             }
             
@@ -87,6 +89,7 @@ public class ScmRepositoryAnalysisService implements IScmRepositoryAnalysisServi
         } catch (final Throwable e) {
             LOGGER.error(e.getMessage(), e);
             esperEngine.sendEventDto(_newProxy.getEventFactory().sendFetchFailed());
+            throw new ScmCronJobException(e.getMessage(), e);
         }
         
     }

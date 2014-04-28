@@ -83,6 +83,9 @@ public class ScmRepositoryDefinition implements Serializable, IHasId
     
     private Date                                lastDateCheckout;
     
+    
+    private ScmExecutionStatus                  lastExecutionStatus;
+    
     private String                              password             = "";
     
     
@@ -181,6 +184,13 @@ public class ScmRepositoryDefinition implements Serializable, IHasId
     
         if (lastDateCheckout == null) { return null; }
         return new DateTime(lastDateCheckout);
+    }
+    
+    
+    public ScmExecutionStatus getLastExecutionStatus() {
+    
+    
+        return lastExecutionStatus;
     }
     
     
@@ -364,6 +374,13 @@ public class ScmRepositoryDefinition implements Serializable, IHasId
     
     
         lastDateCheckout = _lastDateCheckout;
+    }
+    
+    
+    public void setLastExecutionStatus(final ScmExecutionStatus _lastExecutionStatus) {
+    
+    
+        lastExecutionStatus = _lastExecutionStatus;
     }
     
     
