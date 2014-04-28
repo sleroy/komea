@@ -52,4 +52,9 @@ public class ProviderPage extends LayoutPage
                         new ProviderTableActionPanelColumn(Model.of("Actions"), providerService,
                                 wicketAdminService)).displayRows(10).withData(dataProvider).build());
     }
+    
+       @Override
+    public String getTitle() {
+        return getString("administration.title.plugins");
+    }
 }

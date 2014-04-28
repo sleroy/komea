@@ -139,7 +139,7 @@ public class AlertForm extends StatelessForm<KpiAlertType> {
 
     public void initSelectKpi() {
         List<IHasKey> allKpi = (List<IHasKey>) (List<?>) kpiService.selectAll();
-        final SelectDialog DialogKpi = new SelectDialog("kpiDialog", getString("global.field.popup.kpi"), allKpi) {
+        final SelectDialog DialogKpi = new SelectDialog("kpiDialog", getString("global.field.popup.kpi"), allKpi,alert.getIdKpi()) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {

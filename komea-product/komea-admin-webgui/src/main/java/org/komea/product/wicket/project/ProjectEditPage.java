@@ -75,7 +75,7 @@ public class ProjectEditPage extends LayoutPage {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         List<IHasKey> selectByCriteria = (List<IHasKey>) (List<?>) customerDao.selectByCriteria(new CustomerCriteria());
         final SelectDialog dialogCustomer;
-        dialogCustomer = new SelectDialog("dialogCustomer", getString("project.form.popup.customer"), selectByCriteria) {
+        dialogCustomer = new SelectDialog("dialogCustomer", getString("project.form.popup.customer"), selectByCriteria,_object.getIdCustomer()) {
 
             @Override
             public void onClose(AjaxRequestTarget target, DialogButton button) {

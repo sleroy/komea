@@ -165,13 +165,12 @@ public class StatPage extends LayoutPage
         buildGraphic(options);
         
         add(new BackupLink("backup-values"));
-        
-        
+        List<EventTypeStatistic> receivedAlertTypesIn24LastHours = statService.getReceivedAlertTypesIn24LastHours();
         final DataTable<EventTypeStatistic, String> table =
                 DataTableBuilder.<EventTypeStatistic, String> newTable("table")
                         .addColumn("Event type", "type").addColumn("Provider", "provider")
-                        .addColumn("Number", "value").displayRows(10)
-                        .withListData(statService.getReceivedAlertTypesIn24LastHours()).build();
+                        .addColumn("Number", "value").displayRows(receivedAlertTypesIn24LastHours.size()+10)
+                        .withListData(receivedAlertTypesIn24LastHours).build();
         add(table);
         
     }
@@ -189,6 +188,12 @@ public class StatPage extends LayoutPage
     
         kpiValueService = _kpiValueService;
     }
+
+    @Override
+    public String getTitle() {
+        return getString("administration.title.statistics");
+    }
+    
     
     
     private void buildGraphic(final Options options) {

@@ -139,6 +139,10 @@ public class EventsPage extends LayoutPage
         
     }
     
+       @Override
+    public String getTitle() {
+        return getString("administration.title.events");
+    }
     
     public IEventViewerService getService() {
     
