@@ -40,11 +40,15 @@ public class KpisController {
     @ResponseBody
     public List<Kpi> getKpis(@RequestBody ExtendedEntityType extendedEntityType) {
 
-        LOGGER.debug("call rest method /kpis/get/");
+        LOGGER.debug("call rest method /kpis/get/ with body: " + extendedEntityType);
         final List<Kpi> kpis = kpiService.getKpis(extendedEntityType.getKpiType(), Collections.<String>emptyList());
+        LOGGER.debug("kpis: " + kpis);
         if (extendedEntityType.isForGroups()) {
-            return kpiService.getKpisForGroups(kpis);
+            List<Kpi> kpisForGroups = kpiService.getKpisForGroups(kpis);
+            LOGGER.debug("return getKpisForGroups : " + kpisForGroups);
+            return kpisForGroups;
         } else {
+            LOGGER.debug("return kpis");
             return kpis;
         }
     }

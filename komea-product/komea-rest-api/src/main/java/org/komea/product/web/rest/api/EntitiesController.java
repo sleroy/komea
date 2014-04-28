@@ -2,6 +2,7 @@ package org.komea.product.web.rest.api;
 
 import java.util.List;
 import org.komea.product.backend.service.entities.IEntityService;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.enums.EntityType;
 import org.slf4j.Logger;
@@ -29,8 +30,10 @@ public class EntitiesController {
     @ResponseBody
     public List<BaseEntityDto> getEntities(@RequestBody
             final EntityType _entityType) {
-
-        return BaseEntityDto.convertEntities(entityService.getEntitiesByEntityType(_entityType));
+        LOGGER.debug("call rest method /entities/type/ with body: " + _entityType);
+        List<? extends IEntity> entities = entityService.getEntitiesByEntityType(_entityType);
+        LOGGER.debug("return entities: " + entities);
+        return BaseEntityDto.convertEntities(entities);
 
     }
 

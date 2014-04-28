@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.validation.Valid;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.entities.IEntityService;
+import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.IKpiValueService;
 import org.komea.product.database.api.IEntity;
@@ -43,31 +44,41 @@ public class MeasuresController {
     @Autowired
     private IKpiValueService kpiValueService;
 
+    @Autowired
+    private IHistoryService measureService;
+
     @RequestMapping(method = RequestMethod.POST, value = "/find")
     @ResponseBody
     public MeasuresDto findMeasures(@RequestBody
             final SearchMeasuresDto _searchMeasuresDto) {
+        LOGGER.debug("call rest method /measures/find/ with body: " + _searchMeasuresDto);
         final ExtendedEntityType extendedEntityType = _searchMeasuresDto.getExtendedEntityType();
         final EntityType entityType = extendedEntityType.getEntityType();
         final List<Kpi> simpleKpis = kpiService.getKpis(
                 extendedEntityType.getKpiType(), _searchMeasuresDto.getKpiKeys());
+        LOGGER.debug("simpleKpis: " + simpleKpis);
         final List<Kpi> kpis;
         if (extendedEntityType.isForGroups()) {
             kpis = kpiService.getKpisForGroups(simpleKpis);
+            LOGGER.debug("kpis: " + kpis);
         } else {
             kpis = simpleKpis;
         }
         final List<BaseEntityDto> simpleEntities = entityService.getBaseEntityDTOS(
                 extendedEntityType.getEntityType(), _searchMeasuresDto.getEntityKeys());
+        LOGGER.debug("simpleEntities: " + simpleEntities);
         final List<Measure> measures = new ArrayList<Measure>();
         if (extendedEntityType.isForGroups()) {
             for (final BaseEntityDto simpleEntity : simpleEntities) {
+                LOGGER.debug("simpleEntity: " + simpleEntity);
                 final Integer entityId = simpleEntity.getId();
                 final List<? extends IEntity> entities = entityService.getSubEntities(entityId, extendedEntityType);
                 if (entities != null && !entities.isEmpty()) {
                     List<BaseEntityDto> subEntities = BaseEntityDto.convertEntities(entities);
+                    LOGGER.debug("subEntities: " + subEntities);
                     final List<Measure> realTimeMeasures = kpiValueService.getRealTimeMeasuresFromEntities(
                             simpleKpis, subEntities);
+                    LOGGER.info("realTimeMeasures: " + realTimeMeasures);
                     final Map<Integer, List<Measure>> measuresByKpi = new HashMap<Integer, List<Measure>>(realTimeMeasures.size());
                     for (final Measure realTimeMeasure : realTimeMeasures) {
                         final Integer idKpi = realTimeMeasure.getIdKpi();
@@ -84,12 +95,13 @@ public class MeasuresController {
                         final Measure measure = new Measure();
                         measure.setIdKpi(kpi.getId());
                         measure.setDate(new Date());
-                        measure.setEntityId(entityType, entityId);
+                        measure.setEntity(entityType, entityId);
                         if (kpi.isAverage()) {
                             kpiValueService.setAverage(kpiMeasures, measure);
                         } else {
                             kpiValueService.setSum(kpiMeasures, measure);
                         }
+                        LOGGER.info("add(measure): " + measure);
                         measures.add(measure);
                     }
                 }
@@ -98,7 +110,7 @@ public class MeasuresController {
             measures.addAll(kpiValueService.getRealTimeMeasuresFromEntities(simpleKpis, simpleEntities));
         }
         //todo
-//        measures.addAll(measureService.getMeasures(simpleKpis, simpleEntities, _searchMeasuresDto));
+        measures.addAll(measureService.getMeasures(simpleKpis, simpleEntities, _searchMeasuresDto));
         return new MeasuresDto(extendedEntityType, simpleEntities, kpis, measures);
     }
 

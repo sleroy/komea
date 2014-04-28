@@ -5,13 +5,11 @@ import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.api.exceptions.EntityNotFoundException;
+import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ExtendedEntityType;
-import org.komea.product.database.model.PersonCriteria;
-import org.komea.product.database.model.PersonGroupCriteria;
-import org.komea.product.database.model.ProjectCriteria;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.service.dto.KpiKey;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,26 +102,28 @@ public final class EntityService implements IEntityService {
      * @see org.komea.product.backend.service.entities.IEntityService#loadEntities(org.komea.product.database.enums.EntityType)
      */
     @Override
-    public List<IEntity> getEntitiesByEntityType(final EntityType _entityType) {
+    public List<? extends IEntity> getEntitiesByEntityType(final EntityType _entityType) {
 
         Validate.notNull(_entityType);
-        List<IEntity> rEntities = Collections.EMPTY_LIST;
+        IGenericService<? extends IEntity, ?, ?> service = null;
         switch (_entityType) {
             case PERSON:
-                rEntities = (List) personService.selectByCriteria(new PersonCriteria());
+                service = personService;
                 break;
             case DEPARTMENT:
             case TEAM:
-                rEntities = (List) personGroupService.selectByCriteria(new PersonGroupCriteria());
+                service = personGroupService;
                 break;
             case PROJECT:
-                rEntities = (List) projectService.selectByCriteria(new ProjectCriteria());
+                service = projectService;
                 break;
             default:
                 break;
-
         }
-        return Collections.unmodifiableList(rEntities);
+        if (service == null) {
+            return Collections.emptyList();
+        }
+        return service.selectAll();
     }
 
     /**

@@ -53,7 +53,7 @@ public interface IEntityService {
      * @param _entityType the entity type.
      * @return the list of entities.
      */
-    List<IEntity> getEntitiesByEntityType(EntityType _entityType);
+    List<? extends IEntity> getEntitiesByEntityType(EntityType _entityType);
 
     List<? extends IEntity> getSubEntities(Integer _entityId,
             ExtendedEntityType _extendedEntityType);

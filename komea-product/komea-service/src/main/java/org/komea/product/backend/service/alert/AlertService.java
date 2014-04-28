@@ -51,7 +51,7 @@ public final class AlertService implements IAlertService {
     public KpiAlertDto findAlert(final AlertCriteria _alertCriteria, final IdKpiMap _mapKpis) {
 
         final Measure measure = findMeasure(_alertCriteria);
-        if (measure != null) {
+        if (measure == null) {
             return null;
         }
 

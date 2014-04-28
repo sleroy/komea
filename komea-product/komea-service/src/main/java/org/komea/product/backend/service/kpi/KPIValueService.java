@@ -144,7 +144,7 @@ public final class KPIValueService implements IKpiValueService {
     public Measure getRealTimeMeasure(final KpiKey _key) {
 
         LOGGER.debug("Obtain the real time measure for -> {}", _key);
-        final List<IEntity> entitiesAssociatedToKpiKey = getEntitiesAssociatedToKpiKey(_key);
+        final List<? extends IEntity> entitiesAssociatedToKpiKey = getEntitiesAssociatedToKpiKey(_key);
         if (entitiesAssociatedToKpiKey.isEmpty()) {
             throw new EntityNotFoundException(
                     _key.getEntityKey());
@@ -287,10 +287,10 @@ public final class KPIValueService implements IKpiValueService {
      * @param _kpiKey the measure
      * @return the list of entities.
      */
-    private List<IEntity> getEntitiesAssociatedToKpiKey(final KpiKey _kpiKey) {
+    private List<? extends IEntity> getEntitiesAssociatedToKpiKey(final KpiKey _kpiKey) {
 
         final Kpi findKPIOrFail = new FindKpiOrFail(_kpiKey, kpiDAO).find();
-        List<IEntity> entities = null;
+        List<? extends IEntity> entities = null;
         if (_kpiKey.isAssociatedToEntity()) {
             final IEntity entityAssociatedToKpi = entityService.findEntityAssociatedToKpi(_kpiKey);
             if (entityAssociatedToKpi == null) {

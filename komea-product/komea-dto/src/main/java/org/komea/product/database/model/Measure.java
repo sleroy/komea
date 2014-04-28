@@ -412,20 +412,4 @@ public class Measure implements IHasKey {
     public boolean isValid() {
         return value != null && !value.isInfinite() && !value.isNaN();
     }
-
-    @JsonIgnore
-    public void setEntityId(EntityType entityType, Integer entityId) {
-        switch (entityType) {
-            case DEPARTMENT:
-            case TEAM:
-                setIdPersonGroup(entityId);
-                break;
-            case PERSON:
-                setIdPerson(entityId);
-                break;
-            case PROJECT:
-                setIdProject(entityId);
-                break;
-        }
-    }
 }
