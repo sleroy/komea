@@ -1,10 +1,12 @@
 package org.komea.product.plugins.bugzilla.model;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+import org.komea.product.backend.kpi.search.ISearchedElement;
 
-public class BzBug {
+public class BzBug implements ISearchedElement {
 
     public static BzBug create(final String status, final String resolution,
             final String severity, final String priority) {
@@ -23,12 +25,18 @@ public class BzBug {
         this.parameters = parameters;
     }
 
+    @Override
     public String getParameter(final String key) {
-        return parameters.get(key);
+        return parameters.get(key.toLowerCase());
     }
 
-    public Set<String> getKeys() {
-        return parameters.keySet();
+    @Override
+    public Collection<String> getKeys() {
+        final Collection<String> keys = new HashSet<String>(parameters.size());
+        for (final String key : parameters.keySet()) {
+            keys.add(key.toLowerCase());
+        }
+        return keys;
     }
 
     @Override

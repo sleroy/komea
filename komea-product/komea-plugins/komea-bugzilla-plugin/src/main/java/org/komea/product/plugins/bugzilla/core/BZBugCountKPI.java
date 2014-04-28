@@ -22,8 +22,9 @@ import org.komea.product.plugins.bugzilla.api.IBZServerProxy;
 import org.komea.product.plugins.bugzilla.api.IBZServerProxyFactory;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.komea.product.plugins.bugzilla.model.BzBug;
-import org.komea.product.plugins.bugzilla.model.BzSearch;
-import org.komea.product.plugins.bugzilla.service.StringUtils;
+import org.komea.product.backend.kpi.search.ISearchedElement;
+import org.komea.product.backend.kpi.search.Search;
+import org.komea.product.backend.kpi.search.SearchUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +39,11 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BZBugCountKPI.class);
 
-    public static BZBugCountKPI create(final BzSearch... searchs) {
+    public static BZBugCountKPI create(final Search... searchs) {
         return new BZBugCountKPI(Arrays.asList(searchs));
     }
 
-    private final List<BzSearch> searchs;
+    private final List<Search> searchs;
 
     @Autowired
     private IProjectService projectService;
@@ -54,35 +55,14 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
     private IBZServerProxyFactory proxyFactory;
 
     public BZBugCountKPI(final String searchs) {
-        this(convert(searchs));
-    }
-
-    private static List<BzSearch> convert(final String searchs) {
-        final List<String> searchsString = StringUtils.splitAndTrimWithoutEmpty(searchs, "#");
-        final List<BzSearch> bzSearchs = new ArrayList<BzSearch>(searchsString.size());
-        for (final String searchString : searchsString) {
-            final BzSearch bzSearch = BzSearch.fromString(searchString);
-            bzSearchs.add(bzSearch);
-        }
-        return bzSearchs;
-    }
-
-    private static String convert(final List<BzSearch> bzSearchs) {
-        final StringBuilder stringBuilder = new StringBuilder();
-        for (final BzSearch bzSearch : bzSearchs) {
-            stringBuilder.append(bzSearch.getString()).append("#");
-        }
-        if (!bzSearchs.isEmpty()) {
-            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-        }
-        return stringBuilder.toString();
+        this(SearchUtils.convert(searchs));
     }
 
     public BZBugCountKPI() {
-        this(Collections.<BzSearch>emptyList());
+        this(Collections.<Search>emptyList());
     }
 
-    public BZBugCountKPI(final List<BzSearch> searchs) {
+    public BZBugCountKPI(final List<Search> searchs) {
         super();
         this.searchs = searchs;
     }
@@ -108,13 +88,12 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
                     }
                     final ITuple tuple = TupleFactory.newTuple(project.getEntityKey());
                     final List<BzBug> bugs = bugzillaProxy.getBugs(productName);
-                    int cpt = 0;
-                    for (final BzBug bug : bugs) {
-                        if (isBugMatchesAtLeastOneFilter(bug)) {
-                            cpt++;
-                        }
+                    final List<ISearchedElement> searchedElements = new ArrayList<ISearchedElement>();
+                    for (final ISearchedElement searchedElement : bugs) {
+                        searchedElements.add(searchedElement);
                     }
-                    tupleResultMap.insertEntry(tuple, cpt);
+                    int result = SearchUtils.nbElementsMatchesSearches(searchedElements, searchs);
+                    tupleResultMap.insertEntry(tuple, result);
                 }
             } catch (final Exception ex) {
                 LOGGER.error("Error during the bugzilla server update {} : reason {}",
@@ -125,29 +104,6 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
         }
         final ICEPResult result = CEPResult.buildFromMap(tupleResultMap);
         return result;
-    }
-
-    private boolean isBugMatchesSearch(final BzBug bug, final BzSearch search) {
-        for (final String key : search.getParameterkeys()) {
-            if (bug.getKeys().contains(key)) {
-                final List<String> values = search.getValues(key);
-                final Boolean accept = search.isAccept(key);
-                final String parameter = bug.getParameter(key);
-                if (accept != values.contains(parameter)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private boolean isBugMatchesAtLeastOneFilter(final BzBug bug) {
-        for (final BzSearch search : searchs) {
-            if (isBugMatchesSearch(bug, search)) {
-                return true;
-            }
-        }
-        return searchs.isEmpty();
     }
 
     public void setBugZillaConfiguration(IBZConfigurationDAO bugZillaConfiguration) {
@@ -169,7 +125,7 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
 
     @Override
     public String getFormula() {
-        return "new " + this.getClass().getName() + "(\"" + convert(searchs) + "\")";
+        return "new " + this.getClass().getName() + "(\"" + SearchUtils.convert(searchs) + "\")";
     }
 
 }

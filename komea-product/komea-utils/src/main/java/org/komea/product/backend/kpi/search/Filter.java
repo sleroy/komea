@@ -1,28 +1,27 @@
-package org.komea.product.plugins.bugzilla.model;
+package org.komea.product.backend.kpi.search;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.komea.product.plugins.bugzilla.service.StringUtils;
 
-public class BzFilter {
+public class Filter {
 
-    public static BzFilter create(final String parameterKey, final boolean accept, final String... values) {
-        return new BzFilter(parameterKey, accept, Arrays.asList(values));
+    public static Filter create(final String parameterKey, final boolean accept, final String... values) {
+        return new Filter(parameterKey, accept, Arrays.asList(values));
     }
 
-    public static BzFilter fromString(String filterString) {
+    public static Filter fromString(String filterString) {
         final boolean accept = !filterString.contains("!=");
         final String[] split = filterString.split(accept ? "=" : "!=");
         final String key = split[0].trim();
-        return new BzFilter(key, accept, StringUtils.splitAndTrimWithoutEmpty(split[1], ","));
+        return new Filter(key, accept, StringUtils.splitAndTrimWithoutEmpty(split[1], ","));
     }
 
     final String parameterKey;
     final boolean accept;
     final List<String> values;
 
-    public BzFilter(final String parameterKey, final boolean accept, final List<String> values) {
+    public Filter(final String parameterKey, final boolean accept, final List<String> values) {
         this.parameterKey = parameterKey;
         this.accept = accept;
         this.values = values;
@@ -42,7 +41,7 @@ public class BzFilter {
 
     @Override
     public String toString() {
-        return "BzFilter{" + "parameterKey=" + parameterKey + ", accept=" + accept + ", values=" + values + '}';
+        return "Filter{" + "parameterKey=" + parameterKey + ", accept=" + accept + ", values=" + values + '}';
     }
 
     public String getString() {

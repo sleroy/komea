@@ -1,6 +1,7 @@
-package org.komea.product.plugins.bugzilla.service;
+package org.komea.product.backend.kpi.search;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public abstract class StringUtils {
@@ -20,5 +21,14 @@ public abstract class StringUtils {
             }
         }
         return result;
+    }
+
+    public static boolean containsIgnoreCase(final Collection<String> values, final String val) {
+        for (final String value : values) {
+            if (value.equalsIgnoreCase(val)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

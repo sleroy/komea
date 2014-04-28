@@ -1,4 +1,4 @@
-package org.komea.product.plugins.bugzilla.model;
+package org.komea.product.backend.kpi.search;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,34 +7,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.komea.product.plugins.bugzilla.service.StringUtils;
 
-public class BzSearch {
+public class Search {
 
-    public static BzSearch create(final BzFilter... filters) {
-        return new BzSearch(Arrays.asList(filters));
+    public static Search create(final Filter... filters) {
+        return new Search(Arrays.asList(filters));
     }
 
-    public static BzSearch fromString(String searchString) {
+    public static Search fromString(String searchString) {
         final List<String> filtersString = StringUtils.splitAndTrimWithoutEmpty(searchString, ";");
-        final List<BzFilter> filters = new ArrayList<BzFilter>(filtersString.size());
+        final List<Filter> filters = new ArrayList<Filter>(filtersString.size());
         for (final String filterString : filtersString) {
-            final BzFilter bzFilter = BzFilter.fromString(filterString);
+            final Filter bzFilter = Filter.fromString(filterString);
             filters.add(bzFilter);
         }
-        return new BzSearch(filters);
+        return new Search(filters);
     }
 
-    private final Map<String, BzFilter> filters;
+    private final Map<String, Filter> filters;
 
-    public BzSearch(final List<BzFilter> filters) {
-        this.filters = new HashMap<String, BzFilter>(filters.size());
-        for (final BzFilter filter : filters) {
+    public Search(final List<Filter> filters) {
+        this.filters = new HashMap<String, Filter>(filters.size());
+        for (final Filter filter : filters) {
             this.filters.put(filter.getParameterKey(), filter);
         }
     }
 
-    public Collection<BzFilter> getFilters() {
+    public Collection<Filter> getFilters() {
         return filters.values();
     }
 
@@ -43,23 +42,23 @@ public class BzSearch {
     }
 
     public Boolean isAccept(final String parameterKey) {
-        final BzFilter filter = filters.get(parameterKey);
+        final Filter filter = filters.get(parameterKey);
         return filter == null ? null : filter.isAccept();
     }
 
     public List<String> getValues(final String parameterKey) {
-        final BzFilter filter = filters.get(parameterKey);
+        final Filter filter = filters.get(parameterKey);
         return filter == null ? null : filter.getValues();
     }
 
     @Override
     public String toString() {
-        return "BzSearch{" + "filters=" + filters + '}';
+        return "Search{" + "filters=" + filters + '}';
     }
 
     public String getString() {
         final StringBuilder stringBuilder = new StringBuilder();
-        for (final BzFilter filter : filters.values()) {
+        for (final Filter filter : filters.values()) {
             stringBuilder.append(filter.getString()).append(";");
         }
         if (!filters.isEmpty()) {
