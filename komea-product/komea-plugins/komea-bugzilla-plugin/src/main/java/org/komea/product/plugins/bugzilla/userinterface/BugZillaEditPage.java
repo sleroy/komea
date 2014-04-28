@@ -41,6 +41,6 @@ public final class BugZillaEditPage extends LayoutPage {
         @Override
     public String getTitle() {
 
-        return getString("BugZillaEditPage.title");
+        return getString("bugzillapage.main.title");
     }
 }

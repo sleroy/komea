@@ -33,12 +33,12 @@ import org.komea.product.wicket.statistics.StatPage;
  */
 @MountAdminPages({
     @MountPage(mount = "/departments", page = DepartmentPage.class),
-    @MountPage(mount = "/departmentedit", page = DepartmentEditPage.class),
+    @MountPage(mount = "/saveDepartment", page = DepartmentEditPage.class),
     @MountPage(mount = "/teams", page = TeamPage.class),
-    @MountPage(mount = "/teamedit", page = TeamEditPage.class),
+    @MountPage(mount = "/saveTeam", page = TeamEditPage.class),
     @MountPage(mount = "/kpis", page = KpiPage.class),
-    @MountPage(mount = "/kpiedit", page = KpiEditPage.class),
-    @MountPage(mount = "/projectedit", page = ProjectEditPage.class),
+    @MountPage(mount = "/saveKpi", page = KpiEditPage.class),
+    @MountPage(mount = "/saveProject", page = ProjectEditPage.class),
     @MountPage(mount = "/projects", page = ProjectPage.class),
     @MountPage(mount = "/settings", page = SettingsPage.class),
     @MountPage(mount = "/viewlog", page = ConsolePage.class),
@@ -47,13 +47,13 @@ import org.komea.product.wicket.statistics.StatPage;
     @MountPage(mount = "/cronpage", page = CronPage.class),
     @MountPage(mount = "/accessdenied", page = UnauthorizedPage.class),
     @MountPage(mount = "/users", page = PersonPage.class),
-    @MountPage(mount = "/useradd", page = PersonAddPage.class),
+    @MountPage(mount = "/saveMember", page = PersonAddPage.class),
     @MountPage(mount = "/events", page = EventsPage.class),
     @MountPage(mount = "/plugins", page = ProviderPage.class),
     @MountPage(mount = "/customers", page = CustomerPage.class),
-    @MountPage(mount = "/customerEdit", page = CustomerEditPage.class),
+    @MountPage(mount = "/saveCustomer", page = CustomerEditPage.class),
     @MountPage(mount = "/alerts", page = AlertPage.class),
-    @MountPage(mount = "/alertsEdit", page = AlertEditPage.class)
+    @MountPage(mount = "/saveAlert", page = AlertEditPage.class)
 })
 public class AdministrationWebSite {
     //
