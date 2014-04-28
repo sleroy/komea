@@ -37,37 +37,48 @@ public abstract class SelectDialog extends AbstractFormDialog<String> {
 
     protected final DialogButton btnSelect = new DialogButton("Select"); // with a customized text
 
-    public SelectDialog(final String id, final String title, final IGenericService service) {
+    public SelectDialog(final String id, final String title, final IGenericService service,
+            final Integer itemSelectionne) {
 
-        this(id, title, service.selectAll(), null);
+        this(id, title, service.selectAll(), null, itemSelectionne);
     }
 
     public SelectDialog(
             final String id,
             final String title,
             final IGenericService service,
-            final IChoiceRenderer<IHasKey> rendener) {
+            final IChoiceRenderer<IHasKey> rendener,
+            final Integer itemSelectionne) {
 
-        this(id, title, service.selectAll(), rendener);
+        this(id, title, service.selectAll(), rendener, itemSelectionne);
     }
 
-    public SelectDialog(final String id, final String title, final List<IHasKey> objectList) {
+    public SelectDialog(final String id, final String title, final List<IHasKey> objectList, final Integer itemSelectionne) {
 
-        this(id, title, objectList, null);
+        this(id, title, objectList, null, itemSelectionne);
     }
 
     public SelectDialog(
             final String id,
             final String title,
             final List<IHasKey> objectList,
-            final IChoiceRenderer<IHasKey> _rendener) {
+            final IChoiceRenderer<IHasKey> _rendener,
+            final Integer itemSelectionne) {
 
         super(id, title, true);
         this.form = new Form<String>("form");
         list = objectList;
         IChoiceRenderer<IHasKey> rendener = _rendener;
         if (!list.isEmpty()) {
-            selectedItem = list.get(0);
+
+            for (IHasKey iHasKey : list) {
+                if (iHasKey.getId().equals(itemSelectionne)) {
+                    selectedItem = iHasKey;
+                }
+            }
+            if (selectedItem == null) {
+                selectedItem = list.get(0);
+            }
         }
         if (rendener == null) {
             rendener = new IChoiceRenderer<IHasKey>() {

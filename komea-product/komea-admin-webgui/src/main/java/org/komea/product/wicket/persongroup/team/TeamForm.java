@@ -168,7 +168,7 @@ public class TeamForm extends Form<PersonGroup> {
 
     public void initSelectDepartment() {
         List<IHasKey> allDepartmentsPG = (List<IHasKey>) (List<?>) prService.getAllDepartmentsPG();
-        final SelectDialog dialogPersonGroup = new SelectDialog("dialogParent", getString("teampage.save.form.field.popup.title.department"), allDepartmentsPG) {
+        final SelectDialog dialogPersonGroup = new SelectDialog("dialogParent", getString("teampage.save.form.field.popup.title.department"), allDepartmentsPG,personGroup.getIdPersonGroupParent()) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
