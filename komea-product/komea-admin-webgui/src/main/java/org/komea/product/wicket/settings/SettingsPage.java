@@ -57,4 +57,8 @@ public class SettingsPage extends LayoutPage
     
         service = _service;
     }
+       @Override
+    public String getTitle() {
+        return getString("administration.title.settings");
+    }
 }

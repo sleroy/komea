@@ -106,6 +106,9 @@ public class CronPage extends LayoutPage
                         .withListData(cronService.getCronTasks()).build();
         add(dataTable);
     }
-    
+       @Override
+    public String getTitle() {
+        return getString("administration.title.crons");
+    }
     
 }
