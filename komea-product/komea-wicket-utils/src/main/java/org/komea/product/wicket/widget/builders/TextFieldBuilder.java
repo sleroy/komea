@@ -99,7 +99,7 @@ public class TextFieldBuilder<T>
     
         final UrlTextField urlTextField =
                 new UrlTextField(_wicketID, new PropertyModel<String>(_bugServer, _propertyModel));
-        
+        urlTextField.setConvertEmptyInputStringToNull(false);
         return new TextFieldBuilder<T>(urlTextField);
     }
     

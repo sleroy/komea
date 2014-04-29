@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:wicket="http://wicket.apache.org">
+    <head>
+        <meta charset="utf-8"></meta>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+        <meta content="Komea administration site" name="description"></meta>
+        <meta content="Komea" name="author"></meta>
+        <title>Komea Administration</title>
+        <link rel="stylesheet" href="../../../../../../../main/webapp/static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
+        <link rel="stylesheet" href="../../../../../../../main/webapp/static/css/style.css" type="text/css"></link>
+        <link rel="stylesheet" type="text/css" href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="glyphicon cicon-user"></span> Manage Population of developers inside Komea
+                </div>
+                <div class="panel-body">
+                    <div class="container">
+                        <!--  begin here -->
+                        <wicket:extend>
+                            <div class="alert alert-danger" wicket:id="feedback"></div>
+                            <form class="form" wicket:id="form" role="form">
+
+                                <legend wicket:id="legend" ></legend>
+                                <div class="alert alert-success" wicket:id="success">
+                                    <label>Preferences has been saved!</label>
+                                </div>
+                                <div class="alert alert-warning" wicket:id="errors">
+                                    <label>Preferences has been saved but some properties could not be updated</label>
+                                    <ul>
+                                        <li>error message</li>
+                                    </ul>
+                                </div>
+
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="global.save.form.field.label.serverloc"></wicket:message></label>
+                                        <div class="col-md-6">
+                                            <input id="ldapUrl" name="ldapUrl" type="url" wicket:message="placeholder:global.save.form.field.placeholder.serverloc"  class="form-control" required="required" wicket:id="ldapUrl" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="global.save.form.field.label.loginr"></wicket:message></label>
+                                        <div class="col-md-6">
+                                            <input id="ldapLogin" name="ldapLogin" type="text" wicket:message="placeholder:global.save.form.field.placeholder.login" class="form-control" required="required" wicket:id="ldapLogin" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="global.save.form.field.label.password"></wicket:message></label>
+                                        <div class="col-md-6">
+                                            <input id="ldapPassword" name="ldapPassword" type="text" wicket:message="placeholder:global.save.form.field.placeholder.password"  class="form-control" required="required" wicket:id="ldapPassword" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="ldap.save.form.field.label.base"></wicket:message></label>
+                                        <div class="col-md-6">
+                                            <input id="ldapBase" name="ldapBase" type="text" wicket:message="placeholder:ldap.save.form.field.palceholder.base"  required="required" class="form-control" wicket:id="ldapBase" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="ldap.save.form.field.label.aut"></wicket:message></label>
+                                        <div class="col-md-6">
+                                            <select id="LdapAuthTypeEnum" name="LdapAuthTypeEnumn"  class="form-control" wicket:id="LdapAuthTypeEnum"></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <button id="addedit" name="addedit" class="btn btn-primary" wicket:id="submit"><wicket:message key="global.button.update"></wicket:message></button>
+                                            <!--<button id="cancel" name="cancel" class="btn btn-primary" wicket:id="cancel"><wicket:message key="global.button.cancel"></wicket:message></button>-->
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+
+
+                        </wicket:extend>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="tocea-footer">
+            <p>&copy; Komea.org</p>
+        </footer>
+    </body>
+</html>
+

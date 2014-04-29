@@ -126,20 +126,18 @@ public class DialogFactory {
          });
          AjaxButton ajaxButton = new AjaxButton(data.getIdBtnDel()) {
             
-//            @Override
-//            protected void onError(AjaxRequestTarget target, Form<?> form) {
-//
-//
-//                for (final IHasKey person : data.getChoiceEntityList()) {
-//                    data.getCurrentEntityList().remove(person);
-//                }
-//                for (CustomUpdater cupdater : data.getUpdaters()) {
-//                    cupdater.update();
-//                    target.add(cupdater.getComposant());
-//                }
-//                target.add(data.getListEntite());
-//
-//            }
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                for (final IHasKey person : data.getChoiceEntityList()) {
+                    data.getCurrentEntityList().remove(person);
+                }
+                for (CustomUpdater cupdater : data.getUpdaters()) {
+                    cupdater.update();
+                    target.add(cupdater.getComposant());
+                }
+                target.add(data.getListEntite());
+
+            }
             
             
             @Override
@@ -156,7 +154,7 @@ public class DialogFactory {
                 target.add(data.getListEntite());
             }
         };
-        ajaxButton.setDefaultFormProcessing(false);
+//        ajaxButton.setDefaultFormProcessing(false);
        
         
         data.getPage().add(ajaxButton);
