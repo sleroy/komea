@@ -1,0 +1,56 @@
+// For integrations test
+
+
+
+sourceSets {
+    integrationTest {
+        java.srcDir  'src/integTest/java'
+        resources.srcDir  'src/integTest/resources'
+    }
+}
+
+// Setup dependencies for integration testing
+dependencies {
+    integrationTestCompile sourceSets.main.output
+    integrationTestCompile sourceSets.test.output
+    integrationTestCompile configurations.testCompile
+    integrationTestRuntime configurations.testRuntime
+}
+
+// Define integration test task
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+// Make sure 'check' task calls integration test
+check.dependsOn integrationTest
+
+allprojects {
+    apply plugin: 'java'
+    //     Disable the test report for the individual test task
+    test {
+        reports.html.enabled = false
+    }
+    
+    integrationTest {
+        reports.html.enabled = false
+    }
+}
+
+task integrationTestReport(type: TestReport, dependsOn: integrationTest) {
+    destinationDir = file("${buildDir}/reports/integration-tests")
+    reportOn integrationTest.binResultsDir
+}
+
+integrationTest.mustRunAfter test
+integrationTest.finalizedBy integrationTestReport
+
+task testReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports/allTests")
+    // Include the results from the `test` task in all subprojects
+    reportOn test, integrationTest.binResultsDir
+    
+}
+
+check.dependsOn testReport

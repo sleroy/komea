@@ -59,16 +59,30 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
     apply plugin: "project-report"
-    //    apply plugin: "jacoco"
+    apply plugin: "jacoco"
     
-    apply from: "$rootDir/jacoco-aggregator.gradle"
+    // apply from: "$rootDir/jacoco-aggregator.gradle"
+    
+    repositories.mavenCentral()
     
     
     compileJava {
         sourceCompatibility = 1.6
         targetCompatibility = 1.6
     }
-   
+    
+    // ajout du dossier src/integTest pour les test d'intégrations
+    sourceSets {
+        integtest {
+            java {
+                compileClasspath += main.output
+                runtimeClasspath += main.output
+                srcDir 'src/integTest/java'
+            }
+            resources { srcDir 'src/integtest/resources' }
+        }
+    }
+    
     
     int year = Calendar.getInstance().get(Calendar.YEAR)
     int week = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)
@@ -96,6 +110,8 @@ allprojects {
     }
     
     
+    // utiliser -PisDebug=true pour compiler avec les informations de debud.
+    // utile pour jacoco
     if (isDebug) {
         tasks.withType(Compile) {
             options.debug = true
@@ -105,17 +121,87 @@ allprojects {
         tasks.withType(Compile) { options.debug = false }
     }
     
-    sourceSets {
-        main {
-            java { srcDir "src/main/java" }
-            resources { srcDir "src/main/resources" }
+    
+    
+    
+    jacocoTestReport {
+        group = "Reporting"
+        reports {
+            xml.enabled = true // coveralls plugin depends on xml format report
+            html.enabled = true
         }
-        test {
-            java {  srcDir "src/test/java"  }
-            resources {  srcDir "src/test/resources"  }
+        additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+    }
+    
+    test {
+        jacoco {
+            append = true
+            destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
         }
     }
-    repositories {        mavenCentral() }
+    
+    task integrationTest(type: Test, dependsOn: integtestClasses) {
+        testClassesDir = sourceSets.integtest.output.classesDir
+        classpath = sourceSets.integtest.runtimeClasspath
+        
+        jacoco {
+            append = true
+            destinationFile = file("$buildDir/jacoco/jacocoIntegTest.exec")
+        }
+    }
+    
+    configurations { integtestCompile.extendsFrom testCompile }
+    check.dependsOn integrationTest
+    
+    
+    task mergedData(type: JacocoMerge, dependsOn: check) {
+        // can pass in any task set up for Jacoco
+        // def files = []
+        if (test.jacoco.destinationFile.exists()) {
+            if (integrationTest.jacoco.destinationFile.exists()) {
+                executionData test, integrationTest
+            } else {
+                executionData test
+            }
+        } else   {
+            if (integrationTest.jacoco.destinationFile.exists()) {
+                executionData integrationTest
+            }
+        }
+        executionData files()
+        //println "==== for project $project.name : integrationTest"
+        //executionData check//test, integrationTest
+        destinationFile = file("$buildDir/tmp/jacocoMerged.exec")
+    }
+    
+    mergedData.dependsOn jacocoTestReport
+    
+    task jacocoMergedReport(type: JacocoReport, dependsOn: mergedData) {
+        // can include one or more execution files
+        executionData file("$buildDir/tmp/jacocoMerged.exec")
+        
+        sourceSets project.sourceSets.main
+        
+    }
+    
+    sonarRunner {
+        sonarProperties {
+            property "sonar.junit.reportsPath", test.reports.junitXml.destination
+            property "sonar.jacoco.reportPath", "$buildDir/jacoco/jacocoTest.exec"
+            property "sonar.jacoco.itReportPath", "$buildDir/jacoco/jacocoIntegTest.exec"
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     dependencies { testCompile tests_frameworks }
     
@@ -156,14 +242,8 @@ allprojects {
     
     dependencies { testRuntime "org.slf4j:slf4j-log4j12:1.7.6" }
     
-
-    // coverage test with sonar and jacoco
-    sonarRunner {
-        sonarProperties {
-          property "sonar.jacoco.reportPath", "$buildDir/tmp/jacoco.exec"
-//          property "sonar.jacoco.itReportPath", "$buildDir/jacoco/jacocoIntegTest.exec"
-        }
-      }
+    
+    
 }
 
 /**

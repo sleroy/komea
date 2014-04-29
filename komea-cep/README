@@ -1,0 +1,15 @@
+taks gradle :
+
+test: execute les tests unitaires
+integrationTest : execute les tests d'integrations
+check : execute les tests unitaites et tests d'integrations
+jacocoTestsReport : lance jacoco. 
+					créé les fichier data de jacoco buid/jacoco/jacocoTest.exec et jacoco/jacocoIntegTest.exec pour chaque projet
+					génere un rapport html pour chaque projet mais que pour les tests unitaires	
+jergedData : dépend de jacocoTestsReport pour la générarion des fichiers data de jacoco
+					crée un nouveau fichier buid/tmp/jacocoMerged.exe	
+jacocoMergedReport : dépend de mergedData
+					crée un rapport html de couverture de tests unitaires et integrations par projets
+sonarRunner : execute une analyser sonar (couverture de code avec Jacoco si jacocoTestsReport executé précédements)
+
+options : isDebuf=true utile pour jacoco en local et obligatoire pour sonar si on veut les tests d'executions.
