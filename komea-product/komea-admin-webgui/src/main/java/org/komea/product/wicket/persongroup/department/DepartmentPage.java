@@ -54,7 +54,11 @@ public final class DepartmentPage extends LayoutPage {
             @Override
             public Integer getNumberdisplay(PersonGroup type) {
                 List<PersonGroup> children = personGroupService.getChildren(type.getId());
-                return Integer.valueOf(children.size());
+                int result = 0;
+                if (children != null) {
+                    result = children.size();
+                }
+                return Integer.valueOf(result);
             }
         };
         CountColumn<PersonGroup> countUsers = new CountColumn<PersonGroup>() {
@@ -62,7 +66,11 @@ public final class DepartmentPage extends LayoutPage {
             @Override
             public Integer getNumberdisplay(PersonGroup type) {
                 List<Person> personsOfPersonGroup = membersService.getPersonsOfPersonGroupRecursively(type.getId());
-                return Integer.valueOf(personsOfPersonGroup.size());
+                int result = 0;
+                if (personsOfPersonGroup != null) {
+                    result = personsOfPersonGroup.size();
+                }
+                return Integer.valueOf(result);
             }
         };
         CountColumn<PersonGroup> countProjects = new CountColumn<PersonGroup>() {
@@ -70,7 +78,11 @@ public final class DepartmentPage extends LayoutPage {
             @Override
             public Integer getNumberdisplay(PersonGroup type) {
                 List<Project> projectsOfPersonGroup = projectService.getProjectsOfPersonGroupRecursively(type.getId());
-                return Integer.valueOf(projectsOfPersonGroup.size());
+                int result = 0;
+                if (projectsOfPersonGroup != null) {
+                    result = projectsOfPersonGroup.size();
+                }
+                return Integer.valueOf(result);
             }
         };
         // table
