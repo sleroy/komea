@@ -6,10 +6,14 @@ package org.komea.product.plugins.repository.model;
 
 
 
+import java.io.Serializable;
+
+
+
 /**
  * @author sleroy
  */
-public class ScmExecutionStatus
+public class ScmExecutionStatus implements Serializable
 {
     
     

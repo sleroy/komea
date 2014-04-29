@@ -9,10 +9,13 @@ package org.komea.product.backend.service.kpi;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.database.dao.MeasureDao;
+import org.komea.product.database.model.Kpi;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyInt;
+
+import static org.mockito.Mockito.verify;
 
 
 
@@ -36,7 +39,11 @@ public class HistoryPurgePerValuesActionTest
     public void testPurgeHistory() throws Exception {
     
     
-        assertTrue("Not yet implemented.", false);
+        final Kpi kpi = new Kpi();
+        final HistoryPurgePerDaysAction historyPurgePerDaysAction =
+                new HistoryPurgePerDaysAction(measureDAO, kpi);
+        historyPurgePerDaysAction.purgeHistory();
+        verify(measureDAO).deleteByPrimaryKey(anyInt());
     }
     
 }

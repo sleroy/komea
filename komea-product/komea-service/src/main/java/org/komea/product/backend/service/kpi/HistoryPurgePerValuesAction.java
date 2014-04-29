@@ -20,15 +20,18 @@ public class HistoryPurgePerValuesAction implements IHistoryPurgeAction
 {
     
     
-    private final MeasureDao measureDAO;
     private final Kpi        kpi;
+    private final MeasureDao measureDAO;
     
     
     
     /**
      * Constructor for HistoryPurgePerValuesAction.
-     * @param _measureDAO MeasureDao
-     * @param _kpi Kpi
+     * 
+     * @param _measureDAO
+     *            MeasureDao
+     * @param _kpi
+     *            Kpi
      */
     public HistoryPurgePerValuesAction(final MeasureDao _measureDAO, final Kpi _kpi) {
     
@@ -42,6 +45,7 @@ public class HistoryPurgePerValuesAction implements IHistoryPurgeAction
     
     /**
      * Method purgeHistory.
+     * 
      * @return int
      * @see org.komea.product.backend.api.IHistoryPurgeAction#purgeHistory()
      */

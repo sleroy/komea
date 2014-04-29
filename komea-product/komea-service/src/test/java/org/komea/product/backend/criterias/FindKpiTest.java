@@ -6,12 +6,21 @@ package org.komea.product.backend.criterias;
 
 
 
+import java.util.Collections;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.database.dao.KpiDao;
-import org.mockito.InjectMocks;
+import org.komea.product.database.model.Kpi;
+import org.komea.product.database.model.KpiCriteria;
+import org.komea.product.service.dto.KpiKey;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 
@@ -23,7 +32,6 @@ public class FindKpiTest
 {
     
     
-    @InjectMocks
     private FindKpi findKpi;
     
     
@@ -39,8 +47,12 @@ public class FindKpiTest
     public final void testFind() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        final Kpi kpi = new Kpi();
+        when(kpiDao.selectByCriteriaWithBLOBs(Matchers.any(KpiCriteria.class))).thenReturn(
+                Collections.singletonList(kpi));
+        final FindKpi findKpi = new FindKpiOrFail(KpiKey.ofKpiName("KPI"), kpiDao);
+        findKpi.find();
+        verify(kpiDao, times(1)).selectByCriteriaWithBLOBs(Matchers.any(KpiCriteria.class));
     }
     
 }
