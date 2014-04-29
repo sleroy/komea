@@ -30,9 +30,7 @@ public class EntitiesController {
     @ResponseBody
     public List<BaseEntityDto> getEntities(@RequestBody
             final EntityType _entityType) {
-        LOGGER.debug("call rest method /entities/type/ with body: " + _entityType);
         List<? extends IEntity> entities = entityService.getEntitiesByEntityType(_entityType);
-        LOGGER.debug("return entities: " + entities);
         return BaseEntityDto.convertEntities(entities);
 
     }
