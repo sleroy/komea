@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.api.exceptions.EntityNotFoundException;
-import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.enums.EntityType;
@@ -105,25 +104,18 @@ public final class EntityService implements IEntityService {
     public List<? extends IEntity> getEntitiesByEntityType(final EntityType _entityType) {
 
         Validate.notNull(_entityType);
-        IGenericService<? extends IEntity, ?, ?> service = null;
+
         switch (_entityType) {
             case PERSON:
-                service = personService;
-                break;
+                return personService.selectAll();
             case DEPARTMENT:
+                return personGroupService.getAllDepartmentsPG();
             case TEAM:
-                service = personGroupService;
-                break;
+                return personGroupService.getAllTeamsPG();
             case PROJECT:
-                service = projectService;
-                break;
-            default:
-                break;
+                return projectService.selectAll();
         }
-        if (service == null) {
-            return Collections.emptyList();
-        }
-        return service.selectAll();
+        return Collections.emptyList();
     }
 
     /**
