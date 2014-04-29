@@ -44,9 +44,11 @@ public class DynamicQueryCacheServiceTest
     public final void testAddCacheOnDynamicQuery() throws Exception {
     
     
+        dynamicQueryCacheService.init();
         final IDynamicDataQuery dynamicQuery =
                 dynamicQueryCacheService.addCacheOnDynamicQuery("query",
                         mock(IDynamicDataQuery.class));
+        
         assertTrue(dynamicQuery instanceof CachedDynamicQuery);
         
     }
@@ -59,6 +61,7 @@ public class DynamicQueryCacheServiceTest
     public final void testQueryCacheService() throws Exception {
     
     
+        dynamicQueryCacheService.init();
         // Cache should be empty
         assertTrue(dynamicQueryCacheService.getCache().size() == 0);
     }

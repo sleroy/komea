@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:wicket="http://wicket.apache.org">
+<head>
+<meta charset="utf-8"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+<meta content="Komea administration site" name="description"></meta>
+<meta content="Komea" name="author"></meta>
+<title>Komea Administration</title>
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
+<link rel="stylesheet" href="/static/css/style.css" type="text/css"></link>
+<link rel="stylesheet" type="text/css" href="/static/js/ui/themes/base/jquery-ui.css" />
+</head>
+<body>
+	<wicket:extend>
+		<div class="container">
+			<div class="container">
+				<div class="row">
+					<div class="span12">
+						<table class="table table-condensed table-hover table-striped table-bordered table-condensed">
+							<thead>
+								<tr>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr wicket:id="adminactions">
+									<td><b><p wicket:id="title"></p></b>
+										<button type="button" class="btn btn-sm btn-success" wicket:id="adminaction">Apply the action</button></td>
+								</tr>
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</wicket:extend>
+	<footer class="tocea-footer">
+	<p>&copy; Komea.org</p>
+	<script src="/static/js/ui/jquery.js"></script> <script src="/static/bootstrap/js/bootstrap.min.js"></script> </footer>
+</body>
+</html>

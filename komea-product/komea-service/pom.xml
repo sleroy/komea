@@ -46,7 +46,7 @@
 			<artifactId>jodd-bean</artifactId>
 			<version>3.5</version>
 		</dependency>
-		
+
 
 
 	</dependencies>

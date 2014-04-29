@@ -35,15 +35,18 @@
 			<ul wicket:id="personalpanel" class="nav navbar-nav navbar-right">
 			</ul>
 			<wicket:fragment wicket:id="signin">
-				<li class="dropdown"><a class="dropdown-toggle" href="p/login" data-toggle="dropdown"><wicket:message key="home.singin">Sign In </wicket:message><strong class="caret"></strong></a></li>
+				<li class="dropdown"><a class="dropdown-toggle" href="p/login" data-toggle="dropdown"><wicket:message key="home.singin">Sign In </wicket:message><strong
+						class="caret"></strong></a></li>
 			</wicket:fragment>
 			<wicket:fragment wicket:id="personal">
-				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i><wicket:message key="home.welcome">Welcome, User</wicket:message> <b
-						class="caret"></b></a>
+				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>
+					<wicket:message key="home.welcome">Welcome, User</wicket:message> <b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="https://github.org/sleroy/komea"><i class="glyphicon glyphicon-envelope"></i><wicket:message key="home.support">Contact Support</wicket:message></a></li>
+						<li><a href="https://github.org/sleroy/komea"><i class="glyphicon glyphicon-envelope"></i>
+							<wicket:message key="home.support">Contact Support</wicket:message></a></li>
 						<li class="divider"></li>
-						<li><a href="j_spring_security_logout"><i class="glyphicon glyphicon-off"></i><wicket:message key="home.logout">Logout</wicket:message></a></li>
+						<li><a href="j_spring_security_logout"><i class="glyphicon glyphicon-off"></i>
+							<wicket:message key="home.logout">Logout</wicket:message></a></li>
 					</ul></li>
 			</wicket:fragment>
 		</div>
@@ -51,7 +54,7 @@
 	</nav> </header>
 	<ol class="breadcrumb">
 		<li wicket:id="bread"><a href="p" wicket:id="blink"><span wicket:id="text"></span></a></li>
-		<li wicket:id="breadactive" class="active"><span wicket:id="text"></span></li>
+		<li class="active"><a href="#" wicket:id="breadactive"><span wicket:id="text"></span></a></li>
 	</ol>
 
 	<div class="container-full">
@@ -62,7 +65,8 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon cicon-office "> </span><wicket:message key="home.company">Company</wicket:message></a>
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon cicon-office "> </span>
+								<wicket:message key="home.company">Company</wicket:message></a>
 							</h4>
 						</div>
 						<div id="collapseOne" class="panel-collapse collapse in">
@@ -90,7 +94,8 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><span class="glyphicon glyphicon-stats"> </span><wicket:message key="home.kpis">KPIs</wicket:message></a>
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><span class="glyphicon glyphicon-stats"> </span>
+								<wicket:message key="home.kpis">KPIs</wicket:message></a>
 							</h4>
 						</div>
 						<div id="collapseTwo" class="panel-collapse collapse">
@@ -109,7 +114,8 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"><span class="glyphicon glyphicon-cog"> </span><wicket:message key="home.administration">Administration</wicket:message></a>
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"><span class="glyphicon glyphicon-cog"> </span>
+								<wicket:message key="home.administration">Administration</wicket:message></a>
 							</h4>
 						</div>
 						<div id="collapseThree" class="panel-collapse collapse">
@@ -156,13 +162,10 @@
 	<footer class="tocea-footer">
 	<p>&copy; Komea.org</p>
 	<!--		<script src="static/js/jquery.js"></script>
-		<script src="static/js/ui/jquery.js"></script>--> 
-        <script src="static/bootstrap/js/bootstrap.js" type="text/javascript"></script>
-        <script src="static/js/codepress/codepress.js" type="text/javascript"></script>
-        <script src="static/tablesorter/js/jquery.tablesorter.js"></script>
-        <script src="static/tablesorter/js/jquery.tablesorter.widgets.js"></script>
-        <script src="static/tablesorter/addons/pager/jquery.tablesorter.pager.js"></script>
-        <script id="js">
+		<script src="static/js/ui/jquery.js"></script>--> <script src="static/bootstrap/js/bootstrap.js" type="text/javascript"></script> <script
+		src="static/js/codepress/codepress.js" type="text/javascript"></script> <script src="static/tablesorter/js/jquery.tablesorter.js"></script> <script
+		src="static/tablesorter/js/jquery.tablesorter.widgets.js"></script> <script src="static/tablesorter/addons/pager/jquery.tablesorter.pager.js"></script> <script
+		id="js">
 			$(function() {
 
 				$

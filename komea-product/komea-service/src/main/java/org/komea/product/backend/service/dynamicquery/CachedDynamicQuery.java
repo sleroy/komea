@@ -92,10 +92,10 @@ public final class CachedDynamicQuery implements IDynamicDataQuery
     
         LOGGER.debug("Cache state {} values and {}", dynamicQueryCacheService.getCache().size());
         ICEPResult result = dynamicQueryCacheService.getCache().getIfPresent(queryKey);
-        if (result == null) {
+        if (null == result) {
             result = dynamicDataQuery.getResult();
         }
-        if (result == null) { return CEPResult.buildFromMap(new TupleResultMap()); }
+        if (null == result) { return CEPResult.buildFromMap(new TupleResultMap()); }
         LOGGER.debug("Cache state after retrieving {} values and {}", dynamicQueryCacheService
                 .getCache().size());
         return result;

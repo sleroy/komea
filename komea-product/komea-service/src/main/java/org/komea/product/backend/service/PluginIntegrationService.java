@@ -167,9 +167,10 @@ public class PluginIntegrationService implements IPluginIntegrationService, Bean
     final ProviderDto _providerDTO) {
     
     
+        final ProviderCriteria criteria = new ProviderCriteria();
+        
         final Provider provider = _providerDTO.getProvider();
         LOGGER.info("Registering provider {}", provider.getName());
-        final ProviderCriteria criteria = new ProviderCriteria();
         criteria.createCriteria().andUrlEqualTo(provider.getUrl());
         if (existSelectedProvider(criteria)) {
             LOGGER.warn("Replacing existing provider with new definition (}",

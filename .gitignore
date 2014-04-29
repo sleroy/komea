@@ -30,3 +30,4 @@ tools/org.komea.events.dsl.ui/bin/org/komea/events/dsl/ui/contentassist/.EventDs
 .gradle
 .gradletasknamecache
 build
+.pmd

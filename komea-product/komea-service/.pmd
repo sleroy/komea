@@ -349,7 +349,7 @@
         </rule>
         <rule>
             <name>UnnecessaryParentheses</name>
-            <ruleset>Controversial</ruleset>
+            <ruleset>Unnecessary</ruleset>
         </rule>
         <rule>
             <name>UseConcurrentHashMap</name>

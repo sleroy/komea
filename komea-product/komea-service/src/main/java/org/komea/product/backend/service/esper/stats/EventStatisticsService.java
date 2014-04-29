@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 
 import org.komea.eventory.api.engine.ICEPQuery;
+import org.komea.eventory.api.formula.ITupleResultMap;
 import org.komea.eventory.cache.CacheConfigurationBuilder;
 import org.komea.eventory.formula.tuple.EventCountFormula;
 import org.komea.eventory.formula.tuple.GroupByFormula;
@@ -237,11 +238,12 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
         final ICEPQuery statsBreakdownStatement = cepEngine.getQuery(STATS_BREAKDOWN_24H);
-        return statsBreakdownStatement.getResult().asMap().asPojoRows(new String[]
-            {
-                    "provider",
-                    "type",
-                    "value" }, EventTypeStatistic.class);
+        return ((ITupleResultMap) statsBreakdownStatement.getResult().asMap()).asPojoRows(
+                new String[]
+                    {
+                            "provider",
+                            "type",
+                            "value" }, EventTypeStatistic.class);
     }
     
     

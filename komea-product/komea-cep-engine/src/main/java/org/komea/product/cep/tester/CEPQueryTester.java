@@ -26,6 +26,7 @@ import org.komea.eventory.api.engine.ICEPEngine;
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.formula.ICEPResult;
+import org.komea.eventory.api.formula.IResultMap;
 import org.komea.eventory.api.formula.ITupleResultMap;
 import org.komea.eventory.api.formula.tuple.ITuple;
 import org.komea.eventory.bridge.MemoryBridge;
@@ -88,7 +89,8 @@ public class CEPQueryTester
         public void evaluate(final ICEPQuery _epStatement) {
         
         
-            final List<ITuple> listMapResult = _epStatement.getResult().asMap().asTupleRows();
+            final List<ITuple> listMapResult =
+                    ((ITupleResultMap) _epStatement.getResult().asMap()).asTupleRows();
             Collections.sort(listMapResult);
             LOGGER.debug("Sorted table : {}", listMapResult.toString());
             checkIfisEquals(array.length, listMapResult.size(), "Expected same number of rows");
@@ -634,7 +636,8 @@ public class CEPQueryTester
         if (!cepQuery.getResult().isMap() && hasMapPredicates()) { throw new ClassCastException(
                 "We were expecting a map but the query returned a single value"); }
         if (cepQuery.getResult().isMap()) {
-            final List<ITuple> tuples = cepQuery.getResult().asMap().asTupleRows();
+            final List<ITuple> tuples =
+                    ((ITupleResultMap) cepQuery.getResult().asMap()).asTupleRows();
             Validate.notNull(tuples);
             int i = 0;
             for (final ITuple value : tuples) {
@@ -760,7 +763,7 @@ public class CEPQueryTester
         if (result.isSingleValue()) {
             LOGGER.info("RESULT : Received unique value : \n\t{}", result.asType());
         } else if (result.isMap()) {
-            final ITupleResultMap<Object> asMap = result.asMap();
+            final IResultMap<ITuple, Object> asMap = result.asMap();
             LOGGER.info("RESULT : Received a table : {}", result);
             for (final Entry<ITuple, Object> entry : asMap.getTable().entrySet()) {
                 LOGGER.info("RESULT : {} = {}", entry.getKey(), entry.getValue());

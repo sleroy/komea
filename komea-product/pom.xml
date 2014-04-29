@@ -20,7 +20,7 @@
 	<description>This project contain the core projects of komea to build the war application. </description>
 
 	<properties>
-		<eventory.version>1.0.27</eventory.version>
+		<eventory.version>1.0.38</eventory.version>
 	</properties>
 
 
