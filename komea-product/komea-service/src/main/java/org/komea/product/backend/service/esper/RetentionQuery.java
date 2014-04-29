@@ -29,7 +29,48 @@ public class RetentionQuery extends CEPQueryImplementation
 {
     
     
+    /**
+     * Builds cache retention policy
+     * 
+     * @param _retentionTime
+     *            the retention time
+     * @return the cache configuration
+     */
+    public static ICacheConfiguration buildCacheRetention(final RetentionPeriod _retentionTime) {
+    
+    
+        switch (_retentionTime) {
+            case NEVER:
+                return CacheConfigurationBuilder.noConfiguration();
+            case ONE_HOUR:
+                return CacheConfigurationBuilder.expirationTimeCache(1, TimeUnit.HOURS);
+            case ONE_MONTH:
+                return CacheConfigurationBuilder.expirationTimeCache(30, TimeUnit.DAYS);
+            case ONE_WEEK:
+                return CacheConfigurationBuilder.expirationTimeCache(7, TimeUnit.DAYS);
+            case ONE_YEAR:
+                return CacheConfigurationBuilder.expirationTimeCache(365, TimeUnit.DAYS);
+            case ONE_DAY:
+                return CacheConfigurationBuilder.expirationTimeCache(1, TimeUnit.DAYS);
+            case SIX_HOURS:
+                return CacheConfigurationBuilder.expirationTimeCache(6, TimeUnit.HOURS);
+            case THREE_DAYS:
+                return CacheConfigurationBuilder.expirationTimeCache(3, TimeUnit.DAYS);
+            case THREE_MONTHS:
+                return CacheConfigurationBuilder.expirationTimeCache(90, TimeUnit.DAYS);
+            case TWO_WEEKS:
+                return CacheConfigurationBuilder.expirationTimeCache(15, TimeUnit.DAYS);
+            default:
+                return CacheConfigurationBuilder.expirationTimeCache(1, TimeUnit.DAYS);
+        }
+        
+    }
+    
+    
+    
     private final RetentionPeriod retentionTime;
+    
+    
     private final Severity        severity;
     
     
@@ -49,44 +90,6 @@ public class RetentionQuery extends CEPQueryImplementation
         addFilterDefinition(FilterDefinition.create()
                 .setCacheConfiguration(buildCacheRetention(retentionTime))
                 .setFilter(new EventSeverityFilter(severity)));
-        
-    }
-    
-    
-    /**
-     * Builds cache retention policy
-     * 
-     * @param _retentionTime
-     *            the retention time
-     * @return the cache configuration
-     */
-    private ICacheConfiguration buildCacheRetention(final RetentionPeriod _retentionTime) {
-    
-    
-        switch (_retentionTime) {
-            case NEVER:
-                return CacheConfigurationBuilder.noConfiguration();
-            case ONE_HOUR:
-                return CacheConfigurationBuilder.expirationTimeCache(1, TimeUnit.HOURS);
-            case ONE_MONTH:
-                return CacheConfigurationBuilder.expirationTimeCache(30, TimeUnit.DAYS);
-            case ONE_WEEK:
-                return CacheConfigurationBuilder.expirationTimeCache(1, TimeUnit.HOURS);
-            case ONE_YEAR:
-                return CacheConfigurationBuilder.expirationTimeCache(365, TimeUnit.DAYS);
-            case ONE_DAY:
-                return CacheConfigurationBuilder.expirationTimeCache(1, TimeUnit.DAYS);
-            case SIX_HOURS:
-                return CacheConfigurationBuilder.expirationTimeCache(6, TimeUnit.HOURS);
-            case THREE_DAYS:
-                return CacheConfigurationBuilder.expirationTimeCache(3, TimeUnit.DAYS);
-            case THREE_MONTHS:
-                return CacheConfigurationBuilder.expirationTimeCache(90, TimeUnit.DAYS);
-            case TWO_WEEKS:
-                return CacheConfigurationBuilder.expirationTimeCache(15, TimeUnit.DAYS);
-            default:
-                return CacheConfigurationBuilder.expirationTimeCache(1, TimeUnit.DAYS);
-        }
         
     }
 }

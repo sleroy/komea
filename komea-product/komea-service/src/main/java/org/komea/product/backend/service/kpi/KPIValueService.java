@@ -330,7 +330,6 @@ public final class KPIValueService implements IKpiValueService {
         criteria.createCriteria().andKpiKeyEqualTo(key);
         return criteria;
     }
-
     @Override
     public void setSum(final List<Measure> measures, final Measure result) {
         double sum = 0;

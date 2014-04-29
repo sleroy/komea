@@ -173,6 +173,34 @@ public class EventViewerService implements IEventViewerService, PostSettingRegis
     }
     
     
+    /**
+     * Returns the retention time.
+     * 
+     * @param _severity
+     *            the severity
+     * @return the retention period.
+     */
+    public RetentionPeriod getRetentionTime(final Severity _severity) {
+    
+    
+        switch (_severity) {
+            case BLOCKER:
+                return interrogateServerSettingsBase(RETENTION_EVENT_BLOCKER);
+            case CRITICAL:
+                return interrogateServerSettingsBase(RETENTION_EVENT_CRITICAL);
+            case MAJOR:
+                return interrogateServerSettingsBase(RETENTION_EVENT_MAJOR);
+            case MINOR:
+                return interrogateServerSettingsBase(RETENTION_EVENT_MINOR);
+            case INFO:
+                return interrogateServerSettingsBase(RETENTION_EVENT_INFO);
+            default:
+                return null;
+        }
+        
+    }
+    
+    
     public ISettingService getSettingService() {
     
     
@@ -212,34 +240,6 @@ public class EventViewerService implements IEventViewerService, PostSettingRegis
     
     
         settingService = _settingService;
-    }
-    
-    
-    /**
-     * Returns the retention time.
-     * 
-     * @param _severity
-     *            the severity
-     * @return the retention period.
-     */
-    private RetentionPeriod getRetentionTime(final Severity _severity) {
-    
-    
-        switch (_severity) {
-            case BLOCKER:
-                return interrogateServerSettingsBase(RETENTION_EVENT_BLOCKER);
-            case CRITICAL:
-                return interrogateServerSettingsBase(RETENTION_EVENT_CRITICAL);
-            case MAJOR:
-                return interrogateServerSettingsBase(RETENTION_EVENT_MAJOR);
-            case MINOR:
-                return interrogateServerSettingsBase(RETENTION_EVENT_MINOR);
-            case INFO:
-                return interrogateServerSettingsBase(RETENTION_EVENT_INFO);
-            default:
-                return null;
-        }
-        
     }
     
     

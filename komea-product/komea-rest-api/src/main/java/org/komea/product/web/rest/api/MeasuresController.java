@@ -1,11 +1,16 @@
+
 package org.komea.product.web.rest.api;
+
+
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.validation.Valid;
+
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.history.IHistoryService;
@@ -29,33 +34,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
+
 @Controller
-@RequestMapping(value = "/measures")
-public class MeasuresController {
-
+@RequestMapping(
+    value = "/measures")
+public class MeasuresController
+{
+    
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(MeasuresController.class);
-
+    
     @Autowired
-    private IEntityService entityService;
-
+    private IEntityService      entityService;
+    
     @Autowired
-    private IKPIService kpiService;
-
+    private IKPIService         kpiService;
+    
     @Autowired
-    private IKpiValueService kpiValueService;
-
+    private IKpiValueService    kpiValueService;
+    
     @Autowired
-    private IHistoryService measureService;
-
-    @RequestMapping(method = RequestMethod.POST, value = "/find")
+    private IHistoryService     measureService;
+    
+    
+    
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/find")
     @ResponseBody
     public MeasuresDto findMeasures(@RequestBody
-            final SearchMeasuresDto _searchMeasuresDto) {
+    final SearchMeasuresDto _searchMeasuresDto) {
+    
+    
         LOGGER.debug("call rest method /measures/find/ with body: " + _searchMeasuresDto);
         final ExtendedEntityType extendedEntityType = _searchMeasuresDto.getExtendedEntityType();
         final EntityType entityType = extendedEntityType.getEntityType();
-        final List<Kpi> simpleKpis = kpiService.getKpis(
-                extendedEntityType.getKpiType(), _searchMeasuresDto.getKpiKeys());
+        final List<Kpi> simpleKpis =
+                kpiService
+                        .getKpis(extendedEntityType.getKpiType(), _searchMeasuresDto.getKpiKeys());
         LOGGER.debug("simpleKpis: " + simpleKpis);
         final List<Kpi> kpis;
         if (extendedEntityType.isForGroups()) {
@@ -64,22 +81,26 @@ public class MeasuresController {
         } else {
             kpis = simpleKpis;
         }
-        final List<BaseEntityDto> simpleEntities = entityService.getBaseEntityDTOS(
-                extendedEntityType.getEntityType(), _searchMeasuresDto.getEntityKeys());
+        final List<BaseEntityDto> simpleEntities =
+                entityService.getBaseEntityDTOS(extendedEntityType.getEntityType(),
+                        _searchMeasuresDto.getEntityKeys());
         LOGGER.debug("simpleEntities: " + simpleEntities);
         final List<Measure> measures = new ArrayList<Measure>();
         if (extendedEntityType.isForGroups()) {
             for (final BaseEntityDto simpleEntity : simpleEntities) {
                 LOGGER.debug("simpleEntity: " + simpleEntity);
                 final Integer entityId = simpleEntity.getId();
-                final List<? extends IEntity> entities = entityService.getSubEntities(entityId, extendedEntityType);
+                final List<? extends IEntity> entities =
+                        entityService.getSubEntities(entityId, extendedEntityType);
                 if (entities != null && !entities.isEmpty()) {
-                    List<BaseEntityDto> subEntities = BaseEntityDto.convertEntities(entities);
+                    final List<BaseEntityDto> subEntities = BaseEntityDto.convertEntities(entities);
                     LOGGER.debug("subEntities: " + subEntities);
-                    final List<Measure> realTimeMeasures = kpiValueService.getRealTimeMeasuresFromEntities(
-                            simpleKpis, subEntities);
+                    final List<Measure> realTimeMeasures =
+                            kpiValueService
+                                    .getRealTimeMeasuresFromEntities(simpleKpis, subEntities);
                     LOGGER.info("realTimeMeasures: " + realTimeMeasures);
-                    final Map<Integer, List<Measure>> measuresByKpi = new HashMap<Integer, List<Measure>>(realTimeMeasures.size());
+                    final Map<Integer, List<Measure>> measuresByKpi =
+                            new HashMap<Integer, List<Measure>>(realTimeMeasures.size());
                     for (final Measure realTimeMeasure : realTimeMeasures) {
                         final Integer idKpi = realTimeMeasure.getIdKpi();
                         if (!measuresByKpi.containsKey(idKpi)) {
@@ -107,29 +128,37 @@ public class MeasuresController {
                 }
             }
         } else {
-            measures.addAll(kpiValueService.getRealTimeMeasuresFromEntities(simpleKpis, simpleEntities));
+            measures.addAll(kpiValueService.getRealTimeMeasuresFromEntities(simpleKpis,
+                    simpleEntities));
         }
-        //todo
+        // todo
         measures.addAll(measureService.getMeasures(simpleKpis, simpleEntities, _searchMeasuresDto));
         return new MeasuresDto(extendedEntityType, simpleEntities, kpis, measures);
     }
-
+    
+    
     /**
      * This method get the last measure for a kpi type on an entity
-     *
-     * @param _kpiKey the kpi type
-     * @param _entityKey the entity
+     * 
+     * @param _kpiKey
+     *            the kpi type
+     * @param _entityKey
+     *            the entity
      * @return the last measure value
      * @throws KPINotFoundException
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/last", produces = "application/json")
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/last",
+        produces = "application/json")
     @ResponseBody
     public Double lastMeasuresForEntity(@Valid
-            @RequestBody
-            final KpiKey _kpiKey) throws KPINotFoundException {
-
+    @RequestBody
+    final KpiKey _kpiKey) throws KPINotFoundException {
+    
+    
         final double value = kpiService.getSingleValue(_kpiKey).doubleValue();
         return value;
     }
-
+    
 }
