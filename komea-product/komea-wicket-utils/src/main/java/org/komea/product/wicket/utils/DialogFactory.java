@@ -115,32 +115,31 @@ public class DialogFactory {
         data.getPage().add(dialogPersonGroup);
         dialogPersonGroup.setFilter(data.getCurrentEntityList());
         dialogPersonGroup.addCustomFilter(data.getFilters());
-        data.getPage().add(new AjaxLinkLayout<Object>(data.getIdBtnAdd(), null) {
+         data.getPage().add(new AjaxButton(data.getIdBtnAdd()){
 
             @Override
-            public void onClick(final AjaxRequestTarget art) {
-
-                dialogPersonGroup.open(art);
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                  dialogPersonGroup.open(target);
             }
-        });
-
-        data.getPage().add(new AjaxButton(data.getIdBtnDel()) {
-      
-            @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
-                
-                System.out.println("----------------------------------------------------------");
-                System.out.println("  on error code ");
-                System.out.println("----------------------------------------------------------");
-                for (final IHasKey person : data.getChoiceEntityList()) {
-                    data.getCurrentEntityList().remove(person);
-                }
-                for (CustomUpdater cupdater : data.getUpdaters()) {
-                    cupdater.update();
-                    target.add(cupdater.getComposant());
-                }
-                target.add(data.getListEntite());
-            }
+            
+             
+         });
+         AjaxButton ajaxButton = new AjaxButton(data.getIdBtnDel()) {
+            
+//            @Override
+//            protected void onError(AjaxRequestTarget target, Form<?> form) {
+//
+//
+//                for (final IHasKey person : data.getChoiceEntityList()) {
+//                    data.getCurrentEntityList().remove(person);
+//                }
+//                for (CustomUpdater cupdater : data.getUpdaters()) {
+//                    cupdater.update();
+//                    target.add(cupdater.getComposant());
+//                }
+//                target.add(data.getListEntite());
+//
+//            }
             
             
             @Override
@@ -156,7 +155,11 @@ public class DialogFactory {
 
                 target.add(data.getListEntite());
             }
-        });
+        };
+        ajaxButton.setDefaultFormProcessing(false);
+       
+        
+        data.getPage().add(ajaxButton);
 
     }
 
