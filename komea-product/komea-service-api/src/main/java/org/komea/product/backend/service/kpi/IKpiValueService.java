@@ -7,6 +7,7 @@ import java.util.List;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.BaseEntityDto;
+import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.KpiKey;
@@ -46,7 +47,7 @@ public interface IKpiValueService {
      * @param entities
      * @return
      */
-    public List<Measure> getRealTimeMeasuresFromEntities(
+    public List<MeasureDto> getRealTimeMeasuresFromEntities(
             List<Kpi> kpis,
             List<BaseEntityDto> entities);
 

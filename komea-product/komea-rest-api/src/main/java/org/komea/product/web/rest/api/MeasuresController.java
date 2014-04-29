@@ -13,6 +13,7 @@ import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.IKpiValueService;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.BaseEntityDto;
+import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.dto.MeasuresDto;
 import org.komea.product.database.dto.SearchMeasuresDto;
 import org.komea.product.database.enums.EntityType;
@@ -57,7 +58,7 @@ public class MeasuresController {
         final List<BaseEntityDto> entities = entityService.getBaseEntityDTOS(
                 entityType, _searchMeasuresDto.getEntityKeys());
         final List<Kpi> kpis = Lists.newArrayList();
-        final List<Measure> measures = Lists.newArrayList();
+        final List<MeasureDto> measures = Lists.newArrayList();
         if (extendedEntityType.isForGroups()) {
             fillKpiGroupsMeasures(kpis, measures, _searchMeasuresDto, entities);
         } else {
@@ -71,19 +72,22 @@ public class MeasuresController {
         return new MeasuresDto(extendedEntityType, entities, kpis, measures);
     }
 
-    private void fillKpiGroupsMeasures(final List<Kpi> kpis, final List<Measure> measures,
+    private void fillKpiGroupsMeasures(final List<Kpi> kpis, final List<MeasureDto> measures,
             final SearchMeasuresDto _searchMeasuresDto, final List<BaseEntityDto> entities) {
         final ExtendedEntityType extendedEntityType = _searchMeasuresDto.getExtendedEntityType();
         final EntityType entityType = extendedEntityType.getEntityType();
         final List<String> groupKpiKeys = _searchMeasuresDto.getKpiKeys();
         final List<Kpi> baseKpis = kpiService.getBaseKpisOfGroupKpiKeys(groupKpiKeys);
         kpis.addAll(kpiService.getKpisOfGroupKpiKeys(groupKpiKeys, baseKpis));
+        final List<BaseEntityDto> allSubEntitiesDto = Lists.newArrayList();
         for (final BaseEntityDto simpleEntity : entities) {
             final Integer entityId = simpleEntity.getId();
-            final List<? extends IEntity> subEntities = entityService.getSubEntities(entityId, extendedEntityType);
+            final List<? extends IEntity> subEntities
+                    = entityService.getSubEntities(entityId, extendedEntityType);
             if (subEntities != null && !subEntities.isEmpty()) {
-                List<BaseEntityDto> subEntitiesDto = BaseEntityDto.convertEntities(subEntities);
-                final List<Measure> realTimeMeasures = kpiValueService.getRealTimeMeasuresFromEntities(
+                final List<BaseEntityDto> subEntitiesDto = BaseEntityDto.convertEntities(subEntities);
+                allSubEntitiesDto.addAll(subEntitiesDto);
+                final List<MeasureDto> realTimeMeasures = kpiValueService.getRealTimeMeasuresFromEntities(
                         baseKpis, subEntitiesDto);
                 final Map<Integer, List<Measure>> measuresByKpi
                         = new HashMap<Integer, List<Measure>>(realTimeMeasures.size());
@@ -99,10 +103,11 @@ public class MeasuresController {
                     if (kpiMeasures == null || kpiMeasures.isEmpty()) {
                         continue;
                     }
-                    final Measure measure = new Measure();
+                    final MeasureDto measure = new MeasureDto();
                     measure.setIdKpi(kpi.getId());
                     measure.setDate(new Date());
                     measure.setEntity(entityType, entityId);
+                    measure.setKpiKey(kpi.getKpiKey());
                     if (Kpi.isAverage(kpi.getKpiKey())) {
                         kpiValueService.setAverage(kpiMeasures, measure);
                     } else {
@@ -112,8 +117,11 @@ public class MeasuresController {
                 }
             }
         }
-        // TODO
-        //measures.addAll(measureService.getMeasures(simpleKpis, entities, _searchMeasuresDto));
+        final List<MeasureDto> allSubMeasures = measureService.getMeasures(
+                baseKpis, allSubEntitiesDto, _searchMeasuresDto);
+        final List<MeasureDto> history = Lists.newArrayList();
+        // TODO calculate history from allSubMeasures
+        measures.addAll(history);
     }
 
     /**

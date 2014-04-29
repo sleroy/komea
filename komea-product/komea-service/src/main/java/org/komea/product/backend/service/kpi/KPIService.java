@@ -22,6 +22,7 @@ import org.komea.product.database.dao.KpiAlertTypeDao;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.BaseEntityDto;
+import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.HasSuccessFactorKpiCriteria;
@@ -262,7 +263,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      * @see org.komea.product.backend.service.kpi.IKPIService#getRealTimeMeasuresFromEntities(java.util.List, java.util.List)
      */
     @Override
-    public List<Measure> getRealTimeMeasuresFromEntities(
+    public List<MeasureDto> getRealTimeMeasuresFromEntities(
             final List<Kpi> _kpis,
             final List<BaseEntityDto> _entities) {
 

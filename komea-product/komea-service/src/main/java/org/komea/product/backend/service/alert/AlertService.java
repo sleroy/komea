@@ -10,6 +10,7 @@ import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.KpiAlertDto;
+import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.dto.SearchKpiAlertsDto;
 import org.komea.product.database.dto.SearchMeasuresDto;
 import org.komea.product.database.enums.EntityType;
@@ -83,7 +84,7 @@ public final class AlertService implements IAlertService {
         final SearchMeasuresDto searchMeasuresDto
                 = createMeasureFilterOnKpiKeys(_searchAlert, extendedEntityType, kpiKeys);
 
-        final List<Measure> measuresOfKpi
+        final List<MeasureDto> measuresOfKpi
                 = measureService.getMeasures(idKpiMap.values(), entities, searchMeasuresDto);
         final List<KpiAlertDto> filteredActivatedAlerts = Lists.newArrayList();
         for (final KpiAlertType alertType : alertTypesOfKpiAndSeverity) {

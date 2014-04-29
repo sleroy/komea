@@ -15,13 +15,13 @@ public class MeasuresDto implements Serializable {
     private ExtendedEntityType extendedEntityType;
     private List<BaseEntityDto> entities = new ArrayList<BaseEntityDto>();
     private List<Kpi> kpis = new ArrayList<Kpi>();
-    private List<Measure> measures = new ArrayList<Measure>();
+    private List<MeasureDto> measures = new ArrayList<MeasureDto>();
 
     public MeasuresDto() {
     }
 
     public MeasuresDto(ExtendedEntityType entityType, List<BaseEntityDto> entities,
-            List<Kpi> kpis, List<Measure> measures) {
+            List<Kpi> kpis, List<MeasureDto> measures) {
         this.extendedEntityType = entityType;
         this.entities = entities;
         this.kpis = kpis;
@@ -52,11 +52,11 @@ public class MeasuresDto implements Serializable {
         this.kpis = kpis;
     }
 
-    public List<Measure> getMeasures() {
+    public List<MeasureDto> getMeasures() {
         return measures;
     }
 
-    public void setMeasures(List<Measure> measures) {
+    public void setMeasures(List<MeasureDto> measures) {
         this.measures = measures;
     }
 
@@ -89,7 +89,7 @@ public class MeasuresDto implements Serializable {
             series.add(Pair.create(kpi.getName(), numbers));
             for (final BaseEntityDto entity : entities) {
                 Number number = null;
-                for (final Measure measure : measures) {
+                for (final MeasureDto measure : measures) {
                     if (measureMatches(kpi, entity, measure)) {
                         number = measure.getValue();
                         break;
@@ -118,8 +118,8 @@ public class MeasuresDto implements Serializable {
         return null;
     }
 
-    private boolean measureMatches(final Kpi kpi, final BaseEntityDto entity, final Measure measure) {
-        return kpi.getId().equals(measure.getIdKpi()) && entity.getId().equals(getId(measure));
+    private boolean measureMatches(final Kpi kpi, final BaseEntityDto entity, final MeasureDto measure) {
+        return kpi.getKpiKey().equals(measure.getKey()) && entity.getId().equals(getId(measure));
     }
 
     public List<Pair<String, List<Number>>> getKpiSeries() {
@@ -129,7 +129,7 @@ public class MeasuresDto implements Serializable {
             series.add(Pair.create(entity.getDisplayName(), numbers));
             for (final Kpi kpi : kpis) {
                 Number number = null;
-                for (final Measure measure : measures) {
+                for (final MeasureDto measure : measures) {
                     if (measureMatches(kpi, entity, measure)) {
                         number = measure.getValue();
                         break;

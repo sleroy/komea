@@ -3,6 +3,7 @@ package org.komea.product.backend.service.kpi;
 import java.util.List;
 import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.database.dto.BaseEntityDto;
+import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
@@ -38,7 +39,7 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria> 
      * @param _entities the entities.
      * @return the list of measures.
      */
-    public List<Measure> getRealTimeMeasuresFromEntities(
+    public List<MeasureDto> getRealTimeMeasuresFromEntities(
             List<Kpi> _kpis,
             List<BaseEntityDto> _entities);
 

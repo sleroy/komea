@@ -19,6 +19,7 @@ import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.BaseEntityDto;
+import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.Measure;
@@ -169,17 +170,17 @@ public final class KPIValueService implements IKpiValueService {
      * @see org.komea.product.cep.tester.IKpiValueService#getRealTimeMeasuresFromEntities(java.util.List, java.util.List)
      */
     @Override
-    public List<Measure> getRealTimeMeasuresFromEntities(
+    public List<MeasureDto> getRealTimeMeasuresFromEntities(
             final List<Kpi> kpis,
             final List<BaseEntityDto> entities) {
 
-        final List<Measure> measures = new ArrayList<Measure>(kpis.size() * entities.size());
+        final List<MeasureDto> measures = new ArrayList<MeasureDto>(kpis.size() * entities.size());
         for (final BaseEntityDto entity : entities) {
             for (final Kpi kpi : kpis) {
                 try {
                     final Measure measure = getRealTimeMeasure(KpiKey.ofKpiAndEntity(kpi, entity));
                     if (measure.isValid()) {
-                        measures.add(measure);
+                        measures.add(new MeasureDto(measure, kpi.getKpiKey()));
                     }
                 } catch (final Exception ex) {
                     LOGGER.error(
