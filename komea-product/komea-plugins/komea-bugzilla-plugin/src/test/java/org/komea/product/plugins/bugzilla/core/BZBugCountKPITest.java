@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.eventory.api.formula.ICEPResult;
-import org.komea.eventory.api.formula.ITupleResultMap;
+import org.komea.eventory.api.formula.IResultMap;
 import org.komea.eventory.api.formula.tuple.ITuple;
 import org.komea.product.backend.kpi.search.Filter;
 import org.komea.product.backend.kpi.search.Search;
@@ -203,7 +203,7 @@ public class BZBugCountKPITest {
     private Map<Integer, Integer> getResults(final BZBugCountKPI kpi) {
 
         final ICEPResult result = kpi.getResult();
-        final ITupleResultMap<Integer> map = result.asMap();
+        final IResultMap<ITuple, Integer> map = result.asMap();
         final Map<ITuple, Integer> table = map.getTable();
         final Map<Integer, Integer> results = new HashMap<Integer, Integer>(table.size());
         for (final ITuple tuple : table.keySet()) {

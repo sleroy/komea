@@ -5,6 +5,7 @@ package org.komea.product.wicket.kpiviewer;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,9 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.api.IMeasureHistoryService;
+import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.history.HistoryKey;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.IKpiValueService;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
@@ -23,6 +26,7 @@ import org.komea.product.service.dto.EntityKey;
 import org.komea.product.wicket.LayoutPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.wickedcharts.highcharts.options.Axis;
 import com.googlecode.wickedcharts.highcharts.options.AxisType;
@@ -59,10 +63,11 @@ public class KpiViewerPage extends LayoutPage
         /**
          * @param _id
          */
-        private ChartsList(final String _id) {
+        public ChartsList(final String _id, final List<Kpi> _kpis) {
         
         
-            super(_id);
+            super(_id, _kpis);
+            
         }
         
         
@@ -73,7 +78,7 @@ public class KpiViewerPage extends LayoutPage
             final ChartOptions chartOptions = new ChartOptions();
             
             chartOptions.setSpacingRight(20);
-            chartOptions.setType(SeriesType.SPLINE);
+            chartOptions.setType(SeriesType.BAR);
             chartOptions.setBorderRadius(1);
             chartOptions.setBorderColor(Color.GRAY);
             
@@ -101,7 +106,7 @@ public class KpiViewerPage extends LayoutPage
                     "return '<b>'+ this.series.name +'</b><br/>'+Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' alerts';"));
             options.setTooltip(tooltip);
             
-            buildGraphic(options, "chart", _item.getModelObject());
+            _item.add(buildGraphic(options, "chart", _item.getModelObject()));
             
             
         }
@@ -115,8 +120,15 @@ public class KpiViewerPage extends LayoutPage
      * 
      */
     private static final long      serialVersionUID = 825152658028992367L;
+    @Autowired
+    private IEntityService         entityService;
+    
+    @SpringBean
+    private IKPIService            kpiService;
+    
     @SpringBean
     private IKpiValueService       kpiValueService;
+    
     
     @SpringBean
     private IMeasureHistoryService measureHistoryService;
@@ -128,8 +140,8 @@ public class KpiViewerPage extends LayoutPage
     
         super(_parameters);
         
-        final ListView<Kpi> listView = new ChartsList("charts");
-        // listView.setReuseItems(true);
+        final List<Kpi> selectAll = kpiService.selectAll();
+        final ListView<Kpi> listView = new ChartsList("charts", selectAll);
         
         add(listView);
         
@@ -151,7 +163,7 @@ public class KpiViewerPage extends LayoutPage
     }
     
     
-    private void buildGraphic(final Options options, final String _chartID, final Kpi _kpi) {
+    private Chart buildGraphic(final Options options, final String _chartID, final Kpi _kpi) {
     
     
         // Define the data points. All series have a dummy year
@@ -163,14 +175,17 @@ public class KpiViewerPage extends LayoutPage
         
         
         final List<Measure> history = measureHistoryService.getHistory(HistoryKey.of(_kpi));
-        
+        Collections.sort(history, Measure.DATE_MEASURE);
         
         for (final Measure measure : history) {
             
             final EntityKey entityKeyOfMeasure =
                     EntityKey.of(_kpi.getEntityType(), measure.getEntityID());
+            if (entityKeyOfMeasure == null) {
+                continue;
+            }
             List<Coordinate<Long, Integer>> list = series.get(entityKeyOfMeasure);
-            if (series == null) {
+            if (list == null) {
                 series.put(entityKeyOfMeasure, list = new ArrayList<Coordinate<Long, Integer>>());
             }
             
@@ -182,12 +197,13 @@ public class KpiViewerPage extends LayoutPage
             
             final CustomCoordinatesSeries<Long, Integer> oneChartSerie =
                     new CustomCoordinatesSeries<Long, Integer>();
-            oneChartSerie.setName(serieValue.getKey().toString());
+            oneChartSerie.setName(entityService.getEntityOrFail(serieValue.getKey())
+                    .getDisplayName());
             oneChartSerie.setData(serieValue.getValue());
             options.addSeries(oneChartSerie);
         }
         
         
-        add(new Chart(_chartID, options));
+        return new Chart(_chartID, options);
     }
 }

@@ -42,7 +42,7 @@ public class AlertForm extends StatelessForm<KpiAlertType> {
     private final LayoutPage page;
     private final KpiAlertType alert;
     private final NameGeneric nameEntity;
-    private final TextField customerFiel;
+    private final TextField customerField;
     private final IKPIService kpiService;
     private Boolean alertEnabled;
     private final boolean isNew;
@@ -97,9 +97,9 @@ public class AlertForm extends StatelessForm<KpiAlertType> {
             nameEntity.setName(selectByPrimaryKey.getName());
         }
 
-        this.customerFiel = TextFieldBuilder.<String>createRequired("kpi", nameEntity, "name").withTooltip(getString("global.field.tooltip.kpi")).buildTextField();
-        this.customerFiel.setOutputMarkupId(true);
-        add(customerFiel);
+        this.customerField = TextFieldBuilder.<String>createRequired("kpi", nameEntity, "name").withTooltip(getString("global.field.tooltip.kpi")).buildTextField();
+        this.customerField.setOutputMarkupId(true);
+        add(customerField);
 
         initSelectKpi();
 
@@ -151,8 +151,8 @@ public class AlertForm extends StatelessForm<KpiAlertType> {
                     alert.setIdKpi(null);
                     nameEntity.setName("");
                 }
-                customerFiel.clearInput();
-                target.add(customerFiel);
+                customerField.clearInput();
+                target.add(customerField);
             }
 
         };

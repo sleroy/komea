@@ -5,16 +5,19 @@ package org.komea.product.wicket;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
 import javax.servlet.ServletRequest;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -23,6 +26,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.komea.product.backend.utils.KomeaEntry;
 import org.komea.product.wicket.utils.KomeaSecurityContextHolderAwareRequestWrapper;
 import org.komea.product.wicket.widget.RedirectPageLink;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -35,7 +40,10 @@ public abstract class LayoutPage extends WebPage
 {
     
     
-    private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER           = LoggerFactory.getLogger(LayoutPage.class);
+    
+    
+    private static final long   serialVersionUID = 1L;
     
     
     
@@ -56,6 +64,29 @@ public abstract class LayoutPage extends WebPage
             add(new WebMarkupContainer("personalpanel"));
         }
         buildBreadCrumb();
+        setStatelessHint(true);
+        // DEBUG MODE
+        checkStateless();
+        
+    }
+    
+    
+    /**
+     * Check if the page is stateless
+     */
+    public void checkStateless() {
+    
+    
+        if (!isPageStateless()) {
+            final Iterator<Component> iterator = this.iterator();
+            while (iterator.hasNext()) {
+                final Component next = iterator.next();
+                if (!next.isStateless()) {
+                    LOGGER.info("Page {} component {} is not stateless", getPageRelativePath(),
+                            next.getPath());
+                }
+            }
+        }
     }
     
     
@@ -119,7 +150,7 @@ public abstract class LayoutPage extends WebPage
         for (int i = 0, ni = breadPath.size() - 1; i < ni; ++i) {
             notActivePages.add(breadPath.get(i));
         }
-        final Entry<String, Class> activePage = breadPath.get(breadPath.size() - 1);
+        breadPath.get(breadPath.size() - 1);
         
         add(new ListView<Entry<String, Class>>("bread", notActivePages)
         {
@@ -133,6 +164,6 @@ public abstract class LayoutPage extends WebPage
             }
             
         });
-        add(new RedirectPageLink("breadactive", activePage));
+        add(new BookmarkablePageLink<Void>("breadactive", getPageClass()));
     }
 }
