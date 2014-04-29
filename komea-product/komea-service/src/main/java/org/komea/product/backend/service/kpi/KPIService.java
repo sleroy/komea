@@ -164,7 +164,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     }
 
     @Override
-    public List<Kpi> getBaseKpisOfGroupKpiKeys(final EntityType entityType, final List<String> groupKpiKeys) {
+    public List<Kpi> getBaseKpisOfGroupKpiKeys(final List<String> groupKpiKeys) {
         final Set<String> kpiKeys = new HashSet<String>(groupKpiKeys.size());
         for (final String groupKpiKey : groupKpiKeys) {
             kpiKeys.add(Kpi.getBaseKey(groupKpiKey));

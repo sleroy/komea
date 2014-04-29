@@ -1,7 +1,6 @@
 package org.komea.product.web.rest.api;
 
 import com.google.common.collect.Lists;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -77,7 +76,7 @@ public class MeasuresController {
         final ExtendedEntityType extendedEntityType = _searchMeasuresDto.getExtendedEntityType();
         final EntityType entityType = extendedEntityType.getEntityType();
         final List<String> groupKpiKeys = _searchMeasuresDto.getKpiKeys();
-        final List<Kpi> baseKpis = kpiService.getBaseKpisOfGroupKpiKeys(extendedEntityType.getKpiType(), groupKpiKeys);
+        final List<Kpi> baseKpis = kpiService.getBaseKpisOfGroupKpiKeys(groupKpiKeys);
         kpis.addAll(kpiService.getKpisOfGroupKpiKeys(groupKpiKeys, baseKpis));
         for (final BaseEntityDto simpleEntity : entities) {
             final Integer entityId = simpleEntity.getId();
@@ -91,7 +90,7 @@ public class MeasuresController {
                 for (final Measure realTimeMeasure : realTimeMeasures) {
                     final Integer idKpi = realTimeMeasure.getIdKpi();
                     if (!measuresByKpi.containsKey(idKpi)) {
-                        measuresByKpi.put(idKpi, Collections.<Measure>emptyList());
+                        measuresByKpi.put(idKpi, Lists.<Measure>newArrayList());
                     }
                     measuresByKpi.get(idKpi).add(realTimeMeasure);
                 }
