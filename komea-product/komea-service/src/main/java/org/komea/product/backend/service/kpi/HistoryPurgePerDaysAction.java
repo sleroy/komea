@@ -4,22 +4,15 @@ package org.komea.product.backend.service.kpi;
 
 
 import org.joda.time.DateTime;
-import org.komea.product.backend.api.IHistoryPurgeAction;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.model.Kpi;
-import org.komea.product.database.model.MeasureCriteria;
 
 
 
 /**
  */
-public class HistoryPurgePerDaysAction implements IHistoryPurgeAction
+public class HistoryPurgePerDaysAction extends AbstractHistoryPurgePerTimeAction
 {
-    
-    
-    private final Kpi        kpi;
-    private final MeasureDao measureDAO;
-    
     
     
     /**
@@ -33,29 +26,16 @@ public class HistoryPurgePerDaysAction implements IHistoryPurgeAction
     public HistoryPurgePerDaysAction(final MeasureDao _measureDAO, final Kpi _kpi) {
     
     
-        super();
-        measureDAO = _measureDAO;
-        kpi = _kpi;
-        
+        super(_measureDAO, _kpi);
     }
     
     
-    /**
-     * Method purgeHistory.
-     * 
-     * @return int
-     * @see org.komea.product.backend.api.IHistoryPurgeAction#purgeHistory()
-     */
     @Override
-    public int purgeHistory() {
+    protected DateTime getEvictionTime() {
     
     
         final DateTime dateTime = new DateTime();
         dateTime.minusDays(kpi.getEvictionRate());
-        final MeasureCriteria measureCriteria = new MeasureCriteria();
-        
-        measureCriteria.createCriteria().andDateLessThan(dateTime.toDate())
-                .andIdKpiEqualTo(kpi.getId());
-        return measureDAO.deleteByCriteria(measureCriteria);
+        return dateTime;
     }
 }
