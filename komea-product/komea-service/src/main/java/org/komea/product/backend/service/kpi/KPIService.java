@@ -1,7 +1,11 @@
 package org.komea.product.backend.service.kpi;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.api.exceptions.KpiAlreadyExistingException;
@@ -19,6 +23,7 @@ import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.HasSuccessFactorKpiCriteria;
 import org.komea.product.database.model.HasSuccessFactorKpiKey;
 import org.komea.product.database.model.Kpi;
@@ -156,6 +161,35 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
             kpis.addAll(Kpi.getKpisForGroups(kpi));
         }
         return kpis;
+    }
+
+    @Override
+    public List<Kpi> getBaseKpisOfGroupKpiKeys(final EntityType entityType, final List<String> groupKpiKeys) {
+        final Set<String> kpiKeys = new HashSet<String>(groupKpiKeys.size());
+        for (final String groupKpiKey : groupKpiKeys) {
+            kpiKeys.add(Kpi.getBaseKey(groupKpiKey));
+        }
+        return selectByKeys(new ArrayList<String>(kpiKeys));
+    }
+
+    @Override
+    public List<Kpi> getKpisOfGroupKpiKeys(final List<String> groupKpiKeys, final List<Kpi> kpis) {
+        final Map<String, Kpi> kpiByKeys = new HashMap<String, Kpi>(kpis.size());
+        for (final Kpi kpi : kpis) {
+            kpiByKeys.put(kpi.getKpiKey(), kpi);
+        }
+        final List<Kpi> results = new ArrayList<Kpi>(groupKpiKeys.size());
+        for (final String groupKpiKey : groupKpiKeys) {
+            final Kpi kpi = kpiByKeys.get(Kpi.getBaseKey(groupKpiKey));
+            final Kpi groupKpi = Kpi.copy(kpi);
+            if (Kpi.isAverage(groupKpiKey)) {
+                groupKpi.setAverageKpi(!ValueType.PERCENT.equals(groupKpi.getValueType()));
+            } else if (Kpi.isSum(groupKpiKey)) {
+                groupKpi.setSumKpi();
+            }
+            results.add(groupKpi);
+        }
+        return results;
     }
 
     /**

@@ -73,12 +73,6 @@ public interface IPersonService extends IGenericService<Person, Integer, PersonC
     void deletePerson(final Person _person);
 
     /**
-     * @param _loginFromEmail
-     * @return
-     */
-    boolean existLogin(String _loginFromEmail);
-
-    /**
      * Find or create an user based on an email.
      *
      * @param _email the email.

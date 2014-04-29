@@ -90,8 +90,12 @@ public final class EntityService implements IEntityService {
 
         Validate.notNull(_entityKeys);
         Validate.notNull(_entityType);
-        final List<? extends IEntity> entitiesWithKeys
-                = findEntitiesByTypeAndKeys(_entityType, _entityKeys);
+        final List<? extends IEntity> entitiesWithKeys;
+        if (_entityKeys.isEmpty()) {
+            entitiesWithKeys = getEntitiesByEntityType(_entityType);
+        } else {
+            entitiesWithKeys = findEntitiesByTypeAndKeys(_entityType, _entityKeys);
+        }
         return BaseEntityDto.convertEntities(entitiesWithKeys);
 
     }

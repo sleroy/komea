@@ -91,4 +91,8 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria> 
      */
     void saveOrUpdateKpi(Kpi kpi, List<KpiAlertType> alertTypes, List<SuccessFactor> successFactors);
 
+    List<Kpi> getBaseKpisOfGroupKpiKeys(EntityType entityType, List<String> groupKpiKeys);
+
+    List<Kpi> getKpisOfGroupKpiKeys(List<String> groupKpiKeys, List<Kpi> kpis);
+
 }
