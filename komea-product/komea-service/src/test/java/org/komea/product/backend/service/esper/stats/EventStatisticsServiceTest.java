@@ -33,7 +33,7 @@ public class EventStatisticsServiceTest
     /**
      * Tests the query.
      */
-    @Test 
+    @Test
     public void testBuildProviderEventFrequencyQuery() {
     
     
@@ -41,59 +41,67 @@ public class EventStatisticsServiceTest
                 new EventStatisticsService().buildProviderEventFrequencyQuery();
         
         
+        new JenkinsEventFactory();
         CEPQueryTester.newTest().withQuery(buildProviderEventFrequencyQuery)
-                .sendEvent(new JenkinsEventFactory().sendBuildComplete("bla", 12, "truc"), 2)
-                .expectRows(1).hasResults(new Object[][] {
+                .sendEvent(JenkinsEventFactory.sendBuildComplete("bla", 12, "truc"), 2)
+                .expectRows(1).hasResults(new Object[][]
                     {
-                            "jenkins", "build_complete", 2 } }).dump().runTest();
+                        {
+                                "jenkins",
+                                "build_complete",
+                                2 } }).dump().runTest();
     }
     
     
-    @Test 
+    @Test
     public void testELQuery() {
     
     
         Assert.assertEquals(
-                "new org.komea.product.cep.tuples.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).BLOCKER)",
+                "new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).BLOCKER)",
                 new EventStatisticsService().buildELForAlertCriticityKpi(Severity.BLOCKER));
         Assert.assertEquals(
-                "new org.komea.product.cep.tuples.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).CRITICAL)",
+                "new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).CRITICAL)",
                 new EventStatisticsService().buildELForAlertCriticityKpi(Severity.CRITICAL));
         Assert.assertEquals(
-                "new org.komea.product.cep.tuples.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).MAJOR)",
+                "new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).MAJOR)",
                 new EventStatisticsService().buildELForAlertCriticityKpi(Severity.MAJOR));
         Assert.assertEquals(
-                "new org.komea.product.cep.tuples.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).MINOR)",
+                "new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).MINOR)",
                 new EventStatisticsService().buildELForAlertCriticityKpi(Severity.MINOR));
         Assert.assertEquals(
-                "new org.komea.product.cep.tuples.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).INFO)",
+                "new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).INFO)",
                 new EventStatisticsService().buildELForAlertCriticityKpi(Severity.INFO));
         
     }
     
     
-    @Test ()
+    @Test()
     public void testQuerySeverityBlocker() {
     
     
         final CEPQueryTester newTest = CEPQueryTester.newTest();
+        new JenkinsEventFactory();
+        new JenkinsEventFactory();
         newTest.withQuery(new AlertPerSeverityPerDay(Severity.BLOCKER))
-                .sendEvent(new JenkinsEventFactory().sendBuildComplete("bla", 12, "truc"), 3)
-                .sendEvent(new JenkinsEventFactory().sendBuildFailed("bla", 12, "truc"), 2).dump()
+                .sendEvent(JenkinsEventFactory.sendBuildComplete("bla", 12, "truc"), 3)
+                .sendEvent(JenkinsEventFactory.sendBuildFailed("bla", 12, "truc"), 2).dump()
                 .hasSingleResult(2).dump();
         newTest.getMockEventTypes().get("build_failed").setSeverity(Severity.BLOCKER);
         newTest.runTest();
     }
     
     
-    @Test ()
+    @Test()
     public void testQuerySeverityInfo() {
     
     
         final CEPQueryTester newTest = CEPQueryTester.newTest();
+        new JenkinsEventFactory();
+        new JenkinsEventFactory();
         newTest.withQuery(new AlertPerSeverityPerDay(Severity.INFO))
-                .sendEvent(new JenkinsEventFactory().sendBuildComplete("bla", 12, "truc"), 3)
-                .sendEvent(new JenkinsEventFactory().sendBuildFailed("bla", 12, "truc"), 2).dump()
+                .sendEvent(JenkinsEventFactory.sendBuildComplete("bla", 12, "truc"), 3)
+                .sendEvent(JenkinsEventFactory.sendBuildFailed("bla", 12, "truc"), 2).dump()
                 .hasSingleResult(3).dump();
         newTest.getMockEventTypes().get("build_failed").setSeverity(Severity.BLOCKER);
         newTest.runTest();
