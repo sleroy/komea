@@ -6,10 +6,20 @@ package org.komea.product.backend.service.settings;
 
 
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.komea.product.database.dao.SettingDao;
+import org.komea.product.database.model.Setting;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.junit.Assert.assertEquals;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 
@@ -21,20 +31,26 @@ public class SettingProxyTest
 {
     
     
+    private Setting        setting;
+    
+    @Mock
+    private SettingDao     settingDao;
+    
     @Mock
     private SettingService settingService;
     
     
     
-    /**
-     * Test method for {@link org.komea.product.backend.service.settings.SettingProxy#getSetting()}.
-     */
-    @Test
-    public final void testGetSetting() throws Exception {
+    @Before
+    public void before() {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        when(settingService.getSettingDAO()).thenReturn(settingDao);
+        
+        setting = new Setting();
+        setting.setValue("1");
+        setting.setType(Integer.class.getName());
+        when(settingDao.selectByPrimaryKey(Matchers.anyInt())).thenReturn(setting);
     }
     
     
@@ -45,8 +61,8 @@ public class SettingProxyTest
     public final void testGetStringValue() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        final SettingProxy settingProxy = new SettingProxy(settingService, 1);
+        assertEquals("1", settingProxy.getStringValue());
     }
     
     
@@ -57,8 +73,10 @@ public class SettingProxyTest
     public final void testGetValue() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        final SettingProxy settingProxy = new SettingProxy(settingService, 1);
+        assertEquals(Integer.valueOf(1), settingProxy.getValue());
+        
+        
     }
     
     
@@ -69,22 +87,8 @@ public class SettingProxyTest
     public final void testSetStringValue() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
-    }
-    
-    
-    /**
-     * Test method for
-     * {@link org.komea.product.backend.service.settings.SettingProxy#SettingProxy(org.komea.product.backend.service.settings.SettingService, java.lang.Integer)}
-     * .
-     */
-    @Test
-    public final void testSettingProxy() throws Exception {
-    
-    
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        final SettingProxy settingProxy = new SettingProxy(settingService, 1);
+        settingProxy.setStringValue("2");
     }
     
     
@@ -95,8 +99,9 @@ public class SettingProxyTest
     public final void testSetValue() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        final SettingProxy settingProxy = new SettingProxy(settingService, 1);
+        settingProxy.setValue(2);
+        verify(settingService, times(1)).update(setting);
+        
     }
-    
 }

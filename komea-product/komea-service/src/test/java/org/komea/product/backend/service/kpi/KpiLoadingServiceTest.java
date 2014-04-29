@@ -6,32 +6,39 @@ package org.komea.product.backend.service.kpi;
 
 
 
+import java.util.Collections;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
+import org.komea.product.database.model.Kpi;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 
 /**
  * @author sleroy
- *
  */
 @RunWith(MockitoJUnitRunner.class)
 public class KpiLoadingServiceTest
 {
     
     
-    @Mock
-    private IKpiQueryRegisterService kpiRegisterService;
-    
-    
-    @Mock
-    private IKPIService              kpiService;
     @InjectMocks
     private KpiLoadingService        kpiLoadingService;
+    
+    
+    @Mock
+    private IKpiQueryRegisterService kpiRegisterService;
+    @Mock
+    private IKPIService              kpiService;
     
     
     
@@ -42,8 +49,10 @@ public class KpiLoadingServiceTest
     public final void testInitLoadingService() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        final Kpi kpi = mock(Kpi.class);
+        when(kpiService.selectAll()).thenReturn(Collections.singletonList(kpi));
+        kpiLoadingService.initLoadingService();
+        verify(kpiRegisterService, times(1)).createOrUpdateQueryFromKpi(kpi);
+        
     }
-    
 }
