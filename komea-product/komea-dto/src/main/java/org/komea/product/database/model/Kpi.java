@@ -747,31 +747,31 @@ public class Kpi implements IHasKey {
     }
 
     @JsonIgnore
-    public List<Kpi> getKpisForGroups() {
+    public static List<Kpi> getKpisForGroups(final Kpi kpi) {
         final List<Kpi> kpis = new ArrayList<Kpi>(2);
-        if (ValueType.FLOAT.equals(valueType)
-                || ValueType.INT.equals(valueType)) {
-            final Kpi kpiSum = copy();
-            kpiSum.setKpiKey(kpiKey + SUM_KEY);
+        if (ValueType.FLOAT.equals(kpi.getValueType())
+                || ValueType.INT.equals(kpi.getValueType())) {
+            final Kpi kpiSum = copy(kpi);
+            kpiSum.setKpiKey(kpi.getKpiKey() + SUM_KEY);
             kpis.add(kpiSum);
-            final Kpi kpiAverage = copy();
-            kpiAverage.setKpiKey(kpiKey + AVERAGE_KEY);
-            kpiAverage.setName(name + " (average)");
-            kpiAverage.setDescription(description + " (average)");
+            final Kpi kpiAverage = copy(kpi);
+            kpiAverage.setKpiKey(kpi.getKpiKey() + AVERAGE_KEY);
+            kpiAverage.setName(kpi.getName() + " (average)");
+            kpiAverage.setDescription(kpi.getDescription() + " (average)");
             kpis.add(kpiAverage);
-        } else if (ValueType.FLOAT.equals(valueType)) {
-            final Kpi kpiAverage = copy();
-            kpiAverage.setKpiKey(kpiKey + AVERAGE_KEY);
+        } else if (ValueType.FLOAT.equals(kpi.getValueType())) {
+            final Kpi kpiAverage = copy(kpi);
+            kpiAverage.setKpiKey(kpi.getKpiKey() + AVERAGE_KEY);
             kpis.add(kpiAverage);
         }
         return kpis;
     }
 
     @JsonIgnore
-    private Kpi copy() {
-        return new Kpi(id, kpiKey, name, description, valueMin, valueMax,
-                valueDirection, valueType, entityType, entityID, cronExpression,
-                evictionRate, evictionType, objective, providerType, "");
+    private static Kpi copy(final Kpi kpi) {
+        return new Kpi(kpi.getId(), kpi.getKpiKey(), kpi.getName(), kpi.getDescription(), kpi.getValueMin(), kpi.getValueMax(),
+                kpi.getValueDirection(), kpi.getValueType(), kpi.getEntityType(), kpi.getEntityID(), kpi.getCronExpression(),
+                kpi.getEvictionRate(), kpi.getEvictionType(), kpi.getObjective(), kpi.getProviderType(), kpi.getEsperRequest());
     }
 
 }

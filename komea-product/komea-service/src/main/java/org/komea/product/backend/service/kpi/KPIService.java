@@ -153,7 +153,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     public List<Kpi> getKpisForGroups(final List<Kpi> simpleKpis) {
         final List<Kpi> kpis = new ArrayList<Kpi>(simpleKpis.size() * 2);
         for (final Kpi kpi : simpleKpis) {
-            kpis.addAll(kpi.getKpisForGroups());
+            kpis.addAll(Kpi.getKpisForGroups(kpi));
         }
         return kpis;
     }
