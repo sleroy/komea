@@ -585,6 +585,7 @@ public class Kpi implements IHasKey {
      * @param id the value for kom_kpi.id
      * @mbggenerated Thu Mar 06 10:32:30 CET 2014
      */
+    @Override
     public void setId(final Integer id) {
 
         this.id = id;
@@ -770,7 +771,7 @@ public class Kpi implements IHasKey {
     private Kpi copy() {
         return new Kpi(id, kpiKey, name, description, valueMin, valueMax,
                 valueDirection, valueType, entityType, entityID, cronExpression,
-                evictionRate, evictionType, objective, providerType);
+                evictionRate, evictionType, objective, providerType, "");
     }
 
 }
