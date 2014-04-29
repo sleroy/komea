@@ -2,27 +2,23 @@ package org.komea.product.database.enums;
 
 public enum ExtendedEntityType {
 
-    PROJECT(EntityType.PROJECT, EntityType.PROJECT),
-    PERSON(EntityType.PERSON, EntityType.PERSON),
-    TEAM(EntityType.TEAM, EntityType.PERSON),
-    DEPARTMENT(EntityType.DEPARTMENT, EntityType.PERSON),
-    PROJECTS_PERSON(EntityType.PERSON, EntityType.PROJECT),
-    PROJECTS_TEAM(EntityType.TEAM, EntityType.PROJECT),
-    PROJECTS_DEPARTMENT(EntityType.DEPARTMENT, EntityType.PROJECT);
-    private final EntityType kpiType;
-    private final EntityType entityType;
-
-    private ExtendedEntityType(EntityType entityType, EntityType kpiType) {
-        this.entityType = entityType;
-        this.kpiType = kpiType;
-    }
+    PROJECT,
+    PERSON,
+    TEAM,
+    DEPARTMENT,
+    PROJECTS_PERSON,
+    PROJECTS_TEAM,
+    PROJECTS_DEPARTMENT;
 
     public EntityType getEntityType() {
-        return entityType;
+        if (name().contains("_")) {
+            return EntityType.valueOf(name().split("_")[1]);
+        }
+        return EntityType.valueOf(name());
     }
 
     public EntityType getKpiType() {
-        return kpiType;
+        return name().contains("PROJECT") ? EntityType.PROJECT : EntityType.PERSON;
     }
 
     public boolean isForGroups() {
