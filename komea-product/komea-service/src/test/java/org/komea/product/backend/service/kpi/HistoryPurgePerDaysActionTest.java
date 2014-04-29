@@ -12,7 +12,6 @@ import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.MeasureCriteria;
-import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -29,12 +28,8 @@ public class HistoryPurgePerDaysActionTest
 {
     
     
-    @InjectMocks
-    private AbstractHistoryPurgePerTimeAction historyPurgePerDaysAction;
-    
-    
     @Mock
-    private MeasureDao                        measureDAO;
+    private MeasureDao measureDAO;
     
     
     

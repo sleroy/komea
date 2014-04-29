@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.komea.product.backend.service.esper.IEventConversionAndValidationService;
 import org.komea.product.database.dao.HasProjectPersonDao;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dto.PersonDto;
@@ -28,6 +29,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
 
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 
 
 /**
@@ -37,21 +42,32 @@ public class PersonServiceTest
 {
     
     
-    @Mock
-    private IPersonGroupService  groupService;
+    /**
+     * 
+     */
+    private static final String                  EMAIL_EMAIL_ORG = "email@email.org";
     
     @Mock
-    private PersonDao            personDAOmock;
+    private IEventConversionAndValidationService eventConversionAndValidationService;
     
     @Mock
-    private IPersonRoleService   personRoleService;
+    private IPersonGroupService                  groupService;
     
     @Mock
-    private HasProjectPersonDao  projectPersonDaoMock;
+    private PersonDao                            personDAOmock;
+    
     @Mock
-    private IProjectService      projectService;
+    private IPersonRoleService                   personRoleService;
+    
+    @Mock
+    private HasProjectPersonDao                  projectPersonDaoMock;
+    @Mock
+    private IProjectPersonService                projectPersonService;
+    
+    @Mock
+    private IProjectService                      projectService;
     @InjectMocks
-    private final IPersonService service = new PersonService();
+    private final IPersonService                 service         = new PersonService();
     
     
     
@@ -141,6 +157,55 @@ public class PersonServiceTest
                 Matchers.any(PersonCriteria.class));
         
         Mockito.verify(personRoleService, Mockito.times(1)).selectByPrimaryKey(1);
+        
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.backend.service.entities.PersonService#existUserByEmail(java.lang.String)}.
+     */
+    @Test
+    public void testExistUserByEmail() throws Exception {
+    
+    
+        // CAnnot test the criteria :(
+        // TODO:: DBUNIT
+        service.existUserByEmail(EMAIL_EMAIL_ORG);
+        
+        verify(personDAOmock, times(1)).selectByCriteria(Matchers.any(PersonCriteria.class));
+        verify(personDAOmock, never()).insert(Matchers.any(Person.class));
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.backend.service.entities.PersonService#findUserByEmail(java.lang.String)}.
+     */
+    @Test
+    public void testFindUserByEmail() throws Exception {
+    
+    
+        // CAnnot test the criteria :(
+        // TODO:: DBUNIT
+        service.findUserByEmail(EMAIL_EMAIL_ORG);
+        verify(personDAOmock, times(1)).selectByCriteria(Matchers.any(PersonCriteria.class));
+        
+    }
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.backend.service.entities.PersonService#saveOrUpdatePersonAndItsProjects(org.komea.product.database.model.Person, java.util.List)}
+     * .
+     */
+    @Test
+    public void testSaveOrUpdatePersonAndItsProjects() throws Exception {
+    
+    
+        final Person person = new Person();
+        final List<Project> projects = getProjects();
+        service.saveOrUpdatePersonAndItsProjects(person, projects);
+        verify(projectPersonService).updateProjectsOfPerson(projects, person);
+        verify(personDAOmock).insert(person);
         
     }
     
@@ -241,5 +306,4 @@ public class PersonServiceTest
         team.setType(PersonGroupType.TEAM);
         return team;
     }
-    
 }
