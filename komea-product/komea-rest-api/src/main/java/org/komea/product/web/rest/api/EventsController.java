@@ -151,7 +151,6 @@ public class EventsController {
         final List<String> parentEntityKeys = searchEvent.getEntityKeys();
         final ExtendedEntityType extendedEntityType = searchEvent.getEntityType();
         final EntityType kpiType = extendedEntityType.getKpiType();
-        final EntityType entityType = extendedEntityType.getEntityType();
         final List<BaseEntityDto> parentEntities = entityService.getBaseEntityDTOS(
                 extendedEntityType.getEntityType(), parentEntityKeys);
         final List<BaseEntityDto> entities = entityService.getSubEntities(extendedEntityType, parentEntities);
@@ -165,14 +164,11 @@ public class EventsController {
             if (kpiType == null) {
                 return true;
             }
-            final String entityKey = eventService.getEntityKey(entityType, event);
-            LOGGER.info("entityKey : " + entityKey);
+            final String entityKey = eventService.getEntityKey(kpiType, event);
             if (entityKeys.isEmpty() || entityKeys.contains(entityKey)) {
-                LOGGER.info("true");
                 return true;
             }
         }
-        LOGGER.info("false");
         return false;
     }
 }
