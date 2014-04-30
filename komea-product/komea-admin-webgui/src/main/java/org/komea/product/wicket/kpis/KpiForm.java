@@ -158,7 +158,7 @@ public final class KpiForm extends Form<Kpi> {
                 .build());
 
         TextArea<String> formulaField = TextAreaBuilder.<String>create("formula", kpi, "esperRequest").withTooltip("")
-                .withTooltip("kpipage.save.form.field.tooltip.formula")
+                .withTooltip(getString("kpipage.save.form.field.tooltip.formula"))
                 .build();
 
         formulaField.add(new IValidator<String>() {
