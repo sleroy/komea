@@ -6,7 +6,6 @@ package org.komea.eventory.formula.tuple;
 
 
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +17,7 @@ import org.komea.eventory.api.formula.IResultMap;
  * @author sleroy
  * @param <TRes>
  */
-public class ResultMap<TKey, TRes> implements IResultMap<TKey, TRes>
+public class HashMapResultMap<TKey, TRes> implements IResultMap<TKey, TRes>
 
 {
     
@@ -30,7 +29,7 @@ public class ResultMap<TKey, TRes> implements IResultMap<TKey, TRes>
     /**
      * 
      */
-    public ResultMap() {
+    public HashMapResultMap() {
     
     
         super();
@@ -41,7 +40,7 @@ public class ResultMap<TKey, TRes> implements IResultMap<TKey, TRes>
     public TRes get(final Object _key) {
     
     
-        return resultMap.get(new ArrayListTuple(Collections.singletonList(_key)));
+        return resultMap.get(_key);
     }
     
     

@@ -54,13 +54,14 @@ public class ProjectHealthInfluencePerUser implements ICEPQueryImplementation
     
     
         final IEventFilter<?> eventFilter =
-                EventFilterBuilder.create().chain(new OnlyEventFilter()).chain(new WithUserFilter())
+                EventFilterBuilder.create().chain(new OnlyEventFilter())
+                        .chain(new WithUserFilter())
                         .chain(new EventTypeFilter("build_broken", "build_fixed")).build();
         final IFilterDefinition filterDefinition =
                 FilterDefinition
                         .create()
                         .setCacheConfiguration(
-                                CacheConfigurationBuilder.expirationTimeCache(3, TimeUnit.DAYS))
+                                CacheConfigurationBuilder.expirationTimeCache(7, TimeUnit.DAYS))
                         .setFilter(eventFilter).setFilterName("jenkins-brokenbuild-filter");
         
         return Collections.singletonList(filterDefinition);

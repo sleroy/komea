@@ -26,7 +26,8 @@ import org.komea.eventory.utils.ClassUtils;
  * 
  * @author sleroy
  */
-public class TupleResultMap<TRes> extends ResultMap<ITuple, TRes> implements ITupleResultMap<TRes>
+public class TupleResultMap<TRes> extends HashMapResultMap<ITuple, TRes> implements
+        ITupleResultMap<TRes>
 {
     
     
@@ -153,4 +154,5 @@ public class TupleResultMap<TRes> extends ResultMap<ITuple, TRes> implements ITu
         }
         return sBuilder.toString();
     }
+    
 }

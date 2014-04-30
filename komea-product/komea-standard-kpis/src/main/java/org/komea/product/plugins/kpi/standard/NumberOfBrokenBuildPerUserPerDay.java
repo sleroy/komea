@@ -32,14 +32,14 @@ import org.komea.product.plugins.kpi.tuplecreator.UserTupleCreator;
  * 
  * @author sleroy
  */
-public class NumberOfBrokenBuildPerUser implements ICEPQueryImplementation
+public class NumberOfBrokenBuildPerUserPerDay implements ICEPQueryImplementation
 {
     
     
     /**
      * 
      */
-    public NumberOfBrokenBuildPerUser() {
+    public NumberOfBrokenBuildPerUserPerDay() {
     
     
         super();
@@ -62,7 +62,7 @@ public class NumberOfBrokenBuildPerUser implements ICEPQueryImplementation
                 FilterDefinition
                         .create()
                         .setCacheConfiguration(
-                                CacheConfigurationBuilder.expirationTimeCache(7, TimeUnit.DAYS))
+                                CacheConfigurationBuilder.expirationTimeCache(1, TimeUnit.DAYS))
                         .setFilter(eventFilter).setFilterName("jenkins-brokenbuilder-filter");
         
         return Collections.singletonList(filterDefinition);

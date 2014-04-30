@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.komea.eventory.api.formula.ICEPResult;
 import org.komea.eventory.api.formula.IResultMap;
+import org.komea.eventory.api.formula.tuple.ITuple;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.api.exceptions.EntityNotFoundException;
@@ -311,12 +312,12 @@ public final class KPIValueService implements IKpiValueService
             final Number singleResult = queryResult.asNumber();
             storeMeasureOfAKpiInDatabase(_kpiKey, singleResult.doubleValue());
         } else {
-            final IResultMap<EntityKey, Number> asMap = queryResult.asMap();
-            final Map<EntityKey, Number> simplifiedMap = asMap.getTable();
-            for (final java.util.Map.Entry<EntityKey, Number> kpiLineValue : simplifiedMap
-                    .entrySet()) {
+            final IResultMap<ITuple, Number> asMap = queryResult.asMap();
+            final Map<ITuple, Number> simplifiedMap = asMap.getTable();
+            for (final java.util.Map.Entry<ITuple, Number> kpiLineValue : simplifiedMap.entrySet()) {
                 final KpiKey kpiKeyWithEntity =
-                        KpiKey.ofKpiNameAndEntityKey(_kpiKey.getKpiName(), kpiLineValue.getKey());
+                        KpiKey.ofKpiNameAndEntityKey(_kpiKey.getKpiName(), (EntityKey) kpiLineValue
+                                .getKey().getFirst());
                 storeMeasureOfAKpiInDatabase(kpiKeyWithEntity, kpiLineValue.getValue());
                 
             }
