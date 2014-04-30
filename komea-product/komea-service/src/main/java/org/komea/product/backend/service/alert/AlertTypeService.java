@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.dao.KpiAlertTypeDao;
@@ -34,7 +33,7 @@ public final class AlertTypeService extends
     @Override
     public List<AlertTypeDto> getAlertTypes(final ExtendedEntityType entityType) {
 
-        final List<Kpi> kpis = kpiService.getKpis(entityType.getKpiType(), null);
+        final List<Kpi> kpis = kpiService.getKpis(entityType.getKpiType(), Collections.<String>emptyList());
         final Map<Integer, Kpi> kpisById = new HashMap<Integer, Kpi>(kpis.size());
         for (final Kpi kpi : kpis) {
             kpisById.put(kpi.getId(), kpi);
