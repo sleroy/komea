@@ -156,7 +156,7 @@ public class ProjectForm extends Form<Project> {
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
 
-                prService.saveOrUpdateProject(project, null, (List<Person>) (List<?>) currentPersonList, null, (List<PersonGroup>) (List<?>) currentPersonGroupList);
+                prService.saveOrUpdateProject(project, new ArrayList(), (List<Person>) (List<?>) currentPersonList, new ArrayList(), (List<PersonGroup>) (List<?>) currentPersonGroupList);
                 page.setResponsePage(new ProjectPage(page.getPageParameters()));
 
             }

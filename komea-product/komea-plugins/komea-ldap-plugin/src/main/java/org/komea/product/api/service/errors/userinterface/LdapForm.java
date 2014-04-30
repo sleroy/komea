@@ -52,16 +52,16 @@ public class LdapForm extends Form<LdapServer> {
         webMarkupContainer2.setOutputMarkupPlaceholderTag(true);
         add(webMarkupContainer2);
 
-        add(TextFieldBuilder.createURL("ldapUrl", ldapServer, "ldapUrl")
+        add(TextFieldBuilder.create("ldapUrl", ldapServer, "ldapUrl")
                 .withTooltip(getString("global.save.form.field.tooltip.serverloc")).simpleValidator(3, 255).build());
 
-        add(TextFieldBuilder.<String>createRequired("ldapLogin", ldapServer, "ldapLogin")
+        add(TextFieldBuilder.<String>create("ldapLogin", ldapServer, "ldapLogin")
                 .simpleValidator(0, 255).withTooltip(getString("global.save.form.field.tooltip.login")).build());
 
-        add(TextFieldBuilder.<String>createRequired("ldapPassword", ldapServer, "ldapPassword")
+        add(TextFieldBuilder.<String>create("ldapPassword", ldapServer, "ldapPassword")
                 .simpleValidator(0, 255).withTooltip(getString("global.save.form.field.tooltip.password")).build());
 
-        add(TextFieldBuilder.<String>createRequired("ldapBase", ldapServer, "ldapBase")
+        add(TextFieldBuilder.<String>create("ldapBase", ldapServer, "ldapBase")
                 .simpleValidator(0, 255).withTooltip(getString("ldap.save.form.field.tooltip.base")).build());
 
         add(SelectBoxBuilder.<LdapAuthTypeEnum>createWithEnum("LdapAuthTypeEnum", ldapServer, LdapAuthTypeEnum.class)
