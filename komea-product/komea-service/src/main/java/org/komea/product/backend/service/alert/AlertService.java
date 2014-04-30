@@ -8,6 +8,7 @@ import java.util.Set;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.KpiAlertDto;
 import org.komea.product.database.dto.MeasureDto;
@@ -74,10 +75,32 @@ public final class AlertService implements IAlertService {
         final ExtendedEntityType extendedEntityType = _searchAlert.getExtendedEntityType();
         final EntityType entityType = extendedEntityType.getEntityType();
         final List<KpiAlertType> alertTypesOfKpiAndSeverity
-                = alertTypeService.getAlertTypes(entityType, _searchAlert.getKpiAlertTypeKeys(),
-                        _searchAlert.getSeverityMin());
-        final List<BaseEntityDto> entities
+                = alertTypeService.getAlertTypes(extendedEntityType.getKpiType(),
+                        _searchAlert.getKpiAlertTypeKeys(), _searchAlert.getSeverityMin());
+        final List<BaseEntityDto> parentEntities
                 = entityService.getBaseEntityDTOS(entityType, _searchAlert.getEntityKeys());
+        final List<BaseEntityDto> entities;
+        if (extendedEntityType.isForGroups()) {
+            entities = Lists.newArrayList();
+            final List<Integer> entityIds = Lists.newArrayList();
+            for (final BaseEntityDto parentEntity : parentEntities) {
+                final Integer entityId = parentEntity.getId();
+                final List<? extends IEntity> subEntities
+                        = entityService.getSubEntities(entityId, extendedEntityType);
+                if (subEntities != null && !subEntities.isEmpty()) {
+                    final List<BaseEntityDto> subEntitiesDto = BaseEntityDto.convertEntities(subEntities);
+                    for (final BaseEntityDto subEntityDto : subEntitiesDto) {
+                        final Integer subEntityId = subEntityDto.getId();
+                        if (!entityIds.contains(subEntityId)) {
+                            entityIds.add(subEntityId);
+                            entities.add(subEntityDto);
+                        }
+                    }
+                }
+            }
+        } else {
+            entities = parentEntities;
+        }
 
         final IdKpiMap idKpiMap = new IdKpiMap();
         final Set<String> kpiKeys = idKpiMap.fillIdKpi(alertTypesOfKpiAndSeverity, kpiService);

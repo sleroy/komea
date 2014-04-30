@@ -52,7 +52,7 @@ public class MeasuresController {
     @ResponseBody
     public MeasuresDto findMeasures(@RequestBody
             final SearchMeasuresDto _searchMeasuresDto) {
-        LOGGER.info("call rest method /measures/find/ with body: " + _searchMeasuresDto);
+        LOGGER.debug("call rest method /measures/find/ with body: " + _searchMeasuresDto);
         final ExtendedEntityType extendedEntityType = _searchMeasuresDto.getExtendedEntityType();
         final EntityType entityType = extendedEntityType.getEntityType();
         final List<BaseEntityDto> entities = entityService.getBaseEntityDTOS(
@@ -66,9 +66,6 @@ public class MeasuresController {
             measures.addAll(kpiValueService.getRealTimeMeasuresFromEntities(kpis, entities));
             measures.addAll(measureService.getMeasures(kpis, entities, _searchMeasuresDto));
         }
-        LOGGER.info("entities: " + entities);
-        LOGGER.info("kpis: " + kpis);
-        LOGGER.info("measures: " + measures);
         return new MeasuresDto(extendedEntityType, entities, kpis, measures);
     }
 
