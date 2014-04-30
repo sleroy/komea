@@ -233,6 +233,7 @@ public class EventViewerService implements IEventViewerService, PostSettingRegis
     @Override
     public String getEntityKey(final EntityType entityType, final IEvent event) {
         final String entityKey;
+        LOGGER.info("entityType : " + entityType + " , event : " + event);
         switch (entityType) {
             case TEAM:
             case DEPARTMENT:
@@ -248,7 +249,7 @@ public class EventViewerService implements IEventViewerService, PostSettingRegis
                         = event.getProject() == null ? "" : event.getProject().getProjectKey();
                 break;
             default:
-                entityKey = null;
+                entityKey = "";
         }
         return entityKey;
     }

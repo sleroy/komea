@@ -50,9 +50,7 @@ public final class TestsByStatusKPI implements IDynamicDataQuery {
         final TupleResultMap<Integer> tupleResultMap = new TupleResultMap<Integer>();
 
         final List<TestLinkServer> servers = serverConfig.selectAll();
-        LOGGER.info("Testlink : checking update from servers {}", servers.size());
         for (final TestLinkServer testlinkServer : servers) {
-            LOGGER.info("Testlink : checking update from server {}.", testlinkServer.getName());
             try {
                 addServerResults(tupleResultMap, testlinkServer);
             } catch (final Exception e) {
@@ -69,7 +67,7 @@ public final class TestsByStatusKPI implements IDynamicDataQuery {
         if (openProxy != null) {
             final List<TestLinkProject> listProject = openProxy.getListProject();
             for (final TestLinkProject projet : listProject) {
-                LOGGER.info("Testlink : checking update from project {} of server {}.",
+                LOGGER.debug("Testlink : checking update from project {} of server {}.",
                         projet.getName(), testlinkServer.getName());
                 final Project project = projectService.selectByKey(projet.getName());
                 if (project == null) {
@@ -77,6 +75,7 @@ public final class TestsByStatusKPI implements IDynamicDataQuery {
                 }
                 final ITuple tuple = TupleFactory.newTuple(project.getEntityKey());
                 final List<TestCase> testCases = openProxy.getTotalTests(projet);
+                LOGGER.info(project.getDisplayName() + " test cases : " + testCases.size());
                 int cpt = 0;
                 for (final TestCase testCase : testCases) {
                     if (isTestMatches(testCase)) {
@@ -90,7 +89,7 @@ public final class TestsByStatusKPI implements IDynamicDataQuery {
 
     private boolean isTestMatches(final TestCase testCase) {
         return status.isEmpty() || (testCase.getExecutionStatus() != null
-                && testCase.getExecutionStatus().name().equals(status));
+                && testCase.getExecutionStatus().name().toLowerCase().equals(status.toLowerCase()));
     }
 
     public void setProjectService(IProjectService ProjectService) {
