@@ -150,8 +150,8 @@ public final class PersonForm extends Form<Person> {
         DialogFactory.addMultipleListDialog(dataProject);
 
         initClassicField();
-        initSubmitbutton();
-        initSimpleButton();
+        add(new AjaxButtonSubmit("submit"));
+        add(new AjaxLinkCancelButton("cancel", page));
 
     }
 
@@ -241,59 +241,6 @@ public final class PersonForm extends Form<Person> {
         add(emailTextField);
     }
 
-    public void initSimpleButton() {
-
-        add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
-
-            @Override
-            public void onClick(final AjaxRequestTarget art) {
-
-                final LayoutPage page = getCustom();
-                page.setResponsePage(new PersonPage(page.getPageParameters()));
-            }
-        });
-    }
-
-    public void initSubmitbutton() {
-
-        add(new AjaxButton("submit") {
-
-            @Override
-            protected void onError(final AjaxRequestTarget target, final Form<?> form) {
-
-                feedBack.setVisible(true);
-                target.add(feedBack);
-
-            }
-
-            @Override
-            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-
-                feedBack.setVisible(false);
-                // repaint the feedback panel so that it is hidden
-                target.add(feedBack);
-                person.setUserBdd(savUserBdd);
-                if ("00000".equals(person.getPassword())) {
-                    person.setPassword(savPassword);
-                } else {
-                    person.setPassword(passEncoder.encodePassword(person.getPassword()));
-                }
-                if (isAdmin) {
-                    person.setIdPersonRole(personRole.getAdminRole().getId());
-                } else {
-                    person.setIdPersonRole(null);
-                }
-
-                personService.saveOrUpdatePersonAndItsProjects(person,
-                        (List<Project>) (List<?>) currentEntityList);
-                page.setResponsePage(new PersonPage(page.getPageParameters()));
-
-            }
-
-        });
-
-    }
-
     public Boolean isIsAdmin() {
 
         return isAdmin;
@@ -307,6 +254,59 @@ public final class PersonForm extends Form<Person> {
     public void setSelectedEntity(final List<IHasKey> selectedEntity) {
 
         this.selectedEntity = selectedEntity;
+    }
+
+    private class AjaxLinkCancelButton extends AjaxLinkLayout<LayoutPage> {
+
+        public AjaxLinkCancelButton(String string, LayoutPage page) {
+            super(string, page);
+        }
+
+        @Override
+        public void onClick(final AjaxRequestTarget art) {
+
+            final LayoutPage page = getCustom();
+            page.setResponsePage(new PersonPage(page.getPageParameters()));
+        }
+    }
+
+    private class AjaxButtonSubmit extends AjaxButton {
+
+        public AjaxButtonSubmit(String id) {
+            super(id);
+        }
+
+        @Override
+        protected void onError(final AjaxRequestTarget target, final Form<?> form) {
+
+            feedBack.setVisible(true);
+            target.add(feedBack);
+
+        }
+
+        @Override
+        protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+
+            feedBack.setVisible(false);
+            // repaint the feedback panel so that it is hidden
+            target.add(feedBack);
+            person.setUserBdd(savUserBdd);
+            if ("00000".equals(person.getPassword())) {
+                person.setPassword(savPassword);
+            } else {
+                person.setPassword(passEncoder.encodePassword(person.getPassword()));
+            }
+            if (isAdmin) {
+                person.setIdPersonRole(personRole.getAdminRole().getId());
+            } else {
+                person.setIdPersonRole(null);
+            }
+
+            personService.saveOrUpdatePersonAndItsProjects(person,
+                    (List<Project>) (List<?>) currentEntityList);
+            page.setResponsePage(new PersonPage(page.getPageParameters()));
+
+        }
     }
 
 }

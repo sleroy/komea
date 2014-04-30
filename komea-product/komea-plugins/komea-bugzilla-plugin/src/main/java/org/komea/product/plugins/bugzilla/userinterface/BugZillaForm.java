@@ -61,8 +61,8 @@ public class BugZillaForm extends Form<BZServerConfiguration>
         add(TextFieldBuilder.<String> createRequired("password", bugServer, "password")
                 .simpleValidator(0, 255).withTooltip(getString("global.save.form.field.tooltip.password")).build());
         
-        add(TextFieldBuilder.<String> createRequired("reminderAlert", bugServer, "reminderAlert")
-                .withTooltip(getString("bugzillapage.save.form.field.tooltip.reminder")).build());
+//        add(TextFieldBuilder.<String> createRequired("reminderAlert", bugServer, "reminderAlert")
+//                .withTooltip(getString("bugzillapage.save.form.field.tooltip.reminder")).build());
         
         // button
         add(new AjaxLinkLayout<LayoutPage>("cancel", page)
