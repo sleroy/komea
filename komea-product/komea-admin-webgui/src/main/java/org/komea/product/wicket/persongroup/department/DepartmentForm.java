@@ -122,6 +122,7 @@ public class DepartmentForm extends Form<PersonGroup> {
         dataMember.setService(personService);
         dataMember.setListEntite(listUser);
         dataMember.addFilter(DialogFactory.getPersonWithoutPersonGroupFilter(personGroup.getId()));
+        dataMember.setTooltips(getString("departmentpage.save.form.field.multiple.members"));
         DialogFactory.addMultipleListDialog(dataMember);
 
         add(TextFieldBuilder.<String>createRequired("name", this.personGroup, "name").highlightOnErrors()
@@ -173,6 +174,7 @@ public class DepartmentForm extends Form<PersonGroup> {
         dataTeam.setService(prService);
         dataTeam.addUpdater(cupdater);
         dataTeam.addFilter(DialogFactory.getPersonGroupWithoutParentFilter(personGroup.getId()));
+        dataTeam.setTooltips(getString("departmentpage.save.form.field.multiple.teams"));
         DialogFactory.addMultipleListDialog(dataTeam);
         //button
         add(new AjaxButton("submit", this) {

@@ -81,10 +81,10 @@ public class AlertForm extends StatelessForm<KpiAlertType> {
 
         
         add(SelectBoxBuilder.<Operator>createWithEnumCustom("operator", this.alert,
-                Operator.class,new ChoiceRenderer<Operator>("value")).build());
+                Operator.class,new ChoiceRenderer<Operator>("value")).withTooltip(getString("alertpage.save.form.field.tooltip.operator")).build());
 
         add(SelectBoxBuilder.<Severity>createWithEnum("severity", this.alert,
-                Severity.class).build());
+                Severity.class).withTooltip(getString("alertpage.save.form.field.tooltip.severity")).build());
 
         this.alertEnabled = alert.getEnabled();
         PropertyModel<Boolean> modelchcekBox = new PropertyModel<Boolean>(this, "alertEnabled");

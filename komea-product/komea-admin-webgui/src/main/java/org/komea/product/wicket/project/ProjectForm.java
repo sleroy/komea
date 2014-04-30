@@ -24,6 +24,7 @@ import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.utils.DataListSelectDialogBuilder;
 import org.komea.product.wicket.utils.DialogFactory;
 import org.komea.product.wicket.utils.NameGeneric;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
@@ -105,29 +106,39 @@ public class ProjectForm extends Form<Project> {
             currentPersonList = (List<IHasKey>) (List<?>) personService.getPersonsOfProject(this.project.getId());
         }
 
-        DialogFactory.addListWithSelectDialog(this,
-                "tablePersonGroup",
-                "dialogAddPersonGroup",
-                "btnAddPersonGroup",
-                "btnDelPersonGroup",
-                "selectedPersonGroup",
-                 getString("project.form.field.popup.title.team"),
-                currentPersonGroupList,
-                this.selectedPersonGroup,
-                (List<IHasKey>) (List<?>) this.personGroupService.getAllTeamsPG(),
-                this.personGroupService);
+                         DataListSelectDialogBuilder dataTeam = new DataListSelectDialogBuilder();
+        dataTeam.setPage(this);
+        dataTeam.setIdList("tablePersonGroup");
+        dataTeam.setIdDialog("dialogAddPersonGroup");
+        dataTeam.setIdBtnAdd("btnAddPersonGroup");
+        dataTeam.setIdBtnDel("btnDelPersonGroup");
+        dataTeam.setNameFieldResult("selectedPersonGroup");
+        dataTeam.setDisplayDialogMessage(getString("project.form.field.popup.title.team"));
+        dataTeam.setCurrentEntityList(currentPersonGroupList);
+        dataTeam.setChoiceEntityList(selectedPersonGroup);
+        dataTeam.setSelectDialogList((List<IHasKey>) (List<?>) this.personGroupService.getAllTeamsPG());
+        dataTeam.setService(personGroupService);
+//        dataProject.addFilter(DialogFactory.getPersonWithoutPersonGroupFilter(personGroup.getId()));
+        dataTeam.setTooltips(getString("project.form.field.multiple.team"));
+        DialogFactory.addMultipleListDialog(dataTeam);
 
-        DialogFactory.addListWithSelectDialog(this,
-                "tablePerson",
-                "dialogAddPerson",
-                "btnAddPerson",
-                "btnDelPerson",
-                "selectedPerson",
-                getString("project.form.field.tooltip.members"),
-                currentPersonList,
-                this.selectedPerson,
-                (List<IHasKey>) (List<?>) this.personService.selectAll(),
-                this.personService);
+        
+        DataListSelectDialogBuilder dataMember = new DataListSelectDialogBuilder();
+        dataMember.setPage(this);
+        dataMember.setIdList("tablePerson");
+        dataMember.setIdDialog("dialogAddPerson");
+        dataMember.setIdBtnAdd("btnAddPerson");
+        dataMember.setIdBtnDel("btnDelPerson");
+        dataMember.setNameFieldResult("selectedPerson");
+        dataMember.setDisplayDialogMessage(getString("project.form.field.tooltip.members"));
+        dataMember.setCurrentEntityList(currentPersonList);
+        dataMember.setChoiceEntityList(selectedPerson);
+        dataMember.setSelectDialogList((List<IHasKey>) (List<?>) this.personService.selectAll());
+        dataMember.setService(personService);
+//        dataProject.addFilter(DialogFactory.getPersonWithoutPersonGroupFilter(personGroup.getId()));
+        dataMember.setTooltips(getString("project.form.field.multiple.member"));
+        DialogFactory.addMultipleListDialog(dataMember);
+  
 
         //button
         add(new AjaxLinkLayout<LayoutPage>("cancel", page) {

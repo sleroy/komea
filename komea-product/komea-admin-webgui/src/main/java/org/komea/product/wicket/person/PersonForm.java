@@ -26,6 +26,7 @@ import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.PersonRole;
 import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.utils.DataListSelectDialogBuilder;
 import org.komea.product.wicket.utils.DialogFactory;
 import org.komea.product.wicket.utils.NameGeneric;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
@@ -127,10 +128,22 @@ public final class PersonForm extends Form<Person> {
             currentEntityList = (List) projectService.getProjectsOfAMember(person.getId());
         }
 
-        DialogFactory.addListWithSelectDialog(this, "table", "dialogAddPerson", "btnAddPerson",
-                "btnDelPerson", "selectedEntity",
-                getString("memberpage.save.form.field.tooltip.projects"), currentEntityList,
-                selectedEntity, (List) projectService.selectAll(), projectService);
+                DataListSelectDialogBuilder dataProject = new DataListSelectDialogBuilder();
+        dataProject.setPage(this);
+        dataProject.setIdList("table");
+        dataProject.setIdDialog("dialogAddPerson");
+        dataProject.setIdBtnAdd("btnAddPerson");
+        dataProject.setIdBtnDel("btnDelPerson");
+        dataProject.setNameFieldResult("selectedEntity");
+        dataProject.setDisplayDialogMessage(getString("memberpage.save.form.field.tooltip.projects"));
+        dataProject.setCurrentEntityList(currentEntityList);
+        dataProject.setChoiceEntityList(selectedEntity);
+        dataProject.setSelectDialogList((List) projectService.selectAll());
+        dataProject.setService(projectService);
+//        dataProject.addFilter(DialogFactory.getPersonWithoutPersonGroupFilter(personGroup.getId()));
+        dataProject.setTooltips(getString("memberpage.form.field.multiple.member"));
+        DialogFactory.addMultipleListDialog(dataProject);
+    
 
         initClassicField();
         initSubmitbutton();

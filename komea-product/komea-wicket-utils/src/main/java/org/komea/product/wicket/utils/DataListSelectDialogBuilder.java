@@ -26,6 +26,7 @@ public class DataListSelectDialogBuilder implements Serializable {
     private String idBtnDel;
     private String nameFieldResult;
     private String displayDialogMessage;
+    private String tooltips;
     private List<IHasKey> currentEntityList;
     private List<IHasKey> choiceEntityList;
     private List<IHasKey> selectDialogList;
@@ -37,6 +38,7 @@ public class DataListSelectDialogBuilder implements Serializable {
     public DataListSelectDialogBuilder() {
         this.updaters = new ArrayList<CustomUpdater>();
         this.filters = new ArrayList<ICustomFilter>();
+        tooltips="";
     }
 
     public MarkupContainer getPage() {
@@ -46,6 +48,16 @@ public class DataListSelectDialogBuilder implements Serializable {
     public void setPage(MarkupContainer page) {
         this.page = page;
     }
+
+    public String getTooltips() {
+        return tooltips;
+    }
+
+    public void setTooltips(String tooltips) {
+        this.tooltips = tooltips;
+    }
+    
+    
 
     public List<ICustomFilter> getFilters() {
         return filters;

@@ -119,19 +119,24 @@ public class TeamForm extends Form<PersonGroup> {
         dataPerson.setSelectDialogList((List<IHasKey>) (List<?>)this.personService.selectAll());
         dataPerson.setService(personService);
         dataPerson.addFilter(DialogFactory.getPersonWithoutPersonGroupFilter(personGroup.getId()));
+        dataPerson.setTooltips(getString("teampage.save.form.field.multiple.members"));
         DialogFactory.addMultipleListDialog(dataPerson);
 
-        DialogFactory.addListWithSelectDialog(this,
-                "tableProject",
-                "dialogAddProject",
-                "btnAddProject",
-                "btnDelProject",
-                "selectedProject",
-                getString("teampage.save.form.field.tooltip.projects"),
-                currentProjectList,
-                selectedProject,
-                (List<IHasKey>) (List<?>) this.projectService.selectAll(),
-                projectService);
+                 DataListSelectDialogBuilder dataProject = new DataListSelectDialogBuilder();
+        dataProject.setPage(this);
+        dataProject.setIdList("tableProject");
+        dataProject.setIdDialog("dialogAddProject");
+        dataProject.setIdBtnAdd("btnAddProject");
+        dataProject.setIdBtnDel("btnDelProject");
+        dataProject.setNameFieldResult("selectedProject");
+        dataProject.setDisplayDialogMessage(getString("teampage.save.form.field.tooltip.projects"));
+        dataProject.setCurrentEntityList(currentProjectList);
+        dataProject.setChoiceEntityList(selectedProject);
+        dataProject.setSelectDialogList((List<IHasKey>) (List<?>) this.projectService.selectAll());
+        dataProject.setService(projectService);
+//        dataProject.addFilter(DialogFactory.getPersonWithoutPersonGroupFilter(personGroup.getId()));
+        dataProject.setTooltips(getString("teampage.save.form.field.multiple.projects"));
+        DialogFactory.addMultipleListDialog(dataProject);
 
         add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
 

@@ -5,6 +5,7 @@
  */
 package org.komea.product.wicket.utils;
 
+import com.googlecode.wicket.jquery.core.IJQueryWidget;
 import java.util.List;
 
 import org.apache.wicket.MarkupContainer;
@@ -18,6 +19,8 @@ import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.tooltip.TooltipBehavior;
+import org.apache.wicket.AttributeModifier;
 import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
@@ -74,10 +77,18 @@ public class DialogFactory {
             listEntite.setChoiceRenderer(displayGroup);
             listEntite.setMaxRows(8);
             listEntite.setOutputMarkupId(true);
+
             data.setListEntite(listEntite);
         }
         //
         data.getPage().add(data.getListEntite());
+
+        if (!"".equals(data.getTooltips()) && data.getTooltips()!=null) {
+            final TooltipBehavior tooltipBehavior
+                    = new TooltipBehavior(IJQueryWidget.JQueryWidget.getSelector(data.getListEntite()));
+            data.getListEntite().add(new AttributeModifier("title", data.getTooltips()));
+            data.getListEntite().add(tooltipBehavior);
+        }
 
         final SelectMultipleDialog dialogPersonGroup
                 = new SelectMultipleDialog(data.getIdDialog(), data.getDisplayDialogMessage(),
@@ -115,48 +126,10 @@ public class DialogFactory {
         data.getPage().add(dialogPersonGroup);
         dialogPersonGroup.setFilter(data.getCurrentEntityList());
         dialogPersonGroup.addCustomFilter(data.getFilters());
-         data.getPage().add(new AjaxButton(data.getIdBtnAdd()){
-
-            @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                  dialogPersonGroup.open(target);
-            }
-            
-             
-         });
-         AjaxButton ajaxButton = new AjaxButton(data.getIdBtnDel()) {
-            
-            @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
-                for (final IHasKey person : data.getChoiceEntityList()) {
-                    data.getCurrentEntityList().remove(person);
-                }
-                for (CustomUpdater cupdater : data.getUpdaters()) {
-                    cupdater.update();
-                    target.add(cupdater.getComposant());
-                }
-                target.add(data.getListEntite());
-
-            }
-            
-            
-            @Override
-            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-                for (final IHasKey person : data.getChoiceEntityList()) {
-                    data.getCurrentEntityList().remove(person);
-                }
-
-                for (CustomUpdater cupdater : data.getUpdaters()) {
-                    cupdater.update();
-                    target.add(cupdater.getComposant());
-                }
-
-                target.add(data.getListEntite());
-            }
-        };
+        data.getPage().add(new AjaxButtonAddDialog(data.getIdBtnAdd(), dialogPersonGroup));
+        AjaxButton ajaxButton = new AjaxButtonDelDialog(data.getIdBtnDel(), data);
 //        ajaxButton.setDefaultFormProcessing(false);
-       
-        
+
         data.getPage().add(ajaxButton);
 
     }
@@ -235,6 +208,58 @@ public class DialogFactory {
                 return ((person.getIdPersonGroupParent() != null) && !person.getIdPersonGroupParent().equals(obId));
             }
         };
+    }
+
+    private static class AjaxButtonAddDialog extends AjaxButton {
+
+        private final SelectMultipleDialog dialogPersonGroup;
+
+        public AjaxButtonAddDialog(String id, SelectMultipleDialog dialogPersonGroup) {
+            super(id);
+            this.dialogPersonGroup = dialogPersonGroup;
+        }
+
+        @Override
+        protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            dialogPersonGroup.open(target);
+        }
+    }
+
+    private static class AjaxButtonDelDialog extends AjaxButton {
+
+        private final DataListSelectDialogBuilder data;
+
+        public AjaxButtonDelDialog(String id, DataListSelectDialogBuilder data) {
+            super(id);
+            this.data = data;
+        }
+
+        @Override
+        protected void onError(AjaxRequestTarget target, Form<?> form) {
+            for (final IHasKey person : data.getChoiceEntityList()) {
+                data.getCurrentEntityList().remove(person);
+            }
+            for (CustomUpdater cupdater : data.getUpdaters()) {
+                cupdater.update();
+                target.add(cupdater.getComposant());
+            }
+            target.add(data.getListEntite());
+            
+        }
+
+            @Override
+            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+                for (final IHasKey person : data.getChoiceEntityList()) {
+                    data.getCurrentEntityList().remove(person);
+                }
+                
+                for (CustomUpdater cupdater : data.getUpdaters()) {
+                    cupdater.update();
+                    target.add(cupdater.getComposant());
+                }
+                
+                target.add(data.getListEntite());
+            }
     }
 
 }
