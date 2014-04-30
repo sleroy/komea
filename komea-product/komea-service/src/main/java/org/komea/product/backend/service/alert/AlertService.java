@@ -74,7 +74,7 @@ public final class AlertService implements IAlertService {
         final ExtendedEntityType extendedEntityType = _searchAlert.getExtendedEntityType();
         final EntityType entityType = extendedEntityType.getEntityType();
         final List<KpiAlertType> alertTypesOfKpiAndSeverity
-                = alertTypeService.getAlertTypes(extendedEntityType.getKpiType(),
+                = alertTypeService.getAlertTypes(extendedEntityType,
                         _searchAlert.getKpiAlertTypeKeys(), _searchAlert.getSeverityMin());
         final List<BaseEntityDto> parentEntities
                 = entityService.getBaseEntityDTOS(entityType, _searchAlert.getEntityKeys());

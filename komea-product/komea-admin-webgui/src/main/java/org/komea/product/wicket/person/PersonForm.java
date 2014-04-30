@@ -1,11 +1,7 @@
-
 package org.komea.product.wicket.person;
-
-
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -36,40 +32,34 @@ import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.SelectBoxBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
 
-
-
 /**
  * Formular to edit properties in the settings page.
- * 
+ *
  * @author sleroy
  */
-public final class PersonForm extends Form<Person>
-{
-    
-    
-    private List<IHasKey>             currentEntityList;
-    private final Component           feedBack;
-    private final TextField           groupField;
-    private final NameGeneric         groupName;
-    private Boolean                   isAdmin;
-    private final boolean             isNew;
-    private final LayoutPage          page;
-    private final IPasswordEncoder    passEncoder;
-    private PasswordTextField         password;
-    private final Person              person;
-    private final IPersonRoleService  personRole;
-    private final IPersonService      personService;
-    private final IProjectService     projectService;
+public final class PersonForm extends Form<Person> {
+
+    private List<IHasKey> currentEntityList;
+    private final Component feedBack;
+    private final TextField groupField;
+    private final NameGeneric groupName;
+    private Boolean isAdmin;
+    private final boolean isNew;
+    private final LayoutPage page;
+    private final IPasswordEncoder passEncoder;
+    private PasswordTextField password;
+    private final Person person;
+    private final IPersonRoleService personRole;
+    private final IPersonService personService;
+    private final IProjectService projectService;
     /**
      * @author sleroy
      */
     private final IPersonGroupService prService;
-    private String                    savPassword;
-    private final UserBdd             savUserBdd;
-    private List<IHasKey>             selectedEntity;
-    
-    
-    
+    private String savPassword;
+    private final UserBdd savUserBdd;
+    private List<IHasKey> selectedEntity;
+
     // private final TeamSelectorDialog teamDialog;
     public PersonForm(
             final boolean _isNew,
@@ -82,8 +72,7 @@ public final class PersonForm extends Form<Person>
             final CompoundPropertyModel<Person> _compoundPropertyModel,
             final LayoutPage _page,
             final IPersonGroupService _prService) {
-    
-    
+
         super(_id, _compoundPropertyModel);
         page = _page;
         isNew = _isNew;
@@ -101,94 +90,84 @@ public final class PersonForm extends Form<Person>
         feedBack.setVisible(false);
         add(feedBack);
         groupName = new NameGeneric("");
-        final TextFieldBuilder<String> keyField =
-                TextFieldBuilder.<String> createRequired("login", person, "login")
-                        .simpleValidator(3, 255)
-                        .withTooltip(getString("global.save.form.field.tooltip.login"))
-                        .highlightOnErrors();
-        
+        final TextFieldBuilder<String> keyField
+                = TextFieldBuilder.<String>createRequired("login", person, "login")
+                .simpleValidator(3, 255)
+                .withTooltip(getString("global.save.form.field.tooltip.login"))
+                .highlightOnErrors();
+
         if (isNew) {
             keyField.UniqueStringValidator(getString("global.save.form.field.label.login"),
                     personService);
         } else {
             keyField.buildTextField().setEnabled(false);
         }
-        
+
         add(keyField.build());
-        final PersonGroup selectByPrimaryKey =
-                prService.selectByPrimaryKey(person.getIdPersonGroup());
+        final PersonGroup selectByPrimaryKey
+                = prService.selectByPrimaryKey(person.getIdPersonGroup());
         if (selectByPrimaryKey != null) {
             groupName.setName(selectByPrimaryKey.getName());
         }
-        groupField =
-                TextFieldBuilder.<String> create("group", groupName, "name")
-                        .withTooltip(getString("memberpage.save.form.field.tooltip.memberof"))
-                        .buildTextField();
+        groupField
+                = TextFieldBuilder.<String>create("group", groupName, "name")
+                .withTooltip(getString("memberpage.save.form.field.tooltip.memberof"))
+                .buildTextField();
         add(groupField);
-        
+
         if (person.getUserBdd() == null) {
             person.setUserBdd(UserBdd.KOMEA);
         }
         savUserBdd = person.getUserBdd();
-        add(SelectBoxBuilder.<UserBdd> createWithEnumRequire("userBdd", person, UserBdd.class)
+        add(SelectBoxBuilder.<UserBdd>createWithEnumRequire("userBdd", person, UserBdd.class)
                 .withTooltip(getString("memberpage.save.form.field.tooltip.userorigin")).build());
-        
+
         if (person.getId() != null) {
-            
+
             currentEntityList = (List) projectService.getProjectsOfAMember(person.getId());
         }
-        
+
         DialogFactory.addListWithSelectDialog(this, "table", "dialogAddPerson", "btnAddPerson",
                 "btnDelPerson", "selectedEntity",
                 getString("memberpage.save.form.field.tooltip.projects"), currentEntityList,
                 selectedEntity, (List) projectService.selectAll(), projectService);
-        
+
         initClassicField();
         initSubmitbutton();
         initSimpleButton();
-        
+
     }
-    
-    
+
     public TextField getGroupField() {
-    
-    
+
         return groupField;
     }
-    
-    
+
     public NameGeneric getGroupName() {
-    
-    
+
         return groupName;
     }
-    
-    
+
     public Person getPerson() {
-    
-    
+
         return person;
     }
-    
-    
+
     public List<IHasKey> getSelectedEntity() {
-    
-    
+
         return selectedEntity;
     }
-    
-    
+
     public void initClassicField() {
-    
-    
-        add(TextFieldBuilder.<String> createRequired("firstname", person, "firstName")
+
+        add(TextFieldBuilder.<String>createRequired("firstname", person, "firstName")
                 .simpleValidator(2, 255)
                 .withTooltip(getString("memberpage.save.form.field.tooltip.firstn"))
                 .highlightOnErrors().build());
-        add(TextFieldBuilder.<String> createRequired("lastname", person, "lastName")
+        add(TextFieldBuilder.<String>createRequired("lastname", person, "lastName")
                 .simpleValidator(2, 255).highlightOnErrors()
                 .withTooltip(getString("memberpage.save.form.field.tooltip.lastn")).build());
-        
+
         isAdmin = Boolean.FALSE;
         final Integer idPersonRole = person.getIdPersonRole();
         if (idPersonRole != null) {
@@ -196,7 +175,7 @@ public final class PersonForm extends Form<Person>
             if (idPersonRole.equals(adminRole.getId())) {
                 isAdmin = Boolean.TRUE;
             }
-            
+
         }
         if (person.getPassword() == null) {
             savPassword = "";
@@ -204,11 +183,11 @@ public final class PersonForm extends Form<Person>
             savPassword = person.getPassword();
         }
         person.setPassword("00000");
-        password =
-                (PasswordTextField) TextFieldBuilder.createPassword("password", person, "password")
-                        .simpleValidator(5, 255)
-                        .withTooltip(getString("global.save.form.field.tooltip.password"))
-                        .highlightOnErrors().build();
+        password
+                = (PasswordTextField) TextFieldBuilder.createPassword("password", person, "password")
+                .simpleValidator(5, 255)
+                .withTooltip(getString("global.save.form.field.tooltip.password"))
+                .highlightOnErrors().build();
         password.setConvertEmptyInputStringToNull(false);
         password.setResetPassword(false);
         password.setOutputMarkupId(true);
@@ -219,16 +198,13 @@ public final class PersonForm extends Form<Person>
             password.setVisible(false);
         }
         add(password);
-        
+
         final PropertyModel<Boolean> modelchcekBox = new PropertyModel<Boolean>(this, "isAdmin");
-        final AjaxCheckBox checkBox = new AjaxCheckBox("isAdmin", modelchcekBox)
-        {
-            
-            
+        final AjaxCheckBox checkBox = new AjaxCheckBox("isAdmin", modelchcekBox) {
+
             @Override
             protected void onUpdate(final AjaxRequestTarget target) {
-            
-            
+
                 if (isAdmin) {
                     password.setVisible(true);
                 } else {
@@ -238,56 +214,44 @@ public final class PersonForm extends Form<Person>
                 target.add(password);
             }
         };
-        
+
         add(checkBox);
-        final TextField<String> emailTextField =
-                TextFieldBuilder.<String> createRequired("email", person, "email")
-                        .withTooltip(getString("memberpage.save.form.field.tooltip.email"))
-                        .highlightOnErrors().buildTextField();
+        final TextField<String> emailTextField
+                = TextFieldBuilder.<String>createRequired("email", person, "email")
+                .withTooltip(getString("memberpage.save.form.field.tooltip.email"))
+                .highlightOnErrors().buildTextField();
         emailTextField.add(EmailAddressValidator.getInstance());
         add(emailTextField);
     }
-    
-    
+
     public void initSimpleButton() {
-    
-    
-        add(new AjaxLinkLayout<LayoutPage>("cancel", page)
-        {
-            
-            
+
+        add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
+
             @Override
             public void onClick(final AjaxRequestTarget art) {
-            
-            
+
                 final LayoutPage page = getCustom();
                 page.setResponsePage(new PersonPage(page.getPageParameters()));
             }
         });
     }
-    
-    
+
     public void initSubmitbutton() {
-    
-    
-        add(new AjaxButton("submit")
-        {
-            
-            
+
+        add(new AjaxButton("submit") {
+
             @Override
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
-            
-            
+
                 feedBack.setVisible(true);
                 target.add(feedBack);
-                
+
             }
-            
-            
+
             @Override
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-            
-            
+
                 feedBack.setVisible(false);
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
@@ -302,36 +266,30 @@ public final class PersonForm extends Form<Person>
                 } else {
                     person.setIdPersonRole(null);
                 }
-                
-                personService.saveOrUpdatePerson(person,
+
+                personService.saveOrUpdatePersonAndItsProjects(person,
                         (List<Project>) (List<?>) currentEntityList);
                 page.setResponsePage(new PersonPage(page.getPageParameters()));
-                
+
             }
-            
+
         });
-        
+
     }
-    
-    
+
     public Boolean isIsAdmin() {
-    
-    
+
         return isAdmin;
     }
-    
-    
+
     public void setIsAdmin(final Boolean isAdmin) {
-    
-    
+
         this.isAdmin = isAdmin;
     }
-    
-    
+
     public void setSelectedEntity(final List<IHasKey> selectedEntity) {
-    
-    
+
         this.selectedEntity = selectedEntity;
     }
-    
+
 }
