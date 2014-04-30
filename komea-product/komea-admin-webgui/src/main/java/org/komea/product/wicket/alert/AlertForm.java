@@ -6,6 +6,7 @@
 package org.komea.product.wicket.alert;
 
 import java.util.List;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -68,7 +69,7 @@ public class AlertForm extends StatelessForm<KpiAlertType> {
         if (isNew) {
             keyField.UniqueStringValidator(getString("global.field.key"), alertService);
         } else {
-            keyField.buildTextField().setEnabled(false);
+            keyField.buildTextField().add(new AttributeModifier("readonly", "readonly"));
         }
 
         add(keyField.build());

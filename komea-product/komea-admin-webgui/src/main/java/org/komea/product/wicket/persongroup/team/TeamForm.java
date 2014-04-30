@@ -7,6 +7,7 @@ package org.komea.product.wicket.persongroup.team;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -81,7 +82,7 @@ public class TeamForm extends Form<PersonGroup> {
         if (isNew) {
             keyFieldBuilder.UniqueStringValidator(getString("global.field.key"), prService);
         } else {
-            keyFieldBuilder.buildTextField().setEnabled(false);
+            keyFieldBuilder.buildTextField().add(new AttributeModifier("readonly", "readonly"));
         }
 
         add(keyFieldBuilder.build());

@@ -1,6 +1,6 @@
 package org.komea.product.wicket.kpis;
 
-import com.googlecode.wicket.jquery.ui.form.slider.Slider;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -8,7 +8,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -76,7 +75,7 @@ public final class KpiForm extends Form<Kpi> {
         if (isNew) {
             keyField.UniqueStringValidator(getString("global.field.key"), kpiService);
         } else {
-            keyField.buildTextField().setEnabled(false);
+            keyField.buildTextField().add(new AttributeModifier("readonly", "readonly"));
         }
 
         add(keyField.build());

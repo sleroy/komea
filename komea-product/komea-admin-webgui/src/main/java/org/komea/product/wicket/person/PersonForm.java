@@ -1,11 +1,16 @@
 package org.komea.product.wicket.person;
 
+import com.googlecode.wicket.jquery.core.IJQueryWidget;
+import com.googlecode.wicket.jquery.ui.widget.tooltip.TooltipBehavior;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -101,7 +106,7 @@ public final class PersonForm extends Form<Person> {
             keyField.UniqueStringValidator(getString("global.save.form.field.label.login"),
                     personService);
         } else {
-            keyField.buildTextField().setEnabled(false);
+            keyField.buildTextField().add(new AttributeModifier("readonly", "readonly"));
         }
 
         add(keyField.build());
@@ -128,7 +133,7 @@ public final class PersonForm extends Form<Person> {
             currentEntityList = (List) projectService.getProjectsOfAMember(person.getId());
         }
 
-                DataListSelectDialogBuilder dataProject = new DataListSelectDialogBuilder();
+        DataListSelectDialogBuilder dataProject = new DataListSelectDialogBuilder();
         dataProject.setPage(this);
         dataProject.setIdList("table");
         dataProject.setIdDialog("dialogAddPerson");
@@ -143,7 +148,6 @@ public final class PersonForm extends Form<Person> {
 //        dataProject.addFilter(DialogFactory.getPersonWithoutPersonGroupFilter(personGroup.getId()));
         dataProject.setTooltips(getString("memberpage.form.field.multiple.member"));
         DialogFactory.addMultipleListDialog(dataProject);
-    
 
         initClassicField();
         initSubmitbutton();

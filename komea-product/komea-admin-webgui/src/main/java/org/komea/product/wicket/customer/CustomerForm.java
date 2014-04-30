@@ -5,6 +5,7 @@
  */
 package org.komea.product.wicket.customer;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -42,7 +43,7 @@ public class CustomerForm extends Form<Customer> {
         if (isNew) {
             keyField.UniqueStringValidator(getString("global.field.name"), customerService);
         } else {
-            keyField.buildTextField().setEnabled(false);
+            keyField.buildTextField().add(new AttributeModifier("readonly", "readonly"));
         }
 
         add(keyField.build());

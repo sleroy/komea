@@ -7,6 +7,7 @@ package org.komea.product.wicket.persongroup.department;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -25,7 +26,6 @@ import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.CustomUpdater;
 import org.komea.product.wicket.utils.DataListSelectDialogBuilder;
 import org.komea.product.wicket.utils.DialogFactory;
-import org.komea.product.wicket.utils.ICustomFilter;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
@@ -134,7 +134,7 @@ public class DepartmentForm extends Form<PersonGroup> {
         if (isNew) {
             keyFieldBuilder.UniqueStringValidator(getString("global.field.tooltip.key"), prService);
         } else {
-            keyFieldBuilder.buildTextField().setEnabled(false);
+            keyFieldBuilder.buildTextField().add(new AttributeModifier("readonly", "readonly"));
         }
 
         add(keyFieldBuilder.build());
