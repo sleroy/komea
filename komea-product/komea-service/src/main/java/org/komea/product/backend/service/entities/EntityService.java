@@ -106,19 +106,19 @@ public final class EntityService implements IEntityService {
      * @see org.komea.product.backend.service.entities.IEntityService#loadEntities(org.komea.product.database.enums.EntityType)
      */
     @Override
-    public List<? extends IEntity> getEntitiesByEntityType(final EntityType _entityType) {
+    public <T extends IEntity> List<T> getEntitiesByEntityType(final EntityType _entityType) {
 
         Validate.notNull(_entityType);
 
         switch (_entityType) {
             case PERSON:
-                return personService.selectAll();
+                return List.class.cast(personService.selectAll());
             case DEPARTMENT:
-                return personGroupService.getAllDepartmentsPG();
+                return List.class.cast(personGroupService.getAllDepartmentsPG());
             case TEAM:
-                return personGroupService.getAllTeamsPG();
+                return List.class.cast(personGroupService.getAllTeamsPG());
             case PROJECT:
-                return projectService.selectAll();
+                return List.class.cast(projectService.selectAll());
         }
         return Collections.emptyList();
     }
@@ -198,25 +198,26 @@ public final class EntityService implements IEntityService {
     }
 
     @Override
-    public List<? extends IEntity> getSubEntities(
+    public List<BaseEntityDto> getSubEntities(
+            final ExtendedEntityType extendedEntityType,
+            final List<BaseEntityDto> parentEntities) {
+    
+    
+        final GetSubEntitiesAndConvertIntoDTO subEntities =
+                new GetSubEntitiesAndConvertIntoDTO(extendedEntityType, parentEntities,
+                        personService, projectService);
+        return subEntities.getSubEntities();
+    }
+    
+    
+    @Override
+    public <T extends IEntity> List<T> getSubEntities(
             final Integer _entityId,
             final ExtendedEntityType _extendedEntityType) {
 
-        List<? extends IEntity> entities = null;
-        switch (_extendedEntityType) {
-            case PROJECTS_PERSON:
-                entities = projectService.getProjectsOfAMember(_entityId);
-                break;
-            case PROJECTS_TEAM:
-            case PROJECTS_DEPARTMENT:
-                entities = projectService.getProjectsOfPersonGroupRecursively(_entityId);
-                break;
-            case TEAM:
-            case DEPARTMENT:
-                entities = personService.getPersonsOfPersonGroupRecursively(_entityId);
-                break;
-        }
-        return entities;
+        final GetSubEntities getSubEntities =
+                new GetSubEntities(_entityId, _extendedEntityType, personService, projectService);
+        return getSubEntities.getSubEntities();
     }
 
     /**
