@@ -3,7 +3,7 @@ package org.komea.product.web.rest.api;
 import java.util.List;
 import org.komea.product.backend.service.alert.IAlertTypeService;
 import org.komea.product.database.dto.AlertTypeDto;
-import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ExtendedEntityType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class AlertTypeController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/all")
     @ResponseBody
-    public List<AlertTypeDto> allAlertTypes(@RequestBody EntityType entityType) {
+    public List<AlertTypeDto> allAlertTypes(@RequestBody ExtendedEntityType entityType) {
         return alertTypeService.getAlertTypes(entityType);
     }
 

@@ -10,7 +10,7 @@ import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.dao.KpiAlertTypeDao;
 import org.komea.product.database.dto.AlertTypeDto;
-import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Kpi;
@@ -32,9 +32,9 @@ public final class AlertTypeService extends
     private KpiAlertTypeDao requiredDAO;
 
     @Override
-    public List<AlertTypeDto> getAlertTypes(final EntityType entityType) {
+    public List<AlertTypeDto> getAlertTypes(final ExtendedEntityType entityType) {
 
-        final List<Kpi> kpis = kpiService.getKpis(entityType, null);
+        final List<Kpi> kpis = kpiService.getKpis(entityType.getKpiType(), null);
         final Map<Integer, Kpi> kpisById = new HashMap<Integer, Kpi>(kpis.size());
         for (final Kpi kpi : kpis) {
             kpisById.put(kpi.getId(), kpi);
@@ -58,12 +58,12 @@ public final class AlertTypeService extends
 
     @Override
     public List<KpiAlertType> getAlertTypes(
-            final EntityType entityType,
+            final ExtendedEntityType entityType,
             final List<String> alertTypeKeys,
             final Severity severityMin) {
 
         if (alertTypeKeys == null || alertTypeKeys.isEmpty()) {
-            final List<Kpi> kpis = kpiService.getKpis(entityType, Collections.<String>emptyList());
+            final List<Kpi> kpis = kpiService.getKpis(entityType.getKpiType(), Collections.<String>emptyList());
             if (kpis.isEmpty()) {
                 return Collections.emptyList();
             }
