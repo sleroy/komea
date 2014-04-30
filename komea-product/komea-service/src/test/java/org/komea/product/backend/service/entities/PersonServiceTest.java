@@ -29,9 +29,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
 
+import static org.junit.Assert.assertEquals;
+
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 
@@ -181,13 +184,59 @@ public class PersonServiceTest
      * Test method for {@link org.komea.product.backend.service.entities.PersonService#findUserByEmail(java.lang.String)}.
      */
     @Test
-    public void testFindUserByEmail() throws Exception {
+    public void testFindUserByEmail_AllFailed() throws Exception {
     
     
         // CAnnot test the criteria :(
         // TODO:: DBUNIT
-        service.findUserByEmail(EMAIL_EMAIL_ORG);
+        final Person findOrCreatePersonByEmail = service.findOrCreatePersonByEmail(EMAIL_EMAIL_ORG);
+        assertEquals(EMAIL_EMAIL_ORG, findOrCreatePersonByEmail.getEmail());
+        verify(personDAOmock, times(2)).selectByCriteria(Matchers.any(PersonCriteria.class));
+        
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.backend.service.entities.PersonService#findUserByEmail(java.lang.String)}.
+     */
+    @Test
+    public void testFindUserByEmail_emailSuccess() throws Exception {
+    
+    
+        // CAnnot test the criteria :(
+        // TODO:: DBUNIT
+        programReturnFakePerson();
+        final Person findOrCreatePersonByEmail = service.findOrCreatePersonByEmail(EMAIL_EMAIL_ORG);
+        assertEquals(EMAIL_EMAIL_ORG, findOrCreatePersonByEmail.getEmail());
+        
         verify(personDAOmock, times(1)).selectByCriteria(Matchers.any(PersonCriteria.class));
+        
+    }
+
+
+    private void programReturnFakePerson() {
+    
+    
+        final Person returnPersno = new Person();
+        returnPersno.setEmail(EMAIL_EMAIL_ORG);
+        when(personDAOmock.selectByCriteria(Matchers.any(PersonCriteria.class))).thenReturn(
+                Collections.singletonList(returnPersno));
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.backend.service.entities.PersonService#findUserByEmail(java.lang.String)}.
+     */
+    @Test
+    public void testFindUserByEmail_loginFailed_emailSuccess() throws Exception {
+    
+    
+        programReturnFakePerson();
+        final Person findOrCreatePersonByEmail = service.findOrCreatePersonByEmail(EMAIL_EMAIL_ORG);
+        assertEquals(EMAIL_EMAIL_ORG, findOrCreatePersonByEmail.getEmail());
+        
+        verify(personDAOmock, times(1)).selectByCriteria(Matchers.any(PersonCriteria.class));
+        
         
     }
     
