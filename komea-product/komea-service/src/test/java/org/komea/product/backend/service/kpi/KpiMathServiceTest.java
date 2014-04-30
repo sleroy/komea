@@ -9,6 +9,7 @@ package org.komea.product.backend.service.kpi;
 import java.util.ArrayList;
 
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
+import org.apache.commons.math3.stat.descriptive.summary.Sum;
 import org.junit.Test;
 import org.komea.product.database.model.Measure;
 
@@ -53,8 +54,17 @@ public class KpiMathServiceTest
     public final void testComputeSumFromMeasures() throws Exception {
     
     
-        //
-        // throw new RuntimeException("not yet implemented");
+        final KpiMathService kpiMathService = new KpiMathService();
+        final Measure fakeMeasure = fakeMeasure(12);
+        final Measure fakeMeasure2 = fakeMeasure(24);
+        final ArrayList<Measure> arrayList = Lists.newArrayList(fakeMeasure, fakeMeasure2);
+        final double measures = kpiMathService.computeSumFromMeasures(arrayList);
+        final Sum mean = new Sum();
+        
+        assertEquals(measures, mean.evaluate(new double[]
+            {
+                    12,
+                    24 }), 0.0d);
     }
     
     
