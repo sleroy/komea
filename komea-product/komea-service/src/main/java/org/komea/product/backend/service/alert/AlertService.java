@@ -87,17 +87,13 @@ public final class AlertService implements IAlertService {
 
         final List<MeasureDto> measuresOfKpi
                 = measureService.getMeasures(idKpiMap.values(), entities, searchMeasuresDto);
-        LOGGER.info("measuresOfKpi : " + measuresOfKpi);
         final List<KpiAlertDto> filteredActivatedAlerts = Lists.newArrayList();
         for (final KpiAlertType alertType : alertTypesOfKpiAndSeverity) {
             for (final BaseEntityDto entity : entities) {
-                LOGGER.info("alertType : " + alertType + "\n entity : " + entity);
                 final KpiAlertDto kpiAlert
                         = findAlert(new AlertCriteria(alertType, entity, entityType, measuresOfKpi),
                                 idKpiMap);
-                LOGGER.info("kpiAlert : " + kpiAlert);
                 boolean alertFiltered = isAlertFiltered(_searchAlert, kpiAlert);
-                LOGGER.info("alertFiltered : " + alertFiltered);
                 if (alertFiltered) {
                     filteredActivatedAlerts.add(kpiAlert);
                 }
