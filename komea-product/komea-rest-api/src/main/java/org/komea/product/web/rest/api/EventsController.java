@@ -151,6 +151,7 @@ public class EventsController {
         final List<String> parentEntityKeys = searchEvent.getEntityKeys();
         final ExtendedEntityType extendedEntityType = searchEvent.getEntityType();
         final EntityType kpiType = extendedEntityType.getKpiType();
+        final EntityType entityType = extendedEntityType.getEntityType();
         final List<BaseEntityDto> parentEntities = entityService.getBaseEntityDTOS(
                 extendedEntityType.getEntityType(), parentEntityKeys);
         final List<BaseEntityDto> entities = entityService.getSubEntities(extendedEntityType, parentEntities);
@@ -158,15 +159,14 @@ public class EventsController {
         for (final BaseEntityDto baseEntityDto : entities) {
             entityKeys.add(baseEntityDto.getKey());
         }
-        LOGGER.info("entityKeys : " + entityKeys);
         if ((eventTypeKeys.isEmpty() || eventTypeKeys.contains(event.getEventType().getEventKey()))
                 && (kpiType == null || kpiType.equals(event.getEventType().getEntityType()))
                 && event.getEventType().getSeverity().compareTo(severity) >= 0) {
             if (kpiType == null) {
                 return true;
             }
-            final String entityKey = eventService.getEntityKey(kpiType, event);
-            LOGGER.info("entityKey : " + entityKeys);
+            final String entityKey = eventService.getEntityKey(entityType, event);
+            LOGGER.info("entityKey : " + entityKey);
             if (entityKeys.isEmpty() || entityKeys.contains(entityKey)) {
                 LOGGER.info("true");
                 return true;
