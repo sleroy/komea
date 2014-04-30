@@ -9,10 +9,14 @@ package org.komea.product.backend.service.kpi;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.database.dao.MeasureDao;
+import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.model.Kpi;
-import org.mockito.InjectMocks;
+import org.komea.product.database.model.MeasureCriteria;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.mockito.Mockito.verify;
 
 
 
@@ -24,26 +28,26 @@ public class HistoryPurgePerDaysActionTest
 {
     
     
-    @InjectMocks
-    private HistoryPurgePerDaysAction historyPurgePerDaysAction;
-    
-    
     @Mock
-    private Kpi                       kpi;
-    @Mock
-    private MeasureDao                measureDAO;
+    private MeasureDao measureDAO;
     
     
     
     /**
-     * Test method for {@link org.komea.product.cep.tester.HistoryPurgePerDaysAction#purgeHistory()}.
+     * Test method for {@link org.komea.product.cep.tester.HistoryPurgePerMonthsAction#purgeHistory()}.
      */
     @Test
     public final void testPurgeHistory() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        final Kpi kpi = new Kpi();
+        kpi.setId(1);
+        kpi.setEvictionRate(1);
+        kpi.setEvictionType(EvictionType.DAYS);
+        final AbstractHistoryPurgePerTimeAction historyPurgePerDaysAction =
+                new HistoryPurgePerMonthsAction(measureDAO, kpi);
+        historyPurgePerDaysAction.purgeHistory();
+        verify(measureDAO).deleteByCriteria(Matchers.any(MeasureCriteria.class));
     }
     
 }

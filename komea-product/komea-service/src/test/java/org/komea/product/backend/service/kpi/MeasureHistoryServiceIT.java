@@ -154,7 +154,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase
         // Test day
         final Kpi kpiDay = new Kpi();
         kpiDay.setEvictionType(EvictionType.DAYS);
-        Assert.assertTrue(buildMeasureHistoryComponent.buildHistoryPurgeAction(kpiDay) instanceof HistoryPurgePerDaysAction);
+        Assert.assertTrue(buildMeasureHistoryComponent.buildHistoryPurgeAction(kpiDay) instanceof AbstractHistoryPurgePerTimeAction);
         // Test day
         final Kpi kpiMonth = new Kpi();
         kpiMonth.setEvictionType(EvictionType.MONTHS);

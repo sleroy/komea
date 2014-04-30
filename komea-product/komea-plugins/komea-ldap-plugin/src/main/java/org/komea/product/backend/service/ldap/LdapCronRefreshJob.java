@@ -133,7 +133,7 @@ public class LdapCronRefreshJob implements Job
         if (department != null) {
             personRequested.setIdPersonGroup(department.getId());
         }
-        personService.saveOrUpdatePerson(personRequested, Collections.<Project> emptyList());
+        personService.saveOrUpdatePersonAndItsProjects(personRequested, Collections.<Project> emptyList());
         
     }
     
