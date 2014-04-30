@@ -76,16 +76,12 @@ public final class AlertService implements IAlertService {
         final List<KpiAlertType> alertTypesOfKpiAndSeverity
                 = alertTypeService.getAlertTypes(extendedEntityType,
                         _searchAlert.getKpiAlertTypeKeys(), _searchAlert.getSeverityMin());
-        LOGGER.info("alertTypesOfKpiAndSeverity : " + alertTypesOfKpiAndSeverity);
         final List<BaseEntityDto> parentEntities
                 = entityService.getBaseEntityDTOS(entityType, _searchAlert.getEntityKeys());
-        LOGGER.info("parentEntities : " + parentEntities);
         final List<BaseEntityDto> entities = entityService.getSubEntities(extendedEntityType, parentEntities);
-        LOGGER.info("entities : " + entities);
 
         final IdKpiMap idKpiMap = new IdKpiMap();
         final Set<String> kpiKeys = idKpiMap.fillIdKpi(alertTypesOfKpiAndSeverity, kpiService);
-        LOGGER.info("kpiKeys : " + kpiKeys);
         final SearchMeasuresDto searchMeasuresDto
                 = createMeasureFilterOnKpiKeys(_searchAlert, extendedEntityType, kpiKeys);
 
@@ -95,10 +91,14 @@ public final class AlertService implements IAlertService {
         final List<KpiAlertDto> filteredActivatedAlerts = Lists.newArrayList();
         for (final KpiAlertType alertType : alertTypesOfKpiAndSeverity) {
             for (final BaseEntityDto entity : entities) {
+                LOGGER.info("alertType : " + alertType + "\n entity : " + entity);
                 final KpiAlertDto kpiAlert
                         = findAlert(new AlertCriteria(alertType, entity, entityType, measuresOfKpi),
                                 idKpiMap);
-                if (isAlertFiltered(_searchAlert, kpiAlert)) {
+                LOGGER.info("kpiAlert : " + kpiAlert);
+                boolean alertFiltered = isAlertFiltered(_searchAlert, kpiAlert);
+                LOGGER.info("alertFiltered : " + alertFiltered);
+                if (alertFiltered) {
                     filteredActivatedAlerts.add(kpiAlert);
                 }
             }
@@ -232,7 +232,7 @@ public final class AlertService implements IAlertService {
 
         final SearchMeasuresDto searchMeasuresDto
                 = new SearchMeasuresDto(entityType, new ArrayList<String>(kpiKeys),
-                        _searchAlert.getEntityKeys());
+                        _searchAlert.getEntityKeys(), 1);
         return searchMeasuresDto;
     }
 
@@ -240,20 +240,8 @@ public final class AlertService implements IAlertService {
             final AlertCriteria _criteria,
             final Measure measure) {
 
-        switch (_criteria.getEntityType()) {
-            case PROJECT:
-                return measure.getIdProject().equals(_criteria.getEntity().getId());
-
-            case PERSON:
-                return measure.getIdPerson().equals(_criteria.getEntity().getId());
-            case DEPARTMENT:
-            case TEAM:
-                return measure.getIdPersonGroup().equals(_criteria.getEntity().getId());
-            default:
-                throw new UnsupportedOperationException("Entity type not supported "
-                        + _criteria.getEntityType());
-
-        }
+        Integer entityId = measure.getEntityID();
+        return entityId != null && _criteria.getEntity().getId().equals(entityId);
     }
 
     private boolean isAlertIdAssociatedToKpi(final AlertCriteria _criteria, final Measure measure) {
