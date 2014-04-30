@@ -1,17 +1,21 @@
 package org.komea.product.web.rest.api;
 
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import javax.validation.Valid;
+import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.backend.service.esper.IEventViewerService;
 import org.komea.product.database.alert.IEvent;
+import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.dto.SearchEventDto;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.enums.Severity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +39,8 @@ public class EventsController {
     private IEventPushService eventPushService;
     @Autowired
     private IEventViewerService eventService;
+    @Autowired
+    private IEntityService entityService;
 
     /**
      * This method find events which have been stored into komea
@@ -142,32 +148,23 @@ public class EventsController {
 
         final Severity severity = searchEvent.getSeverityMin();
         final List<String> eventTypeKeys = searchEvent.getEventTypeKeys();
-        final List<String> entityKeys = searchEvent.getEntityKeys();
-        final EntityType entityType = searchEvent.getEntityType();
+        final List<String> parentEntityKeys = searchEvent.getEntityKeys();
+        final ExtendedEntityType extendedEntityType = searchEvent.getEntityType();
+        final EntityType entityType = extendedEntityType.getEntityType();
+        final List<BaseEntityDto> parentEntities = entityService.getBaseEntityDTOS(
+                entityType, parentEntityKeys);
+        final List<BaseEntityDto> entities = entityService.getSubEntities(extendedEntityType, parentEntities);
+        final List<String> entityKeys = Lists.newArrayList();
+        for (final BaseEntityDto baseEntityDto : entities) {
+            entityKeys.add(baseEntityDto.getKey());
+        }
         if ((eventTypeKeys.isEmpty() || eventTypeKeys.contains(event.getEventType().getEventKey()))
                 && (entityType == null || entityType.equals(event.getEventType().getEntityType()))
                 && event.getEventType().getSeverity().compareTo(severity) >= 0) {
             if (entityType == null) {
                 return true;
             }
-            final String entityKey;
-            switch (entityType) {
-                case TEAM:
-                case DEPARTMENT:
-                    entityKey
-                            = event.getPersonGroup() == null ? null : event.getPersonGroup()
-                            .getPersonGroupKey();
-                    break;
-                case PERSON:
-                    entityKey = event.getPerson() != null ? event.getPerson().getLogin() : "";
-                    break;
-                case PROJECT:
-                    entityKey
-                            = event.getProject() == null ? null : event.getProject().getProjectKey();
-                    break;
-                default:
-                    entityKey = null;
-            }
+            final String entityKey = eventService.getEntityKey(entityType, event);
             if (entityKeys.isEmpty() || entityKeys.contains(entityKey)) {
                 return true;
             }

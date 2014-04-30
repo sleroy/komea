@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.List;
 import javax.validation.constraints.NotNull;
-import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.enums.Severity;
 
 public class SearchEventDto implements Serializable {
@@ -14,7 +14,7 @@ public class SearchEventDto implements Serializable {
     @NotNull
     private Severity severityMin = Severity.INFO;
     private int maxEvents = 100;
-    private EntityType entityType;
+    private ExtendedEntityType entityType;
     @NotNull
     private List<String> entityKeys = Lists.newArrayList();
     @NotNull
@@ -23,7 +23,7 @@ public class SearchEventDto implements Serializable {
     public SearchEventDto() {
     }
 
-    public SearchEventDto(int maxEvents, EntityType entityType,
+    public SearchEventDto(int maxEvents, ExtendedEntityType entityType,
             List<String> entityKeys, List<String> eventTypeKeys) {
         this.maxEvents = maxEvents;
         this.entityType = entityType;
@@ -31,14 +31,14 @@ public class SearchEventDto implements Serializable {
         this.eventTypeKeys = eventTypeKeys;
     }
 
-    public SearchEventDto(EntityType entityType,
+    public SearchEventDto(ExtendedEntityType entityType,
             List<String> entityKeys, List<String> eventTypeKeys) {
         this.entityType = entityType;
         this.entityKeys = entityKeys;
         this.eventTypeKeys = eventTypeKeys;
     }
 
-    public SearchEventDto(Severity severityMin, EntityType entityType,
+    public SearchEventDto(Severity severityMin, ExtendedEntityType entityType,
             List<String> entityKeys, List<String> eventTypeKeys) {
         this.severityMin = severityMin;
         this.entityType = entityType;
@@ -46,7 +46,7 @@ public class SearchEventDto implements Serializable {
         this.eventTypeKeys = eventTypeKeys;
     }
 
-    public SearchEventDto(Severity severityMin, int maxEvents, EntityType entityType,
+    public SearchEventDto(Severity severityMin, int maxEvents, ExtendedEntityType entityType,
             List<String> entityKeys, List<String> eventTypeKeys) {
         this.severityMin = severityMin;
         this.maxEvents = maxEvents;
@@ -71,11 +71,11 @@ public class SearchEventDto implements Serializable {
         this.maxEvents = maxEvents;
     }
 
-    public EntityType getEntityType() {
+    public ExtendedEntityType getEntityType() {
         return entityType;
     }
 
-    public void setEntityType(EntityType entityType) {
+    public void setEntityType(ExtendedEntityType entityType) {
         this.entityType = entityType;
     }
 
@@ -98,7 +98,7 @@ public class SearchEventDto implements Serializable {
     @Override
     public String toString() {
         return "SearchEventDto{" + "severityMin=" + severityMin + ", maxEvents=" + maxEvents
-                + ", entityType=" + entityType + ", entityKeys=" + entityKeys + ", eventTypeKeys=" + eventTypeKeys + '}';
+                + ", extendedEntityType=" + entityType + ", entityKeys=" + entityKeys + ", eventTypeKeys=" + eventTypeKeys + '}';
     }
 
 }

@@ -1,5 +1,6 @@
 package org.komea.product.backend.service.entities;
 
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -268,5 +269,33 @@ public final class EntityService implements IEntityService {
             default:
                 return Collections.EMPTY_LIST;
         }
+    }
+
+    @Override
+    public List<BaseEntityDto> getSubEntities(final ExtendedEntityType extendedEntityType,
+            final List<BaseEntityDto> parentEntities) {
+        final List<BaseEntityDto> entities;
+        if (extendedEntityType.isForGroups()) {
+            entities = Lists.newArrayList();
+            final List<Integer> entityIds = Lists.newArrayList();
+            for (final BaseEntityDto parentEntity : parentEntities) {
+                final Integer entityId = parentEntity.getId();
+                final List<? extends IEntity> subEntities
+                        = getSubEntities(entityId, extendedEntityType);
+                if (subEntities != null && !subEntities.isEmpty()) {
+                    final List<BaseEntityDto> subEntitiesDto = BaseEntityDto.convertEntities(subEntities);
+                    for (final BaseEntityDto subEntityDto : subEntitiesDto) {
+                        final Integer subEntityId = subEntityDto.getId();
+                        if (!entityIds.contains(subEntityId)) {
+                            entityIds.add(subEntityId);
+                            entities.add(subEntityDto);
+                        }
+                    }
+                }
+            }
+        } else {
+            entities = parentEntities;
+        }
+        return entities;
     }
 }
