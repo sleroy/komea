@@ -12,13 +12,11 @@ import java.util.Map;
 
 import org.komea.eventory.api.engine.ICEPStatement;
 import org.komea.eventory.api.formula.ICEPFormula;
-import org.komea.eventory.api.formula.ICEPResult;
 import org.komea.eventory.api.formula.ITupleResultMap;
 import org.komea.eventory.api.formula.tuple.IEventTable;
 import org.komea.eventory.api.formula.tuple.IEventTableGenerator;
 import org.komea.eventory.api.formula.tuple.ITupleCreator;
 import org.komea.eventory.api.formula.tuple.ITuplerFormula;
-import org.komea.eventory.query.CEPResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * @author sleroy
  */
 @SuppressWarnings("rawtypes")
-public class GroupByFormula implements ICEPFormula<Serializable>
+public class GroupByFormula implements ICEPFormula<Serializable, ITupleResultMap>
 {
     
     
@@ -61,7 +59,7 @@ public class GroupByFormula implements ICEPFormula<Serializable>
      * @see org.komea.eventory.api.ICEPFormula#compute(org.komea.eventory.api.ICEPStatement, java.util.Map)
      */
     @Override
-    public ICEPResult compute(
+    public ITupleResultMap compute(
             final ICEPStatement<Serializable> _statement,
             final Map<String, Object> _parameters) {
     
@@ -75,7 +73,7 @@ public class GroupByFormula implements ICEPFormula<Serializable>
         final ITupleResultMap<?> resultMap = formulaTupler.processMap(tupleMap, _parameters);
         LOGGER.debug("resultMap produced {}", resultMap);
         
-        return CEPResult.buildFromMap(resultMap);
+        return resultMap;
     }
     
     

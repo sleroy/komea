@@ -9,8 +9,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.eventory.api.engine.ICEPStatement;
-import org.komea.eventory.api.formula.ICEPResult;
-import org.komea.eventory.formula.ElNumericalFormula;
 import org.komea.eventory.formula.ElNumericalFormula.Context;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -24,7 +22,7 @@ public class ElNumericalFormulaTest
 {
     
     
-    @Test 
+    @Test
     public final void testElNumericalFormulaString() throws Exception {
     
     
@@ -33,16 +31,16 @@ public class ElNumericalFormulaTest
         Mockito.when(mock.getAggregateView()).thenReturn(Lists.newArrayList("truc", "truc2"));
         
         
-        final ICEPResult result =
+        final Number result =
                 new ElNumericalFormula("previous  + 1").compute(mock, Collections.EMPTY_MAP);
         
-        Assert.assertEquals(2, result.asNumber().intValue());
+        Assert.assertEquals(2, result.intValue());
         
         
     }
     
     
-    @Test 
+    @Test
     public final void testGetFormula() throws Exception {
     
     

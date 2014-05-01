@@ -10,8 +10,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.komea.eventory.api.engine.ICEPStatement;
 import org.komea.eventory.api.filters.IEventFilter;
-import org.komea.eventory.api.formula.ICEPResult;
-import org.komea.eventory.formula.CountWithFilterFormula;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
@@ -22,7 +20,7 @@ public class CountWithFilterFormulaTest
 {
     
     
-    @Test 
+    @Test
     public final void testCountWithFilterFormula() throws Exception {
     
     
@@ -41,9 +39,9 @@ public class CountWithFilterFormulaTest
         Mockito.when(mock.getDefaultStorage()).thenReturn(Lists.newArrayList("truc", "truc2"));
         
         
-        final ICEPResult result = countFormula.compute(mock, Collections.EMPTY_MAP);
+        final Integer result = countFormula.compute(mock, Collections.EMPTY_MAP);
         
         
-        Assert.assertEquals(1, result.asNumber().intValue());
+        Assert.assertEquals(Integer.valueOf(1), result);
     }
 }

@@ -16,7 +16,6 @@ import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.engine.ICEPStatement;
 import org.komea.eventory.api.filters.IFilterDefinition;
 import org.komea.eventory.api.formula.ICEPFormula;
-import org.komea.eventory.api.formula.ICEPResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,16 +27,16 @@ import org.slf4j.LoggerFactory;
  * @author sleroy
  */
 @SuppressWarnings("unchecked")
-public class CEPQuery implements ICEPQuery
+public class CEPQuery<TEvent extends Serializable, TRes> implements ICEPQuery<TEvent, TRes>
 {
     
     
-    private static final Logger LOGGER       = LoggerFactory.getLogger("cep-query");
-    private ICEPStatement<?>    cepStatement = new CEPStatement<Serializable>();
+    private static final Logger       LOGGER       = LoggerFactory.getLogger("cep-query");
+    private ICEPStatement<TEvent>     cepStatement = new CEPStatement<TEvent>();
     
     
-    private ICEPFormula         formula;
-    private Map<String, Object> parameters   = Collections.<String, Object> emptyMap();
+    private ICEPFormula<TEvent, TRes> formula;
+    private Map<String, Object>       parameters   = Collections.<String, Object> emptyMap();
     
     
     
@@ -52,7 +51,7 @@ public class CEPQuery implements ICEPQuery
     
         LOGGER.debug(">---- new cep query :");
         
-        final CEPStatement<Serializable> initStatement = new CEPStatement<Serializable>();
+        final CEPStatement<TEvent> initStatement = new CEPStatement<TEvent>();
         LOGGER.debug(">---- filters defined : {}", _queryDefinition.getFilterDefinitions().size());
         for (final IFilterDefinition definition : _queryDefinition.getFilterDefinitions()) {
             LOGGER.debug(">---- filter choose : {}", definition);
@@ -88,7 +87,7 @@ public class CEPQuery implements ICEPQuery
      * @see org.komea.eventory.api.ICEPQuery#getFormula()
      */
     @Override
-    public <T extends Serializable> ICEPFormula<T> getFormula() {
+    public ICEPFormula<TEvent, TRes> getFormula() {
     
     
         return formula;
@@ -112,7 +111,7 @@ public class CEPQuery implements ICEPQuery
      * @see org.komea.eventory.api.ICEPQuery#getResult()
      */
     @Override
-    public ICEPResult getResult() {
+    public TRes getResult() {
     
     
         return formula.compute(cepStatement, parameters);
@@ -124,7 +123,7 @@ public class CEPQuery implements ICEPQuery
      * @see org.komea.eventory.api.ICEPQuery#getStatement()
      */
     @Override
-    public <T extends Serializable> ICEPStatement<T> getStatement() {
+    public ICEPStatement<TEvent> getStatement() {
     
     
         return getCepStatement();
@@ -152,7 +151,7 @@ public class CEPQuery implements ICEPQuery
      * @param _cepStatement
      *            the cep statement.
      */
-    public void setCepStatement(final ICEPStatement<?> _cepStatement) {
+    public void setCepStatement(final ICEPStatement<TEvent> _cepStatement) {
     
     
         cepStatement = _cepStatement;
@@ -162,7 +161,7 @@ public class CEPQuery implements ICEPQuery
     /**
      * @param _formula
      */
-    public void setFormula(final ICEPFormula<?> _formula) {
+    public void setFormula(final ICEPFormula<TEvent, TRes> _formula) {
     
     
         formula = _formula;

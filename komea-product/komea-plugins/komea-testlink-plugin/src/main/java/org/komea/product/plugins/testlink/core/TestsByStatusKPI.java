@@ -9,8 +9,6 @@ package org.komea.product.plugins.testlink.core;
 import java.util.List;
 
 import org.komea.cep.dynamicdata.IDynamicDataQuery;
-import org.komea.eventory.api.formula.ICEPResult;
-import org.komea.eventory.query.CEPResult;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Project;
@@ -66,7 +64,7 @@ public final class TestsByStatusKPI implements IDynamicDataQuery
      * @see org.komea.cep.dynamicdata.IDynamicDataQuery#getResult()
      */
     @Override
-    public ICEPResult getResult() {
+    public KpiResult getResult() {
     
     
         final KpiResult kpiResult = new KpiResult();
@@ -79,7 +77,7 @@ public final class TestsByStatusKPI implements IDynamicDataQuery
                 LOGGER.error("Testlink update failed for server {}", testlinkServer.getName(), e);
             }
         }
-        return CEPResult.buildFromCustomType(kpiResult);
+        return kpiResult;
     }
     
     
@@ -107,8 +105,8 @@ public final class TestsByStatusKPI implements IDynamicDataQuery
             analysisTestlinkProjects(_kpiResult, testlinkServer, openProxy);
         }
     }
-
-
+    
+    
     private void analysisTestlinkProjects(
             final KpiResult _kpiResult,
             final TestLinkServer testlinkServer,
@@ -126,19 +124,12 @@ public final class TestsByStatusKPI implements IDynamicDataQuery
             
             final List<TestCase> testCases = openProxy.getTotalTests(projet);
             LOGGER.info(project.getDisplayName() + " test cases : " + testCases.size());
-            int cpt = countNumberOfTestCases(testCases);
+            final int cpt = countNumberOfTestCases(testCases);
             _kpiResult.put(project.getEntityKey(), cpt);
         }
     }
-
-
-    private boolean isProxyOpened(final ITestLinkServerProxy openProxy) {
     
     
-        return openProxy != null;
-    }
-
-
     private int countNumberOfTestCases(final List<TestCase> testCases) {
     
     
@@ -149,6 +140,13 @@ public final class TestsByStatusKPI implements IDynamicDataQuery
             }
         }
         return cpt;
+    }
+    
+    
+    private boolean isProxyOpened(final ITestLinkServerProxy openProxy) {
+    
+    
+        return openProxy != null;
     }
     
     

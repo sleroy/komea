@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.komea.eventory.api.formula.ICEPResult;
 import org.komea.eventory.api.formula.ITupleResultMap;
 import org.komea.eventory.api.formula.tuple.IEventGroup;
 import org.komea.eventory.api.formula.tuple.IEventTable;
@@ -27,11 +26,11 @@ import org.komea.eventory.query.xpath.XPathTree;
  * 
  * @author sleroy
  */
-public class XPathGroupByFormula implements ITuplerFormula
+public class XPathGroupByFormula<TRes> implements ITuplerFormula<TRes>
 {
     
     
-    private final XPathFormula formula;
+    private final XPathFormula<?> formula;
     
     
     
@@ -48,18 +47,18 @@ public class XPathGroupByFormula implements ITuplerFormula
      * java.util.Map)
      */
     @Override
-    public ITupleResultMap processMap(final IEventTable _tupleMap, final Map _ownParameters) {
+    public ITupleResultMap<TRes> processMap(final IEventTable _tupleMap, final Map _ownParameters) {
     
     
-        final TupleResultMap tupleResultMap = new TupleResultMap<Object>();
+        final TupleResultMap<TRes> tupleResultMap = new TupleResultMap<TRes>();
         for (final Entry<ITuple, IEventGroup> entry : _tupleMap.iterator()) {
             
             final XPathTree xPathTree = new XPathTree(entry.getValue());
             
-            final ICEPResult executeQuery =
+            final Object executeQuery =
                     formula.executeQuery(Collections.<String, Object> emptyMap(), xPathTree);
             
-            tupleResultMap.insertEntry(entry.getKey(), executeQuery.asType());
+            tupleResultMap.insertEntry(entry.getKey(), (TRes) executeQuery);             // UNSAFE CAST
             
         }
         

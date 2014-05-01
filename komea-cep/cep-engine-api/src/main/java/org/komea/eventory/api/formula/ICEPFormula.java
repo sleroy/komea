@@ -18,7 +18,7 @@ import org.komea.eventory.api.engine.ICEPStatement;
  * 
  * @author sleroy
  */
-public interface ICEPFormula<TEvent extends Serializable>
+public interface ICEPFormula<TEvent extends Serializable, TRes>
 {
     
     
@@ -31,7 +31,7 @@ public interface ICEPFormula<TEvent extends Serializable>
      *            parameters
      * @return the result.
      */
-    ICEPResult compute(ICEPStatement<TEvent> _statement, Map<String, Object> _parameters);
+    TRes compute(ICEPStatement<TEvent> _statement, Map<String, Object> _parameters);
     
     
 }

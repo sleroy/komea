@@ -8,10 +8,10 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.komea.cep.dynamicdata.IDynamicDataQuery;
-import org.komea.eventory.api.formula.ICEPResult;
 import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
 import org.komea.product.backend.api.IDynamicQueryCacheService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
+import org.komea.product.database.dto.KpiResult;
 import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public class DynamicQueryCacheService implements IDynamicQueryCacheService
     private static final Logger              LOGGER          =
                                                                      LoggerFactory
                                                                              .getLogger("dynamicquery-cache");
-    private Cache<String, ICEPResult>        cache;
+    private Cache<String, KpiResult>         cache;
     
     
     private final String                     CRON_EXPRESSION = "0 0/5  * * * ?";
@@ -84,7 +84,7 @@ public class DynamicQueryCacheService implements IDynamicQueryCacheService
      * 
      * @return the cache.
      */
-    public Cache<String, ICEPResult> getCache() {
+    public Cache<String, KpiResult> getCache() {
     
     
         return cache;
@@ -128,10 +128,10 @@ public class DynamicQueryCacheService implements IDynamicQueryCacheService
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.api.IDynamicQueryCacheService#refreshValue(java.lang.String,
-     * org.komea.eventory.api.formula.ICEPResult)
+     * org.komea.eventory.api.formula.KpiResult)
      */
     @Override
-    public void refreshValue(final String _queryKey, final ICEPResult _result) {
+    public void refreshValue(final String _queryKey, final KpiResult _result) {
     
     
         cache.put(_queryKey, _result);

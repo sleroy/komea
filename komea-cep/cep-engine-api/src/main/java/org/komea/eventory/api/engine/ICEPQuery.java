@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.komea.eventory.api.formula.ICEPFormula;
-import org.komea.eventory.api.formula.ICEPResult;
 
 
 
@@ -24,7 +23,7 @@ import org.komea.eventory.api.formula.ICEPResult;
  * 
  * @author sleroy
  */
-public interface ICEPQuery
+public interface ICEPQuery<TEvent extends Serializable, TRes>
 {
     
     
@@ -33,7 +32,7 @@ public interface ICEPQuery
      * 
      * @return the formula.
      */
-    <T extends Serializable> ICEPFormula<T> getFormula();
+    ICEPFormula<TEvent, TRes> getFormula();
     
     
     /**
@@ -47,7 +46,7 @@ public interface ICEPQuery
     /**
      * Returns the result.
      */
-    ICEPResult getResult();
+    TRes getResult();
     
     
     /**
@@ -55,7 +54,7 @@ public interface ICEPQuery
      * 
      * @return the statement.
      */
-    <T extends Serializable> ICEPStatement<T> getStatement();
+    ICEPStatement<TEvent> getStatement();
     
     
     /**

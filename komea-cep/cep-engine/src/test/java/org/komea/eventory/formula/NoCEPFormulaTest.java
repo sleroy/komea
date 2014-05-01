@@ -11,8 +11,6 @@ import java.util.Collections;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.eventory.api.engine.ICEPStatement;
-import org.komea.eventory.api.formula.ICEPResult;
-import org.komea.eventory.formula.NoCEPFormula;
 import org.mockito.Mockito;
 
 
@@ -25,14 +23,12 @@ public class NoCEPFormulaTest
     
     
     @SuppressWarnings("unchecked")
-    @Test 
+    @Test
     public void testFormula() {
     
     
         final NoCEPFormula noCEPFormula = new NoCEPFormula();
-        final ICEPResult compute =
-                noCEPFormula.compute(Mockito.mock(ICEPStatement.class), Collections.EMPTY_MAP);
-        final Object asType = compute.asType();
+        final Object asType = noCEPFormula.compute(Mockito.mock(ICEPStatement.class), Collections.EMPTY_MAP);
         Assert.assertNotNull(asType);
     }
 }

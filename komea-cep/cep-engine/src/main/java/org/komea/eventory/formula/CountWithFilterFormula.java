@@ -13,9 +13,7 @@ import org.hamcrest.Matcher;
 import org.komea.eventory.api.engine.ICEPStatement;
 import org.komea.eventory.api.filters.IEventFilter;
 import org.komea.eventory.api.formula.ICEPFormula;
-import org.komea.eventory.api.formula.ICEPResult;
 import org.komea.eventory.filter.LambdaJEventFilter;
-import org.komea.eventory.query.CEPResult;
 
 import ch.lambdaj.collection.LambdaCollections;
 
@@ -26,7 +24,7 @@ import ch.lambdaj.collection.LambdaCollections;
  * 
  * @author sleroy
  */
-public class CountWithFilterFormula<T extends Serializable> implements ICEPFormula<T>
+public class CountWithFilterFormula<T extends Serializable> implements ICEPFormula<T, Integer>
 {
     
     
@@ -49,13 +47,10 @@ public class CountWithFilterFormula<T extends Serializable> implements ICEPFormu
      * @see org.komea.eventory.api.ICEPFormula#compute(org.komea.eventory.api.ICEPStatement, java.util.Map)
      */
     @Override
-    public ICEPResult compute(
-            final ICEPStatement<T> _statement,
-            final Map<String, Object> _parameters) {
+    public Integer compute(final ICEPStatement<T> _statement, final Map<String, Object> _parameters) {
     
     
-        return CEPResult.buildFromNumber(LambdaCollections.with(_statement.getDefaultStorage())
-                .retain(matcher).size());
+        return LambdaCollections.with(_statement.getDefaultStorage()).retain(matcher).size();
     }
     
     

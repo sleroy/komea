@@ -12,8 +12,6 @@ import java.util.Map;
 import org.apache.commons.lang.Validate;
 import org.komea.eventory.api.engine.ICEPStatement;
 import org.komea.eventory.api.formula.ICEPFormula;
-import org.komea.eventory.api.formula.ICEPResult;
-import org.komea.eventory.query.CEPResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.expression.ExpressionParser;
@@ -26,7 +24,8 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
  * 
  * @author sleroy
  */
-public class ElNumericalFormula<T extends Serializable> implements ICEPFormula<T>
+public class ElNumericalFormula<T extends Serializable, TRes extends Number> implements
+        ICEPFormula<T, TRes>
 {
     
     
@@ -137,9 +136,7 @@ public class ElNumericalFormula<T extends Serializable> implements ICEPFormula<T
      * @see org.komea.product.cep.api.ICEPFormula#compute(org.komea.product.cep.api.ICEPStatement, java.util.Map)
      */
     @Override
-    public ICEPResult compute(
-            final ICEPStatement<T> _statement,
-            final Map<String, Object> _parameters) {
+    public TRes compute(final ICEPStatement<T> _statement, final Map<String, Object> _parameters) {
     
     
         Validate.notNull(_statement);
@@ -158,7 +155,7 @@ public class ElNumericalFormula<T extends Serializable> implements ICEPFormula<T
         }
         LOGGER.debug("Formula returns value {}", context.getPrevious());
         
-        return CEPResult.buildFromNumber(context.getPrevious());
+        return (TRes) context.getPrevious();
     }
     
     

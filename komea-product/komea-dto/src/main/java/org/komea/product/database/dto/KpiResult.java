@@ -6,6 +6,7 @@ package org.komea.product.database.dto;
 
 
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.komea.product.service.dto.EntityKey;
@@ -21,7 +22,30 @@ public class KpiResult
 {
     
     
-    private Map<EntityKey, Number> map = Maps.newHashMap();
+    public static final KpiResult  EMPTY = new KpiResult()
+                                         {
+                                             
+                                             
+                                             /**
+                                              * Puts a value into the map.
+                                              * 
+                                              * @param _entityKey
+                                              *            the entity key
+                                              * @param _value
+                                              *            the value;
+                                              */
+                                             @Override
+                                             public void put(
+                                                     final EntityKey _entityKey,
+                                                     final Number _value) {
+                                             
+                                             
+                                                 throw new IllegalAccessError();
+                                                 
+                                             }
+                                         };
+    
+    private Map<EntityKey, Number> map   = Maps.newHashMap();
     
     
     
@@ -44,7 +68,7 @@ public class KpiResult
     public Map<EntityKey, Number> getMap() {
     
     
-        return map;
+        return Collections.unmodifiableMap(map);
     }
     
     

@@ -8,9 +8,7 @@ package org.komea.product.backend.service.dynamicquery;
 
 import org.apache.commons.lang.Validate;
 import org.komea.cep.dynamicdata.IDynamicDataQuery;
-import org.komea.eventory.api.formula.ICEPResult;
-import org.komea.eventory.formula.tuple.TupleResultMap;
-import org.komea.eventory.query.CEPResult;
+import org.komea.product.database.dto.KpiResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,12 +72,12 @@ public final class CachedDynamicQuery implements IDynamicDataQuery
      * @see org.komea.cep.dynamicdata.IDynamicDataQuery#getResult()
      */
     @Override
-    public ICEPResult getResult() {
+    public KpiResult getResult() {
     
     
         LOGGER.debug("Cache state {} values and {}", dynamicQueryCacheService.getCache().size(),
                 queryKey);
-        final ICEPResult result = returnValueFromCacheOrFreshValue();
+        final KpiResult result = returnValueFromCacheOrFreshValue();
         LOGGER.debug("Cache state after retrieving {} values and {}", dynamicQueryCacheService
                 .getCache().size(), queryKey);
         return result;
@@ -87,18 +85,17 @@ public final class CachedDynamicQuery implements IDynamicDataQuery
     }
     
     
-    private ICEPResult returnValueFromCacheOrFreshValue() {
+    private KpiResult returnValueFromCacheOrFreshValue() {
     
     
         LOGGER.debug("Cache state {} values and {}", dynamicQueryCacheService.getCache().size());
-        ICEPResult result = dynamicQueryCacheService.getCache().getIfPresent(queryKey);
+        KpiResult result = dynamicQueryCacheService.getCache().getIfPresent(queryKey);
         if (null == result) {
             result = dynamicDataQuery.getResult();
         }
-        if (null == result) { return CEPResult.buildFromMap(new TupleResultMap()); }
+        if (null == result) { return KpiResult.EMPTY; }
         LOGGER.debug("Cache state after retrieving {} values and {}", dynamicQueryCacheService
                 .getCache().size());
         return result;
     }
-    
 }

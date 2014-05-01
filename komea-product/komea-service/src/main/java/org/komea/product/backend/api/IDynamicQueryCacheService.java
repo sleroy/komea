@@ -6,7 +6,7 @@ package org.komea.product.backend.api;
 import java.util.List;
 
 import org.komea.cep.dynamicdata.IDynamicDataQuery;
-import org.komea.eventory.api.formula.ICEPResult;
+import org.komea.product.database.dto.KpiResult;
 
 
 
@@ -47,7 +47,7 @@ public interface IDynamicQueryCacheService
      * @param _result
      *            the new value.
      */
-    void refreshValue(String _queryKey, ICEPResult _result);
+    void refreshValue(String _queryKey, KpiResult _result);
     
     
 }
