@@ -3,13 +3,16 @@ package org.komea.product.cep.tester;
 
 
 
+import java.io.Serializable;
+
 import org.komea.eventory.api.engine.ICEPQuery;
+import org.komea.product.database.dto.KpiResult;
 
 
 
 /**
  */
-public interface ICEPQueryTestPredicate
+public interface ICEPQueryTestPredicate<T extends Serializable>
 {
     
     
@@ -19,5 +22,5 @@ public interface ICEPQueryTestPredicate
      * @param _epStatement
      *            EPStatement
      */
-    void evaluate(final ICEPQuery _epStatement);
+    void evaluate(final ICEPQuery<T, KpiResult> _epStatement);
 }

@@ -73,6 +73,20 @@ public class KpiResult
     
     
     /**
+     * Returns the value of an entity.
+     * 
+     * @param _entityKey
+     *            the entity key.
+     * @return the value.
+     */
+    public Number getValue(final EntityKey _entityKey) {
+    
+    
+        return map.get(_entityKey);
+    }
+    
+    
+    /**
      * Puts a value into the map.
      * 
      * @param _entityKey

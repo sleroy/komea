@@ -14,8 +14,6 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
 import org.komea.cep.dynamicdata.IDynamicDataQuery;
-import org.komea.eventory.api.formula.ICEPResult;
-import org.komea.eventory.query.CEPResult;
 import org.komea.product.backend.kpi.search.ISearchedElement;
 import org.komea.product.backend.kpi.search.Search;
 import org.komea.product.backend.kpi.search.SearchUtils;
@@ -103,7 +101,7 @@ public final class BZBugCountKPI implements IDynamicDataQuery
      * @see org.komea.cep.dynamicdata.IDynamicDataQuery#getResult()
      */
     @Override
-    public ICEPResult getResult() {
+    public KpiResult getResult() {
     
     
         final KpiResult kpiResult = new KpiResult();
@@ -135,7 +133,7 @@ public final class BZBugCountKPI implements IDynamicDataQuery
                 IOUtils.closeQuietly(bugzillaProxy);
             }
         }
-        return CEPResult.buildFromCustomType(kpiResult);
+        return kpiResult;
     }
     
     

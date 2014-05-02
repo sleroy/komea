@@ -1,12 +1,14 @@
 package org.komea.product.backend.service.alert;
 
 import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+
+import org.komea.product.backend.api.IHistoryService;
 import org.komea.product.backend.service.entities.IEntityService;
-import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.KpiAlertDto;

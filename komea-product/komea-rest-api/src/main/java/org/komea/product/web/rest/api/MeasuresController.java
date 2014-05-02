@@ -1,14 +1,17 @@
 package org.komea.product.web.rest.api;
 
 import com.google.common.collect.Lists;
+
 import java.util.List;
+
 import javax.validation.Valid;
+
+import org.komea.product.backend.api.IHistoryService;
+import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.entities.IEntityService;
-import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.IKpiMathService;
-import org.komea.product.backend.service.kpi.IKpiValueService;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.dto.MeasuresDto;

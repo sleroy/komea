@@ -8,10 +8,7 @@ package org.komea.eventory.formula.tuple;
 
 import java.io.Serializable;
 
-import org.komea.eventory.api.formula.tuple.ITuple;
-import org.komea.eventory.api.formula.tuple.ITupleCreator;
 import org.komea.eventory.formula.ElFormula;
-import org.komea.eventory.formula.tuple.TupleFactory;
 
 
 
@@ -44,7 +41,7 @@ public class ELTupleCreator implements ITupleCreator
     public ITuple create(final Serializable _event) {
     
     
-        return TupleFactory.newTuple(new ElFormula(formula, Object.class).getValue(_event));
+        return new ElFormula(formula, Object.class).getValue(_event);
     }
     
 }

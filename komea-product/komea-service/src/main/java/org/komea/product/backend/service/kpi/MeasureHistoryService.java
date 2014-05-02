@@ -184,7 +184,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
      * @param measureCriteria MeasureCriteria
      * @return List<Measure>
      * @see
-     * org.komea.product.backend.service.history.IHistoryService#getFilteredHistory(HistoryKey,
+     * org.komea.product.backend.api.IHistoryService#getFilteredHistory(HistoryKey,
      * MeasureCriteria)
      */
     @Override
@@ -203,7 +203,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
      * @param _kpiKey HistoryKey
      * @return List<Measure>
      * @see
-     * org.komea.product.backend.service.history.IHistoryService#getHistory(HistoryKey)
+     * org.komea.product.backend.api.IHistoryService#getHistory(HistoryKey)
      */
     @Override
     public List<Measure> getHistory(final HistoryKey _kpiKey) {
@@ -321,7 +321,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
      *
      * @param _measure Measure
      * @see
-     * org.komea.product.backend.service.history.IHistoryService#storeMeasure(Measure)
+     * org.komea.product.backend.api.IHistoryService#storeMeasure(Measure)
      */
     @Override
     public void storeMeasure(final Measure _measure) {

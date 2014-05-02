@@ -10,11 +10,10 @@ import javax.annotation.PostConstruct;
 
 import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
-import org.komea.eventory.api.formula.ICEPResult;
 import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
+import org.komea.product.backend.api.IDynamicQueryCacheService;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
-import org.komea.product.backend.api.IDynamicQueryCacheService;
 import org.komea.product.backend.exceptions.KpiProvidesInvalidFormulaException;
 import org.komea.product.backend.service.ISpringService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
@@ -24,6 +23,7 @@ import org.komea.product.backend.service.esper.ConvertELIntoQuery;
 import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.ProjectDao;
+import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.service.dto.KpiKey;
 import org.quartz.JobDataMap;
@@ -60,6 +60,9 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService
     private IDynamicDataQueryRegisterService dynamicDataQueryRegisterService;
     
     @Autowired
+    private IDynamicQueryCacheService        dynamicQueryCacheService;
+    
+    @Autowired
     private IEntityService                   entityService;
     
     @Autowired
@@ -67,9 +70,6 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService
     
     @Autowired
     private ProjectDao                       projectDao;
-    
-    @Autowired
-    private IDynamicQueryCacheService               dynamicQueryCacheService;
     
     @Autowired
     private KpiDao                           requiredDAO;
@@ -177,7 +177,7 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService
      * @see org.komea.product.cep.tester.IKpiQueryRegisterService#getEsperQueryFromKpi(org.komea.product.database.model.Kpi)
      */
     @Override
-    public ICEPResult getQueryValueFromKpi(final Kpi _kpi) {
+    public KpiResult getQueryValueFromKpi(final Kpi _kpi) {
     
     
         // WHEN A KPI IS REQUESTED
@@ -186,7 +186,7 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService
         LOGGER.trace("Request value from KPI {}", _kpi.getKpiKey());
         final IDynamicDataQuery query =
                 dynamicDataQueryRegisterService.getQuery(computeKPIEsperKey);
-        ICEPResult result = null;
+        KpiResult result = null;
         if (query != null) {
             LOGGER.trace("This query {} is a dynamic query", computeKPIEsperKey);
             result = query.getResult();

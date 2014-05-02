@@ -6,7 +6,7 @@ package org.komea.product.backend.api;
 
 
 
-import org.komea.eventory.api.formula.ICEPResult;
+import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Kpi;
 
 
@@ -47,7 +47,7 @@ public interface IKpiQueryRegisterService
      *            the kpi
      * @return the statement or null.
      */
-    public ICEPResult getQueryValueFromKpi(Kpi _kpi);
+    public KpiResult getQueryValueFromKpi(Kpi _kpi);
     
     
 }

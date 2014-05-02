@@ -2,14 +2,14 @@
  *
  */
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.backend.api;
 
 
 
 import java.util.List;
 
 import org.komea.product.backend.exceptions.KPINotFoundException;
-import org.komea.product.database.api.IEntity;
+import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.model.Kpi;
@@ -42,7 +42,7 @@ public interface IKpiValueService
      *            the entity.
      * @return the measure
      */
-    public Measure getLastMeasureOfKpi(Kpi findKPIOrFail, IEntity entity);
+    public Measure getLastMeasureOfKpi(HistoryKey _key);
     
     
     /**

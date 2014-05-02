@@ -7,7 +7,7 @@ package org.komea.product.backend.service.cron;
 
 
 import org.junit.Test;
-import org.komea.product.backend.service.kpi.IKpiValueService;
+import org.komea.product.backend.api.IKpiValueService;
 import org.mockito.Mockito;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

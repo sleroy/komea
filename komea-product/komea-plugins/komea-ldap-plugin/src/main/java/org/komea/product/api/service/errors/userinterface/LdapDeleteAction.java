@@ -6,10 +6,12 @@
 
 package org.komea.product.api.service.errors.userinterface;
 
+
+
 /**
- *
  * @author rgalerme
  */
-public class LdapDeleteAction {
-    
+public class LdapDeleteAction
+{
+    //
 }

@@ -1,4 +1,4 @@
-package org.komea.product.backend.service.customer;
+package org.komea.product.backend.service.entities;
 
 import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.database.model.Customer;

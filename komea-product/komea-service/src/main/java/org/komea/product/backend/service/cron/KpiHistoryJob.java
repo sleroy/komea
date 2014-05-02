@@ -3,7 +3,7 @@ package org.komea.product.backend.service.cron;
 
 
 
-import org.komea.product.backend.service.kpi.IKpiValueService;
+import org.komea.product.backend.api.IKpiValueService;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;

@@ -8,8 +8,8 @@ package org.komea.product.backend.service.alert;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.komea.product.backend.api.IHistoryService;
 import org.komea.product.backend.service.entities.IEntityService;
-import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

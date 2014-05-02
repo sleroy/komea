@@ -6,14 +6,12 @@ package org.komea.product.cep.tester;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang.Validate;
 import org.komea.eventory.CEPConfiguration;
 import org.komea.eventory.CEPEngine;
 import org.komea.eventory.api.bridge.IEventBridge;
@@ -25,16 +23,13 @@ import org.komea.eventory.api.engine.ICEPConfiguration;
 import org.komea.eventory.api.engine.ICEPEngine;
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
-import org.komea.eventory.api.formula.ICEPResult;
-import org.komea.eventory.api.formula.IResultMap;
-import org.komea.eventory.api.formula.ITupleResultMap;
-import org.komea.eventory.api.formula.tuple.ITuple;
 import org.komea.eventory.bridge.MemoryBridge;
 import org.komea.eventory.cache.guava.GoogleCacheStorage;
 import org.komea.eventory.query.CEPQuery;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;
+import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.EventType;
@@ -42,10 +37,14 @@ import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.database.model.Provider;
+import org.komea.product.service.dto.EntityKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 
 
@@ -53,113 +52,6 @@ import com.google.common.base.Strings;
  */
 public class CEPQueryTester
 {
-    
-    
-    /**
-     */
-    private static class ArrayPredicate implements ICEPQueryTestPredicate
-    {
-        
-        
-        private final Object[][] array;
-        
-        
-        
-        /**
-         * @param _columnName
-         * @param _expectedValue
-         */
-        public ArrayPredicate(final Object[][] _array) {
-        
-        
-            super();
-            array = _array;
-            
-        }
-        
-        
-        /**
-         * Method evaluate.
-         * 
-         * @param _epStatement
-         *            EPStatement
-         * @see org.komea.product.cep.tester.ICEPQueryTestPredicate#evaluate(EPStatement)
-         */
-        @Override
-        public void evaluate(final ICEPQuery _epStatement) {
-        
-        
-            final List<ITuple> listMapResult =
-                    ((ITupleResultMap) _epStatement.getResult().asMap()).asTupleRows();
-            Collections.sort(listMapResult);
-            LOGGER.debug("Sorted table : {}", listMapResult.toString());
-            checkIfisEquals(array.length, listMapResult.size(), "Expected same number of rows");
-            
-            for (int i = 0; i < listMapResult.size(); ++i) {
-                
-                LOGGER.debug("Evaluating line {} of esper request", i);
-                final ITuple tuple = listMapResult.get(i);
-                final List<Object> arrayList = new ArrayList<Object>(tuple.values());
-                checkIfisEquals(array[i].length, arrayList.size(),
-                        "Comparison number of columns at the line " + i);
-                for (int j = 0; j < arrayList.size(); j++) {
-                    final Object thisProperty = arrayList.get(j);
-                    final Object expectedValue = array[i][j];
-                    LOGGER.debug("Array[{}][{}]={} and should be {}", i, j, thisProperty,
-                            expectedValue);
-                    checkIfisEquals(expectedValue, thisProperty, "Array value");
-                    
-                }
-            }
-            
-        }
-    }
-    
-    
-    
-    /**
-     */
-    private static class SingleLinePredicate implements ICEPQueryLineTestPredicate
-    {
-        
-        
-        private final Object expectedValue;
-        private final int    number;
-        
-        
-        
-        /**
-         * @param _columnName
-         * @param _expectedValue
-         */
-        public SingleLinePredicate(final int _number, final Object _expectedValue) {
-        
-        
-            super();
-            number = _number;
-            
-            expectedValue = _expectedValue;
-        }
-        
-        
-        /**
-         * Method evaluate.
-         * 
-         * @param _tuple
-         *            Map<String,Object>
-         * @see
-         *      org.komea.product.cep.tester.ICEPQueryLineTestPredicate#evaluate(Map<String,Object>)
-         */
-        @Override
-        public void evaluate(final ITuple _tuple) {
-        
-        
-            checkIfisEquals(expectedValue, _tuple.values().get(number), "Expected "
-                    + expectedValue + "  for " + number);
-            
-        }
-    }
-    
     
     
     public static final IEventBridgeFactory  DEFAULT_BRIDGE_FACTORY = new IEventBridgeFactory()
@@ -190,21 +82,10 @@ public class CEPQueryTester
                                                                         }
                                                                     };
     
-    private static final Logger              LOGGER                 =
+    static final Logger                      LOGGER                 =
                                                                             LoggerFactory
                                                                                     .getLogger("[CEP Query Test]");
     
-    
-    
-    public static void checkIfisEquals(
-            final Object _object,
-            final Object _object2,
-            final String _string) {
-    
-    
-        if (!_object.equals(_object2)) { throw new IllegalArgumentException(_string
-                + ": expected " + _object + " received " + _object2); }
-    }
     
     
     /**
@@ -260,39 +141,31 @@ public class CEPQueryTester
     
     
     
-    private ICEPQuery                              cepQuery;
+    private ICEPQuery<Serializable, KpiResult> cepQuery;
     
-    private boolean                                dump;
+    private boolean                            dumpResult;
     
-    private final List<ICEPQueryLineTestPredicate> esperLinePredicates =
-                                                                               new ArrayList<ICEPQueryLineTestPredicate>();
     
-    private final List<ICEPQueryTestPredicate>     esperPredicates     =
-                                                                               new ArrayList<ICEPQueryTestPredicate>();
+    private final List<Serializable>           events          = new ArrayList<Serializable>();
     
-    private final List<Serializable>               events              =
-                                                                               new ArrayList<Serializable>();
+    private int                                expectedRows    = -1;
     
-    private int                                    expectedRows        = -1;
+    private Integer                            expectedStorageSize;
     
-    private Integer                                expectedStorageSize;
-    private final Map<String, EventType>           mockEventTypes      =
-                                                                               new HashMap<String, EventType>();
-    private final Map<String, PersonGroup>         mockGroup           =
-                                                                               new HashMap<String, PersonGroup>();
+    private final Map<String, EventType>       mockEventTypes  = new HashMap<String, EventType>();
+    private final Map<String, PersonGroup>     mockGroup       = new HashMap<String, PersonGroup>();
+    private final Map<String, Person>          mockPerson      = new HashMap<String, Person>();
     
-    private final Map<String, Person>              mockPerson          =
-                                                                               new HashMap<String, Person>();
+    private final Map<String, Project>         mockProject     = new HashMap<String, Project>();
     
-    private final Map<String, Project>             mockProject         =
-                                                                               new HashMap<String, Project>();
+    private final Map<String, Provider>        mockProviders   = new HashMap<String, Provider>();
     
-    private final Map<String, Provider>            mockProviders       =
-                                                                               new HashMap<String, Provider>();
+    private ICEPQueryImplementation            queryImplementationDefinition;
     
-    private ICEPQueryImplementation                queryImplementationDefinition;
+    private final List<ICEPQueryTestPredicate> queryPredicates =
+                                                                       new ArrayList<ICEPQueryTestPredicate>();
     
-    private Object                                 singleResult;
+    private Object                             singleResult;
     
     
     
@@ -350,14 +223,14 @@ public class CEPQueryTester
     
     
     /**
-     * Method dump.
+     * Method dumpResult.
      * 
      * @return CEPQueryTester
      */
     public CEPQueryTester dump() {
     
     
-        dump = true;
+        dumpResult = true;
         
         return this;
     }
@@ -449,28 +322,6 @@ public class CEPQueryTester
     
     
     /**
-     * Method hasLineResult.
-     * 
-     * @param _testPredicate
-     *            ICEPQueryLineTestPredicate
-     * @return CEPQueryTester
-     */
-    public CEPQueryTester hasLineResult(final ICEPQueryLineTestPredicate _testPredicate) {
-    
-    
-        esperLinePredicates.add(_testPredicate);
-        return this;
-    }
-    
-    
-    public boolean hasMapPredicates() {
-    
-    
-        return !esperLinePredicates.isEmpty() || expectedRows != -1;
-    }
-    
-    
-    /**
      * Tests results against an array.
      * 
      * @param _objects
@@ -479,7 +330,7 @@ public class CEPQueryTester
     public CEPQueryTester hasResults(final Object[][] _objects) {
     
     
-        esperPredicates.add(new ArrayPredicate(_objects));
+        queryPredicates.add(new ArrayPredicate(_objects));
         return this;
     }
     
@@ -557,7 +408,7 @@ public class CEPQueryTester
     
         prepareQuery(_cepEngine);
         prepareAlerts(_cepEngine);
-        if (dump) {
+        if (dumpResult) {
             dumpInfos();
         }
         validPredicates();
@@ -616,7 +467,7 @@ public class CEPQueryTester
     public void validateQueryPredicates() {
     
     
-        for (final ICEPQueryTestPredicate testPred : esperPredicates) {
+        for (final ICEPQueryTestPredicate<Serializable> testPred : queryPredicates) {
             testPred.evaluate(cepQuery);
         }
     }
@@ -625,40 +476,15 @@ public class CEPQueryTester
     public void validPredicates() {
     
     
-        if (expectedStorageSize != null) {
+        if (requiresStorageSizeValidation()) {
             final int size = cepQuery.getStatement().getDefaultStorage().size();
-            checkIfisEquals(expectedStorageSize, Integer.valueOf(size),
-                    "Expected storage size equals to " + expectedStorageSize + " with  " + size);
+            assertThat("Storage size should be ", Integer.valueOf(size),
+                    equalTo(expectedStorageSize));
+            
+            
         }
-        if (esperPredicates.isEmpty() && !hasMapPredicates() && singleResult == null) { return; }
         validateQueryPredicates();
         
-        if (!cepQuery.getResult().isMap() && hasMapPredicates()) { throw new ClassCastException(
-                "We were expecting a map but the query returned a single value"); }
-        if (cepQuery.getResult().isMap()) {
-            final List<ITuple> tuples =
-                    ((ITupleResultMap) cepQuery.getResult().asMap()).asTupleRows();
-            Validate.notNull(tuples);
-            int i = 0;
-            for (final ITuple value : tuples) {
-                
-                LOGGER.debug("Testing line {} -> {}", i, value);
-                if (i < esperLinePredicates.size()) {
-                    esperLinePredicates.get(i).evaluate(value);
-                }
-                i++;
-                
-            }
-            if (expectedRows != -1) {
-                checkIfisEquals(expectedRows, i, "Expected fixed number of rows");
-                
-            }
-        } else if (cepQuery.getResult().isSingleValue() && singleResult != null) {
-            
-            checkIfisEquals(singleResult, cepQuery.getResult().asType(),
-                    "Expected value from query : ");
-            
-        }
         
     }
     
@@ -759,18 +585,19 @@ public class CEPQueryTester
     private void dumpInfos() {
     
     
-        final ICEPResult result = cepQuery.getResult();
-        if (result.isSingleValue()) {
-            LOGGER.info("RESULT : Received unique value : \n\t{}", result.asType());
-        } else if (result.isMap()) {
-            final IResultMap<ITuple, Object> asMap = result.asMap();
-            LOGGER.info("RESULT : Received a table : {}", result);
-            for (final Entry<ITuple, Object> entry : asMap.getTable().entrySet()) {
-                LOGGER.info("RESULT : {} = {}", entry.getKey(), entry.getValue());
-            }
-        } else {
-            LOGGER.info("RESULT : {}", result);
+        final KpiResult result = cepQuery.getResult();
+        final Map<EntityKey, Number> asMap = result.getMap();
+        LOGGER.info("RESULT : Received a table : {}", result);
+        for (final Entry<EntityKey, Number> entry : asMap.entrySet()) {
+            LOGGER.info("RESULT : {} = {}", entry.getKey(), entry.getValue());
         }
         
+    }
+    
+    
+    private boolean requiresStorageSizeValidation() {
+    
+    
+        return expectedStorageSize != null;
     }
 }

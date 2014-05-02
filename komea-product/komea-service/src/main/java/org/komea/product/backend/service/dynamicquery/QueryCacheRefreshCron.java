@@ -10,9 +10,9 @@ import java.util.List;
 
 import org.apache.commons.lang.Validate;
 import org.komea.cep.dynamicdata.IDynamicDataQuery;
-import org.komea.eventory.api.formula.ICEPResult;
 import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
 import org.komea.product.backend.api.IDynamicQueryCacheService;
+import org.komea.product.database.dto.KpiResult;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -65,7 +65,7 @@ public class QueryCacheRefreshCron implements Job
             LOGGER.info("Refreshing value for the query {}", queryKey);
             final IDynamicDataQuery query = queryRegisterService.getQuery(queryKey);
             Validate.notNull(queryKey);
-            ICEPResult refreshedValue;
+            KpiResult refreshedValue;
             try {
                 refreshedValue = refreshValueFromQueryByKey(query);
                 
@@ -81,7 +81,7 @@ public class QueryCacheRefreshCron implements Job
     /**
      * Loads a new value.
      */
-    public ICEPResult refreshValueFromQueryByKey(final IDynamicDataQuery _query) throws Exception {
+    public KpiResult refreshValueFromQueryByKey(final IDynamicDataQuery _query) throws Exception {
     
     
         if (_query instanceof CachedDynamicQuery) {

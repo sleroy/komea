@@ -7,23 +7,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import org.komea.eventory.api.formula.ICEPResult;
-import org.komea.eventory.api.formula.IResultMap;
-import org.komea.eventory.api.formula.tuple.ITuple;
+import org.komea.product.backend.api.IHistoryService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
+import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.api.exceptions.EntityNotFoundException;
 import org.komea.product.backend.criterias.FindKpiOrFail;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.history.HistoryKey;
-import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.BaseEntityDto;
+import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
@@ -125,15 +125,16 @@ public final class KPIValueService implements IKpiValueService
      * org.komea.product.database.api.IEntity)
      */
     @Override
-    public Measure getLastMeasureOfKpi(final Kpi findKPIOrFail, final IEntity entity) {
+    public Measure getLastMeasureOfKpi(final HistoryKey _historyKey) {
     
     
-        LOGGER.debug("Fetching last measures for KPI {} and entity {}", findKPIOrFail.getKpiKey(),
-                entity);
+        LOGGER.debug("Fetching last measures for KPI {} and entity {}", _historyKey,
+                _historyKey.getEntityKey());
+        
         final MeasureCriteria criteria = new MeasureCriteria();
-        final HistoryKey hKey = HistoryKey.of(findKPIOrFail, entity);
         final Measure valueMeasure =
-                CollectionUtil.singleOrNull(measureService.getFilteredHistory(hKey, 1, criteria));
+                CollectionUtil.singleOrNull(measureService
+                        .getFilteredHistory(_historyKey, criteria));
         LOGGER.debug("Returning value {}", valueMeasure);
         return valueMeasure;
     }
@@ -179,7 +180,7 @@ public final class KPIValueService implements IKpiValueService
                 "Cannot return a measure, many entities are referenced by the KpiKey " + _key); }
         
         final Kpi kpiOrFail = new FindKpiOrFail(_key, kpiDAO).find();
-        final ICEPResult kpiValue = kpiQueryRegistry.getQueryValueFromKpi(kpiOrFail);
+        final KpiResult kpiValue = kpiQueryRegistry.getQueryValueFromKpi(kpiOrFail);
         //
         final IEntity entity = CollectionUtil.singleOrNull(entitiesAssociatedToKpiKey);
         final Measure measureKey = initializeMeasure(_key, kpiOrFail, kpiValue, entity);
@@ -223,9 +224,9 @@ public final class KPIValueService implements IKpiValueService
     
         final Kpi kpiOrFail = new FindKpiOrFail(_kpiKey, kpiDAO).find();
         
-        final ICEPResult queryResult = kpiQueryRegistry.getQueryValueFromKpi(kpiOrFail);
+        final KpiResult queryResult = kpiQueryRegistry.getQueryValueFromKpi(kpiOrFail);
         
-        return queryResult.asNumber().doubleValue();
+        return queryResult.getValue(_kpiKey.getEntityKey());
     }
     
     
@@ -306,21 +307,14 @@ public final class KPIValueService implements IKpiValueService
     
     
         final Kpi kpi = new FindKpiOrFail(_kpiKey, kpiDAO).find();
-        final ICEPResult queryResult = kpiQueryRegistry.getQueryValueFromKpi(kpi);
+        final KpiResult queryResult = kpiQueryRegistry.getQueryValueFromKpi(kpi);
         
-        if (kpi.isGlobal()) {
-            final Number singleResult = queryResult.asNumber();
-            storeMeasureOfAKpiInDatabase(_kpiKey, singleResult.doubleValue());
-        } else {
-            final IResultMap<ITuple, Number> asMap = queryResult.asMap();
-            final Map<ITuple, Number> simplifiedMap = asMap.getTable();
-            for (final java.util.Map.Entry<ITuple, Number> kpiLineValue : simplifiedMap.entrySet()) {
-                final KpiKey kpiKeyWithEntity =
-                        KpiKey.ofKpiNameAndEntityKey(_kpiKey.getKpiName(), (EntityKey) kpiLineValue
-                                .getKey().getFirst());
-                storeMeasureOfAKpiInDatabase(kpiKeyWithEntity, kpiLineValue.getValue());
-                
-            }
+        final Map<EntityKey, Number> resultMap = queryResult.getMap();
+        for (final Entry<EntityKey, Number> kpiLineValue : resultMap.entrySet()) {
+            final KpiKey kpiKeyWithEntity =
+                    KpiKey.ofKpiNameAndEntityKey(_kpiKey.getKpiName(), kpiLineValue.getKey());
+            storeMeasureOfAKpiInDatabase(kpiKeyWithEntity, kpiLineValue.getValue());
+            
         }
         
     }
@@ -356,18 +350,15 @@ public final class KPIValueService implements IKpiValueService
     private Measure initializeMeasure(
             final KpiKey _key,
             final Kpi kpiOrFail,
-            final ICEPResult kpiValue,
+            final KpiResult kpiValue,
             final IEntity entity) {
     
     
         final Measure measureKey =
                 Measure.initializeMeasureFromKPIKey(kpiOrFail.getId(), _key.getEntityKey());
         measureKey.setEntity(entity.entityType(), entity.getId());
-        final IResultMap<EntityKey, Number> map = kpiValue.asMap();
-        final Number number = map.get(entity.getEntityKey());
-        if (null != number) {
-            measureKey.setValue(number.doubleValue());
-        }
+        final Number value = kpiValue.getValue(entity.getEntityKey());
+        measureKey.setValue(value == null ? Double.NaN : value.doubleValue());
         return measureKey;
     }
     

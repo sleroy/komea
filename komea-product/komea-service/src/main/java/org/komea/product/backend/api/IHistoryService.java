@@ -1,8 +1,10 @@
-package org.komea.product.backend.service.history;
+package org.komea.product.backend.api;
 
 import java.util.Collection;
 import java.util.List;
+
 import org.komea.product.backend.service.generic.IGenericService;
+import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.dto.SearchMeasuresDto;

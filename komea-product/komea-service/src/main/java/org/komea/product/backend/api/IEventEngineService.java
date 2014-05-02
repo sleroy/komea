@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.product.database.alert.IEvent;
+import org.komea.product.database.dto.KpiResult;
 
 
 
@@ -69,7 +70,7 @@ public interface IEventEngineService
      *            the statement name
      * @return the esper statement
      */
-    ICEPQuery getQueryOrFail(String _statement);
+    ICEPQuery<Serializable, KpiResult> getQueryOrFail(String _statement);
     
     
     /**

@@ -6,17 +6,10 @@ package org.komea.product.plugins.kpi.standard;
 
 
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.apache.commons.lang.Validate;
-import org.komea.eventory.api.formula.ITupleResultMap;
 import org.komea.eventory.api.formula.tuple.IEventGroup;
-import org.komea.eventory.api.formula.tuple.IEventTable;
-import org.komea.eventory.api.formula.tuple.ITuple;
-import org.komea.eventory.api.formula.tuple.ITuplerFormula;
-import org.komea.eventory.formula.tuple.TupleResultMap;
 import org.komea.product.database.alert.IEvent;
+import org.komea.product.plugins.kpi.formula.IEventGroupFormula;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +20,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author sleroy
  */
-public class EventValueFormula implements ITuplerFormula<Number>
+public class EventValueFormula<T> implements IEventGroupFormula
 {
     
     
@@ -37,29 +30,24 @@ public class EventValueFormula implements ITuplerFormula<Number>
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.cep.api.formula.tuple.ITuplerFormula#processMap(org.komea.product.cep.api.formula.tuple.IEventTable,
-     * java.util.Map)
+     * @see org.komea.product.plugins.kpi.standard.IEventGroupFormula#evalute(java.lang.Object,
+     * org.komea.eventory.api.formula.tuple.IEventGroup)
      */
     @Override
-    public ITupleResultMap processMap(final IEventTable _tupleMap, final Map _ownParameters) {
+    public Number evaluate(final IEventGroup _eventGroup) {
     
     
-        Validate.notNull(_tupleMap);
-        Validate.notNull(_ownParameters);
-        final ITupleResultMap<Number> resultMap = new TupleResultMap<Number>();
+        Validate.notNull(_eventGroup);
         
-        for (final Entry<ITuple, IEventGroup> entry : _tupleMap.iterator()) {
-            if (entry.getValue().getEvents().isEmpty()) {
-                LOGGER.error(
-                        "No event to return a value, may have a filter problem with tuple {} events {}",
-                        entry, entry.getValue().getEvents());
-                
-                continue;
-            }
-            Validate.isTrue(entry.getValue().getEvents().size() == 1);
-            final IEvent iEvent = entry.getValue().getFirstEvent();
-            resultMap.insertEntry(entry.getKey(), iEvent.getValue());
+        if (_eventGroup.getEvents().isEmpty()) {
+            LOGGER.debug("No event to return a value, may have a filter problem with events {}",
+                    _eventGroup.getEvents());
+            
+            return 0;
         }
-        return resultMap;
+        Validate.isTrue(_eventGroup.getEvents().size() == 1);
+        final IEvent iEvent = _eventGroup.getFirstEvent();
+        return iEvent.getValue();
+        
     }
 }

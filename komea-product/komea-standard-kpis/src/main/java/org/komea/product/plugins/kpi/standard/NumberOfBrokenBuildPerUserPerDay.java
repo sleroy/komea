@@ -18,11 +18,12 @@ import org.komea.eventory.api.formula.ICEPFormula;
 import org.komea.eventory.cache.CacheConfigurationBuilder;
 import org.komea.eventory.filter.EventFilterBuilder;
 import org.komea.eventory.formula.tuple.EventCountFormula;
-import org.komea.eventory.formula.tuple.GroupByFormula;
 import org.komea.eventory.query.FilterDefinition;
 import org.komea.product.cep.filter.OnlyEventFilter;
+import org.komea.product.database.dto.KpiResult;
 import org.komea.product.plugins.kpi.filters.EventTypeFilter;
 import org.komea.product.plugins.kpi.filters.WithUserFilter;
+import org.komea.product.plugins.kpi.formula.UserFormula;
 import org.komea.product.plugins.kpi.tuplecreator.UserTupleCreator;
 
 
@@ -74,10 +75,10 @@ public class NumberOfBrokenBuildPerUserPerDay implements ICEPQueryImplementation
      * @see org.komea.product.cep.api.ICEPQueryImplementation#getFormula()
      */
     @Override
-    public ICEPFormula<?> getFormula() {
+    public ICEPFormula<?, KpiResult> getFormula() {
     
     
-        return new GroupByFormula(new UserTupleCreator(), new EventCountFormula());
+        return new UserFormula(new UserTupleCreator(), new EventCountFormula());
     }
     
     

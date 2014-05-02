@@ -20,12 +20,12 @@ import org.komea.eventory.formula.tuple.GroupByFormula;
 import org.komea.eventory.query.CEPQueryImplementation;
 import org.komea.eventory.query.FilterDefinition;
 import org.komea.product.backend.api.IEventEngineService;
+import org.komea.product.backend.api.IHistoryService;
 import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
 import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.backend.service.history.HistoryKey;
-import org.komea.product.backend.service.history.IHistoryService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.cep.tuples.ProviderEventTypeTupleCreator;
 import org.komea.product.database.dao.ProviderDao;
@@ -237,7 +237,8 @@ public class EventStatisticsService implements IEventStatisticsService
     public List<EventTypeStatistic> getReceivedAlertTypesIn24LastHours() {
     
     
-        final ICEPQuery statsBreakdownStatement = cepEngine.getQuery(STATS_BREAKDOWN_24H);
+        final ICEPQuery<EventTypeStatistics> statsBreakdownStatement =
+                cepEngine.getQuery(STATS_BREAKDOWN_24H);
         return ((ITupleResultMap) statsBreakdownStatement.getResult().asMap()).asPojoRows(
                 new String[]
                     {

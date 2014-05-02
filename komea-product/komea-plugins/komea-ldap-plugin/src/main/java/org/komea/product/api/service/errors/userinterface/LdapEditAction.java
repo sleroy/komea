@@ -6,10 +6,12 @@
 
 package org.komea.product.api.service.errors.userinterface;
 
+
+
 /**
- *
  * @author rgalerme
  */
-public class LdapEditAction {
-    
+public class LdapEditAction
+{
+    //
 }
