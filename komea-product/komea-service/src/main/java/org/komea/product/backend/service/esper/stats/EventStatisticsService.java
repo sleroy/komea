@@ -6,6 +6,7 @@ package org.komea.product.backend.service.esper.stats;
 
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -99,7 +100,7 @@ public class EventStatisticsService implements IEventStatisticsService
     public void alertCriticityPerDay(final Severity _criticity) {
     
     
-        cepEngine.createQuery(new QueryDefinition(alertQueryName(_criticity),
+        cepEngine.createQuery(new QueryDefinition(getKpiNameFromSeverity(_criticity),
                 new AlertPerSeverityPerDay(_criticity)));
         
     }
@@ -192,7 +193,8 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
         final Double kpiSingleValue =
-                ((Number) cepEngine.getQuery(getKpiNameFromSeverity(_criticity))).doubleValue();
+                ((ICEPQuery<Serializable, Number>) cepEngine
+                        .getQuery(getKpiNameFromSeverity(_criticity))).getResult().doubleValue();
         return kpiSingleValue.intValue();
         
     }
@@ -302,13 +304,6 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
         providerDAO = _providerDAO;
-    }
-    
-    
-    private String alertQueryName(final Severity _criticity) {
-    
-    
-        return "number-alert-" + _criticity.name();
     }
     
     

@@ -29,12 +29,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author sleroy
  * @version $Revision: 1.0 $
  */
-public class EventStatisticsServiceIT extends AbstractSpringIntegrationTestCase
+public class EventStatisticsServiceITest extends AbstractSpringIntegrationTestCase
 {
     
     
     private static final org.slf4j.Logger LOGGER = LoggerFactory
-                                                         .getLogger(EventStatisticsServiceIT.class);
+                                                         .getLogger(EventStatisticsServiceITest.class);
     
     
     @Autowired

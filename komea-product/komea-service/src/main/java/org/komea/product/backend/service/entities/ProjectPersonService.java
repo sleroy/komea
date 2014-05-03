@@ -5,6 +5,7 @@ package org.komea.product.backend.service.entities;
 
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
 import org.komea.product.database.dao.HasProjectPersonDao;
 import org.komea.product.database.model.HasProjectPersonCriteria;
 import org.komea.product.database.model.HasProjectPersonKey;
@@ -72,14 +73,16 @@ public class ProjectPersonService implements IProjectPersonService
     public void updatePersonsOfProject(final List<Person> _persons, final Project _project) {
     
     
+        Validate.notNull(_persons);
+        Validate.notNull(_project);
+        
         final HasProjectPersonCriteria hasProjectPersonCriteria = new HasProjectPersonCriteria();
         hasProjectPersonCriteria.createCriteria().andIdProjectEqualTo(_project.getId());
         projectPersonDAO.deleteByCriteria(hasProjectPersonCriteria);
-        if (_persons != null) {
-            for (final Person person : _persons) {
-                projectPersonDAO.insert(new HasProjectPersonKey(_project.getId(), person.getId()));
-            }
+        for (final Person person : _persons) {
+            projectPersonDAO.insert(new HasProjectPersonKey(_project.getId(), person.getId()));
         }
+        
     }
     
     
@@ -88,13 +91,13 @@ public class ProjectPersonService implements IProjectPersonService
     public void updateProjectsOfPerson(final List<Project> _projects, final Person _person) {
     
     
+        Validate.notNull(_projects);
+        Validate.notNull(_person);
         final HasProjectPersonCriteria hasProjectPersonCriteria = new HasProjectPersonCriteria();
         hasProjectPersonCriteria.createCriteria().andIdPersonEqualTo(_person.getId());
         projectPersonDAO.deleteByCriteria(hasProjectPersonCriteria);
-        if (_projects != null) {
-            for (final Project project : _projects) {
-                projectPersonDAO.insert(new HasProjectPersonKey(project.getId(), _person.getId()));
-            }
+        for (final Project project : _projects) {
+            projectPersonDAO.insert(new HasProjectPersonKey(project.getId(), _person.getId()));
         }
     }
 }

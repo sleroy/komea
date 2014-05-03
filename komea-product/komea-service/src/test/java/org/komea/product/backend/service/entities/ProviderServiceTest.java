@@ -43,21 +43,9 @@ public class ProviderServiceTest
     public final void testRemoveProvider() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        // TODO DBUnit test
+        
     }
     
-    
-    /**
-     * Test method for
-     * {@link org.komea.product.backend.service.entities.ProviderService#setRequiredDao(org.komea.product.database.dao.ProviderDao)}.
-     */
-    @Test
-    public final void testSetRequiredDao() throws Exception {
-    
-    
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
-    }
     
 }

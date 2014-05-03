@@ -182,6 +182,7 @@ public class ProviderFormula implements ICEPFormula<IEvent, EventTypeStatistics>
             eventTypeStatistic.setType(eventGroupEntry.getKey().getEventType());
             eventTypeStatistic.setValue(eventValueFormula.evaluate(eventGroupEntry.getValue())
                     .intValue());
+            eventTypeStatistics.add(eventTypeStatistic);
         }
         return eventTypeStatistics;
     }

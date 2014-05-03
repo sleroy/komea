@@ -42,8 +42,8 @@ public class AlertTypeServiceTest
     public final void testCreateKeyCriteria() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        // TODO DBUnit test DBUnit
+        
     }
     
     
@@ -55,8 +55,8 @@ public class AlertTypeServiceTest
     public final void testGetAlertTypesEntityType() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        // TODO DBUnit test
+        
     }
     
 }

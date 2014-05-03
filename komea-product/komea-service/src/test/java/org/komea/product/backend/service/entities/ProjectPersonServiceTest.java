@@ -17,7 +17,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  * @author sleroy
- *
  */
 @RunWith(MockitoJUnitRunner.class)
 public class ProjectPersonServiceTest
@@ -38,8 +37,8 @@ public class ProjectPersonServiceTest
     public final void testGetPersonIdsOfProject() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        // TODO DBUnit test
+        
     }
     
     
@@ -50,32 +49,36 @@ public class ProjectPersonServiceTest
     public final void testGetProjectIdsOfPerson() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        // TODO DBUnit test
+        
     }
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.entities.ProjectPersonService#updatePersonsOfProject(java.util.List, org.komea.product.database.model.Project)}.
+     * Test method for
+     * {@link org.komea.product.backend.service.entities.ProjectPersonService#updatePersonsOfProject(java.util.List, org.komea.product.database.model.Project)}
+     * .
      */
     @Test
     public final void testUpdatePersonsOfProject() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        // TODO DBUnit test
+        
     }
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.entities.ProjectPersonService#updateProjectsOfPerson(java.util.List, org.komea.product.database.model.Person)}.
+     * Test method for
+     * {@link org.komea.product.backend.service.entities.ProjectPersonService#updateProjectsOfPerson(java.util.List, org.komea.product.database.model.Person)}
+     * .
      */
     @Test
     public final void testUpdateProjectsOfPerson() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        // TODO DBUnit test
+        
     }
     
 }

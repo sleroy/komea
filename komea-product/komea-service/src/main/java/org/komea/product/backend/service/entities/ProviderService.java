@@ -69,6 +69,7 @@ public class ProviderService extends AbstractService<Provider, Integer, Provider
         
         criteria.clear();
         criteria.createCriteria().andProviderTypeEqualTo(providerType);
+        // If no provider of the same type anymore.
         if (countByCriteria(criteria) == 0) {
             final EventTypeCriteria eventTypeCriteria = new EventTypeCriteria();
             eventTypeCriteria.createCriteria().andProviderTypeEqualTo(providerType);

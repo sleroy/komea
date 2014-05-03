@@ -9,7 +9,6 @@ package org.komea.product.backend.service.esper.stats;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
-import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.product.cep.tester.CEPQueryTester;
 import org.komea.product.database.enums.Severity;
 import org.slf4j.LoggerFactory;
@@ -28,29 +27,6 @@ public class EventStatisticsServiceTest
                                                          LoggerFactory
                                                                  .getLogger(EventStatisticsServiceTest.class);
     
-    
-    
-    /**
-     * Tests the query.
-     */
-    @Test
-    public void testBuildProviderEventFrequencyQuery() {
-    
-    
-        final ICEPQueryImplementation buildProviderEventFrequencyQuery =
-                new EventStatisticsService().buildProviderEventFrequencyQuery();
-        
-        
-        new JenkinsEventFactory();
-        CEPQueryTester.newTest().withQuery(buildProviderEventFrequencyQuery)
-                .sendEvent(JenkinsEventFactory.sendBuildComplete("bla", 12, "truc"), 2)
-                .expectRows(1).hasResults(new Object[][]
-                    {
-                        {
-                                "jenkins",
-                                "build_complete",
-                                2 } }).dump().runTest();
-    }
     
     
     @Test
@@ -81,8 +57,7 @@ public class EventStatisticsServiceTest
     
     
         final CEPQueryTester newTest = CEPQueryTester.newTest();
-        new JenkinsEventFactory();
-        new JenkinsEventFactory();
+        
         newTest.withQuery(new AlertPerSeverityPerDay(Severity.BLOCKER))
                 .sendEvent(JenkinsEventFactory.sendBuildComplete("bla", 12, "truc"), 3)
                 .sendEvent(JenkinsEventFactory.sendBuildFailed("bla", 12, "truc"), 2).dump()
@@ -97,8 +72,7 @@ public class EventStatisticsServiceTest
     
     
         final CEPQueryTester newTest = CEPQueryTester.newTest();
-        new JenkinsEventFactory();
-        new JenkinsEventFactory();
+        
         newTest.withQuery(new AlertPerSeverityPerDay(Severity.INFO))
                 .sendEvent(JenkinsEventFactory.sendBuildComplete("bla", 12, "truc"), 3)
                 .sendEvent(JenkinsEventFactory.sendBuildFailed("bla", 12, "truc"), 2).dump()

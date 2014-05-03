@@ -47,6 +47,8 @@ import com.google.common.base.Strings;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
+import static org.junit.Assert.assertEquals;
+
 
 
 /**
@@ -410,10 +412,16 @@ public class CEPQueryTester
     
         prepareQuery(_cepEngine);
         prepareAlerts(_cepEngine);
-        if (dumpResult) {
-            dumpInfos();
+        
+        if (singleResult != null) {
+            assertEquals(singleResult, cepQuery.getResult());
+        } else {
+            if (dumpResult) {
+                dumpInfos();
+            }
+            
+            validPredicates();
         }
-        validPredicates();
         
     }
     
