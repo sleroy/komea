@@ -1,5 +1,26 @@
 package org.komea.product.wicket.statistics;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.komea.product.backend.api.IKpiValueService;
+import org.komea.product.backend.service.esper.IEventStatisticsService;
+import org.komea.product.database.enums.Severity;
+import org.komea.product.database.model.Measure;
+import org.komea.product.service.dto.EventTypeStatistic;
+import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.widget.builders.DataTableBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.googlecode.wickedcharts.highcharts.options.Axis;
 import com.googlecode.wickedcharts.highcharts.options.AxisType;
 import com.googlecode.wickedcharts.highcharts.options.ChartOptions;
@@ -13,25 +34,6 @@ import com.googlecode.wickedcharts.highcharts.options.Tooltip;
 import com.googlecode.wickedcharts.highcharts.options.series.Coordinate;
 import com.googlecode.wickedcharts.highcharts.options.series.CustomCoordinatesSeries;
 import com.googlecode.wickedcharts.wicket6.highcharts.Chart;
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.komea.product.backend.service.esper.IEventStatisticsService;
-import org.komea.product.backend.service.kpi.IKpiValueService;
-import org.komea.product.database.enums.Severity;
-import org.komea.product.database.model.Measure;
-import org.komea.product.service.dto.EventTypeStatistic;
-import org.komea.product.wicket.LayoutPage;
-import org.komea.product.wicket.widget.builders.DataTableBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Person admin page

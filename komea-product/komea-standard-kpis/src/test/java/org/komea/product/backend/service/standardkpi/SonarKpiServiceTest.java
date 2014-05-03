@@ -31,7 +31,7 @@ public class SonarKpiServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.standardkpi.JenkinsKpiService#actualLineCoverage()}.
+     * Test method for {@link org.komea.product.backend.service.standardkpi.StandardKpiService#actualLineCoverage()}.
      */
     @Test
     public void testActualLineCoverage() throws Exception {

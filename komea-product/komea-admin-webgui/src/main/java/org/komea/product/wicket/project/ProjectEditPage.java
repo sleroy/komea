@@ -5,8 +5,8 @@
  */
 package org.komea.product.wicket.project;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import java.util.List;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -23,6 +23,8 @@ import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.SelectDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
+
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 /**
  *

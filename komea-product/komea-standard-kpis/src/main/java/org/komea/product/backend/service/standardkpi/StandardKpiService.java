@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
     type = ProviderType.NEWS,
     url = "/provider")
 @Transactional
-public class JenkinsKpiService implements IStandardKpiService
+public class StandardKpiService implements IStandardKpiService
 {
     
     
@@ -39,7 +39,7 @@ public class JenkinsKpiService implements IStandardKpiService
     /**
      *
      */
-    public JenkinsKpiService() {
+    public StandardKpiService() {
     
     
         super();

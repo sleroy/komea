@@ -10,8 +10,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.komea.product.backend.service.customer.ICustomerService;
-import org.komea.product.database.dao.CustomerDao;
+import org.komea.product.backend.service.entities.ICustomerService;
 import org.komea.product.database.model.Customer;
 import org.komea.product.wicket.LayoutPage;
 

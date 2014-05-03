@@ -7,8 +7,6 @@
 package org.komea.product.wicket.persongroup.department;
 
 import org.komea.product.database.model.PersonGroup;
-import org.komea.product.wicket.persongroup.department.DepartmentEditPage;
-import org.komea.product.wicket.persongroup.department.DepartmentPage;
 import org.komea.product.wicket.widget.api.IEditAction;
 
 /**

@@ -7,13 +7,11 @@
 package org.komea.product.wicket.project;
 
 import java.util.List;
-import org.apache.wicket.ajax.AjaxRequestTarget;
+
 import org.komea.product.backend.service.entities.IProjectService;
-import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.AbstractDeleteAction;
-import org.komea.product.wicket.widget.api.IDeleteAction;
 
 /**
  *

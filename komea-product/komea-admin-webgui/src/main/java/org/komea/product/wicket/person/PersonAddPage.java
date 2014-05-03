@@ -3,9 +3,9 @@ package org.komea.product.wicket.person;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
-
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;

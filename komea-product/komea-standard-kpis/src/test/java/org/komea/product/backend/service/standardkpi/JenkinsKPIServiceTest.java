@@ -42,7 +42,7 @@ public class JenkinsKPIServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.standardkpi.JenkinsKpiService#jenkinsSuccessBuildRate()}.
+     * Test method for {@link org.komea.product.backend.service.standardkpi.StandardKpiService#jenkinsSuccessBuildRate()}.
      */
     @Test
     public void testJenkinsSuccessBuildRate() throws Exception {
@@ -53,7 +53,7 @@ public class JenkinsKPIServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.standardkpi.JenkinsKpiService#numberOfBuildPerDay()}.
+     * Test method for {@link org.komea.product.backend.service.standardkpi.StandardKpiService#numberOfBuildPerDay()}.
      */
     @Test
     public void testNumberBuildPerDay() throws Exception {
@@ -116,7 +116,7 @@ public class JenkinsKPIServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.standardkpi.JenkinsKpiService#numberSuccessBuildPerDay()}.
+     * Test method for {@link org.komea.product.backend.service.standardkpi.StandardKpiService#numberSuccessBuildPerDay()}.
      */
     @Test
     public void testNumberSuccessBuildPerDay() throws Exception {

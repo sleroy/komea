@@ -6,11 +6,12 @@
 package org.komea.product.wicket.customer;
 
 import java.util.List;
+
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.komea.product.backend.service.customer.ICustomerService;
+import org.komea.product.backend.service.entities.ICustomerService;
 import org.komea.product.database.model.Customer;
 import org.komea.product.database.model.CustomerCriteria;
 import org.komea.product.wicket.LayoutPage;

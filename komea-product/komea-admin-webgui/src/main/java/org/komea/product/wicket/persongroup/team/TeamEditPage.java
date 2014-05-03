@@ -5,11 +5,7 @@
  */
 package org.komea.product.wicket.persongroup.team;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import java.util.List;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -19,8 +15,6 @@ import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.wicket.LayoutPage;
-import org.komea.product.wicket.utils.SelectDialog;
-import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 
 /**
  *

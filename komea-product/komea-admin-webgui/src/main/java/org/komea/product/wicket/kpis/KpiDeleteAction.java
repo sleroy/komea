@@ -5,18 +5,14 @@
  */
 package org.komea.product.wicket.kpis;
 
-import static com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog.LBL_OK;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 import java.util.List;
-import org.apache.wicket.ajax.AjaxRequestTarget;
+
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.AbstractDeleteAction;
-import org.komea.product.wicket.widget.api.IDeleteAction;
+
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 /**
  * @author rgalerme

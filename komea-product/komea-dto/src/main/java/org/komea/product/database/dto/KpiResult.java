@@ -65,6 +65,20 @@ public class KpiResult
     }
     
     
+    /**
+     * Returns the value as a double value.
+     * 
+     * @param _entityKey
+     *            the entity key.
+     * @return the double value converted from the original value.
+     */
+    public Double getDoubleValue(final EntityKey _entityKey) {
+    
+    
+        return getValue(_entityKey).doubleValue();
+    }
+    
+    
     public Map<EntityKey, Number> getMap() {
     
     

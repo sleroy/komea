@@ -6,6 +6,7 @@
 package org.komea.product.wicket.persongroup;
 
 import java.util.List;
+
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.wicket.LayoutPage;

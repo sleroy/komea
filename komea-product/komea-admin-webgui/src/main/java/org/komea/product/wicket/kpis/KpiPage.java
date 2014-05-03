@@ -29,8 +29,9 @@ public class KpiPage extends LayoutPage
 {
     
     
+    private static final long serialVersionUID = -7589541497237528199L;
     @SpringBean
-    private IKPIService kpiService;
+    private IKPIService       kpiService;
     
     
     
@@ -54,8 +55,10 @@ public class KpiPage extends LayoutPage
         final ISortableDataProvider<Kpi, String> dataProvider =
                 new ListDataModel<Kpi>(listKpisResult);
         final DataTable<Kpi, String> build =
-                DataTableBuilder.<Kpi, String> newTable("table").addColumn(getString("global.field.key"), "KpiKey")
-                        .addColumn(getString("global.field.name"), "Name").addColumn(getString("global.field.label.description"), "Description")
+                DataTableBuilder.<Kpi, String> newTable("table")
+                        .addColumn(getString("global.field.key"), "KpiKey")
+                        .addColumn(getString("global.field.name"), "Name")
+                        .addColumn(getString("global.field.label.description"), "Description")
                         .withEditDeleteColumn(kpiDeleteAction, kpiEditAction)
                         .displayRows(listKpisResult.size() + 10).withData(dataProvider).build();
         add(build);

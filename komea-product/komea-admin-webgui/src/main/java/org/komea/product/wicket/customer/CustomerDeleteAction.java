@@ -7,7 +7,8 @@
 package org.komea.product.wicket.customer;
 
 import java.util.List;
-import org.komea.product.backend.service.customer.ICustomerService;
+
+import org.komea.product.backend.service.entities.ICustomerService;
 import org.komea.product.database.model.Customer;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.AbstractDeleteAction;

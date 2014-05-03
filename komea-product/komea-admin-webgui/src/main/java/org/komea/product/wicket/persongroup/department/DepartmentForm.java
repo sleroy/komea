@@ -7,6 +7,7 @@ package org.komea.product.wicket.persongroup.department;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
