@@ -33,8 +33,9 @@ public class EventStatisticsServiceITest extends AbstractSpringIntegrationTestCa
 {
     
     
-    private static final org.slf4j.Logger LOGGER = LoggerFactory
-                                                         .getLogger(EventStatisticsServiceITest.class);
+    private static final org.slf4j.Logger LOGGER =
+                                                         LoggerFactory
+                                                                 .getLogger(EventStatisticsServiceITest.class);
     
     
     @Autowired
@@ -58,7 +59,7 @@ public class EventStatisticsServiceITest extends AbstractSpringIntegrationTestCa
     public final void testGetReceivedAlertTypesIn24LastHours() {
     
     
-        final JenkinsEventFactory jenkinsEventFactory = new JenkinsEventFactory();
+        new JenkinsEventFactory();
         final CEPQueryTester newTest = CEPQueryTester.newTest();
         
         LOGGER.info("EVENT SENT {}",
@@ -79,6 +80,7 @@ public class EventStatisticsServiceITest extends AbstractSpringIntegrationTestCa
         LOGGER.info("Stats {}", receivedAlertTypesIn24Hours);
         final EventTypeStatistic alertTypeStatistic = receivedAlertTypesIn24Hours.get(0);
         LOGGER.info("Alert number {}", alertTypeStatistic.getValue());
+        System.out.println(alertTypeStatistic.getValue());
         Assert.assertTrue(4L <= alertTypeStatistic.getValue());
         
         boolean found = false;

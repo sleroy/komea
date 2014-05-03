@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.cep.cache;
+package org.komea.product.cep.backend.cache;
 
 
 
@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.komea.eventory.api.cache.ICacheStorage;
 import org.komea.eventory.cache.CacheConfigurationBuilder;
 import org.komea.eventory.cache.guava.GoogleCacheStorage;
+import org.komea.product.cep.backend.cache.CacheFactory;
 
 import static org.junit.Assert.assertTrue;
 
@@ -23,7 +24,7 @@ public class CacheFactoryTest
     
     
     /**
-     * Test method for {@link org.komea.product.cep.cache.CacheFactory#newCacheStorage(org.komea.eventory.api.cache.ICacheConfiguration)}.
+     * Test method for {@link org.komea.product.cep.backend.cache.CacheFactory#newCacheStorage(org.komea.eventory.api.cache.ICacheConfiguration)}.
      */
     @Test
     public final void testNewCacheStorage() throws Exception {

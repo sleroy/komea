@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.hamcrest.Matchers;
 import org.komea.eventory.CEPConfiguration;
 import org.komea.eventory.CEPEngine;
 import org.komea.eventory.api.bridge.IEventBridge;
@@ -43,11 +44,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-
-import static org.junit.Assert.assertEquals;
 
 
 
@@ -414,7 +410,10 @@ public class CEPQueryTester
         prepareAlerts(_cepEngine);
         
         if (singleResult != null) {
-            assertEquals(singleResult, cepQuery.getResult());
+            final Number result = (Number) ((ICEPQuery) cepQuery).getResult();
+            if (!Matchers.equalTo(result).matches(singleResult)) { throw new IllegalArgumentException(
+                    "Single result does not match"); }
+            
         } else {
             if (dumpResult) {
                 dumpInfos();
@@ -488,8 +487,8 @@ public class CEPQueryTester
     
         if (requiresStorageSizeValidation()) {
             final int size = cepQuery.getStatement().getDefaultStorage().size();
-            assertThat("Storage size should be ", Integer.valueOf(size),
-                    equalTo(expectedStorageSize));
+            if (!Matchers.equalTo(Integer.valueOf(size)).matches(expectedStorageSize)) { throw new IllegalArgumentException(
+                    "Storage size should match"); }
             
             
         }
