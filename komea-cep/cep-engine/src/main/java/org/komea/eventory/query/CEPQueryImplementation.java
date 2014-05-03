@@ -50,7 +50,7 @@ public class CEPQueryImplementation implements ICEPQueryImplementation
     /**
      * @param _filterDefinition
      */
-    public void addFilterDefinition(final FilterDefinition _filterDefinition) {
+    public void addFilterDefinition(final IFilterDefinition _filterDefinition) {
     
     
         filterDefinitions.add(_filterDefinition);
