@@ -70,6 +70,16 @@ public class EventBuilder
     }
     
     
+    /**
+     * @return
+     */
+    public EventBuilder now() {
+    
+    
+        return at(new Date());
+    }
+    
+    
     public EventBuilder project(final Project _project) {
     
     

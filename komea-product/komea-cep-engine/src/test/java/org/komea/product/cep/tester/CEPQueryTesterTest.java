@@ -14,8 +14,13 @@ import org.komea.eventory.filter.EventFilterBuilder;
 import org.komea.eventory.query.CEPQueryImplementation;
 import org.komea.product.cep.filter.OnlyEventFilter;
 import org.komea.product.cep.formula.EventCountFormula;
+import org.komea.product.database.alert.EventBuilder;
+import org.komea.product.database.alert.IEvent;
+import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.model.Project;
 import org.komea.product.plugins.kpi.filters.WithProjectFilter;
 import org.komea.product.plugins.kpi.formula.ProjectFormula;
+import org.komea.product.service.dto.EntityKey;
 
 
 
@@ -39,9 +44,26 @@ public class CEPQueryTesterTest
         queryDefinition.addFilterDefinition(EventFilterBuilder.create()
                 .chain(new OnlyEventFilter()).chain(new WithProjectFilter())
                 .buildFilterDefinition("filter", CacheConfigurationBuilder.noConfiguration()));
-        final queryDefinition.CEPQueryTester newTest =
-                CEPQueryTester.newTest().withQuery(queryDefinition);
+        CEPQueryTester.newTest().withQuery(queryDefinition).send(fakeEvent()).expectRows(1)
+                .expectStorageSize(1).hasResults(new Object[][]
+                    {
+                        {
+                                EntityKey.of(EntityType.PROJECT, 1),
+                                1 } });
+        ;
         
+        
+    }
+    
+    
+    /**
+     * @return
+     */
+    private IEvent fakeEvent() {
+    
+    
+        return EventBuilder.newAlert().now()
+                .project(new Project(1, "KEY", "NAME", "DESCRIPTION", 1, "icon")).build();
     }
     
 }

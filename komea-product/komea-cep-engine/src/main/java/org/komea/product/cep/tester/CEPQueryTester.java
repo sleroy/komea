@@ -255,12 +255,13 @@ public class CEPQueryTester
     
     /**
      * @param _i
+     * @return
      */
-    public void expectStorageSize(final int _i) {
+    public CEPQueryTester expectStorageSize(final int _i) {
     
     
         expectedStorageSize = _i;
-        
+        return this;
     }
     
     
