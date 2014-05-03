@@ -8,8 +8,8 @@ package org.komea.product.backend.service.dynamicquery;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.cep.dynamicdata.IDynamicDataQuery;
-import org.komea.eventory.api.formula.ICEPResult;
+import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
+import org.komea.product.database.dto.KpiResult;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
@@ -56,9 +56,9 @@ public class CachedDynamicQueryTest
     
         final Cache cache = mock(Cache.class);
         when(dynamicQueryCacheService.getCache()).thenReturn(cache);
-        final ICEPResult icepResult = mock(ICEPResult.class);
+        final KpiResult icepResult = mock(KpiResult.class);
         when(cache.getIfPresent(Matchers.any(Object.class))).thenReturn(icepResult);
-        final ICEPResult result = cachedDynamicQuery.getResult();
+        final KpiResult result = cachedDynamicQuery.getResult();
         verify(dynamicDataQuery, never()).getResult();
         assertEquals(icepResult, result);
         
@@ -74,10 +74,10 @@ public class CachedDynamicQueryTest
     
         final Cache cache = mock(Cache.class);
         when(dynamicQueryCacheService.getCache()).thenReturn(cache);
-        final ICEPResult icepResult = mock(ICEPResult.class);
+        final KpiResult icepResult = mock(KpiResult.class);
         when(cache.getIfPresent(Matchers.any(Object.class))).thenReturn(null);
         when(dynamicDataQuery.getResult()).thenReturn(icepResult);
-        final ICEPResult result = cachedDynamicQuery.getResult();
+        final KpiResult result = cachedDynamicQuery.getResult();
         verify(dynamicDataQuery, times(1)).getResult();
         assertEquals(icepResult, result);
         
@@ -94,7 +94,7 @@ public class CachedDynamicQueryTest
         final Cache cache = mock(Cache.class);
         when(dynamicQueryCacheService.getCache()).thenReturn(cache);
         when(cache.getIfPresent(Matchers.any(Object.class))).thenReturn(null);
-        final ICEPResult result = cachedDynamicQuery.getResult();
+        final KpiResult result = cachedDynamicQuery.getResult();
         verify(dynamicDataQuery, times(1)).getResult();
         assertNotNull(result);
         

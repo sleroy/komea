@@ -8,8 +8,8 @@ package org.komea.product.plugins.testlink.core;
 
 import java.util.List;
 
-import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.product.backend.service.entities.IProjectService;
+import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Project;
 import org.komea.product.plugins.testlink.api.ITestLinkServerDAO;
@@ -61,7 +61,7 @@ public final class TestsByStatusKPI implements IDynamicDataQuery
     
     /*
      * (non-Javadoc)
-     * @see org.komea.cep.dynamicdata.IDynamicDataQuery#getResult()
+     * @see org.komea.product.cep.api.dynamicdata.IDynamicDataQuery#getResult()
      */
     @Override
     public KpiResult getResult() {

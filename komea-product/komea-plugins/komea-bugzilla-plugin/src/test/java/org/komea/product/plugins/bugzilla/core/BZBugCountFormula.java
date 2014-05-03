@@ -10,7 +10,8 @@ import java.util.Map;
 
 import org.komea.eventory.api.engine.ICEPStatement;
 import org.komea.eventory.api.formula.ICEPFormula;
-import org.komea.eventory.api.formula.ICEPResult;
+import org.komea.product.database.alert.IEvent;
+import org.komea.product.database.dto.KpiResult;
 
 
 
@@ -19,19 +20,19 @@ import org.komea.eventory.api.formula.ICEPResult;
  * 
  * @author sleroy
  */
-public class BZBugCountFormula implements ICEPFormula
+public class BZBugCountFormula implements ICEPFormula<IEvent, KpiResult>
 {
     
     
     /*
      * (non-Javadoc)
-     * @see org.komea.eventory.api.formula.ICEPFormula#compute(org.komea.eventory.api.engine.ICEPStatement, java.util.Map)
+     * @see org.komea.product.cep.api.formula.ICEPFormula#compute(org.komea.eventory.api.engine.ICEPStatement, java.util.Map)
      */
     @Override
-    public ICEPResult compute(final ICEPStatement _arg0, final Map _arg1) {
+    public KpiResult compute(final ICEPStatement<IEvent> _arg0, final Map<String, Object> _arg1) {
     
     
-        return null;
+        return new KpiResult();
     }
     
     

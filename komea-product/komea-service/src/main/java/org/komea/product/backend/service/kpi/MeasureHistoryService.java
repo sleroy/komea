@@ -9,7 +9,7 @@ import org.joda.time.DateTime;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IHistoryPurgeAction;
 import org.komea.product.backend.api.IMeasureHistoryService;
-import org.komea.product.backend.criterias.DateComparator;
+import org.komea.product.backend.criterias.MeasureDateComparator;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.api.IEntity;
@@ -257,7 +257,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
                 measures.addAll(listOfMeasures);
             }
         }
-        Collections.sort(measures, new DateComparator());
+        Collections.sort(measures, new MeasureDateComparator());
         return measures;
     }
 

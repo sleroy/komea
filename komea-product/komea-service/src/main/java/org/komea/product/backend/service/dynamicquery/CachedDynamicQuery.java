@@ -7,7 +7,7 @@ package org.komea.product.backend.service.dynamicquery;
 
 
 import org.apache.commons.lang.Validate;
-import org.komea.cep.dynamicdata.IDynamicDataQuery;
+import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.database.dto.KpiResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +57,7 @@ public final class CachedDynamicQuery implements IDynamicDataQuery
     
     /*
      * (non-Javadoc)
-     * @see org.komea.cep.dynamicdata.IDynamicDataQuery#getFormula()
+     * @see org.komea.product.cep.api.dynamicdata.IDynamicDataQuery#getFormula()
      */
     @Override
     public String getFormula() {
@@ -69,7 +69,7 @@ public final class CachedDynamicQuery implements IDynamicDataQuery
     
     /*
      * (non-Javadoc)
-     * @see org.komea.cep.dynamicdata.IDynamicDataQuery#getResult()
+     * @see org.komea.product.cep.api.dynamicdata.IDynamicDataQuery#getResult()
      */
     @Override
     public KpiResult getResult() {

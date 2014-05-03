@@ -3,10 +3,10 @@
  */
 package org.komea.product.backend.service.esper;
 
-import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
-import org.komea.eventory.formula.ElFormula;
 import org.komea.product.backend.exceptions.InvalidQueryFormulaException;
+import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
+import org.komea.product.cep.formula.ElFormula;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

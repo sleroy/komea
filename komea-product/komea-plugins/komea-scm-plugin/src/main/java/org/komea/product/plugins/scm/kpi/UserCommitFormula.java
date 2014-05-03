@@ -12,10 +12,7 @@ import java.util.Map;
 
 import org.komea.eventory.api.engine.ICEPStatement;
 import org.komea.eventory.api.formula.ICEPFormula;
-import org.komea.eventory.api.formula.ICEPResult;
-import org.komea.eventory.formula.tuple.TupleFactory;
-import org.komea.eventory.formula.tuple.TupleResultMap;
-import org.komea.eventory.query.CEPResult;
+import org.komea.product.database.dto.KpiResult;
 import org.komea.product.plugins.scm.api.plugin.ICommitFunction;
 import org.komea.product.plugins.scm.api.plugin.IScmCommit;
 import org.komea.product.plugins.scm.kpi.functions.ScmCommitTable;
@@ -28,7 +25,7 @@ import org.komea.product.service.dto.EntityKey;
  * 
  * @author sleroy
  */
-public class UserCommitFormula implements ICEPFormula<IScmCommit>
+public class UserCommitFormula implements ICEPFormula<IScmCommit, KpiResult>
 {
     
     
@@ -49,28 +46,25 @@ public class UserCommitFormula implements ICEPFormula<IScmCommit>
     
     /*
      * (non-Javadoc)
-     * @see org.komea.eventory.api.formula.ICEPFormula#compute(org.komea.eventory.api.engine.ICEPStatement, java.util.Map)
+     * @see org.komea.product.cep.api.formula.ICEPFormula#compute(org.komea.eventory.api.engine.ICEPStatement, java.util.Map)
      */
     @Override
-    public ICEPResult compute(final ICEPStatement<IScmCommit> _arg0, final Map<String, Object> _arg1) {
+    public KpiResult compute(final ICEPStatement<IScmCommit> _arg0, final Map<String, Object> _arg1) {
     
     
         final List<IScmCommit> aggregateView = _arg0.getAggregateView();
+        final KpiResult kpiResult = new KpiResult();
         final ScmCommitTable<EntityKey> scmCommitPerDayTable =
                 ScmCommitTable.buildTableFromCommitsAndKey(aggregateView,
                         new ScmUserGroupingFunction());
         
-        final TupleResultMap<Double> tupleResultMap = new TupleResultMap<Double>();
         
         for (final EntityKey userKey : scmCommitPerDayTable.keys()) {
             final Collection<IScmCommit> userCommits =
                     scmCommitPerDayTable.getListOfCommitsPerKey(userKey);
-            tupleResultMap.insertEntry(TupleFactory.newTuple(userKey),
-                    commitFunction.compute(userCommits));
+            kpiResult.put(userKey, commitFunction.compute(userCommits));
         }
         
-        
-        return CEPResult.buildFromMap(tupleResultMap);
+        return kpiResult;
     }
-    
 }

@@ -7,10 +7,10 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
 import org.komea.product.backend.api.IDynamicQueryCacheService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
+import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.database.dto.KpiResult;
 import org.quartz.JobDataMap;
 import org.slf4j.Logger;
@@ -128,7 +128,7 @@ public class DynamicQueryCacheService implements IDynamicQueryCacheService
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.api.IDynamicQueryCacheService#refreshValue(java.lang.String,
-     * org.komea.eventory.api.formula.KpiResult)
+     * org.komea.product.cep.api.formula.KpiResult)
      */
     @Override
     public void refreshValue(final String _queryKey, final KpiResult _result) {

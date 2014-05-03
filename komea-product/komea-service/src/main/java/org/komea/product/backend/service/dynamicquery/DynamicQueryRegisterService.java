@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
+import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,7 +96,7 @@ public class DynamicQueryRegisterService implements IDynamicDataQueryRegisterSer
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.service.kpi.IDynamicDataQueryRegisterService#registerQuery(java.lang.String,
-     * org.komea.cep.dynamicdata.IDynamicDataQuery)
+     * org.komea.product.cep.api.dynamicdata.IDynamicDataQuery)
      */
     @Override
     public void registerQuery(final String _queryName, final IDynamicDataQuery _query) {

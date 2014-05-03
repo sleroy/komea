@@ -8,7 +8,6 @@ package org.komea.product.backend.service.kpi;
 
 import javax.annotation.PostConstruct;
 
-import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
 import org.komea.product.backend.api.IDynamicQueryCacheService;
@@ -21,6 +20,7 @@ import org.komea.product.backend.service.cron.KpiHistoryJob;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.esper.ConvertELIntoQuery;
 import org.komea.product.backend.service.esper.QueryDefinition;
+import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.KpiResult;

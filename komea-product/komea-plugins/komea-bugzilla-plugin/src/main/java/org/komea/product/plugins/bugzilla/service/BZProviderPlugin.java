@@ -6,8 +6,9 @@
 package org.komea.product.plugins.bugzilla.service;
 
 import java.util.Arrays;
+
 import javax.annotation.PostConstruct;
-import org.komea.cep.dynamicdata.IDynamicDataQuery;
+
 import org.komea.product.backend.api.PluginAdminPages;
 import org.komea.product.backend.api.PluginMountPage;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
@@ -23,6 +24,7 @@ import org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO;
 import org.komea.product.plugins.bugzilla.core.BZBugCountKPI;
 import org.komea.product.backend.kpi.search.Filter;
 import org.komea.product.backend.kpi.search.Search;
+import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.plugins.bugzilla.userinterface.BugZillaPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

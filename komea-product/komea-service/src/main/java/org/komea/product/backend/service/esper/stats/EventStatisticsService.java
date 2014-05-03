@@ -6,43 +6,39 @@ package org.komea.product.backend.service.esper.stats;
 
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
+import org.joda.time.DateTime;
 import org.komea.eventory.api.engine.ICEPQuery;
-import org.komea.eventory.api.formula.ITupleResultMap;
 import org.komea.eventory.cache.CacheConfigurationBuilder;
-import org.komea.eventory.formula.tuple.EventCountFormula;
-import org.komea.eventory.formula.tuple.GroupByFormula;
 import org.komea.eventory.query.CEPQueryImplementation;
 import org.komea.eventory.query.FilterDefinition;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.api.IHistoryService;
-import org.komea.product.backend.service.ISystemProjectBean;
-import org.komea.product.backend.service.esper.IEventPushService;
+import org.komea.product.backend.criterias.MeasureDateComparator;
+import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
 import org.komea.product.backend.service.esper.QueryDefinition;
-import org.komea.product.backend.service.history.HistoryKey;
-import org.komea.product.backend.service.kpi.IKPIService;
-import org.komea.product.cep.tuples.ProviderEventTypeTupleCreator;
+import org.komea.product.cep.formula.EventCountFormula;
+import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dao.ProviderDao;
-import org.komea.product.database.enums.EvictionType;
-import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
-import org.komea.product.database.enums.ValueDirection;
-import org.komea.product.database.enums.ValueType;
-import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.EventTypeStatistic;
-import org.komea.product.service.dto.KpiKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Lists;
 
 
 
@@ -59,34 +55,66 @@ public class EventStatisticsService implements IEventStatisticsService
 {
     
     
-    private static final String ALERT_CRITICITY_DAY       = "ALERT_CRITICITY_DAY_";
+    private static final String     ALERT_CRITICITY_DAY       = "ALERT_CRITICITY_DAY_";
     
-    private static final String ALERT_RECEIVED_IN_ONE_DAY = "ALERT_RECEIVED_IN_ONE_DAY";
+    private static final String     ALERT_RECEIVED_IN_ONE_DAY = "ALERT_RECEIVED_IN_ONE_DAY";
     
-    private static final Logger LOGGER                    =
-                                                                  LoggerFactory
-                                                                          .getLogger("event-statistic-system");
+    private static final Logger     LOGGER                    =
+                                                                      LoggerFactory
+                                                                              .getLogger("event-statistic-system");
     
-    private static final String STATS_BREAKDOWN_24H       = "STATS_BREAKDOWN_24H";
+    /**
+     * 
+     */
+    private static final int        NUMBER_HOURS              = 24;
     
-    @Autowired
-    private IEventEngineService cepEngine;
+    /**
+     * 
+     */
+    private static final int        PRECISION                 = 5;
     
-    @Autowired
-    private IEventPushService   eventPushService;
-    
-    @Autowired
-    private IKPIService         kpiService;
-    
-    @Autowired
-    private IHistoryService     measureHistoryService;
+    private static final String     STATS_BREAKDOWN_24H       = "STATS_BREAKDOWN_24H";
     
     @Autowired
-    private ProviderDao         providerDAO;
+    private IEventEngineService     cepEngine;
+    
     
     @Autowired
-    private ISystemProjectBean  systemProject;
+    private ICronRegistryService    cronRegistryService;
     
+    private Cache<Integer, Measure> historyOfAlerts;
+    
+    @Autowired
+    private ProviderDao             providerDAO;
+    
+    
+    
+    /**
+     * Method alertCriticityPerDay.
+     * 
+     * @param _criticity
+     *            Severity
+     * @return Kpi
+     */
+    public void alertCriticityPerDay(final Severity _criticity) {
+    
+    
+        cepEngine.createQuery(new QueryDefinition(alertQueryName(_criticity),
+                new AlertPerSeverityPerDay(_criticity)));
+        
+    }
+    
+    
+    /**
+     * Method alertPerDay.
+     * 
+     * @return Kpi
+     */
+    public void alertPerDay() {
+    
+    
+        cepEngine.createQuery(new QueryDefinition(ALERT_RECEIVED_IN_ONE_DAY, new AlertPerDay()));
+    }
     
     
     /**
@@ -118,20 +146,9 @@ public class EventStatisticsService implements IEventStatisticsService
         cepQueryDefinition.setParameters(Collections.<String, Object> emptyMap());
         cepQueryDefinition.addFilterDefinition(FilterDefinition.create().setCacheConfiguration(
                 CacheConfigurationBuilder.expirationTimeCache(24, TimeUnit.HOURS)));
-        cepQueryDefinition.setFormula(new GroupByFormula(new ProviderEventTypeTupleCreator(),
-                new EventCountFormula()));
+        cepQueryDefinition.setFormula(new ProviderFormula(new EventCountFormula()));
         
         return cepQueryDefinition;
-    }
-    
-    
-    /**
-     * @return the eventPushService
-     */
-    public IEventPushService getAlertPushService() {
-    
-    
-        return eventPushService;
     }
     
     
@@ -145,11 +162,9 @@ public class EventStatisticsService implements IEventStatisticsService
     public List<Measure> getAllMeasures() {
     
     
-        final List<Measure> history =
-                measureHistoryService.getHistory(HistoryKey.of(kpiService.findKPI(
-                        KpiKey.ofKpiName(ALERT_RECEIVED_IN_ONE_DAY)).getId()));
-        LOGGER.debug("History of alerts {}", history.size());
-        return history;
+        final ArrayList<Measure> measureList = Lists.newArrayList(historyOfAlerts.asMap().values());
+        Collections.sort(measureList, new MeasureDateComparator());
+        return Collections.unmodifiableList(measureList);
         
     }
     
@@ -161,18 +176,6 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
         return cepEngine;
-    }
-    
-    
-    /**
-     * Method getKpiService.
-     * 
-     * @return IKPIService
-     */
-    public IKPIService getKpiService() {
-    
-    
-        return kpiService;
     }
     
     
@@ -189,8 +192,7 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
         final Double kpiSingleValue =
-                kpiService.getSingleValue(KpiKey.ofKpiName(getKpiNameFromSeverity(_criticity)))
-                        .doubleValue();
+                ((Number) cepEngine.getQuery(getKpiNameFromSeverity(_criticity))).doubleValue();
         return kpiSingleValue.intValue();
         
     }
@@ -218,15 +220,11 @@ public class EventStatisticsService implements IEventStatisticsService
     public long getReceivedAlertsIn24LastHours() {
     
     
-        return kpiService.getSingleValue(KpiKey.ofKpiName(ALERT_RECEIVED_IN_ONE_DAY)).intValue();
+        return ((Number) cepEngine.getQuery(ALERT_RECEIVED_IN_ONE_DAY).getResult()).longValue();
         
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.esper.IEventStatisticsService#getReceivedAlertTypesIn24Hours()
-     */
     /**
      * Method getReceivedAlertTypesIn24LastHours.
      * 
@@ -237,24 +235,10 @@ public class EventStatisticsService implements IEventStatisticsService
     public List<EventTypeStatistic> getReceivedAlertTypesIn24LastHours() {
     
     
-        final ICEPQuery<EventTypeStatistics> statsBreakdownStatement =
+        final ICEPQuery<IEvent, EventTypeStatistics> statsBreakdownStatement =
                 cepEngine.getQuery(STATS_BREAKDOWN_24H);
-        return ((ITupleResultMap) statsBreakdownStatement.getResult().asMap()).asPojoRows(
-                new String[]
-                    {
-                            "provider",
-                            "type",
-                            "value" }, EventTypeStatistic.class);
-    }
-    
-    
-    /**
-     * @return the systemProject
-     */
-    public final ISystemProjectBean getSystemProject() {
-    
-    
-        return systemProject;
+        
+        return statsBreakdownStatement.getResult().getEventTypeStatistics();
     }
     
     
@@ -263,20 +247,15 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
         LOGGER.info("Creating System KPI for statistics...");
-        final KpiKey kpiKey = KpiKey.ofKpiName(ALERT_RECEIVED_IN_ONE_DAY);
-        final Kpi kpi = kpiService.findKPI(kpiKey);
-        Kpi alertPerDay = null;
-        if (kpi == null) {
-            alertPerDay = alertPerDay();
-            kpiService.saveOrUpdate(alertPerDay);
-            kpiService.saveOrUpdate(alertCriticityPerDay(Severity.BLOCKER));
-            kpiService.saveOrUpdate(alertCriticityPerDay(Severity.CRITICAL));
-            kpiService.saveOrUpdate(alertCriticityPerDay(Severity.MAJOR));
-            kpiService.saveOrUpdate(alertCriticityPerDay(Severity.MINOR));
-            kpiService.saveOrUpdate(alertCriticityPerDay(Severity.INFO));
-            
-            LOGGER.info("Statistics KPI already existing.");
-        }
+        historyOfAlerts =
+                CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.DAYS)
+                        .maximumSize(NUMBER_HOURS * PRECISION).build();
+        alertPerDay();
+        alertCriticityPerDay(Severity.BLOCKER);
+        alertCriticityPerDay(Severity.CRITICAL);
+        alertCriticityPerDay(Severity.MAJOR);
+        alertCriticityPerDay(Severity.MINOR);
+        alertCriticityPerDay(Severity.INFO);
         LOGGER.info("Creating cron for statistics.");
         
         // output snapshot every 1 minute
@@ -287,14 +266,18 @@ public class EventStatisticsService implements IEventStatisticsService
     }
     
     
-    /**
-     * @param _eventPushService
-     *            the eventPushService to set
-     */
-    public void setAlertPushService(final IEventPushService _eventPushService) {
+    @Scheduled(
+        fixedRate = 60 / PRECISION * 60 * 1000)
+    public void schedule() {
     
     
-        eventPushService = _eventPushService;
+        LOGGER.info("Backup of alert stats...");
+        final long receivedAlertsIn24LastHours = getReceivedAlertsIn24LastHours();
+        final Measure measure = new Measure();
+        measure.setDate(new DateTime().toDate());
+        measure.setIdKpi(-1);
+        measure.setValue(new Double(receivedAlertsIn24LastHours));
+        historyOfAlerts.put(new DateTime().hourOfDay().get(), measure);
     }
     
     
@@ -306,17 +289,6 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
         cepEngine = _esperEngine;
-    }
-    
-    
-    /**
-     * @param _kpiService
-     *            the kpiService to set
-     */
-    public final void setKpiService(final IKPIService _kpiService) {
-    
-    
-        kpiService = _kpiService;
     }
     
     
@@ -333,73 +305,10 @@ public class EventStatisticsService implements IEventStatisticsService
     }
     
     
-    /**
-     * @param _systemProject
-     *            the systemProject to set
-     */
-    public final void setSystemProject(final ISystemProjectBean _systemProject) {
+    private String alertQueryName(final Severity _criticity) {
     
     
-        systemProject = _systemProject;
-    }
-    
-    
-    /**
-     * Method alertCriticityPerDay.
-     * 
-     * @param _criticity
-     *            Severity
-     * @return Kpi
-     */
-    private Kpi alertCriticityPerDay(final Severity _criticity) {
-    
-    
-        Kpi kpi;
-        kpi = new Kpi();
-        kpi.setDescription("Provides the number of alerts of criticity "
-                + _criticity + " received under 24 hours");
-        kpi.setEntityType(null);
-        kpi.setEsperRequest(buildELForAlertCriticityKpi(_criticity));
-        kpi.setKpiKey(getKpiNameFromSeverity(_criticity));
-        kpi.setValueMin(0d);
-        kpi.setValueMax(Double.MAX_VALUE);
-        kpi.setName("Number of alerts of criticity " + _criticity + " received under 24 hours.");
-        kpi.setEntityID(null);
-        kpi.setCronExpression("0 * * * * ?");
-        kpi.setEvictionRate(1);
-        kpi.setEvictionType(EvictionType.DAYS);
-        kpi.setValueDirection(ValueDirection.WORST);
-        kpi.setValueType(ValueType.INT);
-        kpi.setProviderType(ProviderType.OTHER);
-        return kpi;
-    }
-    
-    
-    /**
-     * Method alertPerDay.
-     * 
-     * @return Kpi
-     */
-    private Kpi alertPerDay() {
-    
-    
-        Kpi kpi;
-        kpi = new Kpi();
-        kpi.setDescription("Provides the number of alerts received under 24 hours");
-        kpi.setEntityType(null);
-        kpi.setEsperRequest("new " + AlertPerDay.class.getName() + "()");
-        kpi.setKpiKey(ALERT_RECEIVED_IN_ONE_DAY);
-        kpi.setValueMin(0d);
-        kpi.setValueMax(Double.MAX_VALUE);
-        kpi.setName("Number of alerts received under 24 hours.");
-        kpi.setEntityID(null);
-        kpi.setCronExpression("0 * * * * ?");
-        kpi.setEvictionRate(1);
-        kpi.setEvictionType(EvictionType.DAYS);
-        kpi.setValueDirection(ValueDirection.WORST);
-        kpi.setValueType(ValueType.INT);
-        kpi.setProviderType(ProviderType.OTHER);
-        return kpi;
+        return "number-alert-" + _criticity.name();
     }
     
     

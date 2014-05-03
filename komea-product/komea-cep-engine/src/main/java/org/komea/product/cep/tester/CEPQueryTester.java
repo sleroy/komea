@@ -26,6 +26,7 @@ import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.bridge.MemoryBridge;
 import org.komea.eventory.cache.guava.GoogleCacheStorage;
 import org.komea.eventory.query.CEPQuery;
+import org.komea.product.cep.api.tester.ICEPQueryTestPredicate;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.EventSimpleDto;

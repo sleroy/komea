@@ -7,8 +7,8 @@ package org.komea.product.backend.service.dynamicquery;
 
 
 import org.junit.Test;
-import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.product.backend.service.dynamicquery.DynamicQueryRegisterService;
+import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -93,7 +93,7 @@ public class DynamicQueryRegisterServiceTest
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.dynamicquery.DynamicQueryRegisterService#registerQuery(java.lang.String, org.komea.cep.dynamicdata.IDynamicDataQuery)}
+     * {@link org.komea.product.backend.service.dynamicquery.DynamicQueryRegisterService#registerQuery(java.lang.String, org.komea.product.cep.api.dynamicdata.IDynamicDataQuery)}
      * .
      */
     @Test

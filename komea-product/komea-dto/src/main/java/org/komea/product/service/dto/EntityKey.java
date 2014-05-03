@@ -153,6 +153,16 @@ public class EntityKey implements Serializable, Comparable<EntityKey>
     
     
     /**
+     * @return Tests if the key is a department key.
+     */
+    public boolean isDepartmentKey() {
+    
+    
+        return EntityType.DEPARTMENT.equals(entityType);
+    }
+    
+    
+    /**
      * Tests if this key refers to an entity type only.
      * 
      * @return true if this key refers to entity type.
@@ -175,6 +185,36 @@ public class EntityKey implements Serializable, Comparable<EntityKey>
     
     
         return entityType != null && id == null;
+    }
+    
+    
+    /**
+     * @return Tests if the key is a team key.
+     */
+    public boolean isPersonKey() {
+    
+    
+        return EntityType.PERSON.equals(entityType);
+    }
+    
+    
+    /**
+     * @return Tests if the key is a project key.
+     */
+    public boolean isProjectKey() {
+    
+    
+        return EntityType.PROJECT.equals(entityType);
+    }
+    
+    
+    /**
+     * @return Tests if the key is a team key.
+     */
+    public boolean isTeamKey() {
+    
+    
+        return EntityType.TEAM.equals(entityType);
     }
     
     

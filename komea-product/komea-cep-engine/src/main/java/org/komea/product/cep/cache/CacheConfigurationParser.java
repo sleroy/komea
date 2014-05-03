@@ -14,7 +14,7 @@ import org.komea.eventory.api.cache.ICacheConfiguration;
 import org.komea.eventory.api.cache.ICacheIndexer;
 import org.komea.eventory.cache.CacheConfigurationBuilder;
 import org.komea.eventory.cache.CacheConfigurationBuilder.CacheConfiguration;
-import org.komea.eventory.formula.ElFormula;
+import org.komea.product.cep.formula.ElFormula;
 
 
 

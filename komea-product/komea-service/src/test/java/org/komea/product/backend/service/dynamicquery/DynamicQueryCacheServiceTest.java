@@ -8,8 +8,8 @@ package org.komea.product.backend.service.dynamicquery;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.product.backend.service.cron.ICronRegistryService;
+import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -37,7 +37,7 @@ public class DynamicQueryCacheServiceTest
     
     /**
      * Test method for
-     * {@link org.komea.product.backend.service.dynamicquery.DynamicQueryCacheService#addCacheOnDynamicQuery(org.komea.cep.dynamicdata.IDynamicDataQuery)}
+     * {@link org.komea.product.backend.service.dynamicquery.DynamicQueryCacheService#addCacheOnDynamicQuery(org.komea.product.cep.api.dynamicdata.IDynamicDataQuery)}
      * .
      */
     @Test

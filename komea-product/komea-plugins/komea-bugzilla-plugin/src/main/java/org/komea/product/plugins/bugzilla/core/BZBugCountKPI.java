@@ -13,11 +13,11 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
-import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.product.backend.kpi.search.ISearchedElement;
 import org.komea.product.backend.kpi.search.Search;
 import org.komea.product.backend.kpi.search.SearchUtils;
 import org.komea.product.backend.service.entities.IProjectService;
+import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Project;
 import org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO;
@@ -98,7 +98,7 @@ public final class BZBugCountKPI implements IDynamicDataQuery
     
     /*
      * (non-Javadoc)
-     * @see org.komea.cep.dynamicdata.IDynamicDataQuery#getResult()
+     * @see org.komea.product.cep.api.dynamicdata.IDynamicDataQuery#getResult()
      */
     @Override
     public KpiResult getResult() {

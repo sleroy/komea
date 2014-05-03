@@ -9,9 +9,9 @@ package org.komea.product.backend.service.dynamicquery;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
-import org.komea.cep.dynamicdata.IDynamicDataQuery;
 import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
 import org.komea.product.backend.api.IDynamicQueryCacheService;
+import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.database.dto.KpiResult;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;

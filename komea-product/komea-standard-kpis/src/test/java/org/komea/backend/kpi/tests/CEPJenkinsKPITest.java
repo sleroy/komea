@@ -24,14 +24,13 @@ import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.api.filters.IEventFilter;
 import org.komea.eventory.cache.CacheConfigurationBuilder;
 import org.komea.eventory.cache.guava.GoogleCacheStorage;
-import org.komea.eventory.filter.ElEventFilter;
 import org.komea.eventory.filter.EventFilterBuilder;
 import org.komea.eventory.filter.NoEventFilter;
 import org.komea.eventory.formula.CountFormula;
-import org.komea.eventory.formula.ElNumericalFormula;
 import org.komea.eventory.query.CEPQueryBuilder;
 import org.komea.eventory.utils.PluginUtils;
 import org.komea.product.backend.utils.MapPopulation;
+import org.komea.product.cep.filter.ElEventFilter;
 import org.komea.product.cep.filter.OnlyEventFilter;
 import org.komea.product.cep.tester.CEPQueryTester;
 import org.komea.product.database.alert.IEvent;
@@ -133,74 +132,13 @@ public class CEPJenkinsKPITest
     
     
     @Test
-    public void testMTBFPerProject() {
-    
-    
-        // "every Event(eventType.eventKey='build_complete' AND project.name='SCERTIFY') -> Event(eventType.eventKey IN ('build_failed','build_interrupted') AND project.name='SCERTIFY')")
-        
-        //
-        // final IEventFilter eventFilter1 =
-        // new ElEventFilter(
-        // "project.projectKey=='SCERTIFY' && eventType.eventKey='build_complete'");
-        // final IEventFilter eventFilter2 =
-        // new ElEventFilter(
-        // "project.projectKey=='SCERTIFY' && eventType.eventKey='build_failed'");
-        // final IEventFilter eventFilter3 =
-        // new ElEventFilter(
-        // "project.projectKey=='SCERTIFY' && eventType.eventKey='build_interrupted'");
-        // final ICEPQuery query =
-        // CEPQueryBuilder
-        // .create(new CountFormula())
-        // .defineFilterAndTransformer(
-        // EventFilterBuilder.create().chain(new OnlyEventFilter()),
-        // SequenceTransformer.build(eventFilter1,
-        // FilterOperator.or(eventFilter2, eventFilter3)),
-        // CacheConfigurationBuilder.create()
-        // .expirationTime(30, TimeUnit.DAYS).build()).build();
-        //
-        // query.notifyEvent(a1);
-        // query.notifyEvent(a2);
-        // query.notifyEvent(a3);
-        // query.notifyEvent(a4);
-        // Assert.assertEquals(Double.valueOf(1.0d), query.getResult().asNumber());
-    }
-    
-    
-    @Test
-    public void testNumberOfBuildPerMonth() {
-    
-    
-        final IEventFilter<?> filter =
-                EventFilterBuilder.create().chain(new OnlyEventFilter())
-                        .chain(new ElEventFilter("project.projectKey=='SCERTIFY'")).build();
-        final ICEPQuery query =
-                CEPQueryBuilder
-                        .create(new ElNumericalFormula("previous + 1"))
-                        .defineFilter(
-                                filter,
-                                CacheConfigurationBuilder.create()
-                                        .expirationTime(30, TimeUnit.DAYS).build()).build();
-        
-        query.notifyEvent(a1);
-        query.notifyEvent(a2);
-        query.notifyEvent(a3);
-        query.notifyEvent(a4);
-        Assert.assertEquals(Double.valueOf(3.0d), query.getResult().asNumber());
-        
-        // "SELECT COUNT(*) as count FROM Event.win:time(1 month) WHERE eventType.eventKey IN('build_complete', 'build_failed', 'build_interrupted') AND project.name="
-        // + "'SCERTIFY'").expectRows(1).hasLineResult("count", 3L).dump()
-        
-    }
-    
-    
-    @Test
     public void testNumberOfBuildPerMonthWithCountFormula() {
     
     
         final IEventFilter<?> filter =
                 EventFilterBuilder.create().chain(new OnlyEventFilter())
                         .chain(new ElEventFilter("project.projectKey=='SCERTIFY'")).build();
-        final ICEPQuery query =
+        final ICEPQuery<Serializable, Integer> query =
                 CEPQueryBuilder
                         .create(new CountFormula())
                         .defineFilter(filter,
@@ -210,7 +148,7 @@ public class CEPJenkinsKPITest
         query.notifyEvent(a2);
         query.notifyEvent(a3);
         query.notifyEvent(a4);
-        Assert.assertEquals(Integer.valueOf(3), query.getResult().asNumber());
+        Assert.assertEquals(Integer.valueOf(3), query.getResult());
         
         // "SELECT COUNT(*) as count FROM Event.win:time(1 month) WHERE eventType.eventKey IN('build_complete', 'build_failed', 'build_interrupted') AND project.name="
         // + "'SCERTIFY'").expectRows(1).hasLineResult("count", 3L).dump()
@@ -236,7 +174,7 @@ public class CEPJenkinsKPITest
                         .chain(new ElEventFilter(
                                 "project.projectKey==#project &&  #expectedEvents.contains(eventType.eventKey)",
                                 parameters)).build();
-        final ICEPQuery query =
+        final ICEPQuery<Serializable, Integer> query =
                 CEPQueryBuilder
                         .create(new CountFormula())
                         .defineFilter(
@@ -248,7 +186,7 @@ public class CEPJenkinsKPITest
         query.notifyEvent(a2);
         query.notifyEvent(a3);
         query.notifyEvent(a4);
-        Assert.assertEquals(Integer.valueOf(3), query.getResult().asNumber());
+        Assert.assertEquals(Integer.valueOf(3), query.getResult());
         
         // "SELECT COUNT(*) as count FROM Event.win:time(1 month) WHERE eventType.eventKey IN('build_complete', 'build_failed', 'build_interrupted') AND project.name="
         // + "'SCERTIFY'").expectRows(1).hasLineResult("count", 3L).dump()
@@ -279,7 +217,7 @@ public class CEPJenkinsKPITest
                             }
                         }).build();
         
-        final ICEPQuery query =
+        final ICEPQuery<Serializable, Integer> query =
                 CEPQueryBuilder
                         .create(new CountFormula())
                         .defineFilter(
@@ -291,7 +229,7 @@ public class CEPJenkinsKPITest
         query.notifyEvent(a2);
         query.notifyEvent(a3);
         query.notifyEvent(a4);
-        Assert.assertEquals(Integer.valueOf(3), query.getResult().asNumber());
+        Assert.assertEquals(Integer.valueOf(3), query.getResult());
         
         // "SELECT COUNT(*) as count FROM Event.win:time(1 month) WHERE eventType.eventKey IN('build_complete', 'build_failed', 'build_interrupted') AND project.name="
         // + "'SCERTIFY'").expectRows(1).hasLineResult("count", 3L).dump()

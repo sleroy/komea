@@ -101,4 +101,14 @@ public class KpiResult
         
     }
     
+    
+    /**
+     * Returns the size of the results stored
+     */
+    public int size() {
+    
+    
+        return map.size();
+    }
+    
 }

@@ -5,7 +5,7 @@ package org.komea.product.backend.api;
 
 import java.util.List;
 
-import org.komea.cep.dynamicdata.IDynamicDataQuery;
+import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.database.dto.KpiResult;
 
 

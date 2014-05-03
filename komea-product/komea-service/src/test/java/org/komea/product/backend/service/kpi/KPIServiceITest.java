@@ -12,8 +12,6 @@ import org.junit.Test;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.filters.IFilterDefinition;
 import org.komea.eventory.api.formula.ICEPFormula;
-import org.komea.eventory.formula.tuple.EventCountFormula;
-import org.komea.eventory.formula.tuple.GroupByFormula;
 import org.komea.eventory.query.FilterDefinition;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.exceptions.KpiAlreadyExistingException;
@@ -21,10 +19,12 @@ import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
 import org.komea.product.backend.service.esper.IEventViewerService;
+import org.komea.product.cep.formula.EventCountFormula;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
+import org.komea.product.plugins.kpi.formula.ProjectFormula;
 import org.komea.product.service.dto.KpiKey;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.slf4j.Logger;
@@ -74,7 +74,7 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
         public ICEPFormula getFormula() {
         
         
-            return new GroupByFormula(new ProjectEntityKeyTupleCreator(), new EventCountFormula());
+            return new ProjectFormula(new EventCountFormula());
         }
         
         
@@ -124,7 +124,7 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test 
+    @Test
     public void testBug() {
     
     
@@ -145,7 +145,7 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test 
+    @Test
     public void testBug2() {
     
     
@@ -164,7 +164,8 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test (expected = KpiAlreadyExistingException.class)
+    @Test(
+        expected = KpiAlreadyExistingException.class)
     public void testBugAlreadyExistingKPI() {
     
     
@@ -186,7 +187,7 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test 
+    @Test
     public void testBugForIndividualKPI() {
     
     
@@ -211,7 +212,7 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
     }
     //
     //
-    // @Test 
+    // @Test
     // public void testifAlertStatisticsKPIAreWorking() {
     //
     //

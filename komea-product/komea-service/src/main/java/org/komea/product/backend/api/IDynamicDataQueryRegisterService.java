@@ -9,7 +9,7 @@ package org.komea.product.backend.api;
 import java.util.Iterator;
 import java.util.List;
 
-import org.komea.cep.dynamicdata.IDynamicDataQuery;
+import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 
 
 

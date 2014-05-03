@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.komea.event.factory.BugZillaEventFactory;
 import org.komea.product.cep.tester.CEPQueryTester;
 
+import org.komea.product.cep.tester.CEPQueryTester;
+
 
 
 public class EventsCountKpiTest

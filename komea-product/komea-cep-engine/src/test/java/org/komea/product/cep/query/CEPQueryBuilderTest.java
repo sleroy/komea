@@ -21,6 +21,7 @@ import org.komea.eventory.filter.EventFilterBuilder;
 import org.komea.eventory.formula.CountFormula;
 import org.komea.eventory.query.CEPQueryBuilder;
 import org.komea.eventory.utils.PluginUtils;
+import org.komea.product.cep.filter.BlockingEventFilter;
 import org.komea.product.cep.filter.OnlyEventFilter;
 import org.komea.product.database.alert.EventBuilder;
 import org.komea.product.database.enums.Severity;
