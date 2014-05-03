@@ -6,7 +6,6 @@ package org.komea.product.plugins.kpi.formula;
 
 
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 import org.junit.Test;
@@ -37,6 +36,18 @@ public class TeamFormulaTest
 {
     
     
+    public static Event fakeEvent() {
+    
+    
+        final Event event = new Event();
+        final PersonGroup personGroup = new PersonGroup();
+        personGroup.setId(1);
+        personGroup.setType(PersonGroupType.TEAM);
+        event.setPersonGroup(personGroup);
+        return event;
+    }
+    
+    
     /**
      * Test method for
      * {@link org.komea.product.plugins.kpi.formula.TeamFormula#compute(org.komea.eventory.api.engine.ICEPStatement, java.util.Map)}.
@@ -47,13 +58,8 @@ public class TeamFormulaTest
     
         final TeamFormula departmentFormula = new TeamFormula(new EventCountFormula());
         final ICEPStatement<IEvent> cepStatement = mock(ICEPStatement.class);
-        final Event event = new Event();
-        final PersonGroup personGroup = new PersonGroup();
-        personGroup.setId(1);
-        personGroup.setType(PersonGroupType.TEAM);
-        event.setPersonGroup(personGroup);
-        final ArrayList<IEvent> newArrayList = Lists.<IEvent> newArrayList(event);
-        when(cepStatement.getAggregateView()).thenReturn(newArrayList);
+        final Event event = fakeEvent();
+        when(cepStatement.getAggregateView()).thenReturn(Lists.<IEvent> newArrayList(event));
         
         final KpiResult compute =
                 departmentFormula.compute(cepStatement, Collections.<String, Object> emptyMap());
