@@ -8,6 +8,8 @@ package org.komea.product.cep.api.formula;
 
 import java.util.Map;
 
+import org.springframework.expression.spel.SpelEvaluationException;
+
 
 
 /**
@@ -37,7 +39,7 @@ public interface IElFormula<T>
      *            Class<T>
      * @return T
      */
-    public T getValue(Object _context);
+    public T getValue(Object _context) throws SpelEvaluationException;
     
     
     /**
@@ -49,6 +51,6 @@ public interface IElFormula<T>
      *            the extra parameters
      * @return the value.
      */
-    T getValue(Object _context, Map<String, Object> _parameters);
+    T getValue(Object _context, Map<String, Object> _parameters) throws SpelEvaluationException;
     
 }

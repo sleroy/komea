@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
@@ -79,7 +80,7 @@ public class ElFormula<T> implements IElFormula<T>
      * @see org.komea.product.cep.formula.IElFormula#getValue(java.lang.Object)
      */
     @Override
-    public T getValue(final Object _context) {
+    public T getValue(final Object _context) throws SpelEvaluationException {
     
     
         return getValue(_context, null);
@@ -91,7 +92,8 @@ public class ElFormula<T> implements IElFormula<T>
      * @see org.komea.product.cep.formula.IElFormula#getValue(java.lang.Object)
      */
     @Override
-    public T getValue(final Object _context, final Map<String, Object> _parameters) {
+    public T getValue(final Object _context, final Map<String, Object> _parameters)
+            throws SpelEvaluationException {
     
     
         Object valuecontext = _context;
