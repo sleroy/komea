@@ -7,6 +7,7 @@ package org.komea.product.cep.tester;
 
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.komea.eventory.api.engine.ICEPQuery;
@@ -63,8 +64,10 @@ class ArrayPredicate implements ICEPQueryTestPredicate<Serializable>
             assertThat("Array should have 2 columns [entityKey, number]", array[i].length,
                     equalTo(2));
             CEPQueryTester.LOGGER.debug("Evaluating line {} of esper request", i);
-            final Number tuple = resultMap.get(i);
-            assertThat("Expect value for the iteration " + i + " and entity " + array[i][0], tuple,
+            final EntityKey entityKey = (EntityKey) array[i][0];
+            final Number tuple = resultMap.get(entityKey);
+            System.out.println(Arrays.toString(array[i]));
+            assertThat("Expect value for the iteration " + i + " and entity " + entityKey, tuple,
                     equalTo(array[i][1]));
             
         }
