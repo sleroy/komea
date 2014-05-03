@@ -14,7 +14,6 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.cep.api.formula.tuple.ITuple;
-import org.komea.product.database.dto.KpiResult;
 
 import com.google.common.collect.Lists;
 
@@ -146,7 +145,7 @@ public class ArrayListTupleTest
         final ArrayListTuple tuple = new ArrayListTuple(Lists.newArrayList("singleton"));
         final ArrayListTuple tuple2 = new ArrayListTuple(Lists.newArrayList("singleton"));
         final ArrayListTuple tuple3 = new ArrayListTuple(Lists.newArrayList("singleton2"));
-        new ArrayListTuple(Lists.newArrayList(new KpiResult()));
+        
         assertEquals(0, tuple.compareTo(tuple2));
         assertEquals(-1, tuple2.compareTo(tuple3));
         assertEquals(1, tuple3.compareTo(tuple2));

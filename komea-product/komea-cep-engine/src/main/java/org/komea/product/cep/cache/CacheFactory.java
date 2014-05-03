@@ -54,6 +54,16 @@ public class CacheFactory implements ICacheStorageFactory
     }
     
     
+    /**
+     * @return the implementation
+     */
+    public String getImplementation() {
+    
+    
+        return implementation;
+    }
+    
+    
     @PostConstruct
     public void init() {
     
@@ -86,5 +96,16 @@ public class CacheFactory implements ICacheStorageFactory
         } catch (final Exception e) {
             throw new BeanInitializationException(e.getMessage(), e);
         }
+    }
+    
+    
+    /**
+     * @param _implementation
+     *            the implementation to set
+     */
+    public void setImplementation(final String _implementation) {
+    
+    
+        implementation = _implementation;
     }
 }
