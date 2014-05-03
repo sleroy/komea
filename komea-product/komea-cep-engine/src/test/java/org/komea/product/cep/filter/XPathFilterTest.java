@@ -7,7 +7,6 @@ package org.komea.product.cep.filter;
 
 
 import org.junit.Test;
-import org.komea.cep.filter.Event;
 import org.komea.product.cep.filter.XPathFilter;
 import org.komea.product.cep.query.xpath.XPathUtils;
 import org.slf4j.Logger;

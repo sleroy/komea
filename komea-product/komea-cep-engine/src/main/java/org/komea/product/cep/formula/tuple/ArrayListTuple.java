@@ -188,6 +188,16 @@ public class ArrayListTuple implements ITuple
     }
     
     
+    /**
+     * @return true if the tuple does not contains event.
+     */
+    public boolean isEmpty() {
+    
+    
+        return propertyMap.isEmpty();
+    }
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.cep.api.formula.tuple.ITuple#isSingleton()

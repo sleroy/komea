@@ -2,17 +2,19 @@
  * 
  */
 
-package org.komea.cep.formula.tuple;
+package org.komea.product.cep.formula.tuple;
 
 
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.cep.api.formula.tuple.ITuple;
-import org.komea.product.cep.formula.tuple.ArrayListTuple;
+import org.komea.product.database.dto.KpiResult;
 
 import com.google.common.collect.Lists;
 
@@ -50,9 +52,9 @@ public class ArrayListTupleTest
     
     
     /**
-     * Test method for {@link org.komea.cep.formula.tuple.ArrayListTuple#append(java.lang.Object)}.
+     * Test method for {@link org.komea.product.cep.formula.tuple.ArrayListTuple#append(java.lang.Object)}.
      */
-    @Test 
+    @Test
     public final void testAppend() throws Exception {
     
     
@@ -67,9 +69,9 @@ public class ArrayListTupleTest
     
     
     /**
-     * Test method for {@link org.komea.cep.formula.tuple.ArrayListTuple#ArrayListTuple(java.util.List)}.
+     * Test method for {@link org.komea.product.cep.formula.tuple.ArrayListTuple#ArrayListTuple(java.util.List)}.
      */
-    @Test 
+    @Test
     public final void testArrayListTuple() throws Exception {
     
     
@@ -82,16 +84,30 @@ public class ArrayListTupleTest
     
     
     /**
-     * Test method for {@link org.komea.cep.formula.tuple.ArrayListTuple#asBean(java.lang.String[], java.lang.Class)}.
+     * Test method for {@link org.komea.product.cep.formula.tuple.ArrayListTuple#ArrayListTuple(java.util.List)}.
      */
-    @Test 
+    @Test
+    public void testArrayListTupleSimple() throws Exception {
+    
+    
+        final ArrayListTuple arrayListTuple = new ArrayListTuple();
+        assertTrue(arrayListTuple.isEmpty());
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.cep.formula.tuple.ArrayListTuple#asBean(java.lang.String[], java.lang.Class)}.
+     */
+    @Test
     public final void testAsBean() throws Exception {
     
     
         final ArrayListTuple arrayListTuple =
                 new ArrayListTuple(Lists.newArrayList("jedi", "truc"));
-        final DemoPojo pojo = arrayListTuple.asBean(new String[] {
-                "a", "b" }, DemoPojo.class);
+        final DemoPojo pojo = arrayListTuple.asBean(new String[]
+            {
+                    "a",
+                    "b" }, DemoPojo.class);
         Assert.assertNotNull(pojo);
         assertEquals("jedi", pojo.a);
         assertEquals("truc", pojo.b);
@@ -100,16 +116,18 @@ public class ArrayListTupleTest
     
     
     /**
-     * Test method for {@link org.komea.cep.formula.tuple.ArrayListTuple#asMap(java.lang.String[])}.
+     * Test method for {@link org.komea.product.cep.formula.tuple.ArrayListTuple#asMap(java.lang.String[])}.
      */
-    @Test 
+    @Test
     public final void testAsMap() throws Exception {
     
     
         final ArrayListTuple arrayListTuple =
                 new ArrayListTuple(Lists.newArrayList("jedi", "truc"));
-        final Map<String, Object> map = arrayListTuple.asMap(new String[] {
-                "a", "b" });
+        final Map<String, Object> map = arrayListTuple.asMap(new String[]
+            {
+                    "a",
+                    "b" });
         assertEquals(2, map.size());
         assertEquals("jedi", map.get("a"));
         assertEquals("truc", map.get("b"));
@@ -119,9 +137,29 @@ public class ArrayListTupleTest
     
     
     /**
-     * Test method for {@link org.komea.cep.formula.tuple.ArrayListTuple#getFirst()}.
+     * Test method for {@link org.komea.product.cep.formula.tuple.ArrayListTuple#compareTo(org.komea.product.cep.api.formula.tuple.ITuple)}.
      */
-    @Test 
+    @Test
+    public void testCompareTo() throws Exception {
+    
+    
+        final ArrayListTuple tuple = new ArrayListTuple(Lists.newArrayList("singleton"));
+        final ArrayListTuple tuple2 = new ArrayListTuple(Lists.newArrayList("singleton"));
+        final ArrayListTuple tuple3 = new ArrayListTuple(Lists.newArrayList("singleton2"));
+        new ArrayListTuple(Lists.newArrayList(new KpiResult()));
+        assertEquals(0, tuple.compareTo(tuple2));
+        assertEquals(-1, tuple2.compareTo(tuple3));
+        assertEquals(1, tuple3.compareTo(tuple2));
+        assertEquals(1, tuple3.compareTo(null));
+        
+        
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.cep.formula.tuple.ArrayListTuple#getFirst()}.
+     */
+    @Test
     public final void testGetFirst() throws Exception {
     
     
@@ -132,9 +170,29 @@ public class ArrayListTupleTest
     
     
     /**
-     * Test method for {@link org.komea.cep.formula.tuple.ArrayListTuple#isSingleton()}.
+     * Test method for {@link org.komea.product.cep.formula.tuple.ArrayListTuple#hashCode()}.
      */
-    @Test 
+    @Test
+    public void testHashCode() throws Exception {
+    
+    
+        final ArrayListTuple tuple = new ArrayListTuple(Lists.newArrayList("singleton"));
+        final ArrayListTuple tuple2 = new ArrayListTuple(Lists.newArrayList("singleton"));
+        final Set<ITuple> set = new HashSet<ITuple>();
+        set.add(tuple);
+        set.add(tuple2);
+        assertTrue(tuple.equals(tuple2));
+        assertEquals("The set should contains only one event, since they are similar", 1,
+                set.size());
+        
+        
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.cep.formula.tuple.ArrayListTuple#isSingleton()}.
+     */
+    @Test
     public final void testHasSingletonValue() throws Exception {
     
     
@@ -144,9 +202,9 @@ public class ArrayListTupleTest
     
     
     /**
-     * Test method for {@link org.komea.cep.formula.tuple.ArrayListTuple#hasSingletonValue(java.lang.Object)}.
+     * Test method for {@link org.komea.product.cep.formula.tuple.ArrayListTuple#hasSingletonValue(java.lang.Object)}.
      */
-    @Test 
+    @Test
     public final void testHasSingletonValueObject() throws Exception {
     
     
@@ -160,9 +218,9 @@ public class ArrayListTupleTest
     
     
     /**
-     * Test method for {@link org.komea.cep.formula.tuple.ArrayListTuple#size()}.
+     * Test method for {@link org.komea.product.cep.formula.tuple.ArrayListTuple#size()}.
      */
-    @Test 
+    @Test
     public final void testSize() throws Exception {
     
     
@@ -173,9 +231,9 @@ public class ArrayListTupleTest
     
     
     /**
-     * Test method for {@link org.komea.cep.formula.tuple.ArrayListTuple#toString()}.
+     * Test method for {@link org.komea.product.cep.formula.tuple.ArrayListTuple#toString()}.
      */
-    @Test 
+    @Test
     public final void testToString() throws Exception {
     
     
@@ -184,9 +242,9 @@ public class ArrayListTupleTest
     
     
     /**
-     * Test method for {@link org.komea.cep.formula.tuple.ArrayListTuple#values()}.
+     * Test method for {@link org.komea.product.cep.formula.tuple.ArrayListTuple#values()}.
      */
-    @Test 
+    @Test
     public final void testValues() throws Exception {
     
     

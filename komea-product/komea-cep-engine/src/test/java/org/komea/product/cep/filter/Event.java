@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.cep.filter;
+package org.komea.product.cep.filter;
 
 
 
