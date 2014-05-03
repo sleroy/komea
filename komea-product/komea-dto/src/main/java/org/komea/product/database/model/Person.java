@@ -44,6 +44,7 @@ public class Person implements IEntity
         personRequested.setLastName("");
         personRequested.setPassword("");
         personRequested.setUserBdd(UserBdd.KOMEA);
+        personRequested.setEmail(_email);
         return personRequested;
     }
     

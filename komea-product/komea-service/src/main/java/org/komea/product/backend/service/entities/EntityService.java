@@ -112,6 +112,7 @@ public final class EntityService implements IEntityService
         Validate.notNull(_entityType);
         final List<? extends IEntity> entitiesWithKeys;
         if (_entityKeys.isEmpty()) {
+            // FIXME : The design there is Wrong!
             entitiesWithKeys = getEntitiesByEntityType(_entityType);
         } else {
             entitiesWithKeys = findEntitiesByTypeAndKeys(_entityType, _entityKeys);

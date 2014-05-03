@@ -304,5 +304,19 @@ public class CronRegistryService implements ICronRegistryService, ApplicationCon
         
         
     }
+
+
+    public SchedulerFactory getSchedulerFactory() {
+    
+    
+        return schedulerFactory;
+    }
+
+
+    public void setSchedulerFactory(SchedulerFactory _schedulerFactory) {
+    
+    
+        schedulerFactory = _schedulerFactory;
+    }
     
 }

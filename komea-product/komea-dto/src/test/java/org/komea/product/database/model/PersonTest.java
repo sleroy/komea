@@ -31,11 +31,11 @@ public class PersonTest
     public void testNewPersonWithOnlyEmailAndLogin() throws Exception {
     
     
-        final Person newPersonWithOnlyEmailAndLogin =
-                Person.newPersonWithOnlyEmailAndLogin("email@email.org", "email");
-        assertEquals("email@email.org", newPersonWithOnlyEmailAndLogin.getEmail());
-        assertEquals("email", newPersonWithOnlyEmailAndLogin.getLogin());
-        assertEquals(UserBdd.KOMEA, newPersonWithOnlyEmailAndLogin.getUserBdd());
+        final Person newPersno = Person.newPersonWithOnlyEmailAndLogin("email@email.org", "email");
+        assertEquals("email@email.org", newPersno.getEmail());
+        assertEquals("email", newPersno.getLogin());
+        assertEquals("email", newPersno.getFirstName());
+        assertEquals(UserBdd.KOMEA, newPersno.getUserBdd());
     }
     
     

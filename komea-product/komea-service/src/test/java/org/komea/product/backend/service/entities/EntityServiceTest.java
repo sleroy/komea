@@ -3,6 +3,7 @@ package org.komea.product.backend.service.entities;
 
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,10 +41,10 @@ public class EntityServiceTest
     private final IEntityService entityService = new EntityService();
     
     @Mock
-    private IPersonService       personDAO;
+    private IPersonGroupService  personGroupDao;
     
     @Mock
-    private IPersonGroupService  personGroupDao;
+    private IPersonService       personService;
     @Mock
     private IProjectService      projectDao;
     
@@ -55,11 +56,11 @@ public class EntityServiceTest
      * .
      */
     @Test
-    public void testFindEntitiesByTypeAndKeysTeam() throws Exception {
+    public void testFindEntitiesByTypeAndKeysTeam_getAll() throws Exception {
     
     
         entityService.getBaseEntityDTOS(EntityType.TEAM, Collections.EMPTY_LIST);
-        verify(personGroupDao, times(1)).selectByKeys(Matchers.anyList());
+        verify(personGroupDao, times(1)).getAllTeamsPG();
     }
     
     
@@ -69,11 +70,26 @@ public class EntityServiceTest
      * .
      */
     @Test
-    public void testgetBaseEntityDTOSDepartment() throws Exception {
+    public void testgetBaseEntityDTOSDepartment_atLeastOne() throws Exception {
+    
+    
+        final ArrayList<String> newArrayList = Lists.newArrayList("GNI");
+        entityService.getBaseEntityDTOS(EntityType.DEPARTMENT, newArrayList);
+        verify(personGroupDao, times(1)).selectByKeys(newArrayList);
+    }
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.backend.service.entities.EntityService#getEntitiesByKey(org.komea.product.database.enums.EntityType, java.util.List)}
+     * .
+     */
+    @Test
+    public void testgetBaseEntityDTOSDepartment_getAll() throws Exception {
     
     
         entityService.getBaseEntityDTOS(EntityType.DEPARTMENT, Collections.EMPTY_LIST);
-        verify(personGroupDao, times(1)).selectByKeys(Matchers.anyList());
+        verify(personGroupDao, times(1)).getAllDepartmentsPG();
     }
     
     
@@ -83,11 +99,26 @@ public class EntityServiceTest
      * .
      */
     @Test
-    public void testgetBaseEntityDTOSPerson() throws Exception {
+    public void testgetBaseEntityDTOSPerson_atLeastOne() throws Exception {
+    
+    
+        final ArrayList<String> newArrayList = Lists.newArrayList("GNI");
+        entityService.getBaseEntityDTOS(EntityType.PERSON, newArrayList);
+        verify(personService, times(1)).selectByKeys(newArrayList);
+    }
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.backend.service.entities.EntityService#getEntitiesByKey(org.komea.product.database.enums.EntityType, java.util.List)}
+     * .
+     */
+    @Test
+    public void testgetBaseEntityDTOSPerson_getAll() throws Exception {
     
     
         entityService.getBaseEntityDTOS(EntityType.PERSON, Collections.EMPTY_LIST);
-        verify(personDAO, times(1)).selectByKeys(Matchers.anyList());
+        verify(personService, times(1)).selectAll();
     }
     
     
@@ -97,11 +128,69 @@ public class EntityServiceTest
      * .
      */
     @Test
-    public void testgetBaseEntityDTOSProject() throws Exception {
+    public void testgetBaseEntityDTOSProject_atLeastOne() throws Exception {
+    
+    
+        final ArrayList<String> newArrayList = Lists.newArrayList("GNI");
+        entityService.getBaseEntityDTOS(EntityType.PROJECT, newArrayList);
+        verify(projectDao, times(1)).selectByKeys(newArrayList);
+    }
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.backend.service.entities.EntityService#getEntitiesByKey(org.komea.product.database.enums.EntityType, java.util.List)}
+     * .
+     */
+    @Test
+    public void testgetBaseEntityDTOSProject_getAll() throws Exception {
     
     
         entityService.getBaseEntityDTOS(EntityType.PROJECT, Collections.EMPTY_LIST);
-        verify(projectDao, times(1)).selectByKeys(Matchers.anyList());
+        verify(projectDao, times(1)).selectAll();
+    }
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.backend.service.entities.EntityService#getEntitiesByKey(org.komea.product.database.enums.EntityType, java.util.List)}
+     * .
+     */
+    @Test
+    public void testgetBaseEntityDTOSTeam() throws Exception {
+    
+    
+        entityService.getBaseEntityDTOS(EntityType.TEAM, Collections.EMPTY_LIST);
+        verify(personGroupDao, times(1)).getAllTeamsPG();
+    }
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.backend.service.entities.EntityService#getEntitiesByKey(org.komea.product.database.enums.EntityType, java.util.List)}
+     * .
+     */
+    @Test
+    public void testgetBaseEntityDTOSTeam_atLeastOne() throws Exception {
+    
+    
+        final ArrayList<String> newArrayList = Lists.newArrayList("GNI");
+        entityService.getBaseEntityDTOS(EntityType.TEAM, newArrayList);
+        verify(personGroupDao, times(1)).selectByKeys(newArrayList);
+    }
+    
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.backend.service.entities.EntityService#getEntitiesByKey(org.komea.product.database.enums.EntityType, java.util.List)}
+     * .
+     */
+    @Test
+    public void testgetBaseEntityDTOSTeam_getAll() throws Exception {
+    
+    
+        entityService.getBaseEntityDTOS(EntityType.TEAM, Collections.EMPTY_LIST);
+        verify(personGroupDao, times(1)).getAllTeamsPG();
     }
     
     
@@ -118,9 +207,9 @@ public class EntityServiceTest
         person2.setFirstName("william");
         person2.setLastName("Dalton");
         
-        Mockito.when(personDAO.selectByPrimaryKey(Matchers.anyInt())).thenReturn(null);
-        Mockito.when(personDAO.selectByPrimaryKey(12)).thenReturn(person);
-        Mockito.when(personDAO.selectByPrimaryKey(13)).thenReturn(person2);
+        Mockito.when(personService.selectByPrimaryKey(Matchers.anyInt())).thenReturn(null);
+        Mockito.when(personService.selectByPrimaryKey(12)).thenReturn(person);
+        Mockito.when(personService.selectByPrimaryKey(13)).thenReturn(person2);
         
         final List<IEntity> entities =
                 entityService.getEntitiesByPrimaryKey(EntityType.PERSON,
@@ -140,7 +229,7 @@ public class EntityServiceTest
         Assert.assertEquals("william", result.getFirstName());
         Assert.assertEquals("Dalton", result.getLastName());
         
-        Mockito.verify(personDAO, Mockito.times(3)).selectByPrimaryKey(Matchers.anyInt());
+        Mockito.verify(personService, Mockito.times(3)).selectByPrimaryKey(Matchers.anyInt());
         
     }
     
@@ -181,7 +270,7 @@ public class EntityServiceTest
         person.setFirstName("John");
         person.setLastName("Dalton");
         
-        Mockito.when(personDAO.selectByPrimaryKey(12)).thenReturn(person);
+        Mockito.when(personService.selectByPrimaryKey(12)).thenReturn(person);
         
         final IEntity entity =
                 entityService.findEntityByEntityKey(EntityKey.of(EntityType.PERSON, 12));
@@ -192,7 +281,7 @@ public class EntityServiceTest
         Assert.assertEquals("John", result.getFirstName());
         Assert.assertEquals("Dalton", result.getLastName());
         
-        Mockito.verify(personDAO, Mockito.times(1)).selectByPrimaryKey(12);
+        Mockito.verify(personService, Mockito.times(1)).selectByPrimaryKey(12);
         
     }
     

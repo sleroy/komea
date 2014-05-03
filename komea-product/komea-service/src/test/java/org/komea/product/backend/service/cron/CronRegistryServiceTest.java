@@ -6,12 +6,27 @@ package org.komea.product.backend.service.cron;
 
 
 
+import java.util.List;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.quartz.Job;
+import org.quartz.JobDataMap;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.SchedulerFactory;
+import org.quartz.TriggerKey;
 import org.springframework.context.ApplicationContext;
+
+import static org.junit.Assert.assertTrue;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 
@@ -25,9 +40,24 @@ public class CronRegistryServiceTest
     
     @Mock
     private ApplicationContext  applicationContext;
+    
     @InjectMocks
     private CronRegistryService cronRegistryService;
     
+    @Mock
+    private Scheduler           scheduler;
+    
+    @Mock
+    private SchedulerFactory    schedulerFactory;
+    
+    
+    
+    @Before
+    public void before() throws SchedulerException {
+    
+    
+        when(schedulerFactory.getScheduler()).thenReturn(scheduler);
+    }
     
     
     /**
@@ -37,8 +67,8 @@ public class CronRegistryServiceTest
     public final void testDisableCronTask() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        cronRegistryService.disableCronTask("GNI");
+        verify(scheduler).pauseTrigger(TriggerKey.triggerKey("GNI"));
     }
     
     
@@ -49,8 +79,8 @@ public class CronRegistryServiceTest
     public final void testEnableCronTask() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        cronRegistryService.enableCronTask("GNI");
+        verify(scheduler).resumeTrigger(TriggerKey.triggerKey("GNI"));
     }
     
     
@@ -61,8 +91,8 @@ public class CronRegistryServiceTest
     public final void testExistCron() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        cronRegistryService.existCron("CRON");
+        verify(scheduler).checkExists(JobKey.jobKey("CRON"));
     }
     
     
@@ -73,8 +103,8 @@ public class CronRegistryServiceTest
     public final void testForceNow() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        cronRegistryService.forceNow("CRON");
+        verify(scheduler).triggerJob(JobKey.jobKey("CRON"));
     }
     
     
@@ -82,11 +112,11 @@ public class CronRegistryServiceTest
      * Test method for {@link org.komea.product.backend.service.cron.CronRegistryService#getCronTasks()}.
      */
     @Test
-    public final void testGetCronTasks() throws Exception {
+    public final void testGetCronTasks_empty() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        final List<CronDetails> cronTasks = cronRegistryService.getCronTasks();
+        assertTrue(cronTasks.isEmpty());
     }
     
     
@@ -99,8 +129,8 @@ public class CronRegistryServiceTest
     public final void testRegisterCronTask() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        cronRegistryService.registerCronTask("CRON", "* * * * * ?", Job.class, new JobDataMap());
+        // TODO::verify(scheduler, times(1)).scheduleJob(Mockito.mock(JobDetail.class), mock(Trigger.class));
     }
     
     
@@ -111,8 +141,8 @@ public class CronRegistryServiceTest
     public final void testRemoveCronTask() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        cronRegistryService.removeCronTask("CRON");
+        verify(scheduler).deleteJob(JobKey.jobKey("CRON"));
     }
     
     
@@ -124,8 +154,8 @@ public class CronRegistryServiceTest
     public final void testUpdateCronFrequency() throws Exception {
     
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        cronRegistryService.forceNow("CRON");
+        verify(scheduler).triggerJob(JobKey.jobKey("CRON"));
     }
     
 }
