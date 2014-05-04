@@ -223,6 +223,21 @@ public class KpiBuilder
     }
     
     
+    /**
+     * @param _minValue
+     * @param _maxValue
+     * @return
+     */
+    public KpiBuilder interval(final Double _minValue, final Double _maxValue) {
+    
+    
+        kpi.setValueMin(_minValue);
+        kpi.setValueMax(_maxValue);
+        kpi.setValueDirection(_minValue < _maxValue ? ValueDirection.BETTER : ValueDirection.WORST);
+        return this;
+    }
+    
+    
     public KpiBuilder key(final String _key) {
     
     

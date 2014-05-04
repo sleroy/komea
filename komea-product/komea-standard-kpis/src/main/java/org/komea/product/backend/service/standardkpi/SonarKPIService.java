@@ -38,15 +38,20 @@ public class SonarKPIService
         // metric_value
         // sonar
         // metricName
-        return buildSonarMetricKpi("Line coverage", "line_coverage");
+        return buildSonarMetricKpi("Line coverage", "line_coverage", 0, 100);
     }
     
     
-    public Kpi buildSonarMetricKpi(final String _title, final String _metricName) {
+    public Kpi buildSonarMetricKpi(
+            final String _title,
+            final String _metricName,
+            final double _min,
+            final double _max) {
     
     
         return KpiBuilder.createAscending().nameAndKeyDescription(_title).dailyKPI()
                 .entityType(EntityType.PROJECT).providerType(ProviderType.QUALITY)
+                .interval(_min, _max)
                 .query("new " + SonarMetricKpi.class.getName() + "('" + _metricName + "')").build();
     }
     
@@ -56,30 +61,31 @@ public class SonarKPIService
     
     
         saveOrUpdate(actualLineCoverage());
-        saveOrUpdate(buildSonarMetricKpi("Lines of Code", "ncloc"));
-        saveOrUpdate(buildSonarMetricKpi("Classes", "classes"));
-        saveOrUpdate(buildSonarMetricKpi("Files", "files"));
-        saveOrUpdate(buildSonarMetricKpi("Packages", "packages"));
-        saveOrUpdate(buildSonarMetricKpi("Methods", "functions"));
-        saveOrUpdate(buildSonarMetricKpi("Comments (%)", "comment_lines_density"));
+        saveOrUpdate(buildSonarMetricKpi("Lines of Code", "ncloc", 0, 2000000));
+        saveOrUpdate(buildSonarMetricKpi("Classes", "classes", 0, 20000));
+        saveOrUpdate(buildSonarMetricKpi("Files", "files", 0, 50000));
+        saveOrUpdate(buildSonarMetricKpi("Packages", "packages", 0, 5000));
+        saveOrUpdate(buildSonarMetricKpi("Methods", "functions", 0, 50000));
+        saveOrUpdate(buildSonarMetricKpi("Comments (%)", "comment_lines_density", 0, 100));
         saveOrUpdate(buildSonarMetricKpi("Public documented API (%)",
-                "public_documented_api_density"));
-        saveOrUpdate(buildSonarMetricKpi("Complexity /file", "file_complexity"));
-        saveOrUpdate(buildSonarMetricKpi("Complexity /class", "class_complexity"));
-        saveOrUpdate(buildSonarMetricKpi("Unit tests", "tests"));
-        saveOrUpdate(buildSonarMetricKpi("Unit tests errors", "test_errors"));
-        saveOrUpdate(buildSonarMetricKpi("Skipped unit tests", "skipped_tests"));
-        saveOrUpdate(buildSonarMetricKpi("Unit tests failures", "tests_failures"));
-        saveOrUpdate(buildSonarMetricKpi("Unit tests success (%)", "test_success_density"));
-        saveOrUpdate(buildSonarMetricKpi("Branch coverage", "branch_coverage"));
-        saveOrUpdate(buildSonarMetricKpi("IT branch coverage", "it_branch_coverage"));
-        saveOrUpdate(buildSonarMetricKpi("Branch coverage on new code", "new_branch_coverage"));
-        saveOrUpdate(buildSonarMetricKpi("Coverage on new code", "new_coverage"));
-        saveOrUpdate(buildSonarMetricKpi("Duplicated lines (%)", "duplicated_lines_density"));
-        saveOrUpdate(buildSonarMetricKpi("Rules compliance", "violations_density"));
-        saveOrUpdate(buildSonarMetricKpi("Blocker issues", "blocker_violations"));
-        saveOrUpdate(buildSonarMetricKpi("New Blocker issues", "new_blocker_violations"));
-        saveOrUpdate(buildSonarMetricKpi("New issues", "new_violations"));
+                "public_documented_api_density", 0, 100));
+        saveOrUpdate(buildSonarMetricKpi("Complexity /file", "file_complexity", 0, 100));
+        saveOrUpdate(buildSonarMetricKpi("Complexity /class", "class_complexity", 0, 100));
+        saveOrUpdate(buildSonarMetricKpi("Unit tests", "tests", 0, 50000));
+        saveOrUpdate(buildSonarMetricKpi("Unit tests errors", "test_errors", 0, 50000));
+        saveOrUpdate(buildSonarMetricKpi("Skipped unit tests", "skipped_tests", 0, 50000));
+        saveOrUpdate(buildSonarMetricKpi("Unit tests failures", "tests_failures", 0, 50000));
+        saveOrUpdate(buildSonarMetricKpi("Unit tests success (%)", "test_success_density", 0, 100));
+        saveOrUpdate(buildSonarMetricKpi("Branch coverage", "branch_coverage", 0, 100));
+        saveOrUpdate(buildSonarMetricKpi("IT branch coverage", "it_branch_coverage", 0, 100));
+        saveOrUpdate(buildSonarMetricKpi("Branch coverage on new code", "new_branch_coverage", 0,
+                100));
+        saveOrUpdate(buildSonarMetricKpi("Coverage on new code", "new_coverage", 0, 100));
+        saveOrUpdate(buildSonarMetricKpi("Duplicated lines (%)", "duplicated_lines_density", 0, 100));
+        saveOrUpdate(buildSonarMetricKpi("Rules compliance", "violations_density", 0, 100));
+        saveOrUpdate(buildSonarMetricKpi("Blocker issues", "blocker_violations", 0, 100000));
+        saveOrUpdate(buildSonarMetricKpi("New Blocker issues", "new_blocker_violations", 0, 100000));
+        saveOrUpdate(buildSonarMetricKpi("New issues", "new_violations", 0, 100000));
         
         
     }

@@ -71,7 +71,7 @@ public class QueryCacheRefreshCron implements Job
                 
                 dynamicQueryCacheService.refreshValue(queryKey, refreshedValue);
             } catch (final Exception e) {
-                LOGGER.error("Error during the refreshing of the query {}", queryKey);
+                LOGGER.error("Error during the refreshing of the query {}", queryKey, e);
             }
             
         }

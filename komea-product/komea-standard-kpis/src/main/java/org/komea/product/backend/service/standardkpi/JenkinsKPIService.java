@@ -48,7 +48,7 @@ public class JenkinsKPIService
         return KpiBuilder.createAscending().nameAndKey("PHID")
                 .description("Project Health influence of a developer")
                 .providerType(ProviderType.CI_BUILD).entityType(EntityType.PERSON).dailyKPI()
-                .query(ProjectBuildHealthInfluencePerUser.class).build();
+                .interval(-100d, 100d).query(ProjectBuildHealthInfluencePerUser.class).build();
         
     }
     
@@ -79,7 +79,7 @@ public class JenkinsKPIService
         return KpiBuilder.createAscending().nameAndKey("SBRJW")
                 .description("Success project build rate").providerType(ProviderType.CI_BUILD)
                 .entityType(EntityType.PROJECT).dailyKPI().query(SuccessfulBuildRatePerWeek.class)
-                .build();
+                .interval(0d, 100d).build();
         
     }
     
@@ -93,7 +93,7 @@ public class JenkinsKPIService
         return KpiBuilder.createAscending().nameAndKey("NBBPD")
                 .description("Number of broken builds per user ")
                 .providerType(ProviderType.CI_BUILD).entityType(EntityType.PROJECT).dailyKPI()
-                .query(NumberOfBrokenBuildPerUserPerDay.class).build();
+                .interval(0d, 24 * 60 / 5d).query(NumberOfBrokenBuildPerUserPerDay.class).build();
         
     }
     
@@ -120,7 +120,7 @@ public class JenkinsKPIService
         return KpiBuilder.createAscending().nameAndKey("NJCC")
                 .description("Number of job configuration change")
                 .providerType(ProviderType.CI_BUILD).entityType(EntityType.PROJECT).dailyKPI()
-                .query(NumberOfJobConfigurationChangesPerDay.class).build();
+                .interval(0d, 60d).query(NumberOfJobConfigurationChangesPerDay.class).build();
     }
     
     
@@ -130,7 +130,7 @@ public class JenkinsKPIService
         return KpiBuilder.createAscending().nameAndKey("NFBPD")
                 .description("Number of failed build ").providerType(ProviderType.CI_BUILD)
                 .entityType(EntityType.PROJECT).dailyKPI().query(NumberOfFailedBuildPerDay.class)
-                .build();
+                .interval(0d, 24 * 60 / 5d).build();
     }
     
     
@@ -157,7 +157,7 @@ public class JenkinsKPIService
         return KpiBuilder.createAscending().nameAndKey("NUBPD")
                 .description("Number of unstable build").providerType(ProviderType.CI_BUILD)
                 .entityType(EntityType.PROJECT).dailyKPI().query(NumberOfFailedBuildPerDay.class)
-                .build();
+                .interval(0d, 24 * 60 / 5d).build();
     }
     
     
@@ -166,7 +166,7 @@ public class JenkinsKPIService
     
         return KpiBuilder.createAscending().nameAndKey("NSBPD")
                 .description("Number of successful build ").providerType(ProviderType.CI_BUILD)
-                .entityType(EntityType.PROJECT).dailyKPI()
+                .entityType(EntityType.PROJECT).dailyKPI().interval(0d, 24 * 60 / 5d)
                 .query(NumberOfSuccessfulBuildPerDay.class).build();
     }
     

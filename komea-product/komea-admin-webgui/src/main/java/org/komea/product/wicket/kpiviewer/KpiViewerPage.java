@@ -78,7 +78,7 @@ public class KpiViewerPage extends LayoutPage
             final ChartOptions chartOptions = new ChartOptions();
             
             chartOptions.setSpacingRight(20);
-            chartOptions.setType(SeriesType.BAR);
+            chartOptions.setType(SeriesType.SPLINE);
             chartOptions.setBorderRadius(1);
             chartOptions.setBorderColor(Color.GRAY);
             
@@ -194,11 +194,9 @@ public class KpiViewerPage extends LayoutPage
         }
         
         for (final Entry<EntityKey, List<Coordinate<Long, Integer>>> serieValue : series.entrySet()) {
-            System.out.println(serieValue);
             final CustomCoordinatesSeries<Long, Integer> oneChartSerie =
                     new CustomCoordinatesSeries<Long, Integer>();
             final IEntity entityOrFail = entityService.getEntityOrFail(serieValue.getKey());
-            System.out.println("ENtity of fail " + entityOrFail);
             oneChartSerie.setName(entityOrFail.getDisplayName());
             oneChartSerie.setData(serieValue.getValue());
             options.addSeries(oneChartSerie);
