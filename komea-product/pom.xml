@@ -21,6 +21,7 @@
 
 	<properties>
 		<eventory.version>1.0.54</eventory.version>
+		<komea.home>target/komea</komea.home>
 	</properties>
 
 

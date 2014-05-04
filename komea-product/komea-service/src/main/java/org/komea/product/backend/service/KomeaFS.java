@@ -5,6 +5,7 @@ package org.komea.product.backend.service;
 
 import java.io.File;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.komea.product.backend.api.exceptions.InvalidKomeaFileSystemException;
 import org.komea.product.backend.service.fs.IKomeaFS;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
@@ -146,7 +147,7 @@ public class KomeaFS implements IKomeaFS
             storage_path = System.getProperty(KOMEA_SYSTEM_PROPERTY);
         }
         if (Strings.isNullOrEmpty(storage_path)) {
-            storage_path = KOMEA_FOLDER;
+            storage_path = new File(SystemUtils.getUserDir(), KOMEA_FOLDER).getAbsolutePath();
         }
         LOGGER.info("\n\t\t>>>>> Storage path for plugins is {}", storage_path);
         if (storage_path == null) { throw new BeanCreationException(

@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
-import org.joda.time.DateTime;
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.cache.CacheConfigurationBuilder;
 import org.komea.eventory.query.CEPQueryImplementation;
@@ -30,10 +29,10 @@ import org.komea.product.database.dao.ProviderDao;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.EventTypeStatistic;
+import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -264,22 +263,21 @@ public class EventStatisticsService implements IEventStatisticsService
         cepEngine.createOrUpdateQuery(new QueryDefinition(STATS_BREAKDOWN_24H,
                 buildProviderEventFrequencyQuery()));
         
-        
+        cronRegistryService.registerCronTask("STATS", "0 0/1   * * * ?", EventStatsCron.class,
+                new JobDataMap());
     }
     
     
-    @Scheduled(
-        fixedRate = 60 / PRECISION * 60 * 1000)
-    public void schedule() {
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.esper.IEventStatisticsService#putHistory(int, org.komea.product.database.model.Measure)
+     */
+    @Override
+    public void putHistory(final int _hourOrDay, final Measure _measure) {
     
     
-        LOGGER.info("Backup of alert stats...");
-        final long receivedAlertsIn24LastHours = getReceivedAlertsIn24LastHours();
-        final Measure measure = new Measure();
-        measure.setDate(new DateTime().toDate());
-        measure.setIdKpi(-1);
-        measure.setValue(new Double(receivedAlertsIn24LastHours));
-        historyOfAlerts.put(new DateTime().hourOfDay().get(), measure);
+        historyOfAlerts.put(_hourOrDay, _measure);
+        
     }
     
     

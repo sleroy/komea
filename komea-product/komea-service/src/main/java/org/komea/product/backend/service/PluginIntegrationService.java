@@ -173,7 +173,7 @@ public class PluginIntegrationService implements IPluginIntegrationService, Bean
         LOGGER.info("Registering provider {}", provider.getName());
         criteria.createCriteria().andUrlEqualTo(provider.getUrl());
         if (existSelectedProvider(criteria)) {
-            LOGGER.warn("Replacing existing provider with new definition (}",
+            LOGGER.warn("Replacing existing provider with new definition {}",
                     _providerDTO.getProvider());
             removeProvider(provider);
         }

@@ -20,13 +20,13 @@ import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.history.HistoryKey;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.wicket.LayoutPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.wickedcharts.highcharts.options.Axis;
 import com.googlecode.wickedcharts.highcharts.options.AxisType;
@@ -120,7 +120,7 @@ public class KpiViewerPage extends LayoutPage
      * 
      */
     private static final long      serialVersionUID = 825152658028992367L;
-    @Autowired
+    @SpringBean
     private IEntityService         entityService;
     
     @SpringBean
@@ -181,7 +181,7 @@ public class KpiViewerPage extends LayoutPage
             
             final EntityKey entityKeyOfMeasure =
                     EntityKey.of(_kpi.getEntityType(), measure.getEntityID());
-            if (entityKeyOfMeasure == null) {
+            if (entityKeyOfMeasure.isUncompleteKey()) {
                 continue;
             }
             List<Coordinate<Long, Integer>> list = series.get(entityKeyOfMeasure);
@@ -194,11 +194,12 @@ public class KpiViewerPage extends LayoutPage
         }
         
         for (final Entry<EntityKey, List<Coordinate<Long, Integer>>> serieValue : series.entrySet()) {
-            
+            System.out.println(serieValue);
             final CustomCoordinatesSeries<Long, Integer> oneChartSerie =
                     new CustomCoordinatesSeries<Long, Integer>();
-            oneChartSerie.setName(entityService.getEntityOrFail(serieValue.getKey())
-                    .getDisplayName());
+            final IEntity entityOrFail = entityService.getEntityOrFail(serieValue.getKey());
+            System.out.println("ENtity of fail " + entityOrFail);
+            oneChartSerie.setName(entityOrFail.getDisplayName());
             oneChartSerie.setData(serieValue.getValue());
             options.addSeries(oneChartSerie);
         }

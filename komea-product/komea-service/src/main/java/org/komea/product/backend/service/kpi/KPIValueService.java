@@ -134,8 +134,8 @@ public final class KPIValueService implements IKpiValueService
         
         final MeasureCriteria criteria = new MeasureCriteria();
         final Measure valueMeasure =
-                CollectionUtil.singleOrNull(measureService
-                        .getFilteredHistory(_historyKey, criteria));
+                CollectionUtil.singleOrNull(measureService.getFilteredHistory(_historyKey, 1,
+                        criteria));
         LOGGER.debug("Returning value {}", valueMeasure);
         return valueMeasure;
     }

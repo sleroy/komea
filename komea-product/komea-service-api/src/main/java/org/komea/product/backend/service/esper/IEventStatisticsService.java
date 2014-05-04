@@ -34,6 +34,16 @@ public interface IEventStatisticsService
     
     
     /**
+     * Puts a value for this history (only used by cron service)
+     * 
+     * @param _hourOrDay
+     * @param _measure
+     *            the measure
+     */
+    public void putHistory(int _hourOrDay, Measure _measure);
+    
+    
+    /**
      * Method getNumberOfAlerts.
      * 
      * @param _criticity
