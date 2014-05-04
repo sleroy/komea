@@ -45,6 +45,7 @@ public class ScmKpiPlugin implements IScmKpiPlugin
                                                     "Average commit message length per user")
                                             .providerType(ProviderType.SCM)
                                             .entityType(EntityType.PERSON).expirationYear()
+                                            .interval(0d, 10000d)
                                             .query(AverageCommitMessageLength.class).cronDays(1)
                                             .build();
     /**
@@ -58,7 +59,7 @@ public class ScmKpiPlugin implements IScmKpiPlugin
                                                     .providerType(ProviderType.SCM)
                                                     .entityType(EntityType.PERSON).expirationYear()
                                                     .query(NumberOfAddedLinesPerDay.class)
-                                                    .cronDays(1).build();
+                                                    .interval(0d, 1000000d).cronDays(1).build();
     /**
      * 
      */
@@ -68,6 +69,7 @@ public class ScmKpiPlugin implements IScmKpiPlugin
                                                     "Number of commits per day per user")
                                             .providerType(ProviderType.SCM)
                                             .entityType(EntityType.PERSON).expirationYear()
+                                            .interval(0d, 25 * 60d)
                                             .query(NumberOfCommitsPerDay.class).cronDays(1).build();
     /**
      * 
@@ -78,6 +80,7 @@ public class ScmKpiPlugin implements IScmKpiPlugin
                                                     "Number of deleted lines per day per user")
                                             .providerType(ProviderType.SCM)
                                             .entityType(EntityType.PERSON).expirationYear()
+                                            .interval(0d, 1000000d)
                                             .query(NumberOfDeletedLinesPerDay.class).cronDays(1)
                                             .build();
     /**
@@ -89,13 +92,14 @@ public class ScmKpiPlugin implements IScmKpiPlugin
                                                     "Number of changed lines per day per user")
                                             .providerType(ProviderType.SCM)
                                             .entityType(EntityType.PERSON).expirationYear()
+                                            .interval(0d, 1000000d)
                                             .query(NumberOfModifiedLinesPerDay.class).cronDays(1)
                                             .build();
     private static final Kpi BUILD6 = KpiBuilder
                                             .createAscending()
                                             .nameAndKeyDescription(
                                                     "Number total of modified lines per user")
-                                            .providerType(ProviderType.SCM)
+                                            .providerType(ProviderType.SCM).interval(0d, 1000000d)
                                             .entityType(EntityType.PERSON).expirationYear()
                                             .query(TotalNumberOfModifiedLinesPerDay.class)
                                             .cronDays(1).build();
@@ -105,6 +109,7 @@ public class ScmKpiPlugin implements IScmKpiPlugin
                                                     "Number total of modified files per user")
                                             .providerType(ProviderType.SCM)
                                             .entityType(EntityType.PERSON).expirationYear()
+                                            .interval(0d, 1000000d)
                                             .query(NumberOfModifiedFilesPerDay.class).cronDays(1)
                                             .build();
     
