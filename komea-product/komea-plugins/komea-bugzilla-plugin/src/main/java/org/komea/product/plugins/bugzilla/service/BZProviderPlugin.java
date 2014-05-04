@@ -9,10 +9,10 @@ import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
 
+import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.PluginAdminPages;
 import org.komea.product.backend.api.PluginMountPage;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
-import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.EvictionType;

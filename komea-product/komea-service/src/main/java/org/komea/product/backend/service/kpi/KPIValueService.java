@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.Validate;
 import org.komea.product.backend.api.IHistoryService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.backend.api.IKpiValueService;
@@ -125,7 +126,7 @@ public final class KPIValueService implements IKpiValueService
      * org.komea.product.database.api.IEntity)
      */
     @Override
-    public Measure getLastMeasureOfKpi(final HistoryKey _historyKey) {
+    public Measure getLastMeasureInHistoryOfAKpi(final HistoryKey _historyKey) {
     
     
         LOGGER.debug("Fetching last measures for KPI {} and entity {}", _historyKey,
@@ -148,6 +149,20 @@ public final class KPIValueService implements IKpiValueService
     
     
         return measureService;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.api.IKPIService#getMinimalValueForAKpi(java.lang.Integer)
+     */
+    @Override
+    public Double getMinimalValueForAKpi(final Integer _kpiID) {
+    
+    
+        final Kpi selectByPrimaryKey = kpiDAO.selectByPrimaryKey(_kpiID);
+        Validate.notNull(_kpiID);
+        return selectByPrimaryKey.getValueMin();
     }
     
     
@@ -218,6 +233,21 @@ public final class KPIValueService implements IKpiValueService
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.api.IKpiValueService#getRealTimeValues(java.lang.String)
+     */
+    @Override
+    public KpiResult getRealTimeValues(final String _kpiName) {
+    
+    
+        final Kpi selectKpiByKey = new FindKpiOrFail(KpiKey.ofKpiName(_kpiName), kpiDAO).find();
+        if (selectKpiByKey == null) { return KpiResult.EMPTY; }
+        
+        return null;
+    }
+    
+    
     @Override
     public Number getSingleValue(final KpiKey _kpiKey) {
     
@@ -284,19 +314,6 @@ public final class KPIValueService implements IKpiValueService
     }
     
     
-    public void storeMeasureOfAKpiInDatabase(final KpiKey _kpiKey, final Number _kpiValue) {
-    
-    
-        final Kpi findKPI = new FindKpiOrFail(_kpiKey, kpiDAO).find();
-        final Measure measure =
-                Measure.initializeMeasureFromKPIKey(findKPI.getId(), _kpiKey.getEntityKey());
-        measure.setValue(_kpiValue.doubleValue());
-        measureService.storeMeasure(measure);
-        final int purgeHistory = measureService.buildHistoryPurgeAction(findKPI).purgeHistory();
-        LOGGER.debug("Purge history : {} items", purgeHistory);
-    }
-    
-    
     /*
      * (non-Javadoc)
      * @see org.komea.product.cep.tester.IKpiValueService#storeValueInHistory(org.komea.product.service.dto.KpiKey)
@@ -313,10 +330,24 @@ public final class KPIValueService implements IKpiValueService
         for (final Entry<EntityKey, Number> kpiLineValue : resultMap.entrySet()) {
             final KpiKey kpiKeyWithEntity =
                     KpiKey.ofKpiNameAndEntityKey(_kpiKey.getKpiName(), kpiLineValue.getKey());
-            storeMeasureOfAKpiInDatabase(kpiKeyWithEntity, kpiLineValue.getValue());
+            storeValueInKpiHistory(kpiKeyWithEntity, kpiLineValue.getValue());
             
         }
         
+    }
+    
+    
+    @Override
+    public void storeValueInKpiHistory(final KpiKey _kpiKey, final Number _kpiValue) {
+    
+    
+        final Kpi findKPI = new FindKpiOrFail(_kpiKey, kpiDAO).find();
+        final Measure measure =
+                Measure.initializeMeasureFromKPIKey(findKPI.getId(), _kpiKey.getEntityKey());
+        measure.setValue(_kpiValue.doubleValue());
+        measureService.storeMeasure(measure);
+        final int purgeHistory = measureService.buildHistoryPurgeAction(findKPI).purgeHistory();
+        LOGGER.debug("Purge history : {} items", purgeHistory);
     }
     
     
@@ -360,15 +391,6 @@ public final class KPIValueService implements IKpiValueService
         final Number value = kpiValue.getValue(entity.getEntityKey());
         measureKey.setValue(value == null ? Double.NaN : value.doubleValue());
         return measureKey;
-    }
-    
-    
-    protected KpiCriteria createKeyCriteria(final String key) {
-    
-    
-        final KpiCriteria criteria = new KpiCriteria();
-        criteria.createCriteria().andKpiKeyEqualTo(key);
-        return criteria;
     }
     
     

@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.komea.product.backend.api.IHistoryService;
+import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.service.entities.IEntityService;
-import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.KpiAlertDto;
 import org.komea.product.database.dto.MeasureDto;

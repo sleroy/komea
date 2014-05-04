@@ -1,18 +1,15 @@
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.backend.api;
 
 
 
 import java.util.List;
 
 import org.komea.product.backend.service.generic.IGenericService;
-import org.komea.product.database.dto.BaseEntityDto;
-import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.database.model.KpiCriteria;
-import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.SuccessFactor;
 import org.komea.product.service.dto.KpiKey;
 
@@ -45,28 +42,10 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria>
     
     
     /**
-     * Returns a list of measures from a list of kpi and a list of entities.
-     * 
-     * @param _kpis
-     *            the list of kpis
-     * @param _entities
-     *            the entities.
-     * @return the list of measures.
+     * @param _entityType
+     * @return
      */
-    public List<MeasureDto> getRealTimeMeasuresFromEntities(
-            List<Kpi> _kpis,
-            List<BaseEntityDto> _entities);
-    
-    
-    /**
-     * Method that returns a single value for the *special* KPI that does not
-     * render a table.
-     * 
-     * @param _kpiKey
-     *            the kpi key.
-     * @return the kpi single value;
-     */
-    public Number getSingleValue(KpiKey _kpiKey);
+    public List<Kpi> getAllKpisOfEntityType(EntityType _entityType);
     
     
     /**
@@ -88,34 +67,10 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria>
     List<Kpi> getBaseKpisOfGroupKpiKeys(List<String> groupKpiKeys);
     
     
-    /**
-     * Method getKpisForGroups.
-     * 
-     * @param entityType
-     *            EntityType
-     * @param entityKeys
-     *            List<String>
-     * @return List<Kpi>
-     */
-    List<Kpi> getKpis(EntityType entityType, List<String> entityKeys);
-    
-    
     List<Kpi> getKpisForGroups(List<Kpi> simpleKpis);
     
     
     List<Kpi> getKpisOfGroupKpiKeys(List<String> groupKpiKeys, List<Kpi> kpis);
-    
-    
-    /**
-     * Get last Measure of a Kpi for an entity from Esper
-     * 
-     * @param _kpi
-     *            kpi
-     * @param entity
-     *            entity
-     * @return measure or null if value does not exist
-     */
-    Measure getRealTimeMeasure(KpiKey _kpi);
     
     
     /**

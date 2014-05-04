@@ -73,8 +73,12 @@ public class MeasuresController
                             kpiService, entityService);
             fillKpisGroupMeasures.fillKpiGroupsMeasures();
         } else {
-            kpis.addAll(kpiService.getSelectionOfKpis(extendedEntityType.getKpiType(),
-                    _searchMeasuresDto.getKpiKeys()));
+            if (_searchMeasuresDto.hasNoSpecificKpisRequested()) {
+                kpis.addAll(kpiService.getAllKpisOfEntityType(entityType));
+            } else {
+                kpis.addAll(kpiService.getSelectionOfKpis(_searchMeasuresDto.getKpiKeys()));
+            }
+            
             final KpiMeasureFilter kpiMeasureFilter = new KpiMeasureFilter(_searchMeasuresDto);
             for (final String kpi : _searchMeasuresDto.getKpiKeys()) {
                 measures.addAll(kpiService.getKpiAsMeasures(kpi, kpiMeasureFilter));

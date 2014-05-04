@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.komea.product.backend.api.IHistoryService;
+import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.api.IMeasureHistoryService;
@@ -27,8 +28,6 @@ import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.KpiAlertTypeDao;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.ProjectDao;
-import org.komea.product.database.dto.BaseEntityDto;
-import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.HasSuccessFactorKpiCriteria;
@@ -129,13 +128,28 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      * @param _kpiKey
      *            KpiKey
      * @return Kpi
-     * @see org.komea.product.cep.tester.IKPIService#findKPIOrFail(KpiKey)
+     * @see org.komea.product.backend.api.IKPIService#findKPIOrFail(KpiKey)
      */
     @Override
     public Kpi findKPIOrFail(final KpiKey _kpiKey) {
     
     
         return new FindKpiOrFail(_kpiKey, requiredDAO).find();
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.api.IKPIService#getAllKpisOfEntityType(org.komea.product.database.enums.EntityType)
+     */
+    @Override
+    public List<Kpi> getAllKpisOfEntityType(final EntityType _entityType) {
+    
+    
+        final KpiCriteria kpiCriteria = new KpiCriteria();
+        kpiCriteria.createCriteria().andEntityTypeEqualTo(_entityType);
+        return selectByCriteria(kpiCriteria);
+        
     }
     
     
@@ -191,29 +205,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
     
         return kpiQueryRegistry;
-    }
-    
-    
-    /**
-     * Method getKpisForGroups.
-     * 
-     * @param entityType
-     *            EntityType
-     * @param kpiKeys
-     *            List<String>
-     * @return List<Kpi>
-     */
-    @Override
-    public List<Kpi> getKpis(final EntityType entityType, final List<String> kpiKeys) {
-    
-    
-        if (kpiKeys == null || kpiKeys.isEmpty()) {
-            final KpiCriteria kpiCriteria = new KpiCriteria();
-            kpiCriteria.createCriteria().andEntityTypeEqualTo(entityType);
-            return selectByCriteria(kpiCriteria);
-        }
-        return selectByKeys(kpiKeys);
-        
     }
     
     
@@ -273,7 +264,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     public Measure getLastMeasureOfKpi(final Kpi findKPIOrFail, final IEntity entity) {
     
     
-        return kpiValueService.getLastMeasureOfKpi(HistoryKey.of(findKPIOrFail, entity));
+        return kpiValueService.getLastMeasureInHistoryOfAKpi(HistoryKey.of(findKPIOrFail, entity));
     }
     
     
@@ -301,32 +292,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKPIService#getRealTimeMeasure(org.komea.product.service.dto.KpiKey)
-     */
-    @Override
-    public Measure getRealTimeMeasure(final KpiKey _kpi) {
-    
-    
-        return kpiValueService.getRealTimeMeasure(_kpi);
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKPIService#getRealTimeMeasuresFromEntities(java.util.List, java.util.List)
-     */
-    @Override
-    public List<MeasureDto> getRealTimeMeasuresFromEntities(
-            final List<Kpi> _kpis,
-            final List<BaseEntityDto> _entities) {
-    
-    
-        return kpiValueService.getRealTimeMeasuresFromEntities(_kpis, _entities);
-    }
-    
-    
-    /*
-     * (non-Javadoc)
      * @see org.komea.product.backend.genericservice.AbstractService#getRequiredDAO()
      */
     @Override
@@ -337,24 +302,12 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKPIService#getSingleValue(org.komea.product.service.dto.KpiKey)
-     */
-    @Override
-    public Number getSingleValue(final KpiKey _kpiKey) {
-    
-    
-        return kpiValueService.getSingleValue(_kpiKey);
-    }
-    
-    
     /**
      * Method saveOrUpdateKpi.
      * 
      * @param _kpi
      *            Kpi
-     * @see org.komea.product.cep.tester.IKPIService#saveOrUpdate(Kpi)
+     * @see org.komea.product.backend.api.IKPIService#saveOrUpdate(Kpi)
      */
     @Override
     public void saveOrUpdate(final Kpi _kpi) {

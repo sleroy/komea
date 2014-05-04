@@ -7,7 +7,7 @@ package org.komea.product.wicket.kpis;
 
 import java.util.List;
 
-import org.komea.product.backend.service.kpi.IKPIService;
+import org.komea.product.backend.api.IKPIService;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.AbstractDeleteAction;

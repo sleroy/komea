@@ -31,12 +31,12 @@
 			<artifactId>komea-service-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>komea-service</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
-		</dependency> -->
+		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>komea-utils</artifactId>

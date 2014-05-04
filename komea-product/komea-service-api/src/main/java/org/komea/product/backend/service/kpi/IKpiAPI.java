@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.KpiMeasureFilter;
 import org.komea.product.database.dto.KpiResult;
@@ -18,6 +19,7 @@ import org.komea.product.database.dto.SearchMeasuresDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
+import org.komea.product.service.dto.KpiKey;
 
 
 
@@ -131,6 +133,15 @@ public interface IKpiAPI
     
     
     /**
+     * Returns the last stored value into the history of a KPI.
+     * 
+     * @param the
+     *            history key.
+     */
+    Double getLastStoredValueInHistory(HistoryKey _key);
+    
+    
+    /**
      * @param _baseKpis
      * @param _allSubEntitiesDto
      * @param _searchMeasuresDto
@@ -164,7 +175,7 @@ public interface IKpiAPI
      *            the kpi keys
      * @return the list of kpi
      */
-    Collection<? extends Kpi> getSelectionOfKpis(EntityType _kpiType, List<String> _kpiKeys);
+    Collection<? extends Kpi> getSelectionOfKpis(List<String> _kpiKeys);
     
     
     /**
@@ -173,6 +184,17 @@ public interface IKpiAPI
      * @return the list of KPI.
      */
     List<Kpi> selectAll();
+    
+    
+    /**
+     * Stores a value into the history
+     * 
+     * @param _kpiKey
+     *            the kpi key
+     * @param _value
+     *            the value to store
+     */
+    void storeValueInHistory(KpiKey _kpiKey, Double _value);
     
     
 }

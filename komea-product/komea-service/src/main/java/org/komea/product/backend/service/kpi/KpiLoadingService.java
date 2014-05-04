@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.database.model.Kpi;
 import org.slf4j.Logger;

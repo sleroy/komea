@@ -96,21 +96,6 @@ public class EventsControllerTest extends AbstractSpringWebIntegrationTestCase
     public void pushEventTest() throws Exception {
     
     
-        // final Provider provider = new Provider();
-        // provider.setIcon("/incon.png");
-        // provider.setId(1);
-        // provider.setProviderType(ProviderType.JENKINS);
-        //
-        // final EventType eventType = new EventType();
-        // eventType.setCategory("large category");
-        // eventType.setDescription("a large event");
-        // eventType.setEntityType(EntityType.PROJECT);
-        // eventType.setEventKey("dtc");
-        // eventType.setId(1);
-        // eventType.setIdProvider(1);
-        // eventType.setName("dtc");
-        // eventType.setSeverity(Severity.MINOR);
-        
         final EventSimpleDto event = new EventSimpleDto();
         event.setDate(new Date());
         event.setEventType("dtc");

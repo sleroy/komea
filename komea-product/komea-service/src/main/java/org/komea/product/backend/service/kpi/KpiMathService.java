@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.stat.descriptive.summary.Sum;
+import org.komea.product.backend.api.IKpiMathService;
 import org.komea.product.database.model.Measure;
 import org.springframework.stereotype.Service;
 

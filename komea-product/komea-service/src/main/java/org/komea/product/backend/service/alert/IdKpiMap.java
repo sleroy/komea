@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.komea.product.backend.service.kpi.IKPIService;
+import org.komea.product.backend.api.IKPIService;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
 

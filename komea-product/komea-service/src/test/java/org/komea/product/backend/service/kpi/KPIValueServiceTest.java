@@ -11,12 +11,14 @@ import org.junit.runner.RunWith;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.backend.api.IMeasureHistoryService;
+import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 
@@ -54,6 +56,54 @@ public class KPIValueServiceTest
     private ProjectDao               projectDao;
     
     
+    @Autowired
+    private ISystemProjectBean       systemProjectBean;
+    
+    
+    
+    //
+    // @Test
+    // public void testBug() {
+    //
+    //
+    // final String key = "testBugKPI";
+    // final Kpi kpi =
+    // KpiBuilder.createAscending().nameAndKeyDescription(key)
+    // .entityType(EntityType.PROJECT).expirationMonth()
+    // .providerType(ProviderType.OTHER)
+    // .query("new " + DemoKPI.class.getName() + "()").cronFiveMinutes().build();
+    //
+    // kpiService.saveOrUpdate(kpi);
+    //
+    // final Measure measure =
+    // kPIValueService.getRealTimeMeasure(KpiKey.ofKpiAndEntity(kpi,
+    // systemProjectBean.getSystemProject()));
+    // Assert.assertNotNull("Should be filtered and work", measure);
+    //
+    // }
+    
+    
+    //
+    // @Test
+    // public void testBug() {
+    //
+    //
+    // final String key = "testBugKPI";
+    // final Kpi kpi =
+    // KpiBuilder.createAscending().nameAndKeyDescription(key)
+    // .entityType(EntityType.PROJECT).expirationMonth()
+    // .providerType(ProviderType.OTHER)
+    // .query("new " + DemoKPI.class.getName() + "()").cronFiveMinutes().build();
+    //
+    // kpiService.saveOrUpdate(kpi);
+    //
+    // final Measure measure =
+    // kPIValueService.getRealTimeMeasure(KpiKey.ofKpiAndEntity(kpi,
+    // systemProjectBean.getSystemProject()));
+    // Assert.assertNotNull("Should be filtered and work", measure);
+    //
+    // }
+    
     
     /**
      * Test method for
@@ -61,7 +111,7 @@ public class KPIValueServiceTest
      * .
      */
     @Test
-    public final void testGetLastMeasureOfKpi() throws Exception {
+    public final void testGetLastMeasureInHistoryOfAKpi() throws Exception {
     
     
         // TODO
@@ -70,8 +120,7 @@ public class KPIValueServiceTest
     
     
     /**
-     * Test method for
-     * {@link org.komea.product.cep.tester.KPIValueService#getRealTimeMeasure(org.komea.product.service.dto.KpiKey)}.
+     * Test method for {@link org.komea.product.cep.tester.KPIValueService#getRealTimeMeasure(org.komea.product.service.dto.KpiKey)}.
      */
     @Test
     public final void testGetRealTimeMeasure() throws Exception {
@@ -83,8 +132,7 @@ public class KPIValueServiceTest
     
     
     /**
-     * Test method for
-     * {@link org.komea.product.cep.tester.KPIValueService#getRealTimeMeasuresFromEntities(java.util.List, java.util.List)}.
+     * Test method for {@link org.komea.product.cep.tester.KPIValueService#getRealTimeMeasuresFromEntities(java.util.List, java.util.List)}.
      */
     @Test
     public final void testGetRealTimeMeasuresFromEntities() throws Exception {
@@ -108,22 +156,7 @@ public class KPIValueServiceTest
     
     
     /**
-     * Test method for
-     * {@link org.komea.product.cep.tester.KPIValueService#storeMeasureOfAKpiInDatabase(org.komea.product.service.dto.KpiKey, java.lang.Number)}
-     * .
-     */
-    @Test
-    public final void testStoreMeasureOfAKpiInDatabase() throws Exception {
-    
-    
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
-    }
-    
-    
-    /**
-     * Test method for
-     * {@link org.komea.product.cep.tester.KPIValueService#storeValueInHistory(org.komea.product.service.dto.KpiKey)}.
+     * Test method for {@link org.komea.product.cep.tester.KPIValueService#storeValueInHistory(org.komea.product.service.dto.KpiKey)}.
      */
     @Test
     public final void testStoreValueInHistory() throws Exception {
@@ -133,4 +166,61 @@ public class KPIValueServiceTest
         org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
+    
+    /**
+     * Test method for
+     * {@link org.komea.product.cep.tester.KPIValueService#storeValueInKpiHistory(org.komea.product.service.dto.KpiKey, java.lang.Number)} .
+     */
+    @Test
+    public final void testStoreValueInKpiHistory() throws Exception {
+    
+    
+        // TODO
+        org.junit.Assert.assertTrue("not yet implemented", false);
+    }
+    
+    
+    // @Test
+    // public void testBugForIndividualKPI() {
+    //
+    //
+    // final String key = "testBugIndividualKPI";
+    // final Kpi kpi =
+    // KpiBuilder.createAscending().nameAndKeyDescription(key)
+    // .providerType(ProviderType.OTHER).entityType(EntityType.PROJECT)
+    // .expirationMonth().query("new " + DemoKPI.class.getName() + "()")
+    // .cronFiveMinutes().build();
+    // kpi.setEntityID(systemProjectBean.getSystemProject().getId());
+    // kpiService.saveOrUpdate(kpi);
+    //
+    // final Measure measure =
+    // kpiService.getRealTimeMeasure(KpiKey.ofKpiAndEntity(kpi,
+    // systemProjectBean.getSystemProject()));
+    // Assert.assertNotNull("Should work, the results are filtered by the KPI Key", measure);
+    // final Measure measure2 = kpiService.getRealTimeMeasure(KpiKey.ofKpi(kpi));
+    // Assert.assertNotNull(
+    // "Should work, the results are not filtered by the KPI Key (no entity key) but its an individual KPI",
+    // measure2);
+    //
+    // }
+    
+    //
+    // @Test
+    // public void testBug2() {
+    //
+    //
+    // final String key = "testBugKPI2";
+    // final Kpi kpi =
+    // KpiBuilder.createAscending().nameAndKeyDescription(key)
+    // .entityType(EntityType.PROJECT).expirationMonth()
+    // .providerType(ProviderType.OTHER)
+    // .query("new " + DemoKPI.class.getName() + "()").cronFiveMinutes().build();
+    //
+    // kpiService.saveOrUpdate(kpi);
+    //
+    // final Measure measure = kpiService.getRealTimeMeasure(KpiKey.ofKpi(kpi));
+    // Assert.assertNotNull("Should be filtered and work", measure);
+    //
+    // }
+    //
 }

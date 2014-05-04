@@ -11,6 +11,7 @@ import java.util.List;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.dto.BaseEntityDto;
+import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
@@ -42,29 +43,38 @@ public interface IKpiValueService
      *            the entity.
      * @return the measure
      */
-    public Measure getLastMeasureOfKpi(HistoryKey _key);
+    public Measure getLastMeasureInHistoryOfAKpi(HistoryKey _key);
     
     
     /**
-     * Get the real time value of a kpi.
+     * Returns the minimal value for a kpi.
      * 
-     * @param _key
-     *            the kpi key.
+     * @param _kpiID
+     *            the kpi ID.
      * @return
      */
-    public Measure getRealTimeMeasure(KpiKey _key);
+    public Double getMinimalValueForAKpi(Integer _kpiID);
     
     
     /**
-     * Get the real times measures of some entities;
+     * Returns a list of measures from a list of kpi and a list of entities.
      * 
-     * @param kpis
-     * @param entities
-     * @return
+     * @param _kpis
+     *            the list of kpis
+     * @param _entities
+     *            the entities.
+     * @return the list of measures.
      */
     public List<MeasureDto> getRealTimeMeasuresFromEntities(
-            List<Kpi> kpis,
-            List<BaseEntityDto> entities);
+            List<Kpi> _kpis,
+            List<BaseEntityDto> _entities);
+    
+    
+    /**
+     * @param _kpiName
+     * @return
+     */
+    public KpiResult getRealTimeValues(String _kpiName);
     
     
     /**
@@ -73,7 +83,7 @@ public interface IKpiValueService
      * @param _kpiKey
      *            KpiKey
      * @return Number
-     * @see org.komea.product.cep.tester.IKPIService#getSingleValue(KpiKey)
+     * @see org.komea.product.backend.api.IKPIService#getSingleValue(KpiKey)
      */
     public Number getSingleValue(KpiKey _kpiKey);
     
@@ -85,9 +95,31 @@ public interface IKpiValueService
      * @param _kpiKey
      *            KpiKey
      * @throws KPINotFoundException
-     * @see org.komea.product.cep.tester.IKPIService#storeValueInHistory(KpiKey)
+     * @see org.komea.product.backend.api.IKPIService#storeValueInHistory(KpiKey)
      */
     public void storeValueInHistory(KpiKey _kpiKey) throws KPINotFoundException;
     
+    
+    /**
+     * Stores a value directly into the kpi history.
+     * 
+     * @param _kpiKey
+     *            the kpi key
+     * @param _value
+     *            the value.
+     */
+    public void storeValueInKpiHistory(KpiKey _kpiKey, Number _value);
+    
+    
+    /**
+     * Get last Measure of a Kpi for an entity from Esper
+     * 
+     * @param _kpi
+     *            kpi
+     * @param entity
+     *            entity
+     * @return measure or null if value does not exist
+     */
+    Measure getRealTimeMeasure(KpiKey _kpi);
     
 }
