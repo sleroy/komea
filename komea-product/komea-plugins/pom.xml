@@ -20,6 +20,7 @@
     <modules>
         <module>komea-scm-plugin</module>
         <module>komea-git-plugin</module>
+<!--        <module>komea-perforce-plugin</module> -->
         <module>komea-rss-plugin</module>
         <module>komea-ldap-plugin</module>
         <module>komea-sample-plugin</module>

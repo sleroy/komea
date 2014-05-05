@@ -6,13 +6,10 @@
 
 package org.komea.product.wicket.customer;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Rule;
-import org.komea.product.backend.service.alert.IAlertTypeService;
-import org.komea.product.backend.service.customer.ICustomerService;
-import org.komea.product.wicket.alert.AlertPage;
+import org.junit.Test;
+import org.komea.product.backend.service.entities.ICustomerService;
 import org.komea.product.wicket.utils.WicketTesterMethodRule;
 import org.mockito.Mockito;
 

@@ -5,8 +5,6 @@
 package org.komea.product.wicket.person;
 
 
-import static org.mockito.Mockito.mock;
-
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
@@ -20,6 +18,8 @@ import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.model.Person;
 import org.komea.product.wicket.utils.WicketTesterMethodRule;
+
+import static org.mockito.Mockito.mock;
 
 /**
  * @author sleroy

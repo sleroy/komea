@@ -5,12 +5,9 @@
  */
 package org.komea.product.wicket.alert;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.Test;
 import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.service.alert.IAlertTypeService;
 import org.komea.product.wicket.utils.WicketTesterMethodRule;

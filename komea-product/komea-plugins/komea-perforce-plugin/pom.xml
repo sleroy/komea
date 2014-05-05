@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.komea.plugins</groupId>
+		<artifactId>komea-plugins</artifactId>
+		<version>1.0.13-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>komea-perforce-plugin</artifactId>
+
+	<name>Komea : Perforce plugin</name>
+	<description>Komea Perforce plugin</description>
+
+
+
+	<dependencies>
+		
+		<dependency>
+	<groupId>com.perforce</groupId>
+	<artifactId>p4java</artifactId>
+	<version>2013.1.656196</version>
+</dependency>
+            
+
+		<dependency>
+			<groupId>org.komea.plugins</groupId>
+			<artifactId>komea-scm-plugin</artifactId>
+			<version>${project.version}</version>
+
+		</dependency>
+
+		<dependency>
+			<groupId>org.komea.product</groupId>
+			<artifactId>komea-testspring</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+	
+	</dependencies>
+
+</project>

@@ -1,10 +1,15 @@
 package org.komea.product.web.dto;
 
 import java.util.List;
+
 import org.easymock.EasyMock;
-import org.junit.*;
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.komea.product.database.model.Setting;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * The class <code>SettingsDTOTest</code> contains tests for the class <code>{@link SettingsDTO}</code>.

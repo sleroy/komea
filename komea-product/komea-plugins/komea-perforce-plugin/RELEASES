@@ -1,0 +1,52 @@
+v1.0.1-SNAPSHOT
+------------------
+
+Features :
+* Support multiple GIT repositories
+* Support parallelism
+* Support events (branch number, tags number, tag per branch, new_commit, fetch_failed, branch_association)
+* Support customer branch
+* Support http authentication
+
+Limitations : 
+ * No authentication support
+ * No admin page
+ * No commit analysis (size / files modified)
+ * No SSL/SSH authentication.
+ 
+Roadmap : 
+ - admin page
+ - feature and different branch type support
+
+
+
+% of Pull requests that are closed
+% of Pull requests that are merged
+Avg Hours Pull Requests opened
+Comments per pull request
+Commits
+Hours Pull Requests Opened
+Issues closed
+Issues comments
+Issues opened
+Issues reopened
+Lines added
+Lines Deleted
+Lines modified
+Lines modified per my merged pull requests
+Lines modified per my merges
+Lines modified in my merges
+Lines per commit
+Lines per push
+Merges
+My pull requests closed
+My pull requests merged
+Net lines
+Pull request comments
+Pull request comments
+Pull requests closed by me
+Pull request merged by me
+Pull request opened
+Pull requests opened per merge
+Pushes
+

@@ -5,8 +5,6 @@
 package org.komea.product.wicket.console;
 
 
-import static org.mockito.Mockito.when;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,6 +12,8 @@ import org.komea.product.backend.service.ISettingProxy;
 import org.komea.product.backend.service.ISettingService;
 import org.komea.product.wicket.utils.WicketTesterMethodRule;
 import org.mockito.Mockito;
+
+import static org.mockito.Mockito.when;
 
 /**
  * @author sleroy
