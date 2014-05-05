@@ -72,7 +72,8 @@ public class ObjectStorage<T> implements IObjectStorage<T> {
     public synchronized void set(final T _object) {
 
         try {
-            X_STREAM.toXML(_object, service.store(getResource()));
+        	
+            X_STREAM.toXML(_object, service.store(getResource()));            
         } catch (final FileNotFoundException e) {
             throw new SerializationException(e.getMessage(), e);
         }

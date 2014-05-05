@@ -6,6 +6,12 @@ package org.komea.product.backend.service;
 
 
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.lang.reflect.Field;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,17 +19,12 @@ import org.komea.product.backend.business.IDAOObjectStorage;
 import org.komea.product.backend.service.fs.IKomeaFS;
 import org.komea.product.backend.service.fs.IObjectStorage;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
+import org.komea.product.backend.storage.DAOStorageIndex;
 import org.komea.product.database.api.IHasId;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 
 
@@ -54,7 +55,7 @@ public class PluginStorageServiceTest
      * Test method for {@link org.komea.product.backend.service.PluginStorageService#registerDAOStorage(java.lang.String, java.lang.Class)}.
      */
     @Test
-    public final void testRegisterDAOStorage() throws Exception {
+    public final void testRegisterDAOStorage_singleton() throws Exception {
     
     
         final IDAOObjectStorage<IHasId> storage =
@@ -64,12 +65,31 @@ public class PluginStorageServiceTest
         assertEquals(storage, pluginStorageService.registerDAOStorage("daoStorage", IHasId.class));
     }
     
+    /**
+     * Test method for {@link org.komea.product.backend.service.PluginStorageService#registerDAOStorage(java.lang.String, java.lang.Class)}.
+     */
+    @Test
+    public final void testRegisterDAOStorage_parameter() throws Exception {
+    
+    
+        final IDAOObjectStorage<IHasId> storage =
+                pluginStorageService.registerDAOStorage("daoStorage", IHasId.class);
+        assertNotNull(storage);
+        
+        Field declaredField = storage.getClass().getDeclaredField("daoStorageIndex");
+        declaredField.setAccessible(true);
+        assertTrue(declaredField.get(storage) instanceof DAOStorageIndex);
+        
+    }
+    
+    
+    
     
     /**
      * Test method for {@link org.komea.product.backend.service.PluginStorageService#registerStorage(java.lang.String, java.lang.Class)}.
      */
     @Test
-    public final void testRegisterStorage() throws Exception {
+    public final void testRegisterStorage_singleton() throws Exception {
     
     
         final IObjectStorage<IHasId> storage =

@@ -42,7 +42,7 @@ public interface IPluginStorageService
      *            the class of the pojo to be stored/retrieved
      * @return the object stoirage
      */
-    <T extends IHasId> IObjectStorage<T> registerStorage(
+    <T> IObjectStorage<T> registerStorage(
             String _pluginName,
             Class<T> _pojoStorageClass);
 }
