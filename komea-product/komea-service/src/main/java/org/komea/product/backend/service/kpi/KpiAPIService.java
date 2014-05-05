@@ -15,7 +15,7 @@ import org.komea.product.backend.api.IKpiMathService;
 import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.service.history.HistoryKey;
-import org.komea.product.database.dto.BaseEntityDto;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.dto.SearchMeasuresDto;
@@ -195,14 +195,8 @@ public class KpiAPIService implements IKpiAPI {
         return measureHistoryService;
     }
     
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IKpiAPI#getMeasures(java.util.List,
-     * java.util.List, org.komea.product.database.dto.SearchMeasuresDto)
-     */
     @Override
-    public List<MeasureDto> getMeasures(final List<Kpi> _baseKpis, final List<BaseEntityDto> _allSubEntitiesDto,
+    public List<MeasureDto> getMeasures(final List<Kpi> _baseKpis, final List<? extends IEntity> _allSubEntitiesDto,
             final SearchMeasuresDto _searchMeasuresDto) {
     
         return measureHistoryService.getMeasures(_baseKpis, _allSubEntitiesDto, _searchMeasuresDto);
@@ -210,7 +204,7 @@ public class KpiAPIService implements IKpiAPI {
     }
     
     @Override
-    public List<MeasureDto> getRealTimeMeasuresFromEntities(final List<Kpi> _baseKpis, final List<BaseEntityDto> _subEntitiesDto) {
+    public List<MeasureDto> getRealTimeMeasuresFromEntities(final List<Kpi> _baseKpis, final List<? extends IEntity> _subEntitiesDto) {
     
         return kpiValueService.getAllRealTimeMeasuresPerEntityAndPerKpi(_baseKpis, _subEntitiesDto);
         
