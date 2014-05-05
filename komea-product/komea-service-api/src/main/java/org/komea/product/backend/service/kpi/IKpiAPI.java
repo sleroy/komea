@@ -71,19 +71,7 @@ public interface IKpiAPI
     @Deprecated
     List<Kpi> getBaseKpisOfGroupKpiKeys(List<String> _groupKpiKeys);
     
-    
-    /**
-     * Returns the given kpi as a list of measures dto
-     * 
-     * @param _kpi
-     *            the kpi name.
-     * @param _kpiMeasureFilter
-     *            the filter to obtain the measures
-     * @return the list of measures dto
-     */
-    Collection<? extends MeasureDto> getKpiAsMeasures(
-            String _kpi,
-            KpiMeasureFilter _kpiMeasureFilter);
+  
     
     
     /**

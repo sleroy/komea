@@ -1,8 +1,12 @@
+
 package org.komea.product.web.rest.api;
 
-import com.google.common.collect.Lists;
+
+
 import java.util.List;
+
 import javax.validation.Valid;
+
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.entities.IEntityService;
@@ -26,88 +30,100 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.collect.Lists;
+
+
+
 @Controller
 @RequestMapping(
-        value = "/measures")
-public class MeasuresController {
-
+    value = "/measures")
+public class MeasuresController
+{
+    
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(MeasuresController.class);
-
+    
     @Autowired
-    private IEntityService entityService;
-
+    private IEntityService      entityService;
+    
+    
     @Autowired
-    private IKpiAPI kpiService;
-
+    private IKpiAPI             kpiService;
+    
+    
+    
     @RequestMapping(
-            method = RequestMethod.POST,
-            value = "/find")
+        method = RequestMethod.POST,
+        value = "/find")
     @ResponseBody
     public MeasuresDto findMeasures(@RequestBody
-            final SearchMeasuresDto _searchMeasuresDto) {
-        try {
-
-            LOGGER.debug("call rest method /measures/find/ with body: " + _searchMeasuresDto);
-            final ExtendedEntityType extendedEntityType = _searchMeasuresDto.getExtendedEntityType();
-            final EntityType entityType = extendedEntityType.getEntityType();
-            final List<BaseEntityDto> entities
-                    = entityService.getBaseEntityDTOS(entityType, _searchMeasuresDto.getEntityKeys());
-            final List<Kpi> kpis = Lists.newArrayList();
-            final List<MeasureDto> measures = Lists.newArrayList();
-            if (extendedEntityType.isForGroups()) {
-                final FillKpisGroupMeasures fillKpisGroupMeasures
-                        = new FillKpisGroupMeasures(kpis, measures, _searchMeasuresDto, entities,
-                                kpiService, entityService);
-                fillKpisGroupMeasures.fillKpiGroupsMeasures();
+    final SearchMeasuresDto _searchMeasuresDto) {
+    
+    
+        LOGGER.debug("call rest method /measures/find/ with body: " + _searchMeasuresDto);
+        final ExtendedEntityType extendedEntityType = _searchMeasuresDto.getExtendedEntityType();
+        final EntityType entityType = extendedEntityType.getEntityType();
+        final List<BaseEntityDto> entities =
+                entityService.getBaseEntityDTOS(entityType, _searchMeasuresDto.getEntityKeys());
+        final List<Kpi> kpis = Lists.newArrayList();
+        final List<MeasureDto> measures = Lists.newArrayList();
+        if (extendedEntityType.isForGroups()) {
+            final FillKpisGroupMeasures fillKpisGroupMeasures =
+                    new FillKpisGroupMeasures(kpis, measures, _searchMeasuresDto, entities,
+                            kpiService, entityService);
+            fillKpisGroupMeasures.fillKpiGroupsMeasures();
+        } else {
+            if (_searchMeasuresDto.hasNoSpecificKpisRequested()) {
+                kpis.addAll(kpiService.getAllKpisOfEntityType(entityType));
             } else {
-                if (_searchMeasuresDto.hasNoSpecificKpisRequested()) {
-                    kpis.addAll(kpiService.getAllKpisOfEntityType(entityType));
-                } else {
-                    kpis.addAll(kpiService.getSelectionOfKpis(_searchMeasuresDto.getKpiKeys()));
-                }
-
-                final KpiMeasureFilter kpiMeasureFilter = new KpiMeasureFilter(_searchMeasuresDto);
-                for (final String kpi : _searchMeasuresDto.getKpiKeys()) {
-                    measures.addAll(kpiService.getKpiAsMeasures(kpi, kpiMeasureFilter));
-                }
+                kpis.addAll(kpiService.getSelectionOfKpis(_searchMeasuresDto.getKpiKeys()));
             }
-            return new MeasuresDto(extendedEntityType, entities, kpis, measures);
-        } catch (Exception ex) {
-            LOGGER.error(ex.getMessage(), ex);
-            return null;
+            
+            measures.addAll(kpiService.getRealTimeMeasuresFromEntities(kpis, entities));
+            measures.addAll(kpiService.getMeasures(kpis, entities, _searchMeasuresDto));
+            
         }
+        return new MeasuresDto(extendedEntityType, entities, kpis, measures);
     }
-
+    
+    
     public IKpiAPI getKpiService() {
-
+    
+    
         return kpiService;
     }
-
+    
+    
     /**
      * This method get the last measure for a kpi type on an entity
-     *
-     * @param _kpiKey the kpi type
+     * 
+     * @param _kpiKey
+     *            the kpi type
      * @return the last measure value
      * @throws KPINotFoundException
      */
     @RequestMapping(
-            method = RequestMethod.POST,
-            value = "/last",
-            produces = "application/json")
+        method = RequestMethod.POST,
+        value = "/last",
+        produces = "application/json")
     @ResponseBody
     public Double lastMeasuresForEntity(@Valid
-            @RequestBody
-            final KpiKey _kpiKey) throws KPINotFoundException {
-
+    @RequestBody
+    final KpiKey _kpiKey) throws KPINotFoundException {
+    
+    
         Validate.isTrue(_kpiKey.isAssociatedToEntity());
         final KpiResult kpiValues = kpiService.getKpiValues(_kpiKey.getKpiName());
         return kpiValues.getDoubleValue(_kpiKey.getEntityKey());
-
+        
     }
-
+    
+    
     public void setKpiService(final IKpiAPI _kpiService) {
-
+    
+    
         kpiService = _kpiService;
     }
-
+    
+    
 }

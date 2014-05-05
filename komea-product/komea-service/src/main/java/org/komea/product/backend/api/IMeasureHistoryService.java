@@ -3,8 +3,13 @@ package org.komea.product.backend.api;
 
 
 
+import java.util.List;
+
 import org.joda.time.DateTime;
 import org.komea.product.backend.service.history.HistoryKey;
+import org.komea.product.database.dto.BaseEntityDto;
+import org.komea.product.database.dto.MeasureDto;
+import org.komea.product.database.dto.SearchMeasuresDto;
 import org.komea.product.database.model.Kpi;
 
 
@@ -38,6 +43,8 @@ public interface IMeasureHistoryService extends IHistoryService
      * @return the history purge action.
      */
     IHistoryPurgeAction buildHistoryPurgeAction(Kpi _kpi);
+
+
     
     
 }
