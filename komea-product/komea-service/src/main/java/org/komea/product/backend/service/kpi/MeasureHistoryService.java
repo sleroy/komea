@@ -19,7 +19,6 @@ import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
-import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.dto.SearchMeasuresDto;
 import org.komea.product.database.model.Kpi;
@@ -338,18 +337,18 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
      */
     @Override
     @SuppressWarnings("unchecked")
-    public List<MeasureDto> getMeasures(final Collection<Kpi> kpis, final Collection<BaseEntityDto> entities,
-            final SearchMeasuresDto searchMeasuresDto) {
+    public List<MeasureDto> getMeasures(final Collection<Kpi> _kpis, final Collection<? extends IEntity> _entities,
+            final SearchMeasuresDto _searchMeasuresDto) {
     
-        if (kpis.isEmpty() || entities.isEmpty()) {
+        if (_kpis.isEmpty() || _entities.isEmpty()) {
             return Collections.EMPTY_LIST;
         }
-        final Integer limit = searchMeasuresDto.getNbMeasures();
+        final Integer limit = _searchMeasuresDto.getNbMeasures();
         final RowBounds rowBounds = new RowBounds(0, limit == null ? Integer.MAX_VALUE : limit);
         final List<MeasureDto> measures = new ArrayList<MeasureDto>(1000);
-        for (final IEntity entity : entities) {
-            for (final Kpi kpi : kpis) {
-                final MeasureCriteria measureCriteria = buildMeasureCriteriaFromSearchFilter(searchMeasuresDto,
+        for (final IEntity entity : _entities) {
+            for (final Kpi kpi : _kpis) {
+                final MeasureCriteria measureCriteria = buildMeasureCriteriaFromSearchFilter(_searchMeasuresDto,
                         HistoryKey.of(kpi.getId(), entity.getEntityKey()));
                 final List<MeasureDto> listOfMeasures = MeasureDto.convert(getListOfMeasures(rowBounds, measureCriteria), kpi.getKpiKey());
                 measures.addAll(listOfMeasures);
