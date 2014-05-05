@@ -62,13 +62,13 @@ public interface IKpiValueService
      * 
      * @param _kpis
      *            the list of kpis
-     * @param _entities
+     * @param _subEntitiesDto
      *            the entities.
      * @return the list of measures.
      */
     public List<MeasureDto> getAllRealTimeMeasuresPerEntityAndPerKpi(
             List<Kpi> _kpis,
-            List<IEntity> _entities);
+            List<? extends IEntity> _subEntitiesDto);
     
     
     /**

@@ -188,7 +188,7 @@ public final class KPIValueService implements IKpiValueService {
 	 */
 	@Override
 	public List<MeasureDto> getAllRealTimeMeasuresPerEntityAndPerKpi(
-			final List<Kpi> kpis, final List<IEntity> entities) {
+			final List<Kpi> kpis, final List<? extends IEntity> entities) {
 
 		final List<MeasureDto> measures = new ArrayList<MeasureDto>(kpis.size()
 				* entities.size());

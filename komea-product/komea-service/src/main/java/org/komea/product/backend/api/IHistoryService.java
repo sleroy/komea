@@ -5,8 +5,7 @@ import java.util.List;
 
 import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.backend.service.history.HistoryKey;
-import org.komea.product.database.dto.BaseEntityDto;
-import org.komea.product.database.dto.KpiMeasureFilter;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.dto.SearchMeasuresDto;
 import org.komea.product.database.model.Kpi;
@@ -62,7 +61,7 @@ public interface IHistoryService extends
 	void storeMeasure(Measure _measure);
 
 	List<MeasureDto> getMeasures(Collection<Kpi> kpis,
-			Collection<BaseEntityDto> entities,
+			Collection<? extends IEntity> entities,
 			SearchMeasuresDto searchMeasuresDto);
 
 }

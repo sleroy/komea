@@ -11,8 +11,7 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.komea.product.backend.service.history.HistoryKey;
-import org.komea.product.database.dto.BaseEntityDto;
-import org.komea.product.database.dto.KpiMeasureFilter;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.dto.SearchMeasuresDto;
@@ -138,7 +137,7 @@ public interface IKpiAPI
     @Deprecated
     List<MeasureDto> getMeasures(
             List<Kpi> _baseKpis,
-            List<BaseEntityDto> _allSubEntitiesDto,
+            List<? extends IEntity> _allSubEntitiesDto,
             SearchMeasuresDto _searchMeasuresDto);
     
     
@@ -151,7 +150,7 @@ public interface IKpiAPI
     @Deprecated
     List<MeasureDto> getRealTimeMeasuresFromEntities(
             List<Kpi> _baseKpis,
-            List<BaseEntityDto> _subEntitiesDto);
+            List<? extends IEntity> _subEntitiesDto);
     
     
     /**

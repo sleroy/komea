@@ -359,7 +359,7 @@ public final class MeasureHistoryService extends
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<MeasureDto> getMeasures(final Collection<Kpi> kpis,
-			final Collection<BaseEntityDto> entities,
+			final Collection<? extends IEntity> entities,
 			final SearchMeasuresDto searchMeasuresDto) {
 
 		if (kpis.isEmpty() || entities.isEmpty()) {
