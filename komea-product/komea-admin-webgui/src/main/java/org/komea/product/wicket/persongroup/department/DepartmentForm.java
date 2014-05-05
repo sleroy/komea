@@ -66,7 +66,6 @@ public class DepartmentForm extends Form<PersonGroup> {
         this.currentMemberList = new ArrayList<IHasKey>();
         teamMemberList = new ArrayList<IHasKey>();
         depMemberList = new ArrayList<IHasKey>();
-        List<Person> personsOfPersonGroup;
         if (this.personGroup.getId() != null) {
 
             depMemberList.addAll(personService.getPersonsOfPersonGroup(this.personGroup.getId()));
@@ -90,7 +89,6 @@ public class DepartmentForm extends Form<PersonGroup> {
 
         };
         listUser.setChoiceRenderer(DialogFactory.getChoiceRendenerEntity());
-//        listUser.setEnabled(false);
         listUser.setMaxRows(8);
         listUser.setOutputMarkupId(true);
         CustomUpdater cupdater = new CustomUpdater(listUser) {

@@ -13,9 +13,11 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.PropertyModel;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
@@ -26,6 +28,7 @@ import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.utils.CustomUpdater;
 import org.komea.product.wicket.utils.DataListSelectDialogBuilder;
 import org.komea.product.wicket.utils.DialogFactory;
 import org.komea.product.wicket.utils.NameGeneric;
@@ -52,6 +55,8 @@ public class ProjectForm extends Form<Project> {
     private List<IHasKey> selectedPersonGroup;
     private List<IHasKey> currentPersonList;
     private List<IHasKey> selectedPerson;
+    private List<IHasKey> teamPersonList;
+    private List<IHasKey> projectPersonList;
 
     public ProjectForm(boolean _isNew,
             String form,
@@ -76,6 +81,8 @@ public class ProjectForm extends Form<Project> {
         currentPersonGroupList = new ArrayList<IHasKey>();
         selectedPerson = new ArrayList<IHasKey>();
         currentPersonList = new ArrayList<IHasKey>();
+        teamPersonList = new ArrayList<IHasKey>();
+        projectPersonList = new ArrayList<IHasKey>();
         this.customerName = new NameGeneric("");
         //field
         add(TextFieldBuilder.<String>createRequired("name", this.project, "name").highlightOnErrors()
@@ -104,11 +111,72 @@ public class ProjectForm extends Form<Project> {
         add(customerFiel);
 
         if (this.project.getId() != null) {
-            currentPersonGroupList = (List<IHasKey>) (List<?>) personGroupService.getTeamsOfProject(this.project.getId());
-            currentPersonList = (List<IHasKey>) (List<?>) personService.getPersonsOfProject(this.project.getId());
+            projectPersonList.addAll(personService.getPersonsOfProject(this.project.getId()));
+            currentPersonGroupList.addAll((List<IHasKey>) (List<?>) personGroupService.getTeamsOfProject(this.project.getId()));
+            for (IHasKey personGroup : currentPersonGroupList) {
+                teamPersonList.addAll(personService.getPersonsOfPersonGroup(personGroup.getId()));
+            }
+            teamPersonList.removeAll(projectPersonList);
+            currentPersonList.addAll(projectPersonList);
+            currentPersonList.addAll(teamPersonList);
         }
 
-                         DataListSelectDialogBuilder dataTeam = new DataListSelectDialogBuilder();
+        ListMultipleChoice<IHasKey> listUser = new ListMultipleChoice<IHasKey>("tablePerson", new PropertyModel<List<IHasKey>>(this, "selectedPerson"), this.currentPersonList) {
+
+            @Override
+            protected boolean isDisabled(IHasKey object, int index, String selected) {
+                if (teamPersonList.contains(object)) {
+                    return true;
+                }
+                return super.isDisabled(object, index, selected);
+            }
+
+        };
+        listUser.setChoiceRenderer(DialogFactory.getChoiceRendenerEntity());
+        listUser.setMaxRows(8);
+        listUser.setOutputMarkupId(true);
+        CustomUpdater cupdater = new CustomUpdater(listUser) {
+
+            @Override
+            public void update() {
+               
+                currentPersonList.removeAll(teamPersonList);
+                projectPersonList.clear();
+                projectPersonList.addAll(currentPersonList);
+                currentPersonList.clear();
+                teamPersonList.clear();
+                for (IHasKey persong : currentPersonGroupList) {
+                    List<Person> personsOfPersonGroup = personService.getPersonsOfPersonGroup(persong.getId());
+                    teamPersonList.addAll(personsOfPersonGroup);
+                }
+                currentPersonList.addAll(teamPersonList);
+                for (IHasKey key : projectPersonList) {
+                   if(!currentPersonList.contains(key))
+                   {
+                   currentPersonList.add(key);
+                   }
+                }
+               
+            }
+        };
+
+        DataListSelectDialogBuilder dataMember = new DataListSelectDialogBuilder();
+        dataMember.setPage(this);
+        dataMember.setListEntite(listUser);
+        dataMember.setIdDialog("dialogAddPerson");
+        dataMember.setIdBtnAdd("btnAddPerson");
+        dataMember.setIdBtnDel("btnDelPerson");
+        dataMember.setDisplayDialogMessage(getString("project.form.field.tooltip.members"));
+        dataMember.setCurrentEntityList(currentPersonList);
+        dataMember.setChoiceEntityList(selectedPerson);
+        dataMember.setSelectDialogList((List<IHasKey>) (List<?>) this.personService.selectAll());
+        dataMember.setService(personService);
+
+//        dataMember.addFilter(DialogFactory.getPersonWithoutPersonGroupFilter(personGroup.getId()));
+        dataMember.setTooltips(getString("project.form.field.multiple.member"));
+        DialogFactory.addMultipleListDialog(dataMember);
+
+        DataListSelectDialogBuilder dataTeam = new DataListSelectDialogBuilder();
         dataTeam.setPage(this);
         dataTeam.setIdList("tablePersonGroup");
         dataTeam.setIdDialog("dialogAddPersonGroup");
@@ -120,27 +188,10 @@ public class ProjectForm extends Form<Project> {
         dataTeam.setChoiceEntityList(selectedPersonGroup);
         dataTeam.setSelectDialogList((List<IHasKey>) (List<?>) this.personGroupService.getAllTeamsPG());
         dataTeam.setService(personGroupService);
+        dataTeam.addUpdater(cupdater);
 //        dataProject.addFilter(DialogFactory.getPersonWithoutPersonGroupFilter(personGroup.getId()));
         dataTeam.setTooltips(getString("project.form.field.multiple.team"));
         DialogFactory.addMultipleListDialog(dataTeam);
-
-        
-        DataListSelectDialogBuilder dataMember = new DataListSelectDialogBuilder();
-        dataMember.setPage(this);
-        dataMember.setIdList("tablePerson");
-        dataMember.setIdDialog("dialogAddPerson");
-        dataMember.setIdBtnAdd("btnAddPerson");
-        dataMember.setIdBtnDel("btnDelPerson");
-        dataMember.setNameFieldResult("selectedPerson");
-        dataMember.setDisplayDialogMessage(getString("project.form.field.tooltip.members"));
-        dataMember.setCurrentEntityList(currentPersonList);
-        dataMember.setChoiceEntityList(selectedPerson);
-        dataMember.setSelectDialogList((List<IHasKey>) (List<?>) this.personService.selectAll());
-        dataMember.setService(personService);
-//        dataProject.addFilter(DialogFactory.getPersonWithoutPersonGroupFilter(personGroup.getId()));
-        dataMember.setTooltips(getString("project.form.field.multiple.member"));
-        DialogFactory.addMultipleListDialog(dataMember);
-  
 
         //button
         add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
@@ -168,7 +219,7 @@ public class ProjectForm extends Form<Project> {
                 feedBack.setVisible(false);
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
-
+                currentPersonList.removeAll(teamPersonList);
                 prService.saveOrUpdateProject(project, new ArrayList(), (List<Person>) (List<?>) currentPersonList, new ArrayList(), (List<PersonGroup>) (List<?>) currentPersonGroupList);
                 page.setResponsePage(new ProjectPage(page.getPageParameters()));
 

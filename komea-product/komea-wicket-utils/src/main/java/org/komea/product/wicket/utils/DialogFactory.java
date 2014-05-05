@@ -209,7 +209,7 @@ public class DialogFactory {
             }
         };
     }
-
+    
     private static class AjaxButtonAddDialog extends AjaxButton {
 
         private final SelectMultipleDialog dialogPersonGroup;
