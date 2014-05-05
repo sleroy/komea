@@ -65,7 +65,7 @@ public interface IKpiValueService
      *            the entities.
      * @return the list of measures.
      */
-    public List<MeasureDto> getRealTimeMeasuresFromEntities(
+    public List<MeasureDto> getAllRealTimeMeasuresPerEntityAndPerKpi(
             List<Kpi> _kpis,
             List<BaseEntityDto> _entities);
     
@@ -74,7 +74,7 @@ public interface IKpiValueService
      * @param _kpiName
      * @return
      */
-    public KpiResult getRealTimeValues(String _kpiName);
+    public KpiResult getRealTimeValue(String _kpiName);
     
     
     /**

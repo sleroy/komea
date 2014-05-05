@@ -1,7 +1,6 @@
 package org.komea.product.backend.service.kpi;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -11,13 +10,11 @@ import org.komea.product.backend.api.IHistoryService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.api.IMeasureHistoryService;
-import org.komea.product.backend.api.exceptions.EntityNotFoundException;
 import org.komea.product.backend.criterias.FindKpiOrFail;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.utils.CollectionUtil;
-import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.BaseEntityDto;
@@ -173,25 +170,9 @@ public final class KPIValueService implements IKpiValueService {
 	public Measure getRealTimeMeasure(final KpiKey _key) {
 
 		LOGGER.debug("Obtain the real time measure for -> {}", _key);
-		final List<? extends IEntity> entitiesAssociatedToKpiKey = getEntitiesAssociatedToKpiKey(_key);
-		if (entitiesAssociatedToKpiKey.isEmpty()) {
-			throw new EntityNotFoundException(_key.getEntityKey());
-		}
-		if (entitiesAssociatedToKpiKey.size() > 1) {
-			throw new IllegalArgumentException(
-					"Cannot return a measure, many entities are referenced by the KpiKey "
-							+ _key);
-		}
-
-		final Kpi kpiOrFail = new FindKpiOrFail(KpiKey.ofKpiName(_key
-				.getKpiName()), kpiDAO).find();
-		final KpiResult kpiValue = kpiQueryRegistry
-				.getQueryValueFromKpi(kpiOrFail);
-		//
-		final IEntity entity = CollectionUtil
-				.singleOrNull(entitiesAssociatedToKpiKey);
-		final Measure measureKey = initializeMeasure(_key, kpiOrFail, kpiValue,
-				entity);
+		Kpi find = new FindKpiOrFail(_key, kpiDAO).find();
+		final Measure measureKey = initializeMeasure(_key, find,
+				getSingleValue(_key).doubleValue());
 		LOGGER.debug("Obtain the real time measure : {} result = {}", _key,
 				measureKey.getValue());
 		return measureKey;
@@ -205,7 +186,7 @@ public final class KPIValueService implements IKpiValueService {
 	 * (java.util.List, java.util.List)
 	 */
 	@Override
-	public List<MeasureDto> getRealTimeMeasuresFromEntities(
+	public List<MeasureDto> getAllRealTimeMeasuresPerEntityAndPerKpi(
 			final List<Kpi> kpis, final List<BaseEntityDto> entities) {
 
 		final List<MeasureDto> measures = new ArrayList<MeasureDto>(kpis.size()
@@ -236,7 +217,7 @@ public final class KPIValueService implements IKpiValueService {
 	 * .lang.String)
 	 */
 	@Override
-	public KpiResult getRealTimeValues(final String _kpiName) {
+	public KpiResult getRealTimeValue(final String _kpiName) {
 
 		final Kpi selectKpiByKey = new FindKpiOrFail(
 				KpiKey.ofKpiName(_kpiName), kpiDAO).find();
@@ -244,27 +225,19 @@ public final class KPIValueService implements IKpiValueService {
 			return KpiResult.EMPTY;
 		}
 
-		return null;
+		return this.kpiQueryRegistry.getQueryValueFromKpi(selectKpiByKey);
 	}
 
+	/**
+	 * Returns a single value from a kpi result.
+	 */
 	@Override
 	public Number getSingleValue(final KpiKey _kpiKey) {
 
-		final Kpi kpiOrFail = new FindKpiOrFail(_kpiKey, kpiDAO).find();
-
-		final KpiResult queryResult = kpiQueryRegistry
-				.getQueryValueFromKpi(kpiOrFail);
-
-		return queryResult.getValue(_kpiKey.getEntityKey());
+		return getRealTimeValue(_kpiKey.getKpiName()).getValue(
+				_kpiKey.getEntityKey());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.komea.product.cep.tester.IKpiValueService#getSingleValue(org.komea
-	 * .product.service.dto.KpiKey)
-	 */
 	/**
 	 * Method setEntityService.
 	 * 
@@ -347,48 +320,15 @@ public final class KPIValueService implements IKpiValueService {
 		LOGGER.info("Purge history : {} items", purgeHistory);
 	}
 
-	/**
-	 * Returns the list of entities associated to a KPI key.
-	 * 
-	 * @param _kpiKey
-	 *            the measure
-	 * @return the list of entities.
-	 */
-	private List<? extends IEntity> getEntitiesAssociatedToKpiKey(
-			final KpiKey _kpiKey) {
-
-		final Kpi findKPIOrFail = new FindKpiOrFail(_kpiKey, kpiDAO).find();
-		List<? extends IEntity> entities = null;
-		if (_kpiKey.isAssociatedToEntity()) {
-			final IEntity entityAssociatedToKpi = entityService
-					.findEntityAssociatedToKpi(_kpiKey);
-			if (null == entityAssociatedToKpi) {
-				throw new EntityNotFoundException(_kpiKey.getEntityKey());
-			}
-			entities = Collections.singletonList(entityAssociatedToKpi);
-		} else {
-
-			entities = entityService.getEntitiesByEntityType(findKPIOrFail
-					.getEntityType());
-
-		}
-		LOGGER.debug("Entities associated to KPI key {}: {}", _kpiKey,
-				entities.size());
-		return entities;
-	}
-
 	private Measure initializeMeasure(final KpiKey _key, final Kpi kpiOrFail,
-			final KpiResult kpiValue, final IEntity entity) {
+			Double value) {
 
 		Validate.notNull(_key);
 		Validate.notNull(kpiOrFail);
-		Validate.notNull(kpiValue);
-		Validate.notNull(entity);
+		Validate.notNull(value);
 		final Measure measureKey = Measure.initializeMeasureFromKPIKey(
 				kpiOrFail.getId(), _key.getEntityKey());
-		measureKey.setEntity(entity.entityType(), entity.getId());
-		final Number value = kpiValue.getValue(entity.getEntityKey());
-		measureKey.setValue(value == null ? Double.NaN : value.doubleValue());
+		measureKey.setValue(value);
 		return measureKey;
 	}
 

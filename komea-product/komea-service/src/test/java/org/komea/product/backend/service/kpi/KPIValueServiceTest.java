@@ -132,15 +132,15 @@ public class KPIValueServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.cep.tester.KPIValueService#getRealTimeMeasuresFromEntities(java.util.List, java.util.List)}.
-     */
-    @Test
-    public final void testGetRealTimeMeasuresFromEntities() throws Exception {
-    
-    
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
-    }
+	     * Test method for {@link org.komea.product.cep.tester.KPIValueService#getAllRealTimeMeasuresPerEntityAndPerKpi(java.util.List, java.util.List)}.
+	     */
+	    @Test
+	    public final void testGetAllRealTimeMeasuresPerEntityAndPerKpi() throws Exception {
+	    
+	    
+	        // TODO
+	        org.junit.Assert.assertTrue("not yet implemented", false);
+	    }
     
     
     /**

@@ -155,7 +155,7 @@ public class KpiAPIService implements IKpiAPI {
 	@Override
 	public KpiResult getKpiValues(final String _kpiName) {
 
-		return kpiValueService.getRealTimeValues(_kpiName);
+		return kpiValueService.getRealTimeValue(_kpiName);
 	}
 
 	/*
@@ -235,7 +235,7 @@ public class KpiAPIService implements IKpiAPI {
 	public List<MeasureDto> getRealTimeMeasuresFromEntities(
 			final List<Kpi> _baseKpis, final List<BaseEntityDto> _subEntitiesDto) {
 
-		return kpiValueService.getRealTimeMeasuresFromEntities(_baseKpis,
+		return kpiValueService.getAllRealTimeMeasuresPerEntityAndPerKpi(_baseKpis,
 				_subEntitiesDto);
 	}
 

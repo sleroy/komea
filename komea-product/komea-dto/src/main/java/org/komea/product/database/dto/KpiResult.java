@@ -96,7 +96,9 @@ public class KpiResult
     public Number getValue(final EntityKey _entityKey) {
     
     
-        return map.get(_entityKey);
+        Number number = map.get(_entityKey);
+        if (number == null) return 0d; 
+		return number;
     }
     
     
