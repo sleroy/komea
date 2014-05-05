@@ -99,7 +99,7 @@ public class LdapConnector implements Closeable, ILdapConnector {
             final String ldapUrl = ldapServer.getLdapUrl();
             
             if (Strings.isNullOrEmpty(ldapUrl)) {
-                throw new KomeaLdapConfigurationException("The LDAP can't be null");
+                return;
             }
             
             final String ldapUserDN = ldapServer.getLdapUserDN();
@@ -117,9 +117,9 @@ public class LdapConnector implements Closeable, ILdapConnector {
             
             // LDAP Anonymous access
             if (Strings.isNullOrEmpty(ldapUserDN) && Strings.isNullOrEmpty(password)) {
-                
                 contextSource.setAnonymousReadOnly(true);
             }
+            
             contextSource.setUserDn(ldapUserDN);
             contextSource.setPassword(password);
             contextSource.setBase(ldapBase);
