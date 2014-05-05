@@ -89,6 +89,7 @@ public class LdapConnector implements Closeable, ILdapConnector {
     public void initConnection() {
     
         LOGGER.info("LDAP - LDAP");
+        init = false;
         try {
             /**
              * Initialisation of the connexion to the ldap server
@@ -98,7 +99,7 @@ public class LdapConnector implements Closeable, ILdapConnector {
             final String ldapUrl = ldapServer.getLdapUrl();
             
             if (Strings.isNullOrEmpty(ldapUrl)) {
-                return;
+                throw new KomeaLdapConfigurationException("The LDAP can't be null");
             }
             
             final String ldapUserDN = ldapServer.getLdapUserDN();
@@ -127,13 +128,13 @@ public class LdapConnector implements Closeable, ILdapConnector {
             ldapTemplate = new LdapTemplate(contextSource);
             ldapTemplate.afterPropertiesSet();
             
+            init = true;
         } catch (final Exception e) {
             LOGGER.error("----------LDAP ERROR-------------");
             LOGGER.error(e.getMessage(), e);
             LOGGER.error("----------LDAP ERROR-------------");
             throw new KomeaLdapConfigurationException(e.getMessage(), e);
         }
-        init = true;
     }
     /*
      * (non-Javadoc)

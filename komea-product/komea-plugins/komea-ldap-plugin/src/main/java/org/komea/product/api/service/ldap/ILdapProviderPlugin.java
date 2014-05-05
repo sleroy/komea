@@ -2,23 +2,15 @@
 package org.komea.product.api.service.ldap;
 
 
-
-
-import org.komea.product.api.service.errors.KomeaLdapConfigurationException;
-
-
-
 /**
  * ILdapUserService
  * 
  * @author JavaChap
  */
 
-public interface ILdapUserService
-{
+public interface ILdapProviderPlugin {
     
-    
-    String CRON_LDAP         = "0 0/10   * * * ?";
+    String CRON_LDAP         = "0 0/10 * * * ?";
     
     String LDAP_AUTH_TYPE    = "ldap_authType";
     
@@ -45,16 +37,5 @@ public interface ILdapUserService
      * Ldap User DN
      */
     String LDAP_USER_DN      = "ldap_userDn";
-    
-    
-    
-    /**
-     * Returns a ldap connector
-     * 
-     * @return the ldap connector.
-     * @throws LdapConfigurationException
-     */
-    ILdapConnector newConnector() throws KomeaLdapConfigurationException;
-    
     
 }

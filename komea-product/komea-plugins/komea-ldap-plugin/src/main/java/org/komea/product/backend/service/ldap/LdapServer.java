@@ -102,4 +102,11 @@ public class LdapServer implements Serializable, IHasId {
         
     }
     
+    @Override
+    public String toString() {
+    
+        return "LdapServer [ldapUrl=" + ldapUrl + ", ldapLogin=" + ldapLogin + ", ldapPassword=" + ldapPassword + ", ldapBase=" + ldapBase
+                + ", ldapAuthTypeEnum=" + ldapAuthTypeEnum + "]";
+    }
+    
 }

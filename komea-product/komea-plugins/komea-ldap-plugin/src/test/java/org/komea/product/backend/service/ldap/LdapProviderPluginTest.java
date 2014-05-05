@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 import org.komea.product.api.service.errors.KomeaLdapConfigurationException;
 import org.komea.product.api.service.ldap.ILdapConnector;
 import org.komea.product.api.service.ldap.ILdapService;
-import org.komea.product.api.service.ldap.ILdapUserService;
+import org.komea.product.api.service.ldap.ILdapProviderPlugin;
 import org.komea.product.api.service.ldap.LdapUser;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +32,13 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
         "classpath*:/spring/application-context-test.xml", "classpath*:/spring/security-spring-test.xml",
         "classpath*:/spring/ldap-spring-test.xml" })
 @TransactionConfiguration(defaultRollback = true)
-public class LdapUserServiceTest extends AbstractSpringIntegrationTestCase {
+public class LdapProviderPluginTest extends AbstractSpringIntegrationTestCase {
     
     @Autowired
     private ILdapService     service;
     
     @Autowired
-    private ILdapUserService userService;
+    private ILdapProviderPlugin userService;
     
     @Autowired
     private ILdapConnector   ldapConnector;
