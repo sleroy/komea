@@ -6,6 +6,7 @@ package org.komea.product.backend.criterias;
 
 
 
+import org.apache.commons.lang.Validate;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.model.Kpi;
@@ -45,14 +46,9 @@ public class FindKpi
     
     public Kpi find() {
     
-    
+    	Validate.isTrue(!kpiKey.isAssociatedToEntity());
         final KpiCriteria kpiCriteria = new KpiCriteria();
         kpiCriteria.createCriteria().andKpiKeyEqualTo(kpiKey.getKpiName());
-        if (kpiKey.isAssociatedToEntity()) {
-            kpiCriteria.createCriteria().andEntityIDEqualTo(kpiKey.getEntityKey().getId());
-            kpiCriteria.createCriteria()
-                    .andEntityTypeEqualTo(kpiKey.getEntityKey().getEntityType());
-        }
         return CollectionUtil.singleOrNull(kpiDao.selectByCriteriaWithBLOBs(kpiCriteria));
     }
     
