@@ -129,6 +129,8 @@ public final class PersonForm extends Form<Person> {
 
             currentEntityList = (List) projectService.getProjectsOfAMember(person.getId());
         }
+        
+        
 
         DataListSelectDialogBuilder dataProject = new DataListSelectDialogBuilder();
         dataProject.setPage(this);
