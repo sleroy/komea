@@ -167,13 +167,13 @@ public final class KPIValueService implements IKpiValueService {
 	 * komea.product.service.dto.KpiKey)
 	 */
 	@Override
-	public Measure getRealTimeMeasure(final KpiKey _key) {
+	public Measure getRealTimeMeasure(final KpiKey _kpiKey) {
 
-		LOGGER.debug("Obtain the real time measure for -> {}", _key);
-		Kpi find = new FindKpiOrFail(_key, kpiDAO).find();
-		final Measure measureKey = initializeMeasure(_key, find,
-				getSingleValue(_key).doubleValue());
-		LOGGER.debug("Obtain the real time measure : {} result = {}", _key,
+		LOGGER.debug("Obtain the real time measure for -> {}", _kpiKey);
+		Kpi kpi = new FindKpiOrFail(_kpiKey, kpiDAO).find();
+		final Measure measureKey = Measure.initializeMeasure(kpi,
+				_kpiKey.getEntityKey(), getSingleValue(_kpiKey).doubleValue());
+		LOGGER.debug("Obtain the real time measure : {} result = {}", _kpiKey,
 				measureKey.getValue());
 		return measureKey;
 	}
@@ -193,16 +193,10 @@ public final class KPIValueService implements IKpiValueService {
 				* entities.size());
 		for (final BaseEntityDto entity : entities) {
 			for (final Kpi kpi : kpis) {
-				try {
-					final Measure measure = getRealTimeMeasure(KpiKey
-							.ofKpiAndEntity(kpi, entity));
-					if (measure.isValid()) {
-						measures.add(new MeasureDto(measure, kpi.getKpiKey()));
-					}
-				} catch (final Exception ex) {
-					LOGGER.error(
-							"Error with getRealTimeMeasure(kpiKey) where kpiKey="
-									+ KpiKey.ofKpiAndEntity(kpi, entity), ex);
+				final Measure measure = getRealTimeMeasure(KpiKey
+						.ofKpiAndEntity(kpi, entity));
+				if (measure.isValid()) {
+					measures.add(new MeasureDto(measure, kpi.getKpiKey()));
 				}
 			}
 		}
@@ -218,14 +212,18 @@ public final class KPIValueService implements IKpiValueService {
 	 */
 	@Override
 	public KpiResult getRealTimeValue(final String _kpiName) {
-
+		LOGGER.debug("Obtain the real time measure for -> {}", _kpiName);
 		final Kpi selectKpiByKey = new FindKpiOrFail(
 				KpiKey.ofKpiName(_kpiName), kpiDAO).find();
 		if (selectKpiByKey == null) {
-			return KpiResult.EMPTY;
+			LOGGER.debug("Returns an ## empty result ##", KpiResult.EMPTY);
+			return new InferMissingEntityValuesIntoKpiResult(KpiResult.EMPTY, selectKpiByKey, entityService).inferEntityKeys();
 		}
 
-		return this.kpiQueryRegistry.getQueryValueFromKpi(selectKpiByKey);
+		KpiResult queryValueFromKpi = this.kpiQueryRegistry
+				.getQueryValueFromKpi(selectKpiByKey);
+		LOGGER.debug("Returns the real time measure for -> {}", _kpiName);
+		return queryValueFromKpi;
 	}
 
 	/**
@@ -295,7 +293,7 @@ public final class KPIValueService implements IKpiValueService {
 		final Kpi kpi = new FindKpiOrFail(_kpiKey, kpiDAO).find();
 		final KpiResult queryResult = kpiQueryRegistry
 				.getQueryValueFromKpi(kpi);
-
+		// Store all data
 		final Map<EntityKey, Number> resultMap = queryResult.getMap();
 		for (final Entry<EntityKey, Number> kpiLineValue : resultMap.entrySet()) {
 			final KpiKey kpiKeyWithEntity = KpiKey.ofKpiNameAndEntityKey(
@@ -311,25 +309,13 @@ public final class KPIValueService implements IKpiValueService {
 			final Number _kpiValue) {
 
 		final Kpi findKPI = new FindKpiOrFail(_kpiKey, kpiDAO).find();
-		final Measure measure = Measure.initializeMeasureFromKPIKey(
-				findKPI.getId(), _kpiKey.getEntityKey());
-		measure.setValue(_kpiValue.doubleValue());
+		final Measure measure = Measure.initializeMeasure(findKPI,
+				_kpiKey.getEntityKey(), _kpiValue.doubleValue());
+
 		measureService.storeMeasure(measure);
 		final int purgeHistory = measureService
 				.buildHistoryPurgeAction(findKPI).purgeHistory();
 		LOGGER.info("Purge history : {} items", purgeHistory);
-	}
-
-	private Measure initializeMeasure(final KpiKey _key, final Kpi kpiOrFail,
-			Double value) {
-
-		Validate.notNull(_key);
-		Validate.notNull(kpiOrFail);
-		Validate.notNull(value);
-		final Measure measureKey = Measure.initializeMeasureFromKPIKey(
-				kpiOrFail.getId(), _key.getEntityKey());
-		measureKey.setValue(value);
-		return measureKey;
 	}
 
 }

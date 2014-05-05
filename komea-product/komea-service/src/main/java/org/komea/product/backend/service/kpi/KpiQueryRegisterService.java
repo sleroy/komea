@@ -3,7 +3,10 @@
  */
 package org.komea.product.backend.service.kpi;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
+
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
 import org.komea.product.backend.api.IDynamicQueryCacheService;
@@ -17,6 +20,7 @@ import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.esper.ConvertELIntoQuery;
 import org.komea.product.backend.service.esper.QueryDefinition;
 import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.KpiResult;
@@ -36,219 +40,254 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class KpiQueryRegisterService implements IKpiQueryRegisterService {
 
-    /**
+	/**
      *
      */
-    private static final String KPI_HISTORY_INTERVAL = "0 0/60 * * * ?";
+	private static final String KPI_HISTORY_INTERVAL = "0 0/60 * * * ?";
 
-    private static final Logger LOGGER
-            = LoggerFactory
-            .getLogger("kpi-query-register");
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger("kpi-query-register");
 
-    @Autowired
-    private ICronRegistryService cronRegistry;
+	@Autowired
+	private ICronRegistryService cronRegistry;
 
-    @Autowired
-    private IDynamicDataQueryRegisterService dynamicDataQueryRegisterService;
+	@Autowired
+	private IDynamicDataQueryRegisterService dynamicDataQueryRegisterService;
 
-    @Autowired
-    private IDynamicQueryCacheService dynamicQueryCacheService;
+	@Autowired
+	private IDynamicQueryCacheService dynamicQueryCacheService;
 
-    @Autowired
-    private IEntityService entityService;
+	@Autowired
+	private IEntityService entityService;
 
-    @Autowired
-    private IEventEngineService esperEngine;
+	@Autowired
+	private IEventEngineService esperEngine;
 
-    @Autowired
-    private ProjectDao projectDao;
+	@Autowired
+	private ProjectDao projectDao;
 
-    @Autowired
-    private KpiDao requiredDAO;
+	@Autowired
+	private KpiDao requiredDAO;
 
-    @Autowired
-    private ISpringService springService;
+	@Autowired
+	private ISpringService springService;
 
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.tester.IKpiQueryRegisterService#refreshEsper(org.komea.product.database.model.Kpi)
-     */
-    @Override
-    public void createOrUpdateQueryFromKpi(final Kpi _kpi) {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.komea.product.cep.tester.IKpiQueryRegisterService#refreshEsper(org
+	 * .komea.product.database.model.Kpi)
+	 */
+	@Override
+	public void createOrUpdateQueryFromKpi(final Kpi _kpi) {
 
-        LOGGER.debug("Refreshing Esper with KPI {}", _kpi.getKpiKey());
-        evaluateFormulaAndRegisterQuery(_kpi);
-        if (_kpi.isAssociatedToEntity()) {
+		LOGGER.debug("Refreshing Esper with KPI {}", _kpi.getKpiKey());
+		evaluateFormulaAndRegisterQuery(_kpi);
+		if (_kpi.isAssociatedToEntity()) {
 
-            entityService.findEntityAssociatedToKpi(KpiKey.ofKpi(_kpi));
-        }
+			entityService.findEntityAssociatedToKpi(KpiKey.ofKpi(_kpi));
+		}
 
-    }
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.tester.IKpiQueryRegisterService#createEsperQueryFromKPI(org.komea.product.database.model.Kpi)
-     */
-    @Override
-    public void evaluateFormulaAndRegisterQuery(final Kpi _kpi) {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.komea.product.cep.tester.IKpiQueryRegisterService#createEsperQueryFromKPI
+	 * (org.komea.product.database.model.Kpi)
+	 */
+	@Override
+	public void evaluateFormulaAndRegisterQuery(final Kpi _kpi) {
 
-        final String formula = _kpi.getEsperRequest();
-        if (!ConvertELIntoQuery.isValidFormula(formula)) {
-            return;
-        }
-        final Object queryImplementation = ConvertELIntoQuery.parseEL(formula);
-        if (!ConvertELIntoQuery.isValidFormulaObject(queryImplementation)) {
-            throw new KpiProvidesInvalidFormulaException(
-                    _kpi);
-        }
-        final String queryName = _kpi.computeKPIEsperKey();
-        if (queryImplementation instanceof ICEPQueryImplementation) {
-            LOGGER.debug("KPI {} provides an event query {}.", _kpi, queryImplementation);
-            esperEngine.createOrUpdateQuery(new QueryDefinition(queryName,
-                    (ICEPQueryImplementation) queryImplementation));
+		final String formula = _kpi.getEsperRequest();
+		if (!ConvertELIntoQuery.isValidFormula(formula)) {
+			return;
+		}
+		final Object queryImplementation = ConvertELIntoQuery.parseEL(formula);
+		if (!ConvertELIntoQuery.isValidFormulaObject(queryImplementation)) {
+			throw new KpiProvidesInvalidFormulaException(_kpi);
+		}
+		final String queryName = _kpi.computeKPIEsperKey();
+		if (queryImplementation instanceof ICEPQueryImplementation) {
+			LOGGER.debug("KPI {} provides an event query {}.", _kpi,
+					queryImplementation);
+			esperEngine.createOrUpdateQuery(new QueryDefinition(queryName,
+					(ICEPQueryImplementation) queryImplementation));
 
-        } else if (queryImplementation instanceof IDynamicDataQuery) {
-            springService.autowirePojo(queryImplementation);
-            LOGGER.debug("KPI {} provides an dynamic data query {}.", _kpi, queryImplementation);
-            final IDynamicDataQuery cachedQuery
-                    = dynamicQueryCacheService.addCacheOnDynamicQuery(queryName,
-                            (IDynamicDataQuery) queryImplementation);
-            dynamicDataQueryRegisterService.registerQuery(queryName, cachedQuery);
-        }
-    }
+		} else if (queryImplementation instanceof IDynamicDataQuery) {
+			springService.autowirePojo(queryImplementation);
+			LOGGER.debug("KPI {} provides an dynamic data query {}.", _kpi,
+					queryImplementation);
+			final IDynamicDataQuery cachedQuery = dynamicQueryCacheService
+					.addCacheOnDynamicQuery(queryName,
+							(IDynamicDataQuery) queryImplementation);
+			dynamicDataQueryRegisterService.registerQuery(queryName,
+					cachedQuery);
+		}
+	}
 
-    /**
-     * @return the cronRegistry
-     */
-    public ICronRegistryService getCronRegistry() {
+	/**
+	 * @return the cronRegistry
+	 */
+	public ICronRegistryService getCronRegistry() {
 
-        return cronRegistry;
-    }
+		return cronRegistry;
+	}
 
-    public IDynamicDataQueryRegisterService getDynamicDataQueryRegisterService() {
+	public IDynamicDataQueryRegisterService getDynamicDataQueryRegisterService() {
 
-        return dynamicDataQueryRegisterService;
-    }
+		return dynamicDataQueryRegisterService;
+	}
 
-    /**
-     * @return the entityService
-     */
-    public IEntityService getEntityService() {
+	/**
+	 * @return the entityService
+	 */
+	public IEntityService getEntityService() {
 
-        return entityService;
-    }
+		return entityService;
+	}
 
-    /**
-     * @return the esperEngine
-     */
-    public IEventEngineService getEsperEngine() {
+	/**
+	 * @return the esperEngine
+	 */
+	public IEventEngineService getEsperEngine() {
 
-        return esperEngine;
-    }
+		return esperEngine;
+	}
 
-    /**
-     * @return the projectDao
-     */
-    public ProjectDao getProjectDao() {
+	/**
+	 * @return the projectDao
+	 */
+	public ProjectDao getProjectDao() {
 
-        return projectDao;
-    }
+		return projectDao;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.cep.tester.IKpiQueryRegisterService#getEsperQueryFromKpi(org.komea.product.database.model.Kpi)
-     */
-    @Override
-    public KpiResult getQueryValueFromKpi(final Kpi _kpi) {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.komea.product.cep.tester.IKpiQueryRegisterService#getEsperQueryFromKpi
+	 * (org.komea.product.database.model.Kpi)
+	 */
+	@Override
+	public KpiResult getQueryValueFromKpi(final Kpi _kpi) {
 
-        // WHEN A KPI IS REQUESTED
-        // WE CHECK FOR DYNAMIC QUERY
-        final String computeKPIEsperKey = _kpi.computeKPIEsperKey();
-        LOGGER.trace("Request value from KPI {}", _kpi.getKpiKey());
-        final IDynamicDataQuery query
-                = dynamicDataQueryRegisterService.getQuery(computeKPIEsperKey);
-        KpiResult result = null;
-        if (query != null) {
-            LOGGER.trace("This query {} is a dynamic query", computeKPIEsperKey);
-            result = query.getResult();
-        } else {
-            // IF IT FAILS WE CHECK FOR EVENT QUERY
-            LOGGER.trace("This query {} is an event query", computeKPIEsperKey);
-            result = esperEngine.getQueryOrFail(computeKPIEsperKey).getResult();
-        }
-        LOGGER.trace("Result of the query is {}", result);
-        return result;
-    }
+		KpiResult result = new KpiResult();
+		// WHEN A KPI IS REQUESTED
+		// WE CHECK FOR DYNAMIC QUERY
+		try {
+			final String computeKPIEsperKey = _kpi.computeKPIEsperKey();
+			LOGGER.trace("Request value from KPI {}", _kpi.getKpiKey());
+			final IDynamicDataQuery query = dynamicDataQueryRegisterService
+					.getQuery(computeKPIEsperKey);
+			if (query != null) {
+				result = obtainDynamicQueryResult(computeKPIEsperKey, query);
+			} else {
+				result = obtainCepQueryResult(computeKPIEsperKey);
+			}
+			LOGGER.trace("Result of the query is {}", result);
 
-    /**
-     * @return the requiredDAO
-     */
-    public KpiDao getRequiredDAO() {
+		} catch (Exception e) {
+			LOGGER.error("KPI {}  could not return any result ",
+					_kpi.computeKPIEsperKey(), e);
+		}
+		return new InferMissingEntityValuesIntoKpiResult(result, _kpi, entityService).inferEntityKeys();
+	}
 
-        return requiredDAO;
-    }
+	private KpiResult obtainDynamicQueryResult(final String computeKPIEsperKey,
+			final IDynamicDataQuery query) {
+		KpiResult result;
+		LOGGER.trace("This query {} is a dynamic query", computeKPIEsperKey);
+		result = query.getResult();
+		return result;
+	}
 
-    public ISpringService getSpringService() {
+	private KpiResult obtainCepQueryResult(final String computeKPIEsperKey) {
+		KpiResult result;
+		// IF IT FAILS WE CHECK FOR EVENT QUERY
+		LOGGER.trace("This query {} is an event query", computeKPIEsperKey);
+		result = esperEngine.getQueryOrFail(computeKPIEsperKey).getResult();
+		return result;
+	}
 
-        return springService;
-    }
 
-    @PostConstruct
-    public void initCron() {
+	/**
+	 * @return the requiredDAO
+	 */
+	public KpiDao getRequiredDAO() {
 
-        cronRegistry.registerCronTask("CRON_REGISTRY", KPI_HISTORY_INTERVAL, KpiHistoryJob.class,
-                new JobDataMap());
-    }
+		return requiredDAO;
+	}
 
-    /**
-     * @param _cronRegistry the cronRegistry to set
-     */
-    public void setCronRegistry(final ICronRegistryService _cronRegistry) {
+	public ISpringService getSpringService() {
 
-        cronRegistry = _cronRegistry;
-    }
+		return springService;
+	}
 
-    public void setDynamicDataQueryRegisterService(
-            final IDynamicDataQueryRegisterService _dynamicDataQueryRegisterService) {
+	@PostConstruct
+	public void initCron() {
 
-        dynamicDataQueryRegisterService = _dynamicDataQueryRegisterService;
-    }
+		cronRegistry.registerCronTask("CRON_REGISTRY", KPI_HISTORY_INTERVAL,
+				KpiHistoryJob.class, new JobDataMap());
+	}
 
-    /**
-     * @param _entityService the entityService to set
-     */
-    public void setEntityService(final IEntityService _entityService) {
+	/**
+	 * @param _cronRegistry
+	 *            the cronRegistry to set
+	 */
+	public void setCronRegistry(final ICronRegistryService _cronRegistry) {
 
-        entityService = _entityService;
-    }
+		cronRegistry = _cronRegistry;
+	}
 
-    /**
-     * @param _esperEngine the esperEngine to set
-     */
-    public void setEsperEngine(final IEventEngineService _esperEngine) {
+	public void setDynamicDataQueryRegisterService(
+			final IDynamicDataQueryRegisterService _dynamicDataQueryRegisterService) {
 
-        esperEngine = _esperEngine;
-    }
+		dynamicDataQueryRegisterService = _dynamicDataQueryRegisterService;
+	}
 
-    /**
-     * @param _projectDao the projectDao to set
-     */
-    public void setProjectDao(final ProjectDao _projectDao) {
+	/**
+	 * @param _entityService
+	 *            the entityService to set
+	 */
+	public void setEntityService(final IEntityService _entityService) {
 
-        projectDao = _projectDao;
-    }
+		entityService = _entityService;
+	}
 
-    /**
-     * @param _requiredDAO the requiredDAO to set
-     */
-    public void setRequiredDAO(final KpiDao _requiredDAO) {
+	/**
+	 * @param _esperEngine
+	 *            the esperEngine to set
+	 */
+	public void setEsperEngine(final IEventEngineService _esperEngine) {
 
-        requiredDAO = _requiredDAO;
-    }
+		esperEngine = _esperEngine;
+	}
 
-    public void setSpringService(final ISpringService _springService) {
+	/**
+	 * @param _projectDao
+	 *            the projectDao to set
+	 */
+	public void setProjectDao(final ProjectDao _projectDao) {
 
-        springService = _springService;
-    }
+		projectDao = _projectDao;
+	}
+
+	/**
+	 * @param _requiredDAO
+	 *            the requiredDAO to set
+	 */
+	public void setRequiredDAO(final KpiDao _requiredDAO) {
+
+		requiredDAO = _requiredDAO;
+	}
+
+	public void setSpringService(final ISpringService _springService) {
+
+		springService = _springService;
+	}
 
 }

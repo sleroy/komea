@@ -293,7 +293,7 @@ public final class MeasureHistoryService extends
 	public void storeMeasure(final HistoryKey _ofKpi, final Double _value,
 			final DateTime _analysisDate) {
 
-		final Measure measure = Measure.initializeMeasureFromKPIKey(
+		final Measure measure = Measure.initializeMeasure(
 				_ofKpi.getKpiID(), _ofKpi.getEntityKey());
 		measure.setValue(_value);
 		measure.setDate(_analysisDate.toDate());
