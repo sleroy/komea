@@ -117,38 +117,6 @@ public class AlertService implements IAlertService {
     }
     
     /**
-     * @return the alertTypeService
-     */
-    public IAlertTypeService getAlertTypeService() {
-    
-        return alertTypeService;
-    }
-    
-    /**
-     * @return the entityService
-     */
-    public IEntityService getEntityService() {
-    
-        return entityService;
-    }
-    
-    /**
-     * @return the kpiService
-     */
-    public IKPIService getKpiService() {
-    
-        return kpiService;
-    }
-    
-    /**
-     * @return the measureService
-     */
-    public IHistoryService getMeasureService() {
-    
-        return measureService;
-    }
-    
-    /**
      * Cette méthode : est ce que le seuil est franchi ?
      *
      * @param alertType
@@ -188,42 +156,6 @@ public class AlertService implements IAlertService {
     public boolean isAlertFiltered(final SearchKpiAlertsDto _filter, final KpiAlertDto kpiAlert) {
     
         return kpiAlert != null && (!_filter.isActivatedOnly() || kpiAlert.isActivated());
-    }
-    
-    /**
-     * @param _alertTypeService
-     *            the alertTypeService to set
-     */
-    public void setAlertTypeService(final IAlertTypeService _alertTypeService) {
-    
-        alertTypeService = _alertTypeService;
-    }
-    
-    /**
-     * @param _entityService
-     *            the entityService to set
-     */
-    public void setEntityService(final IEntityService _entityService) {
-    
-        entityService = _entityService;
-    }
-    
-    /**
-     * @param _kpiService
-     *            the kpiService to set
-     */
-    public void setKpiService(final IKPIService _kpiService) {
-    
-        kpiService = _kpiService;
-    }
-    
-    /**
-     * @param _measureService
-     *            the measureService to set
-     */
-    public void setMeasureService(final IHistoryService _measureService) {
-    
-        measureService = _measureService;
     }
     
     private SearchMeasuresDto createMeasureFilterOnKpiKeys(final SearchKpiAlertsDto _searchAlert, final ExtendedEntityType entityType,
