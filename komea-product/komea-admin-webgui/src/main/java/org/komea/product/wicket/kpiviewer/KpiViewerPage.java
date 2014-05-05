@@ -178,10 +178,12 @@ public class KpiViewerPage extends LayoutPage {
 			try {
 				final IEntity entityOrFail = entityService
 						.getEntityOrFail(serieValue.getKey());
+				oneChartSerie.setName(entityOrFail.getDisplayName());
 			} catch (final Exception entityOrFail) {
 				LOGGER.info("Entity not found ", entityOrFail);
+				continue;
 			}
-			oneChartSerie.setName(entityOrFail.getDisplayName());
+
 			oneChartSerie.setData(serieValue.getValue());
 			options.addSeries(oneChartSerie);
 		}
