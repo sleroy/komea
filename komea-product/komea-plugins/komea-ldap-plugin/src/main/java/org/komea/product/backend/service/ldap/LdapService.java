@@ -3,53 +3,62 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.komea.product.backend.service.ldap;
 
+
 import java.util.List;
+
+import javax.annotation.PostConstruct;
+
+import org.apache.commons.lang.Validate;
 import org.komea.product.api.service.ldap.ILdapService;
-import org.komea.product.api.service.ldap.ILdapUserService;
-import org.komea.product.backend.service.ISettingService;
+import org.komea.product.backend.business.IDAOObjectStorage;
+import org.komea.product.backend.service.plugins.IPluginStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
  * @author rgalerme
  */
 @Service
 public class LdapService implements ILdapService {
     
+    private IDAOObjectStorage<LdapServer> configurationStorage;
+    
     @Autowired
-    private ISettingService settingService;
+    private IPluginStorageService         pluginStorage;
+    
+    @PostConstruct
+    public void init() {
+    
+        configurationStorage = pluginStorage.registerDAOStorage("LDAP", LdapServer.class);
+        
+    }
     
     @Override
-    public void saveOrUpdate(LdapServer _ldapServer) {
-        settingService.getProxy(ILdapUserService.LDAP_SERVER).setStringValue(_ldapServer.getLdapUrl());
-        settingService.getProxy(ILdapUserService.LDAP_USER_DN).setStringValue(_ldapServer.getLdapUserDN());
-        settingService.getProxy(ILdapUserService.LDAP_PASSWORD).setStringValue(_ldapServer.getLdapPassword());
-        settingService.getProxy(ILdapUserService.LDAP_BASE).setStringValue(_ldapServer.getLdapBase());
-        settingService.<LdapAuthTypeEnum> getProxy(ILdapUserService.LDAP_AUTH_TYPE).setValue(_ldapServer.getLdapAuthTypeEnum());
+    public void saveOrUpdate(final LdapServer _ldapServer) {
+    
+        Validate.notNull(_ldapServer);
+        configurationStorage.saveOrUpdate(_ldapServer);
     }
     
     @Override
     public List<LdapServer> selectAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
     
     @Override
-    public void delete(LdapServer _ldapServer) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void delete(final LdapServer _ldapServer) {
+    
+        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
     
     @Override
-    public void load(LdapServer _ldapServer) {
-        _ldapServer.setLdapUrl(settingService.getProxy(ILdapUserService.LDAP_SERVER).getStringValue());
-        _ldapServer.setLdapUserDN(settingService.getProxy(ILdapUserService.LDAP_USER_DN).getStringValue());
-        _ldapServer.setLdapPassword(settingService.getProxy(ILdapUserService.LDAP_PASSWORD).getStringValue());
-        _ldapServer.setLdapBase(settingService.getProxy(ILdapUserService.LDAP_BASE).getStringValue());
-         final LdapAuthTypeEnum ldapAuthTypeEnum =
-                    settingService.<LdapAuthTypeEnum> getProxy(ILdapUserService.LDAP_AUTH_TYPE).getValue();
-         _ldapServer.setLdapAuthTypeEnum(ldapAuthTypeEnum);
+    public LdapServer load() {
+    
+        return configurationStorage.selectAll().get(0);
     }
     
 }

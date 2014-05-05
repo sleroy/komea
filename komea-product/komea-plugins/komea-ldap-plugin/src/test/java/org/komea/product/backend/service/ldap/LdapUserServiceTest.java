@@ -5,7 +5,6 @@
 package org.komea.product.backend.service.ldap;
 
 
-
 import java.io.IOException;
 import java.util.List;
 
@@ -13,16 +12,15 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.api.service.errors.KomeaLdapConfigurationException;
+import org.komea.product.api.service.ldap.ILdapConnector;
+import org.komea.product.api.service.ldap.ILdapService;
 import org.komea.product.api.service.ldap.ILdapUserService;
 import org.komea.product.api.service.ldap.LdapUser;
-import org.komea.product.backend.service.ISettingService;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-
-
 
 /**
  * This class defines a ldap spring test.
@@ -30,40 +28,33 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
  * @author sleroy
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-    locations =
-        {
-                "classpath*:/spring/application-context-test.xml",
-                    "classpath*:/spring/security-spring-test.xml",
-                    "classpath*:/spring/ldap-spring-test.xml" })
-@TransactionConfiguration(
-    defaultRollback = true)
-public class LdapUserServiceTest extends AbstractSpringIntegrationTestCase
-{
-    
+@ContextConfiguration(locations = {
+        "classpath*:/spring/application-context-test.xml", "classpath*:/spring/security-spring-test.xml",
+        "classpath*:/spring/ldap-spring-test.xml" })
+@TransactionConfiguration(defaultRollback = true)
+public class LdapUserServiceTest extends AbstractSpringIntegrationTestCase {
     
     @Autowired
-    private ISettingService  service;
-    
+    private ILdapService     service;
     
     @Autowired
     private ILdapUserService userService;
     
-    
+    @Autowired
+    private ILdapConnector   ldapConnector;
     
     @Test
     public void testLdap() {
     
-    
-        service.getProxy(ILdapUserService.LDAP_SERVER).setStringValue("ldap://localhost:33389");
-        service.getProxy(ILdapUserService.LDAP_PASSWORD).setStringValue("");
-        service.getProxy(ILdapUserService.LDAP_USER_DN).setStringValue("");
-        service.getProxy(ILdapUserService.LDAP_BASE).setStringValue("dc=jbcpcalendar,dc=com");
+        LdapServer ldapServer = new LdapServer();
+        ldapServer.setLdapUrl("ldap://localhost:33389");
+        ldapServer.setLdapPassword("");
+        ldapServer.setLdapUserDN("");
+        ldapServer.setLdapBase("dc=jbcpcalendar,dc=com");
+        service.saveOrUpdate(ldapServer);
         
         try {
-            final LdapConnector ldapConnector = new LdapConnector();
-            ldapConnector.setSettingService(service);
-            ldapConnector.afterSettingInitialisation();
+            ldapConnector.initConnection();
             
             final List<LdapUser> users = ldapConnector.getUsers(null);
             System.out.println(users);
@@ -80,7 +71,6 @@ public class LdapUserServiceTest extends AbstractSpringIntegrationTestCase
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
-        
         
     }
     

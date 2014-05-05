@@ -6,11 +6,12 @@
 
 package org.komea.product.api.service.ldap;
 
+
 import java.util.List;
+
 import org.komea.product.backend.service.ldap.LdapServer;
 
 /**
- *
  * @author rgalerme
  */
 
@@ -19,5 +20,5 @@ public interface ILdapService {
     public void saveOrUpdate(LdapServer _ldapServer);
     public List<LdapServer> selectAll();
     public void delete(LdapServer _ldapServer);
-    public void load(LdapServer _ldapServer);
+    public LdapServer load();
 }

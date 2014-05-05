@@ -1,7 +1,9 @@
 /**
  *
  */
+
 package org.komea.product.api.service.ldap;
+
 
 import java.io.IOException;
 import java.util.List;
@@ -12,19 +14,24 @@ import java.util.List;
  * @author sleroy
  */
 public interface ILdapConnector {
-
+    
     public boolean authenticate(String userName, String password);
-
+    
     /*
      * (non-Javadoc)
      * @see java.io.Closeable#close()
      */
     public void close() throws IOException;
-
+    
     public LdapUser getUser(String userName);
-
+    
     public List<LdapUser> getUsers(String pattern);
-
+    
     boolean isInit();
-
+    
+    /**
+     * This method init connection to the LDAP server using the ldap configuration
+     */
+    void initConnection();
+    
 }

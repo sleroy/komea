@@ -6,6 +6,7 @@
 
 package org.komea.product.api.service.errors.userinterface;
 
+
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -16,16 +17,15 @@ import org.komea.product.backend.service.ldap.LdapServer;
 import org.komea.product.wicket.LayoutPage;
 
 /**
- *
  * @author rgalerme
  */
 public final class LdapPage extends LayoutPage {
-
+    
     @SpringBean
     private ILdapService ldapService;
     
+    public LdapPage(final PageParameters _parameters) {
     
-    public LdapPage(PageParameters _parameters) {
         super(_parameters);
         
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
@@ -33,21 +33,19 @@ public final class LdapPage extends LayoutPage {
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
         
+        LdapServer ldapServer = ldapService.load();
         
-        LdapServer ldapServer = new LdapServer();
-        ldapService.load(ldapServer);
-        LdapForm ldForm = new LdapForm(ldapService, ldapServer, feedbackPanel, this, "form", new CompoundPropertyModel<LdapServer>(ldapServer));
+        LdapForm ldForm = new LdapForm(ldapService, ldapServer, feedbackPanel, this, "form", new CompoundPropertyModel<LdapServer>(
+                ldapServer));
         ldForm.add(new Label("legend", getString("ldap.save.form.title")));
         add(ldForm);
         
-        
     }
-
+    
     @Override
     public String getTitle() {
+    
         return getString("ldap.save.title");
     }
-
     
-
 }
