@@ -159,7 +159,7 @@ public class LdapService implements ILdapService {
     }
     
     @Override
-    public void initConection() {
+    public void initConnection() {
     
         ldapConnector.initConnection();
         

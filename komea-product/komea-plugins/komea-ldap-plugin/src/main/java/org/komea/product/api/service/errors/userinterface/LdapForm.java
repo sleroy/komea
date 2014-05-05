@@ -90,7 +90,7 @@ public class LdapForm extends Form<LdapServer> {
                 boolean success = true;
                 try {
                     ldapService.saveOrUpdate(ldapServer);
-                    ldapService.initConection();
+                    ldapService.initConnection();
                     ldapService.importInformations();
                 } catch (final Exception e) {
                     success = false;

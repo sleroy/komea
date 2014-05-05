@@ -48,7 +48,7 @@ public class LdapProviderPlugin implements ILdapProviderPlugin {
     
         LOGGER.info("LDAP - User service");
         try {
-            ldapService.initConection();
+            ldapService.initConnection();
             
             final JobDataMap properties = initializeDataForCron();
             LOGGER.info("Initialization of lDAP Cron.");

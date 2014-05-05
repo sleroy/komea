@@ -38,6 +38,6 @@ public interface ILdapService {
      * @return
      */
     public LdapServer load();
-    public void initConection();
+    public void initConnection();
     public void importInformations() throws IOException;
 }
