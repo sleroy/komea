@@ -65,8 +65,8 @@ public class GetSubEntities
                         List.class.cast(projectService
                                 .getProjectsOfPersonGroupRecursively(entityId));
                 break;
-            case TEAM:
-            case DEPARTMENT:
+            case MEMBERS_TEAM:
+            case MEMBERS_DEPARTMENT:
                 entities =
                         List.class.cast(personService.getPersonsOfPersonGroupRecursively(entityId));
                 break;

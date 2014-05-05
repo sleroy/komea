@@ -4,8 +4,8 @@ public enum ExtendedEntityType {
 
     PROJECT,
     PERSON,
-    TEAM,
-    DEPARTMENT,
+    MEMBERS_TEAM,
+    MEMBERS_DEPARTMENT,
     PROJECTS_PERSON,
     PROJECTS_TEAM,
     PROJECTS_DEPARTMENT;

@@ -90,12 +90,15 @@ public class MeasuresDto implements Serializable {
             for (final BaseEntityDto entity : entities) {
                 Number number = null;
                 for (final MeasureDto measure : measures) {
-                    if (measureMatches(kpi, entity, measure)) {
+                    boolean measureMatches = measureMatches(kpi, entity, measure);
+                    if (measureMatches) {
                         number = measure.getValue();
                         break;
                     }
                 }
-                numbers.add(number);
+                if (number != null) {
+                    numbers.add(number);
+                }
             }
         }
         return series;
@@ -119,7 +122,7 @@ public class MeasuresDto implements Serializable {
     }
 
     private boolean measureMatches(final Kpi kpi, final BaseEntityDto entity, final MeasureDto measure) {
-        return kpi.getKpiKey().equals(measure.getKey()) && entity.getId().equals(getId(measure));
+        return kpi.getKpiKey().equals(measure.getKpiKey()) && entity.getId().equals(getId(measure));
     }
 
     public List<Pair<String, List<Number>>> getKpiSeries() {

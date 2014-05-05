@@ -71,7 +71,7 @@ public class TestLinkProviderPlugin {
         final TestsByStatusKPI testsByStatusKPI = new TestsByStatusKPI("");
         return new Kpi(null, "test_cases_total", "Total test cases", "Number of test cases",
                 0d, Double.valueOf(Integer.MAX_VALUE), ValueDirection.BETTER, ValueType.INT,
-                EntityType.PROJECT, null, "0 0/5 * * * ?", 12, EvictionType.MONTHS, null,
+                EntityType.PROJECT, null, "0 0 0/6 * * ?", 12, EvictionType.MONTHS, null,
                 ProviderType.REQUIREMENTS, testsByStatusKPI.getFormula());
     }
 
@@ -80,7 +80,7 @@ public class TestLinkProviderPlugin {
         final TestsByStatusKPI testsByStatusKPI = new TestsByStatusKPI(statusName);
         return new Kpi(null, "test_cases_" + statusName, statusName + " test cases", "Number of " + statusName + " test cases",
                 0d, Double.valueOf(Integer.MAX_VALUE), valueDirection, ValueType.INT,
-                EntityType.PROJECT, null, "0 0/5 * * * ?", 12, EvictionType.MONTHS, null,
+                EntityType.PROJECT, null, "0 0 0/6 * * ?", 12, EvictionType.MONTHS, null,
                 ProviderType.REQUIREMENTS, testsByStatusKPI.getFormula());
     }
 

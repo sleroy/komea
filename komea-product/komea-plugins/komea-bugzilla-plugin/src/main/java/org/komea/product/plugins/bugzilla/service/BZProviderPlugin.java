@@ -118,7 +118,7 @@ public class BZProviderPlugin {
     private Kpi bzKpi(final String key, final String name, final String description,
             final ValueDirection valueDirection, final String formula) {
         return new Kpi(null, key, name, description, 0d, Double.valueOf(Integer.MAX_VALUE), valueDirection, ValueType.INT,
-                EntityType.PROJECT, null, "0 0/5 * * * ?", 12, EvictionType.MONTHS, null, ProviderType.BUGTRACKER, formula);
+                EntityType.PROJECT, null, "0 0 0/6 * * ?", 12, EvictionType.MONTHS, null, ProviderType.BUGTRACKER, formula);
     }
 
     private Kpi bzOpenBugs() {
