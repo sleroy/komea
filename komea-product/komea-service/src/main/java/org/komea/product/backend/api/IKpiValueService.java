@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.history.HistoryKey;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.dto.MeasureDto;
@@ -67,7 +68,7 @@ public interface IKpiValueService
      */
     public List<MeasureDto> getAllRealTimeMeasuresPerEntityAndPerKpi(
             List<Kpi> _kpis,
-            List<BaseEntityDto> _entities);
+            List<IEntity> _entities);
     
     
     /**

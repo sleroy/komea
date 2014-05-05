@@ -15,6 +15,7 @@ import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.utils.CollectionUtil;
+import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dto.BaseEntityDto;
@@ -187,11 +188,11 @@ public final class KPIValueService implements IKpiValueService {
 	 */
 	@Override
 	public List<MeasureDto> getAllRealTimeMeasuresPerEntityAndPerKpi(
-			final List<Kpi> kpis, final List<BaseEntityDto> entities) {
+			final List<Kpi> kpis, final List<IEntity> entities) {
 
 		final List<MeasureDto> measures = new ArrayList<MeasureDto>(kpis.size()
 				* entities.size());
-		for (final BaseEntityDto entity : entities) {
+		for (final IEntity entity : entities) {
 			for (final Kpi kpi : kpis) {
 				final Measure measure = getRealTimeMeasure(KpiKey
 						.ofKpiAndEntity(kpi, entity));

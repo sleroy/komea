@@ -251,24 +251,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
     
     /**
-     * Retuens the last measure of a kpi
-     * 
-     * @param _measureKey
-     *            the kpi key
-     * @param findKPIOrFail
-     *            the kpi
-     * @param entity
-     *            the entity.
-     * @return the measure
-     */
-    public Measure getLastMeasureOfKpi(final Kpi findKPIOrFail, final IEntity entity) {
-    
-    
-        return kpiValueService.getLastMeasureInHistoryOfAKpi(HistoryKey.of(findKPIOrFail, entity));
-    }
-    
-    
-    /**
      * @return the measureService
      */
     public final IHistoryService getMeasureService() {
