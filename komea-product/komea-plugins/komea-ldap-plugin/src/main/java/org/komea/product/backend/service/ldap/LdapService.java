@@ -167,8 +167,7 @@ public class LdapService implements ILdapService {
     @Override
     public LdapServer load() {
     
-        LdapServer ldapServer = configurationStorage.get();
-        return ldapServer != null ? ldapServer : new LdapServer();
+        return configurationStorage.get();
     }
     
     @Override
