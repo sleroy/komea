@@ -111,22 +111,40 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService {
 		}
 		final String queryName = _kpi.computeKPIEsperKey();
 		if (queryImplementation instanceof ICEPQueryImplementation) {
-			LOGGER.debug("KPI {} provides an event query {}.", _kpi,
-					queryImplementation);
-			esperEngine.createOrUpdateQuery(new QueryDefinition(queryName,
-					(ICEPQueryImplementation) queryImplementation));
+			registerCEPQuery(_kpi, queryImplementation, queryName);
 
 		} else if (queryImplementation instanceof IDynamicDataQuery) {
-			springService.autowirePojo(queryImplementation);
-			LOGGER.debug("KPI {} provides an dynamic data query {}.", _kpi,
-					queryImplementation);
-			final IDynamicDataQuery cachedQuery = dynamicQueryCacheService
-					.addCacheOnDynamicQuery(queryName,
-							(IDynamicDataQuery) queryImplementation);
-			dynamicDataQueryRegisterService.registerQuery(queryName,
-					cachedQuery);
+			registerDynamicQuery(_kpi, queryImplementation, queryName);
 		}
 	}
+
+    private void registerCEPQuery(
+            final Kpi _kpi,
+            final Object queryImplementation,
+            final String queryName) {
+    
+    
+        LOGGER.debug("KPI {} provides an event query {}.", _kpi,
+        		queryImplementation);
+        esperEngine.createOrUpdateQuery(new QueryDefinition(queryName,
+        		(ICEPQueryImplementation) queryImplementation));
+    }
+
+    private void registerDynamicQuery(
+            final Kpi _kpi,
+            final Object queryImplementation,
+            final String queryName) {
+    
+    
+        springService.autowirePojo(queryImplementation);
+        LOGGER.debug("KPI {} provides an dynamic data query {}.", _kpi,
+        		queryImplementation);
+        final IDynamicDataQuery cachedQuery = dynamicQueryCacheService
+        		.addCacheOnDynamicQuery(queryName,
+        				(IDynamicDataQuery) queryImplementation);
+        dynamicDataQueryRegisterService.registerQuery(queryName,
+        		cachedQuery);
+    }
 
 	/**
 	 * @return the cronRegistry

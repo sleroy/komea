@@ -344,7 +344,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
             return Collections.EMPTY_LIST;
         }
         final Integer limit = _searchMeasuresDto.getNbMeasures();
-        final RowBounds rowBounds = new RowBounds(0, limit == null ? Integer.MAX_VALUE : limit);
+        final RowBounds rowBounds = buildRowBounds(limit);
         final List<MeasureDto> measures = new ArrayList<MeasureDto>(1000);
         for (final IEntity entity : _entities) {
             for (final Kpi kpi : _kpis) {
@@ -356,6 +356,12 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
         }
         Collections.sort(measures, new MeasureDateComparator());
         return measures;
+    }
+
+    private RowBounds buildRowBounds(final Integer limit) {
+    
+    
+        return new RowBounds(0, limit == null ? Integer.MAX_VALUE : limit);
     }
     
 }
