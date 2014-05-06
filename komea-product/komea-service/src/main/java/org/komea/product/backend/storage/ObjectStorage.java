@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import org.apache.commons.lang.SerializationException;
 import org.apache.commons.lang.Validate;
-import org.komea.eventory.utils.ClassUtils;
 import org.komea.product.backend.service.fs.IObjectStorage;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
 import org.slf4j.Logger;
@@ -52,7 +51,7 @@ public class ObjectStorage<T> implements IObjectStorage<T> {
         final String resourceName = getResource();
         try {
             if (!service.existResource(resourceName)) {
-                return (T) ClassUtils.instantiate(className);
+                return null;
             }
             final InputStream open = service.open(resourceName);
             return (T) X_STREAM.fromXML(open);
