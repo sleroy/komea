@@ -36,7 +36,7 @@ public class CreateBranchTest
     }
     
     
-    @Test 
+    @Test
     public void testCreationRepositoryAndScan() throws Exception {
     
     
@@ -60,18 +60,8 @@ public class CreateBranchTest
         System.out.println(gitRepositoryProxy.getBranches());
         
         final List<IScmCommit> receivedEvents =
-                gitRepositoryProxy.getAllCommitsFromABranch("new_branch", previousTime);
+                gitRepositoryProxy.getAllCommitsFromABranch("refs/heads/new_branch", previousTime);
         
         System.out.println(receivedEvents);
-        // assertEquals("Number of events sent the first time", 5, receivedEvents.size());
-        // assertEquals("Second event is branch number", "scm-branch-numbers", receivedEvents.get(1)
-        // .getEventType());
-        // assertEquals("Third event is tag per branch", "scm-tag-perbranch-numbers", receivedEvents
-        // .get(2).getEventType());
-        // assertEquals("One branch is found", 1.0d, receivedEvents.get(1).getValue(), 0);
-        // assertEquals("Zero tag for the branch is found", 0.0d, receivedEvents.get(2).getValue(), 0);
-        // assertEquals("scm-new-commit", receivedEvents.get(3).getEventType());
-        // assertEquals("scm-new-commit", receivedEvents.get(4).getEventType());
-        
     }
 }

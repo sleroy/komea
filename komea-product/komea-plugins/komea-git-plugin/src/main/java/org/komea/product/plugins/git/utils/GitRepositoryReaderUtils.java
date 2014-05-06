@@ -63,8 +63,9 @@ public class GitRepositoryReaderUtils
     public static Git getGit(final ScmRepositoryDefinition _repositoryDefinition) {
     
     
-        if (!_repositoryDefinition.getCloneDirectory().exists()) { throw new IllegalArgumentException(
-                "GIT Repository should be cloned before"); }
+        if (!_repositoryDefinition.getCloneDirectory().exists()) {
+            throw new IllegalArgumentException("GIT Repository should be cloned before");
+        }
         
         FileRepository fileRepository;
         try {
@@ -110,7 +111,7 @@ public class GitRepositoryReaderUtils
     
     
         try {
-            return git.branchList().setListMode(ListMode.REMOTE).call();
+            return git.branchList().setListMode(ListMode.ALL).call();
         } catch (final GitAPIException e) {
             throw new ScmGitAPIException(e.getMessage(), e);
         }

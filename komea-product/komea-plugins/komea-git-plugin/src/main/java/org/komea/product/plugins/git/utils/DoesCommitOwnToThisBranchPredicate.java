@@ -8,6 +8,7 @@ package org.komea.product.plugins.git.utils;
 
 import java.io.IOException;
 
+import org.apache.commons.lang.Validate;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.Ref;
@@ -47,10 +48,15 @@ public class DoesCommitOwnToThisBranchPredicate
     
     
         super();
+        Validate.isTrue(!_branchName.isEmpty());
+        Validate.notNull(_repository);
+        Validate.notNull(_revWalk);
+        
         branchName = _branchName;
         repository = _repository;
         revWalk = _revWalk;
         firstBranchCommit = repository.getAllRefs().get(branchName);
+        Validate.notNull(firstBranchCommit);
         branchFirstCommit = revWalk.parseCommit(firstBranchCommit.getObjectId());
         
     }
