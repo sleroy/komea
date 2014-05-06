@@ -69,7 +69,7 @@ public class PluginStorageServiceTest
      * Test method for {@link org.komea.product.backend.service.PluginStorageService#registerDAOStorage(java.lang.String, java.lang.Class)}.
      */
     @Test
-    public final void testRegisterDAOStorage_parameter() throws Exception {
+    public final void testRegisterDAOStorage_checkDaoStorageIndexFromObjectStorage() throws Exception {
     
     
         final IDAOObjectStorage<IHasId> storage =

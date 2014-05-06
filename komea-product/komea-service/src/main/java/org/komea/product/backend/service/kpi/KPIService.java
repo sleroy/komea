@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.Validate;
 import org.komea.product.backend.api.IHistoryService;
 import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
@@ -294,7 +295,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public void saveOrUpdate(final Kpi _kpi) {
     
-    
+    Validate.isTrue(!_kpi.isAssociatedToEntity());
         if (_kpi.getId() == null) {
             LOGGER.debug("Saving new KPI : {}", _kpi.getKpiKey());
             if (findKPI(KpiKey.ofKpi(_kpi)) != null) { throw new KpiAlreadyExistingException(

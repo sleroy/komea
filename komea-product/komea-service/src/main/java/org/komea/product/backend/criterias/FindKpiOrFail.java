@@ -22,13 +22,20 @@ public class FindKpiOrFail extends FindKpi
 {
     
     
+    public FindKpiOrFail(final KpiKey _ofKpiName, final KpiDao _kpiDAO) {
+    
+    
+        super(_ofKpiName, _kpiDAO);
+    }
+    
+    
     /**
      * Find a kpi or fail
      * 
      * @param _kpiKey
      *            the kpi key
      */
-    public FindKpiOrFail(final KpiKey _kpiKey, final KpiDao _kpiDao) {
+    public FindKpiOrFail(final String _kpiKey, final KpiDao _kpiDao) {
     
     
         super(_kpiKey, _kpiDao);
@@ -44,7 +51,9 @@ public class FindKpiOrFail extends FindKpi
     
     
         final Kpi findKPI = super.find();
-        if (findKPI == null) { throw new KPINotFoundRuntimeException(getKpiKey().getKpiName()); }
+        if (findKPI == null) {
+            throw new KPINotFoundRuntimeException(getKpiKey());
+        }
         return findKPI;
     }
     
