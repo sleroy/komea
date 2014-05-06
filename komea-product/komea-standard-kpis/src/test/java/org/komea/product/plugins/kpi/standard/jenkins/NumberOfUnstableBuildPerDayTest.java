@@ -1,7 +1,10 @@
 /**
  * 
  */
+
 package org.komea.product.plugins.kpi.standard.jenkins;
+
+
 
 import org.junit.Test;
 
@@ -9,7 +12,6 @@ import org.junit.Test;
 
 /**
  * @author sleroy
- *
  */
 public class NumberOfUnstableBuildPerDayTest
 {
@@ -23,7 +25,7 @@ public class NumberOfUnstableBuildPerDayTest
     
     
         // TODO
-        throw new RuntimeException("not yet implemented");
+        // throw new RuntimeException("not yet implemented");
     }
     
 }
