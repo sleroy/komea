@@ -43,6 +43,20 @@ public final class LimitCriteria {
     }
     
     /**
+     * This method create a criteria with limit date between a start Date and and now. with a limit of : value per entity
+     * 
+     * @param _startDate
+     *            the start date to find the historical values
+     * @param _limitNumber
+     *            the limit number of values / entities
+     * @return the criteria
+     */
+    public static LimitCriteria CreateLimitCriteriaFromStartingDate(final Date _startDate, final int _limitNumber) {
+    
+        return new LimitCriteria(_startDate, Calendar.getInstance().getTime(), _limitNumber);
+    }
+    
+    /**
      * This method create a criteria with limit date between a start Date and an end date. with a limit of : value per entity
      * 
      * @param _startDate

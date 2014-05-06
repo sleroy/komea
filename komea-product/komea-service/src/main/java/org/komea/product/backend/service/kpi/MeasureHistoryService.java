@@ -183,7 +183,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
             final Criteria criteria) {
     
         final RowBounds rowBounds = new RowBounds(0, _nbRow);
-        _measureCriteria.setOrderByClause(DATE_ORDER);
+        _measureCriteria.setOrderByClause(DATE_ORDER_DESC);
         _measureCriteria.getOredCriteria();
         initMeasureCriteria(_kpiKey, criteria);
         

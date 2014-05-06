@@ -108,6 +108,7 @@ public final class EntityService implements IEntityService {
         
     }
     
+    @Override
     public <TEntity extends IEntity> TEntity findEntityByEntityStringKey(final EntityStringKey _entityKey) {
     
         Validate.notNull(_entityKey);

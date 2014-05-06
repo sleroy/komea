@@ -43,4 +43,10 @@ public class HistoricalValue {
         measureDate = _measureDate;
     }
     
+    @Override
+    public String toString() {
+    
+        return "value=" + value + ", measureDate=" + measureDate;
+    }
+    
 }

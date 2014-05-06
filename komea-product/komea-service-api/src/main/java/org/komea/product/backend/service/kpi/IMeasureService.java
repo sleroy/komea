@@ -8,7 +8,7 @@ public interface IMeasureService {
     
     //
     
-    MeasureResult getMeasure(final HistoryStringKey _kpiKey, final LimitCriteria _limit);
+    MeasureResult getMeasure(final HistoryStringKey _historyKey, final LimitCriteria _limit);
     
-    List<MeasureResult> getMeasures(final List<HistoryStringKey> measureKey, final LimitCriteria _limit);
+    List<MeasureResult> getMeasures(final HistoryStringKeyList _historyKeyList, final LimitCriteria _limit);
 }

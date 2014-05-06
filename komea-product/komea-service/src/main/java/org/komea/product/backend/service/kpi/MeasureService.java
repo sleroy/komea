@@ -18,6 +18,8 @@ import org.komea.product.service.dto.KpiKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
+
 @Service
 public class MeasureService implements IMeasureService {
     
@@ -31,12 +33,20 @@ public class MeasureService implements IMeasureService {
     private IKPIService     kpiService;
     
     @Override
-    public MeasureResult getMeasure(final HistoryStringKey _measureKey, final LimitCriteria _limit) {
+    public MeasureResult getMeasure(final HistoryStringKey _historyKey, final LimitCriteria _limit) {
     
-        EntityStringKey entityKey = EntityStringKey.of(_measureKey.getEntityType().getEntityType(), _measureKey.getEntityKey());
-        IEntity entity = entityService.getEntityOrFail(entityKey);
-        KpiKey kpiKey = KpiKey.ofKpiNameAndEntity(_measureKey.getKpiKey(), entity);
-        Kpi kpi = kpiService.findKPIOrFail(kpiKey);
+        MeasureResult measureResult = new MeasureResult();
+        
+        EntityStringKey entityKey = EntityStringKey.of(_historyKey.getEntityType().getEntityType(), _historyKey.getEntityKey());
+        IEntity entity = entityService.findEntityByEntityStringKey(entityKey);
+        if (entity == null) {
+            return measureResult;
+        }
+        KpiKey kpiKey = KpiKey.ofKpiNameAndEntity(_historyKey.getKpiKey(), entity);
+        Kpi kpi = kpiService.findKPI(kpiKey);
+        if (kpi == null) {
+            return measureResult;
+        }
         
         HistoryKey historyKey = HistoryKey.of(kpi, entity);
         MeasureCriteria measureCriteria = new MeasureCriteria();
@@ -45,17 +55,23 @@ public class MeasureService implements IMeasureService {
         
         List<Measure> measures = historyService.getFilteredHistory(historyKey, _limit.getLimitNumber(), measureCriteria, criteria);
         
-        MeasureResult measureResult = new MeasureResult();
         for (Measure measure : measures) {
             measureResult.addHistoricalValue(new HistoricalValue(measure.getValue(), measure.getDate()));
         }
         return measureResult;
     }
     @Override
-    public List<MeasureResult> getMeasures(final List<HistoryStringKey> _measureKey, final LimitCriteria _limit) {
+    public List<MeasureResult> getMeasures(final HistoryStringKeyList _historyKeys, final LimitCriteria _limit) {
     
-        // TODO Auto-generated getMeasures
-        return null;
+        List<MeasureResult> measuresList = Lists.newArrayList();
+        HistoryStringKey historyKey;
+        for (String kpiKey : _historyKeys.getKpiKeys()) {
+            for (String entityKey : _historyKeys.getEntityKeys()) {
+                historyKey = new HistoryStringKey(kpiKey, entityKey, _historyKeys.getEntityType());
+                measuresList.add(getMeasure(historyKey, _limit));
+            }
+        }
+        return measuresList;
     }
     //
 }

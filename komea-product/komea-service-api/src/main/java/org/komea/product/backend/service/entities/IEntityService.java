@@ -91,6 +91,15 @@ public interface IEntityService {
     
     List<BaseEntityDto> getSubEntities(ExtendedEntityType extendedEntityType, List<BaseEntityDto> parentEntities);
     
+    /**
+     * Returns the entity or null
+     *
+     * @param EntityStringKey
+     *            contain the entity type and the entity String key
+     * @return the entity.
+     */
+    <TEntity extends IEntity> TEntity findEntityByEntityStringKey(EntityStringKey _entityKey);
+    
     // /**
     // * This method return the complete person list
     // *
