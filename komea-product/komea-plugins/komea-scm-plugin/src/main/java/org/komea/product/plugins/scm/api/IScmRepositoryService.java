@@ -18,6 +18,9 @@ public interface IScmRepositoryService
 {
     
     
+    boolean existScmKey(String _key);
+    
+    
     /**
      * Finds a repository by its name
      * 

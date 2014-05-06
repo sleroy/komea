@@ -36,57 +36,63 @@ import org.springframework.transaction.annotation.Transactional;
  * @author sleroy
  */
 @ProviderPlugin(
-        eventTypes =
-            { @EventTypeDef(
-                    providerType = ProviderType.SCM,
-                    description = "A new commit has been pushed",
-                    enabled = true,
-                    entityType = EntityType.PROJECT,
-                    key = "scm-new-commit",
-                    name = "New commit on scm server",
-                    severity = Severity.INFO), @EventTypeDef(
-                    providerType = ProviderType.SCM,
-                    description = "Fetch on scm server has failed",
-                    enabled = true,
-                    entityType = EntityType.PROJECT,
-                    key = "scm-fetch-failed",
-                    name = "Fetch on scm server has failed.",
-                    severity = Severity.INFO), @EventTypeDef(
-                    providerType = ProviderType.SCM,
-                    description = "Number of tags in a scm branch. The plugin will try to detect how many tags are present on the scm branch.",
-                    enabled = true,
-                    entityType = EntityType.PROJECT,
-                    key = "scm-tag-perbranch-numbers",
-                    name = "Number of tags per branch.",
-                    severity = Severity.INFO), @EventTypeDef(
-                    providerType = ProviderType.SCM,
-                    description = "Event sent when a scm repository is fetched.",
-                    enabled = true,
-                    entityType = EntityType.PROJECT,
-                    key = "scm-fetch-repository",
-                    name = "Number of tags per branch.",
-                    severity = Severity.INFO), @EventTypeDef(
-                    providerType = ProviderType.SCM,
-                    description = "Number of customer tags . This plugin will try to detect custom tags present on a scm repository.",
-                    enabled = true,
-                    entityType = EntityType.PROJECT,
-                    key = "scm-customer-tag-numbers",
-                    name = "Number of customer tags.",
-                    severity = Severity.INFO), @EventTypeDef(
-                    providerType = ProviderType.SCM,
-                    description = "Number of customer branches . This plugin will try to detect the number of customer branches present on a scm repository.",
-                    enabled = true,
-                    entityType = EntityType.PROJECT,
-                    key = "scm-customer-branch-numbers",
-                    name = "Number of customer branches.",
-                    severity = Severity.INFO), @EventTypeDef(
-                    providerType = ProviderType.SCM,
-                    description = "Number of branches . This plugin will try to detect the number of branches present on a scm repository.",
-                    enabled = true,
-                    entityType = EntityType.PROJECT,
-                    key = "scm-branch-numbers",
-                    name = "Number of branches.",
-                    severity = Severity.INFO) },
+        eventTypes = {
+                @EventTypeDef(
+                        providerType = ProviderType.SCM,
+                        description = "A new commit has been pushed",
+                        enabled = true,
+                        entityType = EntityType.PROJECT,
+                        key = "scm-new-commit",
+                        name = "New commit on scm server",
+                        severity = Severity.INFO),
+                @EventTypeDef(
+                        providerType = ProviderType.SCM,
+                        description = "Fetch on scm server has failed",
+                        enabled = true,
+                        entityType = EntityType.PROJECT,
+                        key = "scm-fetch-failed",
+                        name = "Fetch on scm server has failed.",
+                        severity = Severity.INFO),
+                @EventTypeDef(
+                        providerType = ProviderType.SCM,
+                        description = "Number of tags in a scm branch. The plugin will try to detect how many tags are present on the scm branch.",
+                        enabled = true,
+                        entityType = EntityType.PROJECT,
+                        key = "scm-tag-perbranch-numbers",
+                        name = "Number of tags per branch.",
+                        severity = Severity.INFO),
+                @EventTypeDef(
+                        providerType = ProviderType.SCM,
+                        description = "Event sent when a scm repository is fetched.",
+                        enabled = true,
+                        entityType = EntityType.PROJECT,
+                        key = "scm-fetch-repository",
+                        name = "Number of tags per branch.",
+                        severity = Severity.INFO),
+                @EventTypeDef(
+                        providerType = ProviderType.SCM,
+                        description = "Number of customer tags . This plugin will try to detect custom tags present on a scm repository.",
+                        enabled = true,
+                        entityType = EntityType.PROJECT,
+                        key = "scm-customer-tag-numbers",
+                        name = "Number of customer tags.",
+                        severity = Severity.INFO),
+                @EventTypeDef(
+                        providerType = ProviderType.SCM,
+                        description = "Number of customer branches . This plugin will try to detect the number of customer branches present on a scm repository.",
+                        enabled = true,
+                        entityType = EntityType.PROJECT,
+                        key = "scm-customer-branch-numbers",
+                        name = "Number of customer branches.",
+                        severity = Severity.INFO),
+                @EventTypeDef(
+                        providerType = ProviderType.SCM,
+                        description = "Number of branches . This plugin will try to detect the number of branches present on a scm repository.",
+                        enabled = true,
+                        entityType = EntityType.PROJECT,
+                        key = "scm-branch-numbers",
+                        name = "Number of branches.",
+                        severity = Severity.INFO) },
         icon = "scm",
         name = ScmRepositoryService.NAME,
         type = ProviderType.NEWS,
@@ -152,11 +158,21 @@ public final class ScmRepositoryService implements IScmRepositoryService
     
     
     @Override
+    public boolean existScmKey(final String _key) {
+    
+    
+        return findByName(_key) != null;
+    }
+    
+    
+    @Override
     public ScmRepositoryDefinition findByName(final String _feedName) {
     
     
         for (final ScmRepositoryDefinition feed : getDAO().selectAll()) {
-            if (_feedName.equals(feed.getKey())) { return feed; }
+            if (_feedName.equals(feed.getKey())) {
+                return feed;
+            }
         }
         return null;
         
@@ -299,8 +315,9 @@ public final class ScmRepositoryService implements IScmRepositoryService
     
     
         if (!getDAO().exists(_gitRepository)
-                && !getDAO().find(new ScmKeySearchFilter(_gitRepository)).isEmpty()) { throw new IllegalArgumentException(
-                "The key must be unique for a scm repository."); }
+                && !getDAO().find(new ScmKeySearchFilter(_gitRepository)).isEmpty()) {
+            throw new IllegalArgumentException("The key must be unique for a scm repository.");
+        }
         getDAO().saveOrUpdate(_gitRepository);
         
     }

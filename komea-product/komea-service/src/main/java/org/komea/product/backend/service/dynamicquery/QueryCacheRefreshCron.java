@@ -13,6 +13,7 @@ import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
 import org.komea.product.backend.api.IDynamicQueryCacheService;
 import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.database.dto.KpiResult;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -25,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * @author sleroy
  */
+@DisallowConcurrentExecution
 public class QueryCacheRefreshCron implements Job
 {
     

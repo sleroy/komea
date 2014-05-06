@@ -12,6 +12,7 @@ import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.komea.product.plugins.scm.api.IScmRepositoryProxyFactories;
 import org.komea.product.plugins.scm.api.IScmRepositoryService;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -27,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  * @author sleroy
  */
+@DisallowConcurrentExecution
 public class ScmScheduleCronJob implements Job
 {
     

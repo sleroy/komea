@@ -346,7 +346,7 @@ public final class KPIValueService implements IKpiValueService
         
         measureService.storeMeasure(measure);
         final int purgeHistory = measureService.buildHistoryPurgeAction(findKPI).purgeHistory();
-        LOGGER.info("Purge history : {} items", purgeHistory);
+        LOGGER.trace("Purge history : {} items", purgeHistory);
     }
     
 }

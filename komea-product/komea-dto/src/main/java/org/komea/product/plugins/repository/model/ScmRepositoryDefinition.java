@@ -182,7 +182,9 @@ public class ScmRepositoryDefinition implements Serializable, IHasId
     public DateTime getLastDateCheckoutOrNull() {
     
     
-        if (lastDateCheckout == null) { return null; }
+        if (lastDateCheckout == null) {
+            return null;
+        }
         return new DateTime(lastDateCheckout);
     }
     
@@ -214,9 +216,13 @@ public class ScmRepositoryDefinition implements Serializable, IHasId
     public String getProjectAssociated(final String _branchName) {
     
     
-        if (!Strings.isNullOrEmpty(getProjectForRepository())) { return getProjectForRepository(); }
+        if (!Strings.isNullOrEmpty(getProjectForRepository())) {
+            return getProjectForRepository();
+        }
         final BranchDefinition branchDefinition = getBranchDefinition(_branchName);
-        if (branchDefinition == null) { return ""; }
+        if (branchDefinition == null) {
+            return "";
+        }
         return branchDefinition.getProject();
     }
     
@@ -297,7 +303,9 @@ public class ScmRepositoryDefinition implements Serializable, IHasId
     
     
         for (final String regularExp : customerRegExps) {
-            if (Pattern.matches(regularExp, _branchName)) { return true; }
+            if (Pattern.matches(regularExp, _branchName)) {
+                return true;
+            }
         }
         return false;
     }

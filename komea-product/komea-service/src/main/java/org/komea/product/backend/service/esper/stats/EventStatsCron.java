@@ -9,6 +9,7 @@ package org.komea.product.backend.service.esper.stats;
 import org.joda.time.DateTime;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
 import org.komea.product.database.model.Measure;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * @author sleroy
  */
+@DisallowConcurrentExecution
 public class EventStatsCron implements Job
 {
     

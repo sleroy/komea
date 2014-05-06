@@ -103,11 +103,11 @@ public class ScmCronJob implements Job
             
             LOGGER.info("Analysis of the repository : {} {}", repo.getRepoName(), repo.getUrl());
             analysisService.analysis(newProxy);
+            repo.setLastDateCheckout(newTime);
         } catch (final Exception e) {
             LOGGER.error(e.getMessage(), e);
             scmExecutionStatus.setLastError(e);
         } finally {
-            repo.setLastDateCheckout(newTime);
             repo.setLastExecutionStatus(scmExecutionStatus);
             repository.saveOrUpdate(repo);
             IOUtils.closeQuietly(newProxy);
