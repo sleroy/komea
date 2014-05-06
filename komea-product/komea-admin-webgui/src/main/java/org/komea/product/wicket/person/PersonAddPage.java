@@ -81,32 +81,7 @@ public class PersonAddPage extends LayoutPage {
         personForm.add(new Label("legend", message));
         add(personForm);
 
-        final SelectDialog dialogPersonGroup = new SelectDialog("dialogGroup", getString("memberpage.save.form.field.tooltip.memberof"), (List<IHasKey>) (List<?>) personGroupService.selectAll(),_person.getIdPersonGroup()) {
 
-            @Override
-            protected void onSubmit(AjaxRequestTarget target) {
-                IHasKey selectedPersonGroup = getSelected();
-                if (selectedPersonGroup != null) {
-                    personForm.getPerson().setIdPersonGroup(selectedPersonGroup.getId());
-                    personForm.getGroupName().setName(selectedPersonGroup.getDisplayName());
-                } else {
-                    personForm.getPerson().setIdPersonGroup(null);
-                    personForm.getGroupName().setName("");
-                }
-                personForm.getGroupField().clearInput();
-                target.add(personForm.getGroupField());
-            }
-
-        };
-        add(dialogPersonGroup);
-        personForm.add(new AjaxLinkLayout<LayoutPage>("btnGroup", this) {
-
-            @Override
-            public void onClick(final AjaxRequestTarget art) {
-                dialogPersonGroup.open(art);
-
-            }
-        });
 
     }
 
