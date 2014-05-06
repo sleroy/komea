@@ -63,14 +63,14 @@ public class EntityServiceITest extends AbstractSpringDBunitIntegrationTest
     
     
         final List<ProjectDto> projectList = projectService.getAllProjectsAsDtos();
-        Assert.assertEquals(3, projectList.size());
+        Assert.assertEquals(2, projectList.size());
     }
     
     
     @Test
     @ExpectedDatabase(
-        value = "database_insertProject.xml",
-        assertionMode = DatabaseAssertionMode.NON_STRICT)
+            value = "database_insertProject.xml",
+            assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void testInsertProject() {
     
     

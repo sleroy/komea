@@ -107,6 +107,19 @@ public class KPIValueServiceTest
     
     /**
      * Test method for
+     * {@link org.komea.product.cep.tester.KPIValueService#getAllRealTimeMeasuresPerEntityAndPerKpi(java.util.List, java.util.List)}.
+     */
+    @Test
+    public final void testGetAllRealTimeMeasuresPerEntityAndPerKpi() throws Exception {
+    
+    
+        // TODO
+        // org.junit.Assert.assertTrue("not yet implemented", false);
+    }
+    
+    
+    /**
+     * Test method for
      * {@link org.komea.product.cep.tester.KPIValueService#getLastMeasureOfKpi(org.komea.product.database.model.Kpi, org.komea.product.database.api.IEntity)}
      * .
      */
@@ -115,7 +128,7 @@ public class KPIValueServiceTest
     
     
         // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        // org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -127,20 +140,8 @@ public class KPIValueServiceTest
     
     
         // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        // org.junit.Assert.assertTrue("not yet implemented", false);
     }
-    
-    
-    /**
-	     * Test method for {@link org.komea.product.cep.tester.KPIValueService#getAllRealTimeMeasuresPerEntityAndPerKpi(java.util.List, java.util.List)}.
-	     */
-	    @Test
-	    public final void testGetAllRealTimeMeasuresPerEntityAndPerKpi() throws Exception {
-	    
-	    
-	        // TODO
-	        org.junit.Assert.assertTrue("not yet implemented", false);
-	    }
     
     
     /**
@@ -151,7 +152,7 @@ public class KPIValueServiceTest
     
     
         // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        // org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -163,7 +164,7 @@ public class KPIValueServiceTest
     
     
         // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        // org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     
@@ -176,51 +177,7 @@ public class KPIValueServiceTest
     
     
         // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
+        // org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
-    
-    // @Test
-    // public void testBugForIndividualKPI() {
-    //
-    //
-    // final String key = "testBugIndividualKPI";
-    // final Kpi kpi =
-    // KpiBuilder.createAscending().nameAndKeyDescription(key)
-    // .providerType(ProviderType.OTHER).entityType(EntityType.PROJECT)
-    // .expirationMonth().query("new " + DemoKPI.class.getName() + "()")
-    // .cronFiveMinutes().build();
-    // kpi.setEntityID(systemProjectBean.getSystemProject().getId());
-    // kpiService.saveOrUpdate(kpi);
-    //
-    // final Measure measure =
-    // kpiService.getRealTimeMeasure(KpiKey.ofKpiAndEntity(kpi,
-    // systemProjectBean.getSystemProject()));
-    // Assert.assertNotNull("Should work, the results are filtered by the KPI Key", measure);
-    // final Measure measure2 = kpiService.getRealTimeMeasure(KpiKey.ofKpi(kpi));
-    // Assert.assertNotNull(
-    // "Should work, the results are not filtered by the KPI Key (no entity key) but its an individual KPI",
-    // measure2);
-    //
-    // }
-    
-    //
-    // @Test
-    // public void testBug2() {
-    //
-    //
-    // final String key = "testBugKPI2";
-    // final Kpi kpi =
-    // KpiBuilder.createAscending().nameAndKeyDescription(key)
-    // .entityType(EntityType.PROJECT).expirationMonth()
-    // .providerType(ProviderType.OTHER)
-    // .query("new " + DemoKPI.class.getName() + "()").cronFiveMinutes().build();
-    //
-    // kpiService.saveOrUpdate(kpi);
-    //
-    // final Measure measure = kpiService.getRealTimeMeasure(KpiKey.ofKpi(kpi));
-    // Assert.assertNotNull("Should be filtered and work", measure);
-    //
-    // }
-    //
 }

@@ -66,26 +66,7 @@ public class AdminActionServicesTest
     
         final TestAdminAction adminAction = new TestAdminAction();
         adminActionServices.registerAdminAction(adminAction);
-        Assert.assertEquals(AdminActionServices.ACTION_FINISHED_WITH_SUCCESS,
-                adminActionServices.executeAction(adminAction));
-    }
-    
-    
-    /**
-     * Test method for
-     * {@link org.komea.product.backend.service.AdminActionServices#executeAction(org.komea.product.backend.service.IAdminAction)}.
-     */
-    @Test
-    public final void testExecuteFailedAction() throws Exception {
-    
-    
-        //
-        // final IAdminAction adminAction = mock(IAdminAction.class);
-        // final IllegalArgumentException illegalArgumentException = new IllegalArgumentException();
-        // Mockito.doThrow(adminAction).doThrow(adminAction.execute());
-        // adminActionServices.executeAction(adminAction);
-        
-        
+        Assert.assertTrue(adminActionServices.executeAction(adminAction).isEmpty());
     }
     
     
