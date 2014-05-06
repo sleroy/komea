@@ -181,6 +181,13 @@ public class CronRegistryService implements ICronRegistryService, ApplicationCon
     }
     
     
+    public SchedulerFactory getSchedulerFactory() {
+    
+    
+        return schedulerFactory;
+    }
+    
+    
     // For more informations : http://quartz-scheduler.org/documentation/quartz-2.x/tutorials/tutorial-lesson-02
     /**
      * Method registerCronTask.
@@ -205,7 +212,7 @@ public class CronRegistryService implements ICronRegistryService, ApplicationCon
     
         try {
             
-            
+            LOGGER.info("Registering new CRON {}", _cronName);
             final JobDetail jobDetail =
                     JobBuilder.newJob(_runnable).withIdentity(_cronName).withDescription(_cronName)
                             .usingJobData(_properties).build();
@@ -271,6 +278,13 @@ public class CronRegistryService implements ICronRegistryService, ApplicationCon
     }
     
     
+    public void setSchedulerFactory(final SchedulerFactory _schedulerFactory) {
+    
+    
+        schedulerFactory = _schedulerFactory;
+    }
+    
+    
     /**
      * Method updateCronFrequency.
      * 
@@ -303,20 +317,6 @@ public class CronRegistryService implements ICronRegistryService, ApplicationCon
         }
         
         
-    }
-
-
-    public SchedulerFactory getSchedulerFactory() {
-    
-    
-        return schedulerFactory;
-    }
-
-
-    public void setSchedulerFactory(SchedulerFactory _schedulerFactory) {
-    
-    
-        schedulerFactory = _schedulerFactory;
     }
     
 }
