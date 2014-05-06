@@ -198,8 +198,7 @@ public final class PersonForm extends Form<Person> {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                cupdater.update();
-                target.add(cupdater.getComposant());
+
                 IHasKey selectedPersonGroup = getSelected();
                 if (selectedPersonGroup != null) {
                     person.setIdPersonGroup(selectedPersonGroup.getId());
@@ -210,7 +209,9 @@ public final class PersonForm extends Form<Person> {
                 }
                 groupField.clearInput();
                 target.add(groupField);
-                
+                cupdater.update();
+                target.add(cupdater.getComposant());
+
             }
 
         };
