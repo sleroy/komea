@@ -1,7 +1,9 @@
 /**
  *
  */
+
 package org.komea.product.backend.service.kpi;
+
 
 import java.util.List;
 
@@ -17,6 +19,7 @@ import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
+import org.komea.product.database.model.MeasureCriteria.Criteria;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
@@ -28,77 +31,78 @@ import org.mockito.runners.MockitoJUnitRunner;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class MeasureHistoryServiceTest {
-
+    
     @Mock
-    private DAOEventRegistry daoEventRegistry;
-
+    private DAOEventRegistry      daoEventRegistry;
+    
     @Mock
-    private IEventEngineService esperEngine;
-
+    private IEventEngineService   esperEngine;
+    
     @Mock
-    private MeasureDao measureDAO;
-
+    private MeasureDao            measureDAO;
+    
     @InjectMocks
     private MeasureHistoryService measureHistoryService;
     @Mock
-    private MeasureDao requiredDAO;
-
+    private MeasureDao            requiredDAO;
+    
     /**
      * Test method for
      * {@link org.komea.product.cep.tester.MeasureHistoryService#buildHistoryPurgeAction(org.komea.product.database.model.Kpi)}.
      */
-    @Test 
+    @Test
     public final void testBuildHistoryPurgeAction() throws Exception {
-
+    
         // TODO
         // org.junit.Assert.assertTrue("not yet implemented", false);
     }
-
+    
     /**
      * Test method for
      * {@link org.komea.product.cep.tester.MeasureHistoryService#buildMeasureCriteriaFromSearchFilter(org.komea.product.database.dto.SearchMeasuresDto, org.komea.product.backend.service.history.HistoryKey)}
      * .
      */
-    @Test 
+    @Test
     public final void testBuildMeasureCriteriaFromSearchFilter() throws Exception {
-
-        // TODO
-        // org.junit.Assert.assertTrue("not yet implemented", false);
+    
+        MeasureCriteria measureCriteria = new MeasureCriteria();
+        Criteria criteria = measureCriteria.createCriteria();
+        criteria.andIdEqualTo(27);
+        measureCriteria.getOredCriteria();
     }
-
+    
     /**
      * Test method for
      * {@link org.komea.product.cep.tester.MeasureHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, int, org.komea.product.database.model.MeasureCriteria)}
      * .
      */
-    @Test 
+    @Test
     public final void testGetFilteredHistoryHistoryKeyIntMeasureCriteria() throws Exception {
-
+    
         // TODO
         // org.junit.Assert.assertTrue("not yet implemented", false);
     }
-
+    
     /**
      * Test method for
      * {@link org.komea.product.cep.tester.MeasureHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, org.komea.product.database.model.MeasureCriteria)}
      * .
      */
-    @Test 
+    @Test
     public final void testGetFilteredHistoryHistoryKeyMeasureCriteria() throws Exception {
-
+    
         // TODO
         // org.junit.Assert.assertTrue("not yet implemented", false);
     }
-
+    
     /**
      * Test method for
      * {@link org.komea.product.cep.tester.MeasureHistoryService#getHistory(org.komea.product.backend.service.history.HistoryKey)}.
      */
-    @Test 
+    @Test
     public final void testGetHistory() throws Exception {
-
-        final Kpi kpi
-                = KpiBuilder
+    
+        final Kpi kpi = KpiBuilder
                 .createAscending()
                 .providerType(ProviderType.OTHER)
                 .nameAndKeyDescription("Number of successful build per day")
@@ -106,26 +110,25 @@ public class MeasureHistoryServiceTest {
                 .expirationMonth()
                 .query("SELECT project as entity, COUNT(*) as value FROM Event.win:time(1 day) WHERE eventType.eventKey='build_complete' GROUP BY project")
                 .cronSixHours().build();
-
+        
         kpi.setId(1);
         final HistoryKey kpiKey = HistoryKey.of(kpi);
         Assert.assertFalse(kpiKey.hasEntityReference());
         final List<Measure> history = measureHistoryService.getHistory(kpiKey);
-        Mockito.verify(requiredDAO, Mockito.times(1)).selectByCriteria(
-                Matchers.any(MeasureCriteria.class));
+        Mockito.verify(requiredDAO, Mockito.times(1)).selectByCriteria(Matchers.any(MeasureCriteria.class));
         Assert.assertTrue(history.isEmpty());
     }
-
+    
     /**
      * Test method for
      * {@link org.komea.product.cep.tester.MeasureHistoryService#getMeasures(java.util.List, java.util.List, org.komea.product.database.dto.SearchMeasuresDto)}
      * .
      */
-    @Test 
+    @Test
     public final void testGetMeasures() throws Exception {
-
+    
         // TODO
         // org.junit.Assert.assertTrue("not yet implemented", false);
     }
-
+    
 }

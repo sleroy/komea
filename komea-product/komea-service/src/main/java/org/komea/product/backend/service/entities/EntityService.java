@@ -13,6 +13,7 @@ import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.service.dto.EntityKey;
+import org.komea.product.service.dto.EntityStringKey;
 import org.komea.product.service.dto.KpiKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,8 +40,35 @@ public final class EntityService implements IEntityService {
     }
     
     /**
+     * Returns the list of entities
+     *
+     * @param _entityType
+     *            the entity type
+     * @param _entityKeys
+     *            the entity keys
+     * @return the list of entities filtered by entity type and keys.
+     */
+    private List<? extends IEntity> findEntitiesByTypeAndKeys(final EntityType _entityType, final List<String> _entityKeys) {
+    
+        Validate.notNull(_entityKeys);
+        Validate.notNull(_entityType);
+        
+        switch (_entityType) {
+            case PERSON:
+                return personService.selectByKeys(_entityKeys);
+            case TEAM:
+            case DEPARTMENT:
+                return personGroupService.selectByKeys(_entityKeys);
+            case PROJECT:
+                return projectService.selectByKeys(_entityKeys);
+            default:
+                return Collections.EMPTY_LIST;
+        }
+    }
+    
+    /**
      * (non-Javadoc)
-     * 
+     *
      * @see org.komea.product.backend.service.entities.IEntityService#findEntityAssociatedToKpi(org.komea.product.service.dto.KpiKey)
      */
     @Override
@@ -53,7 +81,7 @@ public final class EntityService implements IEntityService {
     
     /**
      * (non-Javadoc)
-     * 
+     *
      * @param _entityType
      *            EntityType
      * @param _key
@@ -80,9 +108,27 @@ public final class EntityService implements IEntityService {
         
     }
     
+    public <TEntity extends IEntity> TEntity findEntityByEntityStringKey(final EntityStringKey _entityKey) {
+    
+        Validate.notNull(_entityKey);
+        switch (_entityKey.getEntityType()) {
+            case PERSON:
+                return (TEntity) personService.selectByKey(_entityKey.getKey());
+            case DEPARTMENT:
+            case TEAM:
+                return (TEntity) personGroupService.selectByKey(_entityKey.getKey());
+            case PROJECT:
+                return (TEntity) projectService.selectByKey(_entityKey.getKey());
+            default:
+                break;
+        
+        }
+        return null;
+        
+    }
     /**
      * Method getEntities.
-     * 
+     *
      * @param _entityType
      *            EntityType
      * @param _entityKeys
@@ -129,7 +175,7 @@ public final class EntityService implements IEntityService {
     
     /**
      * Method loadEntities.
-     * 
+     *
      * @param _entityType
      *            EntityType
      * @param _keys
@@ -157,7 +203,7 @@ public final class EntityService implements IEntityService {
     
     /**
      * (non-Javadoc)
-     * 
+     *
      * @param _entityType
      *            EntityType
      * @param _entityID
@@ -172,6 +218,17 @@ public final class EntityService implements IEntityService {
         final IEntity entity = findEntityByEntityKey(_entityKey);
         if (entity == null) {
             throw new EntityNotFoundException(_entityKey.getId(), _entityKey.getEntityType());
+        }
+        return entity;
+    }
+    
+    @Override
+    public IEntity getEntityOrFail(final EntityStringKey _entityKey) {
+    
+        Validate.notNull(_entityKey);
+        final IEntity entity = findEntityByEntityStringKey(_entityKey);
+        if (entity == null) {
+            throw new EntityNotFoundException(_entityKey.getKey(), _entityKey.getEntityType());
         }
         return entity;
     }
@@ -213,60 +270,6 @@ public final class EntityService implements IEntityService {
     
         final GetSubEntities getSubEntities = new GetSubEntities(_entityId, _extendedEntityType, personService, projectService);
         return getSubEntities.getSubEntities();
-    }
-    
-    /**
-     * @param _personGroupService
-     *            the personGroupService to set
-     */
-    public void setPersonGroupService(final IPersonGroupService _personGroupService) {
-    
-        personGroupService = _personGroupService;
-    }
-    
-    /**
-     * @param _personService
-     *            the personService to set
-     */
-    public void setPersonService(final IPersonService _personService) {
-    
-        personService = _personService;
-    }
-    
-    /**
-     * @param _projectService
-     *            the projectService to set
-     */
-    public void setProjectService(final IProjectService _projectService) {
-    
-        projectService = _projectService;
-    }
-    
-    /**
-     * Returns the list of entities
-     * 
-     * @param _entityType
-     *            the entity type
-     * @param _entityKeys
-     *            the entity keys
-     * @return the list of entities filtered by entity type and keys.
-     */
-    private List<? extends IEntity> findEntitiesByTypeAndKeys(final EntityType _entityType, final List<String> _entityKeys) {
-    
-        Validate.notNull(_entityKeys);
-        Validate.notNull(_entityType);
-        
-        switch (_entityType) {
-            case PERSON:
-                return personService.selectByKeys(_entityKeys);
-            case TEAM:
-            case DEPARTMENT:
-                return personGroupService.selectByKeys(_entityKeys);
-            case PROJECT:
-                return projectService.selectByKeys(_entityKeys);
-            default:
-                return Collections.EMPTY_LIST;
-        }
     }
     
 }
