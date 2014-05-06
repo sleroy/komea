@@ -142,13 +142,6 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
     
     
         Validate.notEmpty(_branchName);
-        DateTime previousTime = _previousTime;
-        if (_previousTime == null) {
-            previousTime = new DateTime();
-            previousTime.withYear(1900);
-            previousTime.withMonthOfYear(1);
-            previousTime.withDayOfMonth(1);
-        }
         final List<IScmCommit> commits = new ArrayList<IScmCommit>(100);
         RevWalk revWalk = null;
         try {
@@ -169,7 +162,7 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
              */
             for (final RevCommit commit : logcmd.call()) {
                 final DateTime dateTime = new DateTime(commit.getAuthorIdent().getWhen());
-                if (!previousTime.isBefore(dateTime)) {
+                if (!isBefore(dateTime, _previousTime)) {
                     continue;
                 }
                 
@@ -281,9 +274,6 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
     }
     
     
-    // http://stackoverflow.com/questions/12493916/getting-commit-information-from-a-revcommit-object-in-jgit
-    // http://stackoverflow.com/questions/10435377/jgit-how-to-get-branch-when-traversing-repos
-    
     /**
      * Returns the git
      * 
@@ -300,6 +290,9 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
         return git;
     }
     
+    
+    // http://stackoverflow.com/questions/12493916/getting-commit-information-from-a-revcommit-object-in-jgit
+    // http://stackoverflow.com/questions/10435377/jgit-how-to-get-branch-when-traversing-repos
     
     /**
      * @return the personService
@@ -356,6 +349,16 @@ public class GitRepositoryProxy implements IScmRepositoryProxy
     
         //
         
+    }
+    
+    
+    private boolean isBefore(final DateTime _dateTime, final DateTime _previousTime) {
+    
+    
+        if (_previousTime == null) {
+            return true;
+        }
+        return _previousTime.isBefore(_dateTime);
     }
     
     
