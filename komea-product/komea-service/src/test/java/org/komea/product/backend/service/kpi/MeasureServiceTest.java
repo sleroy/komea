@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
-import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dto.KpiResult;
@@ -31,7 +31,16 @@ public class MeasureServiceTest extends AbstractSpringDBunitIntegrationTest {
     
     //
     @Autowired
-    private IMeasureHistoryService measureService;
+    private IKpiAPI           measureService;
+    
+    @Autowired
+    private KpiLoadingService kpiLoading;
+    
+    @Before
+    public void setpUp() {
+    
+        kpiLoading.initLoadingService();
+    }
     
     public static class DemoQuery implements IDynamicDataQuery {
         

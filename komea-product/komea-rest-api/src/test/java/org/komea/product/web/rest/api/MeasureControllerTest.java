@@ -3,6 +3,7 @@ package org.komea.product.web.rest.api;
 
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import org.codehaus.jackson.JsonGenerationException;
@@ -13,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.database.enums.ExtendedEntityType;
+import org.komea.product.service.dto.HistoricalMeasureRequest;
 import org.komea.product.service.dto.HistoryStringKeyList;
 import org.komea.product.service.dto.LimitCriteria;
 import org.komea.product.service.dto.MeasureResult;
@@ -73,26 +75,33 @@ public class MeasureControllerTest {
     public void testFindMeasures() throws Exception {
     
         List<MeasureResult> measures = Lists.newArrayList();
+        MeasureResult result = new MeasureResult();
+        result.addHistoricalValue(12D, new Date());
+        measures.add(result);
         Mockito.when(service.getHistoricalMeasures(Matchers.any(HistoryStringKeyList.class), Matchers.any(LimitCriteria.class)))
                 .thenReturn(measures);
         
-        HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
-        String jsonMessage = IntegrationTestUtil.convertObjectToJSON(history);
-        String jsonMessage2 = IntegrationTestUtil.convertObjectToJSON(LimitCriteria.createDefaultLimitCriteria());
-        System.out.println(jsonMessage2);
-        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/find2")
-                .contentType(MediaType.APPLICATION_JSON).content(jsonMessage).content(jsonMessage2));
+        // HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
+        // LimitCriteria limit = LimitCriteria.createDefaultLimitCriteria();
+        HistoricalMeasureRequest request = new HistoricalMeasureRequest();
+        String jsonMessage = IntegrationTestUtil.convertObjectToJSON(request);
+        System.out.println(jsonMessage);
+        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/historic")
+                .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
         
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
         
     }
-    
     @Test
     public void testConvertJsonToLimitCriteria() throws JsonGenerationException, JsonMappingException, IOException {
     
-        String jsonMessage2 = IntegrationTestUtil.convertObjectToJSON(LimitCriteria.createDefaultLimitCriteria());
-        LimitCriteria limitCriteria = IntegrationTestUtil.convertJSONToObject(jsonMessage2, LimitCriteria.class);
-        Assert.assertNotNull(limitCriteria);
+        HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
+        LimitCriteria limit = LimitCriteria.createDefaultLimitCriteria();
+        HistoricalMeasureRequest request = new HistoricalMeasureRequest(history, limit);
+        String jsonMessage = IntegrationTestUtil.convertObjectToJSON(request);
+        HistoricalMeasureRequest res = IntegrationTestUtil.convertJSONToObject(jsonMessage, HistoricalMeasureRequest.class);
+        Assert.assertNotNull(res);
+        // Assert.assertEquals(Integer.MAX_VALUE, res.getLimit().getLimitNumber().intValue());
     }
 }

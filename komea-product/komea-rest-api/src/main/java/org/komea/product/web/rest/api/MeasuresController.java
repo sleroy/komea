@@ -7,7 +7,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.apache.commons.lang.Validate;
-import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.kpi.IKpiAPI;
@@ -19,9 +18,8 @@ import org.komea.product.database.dto.SearchMeasuresDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.model.Kpi;
-import org.komea.product.service.dto.HistoryStringKeyList;
+import org.komea.product.service.dto.HistoricalMeasureRequest;
 import org.komea.product.service.dto.KpiKey;
-import org.komea.product.service.dto.LimitCriteria;
 import org.komea.product.service.dto.MeasureResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,16 +36,13 @@ import com.google.common.collect.Lists;
 @RequestMapping(value = "/measures")
 public class MeasuresController {
     
-    private static final Logger    LOGGER = LoggerFactory.getLogger(MeasuresController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MeasuresController.class);
     
     @Autowired
-    private IEntityService         entityService;
+    private IEntityService      entityService;
     
     @Autowired
-    private IKpiAPI                kpiService;
-    
-    @Autowired
-    private IMeasureHistoryService measureHistoryService;
+    private IKpiAPI             kpiService;
     
     @RequestMapping(method = RequestMethod.POST, value = "/find")
     @ResponseBody
@@ -77,13 +72,12 @@ public class MeasuresController {
         return new MeasuresDto(extendedEntityType, entities, kpis, measures);
     }
     
-    @RequestMapping(method = RequestMethod.POST, value = "/find2")
+    @RequestMapping(method = RequestMethod.POST, value = "/historic", consumes = "application/json; charset=utf-8", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public List<MeasureResult> findMeasures2(@Valid @RequestBody final HistoryStringKeyList _historyKeys,
-            @RequestBody final LimitCriteria _limit) {
+    public List<MeasureResult> findHistoricalMeasure(@RequestBody final HistoricalMeasureRequest _request) {
     
         LOGGER.debug("call rest method /measures/find2/ with body: ");
-        return measureHistoryService.getHistoricalMeasures(_historyKeys, _limit);
+        return kpiService.getHistoricalMeasures(_request.getHistoryKeyList(), _request.getLimit());
     }
     
     /**

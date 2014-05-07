@@ -31,7 +31,6 @@ import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.database.model.MeasureCriteria.Criteria;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.service.dto.EntityStringKey;
-import org.komea.product.service.dto.HistoricalValue;
 import org.komea.product.service.dto.HistoryStringKey;
 import org.komea.product.service.dto.HistoryStringKeyList;
 import org.komea.product.service.dto.KpiKey;
@@ -324,7 +323,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
         List<Measure> measures = getFilteredHistory(historyKey, _limit.getLimitNumber(), measureCriteria, criteria);
         
         for (Measure measure : measures) {
-            measureResult.addHistoricalValue(new HistoricalValue(measure.getValue(), measure.getDate()));
+            measureResult.addHistoricalValue(measure.getValue(), measure.getDate());
         }
         measures.add(kpiValueService.getRealTimeMeasure(convertTKpiKey(_historyKey)));
         return measureResult;

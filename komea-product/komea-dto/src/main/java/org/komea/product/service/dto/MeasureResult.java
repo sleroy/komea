@@ -2,6 +2,7 @@
 package org.komea.product.service.dto;
 
 
+import java.util.Date;
 import java.util.List;
 
 import org.komea.product.database.dto.BaseEntityDto;
@@ -30,6 +31,11 @@ public class MeasureResult {
     public boolean addHistoricalValue(final HistoricalValue _e) {
     
         return historicalValues.add(_e);
+    }
+    
+    public boolean addHistoricalValue(final Double _value, final Date _date) {
+    
+        return historicalValues.add(new HistoricalValue(_value, _date));
     }
     
     public BaseEntityDto getEntity() {
