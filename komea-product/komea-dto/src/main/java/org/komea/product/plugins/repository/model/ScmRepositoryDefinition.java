@@ -81,7 +81,7 @@ public class ScmRepositoryDefinition implements Serializable, IHasId
     private String                              key;
     
     
-    private Date                                lastDateCheckout;
+    private Date                                lastDateCheckout     = new Date();
     
     
     private ScmExecutionStatus                  lastExecutionStatus;
