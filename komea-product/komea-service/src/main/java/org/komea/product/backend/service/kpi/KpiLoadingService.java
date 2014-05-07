@@ -11,7 +11,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.api.IKPIService;
-import org.komea.product.backend.api.IKpiQueryRegisterService;
+import org.komea.product.backend.api.IKpiQueryService;
 import org.komea.product.database.model.Kpi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ public class KpiLoadingService
     
     
     @Autowired
-    private IKpiQueryRegisterService kpiRegisterService;
+    private IKpiQueryService kpiRegisterService;
     
     
     @Autowired
@@ -47,7 +47,7 @@ public class KpiLoadingService
     /**
      * @return the kpiRegisterService
      */
-    public IKpiQueryRegisterService getKpiRegisterService() {
+    public IKpiQueryService getKpiRegisterService() {
     
     
         return kpiRegisterService;
@@ -83,7 +83,7 @@ public class KpiLoadingService
      * @param _kpiRegisterService
      *            the kpiRegisterService to set
      */
-    public void setKpiRegisterService(final IKpiQueryRegisterService _kpiRegisterService) {
+    public void setKpiRegisterService(final IKpiQueryService _kpiRegisterService) {
     
     
         kpiRegisterService = _kpiRegisterService;

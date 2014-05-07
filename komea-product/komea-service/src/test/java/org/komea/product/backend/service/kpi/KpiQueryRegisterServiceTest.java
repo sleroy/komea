@@ -8,14 +8,25 @@ package org.komea.product.backend.service.kpi;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.komea.eventory.api.engine.ICEPQueryImplementation;
+import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
+import org.komea.product.backend.api.IDynamicQueryCacheService;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.service.cron.ICronRegistryService;
-import org.komea.product.backend.service.entities.IEntityService;
-import org.komea.product.database.dao.KpiDao;
-import org.komea.product.database.dao.ProjectDao;
+import org.komea.product.backend.api.IQueryDefinition;
+import org.komea.product.backend.service.ISpringService;
+import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
+import org.komea.product.database.model.Kpi;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.junit.Assert.assertEquals;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 
@@ -28,64 +39,62 @@ public class KpiQueryRegisterServiceTest
     
     
     @Mock
-    private ICronRegistryService    cronRegistry;
+    private IDynamicDataQueryRegisterService dynamicDataQueryRegisterService;
     
     
     @Mock
-    private IEntityService          entityService;
+    private IDynamicQueryCacheService        dynamicQueryCacheService;
     
     
     @Mock
-    private IEventEngineService     esperEngine;
+    private IEventEngineService              esperEngine;
     
     
     @InjectMocks
-    private KpiQueryRegisterService kpiQueryRegisterService;
-    
-    
+    private KpiQueryRegisterService          kpiQueryRegisterService;
     @Mock
-    private ProjectDao              projectDao;
-    @Mock
-    private KpiDao                  requiredDAO;
+    private ISpringService                   springService;
     
     
     
     /**
      * Test method for
-     * {@link org.komea.product.cep.tester.KpiQueryRegisterService#createOrUpdateQueryFromKpi(org.komea.product.database.model.Kpi)} .
+     * {@link org.komea.product.backend.service.kpi.KpiQueryRegisterService#registerQuery(org.komea.product.database.model.Kpi, java.lang.Object)}
+     * .
      */
     @Test
-    public final void testCreateOrUpdateQueryFromKpi() throws Exception {
+    public void testRegisterCEPQuery() throws Exception {
     
     
-        // TODO
-        // org.junit.Assert.assertTrue("not yet implemented", false);
+        final Kpi kpi = new Kpi();
+        final ICEPQueryImplementation mock = mock(ICEPQueryImplementation.class);
+        kpiQueryRegisterService.registerQuery(kpi, mock);
+        final ArgumentCaptor<IQueryDefinition> argumentCaptor =
+                ArgumentCaptor.forClass(IQueryDefinition.class);
+        verify(esperEngine, times(1)).createOrUpdateQuery(argumentCaptor.capture());
+        assertEquals(kpi.computeKPIEsperKey(), argumentCaptor.getValue().getQueryName());
+        
     }
     
     
     /**
      * Test method for
-     * {@link org.komea.product.cep.tester.KpiQueryRegisterService#evaluateFormulaAndRegisterQuery(org.komea.product.database.model.Kpi)}.
+     * {@link org.komea.product.backend.service.kpi.KpiQueryRegisterService#registerQuery(org.komea.product.database.model.Kpi, java.lang.Object)}
+     * .
      */
     @Test
-    public final void testEvaluateFormulaAndRegisterQuery() throws Exception {
+    public void testRegisterDynamicQuery() throws Exception {
     
     
-        // TODO
-        // org.junit.Assert.assertTrue("not yet implemented", false);
+        final Kpi kpi = new Kpi();
+        final IDynamicDataQuery mock = mock(IDynamicDataQuery.class);
+        when(dynamicQueryCacheService.addCacheOnDynamicQuery(kpi.computeKPIEsperKey(), mock))
+                .thenReturn(mock);
+        kpiQueryRegisterService.registerQuery(kpi, mock);
+        verify(dynamicDataQueryRegisterService, times(1)).registerQuery(kpi.computeKPIEsperKey(),
+                mock);
+        verify(dynamicQueryCacheService, times(1)).addCacheOnDynamicQuery(kpi.computeKPIEsperKey(),
+                mock);
+        
     }
-    
-    
-    /**
-     * Test method for
-     * {@link org.komea.product.cep.tester.KpiQueryRegisterService#getQueryValueFromKpi(org.komea.product.database.model.Kpi)}.
-     */
-    @Test
-    public final void testGetQueryValueFromKpi() throws Exception {
-    
-    
-        // TODO
-        // org.junit.Assert.assertTrue("not yet implemented", false);
-    }
-    
 }

@@ -13,7 +13,7 @@ import java.util.Set;
 import org.apache.commons.lang3.Validate;
 import org.komea.product.backend.api.IHistoryService;
 import org.komea.product.backend.api.IKPIService;
-import org.komea.product.backend.api.IKpiQueryRegisterService;
+import org.komea.product.backend.api.IKpiQueryService;
 import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.api.exceptions.KpiAlreadyExistingException;
@@ -70,7 +70,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     private IEntityService           entityService;
     
     @Autowired
-    private IKpiQueryRegisterService kpiQueryRegistry;
+    private IKpiQueryService kpiQueryRegistry;
     
     @Autowired
     private IKpiValueService         kpiValueService;
@@ -202,7 +202,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     }
     
     
-    public IKpiQueryRegisterService getKpiQueryRegistry() {
+    public IKpiQueryService getKpiQueryRegistry() {
     
     
         return kpiQueryRegistry;
@@ -389,7 +389,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     }
     
     
-    public void setKpiQueryRegistry(final IKpiQueryRegisterService _kpiQueryRegistry) {
+    public void setKpiQueryRegistry(final IKpiQueryService _kpiQueryRegistry) {
     
     
         kpiQueryRegistry = _kpiQueryRegistry;

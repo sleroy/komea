@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 import org.apache.commons.lang.Validate;
 import org.joda.time.DateTime;
 import org.komea.product.backend.api.IHistoryService;
-import org.komea.product.backend.api.IKpiQueryRegisterService;
+import org.komea.product.backend.api.IKpiQueryService;
 import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.criterias.FindKpiOrFail;
@@ -57,7 +57,7 @@ public final class KPIValueService implements IKpiValueService
     private KpiDao                   kpiDAO;
     
     @Autowired
-    private IKpiQueryRegisterService kpiQueryRegistry;
+    private IKpiQueryService kpiQueryRegistry;
     
     @Autowired
     private IMeasureHistoryService   measureService;
@@ -137,7 +137,7 @@ public final class KPIValueService implements IKpiValueService
     }
     
     
-    public IKpiQueryRegisterService getKpiQueryRegistry() {
+    public IKpiQueryService getKpiQueryRegistry() {
     
     
         return kpiQueryRegistry;
@@ -287,7 +287,7 @@ public final class KPIValueService implements IKpiValueService
     }
     
     
-    public void setKpiQueryRegistry(final IKpiQueryRegisterService _kpiQueryRegistry) {
+    public void setKpiQueryRegistry(final IKpiQueryService _kpiQueryRegistry) {
     
     
         kpiQueryRegistry = _kpiQueryRegistry;
