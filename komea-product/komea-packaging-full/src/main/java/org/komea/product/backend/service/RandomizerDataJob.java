@@ -12,13 +12,13 @@ import java.util.Random;
 import org.joda.time.DateTime;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.fs.IObjectStorage;
+import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.service.kpi.IKpiAPI;
 import org.komea.product.backend.service.plugins.IPluginStorageService;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.service.dto.KpiKey;
-import org.ocpsoft.prettytime.PrettyTime;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -116,7 +116,7 @@ public class RandomizerDataJob implements Job
         final List<Kpi> allKpisOfEntityType = kpiAPI.getAllKpisOfEntityType(_entityType);
         for (final IEntity entity : entityService.getEntitiesByEntityType(_entityType)) {
             for (final Kpi kpi : allKpisOfEntityType) {
-                LOGGER.debug("Generating random value for {} and {}...", kpi, entity);
+                
                 generateKpiValues(kpi, entity);
             }
         }
@@ -139,18 +139,27 @@ public class RandomizerDataJob implements Job
         }
         final DateTime dateTime = new DateTime();
         while (previousTime.isBefore(dateTime)) {
-            LOGGER.info("Generated  for the day {} and {} and {}",
-                    new PrettyTime(previousTime.toDate()), _kpi, _entity);
+            Double lastStoredValueInHistory =
+                    kpiAPI.getLastStoredValueInHistory(HistoryKey.of(_kpi, _entity));
+            
+            if (lastStoredValueInHistory == null || lastStoredValueInHistory == 0d) {
+                lastStoredValueInHistory =
+                        _kpi.getValueMin() + random.nextDouble() * interval(_kpi);
+            }
             
             
-            kpiAPI.storeValueInHistory(KpiKey.ofKpiAndEntity(_kpi, _entity), _kpi.getValueMin()
-                    + random.nextDouble() * interval(_kpi),
-                    previousTime);
+            lastStoredValueInHistory =
+                    lastStoredValueInHistory * (1.0 + (10.0 - random.nextInt(20)) / 10.0);
+            
+            lastStoredValueInHistory = Math.max(_kpi.getValueMin(), lastStoredValueInHistory);
+            lastStoredValueInHistory = Math.min(_kpi.getValueMax(), lastStoredValueInHistory);
+            kpiAPI.storeValueInHistory(KpiKey.ofKpiAndEntity(_kpi, _entity),
+                    lastStoredValueInHistory, previousTime);
             previousTime = previousTime.plusDays(1);
         }
     }
-
-
+    
+    
     private double interval(final Kpi _kpi) {
     
     
