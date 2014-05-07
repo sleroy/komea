@@ -37,7 +37,7 @@ public class RandomizerDataJob implements Job
 {
     
     
-    private static class LastDateStorage
+    public static class LastDateStorage
     {
         
         
