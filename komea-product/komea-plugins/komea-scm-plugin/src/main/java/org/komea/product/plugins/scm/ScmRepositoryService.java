@@ -11,6 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.Validate;
+import org.komea.product.backend.api.PluginAdminPages;
+import org.komea.product.backend.api.PluginMountPage;
 import org.komea.product.backend.business.IDAOObjectStorage;
 import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
@@ -22,6 +24,7 @@ import org.komea.product.database.enums.Severity;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.komea.product.plugins.scm.api.IScmRepositoryService;
 import org.komea.product.plugins.scm.cron.ScmScheduleCronJob;
+import org.komea.product.plugins.scm.userinterface.ScmPage;
 import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,6 +100,7 @@ import org.springframework.transaction.annotation.Transactional;
         name = ScmRepositoryService.NAME,
         type = ProviderType.NEWS,
         url = ScmRepositoryService.SCM_URL)
+@PluginAdminPages(@PluginMountPage(pluginName = ScmRepositoryService.NAME, page = ScmPage.class))
 @Transactional
 public final class ScmRepositoryService implements IScmRepositoryService
 {
