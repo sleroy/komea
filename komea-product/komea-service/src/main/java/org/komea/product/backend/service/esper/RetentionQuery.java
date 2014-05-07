@@ -11,9 +11,11 @@ import java.util.concurrent.TimeUnit;
 
 import org.komea.eventory.api.cache.ICacheConfiguration;
 import org.komea.eventory.cache.CacheConfigurationBuilder;
+import org.komea.eventory.filter.EventFilterBuilder;
 import org.komea.eventory.query.CEPQueryImplementation;
 import org.komea.eventory.query.FilterDefinition;
 import org.komea.product.cep.filter.EventSeverityFilter;
+import org.komea.product.cep.filter.OnlyEventFilter;
 import org.komea.product.database.enums.RetentionPeriod;
 import org.komea.product.database.enums.Severity;
 
@@ -86,9 +88,13 @@ public class RetentionQuery extends CEPQueryImplementation
         retentionTime = _retentionTime;
         setParameters(new HashMap<String, Object>());
         setFormula(new NoKpiResultFormula());
-        addFilterDefinition(FilterDefinition.create()
+        
+        addFilterDefinition(FilterDefinition
+                .create()
                 .setCacheConfiguration(buildCacheRetention(retentionTime))
-                .setFilter(new EventSeverityFilter(severity)));
+                .setFilter(
+                        EventFilterBuilder.create().chain(new OnlyEventFilter())
+                                .chain(new EventSeverityFilter(_severity)).build()));
         
     }
 }

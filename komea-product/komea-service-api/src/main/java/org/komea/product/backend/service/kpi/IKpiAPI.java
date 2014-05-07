@@ -70,8 +70,6 @@ public interface IKpiAPI
     @Deprecated
     List<Kpi> getBaseKpisOfGroupKpiKeys(List<String> _groupKpiKeys);
     
-  
-    
     
     /**
      * Returns the list of kpis for groups.
@@ -182,6 +180,19 @@ public interface IKpiAPI
      *            the value to store
      */
     void storeValueInHistory(KpiKey _kpiKey, Double _value);
+    
+    
+    /**
+     * Stores a value in history with the given date.
+     * 
+     * @param _kpiKey
+     *            the kpi key
+     * @param _value
+     *            the value
+     * @param _actualTime
+     *            the actual time
+     */
+    void storeValueInHistory(KpiKey _kpiKey, Double _value, DateTime _actualTime);
     
     
 }

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.Validate;
+import org.joda.time.DateTime;
 import org.komea.product.backend.api.IHistoryService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.backend.api.IKpiValueService;
@@ -340,6 +341,17 @@ public final class KPIValueService implements IKpiValueService
     public void storeValueInKpiHistory(final KpiKey _kpiKey, final Number _kpiValue) {
     
     
+        storeValueInKpiHistory(_kpiKey, _kpiValue, new DateTime());
+    }
+    
+    
+    @Override
+    public void storeValueInKpiHistory(
+            final KpiKey _kpiKey,
+            final Number _kpiValue,
+            final DateTime _dateTime) {
+    
+    
         final Kpi findKPI = new FindKpiOrFail(_kpiKey, kpiDAO).find();
         final Measure measure =
                 Measure.initializeMeasure(findKPI, _kpiKey.getEntityKey(), _kpiValue.doubleValue());
@@ -348,5 +360,4 @@ public final class KPIValueService implements IKpiValueService
         final int purgeHistory = measureService.buildHistoryPurgeAction(findKPI).purgeHistory();
         LOGGER.trace("Purge history : {} items", purgeHistory);
     }
-    
 }

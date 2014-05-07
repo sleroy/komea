@@ -5,6 +5,7 @@
 package org.komea.product.backend.service.kpi;
 
 
+
 import java.util.Collection;
 import java.util.List;
 
@@ -27,12 +28,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+
 /**
  * @author sleroy
  */
 @Service
 @Transactional
-public class KpiAPIService implements IKpiAPI {
+public class KpiAPIService implements IKpiAPI
+{
+    
     
     @Autowired
     private IKpiMathService        kpiMathService;
@@ -46,6 +51,8 @@ public class KpiAPIService implements IKpiAPI {
     @Autowired
     private IMeasureHistoryService measureHistoryService;
     
+    
+    
     /*
      * (non-Javadoc)
      * @see
@@ -55,8 +62,10 @@ public class KpiAPIService implements IKpiAPI {
     @Override
     public double computeAverageFromMeasures(final List<Measure> _kpiMeasures) {
     
+    
         return kpiMathService.computeAverageFromMeasures(_kpiMeasures);
     }
+    
     
     /*
      * (non-Javadoc)
@@ -67,8 +76,10 @@ public class KpiAPIService implements IKpiAPI {
     @Override
     public double computeSumFromMeasures(final List<Measure> _kpiMeasures) {
     
+    
         return kpiMathService.computeSumFromMeasures(_kpiMeasures);
     }
+    
     
     /*
      * (non-Javadoc)
@@ -79,10 +90,12 @@ public class KpiAPIService implements IKpiAPI {
     @Override
     public List<Kpi> getAllKpisOfEntityType(final EntityType _entityType) {
     
+    
         Validate.notNull(_entityType);
         
         return kpiService.getAllKpisOfEntityType(_entityType);
     }
+    
     
     /*
      * (non-Javadoc)
@@ -93,25 +106,31 @@ public class KpiAPIService implements IKpiAPI {
     @Override
     public List<Kpi> getBaseKpisOfGroupKpiKeys(final List<String> _groupKpiKeys) {
     
+    
         Validate.notNull(_groupKpiKeys);
         return kpiService.getBaseKpisOfGroupKpiKeys(_groupKpiKeys);
     }
+    
     
     /**
      * @return the kpiMathService
      */
     public IKpiMathService getKpiMathService() {
     
+    
         return kpiMathService;
     }
+    
     
     /**
      * @return the kpiService
      */
     public IKPIService getKpiService() {
     
+    
         return kpiService;
     }
+    
     
     /*
      * (non-Javadoc)
@@ -122,8 +141,10 @@ public class KpiAPIService implements IKpiAPI {
     @Override
     public List<Kpi> getKpisForGroups(final List<Kpi> _kpis) {
     
+    
         return kpiService.getKpisForGroups(_kpis);
     }
+    
     
     /*
      * (non-Javadoc)
@@ -132,10 +153,14 @@ public class KpiAPIService implements IKpiAPI {
      * .util.List, java.util.List)
      */
     @Override
-    public Collection<? extends Kpi> getKpisOfGroupKpiKeys(final List<String> _groupKpiKeys, final List<Kpi> _baseKpis) {
+    public Collection<? extends Kpi> getKpisOfGroupKpiKeys(
+            final List<String> _groupKpiKeys,
+            final List<Kpi> _baseKpis) {
+    
     
         return kpiService.getKpisOfGroupKpiKeys(_groupKpiKeys, _baseKpis);
     }
+    
     
     /*
      * (non-Javadoc)
@@ -146,8 +171,10 @@ public class KpiAPIService implements IKpiAPI {
     @Override
     public KpiResult getKpiValues(final String _kpiName) {
     
+    
         return kpiValueService.getRealTimeValue(_kpiName);
     }
+    
     
     /*
      * (non-Javadoc)
@@ -158,16 +185,20 @@ public class KpiAPIService implements IKpiAPI {
     @Override
     public KpiResult getKpiValuesAverageOnPeriod(final String _kpiName, final DateTime _previousTime) {
     
+    
         throw new UnsupportedOperationException("Not yet implemented");
     }
+    
     
     /**
      * @return the kpiValueService
      */
     public IKpiValueService getKpiValueService() {
     
+    
         return kpiValueService;
     }
+    
     
     /*
      * (non-Javadoc)
@@ -179,7 +210,9 @@ public class KpiAPIService implements IKpiAPI {
     @Override
     public Double getLastStoredValueInHistory(final HistoryKey _key) {
     
-        final Measure lastMeasureInHistoryOfAKpi = kpiValueService.getLastMeasureInHistoryOfAKpi(_key);
+    
+        final Measure lastMeasureInHistoryOfAKpi =
+                kpiValueService.getLastMeasureInHistoryOfAKpi(_key);
         if (lastMeasureInHistoryOfAKpi != null) {
             return lastMeasureInHistoryOfAKpi.getValue();
         } else {
@@ -187,28 +220,39 @@ public class KpiAPIService implements IKpiAPI {
         }
     }
     
+    
     /**
      * @return the measureHistoryService
      */
     public IMeasureHistoryService getMeasureHistoryService() {
     
+    
         return measureHistoryService;
     }
     
+    
     @Override
-    public List<MeasureDto> getMeasures(final List<Kpi> _baseKpis, final List<? extends IEntity> _allSubEntitiesDto,
+    public List<MeasureDto> getMeasures(
+            final List<Kpi> _baseKpis,
+            final List<? extends IEntity> _allSubEntitiesDto,
             final SearchMeasuresDto _searchMeasuresDto) {
+    
     
         return measureHistoryService.getMeasures(_baseKpis, _allSubEntitiesDto, _searchMeasuresDto);
         
     }
     
+    
     @Override
-    public List<MeasureDto> getRealTimeMeasuresFromEntities(final List<Kpi> _baseKpis, final List<? extends IEntity> _subEntitiesDto) {
+    public List<MeasureDto> getRealTimeMeasuresFromEntities(
+            final List<Kpi> _baseKpis,
+            final List<? extends IEntity> _subEntitiesDto) {
+    
     
         return kpiValueService.getAllRealTimeMeasuresPerEntityAndPerKpi(_baseKpis, _subEntitiesDto);
         
     }
+    
     
     /*
      * (non-Javadoc)
@@ -221,9 +265,11 @@ public class KpiAPIService implements IKpiAPI {
     
     final List<String> _kpiKeys) {
     
+    
         Validate.notNull(_kpiKeys);
         return kpiService.selectByKeys(_kpiKeys);
     }
+    
     
     /*
      * (non-Javadoc)
@@ -232,8 +278,10 @@ public class KpiAPIService implements IKpiAPI {
     @Override
     public List<Kpi> selectAll() {
     
+    
         return kpiService.selectAll();
     }
+    
     
     /**
      * @param _kpiMathService
@@ -241,8 +289,10 @@ public class KpiAPIService implements IKpiAPI {
      */
     public void setKpiMathService(final IKpiMathService _kpiMathService) {
     
+    
         kpiMathService = _kpiMathService;
     }
+    
     
     /**
      * @param _kpiService
@@ -250,8 +300,10 @@ public class KpiAPIService implements IKpiAPI {
      */
     public void setKpiService(final IKPIService _kpiService) {
     
+    
         kpiService = _kpiService;
     }
+    
     
     /**
      * @param _kpiValueService
@@ -259,8 +311,10 @@ public class KpiAPIService implements IKpiAPI {
      */
     public void setKpiValueService(final IKpiValueService _kpiValueService) {
     
+    
         kpiValueService = _kpiValueService;
     }
+    
     
     /**
      * @param _measureHistoryService
@@ -268,8 +322,10 @@ public class KpiAPIService implements IKpiAPI {
      */
     public void setMeasureHistoryService(final IMeasureHistoryService _measureHistoryService) {
     
+    
         measureHistoryService = _measureHistoryService;
     }
+    
     
     /*
      * (non-Javadoc)
@@ -280,9 +336,24 @@ public class KpiAPIService implements IKpiAPI {
     @Override
     public void storeValueInHistory(final KpiKey _kpiKey, final Double _value) {
     
+    
         Validate.notNull(_kpiKey);
         Validate.notNull(_value);
-        kpiValueService.storeValueInKpiHistory(_kpiKey, _value);
+        storeValueInHistory(_kpiKey, _value, new DateTime());
+    }
+    
+    
+    @Override
+    public void storeValueInHistory(
+            final KpiKey _kpiKey,
+            final Double _value,
+            final DateTime _actualTime) {
+    
+    
+        Validate.notNull(_kpiKey);
+        Validate.notNull(_value);
+        kpiValueService.storeValueInKpiHistory(_kpiKey, _value, new DateTime());
+        
     }
     
 }

@@ -64,7 +64,7 @@ public class QueryCacheRefreshCron implements Job
         final List<String> queriesIterator = queryRegisterService.getQueryNames();
         for (final String queryKey : queriesIterator) {
             
-            LOGGER.info("Refreshing value for the query {}", queryKey);
+            LOGGER.debug("Refreshing value for the query {}", queryKey);
             final IDynamicDataQuery query = queryRegisterService.getQuery(queryKey);
             Validate.notNull(queryKey);
             KpiResult refreshedValue;
