@@ -22,9 +22,9 @@
                         <!--  begin here -->
                         <wicket:extend>
 
-
+  <div class="alert alert-danger" wicket:id="feedback"></div>
                             <form class="form" wicket:id="form" role="form">
-                                <div class="alert alert-danger" wicket:id="feedback"></div>
+                              
                                 <legend wicket:id="legend" ></legend>
                                 <div class="form-group">
                                     <div class="row">
@@ -62,23 +62,26 @@
                                     <div class="row">
                                         <label class="col-md-3 control-label" for="password"><wicket:message key="scm.save.form.name.password"></wicket:message></label>
                                         <div class="col-md-6">
-                                            <input id="password" name="password" type="text" class="form-control" wicket:message="placeholder:scm.save.form.placeholder.password"  wicket:id="password" />
+                                            <input id="password" name="password" type="password" class="form-control" wicket:message="placeholder:scm.save.form.placeholder.password"  wicket:id="password" />
                                         </div>
                                     </div>
-                                </div>
+                                </div>                             
                                   <div class="form-group">
                                     <div class="row">
                                         <label class="col-md-3 control-label" for="project"><wicket:message key="scm.save.form.name.project"></wicket:message></label>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <input id="project" name="project" type="text" class="form-control" wicket:message="placeholder:scm.save.form.placeholder.project" readonly="readonly"  wicket:id="project" />
+                                        </div>
+                                         <div class="col-md-3">
+                                            <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="btnProject"><wicket:message key="global.button.choose"></wicket:message></button>
                                         </div>
                                     </div>
                                 </div>
                                   <div class="form-group">
                                     <div class="row">
-                                        <label class="col-md-3 control-label" for="project"><wicket:message key="scm.save.form.name.lastdate"></wicket:message></label>
+                                        <label class="col-md-3 control-label" for="lastdate"><wicket:message key="scm.save.form.name.lastdate"></wicket:message></label>
                                         <div class="col-md-6">
-                                            <input id="project" name="project" type="text" class="form-control" wicket:message="placeholder:scm.save.form.placeholder.lastdate" readonly="readonly" wicket:id="project" />
+                                            <input id="lastdate" name="lastdate" type="text" class="form-control" wicket:message="placeholder:scm.save.form.placeholder.lastdate" readonly="readonly" wicket:id="lastdate" />
                                         </div>
                                     </div>
                                 </div>
@@ -92,6 +95,7 @@
                                     </div>
                                 </div>
                             </form>
+  <div wicket:id="dialogProject">[dialog]</div>
                         </wicket:extend>
                     </div>
                 </div>

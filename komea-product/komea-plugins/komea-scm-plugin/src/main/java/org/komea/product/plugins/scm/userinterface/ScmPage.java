@@ -39,10 +39,10 @@ public final class ScmPage extends LayoutPage {
 
         final DataTable<ScmRepositoryDefinition, String> build
                 = DataTableBuilder.<ScmRepositoryDefinition, String>newTable("table")
-                .addColumn(getString("scm.main.key"), "Address")
-                .addColumn(getString("scm.main.type"), "Login")
-                .addColumn(getString("scm.main.reponame"), "Address")
-                .addColumn(getString("scm.main.url"), "Login")
+                .addColumn(getString("scm.main.key"), "Key")
+//                .addColumn(getString("scm.main.type"), "Login")
+                .addColumn(getString("scm.main.reponame"), "RepoName")
+                .addColumn(getString("scm.main.url"), "url")
                 .withEditDeleteColumn(deleteAction, editAction)
                 .displayRows(allRepositories.size() + 10).withData(dataProvider).build();
         add(build);

@@ -19,6 +19,8 @@ import org.joda.time.DateTime;
 import org.komea.product.database.api.IHasId;
 
 import com.google.common.base.Strings;
+import org.komea.product.database.api.IHasKey;
+import org.komea.product.database.api.IKeyVisitor;
 
 
 
@@ -27,7 +29,7 @@ import com.google.common.base.Strings;
  * 
  * @author sleroy
  */
-public class ScmRepositoryDefinition implements Serializable, IHasId
+public class ScmRepositoryDefinition implements Serializable, IHasId,IHasKey
 {
     
     
@@ -468,5 +470,15 @@ public class ScmRepositoryDefinition implements Serializable, IHasId
                 + lastDateCheckout + ", password=" + password + ", projectForRepository="
                 + projectForRepository + ", repoName=" + repoName + ", type=" + type + ", url="
                 + url + ", userName=" + userName + "]";
+    }
+
+    @Override
+    public void accept(IKeyVisitor _visitor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getDisplayName() {
+        return repoName;
     }
 }
