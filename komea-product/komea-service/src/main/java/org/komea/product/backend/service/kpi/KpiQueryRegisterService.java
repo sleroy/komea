@@ -120,6 +120,16 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService
             throw new KpiProvidesInvalidFormulaException(_kpi);
         }
         final String queryName = _kpi.computeKPIEsperKey();
+        registerQuery(_kpi, queryImplementation, queryName);
+    }
+
+
+    private void registerQuery(
+            final Kpi _kpi,
+            final Object queryImplementation,
+            final String queryName) {
+    
+    
         if (queryImplementation instanceof ICEPQueryImplementation) {
             registerCEPQuery(_kpi, queryImplementation, queryName);
             

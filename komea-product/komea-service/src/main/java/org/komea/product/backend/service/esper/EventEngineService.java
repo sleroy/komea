@@ -232,8 +232,10 @@ public final class EventEngineService implements IEventEngineService
     
     
         Validate.notEmpty(_measureName);
-        final ICEPQuery statement = getQuery(_measureName);
-        if (statement == null) { throw new CEPQueryNotFoundException(_measureName); }
+        final ICEPQuery<?, ?> statement = getQuery(_measureName);
+        if (statement == null) {
+            throw new CEPQueryNotFoundException(_measureName);
+        }
         return statement;
     }
     
