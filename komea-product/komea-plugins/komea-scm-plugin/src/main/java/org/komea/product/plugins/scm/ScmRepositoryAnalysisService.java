@@ -90,12 +90,12 @@ public class ScmRepositoryAnalysisService implements IScmRepositoryAnalysisServi
     
     
         final DateTime lastDate = _newProxy.getRepositoryDefinition().getLastDateCheckoutOrNull();
-        LOGGER.info("Check for new commits on branch {} and last date {}", _branchName, lastDate);
+        LOGGER.debug("Check for new commits on branch {} and last date {}", _branchName, lastDate);
         final List<IScmCommit> allCommitsFromABranch =
                 _newProxy.getAllCommitsFromABranch(_branchName, lastDate);
-        LOGGER.info(">>>>>>> Received {} commits", allCommitsFromABranch.size());
+        LOGGER.debug(">>>>>>> Received {} commits", allCommitsFromABranch.size());
         for (final IScmCommit commit : allCommitsFromABranch) {
-            LOGGER.info("Detected new commit {} since {} lastDate {}", commit, lastDate);
+            LOGGER.trace("Detected new commit {} since {} lastDate {}", commit, lastDate);
             
             notifyEvent(_newProxy.getEventFactory().sendNewCommit(commit.getMessage(),
                     commit.getAuthor(), commit.getId()));
