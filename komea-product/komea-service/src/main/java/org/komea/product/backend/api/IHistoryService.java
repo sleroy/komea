@@ -84,6 +84,16 @@ public interface IHistoryService extends IGenericService<Measure, Integer, Measu
      */
     void storeMeasure(Measure _measure);
     
-    List<MeasureDto> getMeasures(Collection<Kpi> kpis, Collection<? extends IEntity> entities, SearchMeasuresDto searchMeasuresDto);
+    /**
+     * This method
+     * 
+     * @param kpis
+     * @param entities
+     * @param searchMeasuresDto
+     * @return
+     * @deprecated use other method IMeasureHistoryService.getMeasure()
+     */
+    @Deprecated
+    List<MeasureDto> getHistocialMeasures(Collection<Kpi> kpis, Collection<? extends IEntity> entities, SearchMeasuresDto searchMeasuresDto);
     
 }

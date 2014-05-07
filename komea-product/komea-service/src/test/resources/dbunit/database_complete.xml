@@ -147,7 +147,7 @@
       evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="27" kpiKey="BRANCH_COVERAGE(%)" name="Branch coverage(%)" description="Branch coverage(%)"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.SonarMetricKpi('branch_coverage')" cronExpression="0 0 0 /1 * ? *"
+      esperRequest="new org.komea.product.backend.service.kpi.MeasureServiceTest.DemoQuery()" cronExpression="0 0 0 /1 * ? *"
       evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="29" kpiKey="BRANCH_COVERAGE_IMPROVEMENT" name="Branch coverage improvement" description="Branch coverage improvement"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"

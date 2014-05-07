@@ -7,13 +7,17 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
 import org.apache.ibatis.session.RowBounds;
 import org.joda.time.DateTime;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IHistoryPurgeAction;
+import org.komea.product.backend.api.IKPIService;
+import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.criterias.MeasureDateComparator;
 import org.komea.product.backend.genericservice.AbstractService;
+import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.IGenericDAO;
@@ -26,11 +30,20 @@ import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.database.model.MeasureCriteria.Criteria;
 import org.komea.product.service.dto.EntityKey;
+import org.komea.product.service.dto.EntityStringKey;
+import org.komea.product.service.dto.HistoricalValue;
+import org.komea.product.service.dto.HistoryStringKey;
+import org.komea.product.service.dto.HistoryStringKeyList;
+import org.komea.product.service.dto.KpiKey;
+import org.komea.product.service.dto.LimitCriteria;
+import org.komea.product.service.dto.MeasureResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
 
 /**
  * This interface provides the functions needed to manipulate the history
@@ -42,12 +55,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public final class MeasureHistoryService extends AbstractService<Measure, Integer, MeasureCriteria> implements IMeasureHistoryService {
     
+    @Autowired
+    private IEntityService      entityService;
+    
+    @Autowired
+    private IKPIService         kpiService;
+    
+    @Autowired
+    private IKpiValueService    kpiValueService;
+    
     /**
      *
      */
     private static final String DATE_ORDER_DESC = "date DESC";
-    private static final String DATE_ORDER      = "date";
     
+    private static final String DATE_ORDER      = "date";
     private static final Logger LOGGER          = LoggerFactory.getLogger(MeasureHistoryService.class);
     
     /**
@@ -75,7 +97,6 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
         
         return measureCriteria;
     }
-    
     private static void createEntityCriteriaForMeasure(final EntityKey _entityKey, final MeasureCriteria.Criteria criteria) {
     
         switch (_entityKey.getEntityType()) {
@@ -166,6 +187,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
     
         return esperEngine;
     }
+    
     @Override
     public List<Measure> getFilteredHistory(final HistoryKey _kpiKey, final int _nbRow, final MeasureCriteria _measureCriteria) {
     
@@ -174,7 +196,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
     
     /**
      * (non-Javadoc)
-     * 
+     *
      * @see org.komea.product.backend.api.IHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey, int,
      *      org.komea.product.database.model.MeasureCriteria, org.komea.product.database.model.MeasureCriteria.Criteria)
      */
@@ -192,7 +214,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
     
     /**
      * (non-Javadoc)
-     * 
+     *
      * @see org.komea.product.backend.api.IHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey,
      *      org.komea.product.database.model.MeasureCriteria)
      */
@@ -202,10 +224,9 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
         return getFilteredHistory(_historyKey, _measureCriteria, _measureCriteria.createCriteria());
         
     }
-    
     /**
      * (non-Javadoc)
-     * 
+     *
      * @see org.komea.product.backend.api.IHistoryService#getFilteredHistory(org.komea.product.backend.service.history.HistoryKey,
      *      org.komea.product.database.model.MeasureCriteria, org.komea.product.database.model.MeasureCriteria.Criteria)
      */
@@ -219,7 +240,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
     
     /**
      * (non-Javadoc)
-     * 
+     *
      * @see org.komea.product.backend.api.IHistoryService#getHistory(org.komea.product.backend.service.history.HistoryKey)
      */
     @Override
@@ -227,6 +248,46 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
     
         final MeasureCriteria measureCriteria = new MeasureCriteria();
         return getFilteredHistory(_kpiKey, measureCriteria);
+    }
+    
+    /**
+     * This method convert an HistoryStringKey to an HistoryKey
+     * 
+     * @param _historyStringKey
+     * @return return the historyKey
+     */
+    private HistoryKey convertToHistoryKey(final HistoryStringKey _historyStringKey) {
+    
+        EntityStringKey entityKey = EntityStringKey.of(_historyStringKey.getEntityType().getEntityType(), _historyStringKey.getEntityKey());
+        IEntity entity = entityService.findEntityByEntityStringKey(entityKey);
+        if (entity == null) {
+            return null;
+        }
+        KpiKey kpiKey = KpiKey.ofKpiNameAndEntity(_historyStringKey.getKpiKey(), entity);
+        Kpi kpi = kpiService.findKPI(kpiKey);
+        if (kpi == null) {
+            return null;
+        }
+        
+        HistoryKey historyKey = HistoryKey.of(kpi, entity);
+        return historyKey;
+    }
+    
+    /**
+     * This method convert a HistoryStingKey to KpiKey
+     * 
+     * @param _historyKey
+     * @return the KpiKey
+     */
+    private KpiKey convertTKpiKey(final HistoryStringKey _historyKey) {
+    
+        EntityStringKey entityKey = EntityStringKey.of(_historyKey.getEntityType().getEntityType(), _historyKey.getEntityKey());
+        IEntity entity = entityService.findEntityByEntityStringKey(entityKey);
+        if (entity == null) {
+            return null;
+        }
+        return KpiKey.ofKpiNameAndEntity(_historyKey.getKpiKey(), entity);
+        
     }
     
     public KpiDao getKpiDao() {
@@ -241,6 +302,33 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
         return list;
     }
     
+    @Override
+    public MeasureResult getHistoricalMeasure(final HistoryStringKey _historyKey, final LimitCriteria _limit) {
+    
+        Validate.notNull(_historyKey, "history string key can't be null");
+        Validate.notNull(_historyKey.getKpiKey(), "kpi key can't be null");
+        Validate.notNull(_historyKey.getEntityKey(), "entity key can't be null");
+        Validate.notNull(_historyKey.getEntityType(), "entity type can't be null");
+        Validate.notNull(_limit, "limit criteria can't be null");
+        
+        MeasureResult measureResult = new MeasureResult();
+        
+        HistoryKey historyKey = convertToHistoryKey(_historyKey);
+        if (historyKey == null) {
+            return measureResult;
+        }
+        
+        MeasureCriteria measureCriteria = new MeasureCriteria();
+        Criteria criteria = measureCriteria.createCriteria();
+        criteria.andDateBetween(_limit.getStartDate(), _limit.getEndDate());
+        List<Measure> measures = getFilteredHistory(historyKey, _limit.getLimitNumber(), measureCriteria, criteria);
+        
+        for (Measure measure : measures) {
+            measureResult.addHistoricalValue(new HistoricalValue(measure.getValue(), measure.getDate()));
+        }
+        measures.add(kpiValueService.getRealTimeMeasure(convertTKpiKey(_historyKey)));
+        return measureResult;
+    }
     /**
      * Method getMeasureDAO.
      *
@@ -265,10 +353,12 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
      * @see
      *      org.komea.product.backend.service.measure.IMeasureService#getMeasures
      *      (List<Kpi>, List<BaseEntityDto>, SearchMeasuresDto)
+     * @deprecated use
      */
+    @Deprecated
     @Override
     @SuppressWarnings("unchecked")
-    public List<MeasureDto> getMeasures(final Collection<Kpi> _kpis, final Collection<? extends IEntity> _entities,
+    public List<MeasureDto> getHistocialMeasures(final Collection<Kpi> _kpis, final Collection<? extends IEntity> _entities,
             final SearchMeasuresDto _searchMeasuresDto) {
     
         if (_kpis.isEmpty() || _entities.isEmpty()) {
@@ -287,6 +377,22 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
         }
         Collections.sort(measures, new MeasureDateComparator());
         return measures;
+    }
+    
+    @Override
+    public List<MeasureResult> getHistoricalMeasures(final HistoryStringKeyList _historyKeys, final LimitCriteria _limit) {
+    
+        Validate.notNull(_historyKeys, "history string key list can't be null");
+        
+        List<MeasureResult> measuresList = Lists.newArrayList();
+        HistoryStringKey historyKey;
+        for (String kpiKey : _historyKeys.getKpiKeys()) {
+            for (String entityKey : _historyKeys.getEntityKeys()) {
+                historyKey = new HistoryStringKey(kpiKey, entityKey, _historyKeys.getEntityType());
+                measuresList.add(getHistoricalMeasure(historyKey, _limit));
+            }
+        }
+        return measuresList;
     }
     
     /*

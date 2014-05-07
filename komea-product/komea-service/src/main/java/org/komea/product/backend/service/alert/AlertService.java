@@ -87,7 +87,7 @@ public class AlertService implements IAlertService {
         final Set<String> kpiKeys = idKpiMap.fillIdKpi(alertTypesOfKpiAndSeverity, kpiService);
         final SearchMeasuresDto searchMeasuresDto = createMeasureFilterOnKpiKeys(_searchAlert, extendedEntityType, kpiKeys);
         
-        final List<MeasureDto> measuresOfKpi = measureService.getMeasures(idKpiMap.values(), entities, searchMeasuresDto);
+        final List<MeasureDto> measuresOfKpi = measureService.getHistocialMeasures(idKpiMap.values(), entities, searchMeasuresDto);
         final List<KpiAlertDto> filteredActivatedAlerts = Lists.newArrayList();
         for (final KpiAlertType alertType : alertTypesOfKpiAndSeverity) {
             for (final BaseEntityDto entity : entities) {

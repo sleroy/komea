@@ -237,8 +237,7 @@ public class KpiAPIService implements IKpiAPI
             final List<? extends IEntity> _allSubEntitiesDto,
             final SearchMeasuresDto _searchMeasuresDto) {
     
-    
-        return measureHistoryService.getMeasures(_baseKpis, _allSubEntitiesDto, _searchMeasuresDto);
+        return measureHistoryService.getHistocialMeasures(_baseKpis, _allSubEntitiesDto, _searchMeasuresDto);
         
     }
     

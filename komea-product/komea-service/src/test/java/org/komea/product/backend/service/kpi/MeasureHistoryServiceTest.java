@@ -120,15 +120,15 @@ public class MeasureHistoryServiceTest {
     }
     
     /**
-     * Test method for
-     * {@link org.komea.product.cep.tester.MeasureHistoryService#getMeasures(java.util.List, java.util.List, org.komea.product.database.dto.SearchMeasuresDto)}
-     * .
-     */
-    @Test
-    public final void testGetMeasures() throws Exception {
-    
-        // TODO
-        // org.junit.Assert.assertTrue("not yet implemented", false);
-    }
+         * Test method for
+         * {@link org.komea.product.cep.tester.MeasureHistoryService#getHistocialMeasures(java.util.List, java.util.List, org.komea.product.database.dto.SearchMeasuresDto)}
+         * .
+         */
+        @Test
+        public final void testGetHistoricalMeasures() throws Exception {
+        
+            // TODO
+            // org.junit.Assert.assertTrue("not yet implemented", false);
+        }
     
 }

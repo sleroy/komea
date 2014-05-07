@@ -2,7 +2,6 @@
 package org.komea.product.web.rest.api;
 
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,14 +14,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.komea.product.database.model.PersonGroup;
 
-
-
-public class IntegrationTestUtil
-{
-    
+public class IntegrationTestUtil {
     
     public static byte[] convertObjectToFormUrlEncodedBytes(final Object object) {
-    
     
         final ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
@@ -50,19 +44,22 @@ public class IntegrationTestUtil
         return formUrlEncoded.toString().getBytes();
     }
     
-    
-    public static String convertObjectToJSON(final Object object)
-            throws JsonGenerationException, JsonMappingException, IOException {
-    
+    public static String convertObjectToJSON(final Object object) throws JsonGenerationException, JsonMappingException, IOException {
     
         final ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(object);
         
     }
     
+    public static <T> T convertJSONToObject(final String _jsonMessage, final Class<T> _returnType) throws JsonGenerationException,
+            JsonMappingException, IOException {
+    
+        final ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(_jsonMessage, _returnType);
+        
+    }
     
     public static void main(final String[] args) {
-    
     
         try {
             System.out.println(convertObjectToJSON(new ArrayList<PersonGroup>()));

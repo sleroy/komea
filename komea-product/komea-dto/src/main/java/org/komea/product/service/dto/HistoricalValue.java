@@ -1,5 +1,5 @@
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.service.dto;
 
 
 import java.util.Date;
