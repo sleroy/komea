@@ -96,7 +96,7 @@ public class ScmRepositoryAnalysisService implements IScmRepositoryAnalysisServi
         LOGGER.info(">>>>>>> Received {} commits", allCommitsFromABranch.size());
         for (final IScmCommit commit : allCommitsFromABranch) {
             LOGGER.info("Detected new commit {} since {} lastDate {}", commit, lastDate);
-            Validate.isTrue(lastDate.isBefore(commit.getCommitTime()));
+            
             notifyEvent(_newProxy.getEventFactory().sendNewCommit(commit.getMessage(),
                     commit.getAuthor(), commit.getId()));
             notifyCommit(commit);
