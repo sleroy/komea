@@ -9,7 +9,7 @@ package org.komea.product.backend.service.kpi;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.api.IKpiQueryRegisterService;
+import org.komea.product.backend.api.IKpiQueryService;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.entities.IEntityService;
@@ -43,7 +43,7 @@ public class KPIValueServiceTest
     
     
     @Mock
-    private IKpiQueryRegisterService kpiQueryRegistry;
+    private IKpiQueryService kpiQueryRegistry;
     
     
     @InjectMocks

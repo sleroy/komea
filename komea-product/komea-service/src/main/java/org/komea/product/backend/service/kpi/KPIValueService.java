@@ -9,8 +9,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.Validate;
+import org.joda.time.DateTime;
 import org.komea.product.backend.api.IHistoryService;
-import org.komea.product.backend.api.IKpiQueryRegisterService;
+import org.komea.product.backend.api.IKpiQueryService;
 import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.criterias.FindKpiOrFail;
@@ -56,7 +57,7 @@ public final class KPIValueService implements IKpiValueService
     private KpiDao                   kpiDAO;
     
     @Autowired
-    private IKpiQueryRegisterService kpiQueryRegistry;
+    private IKpiQueryService kpiQueryRegistry;
     
     @Autowired
     private IMeasureHistoryService   measureService;
@@ -136,7 +137,7 @@ public final class KPIValueService implements IKpiValueService
     }
     
     
-    public IKpiQueryRegisterService getKpiQueryRegistry() {
+    public IKpiQueryService getKpiQueryRegistry() {
     
     
         return kpiQueryRegistry;
@@ -286,7 +287,7 @@ public final class KPIValueService implements IKpiValueService
     }
     
     
-    public void setKpiQueryRegistry(final IKpiQueryRegisterService _kpiQueryRegistry) {
+    public void setKpiQueryRegistry(final IKpiQueryService _kpiQueryRegistry) {
     
     
         kpiQueryRegistry = _kpiQueryRegistry;
@@ -340,13 +341,23 @@ public final class KPIValueService implements IKpiValueService
     public void storeValueInKpiHistory(final KpiKey _kpiKey, final Number _kpiValue) {
     
     
+        storeValueInKpiHistory(_kpiKey, _kpiValue, new DateTime());
+    }
+    
+    
+    @Override
+    public void storeValueInKpiHistory(
+            final KpiKey _kpiKey,
+            final Number _kpiValue,
+            final DateTime _dateTime) {
+    
+    
         final Kpi findKPI = new FindKpiOrFail(_kpiKey, kpiDAO).find();
         final Measure measure =
                 Measure.initializeMeasure(findKPI, _kpiKey.getEntityKey(), _kpiValue.doubleValue());
         
         measureService.storeMeasure(measure);
         final int purgeHistory = measureService.buildHistoryPurgeAction(findKPI).purgeHistory();
-        LOGGER.info("Purge history : {} items", purgeHistory);
+        LOGGER.trace("Purge history : {} items", purgeHistory);
     }
-    
 }

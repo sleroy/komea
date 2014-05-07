@@ -41,23 +41,6 @@ public class ScmRepositoryAnalysisService implements IScmRepositoryAnalysisServi
     
     
     
-    /**
-     * Builds the object
-     * 
-     * @param _fetch
-     *            the rss fedd
-     * @param _lastDate
-     *            the last fetched date.
-     * @param _gitCloner
-     */
-    
-    public ScmRepositoryAnalysisService() {
-    
-    
-        super();
-    }
-    
-    
     /*
      * (non-Javadoc)
      * @see
@@ -107,10 +90,13 @@ public class ScmRepositoryAnalysisService implements IScmRepositoryAnalysisServi
     
     
         final DateTime lastDate = _newProxy.getRepositoryDefinition().getLastDateCheckoutOrNull();
+        LOGGER.debug("Check for new commits on branch {} and last date {}", _branchName, lastDate);
         final List<IScmCommit> allCommitsFromABranch =
                 _newProxy.getAllCommitsFromABranch(_branchName, lastDate);
+        LOGGER.debug(">>>>>>> Received {} commits", allCommitsFromABranch.size());
         for (final IScmCommit commit : allCommitsFromABranch) {
-            Validate.isTrue(lastDate.isBefore(commit.getCommitTime()));
+            LOGGER.trace("Detected new commit {} since {} lastDate {}", commit, lastDate);
+            
             notifyEvent(_newProxy.getEventFactory().sendNewCommit(commit.getMessage(),
                     commit.getAuthor(), commit.getId()));
             notifyCommit(commit);

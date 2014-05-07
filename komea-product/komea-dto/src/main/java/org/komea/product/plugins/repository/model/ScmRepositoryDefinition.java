@@ -19,6 +19,8 @@ import org.joda.time.DateTime;
 import org.komea.product.database.api.IHasId;
 
 import com.google.common.base.Strings;
+import org.komea.product.database.api.IHasKey;
+import org.komea.product.database.api.IKeyVisitor;
 
 
 
@@ -27,7 +29,7 @@ import com.google.common.base.Strings;
  * 
  * @author sleroy
  */
-public class ScmRepositoryDefinition implements Serializable, IHasId
+public class ScmRepositoryDefinition implements Serializable, IHasId,IHasKey
 {
     
     
@@ -81,7 +83,7 @@ public class ScmRepositoryDefinition implements Serializable, IHasId
     private String                              key;
     
     
-    private Date                                lastDateCheckout;
+    private Date                                lastDateCheckout     = new Date();
     
     
     private ScmExecutionStatus                  lastExecutionStatus;
@@ -182,7 +184,9 @@ public class ScmRepositoryDefinition implements Serializable, IHasId
     public DateTime getLastDateCheckoutOrNull() {
     
     
-        if (lastDateCheckout == null) { return null; }
+        if (lastDateCheckout == null) {
+            return null;
+        }
         return new DateTime(lastDateCheckout);
     }
     
@@ -214,9 +218,13 @@ public class ScmRepositoryDefinition implements Serializable, IHasId
     public String getProjectAssociated(final String _branchName) {
     
     
-        if (!Strings.isNullOrEmpty(getProjectForRepository())) { return getProjectForRepository(); }
+        if (!Strings.isNullOrEmpty(getProjectForRepository())) {
+            return getProjectForRepository();
+        }
         final BranchDefinition branchDefinition = getBranchDefinition(_branchName);
-        if (branchDefinition == null) { return ""; }
+        if (branchDefinition == null) {
+            return "";
+        }
         return branchDefinition.getProject();
     }
     
@@ -297,7 +305,9 @@ public class ScmRepositoryDefinition implements Serializable, IHasId
     
     
         for (final String regularExp : customerRegExps) {
-            if (Pattern.matches(regularExp, _branchName)) { return true; }
+            if (Pattern.matches(regularExp, _branchName)) {
+                return true;
+            }
         }
         return false;
     }
@@ -460,5 +470,15 @@ public class ScmRepositoryDefinition implements Serializable, IHasId
                 + lastDateCheckout + ", password=" + password + ", projectForRepository="
                 + projectForRepository + ", repoName=" + repoName + ", type=" + type + ", url="
                 + url + ", userName=" + userName + "]";
+    }
+
+    @Override
+    public void accept(IKeyVisitor _visitor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getDisplayName() {
+        return repoName;
     }
 }

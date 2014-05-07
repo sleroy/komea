@@ -8,10 +8,10 @@ package org.komea.product.backend.api;
 
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.api.IEntity;
-import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.dto.MeasureDto;
 import org.komea.product.database.model.Kpi;
@@ -31,6 +31,20 @@ public interface IKpiValueService
      * Backup the kpi values into the history.
      */
     public void backupKpiValuesIntoHistory();
+    
+    
+    /**
+     * Returns a list of measures from a list of kpi and a list of entities.
+     * 
+     * @param _kpis
+     *            the list of kpis
+     * @param _subEntitiesDto
+     *            the entities.
+     * @return the list of measures.
+     */
+    public List<MeasureDto> getAllRealTimeMeasuresPerEntityAndPerKpi(
+            List<Kpi> _kpis,
+            List<? extends IEntity> _subEntitiesDto);
     
     
     /**
@@ -55,20 +69,6 @@ public interface IKpiValueService
      * @return
      */
     public Double getMinimalValueForAKpi(Integer _kpiID);
-    
-    
-    /**
-     * Returns a list of measures from a list of kpi and a list of entities.
-     * 
-     * @param _kpis
-     *            the list of kpis
-     * @param _subEntitiesDto
-     *            the entities.
-     * @return the list of measures.
-     */
-    public List<MeasureDto> getAllRealTimeMeasuresPerEntityAndPerKpi(
-            List<Kpi> _kpis,
-            List<? extends IEntity> _subEntitiesDto);
     
     
     /**
@@ -110,6 +110,16 @@ public interface IKpiValueService
      *            the value.
      */
     public void storeValueInKpiHistory(KpiKey _kpiKey, Number _value);
+    
+    
+    /**
+     * Stores a value into the history for an entity and a given time.
+     * 
+     * @param _kpiKey
+     * @param _value
+     * @param _dateTime
+     */
+    public void storeValueInKpiHistory(KpiKey _kpiKey, Number _value, DateTime _dateTime);
     
     
     /**

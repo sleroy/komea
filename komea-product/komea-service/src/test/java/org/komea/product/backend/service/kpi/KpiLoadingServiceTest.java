@@ -11,7 +11,7 @@ import java.util.Collections;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.api.IKPIService;
-import org.komea.product.backend.api.IKpiQueryRegisterService;
+import org.komea.product.backend.api.IKpiQueryService;
 import org.komea.product.database.model.Kpi;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -37,7 +37,7 @@ public class KpiLoadingServiceTest
     
     
     @Mock
-    private IKpiQueryRegisterService kpiRegisterService;
+    private IKpiQueryService kpiRegisterService;
     @Mock
     private IKPIService              kpiService;
     

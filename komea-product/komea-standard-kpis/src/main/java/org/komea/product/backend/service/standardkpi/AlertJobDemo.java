@@ -9,6 +9,7 @@ import java.util.Random;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.alert.EventDtoBuilder;
 import org.komea.product.database.dto.EventSimpleDto;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -17,6 +18,7 @@ import org.quartz.JobExecutionException;
 
 /**
  */
+@DisallowConcurrentExecution
 public final class AlertJobDemo implements Job
 {
     

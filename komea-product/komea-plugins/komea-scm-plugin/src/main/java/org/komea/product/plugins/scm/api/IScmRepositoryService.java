@@ -3,7 +3,9 @@ package org.komea.product.plugins.scm.api;
 
 
 
+import java.io.Serializable;
 import java.util.List;
+import org.komea.product.backend.service.generic.IGenericService;
 
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 
@@ -14,8 +16,11 @@ import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
  * 
  * @author sleroy
  */
-public interface IScmRepositoryService
+public interface IScmRepositoryService extends IGenericService<ScmRepositoryDefinition, Serializable, Object> 
 {
+    
+    
+    boolean existScmKey(String _key);
     
     
     /**

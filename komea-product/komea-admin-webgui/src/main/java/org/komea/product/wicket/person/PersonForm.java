@@ -9,6 +9,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -28,9 +29,11 @@ import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.PersonRole;
 import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.utils.CustomUpdater;
 import org.komea.product.wicket.utils.DataListSelectDialogBuilder;
 import org.komea.product.wicket.utils.DialogFactory;
 import org.komea.product.wicket.utils.NameGeneric;
+import org.komea.product.wicket.utils.SelectDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.SelectBoxBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
@@ -62,6 +65,8 @@ public final class PersonForm extends Form<Person> {
     private String savPassword;
     private final UserBdd savUserBdd;
     private List<IHasKey> selectedEntity;
+    private final List<IHasKey> projectMemberList;
+    private final List<IHasKey> directProjectList;
 
     // private final TeamSelectorDialog teamDialog;
     public PersonForm(
@@ -85,8 +90,12 @@ public final class PersonForm extends Form<Person> {
         projectService = _projectService;
         personService = _personService;
         person = _compoundPropertyModel.getObject();
+
         selectedEntity = new ArrayList<IHasKey>();
         currentEntityList = new ArrayList<IHasKey>();
+        projectMemberList = new ArrayList<IHasKey>();
+        directProjectList = new ArrayList<IHasKey>();
+
         feedBack = new FeedbackPanel("feedback");
         feedBack.setOutputMarkupId(true);
         feedBack.setOutputMarkupPlaceholderTag(true);
@@ -127,18 +136,55 @@ public final class PersonForm extends Form<Person> {
 
         if (person.getId() != null) {
 
-            currentEntityList = (List) projectService.getProjectsOfAMember(person.getId());
+            directProjectList.addAll((List) projectService.getProjectsOfAMember(person.getId()));
+            Integer idPersonGroup = person.getIdPersonGroup();
+            if (idPersonGroup != null) {
+                projectMemberList.addAll(projectService.getProjectsOfPersonGroupRecursively(idPersonGroup));
+                projectMemberList.removeAll(directProjectList);
+            }
+            this.currentEntityList.addAll(directProjectList);
+            this.currentEntityList.addAll(projectMemberList);
         }
-        
-        
+
+        ListMultipleChoice<IHasKey> listUser = new ListMultipleChoice<IHasKey>("table", new PropertyModel<List<IHasKey>>(this, "selectedEntity"), currentEntityList) {
+
+            @Override
+            protected boolean isDisabled(IHasKey object, int index, String selected) {
+                if (projectMemberList.contains(object)) {
+                    return true;
+                }
+                return super.isDisabled(object, index, selected);
+            }
+
+        };
+        listUser.setChoiceRenderer(DialogFactory.getChoiceRendenerEntity());
+        listUser.setMaxRows(8);
+        listUser.setOutputMarkupId(true);
+
+        final CustomUpdater cupdater = new CustomUpdater(listUser) {
+
+            @Override
+            public void update() {
+                currentEntityList.removeAll(projectMemberList);
+                directProjectList.clear();
+                directProjectList.addAll(currentEntityList);
+                currentEntityList.clear();
+                projectMemberList.clear();
+                if (person.getIdPersonGroup() != null) {
+                    List<Project> projectsOfPersonGroupRecursively = projectService.getProjectsOfPersonGroupRecursively(person.getIdPersonGroup());
+                    projectMemberList.addAll(projectsOfPersonGroupRecursively);
+                }
+                currentEntityList.addAll(projectMemberList);
+                currentEntityList.addAll(directProjectList);
+            }
+        };
 
         DataListSelectDialogBuilder dataProject = new DataListSelectDialogBuilder();
         dataProject.setPage(this);
-        dataProject.setIdList("table");
         dataProject.setIdDialog("dialogAddPerson");
         dataProject.setIdBtnAdd("btnAddPerson");
         dataProject.setIdBtnDel("btnDelPerson");
-        dataProject.setNameFieldResult("selectedEntity");
+        dataProject.setListEntite(listUser);
         dataProject.setDisplayDialogMessage(getString("memberpage.save.form.field.tooltip.projects"));
         dataProject.setCurrentEntityList(currentEntityList);
         dataProject.setChoiceEntityList(selectedEntity);
@@ -147,6 +193,37 @@ public final class PersonForm extends Form<Person> {
 //        dataProject.addFilter(DialogFactory.getPersonWithoutPersonGroupFilter(personGroup.getId()));
         dataProject.setTooltips(getString("memberpage.form.field.multiple.member"));
         DialogFactory.addMultipleListDialog(dataProject);
+
+        final SelectDialog dialogPersonGroup = new SelectDialog("dialogGroup", getString("memberpage.save.form.field.tooltip.memberof"), (List<IHasKey>) (List<?>) prService.selectAll(), person.getIdPersonGroup()) {
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+
+                IHasKey selectedPersonGroup = getSelected();
+                if (selectedPersonGroup != null) {
+                    person.setIdPersonGroup(selectedPersonGroup.getId());
+                    groupName.setName(selectedPersonGroup.getDisplayName());
+                } else {
+                    person.setIdPersonGroup(null);
+                    groupName.setName("");
+                }
+                groupField.clearInput();
+                target.add(groupField);
+                cupdater.update();
+                target.add(cupdater.getComposant());
+
+            }
+
+        };
+        page.add(dialogPersonGroup);
+        add(new AjaxLinkLayout<LayoutPage>("btnGroup", page) {
+
+            @Override
+            public void onClick(final AjaxRequestTarget art) {
+                dialogPersonGroup.open(art);
+
+            }
+        });
 
         initClassicField();
         add(new AjaxButtonSubmit("submit"));
@@ -300,7 +377,7 @@ public final class PersonForm extends Form<Person> {
             } else {
                 person.setIdPersonRole(null);
             }
-
+            currentEntityList.removeAll(projectMemberList);
             personService.saveOrUpdatePersonAndItsProjects(person,
                     (List<Project>) (List<?>) currentEntityList);
             page.setResponsePage(new PersonPage(page.getPageParameters()));
