@@ -40,9 +40,6 @@ public class KpiQueryService implements IKpiQueryService
 {
     
     
-    /**
-     *
-     */
     private static final String              KPI_HISTORY_INTERVAL = "0 0/60 * * * ?";
     
     private static final Logger              LOGGER               =
@@ -64,7 +61,7 @@ public class KpiQueryService implements IKpiQueryService
     
     
     @Autowired
-    private IKpiQueryRegisterService          kpiQueryRegisterService;
+    private IKpiQueryRegisterService         kpiQueryRegisterService;
     
     
     
@@ -90,7 +87,7 @@ public class KpiQueryService implements IKpiQueryService
      * org.komea.product.cep.tester.IKpiQueryRegisterService#createEsperQueryFromKPI
      * (org.komea.product.database.model.Kpi)
      */
-    @Override
+    
     public void evaluateFormulaAndRegisterQuery(final Kpi _kpi) {
     
     

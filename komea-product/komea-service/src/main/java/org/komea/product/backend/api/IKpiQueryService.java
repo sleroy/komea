@@ -12,7 +12,11 @@ import org.komea.product.database.model.Kpi;
 
 
 /**
- * This interface the registry of query.
+ * This interface provides two main functionalities :
+ * <ul>
+ * <li>register a new query from a kpi and its formula</li>
+ * <li>obtain the result from a query whatever the implementation is (ICEPQuery or IDynamicQuery)</li>
+ * </ul>
  * 
  * @author sleroy
  */
@@ -28,16 +32,6 @@ public interface IKpiQueryService
      *            the kpi.
      */
     public void createOrUpdateQueryFromKpi(Kpi _kpi);
-    
-    
-    /**
-     * This methods registers in the CEP Engine a new query from a kpi.
-     * 
-     * @param _kpi
-     *            the kpi
-     * @return the query definition.
-     */
-    public void evaluateFormulaAndRegisterQuery(Kpi _kpi);
     
     
     /**
