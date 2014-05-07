@@ -75,7 +75,7 @@ public class MeasureServiceTest extends AbstractSpringDBunitIntegrationTest {
         
         // THEN the measure must have two values
         List<HistoricalValue> historicalValues = measure.getHistoricalValues();
-        Assert.assertEquals(3, historicalValues.size());
+        Assert.assertEquals(2, historicalValues.size());
         // the first value must be 35%
         Assert.assertEquals(35, historicalValues.get(1).getValue(), 0.001);
         // the seconf value must be 60%

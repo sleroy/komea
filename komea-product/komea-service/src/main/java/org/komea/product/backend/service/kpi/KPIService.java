@@ -2,7 +2,6 @@
 package org.komea.product.backend.service.kpi;
 
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,8 +21,6 @@ import org.komea.product.backend.criterias.FindKpiOrFail;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IEntityService;
-import org.komea.product.backend.service.history.HistoryKey;
-import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.HasSuccessFactorKpiDao;
 import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.KpiAlertTypeDao;
@@ -37,7 +34,6 @@ import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.database.model.KpiAlertTypeCriteria;
 import org.komea.product.database.model.KpiCriteria;
-import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.database.model.SuccessFactor;
 import org.komea.product.service.dto.KpiKey;
@@ -47,16 +43,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 /**
  */
 @Service
 @Transactional()
-public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria> implements
-        IKPIService
-{
-    
+public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria> implements IKPIService {
     
     private static final Logger      LOGGER = LoggerFactory.getLogger("kpi-service");
     
@@ -86,11 +77,8 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Autowired
     private HasSuccessFactorKpiDao   successFactorKpiDao;
     
-    
-    
     @Override
     public void deleteKpi(final Kpi kpi) {
-    
     
         final Integer idKpi = kpi.getId();
         
@@ -102,14 +90,12 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         kpiAlertTypeCriteria.createCriteria().andIdKpiEqualTo(idKpi);
         alertDao.deleteByCriteria(kpiAlertTypeCriteria);
         
-        final HasSuccessFactorKpiCriteria hasSuccessFactorKpiCriteria =
-                new HasSuccessFactorKpiCriteria();
+        final HasSuccessFactorKpiCriteria hasSuccessFactorKpiCriteria = new HasSuccessFactorKpiCriteria();
         hasSuccessFactorKpiCriteria.createCriteria().andIdKpiEqualTo(idKpi);
         successFactorKpiDao.deleteByCriteria(hasSuccessFactorKpiCriteria);
         
         delete(kpi);
     }
-    
     
     /*
      * (non-Javadoc)
@@ -118,10 +104,8 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public Kpi findKPI(final KpiKey _kpiKey) {
     
-    
         return new FindKpi(_kpiKey, requiredDAO).find();
     }
-    
     
     /**
      * Method findKPIOrFail.
@@ -134,10 +118,8 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public Kpi findKPIOrFail(final KpiKey _kpiKey) {
     
-    
         return new FindKpiOrFail(_kpiKey, requiredDAO).find();
     }
-    
     
     /*
      * (non-Javadoc)
@@ -146,17 +128,14 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public List<Kpi> getAllKpisOfEntityType(final EntityType _entityType) {
     
-    
         final KpiCriteria kpiCriteria = new KpiCriteria();
         kpiCriteria.createCriteria().andEntityTypeEqualTo(_entityType);
         return selectByCriteria(kpiCriteria);
         
     }
     
-    
     @Override
     public List<Kpi> getBaseKpisOfGroupKpiKeys(final List<String> groupKpiKeys) {
-    
     
         final Set<String> kpiKeys = new HashSet<String>(groupKpiKeys.size());
         for (final String groupKpiKey : groupKpiKeys) {
@@ -165,7 +144,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         return selectByKeys(new ArrayList<String>(kpiKeys));
     }
     
-    
     /**
      * Method getCronRegistry.
      * 
@@ -173,10 +151,8 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      */
     public ICronRegistryService getCronRegistry() {
     
-    
         return cronRegistry;
     }
-    
     
     /**
      * Method getEntityService.
@@ -185,10 +161,8 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      */
     public IEntityService getEntityService() {
     
-    
         return entityService;
     }
-    
     
     /**
      * Method getKpiDAO.
@@ -197,21 +171,16 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      */
     public KpiDao getKpiDAO() {
     
-    
         return requiredDAO;
     }
     
-    
     public IKpiQueryService getKpiQueryRegistry() {
-    
     
         return kpiQueryRegistry;
     }
     
-    
     @Override
     public List<Kpi> getKpisForGroups(final List<Kpi> simpleKpis) {
-    
     
         final List<Kpi> kpis = new ArrayList<Kpi>(simpleKpis.size() * 2);
         for (final Kpi kpi : simpleKpis) {
@@ -220,10 +189,8 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         return kpis;
     }
     
-    
     @Override
     public List<Kpi> getKpisOfGroupKpiKeys(final List<String> groupKpiKeys, final List<Kpi> kpis) {
-    
     
         final Map<String, Kpi> kpiByKeys = new HashMap<String, Kpi>(kpis.size());
         for (final Kpi kpi : kpis) {
@@ -243,23 +210,18 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         return results;
     }
     
-    
     public IKpiValueService getKpiValueService() {
-    
     
         return kpiValueService;
     }
-    
     
     /**
      * @return the measureService
      */
     public final IHistoryService getMeasureService() {
     
-    
         return measureService;
     }
-    
     
     /**
      * Project : DAO
@@ -268,10 +230,8 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      */
     public ProjectDao getProjectDao() {
     
-    
         return projectDao;
     }
-    
     
     /*
      * (non-Javadoc)
@@ -280,10 +240,8 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public IGenericDAO<Kpi, Integer, KpiCriteria> getRequiredDAO() {
     
-    
         return requiredDAO;
     }
-    
     
     /**
      * Method saveOrUpdateKpi.
@@ -295,11 +253,12 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public void saveOrUpdate(final Kpi _kpi) {
     
-    Validate.isTrue(!_kpi.isAssociatedToEntity());
+        Validate.isTrue(!_kpi.isAssociatedToEntity());
         if (_kpi.getId() == null) {
             LOGGER.debug("Saving new KPI : {}", _kpi.getKpiKey());
-            if (findKPI(KpiKey.ofKpi(_kpi)) != null) { throw new KpiAlreadyExistingException(
-                    _kpi.getKpiKey()); }
+            if (findKPI(KpiKey.ofKpi(_kpi)) != null) {
+                throw new KpiAlreadyExistingException(_kpi.getKpiKey());
+            }
             requiredDAO.insert(_kpi);
         } else {
             LOGGER.debug("KPI {} updated", _kpi.getKpiKey());
@@ -309,13 +268,8 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         kpiQueryRegistry.createOrUpdateQueryFromKpi(_kpi);
     }
     
-    
     @Override
-    public void saveOrUpdateKpi(
-            final Kpi kpi,
-            final List<KpiAlertType> alertTypes,
-            final List<SuccessFactor> successFactors) {
-    
+    public void saveOrUpdateKpi(final Kpi kpi, final List<KpiAlertType> alertTypes, final List<SuccessFactor> successFactors) {
     
         saveOrUpdate(kpi);
         final Integer idKpi = kpi.getId();
@@ -329,26 +283,21 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
             }
         }
         
-        final HasSuccessFactorKpiCriteria hasSuccessFactorKpiCriteria =
-                new HasSuccessFactorKpiCriteria();
+        final HasSuccessFactorKpiCriteria hasSuccessFactorKpiCriteria = new HasSuccessFactorKpiCriteria();
         hasSuccessFactorKpiCriteria.createCriteria().andIdKpiEqualTo(idKpi);
         successFactorKpiDao.deleteByCriteria(hasSuccessFactorKpiCriteria);
         if (successFactors != null) {
             for (final SuccessFactor successFactor : successFactors) {
-                successFactorKpiDao
-                        .insert(new HasSuccessFactorKpiKey(successFactor.getId(), idKpi));
+                successFactorKpiDao.insert(new HasSuccessFactorKpiKey(successFactor.getId(), idKpi));
             }
         }
     }
     
-    
     @Override
     public List<Kpi> selectAll() {
     
-    
         return requiredDAO.selectByCriteriaWithBLOBs(null);
     }
-    
     
     /**
      * Method setCronRegistry.
@@ -358,10 +307,8 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      */
     public void setCronRegistry(final ICronRegistryService _cronRegistry) {
     
-    
         cronRegistry = _cronRegistry;
     }
-    
     
     /**
      * Method setEntityService.
@@ -371,10 +318,8 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      */
     public void setEntityService(final IEntityService _entityService) {
     
-    
         entityService = _entityService;
     }
-    
     
     /**
      * Method setKpiDAO.
@@ -384,24 +329,18 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      */
     public void setKpiDAO(final KpiDao _kpiDAO) {
     
-    
         requiredDAO = _kpiDAO;
     }
     
-    
     public void setKpiQueryRegistry(final IKpiQueryService _kpiQueryRegistry) {
-    
     
         kpiQueryRegistry = _kpiQueryRegistry;
     }
     
-    
     public void setKpiValueService(final IKpiValueService _kpiValueService) {
-    
     
         kpiValueService = _kpiValueService;
     }
-    
     
     /**
      * @param _measureService
@@ -409,40 +348,31 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      */
     public final void setMeasureService(final IMeasureHistoryService _measureService) {
     
-    
         measureService = _measureService;
     }
     
-    
     public void setProjectDao(final ProjectDao _projectDao) {
-    
     
         projectDao = _projectDao;
     }
-    
     
     /**
      * @param _requiredDAO
      */
     public void setRequiredDAO(final KpiDao _requiredDAO) {
     
-    
         requiredDAO = _requiredDAO;
     }
     
-    
     private void updateByPrimaryKeyWithBlobs(final Kpi _kpi) {
-    
     
         final KpiCriteria kpiCriteria = new KpiCriteria();
         kpiCriteria.createCriteria().andIdEqualTo(_kpi.getId());
         requiredDAO.updateByCriteriaWithBLOBs(_kpi, kpiCriteria);
     }
     
-    
     @Override
     protected KpiCriteria createKeyCriteria(final String key) {
-    
     
         final KpiCriteria criteria = new KpiCriteria();
         criteria.createCriteria().andKpiKeyEqualTo(key);
