@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.Validate;
 import org.komea.product.backend.api.IHistoryService;
 import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.IKpiQueryService;
@@ -22,8 +21,6 @@ import org.komea.product.backend.criterias.FindKpiOrFail;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IEntityService;
-import org.komea.product.backend.service.history.HistoryKey;
-import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.HasSuccessFactorKpiDao;
 import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.KpiAlertTypeDao;
@@ -37,7 +34,6 @@ import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.database.model.KpiAlertTypeCriteria;
 import org.komea.product.database.model.KpiCriteria;
-import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.database.model.SuccessFactor;
 import org.komea.product.service.dto.KpiKey;
@@ -58,33 +54,34 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
 {
     
     
-    private static final Logger      LOGGER = LoggerFactory.getLogger("kpi-service");
+    private static final Logger    LOGGER = LoggerFactory.getLogger("kpi-service");
     
     @Autowired
-    private KpiAlertTypeDao          alertDao;
+    private KpiAlertTypeDao        alertDao;
     
     @Autowired
-    private ICronRegistryService     cronRegistry;
+    private ICronRegistryService   cronRegistry;
     
     @Autowired
-    private IEntityService           entityService;
+    private IEntityService         entityService;
     
     @Autowired
-    private IKpiQueryService kpiQueryRegistry;
+    private IKpiQueryService       kpiQueryRegistry;
     
     @Autowired
-    private IKpiValueService         kpiValueService;
+    private IKpiValueService       kpiValueService;
     
     @Autowired
-    private IMeasureHistoryService   measureService;
+    private IMeasureHistoryService measureService;
     
     @Autowired
-    private ProjectDao               projectDao;
+    private ProjectDao             projectDao;
     
     @Autowired
-    private KpiDao                   requiredDAO;
+    private KpiDao                 requiredDAO;
+    
     @Autowired
-    private HasSuccessFactorKpiDao   successFactorKpiDao;
+    private HasSuccessFactorKpiDao successFactorKpiDao;
     
     
     
@@ -295,11 +292,12 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Override
     public void saveOrUpdate(final Kpi _kpi) {
     
-    Validate.isTrue(!_kpi.isAssociatedToEntity());
+    
         if (_kpi.getId() == null) {
             LOGGER.debug("Saving new KPI : {}", _kpi.getKpiKey());
-            if (findKPI(KpiKey.ofKpi(_kpi)) != null) { throw new KpiAlreadyExistingException(
-                    _kpi.getKpiKey()); }
+            if (findKPI(KpiKey.ofKpi(_kpi)) != null) {
+                throw new KpiAlreadyExistingException(_kpi.getKpiKey());
+            }
             requiredDAO.insert(_kpi);
         } else {
             LOGGER.debug("KPI {} updated", _kpi.getKpiKey());

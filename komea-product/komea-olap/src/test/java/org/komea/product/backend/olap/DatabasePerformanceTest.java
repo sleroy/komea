@@ -64,7 +64,7 @@ public class DatabasePerformanceTest extends AbstractSpringIntegrationTestCase
         final Measure measure = new Measure();
         measure.setDateTime(_from);
         measure.setValue(_d);
-        measure.setIdProject(_idProject);
+        measure.setEntityID(_idProject);
         measure.setIdKpi(_idKpi);
         return measure;
         
@@ -131,8 +131,9 @@ public class DatabasePerformanceTest extends AbstractSpringIntegrationTestCase
     
     
         final TimeSerieOptions timeSerieOptions = new TimeSerieOptions();
-        final List map = measureDao.buildTimeSeries(KPI_BUILD, timeSerieOptions);
-        System.out.println(map);
+        timeSerieOptions.setKpiID(KPI_BUILD);
+        final List map = measureDao.buildTimeSeries(timeSerieOptions);
+        System.out.println(map.size());
         //
         
     }

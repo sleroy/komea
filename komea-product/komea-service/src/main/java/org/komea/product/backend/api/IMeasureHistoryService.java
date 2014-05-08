@@ -3,14 +3,9 @@ package org.komea.product.backend.api;
 
 
 
-import java.util.List;
-
 import org.joda.time.DateTime;
 import org.komea.product.backend.service.history.HistoryKey;
-import org.komea.product.database.dto.BaseEntityDto;
-import org.komea.product.database.dto.MeasureDto;
-import org.komea.product.database.dto.SearchMeasuresDto;
-import org.komea.product.database.model.Kpi;
+import org.komea.product.database.model.MeasureCriteria;
 
 
 
@@ -18,6 +13,15 @@ import org.komea.product.database.model.Kpi;
  */
 public interface IMeasureHistoryService extends IHistoryService
 {
+    
+    
+    /**
+     * Deletes the measure criteria.
+     * 
+     * @param _measureCriteria
+     *            the measure criteria.
+     */
+    public void deleteByCriteria(MeasureCriteria _measureCriteria);
     
     
     /**
@@ -33,18 +37,6 @@ public interface IMeasureHistoryService extends IHistoryService
      *            the date of the measure
      */
     public void storeMeasure(HistoryKey _ofKpi, Double _value, DateTime _analysisDate);
-    
-    
-    /**
-     * Builds an history purge action from a kpi.
-     * 
-     * @param _kpi
-     *            the kpi
-     * @return the history purge action.
-     */
-    IHistoryPurgeAction buildHistoryPurgeAction(Kpi _kpi);
-
-
     
     
 }

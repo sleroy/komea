@@ -2,6 +2,7 @@
 package org.komea.product.backend.service.kpi;
 
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -10,13 +11,10 @@ import java.util.List;
 import org.apache.ibatis.session.RowBounds;
 import org.joda.time.DateTime;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.api.IHistoryPurgeAction;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.criterias.MeasureDateComparator;
-import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.api.IEntity;
-import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.dto.MeasureDto;
@@ -32,6 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+
 /**
  * This interface provides the functions needed to manipulate the history
  * 
@@ -40,14 +40,19 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public final class MeasureHistoryService extends AbstractService<Measure, Integer, MeasureCriteria> implements IMeasureHistoryService {
+public final class MeasureHistoryService implements IMeasureHistoryService
+{
+    
     
     /**
      *
      */
     private static final String DATE_ORDER_DESC = "date DESC";
     
-    private static final Logger LOGGER          = LoggerFactory.getLogger(MeasureHistoryService.class);
+    private static final Logger LOGGER          = LoggerFactory
+                                                        .getLogger(MeasureHistoryService.class);
+    
+    
     
     /**
      * Build measure criteria from search filter.
@@ -58,7 +63,10 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
      *            the history key
      * @return the history key
      */
-    public static MeasureCriteria buildMeasureCriteriaFromSearchFilter(final SearchMeasuresDto searchMeasuresDto, final HistoryKey _historyK) {
+    public static MeasureCriteria buildMeasureCriteriaFromSearchFilter(
+            final SearchMeasuresDto searchMeasuresDto,
+            final HistoryKey _historyK) {
+    
     
         final MeasureCriteria measureCriteria = new MeasureCriteria();
         measureCriteria.setOrderByClause(DATE_ORDER_DESC);
@@ -75,23 +83,16 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
         return measureCriteria;
     }
     
-    private static void createEntityCriteriaForMeasure(final EntityKey _entityKey, final MeasureCriteria.Criteria criteria) {
     
-        switch (_entityKey.getEntityType()) {
-            case PERSON:
-                criteria.andIdPersonEqualTo(_entityKey.getId());
-                break;
-            case PROJECT:
-                criteria.andIdProjectEqualTo(_entityKey.getId());
-                break;
-            case TEAM:
-            case DEPARTMENT:
-                criteria.andIdPersonGroupEqualTo(_entityKey.getId());
-                break;
-            default:
-                break;
-        }
+    private static void createEntityCriteriaForMeasure(
+            final EntityKey _entityKey,
+            final MeasureCriteria.Criteria criteria) {
+    
+    
+        criteria.andEntityIDEqualTo(_entityKey.getId());
+        
     }
+    
     
     /**
      * Method initMeasureCriteria.
@@ -102,7 +103,10 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
      *            MeasureCriteria
      * @return
      */
-    private static Criteria initMeasureCriteria(final HistoryKey _kpiKey, final MeasureCriteria measureCriteria) {
+    private static Criteria initMeasureCriteria(
+            final HistoryKey _kpiKey,
+            final MeasureCriteria measureCriteria) {
+    
     
         final Criteria createCriteria = measureCriteria.createCriteria();
         createCriteria.andIdKpiEqualTo(_kpiKey.getKpiID());
@@ -113,39 +117,26 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
         
     }
     
+    
+    
     @Autowired
     private IEventEngineService esperEngine;
     
     @Autowired
-    private MeasureDao          requiredDAO;
-    
-    @Autowired
     private KpiDao              kpiDao;
     
-    /**
-     * Builds the history purge action.
-     * 
-     * @param _kpi
-     *            the kpi
-     * @return the history purge action. * @see
-     *         org.komea.product.cep.tester.IMeasureHistoryService
-     *         #buildHistoryPurgeAction(Kpi)
-     */
-    @Override
-    public IHistoryPurgeAction buildHistoryPurgeAction(final Kpi _kpi) {
+    @Autowired
+    private MeasureDao          measureDAO;
     
-        switch (_kpi.getEvictionType()) {
-            case DAYS:
-                return new HistoryPurgePerDaysAction(requiredDAO, _kpi);
-            case MONTHS:
-                return new HistoryPurgePerMonthsAction(requiredDAO, _kpi);
-            case VALUES:
-                return new HistoryPurgePerValuesAction(requiredDAO, _kpi);
-                
-        }
-        return null;
-        
+    
+    
+    @Override
+    public void deleteByCriteria(final MeasureCriteria _measureCriteria) {
+    
+    
+        measureDAO.deleteByCriteria(_measureCriteria);
     }
+    
     
     /**
      * Method getEsperEngine.
@@ -154,8 +145,10 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
      */
     public final IEventEngineService getEsperEngine() {
     
+    
         return esperEngine;
     }
+    
     
     /**
      * This method get the last n measure for a history key
@@ -172,7 +165,11 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
      *         MeasureCriteria)
      */
     @Override
-    public List<Measure> getFilteredHistory(final HistoryKey _kpiKey, final int _nbRow, final MeasureCriteria _criteria) {
+    public List<Measure> getFilteredHistory(
+            final HistoryKey _kpiKey,
+            final int _nbRow,
+            final MeasureCriteria _criteria) {
+    
     
         final RowBounds rowBounds = new RowBounds(0, _nbRow);
         final MeasureCriteria measureCriteria = new MeasureCriteria();
@@ -181,6 +178,7 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
         
         return getListOfMeasures(rowBounds, measureCriteria);
     }
+    
     
     /**
      * Method getFilteredHistory.
@@ -193,12 +191,16 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
      * @see org.komea.product.backend.api.IHistoryService#getFilteredHistory(HistoryKey, MeasureCriteria)
      */
     @Override
-    public List<Measure> getFilteredHistory(final HistoryKey _kpiKey, final MeasureCriteria measureCriteria) {
+    public List<Measure> getFilteredHistory(
+            final HistoryKey _kpiKey,
+            final MeasureCriteria measureCriteria) {
+    
     
         initMeasureCriteria(_kpiKey, measureCriteria);
         
-        return requiredDAO.selectByCriteria(measureCriteria);
+        return measureDAO.selectByCriteria(measureCriteria);
     }
+    
     
     /**
      * Returns the measures.
@@ -211,9 +213,18 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
     @Override
     public List<Measure> getHistory(final HistoryKey _kpiKey) {
     
+    
         final MeasureCriteria measureCriteria = new MeasureCriteria();
         return getFilteredHistory(_kpiKey, measureCriteria);
     }
+    
+    
+    public KpiDao getKpiDao() {
+    
+    
+        return kpiDao;
+    }
+    
     
     /**
      * Method getMeasureDAO.
@@ -222,103 +233,10 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
      */
     public final MeasureDao getMeasureDAO() {
     
-        return requiredDAO;
+    
+        return measureDAO;
     }
     
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.genericservice.AbstractService#getRequiredDAO()
-     */
-    @Override
-    public IGenericDAO<Measure, Integer, MeasureCriteria> getRequiredDAO() {
-    
-        return requiredDAO;
-    }
-    
-    /**
-     * Method setEsperEngine.
-     * 
-     * @param _esperEngine
-     *            IEventEngineService
-     */
-    public void setEsperEngine(final IEventEngineService _esperEngine) {
-    
-        esperEngine = _esperEngine;
-    }
-    
-    /**
-     * Method setMeasureDAO.
-     * 
-     * @param _measureDAO
-     *            MeasureDao
-     */
-    public void setMeasureDAO(final MeasureDao _measureDAO) {
-    
-        requiredDAO = _measureDAO;
-    }
-    
-    public void setRequiredDAO(final MeasureDao _requiredDAO) {
-    
-        requiredDAO = _requiredDAO;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.api.IMeasureHistoryService#storeMeasure(org
-     * .komea.product.service.dto.KpiKey, double,
-     * org.komea.product.service.dto.EntityKey, org.joda.time.DateTime)
-     */
-    @SuppressWarnings("boxing")
-    @Override
-    public void storeMeasure(final HistoryKey _ofKpi, final Double _value, final DateTime _analysisDate) {
-    
-        final Measure measure = Measure.initializeMeasure(_ofKpi.getKpiID(), _ofKpi.getEntityKey());
-        measure.setValue(_value);
-        measure.setDate(_analysisDate.toDate());
-        saveOrUpdate(measure);
-        
-    }
-    
-    /**
-     * Method storeMeasure.
-     * 
-     * @param _measure
-     *            Measure
-     * @see org.komea.product.backend.api.IHistoryService#storeMeasure(Measure)
-     */
-    @Override
-    public void storeMeasure(final Measure _measure) {
-    
-        LOGGER.debug("Storing new measure : {}", _measure);
-        
-        requiredDAO.insert(_measure);
-        
-    }
-    
-    private List<Measure> getListOfMeasures(final RowBounds rowBounds, final MeasureCriteria measureCriteria) {
-    
-        final List<Measure> list = requiredDAO.selectByCriteriaWithRowbounds(measureCriteria, rowBounds);
-        LOGGER.trace("Get list of measures {} {} returns {}", rowBounds, measureCriteria, list);
-        return list;
-    }
-    
-    @Override
-    protected MeasureCriteria createKeyCriteria(final String key) {
-    
-        throw new UnsupportedOperationException("Not supported.");
-    }
-    
-    public KpiDao getKpiDao() {
-    
-        return kpiDao;
-    }
-    
-    public void setKpiDao(final KpiDao kpiDao) {
-    
-        this.kpiDao = kpiDao;
-    }
     
     /**
      * Method getMeasures : obtain a list of measures for a subset of KPI and a
@@ -337,8 +255,11 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
      */
     @Override
     @SuppressWarnings("unchecked")
-    public List<MeasureDto> getMeasures(final Collection<Kpi> _kpis, final Collection<? extends IEntity> _entities,
+    public List<MeasureDto> getMeasures(
+            final Collection<Kpi> _kpis,
+            final Collection<? extends IEntity> _entities,
             final SearchMeasuresDto _searchMeasuresDto) {
+    
     
         if (_kpis.isEmpty() || _entities.isEmpty()) {
             return Collections.EMPTY_LIST;
@@ -348,20 +269,114 @@ public final class MeasureHistoryService extends AbstractService<Measure, Intege
         final List<MeasureDto> measures = new ArrayList<MeasureDto>(1000);
         for (final IEntity entity : _entities) {
             for (final Kpi kpi : _kpis) {
-                final MeasureCriteria measureCriteria = buildMeasureCriteriaFromSearchFilter(_searchMeasuresDto,
-                        HistoryKey.of(kpi.getId(), entity.getEntityKey()));
-                final List<MeasureDto> listOfMeasures = MeasureDto.convert(getListOfMeasures(rowBounds, measureCriteria), kpi.getKpiKey());
+                final MeasureCriteria measureCriteria =
+                        buildMeasureCriteriaFromSearchFilter(_searchMeasuresDto,
+                                HistoryKey.of(kpi.getId(), entity.getEntityKey()));
+                final List<MeasureDto> listOfMeasures =
+                        MeasureDto.convert(getListOfMeasures(rowBounds, measureCriteria),
+                                kpi.getKpiKey());
                 measures.addAll(listOfMeasures);
             }
         }
         Collections.sort(measures, new MeasureDateComparator());
         return measures;
     }
-
+    
+    
+    /**
+     * Method setEsperEngine.
+     * 
+     * @param _esperEngine
+     *            IEventEngineService
+     */
+    public void setEsperEngine(final IEventEngineService _esperEngine) {
+    
+    
+        esperEngine = _esperEngine;
+    }
+    
+    
+    public void setKpiDao(final KpiDao kpiDao) {
+    
+    
+        this.kpiDao = kpiDao;
+    }
+    
+    
+    public void setMeasureDAO(final MeasureDao _measureDAO) {
+    
+    
+        measureDAO = _measureDAO;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.komea.product.backend.api.IMeasureHistoryService#storeMeasure(org
+     * .komea.product.service.dto.KpiKey, double,
+     * org.komea.product.service.dto.EntityKey, org.joda.time.DateTime)
+     */
+    @SuppressWarnings("boxing")
+    @Override
+    public void storeMeasure(
+            final HistoryKey _ofKpi,
+            final Double _value,
+            final DateTime _analysisDate) {
+    
+    
+        final Measure measure =
+                Measure.initializeMeasure(_ofKpi.getKpiID(), _ofKpi.getEntityKey().getId());
+        measure.setValue(_value);
+        measure.setDate(_analysisDate.toDate());
+        measureDAO.insert(measure);
+        
+    }
+    
+    
+    /**
+     * Method storeMeasure.
+     * 
+     * @param _measure
+     *            Measure
+     * @see org.komea.product.backend.api.IHistoryService#storeMeasure(Measure)
+     */
+    @Override
+    public void storeMeasure(final Measure _measure) {
+    
+    
+        LOGGER.debug("Storing new measure : {}", _measure);
+        
+        measureDAO.insert(_measure);
+        
+    }
+    
+    
     private RowBounds buildRowBounds(final Integer limit) {
     
     
         return new RowBounds(0, limit == null ? Integer.MAX_VALUE : limit);
     }
+    
+    
+    private List<Measure> getListOfMeasures(
+            final RowBounds rowBounds,
+            final MeasureCriteria measureCriteria) {
+    
+    
+        final List<Measure> list =
+                measureDAO.selectByCriteriaWithRowbounds(measureCriteria, rowBounds);
+        LOGGER.trace("Get list of measures {} {} returns {}", rowBounds, measureCriteria, list);
+        return list;
+    }
+    
+    
+    private void saveOrUpdate(final Measure _measure) {
+    
+    
+        measureDAO.insert(_measure);
+        
+    }
+    
     
 }

@@ -23,7 +23,6 @@ import org.komea.product.database.dto.SearchMeasuresDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
-import org.komea.product.service.dto.KpiKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -334,7 +333,7 @@ public class KpiAPIService implements IKpiAPI
      * .komea.product.service.dto.KpiKey, java.lang.Double)
      */
     @Override
-    public void storeValueInHistory(final KpiKey _kpiKey, final Double _value) {
+    public void storeValueInHistory(final HistoryKey _kpiKey, final Double _value) {
     
     
         Validate.notNull(_kpiKey);
@@ -345,7 +344,7 @@ public class KpiAPIService implements IKpiAPI
     
     @Override
     public void storeValueInHistory(
-            final KpiKey _kpiKey,
+            final HistoryKey _kpiKey,
             final Double _value,
             final DateTime _actualTime) {
     

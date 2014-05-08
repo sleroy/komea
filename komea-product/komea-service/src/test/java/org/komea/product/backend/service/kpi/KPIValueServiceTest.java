@@ -157,7 +157,7 @@ public class KPIValueServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.cep.tester.KPIValueService#storeValueInHistory(org.komea.product.service.dto.KpiKey)}.
+     * Test method for {@link org.komea.product.cep.tester.KPIValueService#storeActualValueInHistory(org.komea.product.service.dto.KpiKey)}.
      */
     @Test
     public final void testStoreValueInHistory() throws Exception {

@@ -17,13 +17,6 @@ public class HistoryKey
 {
     
     
-    /**
-     * Method of.
-     * 
-     * @param _kpiID
-     *            Integer
-     * @return HistoryKey
-     */
     public static HistoryKey of(final Integer _kpiID) {
     
     
@@ -31,17 +24,6 @@ public class HistoryKey
     }
     
     
-    /**
-     * Method of.
-     * 
-     * @param _id
-     *            Integer
-     * @param _entity
-     *            EntityType
-     * @param entityID
-     *            Integer
-     * @return HistoryKey
-     */
     public static HistoryKey of(final Integer _id, final EntityKey _entityKey) {
     
     
@@ -49,17 +31,6 @@ public class HistoryKey
     }
     
     
-    /**
-     * Method of.
-     * 
-     * @param _id
-     *            Integer
-     * @param _entity
-     *            EntityType
-     * @param entityID
-     *            Integer
-     * @return HistoryKey
-     */
     public static HistoryKey of(final Integer _id, final EntityType _entity, final Integer entityID) {
     
     
@@ -67,13 +38,6 @@ public class HistoryKey
     }
     
     
-    /**
-     * Method of.
-     * 
-     * @param _kpiID
-     *            Integer
-     * @return HistoryKey
-     */
     public static HistoryKey of(final Kpi _kpi) {
     
     
@@ -81,17 +45,13 @@ public class HistoryKey
     }
     
     
-    /**
-     * Method of.
-     * 
-     * @param _kpi
-     *            Kpi
-     * @param _entity
-     *            EntityType
-     * @param entityID
-     *            Integer
-     * @return HistoryKey
-     */
+    public static HistoryKey of(final Kpi _findKPI, final EntityKey _key) {
+    
+    
+        return new HistoryKey(_findKPI.getId(), _key);
+    }
+    
+    
     public static HistoryKey of(final Kpi _kpi, final EntityType _entity, final Integer entityID) {
     
     
@@ -99,15 +59,6 @@ public class HistoryKey
     }
     
     
-    /**
-     * Method of.
-     * 
-     * @param _findKPIOrFail
-     *            Kpi
-     * @param _entityAssociatedToKpi
-     *            IEntity
-     * @return HistoryKey
-     */
     public static HistoryKey of(final Kpi _findKPIOrFail, final IEntity _entityAssociatedToKpi) {
     
     
@@ -124,13 +75,11 @@ public class HistoryKey
     
     
     
-    /**
-     * @param _kpiId
-     * @param _entityKey
-     */
     public HistoryKey(final Integer _kpiId, final EntityKey _entityKey) {
     
     
+        super();
+        
         kpiID = _kpiId;
         entityKey = _entityKey;
         
@@ -165,16 +114,30 @@ public class HistoryKey
     public boolean equals(final Object obj) {
     
     
-        if (this == obj) { return true; }
-        if (obj == null) { return false; }
-        if (getClass() != obj.getClass()) { return false; }
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
         final HistoryKey other = (HistoryKey) obj;
         if (entityKey == null) {
-            if (other.entityKey != null) { return false; }
-        } else if (!entityKey.equals(other.entityKey)) { return false; }
+            if (other.entityKey != null) {
+                return false;
+            }
+        } else if (!entityKey.equals(other.entityKey)) {
+            return false;
+        }
         if (kpiID == null) {
-            if (other.kpiID != null) { return false; }
-        } else if (!kpiID.equals(other.kpiID)) { return false; }
+            if (other.kpiID != null) {
+                return false;
+            }
+        } else if (!kpiID.equals(other.kpiID)) {
+            return false;
+        }
         return true;
     }
     

@@ -48,22 +48,22 @@ public final class KPIValueService implements IKpiValueService
 {
     
     
-    private static final Logger      LOGGER = LoggerFactory.getLogger("kpi-value-service");
+    private static final Logger    LOGGER = LoggerFactory.getLogger("kpi-value-service");
     
     @Autowired
-    private IEntityService           entityService;
+    private IEntityService         entityService;
     
     @Autowired
-    private KpiDao                   kpiDAO;
+    private KpiDao                 kpiDAO;
     
     @Autowired
-    private IKpiQueryService kpiQueryRegistry;
+    private IKpiQueryService       kpiQueryRegistry;
     
     @Autowired
-    private IMeasureHistoryService   measureService;
+    private IMeasureHistoryService measureService;
     
     @Autowired
-    private ProjectDao               projectDao;
+    private ProjectDao             projectDao;
     
     
     
@@ -79,7 +79,7 @@ public final class KPIValueService implements IKpiValueService
         LOGGER.info("Backup all kpis into the history...");
         for (final Kpi kpi : kpiDAO.selectByCriteria(new KpiCriteria())) {
             LOGGER.info("Kpi {} is backuping...", kpi.getKey());
-            storeValueInHistory(KpiKey.ofKpi(kpi));
+            storeActualValueInHistory(HistoryKey.of(kpi));
             LOGGER.info("Kpi {} backup finished", kpi.getKey());
             
         }
@@ -219,8 +219,8 @@ public final class KPIValueService implements IKpiValueService
         LOGGER.debug("Obtain the real time measure for -> {}", _kpiKey);
         final Kpi kpi = new FindKpiOrFail(_kpiKey.getKpiName(), kpiDAO).find();
         final Measure measureKey =
-                Measure.initializeMeasure(kpi, _kpiKey.getEntityKey(), getSingleValue(_kpiKey)
-                        .doubleValue());
+                Measure.initializeMeasure(kpi, _kpiKey.getEntityKey().getId(),
+                        getSingleValue(_kpiKey).doubleValue());
         LOGGER.debug("Obtain the real time measure : {} result = {}", _kpiKey,
                 measureKey.getValue());
         return measureKey;
@@ -320,44 +320,58 @@ public final class KPIValueService implements IKpiValueService
      */
     @Override
     @Transactional
-    public void storeValueInHistory(final KpiKey _kpiKey) throws KPINotFoundException {
+    public void storeActualValueInHistory(final HistoryKey _historyKey) throws KPINotFoundException {
     
     
-        final Kpi kpi = new FindKpiOrFail(_kpiKey.getKpiName(), kpiDAO).find();
-        final KpiResult queryResult = kpiQueryRegistry.getQueryValueFromKpi(kpi);
+        Validate.notNull(_historyKey);
+        final Kpi findKPI = kpiDAO.selectByPrimaryKey(_historyKey.getKpiID());
+        final KpiResult queryResult = kpiQueryRegistry.getQueryValueFromKpi(findKPI);
         // Store all data
-        final Map<EntityKey, Number> resultMap = queryResult.getMap();
-        for (final Entry<EntityKey, Number> kpiLineValue : resultMap.entrySet()) {
-            final KpiKey kpiKeyWithEntity =
-                    KpiKey.ofKpiNameAndEntityKey(_kpiKey.getKpiName(), kpiLineValue.getKey());
-            storeValueInKpiHistory(kpiKeyWithEntity, kpiLineValue.getValue());
-            
+        for (final Entry<EntityKey, Number> kpiLineValue : queryResult.getMap().entrySet()) {
+            Validate.isTrue(kpiLineValue.getKey().isEntityReferenceKey());
+            internalStoreValueInKpiHistory(kpiLineValue.getKey().getId(), kpiLineValue.getValue(),
+                    findKPI);
         }
-        
     }
     
     
     @Override
-    public void storeValueInKpiHistory(final KpiKey _kpiKey, final Number _kpiValue) {
+    public void storeValueInKpiHistory(final HistoryKey _kpiKey, final Number _kpiValue) {
     
     
+        Validate.notNull(_kpiKey);
+        Validate.notNull(_kpiValue);
         storeValueInKpiHistory(_kpiKey, _kpiValue, new DateTime());
     }
     
     
     @Override
     public void storeValueInKpiHistory(
-            final KpiKey _kpiKey,
+            final HistoryKey _historyKey,
             final Number _kpiValue,
             final DateTime _dateTime) {
     
     
-        final Kpi findKPI = new FindKpiOrFail(_kpiKey, kpiDAO).find();
+        Validate.isTrue(_historyKey.hasEntityReference());
+        Validate.notNull(_kpiValue);
+        Validate.notNull(_dateTime);
+        final Kpi findKPI = kpiDAO.selectByPrimaryKey(_historyKey.getKpiID());
+        internalStoreValueInKpiHistory(_historyKey.getEntityKey().getId(), _kpiValue, findKPI);
+        
+    }
+    
+    
+    private void internalStoreValueInKpiHistory(
+            final int _entityID,
+            final Number _kpiValue,
+            final Kpi findKPI) {
+    
+    
+        Validate.notNull(_kpiValue);
+        Validate.notNull(findKPI);
         final Measure measure =
-                Measure.initializeMeasure(findKPI, _kpiKey.getEntityKey(), _kpiValue.doubleValue());
+                Measure.initializeMeasure(findKPI, _entityID, _kpiValue.doubleValue());
         
         measureService.storeMeasure(measure);
-        final int purgeHistory = measureService.buildHistoryPurgeAction(findKPI).purgeHistory();
-        LOGGER.trace("Purge history : {} items", purgeHistory);
     }
 }

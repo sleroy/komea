@@ -7,6 +7,7 @@
 package org.komea.product.plugins.bugzilla.service;
 
 
+
 import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
@@ -20,7 +21,6 @@ import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.database.enums.EntityType;
-import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
@@ -32,28 +32,44 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
+
 /**
  * This class defines the bugzilla provider plugin. Informations are collected
  * at runtime.
- *
+ * 
  * @author rgalerme
  * @version $Revision: 1.0 $
  */
-@ProviderPlugin(type = ProviderType.BUGTRACKER, name = BZProviderPlugin.BUGZILLA_PROVIDER_PLUGIN, icon = "bugzilla", url = "/bugzilla-provider", eventTypes = {})
-@PluginAdminPages(@PluginMountPage(pluginName = BZProviderPlugin.BUGZILLA_PROVIDER_PLUGIN, page = BugZillaPage.class))
-public class BZProviderPlugin {
+@ProviderPlugin(
+        type = ProviderType.BUGTRACKER,
+        name = BZProviderPlugin.BUGZILLA_PROVIDER_PLUGIN,
+        icon = "bugzilla",
+        url = "/bugzilla-provider",
+        eventTypes = {})
+@PluginAdminPages(@PluginMountPage(
+        pluginName = BZProviderPlugin.BUGZILLA_PROVIDER_PLUGIN,
+        page = BugZillaPage.class))
+public class BZProviderPlugin
+{
+    
     
     public static final String BUGZILLA_PROVIDER_PLUGIN = "BugZilla Provider plugin";
     
-    private static Logger      LOGGER                   = LoggerFactory.getLogger(BZProviderPlugin.class);
+    private static Logger      LOGGER                   = LoggerFactory
+                                                                .getLogger(BZProviderPlugin.class);
+    
+    
     
     /**
      * @return the logger
      */
     public static Logger getLogger() {
     
+    
         return LOGGER;
     }
+    
     
     /**
      * @param _logger
@@ -61,8 +77,11 @@ public class BZProviderPlugin {
      */
     public static void setLogger(final Logger _logger) {
     
+    
         LOGGER = _logger;
     }
+    
+    
     
     @Autowired
     private IBZConfigurationDAO bugZillaConfiguration;
@@ -73,24 +92,31 @@ public class BZProviderPlugin {
     @Autowired
     private IKPIService         kpiService;
     
+    
+    
     /**
      * @return the bugZillaConfiguration
      */
     public IBZConfigurationDAO getBugZillaConfiguration() {
     
+    
         return bugZillaConfiguration;
     }
+    
     
     /**
      * @return the evenTypeService
      */
     public IEventTypeService getEvenTypeService() {
     
+    
         return evenTypeService;
     }
     
+    
     @PostConstruct
     public void init() {
+    
     
         LOGGER.info("Loading bugZilla plugin");
         
@@ -104,56 +130,6 @@ public class BZProviderPlugin {
         
     }
     
-    private void addKpi(final Kpi _kpi) {
-    
-        if (!kpiService.exists(_kpi.getKpiKey())) {
-            kpiService.saveOrUpdate(_kpi);
-        }
-    }
-    
-    private Kpi bzKpi(final String key, final String name, final String description, final ValueDirection valueDirection,
-            final String formula) {
-    
-        return new Kpi(null, key, name, description, 0d, Double.valueOf(Integer.MAX_VALUE), valueDirection, ValueType.INT,
-                EntityType.PROJECT, null, "0 0 0/6 * * ?", 12, EvictionType.MONTHS, null, ProviderType.BUGTRACKER, formula);
-    }
-    
-    private Kpi bzOpenBugs() {
-    
-        final IDynamicDataQuery query = BZBugCountKPI.create(Search.create(Filter.create("status", false, "new", "unconfirmed", "onhold",
-                "accepted", "assigned", "opened", "reopened")));
-        return bzKpi("bugs_status_open", "Open bugs", "Number of open bugs", ValueDirection.WORST, query.getFormula());
-    }
-    
-    private Kpi bzOpenBySeverityBugs(final String severity) {
-    
-        final IDynamicDataQuery query = BZBugCountKPI.create(Search.create(
-                Filter.create("status", false, "new", "unconfirmed", "onhold", "accepted", "assigned", "opened", "reopened"),
-                Filter.create("severity", true, severity)));
-        return bzKpi("bugs_status_open_severity_" + severity, "Open " + severity + " bugs", "Number of open bugs with " + severity
-                + " severity", ValueDirection.WORST, query.getFormula());
-    }
-    
-    private Kpi bzOpenNotFixedBugs() {
-    
-        final IDynamicDataQuery query = BZBugCountKPI
-                .create(Search.create(Filter.create("status", true, "closed", "delivered", "resolved")));
-        return bzKpi("bugs_status_open_not_fixed", "Open NOT fixed bugs", "Number of open but not fixed bugs", ValueDirection.WORST,
-                query.getFormula());
-    }
-    
-    private Kpi bzClosedBugs() {
-    
-        final IDynamicDataQuery query = BZBugCountKPI.create(Search.create(Filter.create("status", true, "new", "unconfirmed", "onhold",
-                "accepted", "assigned", "opened", "reopened")));
-        return bzKpi("bugs_status_closed", "Closed bugs", "Number of closed bugs", ValueDirection.BETTER, query.getFormula());
-    }
-    
-    private Kpi bzTotalBugs() {
-    
-        final IDynamicDataQuery query = BZBugCountKPI.create();
-        return bzKpi("bugs_total", "Total bugs", "Total number of bugs", ValueDirection.WORST, query.getFormula());
-    }
     
     /**
      * @param _bugZillaConfiguration
@@ -161,8 +137,10 @@ public class BZProviderPlugin {
      */
     public void setBugZillaConfiguration(final IBZConfigurationDAO _bugZillaConfiguration) {
     
+    
         bugZillaConfiguration = _bugZillaConfiguration;
     }
+    
     
     /**
      * @param _evenTypeService
@@ -170,6 +148,85 @@ public class BZProviderPlugin {
      */
     public void setEvenTypeService(final IEventTypeService _evenTypeService) {
     
+    
         evenTypeService = _evenTypeService;
+    }
+    
+    
+    private void addKpi(final Kpi _kpi) {
+    
+    
+        if (!kpiService.exists(_kpi.getKpiKey())) {
+            kpiService.saveOrUpdate(_kpi);
+        }
+    }
+    
+    
+    private Kpi bzClosedBugs() {
+    
+    
+        final IDynamicDataQuery query =
+                BZBugCountKPI.create(Search.create(Filter.create("status", true, "new",
+                        "unconfirmed", "onhold", "accepted", "assigned", "opened", "reopened")));
+        return bzKpi("bugs_status_closed", "Closed bugs", "Number of closed bugs",
+                ValueDirection.BETTER, query.getFormula());
+    }
+    
+    
+    private Kpi bzKpi(
+            final String key,
+            final String name,
+            final String description,
+            final ValueDirection valueDirection,
+            final String formula) {
+    
+    
+        return new Kpi(null, key, name, description, 0d, Double.valueOf(Integer.MAX_VALUE),
+                valueDirection, ValueType.INT, EntityType.PROJECT, null, "0 0 0/6 * * ?", 12, null,
+                ProviderType.BUGTRACKER, formula);
+    }
+    
+    
+    private Kpi bzOpenBugs() {
+    
+    
+        final IDynamicDataQuery query =
+                BZBugCountKPI.create(Search.create(Filter.create("status", false, "new",
+                        "unconfirmed", "onhold", "accepted", "assigned", "opened", "reopened")));
+        return bzKpi("bugs_status_open", "Open bugs", "Number of open bugs", ValueDirection.WORST,
+                query.getFormula());
+    }
+    
+    
+    private Kpi bzOpenBySeverityBugs(final String severity) {
+    
+    
+        final IDynamicDataQuery query =
+                BZBugCountKPI.create(Search.create(Filter.create("status", false, "new",
+                        "unconfirmed", "onhold", "accepted", "assigned", "opened", "reopened"),
+                        Filter.create("severity", true, severity)));
+        return bzKpi("bugs_status_open_severity_" + severity, "Open " + severity + " bugs",
+                "Number of open bugs with " + severity + " severity", ValueDirection.WORST,
+                query.getFormula());
+    }
+    
+    
+    private Kpi bzOpenNotFixedBugs() {
+    
+    
+        final IDynamicDataQuery query =
+                BZBugCountKPI.create(Search.create(Filter.create("status", true, "closed",
+                        "delivered", "resolved")));
+        return bzKpi("bugs_status_open_not_fixed", "Open NOT fixed bugs",
+                "Number of open but not fixed bugs", ValueDirection.WORST, query.getFormula());
+    }
+    
+    
+    private Kpi bzTotalBugs() {
+    
+    
+        final IDynamicDataQuery query = BZBugCountKPI.create();
+        return bzKpi("bugs_total", "Total bugs", "Total number of bugs", ValueDirection.WORST,
+                query.getFormula());
     }
 }

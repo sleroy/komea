@@ -127,7 +127,7 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     
         projectPersonService.updateProjectsOfPerson(Collections.<Project> emptyList(), _person);
         final MeasureCriteria measureCriteria = new MeasureCriteria();
-        measureCriteria.createCriteria().andIdPersonEqualTo(_person.getId());
+        measureCriteria.createCriteria().andEntityIDEqualTo(_person.getId());
         measureService.deleteByCriteria(measureCriteria);
         delete(_person);
     }
@@ -340,7 +340,9 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     
     
         final int indexOf = email.indexOf('@');
-        if (indexOf == -1) { return email; }
+        if (indexOf == -1) {
+            return email;
+        }
         return email.substring(0, indexOf);
     }
     

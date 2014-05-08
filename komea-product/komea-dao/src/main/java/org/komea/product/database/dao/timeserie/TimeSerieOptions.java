@@ -18,7 +18,12 @@ public class TimeSerieOptions
     private List<Integer> idPersonGroups;
     private List<Integer> idPersons;
     private List<Integer> idProjects;
+    private int           kpiID;
+    
+    
     private TimeScale     timeScale;
+    
+    
     private DateTime      toPeriod;
     
     
@@ -55,6 +60,13 @@ public class TimeSerieOptions
     
     
         return idProjects;
+    }
+    
+    
+    public int getKpiID() {
+    
+    
+        return kpiID;
     }
     
     
@@ -107,6 +119,13 @@ public class TimeSerieOptions
     }
     
     
+    public void setKpiID(final int _kpiID) {
+    
+    
+        kpiID = _kpiID;
+    }
+    
+    
     public void setTimeScale(final TimeScale _timeScale) {
     
     
@@ -128,6 +147,6 @@ public class TimeSerieOptions
         return "TimeSerieOptions [fromPeriod="
                 + fromPeriod + ", groupFormula=" + groupFormula + ", idPersonGroups="
                 + idPersonGroups + ", idPersons=" + idPersons + ", idProjects=" + idProjects
-                + ", timeScale=" + timeScale + ", toPeriod=" + toPeriod + "]";
+                + ", kpiID=" + kpiID + ", timeScale=" + timeScale + ", toPeriod=" + toPeriod + "]";
     }
 }

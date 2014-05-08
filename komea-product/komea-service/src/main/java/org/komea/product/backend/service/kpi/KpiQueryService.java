@@ -10,7 +10,6 @@ import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.Validate;
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
 import org.komea.product.backend.api.IEventEngineService;
@@ -91,7 +90,6 @@ public class KpiQueryService implements IKpiQueryService
     public void evaluateFormulaAndRegisterQuery(final Kpi _kpi) {
     
     
-        Validate.isTrue(!_kpi.isAssociatedToEntity());
         final InstantiateQueryFromFormula instantiateQueryFromFormula =
                 new InstantiateQueryFromFormula(_kpi);
         kpiQueryRegisterService.registerQuery(_kpi, instantiateQueryFromFormula.instantiate());

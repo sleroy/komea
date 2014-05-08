@@ -96,9 +96,9 @@ public interface IKpiValueService
      * @param _kpiKey
      *            KpiKey
      * @throws KPINotFoundException
-     * @see org.komea.product.backend.api.IKPIService#storeValueInHistory(KpiKey)
+     * @see org.komea.product.backend.api.IKPIService#storeActualValueInHistory(KpiKey)
      */
-    public void storeValueInHistory(KpiKey _kpiKey) throws KPINotFoundException;
+    public void storeActualValueInHistory(HistoryKey _kpiKey) throws KPINotFoundException;
     
     
     /**
@@ -109,7 +109,7 @@ public interface IKpiValueService
      * @param _value
      *            the value.
      */
-    public void storeValueInKpiHistory(KpiKey _kpiKey, Number _value);
+    public void storeValueInKpiHistory(HistoryKey _kpiKey, Number _value);
     
     
     /**
@@ -119,7 +119,7 @@ public interface IKpiValueService
      * @param _value
      * @param _dateTime
      */
-    public void storeValueInKpiHistory(KpiKey _kpiKey, Number _value, DateTime _dateTime);
+    public void storeValueInKpiHistory(HistoryKey _kpiKey, Number _value, DateTime _dateTime);
     
     
     /**

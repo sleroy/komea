@@ -17,7 +17,6 @@ import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.enums.EntityType;
-import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
@@ -142,31 +141,6 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase
     }
     
     
-    /**
-     * Test method for
-     * {@link org.komea.product.cep.tester.MeasureHistoryService#buildHistoryPurgeAction(org.komea.product.database.model.Kpi)}.
-     */
-    @Test
-    public final void testUnitBuildHistoryPurgeAction() {
-    
-    
-        final MeasureHistoryService buildMeasureHistoryComponent = buildMeasureHistoryComponent();
-        // Test day
-        final Kpi kpiDay = new Kpi();
-        kpiDay.setEvictionType(EvictionType.DAYS);
-        Assert.assertTrue(buildMeasureHistoryComponent.buildHistoryPurgeAction(kpiDay) instanceof AbstractHistoryPurgePerTimeAction);
-        // Test day
-        final Kpi kpiMonth = new Kpi();
-        kpiMonth.setEvictionType(EvictionType.MONTHS);
-        Assert.assertTrue(buildMeasureHistoryComponent.buildHistoryPurgeAction(kpiMonth) instanceof HistoryPurgePerMonthsAction);
-        // Test day
-        final Kpi kpiValues = new Kpi();
-        kpiValues.setEvictionType(EvictionType.VALUES);
-        Assert.assertTrue(buildMeasureHistoryComponent.buildHistoryPurgeAction(kpiValues) instanceof HistoryPurgePerValuesAction);
-        
-    }
-    
-    
     private Kpi buildFakeKpi(final String _kpiNameString) {
     
     
@@ -174,7 +148,7 @@ public class MeasureHistoryServiceIT extends AbstractSpringIntegrationTestCase
         exampleKPI.setKpiKey(_kpiNameString);
         exampleKPI.setProviderType(ProviderType.OTHER);
         exampleKPI.setEntityType(EntityType.PROJECT);
-        exampleKPI.setEntityID(_kpiNameString.hashCode());
+        
         kpiDao.insert(exampleKPI);
         // exampleKPI.setId(_kpiNameString.hashCode());
         return exampleKPI;
