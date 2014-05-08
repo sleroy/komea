@@ -1,5 +1,9 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
 CREATE SCHEMA IF NOT EXISTS `komea` DEFAULT CHARACTER SET utf8 ;
-;
+
 
 -- -----------------------------------------------------
 -- Table `komea`.`kom_customer`
@@ -23,6 +27,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_proj` (
   `icon` VARCHAR(255) NULL ,
   PRIMARY KEY (`id`) )
 ;
+
 
 
 
@@ -108,25 +113,18 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpi` (
 -- Table `komea`.`kom_msr`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `komea`.`kom_msr` (
-  `id` INT NOT NULL AUTO_INCREMENT ,
   `idKpi` INT NOT NULL ,
-  `date` TIMESTAMP NOT NULL ,
-  `idProject` INT NULL ,
-  `idPerson` INT NULL ,
-  `idPersonGroup` INT NULL ,
-  `value` DOUBLE NOT NULL ,
   `year` INT NOT NULL ,
   `month` INT NOT NULL ,
   `week` INT NOT NULL ,
   `day` INT NOT NULL ,
-  `hour` INT NULL ,
+  `hour` INT NOT NULL ,
+  `entityID` INT NOT NULL ,
+  `value` DOUBLE NOT NULL ,
+  `date` TIMESTAMP NOT NULL ,
   `sprint` VARCHAR(45) NULL ,
-  PRIMARY KEY (`id`) )
+  PRIMARY KEY (`idKpi`, `year`, `month`, `week`, `day`, `hour`, `entityID`) )
 ;
-
-
-
-
 
 
 
@@ -332,3 +330,12 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_has_sfac_kpi` (
 ;
 
 
+
+
+
+
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

@@ -23,13 +23,6 @@ public class TimeSerieOptions
     
     
     
-    public TimeSerieOptions() {
-    
-    
-        super();
-    }
-    
-    
     public DateTime getFromPeriod() {
     
     

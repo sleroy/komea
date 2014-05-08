@@ -7,29 +7,17 @@ public class TimeCoordinate
 {
     
     
-    private int    day;
-    
-    
-    private int    hour;
-    
-    
-    private int    month;
-    
-    
-    private Double value;
-    
-    
-    private int    week;
-    
-    
-    private int    year;
-    
-    
-    
     public int getDay() {
     
     
         return day;
+    }
+    
+    
+    public void setDay(int _day) {
+    
+    
+        day = _day;
     }
     
     
@@ -40,10 +28,24 @@ public class TimeCoordinate
     }
     
     
+    public void setHour(int _hour) {
+    
+    
+        hour = _hour;
+    }
+    
+    
     public int getMonth() {
     
     
         return month;
+    }
+    
+    
+    public void setMonth(int _month) {
+    
+    
+        month = _month;
     }
     
     
@@ -54,10 +56,24 @@ public class TimeCoordinate
     }
     
     
+    public void setValue(Double _value) {
+    
+    
+        value = _value;
+    }
+    
+    
     public int getWeek() {
     
     
         return week;
+    }
+    
+    
+    public void setWeek(int _week) {
+    
+    
+        week = _week;
     }
     
     
@@ -68,42 +84,7 @@ public class TimeCoordinate
     }
     
     
-    public void setDay(final int _day) {
-    
-    
-        day = _day;
-    }
-    
-    
-    public void setHour(final int _hour) {
-    
-    
-        hour = _hour;
-    }
-    
-    
-    public void setMonth(final int _month) {
-    
-    
-        month = _month;
-    }
-    
-    
-    public void setValue(final Double _value) {
-    
-    
-        value = _value;
-    }
-    
-    
-    public void setWeek(final int _week) {
-    
-    
-        week = _week;
-    }
-    
-    
-    public void setYear(final int _year) {
+    public void setYear(int _year) {
     
     
         year = _year;
@@ -118,4 +99,14 @@ public class TimeCoordinate
                 + day + ", hour=" + hour + ", month=" + month + ", value=" + value + ", week="
                 + week + ", year=" + year + "]";
     }
+    
+    
+    
+    private int    day;
+    private int    hour;
+    private int    month;
+    private Double value;
+    private int    week;
+    
+    private int    year;
 }

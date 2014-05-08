@@ -1,5 +1,9 @@
-CREATE SCHEMA IF NOT EXISTS `komea` DEFAULT CHARACTER SET utf8 ;
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
+CREATE SCHEMA IF NOT EXISTS `komea` DEFAULT CHARACTER SET utf8 ;
+USE `komea` ;
 
 -- -----------------------------------------------------
 -- Table `komea`.`kom_customer`
@@ -8,7 +12,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_customer` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
-;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -22,11 +26,11 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_proj` (
   `idCustomer` INT NULL ,
   `icon` VARCHAR(255) NULL ,
   PRIMARY KEY (`id`) )
-;
+ENGINE = InnoDB;
 
+CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_proj` (`projectKey` ASC) ;
 
-
-
+CREATE INDEX `fk_Project_Customer1_idx` ON `komea`.`kom_proj` (`idCustomer` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -40,11 +44,11 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pegr` (
   `idPersonGroupParent` INT NULL ,
   `type` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
-;
+ENGINE = InnoDB;
 
+CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_pegr` (`personGroupKey` ASC) ;
 
-
-
+CREATE INDEX `fk_UserGroup_UserGroup1_idx` ON `komea`.`kom_pegr` (`idPersonGroupParent` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -55,9 +59,9 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pero` (
   `roleKey` VARCHAR(255) NOT NULL ,
   `name` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
-;
+ENGINE = InnoDB;
 
-
+CREATE UNIQUE INDEX `roleKey_UNIQUE` ON `komea`.`kom_pero` (`roleKey` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -74,13 +78,13 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pe` (
   `password` VARCHAR(255) NOT NULL DEFAULT '' ,
   `userBdd` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
-;
+ENGINE = InnoDB;
 
+CREATE INDEX `fk_User_UserGroup1_idx` ON `komea`.`kom_pe` (`idPersonGroup` ASC) ;
 
+CREATE UNIQUE INDEX `Personcol_UNIQUE` ON `komea`.`kom_pe` (`login` ASC) ;
 
-
-
-
+CREATE INDEX `fk_kom_pe_kom_pero1_idx` ON `komea`.`kom_pe` (`idPersonRole` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -100,9 +104,9 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `cronExpression` VARCHAR(60) NOT NULL ,
   `providerType` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
-;
+ENGINE = InnoDB;
 
-
+CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_kpi` (`kpiKey` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -120,11 +124,11 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_msr` (
   `date` TIMESTAMP NOT NULL ,
   `sprint` VARCHAR(45) NULL ,
   PRIMARY KEY (`idKpi`, `year`, `month`, `week`, `day`, `hour`, `entityID`) )
-;
+ENGINE = InnoDB;
 
+CREATE INDEX `fk_Measure_Metric1_idx` ON `komea`.`kom_msr` (`idKpi` ASC) ;
 
-
-
+CREATE INDEX `fk_Measure_Project1_idx` ON `komea`.`kom_msr` (`entityID` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -142,11 +146,11 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpia` (
   `operator` VARCHAR(255) NOT NULL ,
   `enabled` TINYINT(1) NOT NULL ,
   PRIMARY KEY (`id`) )
-;
+ENGINE = InnoDB;
 
+CREATE INDEX `fk_MetricAlert_Metric1_idx` ON `komea`.`kom_kpia` (`idKpi` ASC) ;
 
-
-
+CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_kpia` (`kpiAlertKey` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -160,9 +164,9 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pvd` (
   `url` VARCHAR(255) NOT NULL ,
   `description` VARCHAR(2048) NULL ,
   PRIMARY KEY (`id`) )
-;
+ENGINE = InnoDB;
 
-
+CREATE UNIQUE INDEX `url_UNIQUE` ON `komea`.`kom_pvd` (`url` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -174,9 +178,9 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_link` (
   `url` VARCHAR(255) NOT NULL ,
   `idProject` INT NOT NULL ,
   PRIMARY KEY (`id`) )
-;
+ENGINE = InnoDB;
 
-
+CREATE INDEX `fk_Tag_Project_idx` ON `komea`.`kom_link` (`idProject` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -192,9 +196,9 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_evt` (
   `entityType` VARCHAR(255) NULL ,
   `providerType` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
-;
+ENGINE = InnoDB;
 
-
+CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_evt` (`eventKey` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -207,9 +211,9 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_setting` (
   `type` VARCHAR(255) NOT NULL ,
   `description` VARCHAR(2048) NULL ,
   PRIMARY KEY (`id`) )
-;
+ENGINE = InnoDB;
 
-
+CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_setting` (`settingKey` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -219,7 +223,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_tag` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
-;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -229,11 +233,11 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_has_proj_pe` (
   `idProject` INT NOT NULL ,
   `idPerson` INT NOT NULL ,
   PRIMARY KEY (`idProject`, `idPerson`) )
-;
+ENGINE = InnoDB;
 
+CREATE INDEX `fk_Project_has_User_User1_idx` ON `komea`.`kom_has_proj_pe` (`idPerson` ASC) ;
 
-
-
+CREATE INDEX `fk_Project_has_User_Project1_idx` ON `komea`.`kom_has_proj_pe` (`idProject` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -247,11 +251,11 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pvds` (
   `type` VARCHAR(255) NOT NULL ,
   `description` VARCHAR(2048) NULL ,
   PRIMARY KEY (`id`) )
-;
+ENGINE = InnoDB;
 
+CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_pvds` (`providerSettingKey` ASC) ;
 
-
-
+CREATE INDEX `fk_ProviderSetting_Provider1_idx` ON `komea`.`kom_pvds` (`idProvider` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -261,11 +265,11 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_has_proj_tag` (
   `idProject` INT NOT NULL ,
   `idTag` INT NOT NULL ,
   PRIMARY KEY (`idProject`, `idTag`) )
-;
+ENGINE = InnoDB;
 
+CREATE INDEX `fk_Project_has_Tag_Tag1_idx` ON `komea`.`kom_has_proj_tag` (`idTag` ASC) ;
 
-
-
+CREATE INDEX `fk_Project_has_Tag_Project1_idx` ON `komea`.`kom_has_proj_tag` (`idProject` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -275,11 +279,11 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_has_proj_pegr` (
   `idProject` INT NOT NULL ,
   `idPersonGroup` INT NOT NULL ,
   PRIMARY KEY (`idProject`, `idPersonGroup`) )
-;
+ENGINE = InnoDB;
 
+CREATE INDEX `fk_kom_proj_has_kom_pegr_kom_pegr1_idx` ON `komea`.`kom_has_proj_pegr` (`idPersonGroup` ASC) ;
 
-
-
+CREATE INDEX `fk_kom_proj_has_kom_pegr_kom_proj1_idx` ON `komea`.`kom_has_proj_pegr` (`idProject` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -295,9 +299,9 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_acfi` (
   `criticalRetention` VARCHAR(255) NOT NULL ,
   `blockerRetention` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
-;
+ENGINE = InnoDB;
 
-
+CREATE UNIQUE INDEX `id_UNIQUE` ON `komea`.`kom_acfi` (`id` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -309,11 +313,11 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_sfac` (
   `name` VARCHAR(255) NOT NULL ,
   `description` VARCHAR(2048) NULL ,
   PRIMARY KEY (`id`) )
-;
+ENGINE = InnoDB;
 
+CREATE UNIQUE INDEX `id_UNIQUE` ON `komea`.`kom_sfac` (`id` ASC) ;
 
-
-
+CREATE UNIQUE INDEX `successFactoryKey_UNIQUE` ON `komea`.`kom_sfac` (`successFactorKey` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -323,9 +327,15 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_has_sfac_kpi` (
   `idSuccessFactor` INT NOT NULL ,
   `idKpi` INT NOT NULL ,
   PRIMARY KEY (`idSuccessFactor`, `idKpi`) )
-;
+ENGINE = InnoDB;
+
+CREATE INDEX `fk_kom_sfac_has_kom_kpi_kom_kpi1_idx` ON `komea`.`kom_has_sfac_kpi` (`idKpi` ASC) ;
+
+CREATE INDEX `fk_kom_sfac_has_kom_kpi_kom_sfac1_idx` ON `komea`.`kom_has_sfac_kpi` (`idSuccessFactor` ASC) ;
+
+USE `komea` ;
 
 
-
-
-
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
