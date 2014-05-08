@@ -3,10 +3,10 @@ package org.komea.product.database.dto;
 
 
 
-import java.util.Date;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.joda.time.DateTime;
 import org.komea.product.database.model.Measure;
 
 import com.google.common.collect.Lists;
@@ -47,8 +47,9 @@ public class MeasureDto extends Measure
     public MeasureDto(final Measure measure, final String kpiKey) {
     
     
-        super(measure.getId(), measure.getIdKpi(), measure.getDate(), measure.getIdPersonGroup(),
-                measure.getIdPerson(), measure.getIdProject(), measure.getValue());
+        super(measure.getId(), measure.getIdKpi(), new DateTime(measure.getDate()), measure
+                .getIdPersonGroup(), measure.getIdPerson(), measure.getIdProject(), measure
+                .getValue());
         this.kpiKey = kpiKey;
     }
     
@@ -57,7 +58,7 @@ public class MeasureDto extends Measure
             final String kpiKey,
             final Integer id,
             final Integer idKpi,
-            final Date date,
+            final DateTime date,
             final Integer idPersonGroup,
             final Integer idPerson,
             final Integer idProject,
