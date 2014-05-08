@@ -18,7 +18,6 @@ import org.komea.product.backend.service.plugins.IPluginStorageService;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
-import org.komea.product.service.dto.KpiKey;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -153,8 +152,8 @@ public class RandomizerDataJob implements Job
             
             lastStoredValueInHistory = Math.max(_kpi.getValueMin(), lastStoredValueInHistory);
             lastStoredValueInHistory = Math.min(_kpi.getValueMax(), lastStoredValueInHistory);
-            kpiAPI.storeValueInHistory(KpiKey.ofKpiAndEntity(_kpi, _entity),
-                    lastStoredValueInHistory, previousTime);
+            kpiAPI.storeValueInHistory(HistoryKey.of(_kpi, _entity), lastStoredValueInHistory,
+                    previousTime);
             previousTime = previousTime.plusDays(1);
         }
     }

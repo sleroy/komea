@@ -2,6 +2,7 @@
 package org.komea.product.backend.service.entities;
 
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,16 +14,19 @@ import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.service.dto.EntityKey;
-import org.komea.product.service.dto.KpiKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+
 
 /**
  */
 @Service
 @Transactional
-public final class EntityService implements IEntityService {
+public final class EntityService implements IEntityService
+{
+    
     
     @Autowired
     private IPersonGroupService personGroupService;
@@ -33,23 +37,14 @@ public final class EntityService implements IEntityService {
     @Autowired
     private IProjectService     projectService;
     
+    
+    
     public EntityService() {
+    
     
         super();
     }
     
-    /**
-     * (non-Javadoc)
-     * 
-     * @see org.komea.product.backend.service.entities.IEntityService#findEntityAssociatedToKpi(org.komea.product.service.dto.KpiKey)
-     */
-    @Override
-    public IEntity findEntityAssociatedToKpi(final KpiKey _kpiKey) {
-    
-        Validate.notNull(_kpiKey);
-        
-        return findEntityByEntityKey(_kpiKey.getEntityKey());
-    }
     
     /**
      * (non-Javadoc)
@@ -62,6 +57,7 @@ public final class EntityService implements IEntityService {
      */
     @Override
     public <TEntity extends IEntity> TEntity findEntityByEntityKey(final EntityKey _entityKey) {
+    
     
         Validate.notNull(_entityKey);
         switch (_entityKey.getEntityType()) {
@@ -80,6 +76,7 @@ public final class EntityService implements IEntityService {
         
     }
     
+    
     /**
      * Method getEntities.
      * 
@@ -90,7 +87,10 @@ public final class EntityService implements IEntityService {
      * @return List<BaseEntityDto>
      */
     @Override
-    public List<BaseEntityDto> getBaseEntityDTOS(final EntityType _entityType, final List<String> _entityKeys) {
+    public List<BaseEntityDto> getBaseEntityDTOS(
+            final EntityType _entityType,
+            final List<String> _entityKeys) {
+    
     
         Validate.notNull(_entityKeys);
         Validate.notNull(_entityType);
@@ -105,12 +105,14 @@ public final class EntityService implements IEntityService {
         
     }
     
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.service.entities.IEntityService#loadEntities(org.komea.product.database.enums.EntityType)
      */
     @Override
     public <T extends IEntity> List<T> getEntitiesByEntityType(final EntityType _entityType) {
+    
     
         Validate.notNull(_entityType);
         
@@ -127,6 +129,7 @@ public final class EntityService implements IEntityService {
         return Collections.emptyList();
     }
     
+    
     /**
      * Method loadEntities.
      * 
@@ -140,7 +143,10 @@ public final class EntityService implements IEntityService {
      *      List<Integer>)
      */
     @Override
-    public <TEntity extends IEntity> List<TEntity> getEntitiesByPrimaryKey(final EntityType _entityType, final List<Integer> _keys) {
+    public <TEntity extends IEntity> List<TEntity> getEntitiesByPrimaryKey(
+            final EntityType _entityType,
+            final List<Integer> _keys) {
+    
     
         Validate.notNull(_entityType);
         Validate.notNull(_keys);
@@ -155,6 +161,7 @@ public final class EntityService implements IEntityService {
         return Collections.unmodifiableList(listOfEntities);
     }
     
+    
     /**
      * (non-Javadoc)
      * 
@@ -168,6 +175,7 @@ public final class EntityService implements IEntityService {
     @Override
     public IEntity getEntityOrFail(final EntityKey _entityKey) {
     
+    
         Validate.notNull(_entityKey);
         final IEntity entity = findEntityByEntityKey(_entityKey);
         if (entity == null) {
@@ -176,44 +184,61 @@ public final class EntityService implements IEntityService {
         return entity;
     }
     
+    
     /**
      * @return the personGroupService
      */
     public IPersonGroupService getPersonGroupService() {
     
+    
         return personGroupService;
     }
+    
     
     /**
      * @return the personService
      */
     public IPersonService getPersonService() {
     
+    
         return personService;
     }
+    
     
     /**
      * @return the projectService
      */
     public IProjectService getProjectService() {
     
+    
         return projectService;
     }
     
-    @Override
-    public List<BaseEntityDto> getSubEntities(final ExtendedEntityType extendedEntityType, final List<BaseEntityDto> parentEntities) {
     
-        final GetSubEntitiesAndConvertIntoDTO subEntities = new GetSubEntitiesAndConvertIntoDTO(extendedEntityType, parentEntities,
-                personService, projectService);
+    @Override
+    public List<BaseEntityDto> getSubEntities(
+            final ExtendedEntityType extendedEntityType,
+            final List<BaseEntityDto> parentEntities) {
+    
+    
+        final GetSubEntitiesAndConvertIntoDTO subEntities =
+                new GetSubEntitiesAndConvertIntoDTO(extendedEntityType, parentEntities,
+                        personService, projectService);
         return subEntities.getSubEntities();
     }
     
-    @Override
-    public <T extends IEntity> List<T> getSubEntities(final Integer _entityId, final ExtendedEntityType _extendedEntityType) {
     
-        final GetSubEntities getSubEntities = new GetSubEntities(_entityId, _extendedEntityType, personService, projectService);
+    @Override
+    public <T extends IEntity> List<T> getSubEntities(
+            final Integer _entityId,
+            final ExtendedEntityType _extendedEntityType) {
+    
+    
+        final GetSubEntities getSubEntities =
+                new GetSubEntities(_entityId, _extendedEntityType, personService, projectService);
         return getSubEntities.getSubEntities();
     }
+    
     
     /**
      * @param _personGroupService
@@ -221,8 +246,10 @@ public final class EntityService implements IEntityService {
      */
     public void setPersonGroupService(final IPersonGroupService _personGroupService) {
     
+    
         personGroupService = _personGroupService;
     }
+    
     
     /**
      * @param _personService
@@ -230,8 +257,10 @@ public final class EntityService implements IEntityService {
      */
     public void setPersonService(final IPersonService _personService) {
     
+    
         personService = _personService;
     }
+    
     
     /**
      * @param _projectService
@@ -239,8 +268,10 @@ public final class EntityService implements IEntityService {
      */
     public void setProjectService(final IProjectService _projectService) {
     
+    
         projectService = _projectService;
     }
+    
     
     /**
      * Returns the list of entities
@@ -251,7 +282,10 @@ public final class EntityService implements IEntityService {
      *            the entity keys
      * @return the list of entities filtered by entity type and keys.
      */
-    private List<? extends IEntity> findEntitiesByTypeAndKeys(final EntityType _entityType, final List<String> _entityKeys) {
+    private List<? extends IEntity> findEntitiesByTypeAndKeys(
+            final EntityType _entityType,
+            final List<String> _entityKeys) {
+    
     
         Validate.notNull(_entityKeys);
         Validate.notNull(_entityType);

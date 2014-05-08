@@ -18,7 +18,6 @@ import org.komea.product.database.dto.SearchMeasuresDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
-import org.komea.product.service.dto.KpiKey;
 
 
 
@@ -179,20 +178,20 @@ public interface IKpiAPI
      * @param _value
      *            the value to store
      */
-    void storeValueInHistory(KpiKey _kpiKey, Double _value);
+    void storeValueInHistory(HistoryKey _kpiKey, Double _value);
     
     
     /**
      * Stores a value in history with the given date.
      * 
-     * @param _kpiKey
+     * @param _historyKey
      *            the kpi key
      * @param _value
      *            the value
      * @param _actualTime
      *            the actual time
      */
-    void storeValueInHistory(KpiKey _kpiKey, Double _value, DateTime _actualTime);
+    void storeValueInHistory(HistoryKey _historyKey, Double _value, DateTime _actualTime);
     
     
 }

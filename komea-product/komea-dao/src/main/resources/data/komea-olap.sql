@@ -1,3 +1,6 @@
+CREATE SCHEMA IF NOT EXISTS `komea` DEFAULT CHARACTER SET utf8 ;
+
+
 -- -----------------------------------------------------
 -- Table `komea`.`kom_customer`
 -- -----------------------------------------------------
@@ -92,13 +95,9 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `valueMax` DOUBLE NULL ,
   `valueDirection` VARCHAR(255) NOT NULL ,
   `valueType` VARCHAR(255) NOT NULL ,
-  `entityType` VARCHAR(255) NULL ,
+  `entityType` VARCHAR(255) NOT NULL ,
   `esperRequest` MEDIUMTEXT NOT NULL ,
-  `entityID` INT NULL ,
-  `cronExpression` VARCHAR(60) NULL ,
-  `evictionRate` INT NOT NULL ,
-  `evictionType` VARCHAR(255) NOT NULL ,
-  `objective` DOUBLE NULL ,
+  `cronExpression` VARCHAR(60) NOT NULL ,
   `providerType` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
 ;
@@ -110,25 +109,18 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpi` (
 -- Table `komea`.`kom_msr`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `komea`.`kom_msr` (
-  `id` INT NOT NULL AUTO_INCREMENT ,
   `idKpi` INT NOT NULL ,
-  `date` TIMESTAMP NOT NULL ,
-  `idProject` INT NULL ,
-  `idPerson` INT NULL ,
-  `idPersonGroup` INT NULL ,
-  `value` DOUBLE NOT NULL ,
   `year` INT NOT NULL ,
   `month` INT NOT NULL ,
   `week` INT NOT NULL ,
   `day` INT NOT NULL ,
-  `hour` INT NULL ,
+  `hour` INT NOT NULL ,
+  `entityID` INT NOT NULL ,
+  `value` DOUBLE NOT NULL ,
+  `date` TIMESTAMP NOT NULL ,
   `sprint` VARCHAR(45) NULL ,
-  PRIMARY KEY (`id`) )
+  PRIMARY KEY (`idKpi`, `year`, `month`, `week`, `day`, `hour`, `entityID`) )
 ;
-
-
-
-
 
 
 
@@ -332,7 +324,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_has_sfac_kpi` (
   `idKpi` INT NOT NULL ,
   PRIMARY KEY (`idSuccessFactor`, `idKpi`) )
 ;
-
 
 
 

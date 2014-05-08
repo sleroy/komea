@@ -1,3 +1,6 @@
+CREATE SCHEMA IF NOT EXISTS `komea` DEFAULT CHARACTER SET utf8 ;
+;
+
 -- -----------------------------------------------------
 -- Table `komea`.`kom_customer`
 -- -----------------------------------------------------
@@ -20,7 +23,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_proj` (
   `icon` VARCHAR(255) NULL ,
   PRIMARY KEY (`id`) )
 ;
-
 
 
 
@@ -92,13 +94,9 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `valueMax` DOUBLE NULL ,
   `valueDirection` VARCHAR(255) NOT NULL ,
   `valueType` VARCHAR(255) NOT NULL ,
-  `entityType` VARCHAR(255) NULL ,
+  `entityType` VARCHAR(255) NOT NULL ,
   `esperRequest` MEDIUMTEXT NOT NULL ,
-  `entityID` INT NULL ,
-  `cronExpression` VARCHAR(60) NULL ,
-  `evictionRate` INT NOT NULL ,
-  `evictionType` VARCHAR(255) NOT NULL ,
-  `objective` DOUBLE NULL ,
+  `cronExpression` VARCHAR(60) NOT NULL ,
   `providerType` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
 ;
@@ -332,9 +330,5 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_has_sfac_kpi` (
   `idKpi` INT NOT NULL ,
   PRIMARY KEY (`idSuccessFactor`, `idKpi`) )
 ;
-
-
-
-
 
 

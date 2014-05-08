@@ -8,7 +8,6 @@ package org.komea.product.backend.service.kpi;
 
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.product.database.enums.EntityType;
-import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
@@ -176,7 +175,7 @@ public class KpiBuilder
     public KpiBuilder dailyKPI() {
     
     
-        return cronDays(1).expirationYear();
+        return cronDays(1);
     }
     
     
@@ -192,33 +191,6 @@ public class KpiBuilder
     
     
         kpi.setEntityType(_entityType);
-        return this;
-    }
-    
-    
-    public KpiBuilder expirationMonth() {
-    
-    
-        kpi.setEvictionRate(1);
-        kpi.setEvictionType(EvictionType.MONTHS);
-        return this;
-    }
-    
-    
-    public KpiBuilder expirationWeek() {
-    
-    
-        kpi.setEvictionRate(7);
-        kpi.setEvictionType(EvictionType.DAYS);
-        return this;
-    }
-    
-    
-    public KpiBuilder expirationYear() {
-    
-    
-        kpi.setEvictionRate(12);
-        kpi.setEvictionType(EvictionType.MONTHS);
         return this;
     }
     

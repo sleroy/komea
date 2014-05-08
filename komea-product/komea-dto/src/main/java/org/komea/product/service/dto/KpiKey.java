@@ -6,7 +6,6 @@ package org.komea.product.service.dto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
@@ -27,24 +26,7 @@ public class KpiKey
     public static KpiKey ofKpi(final Kpi _kpiName) {
     
     
-        return new KpiKey(_kpiName.getEntityType(), _kpiName.getEntityID(), _kpiName.getKpiKey());
-    }
-    
-    
-    public static KpiKey ofKpiAndEntity(final Kpi _kpiName, final IEntity _entity) {
-    
-    
-        return new KpiKey(_entity.entityType(), _entity.getId(), _kpiName.getKpiKey());
-    }
-    
-    
-    public static KpiKey ofKpiAndEntityDetails(
-            final Kpi _kpiName,
-            final EntityType _entityType,
-            final int _entityID) {
-    
-    
-        return new KpiKey(_entityType, _entityID, _kpiName.getKpiKey());
+        return new KpiKey(_kpiName.getKpiKey(), _kpiName.getEntityType());
     }
     
     
@@ -58,48 +40,24 @@ public class KpiKey
     public static KpiKey ofKpiAndEntityOrNull(final Kpi _kpi, final IEntity _entity) {
     
     
-        if (_entity == null) { return ofKpi(_kpi); }
-        return ofKpiAndEntity(_kpi, _entity);
+        if (_entity == null) {
+            return ofKpi(_kpi);
+        }
+        return new KpiKey(_kpi.getKpiKey(), _entity.getEntityKey().getEntityType());
     }
     
     
     public static KpiKey ofKpiName(final String _kpiName) {
     
     
-        return new KpiKey(null, null, _kpiName);
+        return new KpiKey(_kpiName, null);
     }
     
     
     public static KpiKey ofKpiNameAndEntity(final String _kpiName, final IEntity _entity) {
     
     
-        return new KpiKey(_entity.entityType(), _entity.getId(), _kpiName);
-    }
-    
-    
-    public static KpiKey ofKpiNameAndEntityDetails(
-            final String _kpiName,
-            final EntityType _entityTYpe,
-            final int _entityID) {
-    
-    
-        return new KpiKey(_entityTYpe, _entityID, _kpiName);
-    }
-    
-    
-    /**
-     * Builds a kpi key from a kpi name and the entity key.
-     * 
-     * @param _kpiName
-     *            the kpi name
-     * @param _entityKey
-     *            the entity key
-     * @return the kpi key.
-     */
-    public static KpiKey ofKpiNameAndEntityKey(final String _kpiName, final EntityKey _entityKey) {
-    
-    
-        return new KpiKey(_kpiName, _entityKey);
+        return new KpiKey(_kpiName, _entity.entityType());
     }
     
     
@@ -111,7 +69,9 @@ public class KpiKey
     public static KpiKey ofKpiNameAndEntityOrNull(final String _kpiName, final IEntity _entity) {
     
     
-        if (_entity == null) { return ofKpiName(_kpiName); }
+        if (_entity == null) {
+            return ofKpiName(_kpiName);
+        }
         return ofKpiNameAndEntity(_kpiName, _entity);
     }
     
@@ -128,16 +88,16 @@ public class KpiKey
     public static KpiKey ofKpiNameAndEntityType(final String _kpiName, final EntityType _entityType) {
     
     
-        return new KpiKey(_entityType, null, _kpiName);
+        return new KpiKey(_kpiName, _entityType);
     }
     
     
     
-    private EntityKey entityKey;
+    private EntityType entityType;
     
     @NotNull
     @Size(min = 0, max = 255)
-    private String    kpiName;
+    private String     kpiName;
     
     
     
@@ -154,65 +114,47 @@ public class KpiKey
     }
     
     
-    /**
-     * Kpi Key
-     * 
-     * @param _kpiName
-     *            the kpi name
-     * @param _entityKey
-     *            the entity key.
-     */
-    public KpiKey(final String _kpiName, final EntityKey _entityKey) {
+    public KpiKey(final String _kpiName, final EntityType _entityType) {
     
     
         super();
         kpiName = _kpiName;
-        entityKey = _entityKey;
+        entityType = _entityType;
     }
     
     
-    /**
-     * Builds a kpi.
-     * 
-     * @param _entityType
-     * @param _entityID
-     * @param _kpiName
-     */
-    private KpiKey(final EntityType _entityType, final Integer _entityID, final String _kpiName) {
-    
-    
-        super();
-        entityKey = new EntityKey(_entityType, _entityID);
-        kpiName = _kpiName;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(final Object obj) {
     
     
-        if (this == obj) { return true; }
-        if (obj == null) { return false; }
-        if (getClass() != obj.getClass()) { return false; }
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
         final KpiKey other = (KpiKey) obj;
-        if (entityKey == null) {
-            if (other.entityKey != null) { return false; }
-        } else if (!entityKey.equals(other.entityKey)) { return false; }
+        if (entityType != other.entityType) {
+            return false;
+        }
         if (kpiName == null) {
-            if (other.kpiName != null) { return false; }
-        } else if (!kpiName.equals(other.kpiName)) { return false; }
+            if (other.kpiName != null) {
+                return false;
+            }
+        } else if (!kpiName.equals(other.kpiName)) {
+            return false;
+        }
         return true;
     }
     
     
-    public EntityKey getEntityKey() {
+    public EntityType getEntityType() {
     
     
-        return entityKey;
+        return entityType;
     }
     
     
@@ -223,46 +165,37 @@ public class KpiKey
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
     
     
         final int prime = 31;
         int result = 1;
-        result = prime * result + (entityKey == null ? 0 : entityKey.hashCode());
+        result = prime * result + (entityType == null ? 0 : entityType.hashCode());
         result = prime * result + (kpiName == null ? 0 : kpiName.hashCode());
         return result;
     }
     
     
-    @JsonIgnore
-    public boolean isAssociatedToEntity() {
+    public void setEntityType(final EntityType _entityType) {
     
     
-        return entityKey != null && entityKey.isEntityReferenceKey();
+        entityType = _entityType;
     }
     
     
-    public void setEntityKey(final EntityKey _entityKey) {
+    public void setKpiName(final String _kpiName) {
     
     
-        entityKey = _entityKey;
+        kpiName = _kpiName;
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
     
     
-        return "KpiKey [entityKey=" + entityKey + ", kpiName=" + kpiName + "]";
+        return "KpiKey [entityType=" + entityType + ", kpiName=" + kpiName + "]";
     }
     
 }
