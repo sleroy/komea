@@ -5,25 +5,26 @@ package org.komea.product.backend.olap;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
+import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.database.dao.MeasureDao;
-import org.komea.product.database.dao.timeserie.TimeSerieOptions;
+import org.komea.product.database.dao.timeserie.GroupFormula;
+import org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions;
+import org.komea.product.database.dao.timeserie.TimeScale;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
+import org.komea.product.test.spring.H2ProfilerRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.carrotsearch.junitbenchmarks.BenchmarkRule;
+import static org.junit.Assert.assertTrue;
 
 
 
@@ -31,16 +32,27 @@ public class DatabasePerformanceTest extends AbstractSpringIntegrationTestCase
 {
     
     
-    private final static int    KPI_BUILD          = 1;
+    private final static int     KPI_BUILD              = 1;
     
-    private static final Logger LOGGER             =
-                                                           LoggerFactory
-                                                                   .getLogger(DatabasePerformanceTest.class);
+    private static final Logger  LOGGER                 =
+                                                                LoggerFactory
+                                                                        .getLogger(DatabasePerformanceTest.class);
     
-    private static final int    MAX_BUILD_PER_HOUR = 5;
+    private static final int     MAX_BUILD_PER_HOUR     = 5;
+    
+    /**
+     * 
+     */
+    private static final int     MAX_NUMBER_OF_PROJECTS = 20;
     
     
-    static List<Measure>        measures           = new ArrayList<Measure>(20000);
+    /**
+     * 
+     */
+    private static final int     MAX_TIMEOUT            = 60000;
+    
+    
+    private static List<Measure> measures               = new ArrayList<Measure>(20000);
     
     
     
@@ -49,68 +61,23 @@ public class DatabasePerformanceTest extends AbstractSpringIntegrationTestCase
     
     
         measures.clear();
-        
-        generateTwoYearsOfBuildForJenkins(2);
-    }
-    
-    
-    private static Measure fakeMeasure(
-            final DateTime _from,
-            final int _idKpi,
-            final int _idProject,
-            final double _d) {
-    
-    
-        final Measure measure = new Measure();
-        measure.setDateTime(_from);
-        measure.setValue(_d);
-        measure.setEntityID(_idProject);
-        measure.setIdKpi(_idKpi);
-        return measure;
-        
-    }
-    
-    
-    /**
-     * Generates jenkins event / every hour
-     * 
-     * @param _numberOfProjects
-     */
-    @Transactional
-    private static void generateTwoYearsOfBuildForJenkins(final int _numberOfProjects) {
-    
-    
-        final Random random = new Random();
-        DateTime from =
-                new DateTime().minusYears(2).withHourOfDay(0).withMinuteOfHour(0)
-                        .withSecondOfMinute(0).withMillisOfSecond(0);
-        while (from.isBeforeNow()) {
-            for (int idProject = 0; idProject < _numberOfProjects; ++idProject) {
-                for (int hour = 0; hour < 24; ++hour) {
-                    try {
-                        from = from.withHourOfDay(hour);
-                        if (random.nextBoolean()) { // Generate a build
-                            measures.add(fakeMeasure(from, KPI_BUILD, idProject,
-                                    random.nextInt(MAX_BUILD_PER_HOUR)));
-                        }
-                    } catch (final Exception e) {
-                        //
-                    }
-                }
-            }
-            from = from.plusDays(1);
-        }
-        
+        measures =
+                FakeMeasures.generateHourlyDataForKpi(KPI_BUILD, 2, MAX_NUMBER_OF_PROJECTS,
+                        MAX_BUILD_PER_HOUR);
+        LOGGER.info("Number of elements {}", measures.size());
     }
     
     
     
     @Rule
-    public TestRule    benchmarkRun = new BenchmarkRule();
+    public final H2ProfilerRule h2ProfilerRule = new H2ProfilerRule();
     
     
     @Autowired
-    private MeasureDao measureDao;
+    private MeasureDao          measureDao;
+    
+    @Autowired
+    private IStatisticsAPI      statisticsAPI;
     
     
     
@@ -125,37 +92,151 @@ public class DatabasePerformanceTest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test
+    @Test(timeout = MAX_TIMEOUT)
+    @Transactional
+    public void groupElementsPerDay() {
+    
+    
+        final BasicMicroBenchmark basicMicroBenchmark = new BasicMicroBenchmark();
+        basicMicroBenchmark.setTestName("groupDay");
+        basicMicroBenchmark.run(new Runnable()
+        {
+            
+            
+            @Override
+            public void run() {
+            
+            
+                final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions();
+                timeSerieOptions.setTimeScale(TimeScale.PER_DAY);
+                sameTimeSerieConfig(timeSerieOptions);
+                statisticsAPI.buildGlobalPeriodTimeSeries(timeSerieOptions);
+                
+                
+            }
+            
+            
+        });
+        
+        
+    }
+    
+    
+    @Test(timeout = 60000)
+    @Transactional
+    public void groupElementsPerHour() {
+    
+    
+        final BasicMicroBenchmark basicMicroBenchmark = new BasicMicroBenchmark();
+        basicMicroBenchmark.setTestName("groupHour");
+        basicMicroBenchmark.run(new Runnable()
+        {
+            
+            
+            @Override
+            public void run() {
+            
+            
+                final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions();
+                timeSerieOptions.setTimeScale(TimeScale.PER_HOUR);
+                sameTimeSerieConfig(timeSerieOptions);
+                statisticsAPI.buildGlobalPeriodTimeSeries(timeSerieOptions);
+                
+                
+            }
+        });
+        
+        
+    }
+    
+    
+    @Test(timeout = 60000)
+    @Transactional
+    public void groupElementsPerMonth() {
+    
+    
+        final BasicMicroBenchmark basicMicroBenchmark = new BasicMicroBenchmark();
+        basicMicroBenchmark.setTestName("groupMonth");
+        basicMicroBenchmark.run(new Runnable()
+        {
+            
+            
+            @Override
+            public void run() {
+            
+            
+                final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions();
+                timeSerieOptions.setTimeScale(TimeScale.PER_MONTH);
+                sameTimeSerieConfig(timeSerieOptions);
+                statisticsAPI.buildGlobalPeriodTimeSeries(timeSerieOptions);
+            }
+        });
+        
+    }
+    
+    
+    @Test(timeout = 60000)
+    @Transactional
+    public void groupElementsPerWeek() {
+    
+    
+        final BasicMicroBenchmark basicMicroBenchmark = new BasicMicroBenchmark();
+        basicMicroBenchmark.setTestName("groupWeek");
+        basicMicroBenchmark.run(new Runnable()
+        {
+            
+            
+            @Override
+            public void run() {
+            
+            
+                final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions();
+                timeSerieOptions.setTimeScale(TimeScale.PER_WEEK);
+                sameTimeSerieConfig(timeSerieOptions);
+                statisticsAPI.buildGlobalPeriodTimeSeries(timeSerieOptions);
+                
+            }
+        });
+        //
+        
+    }
+    
+    
+    @Test(timeout = 60000)
     @Transactional
     public void groupElementsPerYear() {
     
     
-        final TimeSerieOptions timeSerieOptions = new TimeSerieOptions();
+        final BasicMicroBenchmark basicMicroBenchmark = new BasicMicroBenchmark();
+        basicMicroBenchmark.setTestName("groupYears");
+        basicMicroBenchmark.run(new Runnable()
+        {
+            
+            
+            @Override
+            public void run() {
+            
+            
+                final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions();
+                timeSerieOptions.setTimeScale(TimeScale.PER_YEAR);
+                sameTimeSerieConfig(timeSerieOptions);
+                statisticsAPI.buildGlobalPeriodTimeSeries(timeSerieOptions);
+                
+                
+            }
+        });
+        
+    }
+    
+    
+    private void sameTimeSerieConfig(final PeriodTimeSerieOptions timeSerieOptions) {
+    
+    
         timeSerieOptions.setKpiID(KPI_BUILD);
-        final List map = measureDao.buildTimeSeries(timeSerieOptions);
-        System.out.println(map.size());
-        //
-        
+        timeSerieOptions.setGroupFormula(GroupFormula.COUNT);
+        timeSerieOptions.untilNow();
+        timeSerieOptions.lastYears(10);
+        assertTrue(timeSerieOptions.isValid());
     }
     
-    
-    @Test
-    @Transactional
-    public void insertElements() {
-    
-    
-        //
-        
-    }
-    
-    
-    @Test
-    @Transactional
-    public void insertElementsAndCount() {
-    
-    
-        final int countNumberOfValues = measureDao.countByCriteria(new MeasureCriteria());
-        LOGGER.info("Number of values produced {}", countNumberOfValues);
-        
-    }
 }

@@ -130,6 +130,8 @@ CREATE INDEX `fk_Measure_Metric1_idx` ON `komea`.`kom_msr` (`idKpi` ASC) ;
 
 CREATE INDEX `fk_Measure_Project1_idx` ON `komea`.`kom_msr` (`entityID` ASC) ;
 
+CREATE INDEX `dateIndex` ON `komea`.`kom_msr` (`date` ASC) ;
+
 
 -- -----------------------------------------------------
 -- Table `komea`.`kom_kpia`

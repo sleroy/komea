@@ -37,8 +37,8 @@
         <javadoc.skip>true</javadoc.skip>
 
         <!-- Versions of artifacts -->
-        <mybatis.version>3.2.3</mybatis.version>
-        <mybatis.spring.version>1.2.1</mybatis.spring.version>
+        <mybatis.version>3.2.7</mybatis.version>
+        <mybatis.spring.version>1.2.2</mybatis.spring.version>
 
         <javax.validation.version>1.0.0.GA</javax.validation.version>
         <gwt.charts.version>0.9.9</gwt.charts.version>

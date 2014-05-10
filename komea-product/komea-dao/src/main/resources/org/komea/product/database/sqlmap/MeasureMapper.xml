@@ -399,18 +399,41 @@
 		</if>
 	</select>
 
-	<select id="buildTimeSeries"
-		parameterType="org.komea.product.database.dao.timeserie.TimeSerieOptions"
+	<select id="buildGlobalPeriodTimeSeries"
+		parameterType="org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions"
 		resultMap="TimeCoordinate">
 
 		SELECT
-		year, COUNT(*) as value
+		<choose>
+			<when test='timeScale.name().equals("PER_YEAR")'> year, </when>
+			<when test='timeScale.name().equals("PER_MONTH")'> year,month, </when>
+			<when test='timeScale.name().equals("PER_WEEK")'> year,month, week, </when>
+			<when test='timeScale.name().equals("PER_DAY")'> year,month, week, day,</when>
+			<when test='timeScale.name().equals("PER_HOUR")'> year,month, week, day, hour,</when>
+		</choose>
+		<choose>
+			<when test='groupFormula.name().equals("COUNT")'> COUNT(*) as value </when>
+			<when test='groupFormula.name().equals("SUM_VALUE")'> SUM(value) as value </when>
+			<when test='groupFormula.name().equals("AVG_VALUE")'> AVG(value) as value </when>
+		</choose>
 		FROM
 		kom_msr
-		GROUP BY
-		year, month , week, day, hour
-		ORDER BY
-		year ASC, month ASC, week ASC, day ASC, hour ASC
+		WHERE		
+			date BETWEEN #{fromPeriod} AND #{toPeriod}		
+			AND idKpi = #{kpiID}
+		<choose>
+			<when test='timeScale.name().equals("PER_YEAR")'> GROUP BY year ORDER BY year ASC </when>
+			<when test='timeScale.name().equals("PER_MONTH")'> GROUP BY year,month ORDER BY year ASC, month ASC
+			</when>
+			<when test='timeScale.name().equals("PER_WEEK")'> GROUP BY year, month, week ORDER BY year ASC, month
+				ASC, week ASC </when>
+			<when test='timeScale.name().equals("PER_DAY")'> GROUP BY year, month, week,day ORDER BY year ASC,
+				month ASC, week ASC, day ASC </when>
+			<when test='timeScale.name().equals("PER_HOUR")'> GROUP BY year, month, week,day,hour ORDER BY year
+				ASC, month ASC, week ASC, day ASC, hour ASC </when>
+		</choose>
+
+
 	</select>
 
 </mapper>
