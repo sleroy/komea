@@ -14,8 +14,42 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions
     
     
     private Date fromPeriod;
+    
+    
     private Date toPeriod;
     
+    
+    
+    @Override
+    public boolean equals(final Object obj) {
+    
+    
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof PeriodTimeSerieOptions)) {
+            return false;
+        }
+        final PeriodTimeSerieOptions other = (PeriodTimeSerieOptions) obj;
+        if (fromPeriod == null) {
+            if (other.fromPeriod != null) {
+                return false;
+            }
+        } else if (!fromPeriod.equals(other.fromPeriod)) {
+            return false;
+        }
+        if (toPeriod == null) {
+            if (other.toPeriod != null) {
+                return false;
+            }
+        } else if (!toPeriod.equals(other.toPeriod)) {
+            return false;
+        }
+        return true;
+    }
     
     
     public Date getFromPeriod() {
@@ -53,6 +87,18 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions
     
     
         return toPeriod;
+    }
+    
+    
+    @Override
+    public int hashCode() {
+    
+    
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + (fromPeriod == null ? 0 : fromPeriod.hashCode());
+        result = prime * result + (toPeriod == null ? 0 : toPeriod.hashCode());
+        return result;
     }
     
     

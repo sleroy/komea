@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.database.dao.MeasureDao;
@@ -18,7 +17,6 @@ import org.komea.product.database.dao.timeserie.TimeScale;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
-import org.komea.product.test.spring.H2ProfilerRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,13 +44,10 @@ public class DatabasePerformanceTest extends AbstractSpringIntegrationTestCase
     private static final int     MAX_NUMBER_OF_PROJECTS = 20;
     
     
-    /**
-     * 
-     */
-    private static final int     MAX_TIMEOUT            = 60000;
-    
-    
     private static List<Measure> measures               = new ArrayList<Measure>(20000);
+    
+    
+    private static final int     MILLI_INTERVAL         = 1000;
     
     
     
@@ -69,15 +64,15 @@ public class DatabasePerformanceTest extends AbstractSpringIntegrationTestCase
     
     
     
-    @Rule
-    public final H2ProfilerRule h2ProfilerRule = new H2ProfilerRule();
+    // @Rule
+    // public final H2ProfilerRule h2ProfilerRule = new H2ProfilerRule();
     
     
     @Autowired
-    private MeasureDao          measureDao;
+    private MeasureDao     measureDao;
     
     @Autowired
-    private IStatisticsAPI      statisticsAPI;
+    private IStatisticsAPI statisticsAPI;
     
     
     
@@ -92,7 +87,7 @@ public class DatabasePerformanceTest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test(timeout = MAX_TIMEOUT)
+    @Test(timeout = 52 * MILLI_INTERVAL)
     @Transactional
     public void groupElementsPerDay() {
     
@@ -122,7 +117,7 @@ public class DatabasePerformanceTest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test(timeout = 60000)
+    @Test(timeout = 46 * MILLI_INTERVAL)
     @Transactional
     public void groupElementsPerHour() {
     
@@ -150,7 +145,7 @@ public class DatabasePerformanceTest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test(timeout = 60000)
+    @Test(timeout = 100 * MILLI_INTERVAL)
     @Transactional
     public void groupElementsPerMonth() {
     
@@ -175,7 +170,7 @@ public class DatabasePerformanceTest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test(timeout = 60000)
+    @Test(timeout = 30 * MILLI_INTERVAL)
     @Transactional
     public void groupElementsPerWeek() {
     
@@ -202,7 +197,7 @@ public class DatabasePerformanceTest extends AbstractSpringIntegrationTestCase
     }
     
     
-    @Test(timeout = 60000)
+    @Test(timeout = 32 * MILLI_INTERVAL)
     @Transactional
     public void groupElementsPerYear() {
     
