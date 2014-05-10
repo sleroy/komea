@@ -80,6 +80,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS `Personcol_UNIQUE` ON `komea`.`kom_pe` (`login
 
 CREATE INDEX IF NOT EXISTS `fk_kom_pe_kom_pero1_idx` ON `komea`.`kom_pe` (`idPersonRole` ASC) ;
 
+CREATE INDEX IF NOT EXISTS `person-email-index` ON `komea`.`kom_pe` (`email` ASC) ;
+
 
 -- -----------------------------------------------------
 -- Table `komea`.`kom_kpi`
@@ -107,6 +109,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE3` ON `komea`.`kom_kpi` (`kpiKey` A
 -- Table `komea`.`kom_msr`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `komea`.`kom_msr` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `idKpi` INT NOT NULL ,
   `year` INT NOT NULL ,
   `month` INT NOT NULL ,
@@ -117,7 +120,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_msr` (
   `value` DOUBLE NOT NULL ,
   `date` TIMESTAMP NOT NULL ,
   `sprint` VARCHAR(45) NULL ,
-  PRIMARY KEY (`idKpi`, `year`, `month`, `week`, `day`, `hour`, `entityID`) )
+  PRIMARY KEY (`id`) )
 ;
 
 CREATE INDEX IF NOT EXISTS `fk_Measure_Metric1_idx` ON `komea`.`kom_msr` (`idKpi` ASC) ;
@@ -125,6 +128,8 @@ CREATE INDEX IF NOT EXISTS `fk_Measure_Metric1_idx` ON `komea`.`kom_msr` (`idKpi
 CREATE INDEX IF NOT EXISTS `fk_Measure_Project1_idx` ON `komea`.`kom_msr` (`entityID` ASC) ;
 
 CREATE INDEX IF NOT EXISTS `dateIndex` ON `komea`.`kom_msr` (`date` ASC) ;
+
+CREATE INDEX IF NOT EXISTS `measure-complex-index` ON `komea`.`kom_msr` (`year` ASC, `idKpi` ASC, `month` ASC, `week` ASC, `day` ASC, `hour` ASC, `entityID` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -329,5 +334,5 @@ CREATE INDEX IF NOT EXISTS `fk_kom_sfac_has_kom_kpi_kom_kpi1_idx` ON `komea`.`ko
 
 CREATE INDEX IF NOT EXISTS `fk_kom_sfac_has_kom_kpi_kom_sfac1_idx` ON `komea`.`kom_has_sfac_kpi` (`idSuccessFactor` ASC) ;
 
-;
+
 

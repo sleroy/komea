@@ -82,6 +82,8 @@ public class DatabasePerformanceTest extends AbstractSpringIntegrationTestCase
     
         measureDao.deleteByCriteria(new MeasureCriteria());
         for (final Measure measure : measures) {
+            
+            
             measureDao.insert(measure);
         }
     }
