@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.komea.product.database.dao.MeasureDao">
-
+	
 	<resultMap type="org.komea.product.database.dao.timeserie.TimeCoordinate"
 		id="TimeCoordinate">
 		<result column="year" property="year" />
@@ -418,19 +418,23 @@
 		</choose>
 		FROM
 		kom_msr
-		WHERE		
-			date BETWEEN #{fromPeriod} AND #{toPeriod}		
-			AND idKpi = #{kpiID}
+		WHERE
+		date BETWEEN #{fromPeriod} AND #{toPeriod}
+		AND idKpi =
+		#{kpiID}
 		<choose>
 			<when test='timeScale.name().equals("PER_YEAR")'> GROUP BY year ORDER BY year ASC </when>
 			<when test='timeScale.name().equals("PER_MONTH")'> GROUP BY year,month ORDER BY year ASC, month ASC
 			</when>
 			<when test='timeScale.name().equals("PER_WEEK")'> GROUP BY year, month, week ORDER BY year ASC, month
-				ASC, week ASC </when>
+				ASC, week ASC
+			</when>
 			<when test='timeScale.name().equals("PER_DAY")'> GROUP BY year, month, week,day ORDER BY year ASC,
-				month ASC, week ASC, day ASC </when>
+				month ASC, week ASC, day ASC
+			</when>
 			<when test='timeScale.name().equals("PER_HOUR")'> GROUP BY year, month, week,day,hour ORDER BY year
-				ASC, month ASC, week ASC, day ASC, hour ASC </when>
+				ASC, month ASC, week ASC, day ASC, hour ASC
+			</when>
 		</choose>
 
 

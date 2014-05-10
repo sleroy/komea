@@ -86,6 +86,8 @@ CREATE UNIQUE INDEX `Personcol_UNIQUE` ON `komea`.`kom_pe` (`login` ASC) ;
 
 CREATE INDEX `fk_kom_pe_kom_pero1_idx` ON `komea`.`kom_pe` (`idPersonRole` ASC) ;
 
+CREATE INDEX `person-email-index` ON `komea`.`kom_pe` (`email` ASC) ;
+
 
 -- -----------------------------------------------------
 -- Table `komea`.`kom_kpi`
@@ -113,6 +115,7 @@ CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_kpi` (`kpiKey` ASC) ;
 -- Table `komea`.`kom_msr`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `komea`.`kom_msr` (
+  `id` INT NOT NULL ,
   `idKpi` INT NOT NULL ,
   `year` INT NOT NULL ,
   `month` INT NOT NULL ,
@@ -123,7 +126,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_msr` (
   `value` DOUBLE NOT NULL ,
   `date` TIMESTAMP NOT NULL ,
   `sprint` VARCHAR(45) NULL ,
-  PRIMARY KEY (`idKpi`, `year`, `month`, `week`, `day`, `hour`, `entityID`) )
+  PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
 CREATE INDEX `fk_Measure_Metric1_idx` ON `komea`.`kom_msr` (`idKpi` ASC) ;
@@ -131,6 +134,8 @@ CREATE INDEX `fk_Measure_Metric1_idx` ON `komea`.`kom_msr` (`idKpi` ASC) ;
 CREATE INDEX `fk_Measure_Project1_idx` ON `komea`.`kom_msr` (`entityID` ASC) ;
 
 CREATE INDEX `dateIndex` ON `komea`.`kom_msr` (`date` ASC) ;
+
+CREATE INDEX `measure-complex-index` ON `komea`.`kom_msr` (`year` ASC, `idKpi` ASC, `month` ASC, `week` ASC, `day` ASC, `hour` ASC, `entityID` ASC) ;
 
 
 -- -----------------------------------------------------
