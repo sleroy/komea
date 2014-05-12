@@ -38,52 +38,53 @@
 
    <kom_kpi id="1" kpiKey="ALERT_RECEIVED_IN_ONE_DAY" name="Number of alerts received under 24 hours."
       description="Provides the number of alerts received under 24 hours" valueMin="0" valueMax="1.7976931348623157e308"
-      valueDirection="WORST" valueType="INT" esperRequest="new org.komea.product.backend.service.esper.stats.AlertPerDay()"
-      cronExpression="0 * * * * ?" evictionRate="1" evictionType="DAYS" providerType="OTHER" />
+      valueDirection="WORST" valueType="INT" entityType="PROJECT"
+      esperRequest="new org.komea.product.backend.service.esper.stats.AlertPerDay()" cronExpression="0 * * * * ?"
+      evictionRate="1" evictionType="DAYS" providerType="OTHER" />
    <kom_kpi id="2" kpiKey="ALERT_CRITICITY_DAY_BLOCKER" name="Number of alerts of criticity BLOCKER received under 24 hours."
       description="Provides the number of alerts of criticity BLOCKER received under 24 hours" valueMin="0"
-      valueMax="1.7976931348623157e308" valueDirection="WORST" valueType="INT"
+      valueMax="1.7976931348623157e308" valueDirection="WORST" valueType="INT" entityType="PROJECT"
       esperRequest="new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).BLOCKER)"
       cronExpression="0 * * * * ?" evictionRate="1" evictionType="DAYS" providerType="OTHER" />
    <kom_kpi id="3" kpiKey="ALERT_CRITICITY_DAY_CRITICAL" name="Number of alerts of criticity CRITICAL received under 24 hours."
       description="Provides the number of alerts of criticity CRITICAL received under 24 hours" valueMin="0"
-      valueMax="1.7976931348623157e308" valueDirection="WORST" valueType="INT"
+      valueMax="1.7976931348623157e308" valueDirection="WORST" valueType="INT" entityType="PROJECT"
       esperRequest="new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).CRITICAL)"
       cronExpression="0 * * * * ?" evictionRate="1" evictionType="DAYS" providerType="OTHER" />
    <kom_kpi id="4" kpiKey="ALERT_CRITICITY_DAY_MAJOR" name="Number of alerts of criticity MAJOR received under 24 hours."
       description="Provides the number of alerts of criticity MAJOR received under 24 hours" valueMin="0"
-      valueMax="1.7976931348623157e308" valueDirection="WORST" valueType="INT"
+      valueMax="1.7976931348623157e308" valueDirection="WORST" valueType="INT" entityType="PROJECT"
       esperRequest="new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).MAJOR)"
       cronExpression="0 * * * * ?" evictionRate="1" evictionType="DAYS" providerType="OTHER" />
    <kom_kpi id="5" kpiKey="ALERT_CRITICITY_DAY_MINOR" name="Number of alerts of criticity MINOR received under 24 hours."
       description="Provides the number of alerts of criticity MINOR received under 24 hours" valueMin="0"
-      valueMax="1.7976931348623157e308" valueDirection="WORST" valueType="INT"
+      valueMax="1.7976931348623157e308" valueDirection="WORST" valueType="INT" entityType="PROJECT"
       esperRequest="new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).MINOR)"
       cronExpression="0 * * * * ?" evictionRate="1" evictionType="DAYS" providerType="OTHER" />
    <kom_kpi id="6" kpiKey="ALERT_CRITICITY_DAY_INFO" name="Number of alerts of criticity INFO received under 24 hours."
       description="Provides the number of alerts of criticity INFO received under 24 hours" valueMin="0"
-      valueMax="1.7976931348623157e308" valueDirection="WORST" valueType="INT"
+      valueMax="1.7976931348623157e308" valueDirection="WORST" valueType="INT" entityType="PROJECT"
       esperRequest="new org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay(T(org.komea.product.database.enums.Severity).INFO)"
       cronExpression="0 * * * * ?" evictionRate="1" evictionType="DAYS" providerType="OTHER" />
-   <kom_kpi id="7" kpiKey="NUMBER_OF_SUCCESSFUL_BUILD_PER_WEEK" name="Number of successful build per week"
-      description="Number of successful build per week" valueMin="1" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.SuccessfulBuildPerDay()" cronExpression="0 0 0 4 * ? *"
-      evictionRate="12" evictionType="DAYS" providerType="CI_BUILD" />
-   <kom_kpi id="8" kpiKey="NUMBER_OF_SUCCESSFUL_BUILD_PER_DAY" name="Number of successful build per day"
-      description="Number of successful build per day" valueMin="0" valueMax="1.7976931348623157e308" valueDirection="BETTER"
-      valueType="INT" entityType="PROJECT" esperRequest="new org.komea.product.plugins.kpi.standard.SuccessfulBuildPerDay()"
-      cronExpression="0 0 0/6 * * ? *" evictionRate="1" evictionType="MONTHS" providerType="CI_BUILD" />
-   <kom_kpi id="9" kpiKey="NUMBER_OF_BUILD_PER_DAY" name="Number of build per day" description="Number of build per day"
-      valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.BuildPerDay()" cronExpression="0 0/5 * * * ? *"
-      evictionRate="1" evictionType="MONTHS" providerType="CI_BUILD" />
-   <kom_kpi id="10" kpiKey="NUMBER_OF_BUILD_PER_MONTH" name="Number of build per month" description="Number of build per month"
-      valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.BuildPerMonth()" cronExpression="0 0 0 ? * MON *"
-      evictionRate="12" evictionType="MONTHS" providerType="CI_BUILD" />
+<!--    <kom_kpi id="7" kpiKey="NUMBER_OF_SUCCESSFUL_BUILD_PER_WEEK" name="Number of successful build per week" -->
+<!--       description="Number of successful build per week" valueMin="1" valueDirection="BETTER" valueType="INT" entityType="PROJECT" -->
+<!--       esperRequest="new org.komea.product.plugins.kpi.standard.SuccessfulBuildPerDay()" cronExpression="0 0 0 4 * ? *" -->
+<!--       evictionRate="12" evictionType="DAYS" providerType="CI_BUILD" /> -->
+<!--    <kom_kpi id="8" kpiKey="NUMBER_OF_SUCCESSFUL_BUILD_PER_DAY" name="Number of successful build per day" -->
+<!--       description="Number of successful build per day" valueMin="0" valueMax="1.7976931348623157e308" valueDirection="BETTER" -->
+<!--       valueType="INT" entityType="PROJECT" esperRequest="new org.komea.product.plugins.kpi.standard.SuccessfulBuildPerDay()" -->
+<!--       cronExpression="0 0 0/6 * * ? *" evictionRate="1" evictionType="MONTHS" providerType="CI_BUILD" /> -->
+<!--    <kom_kpi id="9" kpiKey="NUMBER_OF_BUILD_PER_DAY" name="Number of build per day" description="Number of build per day" -->
+<!--       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT" -->
+<!--       esperRequest="new org.komea.product.plugins.kpi.standard.BuildPerDay()" cronExpression="0 0/5 * * * ? *" -->
+<!--       evictionRate="1" evictionType="MONTHS" providerType="CI_BUILD" /> -->
+<!--    <kom_kpi id="10" kpiKey="NUMBER_OF_BUILD_PER_MONTH" name="Number of build per month" description="Number of build per month" -->
+<!--       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT" -->
+<!--       esperRequest="new org.komea.product.plugins.kpi.standard.BuildPerMonth()" cronExpression="0 0 0 ? * MON *" -->
+<!--       evictionRate="12" evictionType="MONTHS" providerType="CI_BUILD" /> -->
    <kom_kpi id="11" kpiKey="LINE_COVERAGE" name="Line coverage" description="Line coverage" valueMin="5e-324"
       valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('line_coverage')" cronExpression="0 0 0 /1 * ? *"
+      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi(&quot;line_coverage&quot;)" cronExpression="0 0 0 /1 * ? *"
       evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="12" kpiKey="VOLUMETRY" name="Volumetry" description="Volumetry" valueMin="5e-324"
       valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
@@ -111,8 +112,8 @@
       evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="18" kpiKey="COMMENT_LINES_DENSITY_(%)" name="Comment lines density (%)" description="Comment lines density (%)"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('comment_lines_density')" cronExpression="0 0 0 /1 * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('comment_lines_density')"
+      cronExpression="0 0 0 /1 * ? *" evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="19" kpiKey="PUBLIC_DOCUMENTED_API_DENSITY" name="Public documented api density" description="Public documented api density"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
       esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('public_documented_api_density')"
@@ -143,19 +144,19 @@
       evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="26" kpiKey="UNIT_TESTS_SUCCESS_(%)" name="Unit tests success (%)" description="Unit tests success (%)"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('test_success_density')" cronExpression="0 0 0 /1 * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('test_success_density')"
+      cronExpression="0 0 0 /1 * ? *" evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="27" kpiKey="BRANCH_COVERAGE(%)" name="Branch coverage(%)" description="Branch coverage(%)"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
       esperRequest="new org.komea.product.backend.service.kpi.MeasureServiceTest.DemoQuery()" cronExpression="0 0 0 /1 * ? *"
       evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="29" kpiKey="BRANCH_COVERAGE_IMPROVEMENT" name="Branch coverage improvement" description="Branch coverage improvement"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('new_branch_coverage')" cronExpression="0 0 0 /1 * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('new_branch_coverage')"
+      cronExpression="0 0 0 /1 * ? *" evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="30" kpiKey="LINE_COVERAGE_IMPROVEMENT" name="Line coverage improvement" description="Line coverage improvement"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('new_coverage')" cronExpression="0 0 0 /1 * ? *"
+      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi(&quot;new_coverage&quot;)" cronExpression="0 0 0 /1 * ? *"
       evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="31" kpiKey="DUPLICATED_CODE_DENSITY" name="Duplicated code density" description="Duplicated code density"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
@@ -163,16 +164,16 @@
       cronExpression="0 0 0 /1 * ? *" evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="32" kpiKey="VIOLATION_DENSITY" name="Violation density" description="Violation density"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('violations_density')" cronExpression="0 0 0 /1 * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('violations_density')"
+      cronExpression="0 0 0 /1 * ? *" evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="33" kpiKey="BLOCKER_VIOLATIONS" name="Blocker violations" description="Blocker violations"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('blocker_violations')" cronExpression="0 0 0 /1 * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('blocker_violations')"
+      cronExpression="0 0 0 /1 * ? *" evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="34" kpiKey="BLOCKER_VIOLATION_PROGRESSION" name="Blocker violation progression" description="Blocker violation progression"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('new_blocker_violations')" cronExpression="0 0 0 /1 * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('new_blocker_violations')"
+      cronExpression="0 0 0 /1 * ? *" evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="35" kpiKey="VIOLATION_PROGRESSION" name="Violation progression" description="Violation progression"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
       esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('new_violations')" cronExpression="0 0 0 /1 * ? *"
@@ -203,8 +204,8 @@
       evictionRate="12" evictionType="MONTHS" providerType="CI_BUILD" />
    <kom_kpi id="41" kpiKey="IT_BRANCH_COVERAGE(%)" name="IT Branch coverage(%)" description="IT Branch coverage(%)"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('it_branch_coverage')" cronExpression="0 0 0/6 * * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('it_branch_coverage')"
+      cronExpression="0 0 0/6 * * ? *" evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="42" kpiKey="LINES_OF_CODE" name="Lines of Code" description="Lines of Code" valueMin="5e-324"
       valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
       esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('ncloc')" cronExpression="0 0 0/6 * * ? *"
@@ -215,8 +216,8 @@
       evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="44" kpiKey="COMMENTS_(%)" name="Comments (%)" description="Comments (%)" valueMin="5e-324"
       valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('comment_lines_density')" cronExpression="0 0 0/6 * * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('comment_lines_density')"
+      cronExpression="0 0 0/6 * * ? *" evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="45" kpiKey="PUBLIC_DOCUMENTED_API_(%)" name="Public documented API (%)" description="Public documented API (%)"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
       esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('public_documented_api_density')"
@@ -251,12 +252,12 @@
       evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="53" kpiKey="IT_BRANCH_COVERAGE" name="IT branch coverage" description="IT branch coverage"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('it_branch_coverage')" cronExpression="0 0 0/6 * * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('it_branch_coverage')"
+      cronExpression="0 0 0/6 * * ? *" evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="54" kpiKey="BRANCH_COVERAGE_ON_NEW_CODE" name="Branch coverage on new code" description="Branch coverage on new code"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('new_branch_coverage')" cronExpression="0 0 0/6 * * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('new_branch_coverage')"
+      cronExpression="0 0 0/6 * * ? *" evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="55" kpiKey="COVERAGE_ON_NEW_CODE" name="Coverage on new code" description="Coverage on new code"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
       esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('new_coverage')" cronExpression="0 0 0/6 * * ? *"
@@ -267,16 +268,16 @@
       cronExpression="0 0 0/6 * * ? *" evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="57" kpiKey="RULES_COMPLIANCE" name="Rules compliance" description="Rules compliance" valueMin="5e-324"
       valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('violations_density')" cronExpression="0 0 0/6 * * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('violations_density')"
+      cronExpression="0 0 0/6 * * ? *" evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="58" kpiKey="BLOCKER_ISSUES" name="Blocker issues" description="Blocker issues" valueMin="5e-324"
       valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('blocker_violations')" cronExpression="0 0 0/6 * * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('blocker_violations')"
+      cronExpression="0 0 0/6 * * ? *" evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="59" kpiKey="NEW_BLOCKER_ISSUES" name="New Blocker issues" description="New Blocker issues"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('new_blocker_violations')" cronExpression="0 0 0/6 * * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('new_blocker_violations')"
+      cronExpression="0 0 0/6 * * ? *" evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="60" kpiKey="NEW_ISSUES" name="New issues" description="New issues" valueMin="5e-324"
       valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
       esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('new_violations')" cronExpression="0 0 0/6 * * ? *"
@@ -289,7 +290,7 @@
    <kom_msr id="3950" idKpi="2" date="2014-04-15 08:33:00" value="0" />
    <kom_msr id="3952" idKpi="4" date="2014-04-15 08:33:00" value="0" />
    <kom_msr id="3955" idKpi="2" date="2014-04-15 08:34:00" value="0" />
-   
+
 
 
 

@@ -5,7 +5,6 @@
 package org.komea.product.backend.service.kpi;
 
 
-
 import java.util.Collection;
 import java.util.List;
 
@@ -88,7 +87,7 @@ public class KpiAPIService implements IKpiAPI {
      * @param _historyKey
      * @return the KpiKey
      */
-    private KpiKey convertTKpiKey(final HistoryStringKey _historyKey) {
+    private KpiKey convertToKpiKey(final HistoryStringKey _historyKey) {
     
         EntityStringKey entityKey = EntityStringKey.of(_historyKey.getEntityType().getEntityType(), _historyKey.getEntityKey());
         IEntity entity = entityService.findEntityByEntityStringKey(entityKey);
@@ -96,7 +95,7 @@ public class KpiAPIService implements IKpiAPI {
             return null;
         }
         return KpiKey.ofKpiNameAndEntity(_historyKey.getKpiKey(), entity);
-        
+    }
     
     /*
      * (non-Javadoc)
@@ -255,10 +254,7 @@ public class KpiAPIService implements IKpiAPI {
     }
     
     @Override
-    public List<MeasureDto> getRealTimeMeasuresFromEntities(
-            final List<Kpi> _baseKpis,
-            final List<? extends IEntity> _subEntitiesDto) {
-    
+    public List<MeasureDto> getRealTimeMeasuresFromEntities(final List<Kpi> _baseKpis, final List<? extends IEntity> _subEntitiesDto) {
     
         return kpiValueService.getAllRealTimeMeasuresPerEntityAndPerKpi(_baseKpis, _subEntitiesDto);
         
@@ -315,7 +311,6 @@ public class KpiAPIService implements IKpiAPI {
     
         kpiValueService = _kpiValueService;
     }
-    
     
     /**
      * @param _measureHistoryService
