@@ -139,8 +139,7 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
         final String key = "testBugKPI";
         final Kpi kpi =
                 KpiBuilder.createAscending().nameAndKeyDescription(key)
-                        .entityType(EntityType.PROJECT).expirationMonth()
-                        .providerType(ProviderType.OTHER)
+                        .entityType(EntityType.PROJECT).providerType(ProviderType.OTHER)
                         .query("new " + DemoKPI.class.getName() + "()").cronFiveMinutes().build();
         
         kpiService.saveOrUpdate(kpi);

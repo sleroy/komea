@@ -40,14 +40,9 @@ public class BuildPeriodTimeSeriesPerformanceTest extends AbstractSpringIntegrat
     
     private static final int     MAX_BUILD_PER_HOUR     = 5;
     
-    /**
-     * 
-     */
     private static final int     MAX_NUMBER_OF_PROJECTS = 20;
     
-    /**
-     * 
-     */
+    
     private static final int     MAX_YEARS              = 2;
     
     

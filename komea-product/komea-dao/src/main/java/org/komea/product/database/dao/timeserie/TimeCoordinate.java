@@ -3,6 +3,10 @@ package org.komea.product.database.dao.timeserie;
 
 
 
+import org.joda.time.DateTime;
+
+
+
 public class TimeCoordinate
 {
     
@@ -16,7 +20,7 @@ public class TimeCoordinate
     private int    hour;
     
     
-    private int    kpiID;
+    private int    idKpi;
     
     
     private int    month;
@@ -65,7 +69,7 @@ public class TimeCoordinate
         if (hour != other.hour) {
             return false;
         }
-        if (kpiID != other.kpiID) {
+        if (idKpi != other.idKpi) {
             return false;
         }
         if (month != other.month) {
@@ -85,6 +89,20 @@ public class TimeCoordinate
             return false;
         }
         return true;
+    }
+    
+    
+    /**
+     * Returns the period.
+     * 
+     * @return the period.
+     */
+    public DateTime getDate() {
+    
+    
+        final DateTime dateTime = new DateTime();
+        
+        return dateTime;
     }
     
     
@@ -115,14 +133,14 @@ public class TimeCoordinate
     
     
     /**
-     * Returns the value of the field kpiID.
+     * Returns the value of the field idKpi.
      * 
-     * @return the kpiID
+     * @return the idKpi
      */
-    public int getKpiID() {
+    public int getIdKpi() {
     
     
-        return kpiID;
+        return idKpi;
     }
     
     
@@ -167,7 +185,7 @@ public class TimeCoordinate
         result = prime * result + day;
         result = prime * result + entityID;
         result = prime * result + hour;
-        result = prime * result + kpiID;
+        result = prime * result + idKpi;
         result = prime * result + month;
         result = prime * result + (value == null ? 0 : value.hashCode());
         result = prime * result + week;
@@ -204,15 +222,15 @@ public class TimeCoordinate
     
     
     /**
-     * Sets the field kpiID with the value of _kpiID.
+     * Sets the field idKpi with the value of _kpiID.
      * 
      * @param _kpiID
-     *            the kpiID to set
+     *            the idKpi to set
      */
-    public void setKpiID(final int _kpiID) {
+    public void setIdKpi(final int _kpiID) {
     
     
-        kpiID = _kpiID;
+        idKpi = _kpiID;
     }
     
     
@@ -253,7 +271,7 @@ public class TimeCoordinate
     
     
         return "TimeCoordinate [day="
-                + day + ", entityID=" + entityID + ", hour=" + hour + ", kpiID=" + kpiID
+                + day + ", entityID=" + entityID + ", hour=" + hour + ", idKpi=" + idKpi
                 + ", month=" + month + ", value=" + value + ", week=" + week + ", year=" + year
                 + "]";
     }

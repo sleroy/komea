@@ -328,7 +328,7 @@ public final class MeasureHistoryService implements IMeasureHistoryService
         final Measure measure =
                 Measure.initializeMeasure(_ofKpi.getKpiID(), _ofKpi.getEntityKey().getId());
         measure.setValue(_value);
-        measure.setDate(_analysisDate.toDate());
+        measure.setDateTime(_analysisDate);
         measureDAO.insert(measure);
         
     }

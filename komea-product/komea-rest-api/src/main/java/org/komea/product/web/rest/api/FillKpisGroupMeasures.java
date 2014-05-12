@@ -78,6 +78,25 @@ public class FillKpisGroupMeasures
     }
     
     
+    public void computeMeasuresForSubEntities(
+            final EntityType entityType,
+            final List<Kpi> baseKpis,
+            final List<BaseEntityDto> allSubEntitiesDto,
+            final Integer entityId,
+            final List<? extends IEntity> subEntities) {
+    
+    
+        final List<BaseEntityDto> subEntitiesDto = BaseEntityDto.convertEntities(subEntities);
+        allSubEntitiesDto.addAll(subEntitiesDto);
+        final List<MeasureDto> realTimeMeasures =
+                kpiService.getRealTimeMeasuresFromEntities(baseKpis, subEntitiesDto);
+        final Map<Integer, List<Measure>> measuresByKpi =
+                new HashMap<Integer, List<Measure>>(realTimeMeasures.size());
+        buildMapKpiMeasure(realTimeMeasures, measuresByKpi);
+        forEachKpiComputeAggregateMeasure(entityType, entityId, measuresByKpi);
+    }
+    
+    
     public void fillKpiGroupsMeasures() {
     
     
@@ -100,28 +119,8 @@ public class FillKpisGroupMeasures
         // TODO calculate history from allSubMeasures
         measures.addAll(history);
     }
-
-
-    public void computeMeasuresForSubEntities(
-            final EntityType entityType,
-            final List<Kpi> baseKpis,
-            final List<BaseEntityDto> allSubEntitiesDto,
-            final Integer entityId,
-            final List<? extends IEntity> subEntities) {
     
     
-        final List<BaseEntityDto> subEntitiesDto =
-                BaseEntityDto.convertEntities(subEntities);
-        allSubEntitiesDto.addAll(subEntitiesDto);
-        final List<MeasureDto> realTimeMeasures =
-                kpiService.getRealTimeMeasuresFromEntities(baseKpis, subEntitiesDto);
-        final Map<Integer, List<Measure>> measuresByKpi =
-                new HashMap<Integer, List<Measure>>(realTimeMeasures.size());
-        buildMapKpiMeasure(realTimeMeasures, measuresByKpi);
-        forEachKpiComputeAggregateMeasure(entityType, entityId, measuresByKpi);
-    }
-
-
     public void forEachKpiComputeAggregateMeasure(
             final EntityType entityType,
             final Integer entityId,
@@ -134,8 +133,7 @@ public class FillKpisGroupMeasures
                 continue;
             }
             
-            measures.add(buildMeasureWithSummaryValue(kpiMeasures, kpi, entityType,
-                    entityId));
+            measures.add(buildMeasureWithSummaryValue(kpiMeasures, kpi, entityType, entityId));
         }
     }
     
@@ -173,7 +171,7 @@ public class FillKpisGroupMeasures
         final MeasureDto measure = new MeasureDto();
         measure.setIdKpi(kpi.getId());
         measure.setDate(new Date());
-        measure.setEntity(entityType, entityId);
+        measure.setEntityID(entityId);
         measure.setKpiKey(kpi.getKpiKey());
         final double value;
         if (Kpi.isAverage(kpi.getKpiKey())) {

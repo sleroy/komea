@@ -443,16 +443,16 @@
 	</sql>
 	<sql id="timeGroupBy">
 		<choose>
-			<when test='options.timeScale.name().equals("PER_YEAR")'> GROUP BY idKpi, entityID, year ORDER BY idKpi ASC, entityID ASC, year ASC </when>
-			<when test='options.timeScale.name().equals("PER_MONTH")'> GROUP BY idKpi, entityID, year,month ORDER BY  idKpi ASC, entityID ASC,year ASC, month ASC
+			<when test='options.timeScale.name().equals("PER_YEAR")'> GROUP BY idKpi, entityID, year ORDER BY year ASC </when>
+			<when test='options.timeScale.name().equals("PER_MONTH")'> GROUP BY idKpi, entityID, year,month ORDER BY  year ASC, month ASC
 			</when>
-			<when test='options.timeScale.name().equals("PER_WEEK")'> GROUP BY idKpi, entityID, year, month, week ORDER BY  idKpi ASC, entityID ASC,year ASC, month
+			<when test='options.timeScale.name().equals("PER_WEEK")'> GROUP BY idKpi, entityID, year, month, week ORDER BY year ASC, month
 				ASC, week ASC
 			</when>
-			<when test='options.timeScale.name().equals("PER_DAY")'> GROUP BY idKpi, entityID, year, month, week,day ORDER BY  idKpi ASC, entityID ASC,year ASC,
+			<when test='options.timeScale.name().equals("PER_DAY")'> GROUP BY idKpi, entityID, year, month, week,day ORDER BY  year ASC,
 				month ASC, week ASC, day ASC
 			</when>
-			<when test='options.timeScale.name().equals("PER_HOUR")'> GROUP BY idKpi, entityID, year, month, week,day,hour ORDER BY  idKpi ASC, entityID ASC,year
+			<when test='options.timeScale.name().equals("PER_HOUR")'> GROUP BY idKpi, entityID, year, month, week,day,hour ORDER BY  year
 				ASC, month ASC, week ASC, day ASC, hour ASC
 			</when>
 		</choose>
@@ -499,7 +499,7 @@
 		<include refid="timeGroupBy" />
 	</select>
 
-	<select id="evaluateKpiValue" resultMap="TimeCoordinate"
+	<select id="evaluateKpiValue" resultType="double"
 		parameterType="map">
 		SELECT
 		<include refid="CustomFormula" />
@@ -508,10 +508,10 @@
 		WHERE
 		idKpi = #{options.kpiID} AND
 		entityID = #{key.id}
-		<include refid="timeGroupBy" />
+		GROUP BY idKpi, entityID
 	</select>
 
-   <select id="evaluateKpiValueOnPeriod" resultMap="TimeCoordinate"
+   <select id="evaluateKpiValueOnPeriod" resultType="double"
 		parameterType="map">
 		SELECT
 		<include refid="CustomFormula" />
@@ -521,7 +521,7 @@
 		idKpi = #{options.kpiID} AND
 		entityID = #{key.id} AND
 		<include refid="wherePeriod" />
-		<include refid="timeGroupBy" />
+		GROUP BY idKpi, entityID
 	</select>
 	
 	<select id="evaluateKpiValues" resultType="hashmap"
@@ -532,8 +532,9 @@
 		FROM
 		kom_msr
 		WHERE
-		idKpi = #{options.kpiID}
-		<include refid="timeGroupBy" />
+		idKpi = #{options.kpiID} AND
+		entityID = #{key.id} 
+		GROUP BY entityID
 	</select>
 
    <select id="evaluateKpiValuesOnPeriod" resultType="hashmap"
@@ -545,8 +546,9 @@
 		kom_msr
 		WHERE
 		idKpi = #{options.kpiID} AND
+		entityID = #{key.id} AND 
 		<include refid="wherePeriod" />
-		<include refid="timeGroupBy" />
+		GROUP BY entityID
 	</select>
 
 </mapper>

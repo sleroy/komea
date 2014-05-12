@@ -177,7 +177,7 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions
     
     
     /**
-     * 
+     * Sets the toPeriod to now.
      */
     public void untilNow() {
     
