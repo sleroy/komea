@@ -4,8 +4,6 @@
 
 package org.komea.product.backend.olap;
 
-
-
 import java.util.List;
 import java.util.Random;
 
@@ -15,124 +13,92 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
-
-
 /**
  * @author sleroy
  */
-public class FakeMeasures
-{
-    
-    
-    /**
-     * Generates jenkins event / every hour
-     * 
-     * @param _numberOfProjects
-     * @return
-     */
-    @Transactional
-    public static List<Measure> generateDailyDataForKpi(
-            final int _kpiID,
-            final int _maxYears,
-            final int _numberOfProjects,
-            final int _valueMaxrange) {
-    
-    
-        final List<Measure> measures = Lists.newArrayList();
-        final Random random = new Random();
-        DateTime from = programBeforeDate(_maxYears);
-        while (from.isBeforeNow()) {
-            for (int idProject = 0; idProject < _numberOfProjects; ++idProject) {
-                if (random.nextBoolean()) { // Generate a build
-                
-                    measures.add(fakeMeasure(from, _kpiID, idProject,
-                            random.nextInt(_valueMaxrange)));
-                }
-            }
-            from = from.plusDays(1);
-        }
-        return measures;
-    }
-    
-    
-    /**
-     * Generates jenkins event / every hour
-     * 
-     * @param _numberOfProjects
-     * @return
-     */
-    @Transactional
-    public static List<Measure> generateHourlyDataForKpi(
-            final int _kpiID,
-            final int _maxYears,
-            final int _numberOfProjects,
-            final int _valueMaxrange) {
-    
-    
-        final List<Measure> measures = Lists.newArrayList();
-        final Random random = new Random();
-        DateTime from = programBeforeDate(_maxYears);
-        while (from.isBeforeNow()) {
-            for (int idProject = 0; idProject < _numberOfProjects; ++idProject) {
-                from =
-                        generateHourlyData(_kpiID, _valueMaxrange, measures, random, from,
-                                idProject);
-            }
-            from = from.plusDays(1);
-        }
-        return measures;
-    }
-    
-    
-    private static Measure fakeMeasure(
-            final DateTime _from,
-            final int _idKpi,
-            final int _idProject,
-            final double _d) {
-    
-    
-        final Measure measure = new Measure();
-        measure.setDateTime(_from);
-        measure.setValue(_d);
-        measure.setEntityID(_idProject);
-        measure.setIdKpi(_idKpi);
-        return measure;
-        
-    }
-    
-    
-    private static DateTime generateHourlyData(
-            final int _kpiID,
-            final int _valueMaxrange,
-            final List<Measure> measures,
-            final Random random,
-            DateTime from,
-            final int idProject) {
-    
-    
-        for (int hour = 0; hour < 24; ++hour) {
-            try {
-                from = from.withHourOfDay(hour);
-                if (random.nextBoolean()) { // Generate a build
-                
-                    measures.add(fakeMeasure(from, _kpiID, idProject,
-                            random.nextInt(_valueMaxrange)));
-                }
-            } catch (final Exception e) {
-                //
-            }
-        }
-        return from;
-    }
-    
-    
-    private static DateTime programBeforeDate(final int _maxYears) {
-    
-    
-        final DateTime from =
-                new DateTime().minusYears(_maxYears).withHourOfDay(0).withMinuteOfHour(0)
-                        .withSecondOfMinute(0).withMillisOfSecond(0);
-        return from;
-    }
-    
+public class FakeMeasures {
+
+	/**
+	 * Generates jenkins event / every hour
+	 * 
+	 * @param _numberOfProjects
+	 * @return
+	 */
+	@Transactional
+	public static List<Measure> generateDailyDataForKpi(final int _kpiID, final int _maxYears,
+	        final int _numberOfProjects, final int _valueMaxrange) {
+
+		final List<Measure> measures = Lists.newArrayList();
+		final Random random = new Random();
+		DateTime from = programBeforeDate(_maxYears);
+		while (from.isBeforeNow()) {
+			for (int idProject = 0; idProject < _numberOfProjects; ++idProject) {
+				if (random.nextBoolean()) { // Generate a build
+
+					measures.add(fakeMeasure(from, _kpiID, idProject, random.nextInt(_valueMaxrange)));
+				}
+			}
+			from = from.plusDays(1);
+		}
+		return measures;
+	}
+
+	/**
+	 * Generates jenkins event / every hour
+	 * 
+	 * @param _numberOfProjects
+	 * @return
+	 */
+	@Transactional
+	public static List<Measure> generateHourlyDataForKpi(final int _kpiID, final int _maxYears,
+	        final int _numberOfProjects, final int _valueMaxrange) {
+
+		final List<Measure> measures = Lists.newArrayList();
+		final Random random = new Random();
+		DateTime from = programBeforeDate(_maxYears);
+		while (from.isBeforeNow()) {
+			for (int idProject = 0; idProject < _numberOfProjects; ++idProject) {
+				from = generateHourlyData(_kpiID, _valueMaxrange, measures, random, from, idProject);
+			}
+			from = from.plusDays(1);
+		}
+		return measures;
+	}
+
+	private static Measure fakeMeasure(final DateTime _from, final int _idKpi, final int _idProject, final double _d) {
+
+		final Measure measure = new Measure();
+		measure.setDateTime(_from);
+		measure.setValue(_d);
+		measure.setEntityID(_idProject);
+		measure.setIdKpi(_idKpi);
+		return measure;
+
+	}
+
+	private static DateTime generateHourlyData(final int _kpiID, final int _valueMaxrange,
+	        final List<Measure> measures, final Random random, final DateTime from, final int idProject) {
+
+		DateTime from2 = from;
+		for (int hour = 0; hour < 24; ++hour) {
+			try {
+				from2 = from.withHourOfDay(hour);
+				if (random.nextBoolean()) { // Generate a build
+
+					measures.add(fakeMeasure(from, _kpiID, idProject, random.nextInt(_valueMaxrange)));
+				}
+			} catch (final Exception e) {
+				//
+			}
+		}
+		return from2;
+	}
+
+	private static DateTime programBeforeDate(final int _maxYears) {
+
+		final DateTime from = new DateTime().minusYears(_maxYears).withHourOfDay(0).withMinuteOfHour(0)
+		        .withSecondOfMinute(0).withMillisOfSecond(0);
+		return from;
+	}
+
 }
