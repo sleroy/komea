@@ -291,9 +291,7 @@ public class Kpi implements IHasKey
         if (getEntityType() != null) {
             sb.append("_T_").append(getEntityType().name());
         }
-        if (getId() != null) {
-            sb.append("_ENTITY_").append(getId());
-        }
+        
         return sb.toString();
     }
     
