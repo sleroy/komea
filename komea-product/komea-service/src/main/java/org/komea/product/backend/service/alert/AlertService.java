@@ -2,14 +2,9 @@
 package org.komea.product.backend.service.alert;
 
 
-import java.util.ArrayList;
-import java.util.Set;
-
 import org.komea.product.backend.api.IKPIService;
 import org.komea.product.database.dto.KpiAlertDto;
 import org.komea.product.database.dto.SearchKpiAlertsDto;
-import org.komea.product.database.dto.SearchMeasuresDto;
-import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.AlertCriteria;
@@ -73,14 +68,6 @@ public class AlertService implements IAlertService {
     public boolean isAlertFiltered(final SearchKpiAlertsDto _filter, final KpiAlertDto kpiAlert) {
     
         return kpiAlert != null && (!_filter.isActivatedOnly() || kpiAlert.isActivated());
-    }
-    
-    private SearchMeasuresDto createMeasureFilterOnKpiKeys(final SearchKpiAlertsDto _searchAlert, final ExtendedEntityType entityType,
-            final Set<String> kpiKeys) {
-    
-        final SearchMeasuresDto searchMeasuresDto = new SearchMeasuresDto(entityType, new ArrayList<String>(kpiKeys),
-                _searchAlert.getEntityKeys(), 1);
-        return searchMeasuresDto;
     }
     
     @Override

@@ -20,18 +20,15 @@ import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.AlertCriteria;
-import org.komea.product.test.spring.AbstractSpringDBunitIntegrationTest;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Lists;
 
 /**
  * @author sleroy
  */
-public class AlertServiceITest extends AbstractSpringDBunitIntegrationTest {
+public class AlertServiceTest {
     
-    @Autowired
-    private IAlertService alertService;
+    private final IAlertService alertService = new AlertService();
     
     // @Mock
     // private IAlertTypeService alertTypeService;
