@@ -34,7 +34,7 @@
 		<java.version>1.6</java.version>
 		<!-- Plugin conf -->
 		<gpg.skip>true</gpg.skip>
-		<javadoc.skip>false</javadoc.skip>
+		<javadoc.skip>true</javadoc.skip>
 
 
 		<!-- Versions of artifacts -->
