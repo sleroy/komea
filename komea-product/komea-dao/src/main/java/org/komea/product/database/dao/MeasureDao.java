@@ -30,7 +30,8 @@ public interface MeasureDao
      *            the time serie options.
      * @return the coordinates of the time serie
      */
-    List<TimeCoordinate> buildGlobalPeriodTimeSeries(PeriodTimeSerieOptions _timeSerieOptions);
+    List<TimeCoordinate> buildGlobalPeriodTimeSeries(@Param("options")
+    PeriodTimeSerieOptions _timeSerieOptions);
     
     
     /**
@@ -40,9 +41,9 @@ public interface MeasureDao
      *            the time serie options.
      * @return the coordinates
      */
-    List<TimeCoordinate> buildPeriodTimeSeries(
-            PeriodTimeSerieOptions _timeSerieOptions,
-            EntityKey _entityKey);
+    List<TimeCoordinate> buildPeriodTimeSeries(@Param("options")
+    PeriodTimeSerieOptions _timeSerieOptions, @Param("key")
+    EntityKey _entityKey);
     
     
     /**
@@ -52,7 +53,9 @@ public interface MeasureDao
      *            the time serie options.
      * @return the coordinates
      */
-    List<TimeCoordinate> buildTimeSeries(TimeSerieOptions _timeSerieOptions, EntityKey _entityKey);
+    List<TimeCoordinate> buildTimeSeries(@Param("options")
+    TimeSerieOptions _timeSerieOptions, @Param("key")
+    EntityKey _entityKey);
     
     
     /**
@@ -87,7 +90,9 @@ public interface MeasureDao
      * @param _entityKey
      * @return
      */
-    Double getKpiValue(TimeSerieOptions _options, EntityKey _entityKey);
+    Double evaluateKpiValue(@Param("options")
+    TimeSerieOptions _options, @Param("key")
+    EntityKey _entityKey);
     
     
     /**
@@ -95,7 +100,9 @@ public interface MeasureDao
      * @param _entityKey
      * @return
      */
-    Double getKpiValueOnPeriod(PeriodTimeSerieOptions _options, EntityKey _entityKey);
+    Double evaluateKpiValueOnPeriod(@Param("options")
+    PeriodTimeSerieOptions _options, @Param("key")
+    EntityKey _entityKey);
     
     
     /**
@@ -104,14 +111,16 @@ public interface MeasureDao
      * @param _options
      * @return
      */
-    Map<EntityKey, Number> getKpiValues(TimeSerieOptions _options);
+    Map<EntityKey, Number> evaluateKpiValues(@Param("options")
+    TimeSerieOptions _options);
     
     
     /**
      * @param _options
      * @return
      */
-    Map<EntityKey, Number> getKpiValuesOnPeriod(PeriodTimeSerieOptions _options);
+    Map<EntityKey, Number> evaluateKpiValuesOnPeriod(@Param("options")
+    PeriodTimeSerieOptions _options);
     
     
     /**

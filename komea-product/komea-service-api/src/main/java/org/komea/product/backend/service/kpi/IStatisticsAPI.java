@@ -58,7 +58,7 @@ public interface IStatisticsAPI
      * a value according the period [now() -timeScale()] and the given formula;
      * The result is computed for an unique entity.
      */
-    KpiResult getKpiValuesOnPeriod(PeriodTimeSerieOptions _options);
+    KpiResult evaluateKpiValuesOnPeriod(PeriodTimeSerieOptions _options);
     
     
     /**
@@ -74,7 +74,7 @@ public interface IStatisticsAPI
      * a value according the period [now() -timeScale()] and the given formula;
      * The result is computed for an unique entity.
      */
-    KpiResult getKpiValues(TimeSerieOptions _options);
+    KpiResult evaluateKpiValues(TimeSerieOptions _options);
     
     
     /**
@@ -93,7 +93,7 @@ public interface IStatisticsAPI
      *            the kpi and entity
      * @return the current kpi value.
      */
-    Double getTheCurrentKpiValue(KpiKey _kpiKeys);
+    Double evaluateTheCurrentKpiValue(KpiKey _kpiKeys);
     
     
     /**
@@ -103,5 +103,5 @@ public interface IStatisticsAPI
      * @param _kpiName
      * @return a map associating the entities with their values.
      */
-    KpiResult getTheCurrentKpiValues(String _kpiName);
+    KpiResult evaluateTheCurrentKpiValues(String _kpiName);
 }

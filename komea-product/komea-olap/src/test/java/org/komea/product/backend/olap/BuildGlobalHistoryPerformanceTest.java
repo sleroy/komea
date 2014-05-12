@@ -26,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 
 
 
-public class DatabasePerformanceTest extends AbstractSpringIntegrationTestCase
+public class BuildGlobalHistoryPerformanceTest extends AbstractSpringIntegrationTestCase
 {
     
     
@@ -34,7 +34,7 @@ public class DatabasePerformanceTest extends AbstractSpringIntegrationTestCase
     
     private static final Logger  LOGGER                 =
                                                                 LoggerFactory
-                                                                        .getLogger(DatabasePerformanceTest.class);
+                                                                        .getLogger(BuildGlobalHistoryPerformanceTest.class);
     
     private static final int     MAX_BUILD_PER_HOUR     = 5;
     

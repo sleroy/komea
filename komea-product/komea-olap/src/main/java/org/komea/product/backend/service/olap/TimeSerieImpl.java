@@ -22,7 +22,7 @@ public class TimeSerieImpl implements TimeSerie
     
     
     private final List<TimeCoordinate> buildGlobalPeriodTimeSeries;
-    private final EntityKey            entityKey = new EntityKey();
+    private EntityKey                  entityKey = new EntityKey();
     
     
     
@@ -36,6 +36,20 @@ public class TimeSerieImpl implements TimeSerie
         
         buildGlobalPeriodTimeSeries = _buildGlobalPeriodTimeSeries;
         
+    }
+    
+    
+    /**
+     * @param _buildPeriodTimeSeries
+     * @param _entityKey
+     */
+    public TimeSerieImpl(
+            final List<TimeCoordinate> _buildPeriodTimeSeries,
+            final EntityKey _entityKey) {
+    
+    
+        buildGlobalPeriodTimeSeries = _buildPeriodTimeSeries;
+        entityKey = _entityKey;
     }
     
     

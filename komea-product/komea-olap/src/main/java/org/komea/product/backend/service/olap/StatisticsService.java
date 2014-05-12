@@ -68,7 +68,8 @@ public class StatisticsService implements IStatisticsAPI
             final EntityKey _entityKey) {
     
     
-        return new TimeSerieImpl(measureDao.buildPeriodTimeSeries(_timeSerieOptions, _entityKey));
+        return new TimeSerieImpl(measureDao.buildPeriodTimeSeries(_timeSerieOptions, _entityKey),
+                _entityKey);
     }
     
     
@@ -83,7 +84,8 @@ public class StatisticsService implements IStatisticsAPI
             final EntityKey _entityKey) {
     
     
-        return new TimeSerieImpl(measureDao.buildTimeSeries(_timeSerieOptions, _entityKey));
+        return new TimeSerieImpl(measureDao.buildTimeSeries(_timeSerieOptions, _entityKey),
+                _entityKey);
     }
     
     
@@ -96,7 +98,7 @@ public class StatisticsService implements IStatisticsAPI
     public Double evaluateKpiValue(final TimeSerieOptions _options, final EntityKey _entityKey) {
     
     
-        return measureDao.getKpiValue(_options, _entityKey);
+        return measureDao.evaluateKpiValue(_options, _entityKey);
     }
     
     
@@ -112,7 +114,7 @@ public class StatisticsService implements IStatisticsAPI
             final EntityKey _entityKey) {
     
     
-        return measureDao.getKpiValueOnPeriod(_options, _entityKey);
+        return measureDao.evaluateKpiValueOnPeriod(_options, _entityKey);
     }
     
     
@@ -121,10 +123,10 @@ public class StatisticsService implements IStatisticsAPI
      * @see org.komea.product.backend.service.kpi.IStatisticsAPI#getKpiValues(org.komea.product.database.dao.timeserie.TimeSerieOptions)
      */
     @Override
-    public KpiResult getKpiValues(final TimeSerieOptions _options) {
+    public KpiResult evaluateKpiValues(final TimeSerieOptions _options) {
     
     
-        return new KpiResult(measureDao.getKpiValues(_options));
+        return new KpiResult(measureDao.evaluateKpiValues(_options));
     }
     
     
@@ -135,10 +137,10 @@ public class StatisticsService implements IStatisticsAPI
      * )
      */
     @Override
-    public KpiResult getKpiValuesOnPeriod(final PeriodTimeSerieOptions _options) {
+    public KpiResult evaluateKpiValuesOnPeriod(final PeriodTimeSerieOptions _options) {
     
     
-        return new KpiResult(measureDao.getKpiValuesOnPeriod(_options));
+        return new KpiResult(measureDao.evaluateKpiValuesOnPeriod(_options));
         
     }
     
@@ -148,11 +150,11 @@ public class StatisticsService implements IStatisticsAPI
      * @see org.komea.product.backend.service.kpi.IStatisticsAPI#getTheCurrentKpiValue(org.komea.product.service.dto.KpiKey)
      */
     @Override
-    public Double getTheCurrentKpiValue(final KpiKey _kpiKeys) {
+    public Double evaluateTheCurrentKpiValue(final KpiKey _kpiKeys) {
     
     
         Validate.isTrue(_kpiKeys.getEntityKey().isEntityReferenceKey());
-        return getTheCurrentKpiValues(_kpiKeys.getKpiName())
+        return evaluateTheCurrentKpiValues(_kpiKeys.getKpiName())
                 .getDoubleValue(_kpiKeys.getEntityKey());
     }
     
@@ -162,7 +164,7 @@ public class StatisticsService implements IStatisticsAPI
      * @see org.komea.product.backend.service.kpi.IStatisticsAPI#getTheCurrentKpiValues(java.lang.String)
      */
     @Override
-    public KpiResult getTheCurrentKpiValues(final String _kpiName) {
+    public KpiResult evaluateTheCurrentKpiValues(final String _kpiName) {
     
     
         final Kpi findKpiOrFail = new FindKpiOrFail(_kpiName, kpiDAO).find();

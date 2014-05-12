@@ -10,14 +10,19 @@ public class TimeCoordinate
     private int    day;
     
     
+    private int    entityID;
+    
+    
     private int    hour;
+    
+    
+    private int    kpiID;
     
     
     private int    month;
     
     
     private Double value;
-    
     
     private int    week;
     
@@ -26,6 +31,17 @@ public class TimeCoordinate
     
     
     
+    public TimeCoordinate() {
+    
+    
+        super();
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(final Object obj) {
     
@@ -43,7 +59,13 @@ public class TimeCoordinate
         if (day != other.day) {
             return false;
         }
+        if (entityID != other.entityID) {
+            return false;
+        }
         if (hour != other.hour) {
+            return false;
+        }
+        if (kpiID != other.kpiID) {
             return false;
         }
         if (month != other.month) {
@@ -73,10 +95,34 @@ public class TimeCoordinate
     }
     
     
+    /**
+     * Returns the value of the field entityID.
+     * 
+     * @return the entityID
+     */
+    public int getEntityID() {
+    
+    
+        return entityID;
+    }
+    
+    
     public int getHour() {
     
     
         return hour;
+    }
+    
+    
+    /**
+     * Returns the value of the field kpiID.
+     * 
+     * @return the kpiID
+     */
+    public int getKpiID() {
+    
+    
+        return kpiID;
     }
     
     
@@ -108,6 +154,10 @@ public class TimeCoordinate
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
     
@@ -115,7 +165,9 @@ public class TimeCoordinate
         final int prime = 31;
         int result = 1;
         result = prime * result + day;
+        result = prime * result + entityID;
         result = prime * result + hour;
+        result = prime * result + kpiID;
         result = prime * result + month;
         result = prime * result + (value == null ? 0 : value.hashCode());
         result = prime * result + week;
@@ -131,10 +183,36 @@ public class TimeCoordinate
     }
     
     
+    /**
+     * Sets the field entityID with the value of _entityID.
+     * 
+     * @param _entityID
+     *            the entityID to set
+     */
+    public void setEntityID(final int _entityID) {
+    
+    
+        entityID = _entityID;
+    }
+    
+    
     public void setHour(final int _hour) {
     
     
         hour = _hour;
+    }
+    
+    
+    /**
+     * Sets the field kpiID with the value of _kpiID.
+     * 
+     * @param _kpiID
+     *            the kpiID to set
+     */
+    public void setKpiID(final int _kpiID) {
+    
+    
+        kpiID = _kpiID;
     }
     
     
@@ -166,12 +244,17 @@ public class TimeCoordinate
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
     
     
         return "TimeCoordinate [day="
-                + day + ", hour=" + hour + ", month=" + month + ", value=" + value + ", week="
-                + week + ", year=" + year + "]";
+                + day + ", entityID=" + entityID + ", hour=" + hour + ", kpiID=" + kpiID
+                + ", month=" + month + ", value=" + value + ", week=" + week + ", year=" + year
+                + "]";
     }
 }

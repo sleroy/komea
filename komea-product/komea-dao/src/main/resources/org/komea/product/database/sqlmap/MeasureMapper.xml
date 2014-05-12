@@ -2,8 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.komea.product.database.dao.MeasureDao">
 
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache">
+		<property name="timeToIdleSeconds" value="7200" /><!--2 hours -->
+		<property name="timeToLiveSeconds" value="7200" /><!--2 hours -->
+		<property name="maxElementsInMemory" value="1000" />
+		<property name="maxElementsOnDisk" value="10000000" />
+		<property name="memoryStoreEvictionPolicy" value="LRU" />
+	</cache>
+
 	<resultMap type="org.komea.product.database.dao.timeserie.TimeCoordinate"
 		id="TimeCoordinate">
+		<result column="entityID" property="entityID" />
+		<result column="idKpi" property="idKpi" />
 		<result column="year" property="year" />
 		<result column="day" property="day" />
 		<result column="week" property="week" />
@@ -49,7 +59,8 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value} and
+									and ${criterion.condition} #{criterion.value}
+									and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -84,7 +95,8 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value} and
+									and ${criterion.condition} #{criterion.value}
+									and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -157,13 +169,17 @@
 			14:47:35 CEST 2014. -->
 		insert into kom_msr (id, idKpi, year,
 		month, week, day, hour,
-		entityID, value, date,
+		entityID,
+		value, date,
 		sprint)
-		values (#{id,jdbcType=INTEGER}, #{idKpi,jdbcType=INTEGER},
+		values (#{id,jdbcType=INTEGER},
+		#{idKpi,jdbcType=INTEGER},
 		#{year,jdbcType=INTEGER},
-		#{month,jdbcType=INTEGER}, #{week,jdbcType=INTEGER}, #{day,jdbcType=INTEGER},
+		#{month,jdbcType=INTEGER}, #{week,jdbcType=INTEGER},
+		#{day,jdbcType=INTEGER},
 		#{hour,jdbcType=INTEGER},
-		#{entityID,jdbcType=INTEGER}, #{value,jdbcType=DOUBLE}, #{date,jdbcType=TIMESTAMP},
+		#{entityID,jdbcType=INTEGER}, #{value,jdbcType=DOUBLE},
+		#{date,jdbcType=TIMESTAMP},
 		#{sprint,jdbcType=VARCHAR})
 	</insert>
 	<insert id="insertSelective" parameterType="org.komea.product.database.model.Measure">
@@ -302,16 +318,24 @@
 			14:47:35 CEST 2014. -->
 		update kom_msr
 		set id = #{record.id,jdbcType=INTEGER},
-		idKpi = #{record.idKpi,jdbcType=INTEGER},
-		year = #{record.year,jdbcType=INTEGER},
-		month = #{record.month,jdbcType=INTEGER},
-		week = #{record.week,jdbcType=INTEGER},
+		idKpi =
+		#{record.idKpi,jdbcType=INTEGER},
+		year =
+		#{record.year,jdbcType=INTEGER},
+		month =
+		#{record.month,jdbcType=INTEGER},
+		week =
+		#{record.week,jdbcType=INTEGER},
 		day = #{record.day,jdbcType=INTEGER},
 		hour = #{record.hour,jdbcType=INTEGER},
-		entityID = #{record.entityID,jdbcType=INTEGER},
-		value = #{record.value,jdbcType=DOUBLE},
-		date = #{record.date,jdbcType=TIMESTAMP},
-		sprint = #{record.sprint,jdbcType=VARCHAR}
+		entityID =
+		#{record.entityID,jdbcType=INTEGER},
+		value =
+		#{record.value,jdbcType=DOUBLE},
+		date =
+		#{record.date,jdbcType=TIMESTAMP},
+		sprint =
+		#{record.sprint,jdbcType=VARCHAR}
 		<if test="_parameter != null">
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>
@@ -361,11 +385,14 @@
 			14:47:35 CEST 2014. -->
 		update kom_msr
 		set idKpi = #{idKpi,jdbcType=INTEGER},
-		year = #{year,jdbcType=INTEGER},
+		year =
+		#{year,jdbcType=INTEGER},
 		month = #{month,jdbcType=INTEGER},
-		week = #{week,jdbcType=INTEGER},
+		week =
+		#{week,jdbcType=INTEGER},
 		day = #{day,jdbcType=INTEGER},
-		hour = #{hour,jdbcType=INTEGER},
+		hour =
+		#{hour,jdbcType=INTEGER},
 		entityID = #{entityID,jdbcType=INTEGER},
 		value = #{value,jdbcType=DOUBLE},
 		date = #{date,jdbcType=TIMESTAMP},
@@ -391,45 +418,135 @@
 		</if>
 	</select>
 
-
-	<select id="buildGlobalPeriodTimeSeries"
-		parameterType="org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions"
-		resultMap="TimeCoordinate">
-
-		SELECT
+	<sql id="CustomFormula">
 		<choose>
-			<when test='timeScale.name().equals("PER_YEAR")'> year, </when>
-			<when test='timeScale.name().equals("PER_MONTH")'> year,month, </when>
-			<when test='timeScale.name().equals("PER_WEEK")'> year,month, week, </when>
-			<when test='timeScale.name().equals("PER_DAY")'> year,month, week, day,</when>
-			<when test='timeScale.name().equals("PER_HOUR")'> year,month, week, day, hour,</when>
+			<when test='options.groupFormula.name().equals("COUNT")'> COUNT(*) as value </when>
+			<when test='options.groupFormula.name().equals("SUM_VALUE")'> SUM(value) as value </when>
+			<when test='options.groupFormula.name().equals("AVG_VALUE")'> AVG(value) as value </when>
 		</choose>
+	</sql>
+	<sql id="buildTimeSerie">
+		idKpi, entityID,
 		<choose>
-			<when test='groupFormula.name().equals("COUNT")'> COUNT(*) as value </when>
-			<when test='groupFormula.name().equals("SUM_VALUE")'> SUM(value) as value </when>
-			<when test='groupFormula.name().equals("AVG_VALUE")'> AVG(value) as value </when>
+			<when test='options.timeScale.name().equals("PER_YEAR")'> year, </when>
+			<when test='options.timeScale.name().equals("PER_MONTH")'> year,month, </when>
+			<when test='options.timeScale.name().equals("PER_WEEK")'> year,month, week, </when>
+			<when test='options.timeScale.name().equals("PER_DAY")'> year,month, week, day,</when>
+			<when test='options.timeScale.name().equals("PER_HOUR")'> year,month, week, day, hour,</when>
 		</choose>
-		FROM
-		kom_msr
-		WHERE
-		date BETWEEN #{fromPeriod} AND #{toPeriod}
-		AND idKpi =
-		#{kpiID}
+		<include refid="CustomFormula" />
+	</sql>
+
+
+	<sql id="wherePeriod">
+		date BETWEEN #{options.fromPeriod} AND #{options.toPeriod}
+	</sql>
+	<sql id="timeGroupBy">
 		<choose>
-			<when test='timeScale.name().equals("PER_YEAR")'> GROUP BY year ORDER BY year ASC </when>
-			<when test='timeScale.name().equals("PER_MONTH")'> GROUP BY year,month ORDER BY year ASC, month ASC
+			<when test='options.timeScale.name().equals("PER_YEAR")'> GROUP BY idKpi, entityID, year ORDER BY idKpi ASC, entityID ASC, year ASC </when>
+			<when test='options.timeScale.name().equals("PER_MONTH")'> GROUP BY idKpi, entityID, year,month ORDER BY  idKpi ASC, entityID ASC,year ASC, month ASC
 			</when>
-			<when test='timeScale.name().equals("PER_WEEK")'> GROUP BY year, month, week ORDER BY year ASC, month
+			<when test='options.timeScale.name().equals("PER_WEEK")'> GROUP BY idKpi, entityID, year, month, week ORDER BY  idKpi ASC, entityID ASC,year ASC, month
 				ASC, week ASC
 			</when>
-			<when test='timeScale.name().equals("PER_DAY")'> GROUP BY year, month, week,day ORDER BY year ASC,
+			<when test='options.timeScale.name().equals("PER_DAY")'> GROUP BY idKpi, entityID, year, month, week,day ORDER BY  idKpi ASC, entityID ASC,year ASC,
 				month ASC, week ASC, day ASC
 			</when>
-			<when test='timeScale.name().equals("PER_HOUR")'> GROUP BY year, month, week,day,hour ORDER BY year
+			<when test='options.timeScale.name().equals("PER_HOUR")'> GROUP BY idKpi, entityID, year, month, week,day,hour ORDER BY  idKpi ASC, entityID ASC,year
 				ASC, month ASC, week ASC, day ASC, hour ASC
 			</when>
 		</choose>
 
+	</sql>
+
+
+	<select id="buildGlobalPeriodTimeSeries" resultMap="TimeCoordinate"
+		parameterType="map">
+		SELECT
+		<include refid="buildTimeSerie" />
+		FROM
+		kom_msr
+		WHERE
+		idKpi = #{options.kpiID} AND
+		<include refid="wherePeriod" />
+		<include refid="timeGroupBy" />
 
 	</select>
+
+	<select id="buildPeriodTimeSeries" resultMap="TimeCoordinate"
+		parameterType="map">
+
+		SELECT
+		<include refid="buildTimeSerie" />
+		FROM
+		kom_msr
+		WHERE
+		idKpi = #{options.kpiID} AND
+		entityID = #{key.id} AND
+		<include refid="wherePeriod" />
+		<include refid="timeGroupBy" />
+	</select>
+
+	<select id="buildTimeSeries" resultMap="TimeCoordinate"
+		parameterType="map">
+		SELECT
+		<include refid="buildTimeSerie" />
+		FROM
+		kom_msr
+		WHERE
+		idKpi = #{options.kpiID} AND
+		entityID = #{key.id}
+		<include refid="timeGroupBy" />
+	</select>
+
+	<select id="evaluateKpiValue" resultMap="TimeCoordinate"
+		parameterType="map">
+		SELECT
+		<include refid="CustomFormula" />
+		FROM
+		kom_msr
+		WHERE
+		idKpi = #{options.kpiID} AND
+		entityID = #{key.id}
+		<include refid="timeGroupBy" />
+	</select>
+
+   <select id="evaluateKpiValueOnPeriod" resultMap="TimeCoordinate"
+		parameterType="map">
+		SELECT
+		<include refid="CustomFormula" />
+		FROM
+		kom_msr
+		WHERE
+		idKpi = #{options.kpiID} AND
+		entityID = #{key.id} AND
+		<include refid="wherePeriod" />
+		<include refid="timeGroupBy" />
+	</select>
+	
+	<select id="evaluateKpiValues" resultType="hashmap"
+		parameterType="map">
+		SELECT
+		entityID,
+		<include refid="CustomFormula" />
+		FROM
+		kom_msr
+		WHERE
+		idKpi = #{options.kpiID}
+		<include refid="timeGroupBy" />
+	</select>
+
+   <select id="evaluateKpiValuesOnPeriod" resultType="hashmap"
+		parameterType="map">
+		SELECT
+		entityID,
+		<include refid="CustomFormula" />
+		FROM
+		kom_msr
+		WHERE
+		idKpi = #{options.kpiID} AND
+		<include refid="wherePeriod" />
+		<include refid="timeGroupBy" />
+	</select>
+
 </mapper>
