@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.backend.service.olap;
 
 
 
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.stat.descriptive.summary.Sum;
 import org.junit.Test;
+import org.komea.product.backend.service.olap.KpiMathService;
 import org.komea.product.database.model.Measure;
 
 import com.google.common.collect.Lists;
@@ -27,7 +28,7 @@ public class KpiMathServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.kpi.KpiMathService#computeAverageFromMeasures(java.util.List)}.
+     * Test method for {@link org.komea.product.backend.service.olap.KpiMathService#computeAverageFromMeasures(java.util.List)}.
      */
     @Test
     public final void testComputeAverageFromMeasures() throws Exception {
@@ -48,7 +49,7 @@ public class KpiMathServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.service.kpi.KpiMathService#computeSumFromMeasures(java.util.List)}.
+     * Test method for {@link org.komea.product.backend.service.olap.KpiMathService#computeSumFromMeasures(java.util.List)}.
      */
     @Test
     public final void testComputeSumFromMeasures() throws Exception {

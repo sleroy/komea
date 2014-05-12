@@ -10,10 +10,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryService;
-import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.database.dao.KpiDao;
+import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -31,78 +31,34 @@ public class KPIValueServiceTest
     
     
     @Mock
-    private IEntityService           entityService;
+    private IEntityService      entityService;
     
     
     @Mock
-    private IEventEngineService      esperEngine;
+    private IEventEngineService esperEngine;
     
     
     @Mock
-    private KpiDao                   kpiDAO;
+    private KpiDao              kpiDAO;
     
     
     @Mock
-    private IKpiQueryService kpiQueryRegistry;
+    private IKpiQueryService    kpiQueryRegistry;
     
     
     @InjectMocks
-    private KPIValueService          kPIValueService;
+    private KPIValueService     kPIValueService;
     
     
     @Mock
-    private IMeasureHistoryService   measureService;
+    private MeasureDao          measureService;
     @Mock
-    private ProjectDao               projectDao;
+    private ProjectDao          projectDao;
     
     
     @Autowired
-    private ISystemProjectBean       systemProjectBean;
+    private ISystemProjectBean  systemProjectBean;
     
-    
-    
-    //
-    // @Test
-    // public void testBug() {
-    //
-    //
-    // final String key = "testBugKPI";
-    // final Kpi kpi =
-    // KpiBuilder.createAscending().nameAndKeyDescription(key)
-    // .entityType(EntityType.PROJECT).expirationMonth()
-    // .providerType(ProviderType.OTHER)
-    // .query("new " + DemoKPI.class.getName() + "()").cronFiveMinutes().build();
-    //
-    // kpiService.saveOrUpdate(kpi);
-    //
-    // final Measure measure =
-    // kPIValueService.getRealTimeMeasure(KpiKey.ofKpiAndEntity(kpi,
-    // systemProjectBean.getSystemProject()));
-    // Assert.assertNotNull("Should be filtered and work", measure);
-    //
-    // }
-    
-    
-    //
-    // @Test
-    // public void testBug() {
-    //
-    //
-    // final String key = "testBugKPI";
-    // final Kpi kpi =
-    // KpiBuilder.createAscending().nameAndKeyDescription(key)
-    // .entityType(EntityType.PROJECT).expirationMonth()
-    // .providerType(ProviderType.OTHER)
-    // .query("new " + DemoKPI.class.getName() + "()").cronFiveMinutes().build();
-    //
-    // kpiService.saveOrUpdate(kpi);
-    //
-    // final Measure measure =
-    // kPIValueService.getRealTimeMeasure(KpiKey.ofKpiAndEntity(kpi,
-    // systemProjectBean.getSystemProject()));
-    // Assert.assertNotNull("Should be filtered and work", measure);
-    //
-    // }
     
     
     /**

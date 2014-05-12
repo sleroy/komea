@@ -52,6 +52,17 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions
     }
     
     
+    /**
+     * 
+     */
+    public void fromLastTimeScale() {
+    
+    
+        // TODO Auto-generated method stub
+        
+    }
+    
+    
     public Date getFromPeriod() {
     
     
@@ -124,6 +135,17 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions
     
     
         fromPeriod = new DateTime().minusYears(_numberOfYears).toDate();
+        
+    }
+    
+    
+    /**
+     * 
+     */
+    public void pickBestGranularity() {
+    
+    
+        // TODO Auto-generated method stub
         
     }
     

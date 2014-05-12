@@ -6,9 +6,9 @@ package org.komea.product.backend.service.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.database.dao.HasProjectPersonGroupDao;
+import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.dao.PersonGroupDao;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.DepartmentDto;
@@ -45,7 +45,7 @@ public final class PersonGroupService extends
     private static final Logger      LOGGER = LoggerFactory.getLogger("persongroup-service");
     
     @Autowired
-    private IMeasureHistoryService   measureService;
+    private MeasureDao               measureService;
     
     @Autowired
     private IPersonService           personService;

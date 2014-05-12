@@ -10,11 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.komea.product.backend.api.IHistoryService;
 import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.IKpiQueryService;
 import org.komea.product.backend.api.IKpiValueService;
-import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.api.exceptions.KpiAlreadyExistingException;
 import org.komea.product.backend.criterias.FindKpi;
 import org.komea.product.backend.criterias.FindKpiOrFail;
@@ -25,6 +23,7 @@ import org.komea.product.database.dao.HasSuccessFactorKpiDao;
 import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.KpiAlertTypeDao;
 import org.komea.product.database.dao.KpiDao;
+import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ValueType;
@@ -71,8 +70,9 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Autowired
     private IKpiValueService       kpiValueService;
     
+    
     @Autowired
-    private IMeasureHistoryService measureService;
+    private MeasureDao             measureDao;
     
     @Autowired
     private ProjectDao             projectDao;
@@ -93,7 +93,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         
         final MeasureCriteria measureCriteria = new MeasureCriteria();
         measureCriteria.createCriteria().andIdKpiEqualTo(idKpi);
-        measureService.deleteByCriteria(measureCriteria);
+        measureDao.deleteByCriteria(measureCriteria);
         
         final KpiAlertTypeCriteria kpiAlertTypeCriteria = new KpiAlertTypeCriteria();
         kpiAlertTypeCriteria.createCriteria().andIdKpiEqualTo(idKpi);
@@ -249,16 +249,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
     
     /**
-     * @return the measureService
-     */
-    public final IHistoryService getMeasureService() {
-    
-    
-        return measureService;
-    }
-    
-    
-    /**
      * Project : DAO
      * 
      * @return the project DAO.
@@ -398,17 +388,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
     
         kpiValueService = _kpiValueService;
-    }
-    
-    
-    /**
-     * @param _measureService
-     *            the measureService to set
-     */
-    public final void setMeasureService(final IMeasureHistoryService _measureService) {
-    
-    
-        measureService = _measureService;
     }
     
     

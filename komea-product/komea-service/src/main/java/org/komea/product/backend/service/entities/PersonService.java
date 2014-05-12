@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.esper.IEventConversionAndValidationService;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.IGenericDAO;
+import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dto.Pair;
 import org.komea.product.database.dto.PersonDto;
@@ -52,7 +52,7 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     private IPersonGroupService                  groupService;
     
     @Autowired
-    private IMeasureHistoryService               measureService;
+    private MeasureDao                           measureService;
     
     @Autowired
     private IPersonRoleService                   personRoleService;

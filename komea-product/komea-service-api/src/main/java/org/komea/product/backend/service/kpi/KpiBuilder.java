@@ -195,6 +195,14 @@ public class KpiBuilder
     }
     
     
+    public KpiBuilder forProject() {
+    
+    
+        kpi.setEntityType(EntityType.PROJECT);
+        return this;
+    }
+    
+    
     /**
      * @param _minValue
      * @param _maxValue
@@ -256,6 +264,15 @@ public class KpiBuilder
     }
     
     
+    public KpiBuilder produceValue(final ValueType _valueType, final ValueDirection _valueDirection) {
+    
+    
+        kpi.setValueDirection(_valueDirection);
+        kpi.setValueType(_valueType);
+        return this;
+    }
+    
+    
     public KpiBuilder providerType(final ProviderType _providerType) {
     
     
@@ -284,5 +301,4 @@ public class KpiBuilder
         kpi.setEsperRequest(_query);
         return this;
     }
-    
 }

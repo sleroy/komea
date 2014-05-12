@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
-import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.dao.HasProjectPersonGroupDao;
 import org.komea.product.database.dao.HasProjectTagDao;
 import org.komea.product.database.dao.LinkDao;
+import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.dao.TagDao;
 import org.komea.product.database.dto.ProjectDto;
@@ -57,7 +57,7 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
     private LinkDao                  linkDAO;
     
     @Autowired
-    private IMeasureHistoryService   measureService;
+    private MeasureDao               measureService;
     
     @Autowired
     private IPersonGroupService      personGroupService;

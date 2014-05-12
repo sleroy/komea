@@ -8,20 +8,16 @@ package org.komea.product.backend.service.kpi;
 
 import java.io.Serializable;
 
-import javax.annotation.PostConstruct;
-
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.backend.api.IKpiQueryService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
-import org.komea.product.backend.service.cron.KpiHistoryJob;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Kpi;
-import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +35,7 @@ public class KpiQueryService implements IKpiQueryService
 {
     
     
-    private static final String              KPI_HISTORY_INTERVAL = "0 0/60 * * * ?";
-    
-    private static final Logger              LOGGER               =
-                                                                          LoggerFactory
-                                                                                  .getLogger("kpi-query-service");
+    private static final Logger              LOGGER = LoggerFactory.getLogger("kpi-query-service");
     
     @Autowired
     private ICronRegistryService             cronRegistry;
@@ -158,15 +150,6 @@ public class KpiQueryService implements IKpiQueryService
         }
         return new InferMissingEntityValuesIntoKpiResult(result, _kpi, entityService)
                 .inferEntityKeys();
-    }
-    
-    
-    @PostConstruct
-    public void initCron() {
-    
-    
-        cronRegistry.registerCronTask("KPI_HISTORY_JOB", KPI_HISTORY_INTERVAL, KpiHistoryJob.class,
-                new JobDataMap());
     }
     
     

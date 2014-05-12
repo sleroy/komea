@@ -10,19 +10,10 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
-import org.joda.time.DateTime;
 import org.komea.product.backend.api.IKPIService;
-import org.komea.product.backend.api.IKpiMathService;
 import org.komea.product.backend.api.IKpiValueService;
-import org.komea.product.backend.api.IMeasureHistoryService;
-import org.komea.product.backend.service.history.HistoryKey;
-import org.komea.product.database.api.IEntity;
-import org.komea.product.database.dto.KpiResult;
-import org.komea.product.database.dto.MeasureDto;
-import org.komea.product.database.dto.SearchMeasuresDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
-import org.komea.product.database.model.Measure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,45 +30,11 @@ public class KpiAPIService implements IKpiAPI
     
     
     @Autowired
-    private IKpiMathService        kpiMathService;
+    private IKPIService      kpiService;
     
     @Autowired
-    private IKPIService            kpiService;
+    private IKpiValueService kpiValueService;
     
-    @Autowired
-    private IKpiValueService       kpiValueService;
-    
-    @Autowired
-    private IMeasureHistoryService measureHistoryService;
-    
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IKpiAPI#computeAverageFromMeasures
-     * (java.util.List)
-     */
-    @Override
-    public double computeAverageFromMeasures(final List<Measure> _kpiMeasures) {
-    
-    
-        return kpiMathService.computeAverageFromMeasures(_kpiMeasures);
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IKpiAPI#computeSumFromMeasures(
-     * java.util.List)
-     */
-    @Override
-    public double computeSumFromMeasures(final List<Measure> _kpiMeasures) {
-    
-    
-        return kpiMathService.computeSumFromMeasures(_kpiMeasures);
-    }
     
     
     /*
@@ -108,16 +65,6 @@ public class KpiAPIService implements IKpiAPI
     
         Validate.notNull(_groupKpiKeys);
         return kpiService.getBaseKpisOfGroupKpiKeys(_groupKpiKeys);
-    }
-    
-    
-    /**
-     * @return the kpiMathService
-     */
-    public IKpiMathService getKpiMathService() {
-    
-    
-        return kpiMathService;
     }
     
     
@@ -161,34 +108,6 @@ public class KpiAPIService implements IKpiAPI
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IKpiAPI#getKpiValues(java.lang.
-     * String)
-     */
-    @Override
-    public KpiResult getKpiValues(final String _kpiName) {
-    
-    
-        return kpiValueService.getRealTimeValue(_kpiName);
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IKpiAPI#getKpiValuesAverageOnPeriod
-     * (java.lang.String, org.joda.time.DateTime)
-     */
-    @Override
-    public KpiResult getKpiValuesAverageOnPeriod(final String _kpiName, final DateTime _previousTime) {
-    
-    
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-    
-    
     /**
      * @return the kpiValueService
      */
@@ -196,60 +115,6 @@ public class KpiAPIService implements IKpiAPI
     
     
         return kpiValueService;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IKpiAPI#getLastStoredValueInHistory
-     * (org.komea.product.database.model.Kpi,
-     * org.komea.product.database.api.IEntity)
-     */
-    @Override
-    public Double getLastStoredValueInHistory(final HistoryKey _key) {
-    
-    
-        final Measure lastMeasureInHistoryOfAKpi =
-                kpiValueService.getLastMeasureInHistoryOfAKpi(_key);
-        if (lastMeasureInHistoryOfAKpi != null) {
-            return lastMeasureInHistoryOfAKpi.getValue();
-        } else {
-            return kpiValueService.getMinimalValueForAKpi(_key.getKpiID());
-        }
-    }
-    
-    
-    /**
-     * @return the measureHistoryService
-     */
-    public IMeasureHistoryService getMeasureHistoryService() {
-    
-    
-        return measureHistoryService;
-    }
-    
-    
-    @Override
-    public List<MeasureDto> getMeasures(
-            final List<Kpi> _baseKpis,
-            final List<? extends IEntity> _allSubEntitiesDto,
-            final SearchMeasuresDto _searchMeasuresDto) {
-    
-    
-        return measureHistoryService.getMeasures(_baseKpis, _allSubEntitiesDto, _searchMeasuresDto);
-        
-    }
-    
-    
-    @Override
-    public List<MeasureDto> getRealTimeMeasuresFromEntities(
-            final List<Kpi> _baseKpis,
-            final List<? extends IEntity> _subEntitiesDto) {
-    
-    
-        return kpiValueService.getAllRealTimeMeasuresPerEntityAndPerKpi(_baseKpis, _subEntitiesDto);
-        
     }
     
     
@@ -283,17 +148,6 @@ public class KpiAPIService implements IKpiAPI
     
     
     /**
-     * @param _kpiMathService
-     *            the kpiMathService to set
-     */
-    public void setKpiMathService(final IKpiMathService _kpiMathService) {
-    
-    
-        kpiMathService = _kpiMathService;
-    }
-    
-    
-    /**
      * @param _kpiService
      *            the kpiService to set
      */
@@ -314,45 +168,5 @@ public class KpiAPIService implements IKpiAPI
         kpiValueService = _kpiValueService;
     }
     
-    
-    /**
-     * @param _measureHistoryService
-     *            the measureHistoryService to set
-     */
-    public void setMeasureHistoryService(final IMeasureHistoryService _measureHistoryService) {
-    
-    
-        measureHistoryService = _measureHistoryService;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IKpiAPI#storeValueInHistory(org
-     * .komea.product.service.dto.KpiKey, java.lang.Double)
-     */
-    @Override
-    public void storeValueInHistory(final HistoryKey _kpiKey, final Double _value) {
-    
-    
-        Validate.notNull(_kpiKey);
-        Validate.notNull(_value);
-        storeValueInHistory(_kpiKey, _value, new DateTime());
-    }
-    
-    
-    @Override
-    public void storeValueInHistory(
-            final HistoryKey _kpiKey,
-            final Double _value,
-            final DateTime _actualTime) {
-    
-    
-        Validate.notNull(_kpiKey);
-        Validate.notNull(_value);
-        kpiValueService.storeValueInKpiHistory(_kpiKey, _value, new DateTime());
-        
-    }
     
 }

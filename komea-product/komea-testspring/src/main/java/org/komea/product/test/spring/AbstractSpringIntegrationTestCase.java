@@ -1,6 +1,4 @@
-
 package org.komea.product.test.spring;
-
 
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -17,12 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
  * @author sleroy
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-    "classpath:/spring/application-context-test.xml" })
+@ContextConfiguration(locations = { "classpath:/spring/application-context-test.xml" })
 @TransactionConfiguration(defaultRollback = true)
 @Transactional
 public abstract class AbstractSpringIntegrationTestCase {
-    
-    protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
-    
+
+	protected static final Logger	LOGGER	= LoggerFactory.getLogger(AbstractSpringIntegrationTestCase.class);
+
 }

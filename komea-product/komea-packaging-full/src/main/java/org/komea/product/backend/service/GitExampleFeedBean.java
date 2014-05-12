@@ -45,8 +45,9 @@ public class GitExampleFeedBean
     
     
         if (!repository.getAllRepositories().isEmpty()) {
-        
-        return; }
+            
+            return;
+        }
         
         
         registerGitRepo("GITHub Komea", "https://github.com/sleroy/komea.git", "KOMEA_FOLDER");
@@ -63,6 +64,7 @@ public class GitExampleFeedBean
         gitRepo.setUrl(_url);
         gitRepo.setProjectForRepository(_project);
         gitRepo.setType(GitProviderPlugin.GIT_TYPE);
+        
         gitRepo.setPassword("");
         gitRepo.setUserName("");
         gitRepo.setKey(ScmRepositoryDefinition.transformNameInKey(_repoName));

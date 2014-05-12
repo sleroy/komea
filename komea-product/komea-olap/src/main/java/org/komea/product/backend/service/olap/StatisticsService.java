@@ -6,20 +6,32 @@ package org.komea.product.backend.service.olap;
 
 
 
+import java.util.List;
+import java.util.Map.Entry;
+
 import org.apache.commons.lang3.Validate;
-import org.komea.product.backend.api.IKpiQueryService;
-import org.komea.product.backend.criterias.FindKpiOrFail;
+import org.joda.time.DateTime;
+import org.komea.product.backend.api.IKpiMathService;
+import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.criterias.FindKpiPerId;
+import org.komea.product.backend.exceptions.KPINotFoundException;
+import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.backend.service.kpi.TimeSerie;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
+import org.komea.product.database.dao.timeserie.GroupFormula;
 import org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions;
+import org.komea.product.database.dao.timeserie.TimeScale;
 import org.komea.product.database.dao.timeserie.TimeSerieOptions;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Kpi;
+import org.komea.product.database.model.KpiCriteria;
+import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.service.dto.KpiKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,19 +49,54 @@ public class StatisticsService implements IStatisticsAPI
 {
     
     
+    private static final Logger LOGGER = LoggerFactory.getLogger("kpi-statistics");
     @Autowired
-    private KpiDao           kpiDao;
-    @Autowired
-    private KpiDao           kpiDAO;
-    
-    @Autowired
-    private IKpiQueryService kpiQueryRegisterService;
-    
+    private KpiDao              kpiDao;
     
     @Autowired
-    private MeasureDao       measureDao;
+    private KpiDao              kpiDAO;
     
     
+    @Autowired
+    private IKpiMathService     kpiMathService;
+    
+    
+    @Autowired
+    private IKpiValueService    kpiValueService;
+    
+    
+    @Autowired
+    private MeasureDao          measureDao;
+    
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.kpi.IKpiValueService#
+     * backupKpiValuesIntoHistory()
+     */
+    @Override
+    public void backupKpiValuesIntoHistory() {
+    
+    
+        LOGGER.info("Backup all kpis into the history...");
+        for (final Kpi kpi : kpiDAO.selectByCriteria(new KpiCriteria())) {
+            LOGGER.info("Kpi {} is backuping...", kpi.getKey());
+            storeActualValueInHistory(HistoryKey.of(kpi));
+            LOGGER.info("Kpi {} backup finished", kpi.getKey());
+            
+        }
+        LOGGER.info("Backup finished for all kpis");
+        
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.komea.product.cep.tester.IKpiValueService#storeValueInHistory(org
+     * .komea.product.service.dto.KpiKey)
+     */
     
     /*
      * (non-Javadoc)
@@ -102,6 +149,30 @@ public class StatisticsService implements IStatisticsAPI
         
         return new TimeSerieImpl(measureDao.buildTimeSeries(_timeSerieOptions, _entityKey),
                 _entityKey);
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#computeAverageFromMeasures(java.util.List)
+     */
+    @Override
+    public double computeAverageFromMeasures(final List<Measure> _kpiMeasures) {
+    
+    
+        return kpiMathService.computeAverageFromMeasures(_kpiMeasures);
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#computeSumFromMeasures(java.util.List)
+     */
+    @Override
+    public double computeSumFromMeasures(final List<Measure> _kpiMeasures) {
+    
+    
+        return kpiMathService.computeSumFromMeasures(_kpiMeasures);
     }
     
     
@@ -199,8 +270,7 @@ public class StatisticsService implements IStatisticsAPI
     
         Validate.isTrue(!Strings.isNullOrEmpty(_kpiName));
         
-        final Kpi findKpiOrFail = new FindKpiOrFail(_kpiName, kpiDAO).find();
-        return kpiQueryRegisterService.getQueryValueFromKpi(findKpiOrFail);
+        return kpiValueService.getRealTimeValue(_kpiName);
     }
     
     
@@ -211,6 +281,43 @@ public class StatisticsService implements IStatisticsAPI
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#getKpiValuesAverageOnPeriod(java.lang.String, org.joda.time.DateTime)
+     */
+    @Override
+    public KpiResult getKpiValuesAverageOnPeriod(final String _kpiName, final DateTime _previousTime) {
+    
+    
+        final PeriodTimeSerieOptions periodTimeSerieOptions = new PeriodTimeSerieOptions();
+        periodTimeSerieOptions.untilNow();
+        periodTimeSerieOptions.setFromPeriod(_previousTime);
+        periodTimeSerieOptions.pickBestGranularity();
+        periodTimeSerieOptions.setGroupFormula(GroupFormula.AVG_VALUE);
+        return evaluateKpiValuesOnPeriod(periodTimeSerieOptions);
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.komea.product.backend.service.kpi.IStatisticsAPI#getLastStoredValueInHistory(org.komea.product.backend.service.history.HistoryKey
+     * )
+     */
+    @Override
+    public Double getLastStoredValueInHistory(final HistoryKey _key) {
+    
+    
+        Validate.notNull(_key.hasEntityReference());
+        final PeriodTimeSerieOptions periodTimeSerieOptions = new PeriodTimeSerieOptions();
+        periodTimeSerieOptions.untilNow();
+        periodTimeSerieOptions.fromLastTimeScale();
+        periodTimeSerieOptions.setTimeScale(TimeScale.PER_DAY);
+        periodTimeSerieOptions.setGroupFormula(GroupFormula.AVG_VALUE);
+        return evaluateKpiValueOnPeriod(periodTimeSerieOptions, _key.getEntityKey());
+    }
+    
+    
     public void setKpiDao(final KpiDao _kpiDao) {
     
     
@@ -218,4 +325,56 @@ public class StatisticsService implements IStatisticsAPI
     }
     
     
+    @Transactional
+    public void storeActualValueInHistory(final HistoryKey _historyKey) throws KPINotFoundException {
+    
+    
+        Validate.notNull(_historyKey);
+        final Kpi findKPI = kpiDAO.selectByPrimaryKey(_historyKey.getKpiID());
+        final KpiResult queryResult = kpiValueService.getRealTimeValue(findKPI.getKey());// FIXME:/Performance problem
+        // Store all data
+        final DateTime actualTime = new DateTime();
+        for (final Entry<EntityKey, Number> kpiLineValue : queryResult.getMap().entrySet()) {
+            Validate.isTrue(kpiLineValue.getKey().isEntityReferenceKey());
+            storeValueInHistory(HistoryKey.of(findKPI, kpiLineValue.getKey()), kpiLineValue
+                    .getValue().doubleValue(), actualTime);
+            
+        }
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#storeValueInHistory(org.komea.product.backend.service.history.HistoryKey,
+     * java.lang.Double)
+     */
+    @Override
+    public void storeValueInHistory(final HistoryKey _kpiKey, final Double _value) {
+    
+    
+        storeValueInHistory(_kpiKey, _value, new DateTime());
+        
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#storeValueInHistory(org.komea.product.backend.service.history.HistoryKey,
+     * java.lang.Double, org.joda.time.DateTime)
+     */
+    @Override
+    public void storeValueInHistory(
+            final HistoryKey _historyKey,
+            final Double _value,
+            final DateTime _actualTime) {
+    
+    
+        final Measure measure =
+                Measure.initializeMeasure(_historyKey.getKpiID(), _historyKey.getEntityKey()
+                        .getId());
+        measure.setValue(_value);
+        measure.setDateTime(_actualTime);
+        measureDao.insert(measure);
+        
+    }
 }

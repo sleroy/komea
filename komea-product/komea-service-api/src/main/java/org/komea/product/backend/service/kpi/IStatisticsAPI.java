@@ -6,9 +6,14 @@ package org.komea.product.backend.service.kpi;
 
 
 
+import java.util.List;
+
+import org.joda.time.DateTime;
+import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.database.dao.timeserie.TimeSerieOptions;
 import org.komea.product.database.dto.KpiResult;
+import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.service.dto.KpiKey;
 
@@ -19,6 +24,9 @@ import org.komea.product.service.dto.KpiKey;
  */
 public interface IStatisticsAPI
 {
+    
+    
+    void backupKpiValuesIntoHistory();
     
     
     /**
@@ -54,11 +62,33 @@ public interface IStatisticsAPI
     
     
     /**
+     * Compute the average of kpi measures
+     * 
+     * @param _kpiMeasures
+     *            the kpi measures
+     * @return a value representing the average.
+     */
+    @Deprecated
+    double computeAverageFromMeasures(List<Measure> _kpiMeasures);
+    
+    
+    /**
+     * Computes the sum from a list of measures
+     * 
+     * @param _kpiMeasures
+     *            the kpi measures
+     * @return a value representing the sum
+     */
+    @Deprecated
+    double computeSumFromMeasures(List<Measure> _kpiMeasures);
+    
+    
+    /**
      * Returns a value computed from kpi history given a formula. The formula must provides the TimeScale and the formula used. It computes
      * a value according the period [now() -timeScale()] and the given formula;
      * The result is computed for an unique entity.
      */
-    KpiResult evaluateKpiValuesOnPeriod(PeriodTimeSerieOptions _options);
+    Double evaluateKpiValue(TimeSerieOptions _options, EntityKey _entityKey);
     
     
     /**
@@ -82,7 +112,7 @@ public interface IStatisticsAPI
      * a value according the period [now() -timeScale()] and the given formula;
      * The result is computed for an unique entity.
      */
-    Double evaluateKpiValue(TimeSerieOptions _options, EntityKey _entityKey);
+    KpiResult evaluateKpiValuesOnPeriod(PeriodTimeSerieOptions _options);
     
     
     /**
@@ -104,4 +134,52 @@ public interface IStatisticsAPI
      * @return a map associating the entities with their values.
      */
     KpiResult evaluateTheCurrentKpiValues(String _kpiName);
+    
+    
+    /**
+     * Returns the kpi values averaged since the begin period given in parameter. The results are returned as an object called KpiRESULT.
+     * Basically it is a
+     * map referencing an entity key to its value.
+     * 
+     * @param _kpiName
+     *            the kpi name
+     * @param _previousTime
+     *            the previous time.
+     * @return the kpi result
+     */
+    KpiResult getKpiValuesAverageOnPeriod(String _kpiName, DateTime _previousTime);
+    
+    
+    /**
+     * Returns the last stored value into the history of a KPI.
+     * 
+     * @param the
+     *            history key.
+     */
+    @Deprecated
+    Double getLastStoredValueInHistory(HistoryKey _key);
+    
+    
+    /**
+     * Stores a value into the history
+     * 
+     * @param _kpiKey
+     *            the kpi key
+     * @param _value
+     *            the value to store
+     */
+    void storeValueInHistory(HistoryKey _kpiKey, Double _value);
+    
+    
+    /**
+     * Stores a value in history with the given date.
+     * 
+     * @param _historyKey
+     *            the kpi key
+     * @param _value
+     *            the value
+     * @param _actualTime
+     *            the actual time
+     */
+    void storeValueInHistory(HistoryKey _historyKey, Double _value, DateTime _actualTime);
 }

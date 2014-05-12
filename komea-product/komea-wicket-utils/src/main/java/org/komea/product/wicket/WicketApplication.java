@@ -9,8 +9,7 @@ import java.util.Set;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.settings.IExceptionSettings;
-import org.apache.wicket.settings.IExceptionSettings.ThreadDumpStrategy;
+import org.apache.wicket.settings.ExceptionSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.spring.test.ApplicationContextMock;
 import org.komea.product.backend.api.IWicketAdminService;
@@ -62,7 +61,9 @@ public class WicketApplication extends AuthenticatedWebApplication
     public ApplicationContext getAppCtx() {
     
     
-        if (isDebugMode()) { return getContextMock(); }
+        if (isDebugMode()) {
+            return getContextMock();
+        }
         return WebApplicationContextUtils.getWebApplicationContext(getServletContext());
     }
     
@@ -124,9 +125,7 @@ public class WicketApplication extends AuthenticatedWebApplication
         LOGGER.debug("#############################################################");
         
         
-        getExceptionSettings().setThreadDumpStrategy(ThreadDumpStrategy.ALL_THREADS);
-        getExceptionSettings()
-                .setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_EXCEPTION_PAGE);
+        getExceptionSettings().setUnexpectedExceptionDisplay(ExceptionSettings.SHOW_EXCEPTION_PAGE);
     }
     
     
