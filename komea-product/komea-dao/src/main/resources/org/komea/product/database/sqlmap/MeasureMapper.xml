@@ -2,14 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.komea.product.database.dao.MeasureDao">
 
-	<cache type="org.mybatis.caches.ehcache.EhcacheCache">
-		<property name="timeToIdleSeconds" value="7200" /><!--2 hours -->
-		<property name="timeToLiveSeconds" value="7200" /><!--2 hours -->
-		<property name="maxElementsInMemory" value="1000" />
-		<property name="maxElementsOnDisk" value="10000000" />
-		<property name="memoryStoreEvictionPolicy" value="LRU" />
-	</cache>
-
 	<resultMap type="org.komea.product.database.dao.timeserie.TimeCoordinate"
 		id="TimeCoordinate">
 		<result column="entityID" property="entityID" />
@@ -21,6 +13,13 @@
 		<result column="month" property="month" />
 		<result column="value" property="value" />
 	</resultMap>
+
+	<resultMap type="org.komea.product.database.dao.timeserie.EntityIdValue"
+		id="entityIDValue">
+		<result column="entityID" property="entityID" />
+		<result column="value" property="value" />
+	</resultMap>
+
 
 	<resultMap id="BaseResultMap" type="org.komea.product.database.model.Measure">
 
@@ -443,16 +442,21 @@
 	</sql>
 	<sql id="timeGroupBy">
 		<choose>
-			<when test='options.timeScale.name().equals("PER_YEAR")'> GROUP BY idKpi, entityID, year ORDER BY year ASC </when>
-			<when test='options.timeScale.name().equals("PER_MONTH")'> GROUP BY idKpi, entityID, year,month ORDER BY  year ASC, month ASC
+			<when test='options.timeScale.name().equals("PER_YEAR")'> GROUP BY idKpi, entityID, year ORDER BY year ASC
 			</when>
-			<when test='options.timeScale.name().equals("PER_WEEK")'> GROUP BY idKpi, entityID, year, month, week ORDER BY year ASC, month
+			<when test='options.timeScale.name().equals("PER_MONTH")'> GROUP BY idKpi, entityID, year,month ORDER BY year
+				ASC, month ASC
+			</when>
+			<when test='options.timeScale.name().equals("PER_WEEK")'> GROUP BY idKpi, entityID, year, month, week ORDER BY
+				year ASC, month
 				ASC, week ASC
 			</when>
-			<when test='options.timeScale.name().equals("PER_DAY")'> GROUP BY idKpi, entityID, year, month, week,day ORDER BY  year ASC,
+			<when test='options.timeScale.name().equals("PER_DAY")'> GROUP BY idKpi, entityID, year, month, week,day
+				ORDER BY year ASC,
 				month ASC, week ASC, day ASC
 			</when>
-			<when test='options.timeScale.name().equals("PER_HOUR")'> GROUP BY idKpi, entityID, year, month, week,day,hour ORDER BY  year
+			<when test='options.timeScale.name().equals("PER_HOUR")'> GROUP BY idKpi, entityID, year, month, week,day,hour
+				ORDER BY year
 				ASC, month ASC, week ASC, day ASC, hour ASC
 			</when>
 		</choose>
@@ -499,8 +503,7 @@
 		<include refid="timeGroupBy" />
 	</select>
 
-	<select id="evaluateKpiValue" resultType="double"
-		parameterType="map">
+	<select id="evaluateKpiValue" resultType="double" parameterType="map">
 		SELECT
 		<include refid="CustomFormula" />
 		FROM
@@ -508,10 +511,11 @@
 		WHERE
 		idKpi = #{options.kpiID} AND
 		entityID = #{key.id}
-		GROUP BY idKpi, entityID
+		GROUP
+		BY idKpi, entityID
 	</select>
 
-   <select id="evaluateKpiValueOnPeriod" resultType="double"
+	<select id="evaluateKpiValueOnPeriod" resultType="double"
 		parameterType="map">
 		SELECT
 		<include refid="CustomFormula" />
@@ -523,8 +527,8 @@
 		<include refid="wherePeriod" />
 		GROUP BY idKpi, entityID
 	</select>
-	
-	<select id="evaluateKpiValues" resultType="hashmap"
+
+	<select id="evaluateKpiValues" resultMap="entityIDValue"
 		parameterType="map">
 		SELECT
 		entityID,
@@ -532,11 +536,11 @@
 		FROM
 		kom_msr
 		WHERE
-		idKpi = #{options.kpiID}  
+		idKpi = #{options.kpiID}
 		GROUP BY entityID
 	</select>
 
-   <select id="evaluateKpiValuesOnPeriod" resultType="hashmap"
+	<select id="evaluateKpiValuesOnPeriod" resultMap="entityIDValue"
 		parameterType="map">
 		SELECT
 		entityID,

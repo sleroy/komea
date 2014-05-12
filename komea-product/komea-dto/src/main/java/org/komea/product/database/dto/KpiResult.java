@@ -10,9 +10,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.komea.product.database.api.IEntity;
+import org.komea.product.database.dao.timeserie.EntityIdValue;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.service.dto.EntityKey;
 
@@ -77,14 +77,12 @@ public class KpiResult
      * @param _entityType
      * @return
      */
-    public KpiResult fill(
-            final Map<Integer, Number> _evaluateKpiValues,
-            final EntityType _entityType) {
+    public KpiResult fill(final List<EntityIdValue> _evaluateKpiValues, final EntityType _entityType) {
     
     
         map = Maps.newHashMapWithExpectedSize(_evaluateKpiValues.size());
-        for (final Entry<Integer, Number> entry : _evaluateKpiValues.entrySet()) {
-            map.put(EntityKey.of(_entityType, entry.getKey()), entry.getValue());
+        for (final EntityIdValue entry : _evaluateKpiValues) {
+            map.put(EntityKey.of(_entityType, entry.getEntityID()), entry.getValue());
         }
         
         return this;

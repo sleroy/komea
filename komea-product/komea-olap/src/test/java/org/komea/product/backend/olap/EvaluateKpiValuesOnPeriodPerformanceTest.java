@@ -11,22 +11,18 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.database.dao.MeasureDao;
-import org.komea.product.database.dao.timeserie.GroupFormula;
 import org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.database.dao.timeserie.TimeScale;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
-import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertTrue;
 
 
-
-public class EvaluateKpiValuesOnPeriodPerformanceTest extends AbstractSpringIntegrationTestCase
+public class EvaluateKpiValuesOnPeriodPerformanceTest extends AbstractPerformanceTest
 {
     
     
@@ -76,6 +72,7 @@ public class EvaluateKpiValuesOnPeriodPerformanceTest extends AbstractSpringInte
     
     
     
+    @Override
     @Before
     public void before() {
     
@@ -225,15 +222,5 @@ public class EvaluateKpiValuesOnPeriodPerformanceTest extends AbstractSpringInte
         
     }
     
-    
-    private void sameTimeSerieConfig(final PeriodTimeSerieOptions timeSerieOptions) {
-    
-    
-        timeSerieOptions.setKpiID(KPI_BUILD);
-        timeSerieOptions.setGroupFormula(GroupFormula.COUNT);
-        timeSerieOptions.untilNow();
-        timeSerieOptions.lastYears(10);
-        assertTrue(timeSerieOptions.isValid());
-    }
     
 }

@@ -24,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Strings;
+
 
 
 /**
@@ -58,6 +60,8 @@ public class StatisticsService implements IStatisticsAPI
     public TimeSerie buildGlobalPeriodTimeSeries(final PeriodTimeSerieOptions _timeSerieOptions) {
     
     
+        Validate.notNull(_timeSerieOptions);
+        
         return new TimeSerieImpl(measureDao.buildGlobalPeriodTimeSeries(_timeSerieOptions));
     }
     
@@ -73,6 +77,9 @@ public class StatisticsService implements IStatisticsAPI
             final EntityKey _entityKey) {
     
     
+        Validate.notNull(_timeSerieOptions);
+        Validate.notNull(_entityKey);
+        Validate.isTrue(_entityKey.isEntityReferenceKey());
         return new TimeSerieImpl(measureDao.buildPeriodTimeSeries(_timeSerieOptions, _entityKey),
                 _entityKey);
     }
@@ -89,6 +96,10 @@ public class StatisticsService implements IStatisticsAPI
             final EntityKey _entityKey) {
     
     
+        Validate.notNull(_timeSerieOptions);
+        Validate.notNull(_entityKey);
+        Validate.isTrue(_entityKey.isEntityReferenceKey());
+        
         return new TimeSerieImpl(measureDao.buildTimeSeries(_timeSerieOptions, _entityKey),
                 _entityKey);
     }
@@ -103,6 +114,10 @@ public class StatisticsService implements IStatisticsAPI
     public Double evaluateKpiValue(final TimeSerieOptions _options, final EntityKey _entityKey) {
     
     
+        Validate.notNull(_options);
+        Validate.notNull(_entityKey);
+        Validate.isTrue(_entityKey.isEntityReferenceKey());
+        
         return measureDao.evaluateKpiValue(_options, _entityKey);
     }
     
@@ -123,6 +138,9 @@ public class StatisticsService implements IStatisticsAPI
             final EntityKey _entityKey) {
     
     
+        Validate.notNull(_options);
+        Validate.notNull(_entityKey);
+        Validate.isTrue(_entityKey.isEntityReferenceKey());
         return measureDao.evaluateKpiValueOnPeriod(_options, _entityKey);
     }
     
@@ -131,6 +149,8 @@ public class StatisticsService implements IStatisticsAPI
     public KpiResult evaluateKpiValues(final TimeSerieOptions _options) {
     
     
+        Validate.notNull(_options);
+        
         final Kpi findKpiPerId = new FindKpiPerId(_options.getKpiID(), kpiDao).find();
         return new KpiResult().fill(measureDao.evaluateKpiValues(_options),
                 findKpiPerId.getEntityType());
@@ -147,6 +167,7 @@ public class StatisticsService implements IStatisticsAPI
     public KpiResult evaluateKpiValuesOnPeriod(final PeriodTimeSerieOptions _options) {
     
     
+        Validate.notNull(_options);
         final Kpi findKpiPerId = new FindKpiPerId(_options.getKpiID(), kpiDao).find();
         return new KpiResult().fill(measureDao.evaluateKpiValuesOnPeriod(_options),
                 findKpiPerId.getEntityType());
@@ -176,6 +197,8 @@ public class StatisticsService implements IStatisticsAPI
     public KpiResult evaluateTheCurrentKpiValues(final String _kpiName) {
     
     
+        Validate.isTrue(!Strings.isNullOrEmpty(_kpiName));
+        
         final Kpi findKpiOrFail = new FindKpiOrFail(_kpiName, kpiDAO).find();
         return kpiQueryRegisterService.getQueryValueFromKpi(findKpiOrFail);
     }
