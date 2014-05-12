@@ -76,7 +76,7 @@ public class MeasuresController {
     @ResponseBody
     public List<MeasureResult> findHistoricalMeasure(@RequestBody final HistoricalMeasureRequest _request) {
     
-        LOGGER.debug("call rest method /measures/find2/ with body: ");
+        LOGGER.debug("call rest method /measures/historic/ with body: ");
         return kpiService.getHistoricalMeasures(_request.getHistoryKeyList(), _request.getLimit());
     }
     
