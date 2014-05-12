@@ -111,6 +111,9 @@ AbstractSpringIntegrationTestCase
     public void before2() {
     
     
+        if (kpiDao.selectByPrimaryKey(1) != null) {
+            return;
+        }
         final Kpi record = new Kpi();
         record.setCronExpression("");
         record.setDescription("");
