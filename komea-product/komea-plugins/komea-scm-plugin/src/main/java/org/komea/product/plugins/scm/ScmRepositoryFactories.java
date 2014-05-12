@@ -5,7 +5,6 @@
 package org.komea.product.plugins.scm;
 
 
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +12,7 @@ import java.util.Map;
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.service.fs.IKomeaFS;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
+import org.komea.product.plugins.repository.model.ScmType;
 import org.komea.product.plugins.scm.api.IScmRepositoryProxyFactories;
 import org.komea.product.plugins.scm.api.error.ScmAlreadyExistingScmRepositoryFactoryException;
 import org.komea.product.plugins.scm.api.error.ScmRepositoryProxyTypeNotFoundException;
@@ -23,31 +23,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-
 /**
  * Defines the register of scm repository factories
  * 
  * @author sleroy
  */
 @Service
-public class ScmRepositoryFactories implements IScmRepositoryProxyFactories
-{
+public class ScmRepositoryFactories implements IScmRepositoryProxyFactories {
     
+    private static final Logger                           LOGGER       = LoggerFactory.getLogger(ScmRepositoryFactories.class);
     
-    private static final Logger                           LOGGER       =
-                                                                               LoggerFactory
-                                                                                       .getLogger(ScmRepositoryFactories.class);
-    
-    
-    private final Map<String, IScmRepositoryProxyFactory> factoriesMap =
-                                                                               new HashMap<String, IScmRepositoryProxyFactory>();
-    
+    private final Map<String, IScmRepositoryProxyFactory> factoriesMap = new HashMap<String, IScmRepositoryProxyFactory>();
     
     @Autowired
     private IKomeaFS                                      komeaFS;
-    
-    
     
     /**
      * Returns the Komea file system
@@ -56,10 +45,8 @@ public class ScmRepositoryFactories implements IScmRepositoryProxyFactories
      */
     public IKomeaFS getKomeaFS() {
     
-    
         return komeaFS;
     }
-    
     
     /*
      * (non-Javadoc)
@@ -69,40 +56,33 @@ public class ScmRepositoryFactories implements IScmRepositoryProxyFactories
     @Override
     public IScmRepositoryProxy newProxy(final ScmRepositoryDefinition _repositoryDefinition) {
     
-    
         Validate.notNull(_repositoryDefinition);
-        final String scmType = _repositoryDefinition.getType().toUpperCase();
+        final String scmType = _repositoryDefinition.getType().toString();
         final IScmRepositoryProxyFactory iScmRepositoryProxyFactory = factoriesMap.get(scmType);
-        if (iScmRepositoryProxyFactory == null) { throw new ScmRepositoryProxyTypeNotFoundException(
-                "Scm repository factory not found for this type of scm : " + scmType); }
+        if (iScmRepositoryProxyFactory == null) {
+            throw new ScmRepositoryProxyTypeNotFoundException("Scm repository factory not found for this type of scm : " + scmType);
+        }
         
         return iScmRepositoryProxyFactory.getProxy(_repositoryDefinition, getWorkspace());
     }
     
-    
     @Override
-    public void registerFactory(
-            final String _providerType,
-            final IScmRepositoryProxyFactory _proxyFactory) {
+    public void registerFactory(final ScmType _providerType, final IScmRepositoryProxyFactory _proxyFactory) {
     
-    
-        final String providerTypeUPCase = _providerType.toUpperCase();
+        final String providerTypeUPCase = _providerType.toString();
         LOGGER.debug("Register a factory for the type of scm {}", providerTypeUPCase);
-        if (factoriesMap.containsKey(providerTypeUPCase)) { throw new ScmAlreadyExistingScmRepositoryFactoryException(
-                providerTypeUPCase); }
+        if (factoriesMap.containsKey(providerTypeUPCase)) {
+            throw new ScmAlreadyExistingScmRepositoryFactoryException(providerTypeUPCase);
+        }
         factoriesMap.put(providerTypeUPCase, _proxyFactory);
     }
     
-    
     public void setKomeaFS(final IKomeaFS _komeaFS) {
-    
     
         komeaFS = _komeaFS;
     }
     
-    
     private File getWorkspace() {
-    
     
         return komeaFS.getFileSystemFolder("scm-workspace");
     }
