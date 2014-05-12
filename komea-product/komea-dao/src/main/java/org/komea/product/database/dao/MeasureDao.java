@@ -6,6 +6,7 @@ package org.komea.product.database.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions;
@@ -111,7 +112,8 @@ public interface MeasureDao
      * @param _options
      * @return
      */
-    Map<EntityKey, Number> evaluateKpiValues(@Param("options")
+    @MapKey("entityID")
+    Map<Integer, Number> evaluateKpiValues(@Param("options")
     TimeSerieOptions _options);
     
     
@@ -119,7 +121,8 @@ public interface MeasureDao
      * @param _options
      * @return
      */
-    Map<EntityKey, Number> evaluateKpiValuesOnPeriod(@Param("options")
+    @MapKey("entityID")
+    Map<Integer, Number> evaluateKpiValuesOnPeriod(@Param("options")
     PeriodTimeSerieOptions _options);
     
     

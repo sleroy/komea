@@ -9,6 +9,7 @@ package org.komea.product.backend.service.olap;
 import org.apache.commons.lang3.Validate;
 import org.komea.product.backend.api.IKpiQueryService;
 import org.komea.product.backend.criterias.FindKpiOrFail;
+import org.komea.product.backend.criterias.FindKpiPerId;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.backend.service.kpi.TimeSerie;
 import org.komea.product.database.dao.KpiDao;
@@ -35,9 +36,13 @@ public class StatisticsService implements IStatisticsAPI
     
     
     @Autowired
+    private KpiDao           kpiDao;
+    @Autowired
     private KpiDao           kpiDAO;
+    
     @Autowired
     private IKpiQueryService kpiQueryRegisterService;
+    
     
     @Autowired
     private MeasureDao       measureDao;
@@ -104,6 +109,10 @@ public class StatisticsService implements IStatisticsAPI
     
     /*
      * (non-Javadoc)
+     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#getKpiValues(org.komea.product.database.dao.timeserie.TimeSerieOptions)
+     */
+    /*
+     * (non-Javadoc)
      * @see
      * org.komea.product.backend.service.kpi.IStatisticsAPI#getKpiOnPeriodValues(org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions
      * , org.komea.product.service.dto.EntityKey)
@@ -118,15 +127,13 @@ public class StatisticsService implements IStatisticsAPI
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#getKpiValues(org.komea.product.database.dao.timeserie.TimeSerieOptions)
-     */
     @Override
     public KpiResult evaluateKpiValues(final TimeSerieOptions _options) {
     
     
-        return new KpiResult(measureDao.evaluateKpiValues(_options));
+        final Kpi findKpiPerId = new FindKpiPerId(_options.getKpiID(), kpiDao).find();
+        return new KpiResult().fill(measureDao.evaluateKpiValues(_options),
+                findKpiPerId.getEntityType());
     }
     
     
@@ -140,7 +147,9 @@ public class StatisticsService implements IStatisticsAPI
     public KpiResult evaluateKpiValuesOnPeriod(final PeriodTimeSerieOptions _options) {
     
     
-        return new KpiResult(measureDao.evaluateKpiValuesOnPeriod(_options));
+        final Kpi findKpiPerId = new FindKpiPerId(_options.getKpiID(), kpiDao).find();
+        return new KpiResult().fill(measureDao.evaluateKpiValuesOnPeriod(_options),
+                findKpiPerId.getEntityType());
         
     }
     
@@ -154,8 +163,8 @@ public class StatisticsService implements IStatisticsAPI
     
     
         Validate.isTrue(_kpiKeys.getEntityKey().isEntityReferenceKey());
-        return evaluateTheCurrentKpiValues(_kpiKeys.getKpiName())
-                .getDoubleValue(_kpiKeys.getEntityKey());
+        return evaluateTheCurrentKpiValues(_kpiKeys.getKpiName()).getDoubleValue(
+                _kpiKeys.getEntityKey());
     }
     
     
@@ -169,6 +178,20 @@ public class StatisticsService implements IStatisticsAPI
     
         final Kpi findKpiOrFail = new FindKpiOrFail(_kpiName, kpiDAO).find();
         return kpiQueryRegisterService.getQueryValueFromKpi(findKpiOrFail);
+    }
+    
+    
+    public KpiDao getKpiDao() {
+    
+    
+        return kpiDao;
+    }
+    
+    
+    public void setKpiDao(final KpiDao _kpiDao) {
+    
+    
+        kpiDao = _kpiDao;
     }
     
     

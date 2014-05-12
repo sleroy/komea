@@ -532,8 +532,7 @@
 		FROM
 		kom_msr
 		WHERE
-		idKpi = #{options.kpiID} AND
-		entityID = #{key.id} 
+		idKpi = #{options.kpiID}  
 		GROUP BY entityID
 	</select>
 
@@ -546,7 +545,6 @@
 		kom_msr
 		WHERE
 		idKpi = #{options.kpiID} AND
-		entityID = #{key.id} AND 
 		<include refid="wherePeriod" />
 		GROUP BY entityID
 	</select>

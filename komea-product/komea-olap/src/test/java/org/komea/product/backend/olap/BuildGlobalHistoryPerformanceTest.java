@@ -119,7 +119,7 @@ public class BuildGlobalHistoryPerformanceTest extends AbstractSpringIntegration
     }
     
     
-    @Test(timeout = 60 * MILLI_INTERVAL)
+    @Test(timeout = 90 * MILLI_INTERVAL)
     @Transactional
     public void groupElementsPerHour() {
     
