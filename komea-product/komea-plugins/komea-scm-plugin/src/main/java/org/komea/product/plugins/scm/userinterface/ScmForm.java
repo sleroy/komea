@@ -12,10 +12,14 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.ContextRelativeResource;
+import org.apache.wicket.request.resource.PackageResourceReference;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.model.Project;
+import org.komea.product.plugins.repository.model.ScmExecutionStatus;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.komea.product.plugins.scm.api.IScmRepositoryService;
 import org.komea.product.wicket.LayoutPage;
@@ -50,9 +54,10 @@ public class ScmForm extends Form<ScmRepositoryDefinition> {
         affichageDate = new NameGeneric(scmData.getLastDateCheckout().toString());
         projectName = new NameGeneric("");
         // url field
+
+        
         add(TextFieldBuilder.createURL("url", scmData, "url")
                 .withTooltip(getString("scm.save.form.tooltips.url")).simpleValidator(3, 255).build());
-
         // required input text field
         TextFieldBuilder<String> keyFieldBuilder = TextFieldBuilder.<String>createRequired("key", scmData, "key")
                 .simpleValidator(0, 255).withTooltip(getString("scm.save.form.tooltips.key"));
@@ -70,7 +75,6 @@ public class ScmForm extends Form<ScmRepositoryDefinition> {
         // input text field
         add(TextFieldBuilder.<String>create("username", scmData, "userName")
                 .simpleValidator(0, 255).withTooltip(getString("scm.save.form.tooltips.username")).build());
-
         savPassword = scmData.getPassword();
         System.out.println(scmData.getPassword());
         add(TextFieldBuilder.<String>createPasswordNoRequire("password", scmData, "password")
