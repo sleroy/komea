@@ -11,12 +11,12 @@
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="idKpi" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="step" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="formula" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="idProject" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="idPerson" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="idPersonGroup" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="value" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="step" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="formula" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
