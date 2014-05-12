@@ -271,51 +271,6 @@ public class Kpi implements IHasKey
     }
     
     
-    /**
-     * @param _cronExpression
-     * @param _description
-     * @param _entityType
-     * @param _esperRequest
-     * @param _id
-     * @param _kpiKey
-     * @param _name
-     * @param _providerType
-     * @param _valueDirection
-     * @param _valueMax
-     * @param _valueMin
-     * @param _valueType
-     */
-    public Kpi(
-            final String _cronExpression,
-            final String _description,
-            final EntityType _entityType,
-            final String _esperRequest,
-            final Integer _id,
-            final String _kpiKey,
-            final String _name,
-            final ProviderType _providerType,
-            final ValueDirection _valueDirection,
-            final Double _valueMax,
-            final Double _valueMin,
-            final ValueType _valueType) {
-    
-    
-        super();
-        cronExpression = _cronExpression;
-        description = _description;
-        entityType = _entityType;
-        esperRequest = _esperRequest;
-        id = _id;
-        kpiKey = _kpiKey;
-        name = _name;
-        providerType = _providerType;
-        valueDirection = _valueDirection;
-        valueMax = _valueMax;
-        valueMin = _valueMin;
-        valueType = _valueType;
-    }
-    
-    
     @JsonIgnore
     @Override
     public void accept(final IKeyVisitor _visitor) {
