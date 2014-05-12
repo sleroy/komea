@@ -120,7 +120,7 @@ public class AlertServiceITest extends AbstractSpringDBunitIntegrationTest {
     @Test
     public void testIsAlertAssociatedToMeasureEntity() throws Exception {
     
-        // alertService.
+        org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
     /**
