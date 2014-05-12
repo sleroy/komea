@@ -32,42 +32,6 @@ public class AlertServiceITest extends AbstractSpringDBunitIntegrationTest {
     // @Mock
     // private IHistoryService measureService;
     
-    /**
-     * Test method for
-     * {@link org.komea.product.backend.service.alert.AlertService#findAlert(org.komea.product.database.enums.EntityType, org.komea.product.database.dto.BaseEntityDto, org.komea.product.database.model.KpiAlertType, java.util.List, java.util.Map)}
-     * .
-     */
-    @Test
-    public final void testFindAlert() throws Exception {
-    
-        // TODO
-        
-        org.junit.Assert.assertTrue("not yet implemented", false);
-    }
-    
-    /**
-     * Test method for
-     * {@link org.komea.product.backend.service.alert.AlertService#findAlerts(org.komea.product.database.dto.SearchKpiAlertsDto)}.
-     */
-    @Test
-    public final void testFindAlerts() throws Exception {
-    
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
-    }
-    
-    /**
-     * Test method for
-     * {@link org.komea.product.backend.service.alert.AlertService#findMeasure(org.komea.product.database.enums.EntityType, org.komea.product.database.dto.BaseEntityDto, org.komea.product.database.model.KpiAlertType, java.util.List)}
-     * .
-     */
-    @Test
-    public final void testFindMeasure() throws Exception {
-    
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
-    }
-    
     @Test
     public final void testIsAlert_definition_not_activated() throws Exception {
     
