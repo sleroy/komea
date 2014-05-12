@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
@@ -45,7 +44,6 @@ AbstractSpringIntegrationTestCase
 {
     
     
-    public static final int      KPI_BUILD              = 1;
     private static final Logger  LOGGER                 =
                                                                 LoggerFactory
                                                                         .getLogger(EvaluateKpiValuesPerformanceTest.class);
@@ -58,30 +56,17 @@ AbstractSpringIntegrationTestCase
     protected static final int   MILLI_INTERVAL         = 1000;
     
     
-    
-    @BeforeClass
-    public static void beforeClass() {
-    
-    
-        measures.clear();
-        measures =
-                FakeMeasures.generateHourlyDataForKpi(KPI_BUILD, 2, MAX_NUMBER_OF_PROJECTS,
-                        MAX_BUILD_PER_HOUR);
-        LOGGER.info("Number of elements {}", measures.size());
-    }
-    
-    
-    
     // @Rule
     // public final H2ProfilerRule h2ProfilerRule = new H2ProfilerRule();
     
     
+    private Kpi                  generatedKpi;
     @Autowired
-    private KpiDao           kpiDao;
+    private KpiDao               kpiDao;
     @Autowired
-    private MeasureDao       measureDao;
+    private MeasureDao           measureDao;
     @Autowired
-    protected IStatisticsAPI statisticsAPI;
+    protected IStatisticsAPI     statisticsAPI;
     
     
     
@@ -99,6 +84,26 @@ AbstractSpringIntegrationTestCase
     public void before2() {
     
     
+        if (kpiDao.selectByPrimaryKey(1) != null) {
+            return;
+        }
+        initFakeKPi();
+        
+        
+        kpiDao.insert(generatedKpi);
+        
+        System.out.println("< Number of kpis : "
+                + kpiDao.selectByCriteria(new KpiCriteria()).size() + " <> ID ="
+                + generatedKpi.getId());
+        
+        
+        measures.clear();
+        measures =
+                FakeMeasures.generateHourlyDataForKpi(generatedKpi.getId(), 2,
+                        MAX_NUMBER_OF_PROJECTS, MAX_BUILD_PER_HOUR);
+        LOGGER.info("Number of elements {}", measures.size());
+        
+        
         measureDao.deleteByCriteria(new MeasureCriteria());
         for (final Measure measure : measures) {
             
@@ -106,27 +111,24 @@ AbstractSpringIntegrationTestCase
             measureDao.insert(measure);
         }
         System.out.println("Number of kpis : " + kpiDao.selectByCriteria(new KpiCriteria()).size());
-        if (kpiDao.selectByPrimaryKey(1) != null) {
-            return;
-        }
-        final Kpi record = new Kpi();
-        record.setCronExpression("");
-        record.setDescription("");
-        record.setEntityType(EntityType.PROJECT);
-        record.setEsperRequest("esperRequest");
-        record.setKpiKey("bla");
-        record.setName("bla");
-        record.setProviderType(ProviderType.BUGTRACKER);
-        record.setValueDirection(ValueDirection.BETTER);
-        record.setValueMax(100d);
-        record.setValueMin(0d);
-        record.setValueType(ValueType.BOOL);
-        
-        
-        record.setId(1);
-        kpiDao.insert(record);
-        System.out.println("< Number of kpis : "
-                + kpiDao.selectByCriteria(new KpiCriteria()).size());
+    }
+
+
+    private void initFakeKPi() {
+    
+    
+        generatedKpi = new Kpi();
+        generatedKpi.setCronExpression("");
+        generatedKpi.setDescription("");
+        generatedKpi.setEntityType(EntityType.PROJECT);
+        generatedKpi.setEsperRequest("esperRequest");
+        generatedKpi.setKpiKey("bla");
+        generatedKpi.setName("bla");
+        generatedKpi.setProviderType(ProviderType.BUGTRACKER);
+        generatedKpi.setValueDirection(ValueDirection.BETTER);
+        generatedKpi.setValueMax(100d);
+        generatedKpi.setValueMin(0d);
+        generatedKpi.setValueType(ValueType.BOOL);
     }
     
     
@@ -144,7 +146,7 @@ AbstractSpringIntegrationTestCase
     protected void sameTimeSerieTimeConfig(final TimeSerieOptions _timeSerieOptions) {
     
     
-        _timeSerieOptions.setKpiID(KPI_BUILD);
+        _timeSerieOptions.setKpiID(generatedKpi.getId());
         _timeSerieOptions.setGroupFormula(GroupFormula.COUNT);
         
         
