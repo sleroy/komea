@@ -2,7 +2,6 @@
 package org.komea.product.rest.client;
 
 
-
 import java.util.List;
 
 import org.junit.Assert;
@@ -17,63 +16,46 @@ import org.komea.product.rest.client.api.IPersonsAPI;
 import org.komea.product.rest.client.api.IProjectsAPI;
 import org.komea.product.rest.client.api.ITeamsAPI;
 
-
-
-public class DepartmentsAPIITest
-{
-    
+public class DepartmentsAPIITest {
     
     @Rule
     public ServerMethodRule serverInit = new ServerMethodRule();
     
-    
-    
     //
-    @Test 
+    @Test
     public void testAllProjects() throws Exception {
     
-    
-        final IProjectsAPI projectsAPI =
-                RestClientFactory.INSTANCE.createProjectsAPI(serverInit.getAddress());
+        final IProjectsAPI projectsAPI = RestClientFactory.INSTANCE.createProjectsAPI(serverInit.getAddress());
         Assert.assertNotNull(projectsAPI);
         final List<ProjectDto> projects = projectsAPI.allProjects();
         Assert.assertFalse(projects.isEmpty());
     }
     
-    
-    @Test 
+    @Test
     public void testGetAllDepartments() throws Exception {
     
-    
-        final IDepartmentsAPI projectsAPI =
-                RestClientFactory.INSTANCE.createDeparmtentsAPI(serverInit.getAddress());
+        final IDepartmentsAPI projectsAPI = RestClientFactory.INSTANCE.createDeparmtentsAPI(serverInit.getAddress());
         Assert.assertNotNull(projectsAPI);
-        final List<DepartmentDto> projects = projectsAPI.allDepartments();
+        final List<DepartmentDto> departments = projectsAPI.allDepartments();
         // Assert.assertTrue(projects.get(0) instanceof DepartmentDto);
-        Assert.assertTrue(projects.isEmpty());
+        Assert.assertTrue(departments.isEmpty());
     }
     
-    
-    @Test 
+    @Test
     public void testGetAllPersons() throws Exception {
     
-    
-        final IPersonsAPI projectsAPI =
-                RestClientFactory.INSTANCE.createPersonsAPI(serverInit.getAddress());
+        final IPersonsAPI projectsAPI = RestClientFactory.INSTANCE.createPersonsAPI(serverInit.getAddress());
         Assert.assertNotNull(projectsAPI);
         final List<PersonDto> persons = projectsAPI.allPersons();
         Assert.assertEquals(1, persons.size());
     }
     
-    
-    @Test 
+    @Test
     public void testgetallTeams() throws Exception {
     
-    
-        final ITeamsAPI projectsAPI =
-                RestClientFactory.INSTANCE.createTeamsAPI(serverInit.getAddress());
+        final ITeamsAPI projectsAPI = RestClientFactory.INSTANCE.createTeamsAPI(serverInit.getAddress());
         Assert.assertNotNull(projectsAPI);
-        final List<TeamDto> projects = projectsAPI.allTeams();
-        Assert.assertTrue(projects.isEmpty());
+        final List<TeamDto> teams = projectsAPI.allTeams();
+        Assert.assertTrue(teams.isEmpty());
     }
 }
