@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.google.common.collect.Lists;
 
-public class MeasureServiceTest extends AbstractSpringDBunitIntegrationTest {
+public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
     
     //
     @Autowired
