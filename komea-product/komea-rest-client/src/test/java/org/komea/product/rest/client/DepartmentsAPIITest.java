@@ -5,6 +5,7 @@ package org.komea.product.rest.client;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.komea.product.database.dto.DepartmentDto;
@@ -22,6 +23,7 @@ public class DepartmentsAPIITest {
     public ServerMethodRule serverInit = new ServerMethodRule();
     
     //
+    @Ignore("not used")
     @Test
     public void testAllProjects() throws Exception {
     
@@ -31,6 +33,7 @@ public class DepartmentsAPIITest {
         Assert.assertFalse(projects.isEmpty());
     }
     
+    @Ignore("not used")
     @Test
     public void testGetAllDepartments() throws Exception {
     
@@ -41,6 +44,7 @@ public class DepartmentsAPIITest {
         Assert.assertTrue(departments.isEmpty());
     }
     
+    @Ignore("not used")
     @Test
     public void testGetAllPersons() throws Exception {
     
@@ -50,6 +54,7 @@ public class DepartmentsAPIITest {
         Assert.assertEquals(1, persons.size());
     }
     
+    @Ignore("not used")
     @Test
     public void testgetallTeams() throws Exception {
     

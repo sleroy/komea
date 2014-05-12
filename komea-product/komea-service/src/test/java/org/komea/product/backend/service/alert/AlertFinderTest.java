@@ -165,22 +165,7 @@ public class AlertFinderTest {
         
         org.junit.Assert.assertNull("the result must null", alert);
     }
-    /**
-     * Test method for
-     * {@link org.komea.product.backend.service.alert.AlertService#findAlerts(org.komea.product.database.dto.SearchKpiAlertsDto)}.
-     */
-    @Test
-    public final void testFindAlerts() throws Exception {
     
-        // TODO
-        org.junit.Assert.assertTrue("not yet implemented", false);
-    }
-    
-    /**
-     * Test method for
-     * {@link org.komea.product.backend.service.alert.AlertService#findMeasure(org.komea.product.database.enums.EntityType, org.komea.product.database.dto.BaseEntityDto, org.komea.product.database.model.KpiAlertType, java.util.List)}
-     * .
-     */
     @Test
     public final void testFindMeasure() throws Exception {
     
