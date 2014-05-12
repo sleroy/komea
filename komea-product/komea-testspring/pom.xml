@@ -101,6 +101,12 @@
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-core</artifactId>
 			<version>1.5.5</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -121,7 +127,7 @@
 			<scope>compile</scope>
 		</dependency>
 
-		
+
 
 	</dependencies>
 

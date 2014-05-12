@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
@@ -23,13 +22,14 @@ import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
+import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
-import org.komea.product.test.spring.H2ProfilerRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertTrue;
 
@@ -38,6 +38,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author sleroy
  */
+@Transactional
 public abstract class AbstractPerformanceTest extends
 
 AbstractSpringIntegrationTestCase
@@ -52,7 +53,7 @@ AbstractSpringIntegrationTestCase
     /**
      * 
      */
-    private static final int     MAX_NUMBER_OF_PROJECTS = 20;
+    private static final int     MAX_NUMBER_OF_PROJECTS = 5;
     private static List<Measure> measures               = new ArrayList<Measure>(20000);
     protected static final int   MILLI_INTERVAL         = 1000;
     
@@ -71,16 +72,16 @@ AbstractSpringIntegrationTestCase
     
     
     
-    @Rule
-    public final H2ProfilerRule h2ProfilerRule = new H2ProfilerRule();
+    // @Rule
+    // public final H2ProfilerRule h2ProfilerRule = new H2ProfilerRule();
     
     
     @Autowired
-    private KpiDao              kpiDao;
+    private KpiDao           kpiDao;
     @Autowired
-    private MeasureDao          measureDao;
+    private MeasureDao       measureDao;
     @Autowired
-    protected IStatisticsAPI    statisticsAPI;
+    protected IStatisticsAPI statisticsAPI;
     
     
     
@@ -95,7 +96,7 @@ AbstractSpringIntegrationTestCase
     
     
     @Before
-    public void before() {
+    public void before2() {
     
     
         measureDao.deleteByCriteria(new MeasureCriteria());
@@ -104,13 +105,7 @@ AbstractSpringIntegrationTestCase
             
             measureDao.insert(measure);
         }
-    }
-    
-    
-    @Before
-    public void before2() {
-    
-    
+        System.out.println("Number of kpis : " + kpiDao.selectByCriteria(new KpiCriteria()).size());
         if (kpiDao.selectByPrimaryKey(1) != null) {
             return;
         }
@@ -130,6 +125,8 @@ AbstractSpringIntegrationTestCase
         
         record.setId(1);
         kpiDao.insert(record);
+        System.out.println("< Number of kpis : "
+                + kpiDao.selectByCriteria(new KpiCriteria()).size());
     }
     
     

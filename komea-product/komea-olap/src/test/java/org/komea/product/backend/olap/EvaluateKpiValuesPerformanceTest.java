@@ -16,10 +16,6 @@ AbstractPerformanceTest
 {
     
     
-    // @Rule
-    // public final H2ProfilerRule h2ProfilerRule = new H2ProfilerRule();
-    
-    
     @Test(timeout = 52 * MILLI_INTERVAL)
     @Transactional
     public void groupElementsPerDay() {
