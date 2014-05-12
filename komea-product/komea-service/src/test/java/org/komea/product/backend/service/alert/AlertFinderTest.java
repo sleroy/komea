@@ -24,7 +24,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.google.common.collect.Lists;
 
 @RunWith(MockitoJUnitRunner.class)
-public class IAlertFinderITest {
+public class AlertFinderTest {
     
     @Mock
     private IAlertService            alertSerice;

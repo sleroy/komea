@@ -44,6 +44,11 @@ public class AlertFinderService implements IAlertFinderService {
     @Autowired
     private IKPIService       kpiService;
     
+    public IAlertService getAlertService() {
+    
+        return alertService;
+    }
+    
     /**
      * @param _alertCriteria
      * @param _mapKpis
