@@ -5,9 +5,7 @@
 package org.komea.product.backend.service.alert;
 
 
-
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.komea.product.database.enums.Operator;
 import org.komea.product.database.enums.Severity;
@@ -15,29 +13,13 @@ import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.test.spring.AbstractSpringDBunitIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
-
 /**
  * @author sleroy
  */
-public class AlertServiceITest extends AbstractSpringDBunitIntegrationTest
-{
-    
-    
-    private AlertService  alertService;
+public class AlertServiceITest extends AbstractSpringDBunitIntegrationTest {
     
     @Autowired
-    private IAlertService ialertService;
-    
-    
-    
-    @Before
-    public void setUp() {
-    
-    
-        alertService = (AlertService) ialertService;
-    }
-    
+    private IAlertService alertService;
     
     // @Mock
     // private IAlertTypeService alertTypeService;
@@ -58,12 +40,10 @@ public class AlertServiceITest extends AbstractSpringDBunitIntegrationTest
     @Test
     public final void testFindAlert() throws Exception {
     
-    
         // TODO
         
         org.junit.Assert.assertTrue("not yet implemented", false);
     }
-    
     
     /**
      * Test method for
@@ -72,11 +52,9 @@ public class AlertServiceITest extends AbstractSpringDBunitIntegrationTest
     @Test
     public final void testFindAlerts() throws Exception {
     
-    
         // TODO
         org.junit.Assert.assertTrue("not yet implemented", false);
     }
-    
     
     /**
      * Test method for
@@ -86,15 +64,12 @@ public class AlertServiceITest extends AbstractSpringDBunitIntegrationTest
     @Test
     public final void testFindMeasure() throws Exception {
     
-    
         // TODO
         org.junit.Assert.assertTrue("not yet implemented", false);
     }
     
-    
     @Test
     public final void testIsAlert_definition_not_activated() throws Exception {
-    
     
         // GIVEN an alert is launch when branch coverage is under 60%
         final KpiAlertType alertType = new KpiAlertType();
@@ -118,10 +93,8 @@ public class AlertServiceITest extends AbstractSpringDBunitIntegrationTest
         Assert.assertFalse(activated);
     }
     
-    
     @Test
     public final void testIsAlert_not_activated() throws Exception {
-    
     
         // GIVEN an alert is launch when branch coverage is under 60%
         final KpiAlertType alertType = new KpiAlertType();
@@ -145,7 +118,6 @@ public class AlertServiceITest extends AbstractSpringDBunitIntegrationTest
         Assert.assertFalse(activated);
     }
     
-    
     /**
      * Test method for
      * {@link org.komea.product.backend.service.alert.AlertService#isAlertActivated(org.komea.product.database.model.KpiAlertType, java.lang.Number)}
@@ -153,7 +125,6 @@ public class AlertServiceITest extends AbstractSpringDBunitIntegrationTest
      */
     @Test
     public final void testIsAlertActivated() throws Exception {
-    
     
         // GIVEN an alert is launch when branch coverage is under 60%
         final KpiAlertType alertType = new KpiAlertType();
@@ -177,7 +148,6 @@ public class AlertServiceITest extends AbstractSpringDBunitIntegrationTest
         Assert.assertTrue(activated);
     }
     
-    
     /**
      * Test method for
      * {@link org.komea.product.backend.service.alert.AlertService#isAlertAssociatedToMeasureEntity(org.komea.product.backend.service.alert.AlertCriteria, org.komea.product.database.model.Measure)}
@@ -186,10 +156,8 @@ public class AlertServiceITest extends AbstractSpringDBunitIntegrationTest
     @Test
     public void testIsAlertAssociatedToMeasureEntity() throws Exception {
     
-    
         // alertService.
     }
-    
     
     /**
      * Test method for
@@ -198,7 +166,6 @@ public class AlertServiceITest extends AbstractSpringDBunitIntegrationTest
      */
     @Test
     public void testIsAlertFiltered() throws Exception {
-    
     
         org.junit.Assert.assertTrue("not yet implemented", false);
         

@@ -2,7 +2,7 @@ package org.komea.product.web.rest.api;
 
 import java.util.List;
 import javax.validation.Valid;
-import org.komea.product.backend.service.alert.IAlertService;
+import org.komea.product.backend.service.alert.IAlertFinderService;
 import org.komea.product.database.dto.KpiAlertDto;
 import org.komea.product.database.dto.SearchKpiAlertsDto;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ public class AlertController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AlertController.class);
 
     @Autowired
-    private IAlertService alertService;
+    private IAlertFinderService alertService;
 
     /**
      * This method find alerts which have been stored into komea

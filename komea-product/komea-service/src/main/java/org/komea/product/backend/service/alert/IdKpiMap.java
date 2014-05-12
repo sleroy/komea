@@ -5,7 +5,6 @@
 package org.komea.product.backend.service.alert;
 
 
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,18 +18,12 @@ import org.komea.product.database.model.KpiAlertType;
 
 import com.google.common.collect.Sets;
 
-
-
 /**
  * @author sleroy
  */
-public class IdKpiMap
-{
-    
+public class IdKpiMap {
     
     private final Map<Integer, Kpi> idKpiMap = new HashMap<Integer, Kpi>();
-    
-    
     
     /**
      * Fill the map and returns the kpi keys.
@@ -41,7 +34,6 @@ public class IdKpiMap
      */
     public Set<String> fillIdKpi(final List<KpiAlertType> alertTypes, final IKPIService _kpiService) {
     
-    
         final Set<String> kpiKeys = Sets.newHashSet();
         for (final KpiAlertType alertType : alertTypes) {
             final Kpi kpi = _kpiService.selectByPrimaryKey(alertType.getIdKpi());
@@ -50,7 +42,6 @@ public class IdKpiMap
         }
         return kpiKeys;
     }
-    
     
     /**
      * Returns the kpi from an id.
@@ -61,16 +52,13 @@ public class IdKpiMap
      */
     public Kpi get(final Integer _idKpi) {
     
-    
         return idKpiMap.get(_idKpi);
     }
-    
     
     /**
      * Returns the list of values.
      */
     public Collection<Kpi> values() {
-    
     
         return Collections.unmodifiableCollection(idKpiMap.values());
     }
