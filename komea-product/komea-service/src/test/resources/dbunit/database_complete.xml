@@ -84,7 +84,7 @@
 <!--       evictionRate="12" evictionType="MONTHS" providerType="CI_BUILD" /> -->
    <kom_kpi id="11" kpiKey="LINE_COVERAGE" name="Line coverage" description="Line coverage" valueMin="5e-324"
       valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi(&quot;line_coverage&quot;)" cronExpression="0 0 0 /1 * ? *"
+      esperRequest="new org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi('line_coverage')" cronExpression="0 0 0 /1 * ? *"
       evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
    <kom_kpi id="12" kpiKey="VOLUMETRY" name="Volumetry" description="Volumetry" valueMin="5e-324"
       valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"

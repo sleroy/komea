@@ -14,6 +14,8 @@ import org.komea.product.database.enums.Severity;
 import org.komea.product.test.spring.AbstractSpringDBunitIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+
 public class AlertFinderITest extends AbstractSpringDBunitIntegrationTest {
     
     @Autowired
@@ -26,14 +28,29 @@ public class AlertFinderITest extends AbstractSpringDBunitIntegrationTest {
     //
     
     @Test
-    public final void testFindAlerts() throws Exception {
+    public final void testFindAlerts_with_no_existing_alerts() throws Exception {
     
         SearchKpiAlertsDto searchAlert = new SearchKpiAlertsDto();
         searchAlert.addAlertKey("COVERAGE_BRANCH_TOO_LOW");
         searchAlert.addEntityKey("KOMEA");
         searchAlert.setActivatedOnly(true);
         searchAlert.setExtendedEntityType(ExtendedEntityType.PROJECT);
-        searchAlert.setSeverityMin(Severity.MAJOR);
+        searchAlert.setSeverityMin(Severity.MINOR);
+        List<KpiAlertDto> alerts = finderService.findAlerts(searchAlert);
+        
+        Assert.assertTrue(alerts.isEmpty());
+    }
+    
+    @Test
+    @DatabaseSetup("alerts.xml")
+    public final void testFindAlerts_with_existing_alerts() throws Exception {
+    
+        SearchKpiAlertsDto searchAlert = new SearchKpiAlertsDto();
+        searchAlert.addAlertKey("COVERAGE_BRANCH_TOO_LOW");
+        searchAlert.addEntityKey("KOMEA");
+        searchAlert.setActivatedOnly(true);
+        searchAlert.setExtendedEntityType(ExtendedEntityType.PROJECT);
+        searchAlert.setSeverityMin(Severity.MINOR);
         List<KpiAlertDto> alerts = finderService.findAlerts(searchAlert);
         
         Assert.assertTrue(alerts.isEmpty());
