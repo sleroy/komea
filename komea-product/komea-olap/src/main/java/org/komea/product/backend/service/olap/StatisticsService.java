@@ -27,14 +27,11 @@ import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.EntityKey;
-import org.komea.product.service.dto.KpiKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.base.Strings;
 
 /**
  * @author sleroy
@@ -249,11 +246,11 @@ public class StatisticsService implements IStatisticsAPI {
 	 * (org.komea.product.service.dto.KpiKey)
 	 */
 	@Override
-	public Double evaluateTheCurrentKpiValue(final KpiKey _kpiKeys) {
+	public Double evaluateTheCurrentKpiValue(final HistoryKey _kpiKeys) {
 
 		Validate.isTrue(_kpiKeys.getEntityKey().isEntityReferenceKey());
 		LOGGER.debug("evaluateTheCurrentKpiValue : {}", _kpiKeys);
-		return evaluateTheCurrentKpiValues(_kpiKeys.getKpiName()).getDoubleValue(_kpiKeys.getEntityKey());
+		return evaluateTheCurrentKpiValues(_kpiKeys.getKpiID()).getDoubleValue(_kpiKeys.getEntityKey());
 	}
 
 	/*
@@ -264,10 +261,9 @@ public class StatisticsService implements IStatisticsAPI {
 	 * (java.lang.String)
 	 */
 	@Override
-	public KpiResult evaluateTheCurrentKpiValues(final String _kpiName) {
+	public KpiResult evaluateTheCurrentKpiValues(final Integer _kpiName) {
 
-		Validate.isTrue(!Strings.isNullOrEmpty(_kpiName));
-		LOGGER.debug("evaluateTheCUrrentKpiValues : {}", _kpiName);
+		LOGGER.debug("evaluateTheCurrentKpiValues : {}", _kpiName);
 		return kpiValueService.getRealTimeValue(_kpiName);
 	}
 
@@ -283,7 +279,7 @@ public class StatisticsService implements IStatisticsAPI {
 	 * getKpiValuesAverageOnPeriod(java.lang.String, org.joda.time.DateTime)
 	 */
 	@Override
-	public KpiResult getKpiValuesAverageOnPeriod(final String _kpiName, final DateTime _previousTime) {
+	public KpiResult getKpiValuesAverageOnPeriod(final Integer _kpiName, final DateTime _previousTime) {
 		LOGGER.debug("getKpiValuesAverageOnPeriod : {}", _kpiName, _previousTime);
 
 		final PeriodTimeSerieOptions periodTimeSerieOptions = new PeriodTimeSerieOptions();
