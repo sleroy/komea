@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.esper.IEventConversionAndValidationService;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.IGenericDAO;
+import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.dao.PersonDao;
 import org.komea.product.database.dto.Pair;
 import org.komea.product.database.dto.PersonDto;
@@ -52,7 +52,7 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     private IPersonGroupService                  groupService;
     
     @Autowired
-    private IMeasureHistoryService               measureService;
+    private MeasureDao                           measureService;
     
     @Autowired
     private IPersonRoleService                   personRoleService;
@@ -127,7 +127,7 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     
         projectPersonService.updateProjectsOfPerson(Collections.<Project> emptyList(), _person);
         final MeasureCriteria measureCriteria = new MeasureCriteria();
-        measureCriteria.createCriteria().andIdPersonEqualTo(_person.getId());
+        measureCriteria.createCriteria().andEntityIDEqualTo(_person.getId());
         measureService.deleteByCriteria(measureCriteria);
         delete(_person);
     }
@@ -340,7 +340,9 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     
     
         final int indexOf = email.indexOf('@');
-        if (indexOf == -1) { return email; }
+        if (indexOf == -1) {
+            return email;
+        }
         return email.substring(0, indexOf);
     }
     

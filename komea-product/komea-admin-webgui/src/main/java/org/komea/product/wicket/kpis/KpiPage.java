@@ -46,9 +46,8 @@ public class KpiPage extends LayoutPage
         final List<Kpi> listAllKpis = kpiService.selectAll();
         final List<Kpi> listKpisResult = new ArrayList<Kpi>();
         for (final Kpi kpi : listAllKpis) {
-            if (!kpi.isGlobal()) {
-                listKpisResult.add(kpi);
-            }
+            listKpisResult.add(kpi);
+            
         }
         final IDeleteAction<Kpi> kpiDeleteAction =
                 new KpiDeleteAction(kpiService, listKpisResult, this);

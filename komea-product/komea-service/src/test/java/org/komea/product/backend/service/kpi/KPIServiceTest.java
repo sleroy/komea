@@ -50,26 +50,22 @@ public class KPIServiceTest
 {
     
     
-    private static final String         KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12 =
-                                                                                      "KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12";
-    private static final String         SELECT_COUNT_FROM_ALERT               =
-                                                                                      "SELECT COUNT(*) From Event";
+    private static final String  KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12 =
+                                                                               "KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12";
+    private static final String  SELECT_COUNT_FROM_ALERT               =
+                                                                               "SELECT COUNT(*) From Event";
     @Mock
-    private IEventEngineService         cepEngine;
+    private IEventEngineService  cepEngine;
     @Mock
-    private ICronRegistryService        cronRegistryService;
+    private ICronRegistryService cronRegistryService;
     @Mock
-    private KpiDao                      kpiDAOMock;
+    private KpiDao               kpiDAOMock;
     
     @InjectMocks
-    private final KPIService            kpiService                            = new KPIService();
+    private final KPIService     kpiService                            = new KPIService();
     
     @Mock
-    private MeasureDao                  measureDAOMock;
-    
-    @InjectMocks
-    private final MeasureHistoryService measureService                        =
-                                                                                      new MeasureHistoryService();
+    private MeasureDao           measureDAOMock;
     
     
     
@@ -118,7 +114,7 @@ public class KPIServiceTest
         kpi.setId(1);
         kpi.setEsperRequest(SELECT_COUNT_FROM_ALERT);
         kpi.setEntityType(EntityType.PERSON);
-        kpi.setEntityID(person.getId());
+        
         kpi.setDescription("Demo of KPI");
         kpi.setProviderType(ProviderType.OTHER);
         kpi.setKpiKey("PERSON_PRODUCTIVITY");
@@ -141,7 +137,7 @@ public class KPIServiceTest
                 kpiService.findKPI(KpiKey.ofKpiNameAndEntity("PERSON_PRODUCTIVITY", person));
         Assert.assertNotNull(findKPIFacade);
         Assert.assertEquals(kpi, findKPIFacade);
-        Assert.assertEquals(person.getId(), kpi.getEntityID());
+        
         
     }
     

@@ -27,7 +27,7 @@ public class KpiKey
     public static KpiKey ofKpi(final Kpi _kpiName) {
     
     
-        return new KpiKey(_kpiName.getEntityType(), _kpiName.getEntityID(), _kpiName.getKpiKey());
+        return new KpiKey(_kpiName.getEntityType(), null, _kpiName.getKpiKey());
     }
     
     
@@ -58,7 +58,9 @@ public class KpiKey
     public static KpiKey ofKpiAndEntityOrNull(final Kpi _kpi, final IEntity _entity) {
     
     
-        if (_entity == null) { return ofKpi(_kpi); }
+        if (_entity == null) {
+            return ofKpi(_kpi);
+        }
         return ofKpiAndEntity(_kpi, _entity);
     }
     
@@ -111,7 +113,9 @@ public class KpiKey
     public static KpiKey ofKpiNameAndEntityOrNull(final String _kpiName, final IEntity _entity) {
     
     
-        if (_entity == null) { return ofKpiName(_kpiName); }
+        if (_entity == null) {
+            return ofKpiName(_kpiName);
+        }
         return ofKpiNameAndEntity(_kpiName, _entity);
     }
     
@@ -195,16 +199,30 @@ public class KpiKey
     public boolean equals(final Object obj) {
     
     
-        if (this == obj) { return true; }
-        if (obj == null) { return false; }
-        if (getClass() != obj.getClass()) { return false; }
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
         final KpiKey other = (KpiKey) obj;
         if (entityKey == null) {
-            if (other.entityKey != null) { return false; }
-        } else if (!entityKey.equals(other.entityKey)) { return false; }
+            if (other.entityKey != null) {
+                return false;
+            }
+        } else if (!entityKey.equals(other.entityKey)) {
+            return false;
+        }
         if (kpiName == null) {
-            if (other.kpiName != null) { return false; }
-        } else if (!kpiName.equals(other.kpiName)) { return false; }
+            if (other.kpiName != null) {
+                return false;
+            }
+        } else if (!kpiName.equals(other.kpiName)) {
+            return false;
+        }
         return true;
     }
     

@@ -8,7 +8,6 @@ package org.komea.product.backend.service.kpi;
 
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.product.database.enums.EntityType;
-import org.komea.product.database.enums.EvictionType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
@@ -176,7 +175,7 @@ public class KpiBuilder
     public KpiBuilder dailyKPI() {
     
     
-        return cronDays(1).expirationYear();
+        return cronDays(1);
     }
     
     
@@ -196,29 +195,10 @@ public class KpiBuilder
     }
     
     
-    public KpiBuilder expirationMonth() {
+    public KpiBuilder forProject() {
     
     
-        kpi.setEvictionRate(1);
-        kpi.setEvictionType(EvictionType.MONTHS);
-        return this;
-    }
-    
-    
-    public KpiBuilder expirationWeek() {
-    
-    
-        kpi.setEvictionRate(7);
-        kpi.setEvictionType(EvictionType.DAYS);
-        return this;
-    }
-    
-    
-    public KpiBuilder expirationYear() {
-    
-    
-        kpi.setEvictionRate(12);
-        kpi.setEvictionType(EvictionType.MONTHS);
+        kpi.setEntityType(EntityType.PROJECT);
         return this;
     }
     
@@ -284,6 +264,15 @@ public class KpiBuilder
     }
     
     
+    public KpiBuilder produceValue(final ValueType _valueType, final ValueDirection _valueDirection) {
+    
+    
+        kpi.setValueDirection(_valueDirection);
+        kpi.setValueType(_valueType);
+        return this;
+    }
+    
+    
     public KpiBuilder providerType(final ProviderType _providerType) {
     
     
@@ -312,5 +301,4 @@ public class KpiBuilder
         kpi.setEsperRequest(_query);
         return this;
     }
-    
 }

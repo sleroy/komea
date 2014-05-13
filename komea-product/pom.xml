@@ -1,7 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
 		<groupId>org.komea</groupId>
 		<artifactId>komea</artifactId>
@@ -104,7 +104,7 @@
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-spring</artifactId>
-				<version>6.14.0</version>
+				<version>6.15.0</version>
 				<exclusions>
 					<exclusion>
 						<artifactId>slf4j-api</artifactId>
@@ -115,7 +115,7 @@
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-extensions</artifactId>
-				<version>6.14.0</version>
+				<version>6.15.0</version>
 				<exclusions>
 					<exclusion>
 						<artifactId>slf4j-api</artifactId>
@@ -126,7 +126,7 @@
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-util</artifactId>
-				<version>6.14.0</version>
+				<version>6.15.0</version>
 				<exclusions>
 					<exclusion>
 						<artifactId>slf4j-api</artifactId>
@@ -137,7 +137,7 @@
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-auth-roles</artifactId>
-				<version>6.14.0</version>
+				<version>6.15.0</version>
 				<scope>compile</scope>
 				<exclusions>
 					<exclusion>
@@ -149,19 +149,19 @@
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-native-websocket-tomcat</artifactId>
-				<version>6.14.0</version>
+				<version>6.15.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-native-websocket-jetty9</artifactId>
-				<version>6.14.0</version>
+				<version>6.15.0</version>
 			</dependency>
 
 
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket</artifactId>
-				<version>6.14.0</version>
+				<version>6.15.0</version>
 				<type>pom</type>
 				<exclusions>
 					<exclusion>
@@ -175,7 +175,7 @@
 			<dependency>
 				<groupId>com.googlecode.wicket-jquery-ui</groupId>
 				<artifactId>wicket-jquery-ui</artifactId>
-				<version>6.14.0</version>
+				<version>6.15.0</version>
 			</dependency>
 
 			<dependency>
@@ -203,7 +203,7 @@
 		<dependency>
 			<groupId>com.googlecode.openpojo</groupId>
 			<artifactId>openpojo</artifactId>
-			<version>0.4.9</version>
+			<version>0.5.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -238,7 +238,7 @@
 
 		<!-- test -->
 		<module>komea-integration-tests</module>
-	
+
+		<module>komea-olap</module>
 	</modules>
 </project>
-

@@ -2,6 +2,7 @@
 package org.komea.product.backend.service.entities;
 
 
+
 import java.util.List;
 
 import org.komea.product.database.api.IEntity;
@@ -10,24 +11,20 @@ import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.service.dto.EntityStringKey;
-import org.komea.product.service.dto.KpiKey;
 
-/**
- */
-public interface IEntityService {
+
     
-    /**
-     * Method getEntityAssociatedToKpi.
-     *
+/**
      * @param _kpiKey
      *            KpiKey
-     * @return IEntity
-     */
-    IEntity findEntityAssociatedToKpi(KpiKey _kpiKey);
+ */
+public interface IEntityService
+{
+    
     
     /**
      * Loads an entity from the database.
-     *
+     * 
      * @param _entityType
      *            the entity type
      * @param _key
@@ -36,9 +33,10 @@ public interface IEntityService {
      */
     <TEntity extends IEntity> TEntity findEntityByEntityKey(EntityKey _entityKey);
     
+    
     /**
      * Method getEntities.
-     *
+     * 
      * @param entityType
      *            EntityType
      * @param entityKeys
@@ -47,18 +45,20 @@ public interface IEntityService {
      */
     List<BaseEntityDto> getBaseEntityDTOS(final EntityType entityType, final List<String> entityKeys);
     
+    
     /**
      * Load entities.
-     *
+     * 
      * @param _entityType
      *            the entity type.
      * @return the list of entities.
      */
     <T extends IEntity> List<T> getEntitiesByEntityType(EntityType _entityType);
     
+    
     /**
      * Loads a list of entities from the database.
-     *
+     * 
      * @param _entityType
      *            the entity type
      * @param _keys
@@ -67,9 +67,10 @@ public interface IEntityService {
      */
     <TEntity extends IEntity> List<TEntity> getEntitiesByPrimaryKey(EntityType _entityType, List<Integer> _keys);
     
+    
     /**
      * Returns the entity or fail
-     *
+     * 
      * @param _entityType
      *            the entity type
      * @param _entityID
@@ -99,7 +100,6 @@ public interface IEntityService {
      * @return the entity.
      */
     <TEntity extends IEntity> TEntity findEntityByEntityStringKey(EntityStringKey _entityKey);
-    
     // /**
     // * This method return the complete person list
     // *

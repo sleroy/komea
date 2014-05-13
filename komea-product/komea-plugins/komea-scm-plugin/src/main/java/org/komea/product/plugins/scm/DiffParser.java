@@ -51,9 +51,10 @@ public class DiffParser
     public void computeStats() throws IOException {
     
     
-        final Patch parseUnifiedDiff = DiffUtils.parseUnifiedDiff(diffLines);
-        
-        for (final Delta delta : parseUnifiedDiff.getDeltas()) {
+        final Patch<String> parseUnifiedDiff = DiffUtils.parseUnifiedDiff(diffLines);
+        final List<Delta<String>> deltas = parseUnifiedDiff.getDeltas();
+        for (final Delta delta : deltas) {
+            
             
             switch (delta.getType()) {
                 case CHANGE:

@@ -157,6 +157,11 @@
             <artifactId>komea-service</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>komea-olap</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>komea-service-api</artifactId>

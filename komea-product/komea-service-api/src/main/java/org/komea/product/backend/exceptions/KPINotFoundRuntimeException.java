@@ -69,6 +69,16 @@ public class KPINotFoundRuntimeException extends KomeaException
     
     
     /**
+     * @param _kpiKey
+     */
+    public KPINotFoundRuntimeException(final Integer _kpiKey) {
+    
+    
+        this(null, "pkey=" + _kpiKey, null);
+    }
+    
+    
+    /**
      * Constructor for KPINotFoundRuntimeException.
      * 
      * @param _kpiName

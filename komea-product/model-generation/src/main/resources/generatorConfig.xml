@@ -77,7 +77,6 @@
         </table>
         <table tableName="kom_msr" domainObjectName="Measure">
             <property name="useActualColumnNames" value="true" />
-            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
         </table>
         <table tableName="kom_kpia" domainObjectName="KpiAlertType">
             <property name="useActualColumnNames" value="true" />

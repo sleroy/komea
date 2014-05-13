@@ -6,7 +6,7 @@ package org.komea.product.wicket.dialogs;
 
 
 
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.komea.product.database.model.PersonGroup;
 
 
@@ -16,7 +16,7 @@ import org.komea.product.database.model.PersonGroup;
  * 
  * @author sleroy
  */
-public final class TeamEntityChoiceRenderer implements IChoiceRenderer<PersonGroup>
+public final class TeamEntityChoiceRenderer extends ChoiceRenderer<PersonGroup>
 {
     
     
