@@ -40,8 +40,11 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
 
 	/**
 	 * Defines the from period fro mthe last time scale.
+	 * 
+	 * @param _timeScale
 	 */
-	public void fromLastTimeScale() {
+	public void fromLastTimeScale(final TimeScale _timeScale) {
+		timeScale = _timeScale;
 		switch (timeScale) {
 			case PER_DAY:
 				fromPeriod = new DateTime().minusDays(1).toDate();
