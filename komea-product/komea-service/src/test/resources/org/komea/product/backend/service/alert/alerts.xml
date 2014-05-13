@@ -2,26 +2,25 @@
 <dataset>
    <kom_kpi id="1" kpiKey="LINE_COVERAGE" name="Line coverage" description="Line coverage" valueMin="5e-324"
       valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.backend.utils.exemples.LineCoverageKPI('line_coverage')" cronExpression="0 0 0 /1 * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.backend.utils.exemples.kpi.LineCoverageKPI('line_coverage')" cronExpression="0 0 0 /1 * ? *"
+      providerType="QUALITY" />
 
    <kom_kpi id="2" kpiKey="BRANCH_COVERAGE(%)" name="Branch coverage(%)" description="Branch coverage(%)"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.backend.utils.exemples.kpiBranchCoverageKPI()" cronExpression="0 0 0 /1 * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.backend.utils.exemples.kpi.BranchCoverageKPI()" cronExpression="0 0 0 /1 * ? *"
+      providerType="QUALITY" />
 
 
 
 
-   <kom_msr id="3956" idKpi="2" idProject="4" date="2014-01-05 00:00:00" value="35" />
-   <kom_msr id="3957" idKpi="2" idProject="4" date="2014-05-01 00:00:00" value="60" />
-   <kom_msr id="3958" idKpi="2" idProject="5" date="2014-01-05 00:00:00" value="22" />
-   <kom_msr id="3959" idKpi="2" idProject="5" date="2014-05-01 00:00:00" value="44" />
-   <kom_msr id="3960" idKpi="1" idProject="4" date="2014-01-05 00:00:00" value="42" />
-   <kom_msr id="3961" idKpi="1" idProject="4" date="2014-05-01 00:00:00" value="57" />
-   <kom_msr id="3962" idKpi="1" idProject="5" date="2014-01-05 00:00:00" value="55" />
-   <kom_msr id="3963" idKpi="1" idProject="5" date="2014-05-01 00:00:00" value="66" />
-
+   <kom_msr id="3956" idKpi="2" entityID="4" year="2014" month="1" day="5" value="35" />
+   <kom_msr id="3957" idKpi="2" entityID="4" year="2014" month="5" day="1" value="60" />
+   <kom_msr id="3958" idKpi="2" entityID="5" year="2014" month="1" day="5" value="22" />
+   <kom_msr id="3959" idKpi="2" entityID="5" year="2014" month="5" day="1" value="44" />
+   <kom_msr id="3960" idKpi="1" entityID="4" year="2014" month="1" day="5" value="42" />
+   <kom_msr id="3961" idKpi="1" entityID="4" year="2014" month="5" day="1" value="57" />
+   <kom_msr id="3962" idKpi="1" entityID="5" year="2014" month="1" day="5" value="55" />
+   <kom_msr id="3963" idKpi="1" entityID="5" year="2014" month="5" day="1" value="66" />
 
    <kom_kpia id="1" idKpi="2" kpiAlertKey="COVERAGE_BRANCH_TOO_LOW" name="branch coverage too small" severity="MAJOR"
       operator="LESSER" value="40" enabled="1" />

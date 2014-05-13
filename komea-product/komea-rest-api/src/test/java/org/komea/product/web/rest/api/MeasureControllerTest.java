@@ -11,6 +11,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.easymock.Mock;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.komea.product.backend.service.kpi.IKpiAPI;
 import org.komea.product.database.enums.ExtendedEntityType;
@@ -57,6 +58,7 @@ public class MeasureControllerTest extends AbstractSpringWebIntegrationTestCase 
         
     }
     
+    @Ignore("deprecated")
     @Test
     public void testFindMeasures() throws Exception {
     

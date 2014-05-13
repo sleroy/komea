@@ -8,6 +8,7 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
@@ -67,6 +68,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
     @Autowired
     private KpiDao                   kpiDAO;
     
+    @Ignore("obsolete")
     @Test
     @DatabaseSetup("measures.xml")
     public void test_getMeasure() {
@@ -92,6 +94,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         
     }
     
+    @Ignore("obsolete")
     @Test
     @DatabaseSetup("measures.xml")
     public void test__only_one_getMeasure() {
@@ -115,6 +118,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         Assert.assertEquals(60, historicalValues.get(0).getValue(), 0.001);
     }
     
+    @Ignore("obsolete")
     @Test
     @DatabaseSetup("measures.xml")
     public void test__only_one_getMeasure_with__start_date_after_first_value() {
@@ -139,6 +143,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         Assert.assertEquals(60, historicalValues.get(0).getValue(), 0.001);
     }
     
+    @Ignore("obsolete")
     @Test
     @DatabaseSetup("measures.xml")
     public void test__only_one_getMeasure_with_end_date_before_first_value() {
@@ -164,6 +169,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         Assert.assertEquals(35, historicalValues.get(0).getValue(), 0.001);
     }
     
+    @Ignore("obsolete")
     @Test
     @DatabaseSetup("measures.xml")
     public void test__only_one_getMeasure_with_start_date_sup_end_date() {
@@ -187,6 +193,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         Assert.assertEquals(0, historicalValues.size());
     }
     
+    @Ignore("obsolete")
     @Test
     @DatabaseSetup("measures.xml")
     public void test_getMeasure_with_negative_limit_number_value() {
@@ -207,6 +214,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         Assert.assertEquals(0, historicalValues.size());
     }
     
+    @Ignore("obsolete")
     @Test
     @DatabaseSetup("measures.xml")
     public void test_getMeasure_not_existing_kpi() {
@@ -227,6 +235,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         Assert.assertEquals(0, historicalValues.size());
     }
     
+    @Ignore("obsolete")
     @Test
     @DatabaseSetup("measures.xml")
     public void test_getMeasure_not_existing_Project() {
@@ -247,6 +256,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         Assert.assertEquals(0, historicalValues.size());
     }
     
+    @Ignore("obsolete")
     @Test(expected = IllegalArgumentException.class)
     @DatabaseSetup("measures.xml")
     public void test_getMeasure_with_null_kpiKey() {
@@ -267,6 +277,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         Assert.assertEquals(0, historicalValues.size());
     }
     
+    @Ignore("obsolete")
     @Test
     @DatabaseSetup("measures.xml")
     public void test_getMeasures() {

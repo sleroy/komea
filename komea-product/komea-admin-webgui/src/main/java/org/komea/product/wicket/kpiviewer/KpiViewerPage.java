@@ -150,14 +150,16 @@ public class KpiViewerPage extends LayoutPage {
 
 		final Map<EntityKey, List<Coordinate<Long, Integer>>> series = new HashMap<EntityKey, List<Coordinate<Long, Integer>>>();
 
-		for (final IEntity eKey : entityService.getEntitiesByEntityType(_kpi.getEntityType())) {
+		final List<IEntity> entitiesByEntityType = entityService.getEntitiesByEntityType(_kpi.getEntityType());
+		LOGGER.info("KPI {} has {} entities", _kpi, entitiesByEntityType.size());
+		for (final IEntity eKey : entitiesByEntityType) {
 			final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions();
 			timeSerieOptions.untilNow();
 			timeSerieOptions.setGroupFormula(GroupFormula.AVG_VALUE);
 			timeSerieOptions.setTimeScale(TimeScale.PER_DAY);
 			timeSerieOptions.lastYears(3);
-			// /FIXME:: History KPI Viewer
 			final TimeSerie history = statsService.buildPeriodTimeSeries(timeSerieOptions, eKey.getEntityKey());
+			LOGGER.info("Time serie with {} values", history.getCoordinates().size());
 
 			for (final TimeCoordinate measure : history.getCoordinates()) {
 

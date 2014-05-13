@@ -2,7 +2,6 @@
 package org.komea.product.wicket.kpis;
 
 
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -31,16 +30,12 @@ import org.komea.product.wicket.widget.builders.SelectBoxBuilder;
 import org.komea.product.wicket.widget.builders.TextAreaBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
 
-
-
 /**
  * Formular to edit properties in the settings page.
  * 
  * @author sleroy
  */
-public final class KpiForm extends Form<Kpi>
-{
-    
+public final class KpiForm extends Form<Kpi> {
     
     private static final long       serialVersionUID = 1L;
     private final Component         feedBack;
@@ -51,18 +46,8 @@ public final class KpiForm extends Form<Kpi>
     private final LayoutPage        page;
     private final TextField<Double> textminValue;
     
-    
-    
-    public KpiForm(
-            final boolean _isNew,
-            final String _id,
-            final IKPIService _kpi,
-            final IEntityService _entity,
-            final IProviderService _providerService,
-            final Component _feedBack,
-            final IModel<Kpi> _dto,
-            final LayoutPage _kpiPage) {
-    
+    public KpiForm(final boolean _isNew, final String _id, final IKPIService _kpi, final IEntityService _entity,
+            final IProviderService _providerService, final Component _feedBack, final IModel<Kpi> _dto, final LayoutPage _kpiPage) {
     
         super(_id, _dto);
         isNew = _isNew;
@@ -74,14 +59,11 @@ public final class KpiForm extends Form<Kpi>
         feedBack.setVisible(false);
         nameEntity = new NameGeneric("");
         
-        add(TextFieldBuilder.<String> createRequired("name", kpi, "name").highlightOnErrors()
-                .simpleValidator(0, 255).withTooltip(getString("global.field.tooltip.name"))
-                .build());
+        add(TextFieldBuilder.<String> createRequired("name", kpi, "name").highlightOnErrors().simpleValidator(0, 255)
+                .withTooltip(getString("global.field.tooltip.name")).build());
         
-        final TextFieldBuilder<String> keyField =
-                TextFieldBuilder.<String> createRequired("kpiKey", kpi, "kpiKey")
-                        .simpleValidator(0, 255).highlightOnErrors()
-                        .withTooltip(getString("global.field.tooltip.key"));
+        final TextFieldBuilder<String> keyField = TextFieldBuilder.<String> createRequired("kpiKey", kpi, "kpiKey").simpleValidator(0, 255)
+                .highlightOnErrors().withTooltip(getString("global.field.tooltip.key"));
         
         if (isNew) {
             keyField.UniqueStringValidator(getString("global.field.key"), kpiService);
@@ -91,31 +73,23 @@ public final class KpiForm extends Form<Kpi>
         
         add(keyField.build());
         
-        add(TextAreaBuilder.<String> create("description", kpi, "description")
-                .simpleValidator(0, 2048).highlightOnErrors()
+        add(TextAreaBuilder.<String> create("description", kpi, "description").simpleValidator(0, 2048).highlightOnErrors()
                 .withTooltip(getString("global.field.tooltip.description")).build());
         
         add(SelectBoxBuilder.<ProviderType> createWithEnum("providerType", kpi, ProviderType.class)
                 .withTooltip(getString("kpipage.save.form.field.tooltip.category")).build());
         
-        textminValue =
-                TextFieldBuilder.<Double> create("valueMin", kpi, "valueMin")
-                        .withTooltip(getString("kpipage.save.form.field.tooltip.minvalue"))
-                        .buildTextField();
+        textminValue = TextFieldBuilder.<Double> create("valueMin", kpi, "valueMin")
+                .withTooltip(getString("kpipage.save.form.field.tooltip.minvalue")).buildTextField();
         
         add(textminValue);
         //
-        final TextField<Double> textMaxValue =
-                TextFieldBuilder.<Double> create("valueMax", kpi, "valueMax")
-                        .withTooltip(getString("kpipage.save.form.field.tooltip.maxvalue"))
-                        .buildTextField();
-        textMaxValue.add(new IValidator<Double>()
-        {
-            
+        final TextField<Double> textMaxValue = TextFieldBuilder.<Double> create("valueMax", kpi, "valueMax")
+                .withTooltip(getString("kpipage.save.form.field.tooltip.maxvalue")).buildTextField();
+        textMaxValue.add(new IValidator<Double>() {
             
             @Override
             public void validate(final IValidatable<Double> validatable) {
-            
             
                 final Double valueMax = validatable.getValue();
                 final String value = textminValue.getValue();
@@ -135,8 +109,7 @@ public final class KpiForm extends Form<Kpi>
         });
         add(textMaxValue);
         
-        add(SelectBoxBuilder
-                .<ValueDirection> createWithEnum("valueDirection", kpi, ValueDirection.class)
+        add(SelectBoxBuilder.<ValueDirection> createWithEnum("valueDirection", kpi, ValueDirection.class)
                 .withTooltip(getString("kpipage.save.form.field.tooltip.dirvalue")).build());
         
         add(SelectBoxBuilder.<ValueType> createWithEnum("valueType", kpi, ValueType.class)
@@ -144,19 +117,13 @@ public final class KpiForm extends Form<Kpi>
         
         add(SelectBoxBuilder.<EntityType> createWithEnum("entityType", kpi, EntityType.class)
                 .withTooltip(getString("kpipage.save.form.field.tooltip.typentity")).build());
-        final TextField<String> buildCronField =
-                TextFieldBuilder.<String> create("cronExpression", kpi, "cronExpression")
-                        .simpleValidator(0, 60).highlightOnErrors()
-                        .withTooltip(getString("kpipage.save.form.field.tooltip.cron"))
-                        .buildTextField();
+        final TextField<String> buildCronField = TextFieldBuilder.<String> create("cronExpression", kpi, "cronExpression")
+                .simpleValidator(0, 60).highlightOnErrors().withTooltip(getString("kpipage.save.form.field.tooltip.cron")).buildTextField();
         
-        buildCronField.add(new IValidator<String>()
-        {
-            
+        buildCronField.add(new IValidator<String>() {
             
             @Override
             public void validate(final IValidatable<String> validatable) {
-            
             
                 final String value = validatable.getValue();
                 if (!CronUtils.isValidCronExpression(value)) {
@@ -169,24 +136,18 @@ public final class KpiForm extends Form<Kpi>
         
         add(buildCronField);
         
-        add(TextFieldBuilder.<String> createRequired("evictionRate", kpi, "evictionRate")
-                .withTooltip(getString("kpipage.save.form.error.cron")).build());
         // FIXME::
         // add(SelectBoxBuilder.<EvictionType>createWithEnum("evictionType", kpi, EvictionType.class)
         // .withTooltip(getString("kpipage.save.form.field.tooltip.evicttype"))
         // .build());
         
-        final TextArea<String> formulaField =
-                TextAreaBuilder.<String> create("formula", kpi, "esperRequest").withTooltip("")
-                        .withTooltip(getString("kpipage.save.form.field.tooltip.formula")).build();
+        final TextArea<String> formulaField = TextAreaBuilder.<String> create("formula", kpi, "esperRequest").withTooltip("")
+                .withTooltip(getString("kpipage.save.form.field.tooltip.formula")).build();
         
-        formulaField.add(new IValidator<String>()
-        {
-            
+        formulaField.add(new IValidator<String>() {
             
             @Override
             public void validate(final IValidatable<String> validatable) {
-            
             
                 final String value = validatable.getValue();
                 if (!ConvertELIntoQuery.isValidFormula(value)) {
@@ -201,39 +162,30 @@ public final class KpiForm extends Form<Kpi>
         
         final Kpi myKpi = kpi;
         
-        add(new AjaxLinkLayout<LayoutPage>("cancel", page)
-        {
-            
+        add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
             
             @Override
             public void onClick(final AjaxRequestTarget art) {
-            
             
                 final LayoutPage page = getCustom();
                 page.setResponsePage(new KpiPage(page.getPageParameters()));
             }
         });
         
-        add(new AjaxLinkLayout<TextField>("maxValueMax", textMaxValue)
-        {
-            
+        add(new AjaxLinkLayout<TextField>("maxValueMax", textMaxValue) {
             
             @Override
             public void onClick(final AjaxRequestTarget art) {
-            
             
                 myKpi.setValueMax(Double.MAX_VALUE);
                 art.add(getCustom());
             }
             
         });
-        add(new AjaxLinkLayout<TextField>("maxValueMin", textminValue)
-        {
-            
+        add(new AjaxLinkLayout<TextField>("maxValueMin", textminValue) {
             
             @Override
             public void onClick(final AjaxRequestTarget art) {
-            
             
                 myKpi.setValueMin(-Double.MAX_VALUE);
                 art.add(getCustom());
@@ -242,24 +194,19 @@ public final class KpiForm extends Form<Kpi>
         });
         //
         // // add a button that can be used to submit the form via ajax
-        add(new AjaxButton("submit", this)
-        {
-            
+        add(new AjaxButton("submit", this) {
             
             @Override
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
-            
             
                 feedBack.setVisible(true);
                 // repaint the feedback panel so errors are shown
                 target.add(feedBack);
             }
             
-            
             //
             @Override
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-            
             
                 feedBack.setVisible(false);
                 // repaint the feedback panel so that it is hidden
@@ -277,16 +224,12 @@ public final class KpiForm extends Form<Kpi>
         // ///////////////////////////////////////////////////////////////////////////////////
     }
     
-    
     public Kpi getKpi() {
-    
     
         return kpi;
     }
     
-    
     public NameGeneric getNameEntity() {
-    
     
         return nameEntity;
     }
