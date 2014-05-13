@@ -18,15 +18,19 @@ import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.api.IHasKey;
+import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.model.Project;
 import org.komea.product.plugins.repository.model.ScmExecutionStatus;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
+import org.komea.product.plugins.repository.model.ScmType;
 import org.komea.product.plugins.scm.api.IScmRepositoryService;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.NameGeneric;
 import org.komea.product.wicket.utils.SelectDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
+import org.komea.product.wicket.widget.builders.SelectBoxBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
+import org.ocpsoft.prettytime.PrettyTime;
 
 /**
  *
@@ -51,10 +55,13 @@ public class ScmForm extends Form<ScmRepositoryDefinition> {
         this.scmData = _scmData;
         this.projectService = _projectService;
         feedBack.setVisible(false);
-        affichageDate = new NameGeneric(scmData.getLastDateCheckout().toString());
+        PrettyTime p = new PrettyTime();
+        affichageDate = new NameGeneric(p.format(scmData.getLastDateCheckout()));
         projectName = new NameGeneric("");
         // url field
-
+        ScmType type = scmData.getType();
+                add(SelectBoxBuilder.<ScmType>createWithEnum("type", scmData,
+                ScmType.class).withTooltip(getString("scm.save.form.tooltips.type")).build());
         
         add(TextFieldBuilder.createURL("url", scmData, "url")
                 .withTooltip(getString("scm.save.form.tooltips.url")).simpleValidator(3, 255).build());
