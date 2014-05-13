@@ -80,14 +80,6 @@ public class StatisticsService implements IStatisticsAPI {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.komea.product.cep.tester.IKpiValueService#storeValueInHistory(org
-	 * .komea.product.service.dto.KpiKey)
-	 */
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see org.komea.product.backend.service.kpi.IStatisticsAPI#
 	 * buildGlobalPeriodTimeSeries(org.komea.product.database.dao.timeserie.
 	 * PeriodTimeSerieOptions)
@@ -181,16 +173,9 @@ public class StatisticsService implements IStatisticsAPI {
 		Validate.isTrue(_entityKey.isEntityReferenceKey());
 		Validate.isTrue(_options.isValid());
 		LOGGER.debug("evaluateKpiValue : {}", _options, _entityKey);
-		return measureDao.evaluateKpiValue(_options, _entityKey);
+		return valueOrZero(measureDao.evaluateKpiValue(_options, _entityKey));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.komea.product.backend.service.kpi.IStatisticsAPI#getKpiValues(org
-	 * .komea.product.database.dao.timeserie.TimeSerieOptions)
-	 */
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -206,8 +191,10 @@ public class StatisticsService implements IStatisticsAPI {
 		Validate.notNull(_entityKey);
 		Validate.isTrue(_entityKey.isEntityReferenceKey());
 		Validate.isTrue(_options.isValid());
-		LOGGER.debug("evaluateKpiValueOnPeriod : {}", _options, _entityKey);
-		return measureDao.evaluateKpiValueOnPeriod(_options, _entityKey);
+
+		final Double evaluateKpiValueOnPeriod = measureDao.evaluateKpiValueOnPeriod(_options, _entityKey);
+		LOGGER.debug("evaluateKpiValueOnPeriod : {} ekey {}, return {}", _options, _entityKey, evaluateKpiValueOnPeriod);
+		return valueOrZero(evaluateKpiValueOnPeriod);
 	}
 
 	@Override
@@ -250,7 +237,7 @@ public class StatisticsService implements IStatisticsAPI {
 
 		Validate.isTrue(_kpiKeys.getEntityKey().isEntityReferenceKey());
 		LOGGER.debug("evaluateTheCurrentKpiValue : {}", _kpiKeys);
-		return evaluateTheCurrentKpiValues(_kpiKeys.getKpiID()).getDoubleValue(_kpiKeys.getEntityKey());
+		return valueOrZero(evaluateTheCurrentKpiValues(_kpiKeys.getKpiID()).getDoubleValue(_kpiKeys.getEntityKey()));
 	}
 
 	/*
@@ -306,7 +293,8 @@ public class StatisticsService implements IStatisticsAPI {
 		periodTimeSerieOptions.untilNow();
 		periodTimeSerieOptions.fromLastTimeScale(TimeScale.PER_DAY);
 		periodTimeSerieOptions.setGroupFormula(GroupFormula.AVG_VALUE);
-		return evaluateKpiValueOnPeriod(periodTimeSerieOptions, _key.getEntityKey());
+		LOGGER.debug("getLastStoredValueInHistory : period {}", periodTimeSerieOptions);
+		return valueOrZero(evaluateKpiValueOnPeriod(periodTimeSerieOptions, _key.getEntityKey()));
 	}
 
 	public void setKpiDao(final KpiDao _kpiDao) {
@@ -314,7 +302,6 @@ public class StatisticsService implements IStatisticsAPI {
 		kpiDao = _kpiDao;
 	}
 
-	@Transactional
 	public void storeActualValueInHistory(final HistoryKey _historyKey) throws KPINotFoundException {
 
 		Validate.notNull(_historyKey);
@@ -362,5 +349,10 @@ public class StatisticsService implements IStatisticsAPI {
 		measure.setDateTime(_actualTime);
 		measureDao.insert(measure);
 
+	}
+
+	private Double valueOrZero(final Double _value) {
+
+		return _value == null ? 0d : _value;
 	}
 }

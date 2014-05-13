@@ -14,10 +14,10 @@ import org.komea.product.wicket.cronpage.CronPage;
 import org.komea.product.wicket.customer.CustomerEditPage;
 import org.komea.product.wicket.customer.CustomerPage;
 import org.komea.product.wicket.events.EventsPage;
+import org.komea.product.wicket.kpichart.KpiChartPage;
 import org.komea.product.wicket.kpis.KpiEditPage;
 import org.komea.product.wicket.kpis.KpiPage;
 import org.komea.product.wicket.kpivalues.KpiValuesPage;
-import org.komea.product.wicket.kpiviewer.KpiViewerPage;
 import org.komea.product.wicket.person.PersonAddPage;
 import org.komea.product.wicket.person.PersonPage;
 import org.komea.product.wicket.persongroup.department.DepartmentEditPage;
@@ -54,7 +54,7 @@ import org.komea.product.wicket.statistics.StatPage;
         @MountPage(mount = "/saveCustomer", page = CustomerEditPage.class),
         @MountPage(mount = "/alerts", page = AlertPage.class),
         @MountPage(mount = "/saveAlert", page = AlertEditPage.class),
-        @MountPage(mount = "/kpiview", page = KpiViewerPage.class),
+        @MountPage(mount = "/kpiview", page = KpiChartPage.class),
         @MountPage(mount = "/kpivalues", page = KpiValuesPage.class),
         @MountPage(mount = "/adminactions", page = AdminActionPage.class) })
 public class AdministrationWebSite {

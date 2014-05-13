@@ -1,4 +1,4 @@
-package org.komea.product.wicket.kpiviewer;
+package org.komea.product.wicket.kpichart;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ import com.googlecode.wickedcharts.wicket6.highcharts.Chart;
  * 
  * @author sleroy
  */
-public class KpiViewerPage extends LayoutPage {
+public class KpiChartPage extends LayoutPage {
 
 	/**
 	 * @author sleroy
@@ -101,7 +101,7 @@ public class KpiViewerPage extends LayoutPage {
 		}
 	}
 
-	private static final Logger	LOGGER	         = LoggerFactory.getLogger(KpiViewerPage.class);
+	private static final Logger	LOGGER	         = LoggerFactory.getLogger(KpiChartPage.class);
 
 	/**
      * 
@@ -119,7 +119,7 @@ public class KpiViewerPage extends LayoutPage {
 	@SpringBean
 	private IStatisticsAPI	    statsService;
 
-	public KpiViewerPage(final PageParameters _parameters) {
+	public KpiChartPage(final PageParameters _parameters) {
 
 		super(_parameters);
 
