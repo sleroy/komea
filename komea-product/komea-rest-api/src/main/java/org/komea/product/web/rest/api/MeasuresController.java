@@ -2,6 +2,8 @@
 package org.komea.product.web.rest.api;
 
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.komea.product.backend.exceptions.KPINotFoundException;

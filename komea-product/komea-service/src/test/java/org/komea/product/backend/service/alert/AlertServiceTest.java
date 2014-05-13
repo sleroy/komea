@@ -153,7 +153,7 @@ public class AlertServiceTest {
         
         // AND a measure on theKomea project
         Measure measure = new Measure();
-        measure.setEntity(EntityType.PROJECT, 1);
+        measure.setEntityID(1);
         measure.setValue(25D);
         
         // WHEN I check if the mieasure corrspond to the alertCriterai

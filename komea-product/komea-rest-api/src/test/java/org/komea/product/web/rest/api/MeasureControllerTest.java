@@ -8,10 +8,11 @@ import java.util.List;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.easymock.Mock;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.komea.product.backend.api.IMeasureHistoryService;
+import org.komea.product.backend.service.kpi.IKpiAPI;
 import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.service.dto.HistoricalMeasureRequest;
 import org.komea.product.service.dto.HistoryStringKeyList;
@@ -20,7 +21,6 @@ import org.komea.product.service.dto.MeasureResult;
 import org.komea.product.test.spring.AbstractSpringWebIntegrationTestCase;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,16 +38,16 @@ import com.google.common.collect.Lists;
 public class MeasureControllerTest extends AbstractSpringWebIntegrationTestCase {
     
     @Autowired
-    private WebApplicationContext  context;
+    private WebApplicationContext context;
     
-    private MockMvc                mockMvc;
+    private MockMvc               mockMvc;
     
     @Autowired
     @InjectMocks
-    private MeasuresController     measureController;
+    private MeasuresController    measureController;
     
     @Mock
-    private IMeasureHistoryService service;
+    private IKpiAPI               service;
     
     @Before
     public void setUp() {

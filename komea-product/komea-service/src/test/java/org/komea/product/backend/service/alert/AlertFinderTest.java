@@ -69,7 +69,7 @@ public class AlertFinderTest {
         MeasureDto measureDto = new MeasureDto();
         measureDto.setId(1);
         measureDto.setIdKpi(1);
-        measureDto.setEntity(EntityType.PROJECT, 1);
+        measureDto.setEntityID(1);
         measureDto.setValue(36D);
         measures.add(measureDto);
         
@@ -110,7 +110,7 @@ public class AlertFinderTest {
         MeasureDto measureDto = new MeasureDto();
         measureDto.setId(1);
         measureDto.setIdKpi(1);
-        measureDto.setEntity(EntityType.PROJECT, 1);
+        measureDto.setEntityID(1);
         measureDto.setValue(36D);
         measures.add(measureDto);
         
@@ -151,7 +151,7 @@ public class AlertFinderTest {
         MeasureDto measureDto = new MeasureDto();
         measureDto.setId(1);
         measureDto.setIdKpi(1);
-        measureDto.setEntity(EntityType.PROJECT, 1);
+        measureDto.setEntityID(1);
         measureDto.setValue(36D);
         measures.add(measureDto);
         
@@ -192,7 +192,7 @@ public class AlertFinderTest {
         MeasureDto measureDto = new MeasureDto();
         measureDto.setId(1);
         measureDto.setIdKpi(1);
-        measureDto.setEntity(EntityType.PROJECT, 1);
+        measureDto.setEntityID(1);
         measureDto.setValue(36D);
         measures.add(measureDto);
         
@@ -232,7 +232,7 @@ public class AlertFinderTest {
         MeasureDto measureDto = new MeasureDto();
         measureDto.setId(1);
         measureDto.setIdKpi(1);
-        measureDto.setEntity(EntityType.PROJECT, 1);
+        measureDto.setEntityID(1);
         measureDto.setValue(36D);
         measures.add(measureDto);
         
@@ -272,7 +272,7 @@ public class AlertFinderTest {
         MeasureDto measureDto = new MeasureDto();
         measureDto.setId(1);
         measureDto.setIdKpi(1);
-        measureDto.setEntity(EntityType.PROJECT, 1);
+        measureDto.setEntityID(1);
         measureDto.setValue(36D);
         measures.add(measureDto);
         

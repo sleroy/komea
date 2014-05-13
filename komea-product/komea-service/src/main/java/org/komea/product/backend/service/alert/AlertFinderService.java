@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.komea.product.backend.api.IHistoryService;
 import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.database.dto.BaseEntityDto;
@@ -37,9 +36,6 @@ public class AlertFinderService implements IAlertFinderService {
     
     @Autowired
     private IAlertTypeService alertTypeService;
-    
-    @Autowired
-    private IHistoryService   measureService;
     
     @Autowired
     private IKPIService       kpiService;
@@ -87,7 +83,8 @@ public class AlertFinderService implements IAlertFinderService {
         final Set<String> kpiKeys = idKpiMap.fillIdKpi(alertTypesOfKpiAndSeverity, kpiService);
         final SearchMeasuresDto searchMeasuresDto = createMeasureFilterOnKpiKeys(_searchAlert, extendedEntityType, kpiKeys);
         
-        final List<MeasureDto> measuresOfKpi = measureService.getHistocialMeasures(idKpiMap.values(), entities, searchMeasuresDto);
+        // FIXME::measureService.getMeasures(idKpiMap.values(), entities, searchMeasuresDto);
+        final List<MeasureDto> measuresOfKpi = Lists.newArrayList();
         final List<KpiAlertDto> filteredActivatedAlerts = Lists.newArrayList();
         for (final KpiAlertType alertType : alertTypesOfKpiAndSeverity) {
             for (final BaseEntityDto entity : entities) {
