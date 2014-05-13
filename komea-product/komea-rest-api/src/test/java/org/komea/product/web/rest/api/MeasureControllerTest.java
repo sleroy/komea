@@ -11,13 +11,13 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.komea.product.backend.api.IMeasureHistoryService;
 import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.service.dto.HistoricalMeasureRequest;
 import org.komea.product.service.dto.HistoryStringKeyList;
 import org.komea.product.service.dto.LimitCriteria;
 import org.komea.product.service.dto.MeasureResult;
+import org.komea.product.test.spring.AbstractSpringWebIntegrationTestCase;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
@@ -25,12 +25,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -39,17 +33,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.google.common.collect.Lists;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(locations = {
-        "classpath*:/spring/application-context-test.xml", "classpath*:/spring/dispatcher-servlet-test.xml", })
-@TestExecutionListeners({
-        DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
-        TransactionDbUnitTestExecutionListener.class })
-public class MeasureControllerTest {
+public class MeasureControllerTest extends AbstractSpringWebIntegrationTestCase {
     
     @Autowired
     private WebApplicationContext  context;
