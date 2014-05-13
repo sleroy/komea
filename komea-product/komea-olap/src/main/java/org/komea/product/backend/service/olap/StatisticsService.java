@@ -99,7 +99,8 @@ public class StatisticsService implements IStatisticsAPI {
 	public TimeSerie buildGlobalPeriodTimeSeries(final PeriodTimeSerieOptions _timeSerieOptions) {
 
 		Validate.notNull(_timeSerieOptions);
-
+		Validate.isTrue(_timeSerieOptions.isValid());
+		LOGGER.info("buildGlobalPeriodTimeSeries : {}", _timeSerieOptions);
 		return new TimeSerieImpl(measureDao.buildGlobalPeriodTimeSeries(_timeSerieOptions));
 	}
 
@@ -117,6 +118,8 @@ public class StatisticsService implements IStatisticsAPI {
 		Validate.notNull(_timeSerieOptions);
 		Validate.notNull(_entityKey);
 		Validate.isTrue(_entityKey.isEntityReferenceKey());
+		Validate.isTrue(_timeSerieOptions.isValid());
+		LOGGER.info("buildPeriodTimeSeries : {}", _timeSerieOptions, _entityKey);
 		return new TimeSerieImpl(measureDao.buildPeriodTimeSeries(_timeSerieOptions, _entityKey), _entityKey);
 	}
 
@@ -134,7 +137,8 @@ public class StatisticsService implements IStatisticsAPI {
 		Validate.notNull(_timeSerieOptions);
 		Validate.notNull(_entityKey);
 		Validate.isTrue(_entityKey.isEntityReferenceKey());
-
+		Validate.isTrue(_timeSerieOptions.isValid());
+		LOGGER.info("buildTimeSeries : {}", _timeSerieOptions, _entityKey);
 		return new TimeSerieImpl(measureDao.buildTimeSeries(_timeSerieOptions, _entityKey), _entityKey);
 	}
 
@@ -147,6 +151,7 @@ public class StatisticsService implements IStatisticsAPI {
 	@Override
 	public double computeAverageFromMeasures(final List<Measure> _kpiMeasures) {
 
+		LOGGER.info("computeAverageFromMeasures : {}", _kpiMeasures);
 		return kpiMathService.computeAverageFromMeasures(_kpiMeasures);
 	}
 
@@ -159,7 +164,7 @@ public class StatisticsService implements IStatisticsAPI {
 	 */
 	@Override
 	public double computeSumFromMeasures(final List<Measure> _kpiMeasures) {
-
+		LOGGER.info("computeSumFromMeasures : {}", _kpiMeasures);
 		return kpiMathService.computeSumFromMeasures(_kpiMeasures);
 	}
 
@@ -177,7 +182,8 @@ public class StatisticsService implements IStatisticsAPI {
 		Validate.notNull(_options);
 		Validate.notNull(_entityKey);
 		Validate.isTrue(_entityKey.isEntityReferenceKey());
-
+		Validate.isTrue(_options.isValid());
+		LOGGER.info("evaluateKpiValue : {}", _options, _entityKey);
 		return measureDao.evaluateKpiValue(_options, _entityKey);
 	}
 
@@ -202,6 +208,8 @@ public class StatisticsService implements IStatisticsAPI {
 		Validate.notNull(_options);
 		Validate.notNull(_entityKey);
 		Validate.isTrue(_entityKey.isEntityReferenceKey());
+		Validate.isTrue(_options.isValid());
+		LOGGER.info("evaluateKpiValueOnPeriod : {}", _options, _entityKey);
 		return measureDao.evaluateKpiValueOnPeriod(_options, _entityKey);
 	}
 
@@ -209,7 +217,8 @@ public class StatisticsService implements IStatisticsAPI {
 	public KpiResult evaluateKpiValues(final TimeSerieOptions _options) {
 
 		Validate.notNull(_options);
-
+		Validate.isTrue(_options.isValid());
+		LOGGER.info("evaluateKpiValues : {}", _options);
 		final Kpi findKpiPerId = new FindKpiPerId(_options.getKpiID(), kpiDao).find();
 		return new KpiResult().fill(measureDao.evaluateKpiValues(_options), findKpiPerId.getEntityType());
 	}
@@ -225,6 +234,8 @@ public class StatisticsService implements IStatisticsAPI {
 	public KpiResult evaluateKpiValuesOnPeriod(final PeriodTimeSerieOptions _options) {
 
 		Validate.notNull(_options);
+		Validate.isTrue(_options.isValid());
+		LOGGER.info("evaluateKpiValuesOnPeriod : {}", _options);
 		final Kpi findKpiPerId = new FindKpiPerId(_options.getKpiID(), kpiDao).find();
 		return new KpiResult().fill(measureDao.evaluateKpiValuesOnPeriod(_options), findKpiPerId.getEntityType());
 
@@ -241,6 +252,7 @@ public class StatisticsService implements IStatisticsAPI {
 	public Double evaluateTheCurrentKpiValue(final KpiKey _kpiKeys) {
 
 		Validate.isTrue(_kpiKeys.getEntityKey().isEntityReferenceKey());
+		LOGGER.info("evaluateTheCurrentKpiValue : {}", _kpiKeys);
 		return evaluateTheCurrentKpiValues(_kpiKeys.getKpiName()).getDoubleValue(_kpiKeys.getEntityKey());
 	}
 
@@ -255,7 +267,7 @@ public class StatisticsService implements IStatisticsAPI {
 	public KpiResult evaluateTheCurrentKpiValues(final String _kpiName) {
 
 		Validate.isTrue(!Strings.isNullOrEmpty(_kpiName));
-
+		LOGGER.info("evaluateTheCUrrentKpiValues : {}", _kpiName);
 		return kpiValueService.getRealTimeValue(_kpiName);
 	}
 
@@ -272,6 +284,7 @@ public class StatisticsService implements IStatisticsAPI {
 	 */
 	@Override
 	public KpiResult getKpiValuesAverageOnPeriod(final String _kpiName, final DateTime _previousTime) {
+		LOGGER.info("getKpiValuesAverageOnPeriod : {}", _kpiName, _previousTime);
 
 		final PeriodTimeSerieOptions periodTimeSerieOptions = new PeriodTimeSerieOptions();
 		periodTimeSerieOptions.untilNow();
@@ -290,8 +303,8 @@ public class StatisticsService implements IStatisticsAPI {
 	 */
 	@Override
 	public Double getLastStoredValueInHistory(final HistoryKey _key) {
-
 		Validate.notNull(_key.hasEntityReference());
+		LOGGER.info("getLastStoredValueInHistory : {}", _key);
 		final PeriodTimeSerieOptions periodTimeSerieOptions = new PeriodTimeSerieOptions();
 		periodTimeSerieOptions.untilNow();
 		periodTimeSerieOptions.fromLastTimeScale();
@@ -309,9 +322,10 @@ public class StatisticsService implements IStatisticsAPI {
 	public void storeActualValueInHistory(final HistoryKey _historyKey) throws KPINotFoundException {
 
 		Validate.notNull(_historyKey);
+		LOGGER.info("storeActualValueInHistory : {}", _historyKey);
 		final Kpi findKPI = kpiDAO.selectByPrimaryKey(_historyKey.getKpiID());
 		final KpiResult queryResult = kpiValueService.getRealTimeValue(findKPI.getKey());// FIXME:/Performance
-																						 // problem
+		                                                                                 // problem
 		// Store all data
 		final DateTime actualTime = new DateTime();
 		for (final Entry<EntityKey, Number> kpiLineValue : queryResult.getMap().entrySet()) {
@@ -346,7 +360,7 @@ public class StatisticsService implements IStatisticsAPI {
 	 */
 	@Override
 	public void storeValueInHistory(final HistoryKey _historyKey, final Double _value, final DateTime _actualTime) {
-
+		LOGGER.info("storeValueInHistory : {}", _historyKey, _value, _actualTime);
 		final Measure measure = Measure.initializeMeasure(_historyKey.getKpiID(), _historyKey.getEntityKey().getId());
 		measure.setValue(_value);
 		measure.setDateTime(_actualTime);
