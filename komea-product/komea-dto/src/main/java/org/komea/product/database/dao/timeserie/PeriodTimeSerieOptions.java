@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Months;
 import org.joda.time.Years;
+import org.komea.product.database.model.Kpi;
 
 public class PeriodTimeSerieOptions extends TimeSerieOptions {
 
@@ -21,6 +22,14 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
 	private Date	         fromPeriod;
 
 	private Date	         toPeriod;
+
+	public PeriodTimeSerieOptions() {
+		super();
+	}
+
+	public PeriodTimeSerieOptions(final Kpi _kpi) {
+		super(_kpi);
+	}
 
 	@Override
 	public boolean equals(final Object obj) {
