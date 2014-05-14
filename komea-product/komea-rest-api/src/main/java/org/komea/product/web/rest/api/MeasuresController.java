@@ -7,9 +7,10 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.komea.product.backend.exceptions.KPINotFoundException;
-import org.komea.product.backend.service.entities.IEntityService;
-import org.komea.product.backend.service.kpi.IKpiAPI;
+import org.komea.product.backend.service.kpi.IMeasureService;
+import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.database.dao.timeserie.TimeSerieDTO;
+import org.komea.product.service.dto.KpiStringKeyList;
 import org.komea.product.service.dto.ManyHistoricalMeasureRequest;
 import org.komea.product.service.dto.MeasureResult;
 import org.slf4j.Logger;
@@ -30,10 +31,10 @@ public class MeasuresController {
     private static final Logger LOGGER = LoggerFactory.getLogger(MeasuresController.class);
     
     @Autowired
-    private IEntityService      entityService;
+    private IStatisticsAPI      statService;
     
     @Autowired
-    private IKpiAPI             kpiService;
+    private IMeasureService     measureService;
     
     @RequestMapping(method = RequestMethod.POST, value = "/historic", consumes = "application/json; charset=utf-8", produces = "application/json; charset=utf-8")
     @ResponseBody
@@ -54,9 +55,7 @@ public class MeasuresController {
     @ResponseBody
     public List<MeasureResult> currentMeasures(@Valid @RequestBody final KpiStringKeyList _kpiKeys) throws KPINotFoundException {
     
-        //
-        return Lists.newArrayList();
+        return measureService.currentMeasures(_kpiKeys);
         
     }
-    
 }

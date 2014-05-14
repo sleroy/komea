@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.komea.product.backend.service.kpi.IKpiAPI;
 import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.service.dto.HistoryStringKeyList;
+import org.komea.product.service.dto.KpiStringKeyList;
 import org.komea.product.service.dto.LimitCriteria;
 import org.komea.product.service.dto.ManyHistoricalMeasureRequest;
 import org.komea.product.test.spring.AbstractSpringWebIntegrationTestCase;
