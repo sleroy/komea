@@ -15,6 +15,11 @@ public class KpiStringKeyList {
     private final Set<String> entityKeys;
     private final EntityType  entityType;
     
+    public EntityType getEntityType() {
+    
+        return entityType;
+    }
+    
     public KpiStringKeyList() {
     
         kpiKey = Sets.newHashSet();
