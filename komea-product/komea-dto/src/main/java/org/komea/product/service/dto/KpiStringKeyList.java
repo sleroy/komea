@@ -5,24 +5,29 @@ package org.komea.product.service.dto;
 import java.util.Collection;
 import java.util.Set;
 
+import org.komea.product.database.enums.EntityType;
+
 import com.google.common.collect.Sets;
 
 public class KpiStringKeyList {
     
-    private final Set<String>          kpiKey;
-    private final Set<EntityStringKey> entityKeys;
+    private final Set<String> kpiKey;
+    private final Set<String> entityKeys;
+    private final EntityType  entityType;
     
     public KpiStringKeyList() {
     
         kpiKey = Sets.newHashSet();
         entityKeys = Sets.newHashSet();
+        entityType = EntityType.PROJECT;
     }
     
-    public KpiStringKeyList(final Set<String> _kpiKey, final Set<EntityStringKey> _entityKeys) {
+    public KpiStringKeyList(final Set<String> _kpiKey, final Set<String> _entityKeys, final EntityType _entityType) {
     
         super();
         kpiKey = _kpiKey;
         entityKeys = _entityKeys;
+        entityType = _entityType;
     }
     
     public Set<String> getKpiKey() {
@@ -30,17 +35,17 @@ public class KpiStringKeyList {
         return kpiKey;
     }
     
-    public Set<EntityStringKey> getEntityKeys() {
+    public Set<String> getEntityKeys() {
     
         return entityKeys;
     }
     
-    public boolean addEntityKey(final EntityStringKey _entityKey) {
+    public boolean addEntityKey(final String _entityKey) {
     
         return entityKeys.add(_entityKey);
     }
     
-    public boolean addEntityKeys(final Collection<? extends EntityStringKey> _entityKeys) {
+    public boolean addEntityKeys(final Collection<? extends String> _entityKeys) {
     
         return entityKeys.addAll(_entityKeys);
     }
@@ -53,21 +58,6 @@ public class KpiStringKeyList {
     public void addKpiKey(final String _key) {
     
         kpiKey.add(_key);
-    }
-    
-    public void addKpiStringKey(final KpiStringKey _kpieKey) {
-    
-        addKpiKey(_kpieKey.getKpiName());
-        addEntityKey(_kpieKey.getEntityKey());
-    }
-    
-    public void addKpiStringKeys(final Collection<KpiStringKey> _kpieKeys) {
-    
-        for (KpiStringKey kpiKey : _kpieKeys) {
-            
-            addKpiKey(kpiKey.getKpiName());
-            addEntityKey(kpiKey.getEntityKey());
-        }
     }
     
 }
