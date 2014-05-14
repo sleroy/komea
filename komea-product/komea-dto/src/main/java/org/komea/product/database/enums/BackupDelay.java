@@ -7,6 +7,7 @@ public enum BackupDelay {
 
 	/**
 	 * Tests if the given delay is applied for the kpi passed in parameter.
+	 * Always true for DAY enum if the given kpi does not provide any value.
 	 * 
 	 * @param _kpi
 	 *            the kpi.
@@ -18,7 +19,7 @@ public enum BackupDelay {
 			final BackupDelay valueOf = BackupDelay.valueOf(cronExpression);
 			return equals(valueOf);
 		} catch (final IllegalArgumentException e) {
-			return false;
+			return BackupDelay.DAY.equals(this); // Provided default value DAY
 		}
 
 	}
