@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.komea.product.plugins.bugzilla.api;
 
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
@@ -16,5 +15,6 @@ public interface IBZServerProxyFactory {
 
     public IBZServerProxy newConnector(BZServerConfiguration serv);
 
+    public IBZServerProxy newTestConnector(BZServerConfiguration serv);
 
 }
