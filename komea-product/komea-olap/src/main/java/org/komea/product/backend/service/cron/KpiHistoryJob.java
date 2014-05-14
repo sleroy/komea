@@ -1,6 +1,8 @@
 package org.komea.product.backend.service.cron;
 
+import org.apache.commons.lang.Validate;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
+import org.komea.product.database.enums.BackupDelay;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -32,16 +34,17 @@ public class KpiHistoryJob implements Job {
 	public void execute(final JobExecutionContext _context) throws JobExecutionException {
 
 		LOGGER.info("*** Backup of Kpi values into the history* **");
-
-		statisticsService.backupKpiValuesIntoHistory();
+		final BackupDelay delay = (BackupDelay) _context.getMergedJobDataMap().get("delay");
+		Validate.notNull(delay);
+		statisticsService.backupKpiValuesIntoHistory(delay);
 	}
 
 	public IStatisticsAPI getStatisticsService() {
-	    return statisticsService;
-    }
+		return statisticsService;
+	}
 
-	public void setStatisticsService(IStatisticsAPI _statisticsService) {
-	    statisticsService = _statisticsService;
-    }
+	public void setStatisticsService(final IStatisticsAPI _statisticsService) {
+		statisticsService = _statisticsService;
+	}
 
 }
