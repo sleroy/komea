@@ -31,6 +31,8 @@ import org.komea.product.service.dto.EntityKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,6 +89,7 @@ public class StatisticsService implements IStatisticsAPI {
 	 * buildGlobalPeriodTimeSeries(org.komea.product.database.dao.timeserie.
 	 * PeriodTimeSerieOptions)
 	 */
+	@Caching(cacheable = @Cacheable("buildGlobalPeriodTimeSeries"))
 	@Override
 	public TimeSerie buildGlobalPeriodTimeSeries(final PeriodTimeSerieOptions _timeSerieOptions) {
 
@@ -104,6 +107,7 @@ public class StatisticsService implements IStatisticsAPI {
 	 * (org.komea.product.database.dao.timeserie. PeriodTimeSerieOptions,
 	 * org.komea.product.service.dto.EntityKey)
 	 */
+	@Cacheable("buildPeriodTimeSeries")
 	@Override
 	public TimeSerie buildPeriodTimeSeries(final PeriodTimeSerieOptions _timeSerieOptions, final EntityKey _entityKey) {
 
@@ -123,6 +127,7 @@ public class StatisticsService implements IStatisticsAPI {
 	 * org.komea.product.database.dao.timeserie.TimeSerieOptions,
 	 * org.komea.product.service.dto.EntityKey)
 	 */
+	@Cacheable("buildTimeSeries")
 	@Override
 	public TimeSerie buildTimeSeries(final TimeSerieOptions _timeSerieOptions, final EntityKey _entityKey) {
 
@@ -168,6 +173,7 @@ public class StatisticsService implements IStatisticsAPI {
 	 * .komea.product.database.dao.timeserie.TimeSerieOptions,
 	 * org.komea.product.service.dto.EntityKey)
 	 */
+	@Cacheable("evaluateKpiValue")
 	@Override
 	public Double evaluateKpiValue(final TimeSerieOptions _options, final EntityKey _entityKey) {
 
@@ -187,6 +193,7 @@ public class StatisticsService implements IStatisticsAPI {
 	 * (org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions ,
 	 * org.komea.product.service.dto.EntityKey)
 	 */
+	@Cacheable("evaluateKpiValueOnPeriod")
 	@Override
 	public Double evaluateKpiValueOnPeriod(final PeriodTimeSerieOptions _options, final EntityKey _entityKey) {
 
@@ -200,6 +207,7 @@ public class StatisticsService implements IStatisticsAPI {
 		return valueOrZero(evaluateKpiValueOnPeriod);
 	}
 
+	@Cacheable("evaluateKpiValues")
 	@Override
 	public KpiResult evaluateKpiValues(final TimeSerieOptions _options) {
 
@@ -217,6 +225,7 @@ public class StatisticsService implements IStatisticsAPI {
 	 * org.komea.product.backend.service.kpi.IStatisticsAPI#getKpiOnPeriodValues
 	 * (org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions )
 	 */
+	@Cacheable("evaluateKpiValuesOnPeriod")
 	@Override
 	public KpiResult evaluateKpiValuesOnPeriod(final PeriodTimeSerieOptions _options) {
 
@@ -268,6 +277,7 @@ public class StatisticsService implements IStatisticsAPI {
 	 * @see org.komea.product.backend.service.kpi.IStatisticsAPI#
 	 * getKpiValuesAverageOnPeriod(java.lang.String, org.joda.time.DateTime)
 	 */
+	@Cacheable("getKpiValuesAverageOnPeriod")
 	@Override
 	public KpiResult getKpiValuesAverageOnPeriod(final Integer _kpiName, final DateTime _previousTime) {
 		LOGGER.debug("getKpiValuesAverageOnPeriod : {}", _kpiName, _previousTime);
@@ -287,6 +297,7 @@ public class StatisticsService implements IStatisticsAPI {
 	 * getLastStoredValueInHistory
 	 * (org.komea.product.backend.service.history.HistoryKey )
 	 */
+	@Cacheable("getLastStoredValueInHistory")
 	@Override
 	public Double getLastStoredValueInHistory(final HistoryKey _key) {
 		Validate.notNull(_key.hasEntityReference());

@@ -14,7 +14,7 @@
 
 	<import resource="database-spring.xml" />
 	<import resource="security-spring.xml" />
-	
+
 
 
 
@@ -22,19 +22,11 @@
 
 	<tasks:annotation-driven />
 
-	<!-- generic cache manager -->
-	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
-		<property name="caches">
-			<set>
-				<bean
-					class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
-					name="default" />
-				<bean
-					class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
-					name="software-settings" />
-			</set>
-		</property>
-
+	<bean id="cacheManager"
+		class="org.springframework.cache.concurrent.ConcurrentMapCacheManager">
+		<!-- <property name="caches"> <set> <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" 
+			name="default" /> <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" 
+			name="software-settings" /> </set> </property> -->
 	</bean>
 
 	<context:component-scan base-package="org.komea.product" />
