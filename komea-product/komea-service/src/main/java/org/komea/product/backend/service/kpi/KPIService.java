@@ -138,6 +138,17 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         return new FindKpiOrFail(_kpiKey, requiredDAO).find();
     }
     
+    /**
+     * (non-Javadoc)
+     * 
+     * @see org.komea.product.backend.api.IKPIService#findKPIOrFail(java.lang.String)
+     */
+    @Override
+    public Kpi findKPIOrFail(final String _kpiKey) {
+    
+        return new FindKpi(_kpiKey, requiredDAO).find();
+    }
+    
     /*
      * (non-Javadoc)
      * @see
