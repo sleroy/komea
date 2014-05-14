@@ -136,7 +136,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         HistoryStringKey measureKey = new HistoryStringKey("BRANCH_COVERAGE(%)", "KOMEA", ExtendedEntityType.PROJECT);
         Date startDate = new DateTime(2013, 1, 1, 0, 0, 0).toDate();
         Date endDate = new DateTime(2014, 4, 1, 0, 0, 0).toDate();
-        ;
+        
         LimitCriteria limit = LimitCriteria.CreateLimitCriteria(startDate, endDate, 5);
         
         // MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
