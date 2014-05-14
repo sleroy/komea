@@ -1,5 +1,5 @@
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.backend.service.olap;
 
 
 import java.util.Date;
@@ -11,16 +11,15 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
-import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
+import org.komea.product.backend.service.kpi.IMeasureService;
+import org.komea.product.backend.service.kpi.KpiLoadingService;
 import org.komea.product.database.dao.KpiDao;
-import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ExtendedEntityType;
-import org.komea.product.service.dto.EntityKey;
 import org.komea.product.service.dto.HistoryStringKey;
 import org.komea.product.service.dto.HistoryStringKeyList;
+import org.komea.product.service.dto.KpiStringKey;
 import org.komea.product.service.dto.LimitCriteria;
-import org.komea.product.service.dto.MeasureResult;
 import org.komea.product.test.spring.AbstractSpringDBunitIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,7 +30,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
     
     //
     @Autowired
-    private IKpiAPI           measureService;
+    private IMeasureService   measureService;
     
     @Autowired
     private KpiLoadingService kpiLoading;
@@ -40,25 +39,6 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
     public void setpUp() {
     
         kpiLoading.initLoadingService();
-    }
-    
-    public static class DemoQuery implements IDynamicDataQuery {
-        
-        @Override
-        public String getFormula() {
-        
-            // TODO Auto-generated getFormula
-            return null;
-        }
-        
-        @Override
-        public KpiResult getResult() {
-        
-            KpiResult kpiResult = new KpiResult();
-            kpiResult.put(EntityKey.of(EntityType.PROJECT, 4), 62);
-            return kpiResult;
-        }
-        
     }
     
     @Autowired
@@ -81,7 +61,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         HistoryStringKey measureKey = new HistoryStringKey("BRANCH_COVERAGE(%)", "KOMEA", ExtendedEntityType.PROJECT);
         LimitCriteria limit = LimitCriteria.CreateLimitCriteriaForNValues(5);
         
-        MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
+        // MeasureResult measure = measureService.getClass()(measureKey, limit);
         
         // THEN the measure must have two values
         // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
@@ -108,7 +88,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         HistoryStringKey measureKey = new HistoryStringKey("BRANCH_COVERAGE(%)", "KOMEA", ExtendedEntityType.PROJECT);
         LimitCriteria limit = LimitCriteria.CreateLimitCriteriaForNValues(1);
         
-        MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
+        // MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
         
         // // THEN the measure must have only one values
         // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
@@ -133,7 +113,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         ;
         LimitCriteria limit = LimitCriteria.CreateLimitCriteriaFromStartingDate(startDate, 5);
         
-        MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
+        // MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
         
         // THEN the measure must have only one values
         // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
@@ -159,7 +139,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         ;
         LimitCriteria limit = LimitCriteria.CreateLimitCriteria(startDate, endDate, 5);
         
-        MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
+        // MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
         
         // THEN the measure must have only one values
         // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
@@ -206,7 +186,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         HistoryStringKey measureKey = new HistoryStringKey("BRANCH_COVERAGE(%)", "KOMEA", ExtendedEntityType.PROJECT);
         LimitCriteria limit = LimitCriteria.CreateLimitCriteriaForNValues(-1);
         
-        MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
+        // MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
         
         // THEN the measure list must be empty
         // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
@@ -227,7 +207,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         HistoryStringKey measureKey = new HistoryStringKey("NOT_EXIST", "KOMEA", ExtendedEntityType.PROJECT);
         LimitCriteria limit = LimitCriteria.CreateLimitCriteriaForNValues(-1);
         
-        MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
+        // MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
         
         // THEN the measure list must be empty
         // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
@@ -248,7 +228,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         HistoryStringKey measureKey = new HistoryStringKey("BRANCH_COVERAGE(%)", "NOT_EXIST", ExtendedEntityType.PROJECT);
         LimitCriteria limit = LimitCriteria.CreateLimitCriteriaForNValues(-1);
         
-        MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
+        // MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
         
         // THEN the measure list must be empty
         // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
@@ -269,7 +249,7 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         HistoryStringKey measureKey = new HistoryStringKey(null, "KOMEA", ExtendedEntityType.PROJECT);
         LimitCriteria limit = LimitCriteria.CreateLimitCriteriaForNValues(-1);
         
-        MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
+        // MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
         
         // THEN the measure list must be empty
         // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
@@ -296,10 +276,23 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         List<String> entityKeys = Lists.newArrayList("KOMEA", "SCERTIFY");
         LimitCriteria limit = LimitCriteria.CreateLimitCriteriaForNValues(5);
         HistoryStringKeyList historyKeyList = new HistoryStringKeyList(kpiKeys, entityKeys, ExtendedEntityType.PROJECT);
-        List<MeasureResult> measureResults = measureService.getHistoricalMeasures(historyKeyList, limit);
+        // List<MeasureResult> measureResults = measureService.getHistoricalMeasures(historyKeyList, limit);
         
         // THEN the measure list must be 4 ( 2 KPI on Ti projects)
-        Assert.assertEquals(4, measureResults.size());
+        // Assert.assertEquals(4, measureResults.size());
         // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
+    }
+    
+    @Test
+    @DatabaseSetup("measures.xml")
+    public void test_current_measure_for_kpi_branch_koverage_on_komea_project() {
+    
+        // Given the current branch coverage on the komea project value is 62
+        // WHEN I ash for the current branch coverage on the komea project
+        KpiStringKey kpiKey = KpiStringKey.ofKpiNameAndEntityDetails("BRANCH_COVERAGE(%)", EntityType.PERSON, "KOMEA");
+        double currentMeasure = measureService.currentMeasure(kpiKey);
+        
+        // Then the current branch coverage must be 35
+        Assert.assertEquals(62, currentMeasure, 0.001);
     }
 }

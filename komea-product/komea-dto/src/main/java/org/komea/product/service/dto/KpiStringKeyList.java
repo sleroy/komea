@@ -1,12 +1,9 @@
 
-package org.komea.product.web.rest.api;
+package org.komea.product.service.dto;
 
 
 import java.util.Collection;
 import java.util.Set;
-
-import org.komea.product.service.dto.EntityStringKey;
-import org.komea.product.service.dto.KpiStringKey;
 
 import com.google.common.collect.Sets;
 
