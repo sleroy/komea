@@ -17,7 +17,6 @@ import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.service.dto.EntityKey;
-import org.komea.product.service.dto.HistoricalValue;
 import org.komea.product.service.dto.HistoryStringKey;
 import org.komea.product.service.dto.HistoryStringKeyList;
 import org.komea.product.service.dto.LimitCriteria;
@@ -85,12 +84,12 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
         
         // THEN the measure must have two values
-        List<HistoricalValue> historicalValues = measure.getHistoricalValues();
-        Assert.assertEquals(2, historicalValues.size());
-        // the first value must be 35%
-        Assert.assertEquals(35, historicalValues.get(1).getValue(), 0.001);
-        // the seconf value must be 60%
-        Assert.assertEquals(60, historicalValues.get(0).getValue(), 0.001);
+        // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
+        // Assert.assertEquals(2, historicalValues.size());
+        // // the first value must be 35%
+        // Assert.assertEquals(35, historicalValues.get(1).getValue(), 0.001);
+        // // the seconf value must be 60%
+        // Assert.assertEquals(60, historicalValues.get(0).getValue(), 0.001);
         
     }
     
@@ -111,11 +110,11 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         
         MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
         
-        // THEN the measure must have only one values
-        List<HistoricalValue> historicalValues = measure.getHistoricalValues();
-        Assert.assertEquals(1, historicalValues.size());
-        // the first value must be 35%
-        Assert.assertEquals(60, historicalValues.get(0).getValue(), 0.001);
+        // // THEN the measure must have only one values
+        // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
+        // Assert.assertEquals(1, historicalValues.size());
+        // // the first value must be 35%
+        // Assert.assertEquals(60, historicalValues.get(0).getValue(), 0.001);
     }
     
     @Ignore("obsolete")
@@ -137,10 +136,10 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
         
         // THEN the measure must have only one values
-        List<HistoricalValue> historicalValues = measure.getHistoricalValues();
-        Assert.assertEquals(1, historicalValues.size());
-        // the first value must be 60%
-        Assert.assertEquals(60, historicalValues.get(0).getValue(), 0.001);
+        // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
+        // Assert.assertEquals(1, historicalValues.size());
+        // // the first value must be 60%
+        // Assert.assertEquals(60, historicalValues.get(0).getValue(), 0.001);
     }
     
     @Ignore("obsolete")
@@ -163,10 +162,10 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
         
         // THEN the measure must have only one values
-        List<HistoricalValue> historicalValues = measure.getHistoricalValues();
-        Assert.assertEquals(1, historicalValues.size());
-        // the first value must be 35%
-        Assert.assertEquals(35, historicalValues.get(0).getValue(), 0.001);
+        // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
+        // Assert.assertEquals(1, historicalValues.size());
+        // // the first value must be 35%
+        // Assert.assertEquals(35, historicalValues.get(0).getValue(), 0.001);
     }
     
     @Ignore("obsolete")
@@ -184,13 +183,13 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         Date startDate = new DateTime(2014, 5, 5, 0, 0, 0).toDate();
         Date endDate = new DateTime(2014, 4, 1, 0, 0, 0).toDate();
         ;
-        LimitCriteria limit = LimitCriteria.CreateLimitCriteria(startDate, endDate, 5);
-        
-        MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
-        
-        // THEN the measure list must be empty
-        List<HistoricalValue> historicalValues = measure.getHistoricalValues();
-        Assert.assertEquals(0, historicalValues.size());
+        // LimitCriteria limit = LimitCriteria.CreateLimitCriteria(startDate, endDate, 5);
+        //
+        // MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
+        //
+        // // THEN the measure list must be empty
+        // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
+        // Assert.assertEquals(0, historicalValues.size());
     }
     
     @Ignore("obsolete")
@@ -210,8 +209,8 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
         
         // THEN the measure list must be empty
-        List<HistoricalValue> historicalValues = measure.getHistoricalValues();
-        Assert.assertEquals(0, historicalValues.size());
+        // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
+        // Assert.assertEquals(0, historicalValues.size());
     }
     
     @Ignore("obsolete")
@@ -231,8 +230,8 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
         
         // THEN the measure list must be empty
-        List<HistoricalValue> historicalValues = measure.getHistoricalValues();
-        Assert.assertEquals(0, historicalValues.size());
+        // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
+        // Assert.assertEquals(0, historicalValues.size());
     }
     
     @Ignore("obsolete")
@@ -252,8 +251,8 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
         
         // THEN the measure list must be empty
-        List<HistoricalValue> historicalValues = measure.getHistoricalValues();
-        Assert.assertEquals(0, historicalValues.size());
+        // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
+        // Assert.assertEquals(0, historicalValues.size());
     }
     
     @Ignore("obsolete")
@@ -273,8 +272,8 @@ public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
         MeasureResult measure = measureService.getHistoricalMeasure(measureKey, limit);
         
         // THEN the measure list must be empty
-        List<HistoricalValue> historicalValues = measure.getHistoricalValues();
-        Assert.assertEquals(0, historicalValues.size());
+        // List<HistoricalValue> historicalValues = measure.getHistoricalValues();
+        // Assert.assertEquals(0, historicalValues.size());
     }
     
     @Ignore("obsolete")
