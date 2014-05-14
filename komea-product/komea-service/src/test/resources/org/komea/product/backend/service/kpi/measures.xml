@@ -5,13 +5,13 @@
 
    <kom_kpi id="1" kpiKey="LINE_COVERAGE" name="Line coverage" description="Line coverage" valueMin="5e-324"
       valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.backend.utils.exemples.kpi.SonarMetricKpi('line_coverage')" cronExpression="0 0 0 /1 * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.backend.utils.exemples.kpi.LineCoverageKPI('line_coverage')" cronExpression="0 0 0 /1 * ? *"
+      providerType="QUALITY" />
 
    <kom_kpi id="2" kpiKey="BRANCH_COVERAGE(%)" name="Branch coverage(%)" description="Branch coverage(%)"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.backend.service.kpi.MeasureServiceTest.DemoQuery()" cronExpression="0 0 0 /1 * ? *"
-      evictionRate="12" evictionType="MONTHS" providerType="QUALITY" />
+      esperRequest="new org.komea.product.backend.utils.exemples.kpi.BranchCoverageKPI()" cronExpression="0 0 0 /1 * ? *"
+      providerType="QUALITY" />
 
 
 
