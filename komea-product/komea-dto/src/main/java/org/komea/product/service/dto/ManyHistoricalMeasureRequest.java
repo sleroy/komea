@@ -3,44 +3,45 @@ package org.komea.product.service.dto;
 
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions;
 
 @JsonAutoDetect
 public class ManyHistoricalMeasureRequest {
     
-    private HistoryStringKeyList historyKeyList;
-    private LimitCriteria        limit;
+    private KpiStringKeyList       kpiKeyList;
+    private PeriodTimeSerieOptions period;
     
     public ManyHistoricalMeasureRequest() {
     
-        historyKeyList = new HistoryStringKeyList();
-        limit = LimitCriteria.createDefaultLimitCriteria();
+        kpiKeyList = new KpiStringKeyList();
+        period = new PeriodTimeSerieOptions();
     }
     
-    public ManyHistoricalMeasureRequest(final HistoryStringKeyList _historyKeyList, final LimitCriteria _limit) {
+    public ManyHistoricalMeasureRequest(final KpiStringKeyList _kpiKeyList, final PeriodTimeSerieOptions _period) {
     
         super();
-        historyKeyList = _historyKeyList;
-        limit = _limit;
+        kpiKeyList = _kpiKeyList;
+        period = _period;
     }
     
-    public HistoryStringKeyList getHistoryKeyList() {
+    public KpiStringKeyList getKpiKeyList() {
     
-        return historyKeyList;
+        return kpiKeyList;
     }
     
-    public LimitCriteria getLimit() {
+    public PeriodTimeSerieOptions getPeriod() {
     
-        return limit;
+        return period;
     }
     
-    public void setHistoryKeyList(final HistoryStringKeyList _historyKeyList) {
+    public void setKpiKeyList(final KpiStringKeyList _kpiKeyList) {
     
-        historyKeyList = _historyKeyList;
+        kpiKeyList = _kpiKeyList;
     }
     
-    public void setLimit(final LimitCriteria _limit) {
+    public void setPeriod(final PeriodTimeSerieOptions _period) {
     
-        limit = _limit;
+        period = _period;
     }
     
 }
