@@ -39,7 +39,7 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria> 
      * 
      * @param _kpiKey
      *            KpiKey
-     * @return the KPI or an exception.
+     *            // * @return the KPI or an exception.
      */
     public Kpi findKPIOrFail(KpiKey _kpiKey);
     
