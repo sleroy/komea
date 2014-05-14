@@ -139,7 +139,7 @@ public class BZProviderPlugin {
 	private Kpi bzKpi(final String key, final String name, final String description,
 	        final ValueDirection valueDirection, final String formula) {
 
-		return KpiBuilder.create().name(name).key(key).description(description).interval(0d, 100000d).cron("daily")
+		return KpiBuilder.create().name(name).key(key).description(description).interval(0d, 100000d).dailyKPI()
 		        .providerType(ProviderType.BUGTRACKER).query(formula).forProject()
 		        .produceValue(ValueType.INT, ValueDirection.BETTER).build();
 

@@ -113,8 +113,7 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase {
 
 		final String key = "testBugKPI";
 		final Kpi kpi = KpiBuilder.createAscending().nameAndKeyDescription(key).entityType(EntityType.PROJECT)
-		        .providerType(ProviderType.OTHER).query("new " + DemoKPI.class.getName() + "()").cronFiveMinutes()
-		        .build();
+		        .providerType(ProviderType.OTHER).query("new " + DemoKPI.class.getName() + "()").hourly().build();
 
 		kpiService.saveOrUpdate(kpi);
 
@@ -128,13 +127,11 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase {
 
 		final String key = "testBugKPI3";
 		final Kpi kpi = KpiBuilder.createAscending().nameAndKeyDescription(key).entityType(EntityType.PROJECT)
-		        .providerType(ProviderType.OTHER).query("new " + DemoKPI.class.getName() + "()").cronFiveMinutes()
-		        .build();
+		        .providerType(ProviderType.OTHER).query("new " + DemoKPI.class.getName() + "()").hourly().build();
 
 		kpiService.saveOrUpdate(kpi);
 		final Kpi kpi2 = KpiBuilder.createAscending().nameAndKeyDescription(key).entityType(EntityType.PROJECT)
-		        .providerType(ProviderType.OTHER).query("new " + DemoKPI.class.getName() + "()").cronFiveMinutes()
-		        .build();
+		        .providerType(ProviderType.OTHER).query("new " + DemoKPI.class.getName() + "()").hourly().build();
 
 		kpiService.saveOrUpdate(kpi2);
 	}
