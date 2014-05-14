@@ -12,6 +12,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
+import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.wicket.LayoutPage;
 
@@ -26,6 +27,9 @@ public final class DepartmentEditPage extends LayoutPage {
 
     @SpringBean
     private IPersonService personService;
+    
+    @SpringBean
+    private IProjectService projectService;
 
     public DepartmentEditPage(PageParameters _parameters) {
         this(_parameters, new PersonGroup(), true);
@@ -43,7 +47,7 @@ public final class DepartmentEditPage extends LayoutPage {
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
 
-        final DepartmentForm departmentForm = new DepartmentForm(personService, isNew, "form", prService,
+        final DepartmentForm departmentForm = new DepartmentForm(projectService,personService, isNew, "form", prService,
                 feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this);
         String message;
         if (isNew) {

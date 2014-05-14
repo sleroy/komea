@@ -5,6 +5,8 @@
  */
 package org.komea.product.wicket.persongroup.department;
 
+import com.googlecode.wicket.jquery.core.IJQueryWidget;
+import com.googlecode.wicket.jquery.ui.widget.tooltip.TooltipBehavior;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +21,12 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
+import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
+import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.CustomUpdater;
 import org.komea.product.wicket.utils.DataListSelectDialogBuilder;
@@ -42,6 +46,7 @@ public class DepartmentForm extends Form<PersonGroup> {
     private final LayoutPage page;
     private final PersonGroup personGroup;
     private final IPersonService personService;
+    private final IProjectService projectService;
     private final boolean isNew;
     private List<IHasKey> currentTeamList;
     private List<IHasKey> selectedTeam;
@@ -49,20 +54,26 @@ public class DepartmentForm extends Form<PersonGroup> {
     private List<IHasKey> selectedMember;
     private final List<IHasKey> teamMemberList;
     private final List<IHasKey> depMemberList;
+    private final List<IHasKey> projectDisplayList;
+    private List<IHasKey> projectSelectedList;
 
-    DepartmentForm(IPersonService _personService, boolean _isNew, String form, IPersonGroupService personGroupService, FeedbackPanel feedbackPanel, CompoundPropertyModel<PersonGroup> compoundPropertyModel, DepartmentEditPage aThis) {
+    DepartmentForm(IProjectService _projectService, IPersonService _personService, boolean _isNew, String form, IPersonGroupService personGroupService, FeedbackPanel feedbackPanel, CompoundPropertyModel<PersonGroup> compoundPropertyModel, DepartmentEditPage aThis) {
         super(form, compoundPropertyModel);
         this.personService = _personService;
         this.prService = personGroupService;
         this.feedBack = feedbackPanel;
         this.page = aThis;
         this.isNew = _isNew;
+        this.projectService = _projectService;
         this.personGroup = compoundPropertyModel.getObject();
         selectedTeam = new ArrayList<IHasKey>();
         selectedMember = new ArrayList<IHasKey>();
+        projectDisplayList = new ArrayList<IHasKey>();
+
         feedBack.setVisible(false);
         //field
 
+        // member  component
         this.currentMemberList = new ArrayList<IHasKey>();
         teamMemberList = new ArrayList<IHasKey>();
         depMemberList = new ArrayList<IHasKey>();
@@ -88,6 +99,7 @@ public class DepartmentForm extends Form<PersonGroup> {
             }
 
         };
+
         listUser.setChoiceRenderer(DialogFactory.getChoiceRendenerEntity());
         listUser.setMaxRows(8);
         listUser.setOutputMarkupId(true);
@@ -124,6 +136,7 @@ public class DepartmentForm extends Form<PersonGroup> {
         dataMember.setTooltips(getString("departmentpage.save.form.field.multiple.members"));
         DialogFactory.addMultipleListDialog(dataMember);
 
+        // basic field part
         add(TextFieldBuilder.<String>createRequired("name", this.personGroup, "name").highlightOnErrors()
                 .simpleValidator(0, 255).withTooltip(getString("global.field.tooltip.name")).build());
 
@@ -151,6 +164,7 @@ public class DepartmentForm extends Form<PersonGroup> {
                 page.setResponsePage(new DepartmentPage(page.getPageParameters()));
             }
         });
+
         // team component
         List<PersonGroup> allTeamsPG = prService.getAllTeamsPG();
         this.currentTeamList = new ArrayList<IHasKey>();
@@ -169,12 +183,53 @@ public class DepartmentForm extends Form<PersonGroup> {
         dataTeam.setDisplayDialogMessage(getString("departmentpage.save.form.field.popup.title.team"));
         dataTeam.setCurrentEntityList(currentTeamList);
         dataTeam.setChoiceEntityList(selectedTeam);
-        dataTeam.setSelectDialogList((List<IHasKey>) (List<?>)allTeamsPG);
+        dataTeam.setSelectDialogList((List<IHasKey>) (List<?>) allTeamsPG);
         dataTeam.setService(prService);
         dataTeam.addUpdater(cupdater);
         dataTeam.addFilter(DialogFactory.getPersonGroupWithoutParentFilter(personGroup.getId()));
         dataTeam.setTooltips(getString("departmentpage.save.form.field.multiple.teams"));
         DialogFactory.addMultipleListDialog(dataTeam);
+
+        // project display
+        if (personGroup.getId() != null) {
+            projectDisplayList.addAll(projectService.getProjectsOfPersonGroupRecursively(personGroup.getId()));
+
+            for (IHasKey key : this.currentMemberList) {
+                List<IHasKey> projectsOfAMember = (List) projectService.getProjectsOfAMember(key.getId());
+                DialogFactory.addDistictList(projectDisplayList, projectsOfAMember);
+            }
+
+        }
+
+        ListMultipleChoice<IHasKey> listProject = new ListMultipleChoice<IHasKey>("tableProject", new PropertyModel<List<IHasKey>>(this, "projectSelectedList"), projectDisplayList);
+        listProject.setChoiceRenderer(DialogFactory.getChoiceRendenerEntity());
+        listProject.setMaxRows(8);
+        listProject.setOutputMarkupId(true);
+        listProject.setEnabled(false);
+        final TooltipBehavior tooltipBehavior = new TooltipBehavior(IJQueryWidget.JQueryWidget.getSelector(listProject));
+        listProject.add(new AttributeModifier("title", getString("departmentpage.save.form.field.tooltip.project")));
+        listProject.add(tooltipBehavior);
+        add(listProject);
+        final CustomUpdater projectUpdater = new CustomUpdater(listProject) {
+
+            @Override
+            public void update() {
+                projectDisplayList.clear();
+
+                for (IHasKey key : currentMemberList) {
+                    List<IHasKey> projectsOfAMember = (List) projectService.getProjectsOfAMember(key.getId());
+                    DialogFactory.addDistictList(projectDisplayList, projectsOfAMember);
+
+                }
+                for (IHasKey key : currentTeamList) {
+                    List<IHasKey> projectsOfAMember = (List) projectService.getProjectsOfPersonGroup(key.getId());;
+                    DialogFactory.addDistictList(projectDisplayList, projectsOfAMember);
+
+                }
+            }
+        };
+        dataMember.addUpdater(projectUpdater);
+        dataTeam.addUpdater(projectUpdater);
         //button
         add(new AjaxButton("submit", this) {
 
@@ -198,6 +253,17 @@ public class DepartmentForm extends Form<PersonGroup> {
 
             }
         });
+    }
+
+    public List<IHasKey> getProjectSelectedList() {
+        return projectSelectedList;
+    }
+
+    public void setProjectSelectedList(List<IHasKey> projectSelectedList) {
+        this.projectSelectedList = projectSelectedList;
+    }
+
+    private void buildProjectList() {
     }
 
     public List<IHasKey> getCurrentTeamList() {

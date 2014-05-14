@@ -140,10 +140,13 @@ public final class PersonForm extends Form<Person> {
             Integer idPersonGroup = person.getIdPersonGroup();
             if (idPersonGroup != null) {
                 projectMemberList.addAll(projectService.getProjectsOfPersonGroupRecursively(idPersonGroup));
-                projectMemberList.removeAll(directProjectList);
+                DialogFactory.removeDistictList(projectMemberList, directProjectList);
+//                projectMemberList.removeAll(directProjectList);
             }
-            this.currentEntityList.addAll(directProjectList);
-            this.currentEntityList.addAll(projectMemberList);
+            DialogFactory.addDistictList(this.currentEntityList, directProjectList);
+            DialogFactory.addDistictList(this.currentEntityList, projectMemberList);
+//            this.currentEntityList.addAll(directProjectList);
+//            this.currentEntityList.addAll(projectMemberList);
         }
 
         ListMultipleChoice<IHasKey> listUser = new ListMultipleChoice<IHasKey>("table", new PropertyModel<List<IHasKey>>(this, "selectedEntity"), currentEntityList) {
@@ -165,7 +168,7 @@ public final class PersonForm extends Form<Person> {
 
             @Override
             public void update() {
-                currentEntityList.removeAll(projectMemberList);
+                DialogFactory.removeDistictList(currentEntityList, projectMemberList);
                 directProjectList.clear();
                 directProjectList.addAll(currentEntityList);
                 currentEntityList.clear();
@@ -174,8 +177,8 @@ public final class PersonForm extends Form<Person> {
                     List<Project> projectsOfPersonGroupRecursively = projectService.getProjectsOfPersonGroupRecursively(person.getIdPersonGroup());
                     projectMemberList.addAll(projectsOfPersonGroupRecursively);
                 }
-                currentEntityList.addAll(projectMemberList);
-                currentEntityList.addAll(directProjectList);
+                DialogFactory.addDistictList(currentEntityList, projectMemberList);
+                DialogFactory.addDistictList(currentEntityList, directProjectList);
             }
         };
 
