@@ -5,41 +5,29 @@
 package org.komea.product.database.dao.timeserie;
 
 
-
 import java.io.Serializable;
-
-
 
 /**
  * @author sleroy
  */
-public class TimeSerieOptions implements Serializable
-{
-    
+public class TimeSerieOptions implements Serializable {
     
     protected GroupFormula groupFormula;
     
-    
-    protected int          kpiID;
-    
+    protected Integer      kpiID;
     
     protected TimeScale    timeScale;
-    
-    
     
     /**
      * 
      */
     public TimeSerieOptions() {
     
-    
         super();
     }
     
-    
     @Override
     public boolean equals(final Object obj) {
-    
     
         if (this == obj) {
             return true;
@@ -63,31 +51,23 @@ public class TimeSerieOptions implements Serializable
         return true;
     }
     
-    
     public GroupFormula getGroupFormula() {
-    
     
         return groupFormula;
     }
     
-    
-    public int getKpiID() {
-    
+    public Integer getKpiID() {
     
         return kpiID;
     }
     
-    
     public TimeScale getTimeScale() {
-    
     
         return timeScale;
     }
     
-    
     @Override
     public int hashCode() {
-    
     
         final int prime = 31;
         int result = 1;
@@ -97,44 +77,37 @@ public class TimeSerieOptions implements Serializable
         return result;
     }
     
-    
     /**
      * @return
      */
     public boolean isValid() {
     
-    
         return groupFormula != null && timeScale != null;
     }
     
-    
     public void setGroupFormula(final GroupFormula _groupFormula) {
-    
     
         groupFormula = _groupFormula;
     }
     
-    
-    public void setKpiID(final int _kpiID) {
-    
+    public void setKpiID(final Integer _kpiID) {
     
         kpiID = _kpiID;
     }
     
-    
     public void setTimeScale(final TimeScale _timeScale) {
-    
     
         timeScale = _timeScale;
     }
     
-    
     @Override
     public String toString() {
     
-    
-        return "TimeSerieOptions [groupFormula="
-                + groupFormula + ", kpiID=" + kpiID + ", timeScale=" + timeScale + "]";
+        return "TimeSerieOptions [groupFormula=" + groupFormula + ", kpiID=" + kpiID + ", timeScale=" + timeScale + "]";
     }
     
+    public boolean hasKpi() {
+    
+        return kpiID != null;
+    }
 }
