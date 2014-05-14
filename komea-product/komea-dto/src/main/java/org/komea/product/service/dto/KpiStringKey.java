@@ -220,14 +220,10 @@ public class KpiStringKey {
         entityKey = _entityKey;
     }
     
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
     
-        return "KpiKey [entityKey=" + entityKey + ", kpiName=" + kpiName + "]";
+        return "KpiStringKey [entityKey=" + entityKey + ", kpiName=" + kpiName + "]";
     }
     
 }

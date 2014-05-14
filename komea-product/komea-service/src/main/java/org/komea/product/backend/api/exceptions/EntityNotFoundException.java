@@ -4,6 +4,7 @@ package org.komea.product.backend.api.exceptions;
 
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.service.dto.EntityKey;
+import org.komea.product.service.dto.EntityStringKey;
 
 /**
  */
@@ -33,5 +34,10 @@ public class EntityNotFoundException extends RuntimeException {
     public EntityNotFoundException(final String _key, final EntityType _entityType) {
     
         super("Entity not found " + _key + " type " + _entityType);
+    }
+    
+    public EntityNotFoundException(final EntityStringKey _entityKey) {
+    
+        this(_entityKey.getKey(), _entityKey.getEntityType());
     }
 }
