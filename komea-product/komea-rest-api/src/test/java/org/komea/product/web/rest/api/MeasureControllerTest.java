@@ -15,7 +15,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.komea.product.backend.service.kpi.IKpiAPI;
 import org.komea.product.database.enums.ExtendedEntityType;
-import org.komea.product.service.dto.HistoricalMeasureRequest;
+import org.komea.product.service.dto.ManyHistoricalMeasureRequest;
 import org.komea.product.service.dto.HistoryStringKeyList;
 import org.komea.product.service.dto.LimitCriteria;
 import org.komea.product.service.dto.MeasureResult;
@@ -71,7 +71,7 @@ public class MeasureControllerTest extends AbstractSpringWebIntegrationTestCase 
         
         // HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
         // LimitCriteria limit = LimitCriteria.createDefaultLimitCriteria();
-        HistoricalMeasureRequest request = new HistoricalMeasureRequest();
+        ManyHistoricalMeasureRequest request = new ManyHistoricalMeasureRequest();
         String jsonMessage = IntegrationTestUtil.convertObjectToJSON(request);
         System.out.println(jsonMessage);
         final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/historic")
@@ -86,9 +86,9 @@ public class MeasureControllerTest extends AbstractSpringWebIntegrationTestCase 
     
         HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
         LimitCriteria limit = LimitCriteria.createDefaultLimitCriteria();
-        HistoricalMeasureRequest request = new HistoricalMeasureRequest(history, limit);
+        ManyHistoricalMeasureRequest request = new ManyHistoricalMeasureRequest(history, limit);
         String jsonMessage = IntegrationTestUtil.convertObjectToJSON(request);
-        HistoricalMeasureRequest res = IntegrationTestUtil.convertJSONToObject(jsonMessage, HistoricalMeasureRequest.class);
+        ManyHistoricalMeasureRequest res = IntegrationTestUtil.convertJSONToObject(jsonMessage, ManyHistoricalMeasureRequest.class);
         Assert.assertNotNull(res);
         // Assert.assertEquals(Integer.MAX_VALUE, res.getLimit().getLimitNumber().intValue());
     }

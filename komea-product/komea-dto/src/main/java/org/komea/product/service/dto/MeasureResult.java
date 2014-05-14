@@ -2,40 +2,39 @@
 package org.komea.product.service.dto;
 
 
-import java.util.Date;
-import java.util.List;
-
 import org.komea.product.database.dto.BaseEntityDto;
-import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.model.Kpi;
-
-import com.google.common.collect.Lists;
 
 public class MeasureResult {
     
     //
     
-    private final List<HistoricalValue> historicalValues;
+    private BaseEntityDto entity;
     
-    private ExtendedEntityType          entityType;
+    private Kpi           kpi;
     
-    private BaseEntityDto               entity;
+    public double getValue() {
     
-    private Kpi                         kpi;
+        return value;
+    }
+    
+    public void setValue(final double _value) {
+    
+        value = _value;
+    }
+    
+    private double value;
     
     public MeasureResult() {
     
-        historicalValues = Lists.newArrayList();
     }
     
-    public boolean addHistoricalValue(final HistoricalValue _e) {
+    public MeasureResult(final BaseEntityDto _entity, final Kpi _kpi, final double _value) {
     
-        return historicalValues.add(_e);
-    }
-    
-    public boolean addHistoricalValue(final Double _value, final Date _date) {
-    
-        return historicalValues.add(new HistoricalValue(_value, _date));
+        super();
+        entity = _entity;
+        kpi = _kpi;
+        value = _value;
     }
     
     public BaseEntityDto getEntity() {
@@ -43,29 +42,14 @@ public class MeasureResult {
         return entity;
     }
     
-    public ExtendedEntityType getEntityType() {
-    
-        return entityType;
-    }
-    
-    public List<HistoricalValue> getHistoricalValues() {
-    
-        return historicalValues;
-    }
-    
-    public Kpi getKpi() {
-    
-        return kpi;
-    }
-    
     public void setEntity(final BaseEntityDto _entity) {
     
         entity = _entity;
     }
     
-    public void setEntityType(final ExtendedEntityType _entityType) {
+    public Kpi getKpi() {
     
-        entityType = _entityType;
+        return kpi;
     }
     
     public void setKpi(final Kpi _kpi) {
