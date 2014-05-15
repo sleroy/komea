@@ -27,11 +27,11 @@ public class KpiTest {
         kpi.setId(12);
         kpi.setName("name");
         kpi.setKpiKey("key");
-        System.out.println(kpi.computeKPIEsperKey());
-        assertEquals("KPI_key", kpi.computeKPIEsperKey());
+        System.out.println(kpi.getEsperRequest());
+        assertEquals("KPI_key", kpi.getEsperRequest());
         kpi.setEntityType(EntityType.DEPARTMENT);
-        System.out.println(kpi.computeKPIEsperKey());
-        assertEquals("KPI_key_T_DEPARTMENT" + "", kpi.computeKPIEsperKey());
+        System.out.println(kpi.getEsperRequest());
+        assertEquals("KPI_key_T_DEPARTMENT" + "", kpi.getEsperRequest());
         
     }
 

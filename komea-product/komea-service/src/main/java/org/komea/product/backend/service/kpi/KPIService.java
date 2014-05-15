@@ -91,6 +91,8 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
 		hasSuccessFactorKpiCriteria.createCriteria().andIdKpiEqualTo(idKpi);
 		successFactorKpiDao.deleteByCriteria(hasSuccessFactorKpiCriteria);
 
+		kpiQueryRegistry.removeQuery(kpi);
+
 		delete(kpi);
 	}
 
@@ -252,9 +254,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
 
 		if (_kpi.getId() == null) {
 			LOGGER.debug("Saving new KPI : {}", _kpi.getKpiKey());
-            if (findKPI(KpiKey.ofKpi(_kpi)) != null) {
-                throw new KpiAlreadyExistingException(_kpi.getKpiKey());
-            }
+			if (findKPI(KpiKey.ofKpi(_kpi)) != null) { throw new KpiAlreadyExistingException(_kpi.getKpiKey()); }
 			requiredDAO.insert(_kpi);
 		} else {
 			LOGGER.debug("KPI {} updated", _kpi.getKpiKey());
