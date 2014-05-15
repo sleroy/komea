@@ -6,12 +6,14 @@ package org.komea.product.backend.service.cron;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.database.enums.BackupDelay;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
+import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
@@ -32,6 +34,9 @@ public class KpiHistoryJobTest {
 
 		final KpiHistoryJob kpiHistoryJob = new KpiHistoryJob();
 		final JobExecutionContext mock = Mockito.mock(JobExecutionContext.class);
+		final JobDataMap value = new JobDataMap();
+		value.put("delay", BackupDelay.DAY);
+		when(mock.getMergedJobDataMap()).thenReturn(value);
 		final IStatisticsAPI kpiValueService = Mockito.mock(IStatisticsAPI.class);
 		kpiHistoryJob.setStatisticsService(kpiValueService);
 		kpiHistoryJob.execute(mock);
