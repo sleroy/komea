@@ -2,7 +2,6 @@
 package org.komea.product.backend.service.entities;
 
 
-
 import java.util.List;
 
 import org.junit.After;
@@ -14,16 +13,15 @@ import org.komea.product.database.model.Project;
 import org.komea.product.test.spring.AbstractSpringDBunitIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.google.common.collect.Lists;
 
-
-
-public class UpdateProjectsOfPersonITest extends AbstractSpringDBunitIntegrationTest
-{
-    
+@DatabaseTearDown(value = "database_projectLinks.xml", type = DatabaseOperation.DELETE_ALL)
+public class UpdateProjectsOfPersonITest extends AbstractSpringDBunitIntegrationTest {
     
     @Autowired
     private IPersonService        personService;
@@ -34,15 +32,10 @@ public class UpdateProjectsOfPersonITest extends AbstractSpringDBunitIntegration
     @Autowired
     private IProjectService       projectService;
     
-    
-    
     // @Ignore
     @Test
-    @ExpectedDatabase(
-        value = "database_updatePerson.xml",
-        assertionMode = DatabaseAssertionMode.NON_STRICT)
+    @ExpectedDatabase(value = "database_updatePerson.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void add_project_list_to_person() {
-    
     
         // GIVEN two project Komea and Scertify
         final Project komea = projectService.getOrCreate("KOMEA");
@@ -61,16 +54,12 @@ public class UpdateProjectsOfPersonITest extends AbstractSpringDBunitIntegration
         // THEN sylvain is associate to komea ans scertify project
     }
     
-    
     //
     
     @Test
     @DatabaseSetup("database_projectLinks.xml")
-    @ExpectedDatabase(
-        value = "database_personChangeProject.xml",
-        assertionMode = DatabaseAssertionMode.NON_STRICT)
+    @ExpectedDatabase(value = "database_personChangeProject.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void change_project_list_to_person() {
-    
     
         // GIVEN One user 'sylvain Leroy
         final Person sylvain = personService.findOrCreatePersonByLogin("sleroy");
@@ -86,16 +75,11 @@ public class UpdateProjectsOfPersonITest extends AbstractSpringDBunitIntegration
         // THEN sylvain must be associate to 0 projects
     }
     
-    
     @Test
-    @DatabaseSetup(
-        value =
-            { "database_projectLinks.xml" })
-    @ExpectedDatabase(
-        value = "database_noProjects.xml",
-        assertionMode = DatabaseAssertionMode.NON_STRICT)
+    @DatabaseSetup(value = {
+        "database_projectLinks.xml" })
+    @ExpectedDatabase(value = "database_noProjects.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void clean_project_list_to_person() {
-    
     
         // GIVEN One user 'sylvain Leroy
         final Person sylvain = personService.findOrCreatePersonByLogin("sleroy");
@@ -110,18 +94,14 @@ public class UpdateProjectsOfPersonITest extends AbstractSpringDBunitIntegration
         // THEN sylvain must be associate to 0 projects
     }
     
-    
     @Before
     public void setUp() throws Exception {
-    
     
         //
     }
     
-    
     @After
     public void tearDown() throws Exception {
-    
     
         //
     }
