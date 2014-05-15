@@ -14,7 +14,7 @@ public class TimeCoordinate {
     
     private int    idKpi;
     
-    private int    month;
+    private int    month = 1;
     
     private Double value;
     
@@ -82,9 +82,35 @@ public class TimeCoordinate {
      */
     public DateTime getDate() {
     
-        final DateTime dateTime = new DateTime(year, month, day, 0, 0);
+        int dayCalculate = findDayOfMonth();
+        final DateTime dateTime = new DateTime(year, month, dayCalculate, hour, 0);
         
         return dateTime;
+    }
+    
+    /**
+     * find a day valid in the week of this month
+     * is is suppose month and week are valid
+     * This method
+     * 
+     * @return
+     */
+    int findDayOfMonth() {
+    
+        if (day != 0) {
+            return day;
+        }
+        if (week == 0) {
+            return 1;
+            
+        }
+        DateTime dateTime = new DateTime(year, month, 1, hour, 0);
+        int weekyear = dateTime.getWeekOfWeekyear();
+        while (weekyear < week) {
+            dateTime = dateTime.plusWeeks(1);
+            weekyear = dateTime.getWeekOfWeekyear();
+        }
+        return dateTime.getDayOfMonth();
     }
     
     public int getDay() {

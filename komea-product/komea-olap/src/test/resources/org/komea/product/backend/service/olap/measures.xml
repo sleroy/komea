@@ -16,7 +16,7 @@
 
 
 
-   <kom_msr id="1" idKpi="2" entityID="4" year="2014" month="1" day="5" week="1" value="35"  date="2014-01-05 00:00:00" />
+   <kom_msr id="1" idKpi="2" entityID="4" year="2014" month="1" day="6" week="1" value="35"  date="2014-01-06 00:00:00" />
    <kom_msr id="2" idKpi="2" entityID="4" year="2014" month="5" day="1" week="19" value="60" date="2014-05-01 00:00:00" />
    <!-- <kom_msr id="3958" idKpi="2" entityID="5" year="2014" month="1" day="5" value="22" /> -->
    <!-- <kom_msr id="3959" idKpi="2" entityID="5" year="2014" month="5" day="1" value="44" /> -->
