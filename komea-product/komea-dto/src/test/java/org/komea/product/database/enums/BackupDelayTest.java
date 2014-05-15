@@ -22,7 +22,7 @@ public class BackupDelayTest {
 		final Kpi kpi = new Kpi();
 
 		kpi.setCronExpression("HULK");
-		assertFalse(BackupDelay.DAY.isAppliedTo(kpi));
+		assertTrue(BackupDelay.DAY.isAppliedTo(kpi));
 		assertFalse(BackupDelay.HOUR.isAppliedTo(kpi));
 	}
 
