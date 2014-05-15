@@ -2,19 +2,11 @@
 package org.komea.product.web.rest.api;
 
 
-import java.io.IOException;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.easymock.Mock;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.product.backend.service.kpi.IKpiAPI;
-import org.komea.product.database.enums.ExtendedEntityType;
-import org.komea.product.service.dto.HistoryStringKeyList;
 import org.komea.product.service.dto.KpiStringKeyList;
-import org.komea.product.service.dto.LimitCriteria;
 import org.komea.product.service.dto.ManyHistoricalMeasureRequest;
 import org.komea.product.test.spring.AbstractSpringWebIntegrationTestCase;
 import org.mockito.InjectMocks;
@@ -96,15 +88,5 @@ public class MeasureControllerTest extends AbstractSpringWebIntegrationTestCase 
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
         
     }
-    @Test
-    public void testConvertJsonToLimitCriteria() throws JsonGenerationException, JsonMappingException, IOException {
     
-        HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
-        LimitCriteria limit = LimitCriteria.createDefaultLimitCriteria();
-        ManyHistoricalMeasureRequest request = new ManyHistoricalMeasureRequest(history, limit);
-        String jsonMessage = IntegrationTestUtil.convertObjectToJSON(request);
-        ManyHistoricalMeasureRequest res = IntegrationTestUtil.convertJSONToObject(jsonMessage, ManyHistoricalMeasureRequest.class);
-        Assert.assertNotNull(res);
-        // Assert.assertEquals(Integer.MAX_VALUE, res.getLimit().getLimitNumber().intValue());
-    }
 }

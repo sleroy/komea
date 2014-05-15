@@ -29,17 +29,25 @@ public class TimeSerieDTO {
         coordinates = Lists.newArrayList();
     }
     
-    public TimeSerieDTO(final List<TimeCoordinateDTO> _buildGlobalPeriodTimeSeries) {
-    
-        super();
-        
-        coordinates = _buildGlobalPeriodTimeSeries;
-        
-    }
-    
     public TimeSerieDTO(final List<TimeCoordinateDTO> _buildPeriodTimeSeries, final KpiStringKey _kpiKey) {
     
         coordinates = _buildPeriodTimeSeries;
+    }
+    
+    public boolean addCoordinate(final TimeCoordinateDTO _e) {
+    
+        return coordinates.add(_e);
+    }
+    
+    public static TimeSerieDTO build(final List<TimeCoordinate> _serie, final Kpi _kpi, final BaseEntityDto _entity) {
+    
+        TimeSerieDTO dto = new TimeSerieDTO();
+        dto.setKpi(_kpi);
+        dto.setEntity(_entity);
+        for (TimeCoordinate coordinate : _serie) {
+            dto.addCoordinate(new TimeCoordinateDTO(coordinate.getDate().toDate(), coordinate.getValue()));
+        }
+        return dto;
     }
     
     public List<TimeCoordinateDTO> getCoordinates() {

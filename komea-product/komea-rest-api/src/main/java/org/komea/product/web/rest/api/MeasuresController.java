@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.common.collect.Lists;
-
 @Controller
 @RequestMapping(value = "/measures")
 public class MeasuresController {
@@ -40,7 +38,7 @@ public class MeasuresController {
     @ResponseBody
     public List<TimeSerieDTO> findHistoricalMeasure(@RequestBody final ManyHistoricalMeasureRequest _request) {
     
-        return Lists.newArrayList();
+        return measureService.findMupltipleHistoricalMeasure(_request.getKpiKeyList(), _request.getPeriod());
     }
     
     /**

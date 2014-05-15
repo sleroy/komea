@@ -24,7 +24,7 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.google.common.collect.Sets;
 
 @DatabaseTearDown(value = "measures.xml", type = DatabaseOperation.DELETE_ALL)
-public class MeasureServiceITest extends AbstractSpringDBunitIntegrationTest {
+public class GetCurrentMeasureStoryITest extends AbstractSpringDBunitIntegrationTest {
     
     //
     @Autowired

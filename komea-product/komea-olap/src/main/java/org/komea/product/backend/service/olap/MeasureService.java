@@ -4,6 +4,7 @@ package org.komea.product.backend.service.olap;
 
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
 import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.exceptions.EntityNotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundRuntimeException;
@@ -11,9 +12,13 @@ import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.service.kpi.IMeasureService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
+import org.komea.product.backend.service.kpi.TimeSerie;
 import org.komea.product.database.api.IEntity;
+import org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions;
+import org.komea.product.database.dao.timeserie.TimeSerieDTO;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.model.Kpi;
+import org.komea.product.service.dto.EntityKey;
 import org.komea.product.service.dto.EntityStringKey;
 import org.komea.product.service.dto.KpiStringKey;
 import org.komea.product.service.dto.KpiStringKeyList;
@@ -67,5 +72,36 @@ public class MeasureService implements IMeasureService {
         }
         HistoryKey historyKey = HistoryKey.of(kpi, entity);
         return statService.evaluateTheCurrentKpiValue(historyKey);
+    }
+    @Override
+    public List<TimeSerieDTO> findMupltipleHistoricalMeasure(final KpiStringKeyList _kpiKeyList, final PeriodTimeSerieOptions _period) {
+    
+        // TODO Auto-generated findHistoricalMeasure
+        return Lists.newArrayList();
+    }
+    @Override
+    public TimeSerieDTO findHistoricalMeasure(final KpiStringKey _kpiKey, final PeriodTimeSerieOptions _period) {
+    
+        Validate.notNull(_kpiKey);
+        Validate.notNull(_kpiKey.getKpiName());
+        Validate.notNull(_kpiKey.getEntityKey());
+        Validate.notNull(_kpiKey.getEntityKey().getKey());
+        Validate.notNull(_kpiKey.getEntityKey().getEntityType());
+        Validate.notNull(_period);
+        
+        Kpi kpi = kpiService.findKPI(_kpiKey.getKpiName());
+        if (kpi == null) {
+            throw new KPINotFoundRuntimeException(_kpiKey.getKpiName());
+        }
+        _period.setKpiID(kpi.getId());
+        IEntity entity = entityService.findEntityByEntityStringKey(_kpiKey.getEntityKey());
+        if (entity == null) {
+            throw new EntityNotFoundException(_kpiKey.getEntityKey());
+        }
+        EntityKey entityKey = EntityKey.of(entity);
+        
+        TimeSerie timeSeries = statService.buildPeriodTimeSeries(_period, entityKey);
+        return TimeSerieDTO.build(timeSeries.getCoordinates(), kpi, BaseEntityDto.newFromEntity(entity));
+        
     }
 }
