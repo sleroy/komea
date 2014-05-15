@@ -48,7 +48,7 @@ public class MeasureService implements IMeasureService {
             IEntity entity = entityService.findEntityByEntityStringKey(EntityStringKey.of(_kpiKeys.getEntityType(), entityKey));
             if (entity != null) {
                 BaseEntityDto baseEntity = BaseEntityDto.newFromEntity(entity);
-                for (String kpiKey : _kpiKeys.getKpiKey()) {
+                for (String kpiKey : _kpiKeys.getKpiKeys()) {
                     Kpi kpi = kpiService.findKPI(kpiKey);
                     if (kpi != null) {
                         HistoryKey historyKey = HistoryKey.of(kpi, entity);
@@ -76,8 +76,25 @@ public class MeasureService implements IMeasureService {
     @Override
     public List<TimeSerieDTO> findMupltipleHistoricalMeasure(final KpiStringKeyList _kpiKeyList, final PeriodTimeSerieOptions _period) {
     
-        // TODO Auto-generated findHistoricalMeasure
-        return Lists.newArrayList();
+        Validate.notNull(_kpiKeyList);
+        Validate.notNull(_kpiKeyList.getEntityKeys());
+        Validate.notNull(_kpiKeyList.getKpiKeys());
+        Validate.notNull(_kpiKeyList.getEntityType());
+        Validate.notNull(_period);
+        
+        List<TimeSerieDTO> series = Lists.newArrayList();
+        for (String entityKey : _kpiKeyList.getEntityKeys()) {
+            IEntity entity = entityService.findEntityByEntityStringKey(EntityStringKey.of(_kpiKeyList.getEntityType(), entityKey));
+            if (entity != null) {
+                for (String kpiKey : _kpiKeyList.getKpiKeys()) {
+                    Kpi kpi = kpiService.findKPI(kpiKey);
+                    if (kpi != null) {
+                        series.add(findHistoricalMeasure(kpi, entity, _period));
+                    }
+                }
+            }
+        }
+        return series;
     }
     @Override
     public TimeSerieDTO findHistoricalMeasure(final KpiStringKey _kpiKey, final PeriodTimeSerieOptions _period) {
@@ -98,10 +115,20 @@ public class MeasureService implements IMeasureService {
         if (entity == null) {
             throw new EntityNotFoundException(_kpiKey.getEntityKey());
         }
-        EntityKey entityKey = EntityKey.of(entity);
+        return findHistoricalMeasure(kpi, entity, _period);
+        
+    }
+    
+    private TimeSerieDTO findHistoricalMeasure(final Kpi _kpi, final IEntity _entity, final PeriodTimeSerieOptions _period) {
+    
+        if (_period.getKpiID() == null) {
+            _period.setKpiID(_kpi.getId());
+        }
+        
+        EntityKey entityKey = EntityKey.of(_entity);
         
         TimeSerie timeSeries = statService.buildPeriodTimeSeries(_period, entityKey);
-        return TimeSerieDTO.build(timeSeries.getCoordinates(), kpi, BaseEntityDto.newFromEntity(entity));
+        return TimeSerieDTO.build(timeSeries.getCoordinates(), _kpi, BaseEntityDto.newFromEntity(_entity));
         
     }
 }
