@@ -69,6 +69,36 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         Assert.assertEquals(60, historicalValues.get(1).getValue(), 0.001);
         
     }
+    @Test
+    @DatabaseSetup("measures2.xml")
+    @DatabaseTearDown(value = "measures2.xml", type = DatabaseOperation.DELETE_ALL)
+    public void test_get_historic_measures_with_average() {
+    
+        // GIVEN the database contain the KPI branch_coverage
+        // AND the project Komea has two value for this KPI : 35% (5/01/2014)
+        // and 60% ((14/05/2014)
+        // and 70% ((16/05/2014)
+        
+        // WHEN the user looking for the coverage-branch for the project komea
+        // between 1/4/2014 and now
+        KpiStringKey kpiKey = KpiStringKey.ofKpiNameAndEntityDetails("BRANCH_COVERAGE(%)", EntityType.PROJECT, "KOMEA");
+        PeriodTimeSerieOptions period = new PeriodTimeSerieOptions();
+        period.setFromPeriod(new DateTime(2014, 1, 4, 0, 0, 0));
+        period.setToPeriod(new DateTime());
+        period.pickBestGranularity();
+        period.setGroupFormula(GroupFormula.AVG_VALUE);
+        
+        TimeSerieDTO measure = measureService.findHistoricalMeasure(kpiKey, period);
+        
+        // THEN the measure must have two values
+        List<TimeCoordinateDTO> historicalValues = measure.getCoordinates();
+        Assert.assertEquals(2, historicalValues.size());
+        // the first value must be 35%
+        Assert.assertEquals(35, historicalValues.get(0).getValue(), 0.001);
+        // the second value must be 65% (average between 60 and 70)
+        Assert.assertEquals(65, historicalValues.get(1).getValue(), 0.001);
+        
+    }
     
     @Test
     @DatabaseSetup("measures.xml")

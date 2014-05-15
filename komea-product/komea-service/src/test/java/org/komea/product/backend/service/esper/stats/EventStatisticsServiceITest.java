@@ -67,7 +67,7 @@ public class EventStatisticsServiceITest extends AbstractSpringIntegrationTestCa
         for (final EventTypeStatistic stat : receivedAlertTypesIn24Hours) {
             found |= stat.getType().equals("build_failed");
         }
-        Assert.assertEquals(4L, alertStats.getNumberOfAlerts(Severity.INFO));
+        Assert.assertEquals(5L, alertStats.getNumberOfAlerts(Severity.INFO));
         Assert.assertEquals(0L, alertStats.getNumberOfAlerts(Severity.MAJOR));
         Assert.assertEquals(0L, alertStats.getNumberOfAlerts(Severity.MINOR));
         Assert.assertEquals(0L, alertStats.getNumberOfAlerts(Severity.CRITICAL));
