@@ -9,6 +9,8 @@ import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
+import org.komea.product.database.enums.BackupDelay;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -33,7 +35,7 @@ public class KpiHistoryJobTest {
 		final IStatisticsAPI kpiValueService = Mockito.mock(IStatisticsAPI.class);
 		kpiHistoryJob.setStatisticsService(kpiValueService);
 		kpiHistoryJob.execute(mock);
-		verify(kpiValueService, times(1)).backupKpiValuesIntoHistory();
+		verify(kpiValueService, times(1)).backupKpiValuesIntoHistory(Matchers.any(BackupDelay.class));
 
 	}
 }

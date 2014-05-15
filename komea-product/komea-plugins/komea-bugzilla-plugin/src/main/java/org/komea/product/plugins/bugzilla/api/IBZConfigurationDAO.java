@@ -69,4 +69,6 @@ public interface IBZConfigurationDAO
      * @param serverProxyFactory
      */
     public void setServerProxyFactory(IBZServerProxyFactory serverProxyFactory);
+    
+    public boolean testConnexion(BZServerConfiguration server);
 }

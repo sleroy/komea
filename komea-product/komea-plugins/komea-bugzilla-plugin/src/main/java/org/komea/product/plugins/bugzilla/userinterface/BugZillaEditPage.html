@@ -54,19 +54,28 @@
                                     </div>
                                 </div>
 
-<!--                                <div class="form-group">
+                                <!--                                <div class="form-group">
+                                                                    <div class="row">
+                                                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="bugzillapage.save.form.field.label.reminder"></wicket:message></label>
+                                                                        <div class="col-md-6">
+                                                                            <input id="reminderAlert" name="reminderAlert" type="text" placeholder="default = 10 days" required="required" class="form-control" wicket:id="reminderAlert" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>-->
+                                <div class="form-group">
                                     <div class="row">
-                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="bugzillapage.save.form.field.label.reminder"></wicket:message></label>
-                                        <div class="col-md-6">
-                                            <input id="reminderAlert" name="reminderAlert" type="text" placeholder="default = 10 days" required="required" class="form-control" wicket:id="reminderAlert" />
-                                        </div>
-                                    </div>
-                                </div>-->
 
+                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="global.save.form.label.testconnexion"></wicket:message></label>
+                                        <div class="col-md-2">
+                                            <button id="testbtn" name="testbtn" class="btn btn-primary" wicket:id="testButton"><wicket:message key="global.button.testconnexion"></wicket:message></button>
+                                        </div>
+                                        <label class="col-md-4" for="inputEmail1" wicket:id="testMessage"></label>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <button id="addedit" name="addedit" class="btn btn-primary" wicket:id="submit"><wicket:message key="global.button.save"></wicket:message></button>
+                                            <button id="addedit" name="addedit" class="btn btn-primary" wicket:id="saveValidation"><wicket:message key="global.button.save"></wicket:message></button>
                                             <button id="cancel" name="cancel" class="btn btn-primary" wicket:id="cancel"><wicket:message key="global.button.cancel"></wicket:message></button>
                                         </div>
                                     </div>

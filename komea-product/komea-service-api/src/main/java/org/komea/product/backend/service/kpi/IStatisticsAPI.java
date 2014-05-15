@@ -11,6 +11,7 @@ import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.database.dao.timeserie.TimeSerieOptions;
 import org.komea.product.database.dto.KpiResult;
+import org.komea.product.database.enums.BackupDelay;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.EntityKey;
 
@@ -19,7 +20,7 @@ import org.komea.product.service.dto.EntityKey;
  */
 public interface IStatisticsAPI {
 
-	void backupKpiValuesIntoHistory();
+	void backupKpiValuesIntoHistory(BackupDelay _delay);
 
 	/**
 	 * This method builds a time serie from the history given a list of options.

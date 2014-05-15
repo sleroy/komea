@@ -12,7 +12,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.api.IKPIService;
-import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.backend.service.kpi.TimeSerie;
@@ -20,7 +19,6 @@ import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.timeserie.GroupFormula;
 import org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.database.dao.timeserie.TimeCoordinate;
-import org.komea.product.database.dao.timeserie.TimeScale;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.wicket.LayoutPage;
@@ -114,9 +112,6 @@ public class KpiChartPage extends LayoutPage {
 	private IKPIService	        kpiService;
 
 	@SpringBean
-	private IKpiValueService	kpiValueService;
-
-	@SpringBean
 	private IStatisticsAPI	    statsService;
 
 	public KpiChartPage(final PageParameters _parameters) {
@@ -130,17 +125,6 @@ public class KpiChartPage extends LayoutPage {
 
 	}
 
-	public IKpiValueService getKpiValueService() {
-
-		return kpiValueService;
-	}
-
-	public void setKpiValueService(final IKpiValueService _kpiValueService) {
-
-		kpiValueService = _kpiValueService;
-
-	}
-
 	private Chart buildGraphic(final Options options, final String _chartID, final Kpi _kpi) {
 
 		// Define the data points. All series have a dummy year
@@ -151,13 +135,9 @@ public class KpiChartPage extends LayoutPage {
 		final Map<EntityKey, List<Coordinate<Long, Integer>>> series = new HashMap<EntityKey, List<Coordinate<Long, Integer>>>();
 
 		final List<IEntity> entitiesByEntityType = entityService.getEntitiesByEntityType(_kpi.getEntityType());
-		LOGGER.info("KPI {} has {} entities", _kpi, entitiesByEntityType.size());
+		LOGGER.info("KPI {} has {} entities", _kpi.getDisplayName(), entitiesByEntityType.size());
+		final PeriodTimeSerieOptions timeSerieOptions = buildPeriodTimeOptions(_kpi);
 		for (final IEntity eKey : entitiesByEntityType) {
-			final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions();
-			timeSerieOptions.untilNow();
-			timeSerieOptions.setGroupFormula(GroupFormula.AVG_VALUE);
-			timeSerieOptions.setTimeScale(TimeScale.PER_DAY);
-			timeSerieOptions.lastYears(3);
 			final TimeSerie history = statsService.buildPeriodTimeSeries(timeSerieOptions, eKey.getEntityKey());
 			LOGGER.info("Time serie with {} values", history.getCoordinates().size());
 
@@ -180,6 +160,16 @@ public class KpiChartPage extends LayoutPage {
 		createSeries(options, series);
 
 		return new Chart(_chartID, options);
+	}
+
+	private PeriodTimeSerieOptions buildPeriodTimeOptions(final Kpi _kpi) {
+		final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions(_kpi);
+		timeSerieOptions.untilNow();
+		timeSerieOptions.lastYears(2);
+		timeSerieOptions.pickBestGranularity();
+		timeSerieOptions.setGroupFormula(GroupFormula.AVG_VALUE);
+		timeSerieOptions.setKpiID(_kpi.getId());
+		return timeSerieOptions;
 	}
 
 	private void createSeries(final Options options, final Map<EntityKey, List<Coordinate<Long, Integer>>> series) {

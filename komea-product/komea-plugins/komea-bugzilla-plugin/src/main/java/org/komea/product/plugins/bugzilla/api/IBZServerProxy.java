@@ -32,5 +32,7 @@ public interface IBZServerProxy extends Closeable {
     public List<String> getSeverities();
 
     public List<String> getPriorities();
+    
+    public boolean testConnexion();
 
 }

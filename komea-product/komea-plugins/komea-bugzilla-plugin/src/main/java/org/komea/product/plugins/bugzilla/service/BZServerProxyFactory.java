@@ -3,10 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.komea.product.plugins.bugzilla.service;
-
-
 
 import org.komea.product.plugins.bugzilla.api.IBZServerProxy;
 import org.komea.product.plugins.bugzilla.api.IBZServerProxyFactory;
@@ -17,27 +14,21 @@ import org.springframework.stereotype.Service;
 import com.j2bugzilla.base.BugzillaConnector;
 import com.j2bugzilla.rpc.LogIn;
 
-
-
 /**
  * @author rgalerme
  * @version $Revision: 1.0 $
  */
 @Service
-public class BZServerProxyFactory implements IBZServerProxyFactory
-{
-    
-    
+public class BZServerProxyFactory implements IBZServerProxyFactory {
+
     /**
      * Method connexion.
-     * 
-     * @param _server
-     *            BZServerConfiguration
+     *
+     * @param _server BZServerConfiguration
      * @return BugzillaConnector
      */
     public BugzillaConnector connexion(final BZServerConfiguration _server) {
-    
-    
+
         BugzillaConnector conn = null;
         try {
             conn = new BugzillaConnector();
@@ -49,23 +40,41 @@ public class BZServerProxyFactory implements IBZServerProxyFactory
         }
         return conn;
     }
-    
-    
+
+    private BugzillaConnector testConnexion(final BZServerConfiguration _server) {
+
+        BugzillaConnector conn = null;
+        try {
+            conn = new BugzillaConnector();
+            conn.connectTo(_server.getAddress().toString());
+            final LogIn logIn = new LogIn(_server.getLogin(), _server.getPassword());
+            conn.executeMethod(logIn);
+        } catch (final Exception ex) {
+            conn = null;
+        }
+        return conn;
+    }
+
     /**
      * Method newConnector.
-     * 
-     * @param serv
-     *            BZServerConfiguration
+     *
+     * @param serv BZServerConfiguration
      * @return IBZServerProxy
-     * @see org.komea.backend.IBZServerProxyFactory.bugzilla.api.IBugZillaServerProxyFactory#newConnector(BZServerConfiguration)
+     * @see
+     * org.komea.backend.IBZServerProxyFactory.bugzilla.api.IBugZillaServerProxyFactory#newConnector(BZServerConfiguration)
      */
     @Override
     public IBZServerProxy newConnector(final BZServerConfiguration serv) {
-    
-    
+
         return new BZServerProxy(connexion(serv));
     }
-    
+
+    @Override
+    public IBZServerProxy newTestConnector(final BZServerConfiguration serv) {
+
+        return new BZServerProxy(testConnexion(serv));
+    }
+
     /*
      * BZServerProxy servProx = new BZServerProxy(bugzillaConnector);
      * this.serverController = servProx;

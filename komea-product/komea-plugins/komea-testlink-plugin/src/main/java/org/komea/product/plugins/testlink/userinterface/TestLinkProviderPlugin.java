@@ -95,7 +95,7 @@ public class TestLinkProviderPlugin {
 		final TestsByStatusKPI testsByStatusKPI = new TestsByStatusKPI(statusName);
 		return KpiBuilder.create().name("test_cases_" + statusName)
 		        .description("Number of " + statusName + " test cases").key(statusName + " test cases")
-		        .interval(0d, 10000d).produceValue(ValueType.INT, ValueDirection.BETTER).forProject().cron("daily")
+		        .interval(0d, 10000d).produceValue(ValueType.INT, ValueDirection.BETTER).forProject().dailyKPI()
 		        .providerType(ProviderType.REQUIREMENTS).query(testsByStatusKPI.getFormula()).build();
 
 	}
@@ -104,7 +104,7 @@ public class TestLinkProviderPlugin {
 
 		final TestsByStatusKPI testsByStatusKPI = new TestsByStatusKPI("");
 		return KpiBuilder.create().name("Total test cases").description("Number of test cases").key("test_cases_total")
-		        .interval(0d, 10000d).produceValue(ValueType.INT, ValueDirection.BETTER).forProject().cron("daily")
+		        .interval(0d, 10000d).produceValue(ValueType.INT, ValueDirection.BETTER).forProject().dailyKPI()
 		        .providerType(ProviderType.REQUIREMENTS).query(testsByStatusKPI.getFormula()).build();
 
 	}

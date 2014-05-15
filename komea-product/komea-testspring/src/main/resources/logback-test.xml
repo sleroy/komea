@@ -23,6 +23,9 @@
 	<logger name="org.springframework">
 		<level value="WARN" />
 	</logger>
+	
+	
+	
 	<logger name="org.quartz">
 		<level value="WARN" />
 	</logger>

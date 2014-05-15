@@ -116,9 +116,9 @@ public class ProjectForm extends Form<Project> {
             for (IHasKey personGroup : currentPersonGroupList) {
                 teamPersonList.addAll(personService.getPersonsOfPersonGroup(personGroup.getId()));
             }
-            teamPersonList.removeAll(projectPersonList);
-            currentPersonList.addAll(projectPersonList);
-            currentPersonList.addAll(teamPersonList);
+            DialogFactory.removeDistictList(projectPersonList,teamPersonList );
+            DialogFactory.addDistictList(currentPersonList, projectPersonList);
+            DialogFactory.addDistictList(currentPersonList, teamPersonList);
         }
 
         ListMultipleChoice<IHasKey> listUser = new ListMultipleChoice<IHasKey>("tablePerson", new PropertyModel<List<IHasKey>>(this, "selectedPerson"), this.currentPersonList) {
@@ -139,8 +139,8 @@ public class ProjectForm extends Form<Project> {
 
             @Override
             public void update() {
-               
-                currentPersonList.removeAll(teamPersonList);
+
+                DialogFactory.removeDistictList(currentPersonList, teamPersonList);
                 projectPersonList.clear();
                 projectPersonList.addAll(currentPersonList);
                 currentPersonList.clear();
@@ -149,14 +149,8 @@ public class ProjectForm extends Form<Project> {
                     List<Person> personsOfPersonGroup = personService.getPersonsOfPersonGroup(persong.getId());
                     teamPersonList.addAll(personsOfPersonGroup);
                 }
-                currentPersonList.addAll(teamPersonList);
-                for (IHasKey key : projectPersonList) {
-                   if(!currentPersonList.contains(key))
-                   {
-                   currentPersonList.add(key);
-                   }
-                }
-               
+                DialogFactory.addDistictList(currentPersonList, teamPersonList);
+                DialogFactory.addDistictList(currentPersonList, projectPersonList);
             }
         };
 

@@ -143,4 +143,9 @@ public class BZServerProxy implements IBZServerProxy {
         }
         return productNames;
     }
+
+    @Override
+    public boolean testConnexion() {
+        return conn!=null;
+    }
 }

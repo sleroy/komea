@@ -35,7 +35,7 @@ public final class ScmPage extends LayoutPage {
 
     @SpringBean
     private IScmRepositoryService scmService;
-    
+
     public final static String STATUS_OK = "ok.jpg";
     public final static String STATUS_NOK = "nok.jpg";
 
@@ -52,7 +52,7 @@ public final class ScmPage extends LayoutPage {
         final DataTable<ScmRepositoryDefinition, String> build
                 = DataTableBuilder.<ScmRepositoryDefinition, String>newTable("table")
                 .addColumn(getString("scm.main.key"), "Key")
-                //                .addColumn(getString("scm.main.type"), "Login")
+                .addColumn(getString("scm.main.type"), "Type")
                 .addColumn(getString("scm.main.reponame"), "RepoName")
                 .addColumn(getString("scm.main.url"), "url")
                 .addColumn(propertyColumn)
@@ -91,7 +91,7 @@ public final class ScmPage extends LayoutPage {
             String displayRessource = ScmPage.STATUS_NOK;
             if (scmObjet != null) {
                 ScmRepositoryDefinition rp = (ScmRepositoryDefinition) scmObjet;
-                if (rp.getLastExecutionStatus() !=null && rp.getLastExecutionStatus().isSuccess()) {
+                if (rp.getLastExecutionStatus() != null && rp.getLastExecutionStatus().isSuccess()) {
                     displayRessource = ScmPage.STATUS_OK;
                 }
             }
