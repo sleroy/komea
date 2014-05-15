@@ -54,6 +54,7 @@ public class KpiQueryRegisterServiceTest {
 	public void testRegisterCEPQuery() throws Exception {
 
 		final Kpi kpi = new Kpi();
+		kpi.setEsperRequest("Formula");
 		final ICEPQueryImplementation mock = mock(ICEPQueryImplementation.class);
 		kpiQueryRegisterService.registerQuery(kpi, mock);
 		final ArgumentCaptor<IQueryDefinition> argumentCaptor = ArgumentCaptor.forClass(IQueryDefinition.class);
@@ -71,6 +72,7 @@ public class KpiQueryRegisterServiceTest {
 	public void testRegisterDynamicQuery() throws Exception {
 
 		final Kpi kpi = new Kpi();
+		kpi.setEsperRequest("Formula");
 		final IDynamicDataQuery mock = mock(IDynamicDataQuery.class);
 		when(dynamicQueryCacheService.addCacheOnDynamicQuery(kpi.getEsperRequest(), mock)).thenReturn(mock);
 		kpiQueryRegisterService.registerQuery(kpi, mock);
