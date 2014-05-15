@@ -40,4 +40,5 @@ public interface ILdapService {
     public LdapServer load();
     public void initConnection();
     public void importInformations() throws IOException;
+    public boolean testConnexion(LdapServer _ldapServer);
 }

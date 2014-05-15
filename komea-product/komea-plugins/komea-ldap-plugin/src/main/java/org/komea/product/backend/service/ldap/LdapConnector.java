@@ -29,6 +29,7 @@ import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Strings;
+import java.util.logging.Level;
 
 /**
  * ILdapUserService Implementation Requires three properties to work (ldap url
@@ -41,6 +42,7 @@ import com.google.common.base.Strings;
  */
 @Component
 public class LdapConnector implements Closeable, ILdapConnector {
+
     
     private static class UserAttributesMapper implements AttributesMapper {
         
@@ -135,6 +137,39 @@ public class LdapConnector implements Closeable, ILdapConnector {
             LOGGER.error("----------LDAP ERROR-------------");
             throw new KomeaLdapConfigurationException(e.getMessage(), e);
         }
+    }
+    
+    
+    @Override
+    public boolean testConnexion(LdapServer _ldapServer) {
+        LdapTemplate template;
+        try {
+            final DefaultSpringSecurityContextSource contextSource = new org.springframework.security.ldap.DefaultSpringSecurityContextSource(
+                    _ldapServer.getLdapUrl());
+            initializeAuthenticationStrategy(_ldapServer.getLdapUserDN(), _ldapServer.getLdapAuthTypeEnum(), contextSource);
+            
+            // LDAP Anonymous access
+            if (Strings.isNullOrEmpty(_ldapServer.getLdapUserDN()) && Strings.isNullOrEmpty(_ldapServer.getLdapPassword())) {
+                contextSource.setAnonymousReadOnly(true);
+            }
+            
+            contextSource.setUserDn(_ldapServer.getLdapUserDN());
+            contextSource.setPassword(_ldapServer.getLdapPassword());
+            contextSource.setBase(_ldapServer.getLdapBase());
+            contextSource.afterPropertiesSet();
+            
+            template = new LdapTemplate(contextSource);
+            template.afterPropertiesSet();
+              final AndFilter filter = new AndFilter();
+        filter.and(new EqualsFilter("objectclass", "person")).and(new EqualsFilter("uid", null));
+        final List<LdapUser> users = template.search(DistinguishedName.EMPTY_PATH, filter.encode(), new UserAttributesMapper());
+        if(users == null)
+        {return false;}
+
+        } catch (Exception ex) {
+             return false;
+        }
+        return true;
     }
     /*
      * (non-Javadoc)

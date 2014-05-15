@@ -5,6 +5,8 @@
  */
 package org.komea.product.plugins.bugzilla.userinterface;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
@@ -74,13 +76,16 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
         });
         // partie de 
 
+        final String success = getString("global.connexion.success");
+        final String error = getString("global.connexion.error");
+        
         AjaxButton testButton = new AjaxButton("testButton", this) {
 
             @Override
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
 
                 feedBack.setVisible(true);
-                 conModel.setObject("Error connexion");
+                conModel.setObject(getString("global.connexion.error"));
                 target.add(feedBack);
                 target.add(conMessage);
 
@@ -91,24 +96,22 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
 
                 feedBack.setVisible(false);
                 target.add(feedBack);
-                conModel.setObject("Trying to connect...");
+                conModel.setObject(getString("global.connexion.loading"));
                 conMessage.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(2)));
                 target.add(conMessage);
-                Thread td = new Thread(new Runnable() {
-
+                ExecutorService executorService = Executors.newFixedThreadPool(1);
+                executorService.execute(new Runnable() {
                     @Override
                     public void run() {
                         if (bService.testConnexion(bugServer)) {
-                            conModel.setObject("Connexion success");
+                            conModel.setObject(success);
                         } else {
-                            conModel.setObject("Error connexion");
+                            conModel.setObject(error);
                         }
-                        target.add(conMessage);
                     }
                 });
-                td.start();
-                
-                //test de connexion server a faire 
+                executorService.shutdown();
+
             }
         };
 //        testButton.setDefaultFormProcessing(false);

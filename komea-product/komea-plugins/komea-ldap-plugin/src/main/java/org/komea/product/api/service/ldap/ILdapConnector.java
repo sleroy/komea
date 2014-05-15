@@ -7,6 +7,7 @@ package org.komea.product.api.service.ldap;
 
 import java.io.IOException;
 import java.util.List;
+import org.komea.product.backend.service.ldap.LdapServer;
 
 /**
  * This class defines the ldap connector.
@@ -52,5 +53,7 @@ public interface ILdapConnector {
      * This method init connection to the LDAP server using the ldap configuration
      */
     void initConnection();
+    
+    boolean testConnexion(LdapServer _ldapServer);
     
 }

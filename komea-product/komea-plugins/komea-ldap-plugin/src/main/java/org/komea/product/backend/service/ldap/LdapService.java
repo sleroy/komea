@@ -176,5 +176,10 @@ public class LdapService implements ILdapService {
         Validate.notNull(_ldapServer);
         configurationStorage.set(_ldapServer);
     }
+
+    @Override
+    public boolean testConnexion(LdapServer _ldapServer) {
+        return ldapConnector.testConnexion(_ldapServer);
+    }
     
 }
