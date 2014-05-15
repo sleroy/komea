@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.database.dao.timeserie.TimeScale;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.model.Kpi;
 import org.komea.product.service.dto.EntityKey;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ public class EvaluateKpiValueOnPeriodPerformanceTest extends AbstractPerformance
 	@Transactional
 	public void groupElementsPerDay() {
 
+		final Kpi kpi = beforeInitialization();
 		final BasicMicroBenchmark basicMicroBenchmark = new BasicMicroBenchmark();
 		basicMicroBenchmark.setTestName("groupDay");
 		basicMicroBenchmark.run(new Runnable() {
@@ -24,7 +26,7 @@ public class EvaluateKpiValueOnPeriodPerformanceTest extends AbstractPerformance
 
 				final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions();
 				timeSerieOptions.setTimeScale(TimeScale.PER_DAY);
-				sameTimeSerieConfig(timeSerieOptions);
+				sameTimeSerieConfig(timeSerieOptions, kpi);
 				statisticsAPI.evaluateKpiValueOnPeriod(timeSerieOptions, EntityKey.of(EntityType.PROJECT, 1));
 
 			}
@@ -37,6 +39,7 @@ public class EvaluateKpiValueOnPeriodPerformanceTest extends AbstractPerformance
 	@Transactional
 	public void groupElementsPerHour() {
 
+		final Kpi kpi = beforeInitialization();
 		final BasicMicroBenchmark basicMicroBenchmark = new BasicMicroBenchmark();
 		basicMicroBenchmark.setTestName("groupHour");
 		basicMicroBenchmark.run(new Runnable() {
@@ -46,7 +49,7 @@ public class EvaluateKpiValueOnPeriodPerformanceTest extends AbstractPerformance
 
 				final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions();
 				timeSerieOptions.setTimeScale(TimeScale.PER_HOUR);
-				sameTimeSerieConfig(timeSerieOptions);
+				sameTimeSerieConfig(timeSerieOptions, kpi);
 				statisticsAPI.evaluateKpiValueOnPeriod(timeSerieOptions, EntityKey.of(EntityType.PROJECT, 1));
 
 			}
@@ -58,6 +61,7 @@ public class EvaluateKpiValueOnPeriodPerformanceTest extends AbstractPerformance
 	@Transactional
 	public void groupElementsPerMonth() {
 
+		final Kpi kpi = beforeInitialization();
 		final BasicMicroBenchmark basicMicroBenchmark = new BasicMicroBenchmark();
 		basicMicroBenchmark.setTestName("groupMonth");
 		basicMicroBenchmark.run(new Runnable() {
@@ -67,7 +71,7 @@ public class EvaluateKpiValueOnPeriodPerformanceTest extends AbstractPerformance
 
 				final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions();
 				timeSerieOptions.setTimeScale(TimeScale.PER_MONTH);
-				sameTimeSerieConfig(timeSerieOptions);
+				sameTimeSerieConfig(timeSerieOptions, kpi);
 				statisticsAPI.evaluateKpiValueOnPeriod(timeSerieOptions, EntityKey.of(EntityType.PROJECT, 1));
 			}
 		});
@@ -78,6 +82,7 @@ public class EvaluateKpiValueOnPeriodPerformanceTest extends AbstractPerformance
 	@Transactional
 	public void groupElementsPerWeek() {
 
+		final Kpi kpi = beforeInitialization();
 		final BasicMicroBenchmark basicMicroBenchmark = new BasicMicroBenchmark();
 		basicMicroBenchmark.setTestName("groupWeek");
 		basicMicroBenchmark.run(new Runnable() {
@@ -87,7 +92,7 @@ public class EvaluateKpiValueOnPeriodPerformanceTest extends AbstractPerformance
 
 				final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions();
 				timeSerieOptions.setTimeScale(TimeScale.PER_WEEK);
-				sameTimeSerieConfig(timeSerieOptions);
+				sameTimeSerieConfig(timeSerieOptions, kpi);
 				assertNotNull(statisticsAPI.evaluateKpiValueOnPeriod(timeSerieOptions,
 				        EntityKey.of(EntityType.PROJECT, 1)));
 
@@ -101,6 +106,7 @@ public class EvaluateKpiValueOnPeriodPerformanceTest extends AbstractPerformance
 	@Transactional
 	public void groupElementsPerYear() {
 
+		final Kpi kpi = beforeInitialization();
 		final BasicMicroBenchmark basicMicroBenchmark = new BasicMicroBenchmark();
 		basicMicroBenchmark.setTestName("groupYears");
 		basicMicroBenchmark.run(new Runnable() {
@@ -110,7 +116,7 @@ public class EvaluateKpiValueOnPeriodPerformanceTest extends AbstractPerformance
 
 				final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions();
 				timeSerieOptions.setTimeScale(TimeScale.PER_YEAR);
-				sameTimeSerieConfig(timeSerieOptions);
+				sameTimeSerieConfig(timeSerieOptions, kpi);
 				statisticsAPI.evaluateKpiValueOnPeriod(timeSerieOptions, EntityKey.of(EntityType.PROJECT, 1));
 
 			}

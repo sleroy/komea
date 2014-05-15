@@ -7,6 +7,7 @@ package org.komea.product.database.dao.timeserie;
 import java.io.Serializable;
 
 import org.komea.product.database.model.Kpi;
+
 /**
  * @author sleroy
  */
@@ -17,6 +18,8 @@ public class TimeSerieOptions implements Serializable {
 	protected Integer	   kpiID;
 
 	protected TimeScale	   timeScale;
+
+	private int	           uniqueID;
 
 	public TimeSerieOptions() {
 		super();
@@ -50,13 +53,17 @@ public class TimeSerieOptions implements Serializable {
 		return groupFormula;
 	}
 
-    public Integer getKpiID() {
+	public Integer getKpiID() {
 		return kpiID;
 	}
 
 	public TimeScale getTimeScale() {
 
 		return timeScale;
+	}
+
+	public int getUniqueID() {
+		return uniqueID;
 	}
 
 	@Override
@@ -68,6 +75,11 @@ public class TimeSerieOptions implements Serializable {
 		result = prime * result + kpiID;
 		result = prime * result + (timeScale == null ? 0 : timeScale.hashCode());
 		return result;
+	}
+
+	public boolean hasKpi() {
+
+		return kpiID != null;
 	}
 
 	/**
@@ -83,7 +95,7 @@ public class TimeSerieOptions implements Serializable {
 		groupFormula = _groupFormula;
 	}
 
-    public void setKpiID(final Integer _kpiID) {
+	public void setKpiID(final Integer _kpiID) {
 		kpiID = _kpiID;
 	}
 
@@ -92,14 +104,14 @@ public class TimeSerieOptions implements Serializable {
 		timeScale = _timeScale;
 	}
 
-	@Override
-	public String toString() {
-
-		return "TimeSerieOptions [groupFormula=" + groupFormula + ", kpiID=" + kpiID + ", timeScale=" + timeScale + "]";
+	public void setUniqueID(final int _uniqueID) {
+		uniqueID = _uniqueID;
 	}
 
-    public boolean hasKpi() {
-    
-        return kpiID != null;
-    }
+	@Override
+	public String toString() {
+		return "TimeSerieOptions [groupFormula=" + groupFormula + ", kpiID=" + kpiID + ", timeScale=" + timeScale
+		        + ", uniqueID=" + uniqueID + "]";
+	}
+
 }

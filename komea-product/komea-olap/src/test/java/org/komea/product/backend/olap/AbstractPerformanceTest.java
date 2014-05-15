@@ -9,7 +9,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
@@ -47,7 +46,6 @@ AbstractSpringIntegrationTestCase {
 	// @Rule
 	// public final H2ProfilerRule h2ProfilerRule = new H2ProfilerRule();
 
-	private Kpi	                 generatedKpi;
 	@Autowired
 	private KpiDao	             kpiDao;
 	@Autowired
@@ -63,11 +61,9 @@ AbstractSpringIntegrationTestCase {
 		super();
 	}
 
-	@Before
-	public void before2() {
+	public Kpi beforeInitialization() {
 
-		if (kpiDao.selectByPrimaryKey(1) != null) { return; }
-		initFakeKPi();
+		final Kpi generatedKpi = initFakeKPi();
 
 		kpiDao.insert(generatedKpi);
 
@@ -85,38 +81,39 @@ AbstractSpringIntegrationTestCase {
 			measureDao.insert(measure);
 		}
 		System.out.println("Number of kpis : " + kpiDao.selectByCriteria(new KpiCriteria()).size());
+		return generatedKpi;
 	}
 
-	private void initFakeKPi() {
+	private Kpi initFakeKPi() {
 
-		generatedKpi = new Kpi();
+		final Kpi generatedKpi = new Kpi();
 		generatedKpi.setCronExpression("");
 		generatedKpi.setDescription("");
 		generatedKpi.setEntityType(EntityType.PROJECT);
 		generatedKpi.setEsperRequest("esperRequest");
-		generatedKpi.setKpiKey("bla");
+		generatedKpi.setKpiKey("bla" + generatedKpi.hashCode());
 		generatedKpi.setName("bla");
 		generatedKpi.setProviderType(ProviderType.BUGTRACKER);
 		generatedKpi.setValueDirection(ValueDirection.BETTER);
 		generatedKpi.setValueMax(100d);
 		generatedKpi.setValueMin(0d);
 		generatedKpi.setValueType(ValueType.BOOL);
+		System.out.println("Generated kpi");
+		return generatedKpi;
 	}
 
-	protected void sameTimeSerieConfig(final PeriodTimeSerieOptions timeSerieOptions) {
+	protected void sameTimeSerieConfig(final PeriodTimeSerieOptions timeSerieOptions, final Kpi _kpi) {
 
 		timeSerieOptions.untilNow();
 		timeSerieOptions.lastYears(10);
 
-		sameTimeSerieTimeConfig(timeSerieOptions);
+		sameTimeSerieTimeConfig(timeSerieOptions, _kpi);
 		assertTrue(timeSerieOptions.isValid());
 	}
 
-	protected void sameTimeSerieTimeConfig(final TimeSerieOptions _timeSerieOptions) {
-
-		_timeSerieOptions.setKpiID(generatedKpi.getId());
+	protected void sameTimeSerieTimeConfig(final TimeSerieOptions _timeSerieOptions, final Kpi _kpi) {
+		_timeSerieOptions.setKpiID(_kpi.getId());
 		_timeSerieOptions.setGroupFormula(GroupFormula.COUNT);
 
 	}
-
 }

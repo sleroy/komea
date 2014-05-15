@@ -22,7 +22,16 @@
 	</util:properties>
 
 
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="ehcache"></property>
+	</bean>
 
+	<!-- Ehcache library setup -->
+	<bean id="ehcache"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="ehcache.xml"></property>
+		<property name="shared" value="true"></property>
+	</bean>
 
 	<cache:annotation-driven cache-manager="cacheManager" />
 
@@ -39,15 +48,6 @@
 		@Required and @Autowired, as well as JSR 250's @PostConstruct,@PreDestroy 
 		and @Resource (if available) and JPA's @PersistenceContext & @PersistenceUnit. -->
 	<context:annotation-config />
-
-
-	<!-- generic cache manager -->
-	<bean id="cacheManager"
-		class="org.springframework.cache.concurrent.ConcurrentMapCacheManager">
-		<!-- <property name="caches"> <set> <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" 
-			name="default" /> <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" 
-			name="software-settings" /> </set> </property> -->
-	</bean>
 
 
 

@@ -18,6 +18,7 @@ import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.backend.service.kpi.TimeSerie;
 import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
+import org.komea.product.database.dao.timeserie.EntityIdValue;
 import org.komea.product.database.dao.timeserie.GroupFormula;
 import org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.database.dao.timeserie.TimeScale;
@@ -32,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,9 +47,6 @@ public class StatisticsService implements IStatisticsAPI {
 
 	@Autowired
 	private KpiDao	            kpiDao;
-
-	@Autowired
-	private KpiDao	            kpiDAO;
 
 	@Autowired
 	private IKpiMathService	    kpiMathService;
@@ -70,7 +67,7 @@ public class StatisticsService implements IStatisticsAPI {
 	public void backupKpiValuesIntoHistory(final BackupDelay _backupDelay) {
 
 		LOGGER.debug("Backup all kpis into the history...");
-		for (final Kpi kpi : kpiDAO.selectByCriteria(new KpiCriteria())) {
+		for (final Kpi kpi : kpiDao.selectByCriteria(new KpiCriteria())) {
 			if (_backupDelay.isAppliedTo(kpi)) {
 				LOGGER.debug("Kpi {} is backuping...", kpi.getKey());
 				storeActualValueInHistory(HistoryKey.of(kpi));
@@ -89,14 +86,16 @@ public class StatisticsService implements IStatisticsAPI {
 	 * buildGlobalPeriodTimeSeries(org.komea.product.database.dao.timeserie.
 	 * PeriodTimeSerieOptions)
 	 */
-	@Caching(cacheable = @Cacheable("buildGlobalPeriodTimeSeries"))
+	@Cacheable("buildGlobalPeriodTimeSeries")
 	@Override
 	public TimeSerie buildGlobalPeriodTimeSeries(final PeriodTimeSerieOptions _timeSerieOptions) {
 
 		Validate.notNull(_timeSerieOptions);
 		Validate.isTrue(_timeSerieOptions.isValid());
 		LOGGER.debug("buildGlobalPeriodTimeSeries : {}", _timeSerieOptions);
-		return new TimeSerieImpl(measureDao.buildGlobalPeriodTimeSeries(_timeSerieOptions));
+
+		final PeriodTimeSerieOptions options = generateFormulaID(_timeSerieOptions);
+		return new TimeSerieImpl(measureDao.buildGlobalPeriodTimeSeries(options));
 	}
 
 	/*
@@ -116,7 +115,8 @@ public class StatisticsService implements IStatisticsAPI {
 		Validate.isTrue(_entityKey.isEntityReferenceKey());
 		Validate.isTrue(_timeSerieOptions.isValid());
 		LOGGER.debug("buildPeriodTimeSeries : {}", _timeSerieOptions, _entityKey);
-		return new TimeSerieImpl(measureDao.buildPeriodTimeSeries(_timeSerieOptions, _entityKey), _entityKey);
+		final PeriodTimeSerieOptions serieOptions = generateFormulaID(_timeSerieOptions);
+		return new TimeSerieImpl(measureDao.buildPeriodTimeSeries(serieOptions, _entityKey), _entityKey);
 	}
 
 	/*
@@ -136,7 +136,8 @@ public class StatisticsService implements IStatisticsAPI {
 		Validate.isTrue(_entityKey.isEntityReferenceKey());
 		Validate.isTrue(_timeSerieOptions.isValid());
 		LOGGER.debug("buildTimeSeries : {}", _timeSerieOptions, _entityKey);
-		return new TimeSerieImpl(measureDao.buildTimeSeries(_timeSerieOptions, _entityKey), _entityKey);
+		final TimeSerieOptions options = generateFormulaID(_timeSerieOptions);
+		return new TimeSerieImpl(measureDao.buildTimeSeries(options, _entityKey), _entityKey);
 	}
 
 	/*
@@ -182,7 +183,7 @@ public class StatisticsService implements IStatisticsAPI {
 		Validate.isTrue(_entityKey.isEntityReferenceKey());
 		Validate.isTrue(_options.isValid());
 		LOGGER.debug("evaluateKpiValue : {}", _options, _entityKey);
-		return valueOrZero(measureDao.evaluateKpiValue(_options, _entityKey));
+		return valueOrZero(measureDao.evaluateKpiValue(generateFormulaID(_options), _entityKey));
 	}
 
 	/*
@@ -202,7 +203,8 @@ public class StatisticsService implements IStatisticsAPI {
 		Validate.isTrue(_entityKey.isEntityReferenceKey());
 		Validate.isTrue(_options.isValid());
 
-		final Double evaluateKpiValueOnPeriod = measureDao.evaluateKpiValueOnPeriod(_options, _entityKey);
+		final Double evaluateKpiValueOnPeriod = measureDao.evaluateKpiValueOnPeriod(generateFormulaID(_options),
+		        _entityKey);
 		LOGGER.debug("evaluateKpiValueOnPeriod : {} ekey {}, return {}", _options, _entityKey, evaluateKpiValueOnPeriod);
 		return valueOrZero(evaluateKpiValueOnPeriod);
 	}
@@ -215,7 +217,8 @@ public class StatisticsService implements IStatisticsAPI {
 		Validate.isTrue(_options.isValid());
 		LOGGER.debug("evaluateKpiValues : {}", _options);
 		final Kpi findKpiPerId = new FindKpiPerId(_options.getKpiID(), kpiDao).find();
-		return new KpiResult().fill(measureDao.evaluateKpiValues(_options), findKpiPerId.getEntityType());
+		return new KpiResult().fill(measureDao.evaluateKpiValues(generateFormulaID(_options)),
+		        findKpiPerId.getEntityType());
 	}
 
 	/*
@@ -233,7 +236,10 @@ public class StatisticsService implements IStatisticsAPI {
 		Validate.isTrue(_options.isValid());
 		LOGGER.debug("evaluateKpiValuesOnPeriod : {}", _options);
 		final Kpi findKpiPerId = new FindKpiPerId(_options.getKpiID(), kpiDao).find();
-		return new KpiResult().fill(measureDao.evaluateKpiValuesOnPeriod(_options), findKpiPerId.getEntityType());
+		final PeriodTimeSerieOptions periodTimeSerieOptions = generateFormulaID(_options);
+		final List<EntityIdValue> evaluateKpiValuesOnPeriod = measureDao
+		        .evaluateKpiValuesOnPeriod(periodTimeSerieOptions);
+		return new KpiResult().fill(evaluateKpiValuesOnPeriod, findKpiPerId.getEntityType());
 
 	}
 
@@ -264,6 +270,17 @@ public class StatisticsService implements IStatisticsAPI {
 
 		LOGGER.debug("evaluateTheCurrentKpiValues : {}", _kpiName);
 		return kpiValueService.getRealTimeValue(_kpiName);
+	}
+
+	/**
+	 * Generates the unique id for the formula of a kPI.
+	 * 
+	 * @param kpiID
+	 *            the kpi
+	 */
+	public int generateKpiFormulaID(final Integer kpiID) {
+		final Kpi find = new FindKpiPerId(kpiID, kpiDao).find();
+		return find.getEsperRequest().hashCode();
 	}
 
 	public KpiDao getKpiDao() {
@@ -320,15 +337,15 @@ public class StatisticsService implements IStatisticsAPI {
 
 		Validate.notNull(_historyKey);
 		LOGGER.debug("storeActualValueInHistory : {}", _historyKey);
-		final Kpi findKPI = kpiDAO.selectByPrimaryKey(_historyKey.getKpiID());
+		final Kpi findKPI = kpiDao.selectByPrimaryKey(_historyKey.getKpiID());
 		final KpiResult queryResult = kpiValueService.getRealTimeValue(findKPI.getKey());// FIXME:/Performance
 		                                                                                 // problem
 		// Store all data
 		final DateTime actualTime = new DateTime();
 		for (final Entry<EntityKey, Number> kpiLineValue : queryResult.getMap().entrySet()) {
 			Validate.isTrue(kpiLineValue.getKey().isEntityReferenceKey());
-			storeValueInHistory(HistoryKey.of(findKPI, kpiLineValue.getKey()), kpiLineValue.getValue().doubleValue(),
-			        actualTime);
+			final HistoryKey hKey = HistoryKey.of(findKPI, kpiLineValue.getKey());
+			storeValueInHistory(hKey, kpiLineValue.getValue().doubleValue(), actualTime);
 
 		}
 	}
@@ -358,11 +375,19 @@ public class StatisticsService implements IStatisticsAPI {
 	@Override
 	public void storeValueInHistory(final HistoryKey _historyKey, final Double _value, final DateTime _actualTime) {
 		LOGGER.debug("storeValueInHistory : {}", _historyKey, _value, _actualTime);
-		final Measure measure = Measure.initializeMeasure(_historyKey.getKpiID(), _historyKey.getEntityKey().getId());
+		Validate.isTrue(_historyKey.hasEntityReference());
+
+		final int idFromKpiFormula = generateKpiFormulaID(_historyKey.getKpiID());
+		final Measure measure = Measure.initializeMeasure(idFromKpiFormula, _historyKey.getEntityKey().getId());
 		measure.setValue(_value);
 		measure.setDateTime(_actualTime);
 		measureDao.insert(measure);
 
+	}
+
+	private <T extends TimeSerieOptions> T generateFormulaID(final T _timeSerieOptions) {
+		_timeSerieOptions.setUniqueID(generateKpiFormulaID(_timeSerieOptions.getKpiID()));
+		return _timeSerieOptions; // FIXME :: Should produce a clone.
 	}
 
 	private Double valueOrZero(final Double _value) {

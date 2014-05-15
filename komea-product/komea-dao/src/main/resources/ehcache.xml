@@ -1,10 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ehcache>
-
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
 	<diskStore path=".cache" />
+	<defaultCache timeToLiveSeconds="300" timeToIdleSeconds="3600"
+		maxElementsInMemory="1000" overflowToDisk="false" />
 
-	<defaultCache maxElementsInMemory="2000" eternal="false"
-		timeToIdleSeconds="1800" timeToLiveSeconds="3600" overflowToDisk="false" />
+
+	<cache name="buildGlobalPeriodTimeSeries" overflowToDisk="true"
+		maxElementsInMemory="2" />
+	<cache name="buildPeriodTimeSeries" overflowToDisk="true"
+		maxElementsInMemory="2" />
+	<cache name="buildTimeSeries" overflowToDisk="true"
+		maxElementsInMemory="2" />
+	<cache name="evaluateKpiValue" overflowToDisk="true"
+		maxElementsInMemory="1000" />
+	<cache name="evaluateKpiValueOnPeriod" overflowToDisk="true"
+		maxElementsInMemory="1000" />
+	<cache name="evaluateKpiValues" overflowToDisk="true"
+		maxElementsInMemory="30" />
+	<cache name="evaluateKpiValuesOnPeriod" overflowToDisk="true"
+		maxElementsInMemory="30" />
+	<cache name="getKpiValuesAverageOnPeriod" overflowToDisk="true"
+		maxElementsInMemory="30" />
+	<cache name="getLastStoredValueInHistory" overflowToDisk="true"
+		maxElementsInMemory="1000" />
+
+
+
+
+
+
+
 
 
 </ehcache>
