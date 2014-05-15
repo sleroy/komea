@@ -1,41 +1,53 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.komea.plugins</groupId>
-		<artifactId>komea-plugins</artifactId>
-		<version>1.1.19-SNAPSHOT</version>
-	</parent>
+   <parent>
+      <groupId>org.komea.plugins</groupId>
+      <artifactId>komea-plugins</artifactId>
+      <version>1.1.19-SNAPSHOT</version>
+   </parent>
 
-	<artifactId>komea-scm-plugin</artifactId>
+   <artifactId>komea-scm-plugin</artifactId>
 
-	<name>Komea : SCM plugin framework</name>
-	<description>Komea SCM plugin framework</description>
+   <name>Komea : SCM plugin framework</name>
+   <description>Komea SCM plugin framework</description>
 
 
 
-	<dependencies>
+   <dependencies>
 
-		<dependency>
-			<groupId>com.googlecode.java-diff-utils</groupId>
-			<artifactId>diffutils</artifactId>
-			<version>1.3.0</version>
-		</dependency>
+      <dependency>
+         <groupId>com.googlecode.java-diff-utils</groupId>
+         <artifactId>diffutils</artifactId>
+         <version>1.3.0</version>
+      </dependency>
 
-		<dependency>
-			<groupId>org.komea.product</groupId>
-			<artifactId>komea-service</artifactId>
-			<version>${project.version}</version>
+      <dependency>
+         <groupId>org.komea.product</groupId>
+         <artifactId>komea-service</artifactId>
+         <version>${project.version}</version>
 
-		</dependency>
+      </dependency>
+      <dependency>
+         <groupId>org.komea.product</groupId>
+         <artifactId>komea-service</artifactId>
+         <version>${project.version}</version>
 
-		<dependency>
-			<groupId>org.komea.product</groupId>
-			<artifactId>komea-testspring</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+      </dependency>
+      <dependency>
+         <groupId>org.komea.product</groupId>
+         <artifactId>komea-olap</artifactId>
+         <version>${project.version}</version>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.komea.product</groupId>
+         <artifactId>komea-testspring</artifactId>
+         <version>${project.version}</version>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
 
 </project>
