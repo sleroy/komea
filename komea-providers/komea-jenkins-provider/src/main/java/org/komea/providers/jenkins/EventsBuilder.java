@@ -1,23 +1,14 @@
-
 package org.komea.providers.jenkins;
 
-
-
 import hudson.model.Result;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.enums.BuildIndustrialization;
 
+public abstract class EventsBuilder {
 
-
-public abstract class EventsBuilder
-{
-    
-    
     public static EventSimpleDto createBuildBroken(
             final long start,
             final int buildNumber,
@@ -26,10 +17,9 @@ public abstract class EventsBuilder
             final String user,
             final String projectKey,
             final String branch) {
-    
-    
-        final String message =
-                "User " + user + " may have broken the build for job " + jenkinsProjectName;
+
+        final String message
+                = "User " + user + " may have broken the build for job " + jenkinsProjectName;
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(start));
         properties.put("project", projectKey);
@@ -49,8 +39,7 @@ public abstract class EventsBuilder
         event.setValue(start);
         return event;
     }
-    
-    
+
     public static EventSimpleDto createBuildFixed(
             final long start,
             final int buildNumber,
@@ -59,10 +48,9 @@ public abstract class EventsBuilder
             final String user,
             final String projectKey,
             final String branch) {
-    
-    
-        final String message =
-                "User " + user + " may have fixed the build for job " + jenkinsProjectName;
+
+        final String message
+                = "User " + user + " may have fixed the build for job " + jenkinsProjectName;
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(start));
         properties.put("project", projectKey);
@@ -82,8 +70,7 @@ public abstract class EventsBuilder
         event.setValue(start);
         return event;
     }
-    
-    
+
     public static EventSimpleDto createCodeChangedEvent(
             final long start,
             final int buildNumber,
@@ -93,12 +80,11 @@ public abstract class EventsBuilder
             final String commiter,
             final String projectKey,
             final String branch) {
-    
-    
-        final String message =
-                "User "
-                        + commiter + " did " + nbCommits + " comit(s) since last build of job "
-                        + jenkinsProjectName;
+
+        final String message
+                = "User "
+                + commiter + " did " + nbCommits + " comit(s) since last build of job "
+                + jenkinsProjectName;
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(start));
         properties.put("project", projectKey);
@@ -118,8 +104,7 @@ public abstract class EventsBuilder
         event.setValue(nbCommits);
         return event;
     }
-    
-    
+
     public static EventSimpleDto createIndustrializationEvent(
             final long start,
             final int buildNumber,
@@ -128,12 +113,11 @@ public abstract class EventsBuilder
             final String projectKey,
             final String branch,
             final String industrialization) {
-    
-    
+
         final BuildIndustrialization indus = BuildIndustrialization.valueOf(industrialization);
-        final String message =
-                "Jenkins build industrialization for job "
-                        + jenkinsProjectName + " is " + enumNameToDisplayName(indus.name());
+        final String message
+                = "Jenkins build industrialization for job "
+                + jenkinsProjectName + " is " + enumNameToDisplayName(indus.name());
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(start));
         properties.put("project", projectKey);
@@ -152,18 +136,16 @@ public abstract class EventsBuilder
         event.setValue(indus.ordinal());
         return event;
     }
-    
-    
+
     public static EventSimpleDto createJobConfigurationChanged(
             final String jenkinsProjectName,
             final String providerUrl,
             final String user,
             final String projectKey,
             final String branch) {
-    
-    
-        final String message =
-                "User " + user + " changed configuration of job " + jenkinsProjectName;
+
+        final String message
+                = "User " + user + " changed configuration of job " + jenkinsProjectName;
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("project", projectKey);
         properties.put("jenkinsProject", jenkinsProjectName);
@@ -181,8 +163,7 @@ public abstract class EventsBuilder
         event.setValue(new Date().getTime());
         return event;
     }
-    
-    
+
     public static EventSimpleDto createResultEvent(
             final long start,
             final long end,
@@ -192,8 +173,7 @@ public abstract class EventsBuilder
             final String providerUrl,
             final String projectKey,
             final String branch) {
-    
-    
+
         final long duration = end - start;
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(end));
@@ -231,8 +211,7 @@ public abstract class EventsBuilder
         event.setValue(result.ordinal);
         return event;
     }
-    
-    
+
     public static EventSimpleDto createStartedByUser(
             final long start,
             final int buildNumber,
@@ -241,8 +220,7 @@ public abstract class EventsBuilder
             final String user,
             final String projectKey,
             final String branch) {
-    
-    
+
         final String message = "User " + user + " started build for job " + jenkinsProjectName;
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(start));
@@ -263,8 +241,7 @@ public abstract class EventsBuilder
         event.setValue(start);
         return event;
     }
-    
-    
+
     public static EventSimpleDto createStartEvent(
             final long start,
             final int buildNumber,
@@ -272,8 +249,7 @@ public abstract class EventsBuilder
             final String providerUrl,
             final String projectKey,
             final String branch) {
-    
-    
+
         final String message = "Jenkins build started for job " + jenkinsProjectName;
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(start));
@@ -292,17 +268,16 @@ public abstract class EventsBuilder
         event.setValue(start);
         return event;
     }
-    
-    
+
     public static String enumNameToDisplayName(final String enumName) {
-    
-    
-        return enumName.charAt(0) + enumName.substring(1).replace("_", " ").toLowerCase();
+
+        if (enumName == null || enumName.isEmpty()) {
+            return "";
+        }
+        return enumName.substring(0, 1).toUpperCase() + enumName.substring(1).replace("_", " ").toLowerCase();
     }
-    
-    
+
     private EventsBuilder() {
-    
-    
+
     }
 }

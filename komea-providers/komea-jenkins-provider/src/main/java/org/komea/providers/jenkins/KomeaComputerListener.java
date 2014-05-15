@@ -6,7 +6,6 @@ import hudson.model.TaskListener;
 import hudson.slaves.ComputerListener;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -59,17 +58,21 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
     public static final EventType BUILD_STARTED_BY_USER = createEventType(
             "build_started_by_user", "Jenkins build started by user",
             "", Severity.INFO, EntityType.PERSON);
+    public static final String JENKINS_TEST_KEY = "jenkins_test";
+    public static final EventType JENKINS_TEST = createEventType(
+            JENKINS_TEST_KEY, "Event to test Jenkins",
+            "", Severity.INFO, EntityType.PROJECT);
     public static final List<EventType> EVENT_TYPES = Arrays.asList(
             BUILD_STARTED, BUILD_INDUSTRIALIZATION, BUILD_COMPLETE,
             BUILD_FAILED, BUILD_INTERRUPTED, BUILD_UNSTABLE,
             BUILD_CODE_CHANGED, BUILD_BROKEN, BUILD_FIXED, JOB_CONFIGURATION_CHANGED,
-            BUILD_STARTED_BY_USER);
+            BUILD_STARTED_BY_USER, JENKINS_TEST);
 
     public static EventType createEventType(final String key, final String name,
             final String description, final Severity severity, final EntityType entityType) {
         final EventType eventType = new EventType();
         eventType.setProviderType(ProviderType.CI_BUILD);
-        eventType.setDescription(description);
+        eventType.setDescription(description.isEmpty() ? name : description);
         eventType.setEnabled(true);
         eventType.setEntityType(entityType);
         eventType.setEventKey(key);
@@ -91,8 +94,23 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
         return getJenkinsUrl() + "/job/" + projectName + "/" + buildNumber;
     }
 
+    public static ProviderDto getProviderDto() {
+        return getProviderDto(getJenkinsUrl());
+    }
+
+    private static ProviderDto getProviderDto(final String jenkinsUrl) {
+        final ProviderDto providerDto = new ProviderDto();
+        final Provider provider = getProvider(jenkinsUrl);
+        providerDto.setProvider(provider);
+        providerDto.setEventTypes(KomeaComputerListener.EVENT_TYPES);
+        return providerDto;
+    }
+
     public static Provider getProvider() {
-        final String jenkinsUrl = getJenkinsUrl();
+        return getProvider(getJenkinsUrl());
+    }
+
+    private static Provider getProvider(final String jenkinsUrl) {
         final Provider provider = new Provider();
         provider.setProviderType(ProviderType.CI_BUILD);
         provider.setName("Jenkins");
@@ -102,7 +120,7 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
         return provider;
     }
 
-    private static String getJenkinsUrl() {
+    public static String getJenkinsUrl() {
         final JenkinsLocationConfiguration globalConfig = new JenkinsLocationConfiguration();
         String url = globalConfig.getUrl();
         if (url != null) {
@@ -120,37 +138,31 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
     @Override
     public void onOnline(final Computer c, final TaskListener listener)
             throws IOException, InterruptedException {
-        final Jenkins jenkins = Jenkins.getInstance();
-        final KomeaNotifier.DescriptorImpl descriptor
-                = jenkins.getDescriptorByType(KomeaNotifier.DescriptorImpl.class);
-        final String serverUrlProperty = descriptor.getServerUrl();
-        if (serverUrlProperty == null || serverUrlProperty.trim().isEmpty()) {
-            return;
+        try {
+            final Jenkins jenkins = Jenkins.getInstance();
+            final KomeaNotifier.DescriptorImpl descriptor
+                    = jenkins.getDescriptorByType(KomeaNotifier.DescriptorImpl.class);
+            final String serverUrlProperty = descriptor.getServerUrl();
+            LOGGER.log(Level.FINE, "onOnline - Komea server url : {0}", serverUrlProperty);
+            if (serverUrlProperty == null || serverUrlProperty.trim().isEmpty()) {
+                return;
+            }
+            final ProviderDto providerDto = getProviderDto();
+            registerProvider(serverUrlProperty, providerDto);
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+            ex.printStackTrace(listener.getLogger());
         }
-        final ProviderDto providerDto = new ProviderDto();
-
-        final Provider provider = getProvider();
-        providerDto.setProvider(provider);
-
-        final List<EventType> eventTypes = new ArrayList<EventType>(EVENT_TYPES);
-        providerDto.setEventTypes(eventTypes);
-
-        registerProvider(serverUrlProperty, providerDto, listener);
     }
 
-    public static void registerProvider(final String serverUrl, final ProviderDto provider,
-            final TaskListener listener) {
+    public static void registerProvider(final String serverUrl, final ProviderDto provider) throws Exception {
         final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(KomeaComputerListener.class.getClassLoader());
             final IProvidersAPI providersAPI = RestClientFactory.INSTANCE.createProvidersAPI(serverUrl);
+            LOGGER.log(Level.FINE, "Register Provider : {0} ({1})",
+                    new Object[]{provider.getProvider().getName(), provider.getProvider().getUrl()});
             providersAPI.registerProvider(provider);
-        } catch (Exception ex) {
-            if (listener == null) {
-                LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
-            } else {
-                ex.printStackTrace(listener.getLogger());
-            }
         } finally {
             Thread.currentThread().setContextClassLoader(contextClassLoader);
         }

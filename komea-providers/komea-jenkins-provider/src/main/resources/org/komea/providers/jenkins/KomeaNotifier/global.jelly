@@ -3,5 +3,9 @@
         <f:entry title="Komea Server URL" field="serverUrl">
             <f:textbox />
         </f:entry>
+        <f:validateButton
+            title="${%Test Connection}" progress="${%Testing...}"
+            method="testConnection" with="serverUrl" />
+        <f:description>v.${project.version}-${buildNumber}</f:description>
     </f:section>
 </j:jelly>

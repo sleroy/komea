@@ -22,6 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,9 +30,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletException;
+import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
+import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerRequest;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.database.dto.ProviderDto;
@@ -47,7 +51,6 @@ public class KomeaNotifier extends Notifier implements Serializable {
     @Extension
     public static class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
-        private static final Logger LOGGER = Logger.getLogger(DescriptorImpl.class.getName());
         private String serverUrl;
 
         public DescriptorImpl() {
@@ -71,16 +74,51 @@ public class KomeaNotifier extends Notifier implements Serializable {
                 try {
                     final URL url = new URL(value);
                     if (getResponseCode(url) != 200) {
-                        return FormValidation
-                                .warning("Url not accessible.");
+                        return FormValidation.warning("Url not accessible.");
                     }
                 } catch (final MalformedURLException ex) {
-                    return FormValidation.error("Url not valid : " + ex.getMessage());
+                    return FormValidation.error("Url not valid : " + getCauseMessage(ex));
                 } catch (final IOException ex) {
-                    return FormValidation.error("Url not valid : " + ex.getMessage());
+                    return FormValidation.error("Url not valid : " + getCauseMessage(ex));
                 }
             }
             return FormValidation.ok();
+        }
+
+        public FormValidation doTestConnection(@QueryParameter("serverUrl") final String serverUrl)
+                throws IOException, ServletException {
+            try {
+                final ProviderDto provider = KomeaComputerListener.getProviderDto();
+                KomeaComputerListener.registerProvider(serverUrl, provider);
+                return FormValidation.ok("Success : Jenkins provider registered in Komea.");
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                return FormValidation.error(getCauseMessage(e));
+            }
+        }
+
+        public FormValidation doTestEvents(@QueryParameter("projectKey") final String projectKey)
+                throws IOException, ServletException {
+            try {
+                final String komeaUrl = getKomeaUrl();
+                if (komeaUrl == null) {
+                    return FormValidation.error("Komea server url is not set. Please set it in the page "
+                            + KomeaComputerListener.getJenkinsUrl() + "/configure");
+                }
+                String key = projectKey;
+                if (key.trim().isEmpty()) {
+                    final AbstractProject project
+                            = Stapler.getCurrentRequest().findAncestorObject(AbstractProject.class);
+                    key = project.getName();
+                }
+                final EventSimpleDto event = getTestEvent(key);
+                pushEvents(komeaUrl, Arrays.asList(event));
+                return FormValidation.ok("Success : Jenkins event send at "
+                        + event.getDate().toGMTString() + " for project " + key);
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                return FormValidation.error(getCauseMessage(e));
+            }
         }
 
         @Override
@@ -186,41 +224,72 @@ public class KomeaNotifier extends Notifier implements Serializable {
         return !Result.SUCCESS.equals(build.getResult());
     }
 
+    public static String getCauseMessage(final Throwable ex) {
+        final StringBuilder stringBuilder = new StringBuilder(50);
+        Throwable exception = ex;
+        while (exception != null) {
+            stringBuilder.append(exception.getMessage()).append("\n");
+            exception = exception.getCause();
+        }
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        return stringBuilder.toString();
+    }
+
+    private static EventSimpleDto getTestEvent(final String projectKey) {
+        final Provider provider = KomeaComputerListener.getProvider();
+        final EventSimpleDto event = new EventSimpleDto();
+        event.setDate(new Date());
+        event.setEventType(KomeaComputerListener.JENKINS_TEST_KEY);
+        event.setMessage("Event of project " + projectKey
+                + " of Jenkins provider with url=" + provider.getUrl());
+        event.setProject(projectKey);
+        event.setProvider(provider.getKey());
+        event.setUrl(provider.getUrl());
+        event.setValue(200);
+        return event;
+    }
+
     @Override
     public boolean perform(
             final AbstractBuild<?, ?> build,
             final Launcher launcher,
             final BuildListener listener) throws InterruptedException, IOException {
-
-        if (getServerUrl() == null || !build.equals(build.getRootBuild())) {
-            return true;
-        }
-        final String jenkinsProjectName = build.getProject().getName();
-        if (projectKey == null) {
-            projectKey = jenkinsProjectName;
-        }
-        final Result result = build.getResult();
-        final int buildNumber = build.getNumber();
-        final long start = build.getTime().getTime();
-        final long end = new Date().getTime();
-        final Provider provider = KomeaComputerListener.getProvider();
-        final List<EventSimpleDto> events = new ArrayList<EventSimpleDto>(1);
-        final EventSimpleDto resultEvent = EventsBuilder.createResultEvent(start, end,
-                buildNumber, result, jenkinsProjectName, provider.getUrl(), projectKey, branch);
-        if (resultEvent != null) {
-            events.add(resultEvent);
-        }
-        final Map<String, Integer> commiters = getCommiters(build);
-        for (final String commiter : commiters.keySet()) {
-            if (buildBroken(build)) {
-                events.add(EventsBuilder.createBuildBroken(start, buildNumber,
-                        jenkinsProjectName, provider.getUrl(), commiter, projectKey, branch));
-            } else if (buildFixed(build)) {
-                events.add(EventsBuilder.createBuildFixed(start, buildNumber,
-                        jenkinsProjectName, provider.getUrl(), commiter, projectKey, branch));
+        try {
+            final String komeaUrl = getKomeaUrl();
+            if (komeaUrl == null || !build.equals(build.getRootBuild())) {
+                return true;
             }
+            final String jenkinsProjectName = build.getProject().getName();
+            if (projectKey == null) {
+                projectKey = jenkinsProjectName;
+            }
+            LOGGER.log(Level.FINE, "Build of project {0} performed", projectKey);
+            final Result result = build.getResult();
+            final int buildNumber = build.getNumber();
+            final long start = build.getTime().getTime();
+            final long end = new Date().getTime();
+            final Provider provider = KomeaComputerListener.getProvider();
+            final List<EventSimpleDto> events = new ArrayList<EventSimpleDto>(1);
+            final EventSimpleDto resultEvent = EventsBuilder.createResultEvent(start, end,
+                    buildNumber, result, jenkinsProjectName, provider.getUrl(), projectKey, branch);
+            if (resultEvent != null) {
+                events.add(resultEvent);
+            }
+            final Map<String, Integer> commiters = getCommiters(build);
+            for (final String commiter : commiters.keySet()) {
+                if (buildBroken(build)) {
+                    events.add(EventsBuilder.createBuildBroken(start, buildNumber,
+                            jenkinsProjectName, provider.getUrl(), commiter, projectKey, branch));
+                } else if (buildFixed(build)) {
+                    events.add(EventsBuilder.createBuildFixed(start, buildNumber,
+                            jenkinsProjectName, provider.getUrl(), commiter, projectKey, branch));
+                }
+            }
+            pushEvents(komeaUrl, events);
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+            ex.printStackTrace(listener.getLogger());
         }
-        pushEvents(listener, events);
         return true;
     }
 
@@ -260,57 +329,64 @@ public class KomeaNotifier extends Notifier implements Serializable {
 
     @Override
     public boolean prebuild(final AbstractBuild<?, ?> build, final BuildListener listener) {
-        if (getServerUrl() == null || !build.equals(build.getRootBuild())) {
-            return true;
-        }
-        final String jenkinsProjectName = build.getProject().getName();
-        if (projectKey == null) {
-            projectKey = jenkinsProjectName;
-        }
-        final Provider provider = KomeaComputerListener.getProvider();
-        final int buildNumber = build.getNumber();
-        final long buildDate = build.getTime().getTime();
-
-        final List<EventSimpleDto> events = new ArrayList<EventSimpleDto>(2);
-        events.add(EventsBuilder.createStartEvent(buildDate, buildNumber,
-                jenkinsProjectName, provider.getUrl(), projectKey, branch));
-        events.add(EventsBuilder.createIndustrializationEvent(buildDate, buildNumber,
-                jenkinsProjectName, provider.getUrl(), projectKey, branch, industrialization));
-        final Map<String, Integer> commiters = getCommiters(build);
-        for (final String commiter : commiters.keySet()) {
-            events.add(EventsBuilder.createCodeChangedEvent(buildDate, buildNumber, jenkinsProjectName,
-                    provider.getUrl(), commiters.get(commiter), commiter, projectKey, branch));
-        }
-        if (isStartedByUserCommits(build)) {
-            for (final String commiter : commiters.keySet()) {
-                events.add(EventsBuilder.createStartedByUser(buildDate, buildNumber,
-                        jenkinsProjectName, provider.getUrl(), commiter, projectKey, branch));
+        try {
+            final String komeaUrl = getKomeaUrl();
+            if (komeaUrl == null || !build.equals(build.getRootBuild())) {
+                return true;
             }
+            final String jenkinsProjectName = build.getProject().getName();
+            if (projectKey == null) {
+                projectKey = jenkinsProjectName;
+            }
+            LOGGER.log(Level.FINE, "Prebuild of project {0}", projectKey);
+            final Provider provider = KomeaComputerListener.getProvider();
+            final int buildNumber = build.getNumber();
+            final long buildDate = build.getTime().getTime();
+
+            final List<EventSimpleDto> events = new ArrayList<EventSimpleDto>(2);
+            events.add(EventsBuilder.createStartEvent(buildDate, buildNumber,
+                    jenkinsProjectName, provider.getUrl(), projectKey, branch));
+            events.add(EventsBuilder.createIndustrializationEvent(buildDate, buildNumber,
+                    jenkinsProjectName, provider.getUrl(), projectKey, branch, industrialization));
+            final Map<String, Integer> commiters = getCommiters(build);
+            for (final String commiter : commiters.keySet()) {
+                events.add(EventsBuilder.createCodeChangedEvent(buildDate, buildNumber, jenkinsProjectName,
+                        provider.getUrl(), commiters.get(commiter), commiter, projectKey, branch));
+            }
+            if (isStartedByUserCommits(build)) {
+                for (final String commiter : commiters.keySet()) {
+                    events.add(EventsBuilder.createStartedByUser(buildDate, buildNumber,
+                            jenkinsProjectName, provider.getUrl(), commiter, projectKey, branch));
+                }
+            }
+            final String user = getStartedByUser(build);
+            if (user != null) {
+                events.add(EventsBuilder.createStartedByUser(buildDate, buildNumber,
+                        jenkinsProjectName, provider.getUrl(), user, projectKey, branch));
+            }
+            pushEvents(komeaUrl, events);
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+            ex.printStackTrace(listener.getLogger());
         }
-        final String user = getStartedByUser(build);
-        if (user != null) {
-            events.add(EventsBuilder.createStartedByUser(buildDate, buildNumber,
-                    jenkinsProjectName, provider.getUrl(), user, projectKey, branch));
-        }
-        pushEvents(listener, events);
         return true;
     }
 
-    private String getServerUrl() {
-
-        String serverUrl = getDescriptor().getServerUrl();
+    private static String getKomeaUrl() {
+        final DescriptorImpl komeaDescriptor
+                = Jenkins.getInstance().getDescriptorByType(DescriptorImpl.class);
+        String serverUrl = komeaDescriptor.getServerUrl();
         if (serverUrl != null && serverUrl.trim().isEmpty()) {
             serverUrl = null;
         }
         return serverUrl;
     }
 
-    private void pushEvents(final BuildListener listener, final List<EventSimpleDto> events) {
-
-        final String komeaUrl = getServerUrl();
-        if (komeaUrl == null) {
+    private static void pushEvents(final String komeaUrl, final List<EventSimpleDto> events) throws Exception {
+        if (events.isEmpty()) {
             return;
         }
+        LOGGER.log(Level.FINE, "Push {0} events", events.size());
         final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(KomeaNotifier.class.getClassLoader());
@@ -321,22 +397,13 @@ public class KomeaNotifier extends Notifier implements Serializable {
                     try {
                         eventsAPI.pushEvent(event);
                     } catch (Exception ex) {
-                        final ProviderDto providerDto = new ProviderDto();
-                        final Provider provider = KomeaComputerListener.getProvider();
-                        providerDto.setProvider(provider);
-                        providerDto.setEventTypes(KomeaComputerListener.EVENT_TYPES);
-                        KomeaComputerListener.registerProvider(komeaUrl, providerDto, listener);
+                        final ProviderDto providerDto = KomeaComputerListener.getProviderDto();
+                        KomeaComputerListener.registerProvider(komeaUrl, providerDto);
                         eventsAPI.pushEvent(event);
                     }
                 } else {
                     eventsAPI.pushEvent(event);
                 }
-            }
-        } catch (final Exception ex) {
-            if (listener == null) {
-                LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
-            } else {
-                ex.printStackTrace(listener.getLogger());
             }
         } finally {
             Thread.currentThread().setContextClassLoader(contextClassLoader);

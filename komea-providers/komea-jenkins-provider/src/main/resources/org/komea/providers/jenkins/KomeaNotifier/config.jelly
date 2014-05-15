@@ -9,5 +9,8 @@
         <f:entry title="Industrialization" field="industrialization">
             <f:select />
         </f:entry>
+        <f:validateButton
+            title="${%Test Events}" progress="${%Testing...}"
+            method="testEvents" with="projectKey" />
     </f:section>
 </j:jelly>

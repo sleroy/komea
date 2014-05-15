@@ -15,6 +15,8 @@
     <name>Komea : Jenkins provider</name>
 
     <properties>
+        <maven.build.timestamp.format>dd.MM.yyyy_HH:mm</maven.build.timestamp.format>
+        <buildNumber>${maven.build.timestamp}</buildNumber>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.6</java.version>
     </properties>
@@ -34,6 +36,12 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
