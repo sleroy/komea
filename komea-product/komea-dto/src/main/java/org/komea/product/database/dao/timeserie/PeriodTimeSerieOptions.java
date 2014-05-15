@@ -5,6 +5,7 @@ package org.komea.product.database.dao.timeserie;
 import java.util.Date;
 
 import org.apache.commons.lang3.Validate;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Months;
@@ -24,14 +25,16 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
     private Date             fromPeriod;
     
     private Date             toPeriod;
-
-	public PeriodTimeSerieOptions() {
-		super();
-	}
-
-	public PeriodTimeSerieOptions(final Kpi _kpi) {
-		super(_kpi);
-	}
+    
+    public PeriodTimeSerieOptions() {
+    
+        super();
+    }
+    
+    public PeriodTimeSerieOptions(final Kpi _kpi) {
+    
+        super(_kpi);
+    }
     
     @Override
     public boolean equals(final Object obj) {
@@ -119,6 +122,7 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
      * Tests if the timescale is per year.
      */
     
+    @JsonIgnore
     public boolean isPerYear() {
     
         return timeScale == TimeScale.PER_YEAR;
@@ -127,6 +131,7 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
     /**
      * Tests if the configuration is valid.
      */
+    @JsonIgnore
     @Override
     public boolean isValid() {
     
