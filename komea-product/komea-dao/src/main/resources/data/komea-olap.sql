@@ -113,7 +113,7 @@ CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_kpi` (`kpiKey` ASC) ;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `komea`.`kom_msr` (
   `id` INT NOT NULL ,
-  `idKpi` INT NOT NULL ,
+  `idKpi` VACRHAR(2048) NOT NULL ,
   `year` INT NOT NULL ,
   `month` INT NOT NULL ,
   `week` INT NOT NULL ,

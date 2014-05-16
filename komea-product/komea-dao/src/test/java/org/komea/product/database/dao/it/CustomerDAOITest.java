@@ -1,6 +1,4 @@
-
 package org.komea.product.database.dao.it;
-
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,21 +10,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 public class CustomerDAOITest extends AbstractSpringIntegrationTestCase {
-    
+
     @Autowired
     private CustomerDao customerDAO;
-    
+
     @Test
     @Transactional
     public void test() {
-    
+
+        Assert.assertEquals(1, customerDAO.countByCriteria(null));
+
         final Customer record = new Customer();
-        record.setName("");
-        
+        record.setName("New Customer");
+
         customerDAO.insert(record);
-        
-        Assert.assertEquals(1, customerDAO.selectByCriteria(new CustomerCriteria()).size());
-        
+
+        Assert.assertEquals(2, customerDAO.selectByCriteria(new CustomerCriteria()).size());
+
     }
-    
+
 }
