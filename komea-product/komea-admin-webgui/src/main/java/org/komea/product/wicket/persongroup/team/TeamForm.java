@@ -73,7 +73,6 @@ public class TeamForm extends Form<PersonGroup> {
 
         selectedProject = new ArrayList<IHasKey>();
         currentProjectList = new ArrayList<IHasKey>();
-
         add(TextFieldBuilder.<String>createRequired("name", this.personGroup, "name").highlightOnErrors()
                 .simpleValidator(0, 255).withTooltip(getString("global.field.tooltip.name")).build());
         TextFieldBuilder<String> keyFieldBuilder = TextFieldBuilder.<String>createRequired("personGroupKey", this.personGroup, "personGroupKey")

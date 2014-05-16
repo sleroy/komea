@@ -140,13 +140,12 @@ public final class PersonForm extends Form<Person> {
             Integer idPersonGroup = person.getIdPersonGroup();
             if (idPersonGroup != null) {
                 projectMemberList.addAll(projectService.getProjectsOfPersonGroupRecursively(idPersonGroup));
-                DialogFactory.removeDistictList(projectMemberList, directProjectList);
-//                projectMemberList.removeAll(directProjectList);
+                DialogFactory.removeDistictList(directProjectList,projectMemberList);
             }
-            DialogFactory.addDistictList(this.currentEntityList, directProjectList);
-            DialogFactory.addDistictList(this.currentEntityList, projectMemberList);
-//            this.currentEntityList.addAll(directProjectList);
-//            this.currentEntityList.addAll(projectMemberList);
+            this.currentEntityList.addAll(directProjectList);
+             this.currentEntityList.addAll(projectMemberList);
+//            DialogFactory.addDistictList(this.currentEntityList, projectMemberList);
+//            DialogFactory.addDistictList(this.currentEntityList, directProjectList);
         }
 
         ListMultipleChoice<IHasKey> listUser = new ListMultipleChoice<IHasKey>("table", new PropertyModel<List<IHasKey>>(this, "selectedEntity"), currentEntityList) {

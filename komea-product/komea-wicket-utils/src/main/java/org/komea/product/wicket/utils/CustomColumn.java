@@ -19,19 +19,19 @@ import org.apache.wicket.model.PropertyModel;
  *
  * @author rgalerme
  */
-public abstract class CountColumn<T> implements Serializable{
+public abstract class CustomColumn<T> implements Serializable {
 
-    public abstract Integer getNumberdisplay(T type);
+    public abstract String getValueDisplay(T type);
 
     public IColumn<T, String> build(String _columnName) {
         PropertyColumn<T, String> countColumn;
         countColumn = new PropertyColumn<T, String>(Model.of(_columnName), "toString") {
-            
+
             @Override
             public void populateItem(Item<ICellPopulator<T>> item, String componentId, IModel<T> rowModel) {
                 T entity = rowModel.getObject();
-                Integer numberdisplay = getNumberdisplay(entity);
-                IModel<Integer> nModel = new Model<Integer>(numberdisplay );
+                String numberdisplay = getValueDisplay(entity);
+                IModel<String> nModel = new Model<String>(numberdisplay);
                 PropertyModel<Object> propertyModel = new PropertyModel<Object>(nModel, this.getPropertyExpression());
                 item.add(new Label(componentId, propertyModel));
             }
@@ -39,4 +39,5 @@ public abstract class CountColumn<T> implements Serializable{
         };
         return countColumn;
     }
+
 }

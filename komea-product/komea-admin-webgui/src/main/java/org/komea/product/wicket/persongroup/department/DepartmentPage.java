@@ -20,6 +20,7 @@ import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.persongroup.PersonGroupDeleteAction;
 import org.komea.product.wicket.utils.CountColumn;
+import org.komea.product.wicket.utils.DialogFactory;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
@@ -78,10 +79,14 @@ public final class DepartmentPage extends LayoutPage {
 
             @Override
             public Integer getNumberdisplay(PersonGroup type) {
-                List<Project> projectsOfPersonGroup = projectService.getProjectsOfPersonGroupRecursively(type.getId());
+              List<Project> listResult = projectService.getProjectsOfPersonGroupRecursively(type.getId());
+                List<Person> personsOfPersonGroup = membersService.getPersonsOfPersonGroupRecursively(type.getId());
+                for (Person person : personsOfPersonGroup) {
+                    DialogFactory.addDistictList((List)listResult, (List)projectService.getProjectsOfAMember(person.getId()));
+                }
                 int result = 0;
-                if (projectsOfPersonGroup != null) {
-                    result = projectsOfPersonGroup.size();
+                if (listResult != null) {
+                    result = listResult.size();
                 }
                 return Integer.valueOf(result);
             }
@@ -91,9 +96,9 @@ public final class DepartmentPage extends LayoutPage {
                 = DataTableBuilder.<PersonGroup, String>newTable("table")
                 .addColumn(getString("global.field.key"), "PersonGroupKey")
                 .addColumn(getString("global.field.name"), "Name")
-                .addColumn(countTeams.bluid(getString("departmentpage.main.table.teamnumber")))
-                .addColumn(countUsers.bluid(getString("departmentpage.main.table.membersnumber")))
-                .addColumn(countProjects.bluid(getString("departmentpage.main.table.projectnumber")))
+                .addColumn(countTeams.build(getString("departmentpage.main.table.teamnumber")))
+                .addColumn(countUsers.build(getString("departmentpage.main.table.membersnumber")))
+                .addColumn(countProjects.build(getString("departmentpage.main.table.projectnumber")))
                 .withEditDeleteColumn(personGroupDeleteAction, personGroupEditAction)
                 .displayRows(listAffichage.size() + 10).withData(dataProvider).build();
 

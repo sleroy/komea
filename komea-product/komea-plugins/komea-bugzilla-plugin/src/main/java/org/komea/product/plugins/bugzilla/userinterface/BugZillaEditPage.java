@@ -5,6 +5,7 @@
  */
 package org.komea.product.plugins.bugzilla.userinterface;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -25,10 +26,14 @@ public final class BugZillaEditPage extends LayoutPage {
     private IBZConfigurationDAO bService;
 
     public BugZillaEditPage(PageParameters _parameters) {
-        this(_parameters, new BZServerConfiguration());
+        this(_parameters, new BZServerConfiguration(), true);
     }
 
-    public BugZillaEditPage(PageParameters params, BZServerConfiguration _bugServer) {
+    public BugZillaEditPage(PageParameters _parameters, BZServerConfiguration _bugServer) {
+        this(_parameters, _bugServer, false);
+    }
+
+    private BugZillaEditPage(PageParameters params, BZServerConfiguration _bugServer, boolean _isNew) {
         super(params);
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
@@ -36,9 +41,16 @@ public final class BugZillaEditPage extends LayoutPage {
         add(feedbackPanel);
         BugZillaForm bform = new BugZillaForm(bService, _bugServer, feedbackPanel, this, "form", new CompoundPropertyModel<BZServerConfiguration>(_bugServer));
         add(bform);
+        String message;
+        if (_isNew) {
+            message = getString("bugzillapage.save.add.title");
+        } else {
+            message = getString("bugzillapage.save.edit.title");
+        }
+        bform.add(new Label("legend", message));
     }
-    
-        @Override
+
+    @Override
     public String getTitle() {
 
         return getString("bugzillapage.main.title");

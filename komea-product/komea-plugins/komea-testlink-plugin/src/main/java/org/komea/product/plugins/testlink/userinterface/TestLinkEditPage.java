@@ -8,6 +8,7 @@ package org.komea.product.plugins.testlink.userinterface;
 
 
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -33,13 +34,17 @@ public final class TestLinkEditPage extends LayoutPage
     public TestLinkEditPage(final PageParameters params) {
     
     
-        this(params, new TestLinkServer());
+        this(params, new TestLinkServer(),true);
+    }
+
+    public TestLinkEditPage(PageParameters _parameters,final TestLinkServer _testLinkServer) {
+       this(_parameters, _testLinkServer,false);
     }
     
     
-    public TestLinkEditPage(
+    private TestLinkEditPage(
             final PageParameters pageParameters,
-            final TestLinkServer _testLinkServer) {
+            final TestLinkServer _testLinkServer,boolean _isNew) {
     
     
         super(pageParameters);
@@ -51,6 +56,13 @@ public final class TestLinkEditPage extends LayoutPage
                 new TestLinkForm(this, _testLinkServer, testlinkService, feedbackPanel, "form",
                         new CompoundPropertyModel<TestLinkServer>(_testLinkServer));
         add(tform);
+                String message;
+        if (_isNew) {
+            message = getString("testlinkpage.save.add.title");
+        } else {
+            message = getString("testlinkpage.save.edit.title");
+        }
+        tform.add(new Label("legend", message));
     }
     
     

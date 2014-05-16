@@ -47,7 +47,6 @@ public class ProviderPage extends LayoutPage
                 .<Provider, String> newTable("table")
                 .addColumn("Type of plugin", "providerType")
                 .addColumn("Plugin name", "name")
-                .addColumn("Icon", "icon")
                 .addColumn(
                         new ProviderTableActionPanelColumn(Model.of("Actions"), providerService,
                                 wicketAdminService)).displayRows(10).withData(dataProvider).build());
