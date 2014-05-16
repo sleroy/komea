@@ -49,25 +49,29 @@ public class KomeaDecorator implements Decorator {
 
     @Override
     public void decorate(final Resource resource, final DecoratorContext context) {
-        if (!ResourceUtils.isRootProject(resource) || komeaUrl == null || !KomeaPlugin.isEnabled(settings)) {
-            return;
-        }
-        Project project = (Project) resource;
-        if (komeaProjectKey == null) {
-            komeaProjectKey = project.getKey();
-        }
-        final List<EventSimpleDto> events = new ArrayList<EventSimpleDto>();
-        final Collection<Metric> metrics = metricFinder.findAll(projectMetricKeys);
-        for (final Metric metric : metrics) {
-            final Double result = getValue(metric, context);
-            if (result == null) {
-                continue;
+        try {
+            if (!ResourceUtils.isRootProject(resource) || komeaUrl == null || !KomeaPlugin.isEnabled(settings)) {
+                return;
             }
-            final EventSimpleDto event = createMeasureEvent(metric, result,
-                    sonarUrl, project.getId());
-            events.add(event);
+            Project project = (Project) resource;
+            if (komeaProjectKey == null) {
+                komeaProjectKey = project.getKey();
+            }
+            final List<EventSimpleDto> events = new ArrayList<EventSimpleDto>();
+            final Collection<Metric> metrics = metricFinder.findAll(projectMetricKeys);
+            for (final Metric metric : metrics) {
+                final Double result = getValue(metric, context);
+                if (result == null) {
+                    continue;
+                }
+                final EventSimpleDto event = createMeasureEvent(metric, result,
+                        sonarUrl, project.getId());
+                events.add(event);
+            }
+            KomeaPlugin.pushEvents(sonarUrl, komeaUrl, events.toArray(new EventSimpleDto[events.size()]));
+        } catch (Exception ex) {
+            LOGGER.error(ex.getMessage(), ex);
         }
-        KomeaPlugin.pushEvents(sonarUrl, komeaUrl, events.toArray(new EventSimpleDto[events.size()]));
     }
 
     private EventSimpleDto createMeasureEvent(final Metric metric,

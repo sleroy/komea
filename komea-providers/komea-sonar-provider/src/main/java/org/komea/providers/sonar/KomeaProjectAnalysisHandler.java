@@ -28,13 +28,13 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
 
     @Override
     public void onProjectAnalysis(final ProjectAnalysisEvent event) {
-        final String komeaUrl = KomeaPlugin.getKomeaUrl(settings);
-        if (komeaUrl == null || !event.getProject().isRoot() || !KomeaPlugin.isEnabled(settings)) {
-            return;
-        }
         try {
+            final String komeaUrl = KomeaPlugin.getKomeaUrl(settings);
+            if (komeaUrl == null || !event.getProject().isRoot() || !KomeaPlugin.isEnabled(settings)) {
+                return;
+            }
             final int projectId = event.getProject().getId();
-            final String projectKey = getCiFlowProjectKey(event.getProject());
+            final String projectKey = getKomeaProjectKey(event.getProject());
             if (event.isStart()) {
                 final long start = new Date().getTime();
                 map.put(projectId, start);
@@ -51,19 +51,19 @@ public class KomeaProjectAnalysisHandler implements ProjectAnalysisHandler {
         }
     }
 
-    private String getCiFlowProjectKey(final Project project) {
+    private String getKomeaProjectKey(final Project project) {
         final int projectId = project.getId();
-        String ciFlowProjectKey;
+        String komeaProjectKey;
         if (projectMap.containsKey(projectId)) {
-            ciFlowProjectKey = projectMap.get(projectId);
+            komeaProjectKey = projectMap.get(projectId);
         } else {
-            ciFlowProjectKey = KomeaPlugin.getProjectKey(settings);
-            if (ciFlowProjectKey == null || ciFlowProjectKey.isEmpty()) {
-                ciFlowProjectKey = project.getKey();
+            komeaProjectKey = KomeaPlugin.getProjectKey(settings);
+            if (komeaProjectKey == null || komeaProjectKey.isEmpty()) {
+                komeaProjectKey = project.getKey();
             }
-            projectMap.put(projectId, ciFlowProjectKey);
+            projectMap.put(projectId, komeaProjectKey);
         }
-        return ciFlowProjectKey;
+        return komeaProjectKey;
     }
 
     private EventSimpleDto createStartEvent(final String projectKey, final long start,

@@ -386,7 +386,7 @@ public class KomeaNotifier extends Notifier implements Serializable {
         if (events.isEmpty()) {
             return;
         }
-        LOGGER.log(Level.FINE, "Push {0} events", events.size());
+        LOGGER.log(Level.FINE, "Push {0} Komea events to {1}", new Object[]{events.size(), komeaUrl});
         final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(KomeaNotifier.class.getClassLoader());

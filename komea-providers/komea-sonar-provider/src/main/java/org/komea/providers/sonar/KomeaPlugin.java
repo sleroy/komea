@@ -41,7 +41,7 @@ import org.sonar.api.measures.Metric;
             type = PropertyType.TEXT),
     @Property(
             key = KomeaPlugin.METRICS_KEYS_BLACKLISTED,
-            name = "Metric keys blacklisted",
+            name = "Blacklisted metric keys",
             description = "Keys of metrics wich will be not pushed to Komea. Separate keys with ','",
             project = false,
             global = true,
@@ -157,25 +157,30 @@ public class KomeaPlugin extends SonarPlugin {
         return sonarUrl + "/dashboard/index/" + projectId;
     }
 
-    public static void registerProvider(final String komeaUrl, final ProviderDto provider) {
+    public static void registerProvider(final String komeaUrl, final ProviderDto provider)
+            throws Exception {
         final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(KomeaPlugin.class.getClassLoader());
             final IProvidersAPI providersAPI = RestClientFactory.INSTANCE.createProvidersAPI(komeaUrl);
+            LOGGER.debug("Register Komea Provider : {0} ({1})",
+                    new Object[]{provider.getProvider().getName(), provider.getProvider().getUrl()});
             providersAPI.registerProvider(provider);
-        } catch (Exception ex) {
-            LOGGER.error(ex.getMessage(), ex);
         } finally {
             Thread.currentThread().setContextClassLoader(contextClassLoader);
         }
     }
 
     public static void pushEvents(final String sonarUrl, final String komeaUrl,
-            final EventSimpleDto... events) {
+            final EventSimpleDto... events) throws Exception {
+        if (events.length == 0) {
+            return;
+        }
         final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(KomeaPlugin.class.getClassLoader());
             final IEventsAPI eventsAPI = RestClientFactory.INSTANCE.createEventsAPI(komeaUrl);
+            LOGGER.debug("Push {0} Komea events to {1}", new Object[]{events.length, komeaUrl});
             for (int i = 0; i < events.length; i++) {
                 final EventSimpleDto event = events[i];
                 if (i == 0) {
@@ -192,10 +197,7 @@ public class KomeaPlugin extends SonarPlugin {
                 } else {
                     eventsAPI.pushEvent(event);
                 }
-
             }
-        } catch (Exception ex) {
-            LOGGER.error(ex.getMessage(), ex);
         } finally {
             Thread.currentThread().setContextClassLoader(contextClassLoader);
         }

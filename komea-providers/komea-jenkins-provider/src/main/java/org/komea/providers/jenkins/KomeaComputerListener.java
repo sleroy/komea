@@ -160,7 +160,7 @@ public class KomeaComputerListener extends ComputerListener implements Serializa
         try {
             Thread.currentThread().setContextClassLoader(KomeaComputerListener.class.getClassLoader());
             final IProvidersAPI providersAPI = RestClientFactory.INSTANCE.createProvidersAPI(serverUrl);
-            LOGGER.log(Level.FINE, "Register Provider : {0} ({1})",
+            LOGGER.log(Level.FINE, "Register Komea Provider : {0} ({1})",
                     new Object[]{provider.getProvider().getName(), provider.getProvider().getUrl()});
             providersAPI.registerProvider(provider);
         } finally {
