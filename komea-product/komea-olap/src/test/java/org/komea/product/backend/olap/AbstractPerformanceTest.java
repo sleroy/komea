@@ -64,6 +64,7 @@ public abstract class AbstractPerformanceTest extends
 
         System.out.println("< Number of kpis : " + kpiDao.selectByCriteria(new KpiCriteria()).size() + " <> ID ="
                 + generatedKpi.getId());
+        generatedKpi.setEsperRequest(String.valueOf(generatedKpi.getId()));
 
         measures.clear();
         measures = FakeMeasures.generateHourlyDataForKpi(generatedKpi.getEsperRequest(), 2, MAX_NUMBER_OF_PROJECTS,
