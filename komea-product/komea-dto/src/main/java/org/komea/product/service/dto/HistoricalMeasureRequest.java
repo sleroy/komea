@@ -2,7 +2,7 @@
 package org.komea.product.service.dto;
 
 
-import org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions;
+import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 
 public class HistoricalMeasureRequest {
     

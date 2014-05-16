@@ -3,7 +3,7 @@ package org.komea.product.service.dto;
 
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions;
+import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 
 @JsonAutoDetect
 public class ManyHistoricalMeasureRequest {

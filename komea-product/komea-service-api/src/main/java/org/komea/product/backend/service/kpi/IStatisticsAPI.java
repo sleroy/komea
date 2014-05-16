@@ -8,8 +8,8 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.komea.product.backend.service.history.HistoryKey;
-import org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions;
-import org.komea.product.database.dao.timeserie.TimeSerieOptions;
+import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
+import org.komea.product.model.timeserie.TimeSerieOptions;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.enums.BackupDelay;
 import org.komea.product.database.model.Measure;

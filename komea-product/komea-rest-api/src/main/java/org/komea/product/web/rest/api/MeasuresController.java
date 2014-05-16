@@ -9,7 +9,7 @@ import javax.validation.Valid;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.kpi.IMeasureService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
-import org.komea.product.database.dao.timeserie.TimeSerieDTO;
+import org.komea.product.model.timeserie.dto.TimeSerieDTO;
 import org.komea.product.service.dto.KpiStringKeyList;
 import org.komea.product.service.dto.ManyHistoricalMeasureRequest;
 import org.komea.product.service.dto.MeasureResult;

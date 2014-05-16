@@ -1,5 +1,5 @@
 
-package org.komea.product.database.dao.timeserie;
+package org.komea.product.model.timeserie;
 
 
 import java.io.Serializable;

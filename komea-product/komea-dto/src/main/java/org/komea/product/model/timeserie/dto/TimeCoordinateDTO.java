@@ -1,5 +1,5 @@
 
-package org.komea.product.database.dao.timeserie;
+package org.komea.product.model.timeserie.dto;
 
 
 import java.util.Date;

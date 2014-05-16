@@ -3,4 +3,5 @@
     <inherits name='com.google.common.collect.Collect' />
     <source path='database' />
     <source path='service' />
+    <source path='model/timeserie/dto' />
 </module>

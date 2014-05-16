@@ -1,16 +1,9 @@
-
 package org.komea.product.backend.service.alert;
 
-
-import org.komea.product.backend.api.IKPIService;
 import org.komea.product.database.dto.KpiAlertDto;
 import org.komea.product.database.dto.SearchKpiAlertsDto;
 import org.komea.product.database.model.KpiAlertType;
-import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.AlertCriteria;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class AlertService implements IAlertService {
-    
-    private static final Logger LOGGER = LoggerFactory.getLogger(AlertService.class);
-    
-    @Autowired
-    private IKPIService         kpiService;
-    
+
     /**
      * Cette méthode : est ce que le seuil est franchi ?
      *
@@ -35,7 +23,7 @@ public class AlertService implements IAlertService {
      */
     @Override
     public boolean isAlertActivated(final KpiAlertType alertType, final Number value) {
-    
+
         if (value == null) {
             return false;
         }
@@ -58,7 +46,7 @@ public class AlertService implements IAlertService {
                 return compareTo == 0;
         }
     }
-    
+
     /**
      * @param _filter
      * @param kpiAlert
@@ -66,20 +54,18 @@ public class AlertService implements IAlertService {
      */
     @Override
     public boolean isAlertFiltered(final SearchKpiAlertsDto _filter, final KpiAlertDto kpiAlert) {
-    
+
         return kpiAlert != null && (!_filter.isActivatedOnly() || kpiAlert.isActivated());
     }
-    
+
     @Override
-    public boolean isAlertAssociatedToMeasureEntity(final AlertCriteria _criteria, final Measure measure) {
-    
-        Integer entityId = measure.getEntityID();
+    public boolean isAlertAssociatedToEntity(final AlertCriteria _criteria, final Integer entityId) {
         return entityId != null && _criteria.getEntity().getId().equals(entityId);
     }
-    
+
     @Override
-    public boolean isAlertIdAssociatedToKpi(final AlertCriteria _criteria, final Measure measure) {
-    
-        return measure.getIdKpi().equals(_criteria.getAlertType().getIdKpi());
+    public boolean isAlertIdAssociatedToKpi(final AlertCriteria _criteria, final Integer kpiId) {
+
+        return kpiId.equals(_criteria.getAlertType().getIdKpi());
     }
 }

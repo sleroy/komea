@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
-import org.komea.product.database.dao.timeserie.EntityIdValue;
-import org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions;
-import org.komea.product.database.dao.timeserie.TimeCoordinate;
-import org.komea.product.database.dao.timeserie.TimeSerieOptions;
+import org.komea.product.model.timeserie.EntityIdValue;
+import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
+import org.komea.product.model.timeserie.TimeCoordinate;
+import org.komea.product.model.timeserie.TimeSerieOptions;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.service.dto.EntityKey;
