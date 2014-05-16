@@ -67,4 +67,19 @@ public class MeasuresController {
         
     }
     
+    /**
+     * This method get the last measure for a kpi type on an entity
+     *
+     * @param _kpiKey
+     *            the kpi type
+     * @return the last measure value
+     * @throws KPINotFoundException
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "/last", produces = "application/json")
+    @ResponseBody
+    public List<MeasureResult> lastMeasures(@Valid @RequestBody final KpiStringKeyList _kpiKeys) throws KPINotFoundException {
+    
+        return Lists.newArrayList();
+        
+    }
 }
