@@ -29,7 +29,7 @@
 	<!-- Ehcache library setup -->
 	<bean id="ehcache"
 		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-		<property name="configLocation" value="ehcache.xml"></property>
+		<property name="configLocation" value="classpath:/ehcache.xml"></property>
 		<property name="shared" value="true"></property>
 	</bean>
 
