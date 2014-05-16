@@ -23,7 +23,7 @@ public class FakeMeasures {
      * @return
      */
     @Transactional
-    public static List<Measure> generateDailyDataForKpi(final int _kpiID, final int _maxYears,
+    public static List<Measure> generateDailyDataForKpi(final String _kpiID, final int _maxYears,
             final int _numberOfProjects, final int _valueMaxrange) {
 
         final List<Measure> measures = Lists.newArrayList();
@@ -48,7 +48,7 @@ public class FakeMeasures {
      * @return
      */
     @Transactional
-    public static List<Measure> generateHourlyDataForKpi(final int _kpiID, final int _maxYears,
+    public static List<Measure> generateHourlyDataForKpi(final String _kpiID, final int _maxYears,
             final int _numberOfProjects, final int _valueMaxrange) {
 
         final List<Measure> measures = Lists.newArrayList();
@@ -63,7 +63,7 @@ public class FakeMeasures {
         return measures;
     }
 
-    private static Measure fakeMeasure(final DateTime _from, final int _idKpi, final int _idProject, final double _d) {
+    private static Measure fakeMeasure(final DateTime _from, final String _idKpi, final int _idProject, final double _d) {
 
         final Measure measure = new Measure();
         MeasureUtils.setMeasureDateTime(measure, _from);
@@ -74,7 +74,7 @@ public class FakeMeasures {
 
     }
 
-    private static DateTime generateHourlyData(final int _kpiID, final int _valueMaxrange,
+    private static DateTime generateHourlyData(final String _kpiID, final int _valueMaxrange,
             final List<Measure> measures, final Random random, final DateTime from, final int idProject) {
 
         DateTime from2 = from;

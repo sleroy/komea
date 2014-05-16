@@ -29,7 +29,7 @@
         14:47:35 CEST 2014. -->
         <constructor>
             <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-            <arg column="idKpi" jdbcType="INTEGER" javaType="java.lang.Integer" />
+            <arg column="idKpi" jdbcType="VARCHAR" javaType="java.lang.String" />
             <arg column="year" jdbcType="INTEGER" javaType="java.lang.Integer" />
             <arg column="month" jdbcType="INTEGER" javaType="java.lang.Integer" />
             <arg column="week" jdbcType="INTEGER" javaType="java.lang.Integer" />
@@ -172,7 +172,7 @@
         value, date,
         sprint)
         values (#{id,jdbcType=INTEGER},
-        #{idKpi,jdbcType=INTEGER},
+        #{idKpi,jdbcType=VARCHAR},
         #{year,jdbcType=INTEGER},
         #{month,jdbcType=INTEGER}, #{week,jdbcType=INTEGER},
         #{day,jdbcType=INTEGER},
@@ -226,7 +226,7 @@
                 #{id,jdbcType=INTEGER},
             </if>
             <if test="idKpi != null">
-                #{idKpi,jdbcType=INTEGER},
+                #{idKpi,jdbcType=VARCHAR},
             </if>
             <if test="year != null">
                 #{year,jdbcType=INTEGER},
@@ -277,7 +277,7 @@
                 id = #{record.id,jdbcType=INTEGER},
             </if>
             <if test="record.idKpi != null">
-                idKpi = #{record.idKpi,jdbcType=INTEGER},
+                idKpi = #{record.idKpi,jdbcType=VARCHAR},
             </if>
             <if test="record.year != null">
                 year = #{record.year,jdbcType=INTEGER},
@@ -318,7 +318,7 @@
         update kom_msr
         set id = #{record.id,jdbcType=INTEGER},
         idKpi =
-        #{record.idKpi,jdbcType=INTEGER},
+        #{record.idKpi,jdbcType=VARCHAR},
         year =
         #{record.year,jdbcType=INTEGER},
         month =
@@ -346,7 +346,7 @@
         update kom_msr
         <set>
             <if test="idKpi != null">
-                idKpi = #{idKpi,jdbcType=INTEGER},
+                idKpi = #{idKpi,jdbcType=VARCHAR},
             </if>
             <if test="year != null">
                 year = #{year,jdbcType=INTEGER},
@@ -383,7 +383,7 @@
         MyBatis Generator, do not modify. This element was generated on Sat May 10
         14:47:35 CEST 2014. -->
         update kom_msr
-        set idKpi = #{idKpi,jdbcType=INTEGER},
+        set idKpi = #{idKpi,jdbcType=VARCHAR},
         year =
         #{year,jdbcType=INTEGER},
         month = #{month,jdbcType=INTEGER},

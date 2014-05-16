@@ -47,14 +47,13 @@ public class AlertFinderService implements IAlertFinderService {
      */
     public KpiAlertDto findAlert(final AlertCriteria _alertCriteria, final IdKpiMap _mapKpis) {
 
-        final Measure measure = findMeasure(_alertCriteria);
+        final Measure measure = findMeasure(_alertCriteria, _alertCriteria.getAlertType().getIdKpi());
         if (measure == null) {
             return null;
         }
-
+        final Kpi kpi = _mapKpis.get(_alertCriteria.getAlertType().getIdKpi());
         final KpiAlertDto kpiAlert = new KpiAlertDto();
         kpiAlert.setKpiAlertType(_alertCriteria.getAlertType());
-        final Kpi kpi = _mapKpis.get(_alertCriteria.getAlertType().getIdKpi());
         kpiAlert.setKpi(kpi);
         kpiAlert.setDate(new Date());
         kpiAlert.setEntityName(_alertCriteria.getEntity().getDisplayName());
@@ -97,10 +96,10 @@ public class AlertFinderService implements IAlertFinderService {
      * @param _criteria
      * @return
      */
-    public Measure findMeasure(final AlertCriteria _criteria) {
+    public Measure findMeasure(final AlertCriteria _criteria, final Integer idKpi) {
 
         for (final Measure measure : _criteria.getMeasures()) {
-            if (alertService.isAlertIdAssociatedToKpi(_criteria, measure.getIdKpi())
+            if (alertService.isAlertIdAssociatedToKpi(_criteria, idKpi)
                     && alertService.isAlertAssociatedToEntity(_criteria, measure.getEntityID())) {
                 return measure;
             }

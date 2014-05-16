@@ -364,7 +364,7 @@ public class StatisticsService implements IStatisticsAPI {
         Validate.isTrue(_historyKey.hasEntityReference());
 
         final int idFromKpiFormula = generateKpiFormulaID(_historyKey.getKpiID());
-        final Measure measure = Measure.initializeMeasure(idFromKpiFormula, _historyKey.getEntityKey().getId());
+        final Measure measure = Measure.initializeMeasure(String.valueOf(idFromKpiFormula), _historyKey.getEntityKey().getId());
         measure.setValue(_value);
         MeasureUtils.setMeasureDateTime(measure, _actualTime);
         measureDao.insert(measure);

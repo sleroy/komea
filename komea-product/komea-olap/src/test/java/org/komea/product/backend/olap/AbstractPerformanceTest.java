@@ -39,7 +39,7 @@ public abstract class AbstractPerformanceTest extends
     private static List<Measure> measures = new ArrayList<Measure>(20000);
     protected static final int MILLI_INTERVAL = 1000;
 
-	// @Rule
+    // @Rule
     // public final H2ProfilerRule h2ProfilerRule = new H2ProfilerRule();
     @Autowired
     private KpiDao kpiDao;
@@ -66,7 +66,7 @@ public abstract class AbstractPerformanceTest extends
                 + generatedKpi.getId());
 
         measures.clear();
-        measures = FakeMeasures.generateHourlyDataForKpi(generatedKpi.getId(), 2, MAX_NUMBER_OF_PROJECTS,
+        measures = FakeMeasures.generateHourlyDataForKpi(generatedKpi.getEsperRequest(), 2, MAX_NUMBER_OF_PROJECTS,
                 MAX_BUILD_PER_HOUR);
         LOGGER.info("Number of elements {}", measures.size());
 
