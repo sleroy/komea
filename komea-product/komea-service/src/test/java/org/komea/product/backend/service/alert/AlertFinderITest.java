@@ -17,6 +17,7 @@ import org.komea.product.test.spring.AbstractSpringDBunitIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Ignore
+@DatabaseTearDown(value = "alerts.xml", type = DatabaseOperation.DELETE_ALL)
 public class AlertFinderITest extends AbstractSpringDBunitIntegrationTest {
 
     @Autowired
@@ -48,7 +49,6 @@ public class AlertFinderITest extends AbstractSpringDBunitIntegrationTest {
 
     @Test
     @DatabaseSetup("alerts.xml")
-    @DatabaseTearDown(value = "alerts.xml", type = DatabaseOperation.DELETE_ALL)
     public final void testFindAlerts_with_existing_alerts() throws Exception {
 
         SearchKpiAlertsDto searchAlert = new SearchKpiAlertsDto();
