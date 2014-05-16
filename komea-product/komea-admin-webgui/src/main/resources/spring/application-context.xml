@@ -22,11 +22,15 @@
 
 	<tasks:annotation-driven />
 
-	<bean id="cacheManager"
-		class="org.springframework.cache.concurrent.ConcurrentMapCacheManager">
-		<!-- <property name="caches"> <set> <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" 
-			name="default" /> <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" 
-			name="software-settings" /> </set> </property> -->
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="ehcache"></property>
+	</bean>
+
+	<!-- Ehcache library setup -->
+	<bean id="ehcache"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:/ehcache.xml"></property>
+		<property name="shared" value="true"></property>
 	</bean>
 
 	<context:component-scan base-package="org.komea.product" />
