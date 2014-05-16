@@ -15,7 +15,9 @@ import org.komea.product.database.enums.Severity;
 import org.komea.product.test.spring.AbstractSpringDBunitIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 public class AlertFinderITest extends AbstractSpringDBunitIntegrationTest {
     
@@ -48,6 +50,7 @@ public class AlertFinderITest extends AbstractSpringDBunitIntegrationTest {
     
     @Test
     @DatabaseSetup("alerts.xml")
+    @DatabaseTearDown(value = "alerts.xml", type = DatabaseOperation.DELETE_ALL)
     public final void testFindAlerts_with_existing_alerts() throws Exception {
     
         SearchKpiAlertsDto searchAlert = new SearchKpiAlertsDto();
