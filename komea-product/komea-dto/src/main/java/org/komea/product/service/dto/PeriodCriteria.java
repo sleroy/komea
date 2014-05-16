@@ -1,6 +1,5 @@
 package org.komea.product.service.dto;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public final class PeriodCriteria {
@@ -29,7 +28,7 @@ public final class PeriodCriteria {
      */
     public static PeriodCriteria CreateLimitCriteriaFromStartingDate(final Date _startDate) {
 
-        return new PeriodCriteria(_startDate, Calendar.getInstance().getTime());
+        return new PeriodCriteria(_startDate, new Date());
     }
 
     //
