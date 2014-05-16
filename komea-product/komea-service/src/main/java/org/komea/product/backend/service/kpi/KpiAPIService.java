@@ -19,8 +19,8 @@ import org.komea.product.service.dto.EntityStringKey;
 import org.komea.product.service.dto.HistoryStringKey;
 import org.komea.product.service.dto.HistoryStringKeyList;
 import org.komea.product.service.dto.KpiKey;
-import org.komea.product.service.dto.LimitCriteria;
 import org.komea.product.service.dto.MeasureResult;
+import org.komea.product.service.dto.PeriodCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,15 +85,18 @@ public class KpiAPIService implements IKpiAPI {
         return kpiService.getBaseKpisOfGroupKpiKeys(_groupKpiKeys);
     }
     
+    @Deprecated
     @Override
-    public MeasureResult getHistoricalMeasure(final HistoryStringKey _historyKey, final LimitCriteria _limit) {
+    public MeasureResult getHistoricalMeasure(final HistoryStringKey _historyKey, final PeriodCriteria _limit) {
     
         MeasureResult historicalMeasure = new MeasureResult();
         // FIXME measureHistoryService.getHistoricalMeasure(_historyKey, _limit);
         return historicalMeasure;
     }
+    
+    @Deprecated
     @Override
-    public List<MeasureResult> getHistoricalMeasures(final HistoryStringKeyList _historyKeys, final LimitCriteria _limit) {
+    public List<MeasureResult> getHistoricalMeasures(final HistoryStringKeyList _historyKeys, final PeriodCriteria _limit) {
     
         Validate.notNull(_historyKeys, "history string key list can't be null");
         
