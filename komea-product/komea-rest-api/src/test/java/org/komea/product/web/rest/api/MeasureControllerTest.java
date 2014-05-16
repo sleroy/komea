@@ -98,4 +98,27 @@ public class MeasureControllerTest extends AbstractSpringWebIntegrationTestCase 
         
     }
     
+    @Test
+    public void testlastMeasures() throws Exception {
+    
+        // List<MeasureResult> measures = Lists.newArrayList();
+        // MeasureResult result = new MeasureResult();
+        // result.addHistoricalValue(12D, new Date());
+        // measures.add(result);
+        // Mockito.when(service.getHistoricalMeasures(Matchers.any(HistoryStringKeyList.class), Matchers.any(LimitCriteria.class)))
+        // .thenReturn(measures);
+        
+        // HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
+        // LimitCriteria limit = LimitCriteria.createDefaultLimitCriteria();
+        KpiStringKeyList request = new KpiStringKeyList();
+        String jsonMessage = IntegrationTestUtil.convertObjectToJSON(request);
+        System.out.println(jsonMessage);
+        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/last")
+                .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
+        
+        httpRequest.andDo(MockMvcResultHandlers.print());
+        httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
+        
+    }
+    
 }

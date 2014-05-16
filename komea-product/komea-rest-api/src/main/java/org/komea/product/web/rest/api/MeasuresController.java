@@ -12,6 +12,7 @@ import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.model.timeserie.dto.TimeSerieDTO;
 import org.komea.product.service.dto.KpiStringKeyList;
 import org.komea.product.service.dto.ManyHistoricalMeasureRequest;
+import org.komea.product.service.dto.ManyHistoricalMeasureRequestTemp;
 import org.komea.product.service.dto.MeasureResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.common.collect.Lists;
 
 @Controller
 @RequestMapping(value = "/measures")
@@ -41,8 +44,15 @@ public class MeasuresController {
         return measureService.findMupltipleHistoricalMeasure(_request.getKpiKeyList(), _request.getPeriod());
     }
     
+    @RequestMapping(method = RequestMethod.POST, value = "/historic-temp", consumes = "application/json; charset=utf-8", produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public List<TimeSerieDTO> findHistoricalMeasureTemps(@RequestBody final ManyHistoricalMeasureRequestTemp _request) {
+    
+        return Lists.newArrayList();
+    }
+    
     /**
-     * This method get the last measure for a kpi type on an entity
+     * This method get the current measure for a kpi type on an entity
      *
      * @param _kpiKey
      *            the kpi type
@@ -56,4 +66,5 @@ public class MeasuresController {
         return measureService.currentMeasures(_kpiKeys);
         
     }
+    
 }

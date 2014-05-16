@@ -2,10 +2,8 @@
 package org.komea.product.service.dto;
 
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 
-@JsonAutoDetect
 public class ManyHistoricalMeasureRequest {
     
     private KpiStringKeyList       kpiKeyList;
