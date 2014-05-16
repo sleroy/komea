@@ -79,7 +79,7 @@ public class MeasuresController {
     @ResponseBody
     public List<MeasureResult> lastMeasures(@Valid @RequestBody final KpiStringKeyList _kpiKeys) throws KPINotFoundException {
     
-        return Lists.newArrayList();
+        return measureService.lastMeasures(_kpiKeys);
         
     }
 }

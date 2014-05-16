@@ -55,4 +55,24 @@ public interface IMeasureService {
     TimeSerieDTO findHistoricalMeasure(KpiStringKey _kpiKey, PeriodTimeSerieOptions _period);
     //
     
+    /**
+     * This method return the last values list of kpi apply on a list of entities
+     * 
+     * @param _kpiKeys
+     *            contain the kpi name list, the entity keys list and the entity type
+     * @return the current value list for each couple (entity, kpi)
+     */
+    List<MeasureResult> lastMeasures(KpiStringKeyList _kpiKeys);
+    
+    /**
+     * This method return the last value stored in database of the kpi on an entity
+     * If the kpi does not exist a KPINotFoundRuntimeException is launched
+     * If the entity does not exist a EntityNotFoundException is launched
+     * 
+     * @param _kpiKey
+     *            the kpiString keu (kpi key, entity key and entity type)
+     * @return the current value
+     */
+    double lastMeasure(KpiStringKey _kpiKey);
+    
 }
