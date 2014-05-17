@@ -1,6 +1,4 @@
-package org.komea.product.database.enums;
-
-import org.komea.product.database.model.Kpi;
+package org.komea.eventory.api.cache;
 
 public enum BackupDelay {
 	HOUR, DAY, WEEK, MONTH;
@@ -9,14 +7,13 @@ public enum BackupDelay {
 	 * Tests if the given delay is applied for the kpi passed in parameter.
 	 * Always true for DAY enum if the given kpi does not provide any value.
 	 * 
-	 * @param _kpi
-	 *            the kpi.
+	 * @param _cronExpression
+	 *            the cron expression.
 	 * 
 	 */
-	public boolean isAppliedTo(final Kpi _kpi) {
-		final String cronExpression = _kpi.getCronExpression();
+	public boolean isAppliedTo(final String _cronExpression) {
 		try {
-			final BackupDelay valueOf = BackupDelay.valueOf(cronExpression);
+			final BackupDelay valueOf = BackupDelay.valueOf(_cronExpression);
 			return equals(valueOf);
 		} catch (final IllegalArgumentException e) {
 			return BackupDelay.DAY.equals(this); // Provided default value DAY

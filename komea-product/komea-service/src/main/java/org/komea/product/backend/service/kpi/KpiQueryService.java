@@ -65,48 +65,6 @@ public class KpiQueryService implements IKpiQueryService {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.komea.product.cep.tester.IKpiQueryRegisterService#createEsperQueryFromKPI
-	 * (org.komea.product.database.model.Kpi)
-	 */
-
-	/**
-	 * @return the cronRegistry
-	 */
-	public ICronRegistryService getCronRegistry() {
-
-		return cronRegistry;
-	}
-
-	public IDynamicDataQueryRegisterService getDynamicDataQueryRegisterService() {
-
-		return dynamicDataQueryRegisterService;
-	}
-
-	/**
-	 * @return the entityService
-	 */
-	public IEntityService getEntityService() {
-
-		return entityService;
-	}
-
-	/**
-	 * @return the esperEngine
-	 */
-	public IEventEngineService getEsperEngine() {
-
-		return esperEngine;
-	}
-
-	public IKpiQueryRegisterService getKpiQueryRegisterService() {
-
-		return kpiQueryRegisterService;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
 	 * org.komea.product.cep.tester.IKpiQueryRegisterService#getEsperQueryFromKpi
 	 * (org.komea.product.database.model.Kpi)
 	 */
@@ -128,44 +86,6 @@ public class KpiQueryService implements IKpiQueryService {
 		esperEngine.removeQuery(_kpi.getEsperRequest());
 		dynamicDataQueryRegisterService.removeQuery(_kpi.getEsperRequest());
 
-	}
-
-	/**
-	 * @param _cronRegistry
-	 *            the cronRegistry to set
-	 */
-	public void setCronRegistry(final ICronRegistryService _cronRegistry) {
-
-		cronRegistry = _cronRegistry;
-	}
-
-	public void setDynamicDataQueryRegisterService(
-	        final IDynamicDataQueryRegisterService _dynamicDataQueryRegisterService) {
-
-		dynamicDataQueryRegisterService = _dynamicDataQueryRegisterService;
-	}
-
-	/**
-	 * @param _entityService
-	 *            the entityService to set
-	 */
-	public void setEntityService(final IEntityService _entityService) {
-
-		entityService = _entityService;
-	}
-
-	/**
-	 * @param _esperEngine
-	 *            the esperEngine to set
-	 */
-	public void setEsperEngine(final IEventEngineService _esperEngine) {
-
-		esperEngine = _esperEngine;
-	}
-
-	public void setKpiQueryRegisterService(final IKpiQueryRegisterService _kpiQueryRegisterService) {
-
-		kpiQueryRegisterService = _kpiQueryRegisterService;
 	}
 
 	private void evaluateFormulaAndRegisterQuery(final Kpi _kpi) {

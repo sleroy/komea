@@ -43,31 +43,6 @@ public final class KPIValueService implements IKpiValueService {
 	@Autowired
 	private ProjectDao	        projectDao;
 
-	/**
-	 * Method getEntityService.
-	 * 
-	 * @return IEntityService
-	 */
-	public IEntityService getEntityService() {
-
-		return entityService;
-	}
-
-	/**
-	 * Method getKpiDAO.
-	 * 
-	 * @return KpiDao
-	 */
-	public KpiDao getKpiDAO() {
-
-		return kpiDAO;
-	}
-
-	public IKpiQueryService getKpiQueryRegistry() {
-
-		return kpiQueryRegistry;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -83,27 +58,11 @@ public final class KPIValueService implements IKpiValueService {
 		return selectByPrimaryKey.getValueMin();
 	}
 
-	/**
-	 * Project : DAO
-	 * 
-	 * @return the project DAO.
-	 */
-	public ProjectDao getProjectDao() {
-
-		return projectDao;
-	}
-
 	@Override
 	public KpiResult getRealTimeValue(final Integer _kpiID) {
 		final Kpi selectKpiByKey = new FindKpiPerId(_kpiID, kpiDAO).find();
 		return getRealTimeValue(selectKpiByKey);
 	}
-
-	private KpiResult getRealTimeValue(final Kpi selectKpiByKey) {
-	    final KpiResult queryValueFromKpi = kpiQueryRegistry.getQueryValueFromKpi(selectKpiByKey);
-		LOGGER.debug("Returns the real time measure for -> {}", selectKpiByKey);
-		return queryValueFromKpi;
-    }
 
 	/*
 	 * (non-Javadoc)
@@ -134,44 +93,10 @@ public final class KPIValueService implements IKpiValueService {
 		return getRealTimeValue(_kpiKey.getKpiName()).getValue(_kpiKey.getEntityKey());
 	}
 
-	/**
-	 * Method setEntityService.
-	 * 
-	 * @param _entityService
-	 *            IEntityService
-	 */
-	public void setEntityService(final IEntityService _entityService) {
-
-		entityService = _entityService;
-	}
-
-	/**
-	 * /**
-	 * 
-	 * @param _requiredDAO
-	 */
-	public void setKpiDAO(final KpiDao _requiredDAO) {
-
-		kpiDAO = _requiredDAO;
-	}
-
-	public void setKpiQueryRegistry(final IKpiQueryService _kpiQueryRegistry) {
-
-		kpiQueryRegistry = _kpiQueryRegistry;
-	}
-
-	/**
-	 * @param _measureService
-	 *            the measureService to set
-	 */
-	public final void setMeasureService(final MeasureDao _measureService) {
-
-		measureService = _measureService;
-	}
-
-	public void setProjectDao(final ProjectDao _projectDao) {
-
-		projectDao = _projectDao;
+	private KpiResult getRealTimeValue(final Kpi selectKpiByKey) {
+		final KpiResult queryValueFromKpi = kpiQueryRegistry.getQueryValueFromKpi(selectKpiByKey);
+		LOGGER.debug("Returns the real time measure for -> {}", selectKpiByKey);
+		return queryValueFromKpi;
 	}
 
 }
