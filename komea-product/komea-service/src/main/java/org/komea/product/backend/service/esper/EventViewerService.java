@@ -249,7 +249,7 @@ public class EventViewerService implements IEventViewerService, PostSettingRegis
             lastRetentionPeriods[_severity.ordinal()] = getRetentionTime(_severity);
             LOGGER.debug("Upgrading Stream of events {} with new retention policy", _severity);
             esperService
-                    .createQuery(new QueryDefinition(_queryName, buildRetentionQuery(_severity)));
+                    .createQuery(new QueryInformations(_queryName, buildRetentionQuery(_severity)));
         }
     }
 }

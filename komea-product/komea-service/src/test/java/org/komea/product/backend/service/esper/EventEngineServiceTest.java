@@ -92,18 +92,18 @@ public class EventEngineServiceTest
     public final void testCreateOrUpdateQuery() throws Exception {
     
     
-        final QueryDefinition queryDefinition =
-                new QueryDefinition("query", new CEPQueryImplementationStub());
+        final QueryInformations queryInformations =
+                new QueryInformations("query", new CEPQueryImplementationStub());
         // WHEN I CONTROL A QUERY THT NOT EXISTS
         // THEN IT RETURNS FALSE AND NULL
         assertNull(eventEngineService.getQuery("query"));
         assertFalse(eventEngineService.existQuery("query"));
         // AFTER I CREATE IT
-        eventEngineService.createOrUpdateQuery(queryDefinition);
+        eventEngineService.createOrUpdateQuery(queryInformations);
         // IT RETURNS TRUE
         assertTrue(eventEngineService.existQuery("query"));
         // IF I UPDATE AGAIN
-        eventEngineService.createOrUpdateQuery(queryDefinition);
+        eventEngineService.createOrUpdateQuery(queryInformations);
         // NO ERROR? STILL EXISTS
         assertTrue(eventEngineService.existQuery("query"));
         // I FOUND IT IN THE LiST.

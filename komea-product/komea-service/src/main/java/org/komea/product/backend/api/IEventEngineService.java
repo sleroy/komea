@@ -13,19 +13,19 @@ public interface IEventEngineService {
 	/**
 	 * Registers a esper query.
 	 * 
-	 * @param _queryDefinition
+	 * @param _queryInformations
 	 *            ICEPQueryImplementation
 	 */
-	void createOrUpdateQuery(IQueryDefinition _queryDefinition);
+	void createOrUpdateQuery(IQueryInformations _queryInformations);
 
 	/**
 	 * Creates esper Statement.
 	 * 
-	 * @param _queryDefinition
+	 * @param _queryInformations
 	 *            ICEPQueryImplementation
 	 * @return the esper compiled statement.
 	 */
-	ICEPQuery createQuery(IQueryDefinition _queryDefinition);
+	ICEPQuery createQuery(IQueryInformations _queryInformations);
 
 	/**
 	 * Tests if a statement exist.

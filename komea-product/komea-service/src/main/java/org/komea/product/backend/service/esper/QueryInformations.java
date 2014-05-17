@@ -7,7 +7,7 @@ package org.komea.product.backend.service.esper;
 
 
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
-import org.komea.product.backend.api.IQueryDefinition;
+import org.komea.product.backend.api.IQueryInformations;
 
 
 
@@ -16,7 +16,7 @@ import org.komea.product.backend.api.IQueryDefinition;
  * 
  * @author sleroy
  */
-public class QueryDefinition implements IQueryDefinition
+public class QueryInformations implements IQueryInformations
 {
     
     
@@ -28,14 +28,14 @@ public class QueryDefinition implements IQueryDefinition
     /**
      *  
      */
-    public QueryDefinition() {
+    public QueryInformations() {
     
     
         super();
     }
     
     
-    public QueryDefinition(final String _queryName, final ICEPQueryImplementation _implementation) {
+    public QueryInformations(final String _queryName, final ICEPQueryImplementation _implementation) {
     
     
         queryName = _queryName;

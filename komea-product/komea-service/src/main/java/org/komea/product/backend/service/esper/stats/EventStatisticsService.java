@@ -20,7 +20,7 @@ import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.criterias.MeasureDateComparator;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
-import org.komea.product.backend.service.esper.QueryDefinition;
+import org.komea.product.backend.service.esper.QueryInformations;
 import org.komea.product.cep.formula.EventCountFormula;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dao.ProviderDao;
@@ -87,7 +87,7 @@ public class EventStatisticsService implements IEventStatisticsService {
 	 */
 	public void alertCriticityPerDay(final Severity _criticity) {
 
-		cepEngine.createQuery(new QueryDefinition(getKpiNameFromSeverity(_criticity), new AlertPerSeverityPerDay(
+		cepEngine.createQuery(new QueryInformations(getKpiNameFromSeverity(_criticity), new AlertPerSeverityPerDay(
 		        _criticity)));
 
 	}
@@ -99,7 +99,7 @@ public class EventStatisticsService implements IEventStatisticsService {
 	 */
 	public void alertPerDay() {
 
-		cepEngine.createQuery(new QueryDefinition(ALERT_RECEIVED_IN_ONE_DAY, new AlertPerDay()));
+		cepEngine.createQuery(new QueryInformations(ALERT_RECEIVED_IN_ONE_DAY, new AlertPerDay()));
 	}
 
 	/**
@@ -224,7 +224,7 @@ public class EventStatisticsService implements IEventStatisticsService {
 		LOGGER.info("Creating cron for statistics.");
 
 		// output snapshot every 1 minute
-		cepEngine.createOrUpdateQuery(new QueryDefinition(STATS_BREAKDOWN_24H, buildProviderEventFrequencyQuery()));
+		cepEngine.createOrUpdateQuery(new QueryInformations(STATS_BREAKDOWN_24H, buildProviderEventFrequencyQuery()));
 
 		cronRegistryService.registerCronTask("STATS", "0 0/1   * * * ?", EventStatsCron.class, new JobDataMap());
 	}

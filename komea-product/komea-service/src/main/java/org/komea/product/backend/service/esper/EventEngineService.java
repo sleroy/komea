@@ -20,7 +20,7 @@ import org.komea.eventory.api.engine.ICEPEngine;
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.query.CEPQuery;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.api.IQueryDefinition;
+import org.komea.product.backend.api.IQueryInformations;
 import org.komea.product.backend.api.exceptions.CEPQueryNotFoundException;
 import org.komea.product.backend.api.exceptions.InvalidQueryDefinitionException;
 import org.komea.product.backend.service.fs.IKomeaFS;
@@ -66,10 +66,10 @@ public final class EventEngineService implements IEventEngineService {
 	 * 
 	 * @param _definition
 	 *            IQueryDefinition
-	 * @see org.komea.product.backend.api.IEventEngineService#createOrUpdateQuery(IQueryDefinition)
+	 * @see org.komea.product.backend.api.IEventEngineService#createOrUpdateQuery(IQueryInformations)
 	 */
 	@Override
-	public void createOrUpdateQuery(final IQueryDefinition _definition) {
+	public void createOrUpdateQuery(final IQueryInformations _definition) {
 
 		Validate.notNull(_definition);
 		LOGGER.debug("Registering an esper query  {}", _definition.getQueryName());
@@ -85,24 +85,24 @@ public final class EventEngineService implements IEventEngineService {
 	/**
 	 * Method createEPL.
 	 * 
-	 * @param _queryDefinition
+	 * @param _queryInformations
 	 *            IQueryDefinition
 	 * @return EPStatement
 	 * @throws RuntimeException
-	 * @see org.komea.product.backend.api.IEventEngineService#createQuery(IQueryDefinition)
+	 * @see org.komea.product.backend.api.IEventEngineService#createQuery(IQueryInformations)
 	 */
 	@Override
-	public ICEPQuery createQuery(final IQueryDefinition _queryDefinition) throws RuntimeException {
+	public ICEPQuery createQuery(final IQueryInformations _queryInformations) throws RuntimeException {
 
-		Validate.notNull(_queryDefinition);
-		LOGGER.debug("Instantiating and registering query in the CEP Engine {}", _queryDefinition);
+		Validate.notNull(_queryInformations);
+		LOGGER.debug("Instantiating and registering query in the CEP Engine {}", _queryInformations);
 		try {
-			final ICEPQuery query = new CEPQuery(_queryDefinition.getImplementation());
-			cepEngine.getQueryAdministration().registerQuery(_queryDefinition.getQueryName(), query);
+			final ICEPQuery query = new CEPQuery(_queryInformations.getImplementation());
+			cepEngine.getQueryAdministration().registerQuery(_queryInformations.getQueryName(), query);
 			return query;
 		} catch (final Exception e) {
-			LOGGER.error("Query invalid : " + _queryDefinition, e);
-			throw new InvalidQueryDefinitionException(_queryDefinition.getImplementation(), e);
+			LOGGER.error("Query invalid : " + _queryInformations, e);
+			throw new InvalidQueryDefinitionException(_queryInformations.getImplementation(), e);
 		}
 
 	}

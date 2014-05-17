@@ -9,7 +9,7 @@ import org.komea.product.backend.api.IDynamicQueryCacheService;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.backend.service.ISpringService;
-import org.komea.product.backend.service.esper.QueryDefinition;
+import org.komea.product.backend.service.esper.QueryInformations;
 import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.database.model.Kpi;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService {
 			return;
 		}
 		LOGGER.debug("KPI {} provides an event query {}.", _kpi, queryImplementation);
-		esperEngine.createOrUpdateQuery(new QueryDefinition(_kpi.getEsperRequest(),
+		esperEngine.createOrUpdateQuery(new QueryInformations(_kpi.getEsperRequest(),
 		        (ICEPQueryImplementation) queryImplementation));
 	}
 

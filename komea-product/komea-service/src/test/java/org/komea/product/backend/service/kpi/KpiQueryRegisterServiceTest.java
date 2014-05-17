@@ -16,7 +16,7 @@ import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
 import org.komea.product.backend.api.IDynamicQueryCacheService;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.api.IQueryDefinition;
+import org.komea.product.backend.api.IQueryInformations;
 import org.komea.product.backend.service.ISpringService;
 import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.database.model.Kpi;
@@ -57,7 +57,7 @@ public class KpiQueryRegisterServiceTest {
 		kpi.setEsperRequest("Formula");
 		final ICEPQueryImplementation mock = mock(ICEPQueryImplementation.class);
 		kpiQueryRegisterService.registerQuery(kpi, mock);
-		final ArgumentCaptor<IQueryDefinition> argumentCaptor = ArgumentCaptor.forClass(IQueryDefinition.class);
+		final ArgumentCaptor<IQueryInformations> argumentCaptor = ArgumentCaptor.forClass(IQueryInformations.class);
 		verify(esperEngine, times(1)).createOrUpdateQuery(argumentCaptor.capture());
 		assertEquals(kpi.getEsperRequest(), argumentCaptor.getValue().getQueryName());
 
