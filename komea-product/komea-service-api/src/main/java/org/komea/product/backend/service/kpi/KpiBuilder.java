@@ -198,7 +198,12 @@ public class KpiBuilder {
 
 	public KpiBuilder query(final Class<? extends ICEPQueryImplementation> _query) {
 
-		kpi.setEsperRequest("new CEPQuery(new " + _query.getName() + "());");
+		kpi.setEsperRequest("package org.komea.product.backend.service.kpi;\n"
+		        + "import org.komea.eventory.api.engine.ICEPQueryImplementation;\n"
+		        + "import org.komea.eventory.query.CEPQuery;\n"
+		        + "import org.komea.eventory.query.CEPQueryImplementation;\n"
+		        + "public class DemoClass extends CEPQuery {\n" + "public DemoClass() {\n" + "super(new "
+		        + _query.getName() + "() );\n" + "}\n" + "\n" + "}\n");
 
 		return this;
 	}

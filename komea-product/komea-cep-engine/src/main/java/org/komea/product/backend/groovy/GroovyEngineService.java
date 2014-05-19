@@ -33,7 +33,7 @@ public class GroovyEngineService implements IGroovyEngineService {
 
 		LOGGER.info("Initializing Groovy engine.... please wait...");
 
-		final ClassLoader parent = getClass().getClassLoader();
+		final ClassLoader parent = Thread.currentThread().getContextClassLoader();
 		groovyClassLoader = new GroovyClassLoader(parent);
 
 	}
