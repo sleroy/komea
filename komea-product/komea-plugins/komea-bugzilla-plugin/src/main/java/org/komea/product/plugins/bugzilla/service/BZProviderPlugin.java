@@ -18,7 +18,6 @@ import org.komea.product.backend.kpi.search.Search;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.kpi.KpiBuilder;
 import org.komea.product.backend.service.plugins.IEventTypeService;
-import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
@@ -130,7 +129,7 @@ public class BZProviderPlugin {
 
 	private Kpi bzClosedBugs() {
 
-		final IDynamicDataQuery query = BZBugCountKPI.create(Search.create(Filter.create("status", true, "new",
+		final BZBugCountKPI query = BZBugCountKPI.create(Search.create(Filter.create("status", true, "new",
 		        "unconfirmed", "onhold", "accepted", "assigned", "opened", "reopened")));
 		return bzKpi("bugs_status_closed", "Closed bugs", "Number of closed bugs", ValueDirection.BETTER,
 		        query.getFormula());
@@ -147,14 +146,14 @@ public class BZProviderPlugin {
 
 	private Kpi bzOpenBugs() {
 
-		final IDynamicDataQuery query = BZBugCountKPI.create(Search.create(Filter.create("status", false, "new",
+		final BZBugCountKPI query = BZBugCountKPI.create(Search.create(Filter.create("status", false, "new",
 		        "unconfirmed", "onhold", "accepted", "assigned", "opened", "reopened")));
 		return bzKpi("bugs_status_open", "Open bugs", "Number of open bugs", ValueDirection.WORST, query.getFormula());
 	}
 
 	private Kpi bzOpenBySeverityBugs(final String severity) {
 
-		final IDynamicDataQuery query = BZBugCountKPI.create(Search.create(Filter.create("status", false, "new",
+		final BZBugCountKPI query = BZBugCountKPI.create(Search.create(Filter.create("status", false, "new",
 		        "unconfirmed", "onhold", "accepted", "assigned", "opened", "reopened"), Filter.create("severity", true,
 		        severity)));
 		return bzKpi("bugs_status_open_severity_" + severity, "Open " + severity + " bugs", "Number of open bugs with "
@@ -163,7 +162,7 @@ public class BZProviderPlugin {
 
 	private Kpi bzOpenNotFixedBugs() {
 
-		final IDynamicDataQuery query = BZBugCountKPI.create(Search.create(Filter.create("status", true, "closed",
+		final BZBugCountKPI query = BZBugCountKPI.create(Search.create(Filter.create("status", true, "closed",
 		        "delivered", "resolved")));
 		return bzKpi("bugs_status_open_not_fixed", "Open NOT fixed bugs", "Number of open but not fixed bugs",
 		        ValueDirection.WORST, query.getFormula());
@@ -171,7 +170,7 @@ public class BZProviderPlugin {
 
 	private Kpi bzTotalBugs() {
 
-		final IDynamicDataQuery query = BZBugCountKPI.create();
+		final BZBugCountKPI query = BZBugCountKPI.create();
 		return bzKpi("bugs_total", "Total bugs", "Total number of bugs", ValueDirection.WORST, query.getFormula());
 	}
 }

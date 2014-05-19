@@ -6,9 +6,9 @@ package org.komea.product.backend.service.olap;
 
 import javax.annotation.PostConstruct;
 
+import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.cron.KpiHistoryJob;
-import org.komea.product.database.enums.BackupDelay;
 import org.quartz.JobDataMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

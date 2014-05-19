@@ -1,5 +1,6 @@
 package org.komea.product.backend.api;
 
+import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.database.model.Kpi;
 
 /**
@@ -18,6 +19,6 @@ public interface IKpiQueryRegisterService {
 	 * @param _formula
 	 * @param _queryImplementation
 	 */
-	public void registerQuery(Kpi _kpi, Object _queryImplementation);
+	public void registerQuery(Kpi _kpi, IQuery _queryImplementation);
 
 }

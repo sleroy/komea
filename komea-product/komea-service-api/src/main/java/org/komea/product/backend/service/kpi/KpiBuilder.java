@@ -4,8 +4,8 @@
 
 package org.komea.product.backend.service.kpi;
 
+import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
-import org.komea.product.database.enums.BackupDelay;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.ValueDirection;
@@ -53,7 +53,7 @@ public class KpiBuilder {
 
 	public KpiBuilder cronBeginMonth() {
 
-		kpi.setDelayForBackup(BackupDelay.MONTH);
+		kpi.setCronExpression(BackupDelay.MONTH.name());
 		return this;
 	}
 
@@ -62,7 +62,7 @@ public class KpiBuilder {
      */
 	public KpiBuilder cronOneDay() {
 
-		kpi.setDelayForBackup(BackupDelay.DAY);
+		kpi.setCronExpression(BackupDelay.DAY.name());
 		return this;
 
 	}
@@ -72,7 +72,7 @@ public class KpiBuilder {
      */
 	public KpiBuilder cronOneHours() {
 
-		kpi.setDelayForBackup(BackupDelay.HOUR);
+		kpi.setCronExpression(BackupDelay.HOUR.name());
 		return this;
 
 	}
@@ -84,7 +84,7 @@ public class KpiBuilder {
 	 */
 	public KpiBuilder cronWeek() {
 
-		kpi.setDelayForBackup(BackupDelay.WEEK);
+		kpi.setCronExpression(BackupDelay.WEEK.name());
 		return this;
 	}
 
@@ -96,7 +96,7 @@ public class KpiBuilder {
 	 */
 	public KpiBuilder dailyKPI() {
 
-		kpi.setDelayForBackup(BackupDelay.DAY);
+		kpi.setCronExpression(BackupDelay.DAY.name());
 		return this;
 	}
 
@@ -119,7 +119,7 @@ public class KpiBuilder {
 	}
 
 	public KpiBuilder hourly() {
-		kpi.setDelayForBackup(BackupDelay.HOUR);
+		kpi.setCronExpression(BackupDelay.HOUR.name());
 		return this;
 	}
 

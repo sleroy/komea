@@ -2,6 +2,7 @@ package org.komea.product.database.dto;
 
 import java.util.Date;
 import java.util.logging.Logger;
+
 import org.komea.product.database.enums.Operator;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;

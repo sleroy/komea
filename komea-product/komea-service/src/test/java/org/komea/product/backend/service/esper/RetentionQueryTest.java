@@ -6,6 +6,8 @@ package org.komea.product.backend.service.esper;
 
 
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import java.util.concurrent.TimeUnit;
 
 import org.hamcrest.CustomTypeSafeMatcher;
@@ -16,8 +18,6 @@ import org.komea.eventory.api.cache.ICacheConfiguration;
 import org.komea.product.cep.tester.CEPQueryTester;
 import org.komea.product.database.enums.RetentionPeriod;
 import org.komea.product.database.enums.Severity;
-
-import static org.hamcrest.MatcherAssert.assertThat;
 
 
 

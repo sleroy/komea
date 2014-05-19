@@ -1,8 +1,8 @@
 package org.komea.product.backend.service.cron;
 
 import org.apache.commons.lang.Validate;
+import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
-import org.komea.product.database.enums.BackupDelay;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -35,6 +35,7 @@ public class KpiHistoryJob implements Job {
 
 		LOGGER.info("*** Backup of Kpi values into the history* **");
 		final BackupDelay delay = (BackupDelay) _context.getMergedJobDataMap().get("delay");
+
 		Validate.notNull(delay);
 		statisticsService.backupKpiValuesIntoHistory(delay);
 	}

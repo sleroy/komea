@@ -6,6 +6,9 @@ package org.komea.product.backend.service.esper;
 
 
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.api.IEventEngineService;
@@ -15,10 +18,6 @@ import org.komea.product.database.enums.Severity;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertEquals;
-
-import static org.mockito.Mockito.when;
 
 
 

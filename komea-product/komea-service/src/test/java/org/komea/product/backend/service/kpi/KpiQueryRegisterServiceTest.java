@@ -8,17 +8,13 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.eventory.api.engine.ICEPQueryImplementation;
-import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
-import org.komea.product.backend.api.IDynamicQueryCacheService;
+import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IQueryInformations;
 import org.komea.product.backend.service.ISpringService;
-import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.database.model.Kpi;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
@@ -32,18 +28,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class KpiQueryRegisterServiceTest {
 
 	@Mock
-	private IDynamicDataQueryRegisterService	dynamicDataQueryRegisterService;
-
-	@Mock
-	private IDynamicQueryCacheService	     dynamicQueryCacheService;
-
-	@Mock
-	private IEventEngineService	             esperEngine;
+	private IEventEngineService	    esperEngine;
 
 	@InjectMocks
-	private KpiQueryRegisterService	         kpiQueryRegisterService;
+	private KpiQueryRegisterService	kpiQueryRegisterService;
 	@Mock
-	private ISpringService	                 springService;
+	private ISpringService	        springService;
 
 	/**
 	 * Test method for
@@ -55,29 +45,13 @@ public class KpiQueryRegisterServiceTest {
 
 		final Kpi kpi = new Kpi();
 		kpi.setEsperRequest("Formula");
-		final ICEPQueryImplementation mock = mock(ICEPQueryImplementation.class);
+		final IQuery mock = mock(IQuery.class);
 		kpiQueryRegisterService.registerQuery(kpi, mock);
+
 		final ArgumentCaptor<IQueryInformations> argumentCaptor = ArgumentCaptor.forClass(IQueryInformations.class);
 		verify(esperEngine, times(1)).createOrUpdateQuery(argumentCaptor.capture());
 		assertEquals(kpi.getEsperRequest(), argumentCaptor.getValue().getQueryName());
 
 	}
 
-	/**
-	 * Test method for
-	 * {@link org.komea.product.backend.service.kpi.KpiQueryRegisterService#registerQuery(org.komea.product.database.model.Kpi, java.lang.Object)}
-	 * .
-	 */
-	@Test
-	public void testRegisterDynamicQuery() throws Exception {
-
-		final Kpi kpi = new Kpi();
-		kpi.setEsperRequest("Formula");
-		final IDynamicDataQuery mock = mock(IDynamicDataQuery.class);
-		when(dynamicQueryCacheService.addCacheOnDynamicQuery(kpi.getEsperRequest(), mock)).thenReturn(mock);
-		kpiQueryRegisterService.registerQuery(kpi, mock);
-		verify(dynamicDataQueryRegisterService, times(1)).registerQuery(kpi.getEsperRequest(), mock);
-		verify(dynamicQueryCacheService, times(1)).addCacheOnDynamicQuery(kpi.getEsperRequest(), mock);
-
-	}
 }

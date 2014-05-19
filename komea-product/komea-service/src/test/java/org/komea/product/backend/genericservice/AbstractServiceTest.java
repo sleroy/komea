@@ -6,6 +6,11 @@ package org.komea.product.backend.genericservice;
 
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,12 +23,6 @@ import org.komea.product.database.model.KpiAlertType;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 
 

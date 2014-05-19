@@ -6,10 +6,10 @@ package org.komea.product.backend.service;
 
 
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
 
 
 

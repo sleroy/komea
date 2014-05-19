@@ -6,11 +6,11 @@ package org.komea.product.plugins.kpi.standard.jenkins;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventsFactory;
 import org.komea.product.cep.tester.CEPQueryTester;
-import org.komea.product.plugins.kpi.standard.jenkins.SuccessfulBuildRatePerWeek;
+import org.komea.product.plugins.kpi.standard.jenkins.SuccessfulBuildRate;
 
 
 
-public class SuccessfulBuildRatePerWeekTest
+public class SuccessfulBuildRateTest
 {
     
     
@@ -18,7 +18,7 @@ public class SuccessfulBuildRatePerWeekTest
     public final void testSuccessfulBuildRatePerMonth() throws Exception {
     
     
-        final SuccessfulBuildRatePerWeek buildPerDay = new SuccessfulBuildRatePerWeek();
+        final SuccessfulBuildRate buildPerDay = new SuccessfulBuildRate();
         
         final CEPQueryTester newTest = CEPQueryTester.newTest();
         

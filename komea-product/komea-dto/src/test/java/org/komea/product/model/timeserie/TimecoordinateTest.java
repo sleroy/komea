@@ -2,7 +2,6 @@
 package org.komea.product.model.timeserie;
 
 
-import org.komea.product.model.timeserie.TimeCoordinate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -6,6 +6,10 @@ package org.komea.product.backend.service;
 
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,10 +19,6 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 
 

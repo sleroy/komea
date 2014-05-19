@@ -2,9 +2,8 @@ package org.komea.product.backend.api;
 
 import java.io.Serializable;
 
-import org.komea.eventory.api.engine.ICEPQuery;
+import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.database.alert.IEvent;
-import org.komea.product.database.dto.KpiResult;
 
 /**
  */
@@ -25,7 +24,7 @@ public interface IEventEngineService {
 	 *            ICEPQueryImplementation
 	 * @return the esper compiled statement.
 	 */
-	ICEPQuery createQuery(IQueryInformations _queryInformations);
+	IQuery createQuery(IQueryInformations _queryInformations);
 
 	/**
 	 * Tests if a statement exist.
@@ -42,7 +41,7 @@ public interface IEventEngineService {
 	 * @param _statementName
 	 * @return EPStatement
 	 */
-	ICEPQuery getQuery(String _statementName);
+	<T extends IQuery> T getQuery(String _statementName);
 
 	/**
 	 * Returns the list of statement names.
@@ -58,7 +57,7 @@ public interface IEventEngineService {
 	 *            the statement name
 	 * @return the esper statement
 	 */
-	ICEPQuery<Serializable, KpiResult> getQueryOrFail(String _statement);
+	<T extends IQuery> T getQueryOrFail(String _statement);
 
 	/**
 	 * Removes the query

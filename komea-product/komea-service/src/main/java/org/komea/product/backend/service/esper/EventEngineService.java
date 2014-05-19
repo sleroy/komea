@@ -18,7 +18,7 @@ import org.komea.eventory.api.bridge.IEventBridgeFactory;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.api.engine.ICEPEngine;
 import org.komea.eventory.api.engine.ICEPQuery;
-import org.komea.eventory.query.CEPQuery;
+import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IQueryInformations;
 import org.komea.product.backend.api.exceptions.CEPQueryNotFoundException;
@@ -92,14 +92,14 @@ public final class EventEngineService implements IEventEngineService {
 	 * @see org.komea.product.backend.api.IEventEngineService#createQuery(IQueryInformations)
 	 */
 	@Override
-	public ICEPQuery createQuery(final IQueryInformations _queryInformations) throws RuntimeException {
+	public IQuery createQuery(final IQueryInformations _queryInformations) throws RuntimeException {
 
 		Validate.notNull(_queryInformations);
 		LOGGER.debug("Instantiating and registering query in the CEP Engine {}", _queryInformations);
 		try {
-			final ICEPQuery query = new CEPQuery(_queryInformations.getImplementation());
-			cepEngine.getQueryAdministration().registerQuery(_queryInformations.getQueryName(), query);
-			return query;
+			cepEngine.getQueryAdministration().registerQuery(_queryInformations.getQueryName(),
+			        _queryInformations.getImplementation());
+			return _queryInformations.getImplementation();
 		} catch (final Exception e) {
 			LOGGER.error("Query invalid : " + _queryInformations, e);
 			throw new InvalidQueryDefinitionException(_queryInformations.getImplementation(), e);
@@ -172,7 +172,17 @@ public final class EventEngineService implements IEventEngineService {
 
 		LOGGER.trace("Requesting esper statement {}", _statementName);
 		Validate.notEmpty(_statementName);
-		return cepEngine.getQueryAdministration().getQuery(_statementName);
+		return (ICEPQuery) cepEngine.getQueryAdministration().getQuery(_statementName); // Possible
+		                                                                                // fail
+		                                                                                // if
+		                                                                                // the
+		                                                                                // query
+		                                                                                // is
+		                                                                                // not
+		                                                                                // a
+		                                                                                // cep
+		                                                                                // engine
+		                                                                                // query.
 	}
 
 	/**
@@ -197,7 +207,7 @@ public final class EventEngineService implements IEventEngineService {
 	 * @see org.komea.product.backend.api.IEventEngineService#getQueryOrFail(String)
 	 */
 	@Override
-	public ICEPQuery getQueryOrFail(final String _measureName) {
+	public IQuery getQueryOrFail(final String _measureName) {
 
 		Validate.notEmpty(_measureName);
 		final ICEPQuery<?, ?> statement = getQuery(_measureName);

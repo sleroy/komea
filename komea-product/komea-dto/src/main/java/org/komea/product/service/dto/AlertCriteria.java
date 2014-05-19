@@ -4,6 +4,7 @@
 package org.komea.product.service.dto;
 
 import java.util.List;
+
 import org.apache.commons.lang3.Validate;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.enums.EntityType;

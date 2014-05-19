@@ -3,6 +3,8 @@ package org.komea.product.backend.service.entities;
 
 
 
+import static org.mockito.Matchers.any;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,8 +30,6 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
-
-import static org.mockito.Matchers.any;
 
 
 

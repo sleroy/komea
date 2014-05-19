@@ -7,13 +7,12 @@ package org.komea.product.backend.service.kpi;
 import java.io.Serializable;
 
 import org.komea.eventory.api.engine.ICEPQuery;
-import org.komea.product.backend.api.IDynamicDataQueryRegisterService;
+import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.backend.api.IKpiQueryService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IEntityService;
-import org.komea.product.cep.api.dynamicdata.IDynamicDataQuery;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Kpi;
 import org.slf4j.Logger;
@@ -29,22 +28,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class KpiQueryService implements IKpiQueryService {
 
-	private static final Logger	             LOGGER	= LoggerFactory.getLogger("kpi-query-service");
+	private static final Logger	     LOGGER	= LoggerFactory.getLogger("kpi-query-service");
 
 	@Autowired
-	private ICronRegistryService	         cronRegistry;
+	private ICronRegistryService	 cronRegistry;
 
 	@Autowired
-	private IDynamicDataQueryRegisterService	dynamicDataQueryRegisterService;
+	private IEntityService	         entityService;
 
 	@Autowired
-	private IEntityService	                 entityService;
+	private IEventEngineService	     esperEngine;
 
 	@Autowired
-	private IEventEngineService	             esperEngine;
-
-	@Autowired
-	private IKpiQueryRegisterService	     kpiQueryRegisterService;
+	private IKpiQueryRegisterService	kpiQueryRegisterService;
 
 	/*
 	 * (non-Javadoc)
@@ -82,27 +78,20 @@ public class KpiQueryService implements IKpiQueryService {
 
 	@Override
 	public void removeQuery(final Kpi _kpi) {
-		// Removes in both
 		esperEngine.removeQuery(_kpi.getEsperRequest());
-		dynamicDataQueryRegisterService.removeQuery(_kpi.getEsperRequest());
 
 	}
 
 	private void evaluateFormulaAndRegisterQuery(final Kpi _kpi) {
 
 		final InstantiateQueryFromFormula instantiateQueryFromFormula = new InstantiateQueryFromFormula(_kpi);
-		Object queryImplementation = instantiateQueryFromFormula.instantiate();
+		IQuery queryImplementation = instantiateQueryFromFormula.instantiate();
 		if (queryImplementation == null) {
 			LOGGER.error("Could not provide an implementation for the kpi {}, using stub", _kpi.getKpiKey());
-			queryImplementation = new NoQueryImplementation();
+			queryImplementation = new StubQuery();
 		}
 		kpiQueryRegisterService.registerQuery(_kpi, queryImplementation);
 
-	}
-
-	private IDynamicDataQuery findDynamicQuery(final String computeKPIEsperKey) {
-
-		return dynamicDataQueryRegisterService.getQuery(computeKPIEsperKey);
 	}
 
 	private ICEPQuery<Serializable, KpiResult> findEventQuery(final String computeKPIEsperKey) {
@@ -115,12 +104,7 @@ public class KpiQueryService implements IKpiQueryService {
 		KpiResult result;
 		final String formula = _kpi.getEsperRequest();
 		LOGGER.trace("Request value from KPI {}", _kpi.getKpiKey());
-		final IDynamicDataQuery query = findDynamicQuery(formula);
-		if (query != null) {
-			result = obtainDynamicQueryResult(formula, query);
-		} else {
-			result = obtainCepQueryResult(formula);
-		}
+		result = obtainCepQueryResult(formula);
 		LOGGER.trace("Result of the query is {}", result);
 		return result;
 	}
@@ -130,12 +114,6 @@ public class KpiQueryService implements IKpiQueryService {
 		// IF IT FAILS WE CHECK FOR EVENT QUERY
 		LOGGER.trace("Is {} an event query ?", computeKPIEsperKey);
 		return findEventQuery(computeKPIEsperKey).getResult();
-	}
-
-	private KpiResult obtainDynamicQueryResult(final String computeKPIEsperKey, final IDynamicDataQuery query) {
-
-		LOGGER.trace("This query {} is a dynamic query", computeKPIEsperKey);
-		return query.getResult();
 	}
 
 }

@@ -7,12 +7,12 @@ package org.komea.product.backend.service.kpi;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.product.backend.service.history.HistoryKey;
+import org.komea.product.database.dto.KpiResult;
+import org.komea.product.database.model.Measure;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.TimeSerieOptions;
-import org.komea.product.database.dto.KpiResult;
-import org.komea.product.database.enums.BackupDelay;
-import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.EntityKey;
 
 /**
@@ -20,6 +20,11 @@ import org.komea.product.service.dto.EntityKey;
  */
 public interface IStatisticsAPI {
 
+	/**
+	 * Force backup of kpi measures according the given delay.
+	 * 
+	 * @param _delay
+	 */
 	void backupKpiValuesIntoHistory(BackupDelay _delay);
 
 	/**

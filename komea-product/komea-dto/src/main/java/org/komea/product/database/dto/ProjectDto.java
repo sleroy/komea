@@ -1,7 +1,5 @@
 package org.komea.product.database.dto;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,9 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
+
 import org.komea.product.database.model.Link;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * decribe information on a project

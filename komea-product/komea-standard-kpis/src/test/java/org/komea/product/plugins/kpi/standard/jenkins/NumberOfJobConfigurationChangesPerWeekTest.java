@@ -13,13 +13,13 @@ import org.junit.Test;
 /**
  * @author sleroy
  */
-public class NumberOfJobConfigurationChangesPerDayTest
+public class NumberOfJobConfigurationChangesPerWeekTest
 {
     
     
     /**
      * Test method for
-     * {@link org.komea.product.plugins.kpi.standard.jenkins.NumberOfJobConfigurationChangesPerDay#NumberOfJobConfigurationChangesPerDay()}.
+     * {@link org.komea.product.plugins.kpi.standard.jenkins.NumberOfJobConfigurationChangesPerWeek#NumberOfJobConfigurationChangesPerDay()}.
      */
     @Test
     public final void testNumberOfJobConfigurationChangesPerDay() throws Exception {

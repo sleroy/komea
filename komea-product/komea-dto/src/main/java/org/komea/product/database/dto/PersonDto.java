@@ -1,13 +1,15 @@
 package org.komea.product.database.dto;
 
-import com.google.common.collect.Maps;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
+
 import org.komea.product.database.model.Project;
+
+import com.google.common.collect.Maps;
 
 /**
  * Komea to get persin information

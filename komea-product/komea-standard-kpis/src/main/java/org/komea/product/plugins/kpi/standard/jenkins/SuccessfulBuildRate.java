@@ -1,9 +1,12 @@
-package org.komea.product.plugins.kpi.standard;
+/**
+ * 
+ */
+
+package org.komea.product.plugins.kpi.standard.jenkins;
 
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang.Validate;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.filters.IEventFilter;
 import org.komea.eventory.api.filters.IFilterDefinition;
@@ -17,21 +20,21 @@ import org.komea.product.plugins.kpi.filters.EventTypeFilter;
 import org.komea.product.plugins.kpi.filters.WithProjectFilter;
 import org.komea.product.plugins.kpi.formula.ProjectFormula;
 import org.komea.product.plugins.kpi.standard.bugzilla.AbstractCEPQueryImplementation;
+import org.komea.product.plugins.kpi.standard.jenkins.formula.SuccessfulBuildRateFormula;
 
 /**
- * "SELECT project as entity, last(value) as value FROM Event WHERE
- * eventType.eventKey='eventypeKey' GROUP BY project"
+ * Successful build rate per week.
+ * 
+ * @author sleroy
  */
-public class LastEventValueKpi extends AbstractCEPQueryImplementation {
+public class SuccessfulBuildRate extends AbstractCEPQueryImplementation {
 
-	private final String	eventTypeKey;
+	/**
+     * 
+     */
+	public SuccessfulBuildRate() {
 
-	public LastEventValueKpi(final String _eventTypeKey, final BackupDelay _backupDelay) {
-
-		super(_backupDelay);
-		eventTypeKey = _eventTypeKey;
-		Validate.notNull(_backupDelay);
-		Validate.notEmpty(_eventTypeKey);
+		super(BackupDelay.DAY);
 	}
 
 	/*
@@ -44,11 +47,9 @@ public class LastEventValueKpi extends AbstractCEPQueryImplementation {
 	public List<IFilterDefinition> getFilterDefinitions() {
 
 		final IEventFilter<?> eventFilter = EventFilterBuilder.create().chain(new OnlyEventFilter())
-		        .chain(new WithProjectFilter()).chain(new EventTypeFilter(eventTypeKey)).build();
-		final IFilterDefinition filterDefinition = FilterDefinition
-		        .create()
-		        .setCacheConfiguration(prepareCacheConfiguration().withCustomIndexer(new ProjectCacheIndexer()).build())
-		        .setFilter(eventFilter).setFilterName(eventTypeKey + "-filter");
+		        .chain(new WithProjectFilter()).chain(new EventTypeFilter("build_complete", "build_started")).build();
+		final IFilterDefinition filterDefinition = FilterDefinition.create()
+		        .setCacheConfiguration(buildExpirationCache()).setFilter(eventFilter).setFilterName("jenkins-filter");
 
 		return Collections.singletonList(filterDefinition);
 	}
@@ -61,7 +62,7 @@ public class LastEventValueKpi extends AbstractCEPQueryImplementation {
 	@Override
 	public ICEPFormula<IEvent, KpiResult> getFormula() {
 
-		return new ProjectFormula(new EventValueFormula());
+		return new ProjectFormula(new SuccessfulBuildRateFormula());
 	}
 
 }

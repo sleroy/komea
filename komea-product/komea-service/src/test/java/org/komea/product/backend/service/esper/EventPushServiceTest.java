@@ -6,6 +6,8 @@ package org.komea.product.backend.service.esper;
 
 
 
+import static org.mockito.Mockito.verify;
+
 import org.junit.Test;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.database.alert.Event;
@@ -16,8 +18,6 @@ import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
-
-import static org.mockito.Mockito.verify;
 
 
 

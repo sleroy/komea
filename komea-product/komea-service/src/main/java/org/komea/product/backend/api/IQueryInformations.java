@@ -4,7 +4,7 @@
 
 package org.komea.product.backend.api;
 
-import org.komea.eventory.api.engine.ICEPQueryImplementation;
+import org.komea.eventory.api.engine.IQuery;
 
 /**
  * This interface the data requested by the CEP engine to instantiate a new CEP
@@ -19,7 +19,7 @@ public interface IQueryInformations {
 	 * 
 	 * @return the query definition.
 	 */
-	ICEPQueryImplementation getImplementation();
+	IQuery getImplementation();
 
 	/**
 	 * Returns the name of the query

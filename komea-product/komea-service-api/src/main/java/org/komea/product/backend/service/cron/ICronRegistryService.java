@@ -2,7 +2,7 @@ package org.komea.product.backend.service.cron;
 
 import java.util.List;
 
-import org.komea.product.database.enums.BackupDelay;
+import org.komea.eventory.api.cache.BackupDelay;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 

@@ -6,12 +6,12 @@ package org.komea.product.backend.service.esper;
 
 
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Date;
 
 import org.junit.Test;
 import org.komea.product.database.alert.EventBuilder;
-
-import static org.junit.Assert.assertEquals;
 
 
 

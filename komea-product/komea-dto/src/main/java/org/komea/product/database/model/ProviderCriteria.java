@@ -2,6 +2,7 @@ package org.komea.product.database.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.komea.product.database.enums.ProviderType;
 
 public class ProviderCriteria {

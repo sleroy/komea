@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.annotation.PreDestroy;
 
+import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.product.backend.api.exceptions.CronRuntimeException;
-import org.komea.product.database.enums.BackupDelay;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.Job;

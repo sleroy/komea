@@ -6,6 +6,9 @@ package org.komea.product.backend.service.plugins;
 
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.lang.annotation.Annotation;
 import java.util.List;
 
@@ -17,9 +20,6 @@ import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.EventType;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 
 

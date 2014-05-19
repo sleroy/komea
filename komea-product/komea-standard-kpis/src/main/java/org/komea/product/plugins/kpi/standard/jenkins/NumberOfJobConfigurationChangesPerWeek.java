@@ -1,9 +1,12 @@
-package org.komea.product.plugins.kpi.standard;
+/**
+ * 
+ */
+
+package org.komea.product.plugins.kpi.standard.jenkins;
 
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang.Validate;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.filters.IEventFilter;
 import org.komea.eventory.api.filters.IFilterDefinition;
@@ -11,6 +14,7 @@ import org.komea.eventory.api.formula.ICEPFormula;
 import org.komea.eventory.filter.EventFilterBuilder;
 import org.komea.eventory.query.FilterDefinition;
 import org.komea.product.cep.filter.OnlyEventFilter;
+import org.komea.product.cep.formula.EventCountFormula;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.plugins.kpi.filters.EventTypeFilter;
@@ -19,19 +23,19 @@ import org.komea.product.plugins.kpi.formula.ProjectFormula;
 import org.komea.product.plugins.kpi.standard.bugzilla.AbstractCEPQueryImplementation;
 
 /**
- * "SELECT project as entity, last(value) as value FROM Event WHERE
- * eventType.eventKey='eventypeKey' GROUP BY project"
+ * This class defines the number of build per day.
+ * "SELECT project as entity, COUNT(*) as value FROM Event.win:time(1 day) WHERE eventType.eventKey='build_started' GROUP BY project"
+ * 
+ * @author sleroy
  */
-public class LastEventValueKpi extends AbstractCEPQueryImplementation {
+public class NumberOfJobConfigurationChangesPerWeek extends AbstractCEPQueryImplementation {
 
-	private final String	eventTypeKey;
+	/**
+     * 
+     */
+	public NumberOfJobConfigurationChangesPerWeek() {
 
-	public LastEventValueKpi(final String _eventTypeKey, final BackupDelay _backupDelay) {
-
-		super(_backupDelay);
-		eventTypeKey = _eventTypeKey;
-		Validate.notNull(_backupDelay);
-		Validate.notEmpty(_eventTypeKey);
+		super(BackupDelay.WEEK);
 	}
 
 	/*
@@ -44,11 +48,9 @@ public class LastEventValueKpi extends AbstractCEPQueryImplementation {
 	public List<IFilterDefinition> getFilterDefinitions() {
 
 		final IEventFilter<?> eventFilter = EventFilterBuilder.create().chain(new OnlyEventFilter())
-		        .chain(new WithProjectFilter()).chain(new EventTypeFilter(eventTypeKey)).build();
-		final IFilterDefinition filterDefinition = FilterDefinition
-		        .create()
-		        .setCacheConfiguration(prepareCacheConfiguration().withCustomIndexer(new ProjectCacheIndexer()).build())
-		        .setFilter(eventFilter).setFilterName(eventTypeKey + "-filter");
+		        .chain(new WithProjectFilter()).chain(new EventTypeFilter("job_configuration_changed")).build();
+		final IFilterDefinition filterDefinition = FilterDefinition.create()
+		        .setCacheConfiguration(buildExpirationCache()).setFilter(eventFilter).setFilterName("jenkins-filter");
 
 		return Collections.singletonList(filterDefinition);
 	}
@@ -61,7 +63,7 @@ public class LastEventValueKpi extends AbstractCEPQueryImplementation {
 	@Override
 	public ICEPFormula<IEvent, KpiResult> getFormula() {
 
-		return new ProjectFormula(new EventValueFormula());
+		return new ProjectFormula(new EventCountFormula());
 	}
 
 }

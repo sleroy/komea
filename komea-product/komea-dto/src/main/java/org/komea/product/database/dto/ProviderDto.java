@@ -1,13 +1,16 @@
 package org.komea.product.database.dto;
 
-import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Provider;
+
+import com.google.common.collect.Lists;
 
 public class ProviderDto implements Serializable {
 

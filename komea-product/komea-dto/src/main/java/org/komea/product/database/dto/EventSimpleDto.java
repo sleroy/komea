@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 

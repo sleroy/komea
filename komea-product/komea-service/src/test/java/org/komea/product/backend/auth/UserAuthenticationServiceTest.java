@@ -6,6 +6,11 @@ package org.komea.product.backend.auth;
 
 
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.Collections;
 
 import org.junit.Test;
@@ -20,12 +25,6 @@ import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
-import static org.junit.Assert.assertEquals;
-
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 
 

@@ -2,6 +2,7 @@ package org.komea.product.database.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
 

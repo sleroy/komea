@@ -1,9 +1,7 @@
 package org.komea.product.backend.service.alert;
 
-import com.github.springtestdbunit.annotation.DatabaseOperation;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -15,6 +13,10 @@ import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.test.spring.AbstractSpringDBunitIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.github.springtestdbunit.annotation.DatabaseOperation;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 @Ignore
 @DatabaseTearDown(value = "alerts.xml", type = DatabaseOperation.DELETE_ALL)

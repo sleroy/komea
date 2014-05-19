@@ -17,10 +17,10 @@ import org.komea.product.plugins.kpi.standard.jenkins.BuildPerDay;
 import org.komea.product.plugins.kpi.standard.jenkins.NumberOfBrokenBuildPerUserPerDay;
 import org.komea.product.plugins.kpi.standard.jenkins.NumberOfFailedBuildPerDay;
 import org.komea.product.plugins.kpi.standard.jenkins.NumberOfFixedBuildPerUserPerDay;
-import org.komea.product.plugins.kpi.standard.jenkins.NumberOfJobConfigurationChangesPerDay;
+import org.komea.product.plugins.kpi.standard.jenkins.NumberOfJobConfigurationChangesPerWeek;
 import org.komea.product.plugins.kpi.standard.jenkins.NumberOfSuccessfulBuildPerDay;
 import org.komea.product.plugins.kpi.standard.jenkins.ProjectBuildHealthInfluencePerUser;
-import org.komea.product.plugins.kpi.standard.jenkins.SuccessfulBuildRatePerWeek;
+import org.komea.product.plugins.kpi.standard.jenkins.SuccessfulBuildRate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,7 +78,7 @@ public class JenkinsKPIService
     
         return KpiBuilder.createAscending().nameAndKey("SBRJW")
                 .description("Success project build rate").providerType(ProviderType.CI_BUILD)
-                .entityType(EntityType.PROJECT).dailyKPI().query(SuccessfulBuildRatePerWeek.class)
+                .entityType(EntityType.PROJECT).dailyKPI().query(SuccessfulBuildRate.class)
                 .interval(0d, 100d).build();
         
     }
@@ -120,7 +120,7 @@ public class JenkinsKPIService
         return KpiBuilder.createAscending().nameAndKey("NJCC")
                 .description("Number of job configuration change")
                 .providerType(ProviderType.CI_BUILD).entityType(EntityType.PROJECT).dailyKPI()
-                .interval(0d, 60d).query(NumberOfJobConfigurationChangesPerDay.class).build();
+                .interval(0d, 60d).query(NumberOfJobConfigurationChangesPerWeek.class).build();
     }
     
     

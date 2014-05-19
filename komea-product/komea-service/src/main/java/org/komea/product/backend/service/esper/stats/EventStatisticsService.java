@@ -124,7 +124,6 @@ public class EventStatisticsService implements IEventStatisticsService {
 	public CEPQueryImplementation buildProviderEventFrequencyQuery() {
 
 		final CEPQueryImplementation cepQueryDefinition = new CEPQueryImplementation();
-		cepQueryDefinition.setParameters(Collections.<String, Object> emptyMap());
 		cepQueryDefinition.addFilterDefinition(FilterDefinition.create().setCacheConfiguration(
 		        CacheConfigurationBuilder.expirationTimeCache(24, TimeUnit.HOURS)));
 		cepQueryDefinition.setFormula(new ProviderFormula(new EventCountFormula()));
@@ -204,7 +203,8 @@ public class EventStatisticsService implements IEventStatisticsService {
 	@Override
 	public List<EventTypeStatistic> getReceivedAlertTypesIn24LastHours() {
 
-		final ICEPQuery<IEvent, EventTypeStatistics> statsBreakdownStatement = cepEngine.getQuery(STATS_BREAKDOWN_24H);
+		final ICEPQuery<IEvent, EventTypeStatistics> statsBreakdownStatement = (ICEPQuery<IEvent, EventTypeStatistics>) cepEngine
+		        .getQuery(STATS_BREAKDOWN_24H);
 
 		return statsBreakdownStatement.getResult().getEventTypeStatistics();
 	}

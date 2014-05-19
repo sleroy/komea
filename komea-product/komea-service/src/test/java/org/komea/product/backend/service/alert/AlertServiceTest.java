@@ -3,8 +3,8 @@
  */
 package org.komea.product.backend.service.alert;
 
-import com.google.common.collect.Lists;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.database.dto.BaseEntityDto;
@@ -17,6 +17,8 @@ import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.AlertCriteria;
+
+import com.google.common.collect.Lists;
 
 /**
  * @author sleroy

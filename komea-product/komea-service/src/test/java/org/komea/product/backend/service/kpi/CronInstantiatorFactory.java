@@ -6,6 +6,9 @@ package org.komea.product.backend.service.kpi;
 
 
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.komea.product.backend.service.cron.JobInjectionFactory;
 import org.mockito.Mockito;
 import org.quartz.JobDataMap;
@@ -17,9 +20,6 @@ import org.quartz.spi.OperableTrigger;
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 
 

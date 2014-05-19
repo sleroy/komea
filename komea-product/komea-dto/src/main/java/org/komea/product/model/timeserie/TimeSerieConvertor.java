@@ -1,6 +1,7 @@
 package org.komea.product.model.timeserie;
 
 import java.util.List;
+
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.model.timeserie.dto.TimeCoordinateDTO;

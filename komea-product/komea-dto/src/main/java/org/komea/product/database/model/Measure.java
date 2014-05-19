@@ -3,8 +3,10 @@ package org.komea.product.database.model;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class Measure implements Serializable {

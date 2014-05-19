@@ -13,6 +13,13 @@ import org.komea.eventory.api.cache.BackupDelay;
 public interface IQuery<TRes> {
 
 	/**
+	 * Visitor pattern
+	 * 
+	 * @param _visitor
+	 */
+	void accept(IQueryVisitor _visitor);
+
+	/**
 	 * Returns the backup delay.
 	 * 
 	 * @return the backup delay.
@@ -25,5 +32,4 @@ public interface IQuery<TRes> {
 	 * @return generic type
 	 */
 	TRes getResult();
-
 }

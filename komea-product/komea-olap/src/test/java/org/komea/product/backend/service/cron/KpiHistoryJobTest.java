@@ -9,8 +9,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
+import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
-import org.komea.product.database.enums.BackupDelay;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.quartz.JobDataMap;

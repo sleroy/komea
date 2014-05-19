@@ -6,11 +6,11 @@ package org.komea.product.backend.service;
 
 
 
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.junit.Assert.assertNotNull;
 
 
 
@@ -27,21 +27,21 @@ public class SpringServiceTest extends AbstractSpringIntegrationTestCase
         
         
         @Autowired
-        private ISpringService springService;
+        private ISpringService autowiredService;
         
         
         
-        public ISpringService getSpringService() {
+        public ISpringService getAutowiredService() {
         
         
-            return springService;
+            return autowiredService;
         }
         
         
-        public void setSpringService(final ISpringService _springService) {
+        public void setAutowiredService(final ISpringService _springService) {
         
         
-            springService = _springService;
+            autowiredService = _springService;
         }
     }
     

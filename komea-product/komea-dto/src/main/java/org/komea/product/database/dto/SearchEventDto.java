@@ -1,11 +1,14 @@
 package org.komea.product.database.dto;
 
-import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.List;
+
 import javax.validation.constraints.NotNull;
+
 import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.enums.Severity;
+
+import com.google.common.collect.Lists;
 
 public class SearchEventDto implements Serializable {
 

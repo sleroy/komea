@@ -1,7 +1,7 @@
 package org.komea.product.backend.service.alert;
 
-import com.google.common.collect.Lists;
 import java.util.List;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -18,6 +18,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.google.common.collect.Lists;
 
 @RunWith(MockitoJUnitRunner.class)
 @Ignore

@@ -2,10 +2,10 @@ package org.komea.product.backend.service.kpi;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.filters.IFilterDefinition;
 import org.komea.eventory.api.formula.ICEPFormula;
@@ -41,6 +41,12 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase {
 			//
 		}
 
+		@Override
+		public BackupDelay getBackupDelay() {
+
+			return BackupDelay.DAY;
+		}
+
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -64,18 +70,6 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase {
 		public ICEPFormula getFormula() {
 
 			return new ProjectFormula(new EventCountFormula());
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see
-		 * org.komea.product.cep.api.ICEPQueryImplementation#getParameters()
-		 */
-		@Override
-		public Map<String, Object> getParameters() {
-
-			return Collections.EMPTY_MAP;
 		}
 
 	}
