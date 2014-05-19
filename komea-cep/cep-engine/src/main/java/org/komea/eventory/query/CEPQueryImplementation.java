@@ -11,6 +11,7 @@ import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.filters.IFilterDefinition;
 import org.komea.eventory.api.formula.ICEPFormula;
+import org.komea.eventory.formula.NoCEPFormula;
 
 /**
  * This class defines the implementation necessary to instantiate a cep query
@@ -21,7 +22,7 @@ public class CEPQueryImplementation implements ICEPQueryImplementation {
 
 	private final List<IFilterDefinition>	filterDefinitions	= new ArrayList<IFilterDefinition>();
 
-	private ICEPFormula	                  formula;
+	private ICEPFormula	                  formula	          = new NoCEPFormula();
 
 	private BackupDelay	                  backupDelay	      = BackupDelay.DAY;
 
