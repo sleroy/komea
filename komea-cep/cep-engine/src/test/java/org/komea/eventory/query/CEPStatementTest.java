@@ -19,18 +19,18 @@ public class CEPStatementTest
     
     
     @Test
-    public final void testAdd() throws Exception {
-    
-    
-        final CEPStatement cepStatement = new CEPStatement();
-        final ICEPEventStorage mock = Mockito.mock(ICEPEventStorage.class);
-        cepStatement.add(mock);
-        Assert.assertTrue("storage should be registered",
-                cepStatement.getEventStorages().contains(mock));
-        Assert.assertEquals("should contains only one storage", 1, cepStatement.getEventStorages()
-                .size());
+        public final void testAddStorage() throws Exception {
         
-    }
+        
+            final CEPStatement cepStatement = new CEPStatement();
+            final ICEPEventStorage mock = Mockito.mock(ICEPEventStorage.class);
+            cepStatement.addStorage(mock);
+            Assert.assertTrue("storage should be registered",
+                    cepStatement.getEventStorages().contains(mock));
+            Assert.assertEquals("should contains only one storage", 1, cepStatement.getEventStorages()
+                    .size());
+            
+        }
     
     
     @Test
@@ -48,8 +48,8 @@ public class CEPStatementTest
         Mockito.when(cacheStorage.getAllValues()).thenReturn(Collections.singletonList("truc"));
         Mockito.when(cacheStorage2.getAllValues()).thenReturn(Collections.singletonList("truc2"));
         
-        cepStatement.add(storage);
-        cepStatement.add(storage2);
+        cepStatement.addStorage(storage);
+        cepStatement.addStorage(storage2);
         final List aggregateView = cepStatement.getAggregateView();
         Mockito.verify(storage, Mockito.atLeastOnce()).getCache();
         Mockito.verify(storage2, Mockito.atLeastOnce()).getCache();
@@ -70,7 +70,7 @@ public class CEPStatementTest
         final ICacheStorage cacheStorage = Mockito.mock(ICacheStorage.class);
         Mockito.when(storage.getCache()).thenReturn(cacheStorage);
         
-        cepStatement.add(storage);
+        cepStatement.addStorage(storage);
         cepStatement.getDefaultStorage();
         Mockito.verify(storage, Mockito.atLeastOnce()).getCache();
         Mockito.verify(cacheStorage, Mockito.atLeastOnce()).getAllValues();
@@ -86,7 +86,7 @@ public class CEPStatementTest
         final ICEPEventStorage storage = Mockito.mock(ICEPEventStorage.class);
         
         Mockito.when(storage.getFilterName()).thenReturn("default");
-        cepStatement.add(storage);
+        cepStatement.addStorage(storage);
         Assert.assertNotNull("Should contains event storage default",
                 cepStatement.getEventStorage("default"));
         
@@ -102,7 +102,7 @@ public class CEPStatementTest
         final ICEPEventStorage storage = Mockito.mock(ICEPEventStorage.class);
         
         
-        cepStatement.add(storage);
+        cepStatement.addStorage(storage);
         Assert.assertEquals("Should contains event storage", 1, cepStatement.getEventStorages()
                 .size());
         Assert.assertEquals(storage, cepStatement.getEventStorages().get(0));
@@ -116,7 +116,7 @@ public class CEPStatementTest
         final CEPStatement cepStatement = new CEPStatement();
         final ICEPEventStorage storage = Mockito.mock(ICEPEventStorage.class);
         
-        cepStatement.add(storage);
+        cepStatement.addStorage(storage);
         cepStatement.notifyEvent("truc");
         Mockito.verify(storage, Mockito.atLeastOnce()).notifyEvent("truc");
     }

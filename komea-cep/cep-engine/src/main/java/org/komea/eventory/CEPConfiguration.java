@@ -107,7 +107,8 @@ public class CEPConfiguration implements ICEPConfiguration
     public void putExtraProperty(final String _key, final String _value) {
     
     
-        Validate.notNull(_key);
+        Validate.notNull(_key, "key should not be null");
+        Validate.notEmpty(_key, "key should not be empty");
         extraProperties.put(_key, _value);
     }
     

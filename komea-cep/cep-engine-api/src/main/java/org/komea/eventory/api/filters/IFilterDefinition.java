@@ -31,9 +31,6 @@ public interface IFilterDefinition
     IEventTransformer getEventTransformer();
     
     
-    /**
-     * @return
-     */
     IEventFilter getFilter();
     
     

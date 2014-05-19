@@ -166,7 +166,7 @@ public final class GoogleCacheStorage<T extends Serializable> implements ICacheS
     private Object getKeyFromEvent(final T _event) {
     
     
-        Validate.notNull(_event);
+        Validate.notNull(_event, "null event provided.");
         return indexer.getKey(_event);
     }
 }

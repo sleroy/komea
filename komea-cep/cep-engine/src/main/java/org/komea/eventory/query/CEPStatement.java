@@ -41,7 +41,7 @@ public class CEPStatement<T extends Serializable> implements ICEPStatement<T>
      * @param _mock
      *            the CEP event sto
      */
-    public void add(final ICEPEventStorage _mock) {
+    public void addStorage(final ICEPEventStorage _mock) {
     
     
         storages.add(_mock);
@@ -94,7 +94,9 @@ public class CEPStatement<T extends Serializable> implements ICEPStatement<T>
     
     
         for (final ICEPEventStorage<?> eventStorage : storages) {
-            if (_filtername.equals(eventStorage.getFilterName())) { return (ICEPEventStorage<T>) eventStorage; }
+            if (_filtername.equals(eventStorage.getFilterName())) {
+                return (ICEPEventStorage<T>) eventStorage;
+            }
         }
         return null;
     }
@@ -120,7 +122,7 @@ public class CEPStatement<T extends Serializable> implements ICEPStatement<T>
     public void notifyEvent(final T _event) {
     
     
-        Validate.notNull(_event);
+        Validate.notNull(_event, "null event provided.");
         
         /**
          * Notify the event storages

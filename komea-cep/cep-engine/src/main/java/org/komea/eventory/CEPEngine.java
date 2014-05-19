@@ -112,7 +112,10 @@ public class CEPEngine implements ICEPEngine
     public void initialize(final ICEPConfiguration _configuration) throws IOException {
     
     
-        Validate.notNull(_configuration);
+        Validate.notNull(_configuration, "no configuration provided");
+        Validate.notNull(_configuration.getBridgeFactory(), "no bridge factory");
+        Validate.notNull(_configuration.getCacheStorageFactory(), "no cache storage factory");
+        Validate.notNull(_configuration.getStorageFolder(), "no storage folder");
         cepConfiguration = _configuration;
         if (isInitialized()) {
             close();
@@ -144,9 +147,11 @@ public class CEPEngine implements ICEPEngine
     public void pushEvent(final Serializable _event) {
     
     
-        if (!isInitialized()) { throw new RuntimeException(
-                "The CEP engine has not been initialized, please invoke initialize() method"); }
-        Validate.notNull(_event);
+        if (!isInitialized()) {
+            throw new RuntimeException(
+                    "The CEP engine has not been initialized, please invoke initialize() method");
+        }
+        Validate.notNull(_event, "null event provided");
         
         eventBridge.notify(_event);
     }

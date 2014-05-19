@@ -4,6 +4,8 @@
 
 package org.komea.product.plugins.kpi.standard.sonar;
 
+
+
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -25,6 +27,8 @@ import org.komea.product.plugins.kpi.standard.EventValueFormula;
 import org.komea.product.plugins.kpi.standard.ProjectCacheIndexer;
 import org.komea.product.plugins.kpi.standard.bugzilla.AbstractCEPQueryImplementation;
 
+
+
 /**
  * "SELECT project as entity, last(value) as value FROM Event WHERE eventType.eventKey='metric_value' "
  * + "AND properties('metricName') = '" + _metricName + "' " +
@@ -32,49 +36,60 @@ import org.komea.product.plugins.kpi.standard.bugzilla.AbstractCEPQueryImplement
  * 
  * @author sleroy
  */
-public class SonarMetricKpi extends AbstractCEPQueryImplementation {
-
-	private final String	metricName;
-
-	/**
+public class SonarMetricKpi extends AbstractCEPQueryImplementation
+{
+    
+    
+    private final String metricName;
+    
+    
+    
+    /**
      * 
      */
-	public SonarMetricKpi(final String _metricName) {
-
-		super(BackupDelay.DAY);
-		metricName = _metricName;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.komea.product.cep.api.ICEPQueryImplementation#getFilterDefinitions()
-	 */
-	@Override
-	public List<IFilterDefinition> getFilterDefinitions() {
-
-		final IEventFilter<?> eventFilter = EventFilterBuilder.create().chain(new OnlyEventFilter())
-		        .chain(new WithProjectFilter()).chain(new SonarMetricEventFilter(metricName)).build();
-		final IFilterDefinition filterDefinition = FilterDefinition
-		        .create()
-		        .setCacheConfiguration(
-		                CacheConfigurationBuilder.create().expirationTime(1, TimeUnit.DAYS)
-		                        .withCustomIndexer(new ProjectCacheIndexer()).build()).setFilter(eventFilter)
-		        .setFilterName("sonar-filter");
-
-		return Collections.singletonList(filterDefinition);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.komea.product.cep.api.ICEPQueryImplementation#getFormula()
-	 */
-	@Override
-	public ICEPFormula<IEvent, KpiResult> getFormula() {
-
-		return new ProjectFormula(new EventValueFormula());
-	}
-
+    public SonarMetricKpi(final String _metricName) {
+    
+    
+        super(BackupDelay.DAY);
+        metricName = _metricName;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.komea.product.cep.api.ICEPQueryImplementation#getFilterDefinitions()
+     */
+    @Override
+    public List<IFilterDefinition> getFilterDefinitions() {
+    
+    
+        final IEventFilter<?> eventFilter =
+                EventFilterBuilder.create().chain(new OnlyEventFilter())
+                        .chain(new WithProjectFilter())
+                        .chain(new SonarMetricEventFilter(metricName)).build();
+        final IFilterDefinition filterDefinition =
+                FilterDefinition
+                        .create()
+                        .setCacheConfiguration(
+                                CacheConfigurationBuilder.create().expirationTime(1, TimeUnit.DAYS)
+                                        .withCustomIndexer(new ProjectCacheIndexer()).build())
+                        .setFilter(eventFilter).setFilterName("sonar-filter");
+        
+        return Collections.singletonList(filterDefinition);
+        
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.cep.api.ICEPQueryImplementation#getFormula()
+     */
+    @Override
+    public ICEPFormula<IEvent, KpiResult> getFormula() {
+    
+    
+        return new ProjectFormula(new EventValueFormula());
+    }
+    
 }

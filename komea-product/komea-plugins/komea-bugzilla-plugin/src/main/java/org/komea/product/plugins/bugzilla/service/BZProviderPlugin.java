@@ -40,7 +40,7 @@ public class BZProviderPlugin {
 
 	public static final String	BUGZILLA_PROVIDER_PLUGIN	= "BugZilla Provider plugin";
 
-	private static Logger	   LOGGER	                 = LoggerFactory.getLogger(BZProviderPlugin.class);
+	private static final Logger	LOGGER	                 = LoggerFactory.getLogger(BZProviderPlugin.class);
 
 	/**
 	 * @return the logger
