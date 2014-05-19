@@ -4,10 +4,6 @@
 
 package org.komea.product.backend.service.kpi;
 
-import java.io.InputStream;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.Validate;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
@@ -205,21 +201,24 @@ public class KpiBuilder {
 	}
 
 	public KpiBuilder query(final Class<? extends ICEPQueryImplementation> _query) {
-		InputStream resourceAsStream = null;
+
 		String script = "##notloaded##";
 		try {
-			resourceAsStream = KpiBuilder.class.getResourceAsStream("cepQueryScript.groovy");
-			script = IOUtils.toString(resourceAsStream);
-			Validate.notNull(script);
-			script = script.replace("##KPI##", _query.getSimpleName() + "Script");
-			script = script.replace("##QUERY##", _query.getCanonicalName());
+			final GroovyScriptLoader groovyScriptLoader = new GroovyScriptLoader(KpiBuilder.class.getClassLoader(),
+			        "/org/komea/product/backend/service/kpi/cepQueryScript.groovy");
+			groovyScriptLoader.addParameter("##KPI##", _query.getSimpleName() + "Script");
+			groovyScriptLoader.addParameter("##QUERY##", _query.getCanonicalName());
+			script = groovyScriptLoader.load();
 			kpi.setEsperRequest(script);
 		} catch (final Exception e) {
 			LOGGER.error("Impossible to retrieve Groovy script template : script {}", script, e);
-		} finally {
-			IOUtils.closeQuietly(resourceAsStream);
 		}
 
+		return this;
+	}
+
+	public KpiBuilder queryScript(final String _groovyScript) {
+		kpi.setEsperRequest(_groovyScript);
 		return this;
 	}
 }

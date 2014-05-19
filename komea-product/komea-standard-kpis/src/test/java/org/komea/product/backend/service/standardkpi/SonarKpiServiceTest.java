@@ -4,61 +4,76 @@
 
 package org.komea.product.backend.service.standardkpi;
 
-
-
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.komea.eventory.api.engine.ICEPQueryImplementation;
-import org.komea.product.cep.formula.ElFormula;
+import org.komea.eventory.query.CEPQuery;
+import org.komea.product.backend.groovy.GroovyEngineService;
 import org.komea.product.database.model.Kpi;
-
-
+import org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi;
 
 /**
  * @author sleroy
  */
-public class SonarKpiServiceTest
-{
-    
-    
-    private final SonarKPIService standardKpiBuilderService = new SonarKPIService();
-    
-    
-    
-    /**
-     * Test method for {@link org.komea.product.backend.service.standardkpi.StandardKpiService#actualLineCoverage()}.
-     */
-    @Test
-    public void testActualLineCoverage() throws Exception {
-    
-    
-        testKpi(standardKpiBuilderService.actualLineCoverage());
-        
-    }
-    
-    
-    @Test
-    public void testBuildSonarMetricKpi() throws Exception {
-    
-    
-        testKpi(standardKpiBuilderService.buildSonarMetricKpi("Number of lines of code", "ncloc",
-                0, 100));
-    }
-    
-    
-    private void testKpi(final Kpi kpiToTest) {
-    
-    
-        final Set<ConstraintViolation<Kpi>> validate =
-                Validation.buildDefaultValidatorFactory().getValidator().validate(kpiToTest);
-        Assert.assertNotNull(new ElFormula<ICEPQueryImplementation>(kpiToTest.getEsperRequest(),
-                ICEPQueryImplementation.class));
-        Assert.assertTrue(validate.isEmpty());
-    }
-    
+public class SonarKpiServiceTest {
+
+	private final SonarKPIService	  standardKpiBuilderService	= new SonarKPIService();
+
+	private final GroovyEngineService	groovyEngineService	    = new GroovyEngineService();
+
+	@Before
+	public void before() {
+		groovyEngineService.init();
+
+	}
+
+	@After
+	public void destroy() {
+		groovyEngineService.destroy();
+
+	}
+
+	/**
+	 * Test method for
+	 * {@link org.komea.product.backend.service.standardkpi.StandardKpiService#actualLineCoverage()}
+	 * .
+	 */
+	@Test
+	public void testActualLineCoverage() throws Exception {
+
+		testKpi(standardKpiBuilderService.actualLineCoverage());
+
+	}
+
+	/**
+	 * Test method for
+	 * {@link org.komea.product.backend.service.standardkpi.StandardKpiService#actualLineCoverage()}
+	 * .
+	 */
+	@Test
+	public void testActualLineCoverageInvokcation() throws Exception {
+
+		new CEPQuery(new SonarMetricKpi("ncloc"));
+
+	}
+
+	@Test
+	public void testBuildSonarMetricKpi() throws Exception {
+
+		testKpi(standardKpiBuilderService.buildSonarMetricKpi("Number of lines of code", "ncloc", 0, 100));
+	}
+
+	private void testKpi(final Kpi kpiToTest) {
+
+		final Set<ConstraintViolation<Kpi>> validate = Validation.buildDefaultValidatorFactory().getValidator()
+		        .validate(kpiToTest);
+		Assert.assertTrue(groovyEngineService.isValidFormula(kpiToTest.getEsperRequest()));
+		Assert.assertTrue(validate.isEmpty());
+	}
 }

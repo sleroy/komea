@@ -61,7 +61,7 @@ public class SonarMetricKpi extends AbstractCEPQueryImplementation {
 		        .setCacheConfiguration(
 		                CacheConfigurationBuilder.create().expirationTime(1, TimeUnit.DAYS)
 		                        .withCustomIndexer(new ProjectCacheIndexer()).build()).setFilter(eventFilter)
-		        .setFilterName("jenkins-filter");
+		        .setFilterName("sonar-filter");
 
 		return Collections.singletonList(filterDefinition);
 	}
