@@ -15,6 +15,7 @@ import org.komea.product.service.dto.KpiKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,10 +59,13 @@ public final class KPIValueService implements IKpiValueService {
 		return selectByPrimaryKey.getValueMin();
 	}
 
+	@Cacheable(value = "kpi-realtime-value-cache")
 	@Override
 	public KpiResult getRealTimeValue(final Integer _kpiID) {
 		final Kpi selectKpiByKey = new FindKpiPerId(_kpiID, kpiDAO).find();
-		return getRealTimeValue(selectKpiByKey);
+		final KpiResult queryValueFromKpi = kpiQueryRegistry.getQueryValueFromKpi(selectKpiByKey);
+		LOGGER.debug("Returns the real time measure for -> {}", selectKpiByKey);
+		return queryValueFromKpi;
 	}
 
 	/*
@@ -91,12 +95,6 @@ public final class KPIValueService implements IKpiValueService {
 	public Number getSingleValue(final KpiKey _kpiKey) {
 
 		return getRealTimeValue(_kpiKey.getKpiName()).getValue(_kpiKey.getEntityKey());
-	}
-
-	private KpiResult getRealTimeValue(final Kpi selectKpiByKey) {
-		final KpiResult queryValueFromKpi = kpiQueryRegistry.getQueryValueFromKpi(selectKpiByKey);
-		LOGGER.debug("Returns the real time measure for -> {}", selectKpiByKey);
-		return queryValueFromKpi;
 	}
 
 }

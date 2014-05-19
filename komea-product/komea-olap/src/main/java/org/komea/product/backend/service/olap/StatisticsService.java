@@ -184,7 +184,7 @@ public class StatisticsService implements IStatisticsAPI {
 		Validate.isTrue(_entityKey.isEntityReferenceKey());
 		Validate.isTrue(_options.isValid());
 		LOGGER.debug("evaluateKpiValue : {}", _options, _entityKey);
-		return valueOrZero(measureDao.evaluateKpiValue(generateFormulaID(_options), _entityKey));
+		return measureDao.evaluateKpiValue(generateFormulaID(_options), _entityKey);
 	}
 
 	/*
@@ -207,7 +207,7 @@ public class StatisticsService implements IStatisticsAPI {
 		final Double evaluateKpiValueOnPeriod = measureDao.evaluateKpiValueOnPeriod(generateFormulaID(_options),
 		        _entityKey);
 		LOGGER.debug("evaluateKpiValueOnPeriod : {} ekey {}, return {}", _options, _entityKey, evaluateKpiValueOnPeriod);
-		return valueOrZero(evaluateKpiValueOnPeriod);
+		return evaluateKpiValueOnPeriod;
 	}
 
 	@Cacheable("evaluateKpiValues")
@@ -256,7 +256,7 @@ public class StatisticsService implements IStatisticsAPI {
 
 		Validate.isTrue(_kpiKeys.getEntityKey().isEntityReferenceKey());
 		LOGGER.debug("evaluateTheCurrentKpiValue : {}", _kpiKeys);
-		return valueOrZero(evaluateTheCurrentKpiValues(_kpiKeys.getKpiID()).getDoubleValue(_kpiKeys.getEntityKey()));
+		return evaluateTheCurrentKpiValues(_kpiKeys.getKpiID()).getDoubleValue(_kpiKeys.getEntityKey());
 	}
 
 	/*
@@ -330,7 +330,7 @@ public class StatisticsService implements IStatisticsAPI {
 		periodTimeSerieOptions.setGroupFormula(GroupFormula.AVG_VALUE);
 		periodTimeSerieOptions.setKpiID(_key.getKpiID());
 		LOGGER.debug("getLastStoredValueInHistory : period {}", periodTimeSerieOptions);
-		return valueOrZero(evaluateKpiValueOnPeriod(periodTimeSerieOptions, _key.getEntityKey()));
+		return evaluateKpiValueOnPeriod(periodTimeSerieOptions, _key.getEntityKey());
 	}
 
 	public void setKpiDao(final KpiDao _kpiDao) {
@@ -398,8 +398,4 @@ public class StatisticsService implements IStatisticsAPI {
 		return _timeSerieOptions; // FIXME :: Should produce a clone.
 	}
 
-	private Double valueOrZero(final Double _value) {
-
-		return _value == null ? 0d : _value;
-	}
 }

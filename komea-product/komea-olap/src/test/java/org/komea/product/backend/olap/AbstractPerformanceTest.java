@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.komea.eventory.query.CEPQueryImplementation;
+import org.komea.eventory.query.predefined.EmptyQueryDefinition;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.backend.service.kpi.KpiBuilder;
 import org.komea.product.database.dao.KpiDao;
@@ -87,7 +87,7 @@ public abstract class AbstractPerformanceTest extends AbstractSpringIntegrationT
 	private Kpi initFakeKPi() {
 
 		final Kpi build = KpiBuilder.create().cronOneDay().description("").entityType(EntityType.PROJECT)
-		        .query(CEPQueryImplementation.class).key("bla" + new Date().getTime()).name("Kpi Olap")
+		        .query(EmptyQueryDefinition.class).key("bla" + new Date().getTime()).name("Kpi Olap")
 		        .providerType(ProviderType.BUGTRACKER).interval(0d, 100d)
 		        .produceValue(ValueType.INT, ValueDirection.BETTER).build();
 		System.out.println("Generated kpi");
