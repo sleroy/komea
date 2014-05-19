@@ -11,6 +11,7 @@ import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.backend.api.IKpiQueryService;
+import org.komea.product.backend.groovy.IGroovyEngineService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.database.dto.KpiResult;
@@ -41,6 +42,9 @@ public class KpiQueryService implements IKpiQueryService {
 
 	@Autowired
 	private IKpiQueryRegisterService	kpiQueryRegisterService;
+
+	@Autowired
+	private IGroovyEngineService	 groovyEngineService;
 
 	/*
 	 * (non-Javadoc)
@@ -83,9 +87,7 @@ public class KpiQueryService implements IKpiQueryService {
 	}
 
 	private void evaluateFormulaAndRegisterQuery(final Kpi _kpi) {
-
-		final InstantiateQueryFromFormula instantiateQueryFromFormula = new InstantiateQueryFromFormula(_kpi);
-		IQuery queryImplementation = instantiateQueryFromFormula.instantiate();
+		IQuery queryImplementation = groovyEngineService.parseGroovyScript(_kpi.getEsperRequest());
 		if (queryImplementation == null) {
 			LOGGER.error("Could not provide an implementation for the kpi {}, using stub", _kpi.getKpiKey());
 			queryImplementation = new StubQuery();

@@ -6,6 +6,7 @@ package org.komea.product.backend.service.kpi;
 
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
+import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.ValueDirection;
@@ -106,6 +107,13 @@ public class KpiBuilder {
 		return this;
 	}
 
+	public KpiBuilder dynamicQuery(final Class<? extends IDynamicDataQuery> _query) {
+
+		kpi.setEsperRequest("new " + _query.getName() + "()");
+
+		return this;
+	}
+
 	public KpiBuilder entityType(final EntityType _entityType) {
 
 		kpi.setEntityType(_entityType);
@@ -190,18 +198,9 @@ public class KpiBuilder {
 
 	public KpiBuilder query(final Class<? extends ICEPQueryImplementation> _query) {
 
-		kpi.setEsperRequest("new " + _query.getName() + "()");
+		kpi.setEsperRequest("new CEPQuery(new " + _query.getName() + "());");
 
 		return this;
 	}
 
-	/**
-	 * @param _query
-	 * @return
-	 */
-	public KpiBuilder query(final String _query) {
-
-		kpi.setEsperRequest(_query);
-		return this;
-	}
 }

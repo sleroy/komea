@@ -19,9 +19,7 @@ import org.komea.eventory.api.formula.ICEPFormula;
 public interface ICEPQueryImplementation {
 
 	/**
-	 * Returns the backup delay.
-	 * 
-	 * @return
+	 * @return Returns the backup delay.
 	 */
 	BackupDelay getBackupDelay();
 
