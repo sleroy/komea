@@ -17,7 +17,6 @@ import org.komea.eventory.api.cache.ICacheConfiguration;
 import org.komea.eventory.api.cache.ICacheStorage;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.api.engine.ICEPConfiguration;
-import org.komea.eventory.api.engine.RunningMode;
 import org.komea.eventory.cache.CacheStorageFactory;
 import org.komea.eventory.utils.PluginUtils;
 import org.mockito.Matchers;
@@ -68,7 +67,7 @@ public class CEPEngineTest
         final CEPConfiguration configuration = new CEPConfiguration();
         configuration.setBridgeFactory(eventBridge);
         configuration.setCacheStorageFactory(new CacheStorageFactory());
-        configuration.setMode(RunningMode.AGILE);
+        
         configuration.setNumberQueryListeners(1);
         configuration.setStorageFolder(new File("target"));
         cepEngine.initialize(configuration);

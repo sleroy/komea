@@ -13,7 +13,6 @@ import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.engine.ICEPStatement;
-import org.komea.eventory.api.engine.IQueryVisitor;
 import org.komea.eventory.api.filters.IFilterDefinition;
 import org.komea.eventory.api.formula.ICEPFormula;
 import org.slf4j.Logger;
@@ -71,15 +70,6 @@ public class CEPQuery<TEvent extends Serializable, TRes> implements ICEPQuery<TE
         if (cepStatement.getEventStorages().isEmpty()) {
             LOGGER.warn("Query {} should probably define at least one filter", _queryDefinition);
         }
-        
-    }
-    
-    
-    @Override
-    public void accept(final IQueryVisitor _visitor) {
-    
-    
-        _visitor.visit(this);
         
     }
     
