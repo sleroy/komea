@@ -1,11 +1,12 @@
 package org.komea.product.backend.service.olap;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.komea.product.backend.api.exceptions.EntityNotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundRuntimeException;
@@ -18,6 +19,7 @@ import org.komea.product.model.timeserie.dto.TimeCoordinateDTO;
 import org.komea.product.model.timeserie.dto.TimeSerieDTO;
 import org.komea.product.service.dto.KpiStringKey;
 import org.komea.product.service.dto.KpiStringKeyList;
+import org.komea.product.service.dto.PeriodCriteria;
 import org.komea.product.test.spring.AbstractSpringDBunitIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -41,7 +43,6 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
 		kpiLoading.initLoadingService();
 	}
 
-	@Ignore
 	@Test
 	@DatabaseSetup("measures.xml")
 	public void test__only_one_get_historic_with_end_date_before_first_value() {
@@ -66,7 +67,6 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
 		Assert.assertEquals(0, historicalValues.size());
 	}
 
-	@Ignore
 	@Test
 	@DatabaseSetup("measures.xml")
 	public void test__only_one_get_historic_with_start_date_after_first_value() {
@@ -93,7 +93,6 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
 		Assert.assertEquals(60, historicalValues.get(0).getValue(), 0.001);
 	}
 
-	@Ignore
 	@Test
 	@DatabaseSetup("measures.xml")
 	public void test__only_one_get_historic_with_start_date_sup_end_date() {
@@ -118,7 +117,6 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
 		Assert.assertEquals(0, historicalValues.size());
 	}
 
-	@Ignore
 	@Test
 	@DatabaseSetup("measures.xml")
 	public void test_get_historic_measures() {
@@ -148,7 +146,6 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
 
 	}
 
-	@Ignore
 	@Test
 	@DatabaseSetup("measures.xml")
 	public void test_get_historic_measures_many() {
@@ -160,11 +157,11 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
 		// between 1/4/2014 and now
 		final KpiStringKeyList kpiKeyList = new KpiStringKeyList(Sets.newHashSet("BRANCH_COVERAGE(%)"),
 		        Sets.newHashSet("KOMEA"), EntityType.PROJECT);
-		final PeriodTimeSerieOptions period = new PeriodTimeSerieOptions();
-		period.setFromPeriod(new DateTime(2014, 1, 4, 0, 0, 0));
-		period.setToPeriod(new DateTime());
-		period.pickBestGranularity();
-		period.setGroupFormula(GroupFormula.AVG_VALUE);
+		final PeriodCriteria period = new PeriodCriteria();
+		final Calendar calendar = Calendar.getInstance();
+		calendar.set(2014, Calendar.JANUARY, 4);
+		period.setStartDate(calendar.getTime());
+		period.setEndDate(new Date());
 
 		final TimeSerieDTO measure = measureService.findMupltipleHistoricalMeasure(kpiKeyList, period).get(0);
 
@@ -178,7 +175,6 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
 
 	}
 
-	@Ignore
 	@Test
 	@DatabaseSetup("measures2.xml")
 	@DatabaseTearDown(value = "measures2.xml", type = DatabaseOperation.DELETE_ALL)
@@ -210,7 +206,6 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
 
 	}
 
-	@Ignore
 	@Test(expected = KPINotFoundRuntimeException.class)
 	@DatabaseSetup("measures.xml")
 	public void test_get_historic_not_existing_kpi() {
@@ -226,12 +221,11 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
 		period.pickBestGranularity();
 		period.setGroupFormula(GroupFormula.AVG_VALUE);
 
-		final TimeSerieDTO measure = measureService.findHistoricalMeasure(kpiKey, period);
+		measureService.findHistoricalMeasure(kpiKey, period);
 
 		// THEN a KPINotFoundRuntimeException must be launched
 	}
 
-	@Ignore
 	@Test(expected = EntityNotFoundException.class)
 	@DatabaseSetup("measures.xml")
 	public void test_get_historic_not_existing_Project() {
@@ -248,12 +242,11 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
 		period.pickBestGranularity();
 		period.setGroupFormula(GroupFormula.AVG_VALUE);
 
-		final TimeSerieDTO measure = measureService.findHistoricalMeasure(kpiKey, period);
+		measureService.findHistoricalMeasure(kpiKey, period);
 
 		// THEN a KPINotFoundRuntimeException must be launched
 	}
 
-	@Ignore
 	@Test(expected = IllegalArgumentException.class)
 	@DatabaseSetup("measures.xml")
 	public void test_get_historic_with_null_kpiKey() {
@@ -269,7 +262,7 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
 		period.pickBestGranularity();
 		period.setGroupFormula(GroupFormula.AVG_VALUE);
 
-		final TimeSerieDTO measure = measureService.findHistoricalMeasure(kpiKey, period);
+		measureService.findHistoricalMeasure(kpiKey, period);
 
 		// THEN the measure list must be empty
 		// List<HistoricalValue> historicalValues =
