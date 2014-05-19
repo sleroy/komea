@@ -204,8 +204,8 @@ public class KpiBuilder {
 
 		String script = "##notloaded##";
 		try {
-			final GroovyScriptLoader groovyScriptLoader = new GroovyScriptLoader(KpiBuilder.class.getClassLoader(),
-			        "/org/komea/product/backend/service/kpi/cepQueryScript.groovy");
+			final GroovyScriptLoader groovyScriptLoader = new GroovyScriptLoader(Thread.currentThread()
+			        .getContextClassLoader(), "org/komea/product/backend/service/kpi/cepQueryScript.groovy");
 			groovyScriptLoader.addParameter("##KPI##", _query.getSimpleName() + "Script");
 			groovyScriptLoader.addParameter("##QUERY##", _query.getCanonicalName());
 			script = groovyScriptLoader.load();
