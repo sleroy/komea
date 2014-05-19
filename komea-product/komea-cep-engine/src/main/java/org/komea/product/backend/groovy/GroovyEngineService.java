@@ -1,13 +1,14 @@
 package org.komea.product.backend.groovy;
 
 import groovy.lang.GroovyClassLoader;
+import groovy.lang.GroovyShell;
+import groovy.lang.Script;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.commons.io.IOUtils;
 import org.komea.eventory.api.engine.IQuery;
-import org.komea.eventory.utils.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -41,7 +42,7 @@ public class GroovyEngineService implements IGroovyEngineService {
 	@Override
 	public boolean isValidFormula(final String _formula) {
 
-		return parseGroovyScript(_formula) instanceof IQuery;
+		return parseScript(_formula).run() instanceof IQuery;
 	}
 
 	/*
@@ -52,16 +53,36 @@ public class GroovyEngineService implements IGroovyEngineService {
 	 * (java.lang.String)
 	 */
 	@Override
-	public <T> T parseGroovyScript(final String _groovyScript) {
+	public <T> Class<T> parseClass(final String _groovyScript) {
 
 		Class<T> groovyClass;
 		try {
 			groovyClass = groovyClassLoader.parseClass(_groovyScript);
-			return ClassUtils.instantiate(groovyClass);
+			return groovyClass;
 		} catch (final Exception e) {
 			LOGGER.error("Script {} presents an error {}", _groovyScript, e);
 			throw new GroovyParsingException(_groovyScript, e);
 		}
+
+	}
+
+	@Override
+	public <T extends IQuery> T parseQuery(final String _groovyScript) {
+
+		return (T) IQuery.class.cast(parseScript(_groovyScript).run());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.komea.product.backend.groovy.IGroovyEngineService#parseGroovyScript
+	 * (java.lang.String)
+	 */
+	@Override
+	public Script parseScript(final String _groovyScript) {
+		final GroovyShell shell = new GroovyShell(Thread.currentThread().getContextClassLoader());
+		return shell.parse(_groovyScript);
 
 	}
 }

@@ -34,7 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  * @author sleroy
  */
-public final class BZBugCountKPI implements IDynamicDataQuery {
+public class BZBugCountKPI implements IDynamicDataQuery {
 
 	private static final Logger	LOGGER	= LoggerFactory.getLogger(BZBugCountKPI.class);
 
@@ -55,8 +55,7 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
 	private final List<Search>	  searchs;
 
 	public BZBugCountKPI() {
-
-		this(Collections.<Search> emptyList());
+		searchs = Collections.EMPTY_LIST;
 	}
 
 	public BZBugCountKPI(final List<Search> searchs) {
@@ -74,11 +73,6 @@ public final class BZBugCountKPI implements IDynamicDataQuery {
 	public BackupDelay getBackupDelay() {
 
 		return BackupDelay.DAY;
-	}
-
-	public String getFormula() {
-
-		return "new " + this.getClass().getName() + "(\"" + SearchUtils.convert(searchs) + "\")";
 	}
 
 	/*

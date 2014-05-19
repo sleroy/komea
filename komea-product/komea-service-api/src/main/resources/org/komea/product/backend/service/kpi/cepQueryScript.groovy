@@ -11,3 +11,5 @@ public class ##KPI## extends CEPQuery {
 	}
 
 }
+
+new ##KPI##();

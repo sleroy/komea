@@ -87,7 +87,7 @@ public class KpiQueryService implements IKpiQueryService {
 	}
 
 	private void evaluateFormulaAndRegisterQuery(final Kpi _kpi) {
-		IQuery queryImplementation = groovyEngineService.parseGroovyScript(_kpi.getEsperRequest());
+		IQuery queryImplementation = groovyEngineService.parseQuery(_kpi.getEsperRequest());
 		if (queryImplementation == null) {
 			LOGGER.error("Could not provide an implementation for the kpi {}, using stub", _kpi.getKpiKey());
 			queryImplementation = new StubQuery();
