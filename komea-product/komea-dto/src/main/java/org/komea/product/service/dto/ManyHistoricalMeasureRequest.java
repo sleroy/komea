@@ -2,20 +2,19 @@
 package org.komea.product.service.dto;
 
 
-import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 
 public class ManyHistoricalMeasureRequest {
     
-    private KpiStringKeyList       kpiKeyList;
-    private PeriodTimeSerieOptions period;
+    private KpiStringKeyList kpiKeyList;
+    private PeriodCriteria   period;
     
     public ManyHistoricalMeasureRequest() {
     
         kpiKeyList = new KpiStringKeyList();
-        period = new PeriodTimeSerieOptions();
+        period = new PeriodCriteria();
     }
     
-    public ManyHistoricalMeasureRequest(final KpiStringKeyList _kpiKeyList, final PeriodTimeSerieOptions _period) {
+    public ManyHistoricalMeasureRequest(final KpiStringKeyList _kpiKeyList, final PeriodCriteria _period) {
     
         super();
         kpiKeyList = _kpiKeyList;
@@ -27,7 +26,7 @@ public class ManyHistoricalMeasureRequest {
         return kpiKeyList;
     }
     
-    public PeriodTimeSerieOptions getPeriod() {
+    public PeriodCriteria getPeriod() {
     
         return period;
     }
@@ -37,7 +36,7 @@ public class ManyHistoricalMeasureRequest {
         kpiKeyList = _kpiKeyList;
     }
     
-    public void setPeriod(final PeriodTimeSerieOptions _period) {
+    public void setPeriod(final PeriodCriteria _period) {
     
         period = _period;
     }

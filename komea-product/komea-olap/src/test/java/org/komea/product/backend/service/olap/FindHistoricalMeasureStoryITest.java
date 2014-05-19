@@ -4,6 +4,8 @@ import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.google.common.collect.Sets;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import org.joda.time.DateTime;
 import org.junit.Assert;
@@ -20,6 +22,7 @@ import org.komea.product.model.timeserie.dto.TimeCoordinateDTO;
 import org.komea.product.model.timeserie.dto.TimeSerieDTO;
 import org.komea.product.service.dto.KpiStringKey;
 import org.komea.product.service.dto.KpiStringKeyList;
+import org.komea.product.service.dto.PeriodCriteria;
 import org.komea.product.test.spring.AbstractSpringDBunitIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -105,11 +108,11 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         // between 1/4/2014 and now
         KpiStringKeyList kpiKeyList = new KpiStringKeyList(Sets.newHashSet("BRANCH_COVERAGE(%)"), Sets.newHashSet("KOMEA"),
                 EntityType.PROJECT);
-        PeriodTimeSerieOptions period = new PeriodTimeSerieOptions();
-        period.setFromPeriod(new DateTime(2014, 1, 4, 0, 0, 0));
-        period.setToPeriod(new DateTime());
-        period.pickBestGranularity();
-        period.setGroupFormula(GroupFormula.AVG_VALUE);
+        PeriodCriteria period = new PeriodCriteria();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2014, Calendar.JANUARY, 4);
+        period.setStartDate(calendar.getTime());
+        period.setEndDate(new Date());
 
         TimeSerieDTO measure = measureService.findMupltipleHistoricalMeasure(kpiKeyList, period).get(0);
 

@@ -1,8 +1,7 @@
-
 package org.komea.product.web.rest.api;
 
-
-import org.joda.time.DateTime;
+import java.util.Calendar;
+import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.product.backend.service.kpi.IMeasureService;
@@ -11,6 +10,7 @@ import org.komea.product.model.timeserie.dto.TimeSerieDTO;
 import org.komea.product.service.dto.KpiStringKey;
 import org.komea.product.service.dto.KpiStringKeyList;
 import org.komea.product.service.dto.ManyHistoricalMeasureRequest;
+import org.komea.product.service.dto.PeriodCriteria;
 import org.komea.product.test.spring.AbstractSpringWebIntegrationTestCase;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
@@ -28,63 +28,64 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 public class MeasureControllerTest extends AbstractSpringWebIntegrationTestCase {
-    
+
     @Autowired
     private WebApplicationContext context;
-    
-    private MockMvc               mockMvc;
-    
+
+    private MockMvc mockMvc;
+
     @Autowired
     @InjectMocks
-    private MeasuresController    measureController;
-    
+    private MeasuresController measureController;
+
     @Mock
-    private IMeasureService       service;
-    
+    private IMeasureService service;
+
     @Before
     public void setUp() {
-    
+
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
         MockitoAnnotations.initMocks(this);
-        
+
     }
-    
+
     @Test
     public void testfindHistoricalMeasure() throws Exception {
-    
+
         TimeSerieDTO serie = new TimeSerieDTO();
         Mockito.when(service.findHistoricalMeasure(Matchers.any(KpiStringKey.class), Matchers.any(PeriodTimeSerieOptions.class)))
                 .thenReturn(serie);
         // .thenReturn(measures);
-        
+
         // HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
         // LimitCriteria limit = LimitCriteria.createDefaultLimitCriteria();
         ManyHistoricalMeasureRequest request = new ManyHistoricalMeasureRequest();
-        PeriodTimeSerieOptions period = new PeriodTimeSerieOptions();
-        period.setFromPeriod(new DateTime(2014, 1, 1, 0, 0));
-        period.setToPeriod(new DateTime());
-        period.pickBestGranularity();
+        PeriodCriteria period = new PeriodCriteria();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2014, Calendar.JANUARY, 1);
+        period.setStartDate(calendar.getTime());
+        period.setEndDate(new Date());
         request.setPeriod(period);
         String jsonMessage = IntegrationTestUtil.convertObjectToJSON(request);
         System.out.println(jsonMessage);
-        
+
         final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/historic")
                 .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
-        
+
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        
+
     }
+
     @Test
     public void testCurrentMeasures() throws Exception {
-    
+
         // List<MeasureResult> measures = Lists.newArrayList();
         // MeasureResult result = new MeasureResult();
         // result.addHistoricalValue(12D, new Date());
         // measures.add(result);
         // Mockito.when(service.getHistoricalMeasures(Matchers.any(HistoryStringKeyList.class), Matchers.any(LimitCriteria.class)))
         // .thenReturn(measures);
-        
         // HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
         // LimitCriteria limit = LimitCriteria.createDefaultLimitCriteria();
         KpiStringKeyList request = new KpiStringKeyList();
@@ -92,22 +93,21 @@ public class MeasureControllerTest extends AbstractSpringWebIntegrationTestCase 
         System.out.println(jsonMessage);
         final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/current")
                 .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
-        
+
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        
+
     }
-    
+
     @Test
     public void testlastMeasures() throws Exception {
-    
+
         // List<MeasureResult> measures = Lists.newArrayList();
         // MeasureResult result = new MeasureResult();
         // result.addHistoricalValue(12D, new Date());
         // measures.add(result);
         // Mockito.when(service.getHistoricalMeasures(Matchers.any(HistoryStringKeyList.class), Matchers.any(LimitCriteria.class)))
         // .thenReturn(measures);
-        
         // HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
         // LimitCriteria limit = LimitCriteria.createDefaultLimitCriteria();
         KpiStringKeyList request = new KpiStringKeyList();
@@ -115,10 +115,10 @@ public class MeasureControllerTest extends AbstractSpringWebIntegrationTestCase 
         System.out.println(jsonMessage);
         final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/last")
                 .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
-        
+
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        
+
     }
-    
+
 }
