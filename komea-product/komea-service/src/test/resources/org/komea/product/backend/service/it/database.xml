@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-   <kom_pero id="1" name="tocea" />
-   <kom_pe id="1" idPersonRole="1" firstName="jeremie" lastName="Guidoux" login="jguidoux" email="jeremie.guidoux@tocea.com"
-      userBdd="KOMEA" />
-   <kom_pe id="2" idPersonRole="1" firstName="sylvain" lastName="Leroy" login="sleroy" email="sylvain.leroy@tocea.com@tocea.com"
-      userBdd="KOMEA" />
-   <kom_proj id="1" projectKey="komea" name="komea" description="kpi alerts" />
-   <kom_customer id="1" name="Apple" />
+	<kom_pero id="1" name="tocea" />
+	<kom_pe id="1" firstName="jeremie" lastName="Guidoux" login="jguidoux"
+		email="jeremie.guidoux@tocea.com" userBdd="KOMEA" />
+	<kom_pe id="2" firstName="sylvain" lastName="Leroy" login="sleroy"
+		email="sylvain.leroy@tocea.com@tocea.com" userBdd="KOMEA" />
+	<kom_proj id="1" projectKey="komea" name="komea" description="kpi alerts" />
+	<kom_customer id="1" name="Apple" />
 
-   <kom_kpi id="1" kpiKey="kpi1" name="kpi1" description="kpi no 1" valueMin="0" valueMax="100" valueDirection="NONE"
-      valueType="PERCENT" entityType="PROJECT" entityID="1" cronExpression="* * * * * ?" providerType="OTHER"
-      evictionRate="10" evictionType="VALUES" esperRequest="SELECT * FROM alert" />
+	<kom_kpi id="1" kpiKey="kpi1" name="kpi1" description="kpi no 1"
+		valueMin="0" valueMax="100" valueDirection="NONE" valueType="PERCENT"
+		entityType="PROJECT" entityID="1" cronExpression="* * * * * ?"
+		providerType="OTHER" evictionRate="10" evictionType="VALUES"
+		esperRequest="SELECT * FROM alert" />
 
-   
+
 </dataset>
