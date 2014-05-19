@@ -6,6 +6,7 @@ package org.komea.eventory;
 
 
 
+import java.io.File;
 import java.io.IOException;
 
 import org.junit.Assert;
@@ -16,6 +17,8 @@ import org.komea.eventory.api.cache.ICacheConfiguration;
 import org.komea.eventory.api.cache.ICacheStorage;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.api.engine.ICEPConfiguration;
+import org.komea.eventory.api.engine.RunningMode;
+import org.komea.eventory.cache.CacheStorageFactory;
 import org.komea.eventory.utils.PluginUtils;
 import org.mockito.Matchers;
 
@@ -64,6 +67,10 @@ public class CEPEngineTest
     
         final CEPConfiguration configuration = new CEPConfiguration();
         configuration.setBridgeFactory(eventBridge);
+        configuration.setCacheStorageFactory(new CacheStorageFactory());
+        configuration.setMode(RunningMode.AGILE);
+        configuration.setNumberQueryListeners(1);
+        configuration.setStorageFolder(new File("target"));
         cepEngine.initialize(configuration);
     }
     
@@ -168,8 +175,7 @@ public class CEPEngineTest
     /**
      * Test method for {@link org.komea.eventory.CEPEngine#pushEvent(java.io.Serializable)}.
      */
-    @Test(
-        expected = RuntimeException.class)
+    @Test(expected = RuntimeException.class)
     public final void testPushEventWithClosedEngine() throws Exception {
     
     
@@ -184,8 +190,7 @@ public class CEPEngineTest
     /**
      * Test method for {@link org.komea.eventory.CEPEngine#pushEvent(java.io.Serializable)}.
      */
-    @Test(
-        expected = Exception.class)
+    @Test(expected = Exception.class)
     public final void testPushEventWithoutInitialization() throws Exception {
     
     
