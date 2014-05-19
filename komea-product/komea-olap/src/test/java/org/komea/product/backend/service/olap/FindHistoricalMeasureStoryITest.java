@@ -1,11 +1,12 @@
 package org.komea.product.backend.service.olap;
 
-<<<<<<< HEAD
-=======
+import com.github.springtestdbunit.annotation.DatabaseOperation;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import com.google.common.collect.Sets;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,11 +27,6 @@ import org.komea.product.service.dto.PeriodCriteria;
 import org.komea.product.test.spring.AbstractSpringDBunitIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.github.springtestdbunit.annotation.DatabaseOperation;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.DatabaseTearDown;
-import com.google.common.collect.Sets;
-
 @DatabaseTearDown(value = "measures.xml", type = DatabaseOperation.DELETE_ALL)
 public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegrationTest {
 
@@ -46,13 +42,12 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         kpiLoading.initLoadingService();
     }
 
-
     @Ignore
     @Test
     @DatabaseSetup("measures.xml")
     public void test__only_one_get_historic_with_end_date_before_first_value() {
 
-		// GIVEN the database contain the KPI branch_coverage
+        // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((1/05/2014)
         // WHEN the user looking for the coverage-branch for the project komea
@@ -77,7 +72,7 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
     @DatabaseSetup("measures.xml")
     public void test__only_one_get_historic_with_start_date_after_first_value() {
 
-		// GIVEN the database contain the KPI branch_coverage
+        // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((1/05/2014)
         // WHEN the user looking for the coverage-branch for the project komea
@@ -104,7 +99,7 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
     @DatabaseSetup("measures.xml")
     public void test__only_one_get_historic_with_start_date_sup_end_date() {
 
-		// GIVEN the database contain the KPI branch_coverage
+        // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((1/05/2014)
         // WHEN the user looking for the coverage-branch for the project komea
@@ -129,7 +124,7 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
     @DatabaseSetup("measures.xml")
     public void test_get_historic_measures() {
 
-		// GIVEN the database contain the KPI branch_coverage
+        // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((1/05/2014)
         // WHEN the user looking for the coverage-branch for the project komea
@@ -159,7 +154,7 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
     @DatabaseSetup("measures.xml")
     public void test_get_historic_measures_many() {
 
-		// GIVEN the database contain the KPI branch_coverage
+        // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((1/05/2014)
         // WHEN the user looking for the coverage-branch for the project komea
@@ -190,7 +185,7 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
     @DatabaseTearDown(value = "measures2.xml", type = DatabaseOperation.DELETE_ALL)
     public void test_get_historic_measures_with_average() {
 
-		// GIVEN the database contain the KPI branch_coverage
+        // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((14/05/2014)
         // and 70% ((16/05/2014)
@@ -221,7 +216,7 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
     @DatabaseSetup("measures.xml")
     public void test_get_historic_not_existing_kpi() {
 
-		// GIVEN the database contain the KPI branch_coverage
+        // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((1/05/2014)
         // WHEN the user looking for the coverage-branch for the project komea
@@ -242,7 +237,7 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
     @DatabaseSetup("measures.xml")
     public void test_get_historic_not_existing_Project() {
 
-		// GIVEN the database contain the KPI branch_coverage
+        // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((1/05/2014)
         // WHEN the user looking for the coverage-branch for the project komea
@@ -264,7 +259,7 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
     @DatabaseSetup("measures.xml")
     public void test_get_historic_with_null_kpiKey() {
 
-		// GIVEN the database contain the KPI branch_coverage
+        // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((1/05/2014)
         // WHEN the user looking for the null KPI for the project komea
@@ -277,8 +272,7 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
 
         final TimeSerieDTO measure = measureService.findHistoricalMeasure(kpiKey, period);
 
-
-		// THEN the measure list must be empty
+        // THEN the measure list must be empty
         // List<HistoricalValue> historicalValues =
         // measure.getHistoricalValues();
         // Assert.assertEquals(0, historicalValues.size());
