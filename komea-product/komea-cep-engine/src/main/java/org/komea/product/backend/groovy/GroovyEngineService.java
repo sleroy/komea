@@ -57,9 +57,11 @@ public class GroovyEngineService implements IGroovyEngineService {
 		Class<T> groovyClass;
 		try {
 			groovyClass = groovyClassLoader.parseClass(_groovyScript);
+			return ClassUtils.instantiate(groovyClass);
 		} catch (final Exception e) {
+			LOGGER.error("Script {} presents an error {}", _groovyScript);
 			throw new GroovyParsingException(e);
 		}
-		return ClassUtils.instantiate(groovyClass);
+
 	}
 }

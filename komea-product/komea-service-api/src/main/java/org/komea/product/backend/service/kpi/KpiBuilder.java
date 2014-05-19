@@ -4,6 +4,10 @@
 
 package org.komea.product.backend.service.kpi;
 
+import java.io.InputStream;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.Validate;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
@@ -12,6 +16,8 @@ import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author sleroy
@@ -33,7 +39,9 @@ public class KpiBuilder {
 		return kpiBuilder;
 	}
 
-	private final Kpi	kpi	= new Kpi();
+	private final Kpi	        kpi	   = new Kpi();
+
+	private static final Logger	LOGGER	= LoggerFactory.getLogger(KpiBuilder.class);
 
 	/**
      *
@@ -197,15 +205,21 @@ public class KpiBuilder {
 	}
 
 	public KpiBuilder query(final Class<? extends ICEPQueryImplementation> _query) {
-
-		kpi.setEsperRequest("package org.komea.product.backend.service.kpi;\n"
-		        + "import org.komea.eventory.api.engine.ICEPQueryImplementation;\n"
-		        + "import org.komea.eventory.query.CEPQuery;\n"
-		        + "import org.komea.eventory.query.CEPQueryImplementation;\n"
-		        + "public class DemoClass extends CEPQuery {\n" + "public DemoClass() {\n" + "super(new "
-		        + _query.getName() + "() );\n" + "}\n" + "\n" + "}\n");
+		InputStream resourceAsStream = null;
+		String script = "##notloaded##";
+		try {
+			resourceAsStream = KpiBuilder.class.getResourceAsStream("cepQueryScript.groovy");
+			script = IOUtils.toString(resourceAsStream);
+			Validate.notNull(script);
+			script = script.replace("##KPI##", _query.getSimpleName() + "Script");
+			script = script.replace("##QUERY##", _query.getCanonicalName());
+			kpi.setEsperRequest(script);
+		} catch (final Exception e) {
+			LOGGER.error("Impossible to retrieve Groovy script template : script {}", script, e);
+		} finally {
+			IOUtils.closeQuietly(resourceAsStream);
+		}
 
 		return this;
 	}
-
 }
