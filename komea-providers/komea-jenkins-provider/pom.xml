@@ -10,7 +10,7 @@
 
     <groupId>org.komea.providers</groupId>
     <artifactId>komea-jenkins-provider</artifactId>
-    <version>1.1.20-SNAPSHOT</version>
+    <version>1.1.21-SNAPSHOT</version>
     <packaging>hpi</packaging>
     <name>Komea : Jenkins provider</name>
 
