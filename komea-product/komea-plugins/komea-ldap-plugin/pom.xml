@@ -27,12 +27,7 @@
          <artifactId>spring-security-ldap</artifactId>
       </dependency>
 
-      <dependency>
-         <groupId>org.komea.product</groupId>
-         <artifactId>komea-olap</artifactId>
-         <version>${project.version}</version>
-         <scope>test</scope>
-      </dependency>
+   
 
       <dependency>
          <groupId>org.komea.product</groupId>

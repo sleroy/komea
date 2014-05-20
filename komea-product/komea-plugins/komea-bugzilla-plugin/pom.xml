@@ -19,7 +19,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.komea.product</groupId>
-			<artifactId>komea-olap</artifactId>
+			<artifactId>komea-service</artifactId>
 			<version>1.1.19-SNAPSHOT</version>
 		</dependency>
 		<dependency>

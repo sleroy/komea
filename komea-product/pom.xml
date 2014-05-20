@@ -239,6 +239,6 @@
 		<!-- test -->
 		<module>komea-integration-tests</module>
 
-		<module>komea-olap</module>
+		
 	</modules>
 </project>

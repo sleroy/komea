@@ -92,11 +92,7 @@
                <artifactId>komea-service</artifactId>
                <version>${project.version}</version>
             </dependency>
-            <dependency>
-               <groupId>${project.groupId}</groupId>
-               <artifactId>komea-olap</artifactId>
-               <version>${project.version}</version>
-            </dependency>
+
          </dependencies>
       </profile>
 
@@ -195,12 +191,6 @@
       <dependency>
          <groupId>junit</groupId>
          <artifactId>junit</artifactId>
-         <scope>test</scope>
-      </dependency>
-      <dependency>
-         <groupId>${project.groupId}</groupId>
-         <artifactId>komea-olap</artifactId>
-         <version>${project.version}</version>
          <scope>test</scope>
       </dependency>
 
