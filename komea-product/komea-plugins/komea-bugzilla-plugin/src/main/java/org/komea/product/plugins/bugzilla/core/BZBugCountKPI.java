@@ -1,18 +1,17 @@
 /**
  *
  */
-
 package org.komea.product.plugins.bugzilla.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
+import org.komea.eventory.api.engine.IQueryVisitor;
 import org.komea.product.backend.kpi.search.ISearchedElement;
 import org.komea.product.backend.kpi.search.Search;
 import org.komea.product.backend.kpi.search.SearchUtils;
@@ -31,107 +30,112 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * This class defines a kpi based on counting the number of bugs answering to a
  * collection of criterias.
- * 
+ *
  * @author sleroy
  */
 public class BZBugCountKPI implements IDynamicDataQuery {
 
-	private static final Logger	LOGGER	= LoggerFactory.getLogger(BZBugCountKPI.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BZBugCountKPI.class);
 
-	public static BZBugCountKPI create(final Search... searchs) {
+    public static BZBugCountKPI create(final Search... searchs) {
 
-		return new BZBugCountKPI(Arrays.asList(searchs));
-	}
+        return new BZBugCountKPI(Arrays.asList(searchs));
+    }
 
-	@Autowired
-	private IBZConfigurationDAO	  bugZillaConfiguration;
+    @Autowired
+    private IBZConfigurationDAO bugZillaConfiguration;
 
-	@Autowired
-	private IProjectService	      projectService;
+    @Autowired
+    private IProjectService projectService;
 
-	@Autowired
-	private IBZServerProxyFactory	proxyFactory;
+    @Autowired
+    private IBZServerProxyFactory proxyFactory;
 
-	private final List<Search>	  searchs;
+    private final List<Search> searchs;
 
-	public BZBugCountKPI() {
-		searchs = Collections.EMPTY_LIST;
-	}
+    public BZBugCountKPI() {
+        searchs = Collections.EMPTY_LIST;
+    }
 
-	public BZBugCountKPI(final List<Search> searchs) {
+    public BZBugCountKPI(final List<Search> searchs) {
 
-		super();
-		this.searchs = searchs;
-	}
+        super();
+        this.searchs = searchs;
+    }
 
-	public BZBugCountKPI(final String searchs) {
+    public BZBugCountKPI(final String searchs) {
 
-		this(SearchUtils.convert(searchs));
-	}
+        this(SearchUtils.convert(searchs));
+    }
 
-	@Override
-	public BackupDelay getBackupDelay() {
+    @Override
+    public BackupDelay getBackupDelay() {
 
-		return BackupDelay.DAY;
-	}
+        return BackupDelay.DAY;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.komea.product.cep.api.dynamicdata.IDynamicDataQuery#getResult()
-	 */
-	@Override
-	public KpiResult getResult() {
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.komea.product.cep.api.dynamicdata.IDynamicDataQuery#getResult()
+     */
+    @Override
+    public KpiResult getResult() {
 
-		final KpiResult kpiResult = new KpiResult();
-		for (final BZServerConfiguration conf : bugZillaConfiguration.selectAll()) {
-			IBZServerProxy bugzillaProxy = null;
-			try {
-				bugzillaProxy = proxyFactory.newConnector(conf);
-				Validate.notNull(bugzillaProxy);
-				final List<String> productNames = bugzillaProxy.getProductNames();
-				for (final String productName : productNames) {
-					final Project project = projectService.selectByKey(productName);
-					if (project == null) {
-						continue;
-					}
-					final List<BzBug> bugs = bugzillaProxy.getBugs(productName);
-					final List<ISearchedElement> searchedElements = new ArrayList<ISearchedElement>();
-					for (final ISearchedElement searchedElement : bugs) {
-						searchedElements.add(searchedElement);
-					}
-					final int result = SearchUtils.nbElementsMatchesSearches(searchedElements, searchs);
-					kpiResult.put(project.getEntityKey(), result);
-				}
-			} catch (final Exception ex) {
-				LOGGER.error("Error during the bugzilla server update {} : reason {}", conf.getAddress(),
-				        ex.getMessage(), ex);
-			} finally {
-				IOUtils.closeQuietly(bugzillaProxy);
-			}
-		}
-		return kpiResult;
-	}
+        final KpiResult kpiResult = new KpiResult();
+        for (final BZServerConfiguration conf : bugZillaConfiguration.selectAll()) {
+            IBZServerProxy bugzillaProxy = null;
+            try {
+                bugzillaProxy = proxyFactory.newConnector(conf);
+                Validate.notNull(bugzillaProxy);
+                final List<String> productNames = bugzillaProxy.getProductNames();
+                for (final String productName : productNames) {
+                    final Project project = projectService.selectByKey(productName);
+                    if (project == null) {
+                        continue;
+                    }
+                    final List<BzBug> bugs = bugzillaProxy.getBugs(productName);
+                    final List<ISearchedElement> searchedElements = new ArrayList<ISearchedElement>();
+                    for (final ISearchedElement searchedElement : bugs) {
+                        searchedElements.add(searchedElement);
+                    }
+                    final int result = SearchUtils.nbElementsMatchesSearches(searchedElements, searchs);
+                    kpiResult.put(project.getEntityKey(), result);
+                }
+            } catch (final Exception ex) {
+                LOGGER.error("Error during the bugzilla server update {} : reason {}", conf.getAddress(),
+                        ex.getMessage(), ex);
+            } finally {
+                IOUtils.closeQuietly(bugzillaProxy);
+            }
+        }
+        return kpiResult;
+    }
 
-	public void setBugZillaConfiguration(final IBZConfigurationDAO bugZillaConfiguration) {
+    public void setBugZillaConfiguration(final IBZConfigurationDAO bugZillaConfiguration) {
 
-		this.bugZillaConfiguration = bugZillaConfiguration;
-	}
+        this.bugZillaConfiguration = bugZillaConfiguration;
+    }
 
-	public void setProjectService(final IProjectService ProjectService) {
+    public void setProjectService(final IProjectService ProjectService) {
 
-		projectService = ProjectService;
-	}
+        projectService = ProjectService;
+    }
 
-	public void setProxyFactory(final IBZServerProxyFactory proxyFactory) {
+    public void setProxyFactory(final IBZServerProxyFactory proxyFactory) {
 
-		this.proxyFactory = proxyFactory;
-	}
+        this.proxyFactory = proxyFactory;
+    }
 
-	@Override
-	public String toString() {
+    @Override
+    public String toString() {
 
-		return "BZBugCountKPI{" + "searchs=" + searchs + '}';
-	}
+        return "BZBugCountKPI{" + "searchs=" + searchs + '}';
+    }
+
+    @Override
+    public void accept(IQueryVisitor iqv) {
+        iqv.visit(this);
+    }
 
 }
