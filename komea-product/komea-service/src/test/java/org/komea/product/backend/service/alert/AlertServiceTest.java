@@ -3,8 +3,8 @@
  */
 package org.komea.product.backend.service.alert;
 
+import com.google.common.collect.Lists;
 import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.product.database.dto.BaseEntityDto;
@@ -17,8 +17,6 @@ import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.AlertCriteria;
-
-import com.google.common.collect.Lists;
 
 /**
  * @author sleroy
@@ -153,7 +151,7 @@ public class AlertServiceTest {
         measure.setValue(25D);
 
         // WHEN I check if the mieasure corrspond to the alertCriterai
-        boolean isAssociate = alertService.isAlertAssociatedToEntity(criteria, measure.getEntityID());
+        boolean isAssociate = alertService.isMeasureAssociatedToAlert(criteria, measure);
 
         // THEN the result must be true
         org.junit.Assert.assertTrue("The alert COVERAGE_BRANCH_TOO_LOW should be associate to the project Komea ", isAssociate);

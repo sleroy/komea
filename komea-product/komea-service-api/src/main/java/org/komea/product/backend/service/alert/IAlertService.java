@@ -3,6 +3,7 @@ package org.komea.product.backend.service.alert;
 import org.komea.product.database.dto.KpiAlertDto;
 import org.komea.product.database.dto.SearchKpiAlertsDto;
 import org.komea.product.database.model.KpiAlertType;
+import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.AlertCriteria;
 
 public interface IAlertService {
@@ -12,7 +13,5 @@ public interface IAlertService {
 
     boolean isAlertFiltered(SearchKpiAlertsDto _filter, KpiAlertDto _kpiAlert);
 
-    boolean isAlertAssociatedToEntity(AlertCriteria _criteria, Integer entityId);
-
-    boolean isAlertIdAssociatedToKpi(AlertCriteria _criteria, Integer kpiId);
+    boolean isMeasureAssociatedToAlert(AlertCriteria _criteria, Measure _measure);
 }
