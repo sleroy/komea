@@ -11,6 +11,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.komea.product.backend.api.IKPIService;
+import org.komea.product.backend.api.IKpiLoadingService;
 import org.komea.product.backend.api.IKpiQueryService;
 import org.komea.product.database.model.Kpi;
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class KpiLoadingService
+public class KpiLoadingService implements IKpiLoadingService
 {
     
     
@@ -59,9 +60,10 @@ public class KpiLoadingService
     }
     
     
-    /**
-     * Initializes the service
+    /* (non-Javadoc)
+     * @see org.komea.product.backend.service.kpi.IKpiLoadingService#initLoadingService()
      */
+    @Override
     @PostConstruct
     public void initLoadingService() {
     

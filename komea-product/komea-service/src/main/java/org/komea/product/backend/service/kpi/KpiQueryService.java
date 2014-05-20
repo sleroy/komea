@@ -6,9 +6,6 @@ package org.komea.product.backend.service.kpi;
 
 
 
-import java.io.Serializable;
-
-import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
@@ -97,19 +94,24 @@ public class KpiQueryService implements IKpiQueryService
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.api.IKpiQueryService#isQueryOfKpiRegistered(org.komea.product.database.model.Kpi)
+     */
+    @Override
+    public boolean isQueryOfKpiRegistered(final Kpi _kpi) {
+    
+    
+        return esperEngine.existQuery(FormulaID.of(_kpi));
+    }
+    
+    
     @Override
     public void removeQuery(final Kpi _kpi) {
     
     
-        esperEngine.removeQuery(_kpi.getEsperRequest());
+        esperEngine.removeQuery(FormulaID.of(_kpi));
         
-    }
-    
-    
-    private ICEPQuery<Serializable, KpiResult> findEventQuery(final String computeKPIEsperKey) {
-    
-    
-        return esperEngine.getQueryOrFail(computeKPIEsperKey);
     }
     
     
@@ -117,20 +119,12 @@ public class KpiQueryService implements IKpiQueryService
     
     
         KpiResult result;
-        final String formula = _kpi.getEsperRequest();
+        
         LOGGER.trace("Request value from KPI {}", _kpi.getKpiKey());
-        result = obtainCepQueryResult(formula);
+        result = esperEngine.getQueryOrFail(FormulaID.of(_kpi)).getResult();
         LOGGER.trace("Result of the query is {}", result);
         return result;
     }
     
-    
-    private KpiResult obtainCepQueryResult(final String computeKPIEsperKey) {
-    
-    
-        // IF IT FAILS WE CHECK FOR EVENT QUERY
-        LOGGER.trace("Is {} an event query ?", computeKPIEsperKey);
-        return findEventQuery(computeKPIEsperKey).getResult();
-    }
     
 }

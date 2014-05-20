@@ -44,7 +44,7 @@ public class EventViewerServiceIT extends AbstractSpringIntegrationTestCase
     /**
      * Test method for {@link org.komea.product.backend.service.esper.EventViewerService#getGlobalActivity()}.
      */
-    @Test 
+    @Test
     public final void testGetGlobalActivity() {
     
     
@@ -81,14 +81,14 @@ public class EventViewerServiceIT extends AbstractSpringIntegrationTestCase
     /**
      * Test method for {@link org.komea.product.backend.service.esper.EventViewerService#getInstantView(java.lang.String)}.
      */
-    @Test 
+    @Test
     public final void testGetInstantView() {
     
     
         for (final RetentionPeriod retentionPeriod : RetentionPeriod.values()) {
             final RetentionQuery retentionQueryBuilder =
                     new RetentionQuery(Severity.INFO, retentionPeriod);
-            esperEngine.createQuery(new QueryInformations(retentionPeriod.name(),
+            esperEngine.createQuery(QueryInformations.directInformations(retentionPeriod.name(),
                     retentionQueryBuilder));
         }
     }

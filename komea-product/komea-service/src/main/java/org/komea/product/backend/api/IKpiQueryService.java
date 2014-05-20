@@ -45,6 +45,16 @@ public interface IKpiQueryService
     
     
     /**
+     * Tests if the kpi has its query registered.
+     * 
+     * @param _build
+     *            the kpi
+     * @return true if the query is registered.
+     */
+    public boolean isQueryOfKpiRegistered(Kpi _build);
+    
+    
+    /**
      * Removes a query associated to a kpi.
      * 
      * @param _kpi

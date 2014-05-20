@@ -6,10 +6,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.komea.product.backend.api.IKpiLoadingService;
 import org.komea.product.backend.api.exceptions.EntityNotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundRuntimeException;
 import org.komea.product.backend.service.kpi.IMeasureService;
-import org.komea.product.backend.service.kpi.KpiLoadingService;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.service.dto.KpiStringKey;
 import org.komea.product.service.dto.KpiStringKeyList;
@@ -30,7 +30,7 @@ public class GetCurrentMeasureStoryITest extends AbstractSpringDBunitIntegration
 	private IMeasureService	  measureService;
 
 	@Autowired
-	private KpiLoadingService	kpiLoading;
+	private IKpiLoadingService	kpiLoading;
 
 	@Before
 	public void setpUp() {

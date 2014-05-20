@@ -4,18 +4,20 @@ import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.google.common.collect.Sets;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.komea.product.backend.api.IKpiLoadingService;
 import org.komea.product.backend.api.exceptions.EntityNotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundRuntimeException;
 import org.komea.product.backend.service.kpi.IMeasureService;
-import org.komea.product.backend.service.kpi.KpiLoadingService;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.GroupFormula;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
@@ -34,7 +36,7 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
     private IMeasureService measureService;
 
     @Autowired
-    private KpiLoadingService kpiLoading;
+    private IKpiLoadingService kpiLoading;
 
     @Before
     public void setpUp() {
