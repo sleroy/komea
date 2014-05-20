@@ -57,9 +57,7 @@ public class Person implements IEntity
      * @mbggenerated Wed Feb 19 11:03:52 CET 2014
      */
     @NotNull
-    @Size(
-        min = 0,
-        max = 255)
+    @Size(min = 0, max = 255)
     private String  email;
     
     /**
@@ -69,9 +67,7 @@ public class Person implements IEntity
      * @mbggenerated Wed Feb 19 11:03:52 CET 2014
      */
     @NotNull
-    @Size(
-        min = 0,
-        max = 255)
+    @Size(min = 0, max = 255)
     private String  firstName;
     
     /**
@@ -105,9 +101,7 @@ public class Person implements IEntity
      * @mbggenerated Wed Feb 19 11:03:52 CET 2014
      */
     @NotNull
-    @Size(
-        min = 0,
-        max = 255)
+    @Size(min = 0, max = 255)
     private String  lastName;
     
     /**
@@ -117,9 +111,7 @@ public class Person implements IEntity
      * @mbggenerated Wed Feb 19 11:03:52 CET 2014
      */
     @NotNull
-    @Size(
-        min = 0,
-        max = 255)
+    @Size(min = 0, max = 255)
     private String  login;
     
     /**
@@ -129,9 +121,7 @@ public class Person implements IEntity
      * @mbggenerated Wed Feb 19 11:03:52 CET 2014
      */
     @NotNull
-    @Size(
-        min = 0,
-        max = 255)
+    @Size(min = 0, max = 255)
     private String  password;
     
     /**
@@ -217,13 +207,23 @@ public class Person implements IEntity
     public boolean equals(final Object obj) {
     
     
-        if (this == obj) { return true; }
-        if (obj == null) { return false; }
-        if (getClass() != obj.getClass()) { return false; }
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
         final Person other = (Person) obj;
         if (id == null) {
-            if (other.id != null) { return false; }
-        } else if (!id.equals(other.id)) { return false; }
+            if (other.id != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
+            return false;
+        }
         return true;
     }
     

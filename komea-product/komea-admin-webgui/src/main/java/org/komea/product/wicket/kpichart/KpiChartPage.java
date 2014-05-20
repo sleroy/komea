@@ -1,4 +1,7 @@
+
 package org.komea.product.wicket.kpichart;
+
+
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -17,9 +20,9 @@ import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.backend.service.kpi.TimeSerie;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.GroupFormula;
+import org.komea.product.database.model.Kpi;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.TimeCoordinate;
-import org.komea.product.database.model.Kpi;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.wicket.LayoutPage;
 import org.slf4j.Logger;
@@ -39,152 +42,182 @@ import com.googlecode.wickedcharts.highcharts.options.series.Coordinate;
 import com.googlecode.wickedcharts.highcharts.options.series.CustomCoordinatesSeries;
 import com.googlecode.wickedcharts.wicket6.highcharts.Chart;
 
+
+
 /**
  * Person admin page
  * 
  * @author sleroy
  */
-public class KpiChartPage extends LayoutPage {
-
-	/**
-	 * @author sleroy
-	 */
-	private final class ChartsList extends ListView<Kpi> {
-
-		/**
-		 * @param _id
-		 */
-		public ChartsList(final String _id, final List<Kpi> _kpis) {
-
-			super(_id, _kpis);
-
-		}
-
-		@Override
-		protected void populateItem(final ListItem<Kpi> _item) {
-
-			final ChartOptions chartOptions = new ChartOptions();
-
-			chartOptions.setSpacingRight(20);
-			chartOptions.setType(SeriesType.SPLINE);
-			chartOptions.setBorderRadius(1);
-			chartOptions.setBorderColor(Color.GRAY);
-
-			final Options options = new Options();
-			options.setChartOptions(chartOptions);
-			final String kpiname = _item.getModel().getObject().getName();
-			options.setTitle(new Title("KPI " + kpiname));
-
-			final Axis xAxis = new Axis();
-			xAxis.setType(AxisType.DATETIME);
-
-			final DateTimeLabelFormat dateTimeLabelFormat = new DateTimeLabelFormat();
-			dateTimeLabelFormat.setProperty(DateTimeProperties.MONTH, "%e. %b").setProperty(DateTimeProperties.YEAR,
-			        "%b");
-			xAxis.setDateTimeLabelFormats(dateTimeLabelFormat);
-			options.setxAxis(xAxis);
-
-			final Axis yAxis = new Axis();
-			yAxis.setTitle(new Title(kpiname));
-			yAxis.setMin(0);
-			options.setyAxis(yAxis);
-
-			final Tooltip tooltip = new Tooltip();
-			tooltip.setFormatter(new Function(
-			        "return '<b>'+ this.series.name +'</b><br/>'+Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' alerts';"));
-			options.setTooltip(tooltip);
-
-			_item.add(buildGraphic(options, "chart", _item.getModelObject()));
-
-		}
-	}
-
-	private static final Logger	LOGGER	         = LoggerFactory.getLogger(KpiChartPage.class);
-
-	/**
+public class KpiChartPage extends LayoutPage
+{
+    
+    
+    /**
+     * @author sleroy
+     */
+    private final class ChartsList extends ListView<Kpi>
+    {
+        
+        
+        /**
+         * @param _id
+         */
+        public ChartsList(final String _id, final List<Kpi> _kpis) {
+        
+        
+            super(_id, _kpis);
+            
+        }
+        
+        
+        @Override
+        protected void populateItem(final ListItem<Kpi> _item) {
+        
+        
+            final ChartOptions chartOptions = new ChartOptions();
+            
+            chartOptions.setSpacingRight(20);
+            chartOptions.setType(SeriesType.SPLINE);
+            chartOptions.setBorderRadius(1);
+            chartOptions.setBorderColor(Color.GRAY);
+            
+            final Options options = new Options();
+            options.setChartOptions(chartOptions);
+            final String kpiname = _item.getModel().getObject().getName();
+            options.setTitle(new Title("KPI " + kpiname));
+            
+            final Axis xAxis = new Axis();
+            xAxis.setType(AxisType.DATETIME);
+            
+            final DateTimeLabelFormat dateTimeLabelFormat = new DateTimeLabelFormat();
+            dateTimeLabelFormat.setProperty(DateTimeProperties.MONTH, "%e. %b").setProperty(
+                    DateTimeProperties.YEAR, "%b");
+            xAxis.setDateTimeLabelFormats(dateTimeLabelFormat);
+            options.setxAxis(xAxis);
+            
+            final Axis yAxis = new Axis();
+            yAxis.setTitle(new Title(kpiname));
+            yAxis.setMin(0);
+            options.setyAxis(yAxis);
+            
+            final Tooltip tooltip = new Tooltip();
+            tooltip.setFormatter(new Function(
+                    "return '<b>'+ this.series.name +'</b><br/>'+Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' alerts';"));
+            options.setTooltip(tooltip);
+            
+            _item.add(buildGraphic(options, "chart", _item.getModelObject()));
+            
+        }
+    }
+    
+    
+    
+    private static final Logger LOGGER           = LoggerFactory.getLogger(KpiChartPage.class);
+    
+    /**
      * 
      */
-	private static final long	serialVersionUID	= 825152658028992367L;
-	@SpringBean
-	private IEntityService	    entityService;
-
-	@SpringBean
-	private IKPIService	        kpiService;
-
-	@SpringBean
-	private IStatisticsAPI	    statsService;
-
-	public KpiChartPage(final PageParameters _parameters) {
-
-		super(_parameters);
-
-		final List<Kpi> selectAll = kpiService.selectAll();
-		final ListView<Kpi> listView = new ChartsList("charts", selectAll);
-
-		add(listView);
-
-	}
-
-	private Chart buildGraphic(final Options options, final String _chartID, final Kpi _kpi) {
-
-		// Define the data points. All series have a dummy year
-		// of 1970/71 in order to be compared on the same x axis. Note
-		// that in JavaScript, months start at 0 for January, 1 for February
-		// etc.
-
-		final Map<EntityKey, List<Coordinate<Long, Integer>>> series = new HashMap<EntityKey, List<Coordinate<Long, Integer>>>();
-
-		final List<IEntity> entitiesByEntityType = entityService.getEntitiesByEntityType(_kpi.getEntityType());
-		LOGGER.info("KPI {} has {} entities", _kpi.getDisplayName(), entitiesByEntityType.size());
-		final PeriodTimeSerieOptions timeSerieOptions = buildPeriodTimeOptions(_kpi);
-		for (final IEntity eKey : entitiesByEntityType) {
-			final TimeSerie history = statsService.buildPeriodTimeSeries(timeSerieOptions, eKey.getEntityKey());
-			LOGGER.info("Time serie with {} values", history.getCoordinates().size());
-
-			for (final TimeCoordinate measure : history.getCoordinates()) {
-
-				final EntityKey entityKeyOfMeasure = EntityKey.of(_kpi.getEntityType(), measure.getEntityID());
-				if (entityKeyOfMeasure.isUncompleteKey()) {
-					continue;
-				}
-				List<Coordinate<Long, Integer>> list = series.get(entityKeyOfMeasure);
-				if (list == null) {
-					series.put(entityKeyOfMeasure, list = new ArrayList<Coordinate<Long, Integer>>());
-				}
-
-				list.add(new Coordinate<Long, Integer>(measure.getDate().toDate().getTime(), measure.getValue()
-				        .intValue()));
-			}
-		}
-
-		createSeries(options, series);
-
-		return new Chart(_chartID, options);
-	}
-
-	private PeriodTimeSerieOptions buildPeriodTimeOptions(final Kpi _kpi) {
-		final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions(_kpi);
-		timeSerieOptions.untilNow();
-		timeSerieOptions.lastYears(2);
-		timeSerieOptions.pickBestGranularity();
-		timeSerieOptions.setGroupFormula(GroupFormula.AVG_VALUE);
-		timeSerieOptions.setKpiID(_kpi.getId());
-		return timeSerieOptions;
-	}
-
-	private void createSeries(final Options options, final Map<EntityKey, List<Coordinate<Long, Integer>>> series) {
-		for (final Entry<EntityKey, List<Coordinate<Long, Integer>>> serieValue : series.entrySet()) {
-			final CustomCoordinatesSeries<Long, Integer> oneChartSerie = new CustomCoordinatesSeries<Long, Integer>();
-			try {
-				final IEntity entityOrFail = entityService.getEntityOrFail(serieValue.getKey());
-				oneChartSerie.setName(entityOrFail.getDisplayName());
-			} catch (final Exception entityOrFail) {
-				LOGGER.info("Entity not found ", entityOrFail);
-				continue;
-			}
-
-			oneChartSerie.setData(serieValue.getValue());
-			options.addSeries(oneChartSerie);
-		}
-	}
+    private static final long   serialVersionUID = 825152658028992367L;
+    @SpringBean
+    private IEntityService      entityService;
+    
+    @SpringBean
+    private IKPIService         kpiService;
+    
+    @SpringBean
+    private IStatisticsAPI      statsService;
+    
+    
+    
+    public KpiChartPage(final PageParameters _parameters) {
+    
+    
+        super(_parameters);
+        
+        final List<Kpi> selectAll = kpiService.selectAll();
+        final ListView<Kpi> listView = new ChartsList("charts", selectAll);
+        
+        add(listView);
+        
+    }
+    
+    
+    private Chart buildGraphic(final Options options, final String _chartID, final Kpi _kpi) {
+    
+    
+        // Define the data points. All series have a dummy year
+        // of 1970/71 in order to be compared on the same x axis. Note
+        // that in JavaScript, months start at 0 for January, 1 for February
+        // etc.
+        
+        final Map<EntityKey, List<Coordinate<Long, Integer>>> series =
+                new HashMap<EntityKey, List<Coordinate<Long, Integer>>>();
+        
+        final List<IEntity> entitiesByEntityType =
+                entityService.getEntitiesByEntityType(_kpi.getEntityType());
+        LOGGER.debug("KPI {} has {} entities", _kpi.getDisplayName(), entitiesByEntityType.size());
+        final PeriodTimeSerieOptions timeSerieOptions = buildPeriodTimeOptions(_kpi);
+        for (final IEntity eKey : entitiesByEntityType) {
+            final TimeSerie history =
+                    statsService.buildPeriodTimeSeries(timeSerieOptions, eKey.getEntityKey());
+            LOGGER.debug("Time serie with {} values", history.getCoordinates().size());
+            
+            for (final TimeCoordinate measure : history.getCoordinates()) {
+                
+                final EntityKey entityKeyOfMeasure =
+                        EntityKey.of(_kpi.getEntityType(), measure.getEntityID());
+                if (entityKeyOfMeasure.isUncompleteKey()) {
+                    continue;
+                }
+                List<Coordinate<Long, Integer>> list = series.get(entityKeyOfMeasure);
+                if (list == null) {
+                    series.put(entityKeyOfMeasure, list =
+                            new ArrayList<Coordinate<Long, Integer>>());
+                }
+                
+                list.add(new Coordinate<Long, Integer>(measure.getDate().toDate().getTime(),
+                        measure.getValue().intValue()));
+            }
+        }
+        
+        createSeries(options, series);
+        
+        return new Chart(_chartID, options);
+    }
+    
+    
+    private PeriodTimeSerieOptions buildPeriodTimeOptions(final Kpi _kpi) {
+    
+    
+        final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions(_kpi);
+        timeSerieOptions.untilNow();
+        timeSerieOptions.lastYears(2);
+        timeSerieOptions.pickBestGranularity();
+        timeSerieOptions.setGroupFormula(GroupFormula.AVG_VALUE);
+        timeSerieOptions.setKpiID(_kpi.getId());
+        return timeSerieOptions;
+    }
+    
+    
+    private void createSeries(
+            final Options options,
+            final Map<EntityKey, List<Coordinate<Long, Integer>>> series) {
+    
+    
+        for (final Entry<EntityKey, List<Coordinate<Long, Integer>>> serieValue : series.entrySet()) {
+            final CustomCoordinatesSeries<Long, Integer> oneChartSerie =
+                    new CustomCoordinatesSeries<Long, Integer>();
+            try {
+                final IEntity entityOrFail = entityService.getEntityOrFail(serieValue.getKey());
+                oneChartSerie.setName(entityOrFail.getDisplayName());
+            } catch (final Exception entityOrFail) {
+                LOGGER.debug("Entity not found ", entityOrFail);
+                continue;
+            }
+            
+            oneChartSerie.setData(serieValue.getValue());
+            options.addSeries(oneChartSerie);
+        }
+    }
 }
