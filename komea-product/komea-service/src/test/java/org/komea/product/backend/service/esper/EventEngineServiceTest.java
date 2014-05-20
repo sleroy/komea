@@ -14,9 +14,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.eventory.api.bridge.IEventBridgeFactory;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
+import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.product.backend.service.fs.IKomeaFS;
 import org.komea.product.backend.service.kpi.FormulaID;
-import org.komea.product.backend.service.kpi.StubQuery;
 import org.komea.product.cep.tester.CEPQueryTester;
 import org.komea.product.database.alert.IEvent;
 import org.mockito.InjectMocks;
@@ -90,7 +90,8 @@ public class EventEngineServiceTest
     
     
         final FormulaID rawID = FormulaID.ofRawID("query");
-        final QueryInformations queryInformations = new QueryInformations(rawID, new StubQuery());
+        final QueryInformations queryInformations =
+                new QueryInformations(rawID, mock(ICEPQuery.class));
         // WHEN I CONTROL A QUERY THT NOT EXISTS
         // THEN IT RETURNS FALSE AND NULL
         assertNull(eventEngineService.getQuery(rawID));
