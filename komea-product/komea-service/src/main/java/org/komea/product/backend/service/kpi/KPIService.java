@@ -22,6 +22,7 @@ import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.dao.ProjectDao;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.HasSuccessFactorKpiCriteria;
 import org.komea.product.database.model.HasSuccessFactorKpiKey;
@@ -175,6 +176,13 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
             kpiKeys.add(Kpi.getBaseKey(groupKpiKey));
         }
         return selectByKeys(new ArrayList<String>(kpiKeys));
+    }
+
+    @Override
+    public List<Kpi> getKpisOfProviderType(final ProviderType providerType) {
+        final KpiCriteria kpiCriteria = new KpiCriteria();
+        kpiCriteria.createCriteria().andProviderTypeEqualTo(providerType);
+        return selectByCriteria(kpiCriteria);
     }
 
     /**
