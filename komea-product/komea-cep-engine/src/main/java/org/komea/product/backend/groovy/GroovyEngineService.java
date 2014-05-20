@@ -34,7 +34,7 @@ public class GroovyEngineService implements IGroovyEngineService
     public void destroy() {
     
     
-        LOGGER.error("Destroying Groovy engine.");
+        LOGGER.info("Destroying Groovy engine.");
         IOUtils.closeQuietly(groovyClassLoader);
         groovyClassLoader = null;
     }
