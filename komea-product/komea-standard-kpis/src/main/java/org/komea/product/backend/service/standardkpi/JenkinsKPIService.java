@@ -22,6 +22,7 @@ import org.komea.product.plugins.kpi.standard.jenkins.NumberOfSuccessfulBuildPer
 import org.komea.product.plugins.kpi.standard.jenkins.ProjectBuildHealthInfluencePerUser;
 import org.komea.product.plugins.kpi.standard.jenkins.SuccessfulBuildRate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -29,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * @author sleroy
  */
+@Service
 @Transactional
 public class JenkinsKPIService
 {
