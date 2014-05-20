@@ -64,16 +64,16 @@ public class KpiQueryServiceTest
     
     
     /**
-     * Test method for
-     * {@link org.komea.product.cep.tester.KpiQueryService#evaluateFormulaAndRegisterQuery(org.komea.product.database.model.Kpi)}.
-     */
-    @Test
-    public final void testEvaluateFormulaAndRegisterQuery() throws Exception {
-    
-    
-        // TODO
-        // org.junit.Assert.assertTrue("not yet implemented", false);
-    }
+         * Test method for
+         * {@link org.komea.product.cep.tester.KpiQueryService#updateFormulaOfKpi(org.komea.product.database.model.Kpi)}.
+         */
+        @Test
+        public final void testUpdateFormulaOfKpi() throws Exception {
+        
+        
+            // TODO
+            // org.junit.Assert.assertTrue("not yet implemented", false);
+        }
     
     
     /**
