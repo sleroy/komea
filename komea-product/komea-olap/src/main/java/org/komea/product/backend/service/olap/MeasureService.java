@@ -61,7 +61,15 @@ public class MeasureService implements IMeasureService {
     }
 
     @Override
-    public double currentMeasure(final KpiStringKey _kpiKey) {
+    public Double currentMeasure(final Kpi kpi, final IEntity entity) {
+        Validate.notNull(kpi);
+        Validate.notNull(entity);
+        HistoryKey historyKey = HistoryKey.of(kpi, entity);
+        return statService.evaluateTheCurrentKpiValue(historyKey);
+    }
+
+    @Override
+    public Double currentMeasure(final KpiStringKey _kpiKey) {
 
         Kpi kpi = kpiService.findKPI(_kpiKey.getKpiName());
         if (kpi == null) {
@@ -71,8 +79,7 @@ public class MeasureService implements IMeasureService {
         if (entity == null) {
             throw new EntityNotFoundException(_kpiKey.getEntityKey());
         }
-        HistoryKey historyKey = HistoryKey.of(kpi, entity);
-        return statService.evaluateTheCurrentKpiValue(historyKey);
+        return currentMeasure(kpi, entity);
     }
 
     @Override
@@ -161,7 +168,15 @@ public class MeasureService implements IMeasureService {
     }
 
     @Override
-    public double lastMeasure(final KpiStringKey _kpiKey) {
+    public Double lastMeasure(final Kpi kpi, final IEntity entity) {
+        Validate.notNull(kpi);
+        Validate.notNull(entity);
+        HistoryKey historyKey = HistoryKey.of(kpi, entity);
+        return statService.getLastStoredValueInHistory(historyKey);
+    }
+
+    @Override
+    public Double lastMeasure(final KpiStringKey _kpiKey) {
 
         Kpi kpi = kpiService.findKPI(_kpiKey.getKpiName());
         if (kpi == null) {
@@ -171,7 +186,6 @@ public class MeasureService implements IMeasureService {
         if (entity == null) {
             throw new EntityNotFoundException(_kpiKey.getEntityKey());
         }
-        HistoryKey historyKey = HistoryKey.of(kpi, entity);
-        return statService.getLastStoredValueInHistory(historyKey);
+        return lastMeasure(kpi, entity);
     }
 }

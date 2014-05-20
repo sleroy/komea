@@ -13,10 +13,8 @@ import org.komea.product.database.enums.Operator;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.database.model.Measure;
-import org.komea.product.service.dto.AlertCriteria;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -69,12 +67,7 @@ public class AlertFinderTest {
         measure.setValue(36D);
         measures.add(measure);
 
-        AlertCriteria criteria = new AlertCriteria(alertType, entity, EntityType.PROJECT, measures);
-
-        IdKpiMap mapKpis = new IdKpiMap();
-        Mockito.when(alertSerice.isMeasureAssociatedToAlert(criteria, measure)).thenReturn(true);
-
-        KpiAlertDto alert = finderSerice.findAlert(criteria, mapKpis);
+        KpiAlertDto alert = finderSerice.findAlert(alertType, entity, null);
 
         org.junit.Assert.assertEquals("the result must be 36D", 36D, alert.getValue(), 0.001);
     }
@@ -108,12 +101,7 @@ public class AlertFinderTest {
         measure.setValue(36D);
         measures.add(measure);
 
-        AlertCriteria criteria = new AlertCriteria(alertType, entity, EntityType.PROJECT, measures);
-
-        IdKpiMap mapKpis = new IdKpiMap();
-        Mockito.when(alertSerice.isMeasureAssociatedToAlert(criteria, measure)).thenReturn(false);
-
-        KpiAlertDto alert = finderSerice.findAlert(criteria, mapKpis);
+        KpiAlertDto alert = finderSerice.findAlert(alertType, entity, null);
 
         org.junit.Assert.assertNull("the result must null", alert);
     }
@@ -147,127 +135,8 @@ public class AlertFinderTest {
         measure.setValue(36D);
         measures.add(measure);
 
-        AlertCriteria criteria = new AlertCriteria(alertType, entity, EntityType.PROJECT, measures);
-
-        IdKpiMap mapKpis = new IdKpiMap();
-        Mockito.when(alertSerice.isMeasureAssociatedToAlert(criteria, measure)).thenReturn(true);
-
-        KpiAlertDto alert = finderSerice.findAlert(criteria, mapKpis);
+        KpiAlertDto alert = finderSerice.findAlert(alertType, entity, null);
 
         org.junit.Assert.assertNull("the result must null", alert);
-    }
-
-    @Test
-    public final void testFindMeasure() throws Exception {
-
-        // GIVEN the alert COVERAGE_BRANCH_TOO_LOW
-        final KpiAlertType alertType = new KpiAlertType();
-        alertType.setKpiAlertKey("COVERAGE_BRANCH_TOO_LOW");
-        alertType.setIdKpi(1);
-        alertType.setId(1);
-        alertType.setOperator(Operator.LESSER);
-        alertType.setValue(60D);
-        alertType.setName("branch coverage too small");
-        alertType.setDescription("An alert is launched when the Branche coverage is < 60");
-        alertType.setSeverity(Severity.CRITICAL);
-
-        // AND the project Komea
-        BaseEntityDto entity = new BaseEntityDto();
-        entity.setId(1);
-        entity.setEntityType(EntityType.PROJECT);
-        entity.setDescription("KPI manager");
-        entity.setName("Komea");
-
-        // AND AlertCriteria to find on the project komea alerts of type COVERAGE_BRANCH_TOO_LOW
-        List<Measure> measures = Lists.newArrayList();
-        Measure measure = new Measure();
-        measure.setIdKpi("1");
-        measure.setEntityID(1);
-        measure.setValue(36D);
-        measures.add(measure);
-
-        AlertCriteria criteria = new AlertCriteria(alertType, entity, EntityType.PROJECT, measures);
-
-        Mockito.when(alertSerice.isMeasureAssociatedToAlert(criteria, measure)).thenReturn(true);
-
-        Measure m = finderSerice.findMeasure(criteria);
-        // TODO
-        org.junit.Assert.assertEquals("measure should be 36", 36, m.getValue(), 0.001);
-    }
-
-    @Test
-    public final void testFindMeasure_not_associate_to_entity() throws Exception {
-
-        // GIVEN the alert COVERAGE_BRANCH_TOO_LOW
-        final KpiAlertType alertType = new KpiAlertType();
-        alertType.setKpiAlertKey("COVERAGE_BRANCH_TOO_LOW");
-        alertType.setIdKpi(1);
-        alertType.setId(1);
-        alertType.setOperator(Operator.LESSER);
-        alertType.setValue(60D);
-        alertType.setName("branch coverage too small");
-        alertType.setDescription("An alert is launched when the Branche coverage is < 60");
-        alertType.setSeverity(Severity.CRITICAL);
-
-        // AND the project Komea
-        BaseEntityDto entity = new BaseEntityDto();
-        entity.setId(1);
-        entity.setEntityType(EntityType.PROJECT);
-        entity.setDescription("KPI manager");
-        entity.setName("Komea");
-
-        // AND AlertCriteria to find on the project komea alerts of type COVERAGE_BRANCH_TOO_LOW
-        List<Measure> measures = Lists.newArrayList();
-        Measure measure = new Measure();
-        measure.setIdKpi("1");
-        measure.setEntityID(1);
-        measure.setValue(36D);
-        measures.add(measure);
-
-        AlertCriteria criteria = new AlertCriteria(alertType, entity, EntityType.PROJECT, measures);
-
-        Mockito.when(alertSerice.isMeasureAssociatedToAlert(criteria, measure)).thenReturn(false);
-
-        Measure m = finderSerice.findMeasure(criteria);
-        // TODO
-        org.junit.Assert.assertNull("measure should be null ", m);
-    }
-
-    @Test
-    public final void testFindMeasure_not_associate_to_KPI() throws Exception {
-
-        // GIVEN the alert COVERAGE_BRANCH_TOO_LOW
-        final KpiAlertType alertType = new KpiAlertType();
-        alertType.setKpiAlertKey("COVERAGE_BRANCH_TOO_LOW");
-        alertType.setIdKpi(1);
-        alertType.setId(1);
-        alertType.setOperator(Operator.LESSER);
-        alertType.setValue(60D);
-        alertType.setName("branch coverage too small");
-        alertType.setDescription("An alert is launched when the Branche coverage is < 60");
-        alertType.setSeverity(Severity.CRITICAL);
-
-        // AND the project Komea
-        BaseEntityDto entity = new BaseEntityDto();
-        entity.setId(1);
-        entity.setEntityType(EntityType.PROJECT);
-        entity.setDescription("KPI manager");
-        entity.setName("Komea");
-
-        // AND AlertCriteria to find on the project komea alerts of type COVERAGE_BRANCH_TOO_LOW
-        List<Measure> measures = Lists.newArrayList();
-        Measure measure = new Measure();
-        measure.setIdKpi("1");
-        measure.setEntityID(1);
-        measure.setValue(36D);
-        measures.add(measure);
-
-        AlertCriteria criteria = new AlertCriteria(alertType, entity, EntityType.PROJECT, measures);
-
-        Mockito.when(alertSerice.isMeasureAssociatedToAlert(criteria, measure)).thenReturn(true);
-
-        Measure m = finderSerice.findMeasure(criteria);
-        // TODO
-        org.junit.Assert.assertNull("measure should be null ", m);
     }
 }

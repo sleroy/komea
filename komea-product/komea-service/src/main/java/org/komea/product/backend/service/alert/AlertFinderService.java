@@ -1,22 +1,18 @@
 package org.komea.product.backend.service.alert;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.service.entities.IEntityService;
+import org.komea.product.backend.service.kpi.IMeasureService;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.KpiAlertDto;
 import org.komea.product.database.dto.SearchKpiAlertsDto;
-import org.komea.product.database.dto.SearchMeasuresDto;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
-import org.komea.product.database.model.Measure;
-import org.komea.product.service.dto.AlertCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +29,9 @@ public class AlertFinderService implements IAlertFinderService {
     private IAlertTypeService alertTypeService;
 
     @Autowired
+    private IMeasureService measureService;
+
+    @Autowired
     private IKPIService kpiService;
 
     public IAlertService getAlertService() {
@@ -40,25 +39,16 @@ public class AlertFinderService implements IAlertFinderService {
         return alertService;
     }
 
-    /**
-     * @param _alertCriteria
-     * @param _mapKpis
-     * @return
-     */
-    public KpiAlertDto findAlert(final AlertCriteria _alertCriteria, final IdKpiMap _mapKpis) {
-
-        final Measure measure = findMeasure(_alertCriteria);
-        if (measure == null) {
-            return null;
-        }
-        final Kpi kpi = _mapKpis.get(_alertCriteria.getAlertType().getIdKpi());
+    public KpiAlertDto findAlert(final KpiAlertType alertType,
+            final BaseEntityDto entity, final Kpi kpi) {
+        final Double value = measureService.lastMeasure(kpi, entity);
         final KpiAlertDto kpiAlert = new KpiAlertDto();
-        kpiAlert.setKpiAlertType(_alertCriteria.getAlertType());
+        kpiAlert.setKpiAlertType(alertType);
         kpiAlert.setKpi(kpi);
         kpiAlert.setDate(new Date());
-        kpiAlert.setEntityName(_alertCriteria.getEntity().getDisplayName());
-        kpiAlert.setValue(measure.getValue());
-        kpiAlert.setActivated(alertService.isAlertActivated(_alertCriteria.getAlertType(), measure.getValue()));
+        kpiAlert.setEntityName(entity.getDisplayName());
+        kpiAlert.setValue(value);
+        kpiAlert.setActivated(alertService.isAlertActivated(alertType, value));
 
         return kpiAlert;
     }
@@ -73,16 +63,14 @@ public class AlertFinderService implements IAlertFinderService {
         final List<BaseEntityDto> parentEntities = entityService.getBaseEntityDTOS(entityType, _searchAlert.getEntityKeys());
         final List<BaseEntityDto> entities = entityService.getSubEntities(extendedEntityType, parentEntities);
 
-        final IdKpiMap idKpiMap = new IdKpiMap();
-        final Set<String> kpiKeys = idKpiMap.fillIdKpi(alertTypesOfKpiAndSeverity, kpiService);
-        final SearchMeasuresDto searchMeasuresDto = createMeasureFilterOnKpiKeys(_searchAlert, extendedEntityType, kpiKeys);
-
-//        final List<Measure> measuresOfKpi = measureService.getMeasures(idKpiMap.values(), entities, searchMeasuresDto);
-        final List<Measure> measuresOfKpi = Lists.newArrayList();
         final List<KpiAlertDto> filteredActivatedAlerts = Lists.newArrayList();
         for (final KpiAlertType alertType : alertTypesOfKpiAndSeverity) {
+            final Kpi kpi = kpiService.selectByPrimaryKey(alertType.getIdKpi());
+            if (kpi == null) {
+                continue;
+            }
             for (final BaseEntityDto entity : entities) {
-                final KpiAlertDto kpiAlert = findAlert(new AlertCriteria(alertType, entity, entityType, measuresOfKpi), idKpiMap);
+                final KpiAlertDto kpiAlert = findAlert(alertType, entity, kpi);
                 boolean alertFiltered = alertService.isAlertFiltered(_searchAlert, kpiAlert);
                 if (alertFiltered) {
                     filteredActivatedAlerts.add(kpiAlert);
@@ -92,26 +80,4 @@ public class AlertFinderService implements IAlertFinderService {
         return filteredActivatedAlerts;
     }
 
-    /**
-     * @param _criteria
-     * @return
-     */
-    public Measure findMeasure(final AlertCriteria _criteria) {
-
-        for (final Measure measure : _criteria.getMeasures()) {
-            if (alertService.isMeasureAssociatedToAlert(_criteria, measure)) {
-                return measure;
-            }
-        }
-
-        return null;
-    }
-
-    private SearchMeasuresDto createMeasureFilterOnKpiKeys(final SearchKpiAlertsDto _searchAlert, final ExtendedEntityType entityType,
-            final Set<String> kpiKeys) {
-
-        final SearchMeasuresDto searchMeasuresDto = new SearchMeasuresDto(entityType, new ArrayList<String>(kpiKeys),
-                _searchAlert.getEntityKeys(), 1);
-        return searchMeasuresDto;
-    }
 }

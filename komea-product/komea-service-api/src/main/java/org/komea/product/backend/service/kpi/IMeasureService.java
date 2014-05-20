@@ -1,6 +1,8 @@
 package org.komea.product.backend.service.kpi;
 
 import java.util.List;
+import org.komea.product.database.api.IEntity;
+import org.komea.product.database.model.Kpi;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.dto.TimeSerieDTO;
 import org.komea.product.service.dto.KpiStringKey;
@@ -28,7 +30,16 @@ public interface IMeasureService {
      * @param _kpiKey the kpiString keu (kpi key, entity key and entity type)
      * @return the current value
      */
-    double currentMeasure(KpiStringKey _kpiKey);
+    Double currentMeasure(KpiStringKey _kpiKey);
+
+    /**
+     * This method return the current value of the kpi on an entity
+     *
+     * @param kpi kpi
+     * @param entity entity
+     * @return the current value
+     */
+    Double currentMeasure(Kpi kpi, IEntity entity);
 
     /**
      * this method find historical measure for a list of kpi apply on a list of
@@ -73,6 +84,16 @@ public interface IMeasureService {
      * @param _kpiKey the kpiString keu (kpi key, entity key and entity type)
      * @return the current value
      */
-    double lastMeasure(KpiStringKey _kpiKey);
+    Double lastMeasure(KpiStringKey _kpiKey);
+
+    /**
+     * This method return the last value stored in database of the kpi on an
+     * entity
+     *
+     * @param kpi kpi
+     * @param entity entity
+     * @return the current value
+     */
+    Double lastMeasure(Kpi kpi, IEntity entity);
 
 }

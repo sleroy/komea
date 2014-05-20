@@ -1,7 +1,6 @@
 package org.komea.product.backend.service.alert;
 
 import java.util.List;
-
 import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.database.dto.AlertTypeDto;
 import org.komea.product.database.enums.ExtendedEntityType;
