@@ -3,9 +3,6 @@ package org.komea.product.database.dto;
 
 
 
-
-
-
 /**
  * This class implements a scm commit;
  * 
@@ -13,6 +10,9 @@ package org.komea.product.database.dto;
  */
 public class ScmCommitDto
 {
+    
+    
+    private String id;
     
     
     private String message               = "";
@@ -29,6 +29,13 @@ public class ScmCommitDto
     
     private int    numberOfModifiedFiles = 0;
     
+    
+    
+    public String getId() {
+    
+    
+        return id;
+    }
     
     
     /**
@@ -88,6 +95,13 @@ public class ScmCommitDto
     
     
         return numberOfModifiedFiles;
+    }
+    
+    
+    public void setId(final String _id) {
+    
+    
+        id = _id;
     }
     
     

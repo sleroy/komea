@@ -9,9 +9,9 @@ package org.komea.product.web.rest.api;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
-import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
+import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.dto.ScmCommitDto;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -45,7 +45,7 @@ public class ScmCommitControllerTest
     
     
     @Mock
-    private IEventEngineService       eventEngineService;
+    private IEventPushService         eventEngineService;
     
     
     private MockMvc                   mockMvc;

@@ -6,10 +6,12 @@ package org.komea.product.web.rest.api;
 import javax.validation.Valid;
 
 import org.joda.time.DateTime;
-import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
+import org.komea.product.backend.service.esper.IEventPushService;
+import org.komea.product.database.alert.EventDtoBuilder;
 import org.komea.product.database.dto.ScmCommitDto;
+import org.komea.product.plugins.scm.api.IScmRepositoryService;
 import org.komea.product.plugins.scm.api.plugin.ScmCommit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,18 +39,22 @@ public class ScmCommitController
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(ScmCommitController.class);
+    private static final Logger   LOGGER = LoggerFactory.getLogger(ScmCommitController.class);
     
     
     @Autowired
-    private IEventEngineService eventEngineService;
+    private IEventPushService     eventPushService;
     
     
     @Autowired
-    private IPersonService      personService;
+    private IPersonService        personService;
     
     @Autowired
-    private IProjectService     projectService;
+    private IProjectService       projectService;
+    
+    
+    @Autowired
+    private IScmRepositoryService scmRepositoryService;
     
     
     
@@ -70,12 +76,16 @@ public class ScmCommitController
         scmCommit.setProject(projectService.selectByKey(project));
         scmCommit.setMessage(commitDTO.getMessage());
         scmCommit.setCommitTime(new DateTime());
+        scmCommit.setId(commitDTO.getId());
         scmCommit.setNumberOfAddedlines(commitDTO.getNumberOfAddedlines());
         scmCommit.setNumberOfChangedLines(commitDTO.getNumberOfChangedLines());
         scmCommit.setNumberofDeletedLines(commitDTO.getNumberofDeletedLines());
         scmCommit.setNumberOfModifiedFiles(commitDTO.getNumberOfModifiedFiles());
         LOGGER.debug("Pushing scm commit  : {}", scmCommit);
-        eventEngineService.sendCustomEvent(scmCommit);
+        eventPushService.sendCustomEvent(scmCommit);
+        
+        triggerNewCOmmitEvent(project, user, scmCommit);
+        
         
     }
     
@@ -114,7 +124,8 @@ public class ScmCommitController
         scmCommit.setNumberofDeletedLines(numberofDeletedLines);
         scmCommit.setNumberOfModifiedFiles(numberOfModifiedFiles);
         LOGGER.debug("Pushing scm commit  : {}", scmCommit);
-        eventEngineService.sendCustomEvent(scmCommit);
+        eventPushService.sendCustomEvent(scmCommit);
+        triggerNewCOmmitEvent(project, user, scmCommit);
     }
     
     
@@ -143,6 +154,20 @@ public class ScmCommitController
         scmCommit.setNumberofDeletedLines(0);
         scmCommit.setNumberOfModifiedFiles(0);
         LOGGER.debug("Pushing scm commit  : {}", scmCommit);
-        eventEngineService.sendCustomEvent(scmCommit);
+        eventPushService.sendCustomEvent(scmCommit);
+        triggerNewCOmmitEvent(project, user, scmCommit);
+    }
+    
+    
+    private void triggerNewCOmmitEvent(
+            final String project,
+            final String user,
+            final ScmCommit scmCommit) {
+    
+    
+        eventPushService.sendEventDto(EventDtoBuilder.newAlert()
+                .at(scmCommit.getCommitTime().toDate()).eventType("scm-new-commit")
+                .message("New commit has been made by " + user + " in project " + project)
+                .project(project).provided("scm").build());
     }
 }

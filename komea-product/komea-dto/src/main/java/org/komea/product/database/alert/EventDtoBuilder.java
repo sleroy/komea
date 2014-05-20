@@ -5,7 +5,7 @@ package org.komea.product.database.alert;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Date;
+import java.util.Date;
 
 import org.komea.product.database.dto.EventSimpleDto;
 
