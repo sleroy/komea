@@ -11,7 +11,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
-import org.komea.eventory.api.engine.IQueryVisitor;
 import org.komea.product.backend.kpi.search.ISearchedElement;
 import org.komea.product.backend.kpi.search.Search;
 import org.komea.product.backend.kpi.search.SearchUtils;
@@ -131,11 +130,6 @@ public class BZBugCountKPI implements IDynamicDataQuery {
     public String toString() {
 
         return "BZBugCountKPI{" + "searchs=" + searchs + '}';
-    }
-
-    @Override
-    public void accept(IQueryVisitor iqv) {
-        iqv.visit(this);
     }
 
 }

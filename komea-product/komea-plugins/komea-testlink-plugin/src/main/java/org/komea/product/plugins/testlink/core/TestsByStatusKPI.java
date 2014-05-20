@@ -7,7 +7,6 @@ import br.eti.kinoshita.testlinkjavaapi.model.TestCase;
 import java.util.List;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
-import org.komea.eventory.api.engine.IQueryVisitor;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Project;
@@ -131,11 +130,6 @@ public final class TestsByStatusKPI implements IDynamicDataQuery {
 
         return status.isEmpty() || testCase.getExecutionStatus() != null
                 && testCase.getExecutionStatus().name().toLowerCase().equals(status.toLowerCase());
-    }
-
-    @Override
-    public void accept(IQueryVisitor iqv) {
-        iqv.visit(this);
     }
 
 }
