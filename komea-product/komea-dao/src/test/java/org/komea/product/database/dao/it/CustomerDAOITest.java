@@ -18,14 +18,14 @@ public class CustomerDAOITest extends AbstractSpringIntegrationTestCase {
     @Transactional
     public void test() {
 
-        Assert.assertEquals(0, customerDAO.countByCriteria(null));
+        final int nbCustomers = customerDAO.countByCriteria(null);
 
         final Customer record = new Customer();
         record.setName("New Customer");
 
         customerDAO.insert(record);
 
-        Assert.assertEquals(1, customerDAO.selectByCriteria(new CustomerCriteria()).size());
+        Assert.assertEquals(nbCustomers + 1, customerDAO.selectByCriteria(new CustomerCriteria()).size());
     }
 
 }
