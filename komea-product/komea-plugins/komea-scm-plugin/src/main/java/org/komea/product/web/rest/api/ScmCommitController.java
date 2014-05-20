@@ -11,6 +11,7 @@ import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.alert.EventDtoBuilder;
 import org.komea.product.database.dto.ScmCommitDto;
+import org.komea.product.plugins.scm.ScmRepositoryService;
 import org.komea.product.plugins.scm.api.IScmRepositoryService;
 import org.komea.product.plugins.scm.api.plugin.ScmCommit;
 import org.slf4j.Logger;
@@ -168,6 +169,6 @@ public class ScmCommitController
         eventPushService.sendEventDto(EventDtoBuilder.newAlert()
                 .at(scmCommit.getCommitTime().toDate()).eventType("scm-new-commit")
                 .message("New commit has been made by " + user + " in project " + project)
-                .project(project).provided("scm").build());
+                .project(project).provided(ScmRepositoryService.SCM_URL).build());
     }
 }

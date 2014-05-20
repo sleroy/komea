@@ -266,10 +266,10 @@ public class StatisticsService implements IStatisticsAPI {
      * (java.lang.String)
      */
     @Override
-    public KpiResult evaluateTheCurrentKpiValues(final Integer _kpiName) {
+    public KpiResult evaluateTheCurrentKpiValues(final Integer _kpiID) {
 
-        LOGGER.debug("evaluateTheCurrentKpiValues : {}", _kpiName);
-        return kpiValueService.getRealTimeValue(_kpiName);
+        LOGGER.debug("evaluateTheCurrentKpiValues : {}", _kpiID);
+        return kpiValueService.getRealTimeValue(_kpiID);
     }
 
     /**

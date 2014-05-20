@@ -16,6 +16,8 @@ import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.model.timeserie.EntityIdValue;
 import org.komea.product.service.dto.EntityKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
 
@@ -50,6 +52,9 @@ public class KpiResult implements Serializable
                                                            
                                                        }
                                                    };
+    
+    private static final Logger    LOGGER          = LoggerFactory.getLogger(KpiResult.class);
+    
     
     private Map<EntityKey, Number> map             = Maps.newHashMap();
     
@@ -175,12 +180,14 @@ public class KpiResult implements Serializable
             kpiResult.hasFailed(reasonOfFailure);
             return kpiResult;
         }
+        LOGGER.info("From {}", kpiResult.map);
         for (final IEntity entity : entitiesByEntityType) {
             final EntityKey entityKey = entity.getEntityKey();
             if (!kpiResult.map.containsKey(entityKey)) {
                 kpiResult.put(entityKey, _minValue);
             }
         }
+        LOGGER.info("To {}", kpiResult.map);
         return kpiResult;
     }
     

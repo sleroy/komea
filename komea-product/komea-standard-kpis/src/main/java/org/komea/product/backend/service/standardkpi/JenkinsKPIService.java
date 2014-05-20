@@ -47,7 +47,7 @@ public class JenkinsKPIService
     public Kpi healthRateOfUserActions() {
     
     
-        return KpiBuilder.createAscending().nameAndKey("PHID")
+        return KpiBuilder.createAscending().nameAndKey("Project health influence")
                 .description("Project Health influence of a developer")
                 .providerType(ProviderType.CI_BUILD).entityType(EntityType.PERSON).dailyKPI()
                 .interval(-100d, 100d).query(ProjectBuildHealthInfluencePerUser.class).build();
