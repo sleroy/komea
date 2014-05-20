@@ -24,6 +24,7 @@ import org.komea.product.service.dto.EntityKey;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -114,8 +115,9 @@ public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestC
         final KpiResult resultFromKey = kpiValueService.getRealTimeValue(build.getKey());
         final KpiResult resultFromID = kpiValueService.getRealTimeValue(build.getId());
         assertNotNull(resultFromKey);
-        
+        assertFalse(resultFromKey.hasFailed());
         assertNotNull(resultFromID);
+        assertFalse(resultFromID.hasFailed());
         
     }
 }

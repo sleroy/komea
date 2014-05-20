@@ -6,7 +6,6 @@ package org.komea.product.backend.service.esper.stats;
 
 
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 
 import org.komea.eventory.api.engine.ICEPQuery;
+import org.komea.eventory.api.engine.IQuery;
 import org.komea.eventory.cache.CacheConfigurationBuilder;
 import org.komea.eventory.query.CEPQueryImplementation;
 import org.komea.eventory.query.FilterDefinition;
@@ -191,9 +191,9 @@ public class EventStatisticsService implements IEventStatisticsService
     public long getNumberOfAlerts(final Severity _criticity) {
     
     
-        final Double kpiSingleValue =
-                ((ICEPQuery<Serializable, Number>) cepEngine.getQuery(FormulaID
-                        .ofRawID(getKpiNameFromSeverity(_criticity)))).getResult().doubleValue();
+        final IQuery<Number> query =
+                cepEngine.getQuery(FormulaID.ofRawID(getKpiNameFromSeverity(_criticity)));
+        final Double kpiSingleValue = query.getResult().doubleValue();
         return kpiSingleValue.intValue();
         
     }

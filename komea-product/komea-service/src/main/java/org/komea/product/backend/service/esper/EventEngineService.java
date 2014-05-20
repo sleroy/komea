@@ -19,7 +19,6 @@ import org.komea.eventory.CEPEngine;
 import org.komea.eventory.api.bridge.IEventBridgeFactory;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.api.engine.ICEPEngine;
-import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IQueryInformations;
@@ -193,12 +192,12 @@ public final class EventEngineService implements IEventEngineService
      * @see org.komea.product.backend.api.IEventEngineService#getQuery(String)
      */
     @Override
-    public ICEPQuery getQuery(final FormulaID _formulaID) {
+    public <T extends IQuery> T getQuery(final FormulaID _formulaID) {
     
     
         LOGGER.trace("Requesting esper statement {}", _formulaID);
         Validate.isTrue(_formulaID.isValid());
-        return (ICEPQuery) cepEngine.getQueryAdministration().getQuery(_formulaID.getId());
+        return (T) cepEngine.getQueryAdministration().getQuery(_formulaID.getId());
         
     }
     
@@ -231,11 +230,11 @@ public final class EventEngineService implements IEventEngineService
      * @see org.komea.product.backend.api.IEventEngineService#getQueryOrFail(String)
      */
     @Override
-    public IQuery getQueryOrFail(final FormulaID _formulaID) {
+    public <T extends IQuery> T getQueryOrFail(final FormulaID _formulaID) {
     
     
         Validate.isTrue(_formulaID.isValid());
-        final ICEPQuery<?, ?> statement = getQuery(_formulaID);
+        final T statement = getQuery(_formulaID);
         if (statement == null) {
             throw new CEPQueryNotFoundException(_formulaID);
         }

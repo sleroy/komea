@@ -88,6 +88,7 @@ public class KpiQueryService implements IKpiQueryService
             result = getKpiResultFromKpi(_kpi);
         } catch (final Exception e) {
             LOGGER.error("KPI {}  could not return any result ", _kpi.getEsperRequest(), e);
+            result.hasFailed(e);
         }
         return new InferMissingEntityValuesIntoKpiResult(result, _kpi, entityService)
                 .inferEntityKeys();
@@ -121,7 +122,7 @@ public class KpiQueryService implements IKpiQueryService
         KpiResult result;
         
         LOGGER.trace("Request value from KPI {}", _kpi.getKpiKey());
-        result = esperEngine.getQueryOrFail(FormulaID.of(_kpi)).getResult();
+        result = (KpiResult) esperEngine.getQueryOrFail(FormulaID.of(_kpi)).getResult();
         LOGGER.trace("Result of the query is {}", result);
         return result;
     }

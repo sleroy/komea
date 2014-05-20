@@ -28,30 +28,33 @@ public class KpiResult implements Serializable
 {
     
     
-    public static final KpiResult  EMPTY = new KpiResult()
-                                         {
-                                             
-                                             
-                                             /**
-                                              * Puts a value into the map.
-                                              * 
-                                              * @param _entityKey
-                                              *            the entity key
-                                              * @param _value
-                                              *            the value;
-                                              */
-                                             @Override
-                                             public void put(
-                                                     final EntityKey _entityKey,
-                                                     final Number _value) {
-                                             
-                                             
-                                                 throw new IllegalAccessError();
-                                                 
-                                             }
-                                         };
+    public static final KpiResult  EMPTY           = new KpiResult()
+                                                   {
+                                                       
+                                                       
+                                                       /**
+                                                        * Puts a value into the map.
+                                                        * 
+                                                        * @param _entityKey
+                                                        *            the entity key
+                                                        * @param _value
+                                                        *            the value;
+                                                        */
+                                                       @Override
+                                                       public void put(
+                                                               final EntityKey _entityKey,
+                                                               final Number _value) {
+                                                       
+                                                       
+                                                           throw new IllegalAccessError();
+                                                           
+                                                       }
+                                                   };
     
-    private Map<EntityKey, Number> map   = Maps.newHashMap();
+    private Map<EntityKey, Number> map             = Maps.newHashMap();
+    
+    
+    private Throwable              reasonOfFailure = null;
     
     
     
@@ -111,6 +114,13 @@ public class KpiResult implements Serializable
     }
     
     
+    public Throwable getReasonOfFailure() {
+    
+    
+        return reasonOfFailure;
+    }
+    
+    
     /**
      * Returns the value of an entity.
      * 
@@ -129,6 +139,27 @@ public class KpiResult implements Serializable
     }
     
     
+    public boolean hasFailed() {
+    
+    
+        return reasonOfFailure != null;
+    }
+    
+    
+    /**
+     * Marks the result has failed.
+     * 
+     * @param _reasonOfFailure
+     *            the result;
+     */
+    public void hasFailed(final Throwable _reasonOfFailure) {
+    
+    
+        reasonOfFailure = _reasonOfFailure;
+        
+    }
+    
+    
     /**
      * Generate minimal values when entities are missing.
      * 
@@ -140,6 +171,10 @@ public class KpiResult implements Serializable
     
     
         final KpiResult kpiResult = new KpiResult(new HashMap<EntityKey, Number>(map));
+        if (hasFailed()) {
+            kpiResult.hasFailed(reasonOfFailure);
+            return kpiResult;
+        }
         for (final IEntity entity : entitiesByEntityType) {
             final EntityKey entityKey = entity.getEntityKey();
             if (!kpiResult.map.containsKey(entityKey)) {
@@ -188,5 +223,6 @@ public class KpiResult implements Serializable
     
         return map.size();
     }
+    
     
 }

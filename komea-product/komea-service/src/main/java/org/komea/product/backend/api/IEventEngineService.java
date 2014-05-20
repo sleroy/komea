@@ -8,7 +8,6 @@ import java.io.Serializable;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.service.kpi.FormulaID;
 import org.komea.product.database.alert.IEvent;
-import org.komea.product.database.dto.KpiResult;
 
 
 
@@ -71,7 +70,7 @@ public interface IEventEngineService
      *            the statement name
      * @return the esper statement
      */
-    <T extends IQuery<KpiResult>> T getQueryOrFail(FormulaID _statement);
+    <T extends IQuery> T getQueryOrFail(FormulaID _statement);
     
     
     /**
