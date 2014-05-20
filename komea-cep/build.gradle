@@ -51,7 +51,7 @@ sonarRunner {
 /** GLOBAL PROJECT CONFIGURATION */
 buildscript { repositories { mavenCentral() } }
 
-ext.isDebug = false
+ext.isDebug = true
 
 allprojects {
     apply plugin: "java"

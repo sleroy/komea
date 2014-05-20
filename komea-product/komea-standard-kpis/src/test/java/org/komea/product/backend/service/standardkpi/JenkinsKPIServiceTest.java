@@ -13,9 +13,10 @@ import javax.validation.Validation;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.komea.eventory.api.engine.ICEPQueryImplementation;
-import org.komea.product.cep.formula.ElFormula;
+import org.komea.product.backend.groovy.QueryValidatorObject;
 import org.komea.product.database.model.Kpi;
+
+import static org.junit.Assert.assertTrue;
 
 
 
@@ -131,8 +132,7 @@ public class JenkinsKPIServiceTest
     
         final Set<ConstraintViolation<Kpi>> validate =
                 Validation.buildDefaultValidatorFactory().getValidator().validate(kpiToTest);
-        Assert.assertNotNull(new ElFormula<ICEPQueryImplementation>(kpiToTest.getEsperRequest(),
-                ICEPQueryImplementation.class));
+        assertTrue(new QueryValidatorObject().validateQuery(kpiToTest.getEsperRequest()));
         Assert.assertTrue(validate.isEmpty());
     }
     
