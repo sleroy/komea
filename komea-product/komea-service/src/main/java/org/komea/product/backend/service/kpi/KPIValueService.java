@@ -76,7 +76,7 @@ public final class KPIValueService implements IKpiValueService
     
         final Kpi selectKpiByKey = new FindKpiPerId(_kpiID, kpiDAO).find();
         final KpiResult queryValueFromKpi = kpiQueryService.getQueryValueFromKpi(selectKpiByKey);
-        LOGGER.info("Returns the real time measure for -> {} is {}", selectKpiByKey,
+        LOGGER.debug("Returns the real time measure for -> {} is {}", selectKpiByKey,
                 queryValueFromKpi);
         return queryValueFromKpi;
     }
@@ -92,10 +92,10 @@ public final class KPIValueService implements IKpiValueService
     public KpiResult getRealTimeValue(final String _kpiName) {
     
     
-        LOGGER.info("Obtain the real time measure for -> {}", _kpiName);
+        LOGGER.debug("Obtain the real time measure for -> {}", _kpiName);
         final Kpi selectKpiByKey = new FindKpiOrFail(KpiKey.ofKpiName(_kpiName), kpiDAO).find();
         if (selectKpiByKey == null) {
-            LOGGER.info("Returns an ## empty result ##", KpiResult.EMPTY);
+            LOGGER.error("Returns an ## empty result ##", KpiResult.EMPTY);
             return new InferMissingEntityValuesIntoKpiResult(KpiResult.EMPTY, selectKpiByKey,
                     entityService).inferEntityKeys();
         }

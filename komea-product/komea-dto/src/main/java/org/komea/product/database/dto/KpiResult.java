@@ -207,6 +207,18 @@ public class KpiResult implements Serializable
     
     
     /**
+     * Tests if the result of the kpi is empty
+     * 
+     * @return
+     */
+    public boolean isEmpty() {
+    
+    
+        return map.isEmpty();
+    }
+    
+    
+    /**
      * Puts a value into the map.
      * 
      * @param _entityKey

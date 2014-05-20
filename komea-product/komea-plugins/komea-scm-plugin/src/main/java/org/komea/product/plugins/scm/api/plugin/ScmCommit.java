@@ -212,6 +212,18 @@ public class ScmCommit implements IScmCommit
     
     /*
      * (non-Javadoc)
+     * @see org.komea.product.plugins.scm.api.plugin.IScmCommit#hasCompleteInformations()
+     */
+    @Override
+    public boolean hasCompleteInformations() {
+    
+    
+        return hasAuthor() && hasProject() && !message.isEmpty() && commitTime != null;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.scm.api.plugin.IScmCommit#hasProject()
      */
     @Override

@@ -10,6 +10,8 @@ import java.io.Serializable;
 
 import org.komea.eventory.api.filters.IEventFilter;
 import org.komea.product.plugins.scm.api.plugin.IScmCommit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -22,6 +24,10 @@ public class ScmCommitFilter implements IEventFilter
 {
     
     
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScmCommitFilter.class);
+    
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.eventory.api.filters.IEventFilter#isFiltered(java.io.Serializable)
@@ -31,9 +37,14 @@ public class ScmCommitFilter implements IEventFilter
     
     
         final boolean isCommitEvent = _arg0 instanceof IScmCommit;
-        if (!isCommitEvent) { return false; }
+        if (!isCommitEvent) {
+            return false;
+        }
         final IScmCommit commit = (IScmCommit) _arg0;
-        return commit.hasAuthor() && commit.hasProject();
+        final boolean hasCompleteInformations = commit.hasCompleteInformations();
+        if (!hasCompleteInformations) {
+            LOGGER.warn("Invalid scm commit received {}", _arg0);
+        }
+        return hasCompleteInformations;
     }
-    
 }
