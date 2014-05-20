@@ -6,7 +6,6 @@ package org.komea.product.plugins.kpi.standard.jenkins;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventsFactory;
 import org.komea.product.cep.tester.CEPQueryTester;
-import org.komea.product.plugins.kpi.standard.jenkins.ProjectBuildHealthInfluencePerUser;
 
 
 
@@ -14,11 +13,12 @@ public class ProjectBuildHealthInfluencePerUserTest
 {
     
     
-    @Test 
+    @Test
     public final void ProjectHealthInfluencePerUserTest() throws Exception {
     
     
-        final ProjectBuildHealthInfluencePerUser buildPerDay = new ProjectBuildHealthInfluencePerUser();
+        final ProjectBuildHealthInfluencePerUser buildPerDay =
+                new ProjectBuildHealthInfluencePerUser();
         
         final CEPQueryTester newTest = CEPQueryTester.newTest();
         
@@ -31,10 +31,10 @@ public class ProjectBuildHealthInfluencePerUserTest
         withQuery.sendEvent(JenkinsEventsFactory.sendBuildFixed("KOMEA", 1, "TRUC", "yoip"));
         withQuery.sendEvent(JenkinsEventsFactory.sendBuildFixed("KOMEA", 1, "TRUC", "yoip"));
         withQuery.sendEvent(JenkinsEventsFactory.sendBuildBroken("KOMEA", 1, "TRUC", "yoip"));
-        newTest.dump().hasResults(new Object[][]
-            {
-                { newTest.getMockPerson().get("sleroy").getEntityKey(), 50.0 },
-                { newTest.getMockPerson().get("yoip").getEntityKey(), 100.0 * 2.0 / 3.0 } }
+        newTest.dump().hasResults(new Object[][] {
+                {
+                        newTest.getMockPerson().get("sleroy").getEntityKey(), 0.0 }, {
+                        newTest.getMockPerson().get("yoip").getEntityKey(), 1.0 } }
         
         ).runTest();
     }

@@ -57,7 +57,7 @@ public class ProjectBuildHealthFormula implements IEventGroupFormula<IEvent> {
 		 * 
 		 * @return the formula
 		 */
-		public double computePercentageOfSuccessBuild() {
+		public double computeEffectOfAction() {
 
 			return positiveActions - negativeActions;
 		}
@@ -75,7 +75,7 @@ public class ProjectBuildHealthFormula implements IEventGroupFormula<IEvent> {
 
 		final HealthInformations healthComputation = new HealthInformations();
 		CollectionUtil.iterate(_eventGroup.getEvents(), healthComputation);
-		return healthComputation.computePercentageOfSuccessBuild();
+		return healthComputation.computeEffectOfAction();
 	}
 
 }

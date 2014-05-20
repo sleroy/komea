@@ -7,46 +7,26 @@ package org.komea.product.plugins.bugzilla.service;
 
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.komea.product.backend.groovy.GroovyEngineService;
-import org.komea.product.backend.groovy.QueryValidatorObject;
-import org.komea.product.backend.service.cron.ICronRegistryService;
-import org.komea.product.backend.service.plugins.IEventTypeService;
-import org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.slf4j.Logger;
+import org.komea.product.backend.groovy.IGroovyEngineService;
+import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.Assert.assertTrue;
 
 
 
 /**
  * @author sleroy
  */
-@RunWith(MockitoJUnitRunner.class)
-public class BZProviderPluginTest
+
+public class BZProviderPluginTest extends AbstractSpringIntegrationTestCase
 {
     
     
-    @Mock
-    private IBZConfigurationDAO  bugZillaConfiguration;
+    private final BZProviderPlugin bZProviderPlugin = new BZProviderPlugin();
     
-    
-    @InjectMocks
-    private BZProviderPlugin     bZProviderPlugin;
-    
-    
-    @Mock
-    private IEventTypeService    evenTypeService;
-    
-    
-    private GroovyEngineService  groovyEngineService;
-    @Mock
-    private Logger               logger;
-    
-    
-    @Mock
-    private ICronRegistryService registryService;
+    @Autowired
+    private IGroovyEngineService   groovyEngineService;
     
     
     
@@ -57,7 +37,8 @@ public class BZProviderPluginTest
     public void testBzOpenBugs() throws Exception {
     
     
-        new QueryValidatorObject().validateQuery(bZProviderPlugin.bzOpenBugs().getEsperRequest());
+        assertTrue(groovyEngineService.isValidFormula(bZProviderPlugin.bzOpenBugs()
+                .getEsperRequest()));
         
         
     }
@@ -70,8 +51,8 @@ public class BZProviderPluginTest
     public void testBzOpenBySeverityBugs() throws Exception {
     
     
-        new QueryValidatorObject().validateQuery(bZProviderPlugin.bzOpenBySeverityBugs("critical")
-                .getEsperRequest());
+        assertTrue(groovyEngineService.isValidFormula(bZProviderPlugin.bzOpenBySeverityBugs(
+                "critical").getEsperRequest()));
     }
     
     
@@ -82,8 +63,8 @@ public class BZProviderPluginTest
     public void testBzOpenNotFixedBugs() throws Exception {
     
     
-        new QueryValidatorObject().validateQuery(bZProviderPlugin.bzOpenNotFixedBugs()
-                .getEsperRequest());
+        assertTrue(groovyEngineService.isValidFormula(bZProviderPlugin.bzOpenNotFixedBugs()
+                .getEsperRequest()));
     }
     
     
@@ -94,8 +75,8 @@ public class BZProviderPluginTest
     public void testBzTotalBugs() throws Exception {
     
     
-        new QueryValidatorObject().validateQuery(bZProviderPlugin.bzTotalBugs().getEsperRequest());
+        assertTrue(groovyEngineService.isValidFormula(bZProviderPlugin.bzTotalBugs()
+                .getEsperRequest()));
     }
-    
     
 }
