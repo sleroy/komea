@@ -3,18 +3,9 @@ package org.komea.product.backend.service.alert;
 
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.komea.product.backend.api.IKPIService;
 import org.komea.product.database.dto.KpiAlertDto;
 import org.komea.product.database.dto.SearchKpiAlertsDto;
-import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
-import org.komea.product.database.model.KpiCriteria;
-import org.komea.product.database.model.Measure;
-import org.komea.product.service.dto.AlertCriteria;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,11 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AlertService implements IAlertService
 {
-    
-    
-    @Autowired
-    private IKPIService kpiService;
-    
     
     
     /**
@@ -79,23 +65,5 @@ public class AlertService implements IAlertService
     
     
         return kpiAlert != null && (!_filter.isActivatedOnly() || kpiAlert.isActivated());
-    }
-    
-    
-    @Override
-    public boolean isMeasureAssociatedToAlert(final AlertCriteria _criteria, final Measure _measure) {
-    
-    
-        final Integer entityId = _measure.getEntityID();
-        final KpiCriteria kpiCriteria = new KpiCriteria();
-        // FIXME TODO get KPIs where formula corresponds to the measure
-        final List<Kpi> kpis = kpiService.selectByCriteria(kpiCriteria);
-        final List<Integer> kpiIds = new ArrayList<Integer>(kpis.size());
-        for (final Kpi kpi : kpis) {
-            kpiIds.add(kpi.getId());
-        }
-        return entityId != null
-                && _criteria.getEntity().getId().equals(entityId)
-                && kpiIds.contains(_criteria.getAlertType().getIdKpi());
     }
 }
