@@ -24,6 +24,7 @@ import org.komea.product.service.dto.EntityKey;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -71,26 +72,32 @@ public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestC
         
         
             final KpiResult kpiResult = new KpiResult();
-            kpiResult.insertResult(EntityKey.of(EntityType.PROJECT, 1), VALUE);
+            kpiResult.insertResult(OF, VALUE);
             return kpiResult;
         }
     }
     
     
     
-    @Autowired
-    private IKpiAPI            kpiAPI;
-    @Autowired
-    private IKpiLoadingService kpiLoadingService;
+    /**
+     * 
+     */
+    private static final EntityKey OF = EntityKey.of(EntityType.PROJECT, 1);
+    
     
     @Autowired
-    private IKpiQueryService   kpiQueryService;
+    private IKpiAPI                kpiAPI;
+    @Autowired
+    private IKpiLoadingService     kpiLoadingService;
     
     @Autowired
-    private IKPIService        kpiService;
+    private IKpiQueryService       kpiQueryService;
     
     @Autowired
-    private IKpiValueService   kpiValueService;
+    private IKPIService            kpiService;
+    
+    @Autowired
+    private IKpiValueService       kpiValueService;
     
     
     
@@ -118,6 +125,8 @@ public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestC
         assertFalse(resultFromKey.hasFailed());
         assertNotNull(resultFromID);
         assertFalse(resultFromID.hasFailed());
+        assertEquals(resultFromID.getDoubleValue(OF), 2.0, 0);
+        assertEquals(resultFromKey.getDoubleValue(OF), 2.0, 0);
         
     }
 }
