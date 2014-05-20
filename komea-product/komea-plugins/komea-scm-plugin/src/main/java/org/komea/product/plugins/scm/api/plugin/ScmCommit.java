@@ -321,7 +321,7 @@ public class ScmCommit implements IScmCommit
     public String toString() {
     
     
-        return "ScmCommit [author="
+        return "ScmCommitDto [author="
                 + author + ", commitTime=" + commitTime + ", id=" + id + ", message=" + message
                 + ", numberOfAddedlines=" + numberOfAddedlines + ", numberofDeletedLines="
                 + numberofDeletedLines + ", numberOfModifiedFiles=" + numberOfModifiedFiles + "]";

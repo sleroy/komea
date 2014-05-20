@@ -3,8 +3,8 @@ package org.komea.product.test.spring;
 
 
 
-import org.apache.log4j.Logger;
 import org.junit.runner.RunWith;
+import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -28,7 +28,7 @@ public abstract class AbstractSpringWebIntegrationTestCase
 {
     
     
-    protected final Logger LOGGER = Logger.getLogger(getClass());
+    protected final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(getClass());
     
     
 }
