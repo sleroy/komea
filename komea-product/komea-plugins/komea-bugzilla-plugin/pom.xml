@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.komea.plugins</groupId>
 		<artifactId>komea-plugins</artifactId>
-		<version>1.1.19-SNAPSHOT</version>
+		<version>1.1.20-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>komea-bugzilla-plugin</artifactId>
@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>org.komea.product</groupId>
 			<artifactId>komea-service</artifactId>
-			<version>1.1.19-SNAPSHOT</version>
+			<version>1.1.20-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.j2bugzilla</groupId>
@@ -30,18 +30,18 @@
 		<dependency>
 			<groupId>org.komea.product</groupId>
 			<artifactId>komea-service-api</artifactId>
-			<version>1.1.19-SNAPSHOT</version>
+			<version>1.1.20-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.komea.product</groupId>
 			<artifactId>komea-testspring</artifactId>
-			<version>1.1.19-SNAPSHOT</version>
+			<version>1.1.20-SNAPSHOT</version>
 		    <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.komea.product</groupId>
 			<artifactId>komea-utils</artifactId>
-			<version>1.1.19-SNAPSHOT</version>
+			<version>1.1.20-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
