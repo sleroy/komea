@@ -6,17 +6,12 @@ package org.komea.product.backend.service.esper;
 
 
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
+import java.io.File;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.eventory.CEPEngine;
 import org.komea.eventory.api.bridge.IEventBridgeFactory;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.product.backend.service.fs.IKomeaFS;
@@ -24,9 +19,18 @@ import org.komea.product.cep.tester.CEPQueryTester;
 import org.komea.product.database.alert.IEvent;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 
@@ -39,9 +43,6 @@ public class EventEngineServiceTest
     
     
     private final ICacheStorageFactory cacheStorageFactory = CEPQueryTester.DEFAULT_CACHE_FACTORY;
-    
-    
-    private final CEPEngine            cepEngine           = null;
     
     
     private final IEventBridgeFactory  eventBridgeFactory  = CEPQueryTester.DEFAULT_BRIDGE_FACTORY;
@@ -67,18 +68,13 @@ public class EventEngineServiceTest
     public void before() {
     
     
+        when(komeaFS.getFileSystemFolder(Mockito.anyString())).thenReturn(new File("target"));
         eventEngineService.setCacheStorageFactory(cacheStorageFactory);
         eventEngineService.setEventBridgeFactory(eventBridgeFactory);
         
         
         eventEngineService.init();
         
-        //
-        // final CEPConfiguration cepConfiguration = new CEPConfiguration();
-        // cepConfiguration.setBridgeFactory(CEPQueryTester.DEFAULT_BRIDGE_FACTORY);
-        // cepConfiguration.setCacheStorageFactory(CEPQueryTester.DEFAULT_CACHE_FACTORY);
-        // cepEngine.initialize(cepConfiguration);
-        // eventEngineService.setCepEngine(cepEngine);
     }
     
     

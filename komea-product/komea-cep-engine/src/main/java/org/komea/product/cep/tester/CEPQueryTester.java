@@ -3,6 +3,7 @@ package org.komea.product.cep.tester;
 
 
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -114,6 +115,7 @@ public class CEPQueryTester
         final ICEPEngine esperEngineBean = new CEPEngine();
         try {
             final CEPConfiguration cepConfiguration = new CEPConfiguration();
+            cepConfiguration.setStorageFolder(new File("target"));
             
             cepConfiguration.setBridgeFactory(DEFAULT_BRIDGE_FACTORY);
             cepConfiguration.setCacheStorageFactory(DEFAULT_CACHE_FACTORY);
@@ -411,8 +413,9 @@ public class CEPQueryTester
         
         if (singleResult != null) {
             final Number result = (Number) ((ICEPQuery) cepQuery).getResult();
-            if (!Matchers.equalTo(result).matches(singleResult)) { throw new IllegalArgumentException(
-                    "Single result does not match"); }
+            if (!Matchers.equalTo(result).matches(singleResult)) {
+                throw new IllegalArgumentException("Single result does not match");
+            }
             
         } else {
             if (dumpResult) {
@@ -487,8 +490,9 @@ public class CEPQueryTester
     
         if (requiresStorageSizeValidation()) {
             final int size = cepQuery.getStatement().getDefaultStorage().size();
-            if (!Matchers.equalTo(Integer.valueOf(size)).matches(expectedStorageSize)) { throw new IllegalArgumentException(
-                    "Storage size should match"); }
+            if (!Matchers.equalTo(Integer.valueOf(size)).matches(expectedStorageSize)) {
+                throw new IllegalArgumentException("Storage size should match");
+            }
             
             
         }
