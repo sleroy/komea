@@ -106,7 +106,7 @@ public class ScmVerifyWhenRealTimeValueWhenScmCOmmitLaunched extends
         
         // I OBTAIN THE REAL TIME VALUE OF A KPI
         final KpiResult realTimeValue =
-                kpiValueService.getRealTimeValue(ScmKpiPlugin.NUMBER_COMMITS.getKey());
+                kpiValueService.getRealTimeValue(ScmKpiPlugin.NUMBER_COMMITS_PROJECT.getKey());
         // VALUES SHOULD NOT BE NULL
         assertNotNull(realTimeValue);
         // AND NOT EMPTY

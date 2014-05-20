@@ -17,6 +17,7 @@ import org.komea.product.plugins.scm.api.IScmKpiPlugin;
 import org.komea.product.plugins.scm.kpi.functions.AverageCommitMessageLength;
 import org.komea.product.plugins.scm.kpi.functions.NumberOfAddedLinesPerDay;
 import org.komea.product.plugins.scm.kpi.functions.NumberOfCommitsPerDay;
+import org.komea.product.plugins.scm.kpi.functions.NumberOfCommitsPerDayPerProject;
 import org.komea.product.plugins.scm.kpi.functions.NumberOfDeletedLinesPerDay;
 import org.komea.product.plugins.scm.kpi.functions.NumberOfModifiedFilesPerDay;
 import org.komea.product.plugins.scm.kpi.functions.NumberOfModifiedLinesPerDay;
@@ -39,71 +40,95 @@ public class ScmKpiPlugin implements IScmKpiPlugin
     /**
      * 
      */
-    public static final Kpi AVERAGE_COMMIT  = KpiBuilder
-                                           .createAscending()
-                                           .nameAndKeyDescription(
-                                                   "Average commit message length per user")
-                                           .providerType(ProviderType.SCM)
-                                           .entityType(EntityType.PERSON).interval(0d, 10000d)
-                                           .query(AverageCommitMessageLength.class).dailyKPI()
-                                           .build();
+    public static final Kpi ADDED_LINES            =
+                                                           KpiBuilder
+                                                                   .createAscending()
+                                                                   .nameAndKeyDescription(
+                                                                           "Number of added lines per user")
+                                                                   .providerType(ProviderType.SCM)
+                                                                   .entityType(EntityType.PERSON)
+                                                                   .query(NumberOfAddedLinesPerDay.class)
+                                                                   .interval(0d, 1000000d)
+                                                                   .dailyKPI().build();
     /**
      * 
      */
-    public static final Kpi ADDED_LINES = KpiBuilder.createAscending()
-                                           .nameAndKeyDescription("Number of added lines per user")
-                                           .providerType(ProviderType.SCM)
-                                           .entityType(EntityType.PERSON)
-                                           .query(NumberOfAddedLinesPerDay.class)
-                                           .interval(0d, 1000000d).dailyKPI().build();
+    public static final Kpi AVERAGE_COMMIT         =
+                                                           KpiBuilder
+                                                                   .createAscending()
+                                                                   .nameAndKeyDescription(
+                                                                           "Average commit message length per user")
+                                                                   .providerType(ProviderType.SCM)
+                                                                   .entityType(EntityType.PERSON)
+                                                                   .interval(0d, 10000d)
+                                                                   .query(AverageCommitMessageLength.class)
+                                                                   .dailyKPI().build();
+    public static final Kpi BUILD6                 =
+                                                           KpiBuilder
+                                                                   .createAscending()
+                                                                   .nameAndKeyDescription(
+                                                                           "Number total of modified lines per user")
+                                                                   .providerType(ProviderType.SCM)
+                                                                   .interval(0d, 1000000d)
+                                                                   .entityType(EntityType.PERSON)
+                                                                   .query(TotalNumberOfModifiedLinesPerDay.class)
+                                                                   .dailyKPI().build();
+    public static final Kpi BUILD7                 =
+                                                           KpiBuilder
+                                                                   .createAscending()
+                                                                   .nameAndKeyDescription(
+                                                                           "Number total of modified files per user")
+                                                                   .providerType(ProviderType.SCM)
+                                                                   .entityType(EntityType.PERSON)
+                                                                   .interval(0d, 1000000d)
+                                                                   .query(NumberOfModifiedFilesPerDay.class)
+                                                                   .dailyKPI().build();
     /**
      * 
      */
-    public static final Kpi NUMBER_COMMITS = KpiBuilder
-                                           .createAscending()
-                                           .nameAndKeyDescription(
-                                                   "Number of commits per day per user")
-                                           .providerType(ProviderType.SCM)
-                                           .entityType(EntityType.PERSON).interval(0d, 25 * 60d)
-                                           .query(NumberOfCommitsPerDay.class).hourly().build();
+    public static final Kpi CHANGED_LINES          =
+                                                           KpiBuilder
+                                                                   .createAscending()
+                                                                   .nameAndKeyDescription(
+                                                                           "Number of changed lines per day per user")
+                                                                   .providerType(ProviderType.SCM)
+                                                                   .entityType(EntityType.PERSON)
+                                                                   .interval(0d, 1000000d)
+                                                                   .query(NumberOfModifiedLinesPerDay.class)
+                                                                   .dailyKPI().build();
     /**
      * 
      */
-    public static final Kpi DELETED_LINES = KpiBuilder
-                                           .createAscending()
-                                           .nameAndKeyDescription(
-                                                   "Number of deleted lines per day per user")
-                                           .providerType(ProviderType.SCM)
-                                           .entityType(EntityType.PERSON).interval(0d, 1000000d)
-                                           .query(NumberOfDeletedLinesPerDay.class).dailyKPI()
-                                           .build();
-    /**
-     * 
-     */
-    public static final Kpi CHANGED_LINES = KpiBuilder
-                                           .createAscending()
-                                           .nameAndKeyDescription(
-                                                   "Number of changed lines per day per user")
-                                           .providerType(ProviderType.SCM)
-                                           .entityType(EntityType.PERSON).interval(0d, 1000000d)
-                                           .query(NumberOfModifiedLinesPerDay.class).dailyKPI()
-                                           .build();
-    public static final Kpi BUILD6 = KpiBuilder
-                                           .createAscending()
-                                           .nameAndKeyDescription(
-                                                   "Number total of modified lines per user")
-                                           .providerType(ProviderType.SCM).interval(0d, 1000000d)
-                                           .entityType(EntityType.PERSON)
-                                           .query(TotalNumberOfModifiedLinesPerDay.class)
-                                           .dailyKPI().build();
-    public static final Kpi BUILD7 = KpiBuilder
-                                           .createAscending()
-                                           .nameAndKeyDescription(
-                                                   "Number total of modified files per user")
-                                           .providerType(ProviderType.SCM)
-                                           .entityType(EntityType.PERSON).interval(0d, 1000000d)
-                                           .query(NumberOfModifiedFilesPerDay.class).dailyKPI()
-                                           .build();
+    public static final Kpi DELETED_LINES          =
+                                                           KpiBuilder
+                                                                   .createAscending()
+                                                                   .nameAndKeyDescription(
+                                                                           "Number of deleted lines per day per user")
+                                                                   .providerType(ProviderType.SCM)
+                                                                   .entityType(EntityType.PERSON)
+                                                                   .interval(0d, 1000000d)
+                                                                   .query(NumberOfDeletedLinesPerDay.class)
+                                                                   .dailyKPI().build();
+    public static final Kpi NUMBER_COMMITS         =
+                                                           KpiBuilder
+                                                                   .createAscending()
+                                                                   .nameAndKeyDescription(
+                                                                           "Number of commits per day per user")
+                                                                   .providerType(ProviderType.SCM)
+                                                                   .entityType(EntityType.PERSON)
+                                                                   .interval(0d, 25 * 60d)
+                                                                   .query(NumberOfCommitsPerDay.class)
+                                                                   .hourly().build();
+    public static final Kpi NUMBER_COMMITS_PROJECT =
+                                                           KpiBuilder
+                                                                   .createAscending()
+                                                                   .nameAndKeyDescription(
+                                                                           "Number of commits per day per project")
+                                                                   .providerType(ProviderType.SCM)
+                                                                   .entityType(EntityType.PROJECT)
+                                                                   .interval(0d, 25 * 60d)
+                                                                   .query(NumberOfCommitsPerDayPerProject.class)
+                                                                   .hourly().build();
     
     @Autowired
     public IKPIService      kpiService;
@@ -137,6 +162,7 @@ public class ScmKpiPlugin implements IScmKpiPlugin
         saveOrUpdate(numberOfCommitsPerDayPerUser());
         saveOrUpdate(numberofDeletedLinesPerDayPerUser());
         saveOrUpdate(numberTotalOfModifiedLinesPerUser());
+        saveOrUpdate(NUMBER_COMMITS_PROJECT);
         
     }
     

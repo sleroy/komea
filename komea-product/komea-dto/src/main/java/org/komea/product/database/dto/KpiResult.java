@@ -180,14 +180,14 @@ public class KpiResult implements Serializable
             kpiResult.hasFailed(reasonOfFailure);
             return kpiResult;
         }
-        LOGGER.info("From {}", kpiResult.map);
+        LOGGER.trace("From {}", kpiResult.map);
         for (final IEntity entity : entitiesByEntityType) {
             final EntityKey entityKey = entity.getEntityKey();
             if (!kpiResult.map.containsKey(entityKey)) {
                 kpiResult.put(entityKey, _minValue);
             }
         }
-        LOGGER.info("To {}", kpiResult.map);
+        LOGGER.trace("To {}", kpiResult.map);
         return kpiResult;
     }
     

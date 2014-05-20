@@ -21,12 +21,12 @@ import org.komea.product.plugins.scm.api.plugin.ICommitFunction;
 /**
  * @author sleroy
  */
-public abstract class ScmUserQueryImplementation extends AbstractCEPQueryImplementation implements
-        ICommitFunction
+public abstract class ScmProjectQueryImplementation extends AbstractCEPQueryImplementation
+        implements ICommitFunction
 {
     
     
-    public ScmUserQueryImplementation() {
+    public ScmProjectQueryImplementation() {
     
     
         super(BackupDelay.DAY);
@@ -69,7 +69,7 @@ public abstract class ScmUserQueryImplementation extends AbstractCEPQueryImpleme
     public ICEPFormula getFormula() {
     
     
-        return new CommitFormula(new ScmUserGroupingFunction(), getCommitFunction());
+        return new CommitFormula(new ScmProjectGroupingFunction(), getCommitFunction());
     }
     
 }
