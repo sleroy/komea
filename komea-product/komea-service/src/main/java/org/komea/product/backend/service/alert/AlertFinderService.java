@@ -20,6 +20,9 @@ import org.springframework.stereotype.Service;
 public class AlertFinderService implements IAlertFinderService {
 
     @Autowired
+    private IMeasureService measureService;
+
+    @Autowired
     private IAlertService alertService;
 
     @Autowired
@@ -27,9 +30,6 @@ public class AlertFinderService implements IAlertFinderService {
 
     @Autowired
     private IAlertTypeService alertTypeService;
-
-    @Autowired
-    private IMeasureService measureService;
 
     @Autowired
     private IKPIService kpiService;

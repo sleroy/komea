@@ -16,7 +16,7 @@ import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.backend.service.kpi.TimeSerie;
 import org.komea.product.database.api.IEntity;
-import org.komea.product.model.timeserie.GroupFormula;
+import org.komea.product.database.enums.GroupFormula;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.TimeCoordinate;
 import org.komea.product.database.model.Kpi;

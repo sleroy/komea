@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-   <kom_customer id="1" name="SIGMA" />
-   <kom_pero id="1" name="tocea" />
-   <kom_pe id="1" idPersonRole="1" firstName="jeremie" lastName="Guidoux" login="jguidoux" email="jeremie.guidoux@tocea.com"
-      userBdd="KOMEA" />
-   <kom_pe id="2" idPersonRole="1" firstName="sylvain" lastName="Leroy" login="sleroy" email="sylvain.leroy@tocea.com@tocea.com"
-      userBdd="KOMEA" />
-   <kom_kpi id="1" kpiKey="KPI1" name="kpi no 1" valueMin="0" providerType="OTHER" valueMax="100"
-      valueDirection="NONE" valueType="PERCENT" entityType="PERSON" esperRequest="request" />
+    <kom_customer id="1" name="SIGMA" />
+    <kom_pero id="1" name="tocea" />
+    <kom_pe id="1" idPersonRole="1" firstName="jeremie" lastName="Guidoux" login="jguidoux" email="jeremie.guidoux@tocea.com"
+           userBdd="KOMEA" />
+    <kom_pe id="2" idPersonRole="1" firstName="sylvain" lastName="Leroy" login="sleroy" email="sylvain.leroy@tocea.com@tocea.com"
+           userBdd="KOMEA" />
+    <kom_kpi id="1" kpiKey="KPI1" name="kpi no 1" valueMin="0" providerType="OTHER" valueMax="100"
+            valueDirection="NONE" valueType="PERCENT" groupFormula="AVG_VALUE" entityType="PERSON" esperRequest="request" />
 
-   <kom_proj id="1" projectKey="komea" name="komea" description="kpi alert" />
-   <kom_proj id="2" projectKey="techdebt" name="techdebt" description="tech debt calculator" />
+    <kom_proj id="1" projectKey="komea" name="komea" description="kpi alert" />
+    <kom_proj id="2" projectKey="techdebt" name="techdebt" description="tech debt calculator" />
 
 </dataset>

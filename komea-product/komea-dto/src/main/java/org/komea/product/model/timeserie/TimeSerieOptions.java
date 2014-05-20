@@ -4,6 +4,7 @@
 
 package org.komea.product.model.timeserie;
 
+import org.komea.product.database.enums.GroupFormula;
 import java.io.Serializable;
 
 import org.komea.product.database.model.Kpi;

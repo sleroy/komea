@@ -17,7 +17,7 @@ import org.komea.product.backend.exceptions.KPINotFoundRuntimeException;
 import org.komea.product.backend.service.kpi.IMeasureService;
 import org.komea.product.backend.service.kpi.KpiLoadingService;
 import org.komea.product.database.enums.EntityType;
-import org.komea.product.model.timeserie.GroupFormula;
+import org.komea.product.database.enums.GroupFormula;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.dto.TimeCoordinateDTO;
 import org.komea.product.model.timeserie.dto.TimeSerieDTO;
