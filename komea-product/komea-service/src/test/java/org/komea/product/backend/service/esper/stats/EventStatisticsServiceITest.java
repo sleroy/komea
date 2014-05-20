@@ -5,6 +5,7 @@
 package org.komea.product.backend.service.esper.stats;
 
 
+
 import java.util.List;
 
 import org.junit.Assert;
@@ -21,11 +22,15 @@ import org.komea.product.service.dto.EventTypeStatistic;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
+
 /**
  * @author sleroy
  * @version $Revision: 1.0 $
  */
-public class EventStatisticsServiceITest extends AbstractSpringIntegrationTestCase {
+public class EventStatisticsServiceITest extends AbstractSpringIntegrationTestCase
+{
+    
     
     @Autowired
     private IEventStatisticsService alertStats;
@@ -39,24 +44,32 @@ public class EventStatisticsServiceITest extends AbstractSpringIntegrationTestCa
     @Autowired
     private ISystemProjectBean      systemProject;
     
+    
+    
     /**
      * Test method for {@link org.komea.product.cep.tuples.EventStatisticsService#getReceivedAlertTypesIn24LastHours()} .
      */
     @Test
     public final void testGetReceivedAlertTypesIn24LastHours() {
     
-        new JenkinsEventFactory();
+    
         final CEPQueryTester newTest = CEPQueryTester.newTest();
         
-        LOGGER.info("EVENT SENT {}", newTest.convertDto(JenkinsEventFactory.sendBuildFailed("SCERTIFY", 448, "truc")));
-        final IEvent convertDto = newTest.convertDto(JenkinsEventFactory.sendBuildFailed("SCERTIFY", 448, "truc"));
+        LOGGER.info("EVENT SENT {}",
+                newTest.convertDto(JenkinsEventFactory.sendBuildFailed("SCERTIFY", 448, "truc")));
+        final IEvent convertDto =
+                newTest.convertDto(JenkinsEventFactory.sendBuildFailed("SCERTIFY", 448, "truc"));
         newTest.getMockEventTypes().get("build_failed").setSeverity(Severity.INFO);
         esperEngine.sendEvent(convertDto);
-        esperEngine.sendEvent(newTest.convertDto(JenkinsEventFactory.sendBuildFailed("SCERTIFY", 448, "truc")));
-        esperEngine.sendEvent(newTest.convertDto(JenkinsEventFactory.sendBuildFailed("SCERTIFY", 448, "truc")));
-        esperEngine.sendEvent(newTest.convertDto(JenkinsEventFactory.sendBuildFailed("SCERTIFY", 448, "truc")));
+        esperEngine.sendEvent(newTest.convertDto(JenkinsEventFactory.sendBuildFailed("SCERTIFY",
+                448, "truc")));
+        esperEngine.sendEvent(newTest.convertDto(JenkinsEventFactory.sendBuildFailed("SCERTIFY",
+                448, "truc")));
+        esperEngine.sendEvent(newTest.convertDto(JenkinsEventFactory.sendBuildFailed("SCERTIFY",
+                448, "truc")));
         
-        final List<EventTypeStatistic> receivedAlertTypesIn24Hours = alertStats.getReceivedAlertTypesIn24LastHours();
+        final List<EventTypeStatistic> receivedAlertTypesIn24Hours =
+                alertStats.getReceivedAlertTypesIn24LastHours();
         LOGGER.info("Stats {}", receivedAlertTypesIn24Hours);
         final EventTypeStatistic alertTypeStatistic = receivedAlertTypesIn24Hours.get(0);
         LOGGER.info("Alert number {}", alertTypeStatistic.getValue());

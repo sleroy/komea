@@ -239,7 +239,7 @@ public class EventStatisticsService implements IEventStatisticsService
     
         final ICEPQuery<IEvent, EventTypeStatistics> statsBreakdownStatement =
                 (ICEPQuery<IEvent, EventTypeStatistics>) cepEngine.getQuery(FormulaID
-                        .of(STATS_BREAKDOWN_24H));
+                        .ofRawID(STATS_BREAKDOWN_24H));
         
         return statsBreakdownStatement.getResult().getEventTypeStatistics();
     }
