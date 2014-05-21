@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @Controller
 @RequestMapping(value = "/scm/")
+@Transactional
 public class ScmCommitController
 {
     
@@ -72,6 +74,7 @@ public class ScmCommitController
     
     
         LOGGER.info("Received new commit notification {} {} {}", project, user, commitDTO);
+        projectService.getOrCreate(project);
         final ScmCommit scmCommit = new ScmCommit();
         scmCommit.setAuthor(personService.findOrCreatePersonByLogin(user));
         scmCommit.setProject(projectService.selectByKey(project));
@@ -115,6 +118,7 @@ public class ScmCommitController
         LOGGER.info("NumberOfChangedLines {}", numberOfChangedLines);
         LOGGER.info("NumberofDeletedLines {}", numberofDeletedLines);
         LOGGER.info("NumberOfModifiedFiles {}", numberOfModifiedFiles);
+        projectService.getOrCreate(project);
         final ScmCommit scmCommit = new ScmCommit();
         scmCommit.setAuthor(personService.findOrCreatePersonByLogin(user));
         scmCommit.setProject(projectService.selectByKey(project));
@@ -145,6 +149,7 @@ public class ScmCommitController
     
         LOGGER.info("Received new light commit notification");
         LOGGER.info("User {}\nProject {} Message {}\n", user, project, message);
+        projectService.getOrCreate(project);
         final ScmCommit scmCommit = new ScmCommit();
         scmCommit.setAuthor(personService.findOrCreatePersonByLogin(user));
         scmCommit.setProject(projectService.selectByKey(project));

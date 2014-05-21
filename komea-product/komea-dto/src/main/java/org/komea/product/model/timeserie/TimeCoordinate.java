@@ -2,11 +2,16 @@
 package org.komea.product.model.timeserie;
 
 
+
 import java.io.Serializable;
 
 import org.joda.time.DateTime;
 
-public class TimeCoordinate implements Serializable {
+
+
+public class TimeCoordinate implements Serializable
+{
+    
     
     private int    day;
     
@@ -14,7 +19,7 @@ public class TimeCoordinate implements Serializable {
     
     private int    hour;
     
-    private int    idKpi;
+    private String idKpi;
     
     private int    month = 1;
     
@@ -24,10 +29,14 @@ public class TimeCoordinate implements Serializable {
     
     private int    year;
     
+    
+    
     public TimeCoordinate() {
+    
     
         super();
     }
+    
     
     /*
      * (non-Javadoc)
@@ -35,6 +44,7 @@ public class TimeCoordinate implements Serializable {
      */
     @Override
     public boolean equals(final Object obj) {
+    
     
         if (this == obj) {
             return true;
@@ -55,7 +65,11 @@ public class TimeCoordinate implements Serializable {
         if (hour != other.hour) {
             return false;
         }
-        if (idKpi != other.idKpi) {
+        if (idKpi == null) {
+            if (other.idKpi != null) {
+                return false;
+            }
+        } else if (!idKpi.equals(other.idKpi)) {
             return false;
         }
         if (month != other.month) {
@@ -77,6 +91,7 @@ public class TimeCoordinate implements Serializable {
         return true;
     }
     
+    
     /**
      * Returns the period.
      * 
@@ -84,16 +99,20 @@ public class TimeCoordinate implements Serializable {
      */
     public DateTime getDate() {
     
+    
         final int dayCalculate = findDayOfMonth();
         final DateTime dateTime = new DateTime(year, month, dayCalculate, hour, 0);
         
         return dateTime;
     }
     
+    
     public int getDay() {
+    
     
         return day;
     }
+    
     
     /**
      * Returns the value of the field entityID.
@@ -102,43 +121,57 @@ public class TimeCoordinate implements Serializable {
      */
     public int getEntityID() {
     
+    
         return entityID;
     }
     
+    
     public int getHour() {
+    
     
         return hour;
     }
+    
     
     /**
      * Returns the value of the field idKpi.
      * 
      * @return the idKpi
      */
-    public int getIdKpi() {
+    public String getIdKpi() {
+    
     
         return idKpi;
     }
     
+    
     public int getMonth() {
+    
     
         return month;
     }
     
+    
     public Double getValue() {
+    
     
         return value;
     }
     
+    
     public int getWeek() {
+    
     
         return week;
     }
     
+    
     public int getYear() {
+    
     
         return year;
     }
+    
     
     /*
      * (non-Javadoc)
@@ -147,12 +180,13 @@ public class TimeCoordinate implements Serializable {
     @Override
     public int hashCode() {
     
+    
         final int prime = 31;
         int result = 1;
         result = prime * result + day;
         result = prime * result + entityID;
         result = prime * result + hour;
-        result = prime * result + idKpi;
+        result = prime * result + (idKpi == null ? 0 : idKpi.hashCode());
         result = prime * result + month;
         result = prime * result + (value == null ? 0 : value.hashCode());
         result = prime * result + week;
@@ -160,10 +194,13 @@ public class TimeCoordinate implements Serializable {
         return result;
     }
     
+    
     public void setDay(final int _day) {
+    
     
         day = _day;
     }
+    
     
     /**
      * Sets the field entityID with the value of _entityID.
@@ -173,13 +210,17 @@ public class TimeCoordinate implements Serializable {
      */
     public void setEntityID(final int _entityID) {
     
+    
         entityID = _entityID;
     }
     
+    
     public void setHour(final int _hour) {
+    
     
         hour = _hour;
     }
+    
     
     /**
      * Sets the field idKpi with the value of _kpiID.
@@ -187,30 +228,40 @@ public class TimeCoordinate implements Serializable {
      * @param _kpiID
      *            the idKpi to set
      */
-    public void setIdKpi(final int _kpiID) {
+    public void setIdKpi(final String _kpiID) {
+    
     
         idKpi = _kpiID;
     }
     
+    
     public void setMonth(final int _month) {
+    
     
         month = _month;
     }
     
+    
     public void setValue(final Double _value) {
+    
     
         value = _value;
     }
     
+    
     public void setWeek(final int _week) {
+    
     
         week = _week;
     }
     
+    
     public void setYear(final int _year) {
+    
     
         year = _year;
     }
+    
     
     /*
      * (non-Javadoc)
@@ -219,9 +270,13 @@ public class TimeCoordinate implements Serializable {
     @Override
     public String toString() {
     
-        return "TimeCoordinate [day=" + day + ", entityID=" + entityID + ", hour=" + hour + ", idKpi=" + idKpi + ", month=" + month
-                + ", value=" + value + ", week=" + week + ", year=" + year + "]";
+    
+        return "TimeCoordinate [day="
+                + day + ", entityID=" + entityID + ", hour=" + hour + ", idKpi=" + idKpi
+                + ", month=" + month + ", value=" + value + ", week=" + week + ", year=" + year
+                + "]";
     }
+    
     
     /**
      * find a day valid in the week of this month is is suppose month and week
@@ -230,6 +285,7 @@ public class TimeCoordinate implements Serializable {
      * @return
      */
     int findDayOfMonth() {
+    
     
         if (day != 0) {
             return day;

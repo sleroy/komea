@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.functional.test;
 
 
 
@@ -10,9 +10,11 @@ import org.junit.Test;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.product.backend.api.IKPIService;
-import org.komea.product.backend.api.IKpiLoadingService;
 import org.komea.product.backend.api.IKpiQueryService;
-import org.komea.product.backend.api.IKpiValueService;
+import org.komea.product.backend.service.history.HistoryKey;
+import org.komea.product.backend.service.kpi.IKpiAPI;
+import org.komea.product.backend.service.kpi.IStatisticsAPI;
+import org.komea.product.backend.service.kpi.KpiBuilder;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.GroupFormula;
@@ -25,8 +27,6 @@ import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 
@@ -36,7 +36,7 @@ import static org.junit.Assert.assertTrue;
  * 
  * @author sleroy
  */
-public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestCase
+public class GetLastStoredValueITest extends AbstractSpringIntegrationTestCase
 {
     
     
@@ -72,23 +72,18 @@ public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestC
         
         
             final KpiResult kpiResult = new KpiResult();
-            kpiResult.insertResult(OF, VALUE);
+            kpiResult.insertResult(entityKey, VALUE);
             return kpiResult;
         }
     }
     
     
     
-    /**
-     * 
-     */
-    private static final EntityKey OF = EntityKey.of(EntityType.PROJECT, 1);
+    private static final EntityKey entityKey = EntityKey.of(EntityType.PROJECT, 1);
     
     
     @Autowired
     private IKpiAPI                kpiAPI;
-    @Autowired
-    private IKpiLoadingService     kpiLoadingService;
     
     @Autowired
     private IKpiQueryService       kpiQueryService;
@@ -97,7 +92,7 @@ public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestC
     private IKPIService            kpiService;
     
     @Autowired
-    private IKpiValueService       kpiValueService;
+    private IStatisticsAPI         statisticsAPI;
     
     
     
@@ -118,15 +113,11 @@ public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestC
         assertTrue(kpiService.exists(build.getKpiKey()));
         // AND QUERY SHOULD HAVE BEEN REGISTERED
         assertTrue(kpiQueryService.isQueryOfKpiRegistered(build));
-        // THEN RETURNS A final GIVEN VALUE
-        final KpiResult resultFromKey = kpiValueService.getRealTimeValue(build.getKey());
-        final KpiResult resultFromID = kpiValueService.getRealTimeValue(build.getId());
-        assertNotNull(resultFromKey);
-        assertFalse(resultFromKey.hasFailed());
-        assertNotNull(resultFromID);
-        assertFalse(resultFromID.hasFailed());
-        assertEquals(resultFromID.getDoubleValue(OF), 2.0, 0);
-        assertEquals(resultFromKey.getDoubleValue(OF), 2.0, 0);
-        
+        // FORCE BACKUP
+        statisticsAPI.backupKpiValuesIntoHistory(BackupDelay.DAY);
+        // I SHOULD OBTAIN SOMETHING FROM MEASURE TABLE
+        final Double valueInHistory =
+                statisticsAPI.getLastStoredValueInHistory(HistoryKey.of(build, entityKey));
+        assertEquals(2.0, valueInHistory, 0.0d);
     }
 }

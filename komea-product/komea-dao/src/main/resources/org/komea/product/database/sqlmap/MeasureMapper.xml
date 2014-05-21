@@ -471,7 +471,7 @@
         FROM
         kom_msr
         WHERE
-        idKpi = #{options.kpiID,jdbcType=VARCHAR} AND
+        idKpi = #{options.uniqueID,jdbcType=VARCHAR} AND
         <include refid="wherePeriod" />
         <include refid="timeGroupBy" />
 
@@ -485,7 +485,7 @@
         FROM
         kom_msr
         WHERE
-        idKpi = #{options.kpiID,jdbcType=VARCHAR} AND
+        idKpi = #{options.uniqueID,jdbcType=VARCHAR} AND
         entityID = #{key.id} AND
         <include refid="wherePeriod" />
         <include refid="timeGroupBy" />
@@ -498,7 +498,7 @@
         FROM
         kom_msr
         WHERE
-        idKpi = #{options.kpiID,jdbcType=VARCHAR} AND
+        idKpi = #{options.uniqueID,jdbcType=VARCHAR} AND
         entityID = #{key.id}
         <include refid="timeGroupBy" />
     </select>
@@ -509,7 +509,7 @@
         FROM
         kom_msr
         WHERE
-        idKpi = #{options.kpiID,jdbcType=VARCHAR} AND
+        idKpi = #{options.uniqueID,jdbcType=VARCHAR} AND
         entityID = #{key.id}
         GROUP
         BY idKpi, entityID
@@ -522,7 +522,7 @@
         FROM
         kom_msr
         WHERE
-        idKpi = #{options.kpiID,jdbcType=VARCHAR} AND
+        idKpi = #{options.uniqueID} AND
         entityID = #{key.id} AND
         <include refid="wherePeriod" />
         GROUP BY idKpi, entityID
@@ -536,7 +536,7 @@
         FROM
         kom_msr
         WHERE
-        idKpi = #{options.kpiID,jdbcType=VARCHAR} 
+        idKpi = #{options.uniqueID,jdbcType=VARCHAR} 
         GROUP BY entityID
     </select>
 
@@ -548,7 +548,7 @@
         FROM
         kom_msr
         WHERE
-        idKpi = #{options.kpiID,jdbcType=VARCHAR} AND
+        idKpi = #{options.uniqueID,jdbcType=VARCHAR} AND
         <include refid="wherePeriod" />
         GROUP BY entityID
     </select>

@@ -2,42 +2,64 @@
 package org.komea.product.model.timeserie;
 
 
+
 import java.util.Date;
 
 import org.apache.commons.lang3.Validate;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
+import org.joda.time.DateTimeFieldType;
 import org.joda.time.Days;
 import org.joda.time.Months;
 import org.joda.time.Years;
 import org.komea.product.database.model.Kpi;
 
-public class PeriodTimeSerieOptions extends TimeSerieOptions {
+
+
+public class PeriodTimeSerieOptions extends TimeSerieOptions
+{
     
-    private static final int MAX_MONTH_FOR_WEEK_TIMESCALE  = 6;
     
-    private static final int MAX_MONTH_FOR_DAYTIMESCALE    = 1;
+    /**
+     * 
+     */
+    private static final DateTimeComparator DATE_COMPARATOR_INSTANCE      =
+                                                                                  DateTimeComparator
+                                                                                          .getInstance(DateTimeFieldType
+                                                                                                  .hourOfDay());
     
-    private static final int MAX_DAYS_FOR_HOURTIMESCALE    = 2;
+    private static final int                MAX_DAYS_FOR_HOURTIMESCALE    = 2;
     
-    private static final int MAX_YEARS_FOR_MONTH_TIMESCALE = 2;
+    private static final int                MAX_MONTH_FOR_DAYTIMESCALE    = 1;
     
-    private Date             fromPeriod;
+    private static final int                MAX_MONTH_FOR_WEEK_TIMESCALE  = 6;
     
-    private Date             toPeriod;
+    private static final int                MAX_YEARS_FOR_MONTH_TIMESCALE = 2;
+    
+    private Date                            fromPeriod;
+    
+    private Date                            toPeriod;
+    
+    
     
     public PeriodTimeSerieOptions() {
+    
     
         super();
     }
     
+    
     public PeriodTimeSerieOptions(final Kpi _kpi) {
+    
     
         super(_kpi);
     }
     
+    
     @Override
     public boolean equals(final Object obj) {
+    
     
         if (this == obj) {
             return true;
@@ -53,18 +75,19 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
             if (other.fromPeriod != null) {
                 return false;
             }
-        } else if (!fromPeriod.equals(other.fromPeriod)) {
+        } else if (DATE_COMPARATOR_INSTANCE.compare(fromPeriod, other.fromPeriod) != 0) {
             return false;
         }
         if (toPeriod == null) {
             if (other.toPeriod != null) {
                 return false;
             }
-        } else if (!toPeriod.equals(other.toPeriod)) {
+        } else if (DATE_COMPARATOR_INSTANCE.compare(toPeriod, other.toPeriod) != 0) {
             return false;
         }
         return true;
     }
+    
     
     /**
      * Defines the from period fro mthe last time scale.
@@ -72,6 +95,7 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
      * @param _timeScale
      */
     public void fromLastTimeScale(final TimeScale _timeScale) {
+    
     
         timeScale = _timeScale;
         switch (timeScale) {
@@ -98,18 +122,24 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
         
     }
     
+    
     public Date getFromPeriod() {
+    
     
         return fromPeriod;
     }
     
+    
     public Date getToPeriod() {
+    
     
         return toPeriod;
     }
     
+    
     @Override
     public int hashCode() {
+    
     
         final int prime = 31;
         int result = super.hashCode();
@@ -118,6 +148,7 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
         return result;
     }
     
+    
     /**
      * Tests if the timescale is per year.
      */
@@ -125,8 +156,10 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
     @JsonIgnore
     public boolean isPerYear() {
     
+    
         return timeScale == TimeScale.PER_YEAR;
     }
+    
     
     /**
      * Tests if the configuration is valid.
@@ -135,19 +168,24 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
     @Override
     public boolean isValid() {
     
+    
         return super.isValid() && fromPeriod != null && toPeriod != null;
     }
     
+    
     public void lastYears(final int _numberOfYears) {
+    
     
         fromPeriod = new DateTime().minusYears(_numberOfYears).toDate();
         
     }
     
+    
     /**
      * Pick best granularity from dates
      */
     public void pickBestGranularity() {
+    
     
         Validate.notNull(fromPeriod);
         Validate.notNull(toPeriod);
@@ -168,27 +206,36 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
         
     }
     
+    
     public void setFromPeriod(final DateTime _fromPeriod) {
+    
     
         fromPeriod = _fromPeriod.toDate();
     }
     
+    
     public void setToPeriod(final DateTime _toPeriod) {
+    
     
         toPeriod = _toPeriod.toDate();
     }
     
+    
     @Override
     public String toString() {
     
-        return "PeriodTimeSerieOptions [fromPeriod=" + fromPeriod + ", toPeriod=" + toPeriod + ", toString()=" + super.toString()
+    
+        return "PeriodTimeSerieOptions [fromPeriod="
+                + fromPeriod + ", toPeriod=" + toPeriod + ", toString()=" + super.toString()
                 + ", getClass()=" + getClass() + "]";
     }
+    
     
     /**
      * Sets the toPeriod to now.
      */
     public void untilNow() {
+    
     
         toPeriod = new DateTime().toDate();
         
