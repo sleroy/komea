@@ -1,15 +1,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:wicket="http://wicket.apache.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+	xmlns:wicket="http://wicket.apache.org">
 <head>
 <meta charset="utf-8"></meta>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
 <meta content="Komea administration site" name="description"></meta>
 <meta content="Komea" name="author"></meta>
 <title>Komea Administration</title>
-<link rel="stylesheet" href="../../../../../../../main/webapp/static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
-<link rel="stylesheet" href="../../../../../../../main/webapp/static/css/style.css" type="text/css"></link>
-<link rel="stylesheet" type="text/css" href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
+<link rel="stylesheet"
+	href="../../../../../../../main/webapp/static/bootstrap/css/bootstrap.min.css"
+	type="text/css" media="screen"></link>
+<link rel="stylesheet"
+	href="../../../../../../../main/webapp/static/css/style.css"
+	type="text/css"></link>
+<link rel="stylesheet" type="text/css"
+	href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
 </head>
 <body>
 	<div class="container  container_father">
@@ -21,8 +27,18 @@
 		<wicket:extend>
 			<div class="row panel panel-default">
 				<div class="col-sm-12">
-					<table wicket:id="kpis">
-						<caption wicket:id="kpi"></caption>
+					<div wicket:id="feedback"></div>
+					<form wicket:id="form" class="form">
+						<p>
+							<label>Select one of the kpi to display informations</label> <br />
+							<select wicket:id="kpis"></select>
+						</p>
+						<input type="submit" value="Display kpi informations" />
+					</form>
+
+					<h1 wicket:id="kpi"></h1>
+					<h2 wicket:id="details"></h2>
+					<table>
 						<thead>
 							<tr>
 								<th>Entity Key</th>
@@ -38,12 +54,20 @@
 							</tr>
 						</tbody>
 					</table>
+					<h2>List of events currently in the cache</h2>
+					<form class="form">
+						<select wicket:id="events" class="form select"></select>
+					</form>
+					<div wicket:id="chart"></div>
 				</div>
 			</div>
 		</wicket:extend>
 	</div>
 	<footer class="tocea-footer">
 	<p>&copy; Komea.org</p>
-	<script src="../../../../../../../main/webapp/static/js/ui/jquery.js"></script> <script src="../../../../../../../main/webapp/static/bootstrap/js/bootstrap.min.js"></script> </footer>
+	<script src="../../../../../../../main/webapp/static/js/ui/jquery.js"></script>
+	<script
+		src="../../../../../../../main/webapp/static/bootstrap/js/bootstrap.min.js"></script>
+	</footer>
 </body>
 </html>

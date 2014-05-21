@@ -45,6 +45,16 @@ public interface IKpiQueryService
     
     
     /**
+     * Tests if this kpi has a dynamic query associated.
+     * 
+     * @param _kpiChoice
+     *            the kpi
+     * @return true if the kpi formula implements a dynamic query.
+     */
+    public boolean isDynamicQuery(Kpi _kpiChoice);
+    
+    
+    /**
      * Tests if the kpi has its query registered.
      * 
      * @param _build

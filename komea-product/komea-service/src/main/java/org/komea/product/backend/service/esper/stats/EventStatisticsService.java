@@ -72,7 +72,7 @@ public class EventStatisticsService implements IEventStatisticsService
     /**
      * 
      */
-    private static final int        PRECISION                 = 5;
+    private static final int        PRECISION                 = 10;
     
     private static final String     STATS_BREAKDOWN_24H       = "STATS_BREAKDOWN_24H";
     

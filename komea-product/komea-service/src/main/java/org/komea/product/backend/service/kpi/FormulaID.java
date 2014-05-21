@@ -32,6 +32,10 @@ public class FormulaID
     public static FormulaID of(final Kpi _kpi) {
     
     
+        if (_kpi.getEsperRequest() == null) {
+            throw new IllegalArgumentException(
+                    "Illegal kpi provided, the kpi should be loaded with its formula (selectWithBlobs");
+        }
         return new FormulaID(_kpi.getEsperRequest());
     }
     

@@ -6,6 +6,7 @@ package org.komea.product.backend.service.kpi;
 
 
 
+import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
@@ -92,6 +93,18 @@ public class KpiQueryService implements IKpiQueryService
         }
         return new InferMissingEntityValuesIntoKpiResult(result, _kpi, entityService)
                 .inferEntityKeys();
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.api.IKpiQueryService#isDynamicQuery(org.komea.product.database.model.Kpi)
+     */
+    @Override
+    public boolean isDynamicQuery(final Kpi _kpiChoice) {
+    
+    
+        return esperEngine.getQuery(FormulaID.of(_kpiChoice)) instanceof IDynamicDataQuery;
     }
     
     
