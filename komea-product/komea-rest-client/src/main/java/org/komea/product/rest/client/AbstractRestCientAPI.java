@@ -3,7 +3,6 @@ package org.komea.product.rest.client;
 import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.text.MessageFormat;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
@@ -179,8 +178,7 @@ abstract class AbstractRestCientAPI implements IRestClientAPI {
         target = client.target(serverURI);
         if (!testConnectionValid()) {
             target = null;
-            throw new ConnectException(MessageFormat.format("can't connect to the server {}",
-                    _serverURL));
+            throw new ConnectException("can't connect to the server : " + _serverURL);
         }
 
     }

@@ -69,4 +69,9 @@ public final class PeriodCriteria {
         endDate = _endDate;
     }
 
+    @Override
+    public String toString() {
+        return "PeriodCriteria{" + "startDate=" + startDate + ", endDate=" + endDate + '}';
+    }
+
 }
