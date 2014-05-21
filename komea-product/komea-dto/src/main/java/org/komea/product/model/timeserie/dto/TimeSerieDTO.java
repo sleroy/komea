@@ -7,7 +7,6 @@ import com.google.common.collect.Lists;
 import java.util.List;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.model.Kpi;
-import org.komea.product.service.dto.KpiStringKey;
 
 /**
  * contain historical values for a kpi on an entity
@@ -25,9 +24,10 @@ public class TimeSerieDTO {
         coordinates = Lists.newArrayList();
     }
 
-    public TimeSerieDTO(final List<TimeCoordinateDTO> _buildPeriodTimeSeries, final KpiStringKey _kpiKey) {
-
-        coordinates = _buildPeriodTimeSeries;
+    public TimeSerieDTO(List<TimeCoordinateDTO> coordinates, Kpi kpi, BaseEntityDto entity) {
+        this.coordinates = coordinates;
+        this.kpi = kpi;
+        this.entity = entity;
     }
 
     public boolean addCoordinate(final TimeCoordinateDTO _e) {
