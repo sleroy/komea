@@ -25,6 +25,8 @@
 		<sec:form-login login-page="/auth/login"
 			default-target-url="/" authentication-failure-url="/auth/accessdenied" />
 		<sec:logout logout-success-url="/auth/logout" />
+		<sec:remember-me/>
+		
 	</sec:http>
 
 	<sec:authentication-manager alias="authenticationManager">
@@ -34,6 +36,8 @@
 					authorities="ROLE_PUSH, ROLE_REST, ROLE_USER, ROLE_ADMIN" />
 				<sec:user name="push" password="push" authorities="ROLE_USER, PUSH_ROLE" />
 			</sec:user-service>
+			
+			
 		</sec:authentication-provider>
 	</sec:authentication-manager>
 

@@ -37,7 +37,6 @@ public class AverageCommitMessageLength extends ScmUserQueryImplementation
     public double compute(final Collection<IScmCommit> commitsOfTheDay) {
     
     
-        LOGGER.info("Received {} commits");
         final DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
         
         
@@ -45,7 +44,6 @@ public class AverageCommitMessageLength extends ScmUserQueryImplementation
             descriptiveStatistics.addValue(commit.getMessage().length());
         }
         final double mean = descriptiveStatistics.getMean();
-        LOGGER.info("Result is {}", mean);
         
         return mean;
         
