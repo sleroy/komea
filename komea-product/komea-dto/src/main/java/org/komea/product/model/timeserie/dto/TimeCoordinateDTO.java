@@ -44,4 +44,9 @@ public class TimeCoordinateDTO {
         return value != null;
     }
 
+    @Override
+    public String toString() {
+        return "TimeCoordinateDTO{" + "date=" + date + ", value=" + value + '}';
+    }
+
 }

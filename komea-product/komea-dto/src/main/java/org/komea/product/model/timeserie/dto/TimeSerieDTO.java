@@ -3,13 +3,11 @@
  */
 package org.komea.product.model.timeserie.dto;
 
+import com.google.common.collect.Lists;
 import java.util.List;
-
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.service.dto.KpiStringKey;
-
-import com.google.common.collect.Lists;
 
 /**
  * contain historical values for a kpi on an entity
@@ -60,6 +58,11 @@ public class TimeSerieDTO {
     public void setKpi(final Kpi _kpi) {
 
         kpi = _kpi;
+    }
+
+    @Override
+    public String toString() {
+        return "TimeSerieDTO{" + "coordinates=" + coordinates + ", kpi=" + kpi + ", entity=" + entity + '}';
     }
 
 }
