@@ -397,30 +397,10 @@ public class StatisticsService implements IStatisticsAPI
         // Store all data
         final DateTime actualTime = new DateTime();
         if (_historyKey.hasEntityReference()) {
-            LOGGER.info("Storing values of the kpi {} into the database for the reference {}",
-                    findKPI.getKey(), _historyKey.getEntityKey());
-            Validate.isTrue(_historyKey.getEntityKey().isEntityReferenceKey());
-            if (queryResult.hasKey(_historyKey.getEntityKey())) {
-                storeValueInHistory(_historyKey,
-                        queryResult.getDoubleValue(_historyKey.getEntityKey()), actualTime);
-            }
+            storeASingleEntityValue(_historyKey, findKPI, queryResult, actualTime);
             
         } else {
-            LOGGER.info("Storing all values[{}] of the kpi {} into the database.",
-                    findKPI.getKey(), queryResult.size());
-            for (final Entry<EntityKey, Number> kpiLineValue : queryResult.getMap().entrySet()) {
-                if (kpiLineValue.getValue() == null) {
-                    LOGGER.info("Entity {} has not value for the kpi {}", findKPI);
-                    continue;
-                }
-                
-                Validate.notNull(kpiLineValue.getKey());
-                Validate.isTrue(kpiLineValue.getKey().isEntityReferenceKey());
-                final HistoryKey hKey = HistoryKey.of(findKPI, kpiLineValue.getKey());
-                storeValueInHistory(hKey, kpiLineValue.getValue() == null ? null : kpiLineValue
-                        .getValue().doubleValue());
-                
-            }
+            storeAllValuesOfAKpi(findKPI, queryResult);
         }
     }
     
@@ -483,6 +463,44 @@ public class StatisticsService implements IStatisticsAPI
         final String idFromKpiFormula =
                 FormulaID.of(new FindKpiPerId(_kpiID, kpiDao).find()).getId();
         return idFromKpiFormula;
+    }
+    
+    
+    private void storeAllValuesOfAKpi(final Kpi findKPI, final KpiResult queryResult) {
+    
+    
+        LOGGER.info("Storing all values[{}] of the kpi {} into the database.", findKPI.getKey(),
+                queryResult.size());
+        for (final Entry<EntityKey, Number> kpiLineValue : queryResult.getMap().entrySet()) {
+            if (kpiLineValue.getValue() == null) {
+                LOGGER.info("Entity {} has not value for the kpi {}", findKPI);
+                continue;
+            }
+            
+            Validate.notNull(kpiLineValue.getKey());
+            Validate.isTrue(kpiLineValue.getKey().isEntityReferenceKey());
+            final HistoryKey hKey = HistoryKey.of(findKPI, kpiLineValue.getKey());
+            storeValueInHistory(hKey, kpiLineValue.getValue() == null ? null : kpiLineValue
+                    .getValue().doubleValue());
+            
+        }
+    }
+    
+    
+    private void storeASingleEntityValue(
+            final HistoryKey _historyKey,
+            final Kpi findKPI,
+            final KpiResult queryResult,
+            final DateTime actualTime) {
+    
+    
+        LOGGER.info("Storing values of the kpi {} into the database for the reference {}",
+                findKPI.getKey(), _historyKey.getEntityKey());
+        Validate.isTrue(_historyKey.getEntityKey().isEntityReferenceKey());
+        if (queryResult.hasKey(_historyKey.getEntityKey())) {
+            storeValueInHistory(_historyKey,
+                    queryResult.getDoubleValue(_historyKey.getEntityKey()), actualTime);
+        }
     }
     
 }
