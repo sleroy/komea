@@ -108,6 +108,7 @@ public class StatPage extends LayoutPage {
 	public StatPage(final PageParameters _parameters) {
 
 		super(_parameters);
+                accordion.setActiveTab(ADMIN_INDEX);
 		add(new Label("alert_number", new LoadableDetachableModelExtension()));
 		generateLabelForAlertsWithCriticity(Severity.BLOCKER);
 		generateLabelForAlertsWithCriticity(Severity.CRITICAL);

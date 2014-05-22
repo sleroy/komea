@@ -47,7 +47,7 @@ public final class DepartmentPage extends LayoutPage {
         final IDeleteAction<PersonGroup> personGroupDeleteAction
                 = new PersonGroupDeleteAction(personGroupService, listAffichage, this);
         final IEditAction<PersonGroup> personGroupEditAction = new DepartmentEditAction(this);
-
+        accordion.setActiveTab(COMPANY_INDEX);
         final ISortableDataProvider<PersonGroup, String> dataProvider
                 = new ListDataModel<PersonGroup>(listAffichage);
         //specific column

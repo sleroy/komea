@@ -134,7 +134,7 @@ public class KpiChartPage extends LayoutPage
     
     
         super(_parameters);
-        
+                accordion.setActiveTab(KPIS_INDEX);
         final List<Kpi> selectAll = kpiService.selectAll();
         final ListView<Kpi> listView = new ChartsList("charts", selectAll);
         

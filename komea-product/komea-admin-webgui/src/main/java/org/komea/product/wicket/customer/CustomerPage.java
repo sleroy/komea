@@ -31,7 +31,7 @@ public final class CustomerPage extends LayoutPage {
     
     public CustomerPage(PageParameters params) {
         super(params);
-        
+        accordion.setActiveTab(COMPANY_INDEX);
         List<Customer> listAffichage = customerService.selectByCriteria(new CustomerCriteria());
         final IDeleteAction<Customer> deleteAction = new CustomerDeleteAction(listAffichage, customerService,this);
         final IEditAction<Customer> editAction = new CustomerEditAction(this);

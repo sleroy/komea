@@ -46,7 +46,7 @@ public class KpiEditPage extends LayoutPage {
 	private KpiEditPage(final PageParameters _parameters, final Kpi _kpi, final boolean isNew) {
 
 		super(_parameters);
-
+                accordion.setActiveTab(KPIS_INDEX);
 		final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
 		feedbackPanel.setOutputMarkupId(true);
 		feedbackPanel.setOutputMarkupPlaceholderTag(true);

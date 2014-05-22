@@ -24,6 +24,8 @@ import org.komea.product.database.api.IHasKey;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.model.Model;
 
 
 
@@ -77,7 +79,7 @@ public abstract class SelectDialog extends AbstractFormDialog<String>
             final Integer itemSelectionne) {
     
     
-        super(id, title, true);
+        super(id, title,new Model<String>(), true);
         form = new Form<String>("form");
         list = objectList;
         IChoiceRenderer<IHasKey> rendener = _rendener;

@@ -37,11 +37,12 @@ public final class AlertEditPage extends LayoutPage {
 
     public AlertEditPage(PageParameters _parameters, KpiAlertType _alertType, boolean isNew) {
         super(_parameters);
+        accordion.setActiveTab(KPIS_INDEX);
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
-
+        accordion.setActiveTab(KPIS_INDEX);
         AlertForm alertForm = new AlertForm(isNew, kpiService, alertService, feedbackPanel, this, _alertType, "form", new CompoundPropertyModel<KpiAlertType>(_alertType));
         String message;
         if (isNew) {
@@ -49,7 +50,8 @@ public final class AlertEditPage extends LayoutPage {
         } else {
             message = getString("alertpage.save.update.title");
         }
-        alertForm.add(new Label("legend", message));        add(alertForm);
+        alertForm.add(new Label("legend", message));
+        add(alertForm);
     }
 
     @Override

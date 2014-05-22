@@ -36,7 +36,7 @@ public class PersonPage extends LayoutPage {
     public PersonPage(final PageParameters _parameters) {
 
         super(_parameters);
-
+accordion.setActiveTab(COMPANY_INDEX);
         List<Person> listAffichage = personDAO.selectAll();
         final IDeleteAction<Person> personDeleteAction = new PersonDeleteAction(personDAO, listAffichage, this);
         final IEditAction<Person> personEditAction = new PersonEditAction(this, personRoleDAO);

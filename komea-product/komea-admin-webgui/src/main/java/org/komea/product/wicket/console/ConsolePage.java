@@ -35,6 +35,7 @@ public class ConsolePage extends LayoutPage {
     
         super(_parameters);
         String consoleLog = "";
+        accordion.setActiveTab(ADMIN_INDEX);
         String logFilePAth = settingService.getProxy("logfile_path").getStringValue();
         try {
             File logFile = new File(logFilePAth);

@@ -47,7 +47,7 @@ public class ProviderPage extends LayoutPage
     
     
         super(_parameters);
-        
+        accordion.setActiveTab(ADMIN_INDEX);
         final ISortableDataProvider<Provider, String> dataProvider =
                 new ListDataModel(providerService.selectAll());
         
@@ -56,7 +56,7 @@ public class ProviderPage extends LayoutPage
             @Override
             public Integer getNumberdisplay(Provider type) {
 //                type.getProviderType()
-                List<Kpi> personsOfPersonGroup = kpiService.selectAll();
+                List<Kpi> personsOfPersonGroup = kpiService.getKpisOfProviderType(type.getProviderType());
                 int result = 0;
                 if (personsOfPersonGroup != null) {
                     result = personsOfPersonGroup.size();

@@ -83,7 +83,6 @@ public class ScmForm extends Form<ScmRepositoryDefinition> {
         add(TextFieldBuilder.<String>create("username", scmData, "userName")
                 .simpleValidator(0, 255).withTooltip(getString("scm.save.form.tooltips.username")).build());
         savPassword = scmData.getPassword();
-        System.out.println(scmData.getPassword());
         add(TextFieldBuilder.<String>createPasswordNoRequire("password", scmData, "password")
                 .simpleValidator(0, 255).withTooltip(getString("scm.save.form.tooltips.password")).build());
         Integer selectedProject = Integer.valueOf(0);

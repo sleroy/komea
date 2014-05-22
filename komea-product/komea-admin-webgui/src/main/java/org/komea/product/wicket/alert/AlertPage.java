@@ -8,7 +8,11 @@ package org.komea.product.wicket.alert;
 
 
 
+import com.googlecode.wicket.jquery.core.Options;
+import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
@@ -41,6 +45,7 @@ public final class AlertPage extends LayoutPage
     
     
         super(params);
+        accordion.setActiveTab(KPIS_INDEX);
         final List<KpiAlertType> listAffichage = alertService.selectAll();
         final IDeleteAction<KpiAlertType> deleteAction =
                 new AlertDeleteAction(listAffichage, alertService, this);
