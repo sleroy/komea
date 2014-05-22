@@ -119,13 +119,11 @@ public class TestLinkJavaAPI implements ITestLinkServerProxy {
         final List<TestCase> result = new ArrayList<TestCase>();
         Validate.notNull(api);
         final TestPlan[] projectTestPlans = api.getProjectTestPlans(_project.getId());
-        LOGGER.info("TestLink-" + _project.getName() + " nb projectTestPlans : " + projectTestPlans.length);
         for (final TestPlan testPlan : projectTestPlans) {
             final TestSuite[] testSuitesForTestPlan = api.getTestSuitesForTestPlan(testPlan.getId());
-            LOGGER.info("TestLink-" + _project.getName() + "-" + testPlan.getName() + " nb testSuitesForTestPlan : " + testSuitesForTestPlan.length);
             for (final TestSuite testSuite : testSuitesForTestPlan) {
-                final TestCase[] testCasesForTestSuite = api.getTestCasesForTestSuite(testSuite.getId(), Boolean.TRUE, TestCaseDetails.FULL);
-                LOGGER.info("TestLink-" + _project.getName() + "-" + testPlan.getName() + "-" + testSuite.getName() + " nb testCasesForTestSuite : " + testCasesForTestSuite.length);
+                final TestCase[] testCasesForTestSuite = api.getTestCasesForTestSuite(
+                        testSuite.getId(), Boolean.TRUE, TestCaseDetails.SIMPLE);
                 result.addAll(Arrays.asList(testCasesForTestSuite));
             }
         }

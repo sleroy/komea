@@ -104,9 +104,8 @@ public final class TestsByStatusKPI implements IDynamicDataQuery {
             }
 
             final List<TestCase> testCases = openProxy.getTotalTests(projet);
-            LOGGER.info(project.getDisplayName() + " total test cases : " + testCases.size());
+            LOGGER.info("testCases: " + testCases);
             final int cpt = countNumberOfTestCases(testCases);
-            LOGGER.info(project.getDisplayName() + " matching test cases : " + testCases.size());
             _kpiResult.put(project.getEntityKey(), cpt);
         }
     }
@@ -128,9 +127,6 @@ public final class TestsByStatusKPI implements IDynamicDataQuery {
     }
 
     private boolean isTestMatches(final TestCase testCase) {
-        LOGGER.info("status:" + status + " - testCase.getExecutionStatus():" + testCase.getExecutionStatus() + " - matches:"
-                + (status.isEmpty() || testCase.getExecutionStatus() != null
-                && testCase.getExecutionStatus().name().toLowerCase().equals(status.toLowerCase())));
         return status.isEmpty() || testCase.getExecutionStatus() != null
                 && testCase.getExecutionStatus().name().toLowerCase().equals(status.toLowerCase());
     }
