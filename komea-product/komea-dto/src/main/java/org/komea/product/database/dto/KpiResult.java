@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.Validate;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.model.timeserie.EntityIdValue;
@@ -238,7 +239,7 @@ public class KpiResult implements Serializable
             LOGGER.error("Trying to store values for a null key, ignoring the value {}", _value);
             return;
         }
-        
+        Validate.isTrue(_entityKey.isEntityReferenceKey());
         map.put(_entityKey, _value);
         
     }
