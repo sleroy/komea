@@ -9,7 +9,7 @@ package org.komea.product.plugins.scm;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
-import org.komea.product.backend.api.IKpiQueryService;
+import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.dto.ScmCommitDto;
@@ -51,7 +51,7 @@ public class ScmVerifyWhenRealTimeValueWhenScmCOmmitLaunched extends
     
     
     @Autowired
-    private IKpiQueryService          kpiValueService;
+    private IQueryService          kpiValueService;
     
     
     private MockMvc                   mockMvc;

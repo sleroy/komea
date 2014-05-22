@@ -11,7 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKPIService;
-import org.komea.product.backend.api.IKpiQueryService;
+import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
@@ -37,7 +37,7 @@ public class KpiValuesPageTest extends AbstractSpringIntegrationTestCase
     private IEventEngineService         eventEngineService;
     
     @Autowired
-    private IKpiQueryService            kpiQueryService;
+    private IQueryService            kpiQueryService;
     
     @Autowired
     private IKPIService                 kpiService;

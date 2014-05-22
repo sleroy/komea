@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.product.backend.api.IKPIService;
-import org.komea.product.backend.api.IKpiQueryService;
+import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.service.kpi.IKpiAPI;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
@@ -86,7 +86,7 @@ public class GetLastStoredValueITest extends AbstractSpringIntegrationTestCase
     private IKpiAPI                kpiAPI;
     
     @Autowired
-    private IKpiQueryService       kpiQueryService;
+    private IQueryService       kpiQueryService;
     
     @Autowired
     private IKPIService            kpiService;

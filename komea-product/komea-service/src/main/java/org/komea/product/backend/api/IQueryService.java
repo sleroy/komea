@@ -20,7 +20,7 @@ import org.komea.product.database.model.Kpi;
  * 
  * @author sleroy
  */
-public interface IKpiQueryService
+public interface IQueryService
 {
     
     

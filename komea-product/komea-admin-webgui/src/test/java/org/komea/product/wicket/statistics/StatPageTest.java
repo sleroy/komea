@@ -8,7 +8,7 @@ package org.komea.product.wicket.statistics;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.komea.product.backend.api.IKpiQueryService;
+import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.wicket.utils.WicketTesterMethodRule;
@@ -25,7 +25,7 @@ public class StatPageTest {
     @Before
     public void before() {
     
-        wicketRule.getApplicationContextMock().putBean(Mockito.mock(IKpiQueryService.class));
+        wicketRule.getApplicationContextMock().putBean(Mockito.mock(IQueryService.class));
         wicketRule.getApplicationContextMock().putBean(Mockito.mock(IEventStatisticsService.class));
         wicketRule.getApplicationContextMock().putBean(Mockito.mock(IStatisticsAPI.class));
         

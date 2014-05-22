@@ -10,7 +10,7 @@ import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
-import org.komea.product.backend.api.IKpiQueryService;
+import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.criterias.FindKpiOrFail;
 import org.komea.product.backend.criterias.FindKpiPerId;
 import org.komea.product.backend.groovy.IGroovyEngineService;
@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class KpiQueryService implements IKpiQueryService
+public class QueryService implements IQueryService
 {
     
     
@@ -121,7 +121,7 @@ public class KpiQueryService implements IKpiQueryService
     /*
      * (non-Javadoc)
      * @see
-     * org.komea.product.backend.api.IKpiQueryService#getRealTimeValues(java
+     * org.komea.product.backend.api.IQueryService#getRealTimeValues(java
      * .lang.String)
      */
     @Override
@@ -137,7 +137,7 @@ public class KpiQueryService implements IKpiQueryService
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.backend.api.IKpiQueryService#isDynamicQuery(org.komea.product.database.model.Kpi)
+     * @see org.komea.product.backend.api.IQueryService#isDynamicQuery(org.komea.product.database.model.Kpi)
      */
     @Override
     public boolean isDynamicQuery(final Kpi _kpiChoice) {
@@ -149,7 +149,7 @@ public class KpiQueryService implements IKpiQueryService
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.backend.api.IKpiQueryService#isQueryOfKpiRegistered(org.komea.product.database.model.Kpi)
+     * @see org.komea.product.backend.api.IQueryService#isQueryOfKpiRegistered(org.komea.product.database.model.Kpi)
      */
     @Override
     public boolean isQueryOfKpiRegistered(final Kpi _kpi) {

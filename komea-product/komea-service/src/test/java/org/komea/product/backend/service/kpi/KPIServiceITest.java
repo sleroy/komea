@@ -15,7 +15,7 @@ import org.komea.eventory.api.formula.ICEPFormula;
 import org.komea.eventory.query.FilterDefinition;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKPIService;
-import org.komea.product.backend.api.IKpiQueryService;
+import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.api.exceptions.KpiAlreadyExistingException;
 import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
@@ -104,7 +104,7 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
     private IKPIService             kpiService;
     
     @Autowired
-    private IKpiQueryService        kpiValueService;
+    private IQueryService        kpiValueService;
     
     
     @Autowired

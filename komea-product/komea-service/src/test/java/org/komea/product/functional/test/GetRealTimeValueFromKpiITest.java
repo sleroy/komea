@@ -11,7 +11,7 @@ import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.IKpiLoadingService;
-import org.komea.product.backend.api.IKpiQueryService;
+import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.service.kpi.IKpiAPI;
 import org.komea.product.backend.service.kpi.KpiBuilder;
 import org.komea.product.database.dto.KpiResult;
@@ -92,13 +92,13 @@ public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestC
     private IKpiLoadingService     kpiLoadingService;
     
     @Autowired
-    private IKpiQueryService       kpiQueryService;
+    private IQueryService       kpiQueryService;
     
     @Autowired
     private IKPIService            kpiService;
     
     @Autowired
-    private IKpiQueryService       kpiValueService;
+    private IQueryService       kpiValueService;
     
     
     

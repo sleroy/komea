@@ -16,7 +16,7 @@ import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiMathService;
-import org.komea.product.backend.api.IKpiQueryService;
+import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.criterias.FindKpiPerId;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.history.HistoryKey;
@@ -66,7 +66,7 @@ public class StatisticsService implements IStatisticsAPI
     private IKpiMathService     kpiMathService;
     
     @Autowired
-    private IKpiQueryService    kpiQueryService;
+    private IQueryService    kpiQueryService;
     
     
     @Autowired

@@ -23,7 +23,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * @author sleroy
  */
 @RunWith(MockitoJUnitRunner.class)
-public class KpiQueryServiceTest
+public class QueryServiceTest
 {
     
     
@@ -40,7 +40,7 @@ public class KpiQueryServiceTest
     
     
     @InjectMocks
-    private KpiQueryService kpiQueryRegisterService;
+    private QueryService kpiQueryRegisterService;
     
     
     @Mock
@@ -52,7 +52,7 @@ public class KpiQueryServiceTest
     
     /**
      * Test method for
-     * {@link org.komea.product.cep.tester.KpiQueryService#createOrUpdateQueryFromKpi(org.komea.product.database.model.Kpi)} .
+     * {@link org.komea.product.cep.tester.QueryService#createOrUpdateQueryFromKpi(org.komea.product.database.model.Kpi)} .
      */
     @Test
     public final void testCreateOrUpdateQueryFromKpi() throws Exception {
@@ -65,7 +65,7 @@ public class KpiQueryServiceTest
     
     /**
          * Test method for
-         * {@link org.komea.product.cep.tester.KpiQueryService#updateFormulaOfKpi(org.komea.product.database.model.Kpi)}.
+         * {@link org.komea.product.cep.tester.QueryService#updateFormulaOfKpi(org.komea.product.database.model.Kpi)}.
          */
         @Test
         public final void testUpdateFormulaOfKpi() throws Exception {
@@ -78,7 +78,7 @@ public class KpiQueryServiceTest
     
     /**
          * Test method for
-         * {@link org.komea.product.cep.tester.KpiQueryService#evaluateRealTimeValues(org.komea.product.database.model.Kpi)}.
+         * {@link org.komea.product.cep.tester.QueryService#evaluateRealTimeValues(org.komea.product.database.model.Kpi)}.
          */
         @Test
         public final void testEvaluateRealTimeValues() throws Exception {
