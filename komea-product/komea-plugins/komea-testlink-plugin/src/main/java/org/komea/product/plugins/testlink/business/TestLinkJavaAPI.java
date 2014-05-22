@@ -128,7 +128,9 @@ public class TestLinkJavaAPI implements ITestLinkServerProxy {
                 for (TestCase testCase : testCasesForTestSuite) {
                     final Execution lastExecutionResult = api.getLastExecutionResult(
                             testPlan.getId(), testCase.getId(), testCase.getId());
-                    testCase.setExecutionStatus(lastExecutionResult.getStatus());
+                    if (lastExecutionResult != null) {
+                        testCase.setExecutionStatus(lastExecutionResult.getStatus());
+                    }
                 }
                 result.addAll(Arrays.asList(testCasesForTestSuite));
             }
