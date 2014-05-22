@@ -31,6 +31,8 @@ import org.komea.product.plugins.testlink.model.TestLinkMetrics;
 import org.komea.product.plugins.testlink.model.TestLinkProject;
 import org.komea.product.plugins.testlink.model.TestLinkRequirement;
 import org.komea.product.plugins.testlink.model.TestLinkServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is the implementation of the proxy that obtains informations from
@@ -40,6 +42,7 @@ import org.komea.product.plugins.testlink.model.TestLinkServer;
  */
 public class TestLinkJavaAPI implements ITestLinkServerProxy {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestLinkJavaAPI.class.getName());
     private TestLinkAPI api = null;
 
     /**
@@ -116,10 +119,14 @@ public class TestLinkJavaAPI implements ITestLinkServerProxy {
         final List<TestCase> result = new ArrayList<TestCase>();
         Validate.notNull(api);
         final TestPlan[] projectTestPlans = api.getProjectTestPlans(_project.getId());
+        LOGGER.info("TestLink-" + _project.getName() + " nb projectTestPlans : " + projectTestPlans.length);
         for (final TestPlan testPlan : projectTestPlans) {
             final TestSuite[] testSuitesForTestPlan = api.getTestSuitesForTestPlan(testPlan.getId());
+            LOGGER.info("TestLink-" + _project.getName() + "-" + testPlan.getName() + " nb testSuitesForTestPlan : " + testSuitesForTestPlan.length);
             for (final TestSuite testSuite : testSuitesForTestPlan) {
-                result.addAll(Arrays.asList(api.getTestCasesForTestSuite(testSuite.getId(), Boolean.TRUE, TestCaseDetails.FULL)));
+                final TestCase[] testCasesForTestSuite = api.getTestCasesForTestSuite(testSuite.getId(), Boolean.TRUE, TestCaseDetails.FULL);
+                LOGGER.info("TestLink-" + _project.getName() + "-" + testPlan.getName() + "-" + testSuite.getName() + " nb testCasesForTestSuite : " + testCasesForTestSuite.length);
+                result.addAll(Arrays.asList(testCasesForTestSuite));
             }
         }
         return result;
