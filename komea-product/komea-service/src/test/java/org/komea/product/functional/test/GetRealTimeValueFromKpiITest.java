@@ -12,7 +12,6 @@ import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.IKpiLoadingService;
 import org.komea.product.backend.api.IKpiQueryService;
-import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.service.kpi.IKpiAPI;
 import org.komea.product.backend.service.kpi.KpiBuilder;
 import org.komea.product.database.dto.KpiResult;
@@ -74,7 +73,7 @@ public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestC
         
         
             final KpiResult kpiResult = new KpiResult();
-            kpiResult.insertResult(OF, VALUE);
+            kpiResult.put(OF, VALUE);
             return kpiResult;
         }
     }
@@ -99,7 +98,7 @@ public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestC
     private IKPIService            kpiService;
     
     @Autowired
-    private IKpiValueService       kpiValueService;
+    private IKpiQueryService       kpiValueService;
     
     
     
@@ -121,8 +120,8 @@ public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestC
         // AND QUERY SHOULD HAVE BEEN REGISTERED
         assertTrue(kpiQueryService.isQueryOfKpiRegistered(build));
         // THEN RETURNS A final GIVEN VALUE
-        final KpiResult resultFromKey = kpiValueService.getRealTimeValue(build.getKey());
-        final KpiResult resultFromID = kpiValueService.getRealTimeValue(build.getId());
+        final KpiResult resultFromKey = kpiValueService.evaluateRealTimeValues(build.getKey());
+        final KpiResult resultFromID = kpiValueService.evaluateRealTimeValues(build.getId());
         assertNotNull(resultFromKey);
         assertFalse(resultFromKey.hasFailed());
         assertNotNull(resultFromID);

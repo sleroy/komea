@@ -72,7 +72,7 @@ public class WhenAKpiIsRegisteredWeHaveAQueryAndItExists extends AbstractSpringI
         
         
             final KpiResult kpiResult = new KpiResult();
-            kpiResult.insertResult(entityKey, VALUE);
+            kpiResult.put(entityKey, VALUE);
             return kpiResult;
         }
     }

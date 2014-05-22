@@ -121,7 +121,7 @@ public class KpiQueryService implements IKpiQueryService
     /*
      * (non-Javadoc)
      * @see
-     * org.komea.product.backend.api.IKpiValueService#getRealTimeValues(java
+     * org.komea.product.backend.api.IKpiQueryService#getRealTimeValues(java
      * .lang.String)
      */
     @Override

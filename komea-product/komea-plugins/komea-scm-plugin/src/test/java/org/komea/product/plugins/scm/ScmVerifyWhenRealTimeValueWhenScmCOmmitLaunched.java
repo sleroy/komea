@@ -9,7 +9,7 @@ package org.komea.product.plugins.scm;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
-import org.komea.product.backend.api.IKpiValueService;
+import org.komea.product.backend.api.IKpiQueryService;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.dto.ScmCommitDto;
@@ -51,7 +51,7 @@ public class ScmVerifyWhenRealTimeValueWhenScmCOmmitLaunched extends
     
     
     @Autowired
-    private IKpiValueService          kpiValueService;
+    private IKpiQueryService          kpiValueService;
     
     
     private MockMvc                   mockMvc;
@@ -106,7 +106,8 @@ public class ScmVerifyWhenRealTimeValueWhenScmCOmmitLaunched extends
         
         // I OBTAIN THE REAL TIME VALUE OF A KPI
         final KpiResult realTimeValue =
-                kpiValueService.getRealTimeValue(ScmKpiPlugin.NUMBER_COMMITS_PROJECT.getKey());
+                kpiValueService
+                        .evaluateRealTimeValues(ScmKpiPlugin.NUMBER_COMMITS_PROJECT.getKey());
         // VALUES SHOULD NOT BE NULL
         assertNotNull(realTimeValue);
         // AND NOT EMPTY

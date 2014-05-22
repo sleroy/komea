@@ -17,7 +17,6 @@ import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiMathService;
 import org.komea.product.backend.api.IKpiQueryService;
-import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.criterias.FindKpiPerId;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.history.HistoryKey;
@@ -69,8 +68,6 @@ public class StatisticsService implements IStatisticsAPI
     @Autowired
     private IKpiQueryService    kpiQueryService;
     
-    @Autowired
-    private IKpiValueService    kpiValueService;
     
     @Autowired
     private MeasureDao          measureDao;
@@ -79,7 +76,7 @@ public class StatisticsService implements IStatisticsAPI
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKpiValueService#
+     * @see org.komea.product.backend.service.kpi.IKpiQueryService#
      * backupKpiValuesIntoHistory()
      */
     @Override
@@ -320,7 +317,7 @@ public class StatisticsService implements IStatisticsAPI
     
     
         LOGGER.debug("evaluateTheCurrentKpiValues : {}", _kpiID);
-        return kpiValueService.getRealTimeValue(_kpiID);
+        return kpiQueryService.evaluateRealTimeValues(_kpiID);
     }
     
     
@@ -391,7 +388,7 @@ public class StatisticsService implements IStatisticsAPI
         Validate.notNull(_historyKey);
         LOGGER.debug("storeActualValueInHistory : {}", _historyKey);
         final Kpi findKPI = new FindKpiPerId(_historyKey.getKpiID(), kpiDao).find();
-        final KpiResult queryResult = kpiValueService.getRealTimeValue(findKPI.getKey());// FIXME:/Performance
+        final KpiResult queryResult = kpiQueryService.evaluateRealTimeValues(findKPI.getKey());// FIXME:/Performance
         Validate.notNull(queryResult);
         // problem
         // Store all data

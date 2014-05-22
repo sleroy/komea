@@ -5,12 +5,12 @@
 package org.komea.product.backend.service.kpi;
 
 
+
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.api.IKPIService;
-import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.EntityType;
@@ -27,37 +27,25 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
+
+
 /**
  * @author sleroy
  */
 @Service
 @Transactional
-public class KpiAPIService implements IKpiAPI {
+public class KpiAPIService implements IKpiAPI
+{
+    
     
     @Autowired
-    private IKPIService      kpiService;
+    private IEntityService entityService;
     
     @Autowired
-    private IKpiValueService kpiValueService;
+    private IKPIService    kpiService;
     
-    @Autowired
-    private IEntityService   entityService;
     
-    /**
-     * This method convert a HistoryStingKey to KpiKey
-     *
-     * @param _historyKey
-     * @return the KpiKey
-     */
-    private KpiKey convertToKpiKey(final HistoryStringKey _historyKey) {
     
-        EntityStringKey entityKey = EntityStringKey.of(_historyKey.getEntityType().getEntityType(), _historyKey.getEntityKey());
-        IEntity entity = entityService.findEntityByEntityStringKey(entityKey);
-        if (entity == null) {
-            return null;
-        }
-        return KpiKey.ofKpiNameAndEntity(_historyKey.getKpiKey(), entity);
-    }
     /*
      * (non-Javadoc)
      * @see
@@ -67,10 +55,12 @@ public class KpiAPIService implements IKpiAPI {
     @Override
     public List<Kpi> getAllKpisOfEntityType(final EntityType _entityType) {
     
+    
         Validate.notNull(_entityType);
         
         return kpiService.getAllKpisOfEntityType(_entityType);
     }
+    
     
     /*
      * (non-Javadoc)
@@ -81,42 +71,55 @@ public class KpiAPIService implements IKpiAPI {
     @Override
     public List<Kpi> getBaseKpisOfGroupKpiKeys(final List<String> _groupKpiKeys) {
     
+    
         Validate.notNull(_groupKpiKeys);
         return kpiService.getBaseKpisOfGroupKpiKeys(_groupKpiKeys);
     }
     
+    
     @Deprecated
     @Override
-    public MeasureResult getHistoricalMeasure(final HistoryStringKey _historyKey, final PeriodCriteria _limit) {
+    public MeasureResult getHistoricalMeasure(
+            final HistoryStringKey _historyKey,
+            final PeriodCriteria _limit) {
     
-        MeasureResult historicalMeasure = new MeasureResult();
+    
+        final MeasureResult historicalMeasure = new MeasureResult();
         // FIXME measureHistoryService.getHistoricalMeasure(_historyKey, _limit);
         return historicalMeasure;
     }
     
+    
     @Deprecated
     @Override
-    public List<MeasureResult> getHistoricalMeasures(final HistoryStringKeyList _historyKeys, final PeriodCriteria _limit) {
+    public List<MeasureResult> getHistoricalMeasures(
+            final HistoryStringKeyList _historyKeys,
+            final PeriodCriteria _limit) {
+    
     
         Validate.notNull(_historyKeys, "history string key list can't be null");
         
-        List<MeasureResult> measuresList = Lists.newArrayList();
+        final List<MeasureResult> measuresList = Lists.newArrayList();
         HistoryStringKey historyKey;
-        for (String kpiKey : _historyKeys.getKpiKeys()) {
-            for (String entityKey : _historyKeys.getEntityKeys()) {
+        for (final String kpiKey : _historyKeys.getKpiKeys()) {
+            for (final String entityKey : _historyKeys.getEntityKeys()) {
                 historyKey = new HistoryStringKey(kpiKey, entityKey, _historyKeys.getEntityType());
                 measuresList.add(getHistoricalMeasure(historyKey, _limit));
             }
         }
         return measuresList;
     }
+    
+    
     /**
      * @return the kpiService
      */
     public IKPIService getKpiService() {
     
+    
         return kpiService;
     }
+    
     
     /*
      * (non-Javadoc)
@@ -127,8 +130,10 @@ public class KpiAPIService implements IKpiAPI {
     @Override
     public List<Kpi> getKpisForGroups(final List<Kpi> _kpis) {
     
+    
         return kpiService.getKpisForGroups(_kpis);
     }
+    
     
     /*
      * (non-Javadoc)
@@ -137,18 +142,14 @@ public class KpiAPIService implements IKpiAPI {
      * .util.List, java.util.List)
      */
     @Override
-    public Collection<? extends Kpi> getKpisOfGroupKpiKeys(final List<String> _groupKpiKeys, final List<Kpi> _baseKpis) {
+    public Collection<? extends Kpi> getKpisOfGroupKpiKeys(
+            final List<String> _groupKpiKeys,
+            final List<Kpi> _baseKpis) {
+    
     
         return kpiService.getKpisOfGroupKpiKeys(_groupKpiKeys, _baseKpis);
     }
     
-    /**
-     * @return the kpiValueService
-     */
-    public IKpiValueService getKpiValueService() {
-    
-        return kpiValueService;
-    }
     
     /*
      * (non-Javadoc)
@@ -161,9 +162,11 @@ public class KpiAPIService implements IKpiAPI {
     
     final List<String> _kpiKeys) {
     
+    
         Validate.notNull(_kpiKeys);
         return kpiService.selectByKeys(_kpiKeys);
     }
+    
     
     /*
      * (non-Javadoc)
@@ -172,8 +175,10 @@ public class KpiAPIService implements IKpiAPI {
     @Override
     public List<Kpi> selectAll() {
     
+    
         return kpiService.selectAll();
     }
+    
     
     /**
      * @param _kpiService
@@ -181,16 +186,28 @@ public class KpiAPIService implements IKpiAPI {
      */
     public void setKpiService(final IKPIService _kpiService) {
     
+    
         kpiService = _kpiService;
     }
     
-    /**
-     * @param _kpiValueService
-     *            the kpiValueService to set
-     */
-    public void setKpiValueService(final IKpiValueService _kpiValueService) {
     
-        kpiValueService = _kpiValueService;
+    /**
+     * This method convert a HistoryStingKey to KpiKey
+     * 
+     * @param _historyKey
+     * @return the KpiKey
+     */
+    private KpiKey convertToKpiKey(final HistoryStringKey _historyKey) {
+    
+    
+        final EntityStringKey entityKey =
+                EntityStringKey.of(_historyKey.getEntityType().getEntityType(),
+                        _historyKey.getEntityKey());
+        final IEntity entity = entityService.findEntityByEntityStringKey(entityKey);
+        if (entity == null) {
+            return null;
+        }
+        return KpiKey.ofKpiNameAndEntity(_historyKey.getKpiKey(), entity);
     }
     
 }

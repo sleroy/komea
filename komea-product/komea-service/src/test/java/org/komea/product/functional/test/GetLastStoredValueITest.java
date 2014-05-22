@@ -72,7 +72,7 @@ public class GetLastStoredValueITest extends AbstractSpringIntegrationTestCase
         
         
             final KpiResult kpiResult = new KpiResult();
-            kpiResult.insertResult(entityKey, VALUE);
+            kpiResult.put(entityKey, VALUE);
             return kpiResult;
         }
     }

@@ -12,7 +12,6 @@ import java.util.Set;
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.IKpiQueryService;
-import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.api.exceptions.KpiAlreadyExistingException;
 import org.komea.product.backend.criterias.FindKpi;
 import org.komea.product.backend.criterias.FindKpiOrFail;
@@ -68,8 +67,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     @Autowired
     private IKpiQueryService       kpiQueryRegistry;
     
-    @Autowired
-    private IKpiValueService       kpiValueService;
     
     @Autowired
     private MeasureDao             measureDao;
@@ -283,13 +280,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     }
     
     
-    public IKpiValueService getKpiValueService() {
-    
-    
-        return kpiValueService;
-    }
-    
-    
     /**
      * Project : DAO
      * 
@@ -466,13 +456,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     
     
         kpiQueryRegistry = _kpiQueryRegistry;
-    }
-    
-    
-    public void setKpiValueService(final IKpiValueService _kpiValueService) {
-    
-    
-        kpiValueService = _kpiValueService;
     }
     
     
