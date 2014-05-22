@@ -27,7 +27,6 @@ import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.IKpiQueryService;
-import org.komea.product.backend.api.IKpiValueService;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.service.kpi.FormulaID;
@@ -163,10 +162,6 @@ public class KpiValuesPage extends LayoutPage
     
     
     @SpringBean
-    private IKpiValueService    kpiValueService;
-    
-    
-    @SpringBean
     private IStatisticsAPI      statsService;
     
     
@@ -255,21 +250,6 @@ public class KpiValuesPage extends LayoutPage
         options.setTooltip(tooltip);
         
         add(buildGraphic(options, "chart", kpiChoice));
-    }
-    
-    
-    public IKpiValueService getKpiValueService() {
-    
-    
-        return kpiValueService;
-    }
-    
-    
-    public void setKpiValueService(final IKpiValueService _kpiValueService) {
-    
-    
-        kpiValueService = _kpiValueService;
-        
     }
     
     

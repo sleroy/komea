@@ -28,14 +28,17 @@
 			<div class="row panel panel-default">
 				<div class="col-sm-12">
 					<div wicket:id="feedback"></div>
-					<form wicket:id="form" class="form">
-						<p>
-							<label>Select one of the kpi to display informations</label> <br />
-							<select wicket:id="kpis"></select>
-						</p>
-						<input type="submit" value="Display kpi informations" />
-					</form>
+					<form wicket:id="form" class="form" role="form">
+						<div class="form-group">
+							<label for="chooseKPI">Select one of the kpi to display
+								informations</label> <select wicket:id="kpis" id="chooseKPI"
+								class="form-control"></select>
+						</div>
 
+						<input type="submit" value="Display kpi informations"
+							class="form-control" />
+					</form>
+					<hr />
 					<h1 wicket:id="kpi"></h1>
 					<h2 wicket:id="details"></h2>
 					<table>
@@ -56,7 +59,7 @@
 					</table>
 					<h2>List of events currently in the cache</h2>
 					<form class="form">
-						<select wicket:id="events" class="form select"></select>
+						<select wicket:id="events" class="form-control"></select>
 					</form>
 					<div wicket:id="chart"></div>
 				</div>

@@ -91,7 +91,7 @@ public class KpiResult implements Serializable
     
         map = Maps.newHashMapWithExpectedSize(_evaluateKpiValues.size());
         for (final EntityIdValue entry : _evaluateKpiValues) {
-            map.put(EntityKey.of(_entityType, entry.getEntityID()), entry.getValue());
+            put(EntityKey.of(_entityType, entry.getEntityID()), entry.getValue());
         }
         
         return this;
@@ -193,20 +193,6 @@ public class KpiResult implements Serializable
     
     
     /**
-     * Insert a single result into the map.
-     * 
-     * @param _key
-     * @param _value
-     */
-    public void insertResult(final EntityKey _key, final double _value) {
-    
-    
-        map.put(_key, _value);
-        
-    }
-    
-    
-    /**
      * Tests if the result of the kpi is empty
      * 
      * @return
@@ -229,6 +215,11 @@ public class KpiResult implements Serializable
     public void put(final EntityKey _entityKey, final Number _value) {
     
     
+        if (_entityKey == null) {
+            LOGGER.error("Trying to store values for a null key, ignoring the value {}", _value);
+            return;
+        }
+        
         map.put(_entityKey, _value);
         
     }

@@ -392,6 +392,7 @@ public class StatisticsService implements IStatisticsAPI
         LOGGER.debug("storeActualValueInHistory : {}", _historyKey);
         final Kpi findKPI = new FindKpiPerId(_historyKey.getKpiID(), kpiDao).find();
         final KpiResult queryResult = kpiValueService.getRealTimeValue(findKPI.getKey());// FIXME:/Performance
+        Validate.notNull(queryResult);
         // problem
         // Store all data
         final DateTime actualTime = new DateTime();
@@ -404,6 +405,7 @@ public class StatisticsService implements IStatisticsAPI
         } else {
             LOGGER.info("Storing all values of the kpi {} into the database.", findKPI.getKey());
             for (final Entry<EntityKey, Number> kpiLineValue : queryResult.getMap().entrySet()) {
+                Validate.notNull(kpiLineValue.getKey());
                 Validate.isTrue(kpiLineValue.getKey().isEntityReferenceKey());
                 final HistoryKey hKey = HistoryKey.of(findKPI, kpiLineValue.getKey());
                 storeValueInHistory(hKey, kpiLineValue.getValue().doubleValue(), actualTime);
