@@ -96,7 +96,7 @@ public final class TestsByStatusKPI implements IDynamicDataQuery {
 
         final List<TestLinkProject> listProject = openProxy.getListProject();
         for (final TestLinkProject projet : listProject) {
-            LOGGER.info("Testlink : checking update from project {} of server {}.", projet.getName(),
+            LOGGER.debug("Testlink : checking update from project {} of server {}.", projet.getName(),
                     testlinkServer.getName());
             final Project project = projectService.selectByKey(projet.getName());
             if (project == null) {
@@ -128,7 +128,9 @@ public final class TestsByStatusKPI implements IDynamicDataQuery {
     }
 
     private boolean isTestMatches(final TestCase testCase) {
-
+        LOGGER.info("status:" + status + " - testCase.getExecutionStatus():" + testCase.getExecutionStatus() + " - matches:"
+                + (status.isEmpty() || testCase.getExecutionStatus() != null
+                && testCase.getExecutionStatus().name().toLowerCase().equals(status.toLowerCase())));
         return status.isEmpty() || testCase.getExecutionStatus() != null
                 && testCase.getExecutionStatus().name().toLowerCase().equals(status.toLowerCase());
     }
