@@ -41,7 +41,7 @@ public class AlertFinderService implements IAlertFinderService {
 
     public KpiAlertDto findAlert(final KpiAlertType alertType,
             final BaseEntityDto entity, final Kpi kpi) {
-        final Double value = measureService.lastMeasure(kpi, entity);
+        final Double value = measureService.currentMeasure(kpi, entity);
         final KpiAlertDto kpiAlert = new KpiAlertDto();
         kpiAlert.setKpiAlertType(alertType);
         kpiAlert.setKpi(kpi);
