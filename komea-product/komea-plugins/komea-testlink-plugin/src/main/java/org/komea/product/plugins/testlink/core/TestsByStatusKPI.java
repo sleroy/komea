@@ -104,7 +104,6 @@ public final class TestsByStatusKPI implements IDynamicDataQuery {
             }
 
             final List<TestCase> testCases = openProxy.getTotalTests(projet);
-            LOGGER.info("testCases: " + testCases);
             final int cpt = countNumberOfTestCases(testCases);
             _kpiResult.put(project.getEntityKey(), cpt);
         }

@@ -12,6 +12,7 @@ package org.komea.product.plugins.testlink.business;
 
 import br.eti.kinoshita.testlinkjavaapi.TestLinkAPI;
 import br.eti.kinoshita.testlinkjavaapi.constants.TestCaseDetails;
+import br.eti.kinoshita.testlinkjavaapi.model.Execution;
 import br.eti.kinoshita.testlinkjavaapi.model.TestCase;
 import br.eti.kinoshita.testlinkjavaapi.model.TestPlan;
 import br.eti.kinoshita.testlinkjavaapi.model.TestProject;
@@ -124,6 +125,11 @@ public class TestLinkJavaAPI implements ITestLinkServerProxy {
             for (final TestSuite testSuite : testSuitesForTestPlan) {
                 final TestCase[] testCasesForTestSuite = api.getTestCasesForTestSuite(
                         testSuite.getId(), Boolean.TRUE, TestCaseDetails.SIMPLE);
+                for (TestCase testCase : testCasesForTestSuite) {
+                    final Execution lastExecutionResult = api.getLastExecutionResult(
+                            testPlan.getId(), testCase.getId(), testCase.getId());
+                    testCase.setExecutionStatus(lastExecutionResult.getStatus());
+                }
                 result.addAll(Arrays.asList(testCasesForTestSuite));
             }
         }
