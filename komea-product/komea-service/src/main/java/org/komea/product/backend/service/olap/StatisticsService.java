@@ -66,7 +66,7 @@ public class StatisticsService implements IStatisticsAPI
     private IKpiMathService     kpiMathService;
     
     @Autowired
-    private IQueryService    kpiQueryService;
+    private IQueryService       kpiQueryService;
     
     
     @Autowired
@@ -466,11 +466,11 @@ public class StatisticsService implements IStatisticsAPI
     private void storeAllValuesOfAKpi(final Kpi findKPI, final KpiResult queryResult) {
     
     
-        LOGGER.info("Storing all values[{}] of the kpi {} into the database.", findKPI.getKey(),
-                queryResult.size());
+        LOGGER.info("Storing all values[{}] of the kpi {} into the database.", queryResult.size(),
+                findKPI.getKey());
         for (final Entry<EntityKey, Number> kpiLineValue : queryResult.getMap().entrySet()) {
             if (kpiLineValue.getValue() == null) {
-                LOGGER.info("Entity {} has not value for the kpi {}", findKPI);
+                LOGGER.debug("Entity {} has not value for the kpi {}", findKPI);
                 continue;
             }
             

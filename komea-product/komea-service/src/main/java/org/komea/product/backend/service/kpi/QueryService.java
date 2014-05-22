@@ -38,7 +38,7 @@ public class QueryService implements IQueryService
 {
     
     
-    private static final Logger      LOGGER = LoggerFactory.getLogger("kpi-query-service");
+    private static final Logger      LOGGER = LoggerFactory.getLogger("query-service");
     
     @Autowired
     private ICronRegistryService     cronRegistry;
@@ -175,7 +175,7 @@ public class QueryService implements IQueryService
         
         LOGGER.trace("Request value from KPI {}", _kpi.getKpiKey());
         result = (KpiResult) esperEngine.getQueryOrFail(FormulaID.of(_kpi)).getResult();
-        LOGGER.info("Result of the query is {}", result);
+        LOGGER.debug("Result of the query is {}", result);
         return result;
     }
     

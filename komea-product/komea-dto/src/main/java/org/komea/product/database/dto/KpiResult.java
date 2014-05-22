@@ -54,8 +54,8 @@ public class KpiResult implements Serializable
                                                        }
                                                    };
     
-    private static final Logger    LOGGER          = LoggerFactory.getLogger(KpiResult.class);
     
+    private static final Logger    LOGGER          = LoggerFactory.getLogger(KpiResult.class);
     
     private Map<EntityKey, Number> map             = Maps.newHashMap();
     
@@ -265,6 +265,18 @@ public class KpiResult implements Serializable
     
     
         return map.size();
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+    
+    
+        return "KpiResult [\\n\\tmap=" + map + ", \\n\\treasonOfFailure=" + reasonOfFailure + "]";
     }
     
     
