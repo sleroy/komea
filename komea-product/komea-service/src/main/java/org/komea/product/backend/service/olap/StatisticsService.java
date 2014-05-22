@@ -89,7 +89,7 @@ public class StatisticsService implements IStatisticsAPI
             final IQuery query = engineService.getQuery(of);
             if (query == null) {
                 LOGGER.error(
-                        "Kpi did not have its query created {} formula {}\n\t Queries present {}",
+                        "Kpi implements a formula thought this query has not been created and registered in the query service : formula {}\n\t Queries present {}",
                         kpi.getKpiKey(), of, Arrays.toString(engineService.getQueryNames()));
                 continue;
             }
@@ -244,8 +244,9 @@ public class StatisticsService implements IStatisticsAPI
         Validate.isTrue(_entityKey.isEntityReferenceKey());
         Validate.isTrue(_options.isValid());
         
+        final PeriodTimeSerieOptions generateFormulaID = generateFormulaID(_options);
         final Double evaluateKpiValueOnPeriod =
-                measureDao.evaluateKpiValueOnPeriod(generateFormulaID(_options), _entityKey);
+                measureDao.evaluateKpiValueOnPeriod(generateFormulaID, _entityKey);
         LOGGER.debug("evaluateKpiValueOnPeriod : {} ekey {}, return {}", _options, _entityKey,
                 evaluateKpiValueOnPeriod);
         return evaluateKpiValueOnPeriod;
@@ -457,8 +458,8 @@ public class StatisticsService implements IStatisticsAPI
     private String generateKpiFormulaID(final Integer _kpiID) {
     
     
-        final String idFromKpiFormula =
-                FormulaID.of(new FindKpiPerId(_kpiID, kpiDao).find()).getId();
+        final Kpi find = new FindKpiPerId(_kpiID, kpiDao).find();
+        final String idFromKpiFormula = FormulaID.of(find).getId();
         return idFromKpiFormula;
     }
     

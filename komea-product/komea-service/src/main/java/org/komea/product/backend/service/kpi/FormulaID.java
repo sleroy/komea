@@ -118,10 +118,10 @@ public class FormulaID
     
     
     /**
-     * Returns the value of the field formula.
-     * 
-     * @return the formula
+     * @deprecated Should not be used, possible confusion with getId) method.
+     * @return
      */
+    @Deprecated
     public String getFormula() {
     
     

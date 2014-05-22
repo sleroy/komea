@@ -156,7 +156,7 @@ public class KpiValuesPage extends LayoutPage
     private transient Kpi       kpiChoice;
     
     @SpringBean
-    private IQueryService    kpiQueryService;
+    private IQueryService       kpiQueryService;
     
     
     @SpringBean
@@ -207,7 +207,7 @@ public class KpiValuesPage extends LayoutPage
                     ? "This kpi is a dynamic query."
                         : "This kpi is produced from events."));
             final MeasureCriteria measureCriteria = new MeasureCriteria();
-            measureCriteria.createCriteria().andIdKpiEqualTo(FormulaID.of(kpiChoice).getFormula());
+            measureCriteria.createCriteria().andIdKpiEqualTo(FormulaID.of(kpiChoice).getId());
             add(new Label("values", measureDao.countByCriteria(measureCriteria)));
             final List<IEntity> entitiesByEntityType =
                     entityService.getEntitiesByEntityType(kpiChoice.getEntityType());
