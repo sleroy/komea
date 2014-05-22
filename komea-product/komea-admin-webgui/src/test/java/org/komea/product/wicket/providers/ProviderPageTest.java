@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.komea.product.backend.api.IKPIService;
-import org.komea.product.backend.api.IWicketAdminService;
 import org.komea.product.backend.service.entities.IProviderService;
 import org.komea.product.wicket.utils.WicketTesterMethodRule;
 import org.mockito.Mockito;
@@ -34,7 +33,7 @@ public class ProviderPageTest
     
     
         wicketRule.getApplicationContextMock().putBean(Mockito.mock(IProviderService.class));
-        wicketRule.getApplicationContextMock().putBean(Mockito.mock(IWicketAdminService.class));
+        // wicketRule.getApplicationContextMock().putBean(Mockito.mock(IWicketAdminService.class));
         wicketRule.getApplicationContextMock().putBean(Mockito.mock(IKPIService.class));
         
     }
@@ -44,7 +43,7 @@ public class ProviderPageTest
      * Test method for
      * {@link org.komea.product.wicket.providers.ProviderPage#ProviderPage(org.apache.wicket.request.mapper.parameter.PageParameters)}.
      */
-    @Test 
+    @Test
     public final void testProviderPage() throws Exception {
     
     
