@@ -61,6 +61,7 @@ public final class TestsByStatusKPI implements IDynamicDataQuery {
         final KpiResult kpiResult = new KpiResult();
 
         final List<TestLinkServer> servers = serverConfig.selectAll();
+        LOGGER.info("Testlink : nb servers : " + servers.size());
         for (final TestLinkServer testlinkServer : servers) {
             try {
                 addServerResults(kpiResult, testlinkServer);
@@ -85,6 +86,7 @@ public final class TestsByStatusKPI implements IDynamicDataQuery {
     private void addServerResults(final KpiResult _kpiResult, final TestLinkServer testlinkServer) {
 
         final ITestLinkServerProxy openProxy = proxyFactory.newConnector(testlinkServer);
+        LOGGER.info("Testlink : openProxy : " + openProxy);
         // traitement spécifique au plugin
         if (isProxyOpened(openProxy)) {
             analysisTestlinkProjects(_kpiResult, testlinkServer, openProxy);
@@ -95,8 +97,9 @@ public final class TestsByStatusKPI implements IDynamicDataQuery {
             final ITestLinkServerProxy openProxy) {
 
         final List<TestLinkProject> listProject = openProxy.getListProject();
+        LOGGER.info("Testlink : nbProjects : " + listProject.size());
         for (final TestLinkProject projet : listProject) {
-            LOGGER.debug("Testlink : checking update from project {} of server {}.", projet.getName(),
+            LOGGER.info("Testlink : checking update from project {} of server {}.", projet.getName(),
                     testlinkServer.getName());
             final Project project = projectService.selectByKey(projet.getName());
             if (project == null) {
