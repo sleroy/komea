@@ -400,15 +400,16 @@ public class StatisticsService implements IStatisticsAPI
             LOGGER.info("Storing values of the kpi {} into the database for the reference {}",
                     findKPI.getKey(), _historyKey.getEntityKey());
             Validate.isTrue(_historyKey.getEntityKey().isEntityReferenceKey());
-            storeValueInHistory(_historyKey, queryResult.getValue(_historyKey.getEntityKey())
-                    .doubleValue(), actualTime);
+            storeValueInHistory(_historyKey,
+                    queryResult.getDoubleValueOrNull(_historyKey.getEntityKey()), actualTime);
         } else {
             LOGGER.info("Storing all values of the kpi {} into the database.", findKPI.getKey());
             for (final Entry<EntityKey, Number> kpiLineValue : queryResult.getMap().entrySet()) {
                 Validate.notNull(kpiLineValue.getKey());
                 Validate.isTrue(kpiLineValue.getKey().isEntityReferenceKey());
                 final HistoryKey hKey = HistoryKey.of(findKPI, kpiLineValue.getKey());
-                storeValueInHistory(hKey, kpiLineValue.getValue().doubleValue(), actualTime);
+                final Number value = kpiLineValue.getValue();
+                storeValueInHistory(hKey, value == null ? null : value.doubleValue());
                 
             }
         }

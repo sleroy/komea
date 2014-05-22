@@ -112,6 +112,25 @@ public class KpiResult implements Serializable
     }
     
     
+    /**
+     * Returns the numerical value as a double or null if not present.
+     * 
+     * @param _entityKey
+     *            the entity key
+     * @return a double value or null.
+     */
+    public Double getDoubleValueOrNull(final EntityKey _entityKey) {
+    
+    
+        final Number number = map.get(_entityKey);
+        
+        if (number == null) {
+            return null;
+        }
+        return number.doubleValue();
+    }
+    
+    
     public Map<EntityKey, Number> getMap() {
     
     
