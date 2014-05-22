@@ -14,6 +14,7 @@ import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
+import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.komea.product.wicket.kpivalues.KpiValuesPage;
 import org.komea.product.wicket.utils.WicketTesterMethodRule;
@@ -37,10 +38,13 @@ public class KpiValuesPageTest extends AbstractSpringIntegrationTestCase
     private IEventEngineService         eventEngineService;
     
     @Autowired
-    private IQueryService            kpiQueryService;
+    private IQueryService               kpiQueryService;
     
     @Autowired
     private IKPIService                 kpiService;
+    
+    @Autowired
+    private MeasureDao                  measureDAO;
     
     @Autowired
     private IStatisticsAPI              statisticsAPI;
@@ -56,6 +60,7 @@ public class KpiValuesPageTest extends AbstractSpringIntegrationTestCase
         wicketRule.getApplicationContextMock().putBean(kpiService);
         wicketRule.getApplicationContextMock().putBean(eventEngineService);
         wicketRule.getApplicationContextMock().putBean(kpiQueryService);
+        wicketRule.getApplicationContextMock().putBean(measureDAO);
         
     }
     

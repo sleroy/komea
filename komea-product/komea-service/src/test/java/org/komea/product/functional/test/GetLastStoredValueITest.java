@@ -86,7 +86,7 @@ public class GetLastStoredValueITest extends AbstractSpringIntegrationTestCase
     private IKpiAPI                kpiAPI;
     
     @Autowired
-    private IQueryService       kpiQueryService;
+    private IQueryService          kpiQueryService;
     
     @Autowired
     private IKPIService            kpiService;
@@ -101,7 +101,7 @@ public class GetLastStoredValueITest extends AbstractSpringIntegrationTestCase
     
     
         final Kpi build =
-                KpiBuilder.create().nameAndKey("kpidemovalue").dailyKPI()
+                KpiBuilder.create().nameAndKey("kpigetlaststored").dailyKPI()
                         .description("example of kpi").forProject()
                         .groupFormula(GroupFormula.AVG_VALUE).interval(0d, 100d)
                         .providerType(ProviderType.BUGTRACKER).dynamicQuery(DemoDynamicQuery.class)

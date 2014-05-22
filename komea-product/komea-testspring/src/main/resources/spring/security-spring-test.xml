@@ -25,7 +25,7 @@
 		<sec:form-login login-page="/auth/login"
 			default-target-url="/" authentication-failure-url="/auth/accessdenied" />
 		<sec:logout logout-success-url="/auth/logout" />
-		<sec:remember-me/>
+		
 		
 	</sec:http>
 
