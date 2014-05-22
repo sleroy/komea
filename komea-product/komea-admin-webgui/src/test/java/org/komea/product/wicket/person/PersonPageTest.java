@@ -9,6 +9,7 @@ package org.komea.product.wicket.person;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonRoleService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.wicket.utils.WicketTesterMethodRule;
@@ -34,6 +35,7 @@ public class PersonPageTest
     
         wicketRule.getApplicationContextMock().putBean(Mockito.mock(IPersonService.class));
         wicketRule.getApplicationContextMock().putBean(Mockito.mock(IPersonRoleService.class));
+        wicketRule.getApplicationContextMock().putBean(Mockito.mock(IPersonGroupService.class));
     }
     
     

@@ -30,8 +30,7 @@ public class PersonPage extends LayoutPage {
     private IPersonRoleService personRoleDAO;
     @SpringBean
     private IPersonGroupService personGroupService;
-    @SpringBean
-    private IPersonRoleService personRole;
+
 
     public PersonPage(final PageParameters _parameters) {
 
@@ -62,7 +61,7 @@ accordion.setActiveTab(COMPANY_INDEX);
             @Override
             public String getValueDisplay(Person person) {
                 String name = "";
-                if (personRole.getAdminRole().getId().equals(person.getIdPersonRole())) {
+                if (personRoleDAO.getAdminRole().getId().equals(person.getIdPersonRole())) {
                     name = "admin";
                 }
 
