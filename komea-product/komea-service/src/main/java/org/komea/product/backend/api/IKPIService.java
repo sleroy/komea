@@ -81,7 +81,7 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria> 
      * @param _kpi kpi
      * @return number of deleted measures
      */
-    int purgeHistory(Kpi _kpi);
+    int purgeHistoryOfKpi(Kpi _kpi);
 
     /**
      *

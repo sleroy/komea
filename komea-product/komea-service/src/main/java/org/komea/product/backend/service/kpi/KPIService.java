@@ -301,7 +301,7 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     }
 
     @Override
-    public int purgeHistory(final Kpi _kpi) {
+    public int purgeHistoryOfKpi(final Kpi _kpi) {
         final MeasureCriteria criteriaForKpiFormula = criteriaForKpiFormula(_kpi);
         return measureDao.deleteByCriteria(criteriaForKpiFormula);
     }
