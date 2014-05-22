@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.apache.commons.lang.Validate;
 import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.IKpiQueryService;
 import org.komea.product.backend.api.IKpiValueService;
@@ -275,6 +276,40 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     public IGenericDAO<Kpi, Integer, KpiCriteria> getRequiredDAO() {
 
         return requiredDAO;
+    }
+
+    @Override
+    public boolean isKpiFormulaShared(Kpi _kpi) {
+        Validate.notNull(_kpi.getId());
+        Validate.notNull(_kpi.getEsperRequest());
+        final String formula = _kpi.getEsperRequest();
+        final List<Kpi> kpis = selectAll();
+        for (final Kpi kpi : kpis) {
+            if (formula.equals(_kpi.getEsperRequest())
+                    && _kpi.getId() != kpi.getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private MeasureCriteria criteriaForKpiFormula(final Kpi _kpi) {
+        final MeasureCriteria measureCriteria = new MeasureCriteria();
+        final FormulaID formulaId = FormulaID.of(_kpi);
+        measureCriteria.createCriteria().andIdKpiEqualTo(formulaId.getId());
+        return measureCriteria;
+    }
+
+    @Override
+    public int purgeHistory(final Kpi _kpi) {
+        final MeasureCriteria criteriaForKpiFormula = criteriaForKpiFormula(_kpi);
+        return measureDao.deleteByCriteria(criteriaForKpiFormula);
+    }
+
+    @Override
+    public int countMeasuresOfKpi(final Kpi _kpi) {
+        final MeasureCriteria criteriaForKpiFormula = criteriaForKpiFormula(_kpi);
+        return measureDao.countByCriteria(criteriaForKpiFormula);
     }
 
     /**

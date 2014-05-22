@@ -73,6 +73,32 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria> 
     List<Kpi> getKpisOfProviderType(ProviderType providerType);
 
     /**
+     * Delete all measures of a kpi. Warn : measures can be shared for multiple
+     * kpis, be sure you want delete these measures. Use method
+     * isKpiFormulaShared(kpi) to know if this kpi shared its formula with
+     * others kpis.
+     *
+     * @param _kpi kpi
+     * @return number of deleted measures
+     */
+    int purgeHistory(Kpi _kpi);
+
+    /**
+     *
+     * @param _kpi kpi
+     * @return true if the formula of this kpi is shared with another kpi, false
+     * otherwise
+     */
+    boolean isKpiFormulaShared(Kpi _kpi);
+
+    /**
+     *
+     * @param _kpi kpi
+     * @return number of measures of a kpi
+     */
+    int countMeasuresOfKpi(Kpi _kpi);
+
+    /**
      * @param kpi
      * @param alertTypes
      * @param successFactors
