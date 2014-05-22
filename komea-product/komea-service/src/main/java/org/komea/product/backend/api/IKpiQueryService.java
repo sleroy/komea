@@ -41,7 +41,7 @@ public interface IKpiQueryService
      *            the kpi
      * @return the statement or null.
      */
-    public KpiResult getQueryValueFromKpi(Kpi _kpi);
+    public KpiResult evaluateRealTimeValues(Kpi _kpi);
     
     
     /**
@@ -71,6 +71,18 @@ public interface IKpiQueryService
      *            the kpi
      */
     public void removeQuery(Kpi _kpi);
+    
+    
+    /**
+     * Returns the query values from the kpi (by id.)
+     */
+    KpiResult evaluateRealTimeValues(Integer _kpiID);
+    
+    
+    /**
+     * Returns the query values of a kpi.
+     */
+    KpiResult evaluateRealTimeValues(String _kpiName);
     
     
 }

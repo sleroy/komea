@@ -40,7 +40,25 @@
 					</form>
 					<hr />
 					<h1 wicket:id="kpi"></h1>
-					<h2 wicket:id="details"></h2>
+
+					<table>
+						<thead>
+							<tr>
+								<th>Statistic</th>
+								<th>Details</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Type de KPI</td>
+								<td wicket:id="details"></td>
+							</tr>
+							<tr>
+								<td>Nombre de valeurs dans l'historique</td>
+								<td wicket:id="values"></td>
+							</tr>
+						</tbody>
+					</table>
 					<table>
 						<thead>
 							<tr>
@@ -54,6 +72,7 @@
 								<td wicket:id="entity"></td>
 								<td wicket:id="lastvalue"></td>
 								<td wicket:id="currentvalue"></td>
+
 							</tr>
 						</tbody>
 					</table>

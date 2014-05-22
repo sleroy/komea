@@ -77,15 +77,15 @@ public class KpiQueryServiceTest
     
     
     /**
-     * Test method for
-     * {@link org.komea.product.cep.tester.KpiQueryService#getQueryValueFromKpi(org.komea.product.database.model.Kpi)}.
-     */
-    @Test
-    public final void testGetQueryValueFromKpi() throws Exception {
-    
-    
-        // TODO
-        // org.junit.Assert.assertTrue("not yet implemented", false);
-    }
+         * Test method for
+         * {@link org.komea.product.cep.tester.KpiQueryService#evaluateRealTimeValues(org.komea.product.database.model.Kpi)}.
+         */
+        @Test
+        public final void testEvaluateRealTimeValues() throws Exception {
+        
+        
+            // TODO
+            // org.junit.Assert.assertTrue("not yet implemented", false);
+        }
     
 }

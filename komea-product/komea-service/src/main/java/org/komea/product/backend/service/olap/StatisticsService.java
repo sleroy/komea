@@ -55,7 +55,7 @@ public class StatisticsService implements IStatisticsAPI
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger("kpi-statistics");
+    private static final Logger LOGGER = LoggerFactory.getLogger("statistics-service");
     
     @Autowired
     private IEventEngineService engineService;
@@ -400,16 +400,25 @@ public class StatisticsService implements IStatisticsAPI
             LOGGER.info("Storing values of the kpi {} into the database for the reference {}",
                     findKPI.getKey(), _historyKey.getEntityKey());
             Validate.isTrue(_historyKey.getEntityKey().isEntityReferenceKey());
-            storeValueInHistory(_historyKey,
-                    queryResult.getDoubleValueOrNull(_historyKey.getEntityKey()), actualTime);
+            if (queryResult.hasKey(_historyKey.getEntityKey())) {
+                storeValueInHistory(_historyKey,
+                        queryResult.getDoubleValue(_historyKey.getEntityKey()), actualTime);
+            }
+            
         } else {
-            LOGGER.info("Storing all values of the kpi {} into the database.", findKPI.getKey());
+            LOGGER.info("Storing all values[{}] of the kpi {} into the database.",
+                    findKPI.getKey(), queryResult.size());
             for (final Entry<EntityKey, Number> kpiLineValue : queryResult.getMap().entrySet()) {
+                if (kpiLineValue.getValue() == null) {
+                    LOGGER.info("Entity {} has not value for the kpi {}", findKPI);
+                    continue;
+                }
+                
                 Validate.notNull(kpiLineValue.getKey());
                 Validate.isTrue(kpiLineValue.getKey().isEntityReferenceKey());
                 final HistoryKey hKey = HistoryKey.of(findKPI, kpiLineValue.getKey());
-                final Number value = kpiLineValue.getValue();
-                storeValueInHistory(hKey, value == null ? null : value.doubleValue());
+                storeValueInHistory(hKey, kpiLineValue.getValue() == null ? null : kpiLineValue
+                        .getValue().doubleValue());
                 
             }
         }
@@ -447,6 +456,8 @@ public class StatisticsService implements IStatisticsAPI
     
         LOGGER.debug("storeValueInHistory : {}", _historyKey, _value, _actualTime);
         Validate.isTrue(_historyKey.hasEntityReference());
+        Validate.notNull(_value);
+        Validate.notNull(_actualTime);
         
         final String idFromKpiFormula = generateKpiFormulaID(_historyKey.getKpiID());
         final Measure measure =

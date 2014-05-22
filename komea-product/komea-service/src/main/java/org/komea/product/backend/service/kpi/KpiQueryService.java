@@ -11,14 +11,19 @@ import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
 import org.komea.product.backend.api.IKpiQueryService;
+import org.komea.product.backend.criterias.FindKpiOrFail;
+import org.komea.product.backend.criterias.FindKpiPerId;
 import org.komea.product.backend.groovy.IGroovyEngineService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IEntityService;
+import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Kpi;
+import org.komea.product.service.dto.KpiKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +53,9 @@ public class KpiQueryService implements IKpiQueryService
     private IGroovyEngineService     groovyEngineService;
     
     @Autowired
+    private KpiDao                   kpiDao;
+    
+    @Autowired
     private IKpiQueryRegisterService kpiQueryRegisterService;
     
     
@@ -74,6 +82,19 @@ public class KpiQueryService implements IKpiQueryService
     }
     
     
+    @Cacheable(value = "kpi-realtime-value-cache")
+    @Override
+    public KpiResult evaluateRealTimeValues(final Integer _kpiID) {
+    
+    
+        final Kpi selectKpiByKey = new FindKpiPerId(_kpiID, kpiDao).find();
+        final KpiResult queryValueFromKpi = evaluateRealTimeValues(selectKpiByKey);
+        LOGGER.debug("Returns the real time measure for -> {} is {}", selectKpiByKey,
+                queryValueFromKpi);
+        return queryValueFromKpi;
+    }
+    
+    
     /*
      * (non-Javadoc)
      * @see
@@ -81,7 +102,8 @@ public class KpiQueryService implements IKpiQueryService
      * (org.komea.product.database.model.Kpi)
      */
     @Override
-    public KpiResult getQueryValueFromKpi(final Kpi _kpi) {
+    @Cacheable(value = "kpi-realtime-value-cache")
+    public KpiResult evaluateRealTimeValues(final Kpi _kpi) {
     
     
         KpiResult result = new KpiResult();
@@ -93,6 +115,23 @@ public class KpiQueryService implements IKpiQueryService
         }
         return new InferMissingEntityValuesIntoKpiResult(result, _kpi, entityService)
                 .inferEntityKeys();
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.komea.product.backend.api.IKpiValueService#getRealTimeValues(java
+     * .lang.String)
+     */
+    @Override
+    public KpiResult evaluateRealTimeValues(final String _kpiName) {
+    
+    
+        LOGGER.debug("Obtain the real time measure for -> {}", _kpiName);
+        final Kpi selectKpiByKey = new FindKpiOrFail(KpiKey.ofKpiName(_kpiName), kpiDao).find();
+        
+        return evaluateRealTimeValues(selectKpiByKey.getId());
     }
     
     
@@ -136,7 +175,7 @@ public class KpiQueryService implements IKpiQueryService
         
         LOGGER.trace("Request value from KPI {}", _kpi.getKpiKey());
         result = (KpiResult) esperEngine.getQueryOrFail(FormulaID.of(_kpi)).getResult();
-        LOGGER.trace("Result of the query is {}", result);
+        LOGGER.info("Result of the query is {}", result);
         return result;
     }
     

@@ -33,8 +33,10 @@ import org.komea.product.backend.service.kpi.FormulaID;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.backend.service.kpi.TimeSerie;
 import org.komea.product.database.api.IEntity;
+import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.enums.GroupFormula;
 import org.komea.product.database.model.Kpi;
+import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.TimeCoordinate;
 import org.komea.product.service.dto.EntityKey;
@@ -162,6 +164,10 @@ public class KpiValuesPage extends LayoutPage
     
     
     @SpringBean
+    private MeasureDao          measureDao;
+    
+    
+    @SpringBean
     private IStatisticsAPI      statsService;
     
     
@@ -187,10 +193,12 @@ public class KpiValuesPage extends LayoutPage
             final List<IEntity> entitiesByEntityType = Collections.EMPTY_LIST;
             
             add(new KpiValueList("rows", entitiesByEntityType, kpiChoice));
-            add(new Label("details", ""));
+            add(new Label("details", "no information available"));
+            add(new Label("values", "no values"));
             
             buildEventList(Collections.EMPTY_LIST);
             add(new Label("chart", "No graph available"));
+            
             
         } else {
             add(new Label("kpi", "Kpi " + kpiChoice.getName()));
@@ -198,6 +206,9 @@ public class KpiValuesPage extends LayoutPage
             add(new Label("details", dynamicQuery
                     ? "This kpi is a dynamic query."
                         : "This kpi is produced from events."));
+            final MeasureCriteria measureCriteria = new MeasureCriteria();
+            measureCriteria.createCriteria().andIdKpiEqualTo(FormulaID.of(kpiChoice).getFormula());
+            add(new Label("values", measureDao.countByCriteria(measureCriteria)));
             final List<IEntity> entitiesByEntityType =
                     entityService.getEntitiesByEntityType(kpiChoice.getEntityType());
             

@@ -186,6 +186,19 @@ public class KpiResult implements Serializable
     
     
     /**
+     * Tests if a key is present into the kpi result
+     * 
+     * @param _entityKey
+     * @return
+     */
+    public boolean hasKey(final EntityKey _entityKey) {
+    
+    
+        return map.containsKey(_entityKey);
+    }
+    
+    
+    /**
      * Generate minimal values when entities are missing.
      * 
      * @param entitiesByEntityType
