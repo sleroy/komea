@@ -6,7 +6,7 @@ package org.komea.product.backend.service.standardkpi;
 
 
 
-import org.komea.product.backend.api.IKPIService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.api.standardkpi.IStandardKpiService;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.service.dto.KpiKey;

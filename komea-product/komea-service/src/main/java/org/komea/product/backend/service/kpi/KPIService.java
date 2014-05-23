@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang.Validate;
-import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.api.exceptions.KpiAlreadyExistingException;
 import org.komea.product.backend.criterias.FindKpi;

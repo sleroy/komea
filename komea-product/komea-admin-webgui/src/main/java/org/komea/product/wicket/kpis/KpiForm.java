@@ -14,7 +14,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
-import org.komea.product.backend.api.IKPIService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.groovy.IGroovyEngineService;
 import org.komea.product.backend.service.cron.CronUtils;
 import org.komea.product.backend.service.entities.IEntityService;

@@ -4,7 +4,7 @@
 package org.komea.product.plugins.scm;
 
 import javax.annotation.PostConstruct;
-import org.komea.product.backend.api.IKPIService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.KpiBuilder;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;

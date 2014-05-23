@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang.Validate;
 import org.joda.time.DateTime;
-import org.komea.product.backend.api.IKPIService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.api.exceptions.EntityNotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundRuntimeException;
 import org.komea.product.backend.service.entities.IEntityService;

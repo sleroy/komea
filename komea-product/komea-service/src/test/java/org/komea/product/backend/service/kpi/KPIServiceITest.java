@@ -14,7 +14,6 @@ import org.komea.eventory.api.filters.IFilterDefinition;
 import org.komea.eventory.api.formula.ICEPFormula;
 import org.komea.eventory.query.FilterDefinition;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.api.exceptions.KpiAlreadyExistingException;
 import org.komea.product.backend.service.esper.IEventPushService;

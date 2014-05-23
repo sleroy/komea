@@ -7,7 +7,7 @@ package org.komea.product.backend.service.cron;
 
 
 import org.junit.Test;
-import org.komea.product.backend.api.IKPIService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.quartz.JobExecutionContext;

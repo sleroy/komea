@@ -9,10 +9,10 @@ package org.komea.product.functional.test;
 import org.junit.Test;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
-import org.komea.product.backend.api.IKPIService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.api.IKpiLoadingService;
 import org.komea.product.backend.api.IQueryService;
-import org.komea.product.backend.service.kpi.IKpiAPI;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.KpiBuilder;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.enums.EntityType;
@@ -87,7 +87,7 @@ public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestC
     
     
     @Autowired
-    private IKpiAPI                kpiAPI;
+    private IKPIService                kpiAPI;
     @Autowired
     private IKpiLoadingService     kpiLoadingService;
     

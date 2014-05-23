@@ -1,4 +1,4 @@
-package org.komea.product.backend.api;
+package org.komea.product.backend.service.kpi;
 
 import java.util.List;
 import org.komea.product.backend.service.generic.IGenericService;

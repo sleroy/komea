@@ -3,7 +3,7 @@ package org.komea.product.backend.service.alert;
 import com.google.common.collect.Lists;
 import java.util.Date;
 import java.util.List;
-import org.komea.product.backend.api.IKPIService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.kpi.IMeasureService;
 import org.komea.product.database.dto.BaseEntityDto;

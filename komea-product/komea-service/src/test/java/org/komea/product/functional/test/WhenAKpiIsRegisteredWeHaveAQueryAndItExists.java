@@ -10,10 +10,10 @@ import org.junit.Test;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.api.IKPIService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.service.kpi.FormulaID;
-import org.komea.product.backend.service.kpi.IKpiAPI;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.backend.service.kpi.KpiBuilder;
 import org.komea.product.database.dto.KpiResult;
@@ -86,7 +86,7 @@ public class WhenAKpiIsRegisteredWeHaveAQueryAndItExists extends AbstractSpringI
     private IEventEngineService    engineService;
     
     @Autowired
-    private IKpiAPI                kpiAPI;
+    private IKPIService                kpiAPI;
     
     @Autowired
     private IQueryService       kpiQueryService;

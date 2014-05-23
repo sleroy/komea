@@ -28,10 +28,10 @@ public class KpiBuilder {
     public static KpiBuilder createAscending() {
 
         final KpiBuilder kpiBuilder = create();
-        kpiBuilder.kpi.setValueMin(Double.MIN_VALUE);
-        kpiBuilder.kpi.setValueMax(Double.MAX_VALUE);
-        kpiBuilder.kpi.setValueDirection(ValueDirection.BETTER);
-        kpiBuilder.kpi.setValueType(ValueType.INT);
+        kpiBuilder.kpi.setValueMin(0d);
+        kpiBuilder.kpi.setValueMax(Double.valueOf(Integer.MAX_VALUE));
+        kpiBuilder.kpi.setValueDirection(ValueDirection.NONE);
+        kpiBuilder.kpi.setValueType(ValueType.FLOAT);
         return kpiBuilder;
     }
 
