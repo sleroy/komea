@@ -119,7 +119,6 @@ public class MeasureService implements IMeasureService {
             final KpiStringKeyList _kpiKeyList,
             final PeriodCriteria _period) {
 
-        LOGGER.info("findMupltipleHistoricalMeasure");
         Validate.notNull(_kpiKeyList);
         Validate.notNull(_kpiKeyList.getEntityKeys());
         Validate.notNull(_kpiKeyList.getKpiKeys());
@@ -131,20 +130,16 @@ public class MeasureService implements IMeasureService {
         options.setFromPeriod(new DateTime(_period.getStartDate().getTime()));
         options.setToPeriod(new DateTime(_period.getEndDate().getTime()));
         options.pickBestGranularity();
-        LOGGER.info("options : " + options);
         for (final String entityKey : _kpiKeyList.getEntityKeys()) {
             final IEntity entity
                     = entityService.findEntityByEntityStringKey(EntityStringKey.of(
                                     _kpiKeyList.getEntityType(), entityKey));
-            LOGGER.info("entity : " + entity);
             if (entity != null) {
                 for (final String kpiKey : _kpiKeyList.getKpiKeys()) {
                     final Kpi kpi = kpiService.findKPI(kpiKey);
-                    LOGGER.info("kpi : " + kpi);
                     if (kpi != null) {
                         options.setKpi(kpi);
                         final TimeSerieDTO timeSerieDTO = findHistoricalMeasure(kpi, entity, options);
-                        LOGGER.info("timeSerieDTO : " + timeSerieDTO);
                         series.add(timeSerieDTO);
                     }
                 }
@@ -214,7 +209,6 @@ public class MeasureService implements IMeasureService {
         final EntityKey entityKey = EntityKey.of(_entity);
 
         final TimeSerie timeSeries = statService.buildPeriodTimeSeries(_period, entityKey);
-        LOGGER.info("timeSeries : " + timeSeries);
         return TimeSerieConvertor.build(timeSeries.getCoordinates(), _kpi,
                 BaseEntityDto.newFromEntity(_entity));
 

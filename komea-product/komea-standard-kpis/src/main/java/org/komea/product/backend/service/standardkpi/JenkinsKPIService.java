@@ -148,7 +148,7 @@ public class JenkinsKPIService {
 
     public Kpi numberOfInterruptedBuildPerDay() {
 
-        return KpiBuilder.createAscending().nameAndKey("interrupted builds")
+        return KpiBuilder.createAscending().nameAndKey("Interrupted builds")
                 .description("Number of interrupted builds").providerType(ProviderType.CI_BUILD)
                 .entityType(EntityType.PROJECT).dailyKPI().interval(0d, 24 * 60 / 5d)
                 .query(NumberOfInterruptedBuildPerDay.class).build();
