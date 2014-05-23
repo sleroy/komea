@@ -108,7 +108,6 @@ public class RandomizerDataJob {
         Double lastValue = null;
         int cpt = 0;
         while (date.isBeforeNow()) {
-            LOGGER.info(date.toDate().toGMTString() + " - " + _kpi.getName() + " - " + _entity.getDisplayName());
             final Double value = getValue(_kpi, _entity, date);
             if (value == null) {
                 lastValue = addValue(_kpi, _entity, date, lastValue);
