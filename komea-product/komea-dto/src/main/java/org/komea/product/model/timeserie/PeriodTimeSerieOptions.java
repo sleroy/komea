@@ -169,7 +169,8 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions
     public boolean isValid() {
     
     
-        return super.isValid() && fromPeriod != null && toPeriod != null;
+        return super.isValid()
+                && fromPeriod != null && toPeriod != null && fromPeriod.before(toPeriod);
     }
     
     
