@@ -116,7 +116,6 @@ public class RandomizerDataJob {
         final MeasureCriteria.Criteria criteria = measureCriteria.createCriteria();
         criteria.andIdKpiEqualTo(formulaID.getId()).andEntityIDEqualTo(_entity.getId());
         final List<Measure> measures = measureService.selectByCriteria(measureCriteria);
-        LOGGER.info(measures.size() + " measures exist for entity " + _entity.getDisplayName() + " and kpi " + _kpi.getDisplayName());
         DateTime date = new DateTime(_since);
         Double lastValue = null;
         int cpt = 0;
