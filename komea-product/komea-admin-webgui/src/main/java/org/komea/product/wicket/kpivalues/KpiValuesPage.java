@@ -36,6 +36,7 @@ import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.enums.GroupFormula;
 import org.komea.product.database.model.Kpi;
+import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.TimeCoordinate;
@@ -183,7 +184,9 @@ public class KpiValuesPage extends LayoutPage
         if (kpiParameterName != null) {
             kpiChoice = kpiService.selectByKey(kpiParameterName);
         }
-        final List<Kpi> kpiList = kpiService.selectAll();
+        final KpiCriteria sort = new KpiCriteria();
+        sort.setOrderByClause("name ASC");
+        final List<Kpi> kpiList = kpiService.selectByCriteria(sort);
         
         buildKpiChoicer(kpiList);
         
