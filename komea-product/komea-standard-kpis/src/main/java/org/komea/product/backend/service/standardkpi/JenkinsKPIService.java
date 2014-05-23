@@ -75,8 +75,8 @@ public class JenkinsKPIService {
      */
     public Kpi numberOfBuildBrokenPerUser() {
 
-        return KpiBuilder.createAscending().nameAndKey("Broken builds / user")
-                .description("Number of broken builds per user ")
+        return KpiBuilder.createAscending().nameAndKey("Broken builds")
+                .description("Number of broken builds")
                 .providerType(ProviderType.CI_BUILD).entityType(EntityType.PROJECT).dailyKPI()
                 .interval(0d, 24 * 60 / 5d).query(NumberOfBrokenBuildPerUserPerDay.class).build();
 
@@ -87,7 +87,7 @@ public class JenkinsKPIService {
     // KPI : Durée de non-fonctionnement (maximale)
     public Kpi numberOfBuildPerDay() {
 
-        return KpiBuilder.createAscending().nameAndKey("Builds").description("Number of build ")
+        return KpiBuilder.createAscending().nameAndKey("Builds").description("Number of builds")
                 .providerType(ProviderType.CI_BUILD).entityType(EntityType.PROJECT)
                 .query(BuildPerDay.class).dailyKPI().build();
 
@@ -107,7 +107,7 @@ public class JenkinsKPIService {
     public Kpi numberOfFailedBuildPerDay() {
 
         return KpiBuilder.createAscending().nameAndKey("Failed builds")
-                .description("Number of failed build ").providerType(ProviderType.CI_BUILD)
+                .description("Number of failed builds").providerType(ProviderType.CI_BUILD)
                 .entityType(EntityType.PROJECT).dailyKPI().query(NumberOfFailedBuildPerDay.class)
                 .interval(0d, 24 * 60 / 5d).build();
     }
@@ -130,7 +130,7 @@ public class JenkinsKPIService {
     public Kpi numberOfUnstableBuildPerDay() {
 
         return KpiBuilder.createAscending().nameAndKey("Unstable builds")
-                .description("Number of unstable build").providerType(ProviderType.CI_BUILD)
+                .description("Number of unstable builds").providerType(ProviderType.CI_BUILD)
                 .entityType(EntityType.PROJECT).dailyKPI().query(NumberOfFailedBuildPerDay.class)
                 .interval(0d, 24 * 60 / 5d).build();
     }
@@ -138,7 +138,7 @@ public class JenkinsKPIService {
     public Kpi numberSuccessBuildPerDay() {
 
         return KpiBuilder.createAscending().nameAndKey("Successful builds")
-                .description("Number of successful build ").providerType(ProviderType.CI_BUILD)
+                .description("Number of successful builds").providerType(ProviderType.CI_BUILD)
                 .entityType(EntityType.PROJECT).dailyKPI().interval(0d, 24 * 60 / 5d)
                 .query(NumberOfSuccessfulBuildPerDay.class).build();
     }
