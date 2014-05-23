@@ -3,6 +3,8 @@
  */
 package org.komea.product.backend.service;
 
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import javax.annotation.PostConstruct;
@@ -102,13 +104,17 @@ public class RandomizerDataJob {
         return cpt;
     }
 
-    @Transactional
     private int updateMeasures(final Kpi _kpi, final IEntity _entity, final DateTime _since) {
+        final FormulaID formulaID = FormulaID.of(_kpi);
+        final MeasureCriteria measureCriteria = new MeasureCriteria();
+        final MeasureCriteria.Criteria criteria = measureCriteria.createCriteria();
+        criteria.andIdKpiEqualTo(formulaID.getId()).andEntityIDEqualTo(_entity.getId());
+        final List<Measure> measures = measureService.selectByCriteria(measureCriteria);
         DateTime date = new DateTime(_since);
         Double lastValue = null;
         int cpt = 0;
         while (date.isBeforeNow()) {
-            final Double value = getValue(_kpi, _entity, date);
+            final Double value = getValue(date, measures);
             if (value == null) {
                 lastValue = addValue(_kpi, _entity, date, lastValue);
                 cpt++;
@@ -120,15 +126,24 @@ public class RandomizerDataJob {
         return cpt;
     }
 
-    private Double getValue(final Kpi _kpi, final IEntity _entity, final DateTime date) {
+    private Double getValue(final DateTime date, final List<Measure> measures) {
         final DateTime nextDate = date.plusDays(1);
-        final MeasureCriteria measureCriteria = new MeasureCriteria();
-        final FormulaID formulaID = FormulaID.of(_kpi);
-        final MeasureCriteria.Criteria criteria = measureCriteria.createCriteria();
-        criteria.andIdKpiEqualTo(formulaID.getId()).andEntityIDEqualTo(_entity.getId());
-        criteria.andDateBetween(date.toDate(), nextDate.toDate());
-        final List<Measure> measures = measureService.selectByCriteria(measureCriteria);
-        final Measure measure = measures.isEmpty() ? null : measures.get(0);
+        final Date from = date.toDate();
+        final Date to = nextDate.toDate();
+        final Iterator<Measure> iterator = measures.iterator();
+        Measure measure = null;
+        while (iterator.hasNext()) {
+            final Measure next = iterator.next();
+            final Date d = next.getDate();
+            if (d.after(from) && d.before(to)) {
+                measure = next;
+                break;
+            } else if (d.before(from)) {
+                iterator.remove();
+            } else {
+                break;
+            }
+        }
         return measure == null ? null : measure.getValue();
     }
 
