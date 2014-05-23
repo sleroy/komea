@@ -16,6 +16,7 @@ import javax.annotation.PostConstruct;
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.eventory.cache.CacheConfigurationBuilder;
+import org.komea.eventory.filter.EventFilterBuilder;
 import org.komea.eventory.query.CEPQueryImplementation;
 import org.komea.eventory.query.FilterDefinition;
 import org.komea.product.backend.api.IEventEngineService;
@@ -24,6 +25,7 @@ import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
 import org.komea.product.backend.service.esper.QueryInformations;
 import org.komea.product.backend.service.kpi.FormulaID;
+import org.komea.product.cep.filter.OnlyEventFilter;
 import org.komea.product.cep.formula.EventCountFormula;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.dao.ProviderDao;
@@ -144,8 +146,11 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
         final CEPQueryImplementation cepQueryDefinition = new CEPQueryImplementation();
-        cepQueryDefinition.addFilterDefinition(FilterDefinition.create().setCacheConfiguration(
-                CacheConfigurationBuilder.expirationTimeCache(24, TimeUnit.HOURS)));
+        cepQueryDefinition.addFilterDefinition(FilterDefinition
+                .create()
+                .setFilter(EventFilterBuilder.create().chain(new OnlyEventFilter()).build())
+                .setCacheConfiguration(
+                        CacheConfigurationBuilder.expirationTimeCache(24, TimeUnit.HOURS)));
         cepQueryDefinition.setFormula(new ProviderFormula(new EventCountFormula()));
         
         return cepQueryDefinition;

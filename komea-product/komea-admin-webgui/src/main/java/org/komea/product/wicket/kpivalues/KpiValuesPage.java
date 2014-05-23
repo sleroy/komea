@@ -185,7 +185,7 @@ public class KpiValuesPage extends LayoutPage
             kpiChoice = kpiService.selectByKey(kpiParameterName);
         }
         final KpiCriteria sort = new KpiCriteria();
-        sort.setOrderByClause("name ASC");
+        sort.setOrderByClause("name COLLATE NOCASE ASC");
         final List<Kpi> kpiList = kpiService.selectByCriteria(sort);
         
         buildKpiChoicer(kpiList);
