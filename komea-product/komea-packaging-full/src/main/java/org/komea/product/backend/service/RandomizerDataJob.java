@@ -79,38 +79,46 @@ public class RandomizerDataJob {
     public void execute() {
 
         LOGGER.info("Generating random values...");
-
-        generateKpiValues(EntityType.PERSON);
-        generateKpiValues(EntityType.PROJECT);
+        int personMeasures = generateKpiValues(EntityType.PERSON);
+        LOGGER.info(personMeasures + " measures added for persons");
+        int projectMeasures = generateKpiValues(EntityType.PROJECT);
+        LOGGER.info(projectMeasures + " measures added for projects");
         LOGGER.info("Random values generated...");
 
     }
 
-    @Transactional
-    public void generateKpiValues(final EntityType _entityType) {
+    public int generateKpiValues(final EntityType _entityType) {
         final DateTime twoYearsAgo = twoYearsAgo();
         final List<Kpi> allKpisOfEntityType = kpiAPI.getAllKpisOfEntityType(_entityType);
+        int cpt = 0;
         for (final IEntity entity : entityService.getEntitiesByEntityType(_entityType)) {
             for (final Kpi kpi : allKpisOfEntityType) {
 //                generateKpiValues(kpi, entity);
-                updateMeasures(kpi, entity, twoYearsAgo);
+                int updateMeasures = updateMeasures(kpi, entity, twoYearsAgo);
+                LOGGER.info(updateMeasures + " measures added for entity " + entity.getDisplayName() + " and kpi " + kpi.getDisplayName());
+                cpt += updateMeasures;
             }
         }
-
+        return cpt;
     }
 
-    private void updateMeasures(final Kpi _kpi, final IEntity _entity, final DateTime _since) {
+    @Transactional
+    private int updateMeasures(final Kpi _kpi, final IEntity _entity, final DateTime _since) {
         DateTime date = new DateTime(_since);
         Double lastValue = null;
+        int cpt = 0;
         while (date.isBeforeNow()) {
+            LOGGER.info(date.toDate().toGMTString() + " - " + _kpi.getName() + " - " + _entity.getDisplayName());
             final Double value = getValue(_kpi, _entity, date);
             if (value == null) {
                 lastValue = addValue(_kpi, _entity, date, lastValue);
+                cpt++;
             } else {
                 lastValue = value;
             }
             date = date.plusDays(1);
         }
+        return cpt;
     }
 
     private Double getValue(final Kpi _kpi, final IEntity _entity, final DateTime date) {
@@ -172,6 +180,7 @@ public class RandomizerDataJob {
      * @param _kpi
      * @param _entity
      */
+    @Transactional
     private void generateKpiValues(final Kpi _kpi, final IEntity _entity) {
 
         if (measureService.countByCriteria(new MeasureCriteria()) > 0) {
