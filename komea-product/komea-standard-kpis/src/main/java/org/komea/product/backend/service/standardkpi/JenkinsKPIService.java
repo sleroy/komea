@@ -13,8 +13,10 @@ import org.komea.product.plugins.kpi.standard.jenkins.BuildPerDay;
 import org.komea.product.plugins.kpi.standard.jenkins.NumberOfBrokenBuildPerUserPerDay;
 import org.komea.product.plugins.kpi.standard.jenkins.NumberOfFailedBuildPerDay;
 import org.komea.product.plugins.kpi.standard.jenkins.NumberOfFixedBuildPerUserPerDay;
+import org.komea.product.plugins.kpi.standard.jenkins.NumberOfInterruptedBuildPerDay;
 import org.komea.product.plugins.kpi.standard.jenkins.NumberOfJobConfigurationChangesPerWeek;
 import org.komea.product.plugins.kpi.standard.jenkins.NumberOfSuccessfulBuildPerDay;
+import org.komea.product.plugins.kpi.standard.jenkins.NumberOfUnstableBuildPerDay;
 import org.komea.product.plugins.kpi.standard.jenkins.ProjectBuildHealthInfluencePerUser;
 import org.komea.product.plugins.kpi.standard.jenkins.SuccessfulBuildRate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,7 @@ public class JenkinsKPIService {
 
         saveOrUpdate(numberOfConfigurationChanges());
         saveOrUpdate(numberSuccessBuildPerDay());
+        saveOrUpdate(numberOfInterruptedBuildPerDay());
         saveOrUpdate(numberOfBuildPerDay());
         saveOrUpdate(numberOfUnstableBuildPerDay());
         saveOrUpdate(numberOfFailedBuildPerDay());
@@ -77,7 +80,7 @@ public class JenkinsKPIService {
 
         return KpiBuilder.createAscending().nameAndKey("Broken builds")
                 .description("Number of broken builds")
-                .providerType(ProviderType.CI_BUILD).entityType(EntityType.PROJECT).dailyKPI()
+                .providerType(ProviderType.CI_BUILD).entityType(EntityType.PERSON).dailyKPI()
                 .interval(0d, 24 * 60 / 5d).query(NumberOfBrokenBuildPerUserPerDay.class).build();
 
     }
@@ -131,7 +134,7 @@ public class JenkinsKPIService {
 
         return KpiBuilder.createAscending().nameAndKey("Unstable builds")
                 .description("Number of unstable builds").providerType(ProviderType.CI_BUILD)
-                .entityType(EntityType.PROJECT).dailyKPI().query(NumberOfFailedBuildPerDay.class)
+                .entityType(EntityType.PROJECT).dailyKPI().query(NumberOfUnstableBuildPerDay.class)
                 .interval(0d, 24 * 60 / 5d).build();
     }
 
@@ -141,6 +144,14 @@ public class JenkinsKPIService {
                 .description("Number of successful builds").providerType(ProviderType.CI_BUILD)
                 .entityType(EntityType.PROJECT).dailyKPI().interval(0d, 24 * 60 / 5d)
                 .query(NumberOfSuccessfulBuildPerDay.class).build();
+    }
+
+    public Kpi numberOfInterruptedBuildPerDay() {
+
+        return KpiBuilder.createAscending().nameAndKey("interrupted builds")
+                .description("Number of interrupted builds").providerType(ProviderType.CI_BUILD)
+                .entityType(EntityType.PROJECT).dailyKPI().interval(0d, 24 * 60 / 5d)
+                .query(NumberOfInterruptedBuildPerDay.class).build();
     }
 
     /**
