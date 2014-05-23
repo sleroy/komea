@@ -21,7 +21,6 @@ import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
-import org.komea.product.service.dto.EntityStringKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +79,6 @@ public class RandomizerDataJob {
      */
     @PostConstruct
     public void execute() {
-        test(true);
         LOGGER.info("Generating random values...");
         int personMeasures = generateKpiValues(EntityType.PERSON);
         if (personMeasures > 0) {
@@ -91,29 +89,6 @@ public class RandomizerDataJob {
             LOGGER.info(projectMeasures + " measures added for projects");
         }
         LOGGER.info("Random values generated.");
-        test(false);
-
-    }
-
-    private void test(boolean delete) {
-        final IEntity entity = entityService.findEntityByEntityStringKey(
-                new EntityStringKey(EntityType.PROJECT, "Junit"));
-        final Kpi kpi = kpiAPI.selectByKey("BUILDS");
-        if (kpi == null || entity == null) {
-            return;
-        }
-        final MeasureCriteria measureCriteria = new MeasureCriteria();
-        measureCriteria.createCriteria().andEntityIDEqualTo(entity.getId())
-                .andIdKpiEqualTo(FormulaID.of(kpi).getId());
-        final List<Measure> measures = measureService.selectByCriteria(measureCriteria);
-        final StringBuilder sb = new StringBuilder();
-        for (final Measure measure : measures) {
-            sb.append(measure.getDate().toGMTString()).append(" : ").append(measure.getValue()).append(" ; ");
-        }
-        LOGGER.info("test measure values : " + sb.toString());
-        if (delete) {
-            measureService.deleteByCriteria(measureCriteria);
-        }
     }
 
     public int generateKpiValues(final EntityType _entityType) {
