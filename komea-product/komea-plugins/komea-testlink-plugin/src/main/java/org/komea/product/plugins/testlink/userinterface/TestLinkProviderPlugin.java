@@ -61,11 +61,16 @@ public class TestLinkProviderPlugin {
 
         final String statusName = status.name().toLowerCase();
         final TestsByStatusKPI testsByStatusKPI = new TestsByStatusKPI(statusName);
+        final String statusDisplayName = enumNameToDisplayName(status.name());
         return KpiBuilder.create().key("test_cases_" + statusName)
-                .description("Number of " + statusName + " test cases").name(statusName + " test cases")
+                .description("Number of " + statusDisplayName + " test cases").name(statusDisplayName + " test cases")
                 .interval(0d, 10000d).produceValue(ValueType.INT, valueDirection).forProject().dailyKPI()
                 .providerType(ProviderType.REQUIREMENTS).queryScript(testsByStatusKPI.getFormula()).build();
 
+    }
+
+    private String enumNameToDisplayName(final String enumName) {
+        return enumName.substring(0, 1).toUpperCase() + enumName.substring(1).toLowerCase().replace("_", " ");
     }
 
     private Kpi totalTestsKpi() {
