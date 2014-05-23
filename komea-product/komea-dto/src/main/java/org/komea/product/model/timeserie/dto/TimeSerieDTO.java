@@ -1,27 +1,20 @@
-/**
- *
- */
 package org.komea.product.model.timeserie.dto;
 
 import com.google.common.collect.Lists;
+import java.io.Serializable;
 import java.util.List;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.model.Kpi;
 
-/**
- * contain historical values for a kpi on an entity
- *
- * @author jguidoux
- */
-public class TimeSerieDTO {
+public class TimeSerieDTO implements Serializable {
 
-    private final List<TimeCoordinateDTO> coordinates;
+    private static final long serialVersionUID = 1L;
+
+    private List<TimeCoordinateDTO> coordinates = Lists.newArrayList();
     private Kpi kpi;
     private BaseEntityDto entity;
 
     public TimeSerieDTO() {
-
-        coordinates = Lists.newArrayList();
     }
 
     public TimeSerieDTO(List<TimeCoordinateDTO> coordinates, Kpi kpi, BaseEntityDto entity) {
@@ -58,6 +51,10 @@ public class TimeSerieDTO {
     public void setKpi(final Kpi _kpi) {
 
         kpi = _kpi;
+    }
+
+    public void setCoordinates(List<TimeCoordinateDTO> coordinates) {
+        this.coordinates = coordinates;
     }
 
     @Override
