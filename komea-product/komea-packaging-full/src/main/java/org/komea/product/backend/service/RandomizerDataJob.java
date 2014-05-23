@@ -82,10 +82,14 @@ public class RandomizerDataJob {
 
         LOGGER.info("Generating random values...");
         int personMeasures = generateKpiValues(EntityType.PERSON);
-        LOGGER.info(personMeasures + " measures added for persons");
+        if (personMeasures > 0) {
+            LOGGER.info(personMeasures + " measures added for persons");
+        }
         int projectMeasures = generateKpiValues(EntityType.PROJECT);
-        LOGGER.info(projectMeasures + " measures added for projects");
-        LOGGER.info("Random values generated...");
+        if (projectMeasures > 0) {
+            LOGGER.info(projectMeasures + " measures added for projects");
+        }
+        LOGGER.info("Random values generated.");
 
     }
 
@@ -96,9 +100,11 @@ public class RandomizerDataJob {
         for (final IEntity entity : entityService.getEntitiesByEntityType(_entityType)) {
             for (final Kpi kpi : allKpisOfEntityType) {
 //                generateKpiValues(kpi, entity);
-                int updateMeasures = updateMeasures(kpi, entity, twoYearsAgo);
-                LOGGER.info(updateMeasures + " measures added for entity " + entity.getDisplayName() + " and kpi " + kpi.getDisplayName());
-                cpt += updateMeasures;
+                int addedMeasures = updateMeasures(kpi, entity, twoYearsAgo);
+                if (addedMeasures > 0) {
+                    LOGGER.info(addedMeasures + " measures added for entity " + entity.getDisplayName() + " and kpi " + kpi.getDisplayName());
+                }
+                cpt += addedMeasures;
             }
         }
         return cpt;
@@ -110,6 +116,7 @@ public class RandomizerDataJob {
         final MeasureCriteria.Criteria criteria = measureCriteria.createCriteria();
         criteria.andIdKpiEqualTo(formulaID.getId()).andEntityIDEqualTo(_entity.getId());
         final List<Measure> measures = measureService.selectByCriteria(measureCriteria);
+        LOGGER.info(measures.size() + " measures exist for entity " + _entity.getDisplayName() + " and kpi " + _kpi.getDisplayName());
         DateTime date = new DateTime(_since);
         Double lastValue = null;
         int cpt = 0;
@@ -128,8 +135,8 @@ public class RandomizerDataJob {
 
     private Double getValue(final DateTime date, final List<Measure> measures) {
         final DateTime nextDate = date.plusDays(1);
-        final Date from = date.toDate();
-        final Date to = nextDate.toDate();
+        final Date from = new Date(date.toDate().getTime() - 1);
+        final Date to = new Date(nextDate.toDate().getTime() + 1);
         final Iterator<Measure> iterator = measures.iterator();
         Measure measure = null;
         while (iterator.hasNext()) {
