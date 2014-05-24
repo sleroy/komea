@@ -60,7 +60,7 @@ public class MeasuresController {
 
         final List<TimeSerieDTO> timeSerieDTOs = measureService.findMupltipleHistoricalMeasure(
                 _request.getKpiKeyList(), _request.getPeriod());
-        LOGGER.info("findHistoricalMeasure with params : {}\nResults : {}", _request, timeSerieDTOs);
+        LOGGER.debug("findHistoricalMeasure with params : {}\nResults : {}", _request, timeSerieDTOs);
         return timeSerieDTOs;
     }
 
