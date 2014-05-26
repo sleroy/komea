@@ -12,6 +12,8 @@ import org.apache.commons.lang3.Validate;
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.product.backend.service.ISpringService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -20,6 +22,10 @@ import org.komea.product.backend.service.ISpringService;
  */
 public abstract class GroovyFormulaScript extends Script
 {
+    
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(GroovyFormulaScript.class);
+    
     
     
     /**
@@ -33,6 +39,7 @@ public abstract class GroovyFormulaScript extends Script
     public ICEPQuery autowired(final ICEPQuery _query) {
     
     
+        LOGGER.info("Autowiring the cep query {}", _query);
         getSpringService().autowirePojo(_query);
         return _query;
         
@@ -49,6 +56,7 @@ public abstract class GroovyFormulaScript extends Script
     public IDynamicDataQuery<?> autowired(final IDynamicDataQuery _query) {
     
     
+        LOGGER.info("Autowiring the dynamic data query {}", _query);
         getSpringService().autowirePojo(_query);
         return _query;
         
@@ -59,7 +67,7 @@ public abstract class GroovyFormulaScript extends Script
     
     
         final ISpringService variable = (ISpringService) getBinding().getVariable("spring");
-        Validate.notNull(variable, "Spring service is not null");
+        Validate.notNull(variable, "Spring service must be provided to the groovy shell.");
         return variable;
     }
 }

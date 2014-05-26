@@ -8,8 +8,8 @@ package org.komea.product.backend.service.standardkpi;
 
 import javax.annotation.PostConstruct;
 
-import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.standardkpi.IStandardKpiService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.KpiBuilder;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;

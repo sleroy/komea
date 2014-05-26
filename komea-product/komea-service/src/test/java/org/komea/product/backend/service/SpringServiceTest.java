@@ -6,11 +6,11 @@ package org.komea.product.backend.service;
 
 
 
-import static org.junit.Assert.assertNotNull;
-
 import org.junit.Test;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.Assert.assertNotNull;
 
 
 

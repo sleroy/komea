@@ -48,6 +48,13 @@ public class GroovyEngineService implements IGroovyEngineService
     }
     
     
+    public ISpringService getSpringService() {
+    
+    
+        return springService;
+    }
+    
+    
     @PostConstruct
     public void init() {
     
@@ -117,5 +124,12 @@ public class GroovyEngineService implements IGroovyEngineService
         shell.setVariable("spring", springService);
         return shell.parse(_groovyScript);
         
+    }
+    
+    
+    public void setSpringService(final ISpringService _springService) {
+    
+    
+        springService = _springService;
     }
 }
