@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.komea.plugins</groupId>
 		<artifactId>komea-plugins</artifactId>
-		<version>1.1.21-SNAPSHOT</version>
+		<version>1.1.22-SNAPSHOT</version>
 	</parent>
 	
 	<artifactId>komea-svn-plugin</artifactId>
