@@ -3,10 +3,24 @@ package org.komea.product.backend.api.exceptions;
 
 
 
+import org.komea.product.backend.service.kpi.FormulaID;
+
+
+
 /**
  */
 public class CEPQueryNotFoundException extends RuntimeException
 {
+    
+    
+    /**
+     * @param _formulaID
+     */
+    public CEPQueryNotFoundException(final FormulaID _formulaID) {
+    
+    
+        super("CEP Query statement was not found :" + _formulaID);
+    }
     
     
     /**

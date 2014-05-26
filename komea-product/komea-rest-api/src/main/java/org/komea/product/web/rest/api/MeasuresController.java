@@ -1,9 +1,7 @@
 package org.komea.product.web.rest.api;
 
 import java.util.List;
-
 import javax.validation.Valid;
-
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.kpi.IMeasureService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
@@ -27,17 +25,10 @@ public class MeasuresController {
     private static final Logger LOGGER = LoggerFactory.getLogger(MeasuresController.class);
 
     @Autowired
-    private IStatisticsAPI statService;
-
-    @Autowired
     private IMeasureService measureService;
 
-    @RequestMapping(method = RequestMethod.POST, value = "/historic", consumes = "application/json; charset=utf-8", produces = "application/json; charset=utf-8")
-    @ResponseBody
-    public List<TimeSerieDTO> findHistoricalMeasure(@RequestBody final ManyHistoricalMeasureRequest _request) {
-
-        return measureService.findMupltipleHistoricalMeasure(_request.getKpiKeyList(), _request.getPeriod());
-    }
+    @Autowired
+    private IStatisticsAPI statService;
 
     /**
      * This method get the current measure for a kpi type on an entity
@@ -48,10 +39,29 @@ public class MeasuresController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/current", produces = "application/json")
     @ResponseBody
-    public List<MeasureResult> currentMeasures(@Valid @RequestBody final KpiStringKeyList _kpiKeys) throws KPINotFoundException {
+    public List<MeasureResult> currentMeasures(@Valid
+            @RequestBody
+            final KpiStringKeyList _kpiKeys) throws KPINotFoundException {
+
+        LOGGER.debug("currentMeasures: {}", _kpiKeys);
 
         return measureService.currentMeasures(_kpiKeys);
 
+    }
+
+    @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/historic",
+            consumes = "application/json; charset=utf-8",
+            produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public List<TimeSerieDTO> findHistoricalMeasure(@RequestBody
+            final ManyHistoricalMeasureRequest _request) {
+
+        final List<TimeSerieDTO> timeSerieDTOs = measureService.findMupltipleHistoricalMeasure(
+                _request.getKpiKeyList(), _request.getPeriod());
+        LOGGER.debug("findHistoricalMeasure with params : {}\nResults : {}", _request, timeSerieDTOs);
+        return timeSerieDTOs;
     }
 
     /**
@@ -63,8 +73,11 @@ public class MeasuresController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/last", produces = "application/json")
     @ResponseBody
-    public List<MeasureResult> lastMeasures(@Valid @RequestBody final KpiStringKeyList _kpiKeys) throws KPINotFoundException {
+    public List<MeasureResult> lastMeasures(@Valid
+            @RequestBody
+            final KpiStringKeyList _kpiKeys) throws KPINotFoundException {
 
+        LOGGER.debug("lastMeasures: {}", _kpiKeys);
         return measureService.lastMeasures(_kpiKeys);
 
     }

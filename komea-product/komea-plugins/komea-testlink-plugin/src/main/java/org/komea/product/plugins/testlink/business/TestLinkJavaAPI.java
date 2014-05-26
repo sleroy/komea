@@ -12,6 +12,7 @@ package org.komea.product.plugins.testlink.business;
 
 import br.eti.kinoshita.testlinkjavaapi.TestLinkAPI;
 import br.eti.kinoshita.testlinkjavaapi.constants.TestCaseDetails;
+import br.eti.kinoshita.testlinkjavaapi.model.Execution;
 import br.eti.kinoshita.testlinkjavaapi.model.TestCase;
 import br.eti.kinoshita.testlinkjavaapi.model.TestPlan;
 import br.eti.kinoshita.testlinkjavaapi.model.TestProject;
@@ -31,6 +32,8 @@ import org.komea.product.plugins.testlink.model.TestLinkMetrics;
 import org.komea.product.plugins.testlink.model.TestLinkProject;
 import org.komea.product.plugins.testlink.model.TestLinkRequirement;
 import org.komea.product.plugins.testlink.model.TestLinkServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is the implementation of the proxy that obtains informations from
@@ -40,6 +43,7 @@ import org.komea.product.plugins.testlink.model.TestLinkServer;
  */
 public class TestLinkJavaAPI implements ITestLinkServerProxy {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestLinkJavaAPI.class.getName());
     private TestLinkAPI api = null;
 
     /**
@@ -119,7 +123,16 @@ public class TestLinkJavaAPI implements ITestLinkServerProxy {
         for (final TestPlan testPlan : projectTestPlans) {
             final TestSuite[] testSuitesForTestPlan = api.getTestSuitesForTestPlan(testPlan.getId());
             for (final TestSuite testSuite : testSuitesForTestPlan) {
-                result.addAll(Arrays.asList(api.getTestCasesForTestSuite(testSuite.getId(), Boolean.TRUE, TestCaseDetails.FULL)));
+                final TestCase[] testCasesForTestSuite = api.getTestCasesForTestSuite(
+                        testSuite.getId(), Boolean.TRUE, TestCaseDetails.SIMPLE);
+                for (TestCase testCase : testCasesForTestSuite) {
+                    final Execution lastExecutionResult = api.getLastExecutionResult(
+                            testPlan.getId(), testCase.getId(), testCase.getId());
+                    if (lastExecutionResult != null) {
+                        testCase.setExecutionStatus(lastExecutionResult.getStatus());
+                    }
+                }
+                result.addAll(Arrays.asList(testCasesForTestSuite));
             }
         }
         return result;

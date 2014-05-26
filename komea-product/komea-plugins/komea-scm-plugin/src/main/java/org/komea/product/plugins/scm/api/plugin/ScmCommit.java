@@ -212,6 +212,18 @@ public class ScmCommit implements IScmCommit
     
     /*
      * (non-Javadoc)
+     * @see org.komea.product.plugins.scm.api.plugin.IScmCommit#hasCompleteInformations()
+     */
+    @Override
+    public boolean hasCompleteInformations() {
+    
+    
+        return hasAuthor() && hasProject() && !message.isEmpty() && commitTime != null;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.scm.api.plugin.IScmCommit#hasProject()
      */
     @Override
@@ -321,7 +333,7 @@ public class ScmCommit implements IScmCommit
     public String toString() {
     
     
-        return "ScmCommit [author="
+        return "ScmCommitDto [author="
                 + author + ", commitTime=" + commitTime + ", id=" + id + ", message=" + message
                 + ", numberOfAddedlines=" + numberOfAddedlines + ", numberofDeletedLines="
                 + numberofDeletedLines + ", numberOfModifiedFiles=" + numberOfModifiedFiles + "]";

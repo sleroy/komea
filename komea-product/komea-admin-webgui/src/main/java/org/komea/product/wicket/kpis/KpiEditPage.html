@@ -24,6 +24,9 @@
                             <div class="alert alert-danger" wicket:id="feedback"></div>
                             <form class="form" wicket:id="form" role="form">
                                 <legend wicket:id="legend" ></legend>
+                                  <div class="alert alert-success" wicket:id="success">
+                                    <label><wicket:message key="kpipage.save.form.history.validpurge"></wicket:message></label>
+                                </div>
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <!-- Text input-->
@@ -133,12 +136,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
                                     </div>
-
-
-
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
@@ -146,6 +144,17 @@
                                         <div class="col-md-10">
                                             <textarea id="formula" class="form-control" wicket:message="placeholder:kpipage.save.form.field.tooltip.formula" rows="6" wicket:id="formula"></textarea>
                                             <!--<textarea id="formula" class="form-control codepress java linenumbers-off" rows="6" wicket:id="formula"></textarea>-->
+                                        </div>
+                                    </div>
+                                </div>
+                                                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="kpipage.save.form.history.name"></wicket:message></label>
+                                        <div class="col-md-3">
+                                             <label id="numbervalue" name="numbervalue"  wicket:id="numbervalue" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="btnnumbervalue"><wicket:message key="kpipage.save.form.history.btnpurge"></wicket:message></button>
                                         </div>
                                     </div>
                                 </div>

@@ -1,11 +1,8 @@
 // $codepro.audit.disable
 /**
- * 
+ *
  */
-
 package org.komea.product.wicket.providers;
-
-
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -17,15 +14,11 @@ import org.komea.product.backend.api.IWicketAdminService;
 import org.komea.product.database.model.Provider;
 import org.komea.product.wicket.widget.StaticImage;
 
-
-
 /**
  * @author sleroy
  */
-public class ProviderPanel extends Panel
-{
-    
-    
+public class ProviderPanel extends Panel {
+
     /**
      * @param _id
      * @param _model
@@ -34,8 +27,7 @@ public class ProviderPanel extends Panel
             final String _id,
             final IModel<Provider> _model,
             final IWicketAdminService _wicketAdminService) {
-    
-    
+
         super(_id, new CompoundPropertyModel<Provider>(_model));
         final Provider providerBean = _model.getObject();
         add(new Label("providerName", providerBean.getName()));
@@ -44,11 +36,11 @@ public class ProviderPanel extends Panel
         final LinkExtension linkExtension = new LinkExtension("url", providerBean);
         linkExtension.setEnabled(providerBean.isValidURL());
         add(linkExtension);
-        final Class<? extends WebPage> pluginPageClass =
-                _wicketAdminService.getPluginPage(providerBean.getName());
+        final Class<? extends WebPage> pluginPageClass
+                = _wicketAdminService.getPluginPage(providerBean.getName());
         System.out.println("Plugin page " + pluginPageClass);
-        final AdminLinkExtension adminLinkExtension =
-                new AdminLinkExtension("adminpage", pluginPageClass);
+        final AdminLinkExtension adminLinkExtension
+                = new AdminLinkExtension("adminpage", pluginPageClass);
         adminLinkExtension.setVisible(pluginPageClass != null);
         add(adminLinkExtension);
     }

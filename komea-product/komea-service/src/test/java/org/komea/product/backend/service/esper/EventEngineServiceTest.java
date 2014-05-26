@@ -14,7 +14,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.eventory.api.bridge.IEventBridgeFactory;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
+import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.product.backend.service.fs.IKomeaFS;
+import org.komea.product.backend.service.kpi.FormulaID;
 import org.komea.product.cep.tester.CEPQueryTester;
 import org.komea.product.database.alert.IEvent;
 import org.mockito.InjectMocks;
@@ -87,25 +89,26 @@ public class EventEngineServiceTest
     public final void testCreateOrUpdateQuery() throws Exception {
     
     
+        final FormulaID rawID = FormulaID.ofRawID("query");
         final QueryInformations queryInformations =
-                new QueryInformations("query", new CEPQueryImplementationStub());
+                new QueryInformations(rawID, mock(ICEPQuery.class));
         // WHEN I CONTROL A QUERY THT NOT EXISTS
         // THEN IT RETURNS FALSE AND NULL
-        assertNull(eventEngineService.getQuery("query"));
-        assertFalse(eventEngineService.existQuery("query"));
+        assertNull(eventEngineService.getQuery(rawID));
+        assertFalse(eventEngineService.existQuery(rawID));
         // AFTER I CREATE IT
         eventEngineService.createOrUpdateQuery(queryInformations);
         // IT RETURNS TRUE
-        assertTrue(eventEngineService.existQuery("query"));
+        assertTrue(eventEngineService.existQuery(rawID));
         // IF I UPDATE AGAIN
         eventEngineService.createOrUpdateQuery(queryInformations);
         // NO ERROR? STILL EXISTS
-        assertTrue(eventEngineService.existQuery("query"));
+        assertTrue(eventEngineService.existQuery(rawID));
         // I FOUND IT IN THE LiST.
-        assertTrue(Lists.newArrayList(eventEngineService.getQueryNames()).contains("query"));
-        assertNotNull(eventEngineService.getQuery("query"));
+        assertTrue(Lists.newArrayList(eventEngineService.getQueryNames()).contains(rawID));
+        assertNotNull(eventEngineService.getQuery(rawID));
         // I OBTAIN IT ANOTHER WAY
-        assertNotNull(eventEngineService.getQueryOrFail("query"));
+        assertNotNull(eventEngineService.getQueryOrFail(rawID));
     }
     
     

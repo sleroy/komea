@@ -59,4 +59,9 @@ public class TimeSerieImpl implements TimeSerie {
         return entityKey;
     }
 
+    @Override
+    public String toString() {
+        return "TimeSerieImpl{" + "buildGlobalPeriodTimeSeries=" + buildGlobalPeriodTimeSeries + ", entityKey=" + entityKey + '}';
+    }
+
 }

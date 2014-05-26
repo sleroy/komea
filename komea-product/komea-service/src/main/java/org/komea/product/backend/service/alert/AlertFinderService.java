@@ -3,7 +3,7 @@ package org.komea.product.backend.service.alert;
 import com.google.common.collect.Lists;
 import java.util.Date;
 import java.util.List;
-import org.komea.product.backend.api.IKPIService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.kpi.IMeasureService;
 import org.komea.product.database.dto.BaseEntityDto;
@@ -41,7 +41,7 @@ public class AlertFinderService implements IAlertFinderService {
 
     public KpiAlertDto findAlert(final KpiAlertType alertType,
             final BaseEntityDto entity, final Kpi kpi) {
-        final Double value = measureService.lastMeasure(kpi, entity);
+        final Double value = measureService.currentMeasure(kpi, entity);
         final KpiAlertDto kpiAlert = new KpiAlertDto();
         kpiAlert.setKpiAlertType(alertType);
         kpiAlert.setKpi(kpi);

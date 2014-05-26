@@ -67,13 +67,20 @@ public class KomeaNotifier extends Notifier implements Serializable {
             return super.configure(req, formData);
         }
 
+        private int getResponseCode(final String spec) throws IOException {
+            final URL url = new URL(spec);
+            final HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+            huc.setConnectTimeout(5000);
+            huc.setRequestMethod("HEAD");
+            return huc.getResponseCode();
+        }
+
         public FormValidation doCheckServerUrl(@QueryParameter
                 final String value) {
 
             if (!value.isEmpty()) {
                 try {
-                    final URL url = new URL(value);
-                    if (getResponseCode(url) != 200) {
+                    if (getResponseCode(value) != 200) {
                         return FormValidation.warning("Url not accessible.");
                     }
                 } catch (final MalformedURLException ex) {
@@ -136,13 +143,6 @@ public class KomeaNotifier extends Notifier implements Serializable {
         public boolean isApplicable(final Class<? extends AbstractProject> aClass) {
 
             return true;
-        }
-
-        private int getResponseCode(final URL u) throws IOException {
-
-            final HttpURLConnection huc = (HttpURLConnection) u.openConnection();
-            huc.setRequestMethod("HEAD");
-            return huc.getResponseCode();
         }
 
         public ListBoxModel doFillIndustrializationItems() {

@@ -47,7 +47,7 @@ public class BasicMicroBenchmark
     private final DescriptiveStatistics memoryFree        = new DescriptiveStatistics();
     
     
-    private boolean                     needGC            = true;
+    private boolean                     needGC            = false;
     
     
     private int                         tries             = 30;

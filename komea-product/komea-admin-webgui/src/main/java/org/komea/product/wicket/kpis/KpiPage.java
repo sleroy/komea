@@ -10,7 +10,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.komea.product.backend.api.IKPIService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.widget.api.IDeleteAction;
@@ -42,6 +42,7 @@ public class KpiPage extends LayoutPage
         
         
         final IEditAction<Kpi> kpiEditAction = new KpiEditAction(this);
+        accordion.setActiveTab(KPIS_INDEX);
         
         final List<Kpi> listAllKpis = kpiService.selectAll();
         final List<Kpi> listKpisResult = new ArrayList<Kpi>();

@@ -32,15 +32,4 @@ public class NumberOfModifiedFilesPerDay extends ScmUserQueryImplementation impl
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.plugins.scm.kpi.ScmUserQueryImplementation#getCommitFunction()
-     */
-    @Override
-    public ICommitFunction getCommitFunction() {
-    
-    
-        return this;
-    }
-    
 }

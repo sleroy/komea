@@ -34,6 +34,20 @@ public class BZProviderPluginTest extends AbstractSpringIntegrationTestCase
      * Test method for {@link org.komea.product.plugins.bugzilla.service.BZProviderPlugin#bzOpenBugs()}.
      */
     @Test
+    public void testBzClosedBugs() throws Exception {
+    
+    
+        assertTrue(groovyEngineService.isValidFormula(bZProviderPlugin.bzClosedBugs()
+                .getEsperRequest()));
+        
+        
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.plugins.bugzilla.service.BZProviderPlugin#bzOpenBugs()}.
+     */
+    @Test
     public void testBzOpenBugs() throws Exception {
     
     

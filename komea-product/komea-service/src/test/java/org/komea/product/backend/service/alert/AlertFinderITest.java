@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.komea.product.backend.service.kpi.KpiLoadingService;
+import org.komea.product.backend.api.IKpiLoadingService;
 import org.komea.product.database.dto.KpiAlertDto;
 import org.komea.product.database.dto.SearchKpiAlertsDto;
 import org.komea.product.database.enums.ExtendedEntityType;
@@ -26,7 +26,7 @@ public class AlertFinderITest extends AbstractSpringDBunitIntegrationTest {
     private IAlertFinderService finderService;
 
     @Autowired
-    private KpiLoadingService kpiLoading;
+    private IKpiLoadingService kpiLoading;
 
     @Before
     public void setUp() throws Exception {

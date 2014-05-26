@@ -187,7 +187,7 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
     
         if (!exists(_login)) {
             final Person person =
-                    Person.newPersonWithOnlyEmailAndLogin(_login, _login + "@company.org");
+                    Person.newPersonWithOnlyEmailAndLogin(_login + "@company.org", _login);
             saveOrUpdate(person);
             return person;
         }

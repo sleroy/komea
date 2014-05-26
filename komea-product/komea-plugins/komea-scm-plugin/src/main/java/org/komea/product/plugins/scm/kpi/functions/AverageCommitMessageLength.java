@@ -8,15 +8,20 @@ package org.komea.product.plugins.scm.kpi.functions;
 
 import java.util.Collection;
 
-import org.komea.product.plugins.scm.api.plugin.ICommitFunction;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.komea.product.plugins.scm.api.plugin.IScmCommit;
 import org.komea.product.plugins.scm.kpi.ScmUserQueryImplementation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
-public class AverageCommitMessageLength extends ScmUserQueryImplementation implements
-        ICommitFunction
+public class AverageCommitMessageLength extends ScmUserQueryImplementation
 {
+    
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(AverageCommitMessageLength.class);
+    
     
     
     /**
@@ -32,25 +37,18 @@ public class AverageCommitMessageLength extends ScmUserQueryImplementation imple
     public double compute(final Collection<IScmCommit> commitsOfTheDay) {
     
     
-        long sum = 0L;
+        final DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
+        
+        
         for (final IScmCommit commit : commitsOfTheDay) {
-            sum = sum + commit.getMessage().length();
+            descriptiveStatistics.addValue(commit.getMessage().length());
         }
-        return sum / commitsOfTheDay.size();
+        final double mean = descriptiveStatistics.getMean();
+        
+        return mean;
         
         
     }
     
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.plugins.scm.kpi.ScmUserQueryImplementation#getCommitFunction()
-     */
-    @Override
-    public ICommitFunction getCommitFunction() {
-    
-    
-        return this;
-    }
     
 }

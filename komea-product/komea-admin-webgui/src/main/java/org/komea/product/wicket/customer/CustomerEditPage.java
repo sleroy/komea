@@ -33,6 +33,7 @@ public final class CustomerEditPage extends LayoutPage {
 
     public CustomerEditPage(PageParameters params, Customer _customer, boolean isNew) {
         super(params);
+        accordion.setActiveTab(COMPANY_INDEX);
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
         feedbackPanel.setOutputMarkupPlaceholderTag(true);

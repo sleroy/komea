@@ -115,6 +115,7 @@ public class TextFieldBuilder<T> {
             if (!_isRequired) {
                 ((PasswordTextField) textField).setRequired(false);
             }
+             ((PasswordTextField) textField).setConvertEmptyInputStringToNull(false);
 
         } else if (_isRequired) {
             textField = new RequiredTextField<T>(_wicketId, new PropertyModel<T>(_data, _field));

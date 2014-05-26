@@ -32,15 +32,4 @@ public class NumberOfCommitsPerDay extends ScmUserQueryImplementation implements
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.plugins.scm.kpi.ScmUserQueryImplementation#getCommitFunction()
-     */
-    @Override
-    public ICommitFunction getCommitFunction() {
-    
-    
-        return this;
-    }
-    
 }

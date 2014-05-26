@@ -108,6 +108,14 @@ public interface IScmCommit extends Serializable
     
     
     /**
+     * Returns true if the commit has complete informations (author, project, message)
+     * 
+     * @return
+     */
+    boolean hasCompleteInformations();
+    
+    
+    /**
      * Returns true if a project is associated to this commit.
      */
     boolean hasProject();

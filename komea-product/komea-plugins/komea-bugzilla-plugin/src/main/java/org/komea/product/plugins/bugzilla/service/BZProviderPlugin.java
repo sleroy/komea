@@ -7,11 +7,9 @@ package org.komea.product.plugins.bugzilla.service;
 
 import java.util.Arrays;
 import javax.annotation.PostConstruct;
-import org.komea.product.backend.api.IKPIService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.api.PluginAdminPages;
 import org.komea.product.backend.api.PluginMountPage;
-import org.komea.product.backend.kpi.search.Filter;
-import org.komea.product.backend.kpi.search.Search;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.kpi.GroovyScriptLoader;
 import org.komea.product.backend.service.kpi.KpiBuilder;
@@ -21,7 +19,6 @@ import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO;
-import org.komea.product.plugins.bugzilla.core.BZBugCountKPI;
 import org.komea.product.plugins.bugzilla.userinterface.BugZillaPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,22 +57,15 @@ public class BZProviderPlugin {
     @Autowired
     private IKPIService kpiService;
 
-    public Kpi bzOpenBugs() {
-
-        BZBugCountKPI.create(Search.create(Filter.create("status", false, "new", "unconfirmed",
-                "onhold", "accepted", "assigned", "opened", "reopened")));
-
-        return bzKpi("bugs_status_open", "Open bugs", "Number of open bugs", ValueDirection.WORST,
-                new GroovyScriptLoader("scripts/BzOpenBugScript.groovy").load());
+    public Kpi bzClosedBugs() {
+        return bzKpi("bugs_status_closed", "Closed bugs", "Number of closed bugs",
+                ValueDirection.BETTER,
+                new GroovyScriptLoader("scripts/BzClosedBugScript.groovy").load());
     }
 
-    private Kpi bzClosedBugs() {
-
-        BZBugCountKPI.create(Search.create(Filter.create("status", false, "new", "unconfirmed",
-                "onhold", "accepted", "assigned", "opened", "reopened")));
-
-        return bzKpi("bugs_status_closed", "Closed bugs", "Number of closed bugs", ValueDirection.BETTER,
-                new GroovyScriptLoader("scripts/BzClosedBugScript.groovy").load());
+    public Kpi bzOpenBugs() {
+        return bzKpi("bugs_status_open", "Open bugs", "Number of open bugs", ValueDirection.WORST,
+                new GroovyScriptLoader("scripts/BzOpenBugScript.groovy").load());
     }
 
     public Kpi bzOpenBySeverityBugs(final String severity) {
@@ -89,7 +79,6 @@ public class BZProviderPlugin {
     }
 
     public Kpi bzOpenNotFixedBugs() {
-
         return bzKpi("bugs_status_open_not_fixed", "Open NOT fixed bugs",
                 "Number of open but not fixed bugs", ValueDirection.WORST, new GroovyScriptLoader(
                         "scripts/BzOpenNotFixedBugs.groovy").load());

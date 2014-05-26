@@ -8,7 +8,7 @@ package org.komea.product.backend.service.alert;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.product.backend.api.IKPIService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.dao.KpiAlertTypeDao;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

@@ -31,6 +31,7 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
     private final BZServerConfiguration bugServer;
     private final Component feedBack;
     private final LayoutPage page;
+    private String savPassword;
 
     public BugZillaForm(
             final IBZConfigurationDAO _bService,
@@ -52,8 +53,8 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
 
         add(TextFieldBuilder.<String>createRequired("login", bugServer, "login")
                 .simpleValidator(0, 255).withTooltip(getString("global.save.form.field.tooltip.login")).build());
-
-        add(TextFieldBuilder.<String>createRequired("password", bugServer, "password")
+        savPassword=bugServer.getPassword();
+        add(TextFieldBuilder.<String>createPasswordNoRequire("password", bugServer, "password")
                 .simpleValidator(0, 255).withTooltip(getString("global.save.form.field.tooltip.password")).build());
 
 //        add(TextFieldBuilder.<String> createRequired("reminderAlert", bugServer, "reminderAlert")
@@ -78,7 +79,7 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
 
         final String success = getString("global.connexion.success");
         final String error = getString("global.connexion.error");
-        
+
         AjaxButton testButton = new AjaxButton("testButton", this) {
 
             @Override
@@ -134,6 +135,9 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
                 feedBack.setVisible(false);
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
+                if (bugServer.getPassword() == null || "".equals(bugServer.getPassword())) {
+                    bugServer.setPassword(savPassword);
+                }
                 bService.saveOrUpdate(bugServer);
                 page.setResponsePage(new BugZillaPage(page.getPageParameters()));
 

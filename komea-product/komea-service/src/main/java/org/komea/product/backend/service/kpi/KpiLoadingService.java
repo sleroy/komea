@@ -10,8 +10,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.komea.product.backend.api.IKPIService;
-import org.komea.product.backend.api.IKpiQueryService;
+import org.komea.product.backend.api.IKpiLoadingService;
+import org.komea.product.backend.api.IQueryService;
 import org.komea.product.database.model.Kpi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,14 +28,14 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class KpiLoadingService
+public class KpiLoadingService implements IKpiLoadingService
 {
     
     
     private static final Logger LOGGER = LoggerFactory.getLogger("kpi-loader");
     
     @Autowired
-    private IKpiQueryService    kpiRegisterService;
+    private IQueryService    kpiRegisterService;
     
     @Autowired
     private IKPIService         kpiService;
@@ -45,7 +45,7 @@ public class KpiLoadingService
     /**
      * @return the kpiRegisterService
      */
-    public IKpiQueryService getKpiRegisterService() {
+    public IQueryService getKpiRegisterService() {
     
     
         return kpiRegisterService;
@@ -59,9 +59,10 @@ public class KpiLoadingService
     }
     
     
-    /**
-     * Initializes the service
+    /* (non-Javadoc)
+     * @see org.komea.product.backend.service.kpi.IKpiLoadingService#initLoadingService()
      */
+    @Override
     @PostConstruct
     public void initLoadingService() {
     
@@ -85,7 +86,7 @@ public class KpiLoadingService
      * @param _kpiRegisterService
      *            the kpiRegisterService to set
      */
-    public void setKpiRegisterService(final IKpiQueryService _kpiRegisterService) {
+    public void setKpiRegisterService(final IQueryService _kpiRegisterService) {
     
     
         kpiRegisterService = _kpiRegisterService;

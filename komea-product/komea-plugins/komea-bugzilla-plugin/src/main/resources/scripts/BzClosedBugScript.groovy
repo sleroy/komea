@@ -1,4 +1,4 @@
 import org.komea.product.plugins.bugzilla.core.*;
 import org.komea.product.backend.kpi.search.*;
 
-BZBugCountKPI.create(Search.create(Filter.create("status", true, "new","unconfirmed", "onhold", "accepted", "assigned", "opened", "reopened")));
+BZBugCountKPI.create(Search.create(Filter.create("status", false, "new","unconfirmed", "onhold", "accepted", "assigned", "opened", "reopened")));

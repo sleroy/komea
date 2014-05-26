@@ -4,14 +4,17 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
-import org.komea.product.backend.api.IKPIService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.groovy.IGroovyEngineService;
 import org.komea.product.backend.service.cron.CronUtils;
 import org.komea.product.backend.service.entities.IEntityService;
@@ -30,215 +33,239 @@ import org.komea.product.wicket.widget.builders.TextFieldBuilder;
 
 /**
  * Formular to edit properties in the settings page.
- * 
+ *
  * @author sleroy
  */
 public final class KpiForm extends Form<Kpi> {
 
-	private static final long	       serialVersionUID	= 1L;
-	private final Component	           feedBack;
-	private final boolean	           isNew;
-	private final Kpi	               kpi;
-	private final IKPIService	       kpiService;
-	private final NameGeneric	       nameEntity;
-	private final LayoutPage	       page;
-	private final TextField<Double>	   textminValue;
+    private static final long serialVersionUID = 1L;
+    private final Component feedBack;
+    private final boolean isNew;
+    private final Kpi kpi;
+    private final IKPIService kpiService;
+    private final NameGeneric nameEntity;
+    private final LayoutPage page;
+    private final TextField<Double> textminValue;
 
-	private final IGroovyEngineService	groovyEngineService;
+    private final IGroovyEngineService groovyEngineService;
 
-	public KpiForm(final boolean _isNew, final String _id, final IKPIService _kpi, final IEntityService _entity,
-	        final IProviderService _providerService, final Component _feedBack, final IModel<Kpi> _dto,
-	        final LayoutPage _kpiPage, final IGroovyEngineService _groovyEngineService) {
+    public KpiForm(final boolean _isNew, final String _id, final IKPIService _kpi, final IEntityService _entity,
+            final IProviderService _providerService, final Component _feedBack, final IModel<Kpi> _dto,
+            final LayoutPage _kpiPage, final IGroovyEngineService _groovyEngineService) {
 
-		super(_id, _dto);
-		isNew = _isNew;
-		kpiService = _kpi;
-		feedBack = _feedBack;
-		kpi = _dto.getObject();
-		page = _kpiPage;
-		groovyEngineService = _groovyEngineService;
-		feedBack.setVisible(false);
-		nameEntity = new NameGeneric("");
+        super(_id, _dto);
+        isNew = _isNew;
+        kpiService = _kpi;
+        feedBack = _feedBack;
+        kpi = _dto.getObject();
+        page = _kpiPage;
+        groovyEngineService = _groovyEngineService;
+        feedBack.setVisible(false);
+        nameEntity = new NameGeneric("");
 
-		add(TextFieldBuilder.<String> createRequired("name", kpi, "name").highlightOnErrors().simpleValidator(0, 255)
-		        .withTooltip(getString("global.field.tooltip.name")).build());
+        int countMeasuresOfKpi = kpiService.countMeasuresOfKpi(kpi);
+        final Model<String> modelNumberValue = Model.of(String.valueOf(countMeasuresOfKpi));
+        final Label labelNumberValue = new Label("numbervalue", modelNumberValue);
+        labelNumberValue.setOutputMarkupId(true);
+        labelNumberValue.setOutputMarkupPlaceholderTag(true);
+        add(labelNumberValue);
+        final WebMarkupContainer panelPurgeSuccess = new WebMarkupContainer("success");
+        panelPurgeSuccess.setVisible(false);
+        panelPurgeSuccess.setOutputMarkupId(true);
+        panelPurgeSuccess.setOutputMarkupPlaceholderTag(true);
+        add(panelPurgeSuccess);
 
-		final TextFieldBuilder<String> keyField = TextFieldBuilder.<String> createRequired("kpiKey", kpi, "kpiKey")
-		        .simpleValidator(0, 255).highlightOnErrors().withTooltip(getString("global.field.tooltip.key"));
+        add(TextFieldBuilder.<String>createRequired("name", kpi, "name").highlightOnErrors().simpleValidator(0, 255)
+                .withTooltip(getString("global.field.tooltip.name")).build());
 
-		if (isNew) {
-			keyField.UniqueStringValidator(getString("global.field.key"), kpiService);
-		} else {
-			keyField.buildTextField().add(new AttributeModifier("readonly", "readonly"));
-		}
+        final TextFieldBuilder<String> keyField = TextFieldBuilder.<String>createRequired("kpiKey", kpi, "kpiKey")
+                .simpleValidator(0, 255).highlightOnErrors().withTooltip(getString("global.field.tooltip.key"));
 
-		add(keyField.build());
+        if (isNew) {
+            keyField.UniqueStringValidator(getString("global.field.key"), kpiService);
+        } else {
+            keyField.buildTextField().add(new AttributeModifier("readonly", "readonly"));
+        }
 
-		add(TextAreaBuilder.<String> create("description", kpi, "description").simpleValidator(0, 2048)
-		        .highlightOnErrors().withTooltip(getString("global.field.tooltip.description")).build());
+        add(keyField.build());
 
-		add(SelectBoxBuilder.<ProviderType> createWithEnum("providerType", kpi, ProviderType.class)
-		        .withTooltip(getString("kpipage.save.form.field.tooltip.category")).build());
+        add(TextAreaBuilder.<String>create("description", kpi, "description").simpleValidator(0, 2048)
+                .highlightOnErrors().withTooltip(getString("global.field.tooltip.description")).build());
 
-		textminValue = TextFieldBuilder.<Double> create("valueMin", kpi, "valueMin")
-		        .withTooltip(getString("kpipage.save.form.field.tooltip.minvalue")).buildTextField();
+        add(SelectBoxBuilder.<ProviderType>createWithEnum("providerType", kpi, ProviderType.class)
+                .withTooltip(getString("kpipage.save.form.field.tooltip.category")).build());
 
-		add(textminValue);
-		//
-		final TextField<Double> textMaxValue = TextFieldBuilder.<Double> create("valueMax", kpi, "valueMax")
-		        .withTooltip(getString("kpipage.save.form.field.tooltip.maxvalue")).buildTextField();
-		textMaxValue.add(new IValidator<Double>() {
+        textminValue = TextFieldBuilder.<Double>create("valueMin", kpi, "valueMin")
+                .withTooltip(getString("kpipage.save.form.field.tooltip.minvalue")).buildTextField();
 
-			@Override
-			public void validate(final IValidatable<Double> validatable) {
+        add(textminValue);
+        //
+        final TextField<Double> textMaxValue = TextFieldBuilder.<Double>create("valueMax", kpi, "valueMax")
+                .withTooltip(getString("kpipage.save.form.field.tooltip.maxvalue")).buildTextField();
+        textMaxValue.add(new IValidator<Double>() {
 
-				final Double valueMax = validatable.getValue();
-				final String value = textminValue.getValue();
-				try {
+            @Override
+            public void validate(final IValidatable<Double> validatable) {
 
-					final Double valueMin = Double.valueOf(value);
-					if (valueMax <= valueMin) {
-						final ValidationError error = new ValidationError();
-						error.setMessage(getString("kpipage.save.form.error.minmax"));
-						validatable.error(error);
-					}
-				} catch (final NumberFormatException e) {
-					// Si la valeur min n'est pas un double on ne fait
-					// simplemnet pas la validation
-					// l'erreur sera capter par le validateur de la valeur min
-				}
-			}
-		});
-		add(textMaxValue);
+                final Double valueMax = validatable.getValue();
+                final String value = textminValue.getValue();
+                try {
 
-		add(SelectBoxBuilder.<ValueDirection> createWithEnum("valueDirection", kpi, ValueDirection.class)
-		        .withTooltip(getString("kpipage.save.form.field.tooltip.dirvalue")).build());
+                    final Double valueMin = Double.valueOf(value);
+                    if (valueMax <= valueMin) {
+                        final ValidationError error = new ValidationError();
+                        error.setMessage(getString("kpipage.save.form.error.minmax"));
+                        validatable.error(error);
+                    }
+                } catch (final NumberFormatException e) {
+                    // Si la valeur min n'est pas un double on ne fait
+                    // simplemnet pas la validation
+                    // l'erreur sera capter par le validateur de la valeur min
+                }
+            }
+        });
+        add(textMaxValue);
 
-		add(SelectBoxBuilder.<ValueType> createWithEnum("valueType", kpi, ValueType.class)
-		        .withTooltip(getString("kpipage.save.form.field.tooltip.typvalue")).build());
+        add(SelectBoxBuilder.<ValueDirection>createWithEnum("valueDirection", kpi, ValueDirection.class)
+                .withTooltip(getString("kpipage.save.form.field.tooltip.dirvalue")).build());
 
-		add(SelectBoxBuilder.<EntityType> createWithEnum("entityType", kpi, EntityType.class)
-		        .withTooltip(getString("kpipage.save.form.field.tooltip.typentity")).build());
-		final TextField<String> buildCronField = TextFieldBuilder
-		        .<String> create("cronExpression", kpi, "cronExpression").simpleValidator(0, 60).highlightOnErrors()
-		        .withTooltip(getString("kpipage.save.form.field.tooltip.cron")).buildTextField();
+        add(SelectBoxBuilder.<ValueType>createWithEnum("valueType", kpi, ValueType.class)
+                .withTooltip(getString("kpipage.save.form.field.tooltip.typvalue")).build());
 
-		buildCronField.add(new IValidator<String>() {
+        add(SelectBoxBuilder.<EntityType>createWithEnum("entityType", kpi, EntityType.class)
+                .withTooltip(getString("kpipage.save.form.field.tooltip.typentity")).build());
+        final TextField<String> buildCronField = TextFieldBuilder
+                .<String>create("cronExpression", kpi, "cronExpression").simpleValidator(0, 60).highlightOnErrors()
+                .withTooltip(getString("kpipage.save.form.field.tooltip.cron")).buildTextField();
 
-			@Override
-			public void validate(final IValidatable<String> validatable) {
+        buildCronField.add(new IValidator<String>() {
 
-				final String value = validatable.getValue();
-				if (!CronUtils.isValidCronExpression(value)) {
-					final ValidationError error = new ValidationError();
-					error.setMessage(getString("kpipage.save.form.error.cron"));
-					validatable.error(error);
-				}
-			}
-		});
+            @Override
+            public void validate(final IValidatable<String> validatable) {
 
-		add(buildCronField);
+                final String value = validatable.getValue();
+                if (!CronUtils.isValidCronExpression(value)) {
+                    final ValidationError error = new ValidationError();
+                    error.setMessage(getString("kpipage.save.form.error.cron"));
+                    validatable.error(error);
+                }
+            }
+        });
 
-		// FIXME::
-		// add(SelectBoxBuilder.<EvictionType>createWithEnum("evictionType",
-		// kpi, EvictionType.class)
-		// .withTooltip(getString("kpipage.save.form.field.tooltip.evicttype"))
-		// .build());
+        add(buildCronField);
 
-		final TextArea<String> formulaField = TextAreaBuilder.<String> create("formula", kpi, "esperRequest")
-		        .withTooltip("").withTooltip(getString("kpipage.save.form.field.tooltip.formula")).build();
+        // FIXME::
+        // add(SelectBoxBuilder.<EvictionType>createWithEnum("evictionType",
+        // kpi, EvictionType.class)
+        // .withTooltip(getString("kpipage.save.form.field.tooltip.evicttype"))
+        // .build());
+        final TextArea<String> formulaField = TextAreaBuilder.<String>create("formula", kpi, "esperRequest")
+                .withTooltip("").withTooltip(getString("kpipage.save.form.field.tooltip.formula")).build();
 
-		formulaField.add(new IValidator<String>() {
+        formulaField.add(new IValidator<String>() {
 
-			@Override
-			public void validate(final IValidatable<String> validatable) {
+            @Override
+            public void validate(final IValidatable<String> validatable) {
 
-				final String value = validatable.getValue();
-				if (!groovyEngineService.isValidFormula(value)) {
-					final ValidationError error = new ValidationError();
-					error.setMessage(getString("kpipage.save.form.error.formula"));
-					validatable.error(error);
-				}
-			}
-		});
+                final String value = validatable.getValue();
+                if (!groovyEngineService.isValidFormula(value)) {
+                    final ValidationError error = new ValidationError();
+                    error.setMessage(getString("kpipage.save.form.error.formula"));
+                    validatable.error(error);
+                }
+            }
+        });
 
-		add(formulaField);
+        add(formulaField);
 
-		final Kpi myKpi = kpi;
+        final Kpi myKpi = kpi;
 
-		add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
+        add(new AjaxLinkLayout<LayoutPage>("btnnumbervalue", page) {
 
-			@Override
-			public void onClick(final AjaxRequestTarget art) {
+            @Override
+            public void onClick(final AjaxRequestTarget art) {
 
-				final LayoutPage page = getCustom();
-				page.setResponsePage(new KpiPage(page.getPageParameters()));
-			}
-		});
+                kpiService.purgeHistoryOfKpi(kpi);
+                modelNumberValue.setObject(String.valueOf(kpiService.countMeasuresOfKpi(kpi)));
+                panelPurgeSuccess.setVisible(true);
+                art.add(panelPurgeSuccess);
+                art.add(labelNumberValue);
+            }
+        });
 
-		add(new AjaxLinkLayout<TextField>("maxValueMax", textMaxValue) {
+        add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
 
-			@Override
-			public void onClick(final AjaxRequestTarget art) {
+            @Override
+            public void onClick(final AjaxRequestTarget art) {
 
-				myKpi.setValueMax(Double.MAX_VALUE);
-				art.add(getCustom());
-			}
+                final LayoutPage page = getCustom();
+                page.setResponsePage(new KpiPage(page.getPageParameters()));
+            }
+        });
 
-		});
-		add(new AjaxLinkLayout<TextField>("maxValueMin", textminValue) {
+        add(new AjaxLinkLayout<TextField>("maxValueMax", textMaxValue) {
 
-			@Override
-			public void onClick(final AjaxRequestTarget art) {
+            @Override
+            public void onClick(final AjaxRequestTarget art) {
 
-				myKpi.setValueMin(-Double.MAX_VALUE);
-				art.add(getCustom());
-			}
+                myKpi.setValueMax(Double.MAX_VALUE);
+                art.add(getCustom());
+            }
 
-		});
-		//
-		// // add a button that can be used to submit the form via ajax
-		add(new AjaxButton("submit", this) {
+        });
+        add(new AjaxLinkLayout<TextField>("maxValueMin", textminValue) {
 
-			@Override
-			protected void onError(final AjaxRequestTarget target, final Form<?> form) {
+            @Override
+            public void onClick(final AjaxRequestTarget art) {
 
-				feedBack.setVisible(true);
-				// repaint the feedback panel so errors are shown
-				target.add(feedBack);
-			}
+                myKpi.setValueMin(-Double.MAX_VALUE);
+                art.add(getCustom());
+            }
 
-			//
-			@Override
-			protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+        });
+        //
+        // // add a button that can be used to submit the form via ajax
+        add(new AjaxButton("submit", this) {
 
-				feedBack.setVisible(false);
-				// repaint the feedback panel so that it is hidden
-				target.add(feedBack);
-				kpi.getValueMin();
+            @Override
+            protected void onError(final AjaxRequestTarget target, final Form<?> form) {
 
-				// FIXME::kpi.setObjective(valueOf);
-				kpiService.saveOrUpdate(kpi);
-				page.setResponsePage(new KpiPage(page.getPageParameters()));
+                feedBack.setVisible(true);
+                // repaint the feedback panel so errors are shown
+                target.add(feedBack);
+            }
 
-			}
-		});
+            //
+            @Override
+            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
 
-		// ///////////////////////////////////////////////////////////////////////////////////
-		// ///////////////////////////////////////////////////////////////////////////////////
-	}
+                feedBack.setVisible(false);
+                // repaint the feedback panel so that it is hidden
+                target.add(feedBack);
+                kpi.getValueMin();
 
-	public Kpi getKpi() {
+                // FIXME::kpi.setObjective(valueOf);
+                kpiService.saveOrUpdate(kpi);
+                page.setResponsePage(new KpiPage(page.getPageParameters()));
 
-		return kpi;
-	}
+            }
+        });
 
-	public NameGeneric getNameEntity() {
+        // ///////////////////////////////////////////////////////////////////////////////////
+        // ///////////////////////////////////////////////////////////////////////////////////
+    }
 
-		return nameEntity;
-	}
+    public Kpi getKpi() {
 
-	/**
-	 * Validation the formular : settings are updated from the DTO
-	 */
+        return kpi;
+    }
+
+    public NameGeneric getNameEntity() {
+
+        return nameEntity;
+    }
+
+    /**
+     * Validation the formular : settings are updated from the DTO
+     */
 }

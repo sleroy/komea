@@ -10,7 +10,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.komea.product.backend.api.IKPIService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.alert.IAlertTypeService;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.wicket.LayoutPage;
@@ -37,11 +37,12 @@ public final class AlertEditPage extends LayoutPage {
 
     public AlertEditPage(PageParameters _parameters, KpiAlertType _alertType, boolean isNew) {
         super(_parameters);
+        accordion.setActiveTab(KPIS_INDEX);
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
-
+        accordion.setActiveTab(KPIS_INDEX);
         AlertForm alertForm = new AlertForm(isNew, kpiService, alertService, feedbackPanel, this, _alertType, "form", new CompoundPropertyModel<KpiAlertType>(_alertType));
         String message;
         if (isNew) {
@@ -49,7 +50,8 @@ public final class AlertEditPage extends LayoutPage {
         } else {
             message = getString("alertpage.save.update.title");
         }
-        alertForm.add(new Label("legend", message));        add(alertForm);
+        alertForm.add(new Label("legend", message));
+        add(alertForm);
     }
 
     @Override
