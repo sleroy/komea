@@ -152,7 +152,7 @@ public class BZProviderPlugin {
             final String formula) {
 
         return KpiBuilder.create().name(name).key(key).description(description)
-                .interval(0d, 100000d).dailyKPI().providerType(ProviderType.BUGTRACKER)
+                .interval(0d, 1000d).dailyKPI().providerType(ProviderType.BUGTRACKER)
                 .queryScript(formula).forProject()
                 .produceValue(ValueType.INT, valueDirection).build();
 
