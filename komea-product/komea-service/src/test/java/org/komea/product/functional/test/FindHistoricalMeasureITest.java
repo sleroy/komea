@@ -9,7 +9,6 @@ package org.komea.product.functional.test;
 import org.junit.Test;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
-import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.backend.service.kpi.FormulaID;
@@ -27,9 +26,9 @@ import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.MeasureCriteria;
+import org.komea.product.database.model.Project;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.dto.TimeSerieDTO;
-import org.komea.product.service.dto.EntityKey;
 import org.komea.product.service.dto.EntityStringKey;
 import org.komea.product.service.dto.KpiStringKey;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
@@ -54,10 +53,10 @@ public class FindHistoricalMeasureITest extends AbstractSpringIntegrationTestCas
     {
         
         
-        /**
-         * 
-         */
         public static final double VALUE = 2.0;
+        
+        @Autowired
+        private IProjectService    projectService;
         
         
         
@@ -82,36 +81,36 @@ public class FindHistoricalMeasureITest extends AbstractSpringIntegrationTestCas
         
         
             final KpiResult kpiResult = new KpiResult();
-            kpiResult.put(entityKey, VALUE);
+            kpiResult.put(projectService.selectByKey(PROJECT_NAME).getEntityKey(), VALUE);
             return kpiResult;
         }
     }
     
     
     
-    private static final EntityKey entityKey = EntityKey.of(EntityType.PROJECT, 1);
+    private static final String PROJECT_NAME = "XYZXYZXYZ";
     
     
     @Autowired
-    private IKPIService                kpiAPI;
+    private IKPIService         kpiAPI;
     
     @Autowired
-    private IQueryService          kpiQueryService;
+    private IQueryService       kpiQueryService;
     
     @Autowired
-    private IKPIService            kpiService;
+    private IKPIService         kpiService;
     
     @Autowired
-    private MeasureDao             measureDao;
+    private MeasureDao          measureDao;
     
     @Autowired
-    private IMeasureService        measureService;
+    private IMeasureService     measureService;
     
     @Autowired
-    private IProjectService        projectService;
+    private IProjectService     projectService;
     
     @Autowired
-    private IStatisticsAPI         statisticsAPI;
+    private IStatisticsAPI      statisticsAPI;
     
     
     
@@ -120,7 +119,7 @@ public class FindHistoricalMeasureITest extends AbstractSpringIntegrationTestCas
     
     
         final Kpi build =
-                KpiBuilder.create().nameAndKey("kpigetlaststored").dailyKPI()
+                KpiBuilder.create().nameAndKey("FindHistoricalMeasureITest").dailyKPI()
                         .description("example of kpi").forProject()
                         .groupFormula(GroupFormula.AVG_VALUE).interval(0d, 100d)
                         .providerType(ProviderType.BUGTRACKER).dynamicQuery(DemoDynamicQuery.class)
@@ -128,9 +127,7 @@ public class FindHistoricalMeasureITest extends AbstractSpringIntegrationTestCas
         
         // AND I REGISTER THIS KPI
         kpiService.saveOrUpdate(build);
-        
-        assertEquals("We work on primary key = 1 in entityKey", Integer.valueOf(1), projectService
-                .getOrCreate("SCERTIFY").getId());
+        final Project orCreate = projectService.getOrCreate(PROJECT_NAME);
         
         
         // AND KPI SHOULD EXISTS
@@ -151,14 +148,14 @@ public class FindHistoricalMeasureITest extends AbstractSpringIntegrationTestCas
         assertTrue(timeSerieOptions.isValid());
         // WE SHOULD HAVE ONE TIME COORDINATE
         final TimeSerie timeSeries =
-                statisticsAPI.buildPeriodTimeSeries(timeSerieOptions, entityKey);
+                statisticsAPI.buildPeriodTimeSeries(timeSerieOptions, orCreate.getEntityKey());
         assertNotNull(timeSerieOptions);
         assertEquals("Should have one coordinate", 1, timeSeries.getCoordinates().size());
         // MEASURE SERVICE : should produce analog results
         final TimeSerieDTO findHistoricalMeasure =
                 measureService.findHistoricalMeasure(
                         KpiStringKey.ofKpiNameAndEntityKey(build.getKey(),
-                                EntityStringKey.of(EntityType.PROJECT, "SCERTIFY")),
+                                EntityStringKey.of(EntityType.PROJECT, PROJECT_NAME)),
                         timeSerieOptions);
         assertEquals(1, findHistoricalMeasure.getCoordinates().size());
         

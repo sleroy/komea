@@ -33,9 +33,10 @@ public class MeasureDateComparatorTest
     
         final MeasureDateComparator measureDateComparator = new MeasureDateComparator();
         final Measure measure = new Measure();
-        measure.setDate(new Date());
+        Date date = new Date();
+        measure.setDate(date);
         final Measure measure2 = new Measure();
-        measure2.setDate(new Date());
+        measure2.setDate(date);
         assertEquals(measure.getDate().compareTo(measure2.getDate()),
                 measureDateComparator.compare(measure, measure2));
         

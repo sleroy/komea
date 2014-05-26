@@ -9,7 +9,6 @@ package org.komea.product.functional.test;
 import org.junit.Test;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
-import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.api.IKpiLoadingService;
 import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.service.kpi.IKPIService;
@@ -87,18 +86,18 @@ public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestC
     
     
     @Autowired
-    private IKPIService                kpiAPI;
+    private IKPIService            kpiAPI;
     @Autowired
     private IKpiLoadingService     kpiLoadingService;
     
     @Autowired
-    private IQueryService       kpiQueryService;
+    private IQueryService          kpiQueryService;
     
     @Autowired
     private IKPIService            kpiService;
     
     @Autowired
-    private IQueryService       kpiValueService;
+    private IQueryService          kpiValueService;
     
     
     
@@ -107,7 +106,7 @@ public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestC
     
     
         final Kpi build =
-                KpiBuilder.create().nameAndKey("kpidemovalue").dailyKPI()
+                KpiBuilder.create().nameAndKey("getrealtimevalue").dailyKPI()
                         .description("example of kpi").forProject()
                         .groupFormula(GroupFormula.AVG_VALUE).interval(0d, 100d)
                         .providerType(ProviderType.BUGTRACKER).dynamicQuery(DemoDynamicQuery.class)

@@ -8,7 +8,6 @@ package org.komea.product.backend.service;
 
 /**
  * @author sleroy
- *
  */
 public interface ISpringService
 {
@@ -20,6 +19,6 @@ public interface ISpringService
      * @param _pojo
      *            the pojo to autowire.
      */
-    public abstract void autowirePojo(Object _pojo);
+    public void autowirePojo(Object _pojo);
     
 }

@@ -21,16 +21,19 @@
 	</appender>
 
 	<logger name="org.springframework">
-		<level value="INFO" />
+		<level value="WARN" />
+	</logger>
+	<logger name="org.spring">
+		<level value="WARN" />
 	</logger>
 	<logger name="org.apache.ibatis">
-		<level value="TRACE" />
+		<level value="WARN" />
 	</logger>
 	<logger name="org.mybatis">
-		<level value="TRACE" />
+		<level value="WARN" />
 	</logger>
 	<logger name="org.mybatis.spring.SqlSessionUtils">
-		<level value="INFO" />
+		<level value="WARN" />
 	</logger>
 
 
@@ -49,7 +52,7 @@
 	</logger>
 
 
-	<root level="info">
+	<root level="INFO">
 		<appender-ref ref="FILE" />
 		<appender-ref ref="STDOUT" />
 	</root>

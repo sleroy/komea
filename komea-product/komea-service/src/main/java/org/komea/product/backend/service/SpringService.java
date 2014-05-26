@@ -6,7 +6,7 @@ package org.komea.product.backend.service;
 
 
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -27,21 +27,11 @@ public class SpringService implements ApplicationContextAware, ISpringService
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(SpringService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("spring-service");
     
     
     private ApplicationContext  applicationContext;
     
-    
-    
-    /**
-     * 
-     */
-    public SpringService() {
-    
-    
-        super();
-    }
     
     
     /*
@@ -59,6 +49,12 @@ public class SpringService implements ApplicationContextAware, ISpringService
                 applicationContext.getAutowireCapableBeanFactory();
         autowireCapableBeanFactory.autowireBean(_pojo);
         autowireCapableBeanFactory.initializeBean(autowireCapableBeanFactory, "custombean");
+    }
+    
+    
+    public void init() {
+    
+    
     }
     
     
