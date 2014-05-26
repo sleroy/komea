@@ -18,6 +18,7 @@ import org.komea.product.backend.service.plugins.IPluginStorageService;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
@@ -151,7 +152,7 @@ public class RandomizerDataJob {
         return measure == null ? null : measure.getValue();
     }
 
-    private Double addValue(final Kpi _kpi, IEntity _entity, final DateTime date, final Double lastValue) {
+    public static Double randomValue(final Kpi _kpi, final Double lastValue) {
         Double min = _kpi.getValueMin();
         Double max = _kpi.getValueMax();
         if (min == null) {
@@ -165,9 +166,18 @@ public class RandomizerDataJob {
         if (lastValue == null) {
             value = Math.random() * range + min;
         } else {
-            value = lastValue + (Math.random() * 0.4 - 0.2) * range;
+            value = lastValue + (Math.random() * 0.3 - 0.15) * range;
         }
         value = Math.max(min, Math.min(max, value));
+        if (ValueType.INT.equals(_kpi.getValueType())) {
+            value = (double) Math.round(value);
+        }
+        return value;
+    }
+
+    private Double addValue(final Kpi _kpi, IEntity _entity,
+            final DateTime date, final Double lastValue) {
+        final Double value = randomValue(_kpi, lastValue);
         final FormulaID formulaID = FormulaID.of(_kpi);
         final Measure measure = new Measure();
         measure.setDate(date.toDate());
