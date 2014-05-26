@@ -65,7 +65,7 @@ public class SonarKpiServiceTest {
     @Test
     public void testBuildSonarMetricKpi() throws Exception {
 
-        testKpi(standardKpiBuilderService.buildSonarMetricKpi("Number of lines of code", "ncloc", 0, 100, ValueType.INT, ValueDirection.NONE));
+        testKpi(standardKpiBuilderService.buildSonarMetricKpi("Lines of code", "ncloc", 0, 100, ValueType.INT, ValueDirection.NONE));
     }
 
     private void testKpi(final Kpi kpiToTest) {

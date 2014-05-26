@@ -7,6 +7,7 @@ import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.dto.TimeSerieDTO;
 import org.komea.product.service.dto.KpiStringKey;
 import org.komea.product.service.dto.KpiStringKeyList;
+import org.komea.product.service.dto.MeasureEvolutionResult;
 import org.komea.product.service.dto.MeasureResult;
 import org.komea.product.service.dto.PeriodCriteria;
 
@@ -95,5 +96,13 @@ public interface IMeasureService {
      * @return the current value
      */
     Double lastMeasure(Kpi kpi, IEntity entity);
+
+    /**
+     * Get current measure and last value in history for each pair of entity/kpi
+     *
+     * @param _kpiKeys kpiStringKeyList
+     * @return measures with last values in history
+     */
+    List<MeasureEvolutionResult> measuresWithEvolution(KpiStringKeyList _kpiKeys);
 
 }
