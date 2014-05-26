@@ -7,11 +7,11 @@ package org.komea.product.plugins.bugzilla.service;
 
 import java.util.Arrays;
 import javax.annotation.PostConstruct;
-import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.api.PluginAdminPages;
 import org.komea.product.backend.api.PluginMountPage;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.kpi.GroovyScriptLoader;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.KpiBuilder;
 import org.komea.product.backend.service.plugins.IEventTypeService;
 import org.komea.product.database.enums.ProviderType;
@@ -154,7 +154,7 @@ public class BZProviderPlugin {
         return KpiBuilder.create().name(name).key(key).description(description)
                 .interval(0d, 100000d).dailyKPI().providerType(ProviderType.BUGTRACKER)
                 .queryScript(formula).forProject()
-                .produceValue(ValueType.INT, ValueDirection.BETTER).build();
+                .produceValue(ValueType.INT, valueDirection).build();
 
     }
 }
