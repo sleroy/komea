@@ -47,7 +47,7 @@ public class ProviderPage extends LayoutPage
     
     
         super(_parameters);
-        accordion.setActiveTab(ADMIN_INDEX);
+        
         final ISortableDataProvider<Provider, String> dataProvider =
                 new ListDataModel(providerService.selectAll());
         
