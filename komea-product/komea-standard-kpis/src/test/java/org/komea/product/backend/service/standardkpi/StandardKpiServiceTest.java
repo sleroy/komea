@@ -6,36 +6,35 @@ package org.komea.product.backend.service.standardkpi;
 
 
 
-import org.junit.BeforeClass;
+import groovy.lang.Script;
+
 import org.junit.Test;
-import org.komea.product.backend.groovy.GroovyEngineService;
+import org.komea.eventory.api.engine.IQuery;
+import org.komea.product.backend.api.standardkpi.IStandardKpiService;
+import org.komea.product.backend.groovy.IGroovyEngineService;
+import org.komea.product.database.dto.KpiResult;
+import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 
 
 /**
  * @author sleroy
  */
-public class StandardKpiServiceTest
+public class StandardKpiServiceTest extends AbstractSpringIntegrationTestCase
 {
     
     
-    private static GroovyEngineService groovyEngineService = new GroovyEngineService();
-    
-    
-    
-    @BeforeClass
-    public static void bfc() {
-    
-    
-        // TODO Auto-generated method stub
-        
-    }
-    
+    @Autowired
+    private IGroovyEngineService groovyEngineService;
     
     
     @Autowired
-    private StandardKpiService standardKpiService;
+    private IStandardKpiService  standardKpiService;
     
     
     
@@ -47,9 +46,37 @@ public class StandardKpiServiceTest
     
     
         final StandardKpiService standardKpiServiceTest = new StandardKpiService();
-        standardKpiServiceTest.numberOfProjectPerUser();
+        final Script parseScript =
+                groovyEngineService.parseScript(standardKpiServiceTest.numberOfProjectPerUser()
+                        .getEsperRequest());
+        
+        
+        final IQuery<KpiResult> query = (IQuery<KpiResult>) parseScript.run();
+        assertNotNull(query);
+        assertNotNull(query.getResult());
+        
+        assertEquals("Administrator should have an entry", 1, query.getResult().size());
         
         
     }
     
+    
+    /**
+     * Test method for {@link org.komea.product.backend.service.standardkpi.StandardKpiService#numberOfUsersPerProject()}.
+     */
+    @Test
+    public void testNumberOfUsersPerProject() throws Exception {
+    
+    
+        final StandardKpiService standardKpiServiceTest = new StandardKpiService();
+        final Script parseScript =
+                groovyEngineService.parseScript(standardKpiServiceTest.numberOfUsersPerProject()
+                        .getEsperRequest());
+        
+        
+        final IQuery<KpiResult> query = (IQuery<KpiResult>) parseScript.run();
+        assertNotNull(query);
+        assertNotNull(query.getResult());
+        assertTrue(query.getResult().isEmpty());
+    }
 }
