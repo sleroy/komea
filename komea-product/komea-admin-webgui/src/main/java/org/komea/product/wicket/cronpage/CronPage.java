@@ -41,7 +41,7 @@ public class CronPage extends LayoutPage
     
         super(_parameters);
         
-        accordion.setActiveTab(ADMIN_INDEX);
+        
         final AbstractColumn<CronDetails, String> nextExecutionTime =
                 new AbstractColumn<CronDetails, String>(Model.of("Next execution time"))
                 {

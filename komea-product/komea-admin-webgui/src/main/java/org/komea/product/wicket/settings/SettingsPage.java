@@ -37,7 +37,7 @@ public class SettingsPage extends LayoutPage
         // method loadPersons is defined elsewhere
         final List<Setting> settings = service.getSettings();
         // Build DTO
-        accordion.setActiveTab(ADMIN_INDEX);
+        
         final SettingsDTO settingsDTO = new SettingsDTO();
         settingsDTO.setSettings(settings);
         add(new SettingForm(getService(), "form", new CompoundPropertyModel<SettingsDTO>(

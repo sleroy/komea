@@ -67,7 +67,7 @@ public class PersonAddPage extends LayoutPage {
     private PersonAddPage(final PageParameters _parameters, final Person _person, boolean isNew) {
 
         super(_parameters);
-        accordion.setActiveTab(COMPANY_INDEX);
+        
         final PersonFormData newPersonForm = formularService.newPersonForm();
         final PersonForm personForm
                 = new PersonForm(isNew, personRole, passEncoder, personDAO, projectService, newPersonForm, "form",

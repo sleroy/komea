@@ -63,7 +63,10 @@ public final class KpiForm extends Form<Kpi> {
         feedBack.setVisible(false);
         nameEntity = new NameGeneric("");
 
-        int countMeasuresOfKpi = kpiService.countMeasuresOfKpi(kpi);
+        int countMeasuresOfKpi = 0;
+        if (!isNew) {
+            countMeasuresOfKpi = kpiService.countMeasuresOfKpi(kpi);
+        }
         final Model<String> modelNumberValue = Model.of(String.valueOf(countMeasuresOfKpi));
         final Label labelNumberValue = new Label("numbervalue", modelNumberValue);
         labelNumberValue.setOutputMarkupId(true);
@@ -185,11 +188,13 @@ public final class KpiForm extends Form<Kpi> {
             @Override
             public void onClick(final AjaxRequestTarget art) {
 
-                kpiService.purgeHistoryOfKpi(kpi);
-                modelNumberValue.setObject(String.valueOf(kpiService.countMeasuresOfKpi(kpi)));
-                panelPurgeSuccess.setVisible(true);
-                art.add(panelPurgeSuccess);
-                art.add(labelNumberValue);
+                if (!isNew) {
+                    kpiService.purgeHistoryOfKpi(kpi);
+                    modelNumberValue.setObject(String.valueOf(kpiService.countMeasuresOfKpi(kpi)));
+                    panelPurgeSuccess.setVisible(true);
+                    art.add(panelPurgeSuccess);
+                    art.add(labelNumberValue);
+                }
             }
         });
 
