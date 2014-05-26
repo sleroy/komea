@@ -3,6 +3,7 @@ package org.komea.product.wicket;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.accordion.AccordionPanel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -53,7 +54,11 @@ public abstract class LayoutPage extends WebPage {
 
     private static final long serialVersionUID = 1L;
 
-    protected AccordionPanel accordion;
+    private AccordionPanel accordion;
+
+    private final List<String> menuCompany = Arrays.asList("panel-users", "panel-teams", "panel-departments", "panel-customers", "panel-projects", "panel-empty");
+    private final List<String> menuKpis = Arrays.asList("panel-kpiview", "panel-alerts", "panel-kpis", "panel-empty");
+    private final List<String> menuAdministration = Arrays.asList("panel-settings", "panel-plugins", "panel-viewlog", "panel-stats", "panel-events", "panel-cronpage", "panel-empty");
 
     public final static int COMPANY_INDEX = 0;
     public final static int KPIS_INDEX = 1;
@@ -116,21 +121,13 @@ public abstract class LayoutPage extends WebPage {
 
             @Override
             public WebMarkupContainer getPanel(String panelId) {
-                     List<String> listData = new ArrayList<String>();
-                listData.add("panel-101");
-                listData.add("panel-102");
-                listData.add("panel-103");
-                listData.add("panel-104");
-                listData.add("panel-105");
-                listData.add("panel-empty");
-
                 List<IColumn<?, ?>> columns;
                 columns = new ArrayList<IColumn<?, ?>>();
                 FragmentPropertyColumn fcol;
-                fcol = new FragmentPropertyColumn(Model.of("titre"),page);
+                fcol = new FragmentPropertyColumn(Model.of("titre"), page,accordion);
                 columns.add(fcol);
                 final ISortableDataProvider<String, String> dataProvider
-                        = new ListDataModel<String>(listData);
+                        = new ListDataModel<String>(menuCompany);
                 DataGridView defaultDataTable = new DataGridView("table-panel-1", columns, dataProvider);
                 Fragment fragment = new Fragment(panelId, "panel-1", page);
                 fragment.add(defaultDataTable);
@@ -147,22 +144,15 @@ public abstract class LayoutPage extends WebPage {
             @Override
             public WebMarkupContainer getPanel(String panelId) {
 
-                List<String> listData = new ArrayList<String>();
-                listData.add("panel-201");
-                listData.add("panel-202");
-                listData.add("panel-203");
-                listData.add("panel-empty");
-
-
                 List<IColumn<?, ?>> columns;
                 columns = new ArrayList<IColumn<?, ?>>();
 
                 FragmentPropertyColumn fcol;
-                fcol = new FragmentPropertyColumn(Model.of("titre"),page);
+                fcol = new FragmentPropertyColumn(Model.of("titre"), page,accordion);
 
                 columns.add(fcol);
                 final ISortableDataProvider<String, String> dataProvider
-                        = new ListDataModel<String>(listData);
+                        = new ListDataModel<String>(menuKpis);
                 DataGridView defaultDataTable = new DataGridView("table-panel-2", columns, dataProvider);
                 Fragment fragment = new Fragment(panelId, "panel-2", page);
                 fragment.add(defaultDataTable);
@@ -176,24 +166,16 @@ public abstract class LayoutPage extends WebPage {
 
             @Override
             public WebMarkupContainer getPanel(String panelId) {
-                       List<String> listData = new ArrayList<String>();
-                listData.add("panel-301");
-                listData.add("panel-302");
-                listData.add("panel-303");
-                listData.add("panel-304");
-                listData.add("panel-305");
-                listData.add("panel-306");
-                listData.add("panel-empty");
 
                 List<IColumn<?, ?>> columns;
                 columns = new ArrayList<IColumn<?, ?>>();
                 FragmentPropertyColumn fcol;
-                fcol = new FragmentPropertyColumn(Model.of("titre"),page);
+                fcol = new FragmentPropertyColumn(Model.of("titre"), page,accordion);
                 columns.add(fcol);
                 final ISortableDataProvider<String, String> dataProvider
-                        = new ListDataModel<String>(listData);
+                        = new ListDataModel<String>(menuAdministration);
                 DataGridView defaultDataTable = new DataGridView("table-panel-3", columns, dataProvider);
-            
+
 //                defaultDataTable.get(1).add(new AttributeModifier("class",new Model("danger") ));
                 Fragment fragment = new Fragment(panelId, "panel-3", page);
                 fragment.add(defaultDataTable);
@@ -206,12 +188,12 @@ public abstract class LayoutPage extends WebPage {
 
     public static class FragmentPropertyColumn extends AbstractColumn<String, String> {
 
-      
         private LayoutPage page;
+        private AccordionPanel accordeon;
 
-        public FragmentPropertyColumn(IModel<String> _displayModel, LayoutPage _page) {
+        public FragmentPropertyColumn(IModel<String> _displayModel, LayoutPage _page, AccordionPanel _accordion) {
             super(_displayModel);
-   
+            accordeon = _accordion;
             page = _page;
         }
 
@@ -219,27 +201,49 @@ public abstract class LayoutPage extends WebPage {
         public void populateItem(Item<ICellPopulator<String>> item, String string, IModel<String> imodel) {
             String object = imodel.getObject();
 
-             item.add(new Fragment(string, object, page));
+            item.add(new Fragment(string, object, page));
 
-             System.out.println("%%%%%%%%% verif de type %%%%%%%%%");
-             System.out.println(page.getClass().getCanonicalName());
-             System.out.println(page.getClass().getName());
-             
-             
-             switch(page.getClass().getName())
-             {
-                 case ; 
-                
-             
-             }
-             
-              if("panel-303".equals(object))
-            {
-            item.add(new AttributeModifier("style",new Model("background-color: #C4E3F0") ));
-
+            if (testMenu(object, "panel-teams", "TeamPage", "TeamEditPage")
+                    || testMenu(object, "panel-users", "PersonPage", "PersonAddPage")
+                    || testMenu(object, "panel-departments", "DepartmentPage", "DepartmentEditPage")
+                    || testMenu(object, "panel-customers", "CustomerPage", "CustomerEditPage")
+                    || testMenu(object, "panel-projects", "ProjectPage", "ProjectEditPage")) {
+                accordeon.setActiveTab(COMPANY_INDEX);
+                item.add(new AttributeModifier("style", new Model("background-color: #C4E3F0")));
             }
 
-           
+            if (testMenu(object, "panel-kpis", "KpiPage", "KpiEditPage")
+                    || testMenu(object, "panel-kpiview", "KpiChartPage")
+                    || testMenu(object, "panel-alerts", "AlertPage", "AlertEditPage")) {
+                accordeon.setActiveTab(KPIS_INDEX);
+                item.add(new AttributeModifier("style", new Model("background-color: #C4E3F0")));
+            }
+
+            if (testMenu(object, "panel-settings", "SettingsPage")
+                    || testMenu(object, "panel-plugins", "ProviderPage", "ProviderPanel", "ProviderTableActionPanel")
+                    || testMenu(object, "panel-viewlog", "ConsolePage", "EditPage")
+                    || testMenu(object, "panel-stats", "StatPage", "EditPage")
+                    || testMenu(object, "panel-events", "EventsPage")
+                    || testMenu(object, "panel-cronpage", "CronPage")) {
+                accordeon.setActiveTab(ADMIN_INDEX);
+                item.add(new AttributeModifier("style", new Model("background-color: #C4E3F0")));
+            }
+
+        }
+
+        private final List<String> menuAdministration = Arrays.asList("panel-settings", "panel-plugins", "panel-viewlog", "panel-stats", "panel-events", "panel-cronpage", "panel-empty");
+
+        private boolean testMenu(String _idPanel, String _idPanelConstruc, String... _pages) {
+
+            if (_idPanel.equals(_idPanelConstruc)) {
+                for (String string : _pages) {
+                    if (string.equals(page.getClass().getSimpleName())) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+
         }
 
     }
