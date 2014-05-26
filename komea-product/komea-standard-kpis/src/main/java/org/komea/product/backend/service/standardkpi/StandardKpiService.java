@@ -6,9 +6,16 @@ package org.komea.product.backend.service.standardkpi;
 
 
 
-import org.komea.product.backend.service.kpi.IKPIService;
+import javax.annotation.PostConstruct;
+
+import org.komea.product.backend.api.IKPIService;
 import org.komea.product.backend.api.standardkpi.IStandardKpiService;
+import org.komea.product.backend.service.kpi.KpiBuilder;
+import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.model.Kpi;
+import org.komea.product.plugins.kpi.standard.management.NumberOfProjectsPerPerson;
+import org.komea.product.plugins.kpi.standard.management.NumberOfUsersPerProject;
 import org.komea.product.service.dto.KpiKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +45,38 @@ public class StandardKpiService implements IStandardKpiService
     
     
         super();
+        
+    }
+    
+    
+    @PostConstruct
+    public void init() {
+    
+    
+        saveOrUpdate(numberOfProjectPerUser());
+        saveOrUpdate(numberOfUsersPerProject());
+        
+    }
+    
+    
+    public Kpi numberOfProjectPerUser() {
+    
+    
+        return KpiBuilder.createAscending().nameAndKey("Users per project")
+                .description("This kpi defines the number of users involved in a project.")
+                .providerType(ProviderType.MANAGEMENT).entityType(EntityType.PERSON).dailyKPI()
+                .interval(0d, 100d).dynamicQuery(NumberOfProjectsPerPerson.class).build();
+        
+    }
+    
+    
+    public Kpi numberOfUsersPerProject() {
+    
+    
+        return KpiBuilder.createAscending().nameAndKey("Projects per user")
+                .description("This kpi defines the number of projects a member is participating.")
+                .providerType(ProviderType.MANAGEMENT).entityType(EntityType.PERSON).dailyKPI()
+                .interval(0d, 100d).dynamicQuery(NumberOfUsersPerProject.class).build();
         
     }
     

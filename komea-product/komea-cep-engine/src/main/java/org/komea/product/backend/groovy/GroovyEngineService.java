@@ -3,6 +3,7 @@ package org.komea.product.backend.groovy;
 
 
 
+import groovy.lang.Binding;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
@@ -11,9 +12,12 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.commons.io.IOUtils;
+import org.codehaus.groovy.control.CompilerConfiguration;
 import org.komea.eventory.api.engine.IQuery;
+import org.komea.product.backend.service.ISpringService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
@@ -27,6 +31,10 @@ public class GroovyEngineService implements IGroovyEngineService
     
     private static final Logger LOGGER = LoggerFactory.getLogger("groovy-service");
     private GroovyClassLoader   groovyClassLoader;
+    
+    
+    @Autowired
+    private ISpringService      springService;
     
     
     
@@ -72,6 +80,7 @@ public class GroovyEngineService implements IGroovyEngineService
     
         Class<T> groovyClass;
         try {
+            groovyClassLoader.setShouldRecompile(true);
             groovyClass = groovyClassLoader.parseClass(_groovyScript);
             return groovyClass;
         } catch (final Exception e) {
@@ -100,7 +109,12 @@ public class GroovyEngineService implements IGroovyEngineService
     public Script parseScript(final String _groovyScript) {
     
     
-        final GroovyShell shell = new GroovyShell(Thread.currentThread().getContextClassLoader());
+        final CompilerConfiguration config = new CompilerConfiguration();
+        config.setScriptBaseClass(GroovyFormulaScript.class.getCanonicalName());
+        final Binding binding = new Binding();
+        final GroovyShell shell =
+                new GroovyShell(Thread.currentThread().getContextClassLoader(), binding, config);
+        shell.setVariable("spring", springService);
         return shell.parse(_groovyScript);
         
     }
