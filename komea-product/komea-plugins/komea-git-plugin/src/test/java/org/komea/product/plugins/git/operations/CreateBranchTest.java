@@ -12,6 +12,7 @@ import java.util.List;
 import org.eclipse.jgit.api.Git;
 import org.joda.time.DateTime;
 import org.junit.Test;
+import org.komea.product.backend.service.entities.PersonService;
 import org.komea.product.plugins.git.cron.GitRepoFactory;
 import org.komea.product.plugins.git.utils.GitRepositoryProxy;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
@@ -40,11 +41,13 @@ public class CreateBranchTest
     public void testCreationRepositoryAndScan() throws Exception {
     
     
+        final PersonService personService = new PersonService();
         final ScmRepositoryDefinition gitRepository = GitRepoFactory.createDummyGitRepository();
         
         GitRepoFactory.initEsperEngine();
         final GitRepositoryProxy gitRepositoryProxy =
                 GitRepoFactory.newGitRepositoryProxy(gitRepository);
+        gitRepositoryProxy.setPersonService(personService);
         gitRepositoryProxy.getScmCloner().cloneRepository();
         final Git git = gitRepositoryProxy.getGit();
         System.out.println(gitRepository.getCloneDirectory());
