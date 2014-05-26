@@ -12,12 +12,15 @@ import org.komea.product.backend.service.esper.IEventPushService;
 import org.komea.product.database.dto.EventSimpleDto;
 import org.komea.product.plugins.scm.api.IScmRepositoryAnalysisService;
 import org.komea.product.plugins.scm.api.error.ScmCronJobException;
+import org.komea.product.plugins.scm.api.error.ScmRepositoryAnalysisException;
 import org.komea.product.plugins.scm.api.plugin.IScmCommit;
 import org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.Lists;
 
 
 
@@ -56,19 +59,27 @@ public class ScmRepositoryAnalysisService implements IScmRepositoryAnalysisServi
         LOGGER.info("Differential analysis of the scm repository {}", _newProxy
                 .getRepositoryDefinition().getRepoName());
         
+        final List<Throwable> errorsFound = Lists.newArrayList();
         try {
             // Begin gitRepositoryDefinition
             esperEngine.sendEventDto(_newProxy.getEventFactory().sendFetchRepository());
             LOGGER.info("Checking number of branches");
             checkNumberOfBranches(_newProxy);
+            
             for (final String branchName : _newProxy.getBranches()) {
-                LOGGER.info("Checking number of tags for the branch {}", branchName);
-                checkNumberOfTagsPerBranch(_newProxy, branchName);
-                LOGGER.info("Checking new commits {}", branchName);
-                checkNewCommits(_newProxy, branchName);
+                try {
+                    LOGGER.info("Checking number of tags for the branch {}", branchName);
+                    checkNumberOfTagsPerBranch(_newProxy, branchName);
+                    LOGGER.info("Checking new commits {}", branchName);
+                    checkNewCommits(_newProxy, branchName);
+                } catch (final Exception e) {
+                    errorsFound.add(e);
+                }
             }
             
-            
+            if (!errorsFound.isEmpty()) {
+                throw new ScmRepositoryAnalysisException(errorsFound);
+            }
         } catch (final Throwable e) {
             LOGGER.error(e.getMessage(), e);
             esperEngine.sendEventDto(_newProxy.getEventFactory().sendFetchFailed());
