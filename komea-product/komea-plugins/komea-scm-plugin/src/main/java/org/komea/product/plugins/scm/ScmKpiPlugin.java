@@ -40,7 +40,7 @@ public class ScmKpiPlugin implements IScmKpiPlugin {
             .providerType(ProviderType.SCM)
             .entityType(EntityType.PERSON)
             .query(NumberOfAddedLinesPerDay.class)
-            .interval(0d, 1000000d)
+            .interval(0d, 100000d)
             .dailyKPI().build();
     /**
      *
@@ -52,7 +52,7 @@ public class ScmKpiPlugin implements IScmKpiPlugin {
                     "Commit message length")
             .providerType(ProviderType.SCM)
             .entityType(EntityType.PERSON)
-            .interval(0d, 10000d)
+            .interval(0d, 1000d)
             .query(AverageCommitMessageLength.class)
             .dailyKPI().build();
     public static final Kpi BUILD6
@@ -61,7 +61,7 @@ public class ScmKpiPlugin implements IScmKpiPlugin {
             .nameAndKeyDescription(
                     "Modified lines")
             .providerType(ProviderType.SCM)
-            .interval(0d, 1000000d)
+            .interval(0d, 100000d)
             .entityType(EntityType.PERSON)
             .query(TotalNumberOfModifiedLinesPerDay.class)
             .dailyKPI().build();
@@ -72,7 +72,7 @@ public class ScmKpiPlugin implements IScmKpiPlugin {
                     "Modified files")
             .providerType(ProviderType.SCM)
             .entityType(EntityType.PERSON)
-            .interval(0d, 1000000d)
+            .interval(0d, 100000d)
             .query(NumberOfModifiedFilesPerDay.class)
             .dailyKPI().build();
     /**
@@ -85,7 +85,7 @@ public class ScmKpiPlugin implements IScmKpiPlugin {
                     "Changed lines / day")
             .providerType(ProviderType.SCM)
             .entityType(EntityType.PERSON)
-            .interval(0d, 1000000d)
+            .interval(0d, 100000d)
             .query(NumberOfModifiedLinesPerDay.class)
             .dailyKPI().build();
     /**
@@ -98,7 +98,7 @@ public class ScmKpiPlugin implements IScmKpiPlugin {
                     "Deleted lines / day")
             .providerType(ProviderType.SCM)
             .entityType(EntityType.PERSON)
-            .interval(0d, 1000000d)
+            .interval(0d, 100000d)
             .query(NumberOfDeletedLinesPerDay.class)
             .dailyKPI().build();
     public static final Kpi NUMBER_COMMITS
@@ -108,7 +108,7 @@ public class ScmKpiPlugin implements IScmKpiPlugin {
                     "Commits / day")
             .providerType(ProviderType.SCM)
             .entityType(EntityType.PERSON)
-            .interval(0d, 25 * 60d)
+            .interval(0d, 100d)
             .query(NumberOfCommitsPerDay.class)
             .hourly().build();
     public static final Kpi NUMBER_COMMITS_PROJECT
@@ -118,7 +118,7 @@ public class ScmKpiPlugin implements IScmKpiPlugin {
                     "Commits / day")
             .providerType(ProviderType.SCM)
             .entityType(EntityType.PROJECT)
-            .interval(0d, 25 * 60d)
+            .interval(0d, 1000d)
             .query(NumberOfCommitsPerDayPerProject.class)
             .hourly().build();
 

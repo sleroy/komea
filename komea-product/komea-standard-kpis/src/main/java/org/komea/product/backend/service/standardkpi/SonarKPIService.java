@@ -31,7 +31,7 @@ public class SonarKPIService {
         // metric_value
         // sonar
         // metricName
-        return buildSonarMetricKpi("Line coverage", "line_coverage", 0, 100, ValueType.INT, ValueDirection.BETTER);
+        return buildSonarMetricKpi("Line coverage", "line_coverage", 0, 100, ValueType.PERCENT, ValueDirection.BETTER);
     }
 
     public Kpi buildSonarMetricKpi(
@@ -56,20 +56,19 @@ public class SonarKPIService {
     public void initSonarKPI() {
 
         saveOrUpdate(actualLineCoverage());
-        saveOrUpdate(buildSonarMetricKpi("Lines of Code", "ncloc", 0, 2000000, ValueType.INT, ValueDirection.NONE));
-        saveOrUpdate(buildSonarMetricKpi("Classes", "classes", 0, 20000, ValueType.INT, ValueDirection.NONE));
-        saveOrUpdate(buildSonarMetricKpi("Files", "files", 0, 50000, ValueType.INT, ValueDirection.NONE));
-        saveOrUpdate(buildSonarMetricKpi("Packages", "packages", 0, 5000, ValueType.INT, ValueDirection.NONE));
-        saveOrUpdate(buildSonarMetricKpi("Methods", "functions", 0, 50000, ValueType.INT, ValueDirection.NONE));
+        saveOrUpdate(buildSonarMetricKpi("Lines of Code", "ncloc", 0, 1000000, ValueType.INT, ValueDirection.NONE));
+        saveOrUpdate(buildSonarMetricKpi("Classes", "classes", 0, 10000, ValueType.INT, ValueDirection.NONE));
+        saveOrUpdate(buildSonarMetricKpi("Files", "files", 0, 10000, ValueType.INT, ValueDirection.NONE));
+        saveOrUpdate(buildSonarMetricKpi("Packages", "packages", 0, 1000, ValueType.INT, ValueDirection.NONE));
+        saveOrUpdate(buildSonarMetricKpi("Methods", "functions", 0, 100000, ValueType.INT, ValueDirection.NONE));
         saveOrUpdate(buildSonarMetricKpi("Comments (%)", "comment_lines_density", 0, 100, ValueType.PERCENT, ValueDirection.BETTER));
         saveOrUpdate(buildSonarMetricKpi("Public documented API (%)",
                 "public_documented_api_density", 0, 100, ValueType.PERCENT, ValueDirection.BETTER));
         saveOrUpdate(buildSonarMetricKpi("Complexity /file", "file_complexity", 0, 100, ValueType.FLOAT, ValueDirection.WORST));
         saveOrUpdate(buildSonarMetricKpi("Complexity /class", "class_complexity", 0, 100, ValueType.FLOAT, ValueDirection.WORST));
-        saveOrUpdate(buildSonarMetricKpi("Unit tests", "tests", 0, 50000, ValueType.INT, ValueDirection.BETTER));
-        saveOrUpdate(buildSonarMetricKpi("Unit tests errors", "test_errors", 0, 50000, ValueType.INT, ValueDirection.WORST));
-        saveOrUpdate(buildSonarMetricKpi("Skipped unit tests", "skipped_tests", 0, 50000, ValueType.INT, ValueDirection.WORST));
-        saveOrUpdate(buildSonarMetricKpi("Unit tests failures", "tests_failures", 0, 50000, ValueType.INT, ValueDirection.WORST));
+        saveOrUpdate(buildSonarMetricKpi("Unit tests", "tests", 0, 1000, ValueType.INT, ValueDirection.BETTER));
+        saveOrUpdate(buildSonarMetricKpi("Unit tests errors", "test_errors", 0, 1000, ValueType.INT, ValueDirection.WORST));
+        saveOrUpdate(buildSonarMetricKpi("Skipped unit tests", "skipped_tests", 0, 1000, ValueType.INT, ValueDirection.WORST));
         saveOrUpdate(buildSonarMetricKpi("Unit tests success (%)", "test_success_density", 0, 100, ValueType.PERCENT, ValueDirection.BETTER));
         saveOrUpdate(buildSonarMetricKpi("Branch coverage", "branch_coverage", 0, 100, ValueType.PERCENT, ValueDirection.BETTER));
         saveOrUpdate(buildSonarMetricKpi("IT branch coverage", "it_branch_coverage", 0, 100, ValueType.PERCENT, ValueDirection.BETTER));
