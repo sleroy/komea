@@ -119,9 +119,10 @@ public class GroovyEngineService implements IGroovyEngineService
         final CompilerConfiguration config = new CompilerConfiguration();
         config.setScriptBaseClass(GroovyFormulaScript.class.getCanonicalName());
         final Binding binding = new Binding();
+        binding.setVariable("spring", springService);
         final GroovyShell shell =
                 new GroovyShell(Thread.currentThread().getContextClassLoader(), binding, config);
-        shell.setVariable("spring", springService);
+        
         return shell.parse(_groovyScript);
         
     }
