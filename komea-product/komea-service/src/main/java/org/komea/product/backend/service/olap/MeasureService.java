@@ -71,7 +71,6 @@ public class MeasureService implements IMeasureService {
     @Override
     public List<MeasureEvolutionResult> measuresWithEvolution(final KpiStringKeyList _kpiKeys) {
         final List<MeasureResult> measureResults = currentMeasures(_kpiKeys);
-        LOGGER.info("measureResults : " + measureResults);
         final List<MeasureEvolutionResult> measureEvolutionResults
                 = new ArrayList<MeasureEvolutionResult>(measureResults.size());
         for (final MeasureResult measureResult : measureResults) {
@@ -87,7 +86,6 @@ public class MeasureService implements IMeasureService {
             }
             measureEvolutionResults.add(measureEvolutionResult);
         }
-        LOGGER.info("measureEvolutionResults : " + measureEvolutionResults);
         return measureEvolutionResults;
     }
 
