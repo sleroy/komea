@@ -15,9 +15,9 @@ import org.junit.Rule;
  */
 public class CountColumnTest {
     
-       @Rule
-    public final WicketTesterMethodRule wicketRule = new WicketTesterMethodRule();
-    
+//       @Rule
+//    public final WicketTesterMethodRule wicketRule = new WicketTesterMethodRule();
+//    
     public CountColumnTest() {
     }
 

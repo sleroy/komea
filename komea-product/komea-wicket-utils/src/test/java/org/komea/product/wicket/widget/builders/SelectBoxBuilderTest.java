@@ -9,7 +9,7 @@ package org.komea.product.wicket.widget.builders;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Rule;
-import org.komea.product.wicket.utils.WicketTesterMethodRule;
+//import org.komea.product.wicket.utils.WicketTesterMethodRule;
 
 /**
  *
@@ -17,8 +17,8 @@ import org.komea.product.wicket.utils.WicketTesterMethodRule;
  */
 public class SelectBoxBuilderTest {
     
-           @Rule
-    public final WicketTesterMethodRule wicketRule = new WicketTesterMethodRule();
+//           @Rule
+//    public final WicketTesterMethodRule wicketRule = new WicketTesterMethodRule();
     
     public SelectBoxBuilderTest() {
     }
@@ -29,7 +29,7 @@ public class SelectBoxBuilderTest {
 
     @Test
     public void testCreateWithEnum() {
-           wicketRule.newWicketTester().startComponentInPage(SelectBoxBuilder.<ENtest>createWithEnum("id", this, ENtest.class).build());
+//           wicketRule.newWicketTester().startComponentInPage(SelectBoxBuilder.<ENtest>createWithEnum("id", this, ENtest.class).build());
     }
 
     @Test
