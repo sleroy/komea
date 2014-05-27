@@ -92,7 +92,8 @@ public class MeasuresController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/evolutions", produces = "application/json")
     @ResponseBody
-    public List<MeasureEvolutionResult> measuresWithEvolution(final KpiStringKeyList _kpiKeys) {
+    public List<MeasureEvolutionResult> measuresWithEvolution(@Valid
+            @RequestBody final KpiStringKeyList _kpiKeys) {
         return measureService.measuresWithEvolution(_kpiKeys);
     }
 }
