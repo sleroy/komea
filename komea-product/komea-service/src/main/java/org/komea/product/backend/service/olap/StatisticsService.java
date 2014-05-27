@@ -218,6 +218,7 @@ public class StatisticsService implements IStatisticsAPI
         final PeriodTimeSerieOptions periodTimeSerieOptions = new PeriodTimeSerieOptions();
         periodTimeSerieOptions.untilNow();
         periodTimeSerieOptions.setKpi(kpiPerId);
+        periodTimeSerieOptions.fromLastTimeScale(TimeScale.valueOf(_kpiGoal.getFrequency()));
         periodTimeSerieOptions.setTimeScale(TimeScale.valueOf(_kpiGoal.getFrequency()));
         final KpiResult valuesOnPeriod =
                 evaluateKpiValuesOnPeriod(generateFormulaID(periodTimeSerieOptions));
@@ -405,7 +406,7 @@ public class StatisticsService implements IStatisticsAPI
     
         final double goalValue = _kpiGoal.getValue();
         final double realValue = evaluateKpiGoalValue(_kpiGoal);
-        final double remainEffort = 100.0 * ((realValue - goalValue) / (goalValue + 1.0d));
+        final double remainEffort = 100.0d * ((realValue - goalValue) / (goalValue + 1.0d));
         return remainEffort;
         
     }
