@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:wicket="http://wicket.apache.org">
     <head>
         <meta charset="utf-8"></meta>
@@ -61,10 +61,11 @@
                                         <div class="col-md-3">
                                             <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="btnParent"><wicket:message key="global.button.choose"></wicket:message></button>
                                         </div>
-                                         <div wicket:id="dialogParent">[dialog]</div>
+                                        <div wicket:id="dialogParent">[dialog]</div>
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                     <form class="form" wicket:id="form_dialogAddPerson" role="form">
                                     <div class="row">
                                         <label class="col-md-3" for="inputEmail1"><wicket:message key="teampage.save.form.field.label.members"></wicket:message></label>
                                         <div class="col-md-4">
@@ -81,25 +82,28 @@
                                         </div>
                                     </div>
                                     <div wicket:id="dialogAddPerson">[dialog]</div>
+                                     </form>
                                 </div>
 
-                                    <div class="form-group">
-                                    <div class="row">
-                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="teampage.save.form.field.label.projects"></wicket:message></label>
-                                        <div class="col-md-4">
-                                            <select style="height: 150px" class="form-control col-md-12" wicket:id="tableProject"></select>
-                                        </div>
+                                <div class="form-group">
+                                    <form class="form" wicket:id="form_dialogAddProject" role="form">
                                         <div class="row">
-                                            <div class="col-md-3">
-                                                <button type="button" style="margin-bottom:5px" class="btn btn-small btn-info col-md-5" wicket:id="btnAddProject" ><wicket:message key="global.button.add"></wicket:message></button>
+                                            <label class="col-md-3" for="inputEmail1"><wicket:message key="teampage.save.form.field.label.projects"></wicket:message></label>
+                                            <div class="col-md-4">
+                                                <select style="height: 150px" class="form-control col-md-12" wicket:id="tableProject"></select>
                                             </div>
-                                            <div class="col-md-3">
-                                                <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="btnDelProject" ><wicket:message key="global.button.delete"></wicket:message></button>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <button type="button" style="margin-bottom:5px" class="btn btn-small btn-info col-md-5" wicket:id="btnAddProject" ><wicket:message key="global.button.add"></wicket:message></button>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="btnDelProject" ><wicket:message key="global.button.delete"></wicket:message></button>
 
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
                                         <div wicket:id="dialogAddProject">[dialog]</div>
+                                    </form>
                                 </div>
 
                                 <div class="form-group">
@@ -113,7 +117,7 @@
 
                             </form>
 
-                            
+
 
                         </wicket:extend>
 

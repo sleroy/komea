@@ -17,7 +17,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.komea.product.backend.auth.IPasswordEncoder;
-import org.komea.product.backend.forms.PersonFormData;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonRoleService;
 import org.komea.product.backend.service.entities.IPersonService;
@@ -75,7 +74,6 @@ public final class PersonForm extends Form<Person> {
             final IPasswordEncoder _passEncoder,
             final IPersonService _personService,
             final IProjectService _projectService,
-            final PersonFormData _personFormData,
             final String _id,
             final CompoundPropertyModel<Person> _compoundPropertyModel,
             final LayoutPage _page,
