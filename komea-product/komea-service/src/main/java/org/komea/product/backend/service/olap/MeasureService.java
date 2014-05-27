@@ -80,7 +80,7 @@ public class MeasureService implements IMeasureService {
             if (!measureResult.hasValue()) {
                 measureResult.setValue(lastValue);
                 if (measureEvolutionResult.hasOldValue()) {
-                    final Double lastButOneValue = lastMeasure(measureResult.getKpi(), measureResult.getEntity());
+                    final Double lastButOneValue = lastButOneMeasure(measureResult.getKpi(), measureResult.getEntity());
                     measureEvolutionResult.setOldValue(lastButOneValue);
                 }
             }
@@ -170,6 +170,15 @@ public class MeasureService implements IMeasureService {
             }
         }
         return series;
+    }
+
+    @Override
+    public Double lastButOneMeasure(final Kpi kpi, final IEntity entity) {
+
+        Validate.notNull(kpi);
+        Validate.notNull(entity);
+        final HistoryKey historyKey = HistoryKey.of(kpi, entity);
+        return statService.getLastButOneStoredValueInHistory(historyKey);
     }
 
     @Override

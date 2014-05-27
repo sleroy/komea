@@ -105,4 +105,6 @@ public interface IMeasureService {
      */
     List<MeasureEvolutionResult> measuresWithEvolution(KpiStringKeyList _kpiKeys);
 
+    Double lastButOneMeasure(Kpi kpi, IEntity entity);
+
 }
