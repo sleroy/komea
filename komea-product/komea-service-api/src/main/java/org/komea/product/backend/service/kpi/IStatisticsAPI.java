@@ -9,9 +9,11 @@ package org.komea.product.backend.service.kpi;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.joda.time.Period;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.dto.KpiResult;
+import org.komea.product.database.model.KpiGoal;
 import org.komea.product.database.model.Measure;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.TimeSerieOptions;
@@ -88,6 +90,16 @@ public interface IStatisticsAPI
      */
     @Deprecated
     double computeSumFromMeasures(List<Measure> _kpiMeasures);
+    
+    
+    /**
+     * Returns the value represented by the kpi goal.
+     * 
+     * @param _kpiGoal
+     *            the value represented by the kpi goal.
+     * @return the value.
+     */
+    Double evaluateKpiGoalValue(KpiGoal _kpiGoal);
     
     
     /**
@@ -169,6 +181,26 @@ public interface IStatisticsAPI
      */
     @Deprecated
     Double getLastStoredValueInHistory(HistoryKey _key);
+    
+    
+    /**
+     * Returns the remaining effort to spent to achieve the goal. This result is a percentage difference.
+     * 
+     * @param _kpiGoal
+     *            the goal
+     * @return the remaining effort.
+     */
+    Double getRemainingEffort(KpiGoal _kpiGoal);
+    
+    
+    /**
+     * Returns the remaining time
+     * 
+     * @param _kpiGoal
+     *            the kpi goal
+     * @return the remaining time before the goal exhaustion.
+     */
+    Period getRemainingTime(KpiGoal _kpiGoal);
     
     
     /**

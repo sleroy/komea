@@ -2,9 +2,8 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-CREATE SCHEMA IF NOT EXISTS `komea` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+CREATE SCHEMA IF NOT EXISTS `komea` DEFAULT CHARACTER SET utf8 ;
 USE `komea` ;
-
 
 -- -----------------------------------------------------
 -- Table `komea`.`kom_customer`
@@ -102,7 +101,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `valueMax` DOUBLE NULL ,
   `valueDirection` VARCHAR(255) NOT NULL ,
   `valueType` VARCHAR(255) NOT NULL ,
-  `groupFormula` VARCHAR(255) NOT NULL ,
   `entityType` VARCHAR(255) NOT NULL ,
   `esperRequest` MEDIUMTEXT NOT NULL ,
   `cronExpression` VARCHAR(60) NOT NULL ,
@@ -117,8 +115,8 @@ CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_kpi` (`kpiKey` ASC) ;
 -- Table `komea`.`kom_msr`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `komea`.`kom_msr` (
-  `id` INT NOT NULL ,
-  `idKpi` VARCHAR(100) NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `idKpi` INT NOT NULL ,
   `year` INT NOT NULL ,
   `month` INT NOT NULL ,
   `week` INT NOT NULL ,
@@ -128,6 +126,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_msr` (
   `value` DOUBLE NOT NULL ,
   `date` TIMESTAMP NOT NULL ,
   `sprint` VARCHAR(45) NULL ,
+  `kom_msr_id` INT NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
@@ -138,6 +137,8 @@ CREATE INDEX `fk_Measure_Project1_idx` ON `komea`.`kom_msr` (`entityID` ASC) ;
 CREATE INDEX `dateIndex` ON `komea`.`kom_msr` (`date` ASC) ;
 
 CREATE INDEX `measure-complex-index` ON `komea`.`kom_msr` (`year` ASC, `idKpi` ASC, `month` ASC, `week` ASC, `day` ASC, `hour` ASC, `entityID` ASC) ;
+
+CREATE INDEX `fk_kom_msr_kom_msr1_idx` ON `komea`.`kom_msr` (`kom_msr_id` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -342,5 +343,26 @@ CREATE INDEX `fk_kom_sfac_has_kom_kpi_kom_kpi1_idx` ON `komea`.`kom_has_sfac_kpi
 
 CREATE INDEX `fk_kom_sfac_has_kom_kpi_kom_sfac1_idx` ON `komea`.`kom_has_sfac_kpi` (`idSuccessFactor` ASC) ;
 
+
+-- -----------------------------------------------------
+-- Table `komea`.`kom_kpigoal`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpigoal` (
+  `id` INT NOT NULL ,
+  `idKpi` INT NOT NULL ,
+  `entityID` INT NULL ,
+  `untilDate` TIMESTAMP NULL ,
+  `value` DOUBLE NULL ,
+  `frequency` VARCHAR(45) NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+COMMENT = 'Goal for kpis';
+
+CREATE INDEX `fk_kom_kpigoal_kom_kpi1_idx` ON `komea`.`kom_kpigoal` (`idKpi` ASC) ;
+
 USE `komea` ;
 
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

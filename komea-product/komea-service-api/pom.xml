@@ -18,12 +18,7 @@
 			<artifactId>komea-dto</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
-		<dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>komea-cep-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -43,5 +38,10 @@
 			</exclusions>
 		</dependency>
 
+		<dependency>
+			<groupId>org.komea</groupId>
+			<artifactId>cep-engine-api</artifactId>
+			<version>${eventory.version}</version>
+		</dependency>
 	</dependencies>
 </project>

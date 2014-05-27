@@ -13,8 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.GroupFormula;
 import org.komea.product.model.timeserie.EntityIdValue;
 import org.komea.product.service.dto.EntityKey;
 import org.slf4j.Logger;
@@ -25,42 +27,50 @@ import com.google.common.collect.Maps;
 
 
 /**
+ * This object defines the container that stores the results of the execution of a kpi.
+ * 
  * @author sleroy
  */
 public class KpiResult implements Serializable
 {
     
     
-    public static final KpiResult  EMPTY           = new KpiResult()
-                                                   {
-                                                       
-                                                       
-                                                       /**
-                                                        * Puts a value into the map.
-                                                        * 
-                                                        * @param _entityKey
-                                                        *            the entity key
-                                                        * @param _value
-                                                        *            the value;
-                                                        */
-                                                       @Override
-                                                       public void put(
-                                                               final EntityKey _entityKey,
-                                                               final Number _value) {
-                                                       
-                                                       
-                                                           throw new IllegalAccessError();
-                                                           
-                                                       }
-                                                   };
+    public static final KpiResult  EMPTY            = new KpiResult()
+                                                    {
+                                                        
+                                                        
+                                                        /**
+                                                         * Puts a value into the map.
+                                                         * 
+                                                         * @param _entityKey
+                                                         *            the entity key
+                                                         * @param _value
+                                                         *            the value;
+                                                         */
+                                                        @Override
+                                                        public void put(
+                                                                final EntityKey _entityKey,
+                                                                final Number _value) {
+                                                        
+                                                        
+                                                            throw new IllegalAccessError();
+                                                            
+                                                        }
+                                                    };
     
     
-    private static final Logger    LOGGER          = LoggerFactory.getLogger(KpiResult.class);
-    
-    private Map<EntityKey, Number> map             = Maps.newHashMap();
+    private static final Logger    LOGGER           = LoggerFactory.getLogger(KpiResult.class);
     
     
-    private Throwable              reasonOfFailure = null;
+    /**
+     * 
+     */
+    private static final long      serialVersionUID = -5012854632976327222L;
+    
+    private Map<EntityKey, Number> map              = Maps.newHashMap();
+    
+    
+    private Throwable              reasonOfFailure  = null;
     
     
     
@@ -77,6 +87,29 @@ public class KpiResult implements Serializable
         super();
         map = _map;
         
+    }
+    
+    
+    /**
+     * Computes the unique value from a group formula;
+     * 
+     * @param _groupFormula
+     *            the group formula.
+     * @return the group formula.
+     */
+    public Double computeUniqueValue(final GroupFormula _groupFormula) {
+    
+    
+        switch (_groupFormula) {
+            case COUNT:
+                return Integer.valueOf(size()).doubleValue();
+            case AVG_VALUE:
+                return buildMean();
+            case SUM_VALUE:
+                return buildSum();
+            default:
+                throw new UnsupportedOperationException("Unknown formula");
+        }
     }
     
     
@@ -277,6 +310,26 @@ public class KpiResult implements Serializable
     
     
         return "KpiResult [\\n\\tmap=" + map + ", \\n\\treasonOfFailure=" + reasonOfFailure + "]";
+    }
+    
+    
+    private Double buildMean() {
+    
+    
+        {
+            return buildSum();
+        }
+    }
+    
+    
+    private Double buildSum() {
+    
+    
+        final DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
+        for (final Number dbValue : map.values()) {
+            descriptiveStatistics.addValue(dbValue.doubleValue());
+        }
+        return descriptiveStatistics.getSum();
     }
     
     

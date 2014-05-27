@@ -11,6 +11,7 @@ import org.komea.product.database.model.Customer;
 import org.komea.product.database.model.EventType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
+import org.komea.product.database.model.KpiGoal;
 import org.komea.product.database.model.Link;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.Person;
@@ -58,6 +59,9 @@ public interface IKeyVisitor
      * @param _kpiAlertType
      */
     public void visit(KpiAlertType _kpiAlertType);
+    
+    
+    public void visit(KpiGoal _kpiGoal);
     
     
     /**
@@ -109,6 +113,4 @@ public interface IKeyVisitor
      * @param _tag
      */
     public void visit(Tag _tag);
-    
-    
 }
