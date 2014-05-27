@@ -3,8 +3,8 @@ package org.komea.product.backend.service.alert;
 import com.google.common.collect.Lists;
 import java.util.Date;
 import java.util.List;
-import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.entities.IEntityService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.IMeasureService;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.dto.KpiAlertDto;
@@ -13,6 +13,8 @@ import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
+import org.komea.product.service.dto.EntityStringKey;
+import org.komea.product.service.dto.KpiStringKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +43,11 @@ public class AlertFinderService implements IAlertFinderService {
 
     public KpiAlertDto findAlert(final KpiAlertType alertType,
             final BaseEntityDto entity, final Kpi kpi) {
-        final Double value = measureService.currentMeasure(kpi, entity);
+        Double value = measureService.currentMeasure(kpi, entity);
+        if (value == null) {
+            value = measureService.lastMeasure(new KpiStringKey(kpi.getKey(),
+                    new EntityStringKey(entity.getEntityType(), entity.getKey())));
+        }
         final KpiAlertDto kpiAlert = new KpiAlertDto();
         kpiAlert.setKpiAlertType(alertType);
         kpiAlert.setKpi(kpi);
