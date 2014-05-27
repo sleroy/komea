@@ -52,9 +52,9 @@
 
 	<mybatis:scan base-package="org.komea.product.database.dao" />
 
-
 	<jdbc:initialize-database data-source="dataSource"
 		enabled="${jdbc_initialize_script_enable}" ignore-failures="NONE">
+		<jdbc:script separator="#" location="${database_sqlfile_proc}" />
 		<jdbc:script location="${database_sqlfile}" />
 	</jdbc:initialize-database>
 
