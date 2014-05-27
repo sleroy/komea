@@ -70,4 +70,9 @@ public abstract class GroovyFormulaScript extends Script
         Validate.notNull(variable, "Spring service must be provided to the groovy shell.");
         return variable;
     }
+    
+    
+    public KpiValueProxy kpi(final String _kpiName) {
+        getSpringService().
+    }
 }
