@@ -13,6 +13,7 @@ import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.service.kpi.GroovyScriptLoader;
 import org.komea.product.backend.service.kpi.IEntityKpiFormula;
 import org.komea.product.backend.service.kpi.IKPIService;
+import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.backend.service.kpi.KpiBuilder;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.enums.EntityType;
@@ -24,12 +25,16 @@ import org.komea.product.database.model.Kpi;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import static org.junit.Assert.assertTrue;
 
 
 
 /**
  * @author sleroy
  */
+@Transactional
 public class AbstractGroovyQueryTest extends AbstractSpringIntegrationTestCase
 {
     
@@ -86,6 +91,9 @@ public class AbstractGroovyQueryTest extends AbstractSpringIntegrationTestCase
     @Autowired
     private IKPIService          kpiService;
     
+    @Autowired
+    private IStatisticsAPI       statisticsAPI;
+    
     
     
     @Test
@@ -95,13 +103,13 @@ public class AbstractGroovyQueryTest extends AbstractSpringIntegrationTestCase
         kpiService.saveOrUpdate(fakeKpi("DEMO_KPI_GROOVY1"));
         kpiService.saveOrUpdate(fakeKpi("DEMO_KPI_GROOVY2"));
         final GroovyScriptLoader groovyScriptLoader = new GroovyScriptLoader("groovyScript.groovy");
-        
+        statisticsAPI.backupKpiValuesIntoHistory(BackupDelay.DAY);
         final Kpi kpi = new Kpi();
         kpi.setEntityType(EntityType.PERSON);
         kpi.setEsperRequest(groovyScriptLoader.load());
         final IQuery<KpiResult> parseQuery = groovyEngineService.parseQuery(kpi);
         final KpiResult result = parseQuery.getResult();
-        System.out.println(result);
+        assertTrue(result.size() == 1);
     }
     
     
