@@ -40,7 +40,7 @@ public class ProviderPanelTest {
     @Test
     public void testSomeMethod() {
 //        ProviderPanel panel = new ProviderPanel("id", Model.of(new Provider()), null);
-        wicketRule.newWicketTester().startComponentInPage(ProviderTableActionPanel.class);
+//        wicketRule.newWicketTester().startComponentInPage(ProviderTableActionPanel.class);
 //        WicketTester newWicketTester = wicketRule.newWicketTester();
 //       WicketTester wicketTester = new WicketTester(new WicketApplication());
        
