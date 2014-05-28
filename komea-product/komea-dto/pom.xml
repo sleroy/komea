@@ -29,44 +29,16 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-math3</artifactId>
-			<version>3.2</version>
-		</dependency>
-		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>komea-utils</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- validator -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>${hibernatevalid.version}</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.ocpsoft.prettytime</groupId>
-			<artifactId>prettytime</artifactId>
-			<type>jar</type>
-		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.3.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jodd</groupId>
-			<artifactId>jodd-bean</artifactId>
-			<version>3.5.2</version>
-		</dependency>
 	</dependencies>
 
 </project>

@@ -12,9 +12,13 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.Validate;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.komea.eventory.api.engine.IQuery;
+import org.komea.product.backend.plugin.api.RequiresSpring;
 import org.komea.product.backend.service.ISpringService;
+import org.komea.product.database.dto.KpiResult;
+import org.komea.product.database.model.Kpi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +75,10 @@ public class GroovyEngineService implements IGroovyEngineService
     public boolean isValidFormula(final String _formula) {
     
     
-        return parseScript(_formula).run() instanceof IQuery;
+        final Kpi kpi = new Kpi();
+        kpi.setEsperRequest(_formula);
+        kpi.setId(1);
+        return parseScript(kpi).run() instanceof IQuery;
     }
     
     
@@ -99,10 +106,15 @@ public class GroovyEngineService implements IGroovyEngineService
     
     
     @Override
-    public <T extends IQuery> T parseQuery(final String _groovyScript) {
+    public <T extends IQuery<KpiResult>> T parseQuery(final Kpi _kpi) {
     
     
-        return (T) IQuery.class.cast(parseScript(_groovyScript).run());
+        final IQuery cast = IQuery.class.cast(parseScript(_kpi).run());
+        if (org.springframework.core.annotation.AnnotationUtils.isAnnotationInherited(
+                RequiresSpring.class, cast.getClass())) {
+            springService.autowirePojo(cast);
+        }
+        return (T) cast;
     }
     
     
@@ -113,17 +125,19 @@ public class GroovyEngineService implements IGroovyEngineService
      * (java.lang.String)
      */
     @Override
-    public Script parseScript(final String _groovyScript) {
+    public Script parseScript(final Kpi _kpi) {
     
     
+        Validate.notNull(_kpi.getEsperRequest(), "Kpi should define a formula");
         final CompilerConfiguration config = new CompilerConfiguration();
         config.setScriptBaseClass(GroovyFormulaScript.class.getCanonicalName());
         final Binding binding = new Binding();
         binding.setVariable("spring", springService);
+        binding.setVariable("kpiid", _kpi.getId());
         final GroovyShell shell =
                 new GroovyShell(Thread.currentThread().getContextClassLoader(), binding, config);
         
-        return shell.parse(_groovyScript);
+        return shell.parse(_kpi.getEsperRequest());
         
     }
     
