@@ -1,4 +1,3 @@
-
 -- -----------------------------------------------------
 -- Table `komea`.`kom_customer`
 -- -----------------------------------------------------
@@ -22,7 +21,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_proj` (
   PRIMARY KEY (`id`) )
 ;
 
-CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE1` ON `komea`.`kom_proj` (`projectKey` ASC) ;
+CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE` ON `komea`.`kom_proj` (`projectKey` ASC) ;
 
 CREATE INDEX IF NOT EXISTS `fk_Project_Customer1_idx` ON `komea`.`kom_proj` (`idCustomer` ASC) ;
 
@@ -40,7 +39,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pegr` (
   PRIMARY KEY (`id`) )
 ;
 
-CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE2` ON `komea`.`kom_pegr` (`personGroupKey` ASC) ;
+CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE` ON `komea`.`kom_pegr` (`personGroupKey` ASC) ;
 
 CREATE INDEX IF NOT EXISTS `fk_UserGroup_UserGroup1_idx` ON `komea`.`kom_pegr` (`idPersonGroupParent` ASC) ;
 
@@ -80,7 +79,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS `Personcol_UNIQUE` ON `komea`.`kom_pe` (`login
 
 CREATE INDEX IF NOT EXISTS `fk_kom_pe_kom_pero1_idx` ON `komea`.`kom_pe` (`idPersonRole` ASC) ;
 
-CREATE INDEX IF NOT EXISTS `person-email-index` ON `komea`.`kom_pe` (`email` ASC) ;
+CREATE INDEX IF NOT EXISTS `person-email-INDEX IF NOT EXISTS` ON `komea`.`kom_pe` (`email` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -95,15 +94,15 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `valueMax` DOUBLE NULL ,
   `valueDirection` VARCHAR(255) NOT NULL ,
   `valueType` VARCHAR(255) NOT NULL ,
-  `groupFormula` VARCHAR(255) NOT NULL ,
   `entityType` VARCHAR(255) NOT NULL ,
   `esperRequest` MEDIUMTEXT NOT NULL ,
+  `groupFormula` VARCHAR(255) NOT NULL ,
   `cronExpression` VARCHAR(60) NOT NULL ,
   `providerType` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
 ;
 
-CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE3` ON `komea`.`kom_kpi` (`kpiKey` ASC) ;
+CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE` ON `komea`.`kom_kpi` (`kpiKey` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -121,14 +120,19 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_msr` (
   `value` DOUBLE NOT NULL ,
   `date` TIMESTAMP NOT NULL ,
   `sprint` VARCHAR(45) NULL ,
+  `kom_msr_id` INT NOT NULL ,
   PRIMARY KEY (`id`) )
 ;
 
+CREATE INDEX IF NOT EXISTS `fk_Measure_Metric1_idx` ON `komea`.`kom_msr` (`idKpi` ASC) ;
+
 CREATE INDEX IF NOT EXISTS `fk_Measure_Project1_idx` ON `komea`.`kom_msr` (`entityID` ASC) ;
 
-CREATE INDEX IF NOT EXISTS `dateIndex` ON `komea`.`kom_msr` (`date` ASC) ;
+CREATE INDEX IF NOT EXISTS `dateINDEX IF NOT EXISTS` ON `komea`.`kom_msr` (`date` ASC) ;
 
-CREATE INDEX IF NOT EXISTS `measure-complex-index` ON `komea`.`kom_msr` (`year` ASC, `idKpi` ASC, `month` ASC, `week` ASC, `day` ASC, `hour` ASC, `entityID` ASC) ;
+CREATE INDEX IF NOT EXISTS `measure-complex-INDEX IF NOT EXISTS` ON `komea`.`kom_msr` (`year` ASC, `idKpi` ASC, `month` ASC, `week` ASC, `day` ASC, `hour` ASC, `entityID` ASC) ;
+
+CREATE INDEX IF NOT EXISTS `fk_kom_msr_kom_msr1_idx` ON `komea`.`kom_msr` (`kom_msr_id` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -150,7 +154,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpia` (
 
 CREATE INDEX IF NOT EXISTS `fk_MetricAlert_Metric1_idx` ON `komea`.`kom_kpia` (`idKpi` ASC) ;
 
-CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE4` ON `komea`.`kom_kpia` (`kpiAlertKey` ASC) ;
+CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE` ON `komea`.`kom_kpia` (`kpiAlertKey` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -198,7 +202,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_evt` (
   PRIMARY KEY (`id`) )
 ;
 
-CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE5` ON `komea`.`kom_evt` (`eventKey` ASC) ;
+CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE` ON `komea`.`kom_evt` (`eventKey` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -213,7 +217,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_setting` (
   PRIMARY KEY (`id`) )
 ;
 
-CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE6` ON `komea`.`kom_setting` (`settingKey` ASC) ;
+CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE` ON `komea`.`kom_setting` (`settingKey` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -253,7 +257,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pvds` (
   PRIMARY KEY (`id`) )
 ;
 
-CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE7` ON `komea`.`kom_pvds` (`providerSettingKey` ASC) ;
+CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE` ON `komea`.`kom_pvds` (`providerSettingKey` ASC) ;
 
 CREATE INDEX IF NOT EXISTS `fk_ProviderSetting_Provider1_idx` ON `komea`.`kom_pvds` (`idProvider` ASC) ;
 
@@ -334,4 +338,18 @@ CREATE INDEX IF NOT EXISTS `fk_kom_sfac_has_kom_kpi_kom_kpi1_idx` ON `komea`.`ko
 CREATE INDEX IF NOT EXISTS `fk_kom_sfac_has_kom_kpi_kom_sfac1_idx` ON `komea`.`kom_has_sfac_kpi` (`idSuccessFactor` ASC) ;
 
 
+-- -----------------------------------------------------
+-- Table `komea`.`kom_kpigoal`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpigoal` (
+  `id` INT NOT NULL ,
+  `idKpi` INT NOT NULL ,
+  `entityID` INT NULL ,
+  `untilDate` TIMESTAMP NULL ,
+  `value` DOUBLE NULL ,
+  `frequency` VARCHAR(45) NULL ,
+  PRIMARY KEY (`id`) )
+;
+
+CREATE INDEX IF NOT EXISTS `fk_kom_kpigoal_kom_kpi1_idx` ON `komea`.`kom_kpigoal` (`idKpi` ASC) ;
 

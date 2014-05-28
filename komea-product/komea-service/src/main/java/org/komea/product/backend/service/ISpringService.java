@@ -21,4 +21,10 @@ public interface ISpringService
      */
     public void autowirePojo(Object _pojo);
     
+    
+    /**
+     * @return a bean registered inside spring.
+     */
+    <T> T getBean(Class<T> _bean);
+    
 }

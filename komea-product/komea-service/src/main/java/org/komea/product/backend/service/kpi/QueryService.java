@@ -71,7 +71,7 @@ public class QueryService implements IQueryService
     
     
         LOGGER.debug("Refreshing Esper with KPI {}", _kpi.getKpiKey());
-        IQuery queryImplementation = groovyEngineService.parseQuery(_kpi.getEsperRequest());
+        IQuery queryImplementation = groovyEngineService.parseQuery(_kpi);
         if (queryImplementation == null) {
             LOGGER.error("Could not provide an implementation for the kpi {}, using stub",
                     _kpi.getKpiKey());

@@ -52,6 +52,21 @@ public class SpringService implements ApplicationContextAware, ISpringService
     }
     
     
+    /**
+     * Returns a specific bean
+     * 
+     * @param _bean
+     *            the bean
+     * @return the specific bean.
+     */
+    @Override
+    public <T> T getBean(final Class<T> _bean) {
+    
+    
+        return applicationContext.getBean(_bean);
+    }
+    
+    
     public void init() {
     
     

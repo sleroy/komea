@@ -21,6 +21,7 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
             .getInstance(DateTimeFieldType
                     .hourOfDay());
 
+    
     private static final int MAX_DAYS_FOR_HOURTIMESCALE = 2;
 
     private static final int MAX_MONTH_FOR_DAYTIMESCALE = 1;
@@ -31,6 +32,7 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
 
     private Date fromPeriod;
 
+    
     private Date toPeriod;
 
     public PeriodTimeSerieOptions() {
@@ -158,8 +160,13 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
     @Override
     public boolean isValid() {
 
-        return super.isValid()
-                && fromPeriod != null && toPeriod != null && fromPeriod.before(toPeriod);
+        final boolean isValid =
+                super.isValid()
+                        && fromPeriod != null && toPeriod != null && fromPeriod.before(toPeriod);
+        if (!isValid) {
+            LOGGER.info("Options {} are invalid", this);
+        }
+        return isValid;
     }
 
     public void lastYears(final int _numberOfYears) {
