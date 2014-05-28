@@ -109,7 +109,7 @@ public class AbstractGroovyQueryTest extends AbstractSpringIntegrationTestCase
         kpi.setEsperRequest(groovyScriptLoader.load());
         final IQuery<KpiResult> parseQuery = groovyEngineService.parseQuery(kpi);
         final KpiResult result = parseQuery.getResult();
-        assertTrue(result.size() == 1);
+        assertTrue(result.size() >= 1);
     }
     
     

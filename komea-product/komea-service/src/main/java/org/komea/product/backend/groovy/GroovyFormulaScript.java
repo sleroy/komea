@@ -44,7 +44,7 @@ public abstract class GroovyFormulaScript extends Script
     public ICEPQuery autowired(final ICEPQuery _query) {
     
     
-        LOGGER.info("Autowiring the cep query {}", _query);
+        LOGGER.debug("Autowiring the cep query {}", _query);
         getSpringService().autowirePojo(_query);
         return _query;
         
@@ -61,7 +61,7 @@ public abstract class GroovyFormulaScript extends Script
     public IDynamicDataQuery<?> autowired(final IDynamicDataQuery _query) {
     
     
-        LOGGER.info("Autowiring the dynamic data query {}", _query);
+        LOGGER.debug("Autowiring the dynamic data query {}", _query);
         getSpringService().autowirePojo(_query);
         return _query;
         
