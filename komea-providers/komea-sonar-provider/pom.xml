@@ -15,7 +15,7 @@
     <description>Komea Sonar provider</description>
 
     <properties>
-        <sonar.version>4.0</sonar.version>
+        <sonar.version>3.0</sonar.version>
     </properties>
 
 

@@ -2,8 +2,10 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-CREATE SCHEMA IF NOT EXISTS `komea` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `komea` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
 USE `komea` ;
+
+
 
 -- -----------------------------------------------------
 -- Table `komea`.`kom_customer`
@@ -28,9 +30,8 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_proj` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_proj` (`projectKey` ASC) ;
-
-CREATE INDEX `fk_Project_Customer1_idx` ON `komea`.`kom_proj` (`idCustomer` ASC) ;
+call komea.createIndex( 'kom_proj','key_UNIQUE','projectKey ASC');
+call komea.createIndex( 'kom_proj','fk_Project_Customer1_idx','projectKey ASC');
 
 
 -- -----------------------------------------------------
@@ -46,9 +47,8 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pegr` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_pegr` (`personGroupKey` ASC) ;
-
-CREATE INDEX `fk_UserGroup_UserGroup1_idx` ON `komea`.`kom_pegr` (`idPersonGroupParent` ASC) ;
+call komea.createIndex( 'kom_pegr','key_UNIQUE','personGroupKey ASC');
+call komea.createIndex( 'kom_pegr','fk_UserGroup_UserGroup1_idx','idPersonGroupParent ASC');
 
 
 -- -----------------------------------------------------
@@ -61,7 +61,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pero` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `roleKey_UNIQUE` ON `komea`.`kom_pero` (`roleKey` ASC) ;
+call komea.createIndex('kom_pero','roleKey_UNIQUE','roleKey ASC');
 
 
 -- -----------------------------------------------------
@@ -80,13 +80,13 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pe` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_User_UserGroup1_idx` ON `komea`.`kom_pe` (`idPersonGroup` ASC) ;
+call komea.createIndex( 'kom_pe','fk_User_UserGroup1_idx','idPersonGroup ASC');
 
-CREATE UNIQUE INDEX `Personcol_UNIQUE` ON `komea`.`kom_pe` (`login` ASC) ;
+call komea.createIndex( 'kom_pe','Personcol_UNIQUE','login ASC');
 
-CREATE INDEX `fk_kom_pe_kom_pero1_idx` ON `komea`.`kom_pe` (`idPersonRole` ASC) ;
+call komea.createIndex( 'kom_pe','fk_kom_pe_kom_pero1_idx','idPersonRole ASC');
 
-CREATE INDEX `person-email-index` ON `komea`.`kom_pe` (`email` ASC) ;
+call komea.createIndex( 'kom_pe','person_email_index','email ASC');
 
 
 -- -----------------------------------------------------
@@ -101,6 +101,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   `valueMax` DOUBLE NULL ,
   `valueDirection` VARCHAR(255) NOT NULL ,
   `valueType` VARCHAR(255) NOT NULL ,
+  `groupFormula` VARCHAR(255) NOT NULL ,
   `entityType` VARCHAR(255) NOT NULL ,
   `esperRequest` MEDIUMTEXT NOT NULL ,
   `cronExpression` VARCHAR(60) NOT NULL ,
@@ -108,14 +109,14 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_kpi` (`kpiKey` ASC) ;
+call komea.createIndex( 'kom_kpi','key_UNIQUE','kpiKey ASC');
 
 
 -- -----------------------------------------------------
 -- Table `komea`.`kom_msr`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `komea`.`kom_msr` (
-  `id` INT NOT NULL AUTO_INCREMENT ,
+  `id` INT NOT NULL ,
   `idKpi` VARCHAR(100) NOT NULL ,
   `year` INT NOT NULL ,
   `month` INT NOT NULL ,
@@ -126,19 +127,16 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_msr` (
   `value` DOUBLE NOT NULL ,
   `date` TIMESTAMP NOT NULL ,
   `sprint` VARCHAR(45) NULL ,
-  `kom_msr_id` INT NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_Measure_Metric1_idx` ON `komea`.`kom_msr` (`idKpi` ASC) ;
+call komea.createIndex( 'kom_msr','fk_Measure_Metric1_idx','idKpi ASC');
 
-CREATE INDEX `fk_Measure_Project1_idx` ON `komea`.`kom_msr` (`entityID` ASC) ;
+call komea.createIndex( 'kom_msr', 'fk_Measure_Metric1_idx','idKpi ASC');
 
-CREATE INDEX `dateIndex` ON `komea`.`kom_msr` (`date` ASC) ;
+call komea.createIndex( 'kom_msr','dateIndex', 'date ASC');
 
-CREATE INDEX `measure-complex-index` ON `komea`.`kom_msr` (`year` ASC, `idKpi` ASC, `month` ASC, `week` ASC, `day` ASC, `hour` ASC, `entityID` ASC) ;
-
-CREATE INDEX `fk_kom_msr_kom_msr1_idx` ON `komea`.`kom_msr` (`kom_msr_id` ASC) ;
+call komea.createIndex( 'kom_msr','dateIndex', 'year ASC, idKpi ASC, month ASC, week ASC, day ASC, hour ASC, entityID ASC');
 
 
 -- -----------------------------------------------------
@@ -158,9 +156,9 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpia` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_MetricAlert_Metric1_idx` ON `komea`.`kom_kpia` (`idKpi` ASC) ;
+call komea.createIndex( 'kom_kpia','fk_MetricAlert_Metric1_idx', 'idKpi ASC');
 
-CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_kpia` (`kpiAlertKey` ASC) ;
+call komea.createIndex( 'kom_kpia','key_UNIQUE','kpiAlertKey ASC');
 
 
 -- -----------------------------------------------------
@@ -176,7 +174,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pvd` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `url_UNIQUE` ON `komea`.`kom_pvd` (`url` ASC) ;
+call komea.createIndex( 'kom_pvd','url_UNIQUE','url ASC');
 
 
 -- -----------------------------------------------------
@@ -190,7 +188,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_link` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_Tag_Project_idx` ON `komea`.`kom_link` (`idProject` ASC) ;
+call komea.createIndex( 'kom_link','fk_Tag_Project_idx','idProject ASC');
 
 
 -- -----------------------------------------------------
@@ -208,7 +206,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_evt` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_evt` (`eventKey` ASC) ;
+call komea.createIndex( 'kom_evt','key_UNIQUE','eventKey ASC');
 
 
 -- -----------------------------------------------------
@@ -223,7 +221,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_setting` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_setting` (`settingKey` ASC) ;
+call komea.createIndex( 'kom_setting','ey_UNIQUE','settingKey ASC');
 
 
 -- -----------------------------------------------------
@@ -245,9 +243,9 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_has_proj_pe` (
   PRIMARY KEY (`idProject`, `idPerson`) )
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_Project_has_User_User1_idx` ON `komea`.`kom_has_proj_pe` (`idPerson` ASC) ;
+call komea.createIndex( 'kom_has_proj_pe','fk_Project_has_User_User1_idx','idPerson ASC');
 
-CREATE INDEX `fk_Project_has_User_Project1_idx` ON `komea`.`kom_has_proj_pe` (`idProject` ASC) ;
+call komea.createIndex( 'kom_has_proj_pe','fk_Project_has_User_Project1_idx','idProject ASC');
 
 
 -- -----------------------------------------------------
@@ -263,9 +261,9 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pvds` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `key_UNIQUE` ON `komea`.`kom_pvds` (`providerSettingKey` ASC) ;
+call komea.createIndex( 'kom_pvds','key_UNIQUE','providerSettingKey ASC');
 
-CREATE INDEX `fk_ProviderSetting_Provider1_idx` ON `komea`.`kom_pvds` (`idProvider` ASC) ;
+call komea.createIndex( 'kom_pvds','fk_ProviderSetting_Provider1_idx','idProvider ASC');
 
 
 -- -----------------------------------------------------
@@ -277,9 +275,9 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_has_proj_tag` (
   PRIMARY KEY (`idProject`, `idTag`) )
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_Project_has_Tag_Tag1_idx` ON `komea`.`kom_has_proj_tag` (`idTag` ASC) ;
+call komea.createIndex( 'kom_has_proj_tag','fk_Project_has_Tag_Tag1_idx','idTag ASC');
 
-CREATE INDEX `fk_Project_has_Tag_Project1_idx` ON `komea`.`kom_has_proj_tag` (`idProject` ASC) ;
+call komea.createIndex( 'kom_has_proj_tag', 'fk_Project_has_Tag_Project1_id','idProject ASC');
 
 
 -- -----------------------------------------------------
@@ -291,9 +289,9 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_has_proj_pegr` (
   PRIMARY KEY (`idProject`, `idPersonGroup`) )
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_kom_proj_has_kom_pegr_kom_pegr1_idx` ON `komea`.`kom_has_proj_pegr` (`idPersonGroup` ASC) ;
+call komea.createIndex( 'kom_has_proj_pegr','fk_kom_proj_has_kom_pegr_kom_pegr1_idx','idPersonGroup ASC');
 
-CREATE INDEX `fk_kom_proj_has_kom_pegr_kom_proj1_idx` ON `komea`.`kom_has_proj_pegr` (`idProject` ASC) ;
+call komea.createIndex( 'kom_has_proj_pegr','fk_kom_proj_has_kom_pegr_kom_proj1_idx','idProject ASC');
 
 
 -- -----------------------------------------------------
@@ -311,7 +309,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_acfi` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `id_UNIQUE` ON `komea`.`kom_acfi` (`id` ASC) ;
+call komea.createIndex( 'kom_acfi','key_UNIQUE','id ASC');
 
 
 -- -----------------------------------------------------
@@ -325,9 +323,9 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_sfac` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `id_UNIQUE` ON `komea`.`kom_sfac` (`id` ASC) ;
+call komea.createIndex( 'kom_sfac','key_UNIQUE','id ASC');
 
-CREATE UNIQUE INDEX `successFactoryKey_UNIQUE` ON `komea`.`kom_sfac` (`successFactorKey` ASC) ;
+call komea.createIndex( 'kom_sfac','successFactoryKey','successFactorKey ASC');
 
 
 -- -----------------------------------------------------
@@ -339,33 +337,15 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_has_sfac_kpi` (
   PRIMARY KEY (`idSuccessFactor`, `idKpi`) )
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_kom_sfac_has_kom_kpi_kom_kpi1_idx` ON `komea`.`kom_has_sfac_kpi` (`idKpi` ASC) ;
+call komea.createIndex( 'kom_has_sfac_kpi','fk_kom_sfac_has_kom_kpi_kom_kpi1_idx','idKpi ASC');
 
-CREATE INDEX `fk_kom_sfac_has_kom_kpi_kom_sfac1_idx` ON `komea`.`kom_has_sfac_kpi` (`idSuccessFactor` ASC) ;
+call komea.createIndex( 'kom_has_sfac_kpi','fk_kom_sfac_has_kom_kpi_kom_sfac1_idx','idSuccessFactor ASC');
 
 
--- -----------------------------------------------------
--- Table `komea`.`kom_kpigoal`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpigoal` (
-  `id` INT NOT NULL ,
-  `idKpi` INT NOT NULL ,
-  `entityID` INT NULL ,
-  `untilDate` TIMESTAMP NULL ,
-  `value` DOUBLE NULL ,
-  `frequency` VARCHAR(45) NULL ,
-  PRIMARY KEY (`id`) )
-ENGINE = InnoDB
-COMMENT = 'Goal for kpis'
-PACK_KEYS = DEFAULT;
 
-CREATE INDEX `fk_kom_kpigoal_kom_kpi1_idx` ON `komea`.`kom_kpigoal` (`idKpi` ASC) ;
 
-CREATE INDEX `index_kpigoal` ON `komea`.`kom_kpigoal` (`idKpi` ASC, `entityID` ASC) ;
+
+
+
 
 USE `komea` ;
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

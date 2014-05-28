@@ -1,58 +1,58 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.komea.product</groupId>
-		<artifactId>komea-product</artifactId>
-		<version>1.1.22-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>org.komea.product</groupId>
+        <artifactId>komea-product</artifactId>
+        <version>1.1.22-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>komea-wicket-utils</artifactId>
+    <artifactId>komea-wicket-utils</artifactId>
 
-	<name>Komea : Wicket Library</name>
-	<description>Komea Wicket library provides utilities and services for GUI integration (admin + plugins).</description>
+    <name>Komea : Wicket Library</name>
+    <description>Komea Wicket library provides utilities and services for GUI integration (admin + plugins).</description>
 
-	<build>
-		<resources>
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<testResources>
-			<testResource>
-				<filtering>false</filtering>
-				<directory>src/test/resources</directory>
-			</testResource>
-			<testResource>
-				<filtering>false</filtering>
-				<directory>src/test/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</testResource>
-		</testResources>
+    <build>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <filtering>false</filtering>
+                <directory>src/test/resources</directory>
+            </testResource>
+            <testResource>
+                <filtering>false</filtering>
+                <directory>src/test/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
 
-	</build>
-	<dependencies>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>komea-service</artifactId>
-			<version>${project.version}</version>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>komea-service</artifactId>
+            <version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -60,87 +60,87 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>komea-service-api</artifactId>
 			<version>${project.version}</version>
-		</dependency>
+        </dependency>
 
-		<dependency>
-			<groupId>org.hackrslab</groupId>
-			<artifactId>random-avatar</artifactId>
-			<version>0.2.3</version>
-		</dependency>
-
-
+        <dependency>
+            <groupId>org.hackrslab</groupId>
+            <artifactId>random-avatar</artifactId>
+            <version>0.2.3</version>
+        </dependency>
 
 
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>komea-rest-api</artifactId>
-			<version>${project.version}</version>
+
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>komea-rest-api</artifactId>
+            <version>${project.version}</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>komea-testspring</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>komea-testspring</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
 
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
 
 
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-spring</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-extensions</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-util</artifactId>
-		</dependency>
-		<dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-extensions</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-util</artifactId>
+        </dependency>
+        <dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-auth-roles</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-native-websocket-tomcat</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-native-websocket-jetty9</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-native-websocket-tomcat</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-native-websocket-jetty9</artifactId>
+        </dependency>
 
 
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket</artifactId>
-			<type>pom</type>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket</artifactId>
+            <type>pom</type>
+        </dependency>
 
 
-		<dependency>
-			<groupId>com.googlecode.wicket-jquery-ui</groupId>
-			<artifactId>wicket-jquery-ui</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>com.googlecode.wicket-jquery-ui</groupId>
+            <artifactId>wicket-jquery-ui</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>com.googlecode.wicked-charts</groupId>
-			<artifactId>wicked-charts-wicket6</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>com.googlecode.wicked-charts</groupId>
+            <artifactId>wicked-charts-wicket6</artifactId>
+        </dependency>
 
-	</dependencies>
-	<repositories>
-		<repository>
-			<id>hackrslab-repository</id>
-			<url>http://hackrslab.github.io/maven-repo</url>
-		</repository>
-	</repositories>
+    </dependencies>
+    <repositories>
+        <repository>
+            <id>hackrslab-repository</id>
+            <url>http://hackrslab.github.io/maven-repo</url>
+        </repository>
+    </repositories>
 
 </project>
