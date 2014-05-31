@@ -27,6 +27,7 @@
         <module>komea-standard-metrics-plugin</module>
         <module>komea-svn-plugin</module>
         <module>komea-bugzilla-plugin</module>
+        <module>komea-mantis-plugin</module>
         <module>komea-testlink-plugin</module>
     </modules>
 
