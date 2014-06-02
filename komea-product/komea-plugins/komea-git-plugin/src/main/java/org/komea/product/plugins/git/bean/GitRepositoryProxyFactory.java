@@ -8,7 +8,7 @@ package org.komea.product.plugins.git.bean;
 
 import java.io.File;
 
-import org.komea.product.backend.service.ISpringService;
+import org.komea.product.backend.api.ISpringService;
 import org.komea.product.plugins.git.utils.GitRepositoryProxy;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.komea.product.plugins.scm.api.plugin.IScmRepositoryProxy;
