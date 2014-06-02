@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.backend.service.project;
+package org.komea.product.backend.service.sprint;
 
 
 
