@@ -47,8 +47,7 @@ public class StandardKpiServiceTest extends AbstractSpringIntegrationTestCase
     
         final StandardKpiService standardKpiServiceTest = new StandardKpiService();
         final Script parseScript =
-                groovyEngineService.parseScript(standardKpiServiceTest.numberOfProjectPerUser()
-                        .getEsperRequest());
+                groovyEngineService.parseScript(standardKpiServiceTest.numberOfProjectPerUser());
         
         
         final IQuery<KpiResult> query = (IQuery<KpiResult>) parseScript.run();
@@ -70,8 +69,7 @@ public class StandardKpiServiceTest extends AbstractSpringIntegrationTestCase
     
         final StandardKpiService standardKpiServiceTest = new StandardKpiService();
         final Script parseScript =
-                groovyEngineService.parseScript(standardKpiServiceTest.numberOfUsersPerProject()
-                        .getEsperRequest());
+                groovyEngineService.parseScript(standardKpiServiceTest.numberOfUsersPerProject());
         
         
         final IQuery<KpiResult> query = (IQuery<KpiResult>) parseScript.run();

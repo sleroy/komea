@@ -39,6 +39,7 @@ public class StatPageTest {
     public final void testStatPage() throws Exception {
     
         wicketRule.testStart(StatPage.class);
+       
     }
     
 }

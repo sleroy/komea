@@ -9,9 +9,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.komea.product.backend.api.IFormularService;
 import org.komea.product.backend.auth.IPasswordEncoder;
-import org.komea.product.backend.forms.PersonFormData;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonRoleService;
 import org.komea.product.backend.service.entities.IPersonService;
@@ -29,9 +27,6 @@ import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
  * @author sleroy
  */
 public class PersonAddPage extends LayoutPage {
-
-    @SpringBean
-    private IFormularService formularService;
 
     @SpringBean
     private IPersonService personDAO;
@@ -67,12 +62,11 @@ public class PersonAddPage extends LayoutPage {
     private PersonAddPage(final PageParameters _parameters, final Person _person, boolean isNew) {
 
         super(_parameters);
-        accordion.setActiveTab(COMPANY_INDEX);
-        final PersonFormData newPersonForm = formularService.newPersonForm();
+
         final PersonForm personForm
-                = new PersonForm(isNew, personRole, passEncoder, personDAO, projectService, newPersonForm, "form",
+                = new PersonForm(isNew, personRole, passEncoder, personDAO, projectService, "form",
                         new CompoundPropertyModel<Person>(_person), this, personGroupService);
-                String message;
+        String message;
         if (isNew) {
             message = getString("memberpage.save.add.title");
         } else {
@@ -81,17 +75,12 @@ public class PersonAddPage extends LayoutPage {
         personForm.add(new Label("legend", message));
         add(personForm);
 
-
-
     }
 
     /**
      * @return the formularService
      */
-    public IFormularService getFormularService() {
 
-        return formularService;
-    }
 
     @Override
     public List<? extends Entry<String, Class>> getMiddleLevelPages() {
@@ -125,13 +114,6 @@ public class PersonAddPage extends LayoutPage {
         return projectDAO;
     }
 
-    /**
-     * @param _formularService the formularService to set
-     */
-    public void setFormularService(final IFormularService _formularService) {
-
-        formularService = _formularService;
-    }
 
     /**
      * @param _personDAO the personDAO to set

@@ -8,7 +8,6 @@ package org.komea.product.backend.groovy;
 
 import groovy.lang.Script;
 
-import org.apache.commons.lang3.Validate;
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.product.backend.service.ISpringService;
@@ -28,6 +27,13 @@ public abstract class GroovyFormulaScript extends Script
     
     
     
+    public GroovyFormulaScript() {
+    
+    
+        super();
+    }
+    
+    
     /**
      * AUtowiring the cep event query.
      * 
@@ -35,11 +41,10 @@ public abstract class GroovyFormulaScript extends Script
      *            the query.
      * @return
      */
-    
     public ICEPQuery autowired(final ICEPQuery _query) {
     
     
-        LOGGER.info("Autowiring the cep query {}", _query);
+        LOGGER.debug("Autowiring the cep query {}", _query);
         getSpringService().autowirePojo(_query);
         return _query;
         
@@ -56,7 +61,7 @@ public abstract class GroovyFormulaScript extends Script
     public IDynamicDataQuery<?> autowired(final IDynamicDataQuery _query) {
     
     
-        LOGGER.info("Autowiring the dynamic data query {}", _query);
+        LOGGER.debug("Autowiring the dynamic data query {}", _query);
         getSpringService().autowirePojo(_query);
         return _query;
         
@@ -66,8 +71,7 @@ public abstract class GroovyFormulaScript extends Script
     public ISpringService getSpringService() {
     
     
-        final ISpringService variable = (ISpringService) getBinding().getVariable("spring");
-        Validate.notNull(variable, "Spring service must be provided to the groovy shell.");
-        return variable;
+        return (ISpringService) getBinding().getVariable("spring");
     }
+    
 }

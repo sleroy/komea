@@ -4,10 +4,10 @@ import java.util.List;
 import javax.validation.Valid;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.kpi.IMeasureService;
-import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.model.timeserie.dto.TimeSerieDTO;
 import org.komea.product.service.dto.KpiStringKeyList;
 import org.komea.product.service.dto.ManyHistoricalMeasureRequest;
+import org.komea.product.service.dto.MeasureEvolutionResult;
 import org.komea.product.service.dto.MeasureResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,13 +27,10 @@ public class MeasuresController {
     @Autowired
     private IMeasureService measureService;
 
-    @Autowired
-    private IStatisticsAPI statService;
-
     /**
      * This method get the current measure for a kpi type on an entity
      *
-     * @param _kpiKey the kpi type
+     * @param _kpiKeys
      * @return the last measure value
      * @throws KPINotFoundException
      */
@@ -44,9 +41,14 @@ public class MeasuresController {
             final KpiStringKeyList _kpiKeys) throws KPINotFoundException {
 
         LOGGER.debug("currentMeasures: {}", _kpiKeys);
-
-        return measureService.currentMeasures(_kpiKeys);
-
+        final List<MeasureResult> results = measureService.currentMeasures(_kpiKeys);
+        for (final MeasureResult measureResult : results) {
+            if (measureResult.getValue() == null) {
+                measureResult.setValue(measureService.lastMeasure(
+                        measureResult.getKpi(), measureResult.getEntity()));
+            }
+        }
+        return results;
     }
 
     @RequestMapping(
@@ -67,7 +69,7 @@ public class MeasuresController {
     /**
      * This method get the last measure for a kpi type on an entity
      *
-     * @param _kpiKey the kpi type
+     * @param _kpiKeys
      * @return the last measure value
      * @throws KPINotFoundException
      */
@@ -80,5 +82,18 @@ public class MeasuresController {
         LOGGER.debug("lastMeasures: {}", _kpiKeys);
         return measureService.lastMeasures(_kpiKeys);
 
+    }
+
+    /**
+     * Get current measure and last value in history for each pair of entity/kpi
+     *
+     * @param _kpiKeys kpiStringKeyList
+     * @return measures with last values in history
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "/evolutions", produces = "application/json")
+    @ResponseBody
+    public List<MeasureEvolutionResult> measuresWithEvolution(@Valid
+            @RequestBody final KpiStringKeyList _kpiKeys) {
+        return measureService.measuresWithEvolution(_kpiKeys);
     }
 }

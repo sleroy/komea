@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:wicket="http://wicket.apache.org">
     <head>
         <meta charset="utf-8"></meta>
@@ -53,46 +53,50 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="row">
-                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="departmentpage.save.form.field.label.department"></wicket:message></label>
-                                        <div class="col-md-4">
-                                            <select style="height: 150px" class="form-control col-md-12" wicket:id="table"></select>
-                                        </div>
+                                    <form class="form" wicket:id="form_dialogAddPerson" role="form">
                                         <div class="row">
-                                            <div class="col-md-3">
-                                                <button type="button" style="margin-bottom:5px" class="btn btn-small btn-info col-md-5" wicket:id="btnAddPerson" ><wicket:message key="global.button.add"></wicket:message></button>
+                                            <label class="col-md-3" for="inputEmail1"><wicket:message key="departmentpage.save.form.field.label.department"></wicket:message></label>
+                                            <div class="col-md-4">
+                                                <select style="height: 150px" class="form-control col-md-12" wicket:id="table"></select>
                                             </div>
-                                            <div class="col-md-3">
-                                                <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="btnDelPerson" ><wicket:message key="global.button.delete"></wicket:message></button>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <button type="button" style="margin-bottom:5px" class="btn btn-small btn-info col-md-5" wicket:id="btnAddPerson" ><wicket:message key="global.button.add"></wicket:message></button>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="btnDelPerson" ><wicket:message key="global.button.delete"></wicket:message></button>
 
+                                                </div>
                                             </div>
+                                            <div wicket:id="dialogAddPerson">[dialog]</div>
                                         </div>
-                                        <div wicket:id="dialogAddPerson">[dialog]</div>
-                                    </div>
+                                    </form>
                                 </div>
-                                 <div class="form-group">
-                                    <div class="row">
-                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="departmentpage.main.table.membersnumber"></wicket:message></label>
-                                        <div class="col-md-4">
-                                             <select style="height: 150px" class="form-control col-md-12" wicket:id="listUser"></select>
-                                        </div>
-                                              <div class="row">
-                                            <div class="col-md-3">
-                                                <button type="button" style="margin-bottom:5px" class="btn btn-small btn-info col-md-5" wicket:id="btnAddMember" ><wicket:message key="global.button.add"></wicket:message></button>
+                                <div class="form-group">
+                                    <form class="form" wicket:id="form_dialogAddMember" role="form">
+                                        <div class="row">
+                                            <label class="col-md-3" for="inputEmail1"><wicket:message key="departmentpage.main.table.membersnumber"></wicket:message></label>
+                                            <div class="col-md-4">
+                                                <select style="height: 150px" class="form-control col-md-12" wicket:id="listUser"></select>
                                             </div>
-                                            <div class="col-md-3">
-                                                <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="btnDelMember" ><wicket:message key="global.button.delete"></wicket:message></button>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <button type="button" style="margin-bottom:5px" class="btn btn-small btn-info col-md-5" wicket:id="btnAddMember" ><wicket:message key="global.button.add"></wicket:message></button>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <button type="button" class="btn btn-small btn-info col-md-5" wicket:id="btnDelMember" ><wicket:message key="global.button.delete"></wicket:message></button>
 
+                                                </div>
                                             </div>
+                                            <div wicket:id="dialogAddMember">[dialog]</div>
                                         </div>
-                                        <div wicket:id="dialogAddMember">[dialog]</div>
-                                    </div>
+                                    </form>
                                 </div>
-                                   <div class="form-group">
+                                <div class="form-group">
                                     <div class="row">
                                         <label class="col-md-3" for="inputEmail1"><wicket:message key="departmentpage.main.table.projectnumber"></wicket:message></label>
                                         <div class="col-md-4">
-                                             <select style="height: 150px" class="form-control col-md-12" wicket:id="tableProject"></select>
+                                            <select style="height: 150px" class="form-control col-md-12" wicket:id="tableProject"></select>
                                         </div>
                                     </div>
                                 </div>

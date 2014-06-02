@@ -71,7 +71,7 @@ public class QueryService implements IQueryService
     
     
         LOGGER.debug("Refreshing Esper with KPI {}", _kpi.getKpiKey());
-        IQuery queryImplementation = groovyEngineService.parseQuery(_kpi.getEsperRequest());
+        IQuery queryImplementation = groovyEngineService.parseQuery(_kpi);
         if (queryImplementation == null) {
             LOGGER.error("Could not provide an implementation for the kpi {}, using stub",
                     _kpi.getKpiKey());
@@ -171,13 +171,18 @@ public class QueryService implements IQueryService
     private KpiResult getKpiResultFromKpi(final Kpi _kpi) {
     
     
-        KpiResult result;
+        KpiResult result = new KpiResult();
         
         LOGGER.trace("Request value from KPI {}", _kpi.getKpiKey());
-        result = (KpiResult) esperEngine.getQueryOrFail(FormulaID.of(_kpi)).getResult();
+        try {
+            result =
+                    KpiResult.class
+                            .cast(esperEngine.getQueryOrFail(FormulaID.of(_kpi)).getResult());
+        } catch (final ClassCastException e) {
+            LOGGER.error("Query of {} should returns a kpiResult value", _kpi.getKpiKey(), e);
+        }
         LOGGER.debug("Result of the query is {}", result);
         return result;
     }
-    
     
 }

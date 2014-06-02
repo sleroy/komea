@@ -7,10 +7,10 @@ package org.komea.product.plugins.testlink.userinterface;
 
 import br.eti.kinoshita.testlinkjavaapi.constants.ExecutionStatus;
 import javax.annotation.PostConstruct;
-import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.api.PluginAdminPages;
 import org.komea.product.backend.api.PluginMountPage;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.KpiBuilder;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.ValueDirection;
@@ -64,7 +64,7 @@ public class TestLinkProviderPlugin {
         final String statusDisplayName = enumNameToDisplayName(status.name());
         return KpiBuilder.create().key("test_cases_" + statusName)
                 .description("Number of " + statusDisplayName + " test cases").name(statusDisplayName + " test cases")
-                .interval(0d, 10000d).produceValue(ValueType.INT, valueDirection).forProject().dailyKPI()
+                .interval(0d, 100d).produceValue(ValueType.INT, valueDirection).forProject().dailyKPI()
                 .providerType(ProviderType.REQUIREMENTS).queryScript(testsByStatusKPI.getFormula()).build();
 
     }
@@ -77,7 +77,7 @@ public class TestLinkProviderPlugin {
 
         final TestsByStatusKPI testsByStatusKPI = new TestsByStatusKPI("");
         return KpiBuilder.create().name("Total test cases").description("Number of test cases").key("test_cases_total")
-                .interval(0d, 10000d).produceValue(ValueType.INT, ValueDirection.BETTER).forProject().dailyKPI()
+                .interval(0d, 100d).produceValue(ValueType.INT, ValueDirection.BETTER).forProject().dailyKPI()
                 .providerType(ProviderType.REQUIREMENTS).queryScript(testsByStatusKPI.getFormula()).build();
 
     }

@@ -1,70 +1,75 @@
 .tocea-header {
-	width: auto;
+    width: auto;
 }
 
 .tocea-footer {
-	padding: 5px; float: right;
+    padding: 5px; float: right;
 }
 
 .tocea-content {
-	padding: 35px 5px 5px 5px;
+    padding: 35px 5px 5px 5px;
 }
 
 .glyphicon {
-	margin-right: 5px;
+    margin-right: 5px;
 }
 
 body {
-	
+
 }
 
 #accordion .glyphicon {
-	margin-right: 10px;
+    margin-right: 10px;
 }
 
 .panel-collapse>.list-group .list-group-item:first-child {
-	border-top-right-radius: 0; border-top-left-radius: 0;
+    border-top-right-radius: 0; border-top-left-radius: 0;
 }
 
 .panel-collapse>.list-group .list-group-item {
-	border-width: 1px 0;
+    border-width: 1px 0;
 }
 
 .panel-collapse>.list-group {
-	margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .panel-collapse .list-group-item {
-	border-radius: 0;
+    border-radius: 0;
 }
 
 /* Custom container */
 .container-full {
-	margin-left: 5px; margin-right: 5px; width: auto;
-	background-color: #FFFFFF;
+    margin-left: 5px; margin-right: 5px; width: auto;
+    background-color: #FFFFFF;
 }
 
 .error-template {
-	padding: 40px 15px; text-align: center;
+    padding: 40px 15px; text-align: center;
 }
 
 .error-actions {
-	margin-top: 15px; margin-bottom: 15px;
+    margin-top: 15px; margin-bottom: 15px;
 }
 
 .error-actions .btn {
-	margin-right: 10px;
+    margin-right: 10px;
 }
 
 #gni {
-	width: 120px; margin-bottom: 10px;
+    width: 120px; margin-bottom: 10px;
 }
 
 .custab {
-	border: 1px solid #ccc; padding: 5px; margin: 5% 0;
-	box-shadow: 3px 3px 2px #ccc; transition: 0.5s;
+    border: 1px solid #ccc; padding: 5px; margin: 5% 0;
+    box-shadow: 3px 3px 2px #ccc; transition: 0.5s;
 }
 
 .custab:hover {
-	box-shadow: 3px 3px 0px transparent; transition: 0.5s;
+    box-shadow: 3px 3px 0px transparent; transition: 0.5s;
+}
+
+.bselect td
+{
+    background-color: #C4E3F0;
 }

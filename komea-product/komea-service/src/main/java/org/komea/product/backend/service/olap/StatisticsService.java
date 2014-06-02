@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.Validate;
 import org.joda.time.DateTime;
+import org.joda.time.Period;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
@@ -29,6 +30,7 @@ import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.enums.GroupFormula;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
+import org.komea.product.database.model.KpiGoal;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.utils.MeasureUtils;
 import org.komea.product.model.timeserie.EntityIdValue;
@@ -67,7 +69,6 @@ public class StatisticsService implements IStatisticsAPI
     
     @Autowired
     private IQueryService       kpiQueryService;
-    
     
     @Autowired
     private MeasureDao          measureDao;
@@ -177,30 +178,40 @@ public class StatisticsService implements IStatisticsAPI
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#
-     * computeAverageFromMeasures(java.util.List)
+     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#getKpiGoalValue(org.komea.product.database.model.KpiGoal)
      */
     @Override
-    public double computeAverageFromMeasures(final List<Measure> _kpiMeasures) {
+    public Double evaluateKpiGoalValue(final KpiGoal _kpiGoal) {
     
     
-        LOGGER.debug("computeAverageFromMeasures : {}", _kpiMeasures);
-        return kpiMathService.computeAverageFromMeasures(_kpiMeasures);
+        final Kpi kpiPerId = new FindKpiPerId(_kpiGoal.getIdKpi(), kpiDao).find();
+        final TimeScale timeScale = TimeScale.valueOf(_kpiGoal.getFrequency());
+        
+        final KpiResult valuesOnPeriod = evaluateKpiLastValue(kpiPerId, timeScale);
+        return valuesOnPeriod.computeUniqueValue(kpiPerId.getGroupFormula());
+        
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IStatisticsAPI#computeSumFromMeasures
-     * (java.util.List)
+    /**
+     * Evaluate the last kpi value since a time scale.
+     * 
+     * @param _kpiPerId
+     *            the kpi
+     * @param _timeScale
+     *            the time scale
+     * @return the kpi result.
      */
     @Override
-    public double computeSumFromMeasures(final List<Measure> _kpiMeasures) {
+    public KpiResult evaluateKpiLastValue(final Kpi _kpiPerId, final TimeScale _timeScale) {
     
     
-        LOGGER.debug("computeSumFromMeasures : {}", _kpiMeasures);
-        return kpiMathService.computeSumFromMeasures(_kpiMeasures);
+        final PeriodTimeSerieOptions periodTimeSerieOptions = new PeriodTimeSerieOptions();
+        periodTimeSerieOptions.untilNow();
+        periodTimeSerieOptions.setKpi(_kpiPerId);
+        periodTimeSerieOptions.fromLastTimeScale(_timeScale);
+        periodTimeSerieOptions.setTimeScale(_timeScale);
+        return evaluateKpiValuesOnPeriod(generateFormulaID(periodTimeSerieOptions));
     }
     
     
@@ -329,29 +340,25 @@ public class StatisticsService implements IStatisticsAPI
     }
     
     
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#
-     * getKpiValuesAverageOnPeriod(java.lang.String, org.joda.time.DateTime)
-     */
-    @Cacheable("getKpiValuesAverageOnPeriod")
     @Override
-    public KpiResult getKpiValuesAverageOnPeriod(
-            final Integer _kpiName,
-            final DateTime _previousTime) {
+    public Double getLastButOneStoredValueInHistory(final HistoryKey _key) {
     
     
-        LOGGER.debug("getKpiValuesAverageOnPeriod : {}", _kpiName, _previousTime);
-        
+        Validate.notNull(_key.hasEntityReference());
         final PeriodTimeSerieOptions periodTimeSerieOptions = new PeriodTimeSerieOptions();
-        periodTimeSerieOptions.untilNow();
-        periodTimeSerieOptions.setFromPeriod(_previousTime);
-        periodTimeSerieOptions.pickBestGranularity();
+        periodTimeSerieOptions.setTimeScale(TimeScale.PER_DAY);
+        periodTimeSerieOptions.toLastTimeScale(TimeScale.PER_DAY);
+        periodTimeSerieOptions.fromNbLastTimeScale(TimeScale.PER_DAY, 2);
         periodTimeSerieOptions.setGroupFormula(GroupFormula.AVG_VALUE);
-        return evaluateKpiValuesOnPeriod(periodTimeSerieOptions);
+        periodTimeSerieOptions.setKpiID(_key.getKpiID());
+        return evaluateKpiValueOnPeriod(periodTimeSerieOptions, _key.getEntityKey());
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#getRemainingEffort(org.komea.product.database.model.KpiGoal)
+     */
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.service.kpi.IStatisticsAPI#
@@ -364,15 +371,41 @@ public class StatisticsService implements IStatisticsAPI
     
     
         Validate.notNull(_key.hasEntityReference());
+        final Kpi kpi = new FindKpiPerId(_key.getKpiID(), kpiDao).find();
         LOGGER.debug("getLastStoredValueInHistory : {}", _key);
-        final PeriodTimeSerieOptions periodTimeSerieOptions = new PeriodTimeSerieOptions();
-        periodTimeSerieOptions.setTimeScale(TimeScale.PER_DAY);
-        periodTimeSerieOptions.untilNow();
-        periodTimeSerieOptions.fromLastTimeScale(TimeScale.PER_DAY);
-        periodTimeSerieOptions.setGroupFormula(GroupFormula.AVG_VALUE);
-        periodTimeSerieOptions.setKpiID(_key.getKpiID());
+        final PeriodTimeSerieOptions periodTimeSerieOptions =
+                buildOptionsFromTimeScale(kpi, TimeScale.PER_DAY);
         LOGGER.debug("getLastStoredValueInHistory : period {}", periodTimeSerieOptions);
         return evaluateKpiValueOnPeriod(periodTimeSerieOptions, _key.getEntityKey());
+    }
+    
+    
+    @Override
+    public Double getRemainingEffort(final KpiGoal _kpiGoal) {
+    
+    
+        final double goalValue = _kpiGoal.getValue();
+        final double realValue = evaluateKpiGoalValue(_kpiGoal);
+        final double remainEffort = 100.0d * ((realValue - goalValue) / (goalValue + 1.0d));
+        return remainEffort;
+        
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#getRemainingTime(org.komea.product.database.model.KpiGoal)
+     */
+    @Override
+    public Period getRemainingTime(final KpiGoal _kpiGoal) {
+    
+    
+        Validate.notNull(_kpiGoal);
+        if (_kpiGoal.getUntilDate() == null) {
+            return new Period();
+        }
+        
+        return new Period(new DateTime(), new DateTime(_kpiGoal.getUntilDate()));
     }
     
     
@@ -447,6 +480,21 @@ public class StatisticsService implements IStatisticsAPI
     }
     
     
+    private PeriodTimeSerieOptions buildOptionsFromTimeScale(
+            final Kpi _kpi,
+            final TimeScale _timeScale) {
+    
+    
+        final PeriodTimeSerieOptions periodTimeSerieOptions = new PeriodTimeSerieOptions();
+        periodTimeSerieOptions.setTimeScale(_timeScale);
+        periodTimeSerieOptions.untilNow();
+        periodTimeSerieOptions.fromLastTimeScale(_timeScale);
+        periodTimeSerieOptions.setGroupFormula(_kpi.getGroupFormula());
+        periodTimeSerieOptions.setKpiID(_kpi.getId());
+        return periodTimeSerieOptions;
+    }
+    
+    
     private <T extends TimeSerieOptions> T generateFormulaID(final T _timeSerieOptions) {
     
     
@@ -496,8 +544,10 @@ public class StatisticsService implements IStatisticsAPI
                 findKPI.getKey(), _historyKey.getEntityKey());
         Validate.isTrue(_historyKey.getEntityKey().isEntityReferenceKey());
         if (queryResult.hasKey(_historyKey.getEntityKey())) {
-            storeValueInHistory(_historyKey,
-                    queryResult.getDoubleValue(_historyKey.getEntityKey()), actualTime);
+            final Double value = queryResult.getDoubleValue(_historyKey.getEntityKey());
+            if (value != null) {
+                storeValueInHistory(_historyKey, value, actualTime);
+            }
         }
     }
     

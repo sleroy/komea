@@ -42,7 +42,7 @@ public class KpiPage extends LayoutPage
         
         
         final IEditAction<Kpi> kpiEditAction = new KpiEditAction(this);
-        accordion.setActiveTab(KPIS_INDEX);
+        
         
         final List<Kpi> listAllKpis = kpiService.selectAll();
         final List<Kpi> listKpisResult = new ArrayList<Kpi>();

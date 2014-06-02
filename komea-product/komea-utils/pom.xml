@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.komea.product</groupId>
 		<artifactId>komea-product</artifactId>
-		<version>1.1.21</version>
+		<version>1.1.22-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>komea-utils</artifactId>
@@ -23,7 +23,29 @@
 
 		</dependency>
 
+		
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>3.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.ocpsoft.prettytime</groupId>
+			<artifactId>prettytime</artifactId>
+		</dependency>
 
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.2</version>
+		</dependency>
 		<dependency>
 			<groupId>commons-validator</groupId>
 			<artifactId>commons-validator</artifactId>
@@ -153,17 +175,14 @@
 
 		<!-- time -->
 
+
+		<!-- validator -->
 		<dependency>
-			<groupId>org.ocpsoft.prettytime</groupId>
-			<artifactId>prettytime</artifactId>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernatevalid.version}</version>
+			<scope>compile</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-		</dependency>
-
-
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -171,6 +190,12 @@
 			<version>3.3.2</version>
 		</dependency>
 
+
+		<dependency>
+			<groupId>org.jodd</groupId>
+			<artifactId>jodd-bean</artifactId>
+			<version>3.5.2</version>
+		</dependency>
 	</dependencies>
 
 

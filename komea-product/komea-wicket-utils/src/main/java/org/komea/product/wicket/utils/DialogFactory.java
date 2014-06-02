@@ -69,6 +69,8 @@ public class DialogFactory {
 
     public static void addMultipleListDialog(final DataListSelectDialogBuilder data) {
 
+        Form composant = new Form("form_"+data.getIdDialog());
+        data.getPage().add(composant);
         if (data.getListEntite() == null) {
             final IChoiceRenderer<IHasKey> displayGroup = DialogFactory.getChoiceRendenerEntity();
 
@@ -83,7 +85,7 @@ public class DialogFactory {
             data.setListEntite(listEntite);
         }
         //
-        data.getPage().add(data.getListEntite());
+        composant.add(data.getListEntite());
 
         if (!"".equals(data.getTooltips()) && data.getTooltips() != null) {
             final TooltipBehavior tooltipBehavior
@@ -125,14 +127,14 @@ public class DialogFactory {
                         }
                     }
                 };
-        data.getPage().add(dialogPersonGroup);
+        composant.add(dialogPersonGroup);
         dialogPersonGroup.setFilter(data.getCurrentEntityList());
         dialogPersonGroup.addCustomFilter(data.getFilters());
-        data.getPage().add(new AjaxButtonAddDialog(data.getIdBtnAdd(), dialogPersonGroup));
+        composant.add(new AjaxButtonAddDialog(data.getIdBtnAdd(), dialogPersonGroup));
         AjaxButton ajaxButton = new AjaxButtonDelDialog(data.getIdBtnDel(), data);
 //        ajaxButton.setDefaultFormProcessing(false);
 
-        data.getPage().add(ajaxButton);
+        composant.add(ajaxButton);
 
     }
 

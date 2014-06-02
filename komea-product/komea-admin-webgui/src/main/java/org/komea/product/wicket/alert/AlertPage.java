@@ -45,7 +45,7 @@ public final class AlertPage extends LayoutPage
     
     
         super(params);
-        accordion.setActiveTab(KPIS_INDEX);
+        
         final List<KpiAlertType> listAffichage = alertService.selectAll();
         final IDeleteAction<KpiAlertType> deleteAction =
                 new AlertDeleteAction(listAffichage, alertService, this);

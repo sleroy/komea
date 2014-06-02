@@ -54,6 +54,10 @@ public class MeasureResult {
         value = _value;
     }
 
+    public boolean hasValue() {
+        return value != null;
+    }
+
     @Override
     public String toString() {
         return "MeasureResult{" + "entity=" + entity + ", kpi=" + kpi + ", value=" + value + '}';

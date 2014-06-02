@@ -101,3 +101,18 @@ a,a:visited,a:hover,a:active {
 .panel-body .table {
 	margin-bottom: 0px;
 }
+
+.table > thead > tr > td.bselect,
+.table > tbody > tr > td.bselect,
+.table > tfoot > tr > td.bselect,
+.table > thead > tr > th.bselect,
+.table > tbody > tr > th.bselect,
+.table > tfoot > tr > th.bselect,
+.table > thead > tr.bselect > td,
+.table > tbody > tr.bselect > td,
+.table > tfoot > tr.bselect > td,
+.table > thead > tr.bselect > th,
+.table > tbody > tr.bselect > th,
+.table > tfoot > tr.bselect > th {
+  background-color: #81BEF7;
+}

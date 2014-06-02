@@ -9,6 +9,7 @@ package org.komea.product.backend.service.kpi;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
+import org.komea.product.backend.utils.ObjectValidation;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.GroupFormula;
 import org.komea.product.database.enums.ProviderType;
@@ -71,6 +72,7 @@ public class KpiBuilder
     public Kpi build() {
     
     
+        new ObjectValidation().validateObject(kpi);
         return kpi;
         
     }
@@ -160,6 +162,17 @@ public class KpiBuilder
     }
     
     
+    /**
+     * @return
+     */
+    public KpiBuilder forMembers() {
+    
+    
+        kpi.setEntityType(EntityType.PERSON);
+        return this;
+    }
+    
+    
     public KpiBuilder forProject() {
     
     
@@ -182,6 +195,22 @@ public class KpiBuilder
     
         kpi.setCronExpression(BackupDelay.HOUR.name());
         return this;
+    }
+    
+    
+    public KpiBuilder interval(
+            final double _minValue,
+            final double _maxValue,
+            final ValueDirection _direction,
+            final ValueType _type) {
+    
+    
+        kpi.setValueMin(_minValue);
+        kpi.setValueMax(_maxValue);
+        kpi.setValueDirection(_direction);
+        kpi.setValueType(_type);
+        return this;
+        
     }
     
     
@@ -290,4 +319,6 @@ public class KpiBuilder
         kpi.setEsperRequest(_groovyScript);
         return this;
     }
+    
+    
 }

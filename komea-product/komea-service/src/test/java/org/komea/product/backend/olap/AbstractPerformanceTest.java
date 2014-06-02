@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.komea.eventory.query.predefined.EmptyQueryDefinition;
 import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.backend.service.kpi.FormulaID;
@@ -119,7 +118,7 @@ public abstract class AbstractPerformanceTest extends AbstractSpringIntegrationT
     
         final Kpi build =
                 KpiBuilder.create().cronOneDay().description("").entityType(EntityType.PROJECT)
-                        .query(EmptyQueryDefinition.class).key("bla" + new Date().getTime())
+                        .query(NoQueryDefinition.class).key("bla" + new Date().getTime())
                         .name("Kpi Olap").providerType(ProviderType.BUGTRACKER).interval(0d, 100d)
                         .produceValue(ValueType.INT, ValueDirection.BETTER).build();
         System.out.println("Generated kpi");

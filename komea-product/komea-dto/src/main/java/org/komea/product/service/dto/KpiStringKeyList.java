@@ -1,11 +1,14 @@
 package org.komea.product.service.dto;
 
 import com.google.common.collect.Sets;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 import org.komea.product.database.enums.EntityType;
 
-public class KpiStringKeyList {
+public class KpiStringKeyList implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Set<String> kpiKeys;
     private Set<String> entityKeys;

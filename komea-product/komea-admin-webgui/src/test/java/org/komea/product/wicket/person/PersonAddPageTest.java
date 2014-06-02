@@ -10,7 +10,6 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.komea.product.backend.api.IFormularService;
 import org.komea.product.backend.auth.IPasswordEncoder;
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonRoleService;
@@ -34,7 +33,6 @@ public class PersonAddPageTest {
     
         wicketRule.getApplicationContextMock().putBean(mock(IPersonService.class));
         wicketRule.getApplicationContextMock().putBean(mock(IPersonRoleService.class));
-        wicketRule.getApplicationContextMock().putBean(mock(IFormularService.class));
         wicketRule.getApplicationContextMock().putBean(mock(IProjectService.class));
         wicketRule.getApplicationContextMock().putBean(mock(IPersonGroupService.class));
         wicketRule.getApplicationContextMock().putBean(mock(IPasswordEncoder.class));

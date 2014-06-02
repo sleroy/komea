@@ -1,19 +1,20 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.backend.service.kpi;
 
 
 
-import java.util.List;
-
 import org.joda.time.DateTime;
+import org.joda.time.Period;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.dto.KpiResult;
-import org.komea.product.database.model.Measure;
+import org.komea.product.database.model.Kpi;
+import org.komea.product.database.model.KpiGoal;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
+import org.komea.product.model.timeserie.TimeScale;
 import org.komea.product.model.timeserie.TimeSerieOptions;
 import org.komea.product.service.dto.EntityKey;
 
@@ -69,25 +70,25 @@ public interface IStatisticsAPI
     
     
     /**
-     * Compute the average of kpi measures
+     * Returns the value represented by the kpi goal.
      * 
-     * @param _kpiMeasures
-     *            the kpi measures
-     * @return a value representing the average.
+     * @param _kpiGoal
+     *            the value represented by the kpi goal.
+     * @return the value.
      */
-    @Deprecated
-    double computeAverageFromMeasures(List<Measure> _kpiMeasures);
+    Double evaluateKpiGoalValue(KpiGoal _kpiGoal);
     
     
     /**
-     * Computes the sum from a list of measures
+     * Evaluate the last value of a kpi since the timescale provided.
      * 
-     * @param _kpiMeasures
-     *            the kpi measures
-     * @return a value representing the sum
+     * @param _kpiPerId
+     *            the kpii
+     * @param _timeScale
+     *            the time scale.
+     * @return
      */
-    @Deprecated
-    double computeSumFromMeasures(List<Measure> _kpiMeasures);
+    KpiResult evaluateKpiLastValue(Kpi _kpiPerId, TimeScale _timeScale);
     
     
     /**
@@ -127,14 +128,12 @@ public interface IStatisticsAPI
     
     
     /**
-     * Return the current value of a KPI for a given entity.
+     * Evaluate the current kpi value.
      * 
-     * @warning Should only be used to measure progression of a kpi.
      * @param _kpiKeys
-     *            the kpi and entity
-     * @return the current kpi value.
+     *            the history key
      */
-    Double evaluateTheCurrentKpiValue(HistoryKey _kpiKeys);
+    Double evaluateTheCurrentKpiValue(final HistoryKey _kpiKeys);
     
     
     /**
@@ -147,18 +146,7 @@ public interface IStatisticsAPI
     KpiResult evaluateTheCurrentKpiValues(Integer _kpIID);
     
     
-    /**
-     * Returns the kpi values averaged since the begin period given in
-     * parameter. The results are returned as an object called KpiRESULT.
-     * Basically it is a map referencing an entity key to its value.
-     * 
-     * @param _kpiID
-     *            the kpi name
-     * @param _previousTime
-     *            the previous time.
-     * @return the kpi result
-     */
-    KpiResult getKpiValuesAverageOnPeriod(Integer _kpiID, DateTime _previousTime);
+    Double getLastButOneStoredValueInHistory(HistoryKey _key);
     
     
     /**
@@ -169,6 +157,26 @@ public interface IStatisticsAPI
      */
     @Deprecated
     Double getLastStoredValueInHistory(HistoryKey _key);
+    
+    
+    /**
+     * Returns the remaining effort to spent to achieve the goal. This result is a percentage difference.
+     * 
+     * @param _kpiGoal
+     *            the goal
+     * @return the remaining effort.
+     */
+    Double getRemainingEffort(KpiGoal _kpiGoal);
+    
+    
+    /**
+     * Returns the remaining time
+     * 
+     * @param _kpiGoal
+     *            the kpi goal
+     * @return the remaining time before the goal exhaustion.
+     */
+    Period getRemainingTime(KpiGoal _kpiGoal);
     
     
     /**

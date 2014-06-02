@@ -46,7 +46,7 @@ public final class DepartmentEditPage extends LayoutPage {
         feedbackPanel.setOutputMarkupId(true);
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         add(feedbackPanel);
-        accordion.setActiveTab(COMPANY_INDEX);
+        
         final DepartmentForm departmentForm = new DepartmentForm(projectService,personService, isNew, "form", prService,
                 feedbackPanel, new CompoundPropertyModel<PersonGroup>(_personGroup), this);
         String message;

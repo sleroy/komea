@@ -9,8 +9,9 @@ package org.komea.product.wicket.providers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.komea.product.backend.service.kpi.IKPIService;
+//import org.komea.product.backend.api.IWicketAdminService;
 import org.komea.product.backend.service.entities.IProviderService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.wicket.utils.WicketTesterMethodRule;
 import org.mockito.Mockito;
 
@@ -33,7 +34,7 @@ public class ProviderPageTest
     
     
         wicketRule.getApplicationContextMock().putBean(Mockito.mock(IProviderService.class));
-        // wicketRule.getApplicationContextMock().putBean(Mockito.mock(IWicketAdminService.class));
+//         wicketRule.getApplicationContextMock().putBean(Mockito.mock(IWicketAdminService.class));
         wicketRule.getApplicationContextMock().putBean(Mockito.mock(IKPIService.class));
         
     }
