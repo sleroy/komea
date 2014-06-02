@@ -13,6 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListChoice;
@@ -87,11 +88,11 @@ public abstract class SelectDialog extends AbstractFormDialog<String> {
                         list);
         listEntite.setChoiceRenderer(rendener);
         listEntite.setNullValid(true);
-        listEntite.setMaxRows(list.size()+1);
-        
-        AttributeModifier heightAttributeModifier = new AttributeModifier("height", new Model("150px"));
-        add(heightAttributeModifier);
 
+        if (list.size() < 8) {
+            listEntite.setMaxRows(8);
+        }
+        listEntite.setMaxRows(list.size() + 1);
         form.add(listEntite);
         this.add(form);
 
