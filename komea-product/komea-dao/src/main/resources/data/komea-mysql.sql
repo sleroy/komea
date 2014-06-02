@@ -30,9 +30,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_proj` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_proj','key_UNIQUE','projectKey ASC');
-call komea.createIndex( 'kom_proj','fk_Project_Customer1_idx','projectKey ASC');
-
 
 -- -----------------------------------------------------
 -- Table `komea`.`kom_pegr`
@@ -47,9 +44,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pegr` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_pegr','key_UNIQUE','personGroupKey ASC');
-call komea.createIndex( 'kom_pegr','fk_UserGroup_UserGroup1_idx','idPersonGroupParent ASC');
-
 
 -- -----------------------------------------------------
 -- Table `komea`.`kom_pero`
@@ -60,8 +54,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pero` (
   `name` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
-
-call komea.createIndex('kom_pero','roleKey_UNIQUE','roleKey ASC');
 
 
 -- -----------------------------------------------------
@@ -80,13 +72,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pe` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_pe','fk_User_UserGroup1_idx','idPersonGroup ASC');
-
-call komea.createIndex( 'kom_pe','Personcol_UNIQUE','login ASC');
-
-call komea.createIndex( 'kom_pe','fk_kom_pe_kom_pero1_idx','idPersonRole ASC');
-
-call komea.createIndex( 'kom_pe','person_email_index','email ASC');
 
 
 -- -----------------------------------------------------
@@ -109,8 +94,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpi` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_kpi','key_UNIQUE','kpiKey ASC');
-
 
 -- -----------------------------------------------------
 -- Table `komea`.`kom_msr`
@@ -130,13 +113,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_msr` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_msr','fk_Measure_Metric1_idx','idKpi ASC');
-
-call komea.createIndex( 'kom_msr', 'fk_Measure_Metric1_idx','idKpi ASC');
-
-call komea.createIndex( 'kom_msr','dateIndex', 'date ASC');
-
-call komea.createIndex( 'kom_msr','dateIndex', 'year ASC, idKpi ASC, month ASC, week ASC, day ASC, hour ASC, entityID ASC');
 
 
 -- -----------------------------------------------------
@@ -156,9 +132,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpia` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_kpia','fk_MetricAlert_Metric1_idx', 'idKpi ASC');
-
-call komea.createIndex( 'kom_kpia','key_UNIQUE','kpiAlertKey ASC');
 
 
 -- -----------------------------------------------------
@@ -174,7 +147,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pvd` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_pvd','url_UNIQUE','url ASC');
 
 
 -- -----------------------------------------------------
@@ -188,7 +160,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_link` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_link','fk_Tag_Project_idx','idProject ASC');
 
 
 -- -----------------------------------------------------
@@ -206,7 +177,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_evt` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_evt','key_UNIQUE','eventKey ASC');
 
 
 -- -----------------------------------------------------
@@ -221,7 +191,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_setting` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_setting','ey_UNIQUE','settingKey ASC');
 
 
 -- -----------------------------------------------------
@@ -243,10 +212,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_has_proj_pe` (
   PRIMARY KEY (`idProject`, `idPerson`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_has_proj_pe','fk_Project_has_User_User1_idx','idPerson ASC');
-
-call komea.createIndex( 'kom_has_proj_pe','fk_Project_has_User_Project1_idx','idProject ASC');
-
 
 -- -----------------------------------------------------
 -- Table `komea`.`kom_pvds`
@@ -261,10 +226,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_pvds` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_pvds','key_UNIQUE','providerSettingKey ASC');
-
-call komea.createIndex( 'kom_pvds','fk_ProviderSetting_Provider1_idx','idProvider ASC');
-
 
 -- -----------------------------------------------------
 -- Table `komea`.`kom_has_proj_tag`
@@ -275,9 +236,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_has_proj_tag` (
   PRIMARY KEY (`idProject`, `idTag`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_has_proj_tag','fk_Project_has_Tag_Tag1_idx','idTag ASC');
-
-call komea.createIndex( 'kom_has_proj_tag', 'fk_Project_has_Tag_Project1_id','idProject ASC');
 
 
 -- -----------------------------------------------------
@@ -289,9 +247,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_has_proj_pegr` (
   PRIMARY KEY (`idProject`, `idPersonGroup`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_has_proj_pegr','fk_kom_proj_has_kom_pegr_kom_pegr1_idx','idPersonGroup ASC');
-
-call komea.createIndex( 'kom_has_proj_pegr','fk_kom_proj_has_kom_pegr_kom_proj1_idx','idProject ASC');
 
 
 -- -----------------------------------------------------
@@ -309,7 +264,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_acfi` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_acfi','key_UNIQUE','id ASC');
 
 
 -- -----------------------------------------------------
@@ -323,9 +277,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_sfac` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_sfac','key_UNIQUE','id ASC');
-
-call komea.createIndex( 'kom_sfac','successFactoryKey','successFactorKey ASC');
 
 
 -- -----------------------------------------------------
@@ -337,15 +288,4 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_has_sfac_kpi` (
   PRIMARY KEY (`idSuccessFactor`, `idKpi`) )
 ENGINE = InnoDB;
 
-call komea.createIndex( 'kom_has_sfac_kpi','fk_kom_sfac_has_kom_kpi_kom_kpi1_idx','idKpi ASC');
 
-call komea.createIndex( 'kom_has_sfac_kpi','fk_kom_sfac_has_kom_kpi_kom_sfac1_idx','idSuccessFactor ASC');
-
-
-
-
-
-
-
-
-USE `komea` ;

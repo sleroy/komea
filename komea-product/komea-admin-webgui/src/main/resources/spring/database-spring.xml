@@ -56,6 +56,7 @@
 		enabled="${jdbc_initialize_script_enable}" ignore-failures="NONE">
 		<jdbc:script separator="#" location="${database_sqlfile_proc}" />
 		<jdbc:script location="${database_sqlfile}" />
+        <jdbc:script location="${database_indexes_sqlfile}" />
 	</jdbc:initialize-database>
 
 	<bean id="validator"
