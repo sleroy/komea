@@ -13,6 +13,7 @@ import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 
 
@@ -51,7 +52,7 @@ public class SprintServiceTest extends AbstractSpringIntegrationTestCase
     public final void testGetSprintsAssociatedToAProject() throws Exception {
     
     
-        assertNull(sprintService.getSprintsAssociatedToAProject("projectABC"));
+        assertTrue(sprintService.getSprintsAssociatedToAProject("projectABC").isEmpty());
     }
     
 }
