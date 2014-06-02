@@ -106,11 +106,6 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_msr` (
   PRIMARY KEY (`id`) )
 ;
 
-CREATE INDEX IF NOT EXISTS `fk_Measure_Metric1_idx` ON `komea`.`kom_msr` (`idKpi` ASC) ;
-
-
-CREATE INDEX IF NOT EXISTS `fk_kom_msr_kom_msr1_idx` ON `komea`.`kom_msr` (`kom_msr_id` ASC) ;
-
 
 -- -----------------------------------------------------
 -- Table `komea`.`kom_kpia`

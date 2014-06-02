@@ -29,6 +29,11 @@ CREATE INDEX IF NOT EXISTS `dateIndex` ON `komea`.`kom_msr` (`date` ASC) ;
 
 CREATE INDEX IF NOT EXISTS `measure-complex-index` ON `komea`.`kom_msr` (`year` ASC, `idKpi` ASC, `month` ASC, `week` ASC, `day` ASC, `hour` ASC, `entityID` ASC) ;
 
+CREATE INDEX IF NOT EXISTS `fk_Measure_Metric1_idx` ON `komea`.`kom_msr` (`idKpi` ASC) ;
+
+CREATE INDEX IF NOT EXISTS `fk_kom_msr_kom_msr1_idx` ON `komea`.`kom_msr` (`id` ASC) ;
+
+
 
 CREATE INDEX IF NOT EXISTS `fk_MetricAlert_Metric1_idx` ON `komea`.`kom_kpia` (`idKpi` ASC) ;
 
