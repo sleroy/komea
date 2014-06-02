@@ -7,6 +7,7 @@ package org.komea.product.backend.service;
 
 
 import org.junit.Test;
+import org.komea.product.backend.api.ISpringService;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 

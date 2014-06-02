@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IQueryInformations;
-import org.komea.product.backend.service.ISpringService;
+import org.komea.product.backend.api.ISpringService;
 import org.komea.product.database.model.Kpi;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;

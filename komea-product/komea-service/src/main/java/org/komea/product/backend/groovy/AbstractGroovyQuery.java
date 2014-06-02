@@ -9,8 +9,8 @@ package org.komea.product.backend.groovy;
 import java.util.List;
 
 import org.komea.eventory.api.engine.IQuery;
+import org.komea.product.backend.api.ISpringService;
 import org.komea.product.backend.plugin.api.RequiresSpring;
-import org.komea.product.backend.service.ISpringService;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.kpi.IEntityKpiFormula;
 import org.komea.product.backend.service.kpi.IKPIService;
