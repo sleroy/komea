@@ -98,11 +98,14 @@ public class CronPage extends LayoutPage
                     
                     
                 };
+        
+//        CustomColumnExpression cexp = new CustomColumnExpression(null, null);
         final DataTable dataTable =
                 DataTableBuilder.<CronDetails, String> newTable("table")
                         .addColumn("Cron task", "cronName")
                         .addColumn("CRON Expression", "cronExpression")
                         .addColumn(nextExecutionTime).addColumn(statusCol).displayRows(40)
+//                        .addColumn(statusCol);
                         .withListData(cronService.getCronTasks()).build();
         add(dataTable);
     }
