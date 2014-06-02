@@ -1,10 +1,10 @@
 
-CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE1` ON `komea`.`kom_proj` (`projectKey` ASC) ;
+CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE` ON `komea`.`kom_proj` (`projectKey` ASC) ;
 
 CREATE INDEX IF NOT EXISTS `fk_Project_Customer1_idx` ON `komea`.`kom_proj` (`idCustomer` ASC) ;
 
 
-CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE2` ON `komea`.`kom_pegr` (`personGroupKey` ASC) ;
+CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE` ON `komea`.`kom_pegr` (`personGroupKey` ASC) ;
 
 CREATE INDEX IF NOT EXISTS `fk_UserGroup_UserGroup1_idx` ON `komea`.`kom_pegr` (`idPersonGroupParent` ASC) ;
 
@@ -19,7 +19,7 @@ CREATE INDEX IF NOT EXISTS `person-email-index` ON `komea`.`kom_pe` (`email` ASC
 
 
 
-CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE3` ON `komea`.`kom_kpi` (`kpiKey` ASC) ;
+CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE` ON `komea`.`kom_kpi` (`kpiKey` ASC) ;
 
 
 
@@ -32,7 +32,7 @@ CREATE INDEX IF NOT EXISTS `measure-complex-index` ON `komea`.`kom_msr` (`year` 
 
 CREATE INDEX IF NOT EXISTS `fk_MetricAlert_Metric1_idx` ON `komea`.`kom_kpia` (`idKpi` ASC) ;
 
-CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE4` ON `komea`.`kom_kpia` (`kpiAlertKey` ASC) ;
+CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE` ON `komea`.`kom_kpia` (`kpiAlertKey` ASC) ;
 
 
 CREATE UNIQUE INDEX IF NOT EXISTS `url_UNIQUE` ON `komea`.`kom_pvd` (`url` ASC) ;
@@ -41,10 +41,10 @@ CREATE UNIQUE INDEX IF NOT EXISTS `url_UNIQUE` ON `komea`.`kom_pvd` (`url` ASC) 
 CREATE INDEX IF NOT EXISTS `fk_Tag_Project_idx` ON `komea`.`kom_link` (`idProject` ASC) ;
 
 
-CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE5` ON `komea`.`kom_evt` (`eventKey` ASC) ;
+CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE` ON `komea`.`kom_evt` (`eventKey` ASC) ;
 
 
-CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE6` ON `komea`.`kom_setting` (`settingKey` ASC) ;
+CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE` ON `komea`.`kom_setting` (`settingKey` ASC) ;
 
 
 CREATE INDEX IF NOT EXISTS `fk_Project_has_User_User1_idx` ON `komea`.`kom_has_proj_pe` (`idPerson` ASC) ;
@@ -53,7 +53,7 @@ CREATE INDEX IF NOT EXISTS `fk_Project_has_User_Project1_idx` ON `komea`.`kom_ha
 
 
 
-CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE7` ON `komea`.`kom_pvds` (`providerSettingKey` ASC) ;
+CREATE UNIQUE INDEX IF NOT EXISTS `key_UNIQUE` ON `komea`.`kom_pvds` (`providerSettingKey` ASC) ;
 
 CREATE INDEX IF NOT EXISTS `fk_ProviderSetting_Provider1_idx` ON `komea`.`kom_pvds` (`idProvider` ASC) ;
 
