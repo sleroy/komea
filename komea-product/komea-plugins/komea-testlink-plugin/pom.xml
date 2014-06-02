@@ -6,12 +6,12 @@
     <parent>
         <groupId>org.komea.plugins</groupId>
         <artifactId>komea-plugins</artifactId>
-        <version>1.1.22-SNAPSHOT</version>
+        <version>1.1.23</version>
     </parent>
 
     <groupId>org.komea.plugins</groupId>
     <artifactId>komea-testlink-plugin</artifactId>
-    <version>1.1.22-SNAPSHOT</version>
+    <version>1.1.23</version>
     <name>Komea : Testlink plugin</name>
     <url>http://maven.apache.org</url>
 
