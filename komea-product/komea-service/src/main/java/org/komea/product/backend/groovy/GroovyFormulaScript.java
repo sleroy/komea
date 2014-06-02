@@ -10,7 +10,7 @@ import groovy.lang.Script;
 
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
-import org.komea.product.backend.service.ISpringService;
+import org.komea.product.backend.api.ISpringService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
