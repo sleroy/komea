@@ -2,7 +2,6 @@
 package org.komea.product.backend.service.entities;
 
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,16 +38,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
-
-
 /**
  */
 @Service
 @Transactional
-public final class ProjectService extends AbstractService<Project, Integer, ProjectCriteria>
-        implements IProjectService
-{
-    
+public final class ProjectService extends AbstractService<Project, Integer, ProjectCriteria> implements IProjectService {
     
     @Autowired
     private CustomerDao              customerDAO;
@@ -80,11 +74,8 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
     @Autowired
     private TagDao                   tagDAO;
     
-    
-    
     @Override
     public void deleteProject(final Project _project) {
-    
     
         final Integer idProject = _project.getId();
         
@@ -101,7 +92,6 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         delete(_project);
     }
     
-    
     /**
      * (non-Javadoc)
      * 
@@ -109,7 +99,6 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
      */
     @Override
     public List<ProjectDto> getAllProjectsAsDtos() {
-    
     
         final List<Project> allProjectsEntities = selectAll();
         final List<ProjectDto> projectDTOs = new ArrayList<ProjectDto>(allProjectsEntities.size());
@@ -119,26 +108,21 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         return projectDTOs;
     }
     
-    
     /**
      * @return the customerDAO
      */
     public CustomerDao getCustomerDAO() {
     
-    
         return customerDAO;
     }
-    
     
     /**
      * @return the linkDAO
      */
     public LinkDao getLinkDAO() {
     
-    
         return linkDAO;
     }
-    
     
     /*
      * (non-Javadoc)
@@ -147,14 +131,12 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
     @Override
     public Project getOrCreate(final String _projectKey) {
     
-    
         Project project = selectByKey(_projectKey);
         if (project == null) {
             project = createNewProjectFromKey(_projectKey);
         }
         return project;
     }
-    
     
     /**
      * (non-Javadoc)
@@ -164,30 +146,24 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
     @Override
     public List<Link> getProjectLinks(final Integer _projectId) {
     
-    
         final LinkCriteria criteria = new LinkCriteria();
         criteria.createCriteria().andIdProjectEqualTo(_projectId);
         
         return linkDAO.selectByCriteria(criteria);
     }
     
-    
     /**
      * @return the projectPersonGroupDAO
      */
     public HasProjectPersonGroupDao getProjectPersonGroupDAO() {
     
-    
         return projectPersonGroupDAO;
     }
-    
     
     @Override
     public List<Project> getProjectsOfAMember(final Integer _personId) {
     
-    
-        final List<HasProjectPersonKey> result =
-                projectPersonService.getProjectIdsOfPerson(_personId);
+        final List<HasProjectPersonKey> result = projectPersonService.getProjectIdsOfPerson(_personId);
         final List<Integer> projectIds = new ArrayList<Integer>(result.size());
         for (final HasProjectPersonKey projectPersonGroup : result) {
             projectIds.add(projectPersonGroup.getIdProject());
@@ -196,15 +172,12 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         return selectByPrimaryKeyList(projectIds);
     }
     
-    
     @Override
     public List<Project> getProjectsOfPersonGroup(final Integer _personGroupId) {
     
-    
         final HasProjectPersonGroupCriteria criteria = new HasProjectPersonGroupCriteria();
         criteria.createCriteria().andIdPersonGroupEqualTo(_personGroupId);
-        final List<HasProjectPersonGroupKey> selectByCriteria =
-                projectPersonGroupDAO.selectByCriteria(criteria);
+        final List<HasProjectPersonGroupKey> selectByCriteria = projectPersonGroupDAO.selectByCriteria(criteria);
         final List<Integer> projectIds = new ArrayList<Integer>(selectByCriteria.size());
         for (final HasProjectPersonGroupKey projectPersonGroup : selectByCriteria) {
             projectIds.add(projectPersonGroup.getIdProject());
@@ -212,10 +185,8 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         return selectByPrimaryKeyList(projectIds);
     }
     
-    
     @Override
     public List<Project> getProjectsOfPersonGroupRecursively(final Integer _personGroupId) {
-    
     
         final PersonGroup personGroup = personGroupService.selectByPrimaryKey(_personGroupId);
         if (personGroup == null) {
@@ -236,7 +207,6 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         return new ArrayList<Project>(projectsMap.values());
     }
     
-    
     /**
      * (non-Javadoc)
      * 
@@ -244,7 +214,6 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
      */
     @Override
     public List<String> getProjectTags(final Integer _projectId) {
-    
     
         final List<String> tags = Lists.newArrayList();
         final HasProjectTagCriteria criteria = new HasProjectTagCriteria();
@@ -261,43 +230,31 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         return tags;
     }
     
-    
     /**
      * @return the projectTagsDAO
      */
     public HasProjectTagDao getProjectTagsDAO() {
     
-    
         return projectTagsDAO;
     }
-    
     
     @Override
     public ProjectDao getRequiredDAO() {
     
-    
         return requiredDAO;
     }
-    
     
     /**
      * @return the tagDAO
      */
     public TagDao getTagDAO() {
     
-    
         return tagDAO;
     }
     
-    
     @Override
-    public void saveOrUpdateProject(
-            final Project _project,
-            final List<Tag> _tags,
-            final List<Person> _persons,
-            final List<Link> _links,
+    public void saveOrUpdateProject(final Project _project, final List<Tag> _tags, final List<Person> _persons, final List<Link> _links,
             final List<PersonGroup> _teams) {
-    
     
         Validate.notNull(_tags);
         Validate.notNull(_persons);
@@ -325,16 +282,12 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         }
     }
     
-    
     @Override
     public List<Project> selectAll() {
     
-    
         final ProjectCriteria criteria = new ProjectCriteria();
-        criteria.createCriteria().andProjectKeyNotEqualTo("SYSTEM");
         return selectByCriteria(criteria);
     }
-    
     
     /**
      * @param _customerDAO
@@ -342,10 +295,8 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
      */
     public void setCustomerDAO(final CustomerDao _customerDAO) {
     
-    
         customerDAO = _customerDAO;
     }
-    
     
     /**
      * @param _linkDAO
@@ -353,10 +304,8 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
      */
     public void setLinkDAO(final LinkDao _linkDAO) {
     
-    
         linkDAO = _linkDAO;
     }
-    
     
     /**
      * @param _projectPersonGroupDAO
@@ -364,10 +313,8 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
      */
     public void setProjectPersonGroupDAO(final HasProjectPersonGroupDao _projectPersonGroupDAO) {
     
-    
         projectPersonGroupDAO = _projectPersonGroupDAO;
     }
-    
     
     /**
      * @param _projectTagsDAO
@@ -375,17 +322,13 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
      */
     public void setProjectTagsDAO(final HasProjectTagDao _projectTagsDAO) {
     
-    
         projectTagsDAO = _projectTagsDAO;
     }
     
-    
     public void setRequiredDAO(final ProjectDao _requiredDAO) {
-    
     
         requiredDAO = _requiredDAO;
     }
-    
     
     /**
      * @param _tagDAO
@@ -393,13 +336,10 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
      */
     public void setTagDAO(final TagDao _tagDAO) {
     
-    
         tagDAO = _tagDAO;
     }
     
-    
     private ProjectDto convertProjectToProjectDTO(final Project project) {
-    
     
         final ProjectDto projectDto = new ProjectDto();
         projectDto.setDescription(project.getDescription());
@@ -416,7 +356,6 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         return projectDto;
     }
     
-    
     /**
      * Initializes a new empty project from the key. It provides a default
      * description and name.
@@ -427,7 +366,6 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
      */
     private Project createNewProjectFromKey(final String _projectKey) {
     
-    
         Project project;
         project = new Project();
         project.setDescription("Project automatically generated   " + _projectKey);
@@ -437,54 +375,41 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         return project;
     }
     
-    
     private void deleteMesuresAssociatedToAProject(final Integer idProject) {
-    
     
         final MeasureCriteria measureCriteria = new MeasureCriteria();
         measureCriteria.createCriteria().andEntityIDEqualTo(idProject);
         measureService.deleteByCriteria(measureCriteria);
     }
     
-    
     private void removeAssociatedPersonsOutAProject(final Project _project) {
-    
     
         projectPersonService.updatePersonsOfProject(Collections.<Person> emptyList(), _project);
     }
     
-    
     private void removeLinksAssociatedToAProject(final Integer idProject) {
-    
     
         final LinkCriteria linkCriteria = new LinkCriteria();
         linkCriteria.createCriteria().andIdProjectEqualTo(idProject);
         linkDAO.deleteByCriteria(linkCriteria);
     }
     
-    
     private void removeTagsAssociatedToAProject(final Integer idProject) {
-    
     
         final HasProjectTagCriteria hasProjectTagCriteria = new HasProjectTagCriteria();
         hasProjectTagCriteria.createCriteria().andIdProjectEqualTo(idProject);
         projectTagsDAO.deleteByCriteria(hasProjectTagCriteria);
     }
     
-    
     private void removeTeamsAndDepartmentsAssociatedToAProject(final Integer idProject) {
     
-    
-        final HasProjectPersonGroupCriteria hasProjectPersonGroupCriteria =
-                new HasProjectPersonGroupCriteria();
+        final HasProjectPersonGroupCriteria hasProjectPersonGroupCriteria = new HasProjectPersonGroupCriteria();
         hasProjectPersonGroupCriteria.createCriteria().andIdProjectEqualTo(idProject);
         projectPersonGroupDAO.deleteByCriteria(hasProjectPersonGroupCriteria);
     }
     
-    
     @Override
     protected ProjectCriteria createKeyCriteria(final String key) {
-    
     
         final ProjectCriteria criteria = new ProjectCriteria();
         criteria.createCriteria().andProjectKeyEqualTo(key);
