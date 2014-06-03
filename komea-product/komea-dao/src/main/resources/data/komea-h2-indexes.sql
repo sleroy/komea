@@ -88,4 +88,6 @@ CREATE INDEX IF NOT EXISTS `fk_kom_sfac_has_kom_kpi_kom_kpi1_idx` ON `komea`.`ko
 CREATE INDEX IF NOT EXISTS `fk_kom_sfac_has_kom_kpi_kom_sfac1_idx` ON `komea`.`kom_has_sfac_kpi` (`idSuccessFactor` ASC) ;
 
 
+CREATE INDEX IF NOT EXISTS `fk_kom_kpigoal_kom_kpi1_idx` ON `komea`.`kom_kpigoal` (`idKpi` ASC) ;
+
 
