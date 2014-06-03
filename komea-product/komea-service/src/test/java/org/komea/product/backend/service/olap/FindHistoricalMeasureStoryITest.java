@@ -53,7 +53,7 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         kpiLoading.initLoadingService();
     }
     
-    
+    // @Ignore
     @Test
     @DatabaseSetup("measures.xml")
     public void test__only_one_get_historic_with_end_date_before_first_value() {
