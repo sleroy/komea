@@ -69,6 +69,13 @@ public final class PeriodCriteria {
         endDate = _endDate;
     }
 
+    public PeriodCriteria previous() {
+        final PeriodCriteria periodCriteria = new PeriodCriteria();
+        periodCriteria.setStartDate(new Date(2 * startDate.getTime() - endDate.getTime()));
+        periodCriteria.setEndDate(new Date(startDate.getTime()));
+        return periodCriteria;
+    }
+
     @Override
     public String toString() {
         return "PeriodCriteria{" + "startDate=" + startDate + ", endDate=" + endDate + '}';
