@@ -43,7 +43,7 @@ import static org.junit.Assert.assertTrue;
  * 
  * @author sleroy
  */
-public class FindHistoricalMeasuresTest extends AbstractSpringIntegrationTestCase
+public class FindHistoricalMeasuresITest extends AbstractSpringIntegrationTestCase
 {
     
     
