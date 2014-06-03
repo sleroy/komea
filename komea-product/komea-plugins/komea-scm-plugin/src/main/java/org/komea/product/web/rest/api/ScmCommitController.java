@@ -54,27 +54,25 @@ public class ScmCommitController {
     /**
      * This method push a new commit inside Komea.
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/new_commit/{project}/{user}")
+    @RequestMapping(method = RequestMethod.POST, value = "/new_commit")
     @ResponseStatus(value = HttpStatus.OK)
-    public void pushNewCommit(@PathVariable final String project, @PathVariable final String user,
-            @Valid @RequestBody final ScmCommitDto commitDTO) {
+    public void pushNewCommit(@Valid @RequestBody final ScmCommitDto commitDTO) {
     
-        LOGGER.info("Received new commit notification {} {} {}", project, user, commitDTO);
-        projectService.getOrCreate(project);
+        LOGGER.info("Received new commit notification {} {} {}", commitDTO.getProject(), commitDTO.getUser(), commitDTO);
+        projectService.getOrCreate(commitDTO.getProject());
         final ScmCommit scmCommit = new ScmCommit();
-        scmCommit.setAuthor(personService.findOrCreatePersonByLogin(user));
-        scmCommit.setProject(projectService.selectByKey(project));
+        scmCommit.setAuthor(personService.findOrCreatePersonByLogin(commitDTO.getUser()));
+        scmCommit.setProject(projectService.selectByKey(commitDTO.getProject()));
         scmCommit.setMessage(commitDTO.getMessage());
         scmCommit.setCommitTime(new DateTime());
         scmCommit.setId(commitDTO.getId());
         scmCommit.setNumberOfAddedlines(commitDTO.getNumberOfAddedlines());
-        scmCommit.setNumberOfChangedLines(commitDTO.getNumberOfChangedLines());
         scmCommit.setNumberofDeletedLines(commitDTO.getNumberofDeletedLines());
         scmCommit.setNumberOfModifiedFiles(commitDTO.getNumberOfModifiedFiles());
         LOGGER.debug("Pushing scm commit  : {}", scmCommit);
         eventPushService.sendCustomEvent(scmCommit);
         
-        triggerNewCOmmitEvent(project, user, scmCommit);
+        triggerNewCOmmitEvent(commitDTO.getProject(), commitDTO.getUser(), scmCommit);
         
     }
     
