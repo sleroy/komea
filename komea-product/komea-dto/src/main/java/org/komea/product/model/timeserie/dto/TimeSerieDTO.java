@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.model.Kpi;
+import org.komea.product.service.dto.MeasureResult;
 
 public class TimeSerieDTO implements Serializable {
 
@@ -55,6 +56,27 @@ public class TimeSerieDTO implements Serializable {
 
     public void setCoordinates(List<TimeCoordinateDTO> coordinates) {
         this.coordinates = coordinates;
+    }
+
+    public Double getAverage() {
+        double sum = 0;
+        int count = 0;
+        for (final TimeCoordinateDTO coordinate : coordinates) {
+            final Double value = coordinate.getValue();
+            if (value != null) {
+                sum += coordinate.getValue();
+                count++;
+            }
+        }
+        if (count < 1) {
+            return null;
+        }
+        return sum / count;
+    }
+
+    public MeasureResult toMeasureResult() {
+        final Double average = getAverage();
+        return new MeasureResult(entity, kpi, average);
     }
 
     @Override
