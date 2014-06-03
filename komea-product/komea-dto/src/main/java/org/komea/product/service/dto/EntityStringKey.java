@@ -7,6 +7,9 @@ package org.komea.product.service.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.komea.product.database.enums.EntityType;
 
@@ -48,8 +51,11 @@ public class EntityStringKey implements Serializable, Comparable<EntityStringKey
         return new EntityStringKey(_entityType, _key);
     }
     
+    @NotNull
     private EntityType entityType;
     
+    @NotNull
+    @Size(min = 0, max = 255)
     private String     key;
     
     /**
@@ -149,6 +155,7 @@ public class EntityStringKey implements Serializable, Comparable<EntityStringKey
     /**
      * @return Tests if the key is a department key.
      */
+    @JsonIgnore
     public boolean isDepartmentKey() {
     
         return EntityType.DEPARTMENT.equals(entityType);
@@ -179,6 +186,7 @@ public class EntityStringKey implements Serializable, Comparable<EntityStringKey
     /**
      * @return Tests if the key is a team key.
      */
+    @JsonIgnore
     public boolean isPersonKey() {
     
         return EntityType.PERSON.equals(entityType);
@@ -187,6 +195,7 @@ public class EntityStringKey implements Serializable, Comparable<EntityStringKey
     /**
      * @return Tests if the key is a project key.
      */
+    @JsonIgnore
     public boolean isProjectKey() {
     
         return EntityType.PROJECT.equals(entityType);
@@ -195,6 +204,7 @@ public class EntityStringKey implements Serializable, Comparable<EntityStringKey
     /**
      * @return Tests if the key is a team key.
      */
+    @JsonIgnore
     public boolean isTeamKey() {
     
         return EntityType.TEAM.equals(entityType);
