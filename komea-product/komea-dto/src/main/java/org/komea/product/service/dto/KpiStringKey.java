@@ -117,6 +117,7 @@ public class KpiStringKey {
      * @param _kpiName
      */
     
+    @NotNull
     public KpiStringKey() {
     
         super();
