@@ -9,23 +9,24 @@ import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulato
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
-import org.komea.product.wicket.widget.api.IEditAction;
+import org.komea.product.backend.service.cron.CronDetails;
+import org.komea.product.wicket.widget.api.IAjaxEditAction;
 
 /**
  *
  * @author rgalerme
  */
-public class CustomColumnExpression<T, S> extends AbstractColumn<T, S> {
+public class CustomColumnExpression<S> extends AbstractColumn<CronDetails, S> {
 
-    private final IEditAction<T> editAction;
+    private final IAjaxEditAction<CronDetails> editAction;
 
-    public CustomColumnExpression(IModel<String> displayModel, final IEditAction<T> _editAction) {
+    public CustomColumnExpression(IModel<String> displayModel, final IAjaxEditAction<CronDetails> _editAction) {
         super(displayModel);
         this.editAction = _editAction;
     }
 
     @Override
-    public void populateItem(Item<ICellPopulator<T>> item, String string, IModel<T> imodel) {
+    public void populateItem(Item<ICellPopulator<CronDetails>> item, String string, IModel<CronDetails> imodel) {    
         item.add(new CustomPanelExpression(string, imodel, editAction));
     }
 
