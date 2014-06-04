@@ -18,7 +18,7 @@ public class Gni extends StubQuery {
 	}
 }
 "
-		cronExpression="0 0 0 /1 * ? *" providerType="QUALITY" groupFormula="AVG_VALUE"/>
+		cronExpression="0 0 0 /1 * ? *" providerType="QUALITY" groupFormula="AVG_VALUE" />
 
 	<kom_kpi id="2" kpiKey="BRANCH_COVERAGE(%)" name="Branch coverage(%)"
 		description="Branch coverage(%)" valueMin="5e-324" valueMax="1.7976931348623157e308"
@@ -56,4 +56,7 @@ public class Gni extends StubQuery {
 		value="55" /> -->
 	<!-- <kom_msr id="3963" idKpi="1" entityID="5" year="2014" month="5" day="1" 
 		value="66" /> -->
+      
+      
+     <kom_kpigoal id="1" idKpi="1" entityID="4" value="75" untilDate="2015-05-01 00:00:00" frequency=" * * * * * "/>
 </dataset>

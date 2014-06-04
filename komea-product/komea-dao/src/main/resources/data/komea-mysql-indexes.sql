@@ -69,5 +69,6 @@ call komea.createIndex( 'kom_sfac','successFactoryKey','successFactorKey ASC');
 call komea.createIndex( 'kom_has_sfac_kpi','fk_kom_sfac_has_kom_kpi_kom_kpi1_idx','idKpi ASC');
 call komea.createIndex( 'kom_has_sfac_kpi','fk_kom_sfac_has_kom_kpi_kom_sfac1_idx','idSuccessFactor ASC');
 
+call komea.createIndex( 'kom_kpigoal','fk_kom_kpigoal_kom_kpi1_idx','idKpi ASC');
 
 

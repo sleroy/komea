@@ -295,5 +295,4 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpigoal` (
   PRIMARY KEY (`id`) )
 ;
 
-CREATE INDEX IF NOT EXISTS `fk_kom_kpigoal_kom_kpi1_idx` ON `komea`.`kom_kpigoal` (`idKpi` ASC) ;
 

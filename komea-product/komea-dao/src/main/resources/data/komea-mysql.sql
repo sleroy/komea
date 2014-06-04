@@ -289,3 +289,17 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_has_sfac_kpi` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `komea`.`kom_kpigoal`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `komea`.`kom_kpigoal` (
+  `id` INT NOT NULL ,
+  `idKpi` INT NOT NULL ,
+  `entityID` INT NULL ,
+  `untilDate` TIMESTAMP NULL ,
+  `value` DOUBLE NULL ,
+  `frequency` VARCHAR(45) NULL ,
+  PRIMARY KEY (`id`) )
+;
+
+

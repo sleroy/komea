@@ -2,7 +2,6 @@
 package org.komea.product.backend.service.it;
 
 
-
 import java.util.List;
 
 import org.junit.Assert;
@@ -20,14 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
-
-
 /**
  */
 
-public class EntityServiceITest extends AbstractSpringDBunitIntegrationTest
-{
-    
+public class EntityServiceITest extends AbstractSpringDBunitIntegrationTest {
     
     @Autowired
     private IPersonGroupService groupService;
@@ -38,41 +33,30 @@ public class EntityServiceITest extends AbstractSpringDBunitIntegrationTest
     @Autowired
     private IProjectService     projectService;
     
-    
-    
     @Test
     public void testGetAllDepartments() {
-    
     
         final List<DepartmentDto> departments = groupService.getAllDepartments();
         Assert.assertEquals(5, departments.size());
     }
     
-    
     @Test
     public void testGetPersonList() {
-    
     
         final List<PersonDto> personList = personService.convertAllPersonsIntoPersonDTO();
         Assert.assertEquals(22, personList.size());
     }
     
-    
     @Test
     public void testGetProjectList() {
     
-    
         final List<ProjectDto> projectList = projectService.getAllProjectsAsDtos();
-        Assert.assertEquals(2, projectList.size());
+        Assert.assertEquals(3, projectList.size());
     }
     
-    
     @Test
-    @ExpectedDatabase(
-            value = "database_insertProject.xml",
-            assertionMode = DatabaseAssertionMode.NON_STRICT)
+    @ExpectedDatabase(value = "database_insertProject.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void testInsertProject() {
-    
     
         final Project project = new Project();
         project.setProjectKey("P1");

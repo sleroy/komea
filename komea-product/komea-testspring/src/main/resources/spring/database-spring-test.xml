@@ -14,7 +14,7 @@
                                                    ">
 
 	<context:property-placeholder
-		location="classpath:/config/bdd-${jdbc.bdd.type}.properties" />
+		location="classpath:/config/bdd-h2-test.properties" />
 
 
 	<bean id="dataSource"

@@ -48,14 +48,13 @@
    <kom_pe id="71" firstName="prenom" lastName="nom" email="prenom.nom@test.fr" login="test" password="" userBdd="KOMEA" />
 
 
-   <kom_has_proj_pe  />
+   <kom_has_proj_pe />
 
 
 
    <kom_proj id="1" projectKey="SYSTEM" name="Komea System" description="System project for Komea Statistics" />
    <kom_proj id="4" projectKey="KOMEA" name="Komea" description="Software to measure and produces KPI from CI systems" />
-   <kom_proj id="5" projectKey="SCERTIFY" name="Scertify"
-      description="Scertify™ Code is a static code analysis solution that detects and reduces risks related to Software Development (uncontrolled growth of the Technical Debt, low maintainability, performance issues, lack of agility, security flaws, etc.), thanks to a unique and powerful computer-aided refactoring technology. These unique features are directly available on the fly in the development environment as well as in Continuous Integration environments." />
+   <kom_proj id="5" projectKey="SCERTIFY" name="Scertify" description="Scertify Code is a static code analysis solution" />
 
 
 
