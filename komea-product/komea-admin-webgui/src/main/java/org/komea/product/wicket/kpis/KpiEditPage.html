@@ -141,10 +141,23 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <label class="col-md-2" for="inputEmail1"><wicket:message key="kpipage.save.form.field.label.formula"></wicket:message></label>
-                                        <div class="col-md-10">
-                                            <textarea id="formula" class="form-control" wicket:message="placeholder:kpipage.save.form.field.tooltip.formula" rows="6" wicket:id="formula"></textarea>
-                                            <!--<textarea id="formula" class="form-control codepress java linenumbers-off" rows="6" wicket:id="formula"></textarea>-->
+                                        <div class="col-md-9" style="border:1px solid #CCC;">
+                                            <textarea id="formula" class="form-control codemirror-formula" wicket:message="placeholder:kpipage.save.form.field.tooltip.formula" rows="6" wicket:id="formula"></textarea>
                                         </div>
+                                        <link rel="stylesheet" type="text/css" href="static/js/codemirror-4.2/lib/codemirror.css"></link>
+                                        <script type="text/javascript" src="static/js/codemirror-4.2/lib/codemirror.js"></script>
+                                        <script type="text/javascript" src="static/js/codemirror-4.2/mode/clike/clike.js"></script> 
+                                        <script>
+                                            var formulaTextarea = document.getElementsByClassName("codemirror-formula").item(0);
+                                            var formulaEditor = CodeMirror.fromTextArea(formulaTextarea, {
+                                                lineNumbers: true,
+                                                mode: "text/x-java",
+                                                matchBrackets: true
+                                            });
+                                            formulaEditor.on("change", function(editor, change) {
+						formulaTextarea.value = editor.getValue();
+                                            });
+                                        </script>
                                     </div>
                                 </div>
                                                                 <div class="form-group">
