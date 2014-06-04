@@ -110,7 +110,7 @@ public class MeasuresController {
         final Map<KpiKey, Double> oldValues = Maps.newHashMap();
         for (final TimeSerieDTO oldTimeSerieDTO : oldTimeSerieDTOs) {
             oldValues.put(KpiKey.ofKpiAndEntity(oldTimeSerieDTO.getKpi(),
-                    oldTimeSerieDTO.getEntity()), oldTimeSerieDTO.getAverage());
+                    oldTimeSerieDTO.getEntity()), oldTimeSerieDTO.getGroupFormulaValue());
         }
         final List<MeasureEvolutionResult> measureEvolutionResults = Lists.newArrayList();
         for (final MeasureResult measureResult : averageHistoricalMeasure) {

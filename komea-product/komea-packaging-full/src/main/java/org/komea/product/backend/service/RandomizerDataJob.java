@@ -3,7 +3,6 @@
  */
 package org.komea.product.backend.service;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -133,17 +132,17 @@ public class RandomizerDataJob {
 
     private Double getValue(final DateTime date, final List<Measure> measures) {
         final DateTime nextDate = date.plusDays(1);
-        final Date from = new Date(date.toDate().getTime() - 1);
-        final Date to = new Date(nextDate.toDate().getTime() + 1);
+        final long from = date.toDate().getTime();
+        final long to = nextDate.toDate().getTime();
         final Iterator<Measure> iterator = measures.iterator();
         Measure measure = null;
         while (iterator.hasNext()) {
             final Measure next = iterator.next();
-            final Date d = next.getDate();
-            if (d.after(from) && d.before(to)) {
+            final long time = next.getDate().getTime();
+            if (from <= time && time < to) {
                 measure = next;
                 break;
-            } else if (d.before(from)) {
+            } else if (from > time) {
                 iterator.remove();
             } else {
                 break;
