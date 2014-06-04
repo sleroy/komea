@@ -82,7 +82,7 @@ public class CEPQueryTester
                                                                         }
                                                                     };
     
-    static final Logger                      LOGGER                 =
+    public static final Logger               LOGGER                 =
                                                                             LoggerFactory
                                                                                     .getLogger("[CEP Query Test]");
     
@@ -379,7 +379,9 @@ public class CEPQueryTester
     
     
         if (cepQuery == null) {
-            cepQuery = new CEPQuery(queryImplementationDefinition);
+            cepQuery =
+                    new CEPQuery(queryImplementationDefinition, esperEngineBean.getConfiguration()
+                            .getCacheStorageFactory());
             esperEngineBean.getQueryAdministration().registerQuery("query-test", cepQuery);
         }
     }
@@ -393,7 +395,6 @@ public class CEPQueryTester
         try {
             newEngine.close();
         } catch (final IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

@@ -30,28 +30,19 @@ import com.google.common.base.Strings;
  * @author sleroy
  */
 @Service
-public class CacheFactory implements ICacheStorageFactory
+public class CacheStorageFactoryService implements ICacheStorageFactory
 {
     
     
     private static final Logger LOGGER = LoggerFactory.getLogger("komea-eventcache");
+    
+    
     private Constructor<?>      constructor;
     
     
-    @Value(
-        value = "${cacheImplementation}")
+    @Value(value = "${cacheImplementation}")
     private String              implementation;
     
-    
-    
-    /**
-     * 
-     */
-    public CacheFactory() {
-    
-    
-        super();
-    }
     
     
     /**

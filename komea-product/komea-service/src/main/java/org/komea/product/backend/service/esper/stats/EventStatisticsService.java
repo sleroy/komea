@@ -23,8 +23,8 @@ import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.criterias.MeasureDateComparator;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
-import org.komea.product.backend.service.esper.QueryInformations;
 import org.komea.product.backend.service.kpi.FormulaID;
+import org.komea.product.cep.api.queries.ICEPQueryFactory;
 import org.komea.product.cep.filter.OnlyEventFilter;
 import org.komea.product.cep.formula.EventCountFormula;
 import org.komea.product.database.alert.IEvent;
@@ -66,20 +66,17 @@ public class EventStatisticsService implements IEventStatisticsService
                                                                       LoggerFactory
                                                                               .getLogger("event-statistic-system");
     
-    /**
-     * 
-     */
     private static final int        NUMBER_HOURS              = 24;
     
-    /**
-     * 
-     */
     private static final int        PRECISION                 = 10;
     
     private static final String     STATS_BREAKDOWN_24H       = "STATS_BREAKDOWN_24H";
     
     @Autowired
     private IEventEngineService     cepEngine;
+    
+    @Autowired
+    private ICEPQueryFactory        cepQueryFactory;
     
     @Autowired
     private ICronRegistryService    cronRegistryService;
@@ -101,8 +98,9 @@ public class EventStatisticsService implements IEventStatisticsService
     public void alertCriticityPerDay(final Severity _criticity) {
     
     
-        cepEngine.createQuery(QueryInformations.directInformations(
-                getKpiNameFromSeverity(_criticity), new AlertPerSeverityPerDay(_criticity)));
+        cepEngine.createQueryFromInformations(getKpiNameFromSeverity(_criticity),
+                new AlertPerSeverityPerDay(_criticity));
+        
         
     }
     
@@ -115,8 +113,7 @@ public class EventStatisticsService implements IEventStatisticsService
     public void alertPerDay() {
     
     
-        cepEngine.createQuery(QueryInformations.directInformations(ALERT_RECEIVED_IN_ONE_DAY,
-                new AlertPerDay()));
+        cepEngine.createQueryFromInformations(ALERT_RECEIVED_IN_ONE_DAY, new AlertPerDay());
     }
     
     
@@ -267,8 +264,8 @@ public class EventStatisticsService implements IEventStatisticsService
         LOGGER.info("Creating cron for statistics.");
         
         // output snapshot every 1 minute
-        cepEngine.createOrUpdateQuery(QueryInformations.directInformations(STATS_BREAKDOWN_24H,
-                buildProviderEventFrequencyQuery()));
+        cepEngine.createQueryFromInformations(STATS_BREAKDOWN_24H,
+                buildProviderEventFrequencyQuery());
         
         cronRegistryService.registerCronTask("STATS", "0 0/1   * * * ?", EventStatsCron.class,
                 new JobDataMap());

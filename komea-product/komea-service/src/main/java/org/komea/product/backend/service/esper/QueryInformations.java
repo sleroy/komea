@@ -6,9 +6,7 @@ package org.komea.product.backend.service.esper;
 
 
 
-import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.engine.IQuery;
-import org.komea.eventory.query.CEPQuery;
 import org.komea.product.backend.api.IQueryInformations;
 import org.komea.product.backend.service.kpi.FormulaID;
 
@@ -21,24 +19,6 @@ import org.komea.product.backend.service.kpi.FormulaID;
  */
 public class QueryInformations implements IQueryInformations
 {
-    
-    
-    /**
-     * Builds query informations with direct formula id
-     * 
-     * @param _formulaRawID
-     * @param _queryImplementation
-     * @return
-     */
-    public static IQueryInformations directInformations(
-            final String _formulaRawID,
-            final ICEPQueryImplementation _queryImplementation) {
-    
-    
-        return new QueryInformations(FormulaID.ofRawID(_formulaRawID), new CEPQuery(
-                _queryImplementation));
-    }
-    
     
     
     private IQuery    implementation;

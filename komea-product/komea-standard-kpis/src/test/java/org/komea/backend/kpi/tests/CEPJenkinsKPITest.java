@@ -28,7 +28,6 @@ import org.komea.eventory.filter.EventFilterBuilder;
 import org.komea.eventory.filter.NoEventFilter;
 import org.komea.eventory.formula.CountFormula;
 import org.komea.eventory.query.CEPQueryBuilder;
-import org.komea.eventory.utils.PluginUtils;
 import org.komea.product.backend.utils.MapPopulation;
 import org.komea.product.cep.filter.ElEventFilter;
 import org.komea.product.cep.filter.OnlyEventFilter;
@@ -44,9 +43,7 @@ import com.carrotsearch.junitbenchmarks.BenchmarkRule;
  * Defines a test of a jenkins kpi .
  * http://docs.spring.io/spring/docs/3.0.0.M3/reference/html/ch07s02.html
  */
-@BenchmarkOptions(
-    benchmarkRounds = 200,
-    warmupRounds = 30)
+@BenchmarkOptions(benchmarkRounds = 200, warmupRounds = 30)
 public class CEPJenkinsKPITest
 {
     
@@ -86,7 +83,10 @@ public class CEPJenkinsKPITest
     
     
     @Rule
-    public TestRule benchmarkRun = new BenchmarkRule();
+    public TestRule              benchmarkRun = new BenchmarkRule();
+    
+    
+    private ICacheStorageFactory cacheStorageFactory;
     
     
     
@@ -101,7 +101,7 @@ public class CEPJenkinsKPITest
     public void before() {
     
     
-        PluginUtils.setCacheStorageFactory(new ICacheStorageFactory()
+        cacheStorageFactory = new ICacheStorageFactory()
         {
             
             
@@ -111,7 +111,7 @@ public class CEPJenkinsKPITest
             
                 return new GoogleCacheStorage<Serializable>(_arg0);
             }
-        });
+        };
     }
     
     
@@ -120,7 +120,7 @@ public class CEPJenkinsKPITest
     
     
         CEPQueryBuilder
-                .create(new CountFormula())
+                .create(new CountFormula(), cacheStorageFactory)
                 .defineFilter(new NoEventFilter(),
                         CacheConfigurationBuilder.create().expirationTime(7, TimeUnit.DAYS).build())
                 .build();
@@ -140,7 +140,7 @@ public class CEPJenkinsKPITest
                         .chain(new ElEventFilter("project.projectKey=='SCERTIFY'")).build();
         final ICEPQuery<Serializable, Integer> query =
                 CEPQueryBuilder
-                        .create(new CountFormula())
+                        .create(new CountFormula(), cacheStorageFactory)
                         .defineFilter(filter,
                                 CacheConfigurationBuilder.expirationTimeCache(30, TimeUnit.DAYS))
                         .build();
@@ -176,7 +176,7 @@ public class CEPJenkinsKPITest
                                 parameters)).build();
         final ICEPQuery<Serializable, Integer> query =
                 CEPQueryBuilder
-                        .create(new CountFormula())
+                        .create(new CountFormula(), cacheStorageFactory)
                         .defineFilter(
                                 filter,
                                 CacheConfigurationBuilder.create().expirationTime(7, TimeUnit.DAYS)
@@ -219,7 +219,7 @@ public class CEPJenkinsKPITest
         
         final ICEPQuery<Serializable, Integer> query =
                 CEPQueryBuilder
-                        .create(new CountFormula())
+                        .create(new CountFormula(), cacheStorageFactory)
                         .defineFilter(
                                 filter,
                                 CacheConfigurationBuilder.create().expirationTime(7, TimeUnit.DAYS)
@@ -237,14 +237,13 @@ public class CEPJenkinsKPITest
     }
     
     
-    @Test(
-        timeout = 1000 * 5)
+    @Test(timeout = 1000 * 5)
     public void testSendingEvents() {
     
     
         final ICEPQuery query =
                 CEPQueryBuilder
-                        .create(new CountFormula())
+                        .create(new CountFormula(), cacheStorageFactory)
                         .defineFilter(
                                 new NoEventFilter(),
                                 CacheConfigurationBuilder.create().expirationTime(7, TimeUnit.DAYS)

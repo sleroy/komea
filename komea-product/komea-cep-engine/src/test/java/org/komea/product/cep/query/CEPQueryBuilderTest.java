@@ -20,7 +20,6 @@ import org.komea.eventory.cache.guava.GoogleCacheStorage;
 import org.komea.eventory.filter.EventFilterBuilder;
 import org.komea.eventory.formula.CountFormula;
 import org.komea.eventory.query.CEPQueryBuilder;
-import org.komea.eventory.utils.PluginUtils;
 import org.komea.product.cep.filter.BlockingEventFilter;
 import org.komea.product.cep.filter.OnlyEventFilter;
 import org.komea.product.database.alert.EventBuilder;
@@ -59,8 +58,8 @@ public class CEPQueryBuilderTest
             }
         };
         when(mock.newCacheStorage(Matchers.any(ICacheConfiguration.class))).thenAnswer(answer);
-        PluginUtils.setCacheStorageFactory(mock);
-        final CEPQueryBuilder create = CEPQueryBuilder.create(new CountFormula());
+        
+        final CEPQueryBuilder create = CEPQueryBuilder.create(new CountFormula(), mock);
         final IEventFilter eventFilter =
                 EventFilterBuilder.create().chain(new OnlyEventFilter())
                         .chain(new BlockingEventFilter()).build();
