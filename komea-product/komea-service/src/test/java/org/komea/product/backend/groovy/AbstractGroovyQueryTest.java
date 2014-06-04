@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.eventory.api.engine.IQuery;
+import org.komea.product.backend.api.IGroovyEngineService;
 import org.komea.product.backend.service.kpi.GroovyScriptLoader;
 import org.komea.product.backend.service.kpi.IEntityKpiFormula;
 import org.komea.product.backend.service.kpi.IKPIService;

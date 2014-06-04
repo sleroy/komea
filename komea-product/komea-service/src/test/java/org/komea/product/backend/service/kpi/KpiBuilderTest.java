@@ -12,9 +12,11 @@ import java.util.List;
 import org.junit.Test;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
+import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.eventory.api.filters.IFilterDefinition;
 import org.komea.eventory.api.formula.ICEPFormula;
 import org.komea.eventory.formula.NoCEPFormula;
+import org.komea.product.backend.api.ISpringService;
 import org.komea.product.backend.groovy.GroovyEngineService;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
@@ -24,6 +26,8 @@ import org.komea.product.database.model.Kpi;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
+import static org.mockito.Mockito.mock;
 
 
 
@@ -77,12 +81,61 @@ public class KpiBuilderTest
     
     
     
+    public class EmptyDynamicQuery implements IDynamicDataQuery
+    {
+        
+        
+        /*
+         * (non-Javadoc)
+         * @see org.komea.eventory.api.engine.IQuery#getBackupDelay()
+         */
+        @Override
+        public BackupDelay getBackupDelay() {
+        
+        
+            return BackupDelay.DAY;
+        }
+        
+        
+        /*
+         * (non-Javadoc)
+         * @see org.komea.eventory.api.engine.IQuery#getResult()
+         */
+        @Override
+        public Object getResult() {
+        
+        
+            return null;
+        }
+        
+    }
+    
+    
+    
+    @Test
+    public void dynamicQueryTest() {
+    
+    
+        final GroovyEngineService groovyEngineService = new GroovyEngineService();
+        groovyEngineService.setSpringService(mock(ISpringService.class));
+        final Kpi build =
+                KpiBuilder.create().nameAndKeyDescription("BLA")
+                        .dynamicQuery(EmptyDynamicQuery.class).providerType(ProviderType.CI_BUILD)
+                        .cronOneDay().interval(0d, 1d, ValueDirection.BETTER, ValueType.BOOL)
+                        .entityType(EntityType.DEPARTMENT).build();
+        
+        assertTrue(groovyEngineService.isValidFormula(build.getEsperRequest()));
+        assertNotNull(groovyEngineService.parseQuery(build));
+        
+    }
+    
+    
     @Test
     public void queryTest() {
     
     
         final GroovyEngineService groovyEngineService = new GroovyEngineService();
-        
+        groovyEngineService.setSpringService(mock(ISpringService.class));
         final Kpi build =
                 KpiBuilder.create().nameAndKeyDescription("BLA").query(CEPQuery0.class)
                         .providerType(ProviderType.CI_BUILD).cronOneDay()

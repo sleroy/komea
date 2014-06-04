@@ -6,13 +6,9 @@ package org.komea.product.backend.groovy;
 
 
 
-import java.io.Serializable;
 import java.util.List;
 
-import org.komea.eventory.api.cache.ICacheStorageFactory;
-import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.engine.IQuery;
-import org.komea.eventory.query.CEPQuery;
 import org.komea.product.backend.api.ISpringService;
 import org.komea.product.backend.plugin.api.RequiresSpring;
 import org.komea.product.backend.service.entities.IEntityService;
@@ -26,7 +22,6 @@ import org.komea.product.service.dto.EntityKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-t org.springframework.beans.factory.annotation.Autowired;
 
 
 
@@ -97,30 +92,19 @@ public abstract class AbstractGroovyQuery implements IQuery<KpiResult>
     
     /**
      * Returns a spring service implementing the given class.
-
      */
     public <T> T getService(final Class<T> _class) {
     
     
         return springService.getBean(_class);
     }
-
-    /**
-     * Initializes the CEP Query
-     * @param _queryImplementation the query implementation.
-     * @return the cep query.
-     */
-    public CEPQuery initCEPQuery(final ICEPQueryImplementation _queryImplementation) {
     
-    LOGGER.debug("Initialization of a cep query {}", _queryImplementation);
-        return new CEPQuery(_queryImplementation,
-                getService(ICacheStorageFactory.class));
-    }
     
     public KpiValueProxy kpi(final String _kpiName) {
     
     
         return new KpiValueProxy(ikpiService.findKPIOrFail(_kpiName), statisticsAPI);
     }
+    
+    
 }
-

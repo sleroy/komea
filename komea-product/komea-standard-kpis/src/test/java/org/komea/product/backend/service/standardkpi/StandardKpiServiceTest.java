@@ -10,8 +10,8 @@ import groovy.lang.Script;
 
 import org.junit.Test;
 import org.komea.eventory.api.engine.IQuery;
+import org.komea.product.backend.api.IGroovyEngineService;
 import org.komea.product.backend.api.standardkpi.IStandardKpiService;
-import org.komea.product.backend.groovy.IGroovyEngineService;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;

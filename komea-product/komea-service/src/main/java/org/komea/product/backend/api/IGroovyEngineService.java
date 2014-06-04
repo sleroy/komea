@@ -1,5 +1,5 @@
 
-package org.komea.product.backend.groovy;
+package org.komea.product.backend.api;
 
 
 
