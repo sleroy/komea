@@ -2,7 +2,6 @@
 package org.komea.product.backend.service.kpi;
 
 
-
 import java.util.Collections;
 import java.util.List;
 
@@ -28,35 +27,25 @@ import org.komea.product.plugins.kpi.formula.ProjectFormula;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
-
 /**
  */
-public class KPIServiceITest extends AbstractSpringIntegrationTestCase
-{
+public class KPIServiceITest extends AbstractSpringIntegrationTestCase {
     
-    
-    public static class DemoKPI implements ICEPQueryImplementation
-    {
-        
+    public static class DemoKPI implements ICEPQueryImplementation {
         
         /**
          *
          */
         public DemoKPI() {
         
-        
             //
         }
-        
         
         @Override
         public BackupDelay getBackupDelay() {
         
-        
             return BackupDelay.DAY;
         }
-        
         
         /*
          * (non-Javadoc)
@@ -67,11 +56,9 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
         @Override
         public List<IFilterDefinition> getFilterDefinitions() {
         
-        
             final IFilterDefinition filterDefinition = FilterDefinition.create();
             return Collections.singletonList(filterDefinition);
         }
-        
         
         /*
          * (non-Javadoc)
@@ -80,13 +67,10 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
         @Override
         public ICEPFormula getFormula() {
         
-        
             return new ProjectFormula(new EventCountFormula());
         }
         
     }
-    
-    
     
     private static final String     TEST_QUERY = "testQuery";
     
@@ -103,30 +87,22 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
     private IKPIService             kpiService;
     
     @Autowired
-    private IQueryService        kpiValueService;
-    
+    private IQueryService           kpiValueService;
     
     @Autowired
     private IEventViewerService     viewerService;
     
-    
-    
     public KPIServiceITest() {
-    
     
         super();
     }
     
-    
     @Test
     public void testBug() {
     
-    
         final String key = "testBugKPI";
-        final Kpi kpi =
-                KpiBuilder.createAscending().nameAndKeyDescription(key)
-                        .entityType(EntityType.PROJECT).providerType(ProviderType.OTHER)
-                        .query(DemoKPI.class).hourly().build();
+        final Kpi kpi = KpiBuilder.createAscending().nameAndKeyDescription(key).entityType(EntityType.PROJECT)
+                .providerType(ProviderType.OTHER).query(DemoKPI.class).build();
         
         kpiService.saveOrUpdate(kpi);
         
@@ -135,24 +111,17 @@ public class KPIServiceITest extends AbstractSpringIntegrationTestCase
         
     }
     
-    
     @Test(expected = KpiAlreadyExistingException.class)
     public void testBugAlreadyExistingKPI() {
     
-    
         final String key = "testBugKPI3";
-        final Kpi kpi =
-                KpiBuilder.createAscending().nameAndKeyDescription(key)
-                        .entityType(EntityType.PROJECT).providerType(ProviderType.OTHER)
-                        .query(DemoKPI.class).hourly().build();
+        final Kpi kpi = KpiBuilder.createAscending().nameAndKeyDescription(key).entityType(EntityType.PROJECT)
+                .providerType(ProviderType.OTHER).query(DemoKPI.class).build();
         
         kpiService.saveOrUpdate(kpi);
-        final Kpi kpi2 =
-                KpiBuilder.createAscending().nameAndKeyDescription(key)
-                        .entityType(EntityType.PROJECT).providerType(ProviderType.OTHER)
-                        .query(DemoKPI.class).hourly().build();
+        final Kpi kpi2 = KpiBuilder.createAscending().nameAndKeyDescription(key).entityType(EntityType.PROJECT)
+                .providerType(ProviderType.OTHER).query(DemoKPI.class).build();
         
         kpiService.saveOrUpdate(kpi2);
     }
-    
 }

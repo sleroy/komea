@@ -5,6 +5,8 @@
 package org.komea.product.backend.olap;
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,18 +35,11 @@ import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-
-
 /**
  * @author sleroy
  */
 @Transactional
-public abstract class AbstractPerformanceTest extends AbstractSpringIntegrationTestCase
-{
-    
+public abstract class AbstractPerformanceTest extends AbstractSpringIntegrationTestCase {
     
     protected static final int     MAX_BUILD_PER_HOUR     = 5;
     /**
@@ -66,41 +61,30 @@ public abstract class AbstractPerformanceTest extends AbstractSpringIntegrationT
     @Autowired
     protected IProjectService      projectService;
     
-    
     @Autowired
     protected IStatisticsAPI       statisticsAPI;
-    
-    
     
     /**
      *
      */
     public AbstractPerformanceTest() {
     
-    
         super();
     }
     
-    
     public Kpi beforeInitialization() {
-    
     
         final Project orCreate = projectService.getOrCreate("SCERTIFY");
         System.out.println(orCreate);
         
-        
         final Kpi generatedKpi = initFakeKPi();
         assertEquals(1, kpiDao.insert(generatedKpi));
         queryService.createOrUpdateQueryFromKpi(generatedKpi);
-        System.out.println("< Number of kpis : "
-                + kpiDao.selectByCriteria(new KpiCriteria()).size() + " <> ID ="
-                + generatedKpi.getId());
+        System.out.println("< Number of kpis : " + kpiDao.selectByCriteria(new KpiCriteria()).size() + " <> ID =" + generatedKpi.getId());
         
         measures.clear();
         final FormulaID formulaID = FormulaID.of(generatedKpi);
-        measures =
-                FakeMeasures.generateHourlyDataForKpi(formulaID, 2, MAX_NUMBER_OF_PROJECTS,
-                        MAX_BUILD_PER_HOUR);
+        measures = FakeMeasures.generateHourlyDataForKpi(formulaID, 2, MAX_NUMBER_OF_PROJECTS, MAX_BUILD_PER_HOUR);
         LOGGER.info("Number of elements {}", measures.size());
         
         measureDao.deleteByCriteria(new MeasureCriteria());
@@ -112,22 +96,16 @@ public abstract class AbstractPerformanceTest extends AbstractSpringIntegrationT
         return generatedKpi;
     }
     
-    
     protected Kpi initFakeKPi() {
     
-    
-        final Kpi build =
-                KpiBuilder.create().cronOneDay().description("").entityType(EntityType.PROJECT)
-                        .query(NoQueryDefinition.class).key("bla" + new Date().getTime())
-                        .name("Kpi Olap").providerType(ProviderType.BUGTRACKER).interval(0d, 100d)
-                        .produceValue(ValueType.INT, ValueDirection.BETTER).build();
+        final Kpi build = KpiBuilder.create().description("").entityType(EntityType.PROJECT).query(NoQueryDefinition.class)
+                .key("bla" + new Date().getTime()).name("Kpi Olap").providerType(ProviderType.BUGTRACKER).interval(0d, 100d)
+                .produceValue(ValueType.INT, ValueDirection.BETTER).build();
         System.out.println("Generated kpi");
         return build;
     }
     
-    
     protected void sameTimeSerieConfig(final PeriodTimeSerieOptions timeSerieOptions, final Kpi _kpi) {
-    
     
         timeSerieOptions.untilNow();
         timeSerieOptions.lastYears(10);
@@ -136,9 +114,7 @@ public abstract class AbstractPerformanceTest extends AbstractSpringIntegrationT
         assertTrue(timeSerieOptions.isValid());
     }
     
-    
     protected void sameTimeSerieTimeConfig(final TimeSerieOptions _timeSerieOptions, final Kpi _kpi) {
-    
     
         _timeSerieOptions.setKpiID(_kpi.getId());
         _timeSerieOptions.setGroupFormula(GroupFormula.COUNT);
