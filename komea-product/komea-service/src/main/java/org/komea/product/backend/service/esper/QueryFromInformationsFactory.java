@@ -11,12 +11,14 @@ import org.komea.product.backend.api.IQueryFromInformationsFactory;
 import org.komea.product.backend.service.kpi.FormulaID;
 import org.komea.product.cep.api.queries.ICEPQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
 
 /**
  * @author sleroy
  */
+@Service
 public class QueryFromInformationsFactory implements IQueryFromInformationsFactory
 {
     
