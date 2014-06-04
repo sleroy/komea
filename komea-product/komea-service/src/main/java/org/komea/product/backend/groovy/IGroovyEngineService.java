@@ -3,8 +3,10 @@ package org.komea.product.backend.groovy;
 
 
 
+import groovy.lang.Binding;
 import groovy.lang.Script;
 
+import org.codehaus.groovy.control.CompilerConfiguration;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Kpi;
@@ -51,5 +53,19 @@ public interface IGroovyEngineService
      * @return the script
      */
     Script parseScript(Kpi _kpi);
+    
+    
+    /**
+     * Parses a groovy script.
+     * 
+     * @param _script
+     *            the script
+     * @param _config
+     *            the groovy configuration
+     * @param _binding
+     *            the variable binding.
+     * @return the script or null or an exception.
+     */
+    Script parseScript(String _script, CompilerConfiguration _config, Binding _binding);
     
 }

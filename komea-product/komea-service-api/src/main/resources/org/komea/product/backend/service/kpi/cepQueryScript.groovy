@@ -12,4 +12,4 @@ public class ##KPI## extends CEPQuery {
 
 }
 
-autowired(new ##KPI##());
+autowired(initCEPQuery(new ##KPI##()));

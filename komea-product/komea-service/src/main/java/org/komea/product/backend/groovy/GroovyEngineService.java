@@ -78,7 +78,12 @@ public class GroovyEngineService implements IGroovyEngineService
         final Kpi kpi = new Kpi();
         kpi.setEsperRequest(_formula);
         kpi.setId(1);
-        return parseScript(kpi).run() instanceof IQuery;
+        try {
+            return parseQuery(kpi) instanceof IQuery;
+        } catch (final Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            return false;
+        }
     }
     
     
@@ -105,14 +110,24 @@ public class GroovyEngineService implements IGroovyEngineService
     }
     
     
+    @SuppressWarnings("rawtypes")
     @Override
     public <T extends IQuery<KpiResult>> T parseQuery(final Kpi _kpi) {
     
     
-        final IQuery cast = IQuery.class.cast(parseScript(_kpi).run());
-        if (org.springframework.core.annotation.AnnotationUtils.isAnnotationInherited(
-                RequiresSpring.class, cast.getClass())) {
-            springService.autowirePojo(cast);
+        IQuery cast = null;
+        final Script parseScript = parseScript(_kpi);
+        try {
+            
+            
+            cast = IQuery.class.cast(parseScript.run());
+            if (org.springframework.core.annotation.AnnotationUtils.isAnnotationInherited(
+                    RequiresSpring.class, cast.getClass())) {
+                springService.autowirePojo(cast);
+            }
+        } catch (final Exception e) {
+            LOGGER.error("Errors occured during the EXECUTION of a groovy script : {}\n",
+                    _kpi.getEsperRequest(), e);
         }
         return (T) cast;
     }
@@ -128,17 +143,47 @@ public class GroovyEngineService implements IGroovyEngineService
     public Script parseScript(final Kpi _kpi) {
     
     
-        Validate.notNull(_kpi.getEsperRequest(), "Kpi should define a formula");
-        final CompilerConfiguration config = new CompilerConfiguration();
-        config.setScriptBaseClass(GroovyFormulaScript.class.getCanonicalName());
-        final Binding binding = new Binding();
-        binding.setVariable("spring", springService);
-        binding.setVariable("kpiid", _kpi.getId());
+        Script parseScript = null;
+        try {
+            Validate.notNull(_kpi.getEsperRequest(), "Kpi should define a formula");
+            final CompilerConfiguration config = new CompilerConfiguration();
+            config.setScriptBaseClass(GroovyFormulaScript.class.getCanonicalName());
+            final Binding binding = new Binding();
+            binding.setVariable("spring", springService);
+            binding.setVariable("kpiid", _kpi.getId());
+            
+            parseScript = parseScript(_kpi.getEsperRequest(), config, binding);
+            
+        } catch (final Exception e) {
+            LOGGER.error("Errors occured during the parsing of the groovy script : \n{}",
+                    _kpi.getEsperRequest(), e);
+        }
+        return parseScript;
+    }
+    
+    
+    /**
+     * Parses a script
+     * 
+     * @param _script
+     *            the script
+     * @param config
+     *            the groovy configuration
+     * @param binding
+     *            the binding.
+     * @return the script or null or an exception
+     */
+    @Override
+    public Script parseScript(
+            final String _script,
+            final CompilerConfiguration config,
+            final Binding binding) {
+    
+    
         final GroovyShell shell =
                 new GroovyShell(Thread.currentThread().getContextClassLoader(), binding, config);
         
-        return shell.parse(_kpi.getEsperRequest());
-        
+        return shell.parse(_script);
     }
     
     
