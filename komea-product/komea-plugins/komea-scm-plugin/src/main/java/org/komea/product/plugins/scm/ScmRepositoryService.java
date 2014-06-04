@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import javax.annotation.PostConstruct;
-
 import org.apache.commons.lang.Validate;
 import org.komea.product.backend.api.PluginAdminPages;
 import org.komea.product.backend.api.PluginMountPage;
@@ -15,9 +13,7 @@ import org.komea.product.backend.business.IDAOObjectStorage;
 import org.komea.product.backend.plugin.api.EventTypeDef;
 import org.komea.product.backend.plugin.api.ProviderPlugin;
 import org.komea.product.backend.service.cron.ICronRegistryService;
-import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.backend.service.plugins.IPluginStorageService;
-import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.Severity;
@@ -96,12 +92,12 @@ import org.springframework.transaction.annotation.Transactional;
                     severity = Severity.INFO)},
         icon = "scm",
         name = ScmRepositoryService.NAME,
-        type = ProviderType.NEWS,
+        type = ProviderType.SCM,
         url = ScmRepositoryService.SCM_URL)
 @PluginAdminPages(
         @PluginMountPage(pluginName = ScmRepositoryService.NAME, page = ScmPage.class))
 @Transactional
-public final class ScmRepositoryService implements IScmRepositoryService{
+public final class ScmRepositoryService implements IScmRepositoryService {
 
     public static final String NAME = "Scm plugin";
 
