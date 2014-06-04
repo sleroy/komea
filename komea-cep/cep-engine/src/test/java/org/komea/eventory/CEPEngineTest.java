@@ -17,8 +17,6 @@ import org.komea.eventory.api.cache.ICacheConfiguration;
 import org.komea.eventory.api.cache.ICacheStorage;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.api.engine.ICEPConfiguration;
-import org.komea.eventory.cache.CacheStorageFactory;
-import org.komea.eventory.utils.PluginUtils;
 import org.mockito.Matchers;
 
 import static org.mockito.Mockito.mock;
@@ -48,15 +46,15 @@ public class CEPEngineTest
     
     
     /**
-     * 
+     * @return
      */
-    public static void buildFakeCache() {
+    public static ICacheStorageFactory buildFakeCache() {
     
     
         final ICacheStorageFactory cacheStorageFactory = mock(ICacheStorageFactory.class);
         when(cacheStorageFactory.newCacheStorage(Matchers.any(ICacheConfiguration.class)))
                 .thenReturn(mock(ICacheStorage.class));
-        PluginUtils.setCacheStorageFactory(cacheStorageFactory);
+        return cacheStorageFactory;
         
     }
     
@@ -66,7 +64,7 @@ public class CEPEngineTest
     
         final CEPConfiguration configuration = new CEPConfiguration();
         configuration.setBridgeFactory(eventBridge);
-        configuration.setCacheStorageFactory(new CacheStorageFactory());
+        configuration.setCacheStorageFactory(buildFakeCache());
         
         configuration.setNumberQueryListeners(1);
         configuration.setStorageFolder(new File("target"));

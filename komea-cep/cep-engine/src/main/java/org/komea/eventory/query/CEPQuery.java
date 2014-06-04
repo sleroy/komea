@@ -10,6 +10,7 @@ import java.io.Serializable;
 
 import org.apache.commons.lang.Validate;
 import org.komea.eventory.api.cache.BackupDelay;
+import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.engine.ICEPStatement;
@@ -44,8 +45,12 @@ public class CEPQuery<TEvent extends Serializable, TRes> implements ICEPQuery<TE
      * 
      * @param _queryDefinition
      *            the definition of the query
+     * @param _cacheStorageFactory
+     *            to build a query requires a cache storage factory
      */
-    public CEPQuery(final ICEPQueryImplementation _queryDefinition) {
+    public CEPQuery(
+            final ICEPQueryImplementation _queryDefinition,
+            final ICacheStorageFactory _cacheStorageFactory) {
     
     
         LOGGER.debug(">---- new cep query :");
@@ -55,8 +60,8 @@ public class CEPQuery<TEvent extends Serializable, TRes> implements ICEPQuery<TE
         LOGGER.debug(">---- filters defined : {}", _queryDefinition.getFilterDefinitions().size());
         for (final IFilterDefinition definition : _queryDefinition.getFilterDefinitions()) {
             LOGGER.debug(">---- filter choose : {}", definition);
-            ((CEPStatement<TEvent>) cepStatement).addStorage(new CEPEventStorage<Serializable>(
-                    definition));
+            ((CEPStatement) cepStatement).addStorage(new CEPEventStorage<Serializable>(definition,
+                    _cacheStorageFactory));
         }
         
         LOGGER.debug(">---- formula defined : {}", _queryDefinition.getFormula());

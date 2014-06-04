@@ -11,12 +11,12 @@ import java.io.Serializable;
 import org.apache.commons.lang.Validate;
 import org.komea.eventory.api.cache.ICacheConfiguration;
 import org.komea.eventory.api.cache.ICacheStorage;
+import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.api.engine.ICEPEventStorage;
 import org.komea.eventory.api.filters.IEventFilter;
 import org.komea.eventory.api.filters.IEventTransformer;
 import org.komea.eventory.api.filters.IFilterDefinition;
 import org.komea.eventory.api.filters.ITransformedEvent;
-import org.komea.eventory.utils.PluginUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +50,9 @@ public class CEPEventStorage<T extends Serializable> implements ICEPEventStorage
      * @param _eventFilter
      *            the event filter;
      */
-    public CEPEventStorage(final IFilterDefinition _filterDefinition) {
+    public CEPEventStorage(
+            final IFilterDefinition _filterDefinition,
+            final ICacheStorageFactory _cacheStorageFactory) {
     
     
         super();
@@ -58,12 +60,13 @@ public class CEPEventStorage<T extends Serializable> implements ICEPEventStorage
         Validate.notEmpty(_filterDefinition.getFilterName(), "no filter name");
         Validate.notNull(_filterDefinition.getCacheConfiguration(), "no cache configuration");
         Validate.notNull(_filterDefinition.getFilter(), "no filter");
+        Validate.notNull(_cacheStorageFactory, "Cache storage factory should be provided");
         
         LOGGER = LoggerFactory.getLogger("cepevent-storage-" + _filterDefinition.getFilterName());
         filterName = _filterDefinition.getFilterName();
         cacheConfiguration = _filterDefinition.getCacheConfiguration();
         eventFilter = _filterDefinition.getFilter();
-        storage = PluginUtils.getCacheStorageFactory().newCacheStorage(cacheConfiguration);
+        storage = _cacheStorageFactory.newCacheStorage(cacheConfiguration);
         eventTransfomer = _filterDefinition.getEventTransformer();
         
     }

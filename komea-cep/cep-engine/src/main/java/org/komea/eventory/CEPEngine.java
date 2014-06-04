@@ -14,7 +14,6 @@ import org.komea.eventory.api.bridge.IEventBridge;
 import org.komea.eventory.api.engine.ICEPConfiguration;
 import org.komea.eventory.api.engine.ICEPEngine;
 import org.komea.eventory.api.engine.IQueryAdministrator;
-import org.komea.eventory.utils.PluginUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,7 +122,7 @@ public class CEPEngine implements ICEPEngine
         final int res = cepConfiguration.getNumberQueryListeners();
         LOGGER.debug("CEP Engine starts with {} query listeners", res);
         eventBridge = cepConfiguration.getBridgeFactory().newBridge(cepConfiguration);
-        PluginUtils.setCacheStorageFactory(cepConfiguration.getCacheStorageFactory());
+        
         queryAdministrator = new QueryAdministrator(eventBridge);
         mode = CEPEngineMode.RUNNING;
     }
