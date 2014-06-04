@@ -98,8 +98,9 @@ public class EventStatisticsService implements IEventStatisticsService
     public void alertCriticityPerDay(final Severity _criticity) {
     
     
-        cepEngine.createQueryFromInformations(getKpiNameFromSeverity(_criticity),
-                new AlertPerSeverityPerDay(_criticity));
+        cepEngine.createQueryFromInformations(
+                FormulaID.ofRawID(getKpiNameFromSeverity(_criticity)), new AlertPerSeverityPerDay(
+                        _criticity));
         
         
     }
@@ -113,7 +114,8 @@ public class EventStatisticsService implements IEventStatisticsService
     public void alertPerDay() {
     
     
-        cepEngine.createQueryFromInformations(ALERT_RECEIVED_IN_ONE_DAY, new AlertPerDay());
+        cepEngine.createQueryFromInformations(FormulaID.ofRawID(ALERT_RECEIVED_IN_ONE_DAY),
+                new AlertPerDay());
     }
     
     
@@ -240,7 +242,7 @@ public class EventStatisticsService implements IEventStatisticsService
     
     
         final ICEPQuery<IEvent, EventTypeStatistics> statsBreakdownStatement =
-                (ICEPQuery<IEvent, EventTypeStatistics>) cepEngine.getQuery(FormulaID
+                (ICEPQuery<IEvent, EventTypeStatistics>) cepEngine.getQueryOrFail(FormulaID
                         .ofRawID(STATS_BREAKDOWN_24H));
         
         return statsBreakdownStatement.getResult().getEventTypeStatistics();
@@ -264,7 +266,7 @@ public class EventStatisticsService implements IEventStatisticsService
         LOGGER.info("Creating cron for statistics.");
         
         // output snapshot every 1 minute
-        cepEngine.createQueryFromInformations(STATS_BREAKDOWN_24H,
+        cepEngine.createQueryFromInformations(FormulaID.ofRawID(STATS_BREAKDOWN_24H),
                 buildProviderEventFrequencyQuery());
         
         cronRegistryService.registerCronTask("STATS", "0 0/1   * * * ?", EventStatsCron.class,

@@ -35,11 +35,11 @@ public class QueryFromInformationsFactory implements IQueryFromInformationsFacto
      */
     @Override
     public QueryInformations newCEPQuery(
-            final String _queryName,
+            final FormulaID _queryName,
             final ICEPQueryImplementation _queryImplementation) {
     
     
-        return new QueryInformations(FormulaID.of(_queryName),
+        return new QueryInformations(_queryName,
                 cepQueryFactory.instantiateQuery(_queryImplementation));
         
     }

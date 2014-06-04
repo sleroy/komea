@@ -35,6 +35,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.komea.product</groupId>
+			<artifactId>komea-utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.komea.product</groupId>
 			<artifactId>komea-testspring</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>

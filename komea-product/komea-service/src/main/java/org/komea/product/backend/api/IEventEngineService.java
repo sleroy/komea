@@ -45,7 +45,9 @@ public interface IEventEngineService
      * @param _queryImplementation
      *            the query implementation.
      */
-    void createQueryFromInformations(String _queryName, ICEPQueryImplementation _queryImplementation);
+    void createQueryFromInformations(
+            FormulaID _queryName,
+            ICEPQueryImplementation _queryImplementation);
     
     
     /**

@@ -3,16 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.komea.product.plugins.bugzilla.service;
+
+
 
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.komea.product.backend.business.IDAOObjectStorage;
 import org.komea.product.backend.service.plugins.IPluginStorageService;
 import org.komea.product.backend.utils.CollectionUtil;
@@ -24,149 +25,185 @@ import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+
 /**
  * @author rgalerme
  * @version $Revision: 1.0 $
  */
 @Service
-public class BZConfigurationDAO implements IBZConfigurationDAO {
-
+public class BZConfigurationDAO implements IBZConfigurationDAO
+{
+    
+    
     /**
      * @author sleroy
      */
-    private final class SearchFilterImplementation implements SearchFilter<BZServerConfiguration> {
-
+    private final class SearchFilterImplementation implements SearchFilter<BZServerConfiguration>
+    {
+        
+        
         /**
          *
          */
         private final String string;
-
+        
+        
+        
         /**
          * @param _string
          */
         private SearchFilterImplementation(final String _string) {
-
+        
+        
             string = _string;
         }
-
+        
+        
         @Override
         public boolean match(final BZServerConfiguration _object) {
-
+        
+        
             return string.equals(_object.getAddress());
         }
     }
-
+    
+    
+    
     private IDAOObjectStorage<BZServerConfiguration> configurationStorage;
-
+    
     @Autowired
-    private IPluginStorageService pluginStorage;
-
+    private IPluginStorageService                    pluginStorage;
+    
     @Autowired
-    private IBZServerProxyFactory serverProxyFactory;
-
+    private IBZServerProxyFactory                    serverProxyFactory;
+    
+    
+    
     @Override
     public boolean delete(final BZServerConfiguration _object) {
-
+    
+    
         return configurationStorage.delete(_object);
-
+        
     }
-
-    @Override
-    public boolean testConnexion(BZServerConfiguration server) {
-        IBZServerProxy newConnector = serverProxyFactory.newTestConnector(server);
-
-        boolean connexion = false;
-        if (newConnector != null && newConnector.testConnexion()) {
-            connexion = true;
-            try {
-                newConnector.close();
-            } catch (IOException ex) {
-               connexion=false;
-            }
-        }
-        return connexion;
-    }
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO#find(java.lang.String)
      */
     @Override
     public BZServerConfiguration find(final String _url) {
-
+    
+    
         Validate.notNull(_url);
-        return CollectionUtil.singleOrNull(configurationStorage.find(new SearchFilterImplementation(_url)));
+        return CollectionUtil.singleOrNull(configurationStorage
+                .find(new SearchFilterImplementation(_url)));
     }
-
+    
+    
     /**
      * Method getPluginStorage.
-     *
+     * 
      * @return IPluginStorageService
-     * @see
-     * org.komea.backend.IBZConfigurationDAO.bugzilla.api.IBugZillaConfigurationService#getPluginStorage()
+     * @see org.komea.backend.IBZConfigurationDAO.bugzilla.api.IBugZillaConfigurationService#getPluginStorage()
      */
     @Override
     public IPluginStorageService getPluginStorage() {
-
+    
+    
         return pluginStorage;
     }
-
+    
+    
     /**
      * Method getServerProxyFactory.
-     *
+     * 
      * @return IBZServerProxyFactory
-     * @see
-     * org.komea.backend.IBZConfigurationDAO.bugzilla.api.IBugZillaConfigurationService#getServerProxyFactory()
+     * @see org.komea.backend.IBZConfigurationDAO.bugzilla.api.IBugZillaConfigurationService#getServerProxyFactory()
      */
     @Override
     public IBZServerProxyFactory getServerProxyFactory() {
-
+    
+    
         return serverProxyFactory;
     }
-
+    
+    
     @PostConstruct
     public void init() {
-
-        configurationStorage = pluginStorage.registerDAOStorage("BUGZILLA", BZServerConfiguration.class);
-
+    
+    
+        configurationStorage =
+                pluginStorage.registerDAOStorage("BUGZILLA", BZServerConfiguration.class);
+        
     }
-
+    
+    
     @Override
     public void saveOrUpdate(final BZServerConfiguration server) {
-
+    
+    
         Validate.notNull(server);
         configurationStorage.saveOrUpdate(server);
     }
-
+    
+    
     @Override
     public List<BZServerConfiguration> selectAll() {
-
+    
+    
         return configurationStorage.selectAll();
     }
-
+    
+    
     /**
      * Method setPluginStorage.
-     *
-     * @param pluginStorage IPluginStorageService
-     * @see
-     * org.komea.backend.IBZConfigurationDAO.bugzilla.api.IBugZillaConfigurationService#setPluginStorage(IPluginStorageService)
+     * 
+     * @param pluginStorage
+     *            IPluginStorageService
+     * @see org.komea.backend.IBZConfigurationDAO.bugzilla.api.IBugZillaConfigurationService#setPluginStorage(IPluginStorageService)
      */
     @Override
     public void setPluginStorage(final IPluginStorageService pluginStorage) {
-
+    
+    
         this.pluginStorage = pluginStorage;
     }
-
+    
+    
     /**
      * Method setServerProxyFactory.
-     *
-     * @param serverProxyFactory IBZServerProxyFactory
-     * @see
-     * org.komea.backend.IBZConfigurationDAO.bugzilla.api.IBugZillaConfigurationService#setServerProxyFactory(IBZServerProxyFactory)
+     * 
+     * @param serverProxyFactory
+     *            IBZServerProxyFactory
+     * @see org.komea.backend.IBZConfigurationDAO.bugzilla.api.IBugZillaConfigurationService#setServerProxyFactory(IBZServerProxyFactory)
      */
     @Override
     public void setServerProxyFactory(final IBZServerProxyFactory serverProxyFactory) {
-
+    
+    
         this.serverProxyFactory = serverProxyFactory;
     }
-
+    
+    
+    @Override
+    public boolean testConnexion(final BZServerConfiguration server) {
+    
+    
+        final IBZServerProxy newConnector = serverProxyFactory.newTestConnector(server);
+        
+        boolean connexion = false;
+        if (newConnector != null && newConnector.testConnexion()) {
+            connexion = true;
+            try {
+                newConnector.close();
+            } catch (final IOException ex) {
+                connexion = false;
+            }
+        }
+        return connexion;
+    }
+    
 }

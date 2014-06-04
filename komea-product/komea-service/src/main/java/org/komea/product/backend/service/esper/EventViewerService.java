@@ -293,7 +293,8 @@ public class EventViewerService implements IEventViewerService, PostSettingRegis
             LOGGER.debug(
                     "Upgrading Stream of events with severity= {} with new retention policy, associated to the query {}",
                     _severity, _queryName);
-            esperService.createQueryFromInformations(_queryName, buildRetentionQuery(_severity));
+            esperService.createQueryFromInformations(FormulaID.ofRawID(_queryName),
+                    buildRetentionQuery(_severity));
         }
     }
 }

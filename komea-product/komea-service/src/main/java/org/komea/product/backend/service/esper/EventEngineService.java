@@ -13,7 +13,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.komea.eventory.CEPConfiguration;
 import org.komea.eventory.CEPEngine;
 import org.komea.eventory.api.bridge.IEventBridgeFactory;
@@ -125,12 +125,12 @@ public final class EventEngineService implements IEventEngineService
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.backend.api.IEventEngineService#createQueryFromInformations(java.lang.String,
+     * @see org.komea.product.backend.api.IEventEngineService#createQueryFromInformations(java.lang.String,w
      * org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay)
      */
     @Override
     public void createQueryFromInformations(
-            final String _queryName,
+            final FormulaID _queryName,
             final ICEPQueryImplementation _queryImpl) {
     
     
