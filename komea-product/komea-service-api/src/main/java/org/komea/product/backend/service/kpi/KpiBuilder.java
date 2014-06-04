@@ -63,6 +63,7 @@ public class KpiBuilder
     
     
         super();
+        kpi.setCronExpression("");
     }
     
     
