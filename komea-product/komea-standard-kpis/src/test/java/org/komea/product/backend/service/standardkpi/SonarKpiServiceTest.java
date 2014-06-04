@@ -20,11 +20,15 @@ import org.komea.eventory.api.cache.ICacheStorage;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.cache.guava.GoogleCacheStorage;
 import org.komea.eventory.query.CEPQuery;
+import org.komea.product.backend.api.ISpringService;
 import org.komea.product.backend.groovy.GroovyEngineService;
 import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.plugins.kpi.standard.sonar.SonarMetricKpi;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 
@@ -39,12 +43,30 @@ public class SonarKpiServiceTest
     
     private final SonarKPIService     standardKpiBuilderService = new SonarKPIService();
     
+    final ICacheStorageFactory        iCacheStorageFactory      = new ICacheStorageFactory()
+                                                                {
+                                                                    
+                                                                    
+                                                                    @Override
+                                                                    public ICacheStorage newCacheStorage(
+                                                                            final ICacheConfiguration _arg0) {
+                                                                    
+                                                                    
+                                                                        return new GoogleCacheStorage(
+                                                                                _arg0);
+                                                                    }
+                                                                    
+                                                                };
+    
     
     
     @Before
     public void before() {
     
     
+        final ISpringService mock = mock(ISpringService.class);
+        when(mock.getBean(ICacheStorageFactory.class)).thenReturn(iCacheStorageFactory);
+        groovyEngineService.setSpringService(mock);
         groovyEngineService.init();
         
     }
@@ -78,18 +100,7 @@ public class SonarKpiServiceTest
     public void testActualLineCoverageInvokcation() throws Exception {
     
     
-        new CEPQuery(new SonarMetricKpi("ncloc"), new ICacheStorageFactory()
-        {
-            
-            
-            @Override
-            public ICacheStorage newCacheStorage(final ICacheConfiguration _arg0) {
-            
-            
-                return new GoogleCacheStorage(_arg0);
-            }
-            
-        });
+        new CEPQuery(new SonarMetricKpi("ncloc"), iCacheStorageFactory);
         
     }
     
