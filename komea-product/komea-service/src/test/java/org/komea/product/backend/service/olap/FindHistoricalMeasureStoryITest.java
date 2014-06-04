@@ -190,7 +190,7 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         period.setEndDate(new Date());
         
         final TimeSerieDTO measure =
-                measureService.findMupltipleHistoricalMeasure(kpiKeyList, period).get(0);
+                measureService.findMultipleHistoricalMeasure(kpiKeyList, period).get(0);
         
         // THEN the measure must have two values
         final List<TimeCoordinateDTO> historicalValues = measure.getCoordinates();

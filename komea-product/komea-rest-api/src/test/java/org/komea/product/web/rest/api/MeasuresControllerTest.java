@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-public class MeasureControllerTest extends AbstractSpringWebIntegrationTestCase {
+public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase {
 
     @Autowired
     private WebApplicationContext context;

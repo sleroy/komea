@@ -135,8 +135,19 @@ public class MeasureService implements IMeasureService
     }
     
     
+    /**
+     * @deprecated Use {@link #findMultipleHistoricalMeasure(KpiStringKeyList,PeriodCriteria)} instead
+     */
     @Override
     public List<TimeSerieDTO> findMupltipleHistoricalMeasure(
+            final KpiStringKeyList _kpiKeyList,
+            final PeriodCriteria _period) {
+                return findMultipleHistoricalMeasure(_kpiKeyList, _period);
+            }
+
+
+    @Override
+    public List<TimeSerieDTO> findMultipleHistoricalMeasure(
             final KpiStringKeyList _kpiKeyList,
             final PeriodCriteria _period) {
     
