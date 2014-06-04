@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.List;
 import org.komea.product.database.dto.BaseEntityDto;
+import org.komea.product.database.enums.GroupFormula;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.service.dto.MeasureResult;
 
@@ -58,7 +59,7 @@ public class TimeSerieDTO implements Serializable {
         this.coordinates = coordinates;
     }
 
-    public Double getAverage() {
+    public Double getGroupFormulaValue() {
         double sum = 0;
         int count = 0;
         for (final TimeCoordinateDTO coordinate : coordinates) {
@@ -68,14 +69,14 @@ public class TimeSerieDTO implements Serializable {
                 count++;
             }
         }
-        if (count < 1) {
-            return null;
+        if (GroupFormula.AVG_VALUE.equals(kpi.getGroupFormula())) {
+            return count < 1 ? null : sum / count;
         }
-        return sum / count;
+        return sum;
     }
 
     public MeasureResult toMeasureResult() {
-        final Double average = getAverage();
+        final Double average = getGroupFormulaValue();
         return new MeasureResult(entity, kpi, average);
     }
 

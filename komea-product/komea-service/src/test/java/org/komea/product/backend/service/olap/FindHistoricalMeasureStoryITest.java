@@ -2,8 +2,6 @@
 package org.komea.product.backend.service.olap;
 
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -23,15 +21,12 @@ import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.dto.TimeCoordinateDTO;
 import org.komea.product.model.timeserie.dto.TimeSerieDTO;
 import org.komea.product.service.dto.KpiStringKey;
-import org.komea.product.service.dto.KpiStringKeyList;
-import org.komea.product.service.dto.PeriodCriteria;
 import org.komea.product.test.spring.AbstractSpringDBunitIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
-import com.google.common.collect.Sets;
 
 @DatabaseTearDown(value = "measures.xml", type = DatabaseOperation.DELETE_ALL)
 public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegrationTest {
@@ -158,35 +153,6 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         // the second value must be 60%
         Assert.assertEquals(60, historicalValues.get(1).getValue(), 0.001);
         // TODO:: String id = FormulaID.of("1").getId();
-        
-    }
-    
-    @Test
-    @DatabaseSetup("measures.xml")
-    public void test_get_historic_measures_many() {
-    
-        // GIVEN the database contain the KPI branch_coverage
-        // AND the project Komea has two value for this KPI : 35% (5/01/2014)
-        // and 60% ((1/05/2014)
-        // WHEN the user looking for the coverage-branch for the project komea
-        // between 1/4/2014 and now
-        final KpiStringKeyList kpiKeyList = new KpiStringKeyList(Sets.newHashSet("BRANCH_COVERAGE(%)"), Sets.newHashSet("KOMEA"),
-                EntityType.PROJECT);
-        final PeriodCriteria period = new PeriodCriteria();
-        final Calendar calendar = Calendar.getInstance();
-        calendar.set(2014, Calendar.JANUARY, 4);
-        period.setStartDate(calendar.getTime());
-        period.setEndDate(new Date());
-        
-        final TimeSerieDTO measure = measureService.findMupltipleHistoricalMeasure(kpiKeyList, period).get(0);
-        
-        // THEN the measure must have two values
-        final List<TimeCoordinateDTO> historicalValues = measure.getCoordinates();
-        Assert.assertEquals(2, historicalValues.size());
-        // the first value must be 35%
-        Assert.assertEquals(35, historicalValues.get(0).getValue(), 0.001);
-        // the second value must be 60%
-        Assert.assertEquals(60, historicalValues.get(1).getValue(), 0.001);
         
     }
     

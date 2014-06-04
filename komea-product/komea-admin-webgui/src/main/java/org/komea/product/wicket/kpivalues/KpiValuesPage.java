@@ -2,7 +2,6 @@
 package org.komea.product.wicket.kpivalues;
 
 
-
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,11 +24,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.backend.service.kpi.FormulaID;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.backend.service.kpi.TimeSerie;
 import org.komea.product.database.api.IEntity;
@@ -40,6 +39,7 @@ import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.TimeCoordinate;
+import org.komea.product.model.timeserie.TimeScale;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.wicket.LayoutPage;
 import org.slf4j.Logger;
@@ -59,37 +59,28 @@ import com.googlecode.wickedcharts.highcharts.options.series.Coordinate;
 import com.googlecode.wickedcharts.highcharts.options.series.CustomCoordinatesSeries;
 import com.googlecode.wickedcharts.wicket6.highcharts.Chart;
 
-
-
 /**
  * Person admin page
  * 
  * @author sleroy
  */
-public class KpiValuesPage extends LayoutPage
-{
-    
+public class KpiValuesPage extends LayoutPage {
     
     /**
      * @author sleroy
      */
-    private final class FormExtension extends Form<Void>
-    {
-        
+    private final class FormExtension extends Form<Void> {
         
         /**
          * @param _id
          */
         private FormExtension(final String _id) {
         
-        
             super(_id);
         }
         
-        
         @Override
         protected void onSubmit() {
-        
         
             final PageParameters parameters = new PageParameters();
             if (kpiChoice != null) {
@@ -100,44 +91,30 @@ public class KpiValuesPage extends LayoutPage
         }
     }
     
-    
-    
-    private final class KpiValueList extends ListView<IEntity>
-    {
-        
+    private final class KpiValueList extends ListView<IEntity> {
         
         private final Kpi kpi;
         
-        
-        
-        public KpiValueList(
-                final String _id,
-                final List<IEntity> _entitiesByEntityType,
-                final Kpi _kpi) {
-        
+        public KpiValueList(final String _id, final List<IEntity> _entitiesByEntityType, final Kpi _kpi) {
         
             super(_id, _entitiesByEntityType);
             kpi = _kpi;
             
         }
         
-        
         @Override
         protected void populateItem(final ListItem<IEntity> _item) {
-        
         
             final IEntity entity = _item.getModelObject();
             
             _item.add(new Label("entity", Model.of(_item.getModelObject().getDisplayName())));
             final HistoryKey historyKey = HistoryKey.of(kpi, entity);
-            _item.add(new Label("lastvalue", Model.of(statsService
-                    .getLastStoredValueInHistory(historyKey))));
-            _item.add(new Label("currentvalue", Model.of(statsService
-                    .evaluateTheCurrentKpiValue(historyKey))));
+            PeriodTimeSerieOptions options = PeriodTimeSerieOptions.buildOptionsFromTimeScale(kpi, TimeScale.PER_DAY);
+            
+            _item.add(new Label("lastvalue", Model.of(statsService.evaluateKpiValueOnPeriod(options, historyKey.getEntityKey()))));
+            _item.add(new Label("currentvalue", Model.of(statsService.evaluateTheCurrentKpiValue(historyKey))));
         }
     }
-    
-    
     
     private static final Logger LOGGER           = LoggerFactory.getLogger(KpiValuesPage.class);
     
@@ -148,9 +125,6 @@ public class KpiValuesPage extends LayoutPage
     @SpringBean
     private IEntityService      entityService;
     
-    private Object              event;
-    
-    
     @SpringBean
     private IEventEngineService eventEngineService;
     
@@ -159,25 +133,18 @@ public class KpiValuesPage extends LayoutPage
     @SpringBean
     private IQueryService       kpiQueryService;
     
-    
     @SpringBean
     private IKPIService         kpiService;
-    
     
     @SpringBean
     private MeasureDao          measureDao;
     
-    
     @SpringBean
     private IStatisticsAPI      statsService;
     
-    
-    
     public KpiValuesPage(final PageParameters _parameters) {
     
-    
         super(_parameters);
-        
         
         add(new FeedbackPanel("feedback"));
         final String kpiParameterName = _parameters.get("kpiChoice").toString();
@@ -202,18 +169,14 @@ public class KpiValuesPage extends LayoutPage
             buildEventList(Collections.EMPTY_LIST);
             add(new Label("chart", "No graph available"));
             
-            
         } else {
             add(new Label("kpi", "Kpi " + kpiChoice.getName()));
             final boolean dynamicQuery = kpiQueryService.isDynamicQuery(kpiChoice);
-            add(new Label("details", dynamicQuery
-                    ? "This kpi is a dynamic query."
-                        : "This kpi is produced from events."));
+            add(new Label("details", dynamicQuery ? "This kpi is a dynamic query." : "This kpi is produced from events."));
             final MeasureCriteria measureCriteria = new MeasureCriteria();
             measureCriteria.createCriteria().andIdKpiEqualTo(FormulaID.of(kpiChoice).getId());
             add(new Label("values", measureDao.countByCriteria(measureCriteria)));
-            final List<IEntity> entitiesByEntityType =
-                    entityService.getEntitiesByEntityType(kpiChoice.getEntityType());
+            final List<IEntity> entitiesByEntityType = entityService.getEntitiesByEntityType(kpiChoice.getEntityType());
             
             add(new KpiValueList("rows", entitiesByEntityType, kpiChoice));
             if (dynamicQuery) {
@@ -225,12 +188,9 @@ public class KpiValuesPage extends LayoutPage
             buildChart();
         }
         
-        
     }
     
-    
     public void buildChart() {
-    
     
         final ChartOptions chartOptions = new ChartOptions();
         
@@ -248,8 +208,7 @@ public class KpiValuesPage extends LayoutPage
         xAxis.setType(AxisType.DATETIME);
         
         final DateTimeLabelFormat dateTimeLabelFormat = new DateTimeLabelFormat();
-        dateTimeLabelFormat.setProperty(DateTimeProperties.MONTH, "%e. %b").setProperty(
-                DateTimeProperties.YEAR, "%b");
+        dateTimeLabelFormat.setProperty(DateTimeProperties.MONTH, "%e. %b").setProperty(DateTimeProperties.YEAR, "%b");
         xAxis.setDateTimeLabelFormats(dateTimeLabelFormat);
         options.setxAxis(xAxis);
         
@@ -266,51 +225,41 @@ public class KpiValuesPage extends LayoutPage
         add(buildGraphic(options, "chart", kpiChoice));
     }
     
-    
     private void buildEventList(final List list) {
-    
     
         final ListChoice<Serializable> listEvents = new ListChoice<Serializable>("events", list);
         listEvents.setMaxRows(20);
         add(listEvents);
     }
     
-    
     private Chart buildGraphic(final Options options, final String _chartID, final Kpi _kpi) {
-    
     
         // Define the data points. All series have a dummy year
         // of 1970/71 in order to be compared on the same x axis. Note
         // that in JavaScript, months start at 0 for January, 1 for February
         // etc.
         
-        final Map<EntityKey, List<Coordinate<Long, Integer>>> series =
-                new HashMap<EntityKey, List<Coordinate<Long, Integer>>>();
+        final Map<EntityKey, List<Coordinate<Long, Integer>>> series = new HashMap<EntityKey, List<Coordinate<Long, Integer>>>();
         
-        final List<IEntity> entitiesByEntityType =
-                entityService.getEntitiesByEntityType(_kpi.getEntityType());
+        final List<IEntity> entitiesByEntityType = entityService.getEntitiesByEntityType(_kpi.getEntityType());
         LOGGER.debug("KPI {} has {} entities", _kpi.getDisplayName(), entitiesByEntityType.size());
         final PeriodTimeSerieOptions timeSerieOptions = buildPeriodTimeOptions(_kpi);
         for (final IEntity eKey : entitiesByEntityType) {
-            final TimeSerie history =
-                    statsService.buildPeriodTimeSeries(timeSerieOptions, eKey.getEntityKey());
+            final TimeSerie history = statsService.buildPeriodTimeSeries(timeSerieOptions, eKey.getEntityKey());
             LOGGER.debug("Time serie with {} values", history.getCoordinates().size());
             
             for (final TimeCoordinate measure : history.getCoordinates()) {
                 
-                final EntityKey entityKeyOfMeasure =
-                        EntityKey.of(_kpi.getEntityType(), measure.getEntityID());
+                final EntityKey entityKeyOfMeasure = EntityKey.of(_kpi.getEntityType(), measure.getEntityID());
                 if (entityKeyOfMeasure.isUncompleteKey()) {
                     continue;
                 }
                 List<Coordinate<Long, Integer>> list = series.get(entityKeyOfMeasure);
                 if (list == null) {
-                    series.put(entityKeyOfMeasure, list =
-                            new ArrayList<Coordinate<Long, Integer>>());
+                    series.put(entityKeyOfMeasure, list = new ArrayList<Coordinate<Long, Integer>>());
                 }
                 
-                list.add(new Coordinate<Long, Integer>(measure.getDate().toDate().getTime(),
-                        measure.getValue().intValue()));
+                list.add(new Coordinate<Long, Integer>(measure.getDate().toDate().getTime(), measure.getValue().intValue()));
             }
         }
         
@@ -319,31 +268,23 @@ public class KpiValuesPage extends LayoutPage
         return new Chart(_chartID, options);
     }
     
-    
     private void buildKpiChoicer(final List<Kpi> kpiList) {
     
-    
         final PropertyModel<Kpi> choiceSetter = new PropertyModel<Kpi>(this, "kpiChoice");
-        final ListChoice<Kpi> listChoiceKpis =
-                new ListChoice<Kpi>("kpis", choiceSetter, kpiList, new IChoiceRenderer<Kpi>()
-                {
-                    
-                    
-                    @Override
-                    public Object getDisplayValue(final Kpi _object) {
-                    
-                    
-                        return _object.getName();
-                    }
-                    
-                    
-                    @Override
-                    public String getIdValue(final Kpi _object, final int _index) {
-                    
-                    
-                        return _object.getKpiKey();
-                    }
-                });
+        final ListChoice<Kpi> listChoiceKpis = new ListChoice<Kpi>("kpis", choiceSetter, kpiList, new IChoiceRenderer<Kpi>() {
+            
+            @Override
+            public Object getDisplayValue(final Kpi _object) {
+            
+                return _object.getName();
+            }
+            
+            @Override
+            public String getIdValue(final Kpi _object, final int _index) {
+            
+                return _object.getKpiKey();
+            }
+        });
         listChoiceKpis.setMaxRows(15);
         
         final Form<?> form = new FormExtension("form");
@@ -351,9 +292,7 @@ public class KpiValuesPage extends LayoutPage
         form.add(listChoiceKpis);
     }
     
-    
     private PeriodTimeSerieOptions buildPeriodTimeOptions(final Kpi _kpi) {
-    
     
         final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions(_kpi);
         timeSerieOptions.untilNow();
@@ -364,15 +303,10 @@ public class KpiValuesPage extends LayoutPage
         return timeSerieOptions;
     }
     
-    
-    private void createSeries(
-            final Options options,
-            final Map<EntityKey, List<Coordinate<Long, Integer>>> series) {
-    
+    private void createSeries(final Options options, final Map<EntityKey, List<Coordinate<Long, Integer>>> series) {
     
         for (final Entry<EntityKey, List<Coordinate<Long, Integer>>> serieValue : series.entrySet()) {
-            final CustomCoordinatesSeries<Long, Integer> oneChartSerie =
-                    new CustomCoordinatesSeries<Long, Integer>();
+            final CustomCoordinatesSeries<Long, Integer> oneChartSerie = new CustomCoordinatesSeries<Long, Integer>();
             try {
                 final IEntity entityOrFail = entityService.getEntityOrFail(serieValue.getKey());
                 oneChartSerie.setName(entityOrFail.getDisplayName());

@@ -5,12 +5,12 @@
 package org.komea.product.functional.test;
 
 
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.service.kpi.FormulaID;
 import org.komea.product.backend.service.kpi.IKPIService;
@@ -27,29 +27,19 @@ import org.komea.product.service.dto.EntityKey;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.assertTrue;
-
-
-
 /**
  * This tests validates that we can collect real time values from a kpi.
  * 
  * @author sleroy
  */
-public class WhenAKpiIsRegisteredWeHaveAQueryAndItExists extends AbstractSpringIntegrationTestCase
-{
+public class WhenAKpiIsRegisteredWeHaveAQueryAndItExists extends AbstractSpringIntegrationTestCase {
     
-    
-    public static class DemoDynamicQuery implements IDynamicDataQuery<KpiResult>
-    {
-        
+    public static class DemoDynamicQuery implements IDynamicDataQuery<KpiResult> {
         
         /**
          * 
          */
         public static final double VALUE = 2.0;
-        
-        
         
         /*
          * (non-Javadoc)
@@ -58,10 +48,8 @@ public class WhenAKpiIsRegisteredWeHaveAQueryAndItExists extends AbstractSpringI
         @Override
         public BackupDelay getBackupDelay() {
         
-        
             return BackupDelay.DAY;
         }
-        
         
         /*
          * (non-Javadoc)
@@ -70,46 +58,35 @@ public class WhenAKpiIsRegisteredWeHaveAQueryAndItExists extends AbstractSpringI
         @Override
         public KpiResult getResult() {
         
-        
             final KpiResult kpiResult = new KpiResult();
             kpiResult.put(entityKey, VALUE);
             return kpiResult;
         }
     }
     
-    
-    
     private static final EntityKey entityKey = EntityKey.of(EntityType.PROJECT, 1);
-    
     
     @Autowired
     private IEventEngineService    engineService;
     
     @Autowired
-    private IKPIService                kpiAPI;
+    private IKPIService            kpiAPI;
     
     @Autowired
-    private IQueryService       kpiQueryService;
+    private IQueryService          kpiQueryService;
     
     @Autowired
     private IKPIService            kpiService;
     
-    
     @Autowired
     private IStatisticsAPI         statisticsAPI;
-    
-    
     
     @Test
     public void testGetRealTimeValueFromKPI() {
     
-    
-        final Kpi build =
-                KpiBuilder.create().nameAndKey("kpidemovalue").dailyKPI()
-                        .description("example of kpi").forProject()
-                        .groupFormula(GroupFormula.AVG_VALUE).interval(0d, 100d)
-                        .providerType(ProviderType.BUGTRACKER).dynamicQuery(DemoDynamicQuery.class)
-                        .produceValue(ValueType.INT, ValueDirection.BETTER).build();
+        final Kpi build = KpiBuilder.create().nameAndKey("kpidemovalue").description("example of kpi").forProject()
+                .groupFormula(GroupFormula.AVG_VALUE).interval(0d, 100d).providerType(ProviderType.BUGTRACKER)
+                .dynamicQuery(DemoDynamicQuery.class).produceValue(ValueType.INT, ValueDirection.BETTER).build();
         
         // AND I REGISTER THIS KPI
         kpiService.saveOrUpdate(build);
