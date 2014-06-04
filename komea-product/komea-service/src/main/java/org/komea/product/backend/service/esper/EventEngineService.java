@@ -19,8 +19,10 @@ import org.komea.eventory.CEPEngine;
 import org.komea.eventory.api.bridge.IEventBridgeFactory;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.api.engine.ICEPEngine;
+import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
+import org.komea.product.backend.api.IQueryFromInformationsFactory;
 import org.komea.product.backend.api.IQueryInformations;
 import org.komea.product.backend.api.exceptions.CEPQueryNotFoundException;
 import org.komea.product.backend.api.exceptions.InvalidQueryDefinitionException;
@@ -48,12 +50,14 @@ public final class EventEngineService implements IEventEngineService
 {
     
     
-    private static final Logger  LOGGER = LoggerFactory.getLogger("komea-esper");
+    private static final Logger           LOGGER = LoggerFactory.getLogger("komea-esper");
+    @Autowired
+    private ICacheStorageFactory          cacheStorageFactory;
+    
+    private ICEPEngine                    cepEngine;
     
     @Autowired
-    private ICacheStorageFactory cacheStorageFactory;
-    
-    private ICEPEngine           cepEngine;
+    private IEventBridgeFactory           eventBridgeFactory;
     
     /*
      * (non-Javadoc)
@@ -61,10 +65,10 @@ public final class EventEngineService implements IEventEngineService
      */
     
     @Autowired
-    private IEventBridgeFactory  eventBridgeFactory;
+    private IKomeaFS                      komeaFS;
     
     @Autowired
-    private IKomeaFS             komeaFS;
+    private IQueryFromInformationsFactory queryFromInformationsFactory;
     
     
     
@@ -115,6 +119,22 @@ public final class EventEngineService implements IEventEngineService
             LOGGER.error("Query invalid : " + _queryInformations, e);
             throw new InvalidQueryDefinitionException(_queryInformations.getImplementation(), e);
         }
+        
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.api.IEventEngineService#createQueryFromInformations(java.lang.String,
+     * org.komea.product.backend.service.esper.stats.AlertPerSeverityPerDay)
+     */
+    @Override
+    public void createQueryFromInformations(
+            final String _queryName,
+            final ICEPQueryImplementation _queryImpl) {
+    
+    
+        createOrUpdateQuery(queryFromInformationsFactory.newCEPQuery(_queryName, _queryImpl));
         
     }
     
