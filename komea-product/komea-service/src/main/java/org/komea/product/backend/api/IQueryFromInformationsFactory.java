@@ -8,12 +8,12 @@ package org.komea.product.backend.api;
 
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.product.backend.service.esper.QueryInformations;
+import org.komea.product.backend.service.kpi.FormulaID;
 
 
 
 /**
  * @author sleroy
- *
  */
 public interface IQueryFromInformationsFactory
 {
@@ -27,7 +27,7 @@ public interface IQueryFromInformationsFactory
      * @return a new cep query
      */
     public abstract QueryInformations newCEPQuery(
-            String _queryName,
+            FormulaID _queryName,
             ICEPQueryImplementation _queryImplementation);
     
 }

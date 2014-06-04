@@ -5,7 +5,7 @@ package org.komea.product.backend.service.kpi;
 
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;

@@ -11,7 +11,7 @@ package org.komea.product.plugins.mantis.core;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.plugins.mantis.api.IMantisServerProxy;
 import org.slf4j.Logger;

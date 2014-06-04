@@ -4,7 +4,7 @@ package org.komea.product.backend.storage;
 
 
 import org.apache.commons.lang.SerializationException;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.komea.product.backend.service.fs.IObjectStorage;
 import org.komea.product.backend.service.fs.IPluginFileSystem;
 import org.slf4j.Logger;

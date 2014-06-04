@@ -14,9 +14,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.eventory.utils.ClassUtils;
+import org.komea.product.backend.api.ISpringService;
 import org.komea.product.database.model.Kpi;
 
 import static org.junit.Assert.assertEquals;
+
+import static org.mockito.Mockito.mock;
 
 
 
@@ -44,6 +47,7 @@ public class GroovyEngineServiceTest
     
     
         groovyEngineService = new GroovyEngineService();
+        groovyEngineService.setSpringService(mock(ISpringService.class));
         groovyEngineService.init();
     }
     
@@ -84,7 +88,8 @@ public class GroovyEngineServiceTest
     
     
         final Kpi kpi = new Kpi();
-        kpi.setEsperRequest("new org.komea.eventory.query.CEPQuery(new org.komea.eventory.query.predefined.EmptyQueryDefinition())");
+        
+        kpi.setEsperRequest("query_from_implementation(new org.komea.eventory.query.predefined.EmptyQueryDefinition())");
         kpi.setId(1);
         final Script parseGroovyScript = groovyEngineService.parseScript(kpi);
         System.out.println(parseGroovyScript.run());

@@ -10,7 +10,7 @@ import java.lang.reflect.Constructor;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.komea.eventory.api.bridge.IEventBridge;
 import org.komea.eventory.api.bridge.IEventBridgeFactory;
 import org.komea.eventory.api.engine.ICEPConfiguration;

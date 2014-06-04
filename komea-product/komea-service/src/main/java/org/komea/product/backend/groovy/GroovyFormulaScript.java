@@ -94,13 +94,20 @@ public abstract class GroovyFormulaScript extends Script
      *            the query implementation.
      * @return the cep query.
      */
-    public CEPQuery query_from_definition(final Class _queryImplementation) {
+    public CEPQuery query_from_definition(
+            final Class<? extends ICEPQueryImplementation> _queryImplementation) {
     
     
         LOGGER.debug("Initialization of a cep query {}", _queryImplementation);
         final ICEPQueryImplementation queryImplementation =
-                (ICEPQueryImplementation) org.springframework.beans.BeanUtils
-                        .instantiate(_queryImplementation);
+                org.springframework.beans.BeanUtils.instantiate(_queryImplementation);
+        return query_from_implementation(queryImplementation);
+    }
+    
+    
+    public CEPQuery query_from_implementation(final ICEPQueryImplementation queryImplementation) {
+    
+    
         return autowired(new CEPQuery(queryImplementation, getService(ICacheStorageFactory.class)));
     }
     
