@@ -16,7 +16,7 @@ public class Gni extends StubQuery {
 	}
 }
 "
-		cronExpression="0 0 0 /1 * ? *" providerType="QUALITY" />
+		cronExpression="0 0 0 /1 * ? *" providerType="QUALITY" groupFormula="AVG_VALUE"/>
 
 	<kom_kpi id="2" kpiKey="BRANCH_COVERAGE(%)" name="Branch coverage(%)"
 		description="Branch coverage(%)" valueMin="5e-324" valueMax="1.7976931348623157e308"
@@ -33,16 +33,16 @@ public class Gni extends StubQuery {
 	}
 }
 "
-		cronExpression="0 0 0 /1 * ? *" providerType="QUALITY" />
+		cronExpression="0 0 0 /1 * ? *" providerType="QUALITY" groupFormula="AVG_VALUE"/>
 
 
 
 
-	<kom_msr id="1" idKpi="2" entityID="4" year="2014" month="1"
+	<kom_msr id="1" idKpi="20c553971b955db06c5ffb98d415e518" entityID="4" year="2014" month="1"
 		day="6" week="1" value="35" date="2014-01-06 00:00:00" />
-	<kom_msr id="2" idKpi="2" entityID="4" year="2014" month="5"
+	<kom_msr id="2" idKpi="20c553971b955db06c5ffb98d415e518" entityID="4" year="2014" month="5"
 		day="14" week="19" value="60" date="2014-05-01 00:00:00" />
-	<kom_msr id="3" idKpi="2" entityID="4" year="2014" month="5"
+	<kom_msr id="3" idKpi="20c553971b955db06c5ffb98d415e518" entityID="4" year="2014" month="5"
 		day="16" week="19" value="70" date="2014-05-01 00:00:00" />
 	<!-- <kom_msr id="3958" idKpi="2" entityID="5" year="2014" month="1" day="5" 
 		value="22" /> -->
