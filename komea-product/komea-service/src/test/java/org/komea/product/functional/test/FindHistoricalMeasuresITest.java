@@ -171,7 +171,7 @@ public class FindHistoricalMeasuresITest extends AbstractSpringIntegrationTestCa
         
         period.setEndDate(timeSerieOptions.getToPeriod());
         final List<TimeSerieDTO> findMupltipleHistoricalMeasure =
-                measureService.findMupltipleHistoricalMeasure(ks, period);
+                measureService.findMultipleHistoricalMeasure(ks, period);
         assertEquals("At least one timeserie", 1, findMupltipleHistoricalMeasure.size());
         assertEquals("At least one data in the first time serie", 1, findMupltipleHistoricalMeasure
                 .get(0).getCoordinates().size());

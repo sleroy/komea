@@ -51,8 +51,21 @@ public interface IMeasureService {
      * @param _period the period to fond measure (start --> end)
      * @return a list of series of measure with these date for each couple
      * (entity, kpi)
+     * @deprecated Use {@link #findMultipleHistoricalMeasure(KpiStringKeyList,PeriodCriteria)} instead
      */
     List<TimeSerieDTO> findMupltipleHistoricalMeasure(KpiStringKeyList _kpiKeyList, PeriodCriteria _period);
+
+    /**
+     * this method find historical measure for a list of kpi apply on a list of
+     * entities during a period
+     *
+     * @param _kpiKeyList contain the kpi name list, the entity keys list and
+     * the entity type
+     * @param _period the period to fond measure (start --> end)
+     * @return a list of series of measure with these date for each couple
+     * (entity, kpi)
+     */
+    List<TimeSerieDTO> findMultipleHistoricalMeasure(KpiStringKeyList _kpiKeyList, PeriodCriteria _period);
 
     /**
      * this method find historical measure for a kpi on an entity during a
