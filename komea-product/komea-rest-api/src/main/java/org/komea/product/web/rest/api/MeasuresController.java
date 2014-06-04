@@ -66,7 +66,7 @@ public class MeasuresController {
     public List<TimeSerieDTO> findHistoricalMeasure(@RequestBody
             final ManyHistoricalMeasureRequest _request) {
 
-        final List<TimeSerieDTO> timeSerieDTOs = measureService.findMupltipleHistoricalMeasure(
+        final List<TimeSerieDTO> timeSerieDTOs = measureService.findMultipleHistoricalMeasure(
                 _request.getKpiKeyList(), _request.getPeriod());
         LOGGER.debug("findHistoricalMeasure with params : {}\nResults : {}", _request, timeSerieDTOs);
         return timeSerieDTOs;
@@ -81,7 +81,7 @@ public class MeasuresController {
     public List<MeasureResult> averageHistoricalMeasure(@RequestBody
             final ManyHistoricalMeasureRequest _request) {
 
-        final List<TimeSerieDTO> timeSerieDTOs = measureService.findMupltipleHistoricalMeasure(
+        final List<TimeSerieDTO> timeSerieDTOs = measureService.findMultipleHistoricalMeasure(
                 _request.getKpiKeyList(), _request.getPeriod());
         final List<MeasureResult> measureResults = Lists.newArrayList();
         final boolean addCurrentValues = _request.getPeriod().getEndDate().after(new Date());
@@ -105,7 +105,7 @@ public class MeasuresController {
     public List<MeasureEvolutionResult> averageHistoricalWithEvolution(@RequestBody
             final ManyHistoricalMeasureRequest _request) {
         final List<MeasureResult> averageHistoricalMeasure = averageHistoricalMeasure(_request);
-        final List<TimeSerieDTO> oldTimeSerieDTOs = measureService.findMupltipleHistoricalMeasure(
+        final List<TimeSerieDTO> oldTimeSerieDTOs = measureService.findMultipleHistoricalMeasure(
                 _request.getKpiKeyList(), _request.getPeriod().previous());
         final Map<KpiKey, Double> oldValues = Maps.newHashMap();
         for (final TimeSerieDTO oldTimeSerieDTO : oldTimeSerieDTOs) {
