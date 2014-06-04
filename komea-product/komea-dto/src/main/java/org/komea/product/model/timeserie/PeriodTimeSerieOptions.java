@@ -1,6 +1,9 @@
+
 package org.komea.product.model.timeserie;
 
+
 import java.util.Date;
+
 import org.apache.commons.lang3.Validate;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
@@ -12,42 +15,48 @@ import org.joda.time.Years;
 import org.komea.product.database.model.Kpi;
 
 public class PeriodTimeSerieOptions extends TimeSerieOptions {
-
+    
     /**
      *
      */
-    private static final DateTimeComparator DATE_COMPARATOR_INSTANCE
-            = DateTimeComparator
-            .getInstance(DateTimeFieldType
-                    .hourOfDay());
-
+    private static final DateTimeComparator DATE_COMPARATOR_INSTANCE      = DateTimeComparator.getInstance(DateTimeFieldType.hourOfDay());
     
-    private static final int MAX_DAYS_FOR_HOURTIMESCALE = 2;
-
-    private static final int MAX_MONTH_FOR_DAYTIMESCALE = 1;
-
-    private static final int MAX_MONTH_FOR_WEEK_TIMESCALE = 6;
-
-    private static final int MAX_YEARS_FOR_MONTH_TIMESCALE = 2;
-
-    private Date fromPeriod;
-
+    private static final int                MAX_DAYS_FOR_HOURTIMESCALE    = 2;
+    
+    private static final int                MAX_MONTH_FOR_DAYTIMESCALE    = 1;
+    
+    private static final int                MAX_MONTH_FOR_WEEK_TIMESCALE  = 6;
+    
+    private static final int                MAX_YEARS_FOR_MONTH_TIMESCALE = 2;
+    
+    private Date                            fromPeriod;
+    
+    public static PeriodTimeSerieOptions buildOptionsFromTimeScale(final Kpi _kpi, final TimeScale _timeScale) {
+    
+        final PeriodTimeSerieOptions periodTimeSerieOptions = new PeriodTimeSerieOptions();
+        periodTimeSerieOptions.setTimeScale(_timeScale);
+        periodTimeSerieOptions.untilNow();
+        periodTimeSerieOptions.fromLastTimeScale(_timeScale);
+        periodTimeSerieOptions.setGroupFormula(_kpi.getGroupFormula());
+        periodTimeSerieOptions.setKpiID(_kpi.getId());
+        return periodTimeSerieOptions;
+    }
     
     private Date toPeriod;
-
+    
     public PeriodTimeSerieOptions() {
-
+    
         super();
     }
-
+    
     public PeriodTimeSerieOptions(final Kpi _kpi) {
-
+    
         super(_kpi);
     }
-
+    
     @Override
     public boolean equals(final Object obj) {
-
+    
         if (this == obj) {
             return true;
         }
@@ -74,14 +83,15 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
         }
         return true;
     }
-
+    
     /**
      * Get the date corresponding to now minus nb timescale.
      *
      * @param _timeScale
      * @param nb
      */
-    private Date getDate(final TimeScale _timeScale, int nb) {
+    private Date getDate(final TimeScale _timeScale, final int nb) {
+    
         switch (_timeScale) {
             case PER_DAY:
                 return new DateTime().minusDays(nb).toDate();
@@ -95,96 +105,97 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
                 return new DateTime().minusYears(nb).toDate();
             default:
                 throw new UnsupportedOperationException("Enum not known " + timeScale);
-
+                
         }
-
+        
     }
-
+    
     /**
      * Defines the from period from the nb last timeScale.
      *
      * @param _timeScale
      * @param _nb
      */
-    public void fromNbLastTimeScale(final TimeScale _timeScale, int _nb) {
-
+    public void fromNbLastTimeScale(final TimeScale _timeScale, final int _nb) {
+    
         timeScale = _timeScale;
         fromPeriod = getDate(_timeScale, _nb);
     }
-
+    
     public void fromLastTimeScale(final TimeScale _timeScale) {
+    
         fromNbLastTimeScale(_timeScale, 1);
     }
-
-    public void toNbLastTimeScale(final TimeScale _timeScale, int _nb) {
+    
+    public void toNbLastTimeScale(final TimeScale _timeScale, final int _nb) {
+    
         toPeriod = getDate(_timeScale, _nb);
     }
-
+    
     public void toLastTimeScale(final TimeScale _timeScale) {
+    
         toNbLastTimeScale(_timeScale, 1);
     }
-
+    
     public Date getFromPeriod() {
-
+    
         return fromPeriod;
     }
-
+    
     public Date getToPeriod() {
-
+    
         return toPeriod;
     }
-
+    
     @Override
     public int hashCode() {
-
+    
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + (fromPeriod == null ? 0 : fromPeriod.hashCode());
         result = prime * result + (toPeriod == null ? 0 : toPeriod.hashCode());
         return result;
     }
-
+    
     /**
      * Tests if the timescale is per year.
      */
     @JsonIgnore
     public boolean isPerYear() {
-
+    
         return timeScale == TimeScale.PER_YEAR;
     }
-
+    
     /**
      * Tests if the configuration is valid.
      */
     @JsonIgnore
     @Override
     public boolean isValid() {
-
-        final boolean isValid =
-                super.isValid()
-                        && fromPeriod != null && toPeriod != null && fromPeriod.before(toPeriod);
+    
+        final boolean isValid = super.isValid() && fromPeriod != null && toPeriod != null && fromPeriod.before(toPeriod);
         if (!isValid) {
             LOGGER.info("Options {} are invalid", this);
         }
         return isValid;
     }
-
+    
     public void lastYears(final int _numberOfYears) {
-
+    
         fromPeriod = new DateTime().minusYears(_numberOfYears).toDate();
-
+        
     }
-
+    
     /**
      * Pick best granularity from dates
      */
     public void pickBestGranularity() {
-
+    
         Validate.notNull(fromPeriod);
         Validate.notNull(toPeriod);
         final DateTime startInstant = new DateTime(fromPeriod);
         final DateTime endInstant = new DateTime(toPeriod);
-
+        
         if (Days.daysBetween(startInstant, endInstant).getDays() <= MAX_DAYS_FOR_HOURTIMESCALE) {
             timeScale = TimeScale.PER_HOUR;
         } else if (Months.monthsBetween(startInstant, endInstant).getMonths() <= MAX_MONTH_FOR_DAYTIMESCALE) {
@@ -196,33 +207,32 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions {
         } else {
             timeScale = TimeScale.PER_MONTH;
         }
-
+        
     }
-
+    
     public void setFromPeriod(final DateTime _fromPeriod) {
-
+    
         fromPeriod = _fromPeriod.toDate();
     }
-
+    
     public void setToPeriod(final DateTime _toPeriod) {
-
+    
         toPeriod = _toPeriod.toDate();
     }
-
+    
     @Override
     public String toString() {
-
-        return "PeriodTimeSerieOptions [fromPeriod="
-                + fromPeriod + ", toPeriod=" + toPeriod + ", toString()=" + super.toString()
+    
+        return "PeriodTimeSerieOptions [fromPeriod=" + fromPeriod + ", toPeriod=" + toPeriod + ", toString()=" + super.toString()
                 + ", getClass()=" + getClass() + "]";
     }
-
+    
     /**
      * Sets the toPeriod to now.
      */
     public void untilNow() {
-
+    
         toPeriod = new DateTime().toDate();
-
+        
     }
 }

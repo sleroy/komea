@@ -5,6 +5,10 @@
 package org.komea.product.functional.test;
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.komea.eventory.api.cache.BackupDelay;
@@ -24,32 +28,19 @@ import org.komea.product.service.dto.EntityKey;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-
-
 /**
  * This tests validates that we can collect real time values from a kpi.
  * 
  * @author sleroy
  */
-public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestCase
-{
+public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestCase {
     
-    
-    public static class DemoDynamicQuery implements IDynamicDataQuery<KpiResult>
-    {
-        
+    public static class DemoDynamicQuery implements IDynamicDataQuery<KpiResult> {
         
         /**
          * 
          */
         public static final double VALUE = 2.0;
-        
-        
         
         /*
          * (non-Javadoc)
@@ -58,10 +49,8 @@ public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestC
         @Override
         public BackupDelay getBackupDelay() {
         
-        
             return BackupDelay.DAY;
         }
-        
         
         /*
          * (non-Javadoc)
@@ -70,20 +59,16 @@ public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestC
         @Override
         public KpiResult getResult() {
         
-        
             final KpiResult kpiResult = new KpiResult();
             kpiResult.put(OF, VALUE);
             return kpiResult;
         }
     }
     
-    
-    
     /**
      * 
      */
     private static final EntityKey OF = EntityKey.of(EntityType.PROJECT, 1);
-    
     
     @Autowired
     private IKPIService            kpiAPI;
@@ -99,18 +84,12 @@ public class GetRealTimeValueFromKpiITest extends AbstractSpringIntegrationTestC
     @Autowired
     private IQueryService          kpiValueService;
     
-    
-    
     @Test
     public void testGetRealTimeValueFromKPI() {
     
-    
-        final Kpi build =
-                KpiBuilder.create().nameAndKey("getrealtimevalue").dailyKPI()
-                        .description("example of kpi").forProject()
-                        .groupFormula(GroupFormula.AVG_VALUE).interval(0d, 100d)
-                        .providerType(ProviderType.BUGTRACKER).dynamicQuery(DemoDynamicQuery.class)
-                        .produceValue(ValueType.INT, ValueDirection.BETTER).build();
+        final Kpi build = KpiBuilder.create().nameAndKey("getrealtimevalue").description("example of kpi").forProject()
+                .groupFormula(GroupFormula.AVG_VALUE).interval(0d, 100d).providerType(ProviderType.BUGTRACKER)
+                .dynamicQuery(DemoDynamicQuery.class).produceValue(ValueType.INT, ValueDirection.BETTER).build();
         
         // AND I REGISTER THIS KPI
         kpiService.saveOrUpdate(build);

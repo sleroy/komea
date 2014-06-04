@@ -2,8 +2,6 @@
 package org.komea.product.backend.service.olap;
 
 
-
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
@@ -26,7 +24,6 @@ import org.komea.product.service.dto.EntityKey;
 import org.komea.product.service.dto.EntityStringKey;
 import org.komea.product.service.dto.KpiStringKey;
 import org.komea.product.service.dto.KpiStringKeyList;
-import org.komea.product.service.dto.MeasureEvolutionResult;
 import org.komea.product.service.dto.MeasureResult;
 import org.komea.product.service.dto.PeriodCriteria;
 import org.slf4j.Logger;
@@ -36,12 +33,8 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 
-
-
 @Service
-public class MeasureService implements IMeasureService
-{
-    
+public class MeasureService implements IMeasureService {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(MeasureService.class.getName());
     
@@ -54,11 +47,8 @@ public class MeasureService implements IMeasureService
     @Autowired
     private IStatisticsAPI      statService;
     
-    
-    
     @Override
     public Double currentMeasure(final Kpi kpi, final IEntity entity) {
-    
     
         Validate.notNull(kpi);
         Validate.notNull(entity);
@@ -66,10 +56,8 @@ public class MeasureService implements IMeasureService
         return statService.evaluateTheCurrentKpiValue(historyKey);
     }
     
-    
     @Override
     public Double currentMeasure(final KpiStringKey _kpiKey) {
-    
     
         final Kpi kpi = kpiService.findKPI(_kpiKey.getKpiName());
         if (kpi == null) {
@@ -82,24 +70,19 @@ public class MeasureService implements IMeasureService
         return currentMeasure(kpi, entity);
     }
     
-    
     @Override
     public List<MeasureResult> currentMeasures(final KpiStringKeyList _kpiKeys) {
     
-    
         final List<MeasureResult> measures = Lists.newArrayList();
         for (final String entityKey : _kpiKeys.getEntityKeys()) {
-            final IEntity entity =
-                    entityService.findEntityByEntityStringKey(EntityStringKey.of(
-                            _kpiKeys.getEntityType(), entityKey));
+            final IEntity entity = entityService.findEntityByEntityStringKey(EntityStringKey.of(_kpiKeys.getEntityType(), entityKey));
             if (entity != null) {
                 final BaseEntityDto baseEntity = BaseEntityDto.newFromEntity(entity);
                 for (final String kpiKey : _kpiKeys.getKpiKeys()) {
                     final Kpi kpi = kpiService.findKPI(kpiKey);
                     if (kpi != null) {
                         final HistoryKey historyKey = HistoryKey.of(kpi, entity);
-                        measures.add(new MeasureResult(baseEntity, kpi, statService
-                                .evaluateTheCurrentKpiValue(historyKey)));
+                        measures.add(new MeasureResult(baseEntity, kpi, statService.evaluateTheCurrentKpiValue(historyKey)));
                     }
                 }
             }
@@ -107,12 +90,8 @@ public class MeasureService implements IMeasureService
         return measures;
     }
     
-    
     @Override
-    public TimeSerieDTO findHistoricalMeasure(
-            final KpiStringKey _kpiKey,
-            final PeriodTimeSerieOptions _period) {
-    
+    public TimeSerieDTO findHistoricalMeasure(final KpiStringKey _kpiKey, final PeriodTimeSerieOptions _period) {
     
         Validate.notNull(_kpiKey);
         Validate.notNull(_kpiKey.getKpiName());
@@ -134,23 +113,8 @@ public class MeasureService implements IMeasureService
         
     }
     
-    
-    /**
-     * @deprecated Use {@link #findMultipleHistoricalMeasure(KpiStringKeyList,PeriodCriteria)} instead
-     */
     @Override
-    public List<TimeSerieDTO> findMupltipleHistoricalMeasure(
-            final KpiStringKeyList _kpiKeyList,
-            final PeriodCriteria _period) {
-                return findMultipleHistoricalMeasure(_kpiKeyList, _period);
-            }
-
-
-    @Override
-    public List<TimeSerieDTO> findMultipleHistoricalMeasure(
-            final KpiStringKeyList _kpiKeyList,
-            final PeriodCriteria _period) {
-    
+    public List<TimeSerieDTO> findMultipleHistoricalMeasure(final KpiStringKeyList _kpiKeyList, final PeriodCriteria _period) {
     
         Validate.notNull(_kpiKeyList);
         Validate.notNull(_kpiKeyList.getEntityKeys());
@@ -164,16 +128,13 @@ public class MeasureService implements IMeasureService
         options.setToPeriod(new DateTime(_period.getEndDate()));
         options.pickBestGranularity();
         for (final String entityKey : _kpiKeyList.getEntityKeys()) {
-            final IEntity entity =
-                    entityService.findEntityByEntityStringKey(EntityStringKey.of(
-                            _kpiKeyList.getEntityType(), entityKey));
+            final IEntity entity = entityService.findEntityByEntityStringKey(EntityStringKey.of(_kpiKeyList.getEntityType(), entityKey));
             if (entity != null) {
                 for (final String kpiKey : _kpiKeyList.getKpiKeys()) {
                     final Kpi kpi = kpiService.findKPI(kpiKey);
                     if (kpi != null) {
                         options.setKpi(kpi);
-                        final TimeSerieDTO timeSerieDTO =
-                                findHistoricalMeasure(kpi, entity, options);
+                        final TimeSerieDTO timeSerieDTO = findHistoricalMeasure(kpi, entity, options);
                         series.add(timeSerieDTO);
                     }
                 }
@@ -182,10 +143,8 @@ public class MeasureService implements IMeasureService
         return series;
     }
     
-    
     @Override
     public Double lastButOneMeasure(final Kpi kpi, final IEntity entity) {
-    
     
         Validate.notNull(kpi);
         Validate.notNull(entity);
@@ -193,92 +152,7 @@ public class MeasureService implements IMeasureService
         return statService.getLastButOneStoredValueInHistory(historyKey);
     }
     
-    
-    @Override
-    @Deprecated
-    public Double lastMeasure(final Kpi kpi, final IEntity entity) {
-    
-    
-        Validate.notNull(kpi);
-        Validate.notNull(entity);
-        final HistoryKey historyKey = HistoryKey.of(kpi, entity);
-        return statService.getLastStoredValueInHistory(historyKey);
-    }
-    
-    
-    @Override
-    public Double lastMeasure(final KpiStringKey _kpiKey) {
-    
-    
-        final Kpi kpi = kpiService.findKPI(_kpiKey.getKpiName());
-        if (kpi == null) {
-            throw new KPINotFoundRuntimeException(_kpiKey.getKpiName());
-        }
-        final IEntity entity = entityService.findEntityByEntityStringKey(_kpiKey.getEntityKey());
-        if (entity == null) {
-            throw new EntityNotFoundException(_kpiKey.getEntityKey());
-        }
-        return lastMeasure(kpi, entity);
-    }
-    
-    
-    @Override
-    @Deprecated
-    public List<MeasureResult> lastMeasures(final KpiStringKeyList _kpiKeys) {
-    
-    
-        final List<MeasureResult> measures = Lists.newArrayList();
-        for (final String entityKey : _kpiKeys.getEntityKeys()) {
-            final IEntity entity =
-                    entityService.findEntityByEntityStringKey(EntityStringKey.of(
-                            _kpiKeys.getEntityType(), entityKey));
-            if (entity != null) {
-                final BaseEntityDto baseEntity = BaseEntityDto.newFromEntity(entity);
-                for (final String kpiKey : _kpiKeys.getKpiKeys()) {
-                    final Kpi kpi = kpiService.findKPI(kpiKey);
-                    if (kpi != null) {
-                        final HistoryKey historyKey = HistoryKey.of(kpi, entity);
-                        measures.add(new MeasureResult(baseEntity, kpi, statService
-                                .getLastStoredValueInHistory(historyKey)));
-                    }
-                }
-            }
-        }
-        return measures;
-    }
-    
-    
-    @Deprecated
-    @Override
-    public List<MeasureEvolutionResult> measuresWithEvolution(final KpiStringKeyList _kpiKeys) {
-    
-    
-        final List<MeasureResult> measureResults = currentMeasures(_kpiKeys);
-        final List<MeasureEvolutionResult> measureEvolutionResults =
-                new ArrayList<MeasureEvolutionResult>(measureResults.size());
-        for (final MeasureResult measureResult : measureResults) {
-            final Double lastValue = lastMeasure(measureResult.getKpi(), measureResult.getEntity());
-            final MeasureEvolutionResult measureEvolutionResult =
-                    new MeasureEvolutionResult(measureResult, lastValue);
-            if (!measureResult.hasValue()) {
-                measureResult.setValue(lastValue);
-                if (measureEvolutionResult.hasOldValue()) {
-                    final Double lastButOneValue =
-                            lastButOneMeasure(measureResult.getKpi(), measureResult.getEntity());
-                    measureEvolutionResult.setOldValue(lastButOneValue);
-                }
-            }
-            measureEvolutionResults.add(measureEvolutionResult);
-        }
-        return measureEvolutionResults;
-    }
-    
-    
-    private TimeSerieDTO findHistoricalMeasure(
-            final Kpi _kpi,
-            final IEntity _entity,
-            final PeriodTimeSerieOptions _period) {
-    
+    private TimeSerieDTO findHistoricalMeasure(final Kpi _kpi, final IEntity _entity, final PeriodTimeSerieOptions _period) {
     
         if (_period.getKpiID() == null) {
             _period.setKpiID(_kpi.getId());
@@ -290,8 +164,7 @@ public class MeasureService implements IMeasureService
         final EntityKey entityKey = EntityKey.of(_entity);
         
         final TimeSerie timeSeries = statService.buildPeriodTimeSeries(_period, entityKey);
-        return TimeSerieConvertor.build(timeSeries.getCoordinates(), _kpi,
-                BaseEntityDto.newFromEntity(_entity));
+        return TimeSerieConvertor.build(timeSeries.getCoordinates(), _kpi, BaseEntityDto.newFromEntity(_entity));
         
     }
 }
