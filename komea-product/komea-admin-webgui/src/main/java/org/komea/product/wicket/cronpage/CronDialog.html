@@ -5,7 +5,7 @@
     <body>
     <wicket:panel>
 
-        <form  wicket:id="formCron" >
+        
             <!--<label class="col-md-2" for="inputEmail1">EsperRequest</label>-->
             <!--<select  class="col-md-12" wicket:id="table"></select>-->
 
@@ -19,6 +19,7 @@
             
                             </div>
                         </div>-->
+            <div class="alert alert-danger" wicket:id="feedback"></div>
             <form class="border" wicket:id="formmakecron">
                 <div class="form-group">
                     <div class="row">
@@ -49,6 +50,7 @@
                     </div>
                 </div>
             </form>
+            <form  wicket:id="formCron" >
             <!--<li></li>-->
             <div class="form-group">
                 <div class="row">
@@ -61,7 +63,7 @@
                 <div class="row">
                     <label class="col-md-3" for="inputEmail1"><wicket:message key="cronpage.form.dialog.cronfield.name"></wicket:message></label>
                     <div class="col-md-6">
-                        <input id="firstName" name="name" type="text" wicket:message="placeholder:cronpage.form.dialog.cronfield.palceholder" class="form-control" required="required" wicket:id="name" />
+                        <input id="firstName" name="name" type="text" wicket:message="placeholder:cronpage.form.dialog.cronfield.palceholder" class="form-control" required="required" wicket:id="cron" />
                     </div>
                 </div>
             </div>
