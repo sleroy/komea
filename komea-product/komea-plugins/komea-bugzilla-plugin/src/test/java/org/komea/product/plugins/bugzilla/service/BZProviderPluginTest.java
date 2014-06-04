@@ -7,7 +7,7 @@ package org.komea.product.plugins.bugzilla.service;
 
 
 import org.junit.Test;
-import org.komea.product.backend.groovy.IGroovyEngineService;
+import org.komea.product.backend.api.IGroovyEngineService;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 
