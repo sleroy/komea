@@ -23,18 +23,7 @@ public class Gni extends StubQuery {
 	<kom_kpi id="2" kpiKey="BRANCH_COVERAGE(%)" name="Branch coverage(%)"
 		description="Branch coverage(%)" valueMin="5e-324" valueMax="1.7976931348623157e308"
 		valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-		esperRequest="package org.komea.product.backend.service.kpi;
-import org.komea.eventory.query.CEPQuery;
-import org.komea.eventory.query.CEPQueryImplementation;
-
-public class Gni extends StubQuery {
-
-	public Gni() {
-		super();
-
-	}
-}
-"
+		esperRequest="autowired(new org.komea.product.backend.utils.exemples.kpi.BranchCoverageKPI())"
 		cronExpression="0 0 0 /1 * ? *" providerType="QUALITY" groupFormula="AVG_VALUE"/>
 
 
