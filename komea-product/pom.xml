@@ -30,6 +30,17 @@
 
 		<plugins>
 
+	      <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-surefire-plugin</artifactId>
+		<version>2.17</version>
+		<configuration>
+		  <forkCount>2</forkCount>
+		  <systemPropertyVariables>
+		    <komea.home>target/komea</komea.home>            
+		  </systemPropertyVariables>
+		</configuration>
+	      </plugin>
 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
