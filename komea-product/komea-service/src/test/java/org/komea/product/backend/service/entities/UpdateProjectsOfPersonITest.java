@@ -32,7 +32,6 @@ public class UpdateProjectsOfPersonITest extends AbstractSpringDBunitIntegration
     @Autowired
     private IProjectService       projectService;
     
-    // @Ignore
     @Test
     @ExpectedDatabase(value = "database_updatePerson.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void add_project_list_to_person() {
