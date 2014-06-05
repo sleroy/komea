@@ -2,21 +2,21 @@
 <dataset>
    <kom_kpi id="1" kpiKey="LINE_COVERAGE" name="Line coverage" description="Line coverage" valueMin="5e-324"
       valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.backend.utils.exemples.kpi.LineCoverageKPI('line_coverage')" cronExpression="0 0 0 /1 * ? *"
-      providerType="QUALITY" />
+      esperRequest="autowired(new org.komea.product.backend.utils.exemples.kpi.LineCoverageKPI())" cronExpression="0 0 0 /1 * ? *"
+      providerType="QUALITY" groupFormula="AVG_VALUE"/>
 
    <kom_kpi id="2" kpiKey="BRANCH_COVERAGE(%)" name="Branch coverage(%)" description="Branch coverage(%)"
       valueMin="5e-324" valueMax="1.7976931348623157e308" valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-      esperRequest="new org.komea.product.backend.utils.exemples.kpi.BranchCoverageKPI()" cronExpression="0 0 0 /1 * ? *"
-      providerType="QUALITY" />
+      esperRequest="autowired(new org.komea.product.backend.utils.exemples.kpi.BranchCoverageKPI())" cronExpression="0 0 0 /1 * ? *"
+      providerType="QUALITY" groupFormula="AVG_VALUE"/>
 
 
 
 
-   <kom_msr id="3956" idKpi="2" entityID="4" year="2014" month="1" day="5" value="35" />
-   <kom_msr id="3957" idKpi="2" entityID="4" year="2014" month="5" day="1" value="60" />
-   <kom_msr id="3958" idKpi="2" entityID="5" year="2014" month="1" day="5" value="22" />
-   <kom_msr id="3959" idKpi="2" entityID="5" year="2014" month="5" day="1" value="44" />
+   <kom_msr id="3956" idKpi="4f7b9a4f50fd9b1895ea554df177a61e" entityID="4" year="2014" month="1" day="5" value="35" />
+   <kom_msr id="3957" idKpi="4f7b9a4f50fd9b1895ea554df177a61e" entityID="4" year="2014" month="5" day="1" value="60" />
+   <kom_msr id="3958" idKpi="f7b9a4f50fd9b1895ea554df177a61e" entityID="5" year="2014" month="1" day="5" value="22" />
+   <kom_msr id="3959" idKpi="4f7b9a4f50fd9b1895ea554df177a61e" entityID="5" year="2014" month="5" day="1" value="44" />
    <kom_msr id="3960" idKpi="1" entityID="4" year="2014" month="1" day="5" value="42" />
    <kom_msr id="3961" idKpi="1" entityID="4" year="2014" month="5" day="1" value="57" />
    <kom_msr id="3962" idKpi="1" entityID="5" year="2014" month="1" day="5" value="55" />
