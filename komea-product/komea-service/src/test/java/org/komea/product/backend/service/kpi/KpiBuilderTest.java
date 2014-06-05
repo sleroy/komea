@@ -121,7 +121,7 @@ public class KpiBuilderTest
         final Kpi build =
                 KpiBuilder.create().nameAndKeyDescription("BLA")
                         .dynamicQuery(EmptyDynamicQuery.class).providerType(ProviderType.CI_BUILD)
-                        .cronOneDay().interval(0d, 1d, ValueDirection.BETTER, ValueType.BOOL)
+                        .interval(0d, 1d, ValueDirection.BETTER, ValueType.BOOL)
                         .entityType(EntityType.DEPARTMENT).build();
         
         assertTrue(groovyEngineService.isValidFormula(build.getEsperRequest()));
@@ -138,7 +138,7 @@ public class KpiBuilderTest
         groovyEngineService.setSpringService(mock(ISpringService.class));
         final Kpi build =
                 KpiBuilder.create().nameAndKeyDescription("BLA").query(CEPQuery0.class)
-                        .providerType(ProviderType.CI_BUILD).cronOneDay()
+                        .providerType(ProviderType.CI_BUILD)
                         .interval(0d, 1d, ValueDirection.BETTER, ValueType.BOOL)
                         .entityType(EntityType.DEPARTMENT).build();
         
