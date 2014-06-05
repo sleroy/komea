@@ -52,7 +52,7 @@
 	</logger>
 
 
-	<root level="INFO">
+	<root level="${log.level:-info}">
 		<appender-ref ref="FILE" />
 		<appender-ref ref="STDOUT" />
 	</root>
