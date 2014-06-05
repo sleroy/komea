@@ -6,13 +6,11 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.komea.product.backend.service.kpi.IMeasureService;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.dto.TimeSerieDTO;
 import org.komea.product.service.dto.KpiStringKey;
-import org.komea.product.service.dto.KpiStringKeyList;
 import org.komea.product.service.dto.ManyHistoricalMeasureRequest;
 import org.komea.product.service.dto.PeriodCriteria;
 import org.komea.product.test.spring.AbstractSpringWebIntegrationTestCase;
@@ -74,29 +72,6 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         System.out.println(jsonMessage);
         
         final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/historic")
-                .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
-        
-        httpRequest.andDo(MockMvcResultHandlers.print());
-        httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        
-    }
-    
-    @Ignore("To delete ?")
-    @Test
-    public void testCurrentMeasures() throws Exception {
-    
-        // List<MeasureResult> measures = Lists.newArrayList();
-        // MeasureResult result = new MeasureResult();
-        // result.addHistoricalValue(12D, new Date());
-        // measures.add(result);
-        // Mockito.when(service.getHistoricalMeasures(Matchers.any(HistoryStringKeyList.class), Matchers.any(LimitCriteria.class)))
-        // .thenReturn(measures);
-        // HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
-        // LimitCriteria limit = LimitCriteria.createDefaultLimitCriteria();
-        KpiStringKeyList request = new KpiStringKeyList();
-        String jsonMessage = IntegrationTestUtil.convertObjectToJSON(request);
-        System.out.println(jsonMessage);
-        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/current")
                 .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
         
         httpRequest.andDo(MockMvcResultHandlers.print());
