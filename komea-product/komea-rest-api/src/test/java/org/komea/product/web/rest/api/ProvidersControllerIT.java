@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.database.dto.ProviderDto;
@@ -54,9 +53,8 @@ public class ProvidersControllerIT {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
     
-    @Test
     @ExpectedDatabase(value = "addProvider.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
-    @Ignore
+    @Test
     public void testRegisterProvider() throws Exception {
     
         final Provider provider = new Provider(null, ProviderType.CI_BUILD, "MyProvider", "file://", "http://", "");
