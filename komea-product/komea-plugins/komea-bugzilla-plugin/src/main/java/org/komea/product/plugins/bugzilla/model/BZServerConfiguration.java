@@ -7,6 +7,7 @@
 package org.komea.product.plugins.bugzilla.model;
 
 
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -17,34 +18,46 @@ import org.komea.product.plugins.bugzilla.api.BugStatusGroup;
 
 import com.google.common.collect.Lists;
 
+
+
 /**
  * This class defines the server configuration.
  * 
  * @author rgalerme
  * @version $Revision: 1.0 $
  */
-public class BZServerConfiguration implements Serializable, IHasId {
+public class BZServerConfiguration implements Serializable, IHasId
+{
+    
     
     /**
      * This field describes
      */
-    private static final long                       serialVersionUID = 2673081036274879834L;
+    private static final long                       serialVersionUID   = 2673081036274879834L;
     
-    private String                                  address          = null;
+    private String                                  address            = null;
+    
+    private boolean                                 autocreateProjects = true;
     
     private Integer                                 id;
     
     private String                                  login;
     
     private String                                  password;
-    
-    private final List<String>                      priorities       = Lists.newArrayList();
+    private final List<String>                      priorities         = Lists.newArrayList();
+    private final Map<String, String>               projectAliases     =
+                                                                               new HashMap<String, String>();
     private Integer                                 reminderAlert;
-    private final List<String>                      severities       = Lists.newArrayList();
+    private final List<String>                      severities         = Lists.newArrayList();
+    
+    private final List<String>                      status             = Lists.newArrayList();
+    
     private final Map<BugStatusGroup, List<String>> statusGroups;
-    private final List<String>                      statutes         = Lists.newArrayList();
+    
+    
     
     public BZServerConfiguration() {
+    
     
         super();
         statusGroups = new HashMap<BugStatusGroup, List<String>>();
@@ -55,6 +68,26 @@ public class BZServerConfiguration implements Serializable, IHasId {
         
     }
     
+    
+    /**
+     * Returns the alias or creates it with the name of the project name.
+     * 
+     * @param _projectName
+     *            the project name
+     * @return
+     */
+    public String createOrRetrieveAliasForProjectName(final String _projectName) {
+    
+    
+        String possibleAlias = projectAliases.get(_projectName);
+        if (possibleAlias == null) {
+            possibleAlias = _projectName;
+            projectAliases.put(_projectName, _projectName);
+        }
+        return possibleAlias;
+    }
+    
+    
     /**
      * Method getAddress.
      * 
@@ -62,8 +95,10 @@ public class BZServerConfiguration implements Serializable, IHasId {
      */
     public String getAddress() {
     
+    
         return address;
     }
+    
     
     /**
      * @return the id
@@ -71,8 +106,10 @@ public class BZServerConfiguration implements Serializable, IHasId {
     @Override
     public Integer getId() {
     
+    
         return id;
     }
+    
     
     /**
      * Method getLogin.
@@ -81,8 +118,10 @@ public class BZServerConfiguration implements Serializable, IHasId {
      */
     public String getLogin() {
     
+    
         return login;
     }
+    
     
     /**
      * Method getMdp.
@@ -91,33 +130,52 @@ public class BZServerConfiguration implements Serializable, IHasId {
      */
     public String getPassword() {
     
+    
         return password;
     }
     
+    
     public List<String> getPriorities() {
+    
     
         return priorities;
     }
     
+    
     public Integer getReminderAlert() {
+    
     
         return reminderAlert;
     }
     
+    
     public List<String> getSeverities() {
+    
     
         return severities;
     }
     
+    
+    public List<String> getStatus() {
+    
+    
+        return status;
+    }
+    
+    
     public Map<BugStatusGroup, List<String>> getStatusGroups() {
+    
     
         return statusGroups;
     }
     
-    public List<String> getStatutes() {
     
-        return statutes;
+    public boolean isAutocreateProjects() {
+    
+    
+        return autocreateProjects;
     }
+    
     
     /**
      * Method setAddress.
@@ -127,8 +185,17 @@ public class BZServerConfiguration implements Serializable, IHasId {
      */
     public void setAddress(final String address) {
     
+    
         this.address = address;
     }
+    
+    
+    public void setAutocreateProjects(final boolean _autocreateProjects) {
+    
+    
+        autocreateProjects = _autocreateProjects;
+    }
+    
     
     /**
      * @param _id
@@ -137,8 +204,10 @@ public class BZServerConfiguration implements Serializable, IHasId {
     @Override
     public void setId(final Integer _id) {
     
+    
         id = _id;
     }
+    
     
     /**
      * Method setLogin.
@@ -148,8 +217,10 @@ public class BZServerConfiguration implements Serializable, IHasId {
      */
     public void setLogin(final String login) {
     
+    
         this.login = login;
     }
+    
     
     /**
      * Method setMdp.
@@ -159,13 +230,17 @@ public class BZServerConfiguration implements Serializable, IHasId {
      */
     public void setPassword(final String mdp) {
     
+    
         password = mdp;
     }
     
+    
     public void setReminderAlert(final Integer reminderAlert) {
+    
     
         this.reminderAlert = reminderAlert;
     }
+    
     
     /*
      * (non-Javadoc)
@@ -174,8 +249,10 @@ public class BZServerConfiguration implements Serializable, IHasId {
     @Override
     public String toString() {
     
-        return "BZServerConfiguration [address=" + address + ", login=" + login + ", password=" + password + ", priorities=" + priorities
-                + ", reminderAlert=" + reminderAlert + ", severities=" + severities + ", statusGroups=" + statusGroups + ", statutes="
-                + statutes + "]";
+    
+        return "BZServerConfiguration [address="
+                + address + ", login=" + login + ", password=" + password + ", priorities="
+                + priorities + ", reminderAlert=" + reminderAlert + ", severities=" + severities
+                + ", statusGroups=" + statusGroups + ", status=" + status + "]";
     }
 }

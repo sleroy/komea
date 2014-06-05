@@ -12,7 +12,7 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Project;
-import org.komea.product.plugins.model.IDynamicPluginData;
+import org.komea.product.plugins.model.IDynamicData;
 import org.komea.product.plugins.model.IPluginDataCustomFields;
 
 
@@ -22,7 +22,7 @@ import org.komea.product.plugins.model.IPluginDataCustomFields;
  * 
  * @author sleroy
  */
-public interface ITask extends IDynamicPluginData
+public interface ITask extends IDynamicData
 {
     
     
@@ -43,12 +43,9 @@ public interface ITask extends IDynamicPluginData
     /**
      * Returns the business value of this task.
      * 
-     * @return
-     */
-    Double getBusinessValue();
-    
-    
-    /**
+     Double getBusinessValue();
+     * /**
+     * 
      * @return Returns the consumed charge
      */
     Double getConsumedCharge();
@@ -67,6 +64,7 @@ public interface ITask extends IDynamicPluginData
      * 
      * @return the extra fields.
      */
+    @Override
     IPluginDataCustomFields getCustomFields();
     
     

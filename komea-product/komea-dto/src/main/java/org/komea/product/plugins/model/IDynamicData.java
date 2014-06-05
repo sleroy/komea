@@ -6,13 +6,14 @@ package org.komea.product.plugins.model;
 
 
 
+import java.io.Serializable;
 
 
 
 /**
  * @author sleroy
  */
-public interface IDynamicPluginData
+public interface IDynamicData extends Serializable
 {
     
     
@@ -22,4 +23,6 @@ public interface IDynamicPluginData
      * @return the custom fields.
      */
     IPluginDataCustomFields getCustomFields();
+    
+    
 }

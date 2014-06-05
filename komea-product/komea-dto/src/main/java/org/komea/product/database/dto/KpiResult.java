@@ -292,6 +292,20 @@ public class KpiResult implements Serializable
     
     
     /**
+     * @param _entity
+     * @param _value
+     */
+    public void put(final IEntity _entity, final Number _value) {
+    
+    
+        Validate.notNull(_entity);
+        Validate.notNull(_value);
+        put(_entity.getEntityKey(), _value);
+        
+    }
+    
+    
+    /**
      * Returns the size of the results stored
      */
     public int size() {

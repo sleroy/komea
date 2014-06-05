@@ -1,5 +1,5 @@
 
-package org.komea.product.plugins.bugzilla.core;
+package org.komea.product.plugins.bugtracker.kpis;
 
 
 
@@ -33,7 +33,7 @@ import com.google.common.collect.Lists;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class BZBugCountKPITest
+public class IssueHandlerKPITest
 {
     
     
@@ -51,7 +51,7 @@ public class BZBugCountKPITest
     
     
     
-    public BZBugCountKPITest() {
+    public IssueHandlerKPITest() {
     
     
     }
@@ -85,7 +85,7 @@ public class BZBugCountKPITest
     public void testGetExceptionsResult() {
     
     
-        final BZBugCountKPI kpi =
+        final AbstractIssuePersonKPI kpi =
                 createKpi(Search.create(Filter.create("status", false, "open", "closed")));
         final Map<Integer, Integer> results = getResults(kpi);
         Assert.assertEquals(1, results.size());
@@ -97,7 +97,7 @@ public class BZBugCountKPITest
     public void testGetIgnoreCaseResult() {
     
     
-        final BZBugCountKPI kpi =
+        final AbstractIssuePersonKPI kpi =
                 createKpi(Search.create(Filter.create("StAtUs", true, "open", "CLOSED")));
         final Map<Integer, Integer> results = getResults(kpi);
         Assert.assertEquals(1, results.size());
@@ -109,7 +109,7 @@ public class BZBugCountKPITest
     public void testGetResult() {
     
     
-        final BZBugCountKPI kpi =
+        final AbstractIssuePersonKPI kpi =
                 createKpi(
                         Search.create(Filter.create("status", true, "open", "closed"),
                                 Filter.create("resolution", false, "fixed")),
@@ -125,7 +125,7 @@ public class BZBugCountKPITest
     public void testGetResultByMultipleSearchsOneFilterMultipleValues() {
     
     
-        final BZBugCountKPI kpi =
+        final AbstractIssuePersonKPI kpi =
                 createKpi(Search.create(Filter.create("status", true, "open", "closed")),
                         Search.create(Filter.create("resolution", true, "fixed", "assigned")));
         final Map<Integer, Integer> results = getResults(kpi);
@@ -138,7 +138,7 @@ public class BZBugCountKPITest
     public void testGetResultByMultipleSearchsOneFilterOneValue() {
     
     
-        final BZBugCountKPI kpi =
+        final AbstractIssuePersonKPI kpi =
                 createKpi(Search.create(Filter.create("status", true, "open")),
                         Search.create(Filter.create("resolution", true, "fixed")));
         final Map<Integer, Integer> results = getResults(kpi);
@@ -151,7 +151,7 @@ public class BZBugCountKPITest
     public void testGetResultByOneSearchOneFilterMultipleValues() {
     
     
-        final BZBugCountKPI kpi =
+        final AbstractIssuePersonKPI kpi =
                 createKpi(Search.create(Filter.create("status", true, "open", "closed")));
         final Map<Integer, Integer> results = getResults(kpi);
         Assert.assertEquals(1, results.size());
@@ -163,7 +163,7 @@ public class BZBugCountKPITest
     public void testGetResultByOneSearchOneFilterOneValue() {
     
     
-        final BZBugCountKPI kpi = createKpi(Search.create(Filter.create("status", true, "open")));
+        final AbstractIssuePersonKPI kpi = createKpi(Search.create(Filter.create("status", true, "open")));
         final Map<Integer, Integer> results = getResults(kpi);
         Assert.assertEquals(1, results.size());
         Assert.assertEquals(Integer.valueOf(2), results.get(1));
@@ -174,7 +174,7 @@ public class BZBugCountKPITest
     public void testGetResultBySearchAll() {
     
     
-        final BZBugCountKPI kpi = createKpi();
+        final AbstractIssuePersonKPI kpi = createKpi();
         final Map<Integer, Integer> results = getResults(kpi);
         Assert.assertEquals(1, results.size());
         Assert.assertEquals(Integer.valueOf(6), results.get(1));
@@ -185,7 +185,7 @@ public class BZBugCountKPITest
     public void testGetResultFromDefaultConstructor() {
     
     
-        final BZBugCountKPI kpi = new BZBugCountKPI();
+        final AbstractIssuePersonKPI kpi = new IssueHandlerKPI();
         kpi.setBugZillaConfiguration(bugZillaConfigurationMock);
         kpi.setProxyFactory(proxyFactoryMock);
         kpi.setProjectService(projectService);
@@ -199,7 +199,7 @@ public class BZBugCountKPITest
     public void testGetResultFromEmptyStringFormula() {
     
     
-        final BZBugCountKPI kpi = new BZBugCountKPI("");
+        final AbstractIssuePersonKPI kpi = new IssueHandlerKPI("");
         kpi.setBugZillaConfiguration(bugZillaConfigurationMock);
         kpi.setProxyFactory(proxyFactoryMock);
         kpi.setProjectService(projectService);
@@ -213,8 +213,8 @@ public class BZBugCountKPITest
     public void testGetResultFromStringFormula() {
     
     
-        final BZBugCountKPI kpi =
-                new BZBugCountKPI(
+        final AbstractIssuePersonKPI kpi =
+                new IssueHandlerKPI(
                         "status=open,closed;resolution!=fixed#status!=closed;resolution=assigned");
         kpi.setBugZillaConfiguration(bugZillaConfigurationMock);
         kpi.setProxyFactory(proxyFactoryMock);
@@ -225,10 +225,10 @@ public class BZBugCountKPITest
     }
     
     
-    private BZBugCountKPI createKpi(final Search... searchs) {
+    private AbstractIssuePersonKPI createKpi(final Search... searchs) {
     
     
-        final BZBugCountKPI kpi = BZBugCountKPI.create(searchs);
+        final AbstractIssuePersonKPI kpi = IssueHandlerKPI.create(searchs);
         kpi.setBugZillaConfiguration(bugZillaConfigurationMock);
         kpi.setProxyFactory(proxyFactoryMock);
         kpi.setProjectService(projectService);
@@ -236,7 +236,7 @@ public class BZBugCountKPITest
     }
     
     
-    private Map<Integer, Integer> getResults(final BZBugCountKPI kpi) {
+    private Map<Integer, Integer> getResults(final AbstractIssuePersonKPI kpi) {
     
     
         final KpiResult result = kpi.getResult();

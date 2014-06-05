@@ -23,6 +23,15 @@ public interface ISpringService
     
     
     /**
+     * Returns a bean by its name.
+     * 
+     * @param _dynamicSource
+     *            the dynamic source.
+     */
+    public <T> T getBean(String _dynamicSource);
+    
+    
+    /**
      * @return a bean registered inside spring.
      */
     <T> T getBean(Class<T> _bean);

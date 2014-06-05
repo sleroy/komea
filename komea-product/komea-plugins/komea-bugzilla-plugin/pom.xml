@@ -28,27 +28,14 @@
 			<artifactId>j2bugzilla</artifactId>
 			<version>2.2</version>
 		</dependency>
+
 		<dependency>
-			<groupId>org.komea.product</groupId>
-			<artifactId>komea-service-api</artifactId>
+			<groupId>org.komea.plugins</groupId>
+			<artifactId>komea-bugtracker-plugin</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.komea.product</groupId>
-			<artifactId>komea-utils</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.komea.product</groupId>
-			<artifactId>komea-testspring</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.komea.product</groupId>
-			<artifactId>komea-utils</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
