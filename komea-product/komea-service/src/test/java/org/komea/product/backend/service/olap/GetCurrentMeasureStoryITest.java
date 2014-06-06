@@ -1,10 +1,11 @@
+
 package org.komea.product.backend.service.olap;
+
 
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.komea.product.backend.api.IKpiLoadingService;
 import org.komea.product.backend.api.exceptions.EntityNotFoundException;
@@ -24,102 +25,93 @@ import com.google.common.collect.Sets;
 
 @DatabaseTearDown(value = "measures.xml", type = DatabaseOperation.DELETE_ALL)
 public class GetCurrentMeasureStoryITest extends AbstractSpringDBunitIntegrationTest {
-
-	//
-	@Autowired
-	private IMeasureService	  measureService;
-
-	@Autowired
-	private IKpiLoadingService	kpiLoading;
-
-	@Before
-	public void setpUp() {
-
-		kpiLoading.initLoadingService();
-	}
-
-	@Ignore
-	@Test
-	@DatabaseSetup("measures.xml")
-	public void test_current_measure_for_kpi_branch_koverage_on_komea_project() {
-
-		// Given the current branch coverage on the komea project value is 62
-		// WHEN I ash for the current branch coverage on the komea project
-		final KpiStringKey kpiKey = KpiStringKey.ofKpiNameAndEntityDetails("BRANCH_COVERAGE(%)", EntityType.PROJECT,
-		        "KOMEA");
-		final double currentMeasure = measureService.currentMeasure(kpiKey);
-
-		// Then the current branch coverage must be 35
-		Assert.assertEquals(62, currentMeasure, 0.001);
-	}
-
-	@Ignore
-	@Test
-	@DatabaseSetup("measures.xml")
-	public void test_current_measure_for_kpi_branch_koverage_on_komea_project_many() {
-
-		// Given the current branch coverage on the komea project value is 62
-		// WHEN I ash for the current branch coverage on the komea project
-
-		final KpiStringKeyList kpiKeys = new KpiStringKeyList(Sets.newHashSet("BRANCH_COVERAGE(%)"),
-		        Sets.newHashSet("KOMEA"), EntityType.PROJECT);
-		final double currentMeasure = measureService.currentMeasures(kpiKeys).get(0).getValue();
-
-		// Then the current branch coverage must be 35
-		Assert.assertEquals(62, currentMeasure, 0.001);
-	}
-
-	@Ignore
-	@Test(expected = EntityNotFoundException.class)
-	@DatabaseSetup("measures.xml")
-	public void test_current_measure_for_kpi_branch_koverage_on_not_exinsting_project() {
-
-		// WHEN I ask for the current branch coverage on a non existing project
-		// project
-		final KpiStringKey kpiKey = KpiStringKey.ofKpiNameAndEntityDetails("BRANCH_COVERAGE(%)", EntityType.PROJECT,
-		        "NOT_EXIST");
-		final double currentMeasure = measureService.currentMeasure(kpiKey);
-
-		// Then the EntityNotFoundException exception must be launched
-	}
-
-	@Ignore
-	@Test
-	@DatabaseSetup("measures.xml")
-	public void test_current_measure_for_kpi_branch_koverage_on_not_exinsting_project_many() {
-
-		// WHEN I ask for a the branch coverage kpi on not exintuing project
-		final KpiStringKeyList kpiKeys = new KpiStringKeyList(Sets.newHashSet("NOT_EXIST"),
-		        Sets.newHashSet("NOT_EXIST"), EntityType.PROJECT);
-		final List<MeasureResult> measures = measureService.currentMeasures(kpiKeys);
-
-		// Then the measures list must be empty
-		Assert.assertTrue("Then the measures list must be empty", measures.isEmpty());
-	}
-
-	@Ignore
-	@Test(expected = KPINotFoundRuntimeException.class)
-	@DatabaseSetup("measures.xml")
-	public void test_current_measure_for_not_exising_kpi_on_komea_project() {
-
-		// WHEN I ask for a non existing kpi on the komea project
-		final KpiStringKey kpiKey = KpiStringKey.ofKpiNameAndEntityDetails("NOT_EXIST", EntityType.PROJECT, "KOMEA");
-		final double currentMeasure = measureService.currentMeasure(kpiKey);
-
-		// Then the KPINotFoundRuntimeException exception must be launched
-	}
-
-	@Ignore
-	@Test
-	@DatabaseSetup("measures.xml")
-	public void test_current_measure_no_existing_kpi_on_komea_project_many() {
-
-		// WHEN I ask for a non existing kpi on the komea project
-		final KpiStringKeyList kpiKeys = new KpiStringKeyList(Sets.newHashSet("NOT_EXIST"), Sets.newHashSet("KOMEA"),
-		        EntityType.PROJECT);
-		final List<MeasureResult> measures = measureService.currentMeasures(kpiKeys);
-
-		// Then the measures list must be empty
-		Assert.assertTrue("Then the measures list must be empty", measures.isEmpty());
-	}
+    
+    //
+    @Autowired
+    private IMeasureService    measureService;
+    
+    @Autowired
+    private IKpiLoadingService kpiLoading;
+    
+    @Before
+    public void setpUp() {
+    
+        kpiLoading.initLoadingService();
+    }
+    
+    @Test
+    @DatabaseSetup("measures.xml")
+    public void test_current_measure_for_kpi_branch_koverage_on_komea_project() {
+    
+        // Given the current branch coverage on the komea project value is 62
+        // WHEN I ash for the current branch coverage on the komea project
+        final KpiStringKey kpiKey = KpiStringKey.ofKpiNameAndEntityDetails("BRANCH_COVERAGE(%)", EntityType.PROJECT, "KOMEA");
+        final double currentMeasure = measureService.currentMeasure(kpiKey);
+        
+        // Then the current branch coverage must be 35
+        Assert.assertEquals(62, currentMeasure, 0.001);
+    }
+    
+    @Test
+    @DatabaseSetup("measures.xml")
+    public void test_current_measure_for_kpi_branch_koverage_on_komea_project_many() {
+    
+        // Given the current branch coverage on the komea project value is 62
+        // WHEN I ash for the current branch coverage on the komea project
+        
+        final KpiStringKeyList kpiKeys = new KpiStringKeyList(Sets.newHashSet("BRANCH_COVERAGE(%)"), Sets.newHashSet("KOMEA"),
+                EntityType.PROJECT);
+        final double currentMeasure = measureService.currentMeasures(kpiKeys).get(0).getValue();
+        
+        // Then the current branch coverage must be 35
+        Assert.assertEquals(62, currentMeasure, 0.001);
+    }
+    
+    @Test(expected = EntityNotFoundException.class)
+    @DatabaseSetup("measures.xml")
+    public void test_current_measure_for_kpi_branch_koverage_on_not_exinsting_project() {
+    
+        // WHEN I ask for the current branch coverage on a non existing project
+        // project
+        final KpiStringKey kpiKey = KpiStringKey.ofKpiNameAndEntityDetails("BRANCH_COVERAGE(%)", EntityType.PROJECT, "NOT_EXIST");
+        final double currentMeasure = measureService.currentMeasure(kpiKey);
+        
+        // Then the EntityNotFoundException exception must be launched
+    }
+    
+    @Test
+    @DatabaseSetup("measures.xml")
+    public void test_current_measure_for_kpi_branch_koverage_on_not_exinsting_project_many() {
+    
+        // WHEN I ask for a the branch coverage kpi on not exintuing project
+        final KpiStringKeyList kpiKeys = new KpiStringKeyList(Sets.newHashSet("NOT_EXIST"), Sets.newHashSet("NOT_EXIST"),
+                EntityType.PROJECT);
+        final List<MeasureResult> measures = measureService.currentMeasures(kpiKeys);
+        
+        // Then the measures list must be empty
+        Assert.assertTrue("Then the measures list must be empty", measures.isEmpty());
+    }
+    
+    @Test(expected = KPINotFoundRuntimeException.class)
+    @DatabaseSetup("measures.xml")
+    public void test_current_measure_for_not_exising_kpi_on_komea_project() {
+    
+        // WHEN I ask for a non existing kpi on the komea project
+        final KpiStringKey kpiKey = KpiStringKey.ofKpiNameAndEntityDetails("NOT_EXIST", EntityType.PROJECT, "KOMEA");
+        final double currentMeasure = measureService.currentMeasure(kpiKey);
+        
+        // Then the KPINotFoundRuntimeException exception must be launched
+    }
+    
+    @Test
+    @DatabaseSetup("measures.xml")
+    public void test_current_measure_no_existing_kpi_on_komea_project_many() {
+    
+        // WHEN I ask for a non existing kpi on the komea project
+        final KpiStringKeyList kpiKeys = new KpiStringKeyList(Sets.newHashSet("NOT_EXIST"), Sets.newHashSet("KOMEA"), EntityType.PROJECT);
+        final List<MeasureResult> measures = measureService.currentMeasures(kpiKeys);
+        
+        // Then the measures list must be empty
+        Assert.assertTrue("Then the measures list must be empty", measures.isEmpty());
+    }
 }

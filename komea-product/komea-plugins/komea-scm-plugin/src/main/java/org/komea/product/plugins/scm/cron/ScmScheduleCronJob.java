@@ -7,7 +7,7 @@ package org.komea.product.plugins.scm.cron;
 
 import java.util.List;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.komea.product.plugins.scm.api.IScmRepositoryProxyFactories;

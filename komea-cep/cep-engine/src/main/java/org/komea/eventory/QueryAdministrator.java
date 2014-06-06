@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.komea.eventory.api.bridge.IEventBridge;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.eventory.api.engine.IQueryAdministrator;

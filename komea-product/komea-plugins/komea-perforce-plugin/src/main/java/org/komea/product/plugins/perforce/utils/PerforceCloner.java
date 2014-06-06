@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.komea.product.plugins.scm.api.plugin.IScmCloner;
 import org.slf4j.Logger;

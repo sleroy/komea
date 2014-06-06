@@ -5,7 +5,7 @@
 package org.komea.product.backend.service.entities;
 
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.PersonRoleDao;

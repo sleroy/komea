@@ -12,9 +12,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
 import org.komea.product.backend.api.IEventEngineService;
-import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.ISystemProjectBean;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.cep.tester.CEPQueryTester;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.enums.Severity;
@@ -74,7 +74,6 @@ public class EventStatisticsServiceITest extends AbstractSpringIntegrationTestCa
         final EventTypeStatistic alertTypeStatistic = receivedAlertTypesIn24Hours.get(0);
         LOGGER.info("Alert number {}", alertTypeStatistic.getValue());
         System.out.println(alertTypeStatistic.getValue());
-        // Assert.assertTrue(5L <= alertTypeStatistic.getValue());
         
         boolean found = false;
         for (final EventTypeStatistic stat : receivedAlertTypesIn24Hours) {

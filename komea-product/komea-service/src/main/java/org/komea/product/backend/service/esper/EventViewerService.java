@@ -70,11 +70,14 @@ public class EventViewerService implements IEventViewerService, PostSettingRegis
     
     private static final Logger     LOGGER                   = LoggerFactory
                                                                      .getLogger("event-viewer");
+    
+    
     @Autowired
     private IEventEngineService     esperService;
     
     private final RetentionPeriod[] lastRetentionPeriods     = new RetentionPeriod[Severity
                                                                      .values().length];
+    
     
     @Autowired
     private ISettingService         settingService;
@@ -287,9 +290,11 @@ public class EventViewerService implements IEventViewerService, PostSettingRegis
     
         if (hasChanged(_severity)) {
             lastRetentionPeriods[_severity.ordinal()] = getRetentionTime(_severity);
-            LOGGER.debug("Upgrading Stream of events {} with new retention policy", _severity);
-            esperService.createQuery(QueryInformations.directInformations(_queryName,
-                    buildRetentionQuery(_severity)));
+            LOGGER.debug(
+                    "Upgrading Stream of events with severity= {} with new retention policy, associated to the query {}",
+                    _severity, _queryName);
+            esperService.createQueryFromInformations(FormulaID.ofRawID(_queryName),
+                    buildRetentionQuery(_severity));
         }
     }
 }

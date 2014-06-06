@@ -20,7 +20,6 @@ import org.komea.eventory.cache.guava.GoogleCacheStorage;
 import org.komea.eventory.filter.NoEventFilter;
 import org.komea.eventory.formula.CountFormula;
 import org.komea.eventory.query.CEPQueryBuilder;
-import org.komea.eventory.utils.PluginUtils;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.database.dao.KpiDao;
@@ -93,18 +92,6 @@ public class KPIServiceTest
     public final void testFindKpi() {
     
     
-        PluginUtils.setCacheStorageFactory(new ICacheStorageFactory()
-        {
-            
-            
-            @Override
-            public ICacheStorage newCacheStorage(final ICacheConfiguration _arg0) {
-            
-            
-                return new GoogleCacheStorage(_arg0);
-            }
-        });
-        
         final Person person = new Person();
         person.setId(12);
         person.setFirstName("John");
@@ -131,9 +118,20 @@ public class KPIServiceTest
         Mockito.when(kpiDAOMock.selectByCriteriaWithBLOBs(Matchers.any(KpiCriteria.class)))
                 .thenReturn(kpiList);
         
+        final ICacheStorageFactory cacheStorageFactory = new ICacheStorageFactory()
+        {
+            
+            
+            @Override
+            public ICacheStorage newCacheStorage(final ICacheConfiguration _arg0) {
+            
+            
+                return new GoogleCacheStorage(_arg0);
+            }
+        };
         Mockito.when(cepEngine.getQueryOrFail(FormulaID.of(KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12)))
                 .thenReturn(
-                        CEPQueryBuilder.create(new CountFormula())
+                        CEPQueryBuilder.create(new CountFormula(), cacheStorageFactory)
                                 .defineFilter(new NoEventFilter()).build());
         
         final Kpi findKPIFacade =
@@ -142,5 +140,4 @@ public class KPIServiceTest
         Assert.assertEquals(kpi, findKPIFacade);
         
     }
-    
 }

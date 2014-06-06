@@ -5,6 +5,7 @@ package org.komea.product.backend.api;
 
 import java.io.Serializable;
 
+import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.service.kpi.FormulaID;
 import org.komea.product.database.alert.IEvent;
@@ -34,6 +35,19 @@ public interface IEventEngineService
      * @return the esper compiled statement.
      */
     IQuery createQuery(IQueryInformations _queryInformations);
+    
+    
+    /**
+     * Create query from informations
+     * 
+     * @param _queryName
+     *            the query name
+     * @param _queryImplementation
+     *            the query implementation.
+     */
+    void createQueryFromInformations(
+            FormulaID _queryName,
+            ICEPQueryImplementation _queryImplementation);
     
     
     /**

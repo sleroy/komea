@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.komea.product.plugins.testlink.api.ITestLinkServerProxy;
 import org.komea.product.plugins.testlink.api.TestLinkException;
 import org.komea.product.plugins.testlink.model.TestLinkMetrics;

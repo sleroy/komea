@@ -9,7 +9,7 @@ package org.komea.eventory;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.komea.eventory.api.bridge.IEventBridge;
 import org.komea.eventory.api.engine.ICEPConfiguration;
 import org.komea.eventory.api.engine.ICEPEngine;

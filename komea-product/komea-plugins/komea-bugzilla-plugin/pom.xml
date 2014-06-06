@@ -12,7 +12,7 @@
 	<artifactId>komea-bugzilla-plugin</artifactId>
 
 	<name>Komea : Bugzilla plugin</name>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -21,6 +21,7 @@
 			<groupId>org.komea.product</groupId>
 			<artifactId>komea-service</artifactId>
 			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.j2bugzilla</groupId>
@@ -34,9 +35,14 @@
 		</dependency>
 		<dependency>
 			<groupId>org.komea.product</groupId>
+			<artifactId>komea-utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.komea.product</groupId>
 			<artifactId>komea-testspring</artifactId>
 			<version>${project.version}</version>
-		    <scope>test</scope>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.komea.product</groupId>
@@ -48,6 +54,6 @@
 			<artifactId>junit</artifactId>
 		</dependency>
 
-	
+
 	</dependencies>
 </project>

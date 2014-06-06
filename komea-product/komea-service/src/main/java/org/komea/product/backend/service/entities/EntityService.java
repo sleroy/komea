@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.komea.product.backend.api.exceptions.EntityNotFoundException;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.BaseEntityDto;

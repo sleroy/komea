@@ -8,8 +8,8 @@ package org.komea.product.wicket.alert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.alert.IAlertTypeService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.wicket.utils.WicketTesterMethodRule;
 import org.mockito.Mockito;
 

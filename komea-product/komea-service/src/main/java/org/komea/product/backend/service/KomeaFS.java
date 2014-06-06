@@ -25,9 +25,6 @@ public class KomeaFS implements IKomeaFS
 {
     
     
-    /**
-     * 
-     */
     public static final String      ENV_KOMEA_HOME        = "KOMEA_HOME";
     
     
@@ -37,15 +34,9 @@ public class KomeaFS implements IKomeaFS
     public static final String      KOMEA_FOLDER          = ".komea";
     
     
-    /**
-     * 
-     */
     public static final String      KOMEA_SYSTEM_PROPERTY = "komea.home";
     
     
-    /**
-     * 
-     */
     public static final String      STORAGE_PATH_KEY      = "storage_path";
     
     
@@ -109,10 +100,13 @@ public class KomeaFS implements IKomeaFS
     public File getPath(final File _file) {
     
     
-        if (!_file.isAbsolute()) { throw new IllegalArgumentException(
-                "File system names should be a directory folder"); }
-        if (!_file.exists() && !_file.mkdirs()) { throw new IllegalArgumentException(
-                "Cannot create the folder for the FS " + _file.getAbsolutePath()); }
+        if (!_file.isAbsolute()) {
+            throw new IllegalArgumentException("File system names should be a directory folder");
+        }
+        if (!_file.exists() && !_file.mkdirs()) {
+            throw new IllegalArgumentException("Cannot create the folder for the FS "
+                    + _file.getAbsolutePath());
+        }
         return _file.getAbsoluteFile();
     }
     
@@ -150,8 +144,9 @@ public class KomeaFS implements IKomeaFS
             storage_path = new File(SystemUtils.getUserDir(), KOMEA_FOLDER).getAbsolutePath();
         }
         LOGGER.info("\n\t\t>>>>> Storage path for plugins is {}", storage_path);
-        if (storage_path == null) { throw new BeanCreationException(
-                "Storage path was not initialized"); }
+        if (storage_path == null) {
+            throw new BeanCreationException("Storage path was not initialized");
+        }
         
     }
     
@@ -160,8 +155,11 @@ public class KomeaFS implements IKomeaFS
     
     
         final File pluginPath = getStorage_path();
-        if (!pluginPath.exists() && !pluginPath.mkdirs()) { throw new InvalidKomeaFileSystemException(
-                "Could not initialize Komea Filesystem : folder could not be created", pluginPath); }
+        if (!pluginPath.exists() && !pluginPath.mkdirs()) {
+            throw new InvalidKomeaFileSystemException(
+                    "Could not initialize Komea Filesystem : folder could not be created",
+                    pluginPath);
+        }
         final String absolutePath = pluginPath.getAbsolutePath();
         
         return new File(absolutePath, _fileSystemName);

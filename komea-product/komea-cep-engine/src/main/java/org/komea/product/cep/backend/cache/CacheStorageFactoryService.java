@@ -10,7 +10,7 @@ import java.lang.reflect.Constructor;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.komea.eventory.api.cache.ICacheConfiguration;
 import org.komea.eventory.api.cache.ICacheStorage;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
@@ -30,28 +30,19 @@ import com.google.common.base.Strings;
  * @author sleroy
  */
 @Service
-public class CacheFactory implements ICacheStorageFactory
+public class CacheStorageFactoryService implements ICacheStorageFactory
 {
     
     
     private static final Logger LOGGER = LoggerFactory.getLogger("komea-eventcache");
+    
+    
     private Constructor<?>      constructor;
     
     
-    @Value(
-        value = "${cacheImplementation}")
+    @Value(value = "${cacheImplementation}")
     private String              implementation;
     
-    
-    
-    /**
-     * 
-     */
-    public CacheFactory() {
-    
-    
-        super();
-    }
     
     
     /**

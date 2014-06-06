@@ -90,9 +90,21 @@ public abstract class AbstractGroovyQuery implements IQuery<KpiResult>
     }
     
     
+    /**
+     * Returns a spring service implementing the given class.
+     */
+    public <T> T getService(final Class<T> _class) {
+    
+    
+        return springService.getBean(_class);
+    }
+    
+    
     public KpiValueProxy kpi(final String _kpiName) {
     
     
         return new KpiValueProxy(ikpiService.findKPIOrFail(_kpiName), statisticsAPI);
     }
+    
+    
 }

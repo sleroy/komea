@@ -20,7 +20,7 @@
 	<description>This project contain the core projects of komea to build the war application. </description>
 
 	<properties>
-		<eventory.version>1.0.59</eventory.version>
+		<eventory.version>1.0.61</eventory.version>
 		<komea.home>target/komea</komea.home>
 	</properties>
 
@@ -30,6 +30,17 @@
 
 		<plugins>
 
+	      <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-surefire-plugin</artifactId>
+		<version>2.17</version>
+		<configuration>
+		  <forkCount>2</forkCount>
+		  <systemPropertyVariables>
+		    <komea.home>target/komea</komea.home>            
+		  </systemPropertyVariables>
+		</configuration>
+	      </plugin>
 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>

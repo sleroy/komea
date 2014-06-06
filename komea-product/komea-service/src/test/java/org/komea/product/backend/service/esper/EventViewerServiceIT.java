@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.komea.event.factory.JenkinsEventFactory;
 import org.komea.product.backend.api.IEventEngineService;
+import org.komea.product.backend.service.kpi.FormulaID;
 import org.komea.product.cep.tester.CEPQueryTester;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.enums.RetentionPeriod;
@@ -88,8 +89,8 @@ public class EventViewerServiceIT extends AbstractSpringIntegrationTestCase
         for (final RetentionPeriod retentionPeriod : RetentionPeriod.values()) {
             final RetentionQuery retentionQueryBuilder =
                     new RetentionQuery(Severity.INFO, retentionPeriod);
-            esperEngine.createQuery(QueryInformations.directInformations(retentionPeriod.name(),
-                    retentionQueryBuilder));
+            esperEngine.createQueryFromInformations(FormulaID.ofRawID(retentionPeriod.name()),
+                    retentionQueryBuilder);
         }
     }
 }
