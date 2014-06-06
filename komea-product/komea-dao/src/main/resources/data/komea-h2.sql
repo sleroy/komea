@@ -18,6 +18,7 @@ CREATE  TABLE IF NOT EXISTS `komea`.`kom_proj` (
   `description` VARCHAR(2048) NULL ,
   `idCustomer` INT NULL ,
   `icon` VARCHAR(255) NULL ,
+  `alias` VARCHAR(2048) NULL ,
   PRIMARY KEY (`id`) )
 ;
 
