@@ -68,9 +68,15 @@ public class SpringService implements ApplicationContextAware, ISpringService
     }
     
     
-    public void init() {
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.api.ISpringService#getBean(java.lang.String)
+     */
+    @Override
+    public <T> T getBean(final String _dynamicSource) {
     
     
+        return (T) applicationContext.getBean(_dynamicSource);
     }
     
     

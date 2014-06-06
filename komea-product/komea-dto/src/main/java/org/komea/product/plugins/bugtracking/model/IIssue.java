@@ -47,13 +47,13 @@ public interface IIssue extends IDynamicData
     Person getReporter();
     
     
-    String getResolution();
+    IssueResolution getResolution();
     
     
     String getSeverity();
     
     
-    String getStatus();
+    IssueStatus getStatus();
     
     
     String getSummary();

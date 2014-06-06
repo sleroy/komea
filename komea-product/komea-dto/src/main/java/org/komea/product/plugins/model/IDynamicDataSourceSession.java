@@ -4,12 +4,14 @@
 
 package org.komea.product.plugins.model;
 
+import java.io.Serializable;
+
 
 
 /**
  * @author sleroy
  */
-public interface IDynamicDataSourceSession<T> extends IDynamicDataSource<T>
+public interface IDynamicDataSourceSession<T extends Serializable> extends IDynamicDataSource<T>
 {
     
     

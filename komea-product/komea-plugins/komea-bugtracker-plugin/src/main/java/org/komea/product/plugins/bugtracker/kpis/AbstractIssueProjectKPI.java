@@ -7,6 +7,7 @@ package org.komea.product.plugins.bugtracker.kpis;
 
 
 import groovy.lang.Binding;
+import groovy.lang.Closure;
 import groovy.lang.Script;
 
 import java.util.List;
@@ -15,17 +16,17 @@ import org.apache.wicket.util.collections.MultiMap;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.product.backend.api.IGroovyEngineService;
-import org.komea.product.backend.api.ISpringService;
 import org.komea.product.backend.groovy.AbstractDynamicQuery;
 import org.komea.product.backend.groovy.GroovyFilter;
+import org.komea.product.backend.service.dataplugin.IDynamicDataSourcePool;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.backend.utils.CollectionUtil;
+import org.komea.product.backend.utils.IFilter;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Project;
+import org.komea.product.plugins.bugtracker.datasource.IssuePlugin;
 import org.komea.product.plugins.bugtracking.model.IIssue;
-import org.komea.product.plugins.bugtracking.model.IIssuePlugin;
-import org.komea.product.plugins.model.IDynamicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,17 +42,16 @@ AbstractDynamicQuery
 {
     
     
-    private static final Logger                      LOGGER =
-                                                                    LoggerFactory
-                                                                            .getLogger(IssueHandlerKPI.class);
-    private String                                   filter;
+    private static final Logger      LOGGER = LoggerFactory.getLogger(IssueHandlerKPI.class);
+    private final String             dynamicSource;
+    private IFilter<IIssue>          filter;
     @Autowired
-    private IGroovyEngineService                     groovyEngineService;
+    private IGroovyEngineService     groovyEngineService;
+    
     @Autowired
-    private IProjectService                          projectService;
-    protected final IDynamicDataSource<IIssuePlugin> dynamicDataSource;
+    private IProjectService          projectService;
     @Autowired
-    protected ISpringService                         springService;
+    protected IDynamicDataSourcePool dataSourcePool;
     
     
     
@@ -59,7 +59,8 @@ AbstractDynamicQuery
     
     
         super(EntityType.PERSON, _delay);
-        dynamicDataSource = springService.getBean(_dynamicSource);
+        dynamicSource = _dynamicSource;
+        
     }
     
     
@@ -68,10 +69,10 @@ AbstractDynamicQuery
     
     
         final KpiResult kpiResult = new KpiResult();
-        final Script initializationToEvaluateResults = initializationToEvaluateResults();
+        final IssuePlugin dataSource = dataSourcePool.getDataSourceData(dynamicSource);
         final MultiMap<Project, IIssue> map = new MultiMap<Project, IIssue>();
         LOGGER.info("Obtaining results from the dynamic data source");
-        final List<IIssue> listOfIssues = dynamicDataSource.fetchData().getData();
+        final List<IIssue> listOfIssues = dataSource.getData();
         LOGGER.info("Results obtained : {} elements", listOfIssues.size());
         LOGGER.info("Sorting results per handler");
         for (final IIssue issue : listOfIssues) {
@@ -83,9 +84,7 @@ AbstractDynamicQuery
         }
         LOGGER.info("Applying the filter per handler and obtaining results");
         for (final Project person : projectService.selectAll()) {
-            final List<IIssue> filteredIssues =
-                    CollectionUtil.filter(map.get(person), new GroovyFilter(
-                            initializationToEvaluateResults, "issue"));
+            final List<IIssue> filteredIssues = CollectionUtil.filter(map.get(person), filter);
             kpiResult.put(person, filteredIssues.size());
         }
         
@@ -94,17 +93,33 @@ AbstractDynamicQuery
     }
     
     
-    public String getFilter() {
+    public IFilter<IIssue> getFilter() {
     
     
         return filter;
     }
     
     
-    public void setFilter(final String _filter) {
+    public void setClosure(final Closure<Boolean> _filter) {
+    
+    
+        filter = new ClosureFilter(_filter);
+    }
+    
+    
+    public void setFilter(final IFilter<IIssue> _filter) {
     
     
         filter = _filter;
+    }
+    
+    
+    public void setGroovyFilter(final String _filter) {
+    
+    
+        final Script initializationToEvaluateResults = initializationToEvaluateResults(_filter);
+        
+        filter = new GroovyFilter<IIssue>(initializationToEvaluateResults, "issue");
     }
     
     
@@ -113,16 +128,16 @@ AbstractDynamicQuery
     
     
         return "IssueHandlerKPI [\\n\\tdynamicDataSource="
-                + dynamicDataSource + ", \\n\\tfilter=" + filter + "]";
+                + dynamicSource + ", \\n\\tfilter=" + filter + "]";
     }
     
     
-    protected Script initializationToEvaluateResults() {
+    protected Script initializationToEvaluateResults(final String _groovyFilter) {
     
     
         final CompilerConfiguration config = new CompilerConfiguration();
         final Binding binding = new Binding();
-        return groovyEngineService.parseScript(filter, config, binding);
+        return groovyEngineService.parseScript(_groovyFilter, config, binding);
         
         
     }

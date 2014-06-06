@@ -11,6 +11,8 @@ import org.joda.time.DateTime;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Project;
 import org.komea.product.plugins.bugtracking.model.IIssue;
+import org.komea.product.plugins.bugtracking.model.IssueResolution;
+import org.komea.product.plugins.bugtracking.model.IssueStatus;
 import org.komea.product.plugins.datasource.PluginDataCustomFields;
 import org.komea.product.plugins.model.IPluginDataCustomFields;
 
@@ -173,7 +175,7 @@ public class BZIssueWrapper implements IIssue
      * @see org.komea.product.plugins.bugtracking.model.IIssue#getResolution()
      */
     @Override
-    public String getResolution() {
+    public IssueResolution getResolution() {
     
     
         return bug.getResolution();
@@ -197,7 +199,7 @@ public class BZIssueWrapper implements IIssue
      * @see org.komea.product.plugins.bugtracking.model.IIssue#getStatus()
      */
     @Override
-    public String getStatus() {
+    public IssueStatus getStatus() {
     
     
         return bug.getStatus();

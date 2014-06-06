@@ -40,7 +40,7 @@ public abstract class AbstractPersonDynamicQuery extends AbstractDynamicQuery
      * @see org.komea.product.backend.groovy.AbstractDynamicQuery#getResult()
      */
     @Override
-    public final KpiResult getResult() {
+    public final KpiResult evaluateResult() {
     
     
         initializationToEvaluateResults();

@@ -6,6 +6,7 @@ package org.komea.product.backend.service.dataplugin;
 
 
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import org.apache.commons.lang.Validate;
@@ -62,14 +63,14 @@ public class DynamicDataSourceSession implements IDynamicDataSourceSession
      */
     @SuppressWarnings("unchecked")
     @Override
-    public Object fetchData() {
+    public Serializable fetchData() {
     
     
         LOGGER.debug("Requesting the data from the source");
-        final Collection allValues = newCacheStorage.getAllValues();
+        final Collection<Serializable> allValues = newCacheStorage.getAllValues();
         if (allValues.isEmpty()) {
             LOGGER.debug("Data is not in cache, requesting it directly");
-            final Object data = sourcePool.fetchData();
+            final Serializable data = sourcePool.fetchData();
             LOGGER.debug("Obtained a data {}", data != null);
             newCacheStorage.push(data);
             Validate.isTrue(newCacheStorage.size() == 1); // One element should be present.

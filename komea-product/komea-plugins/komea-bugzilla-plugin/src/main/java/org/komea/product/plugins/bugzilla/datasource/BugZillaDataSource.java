@@ -8,13 +8,9 @@ package org.komea.product.plugins.bugzilla.datasource;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
-import org.komea.eventory.cache.CacheConfigurationBuilder;
 import org.komea.product.backend.service.dataplugin.IDynamicDataSourcePool;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.model.Project;
@@ -26,7 +22,6 @@ import org.komea.product.plugins.bugzilla.api.IBZServerProxy;
 import org.komea.product.plugins.bugzilla.api.IBZServerProxyFactory;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.komea.product.plugins.model.IDynamicDataSource;
-import org.komea.product.plugins.model.IDynamicDataSourceSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,31 +34,29 @@ import com.j2bugzilla.base.Bug;
 /**
  * @author sleroy
  */
-@Component("bz-source")
+@Component("bugzilla-source")
 public class BugZillaDataSource implements IDynamicDataSource<IIssuePlugin>
 {
     
     
-    private static final Logger       LOGGER = LoggerFactory.getLogger(BugZillaDataSource.class);
+    private static final Logger      LOGGER = LoggerFactory.getLogger(BugZillaDataSource.class);
     
     @Autowired
-    private IBZConfigurationDAO       bugZillaConfiguration;
+    private IBZConfigurationDAO      bugZillaConfiguration;
     
     @Autowired
-    private BugZillaToIssueConvertor  bugZillaToIssueConvertor;
+    private BugZillaToIssueConvertor bugZillaToIssueConvertor;
     
     
     @Autowired
-    private IDynamicDataSourcePool    dataSourcePool;
+    private IDynamicDataSourcePool   dataSourcePool;
     
-    
-    private IDynamicDataSourceSession dynamicDataSourceSession;
     
     @Autowired
-    private IProjectService           projectService;
+    private IProjectService          projectService;
     
     @Autowired
-    private IBZServerProxyFactory     proxyFactory;
+    private IBZServerProxyFactory    proxyFactory;
     
     
     
@@ -81,25 +74,6 @@ public class BugZillaDataSource implements IDynamicDataSource<IIssuePlugin>
             obtainIssuesForEachBugZillaServer(issues, conf, bugzillaProxy);
         }
         return new IssuePlugin(issues);
-    }
-    
-    
-    public IDynamicDataSourceSession getDynamicDataSourceSession() {
-    
-    
-        return dynamicDataSourceSession;
-    }
-    
-    
-    @PostConstruct
-    public void init() {
-    
-    
-        LOGGER.info("Registering data source");
-        CacheConfigurationBuilder.create().maximumSize(1);
-        setDynamicDataSourceSession(dataSourcePool.register("bugzilla-source", this,
-                CacheConfigurationBuilder.expirationTimeCache(5, TimeUnit.MINUTES)));
-        
     }
     
     
@@ -170,10 +144,4 @@ public class BugZillaDataSource implements IDynamicDataSource<IIssuePlugin>
     }
     
     
-    public void setDynamicDataSourceSession(
-            final IDynamicDataSourceSession _dynamicDataSourceSession) {
-    
-    
-        dynamicDataSourceSession = _dynamicDataSourceSession;
-    }
 }

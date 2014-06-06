@@ -8,12 +8,15 @@ import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
 
+import java.util.Set;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.codehaus.groovy.control.CompilerConfiguration;
+import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IGroovyEngineService;
 import org.komea.product.backend.api.ISpringService;
@@ -25,6 +28,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.Sets;
+
 
 
 /**
@@ -34,7 +39,13 @@ public class GroovyEngineService implements IGroovyEngineService
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger("groovy-service");
+    private static final Logger LOGGER         = LoggerFactory.getLogger("groovy-service");
+    private final Set<Class>    classImports   = Sets.newHashSet();
+    
+    
+    private final Set<String>   dynamicImports = Sets.newHashSet();
+    
+    
     private GroovyClassLoader   groovyClassLoader;
     
     
@@ -68,6 +79,28 @@ public class GroovyEngineService implements IGroovyEngineService
         
         final ClassLoader parent = Thread.currentThread().getContextClassLoader();
         groovyClassLoader = new GroovyClassLoader(parent);
+        
+        
+        /**
+         * Registering imports
+         */
+        registerStarImport("org.komea.product.database.alert");
+        registerStarImport("org.komea.product.database.alert.enums");
+        registerStarImport("org.komea.product.database.api");
+        registerStarImport("org.komea.product.database.dto");
+        registerStarImport("org.komea.product.database.enums");
+        registerStarImport("org.komea.product.database.model");
+        registerStarImport("org.komea.product.database.utils");
+        registerStarImport("org.komea.product.model.timeserie");
+        registerStarImport("org.komea.product.model.timeserie.dto");
+        registerStarImport("org.komea.product.plugins.bugtracking.model");
+        registerStarImport("org.komea.product.plugins.datasource");
+        registerStarImport("org.komea.product.plugins.model");
+        registerStarImport("org.komea.product.plugins.projectmanagement.model");
+        registerStarImport("org.komea.product.plugins.repository.model");
+        registerStarImport("org.komea.product.plugins.timemanagement.model");
+        registerStarImport("org.komea.product.service.dto");
+        registerStarImport("org.komea.product.service.dto.errors");
         
     }
     
@@ -148,6 +181,8 @@ public class GroovyEngineService implements IGroovyEngineService
         try {
             Validate.notNull(_kpi.getEsperRequest(), "Kpi should define a formula");
             final CompilerConfiguration config = new CompilerConfiguration();
+            buildImportCustomizer(config);
+            
             config.setScriptBaseClass(GroovyFormulaScript.class.getCanonicalName());
             final Binding binding = new Binding();
             binding.setVariable("spring", springService);
@@ -188,9 +223,40 @@ public class GroovyEngineService implements IGroovyEngineService
     }
     
     
+    @Override
+    public void registerClassImport(final Class _class) {
+    
+    
+        classImports.add(_class);
+        
+    }
+    
+    
+    @Override
+    public void registerStarImport(final String _import) {
+    
+    
+        dynamicImports.add(_import);
+    }
+    
+    
     public void setSpringService(final ISpringService _springService) {
     
     
         springService = _springService;
+    }
+    
+    
+    private void buildImportCustomizer(final CompilerConfiguration config) {
+    
+    
+        final ImportCustomizer importCustomizer = new ImportCustomizer();
+        for (final String dynImport : dynamicImports) {
+            importCustomizer.addStarImports(dynImport);
+        }
+        for (final Class clazz : classImports) {
+            importCustomizer.addImports(clazz.getName());
+        }
+        config.addCompilationCustomizers(importCustomizer);
     }
 }

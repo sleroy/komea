@@ -68,4 +68,16 @@ public interface IGroovyEngineService
      */
     Script parseScript(String _script, CompilerConfiguration _config, Binding _binding);
     
+    
+    /**
+     * @param _class
+     */
+    void registerClassImport(Class _class);
+    
+    
+    /**
+     * @param _import
+     */
+    void registerStarImport(String _import);
+    
 }

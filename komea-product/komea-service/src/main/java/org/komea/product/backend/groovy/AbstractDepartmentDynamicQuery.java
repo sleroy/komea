@@ -40,7 +40,7 @@ public abstract class AbstractDepartmentDynamicQuery extends AbstractDynamicQuer
      * @see org.komea.product.backend.groovy.AbstractDynamicQuery#getResult()
      */
     @Override
-    public KpiResult getResult() {
+    public KpiResult evaluateResult() {
     
     
         final KpiResult kpiResult = new KpiResult();

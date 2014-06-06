@@ -6,10 +6,9 @@ package org.komea.product.backend.service.dataplugin;
 
 
 
+import java.io.Serializable;
 import java.util.Set;
 
-import org.komea.eventory.api.cache.ICacheConfiguration;
-import org.komea.product.plugins.model.IDynamicDataSource;
 import org.komea.product.plugins.model.IDynamicDataSourceSession;
 
 
@@ -19,6 +18,26 @@ import org.komea.product.plugins.model.IDynamicDataSourceSession;
  */
 public interface IDynamicDataSourcePool
 {
+    
+    
+    /**
+     * Returns the data source name
+     * 
+     * @param _dataSourceName
+     *            the data source name
+     * @return a session to obtain dynamic data source
+     */
+    <T extends IDynamicDataSourceSession> T getDataSource(String _dataSourceName);
+    
+    
+    /**
+     * Returns directly the data from a data source.
+     * 
+     * @param _dataSourceName
+     *            the data source name
+     * @return the data source data.
+     */
+    <T extends Serializable> T getDataSourceData(String _dataSourceName);
     
     
     /**
@@ -32,18 +51,6 @@ public interface IDynamicDataSourcePool
     /**
      * @return Returns true if for the given data source, the data is stored in cache.
      */
-    boolean isDataInCache(String _dataSourceName);
+    boolean isDataInCache(String _dataSource);
     
-    
-    /**
-     * Register a dynamic data source and returns a session on it.
-     * 
-     * @param _sourcePool
-     *            the source
-     * @return the session.
-     */
-    IDynamicDataSourceSession register(
-            String _dataSourceName,
-            IDynamicDataSource _sourcePool,
-            ICacheConfiguration _cacheConfiguration);
 }

@@ -20,39 +20,10 @@
 		</encoder>
 	</appender>
 
-	<logger name="org.springframework">
-		<level value="WARN" />
-	</logger>
-	<logger name="org.spring">
-		<level value="WARN" />
-	</logger>
-	<logger name="org.apache.ibatis">
-		<level value="WARN" />
-	</logger>
-	<logger name="org.mybatis">
-		<level value="WARN" />
-	</logger>
-	<logger name="org.mybatis.spring.SqlSessionUtils">
-		<level value="WARN" />
-	</logger>
 
 
 
-	<logger name="org.quartz">
-		<level value="WARN" />
-	</logger>
-	<logger name="org.komea">
-		<level value="INFO" />
-	</logger>
-	<logger name="org.hibernate">
-		<level value="WARN" />
-	</logger>
-	<logger name="ch.qos">
-		<level value="ERROR" />
-	</logger>
-
-
-	<root level="${log.level:-info}">
+	<root level="${log.level:-ERROR}">
 		<appender-ref ref="FILE" />
 		<appender-ref ref="STDOUT" />
 	</root>
