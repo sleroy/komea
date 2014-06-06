@@ -20,15 +20,19 @@ import org.komea.product.wicket.widget.api.IAjaxEditAction;
 public class CustomColumnLaunch<S> extends AbstractColumn<CronDetails, S> {
 
     private final IAjaxEditAction<CronDetails> editAction;
+    private final IAjaxEditAction<CronDetails> enableAction;
+    private final IAjaxEditAction<CronDetails> disableAction;
 
-    public CustomColumnLaunch(IModel<String> displayModel, final IAjaxEditAction<CronDetails> _editAction) {
+    public CustomColumnLaunch(IModel<String> displayModel, final IAjaxEditAction<CronDetails> _editAction, final IAjaxEditAction<CronDetails> _activeAction, final IAjaxEditAction<CronDetails> _disableAction) {
         super(displayModel);
         this.editAction = _editAction;
+        this.enableAction=_activeAction;
+        this.disableAction=_disableAction;
     }
 
     @Override
     public void populateItem(Item<ICellPopulator<CronDetails>> item, String string, IModel<CronDetails> imodel) {    
-        item.add(new CustomPanelLaunch(string, imodel, editAction));
+        item.add(new CustomPanelLaunch(string, imodel, editAction,enableAction,disableAction));
     }
 
 }
