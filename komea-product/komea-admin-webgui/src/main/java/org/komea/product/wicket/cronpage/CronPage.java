@@ -1,5 +1,6 @@
 package org.komea.product.wicket.cronpage;
 
+import java.util.List;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
@@ -32,8 +33,7 @@ public class CronPage extends LayoutPage {
 
     @SpringBean
     private ICronRegistryService cronService;
-     private final DataTable dataTable;
-    
+    private final DataTable dataTable;
 
     public CronPage(final PageParameters _parameters) {
 
@@ -66,21 +66,21 @@ public class CronPage extends LayoutPage {
                                 final TriggerState triggerState = _rowModel.getObject().getTriggerState();
                                 switch (triggerState) {
                                     case BLOCKED:
-                                        _cellItem.add(SexyLabel.newDangerLabel(_componentId, "Blocked"));
+                                        _cellItem.add(SexyLabel.newDangerLabel(_componentId, getString("cronpage.status.blocker")));
                                         break;
 
                                     case ERROR:
-                                        _cellItem.add(SexyLabel.newDangerLabel(_componentId, "Danger"));
+                                        _cellItem.add(SexyLabel.newDangerLabel(_componentId, getString("cronpage.status.error")));
                                         break;
                                     case PAUSED:
-                                        _cellItem.add(SexyLabel.newWarningLabel(_componentId, "Warning"));
+                                        _cellItem.add(SexyLabel.newWarningLabel(_componentId, getString("cronpage.status.paused")));
                                         break;
                                     case NORMAL:
                                     case COMPLETE:
-                                        _cellItem.add(SexyLabel.newSuccessLabel(_componentId, "Normal"));
+                                        _cellItem.add(SexyLabel.newSuccessLabel(_componentId, getString("cronpage.status.normal")));
                                         break;
                                     case NONE:
-                                        _cellItem.add(SexyLabel.newInfoLabel(_componentId, "Unknown"));
+                                        _cellItem.add(SexyLabel.newInfoLabel(_componentId, getString("cronpage.status.none")));
                                         break;
                                 }
 
@@ -97,21 +97,31 @@ public class CronPage extends LayoutPage {
                 cronDetails.setCronExpression(cronValue.getName());
                 art.add(dataTable);
                 cronService.updateCronFrequency(cronDetails.getCronName(), cronValue.getName());
-                
+
             }
         };
         add(cd);
+        List<CronDetails> cronTasks = cronService.getCronTasks();
+        final IAjaxEditAction<CronDetails> cronLaunchAction = new CronLaunchAction(cronService);
+        final IAjaxEditAction<CronDetails> cronActiveAction = new CronEnableAction(cronService, cronTasks);
+        final IAjaxEditAction<CronDetails> cronDisalbeAction = new CronDisableAction(cronService, cronTasks);
+        CustomColumnLaunch cLaunch = new CustomColumnLaunch(Model.of(getString("cronpage.main.table.cronlaunch")), cronLaunchAction, cronActiveAction, cronDisalbeAction);
         final IAjaxEditAction<CronDetails> cronEditAction = new CronEditAction(cd);
-        CustomColumnExpression cexp = new CustomColumnExpression(Model.of("CRON Expression"), cronEditAction);
-        dataTable = DataTableBuilder.<CronDetails, String>newTable("table")
-                .addColumn("Cron task", "cronName")
+        CustomColumnExpression cexp = new CustomColumnExpression(Model.of(getString("cronpage.main.table.cronexp")), cronEditAction);
+
+        dataTable = DataTableBuilder.<CronDetails, String>newTable("table").addColumn("Cron task", "cronName")
                 .addColumn(cexp)
-                //                        .addColumn("CRON Expression", "cronExpression")
-                .addColumn(nextExecutionTime).addColumn(statusCol).displayRows(40)
-                //                        .addColumn(statusCol)
-                .withListData(cronService.getCronTasks()).build();
+                .addColumn(nextExecutionTime)
+                .addColumn(statusCol).displayRows(40)
+                .addColumn(cLaunch)
+                .withListData(cronTasks).build();
+
         dataTable.setOutputMarkupId(true);
         dataTable.setOutputMarkupPlaceholderTag(true);
+        ((CronLaunchAction) cronLaunchAction).setComposant(dataTable);
+        ((CronEnableAction) cronActiveAction).setComposant(dataTable);
+        ((CronDisableAction) cronDisalbeAction).setComposant(dataTable);
+
         add(dataTable);
 
     }
