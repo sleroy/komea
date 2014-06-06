@@ -1,10 +1,7 @@
 package org.komea.product.database.model;
 
-import java.util.Arrays;
-import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.apache.commons.lang3.StringUtils;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.api.IKeyVisitor;
 import org.komea.product.database.enums.EntityType;
@@ -322,14 +319,6 @@ public class Project implements IEntity {
 
     public void setAlias(String alias) {
         this.alias = alias;
-    }
-
-    public List<String> getAliasList() {
-        return Arrays.asList(StringUtils.split(this.alias, ALIAS_SEPARATOR));
-    }
-
-    public void setAlias(List<String> alias) {
-        this.alias = StringUtils.join(alias, ALIAS_SEPARATOR);
     }
 
     /**
