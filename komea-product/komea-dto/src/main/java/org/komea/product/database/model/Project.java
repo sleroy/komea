@@ -115,6 +115,23 @@ public class Project implements IEntity {
         this.alias = alias;
     }
 
+    public Project(
+            final Integer id,
+            final String projectKey,
+            final String name,
+            final String description,
+            final Integer idCustomer,
+            final String icon) {
+
+        this.id = id;
+        this.projectKey = projectKey;
+        this.name = name;
+        this.description = description;
+        this.idCustomer = idCustomer;
+        this.icon = icon;
+        this.alias = "";
+    }
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.database.api.IHasKey#accept(org.komea.product.database.api.IKeyVisitor)
