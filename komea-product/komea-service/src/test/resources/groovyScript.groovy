@@ -19,7 +19,7 @@ class KpiQuery extends AbstractGroovyQuery
     public KpiQuery() {
     
     
-        super(EntityType.PERSON);
+        super();
     }
     
     
@@ -43,7 +43,7 @@ class KpiQuery extends AbstractGroovyQuery
     public KpiResult getResult() {
     
     
-        return forEachEntity(new IEntityKpiFormula()
+        return forEachEntity(EntityType.PERSON, new IEntityKpiFormula()
         {
             
             
