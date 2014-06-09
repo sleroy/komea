@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.backend.service;
@@ -20,29 +20,29 @@ import org.springframework.stereotype.Service;
 
 /**
  * This service offers the possibility to developers to autowire pojo.
- * 
+ *
  * @author sleroy
  */
 @Service
 public class SpringService implements ApplicationContextAware, ISpringService
 {
-    
-    
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger("spring-service");
-    
-    
+
+
     private ApplicationContext  applicationContext;
-    
-    
-    
+
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.service.ISpringService#autowirePojo(java.lang.Object)
      */
     @Override
     public void autowirePojo(final Object _pojo) {
-    
-    
+
+
         Validate.notNull(_pojo);
         Validate.notNull(applicationContext, "Spring application has not been initialized");
         LOGGER.trace("Autowiring pojo {}", _pojo.getClass());
@@ -51,31 +51,43 @@ public class SpringService implements ApplicationContextAware, ISpringService
         autowireCapableBeanFactory.autowireBean(_pojo);
         autowireCapableBeanFactory.initializeBean(autowireCapableBeanFactory, "custombean");
     }
+
+
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.api.ISpringService#getApplicationContext()
+     */
+    @Override
+    public ApplicationContext getApplicationContext() {
     
     
+        return applicationContext;
+    }
+
+
     /**
      * Returns a specific bean
-     * 
+     *
      * @param _bean
      *            the bean
      * @return the specific bean.
      */
     @Override
     public <T> T getBean(final Class<T> _bean) {
-    
-    
+
+
         return applicationContext.getBean(_bean);
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.api.ISpringService#getBean(java.lang.String)
      */
     @Override
     public <T> T getBean(final String _dynamicSource) {
-    
-    
+
+
         return (T) applicationContext.getBean(_dynamicSource);
     }
     
@@ -87,11 +99,11 @@ public class SpringService implements ApplicationContextAware, ISpringService
     @Override
     public void setApplicationContext(final ApplicationContext _applicationContext)
             throws BeansException {
-    
-    
+
+
         LOGGER.info("Spring autowiring service is initialized");
         applicationContext = _applicationContext;
-        
-        
+
+
     }
 }
