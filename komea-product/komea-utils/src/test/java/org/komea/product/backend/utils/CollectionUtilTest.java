@@ -1,12 +1,19 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.backend.utils;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
+
+import com.google.common.collect.Lists;
+
+import static org.junit.Assert.assertEquals;
 
 
 
@@ -17,6 +24,10 @@ public class CollectionUtilTest
 {
     
     
+    final ArrayList<String> list = Lists.newArrayList("s1", "s2", "s3");
+    
+    
+    
     /**
      * Test method for
      * {@link org.komea.product.backend.utils.CollectionUtil#filter(java.util.List, org.komea.product.backend.utils.IFilter)}.
@@ -25,7 +36,33 @@ public class CollectionUtilTest
     public void testFilter() throws Exception {
     
     
-        throw new RuntimeException("not yet implemented");
+        final List<String> filter = CollectionUtil.filter(list, new IFilter<String>()
+        {
+            
+            
+            @Override
+            public boolean matches(final String _task) {
+            
+            
+                return true;
+            }
+            
+        });
+        assertEquals(list.size(), filter.size());
+        
+        final List<String> filter2 = CollectionUtil.filter(list, new IFilter<String>()
+        {
+            
+            
+            @Override
+            public boolean matches(final String _task) {
+            
+            
+                return false;
+            }
+            
+        });
+        assertEquals(0, filter2.size());
     }
     
     
@@ -37,7 +74,21 @@ public class CollectionUtilTest
     public void testIterate() throws Exception {
     
     
-        throw new RuntimeException("not yet implemented");
+        final ArrayList<String> arrayList = Lists.newArrayList();
+
+        CollectionUtil.iterate(list, new Treatment<String>()
+        {
+            
+            
+            @Override
+            public void apply(final String _value) {
+            
+            
+                arrayList.add(_value);
+            }
+            
+        });
+        assertEquals(arrayList, list);
     }
     
 }
