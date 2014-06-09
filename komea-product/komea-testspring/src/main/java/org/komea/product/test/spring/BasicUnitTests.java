@@ -2,7 +2,7 @@
  * 
  */
 
-package org.komea.product.cep.query;
+package org.komea.product.test.spring;
 
 
 

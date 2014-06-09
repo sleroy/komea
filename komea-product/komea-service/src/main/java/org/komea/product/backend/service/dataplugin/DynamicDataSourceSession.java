@@ -98,6 +98,18 @@ public class DynamicDataSourceSession implements IDynamicDataSourceSession
     
     /*
      * (non-Javadoc)
+     * @see org.komea.product.plugins.model.IDynamicDataSource#getDefinition()
+     */
+    @Override
+    public Class getDefinition() {
+    
+    
+        return sourcePool.getDefinition();
+    }
+    
+    
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataSourceSession#isDataAvailableInCache()
      */
     @Override

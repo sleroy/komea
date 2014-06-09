@@ -8,6 +8,7 @@ import groovy.lang.Script;
 
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.komea.eventory.api.engine.IQuery;
+import org.komea.product.backend.api.exceptions.GroovyScriptException.GroovyValidationStatus;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Kpi;
 
@@ -24,7 +25,7 @@ public interface IGroovyEngineService
      *            the formula
      * @return true if the formula is valid.
      */
-    public boolean isValidFormula(final String _formula);
+    public GroovyValidationStatus isValidFormula(final String _formula);
     
     
     /**
@@ -42,7 +43,7 @@ public interface IGroovyEngineService
      * @param _kpi
      * @return the instantiated query
      */
-    public <T extends IQuery<KpiResult>> T parseQuery(Kpi _kpi);
+    public <T extends IQuery<KpiResult>> T parseQuery(Kpi _kp);
     
     
     /**

@@ -34,7 +34,6 @@ public abstract class AbstractGroovyQuery implements IQuery<KpiResult>
     
     
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGroovyQuery.class);
-    private final EntityType    entityType;
     
     @Autowired
     protected IEntityService    entityService;
@@ -54,11 +53,11 @@ public abstract class AbstractGroovyQuery implements IQuery<KpiResult>
      * 
      * @param _entityType
      */
-    public AbstractGroovyQuery(final EntityType _entityType) {
+    public AbstractGroovyQuery() {
     
     
         super();
-        entityType = _entityType;
+        
         
     }
     
@@ -70,11 +69,11 @@ public abstract class AbstractGroovyQuery implements IQuery<KpiResult>
      *            the formula
      * @return the kpi result.
      */
-    public KpiResult forEachEntity(final IEntityKpiFormula _formula) {
+    public KpiResult forEachEntity(final EntityType _entityType, final IEntityKpiFormula _formula) {
     
     
         final List<IEntity> entitiesByEntityType =
-                entityService.getEntitiesByEntityType(entityType);
+                entityService.getEntitiesByEntityType(_entityType);
         final KpiResult kpiResult = new KpiResult();
         for (final IEntity entity : entitiesByEntityType) {
             final EntityKey key = entity.getEntityKey();

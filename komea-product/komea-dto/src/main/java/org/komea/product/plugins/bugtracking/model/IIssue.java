@@ -7,6 +7,7 @@ package org.komea.product.plugins.bugtracking.model;
 
 
 import org.joda.time.DateTime;
+import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Project;
 import org.komea.product.plugins.model.IDynamicData;
@@ -50,7 +51,7 @@ public interface IIssue extends IDynamicData
     IssueResolution getResolution();
     
     
-    String getSeverity();
+    Severity getSeverity();
     
     
     IssueStatus getStatus();

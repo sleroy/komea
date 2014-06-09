@@ -9,7 +9,6 @@ package org.komea.product.backend.groovy;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.dto.KpiResult;
-import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -30,7 +29,7 @@ public abstract class AbstractProjectDynamicQuery extends AbstractDynamicQuery
     public AbstractProjectDynamicQuery(final BackupDelay _delay) {
     
     
-        super(EntityType.PROJECT, _delay);
+        super(_delay);
         
     }
     

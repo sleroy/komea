@@ -20,6 +20,8 @@ import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IGroovyEngineService;
 import org.komea.product.backend.api.ISpringService;
+import org.komea.product.backend.api.exceptions.GroovyScriptException;
+import org.komea.product.backend.api.exceptions.GroovyScriptException.GroovyValidationStatus;
 import org.komea.product.backend.plugin.api.RequiresSpring;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Kpi;
@@ -84,6 +86,7 @@ public class GroovyEngineService implements IGroovyEngineService
         /**
          * Registering imports
          */
+        registerStarImport("org.komea.eventory.api.cache");
         registerStarImport("org.komea.product.database.alert");
         registerStarImport("org.komea.product.database.alert.enums");
         registerStarImport("org.komea.product.database.api");
@@ -106,18 +109,23 @@ public class GroovyEngineService implements IGroovyEngineService
     
     
     @Override
-    public boolean isValidFormula(final String _formula) {
+    public GroovyValidationStatus isValidFormula(final String _formula) {
     
     
         final Kpi kpi = new Kpi();
         kpi.setEsperRequest(_formula);
         kpi.setId(1);
+        GroovyValidationStatus status = GroovyValidationStatus.OK;
         try {
-            return parseQuery(kpi) instanceof IQuery;
+            parseQuery(kpi);
+        } catch (final GroovyScriptException e) {
+            LOGGER.error(e.getMessage(), e);
+            status = e.getStatus();
         } catch (final Exception e) {
             LOGGER.error(e.getMessage(), e);
-            return false;
+            status = GroovyValidationStatus.OK;
         }
+        return status;
     }
     
     
@@ -137,8 +145,7 @@ public class GroovyEngineService implements IGroovyEngineService
             groovyClass = groovyClassLoader.parseClass(_groovyScript);
             return groovyClass;
         } catch (final Exception e) {
-            LOGGER.error("Script {} presents an error {}", _groovyScript, e);
-            throw new GroovyParsingException(_groovyScript, e);
+            throw new GroovyScriptException(_groovyScript, GroovyValidationStatus.PARSING_FAILED, e);
         }
         
     }
@@ -151,17 +158,18 @@ public class GroovyEngineService implements IGroovyEngineService
     
         IQuery cast = null;
         final Script parseScript = parseScript(_kpi);
+        Object resultOfScriptExecution = null;
         try {
             
             
-            cast = IQuery.class.cast(parseScript.run());
+            resultOfScriptExecution = parseScript.run();
+            cast = IQuery.class.cast(resultOfScriptExecution);
             if (org.springframework.core.annotation.AnnotationUtils.isAnnotationInherited(
                     RequiresSpring.class, cast.getClass())) {
                 springService.autowirePojo(cast);
             }
         } catch (final Exception e) {
-            LOGGER.error("Errors occured during the EXECUTION of a groovy script : {}\n",
-                    _kpi.getEsperRequest(), e);
+            throw new GroovyScriptException(_kpi, GroovyValidationStatus.EXECUTION_FAILED, e);
         }
         return (T) cast;
     }
@@ -178,22 +186,16 @@ public class GroovyEngineService implements IGroovyEngineService
     
     
         Script parseScript = null;
-        try {
-            Validate.notNull(_kpi.getEsperRequest(), "Kpi should define a formula");
-            final CompilerConfiguration config = new CompilerConfiguration();
-            buildImportCustomizer(config);
-            
-            config.setScriptBaseClass(GroovyFormulaScript.class.getCanonicalName());
-            final Binding binding = new Binding();
-            binding.setVariable("spring", springService);
-            binding.setVariable("kpiid", _kpi.getId());
-            
-            parseScript = parseScript(_kpi.getEsperRequest(), config, binding);
-            
-        } catch (final Exception e) {
-            LOGGER.error("Errors occured during the parsing of the groovy script : \n{}",
-                    _kpi.getEsperRequest(), e);
-        }
+        Validate.notNull(_kpi.getEsperRequest(), "Kpi should define a formula");
+        final CompilerConfiguration config = new CompilerConfiguration();
+        buildImportCustomizer(config);
+        
+        config.setScriptBaseClass(GroovyFormulaScript.class.getCanonicalName());
+        final Binding binding = new Binding();
+        binding.setVariable("spring", springService);
+        binding.setVariable("kpiid", _kpi.getId());
+        
+        parseScript = parseScript(_kpi.getEsperRequest(), config, binding);
         return parseScript;
     }
     
@@ -216,10 +218,14 @@ public class GroovyEngineService implements IGroovyEngineService
             final Binding binding) {
     
     
-        final GroovyShell shell =
-                new GroovyShell(Thread.currentThread().getContextClassLoader(), binding, config);
-        
-        return shell.parse(_script);
+        try {
+            final GroovyShell shell =
+                    new GroovyShell(Thread.currentThread().getContextClassLoader(), binding, config);
+            
+            return shell.parse(_script);
+        } catch (final Exception e) {
+            throw new GroovyScriptException(_script, GroovyValidationStatus.PARSING_FAILED, e);
+        }
     }
     
     

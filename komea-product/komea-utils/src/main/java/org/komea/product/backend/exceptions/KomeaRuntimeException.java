@@ -11,7 +11,7 @@ package org.komea.product.backend.exceptions;
  *
  * @author sleroy
  */
-public abstract class KomeaException extends Exception
+public abstract class KomeaRuntimeException extends RuntimeException
 {
 
 
@@ -28,7 +28,7 @@ public abstract class KomeaException extends Exception
      * @param _message
      *            the message
      */
-    public KomeaException(final String _message) {
+    public KomeaRuntimeException(final String _message) {
 
 
         super(_message, null);
@@ -43,10 +43,10 @@ public abstract class KomeaException extends Exception
      * @param _throwable
      *            the throwable
      */
-    public KomeaException(final String _message, final Throwable _throwable) {
+    public KomeaRuntimeException(final String _message, final Throwable _throwable) {
 
 
-        super("Komea meets an exception : \n\t-> reason :" + _message, _throwable);
+        super("Komea meets an unexpected exception : \n\t-> reason :" + _message, _throwable);
 
     }
 
@@ -57,7 +57,7 @@ public abstract class KomeaException extends Exception
      * @param _throwable
      *            the throwable;
      */
-    public KomeaException(final Throwable _throwable) {
+    public KomeaRuntimeException(final Throwable _throwable) {
 
 
         super(_throwable.getMessage(), _throwable);

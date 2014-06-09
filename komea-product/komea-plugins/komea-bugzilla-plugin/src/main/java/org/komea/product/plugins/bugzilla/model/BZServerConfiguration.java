@@ -9,12 +9,11 @@ package org.komea.product.plugins.bugzilla.model;
 
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.komea.product.backend.utils.StringList;
 import org.komea.product.database.api.IHasId;
-import org.komea.product.plugins.bugzilla.api.BugStatusGroup;
+import org.komea.product.database.utils.Validate;
 
 import com.google.common.collect.Lists;
 
@@ -33,26 +32,28 @@ public class BZServerConfiguration implements Serializable, IHasId
     /**
      * This field describes
      */
-    private static final long                       serialVersionUID   = 2673081036274879834L;
+    private static final long  serialVersionUID   = 2673081036274879834L;
     
-    private String                                  address            = null;
+    private String             address            = null;
     
-    private boolean                                 autocreateProjects = true;
+    private boolean            autocreateProjects = true;
     
-    private Integer                                 id;
+    private final StringList   closedStatus       = StringList.EMPTY;
     
-    private String                                  login;
+    private final StringList   fixedStatus        = new StringList("closed,delivered, resolved");
     
-    private String                                  password;
-    private final List<String>                      priorities         = Lists.newArrayList();
-    private final Map<String, String>               projectAliases     =
-                                                                               new HashMap<String, String>();
-    private Integer                                 reminderAlert;
-    private final List<String>                      severities         = Lists.newArrayList();
+    private Integer            id;
+    private String             login;
+    private final StringList   notfixedStatus     = StringList.EMPTY;
+    private final StringList   openedStatus       =
+                                                          new StringList(
+                                                                  "new,unconfirmed, onhold, accepted, assigned, opened, reopened");
+    private String             password;
     
-    private final List<String>                      status             = Lists.newArrayList();
+    private final List<String> priorities         = Lists.newArrayList();
     
-    private final Map<BugStatusGroup, List<String>> statusGroups;
+    
+    private Integer            reminderAlert;
     
     
     
@@ -60,31 +61,8 @@ public class BZServerConfiguration implements Serializable, IHasId
     
     
         super();
-        statusGroups = new HashMap<BugStatusGroup, List<String>>();
         
-        // statusGroups.put(BugStatusGroup.OPEN, arg1);
-        // statusGroups.put(BugStatusGroup.CLOSED, arg1);
-        // statusGroups.put(BugStatusGroup.OPEN_NOT_FIXED, arg1);
         
-    }
-    
-    
-    /**
-     * Returns the alias or creates it with the name of the project name.
-     * 
-     * @param _projectName
-     *            the project name
-     * @return
-     */
-    public String createOrRetrieveAliasForProjectName(final String _projectName) {
-    
-    
-        String possibleAlias = projectAliases.get(_projectName);
-        if (possibleAlias == null) {
-            possibleAlias = _projectName;
-            projectAliases.put(_projectName, _projectName);
-        }
-        return possibleAlias;
     }
     
     
@@ -149,31 +127,50 @@ public class BZServerConfiguration implements Serializable, IHasId
     }
     
     
-    public List<String> getSeverities() {
-    
-    
-        return severities;
-    }
-    
-    
-    public List<String> getStatus() {
-    
-    
-        return status;
-    }
-    
-    
-    public Map<BugStatusGroup, List<String>> getStatusGroups() {
-    
-    
-        return statusGroups;
-    }
-    
-    
     public boolean isAutocreateProjects() {
     
     
         return autocreateProjects;
+    }
+    
+    
+    public boolean isResolutionFixed(final String _status) {
+    
+    
+        Validate.isTrue(fixedStatus.isEmpty() ^ notfixedStatus.isEmpty());
+        
+        if (!fixedStatus.isEmpty()) {
+            return fixedStatus.contains(_status);
+        } else {
+            return !notfixedStatus.contains(_status);
+        }
+    }
+    
+    
+    public boolean isResolutionNotFixed(final String _status) {
+    
+    
+        return !isResolutionFixed(_status);
+    }
+    
+    
+    public boolean isStatusClosed(final String _status) {
+    
+    
+        return !isStatusOpened(_status);
+    }
+    
+    
+    public boolean isStatusOpened(final String _status) {
+    
+    
+        Validate.isTrue(openedStatus.isEmpty() ^ closedStatus.isEmpty());
+        
+        if (!openedStatus.isEmpty()) {
+            return openedStatus.contains(_status);
+        } else {
+            return closedStatus.contains(_status);
+        }
     }
     
     
@@ -250,9 +247,12 @@ public class BZServerConfiguration implements Serializable, IHasId
     public String toString() {
     
     
-        return "BZServerConfiguration [address="
-                + address + ", login=" + login + ", password=" + password + ", priorities="
-                + priorities + ", reminderAlert=" + reminderAlert + ", severities=" + severities
-                + ", statusGroups=" + statusGroups + ", status=" + status + "]";
+        return "BZServerConfiguration [\\n\\taddress="
+                + address + ", \\n\\tautocreateProjects=" + autocreateProjects
+                + ", \\n\\tclosedStatus=" + closedStatus + ", \\n\\tfixedStatus=" + fixedStatus
+                + ", \\n\\tid=" + id + ", \\n\\tlogin=" + login + ", \\n\\tnotfixedStatus="
+                + notfixedStatus + ", \\n\\topenedStatus=" + openedStatus + ", \\n\\tpassword="
+                + password + ", \\n\\tpriorities=" + priorities + ", \\n\\treminderAlert="
+                + reminderAlert + "]";
     }
 }

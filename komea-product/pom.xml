@@ -56,6 +56,8 @@
 							<ignore>org.komea.product.database.api.*</ignore>
 							<ignore>org.komea.product.database.alert.enums.*</ignore>
 							<ignore>org.komea.product.database.dto.errors.*</ignore>
+							<ignore>org.komea.product.test.spring.*</ignore>
+							
 						</ignores>
 						<excludes>
 							<exclude>org/komea/product/database/dto/**/*.class</exclude>
@@ -65,6 +67,8 @@
 							<exclude>org/komea/product/database/api/**/*.class</exclude>
 							<exclude>org/komea/product/database/alert/enums/**/*.class</exclude>
 							<exclude>org/komea/product/database/dto/errors/**/*.class</exclude>
+							<exclude>org/komea/product/test/spring/**/*.class</exclude>
+							
 						</excludes>
 					</instrumentation>
 

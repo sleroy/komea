@@ -15,7 +15,7 @@ import org.komea.product.database.model.Kpi;
  * 
  * @author sleroy
  */
-public class KpiProvidesInvalidFormulaException extends KomeaException
+public class KpiProvidesInvalidFormulaException extends KomeaRuntimeException
 {
     
     

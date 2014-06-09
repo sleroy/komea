@@ -7,6 +7,7 @@ package org.komea.product.backend.service.dataplugin;
 
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Set;
 
 import org.komea.product.plugins.model.IDynamicDataSourceSession;
@@ -38,6 +39,16 @@ public interface IDynamicDataSourcePool
      * @return the data source data.
      */
     <T extends Serializable> T getDataSourceData(String _dataSourceName);
+    
+    
+    /**
+     * Get data source of type.
+     * 
+     * @param _class
+     *            the class
+     * @return the data source data.
+     */
+    <T> Collection<T> getDataSourceOfType(Class<T> _class);
     
     
     /**

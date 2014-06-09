@@ -5,7 +5,6 @@
 package org.komea.product.backend.groovy;
 
 
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.komea.eventory.api.cache.BackupDelay;
@@ -29,24 +28,37 @@ import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.junit.Assert.assertTrue;
+
+
+
 /**
  * @author sleroy
  */
 @Transactional
-public class AbstractGroovyQueryTest extends AbstractSpringIntegrationTestCase {
+public class AbstractGroovyQueryTest extends AbstractSpringIntegrationTestCase
+{
     
-    public class AlwaysReturn5 extends AbstractGroovyQuery implements IEntityKpiFormula, IDynamicDataQuery<KpiResult> {
+    
+    public class AlwaysReturn5 extends AbstractGroovyQuery implements IEntityKpiFormula,
+            IDynamicDataQuery<KpiResult>
+    {
+        
         
         public AlwaysReturn5() {
         
-            super(EntityType.PROJECT);
+        
+            super();
         }
+        
         
         @Override
         public Number evaluate(final EntityKey _entityKey) {
         
+        
             return 5d;
         }
+        
         
         /*
          * (non-Javadoc)
@@ -55,8 +67,10 @@ public class AbstractGroovyQueryTest extends AbstractSpringIntegrationTestCase {
         @Override
         public BackupDelay getBackupDelay() {
         
+        
             return BackupDelay.DAY;
         }
+        
         
         /*
          * (non-Javadoc)
@@ -65,9 +79,12 @@ public class AbstractGroovyQueryTest extends AbstractSpringIntegrationTestCase {
         @Override
         public KpiResult getResult() {
         
-            return forEachEntity(this);
+        
+            return forEachEntity(EntityType.PERSON, this);
         }
     }
+    
+    
     
     @Autowired
     private IGroovyEngineService groovyEngineService;
@@ -78,8 +95,11 @@ public class AbstractGroovyQueryTest extends AbstractSpringIntegrationTestCase {
     @Autowired
     private IStatisticsAPI       statisticsAPI;
     
+    
+    
     @Test
     public void testGroovyScript() {
+    
     
         kpiService.saveOrUpdate(fakeKpi("DEMO_KPI_GROOVY1"));
         kpiService.saveOrUpdate(fakeKpi("DEMO_KPI_GROOVY2"));
@@ -93,6 +113,7 @@ public class AbstractGroovyQueryTest extends AbstractSpringIntegrationTestCase {
         assertTrue(result.size() >= 1);
     }
     
+    
     /**
      * Fake kpi
      * 
@@ -101,8 +122,10 @@ public class AbstractGroovyQueryTest extends AbstractSpringIntegrationTestCase {
      */
     private Kpi fakeKpi(final String _string) {
     
-        return KpiBuilder.create().nameAndKey(_string).description("").forMembers().providerType(ProviderType.QUALITY)
-                .groupFormula(GroupFormula.SUM_VALUE).dynamicQuery(AlwaysReturn5.class)
+    
+        return KpiBuilder.create().nameAndKey(_string).description("").forMembers()
+                .providerType(ProviderType.QUALITY).groupFormula(GroupFormula.SUM_VALUE)
+                .dynamicQuery(AlwaysReturn5.class)
                 .interval(0.0d, 10.0d, ValueDirection.BETTER, ValueType.INT).build();
         
     }

@@ -25,4 +25,13 @@ public interface IDynamicDataSource<T extends Serializable>
      * @return the data
      */
     T fetchData();
+    
+    
+    /**
+     * Returns the class /interface returned by the dynamic data source.
+     * 
+     * @return the definition.
+     */
+    Class<T> getDefinition();
+    
 }

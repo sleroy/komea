@@ -6,14 +6,14 @@ package org.komea.product.plugins.bugzilla.service;
 
 
 
-import org.komea.product.backend.exceptions.KomeaException;
+import org.komea.product.backend.exceptions.KomeaRuntimeException;
 
 
 
 /**
  * @author sleroy
  */
-public class BugzillaPluginException extends KomeaException
+public class BugzillaPluginException extends KomeaRuntimeException
 {
     
     

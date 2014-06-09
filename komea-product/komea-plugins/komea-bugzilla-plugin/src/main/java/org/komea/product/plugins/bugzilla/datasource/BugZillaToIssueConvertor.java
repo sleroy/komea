@@ -14,6 +14,7 @@ import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Project;
 import org.komea.product.plugins.bugtracking.model.IIssue;
+import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,31 +47,40 @@ public class BugZillaToIssueConvertor
      * @param _bug
      * @return
      */
-    public IIssue convert(final Bug _bug, final Project _project) {
+    public IIssue convert(
+            final Bug _bug,
+            final Project _project,
+            final BZServerConfiguration _bzServerConfiguration) {
     
     
         LOGGER.trace("Received bug {}", _bug);
         final Person handler =
                 createPersonOrNull((String) _bug.getParameterMap().get("assigned_to"));
         final Person creator = createPersonOrNull((String) _bug.getParameterMap().get("creator"));
-        return new BZIssueWrapper(_bug, handler, creator, _project);
+        return new BZIssueWrapper(_bug, handler, creator, _project, _bzServerConfiguration);
         
         
     }
     
     
     /**
+     * Convert all the issues.
+     * 
      * @param _bugs
+     * @param _serverConfiguration
      * @return
      */
-    public Collection<? extends IIssue> convertAll(final List<Bug> _bugs, final Project _project) {
+    public Collection<? extends IIssue> convertAll(
+            final List<Bug> _bugs,
+            final Project _project,
+            final BZServerConfiguration _serverConfiguration) {
     
     
         Validate.notNull(_project);
         
         final List<IIssue> issues = Lists.newArrayList();
         for (final Bug bug : _bugs) {
-            final IIssue issue = convert(bug, _project);
+            final IIssue issue = convert(bug, _project, _serverConfiguration);
             if (issue != null) {
                 issues.add(issue);
             }

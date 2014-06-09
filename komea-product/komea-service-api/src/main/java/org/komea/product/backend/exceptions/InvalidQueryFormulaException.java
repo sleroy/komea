@@ -8,7 +8,7 @@ package org.komea.product.backend.exceptions;
  *
  * @author sleroy
  */
-public class InvalidQueryFormulaException extends KomeaException {
+public class InvalidQueryFormulaException extends KomeaRuntimeException {
 
     /**
      * This kpi does not provides a valid formula.

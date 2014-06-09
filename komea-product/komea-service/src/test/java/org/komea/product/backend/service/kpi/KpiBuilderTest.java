@@ -17,6 +17,7 @@ import org.komea.eventory.api.filters.IFilterDefinition;
 import org.komea.eventory.api.formula.ICEPFormula;
 import org.komea.eventory.formula.NoCEPFormula;
 import org.komea.product.backend.api.ISpringService;
+import org.komea.product.backend.api.exceptions.GroovyScriptException.GroovyValidationStatus;
 import org.komea.product.backend.groovy.GroovyEngineService;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
@@ -24,8 +25,8 @@ import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import static org.mockito.Mockito.mock;
 
@@ -124,7 +125,8 @@ public class KpiBuilderTest
                         .interval(0d, 1d, ValueDirection.BETTER, ValueType.BOOL)
                         .entityType(EntityType.DEPARTMENT).build();
         
-        assertTrue(groovyEngineService.isValidFormula(build.getEsperRequest()));
+        assertEquals(GroovyValidationStatus.OK,
+                groovyEngineService.isValidFormula(build.getEsperRequest()));
         assertNotNull(groovyEngineService.parseQuery(build));
         
     }
@@ -142,7 +144,8 @@ public class KpiBuilderTest
                         .interval(0d, 1d, ValueDirection.BETTER, ValueType.BOOL)
                         .entityType(EntityType.DEPARTMENT).build();
         
-        assertTrue(groovyEngineService.isValidFormula(build.getEsperRequest()));
+        assertEquals(GroovyValidationStatus.OK,
+                groovyEngineService.isValidFormula(build.getEsperRequest()));
         assertNotNull(groovyEngineService.parseQuery(build));
         
     }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.plugins.bugtracking.model;
@@ -10,5 +10,5 @@ package org.komea.product.plugins.bugtracking.model;
  * @author sleroy
  */
 public enum IssueStatus {
-    CLOSED, OPEN
+    CLOSED, OPENED
 }

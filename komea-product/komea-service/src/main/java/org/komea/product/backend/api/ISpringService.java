@@ -6,6 +6,10 @@ package org.komea.product.backend.api;
 
 
 
+import org.springframework.context.ApplicationContext;
+
+
+
 /**
  * @author sleroy
  */
@@ -29,6 +33,9 @@ public interface ISpringService
      *            the dynamic source.
      */
     public <T> T getBean(String _dynamicSource);
+    
+    
+    ApplicationContext getApplicationContext();
     
     
     /**

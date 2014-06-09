@@ -7,6 +7,7 @@ package org.komea.product.backend.service.dataplugin;
 
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -24,7 +25,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 
 
 
@@ -38,17 +41,25 @@ public class DynamicDataSourcePoolService implements IDynamicDataSourcePool
 {
     
     
-    private static final Logger                          LOGGER       =
-                                                                              LoggerFactory
-                                                                                      .getLogger("datapool");
+    private static final Logger                              LOGGER              =
+                                                                                         LoggerFactory
+                                                                                                 .getLogger("datapool");
     
     @Autowired
-    private ICacheStorageFactory                         cacheStorageFactory;
+    private ICacheStorageFactory                             cacheStorageFactory;
     
-    private final Map<String, IDynamicDataSourceSession> dataSessions = Maps.newConcurrentMap();
+    private final Map<String, IDynamicDataSourceSession>     dataSessions        =
+                                                                                         Maps.newConcurrentMap();
+    
+    private final Multimap<Class, IDynamicDataSourceSession> dataTypeSessions    =
+                                                                                         ArrayListMultimap
+                                                                                                 .create();
+    
+    private boolean                                          lazyInitDataTypeMap = false;
+    
     
     @Autowired
-    private ISpringService                               springService;
+    private ISpringService                                   springService;
     
     
     
@@ -78,6 +89,40 @@ public class DynamicDataSourcePoolService implements IDynamicDataSourcePool
                         CacheConfigurationBuilder.expirationTimeCache(10, TimeUnit.MINUTES));
         dataSessions.put(_dataSourceName, dynamicDataSourceSession);
         return (T) dynamicDataSourceSession;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.dataplugin.IDynamicDataSourcePool#getDataSourceData(java.lang.String)
+     */
+    @Override
+    public <T extends Serializable> T getDataSourceData(final String _dataSourceName) {
+    
+    
+        final IDynamicDataSourceSession<T> dataSource = getDataSource(_dataSourceName);
+        return dataSource.fetchData();
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.dataplugin.IDynamicDataSourcePool#getDataSourceOfType(java.lang.Class)
+     */
+    @Override
+    public synchronized <T> Collection<T> getDataSourceOfType(final Class<T> _class) {
+    
+    
+        if (!lazyInitDataTypeMap) {
+            for (final String dynSource : springService.getApplicationContext()
+                    .getBeanNamesForType(_class, true, true)) {
+                final IDynamicDataSourceSession dataSource = getDataSource(dynSource);
+                
+                dataTypeSessions.put(dataSource.getDefinition(), dataSource);
+            }
+            lazyInitDataTypeMap = true;
+        }
+        return (Collection) dataTypeSessions.get(_class);
     }
     
     
@@ -120,19 +165,5 @@ public class DynamicDataSourcePoolService implements IDynamicDataSourcePool
         final ICacheStorage cacheStorage = cacheStorageFactory.newCacheStorage(_cacheConfiguration);
         return new DynamicDataSourceSession(_dataSourceName, cacheStorage, _sourcePool);
     }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.dataplugin.IDynamicDataSourcePool#getDataSourceData(java.lang.String)
-     */
-    @Override
-    public <T extends Serializable> T getDataSourceData(String _dataSourceName) {
-    
-    
-        IDynamicDataSourceSession<T> dataSource = getDataSource(_dataSourceName);
-        return dataSource.fetchData();
-    }
-    
     
 }
