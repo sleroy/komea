@@ -21,7 +21,7 @@
 			<groupId>org.komea.product</groupId>
 			<artifactId>komea-service</artifactId>
 			<version>${project.version}</version>
-			<scope>test</scope>
+
 		</dependency>
 		<dependency>
 			<groupId>com.j2bugzilla</groupId>
