@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.plugins.bugzilla.datasource;
@@ -9,7 +9,7 @@ package org.komea.product.plugins.bugzilla.datasource;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Project;
@@ -33,17 +33,17 @@ import com.j2bugzilla.base.Bug;
 @Transactional
 public class BugZillaToIssueConvertor
 {
-    
-    
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(BugZillaToIssueConvertor.class);
     @Autowired
     private IPersonService      personService;
-    
-    
-    
+
+
+
     /**
      * Convert a single bug into an issue;
-     * 
+     *
      * @param _bug
      * @return
      */
@@ -51,21 +51,21 @@ public class BugZillaToIssueConvertor
             final Bug _bug,
             final Project _project,
             final BZServerConfiguration _bzServerConfiguration) {
-    
-    
+
+
         LOGGER.trace("Received bug {}", _bug);
         final Person handler =
                 createPersonOrNull((String) _bug.getParameterMap().get("assigned_to"));
         final Person creator = createPersonOrNull((String) _bug.getParameterMap().get("creator"));
         return new BZIssueWrapper(_bug, handler, creator, _project, _bzServerConfiguration);
-        
-        
+
+
     }
-    
-    
+
+
     /**
      * Convert all the issues.
-     * 
+     *
      * @param _bugs
      * @param _serverConfiguration
      * @return
@@ -74,10 +74,10 @@ public class BugZillaToIssueConvertor
             final List<Bug> _bugs,
             final Project _project,
             final BZServerConfiguration _serverConfiguration) {
-    
-    
+
+
         Validate.notNull(_project);
-        
+
         final List<IIssue> issues = Lists.newArrayList();
         for (final Bug bug : _bugs) {
             final IIssue issue = convert(bug, _project, _serverConfiguration);
@@ -85,23 +85,23 @@ public class BugZillaToIssueConvertor
                 issues.add(issue);
             }
         }
-        
+
         return issues;
     }
-    
-    
+
+
     /**
      * @param _object
      * @return
      */
     private Person createPersonOrNull(final String _object) {
-    
-    
+
+
         if (_object == null) {
             return null;
         }
-        
+
         return personService.findOrCreatePersonByEmail(_object);
     }
-    
+
 }
