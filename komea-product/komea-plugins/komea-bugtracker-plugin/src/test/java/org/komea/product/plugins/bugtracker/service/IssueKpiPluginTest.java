@@ -51,214 +51,299 @@ import static org.mockito.Mockito.when;
 
 public class IssueKpiPluginTest
 {
-
-
+    
+    
     private final class isClosedFilter implements IFilter<IIssue>
     {
-
-
+        
+        
         @Override
         public boolean matches(final IIssue _task) {
-
-
+        
+        
             return _task.getStatus() == IssueStatus.CLOSED;
         }
     }
-
-
-
+    
+    
+    
     private final class isOpenedFilter implements IFilter<IIssue>
     {
-
-
+        
+        
         @Override
         public boolean matches(final IIssue _task) {
-
-
+        
+        
             return _task.getStatus() == IssueStatus.OPENED;
         }
     }
-
-
-
+    
+    
+    
     /**
      *
      */
     private static final int            NUMBER_OF_ISSUE_PLUGINS = 2;
-
-
+    
+    
     private final Logger                LOGGER                  = LoggerFactory
-            .getLogger(getClass());
+                                                                        .getLogger(getClass());
     private final SpringService         springService           = new SpringService();
     protected final List<IIssue>        fakeListOfIssues        = new PodamFactoryImpl()
-    .manufacturePojo(
-            ArrayList.class,
-            Issue.class);
+                                                                        .manufacturePojo(
+                                                                                ArrayList.class,
+                                                                                Issue.class);
     protected final GroovyEngineService groovyEngineService     = new GroovyEngineService();
-
-
-
+    
+    
+    
     @Before
     public void beforeInit() {
-
-
+    
+    
         final ApplicationContext mock = mock(ApplicationContext.class);
         when(mock.getAutowireCapableBeanFactory()).thenReturn(
                 mock(AutowireCapableBeanFactory.class));
         springService.setApplicationContext(mock);
         groovyEngineService.setSpringService(springService);
         groovyEngineService.init();
-
+        
         System.out.println(fakeListOfIssues);
-
+        
     }
-
-
+    
+    
+    /**
+     * Test method for {@link org.komea.product.plugins.bugtracker.service.IssueKpiPlugin#bzOpenNotFixedBugs()}.
+     */
+    @Test
+    public void test() throws Exception {
+    
+    
+        final KpiDefinition kpiDefinition =
+                new KpiDefinitionLoader(groovyEngineService, "ProjectOpenNotFixedBugs.groovy")
+                        .load();
+        
+        wireData(kpiDefinition);
+        final Double expected =
+                NUMBER_OF_ISSUE_PLUGINS
+                        * Double.valueOf(CollectionUtil.filter(fakeListOfIssues,
+                                new IFilter<IIssue>()
+                                {
+                                    
+                                    
+                                    @Override
+                                    public boolean matches(final IIssue _task) {
+                                    
+                                    
+                                        return _task.getStatus() == IssueStatus.OPENED
+                                                && _task.getResolution() == IssueResolution.NOT_FIXED;
+                                    }
+                                    
+                                }).size());
+        final KpiResult result = kpiDefinition.getResult();
+        assertEquals(expected, result.computeUniqueValue(GroupFormula.SUM_VALUE));
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.plugins.bugtracker.service.IssueKpiPlugin#bzOpenNotFixedBugs()}.
+     */
+    @Test
+    public void testBugsHandled() throws Exception {
+    
+    
+        final KpiDefinition kpiDefinition =
+                new KpiDefinitionLoader(groovyEngineService, "BugsHandled.groovy").load();
+        
+        wireData(kpiDefinition);
+        final Double expected =
+                NUMBER_OF_ISSUE_PLUGINS
+                        * Double.valueOf(CollectionUtil.filter(fakeListOfIssues,
+                                new IFilter<IIssue>()
+                                {
+                                    
+                                    
+                                    @Override
+                                    public boolean matches(final IIssue _task) {
+                                    
+                                    
+                                        return true;
+                                    }
+                                    
+                                }).size());
+        final KpiResult result = kpiDefinition.getResult();
+        assertEquals(expected, result.computeUniqueValue(GroupFormula.SUM_VALUE));
+    }
+    
+    
+    /**
+     * Test method for {@link org.komea.product.plugins.bugtracker.service.IssueKpiPlugin#bzOpenNotFixedBugs()}.
+     */
+    @Test
+    public void testBugsHandledStillOpened() throws Exception {
+    
+    
+        final KpiDefinition kpiDefinition =
+                new KpiDefinitionLoader(groovyEngineService, "BugsHandledStillOpened.groovy")
+                        .load();
+        
+        wireData(kpiDefinition);
+        final Double expected =
+                NUMBER_OF_ISSUE_PLUGINS
+                        * Double.valueOf(CollectionUtil.filter(fakeListOfIssues,
+                                new isOpenedFilter()).size());
+        final KpiResult result = kpiDefinition.getResult();
+        assertEquals(expected, result.computeUniqueValue(GroupFormula.SUM_VALUE));
+    }
+    
+    
     /**
      * Test method for {@link org.komea.product.plugins.bugtracker.service.IssueKpiPlugin#bzOpenBugs()}.
      */
     @Test
     public void testBzClosedBugs() throws Exception {
-
-
+    
+    
         final KpiDefinition kpiDefinition =
                 new KpiDefinitionLoader(groovyEngineService, "ProjectClosedBugScript.groovy")
-        .load();
-
-
+                        .load();
+        
+        
         wireData(kpiDefinition);
         final Double expected =
                 NUMBER_OF_ISSUE_PLUGINS
-                * Double.valueOf(CollectionUtil.filter(fakeListOfIssues,
-                        new isClosedFilter()).size());
+                        * Double.valueOf(CollectionUtil.filter(fakeListOfIssues,
+                                new isClosedFilter()).size());
         final KpiResult result = kpiDefinition.getResult();
         assertEquals(expected, result.computeUniqueValue(GroupFormula.SUM_VALUE));
-
+        
     }
-
-
+    
+    
     /**
      * Test method for {@link org.komea.product.plugins.bugtracker.service.IssueKpiPlugin#bzOpenBugs()}.
      */
     @Test
     public void testBzOpenBugs() throws Exception {
-
-
+    
+    
         final KpiDefinition kpiDefinition =
                 new KpiDefinitionLoader(groovyEngineService, "ProjectOpenBugScript.groovy").load();
-
-
+        
+        
         wireData(kpiDefinition);
         final Double expected =
                 NUMBER_OF_ISSUE_PLUGINS
-                * Double.valueOf(CollectionUtil.filter(fakeListOfIssues,
-                        new isOpenedFilter()).size());
+                        * Double.valueOf(CollectionUtil.filter(fakeListOfIssues,
+                                new isOpenedFilter()).size());
         final KpiResult result = kpiDefinition.getResult();
         assertFalse(result.hasFailed());
         assertEquals(expected, result.computeUniqueValue(GroupFormula.SUM_VALUE));
-
-
+        
+        
     }
-
-
+    
+    
     /**
      * Test method for {@link org.komea.product.plugins.bugtracker.service.IssueKpiPlugin#bzOpenBySeverityBugs(java.lang.String)}.
      */
     @Test
     public void testBzOpenBySeverityBugs() throws Exception {
-
-
+    
+    
         final KpiDefinition kpiDefinition =
                 new KpiDefinitionLoader(groovyEngineService,
                         "ProjectOpenByCriticalSeverityBugs.groovy").load();
-
-
+        
+        
         wireData(kpiDefinition);
         final Double expected =
                 NUMBER_OF_ISSUE_PLUGINS
-                * Double.valueOf(CollectionUtil.filter(fakeListOfIssues,
-                        new IFilter<IIssue>()
-                        {
-
-
-                    @Override
-                    public boolean matches(final IIssue _task) {
-
-
-                        return _task.getStatus() == IssueStatus.OPENED
-                                && _task.getSeverity() == Severity.CRITICAL;
-                    }
-
-                        }).size());
+                        * Double.valueOf(CollectionUtil.filter(fakeListOfIssues,
+                                new IFilter<IIssue>()
+                                {
+                                    
+                                    
+                                    @Override
+                                    public boolean matches(final IIssue _task) {
+                                    
+                                    
+                                        return _task.getStatus() == IssueStatus.OPENED
+                                                && _task.getSeverity() == Severity.CRITICAL;
+                                    }
+                                    
+                                }).size());
         final KpiResult result = kpiDefinition.getResult();
         assertEquals(expected, result.computeUniqueValue(GroupFormula.SUM_VALUE));
-
+        
     }
-
-
+    
+    
     /**
      * Test method for {@link org.komea.product.plugins.bugtracker.service.IssueKpiPlugin#bzOpenNotFixedBugs()}.
      */
     @Test
     public void testBzOpenNotFixedBugs() throws Exception {
-
-
+    
+    
         final KpiDefinition kpiDefinition =
                 new KpiDefinitionLoader(groovyEngineService, "ProjectOpenNotFixedBugs.groovy")
-        .load();
-
+                        .load();
+        
         wireData(kpiDefinition);
         final Double expected =
                 NUMBER_OF_ISSUE_PLUGINS
-                * Double.valueOf(CollectionUtil.filter(fakeListOfIssues,
-                        new IFilter<IIssue>()
-                        {
-
-
-                    @Override
-                    public boolean matches(final IIssue _task) {
-
-
-                        return _task.getStatus() == IssueStatus.OPENED
-                                && _task.getResolution() == IssueResolution.NOT_FIXED;
-                    }
-
-                        }).size());
+                        * Double.valueOf(CollectionUtil.filter(fakeListOfIssues,
+                                new IFilter<IIssue>()
+                                {
+                                    
+                                    
+                                    @Override
+                                    public boolean matches(final IIssue _task) {
+                                    
+                                    
+                                        return _task.getStatus() == IssueStatus.OPENED
+                                                && _task.getResolution() == IssueResolution.NOT_FIXED;
+                                    }
+                                    
+                                }).size());
         final KpiResult result = kpiDefinition.getResult();
         assertEquals(expected, result.computeUniqueValue(GroupFormula.SUM_VALUE));
     }
-
-
+    
+    
     /**
      * Test method for {@link org.komea.product.plugins.bugtracker.service.IssueKpiPlugin#bzTotalBugs()}.
      */
     @Test
     public void testBzTotalBugs() throws Exception {
-
-
+    
+    
         final KpiDefinition kpiDefinition =
                 new KpiDefinitionLoader(groovyEngineService, "ProjectTotalBugs.groovy").load();
-
+        
         wireData(kpiDefinition);
         final Double expected = Double.valueOf(fakeListOfIssues.size() * 2);
         final KpiResult result = kpiDefinition.getResult();
         assertFalse(result.hasFailed());
         assertEquals(expected, result.computeUniqueValue(GroupFormula.SUM_VALUE));
     }
-
-
+    
+    
     /**
      * @param _validFormula
      */
     private void validFormula(final GroovyValidationStatus _validFormula) {
-
-
+    
+    
         assertEquals(GroovyValidationStatus.OK, _validFormula);
-
-
+        
+        
     }
-
-
+    
+    
     /**
      * @param _parseQuery
      */
@@ -272,6 +357,6 @@ public class IssueKpiPluginTest
         when(dynamicDataSource.getDataSourceOfType(IIssuePlugin.class)).thenReturn(
                 Lists.newArrayList(iIssuePlugin, iIssuePlugin));
         when(iIssuePlugin.getData()).thenReturn(fakeListOfIssues);
-
+        
     }
 }
