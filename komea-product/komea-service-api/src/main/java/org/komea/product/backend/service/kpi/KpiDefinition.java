@@ -14,15 +14,15 @@ import org.komea.product.database.model.Kpi;
 
 /**
  * This interface defines a kpi and its query.
- * 
+ *
  * @author sleroy
  */
-public interface IKpiDefinition
+public class KpiDefinition
 {
 
 
-    Kpi getKpi();
+    Kpi               kpi;
 
 
-    IQuery<KpiResult> getQuery();
+    IQuery<KpiResult> query;
 }
