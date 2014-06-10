@@ -55,7 +55,7 @@ public class GroovyScriptLoader
     
     /**
      * Loads the script
-     * 
+     *
      * @return the script text
      */
     public String load() {
@@ -73,6 +73,7 @@ public class GroovyScriptLoader
             
         } catch (final Exception e) {
             LOGGER.error("Impossible to retrieve Groovy script template : script {}", script, e);
+            throw new RuntimeException("Could not load the script " + script);
         } finally {
             IOUtils.closeQuietly(resourceAsStream);
         }

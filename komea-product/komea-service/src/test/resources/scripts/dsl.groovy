@@ -21,16 +21,16 @@ kpibuilder.classNameResolver = "org.komea.product.database.model"
 
 def kpiDsl = new KpiDefinition()
 kpiDsl.kpi = kpibuilder.kpi (
-        description: "",
-        entityType: EntityType.PERSON,
+        description: "Number of closed bugs per project",
+        entityType: EntityType.PROJECT,
         groupFormula: GroupFormula.SUM_VALUE,
-        kpiKey: "",
-        name: "",
-        providerType: ProviderType.SCM,
-        valueDirection: ValueDirection.NONE,
-        valueMax: 100d,
+        kpiKey: "bugs_status_closed",
+        name: "Closed bugs",
+        providerType: ProviderType.BUGTRACKER,
+        valueDirection: ValueDirection.BETTER,
+        valueMax: 50000d,
         valueMin: 0d,
-        valueType: ValueType.BOOL
+        valueType: ValueType.INT
         )
 kpiDsl.query = new StubQuery()
 kpiDsl;

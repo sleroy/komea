@@ -11,12 +11,12 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.exceptions.GroovyScriptException.GroovyValidationStatus;
 import org.komea.product.backend.groovy.GroovyEngineService;
 import org.komea.product.backend.service.SpringService;
 import org.komea.product.backend.service.dataplugin.IDynamicDataSourcePool;
-import org.komea.product.backend.service.kpi.IKPIService;
+import org.komea.product.backend.service.kpi.KpiDefinition;
+import org.komea.product.backend.service.kpi.KpiDefinitionLoader;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.backend.utils.IFilter;
 import org.komea.product.database.dto.KpiResult;
@@ -97,9 +97,6 @@ public class IssueKpiPluginTest
     protected final GroovyEngineService groovyEngineService     = new GroovyEngineService();
 
 
-    final IssueKpiPlugin                issueKpiPlugin          = new IssueKpiPlugin();
-
-
 
     @Before
     public void beforeInit() {
@@ -111,9 +108,7 @@ public class IssueKpiPluginTest
         springService.setApplicationContext(mock);
         groovyEngineService.setSpringService(springService);
         groovyEngineService.init();
-        issueKpiPlugin.setGroovyEngineService(groovyEngineService);
-        issueKpiPlugin.setKpiService(mock(IKPIService.class));
-        issueKpiPlugin.init();
+
         System.out.println(fakeListOfIssues);
 
     }
@@ -126,16 +121,17 @@ public class IssueKpiPluginTest
     public void testBzClosedBugs() throws Exception {
 
 
-        validFormula(groovyEngineService.isValidFormula(issueKpiPlugin.closedBugsKpi()
-                .getEsperRequest()));
-        final IQuery<KpiResult> parseQuery =
-                groovyEngineService.parseQuery(issueKpiPlugin.closedBugsKpi());
-        wireData(parseQuery);
+        final KpiDefinition kpiDefinition =
+                new KpiDefinitionLoader(groovyEngineService, "ProjectClosedBugScript.groovy")
+        .load();
+
+
+        wireData(kpiDefinition);
         final Double expected =
                 NUMBER_OF_ISSUE_PLUGINS
                 * Double.valueOf(CollectionUtil.filter(fakeListOfIssues,
                         new isClosedFilter()).size());
-        final KpiResult result = parseQuery.getResult();
+        final KpiResult result = kpiDefinition.getResult();
         assertEquals(expected, result.computeUniqueValue(GroupFormula.SUM_VALUE));
 
     }
@@ -148,16 +144,16 @@ public class IssueKpiPluginTest
     public void testBzOpenBugs() throws Exception {
 
 
-        validFormula(groovyEngineService.isValidFormula(issueKpiPlugin.openBugsKpi()
-                .getEsperRequest()));
-        final IQuery<KpiResult> parseQuery =
-                groovyEngineService.parseQuery(issueKpiPlugin.openBugsKpi());
-        wireData(parseQuery);
+        final KpiDefinition kpiDefinition =
+                new KpiDefinitionLoader(groovyEngineService, "ProjectOpenBugScript.groovy").load();
+
+
+        wireData(kpiDefinition);
         final Double expected =
                 NUMBER_OF_ISSUE_PLUGINS
                 * Double.valueOf(CollectionUtil.filter(fakeListOfIssues,
                         new isOpenedFilter()).size());
-        final KpiResult result = parseQuery.getResult();
+        final KpiResult result = kpiDefinition.getResult();
         assertFalse(result.hasFailed());
         assertEquals(expected, result.computeUniqueValue(GroupFormula.SUM_VALUE));
 
@@ -172,11 +168,12 @@ public class IssueKpiPluginTest
     public void testBzOpenBySeverityBugs() throws Exception {
 
 
-        validFormula(groovyEngineService.isValidFormula(issueKpiPlugin.openBySeverityBugsKpi(
-                "CRITICAL").getEsperRequest()));
-        final IQuery<KpiResult> parseQuery =
-                groovyEngineService.parseQuery(issueKpiPlugin.openBySeverityBugsKpi("CRITICAL"));
-        wireData(parseQuery);
+        final KpiDefinition kpiDefinition =
+                new KpiDefinitionLoader(groovyEngineService,
+                        "ProjectOpenByCriticalSeverityBugs.groovy").load();
+
+
+        wireData(kpiDefinition);
         final Double expected =
                 NUMBER_OF_ISSUE_PLUGINS
                 * Double.valueOf(CollectionUtil.filter(fakeListOfIssues,
@@ -193,7 +190,7 @@ public class IssueKpiPluginTest
                     }
 
                         }).size());
-        final KpiResult result = parseQuery.getResult();
+        final KpiResult result = kpiDefinition.getResult();
         assertEquals(expected, result.computeUniqueValue(GroupFormula.SUM_VALUE));
 
     }
@@ -206,11 +203,11 @@ public class IssueKpiPluginTest
     public void testBzOpenNotFixedBugs() throws Exception {
 
 
-        validFormula(groovyEngineService.isValidFormula(issueKpiPlugin.openNotFixedBugsKpi()
-                .getEsperRequest()));
-        final IQuery<KpiResult> parseQuery =
-                groovyEngineService.parseQuery(issueKpiPlugin.openNotFixedBugsKpi());
-        wireData(parseQuery);
+        final KpiDefinition kpiDefinition =
+                new KpiDefinitionLoader(groovyEngineService, "ProjectOpenNotFixedBugs.groovy")
+        .load();
+
+        wireData(kpiDefinition);
         final Double expected =
                 NUMBER_OF_ISSUE_PLUGINS
                 * Double.valueOf(CollectionUtil.filter(fakeListOfIssues,
@@ -227,7 +224,7 @@ public class IssueKpiPluginTest
                     }
 
                         }).size());
-        final KpiResult result = parseQuery.getResult();
+        final KpiResult result = kpiDefinition.getResult();
         assertEquals(expected, result.computeUniqueValue(GroupFormula.SUM_VALUE));
     }
 
@@ -239,13 +236,12 @@ public class IssueKpiPluginTest
     public void testBzTotalBugs() throws Exception {
 
 
-        validFormula(groovyEngineService.isValidFormula(issueKpiPlugin.totalBugsKpi()
-                .getEsperRequest()));
-        final IQuery<KpiResult> parseQuery =
-                groovyEngineService.parseQuery(issueKpiPlugin.totalBugsKpi());
-        wireData(parseQuery);
+        final KpiDefinition kpiDefinition =
+                new KpiDefinitionLoader(groovyEngineService, "ProjectTotalBugs.groovy").load();
+
+        wireData(kpiDefinition);
         final Double expected = Double.valueOf(fakeListOfIssues.size() * 2);
-        final KpiResult result = parseQuery.getResult();
+        final KpiResult result = kpiDefinition.getResult();
         assertFalse(result.hasFailed());
         assertEquals(expected, result.computeUniqueValue(GroupFormula.SUM_VALUE));
     }
@@ -266,10 +262,10 @@ public class IssueKpiPluginTest
     /**
      * @param _parseQuery
      */
-    private void wireData(final IQuery<KpiResult> _parseQuery) {
-
-
-        final IssueFilterKPI issueFilter = (IssueFilterKPI) _parseQuery;
+    private void wireData(final KpiDefinition _parseQuery) {
+    
+    
+        final IssueFilterKPI issueFilter = (IssueFilterKPI) _parseQuery.getQuery();
         final IDynamicDataSourcePool dynamicDataSource = mock(IDynamicDataSourcePool.class);
         issueFilter.setDataSourcePool(dynamicDataSource);
         final IIssuePlugin iIssuePlugin = mock(IIssuePlugin.class);
@@ -278,5 +274,4 @@ public class IssueKpiPluginTest
         when(iIssuePlugin.getData()).thenReturn(fakeListOfIssues);
 
     }
-
 }

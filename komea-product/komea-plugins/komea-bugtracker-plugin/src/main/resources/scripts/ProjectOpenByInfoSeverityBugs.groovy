@@ -13,11 +13,11 @@ kpibuilder.classNameResolver = "org.komea.product.database.model"
 
 def kpiDsl = new KpiDefinition()
 kpiDsl.kpi = kpibuilder.kpi (
-        description: "Number of open but not fixed bugs",
+        description: "Total number of bugs per project",
         entityType: EntityType.PROJECT,
         groupFormula: GroupFormula.AVG_VALUE,
-        kpiKey: "bugs_status_open_not_fixed",
-        name: "Open NOT fixed bugs",
+        kpiKey: "bugs_status_open_severity_blocker",
+        name: "Opened bugs with blocker severity",
         providerType: ProviderType.BUGTRACKER,
         valueDirection: ValueDirection.WORST,
         valueMax: 50000d,
@@ -25,9 +25,10 @@ kpiDsl.kpi = kpibuilder.kpi (
         valueType: ValueType.INT
         )
 kpiDsl.query = new IssueFilterKPI(BackupDelay.DAY)
-kpiDsl.query.setClosure({ it.getStatus() == IssueStatus.OPENED && it.getResolution() == IssueResolution.NOT_FIXED});
-kpiDsl.query.setGroupFunction({ it.getProduct() });
+kpiDsl.query.setClosure({ it.getStatus() == IssueStatus.OPENED && it.severity == Severity.INFO})
+kpiDsl.query.setGroupFunction({ it.getProduct() })
 kpiDsl
+
 
 
 
