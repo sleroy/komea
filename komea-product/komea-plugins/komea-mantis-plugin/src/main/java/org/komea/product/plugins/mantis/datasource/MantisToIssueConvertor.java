@@ -2,7 +2,7 @@
  *
  */
 
-package org.komea.product.plugins.bugzilla.datasource;
+package org.komea.product.plugins.mantis.datasource;
 
 
 
@@ -14,15 +14,16 @@ import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Project;
 import org.komea.product.plugins.bugtracking.model.IIssue;
-import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
+import org.komea.product.plugins.mantis.model.MantisServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import biz.futureware.mantis.rpc.soap.client.IssueData;
+
 import com.google.common.collect.Lists;
-import com.j2bugzilla.base.Bug;
 
 
 
@@ -31,16 +32,16 @@ import com.j2bugzilla.base.Bug;
  */
 @Service
 @Transactional
-public class BugZillaToIssueConvertor
+public class MantisToIssueConvertor
 {
-    
-    
-    private static final Logger LOGGER = LoggerFactory.getLogger(BugZillaToIssueConvertor.class);
+
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MantisToIssueConvertor.class);
     @Autowired
     private IPersonService      personService;
-    
-    
-    
+
+
+
     /**
      * Convert a single bug into an issue;
      *
@@ -48,24 +49,20 @@ public class BugZillaToIssueConvertor
      * @return
      */
     public IIssue convert(
-            final Bug _bug,
+            final IssueData _bug,
             final Project _project,
-            final BZServerConfiguration _bzServerConfiguration) {
-    
-    
+            final MantisServerConfiguration _bzServerConfiguration) {
+
+
         LOGGER.trace("Received bug {}", _bug);
-        final Person handler =
-                createPersonOrNull((String) _bug.getParameterMap().get(
-                        _bzServerConfiguration.getHandler_field()));
-        final Person creator =
-                createPersonOrNull((String) _bug.getParameterMap().get(
-                        _bzServerConfiguration.getReporter_field()));
-        return new BZIssueWrapper(_bug, handler, creator, _project, _bzServerConfiguration);
-        
-        
+        final Person handler = createPersonOrNull(_bug.getHandler().getEmail());
+        final Person creator = createPersonOrNull(_bug.getReporter().getEmail());
+        return new MantisIssueWrapper(_bug, handler, creator, _project, _bzServerConfiguration);
+
+
     }
-    
-    
+
+
     /**
      * Convert all the issues.
      *
@@ -74,37 +71,37 @@ public class BugZillaToIssueConvertor
      * @return
      */
     public Collection<? extends IIssue> convertAll(
-            final List<Bug> _bugs,
+            final List<IssueData> _bugs,
             final Project _project,
-            final BZServerConfiguration _serverConfiguration) {
-    
-    
+            final MantisServerConfiguration _serverConfiguration) {
+
+
         Validate.notNull(_project);
-        
+
         final List<IIssue> issues = Lists.newArrayList();
-        for (final Bug bug : _bugs) {
+        for (final IssueData bug : _bugs) {
             final IIssue issue = convert(bug, _project, _serverConfiguration);
             if (issue != null) {
                 issues.add(issue);
             }
         }
-        
+
         return issues;
     }
-    
-    
+
+
     /**
      * @param _object
      * @return
      */
     private Person createPersonOrNull(final String _object) {
-    
-    
+
+
         if (_object == null) {
             return null;
         }
-        
+
         return personService.findOrCreatePersonByEmail(_object);
     }
-    
+
 }

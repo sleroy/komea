@@ -18,9 +18,15 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>org.komea.plugins</groupId>
+			<artifactId>komea-bugtracker-plugin</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.komea.product</groupId>
 			<artifactId>komea-service</artifactId>
-			<version>1.1.22-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
@@ -32,18 +38,18 @@
 		<dependency>
 			<groupId>org.komea.product</groupId>
 			<artifactId>komea-service-api</artifactId>
-			<version>1.1.22-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.komea.product</groupId>
 			<artifactId>komea-testspring</artifactId>
-			<version>1.1.22-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.komea.product</groupId>
 			<artifactId>komea-utils</artifactId>
-			<version>1.1.22-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
