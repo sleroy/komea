@@ -6,6 +6,7 @@ package org.komea.product.plugins.datasource;
 
 
 
+import java.io.Serializable;
 import java.util.Map;
 
 import org.junit.Before;
@@ -31,22 +32,31 @@ public class PluginDataCustomFieldsTest
         
         private String p1;
         private String p2;
+        
+        
+        
         public String getP1() {
         
         
             return p1;
         }
-        public void setP1(String _p1) {
         
         
-            p1 = _p1;
-        }
         public String getP2() {
         
         
             return p2;
         }
-        public void setP2(String _p2) {
+        
+        
+        public void setP1(final String _p1) {
+        
+        
+            p1 = _p1;
+        }
+        
+        
+        public void setP2(final String _p2) {
         
         
             p2 = _p2;
@@ -61,12 +71,12 @@ public class PluginDataCustomFieldsTest
     
     @Before
     public void before() {
-
-
+    
+    
         dataCustomFields = new PluginDataCustomFields();
     }
-
-
+    
+    
     /**
      * Test method for {@link org.komea.product.plugins.datasource.PluginDataCustomFields#containsField(java.lang.String)}.
      */
@@ -79,8 +89,8 @@ public class PluginDataCustomFieldsTest
         dataCustomFields.put("p1", "v");
         assertTrue(dataCustomFields.containsField("p1"));
     }
-
-
+    
+    
     /**
      * Test method for {@link org.komea.product.plugins.datasource.PluginDataCustomFields#getField(java.lang.String)}.
      */
@@ -99,11 +109,11 @@ public class PluginDataCustomFieldsTest
      */
     @Test
     public final void testGetFieldsAsMap() throws Exception {
-
-
+    
+    
         dataCustomFields.put("p1", "v");
         dataCustomFields.put("p2", "v2");
-        final Map<String, String> asMap = dataCustomFields.getFieldsAsMap();
+        final Map<String, Serializable> asMap = dataCustomFields.getFieldsAsMap();
         assertEquals("v", asMap.get("p1"));
         assertEquals("v2", asMap.get("p2"));
     }
