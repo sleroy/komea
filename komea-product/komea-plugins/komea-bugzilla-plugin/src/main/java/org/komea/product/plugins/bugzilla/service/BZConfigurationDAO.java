@@ -21,6 +21,7 @@ import org.komea.product.backend.utils.SearchFilter;
 import org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO;
 import org.komea.product.plugins.bugzilla.api.IBZServerProxy;
 import org.komea.product.plugins.bugzilla.api.IBZServerProxyFactory;
+import org.komea.product.plugins.bugzilla.core.RegisterLog;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -189,10 +190,10 @@ public class BZConfigurationDAO implements IBZConfigurationDAO
     
     
     @Override
-    public boolean testConnexion(final BZServerConfiguration server) {
+    public boolean testConnexion(final BZServerConfiguration server,RegisterLog registerLog) {
     
     
-        final IBZServerProxy newConnector = serverProxyFactory.newTestConnector(server);
+        final IBZServerProxy newConnector = serverProxyFactory.newTestConnector(server,registerLog);
         
         boolean connexion = false;
         if (newConnector != null && newConnector.testConnexion()) {
@@ -200,6 +201,8 @@ public class BZConfigurationDAO implements IBZConfigurationDAO
             try {
                 newConnector.close();
             } catch (final IOException ex) {
+                registerLog.setEx(ex);
+                registerLog.setName("CloseError");
                 connexion = false;
             }
         }

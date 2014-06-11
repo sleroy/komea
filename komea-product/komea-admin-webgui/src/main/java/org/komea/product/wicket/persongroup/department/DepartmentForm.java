@@ -26,7 +26,6 @@ import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
-import org.komea.product.database.model.Project;
 import org.komea.product.wicket.LayoutPage;
 import org.komea.product.wicket.utils.CustomUpdater;
 import org.komea.product.wicket.utils.DataListSelectDialogBuilder;

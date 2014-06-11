@@ -11,6 +11,7 @@ package org.komea.product.plugins.bugzilla.api;
 import java.util.List;
 
 import org.komea.product.backend.service.plugins.IPluginStorageService;
+import org.komea.product.plugins.bugzilla.core.RegisterLog;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 
 
@@ -70,5 +71,5 @@ public interface IBZConfigurationDAO
      */
     public void setServerProxyFactory(IBZServerProxyFactory serverProxyFactory);
     
-    public boolean testConnexion(BZServerConfiguration server);
+    public boolean testConnexion(BZServerConfiguration server,RegisterLog registerLog);
 }

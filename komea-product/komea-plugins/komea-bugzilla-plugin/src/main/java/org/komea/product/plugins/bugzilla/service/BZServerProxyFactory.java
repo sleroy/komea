@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.j2bugzilla.base.BugzillaConnector;
 import com.j2bugzilla.rpc.LogIn;
+import org.komea.product.plugins.bugzilla.core.RegisterLog;
+import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 
 /**
  * @author rgalerme
@@ -32,7 +34,7 @@ public class BZServerProxyFactory implements IBZServerProxyFactory {
         BugzillaConnector conn = null;
         try {
             conn = new BugzillaConnector();
-            conn.connectTo(_server.getAddress().toString());
+            conn.connectTo(_server.getAddress());
             final LogIn logIn = new LogIn(_server.getLogin(), _server.getPassword());
             conn.executeMethod(logIn);
         } catch (final Exception ex) {
@@ -41,17 +43,27 @@ public class BZServerProxyFactory implements IBZServerProxyFactory {
         return conn;
     }
 
-    private BugzillaConnector testConnexion(final BZServerConfiguration _server) {
+    private BugzillaConnector testConnexion(final BZServerConfiguration _server, RegisterLog registerLog) {
 
         BugzillaConnector conn = null;
         try {
             conn = new BugzillaConnector();
-            conn.connectTo(_server.getAddress().toString());
+            conn.connectTo(_server.getAddress());
+        } catch (final Exception ex) {
+            registerLog.setEx(ex);
+            registerLog.setName("AdresseError");
+            conn = null;
+        }
+        try {
             final LogIn logIn = new LogIn(_server.getLogin(), _server.getPassword());
             conn.executeMethod(logIn);
         } catch (final Exception ex) {
+            registerLog.setEx(ex);
+            registerLog.setName("LoginError");
             conn = null;
+
         }
+
         return conn;
     }
 
@@ -70,9 +82,9 @@ public class BZServerProxyFactory implements IBZServerProxyFactory {
     }
 
     @Override
-    public IBZServerProxy newTestConnector(final BZServerConfiguration serv) {
+    public IBZServerProxy newTestConnector(final BZServerConfiguration serv, RegisterLog registerLog) {
 
-        return new BZServerProxy(testConnexion(serv));
+        return new BZServerProxy(testConnexion(serv, registerLog));
     }
 
     /*

@@ -98,9 +98,17 @@ public class TestLinkForm extends Form<TestLinkServer>
                 target.add(feedBack);
                 conModel.setObject(getString("global.connexion.loading"));
                 target.add(conMessage);
-                conMessage.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(2)));
+                conMessage.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(2)){
+
+                    @Override
+                    protected void onPostProcessTarget(AjaxRequestTarget target) {
+                        super.onPostProcessTarget(target); //To change body of generated methods, choose Tools | Templates.
+                        System.out.println("call ajax post porcess meth");
+                    }
+                });
                 ExecutorService executorService = Executors.newFixedThreadPool(1);
                 executorService.execute(new Runnable() {
+                    @Override
                     public void run() {
                         if (testlinkService.testConnexion(testServer)) {
                             conModel.setObject(success);

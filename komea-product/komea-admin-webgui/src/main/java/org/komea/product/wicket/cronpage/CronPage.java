@@ -76,6 +76,8 @@ public class CronPage extends LayoutPage {
                                         _cellItem.add(SexyLabel.newWarningLabel(_componentId, getString("cronpage.status.paused")));
                                         break;
                                     case NORMAL:
+                                        _cellItem.add(SexyLabel.newSuccessLabel(_componentId, getString("cronpage.status.complete")));
+                                        break;
                                     case COMPLETE:
                                         _cellItem.add(SexyLabel.newSuccessLabel(_componentId, getString("cronpage.status.normal")));
                                         break;

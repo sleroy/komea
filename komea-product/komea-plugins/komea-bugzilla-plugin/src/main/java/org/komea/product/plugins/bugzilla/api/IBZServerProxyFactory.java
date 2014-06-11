@@ -5,6 +5,7 @@
  */
 package org.komea.product.plugins.bugzilla.api;
 
+import org.komea.product.plugins.bugzilla.core.RegisterLog;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 
 /**
@@ -15,6 +16,6 @@ public interface IBZServerProxyFactory {
 
     public IBZServerProxy newConnector(BZServerConfiguration serv);
 
-    public IBZServerProxy newTestConnector(BZServerConfiguration serv);
+    public IBZServerProxy newTestConnector(BZServerConfiguration serv,RegisterLog registerLog);
 
 }

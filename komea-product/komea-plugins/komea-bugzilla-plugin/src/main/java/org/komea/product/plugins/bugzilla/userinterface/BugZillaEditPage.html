@@ -23,9 +23,17 @@
                         <wicket:extend>
                             <div class="alert alert-danger" wicket:id="feedback"></div>
                             <form class="form" wicket:id="form" role="form">
-                                 <legend wicket:id="legend" ></legend>
+                                <legend wicket:id="legend" ></legend>
 
-
+                                <div class="alert alert-success" wicket:id="success">
+                                    <label><wicket:message key="global.connexion.success"></wicket:message></label>
+                                </div>
+                                <div class="alert alert-warning" wicket:id="waiting">
+                                    <label><wicket:message key="global.connexion.loading"></wicket:message></label>
+                                </div>
+                                <div class="alert alert-danger" wicket:id="errors">
+                                    <label><wicket:message key="global.connexion.error"></wicket:message></label>
+                                </div>
                                 <!-- Text input-->
                                 <div class="form-group">
                                     <div class="row">
@@ -62,24 +70,25 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>-->
-                                <div class="form-group">
-                                    <div class="row">
-
-                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="global.save.form.label.testconnexion"></wicket:message></label>
-                                        <div class="col-md-2">
-                                            <button id="testbtn" name="testbtn" class="btn btn-primary" wicket:id="testButton"><wicket:message key="global.button.testconnexion"></wicket:message></button>
-                                        </div>
-                                        <label class="col-md-4" for="inputEmail1" wicket:id="testMessage"></label>
-<!--                                         <div class="col-md-4">
-                                        <img class="img-responsive img-thumbnail" width="28" height="28"  align="center" wicket:id="loading" />
-                                         </div>-->
-                                    </div>
-                                </div>
+                                <!--                                <div class="form-group">
+                                                                    <div class="row">
+                                
+                                                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="global.save.form.label.testconnexion"></wicket:message></label>
+                                                                        <div class="col-md-2">
+                                                                            <button id="testbtn" name="testbtn" class="btn btn-primary" wicket:id="testButton"><wicket:message key="global.button.testconnexion"></wicket:message></button>
+                                                                        </div>
+                                                                        <label class="col-md-4" for="inputEmail1" wicket:id="testMessage"></label>
+                                                                                                                 <div class="col-md-4">
+                                                                                                                <img class="img-responsive img-thumbnail" width="28" height="28"  align="center" wicket:id="loading" />
+                                                                                                                 </div>
+                                                                    </div>
+                                                                </div>-->
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <button id="addedit" name="addedit" class="btn btn-primary" wicket:id="saveValidation"><wicket:message key="global.button.save"></wicket:message></button>
                                             <button id="cancel" name="cancel" class="btn btn-primary" wicket:id="cancel"><wicket:message key="global.button.cancel"></wicket:message></button>
+                                            <button id="testbtn" name="testbtn" class="btn btn-primary" wicket:id="testButton"><wicket:message key="global.button.testconnexion"></wicket:message></button>
                                         </div>
                                     </div>
                                 </div>
