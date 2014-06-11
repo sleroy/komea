@@ -48,7 +48,8 @@ public class EmbeddedKpiCatalog implements IEmbeddedKpiCatalog
 
 
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.backend.service.kpi.IEmbeddedKpiCatalog#getKpiDefinitions()
      */
     @Override
@@ -73,9 +74,9 @@ public class EmbeddedKpiCatalog implements IEmbeddedKpiCatalog
                     final KpiDefinition kpiDefinition =
                             (KpiDefinition) groovyEngineService.parseScript(kpi).run();
                     kpiDefinitions.add(kpiDefinition);
-                    LOGGER.info("Registering Embedded kpi {}", kpiDefinition.getKpi().getName());
+                    LOGGER.info("Registering Embedded kpi '{}'", kpiDefinition.getKpi().getName());
                 } catch (final Exception e) {
-                    LOGGER.error("Cannot load a script with reference " + resource);
+                    LOGGER.error("Cannot load a script with reference '{}'", resource);
                 }
             }
         } catch (final Exception e) {

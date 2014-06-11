@@ -3,6 +3,8 @@ package org.komea.product.backend.storage;
 
 
 
+import java.io.IOException;
+
 import org.apache.commons.lang.SerializationException;
 import org.apache.commons.lang3.Validate;
 import org.komea.product.backend.service.fs.IObjectStorage;
@@ -18,7 +20,7 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
 
 /**
  * This class implements an Object Storage.
- * 
+ *
  * @author sleroy
  * @version $Revision: 1.0 $
  */
@@ -35,7 +37,7 @@ public class ObjectStorage<T> implements IObjectStorage<T>
     
     /**
      * Constructor for ObjectStorage.
-     * 
+     *
      * @param _service
      *            IPluginFileSystem
      * @param _className
@@ -54,7 +56,7 @@ public class ObjectStorage<T> implements IObjectStorage<T>
     
     /**
      * Method get.
-     * 
+     *
      * @return T
      * @see org.komea.product.backend.service.fs.IObjectStorage#get()
      */
@@ -71,6 +73,11 @@ public class ObjectStorage<T> implements IObjectStorage<T>
             }
         } catch (final Exception e) {
             LOGGER.error("Could not retrieve data from file {}, invalid format", resourceName, e);
+            try {
+                service.backupAndRename(resourceName);
+            } catch (final IOException e1) {
+                LOGGER.error("Could not backup the file {} creating the problem", resourceName, e);
+            }
         } finally {
             if (newBean == null) {
                 newBean = (T) BeanUtils.instantiate(className);
@@ -83,7 +90,7 @@ public class ObjectStorage<T> implements IObjectStorage<T>
     
     /**
      * Method set.
-     * 
+     *
      * @param _object
      *            T
      * @see org.komea.product.backend.service.fs.IObjectStorage#set(T)
@@ -104,7 +111,7 @@ public class ObjectStorage<T> implements IObjectStorage<T>
     
     /**
      * Method getResource.
-     * 
+     *
      * @return String
      */
     private String getResource() {

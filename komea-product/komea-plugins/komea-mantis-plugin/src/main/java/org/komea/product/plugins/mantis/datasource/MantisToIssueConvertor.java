@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import biz.futureware.mantis.rpc.soap.client.AccountData;
 import biz.futureware.mantis.rpc.soap.client.IssueData;
 
 import com.google.common.collect.Lists;
@@ -55,8 +56,8 @@ public class MantisToIssueConvertor
 
 
         LOGGER.trace("Received bug {}", _bug);
-        final Person handler = createPersonOrNull(_bug.getHandler().getEmail());
-        final Person creator = createPersonOrNull(_bug.getReporter().getEmail());
+        final Person handler = createPersonOrNull(_bug.getHandler());
+        final Person creator = createPersonOrNull(_bug.getReporter());
         return new MantisIssueWrapper(_bug, handler, creator, _project, _bzServerConfiguration);
 
 
@@ -91,17 +92,17 @@ public class MantisToIssueConvertor
 
 
     /**
-     * @param _object
+     * @param _accountData
      * @return
      */
-    private Person createPersonOrNull(final String _object) {
+    private Person createPersonOrNull(final AccountData _accountData) {
 
 
-        if (_object == null) {
+        if (_accountData == null) {
             return null;
         }
 
-        return personService.findOrCreatePersonByEmail(_object);
+        return personService.findOrCreatePersonByEmail(_accountData.getEmail());
     }
 
 }

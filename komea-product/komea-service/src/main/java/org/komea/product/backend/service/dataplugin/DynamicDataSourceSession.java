@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.backend.service.dataplugin;
@@ -20,22 +20,22 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class is basically a wrapper over a dynamic data source that provides a cache before to obtain the value.
- * 
+ *
  * @author sleroy
  */
 public class DynamicDataSourceSession implements IDynamicDataSourceSession
 {
-    
-    
+
+
     private final String             dataSourceName;
     private final Logger             LOGGER;
     private final ICacheStorage      newCacheStorage;
-    
-    
+
+
     private final IDynamicDataSource sourcePool;
-    
-    
-    
+
+
+
     /**
      * @param _dataSourceName
      * @param _newCacheStorage
@@ -44,8 +44,8 @@ public class DynamicDataSourceSession implements IDynamicDataSourceSession
     public DynamicDataSourceSession(final String _dataSourceName, @SuppressWarnings("rawtypes")
     final ICacheStorage<IDynamicDataSource> _newCacheStorage, @SuppressWarnings("rawtypes")
     final IDynamicDataSource _sourcePool) {
-    
-    
+
+
         dataSourceName = _dataSourceName;
         newCacheStorage = _newCacheStorage;
         sourcePool = _sourcePool;
@@ -53,10 +53,10 @@ public class DynamicDataSourceSession implements IDynamicDataSourceSession
         Validate.notNull(dataSourceName);
         Validate.notNull(newCacheStorage);
         Validate.notNull(sourcePool);
-        
+
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataSource#getData()
@@ -64,8 +64,8 @@ public class DynamicDataSourceSession implements IDynamicDataSourceSession
     @SuppressWarnings("unchecked")
     @Override
     public Serializable fetchData() {
-    
-    
+
+
         LOGGER.debug("Requesting the data from the source");
         final Collection<Serializable> allValues = newCacheStorage.getAllValues();
         if (allValues.isEmpty()) {
@@ -79,44 +79,58 @@ public class DynamicDataSourceSession implements IDynamicDataSourceSession
             LOGGER.debug("Returning the data from the cache ");
             return allValues.iterator().next();
         }
-        
-        
+
+
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataSourceSession#getDataSourceName()
      */
     @Override
     public String getDataSourceName() {
-    
-    
+
+
         return dataSourceName;
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataSource#getDefinition()
      */
     @Override
     public Class getDefinition() {
-    
-    
+
+
         return sourcePool.getDefinition();
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataSourceSession#isDataAvailableInCache()
      */
     @Override
     public boolean isDataAvailableInCache() {
-    
-    
+
+
         return newCacheStorage.size() > 0;
     }
     
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+
+
+        return "DynamicDataSourceSession [\\n\\tdataSourceName="
+                + dataSourceName + ", \\n\\tLOGGER=" + LOGGER + ", \\n\\tnewCacheStorage="
+                + newCacheStorage + ", \\n\\tsourcePool=" + sourcePool + "]";
+    }
+
 }

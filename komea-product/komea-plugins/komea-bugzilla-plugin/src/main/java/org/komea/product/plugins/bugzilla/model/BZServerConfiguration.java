@@ -9,9 +9,12 @@ package org.komea.product.plugins.bugzilla.model;
 
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.komea.product.backend.utils.StringList;
 import org.komea.product.database.api.IHasId;
+import org.komea.product.database.enums.Severity;
 import org.komea.product.database.utils.Validate;
 
 
@@ -29,30 +32,34 @@ public class BZServerConfiguration implements Serializable, IHasId
     /**
      * This field describes
      */
-    private static final long serialVersionUID   = 2673081036274879834L;
+    private static final long           serialVersionUID   = 2673081036274879834L;
     
-    private String            address            = null;
+    private String                      address            = null;
     
-    private boolean           autocreateProjects = true;
+    private boolean                     autocreateProjects = true;
     
-    private final StringList  closedStatus       = StringList.EMPTY;
+    private final StringList            closedStatus       = StringList.EMPTY;
     
-    private final StringList  fixedStatus        = new StringList("closed,delivered, resolved");
+    private final StringList            fixedStatus        = new StringList(
+                                                                   "closed,delivered, resolved");
     
-    private final String      handler_field      = "assigned_to";
-    private Integer           id;
-    private String            login;
-    private final StringList  notfixedStatus     = StringList.EMPTY;
-    private final StringList  openedStatus       =
-                                                         new StringList(
-                                                                 "new,unconfirmed, onhold, accepted, assigned, opened, reopened");
+    private final String                handler_field      = "assigned_to";
+    private Integer                     id;
+    private String                      login;
+    private final StringList            notfixedStatus     = StringList.EMPTY;
+    private final StringList            openedStatus       =
+                                                                   new StringList(
+                                                                           "new,unconfirmed, onhold, accepted, assigned, opened, reopened");
     
     
-    private String            password;
+    private String                      password;
     
-    private Integer           reminderAlert;
-
-    private String            reporter_field     = "creator";
+    private Integer                     reminderAlert;
+    
+    private String                      reporter_field     = "creator";
+    
+    
+    private final Map<String, Severity> severityMap        = new HashMap<String, Severity>();
     
     
     
@@ -78,8 +85,8 @@ public class BZServerConfiguration implements Serializable, IHasId
     
     
     public String getHandler_field() {
-
-
+    
+    
         return handler_field;
     }
     
@@ -127,9 +134,16 @@ public class BZServerConfiguration implements Serializable, IHasId
     
     
     public String getReporter_field() {
-
-
+    
+    
         return reporter_field;
+    }
+    
+    
+    public Map<String, Severity> getSeverityMap() {
+    
+    
+        return severityMap;
     }
     
     
@@ -246,8 +260,8 @@ public class BZServerConfiguration implements Serializable, IHasId
     
     
     public void setReporter_field(final String _reporter_field) {
-
-
+    
+    
         reporter_field = _reporter_field;
     }
     
