@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.plugins.bugzilla.datasource;
@@ -24,53 +24,53 @@ import static org.mockito.Mockito.when;
 
 /**
  * This is AN INTEGRATION TEST, depending of the bugzilla on EOS.
- * 
+ *
  * @author sleroy
  */
 
 public class BugZillaDataSourceITest extends AbstractSpringIntegrationTestCase
 {
-    
-    
+
+
     private final IBZConfigurationDAO bugZillaConfiguration =
-                                                                    Mockito.mock(IBZConfigurationDAO.class);
-    
+            Mockito.mock(IBZConfigurationDAO.class);
+
     @Autowired
     private BugZillaDataSource        bugZillaDataSource;
-    
-    
-    
+
+
+
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.datasource.BugZillaDataSource#fetchData()}.
      */
     @Test
     public final void testFetchData() throws Exception {
-    
-    
+
+
         when(bugZillaConfiguration.selectAll()).thenReturn(Lists.newArrayList(fakeConfiguration()));
-        
+
         bugZillaDataSource.setBugZillaConfiguration(bugZillaConfiguration);
         // EXECUTION WITH PROXY CONTAINING TWO PROJECTS , with both 3 bugs
         final IIssuePlugin fetchData = bugZillaDataSource.fetchData();
         assertFalse(fetchData.isEmpty());
-        
+
     }
-    
-    
+
+
     /**
      * @return
      */
     private BZServerConfiguration fakeConfiguration() {
-    
-    
+
+
         final BZServerConfiguration bzServerConfiguration = new BZServerConfiguration();
-        
-        bzServerConfiguration.setAddress("http://eos/bugzilla/");
+
+        bzServerConfiguration.setAddress("http://eos.tocea/bugzilla/");
         bzServerConfiguration.setLogin("jeremie.guidoux@tocea.com");
         bzServerConfiguration.setPassword("tocea35");
         bzServerConfiguration.setReminderAlert(10);
         bzServerConfiguration.setAutocreateProjects(true);
         return bzServerConfiguration;
     }
-    
+
 }
