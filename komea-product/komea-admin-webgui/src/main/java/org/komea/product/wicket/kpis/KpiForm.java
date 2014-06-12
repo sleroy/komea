@@ -167,31 +167,6 @@ public final class KpiForm extends Form<Kpi>
 
         add(SelectBoxBuilder.<EntityType> createWithEnum("entityType", kpi, EntityType.class)
                 .withTooltip(getString("kpipage.save.form.field.tooltip.typentity")).build());
-        final TextField<String> buildCronField =
-                TextFieldBuilder.<String> create("cronExpression", kpi, "cronExpression")
-                .simpleValidator(0, 60).highlightOnErrors()
-                .withTooltip(getString("kpipage.save.form.field.tooltip.cron"))
-                .buildTextField();
-
-        buildCronField.add(new IValidator<String>()
-                {
-
-
-            @Override
-            public void validate(final IValidatable<String> validatable) {
-
-
-                final String value = validatable.getValue();
-                if (!CronUtils.isValidCronExpression(value)) {
-                    final ValidationError error = new ValidationError();
-                    error.setMessage(getString("kpipage.save.form.error.cron"));
-                    validatable.error(error);
-                }
-            }
-                });
-
-        add(buildCronField);
-
         // FIXME::
         // add(SelectBoxBuilder.<EvictionType>createWithEnum("evictionType",
         // kpi, EvictionType.class)

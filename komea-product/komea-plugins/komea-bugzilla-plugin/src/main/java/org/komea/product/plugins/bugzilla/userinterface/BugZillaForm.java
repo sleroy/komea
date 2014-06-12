@@ -5,22 +5,33 @@
  */
 package org.komea.product.plugins.bugzilla.userinterface;
 
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
+import com.j2bugzilla.base.BugzillaException;
+import com.j2bugzilla.base.ConnectionException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 import org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO;
-import org.komea.product.plugins.bugzilla.core.RegisterLog;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.utils.DisplayTraceDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
 
@@ -38,6 +49,9 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
     private final WebMarkupContainer contSuccess;
     private final WebMarkupContainer contWaiting;
     private final WebMarkupContainer contError;
+    private final WebMarkupContainer globalContenaire;
+    private final IModel<String> conModel;
+    private final IModel<String> stackTraceDialog;
 
     public BugZillaForm(
             final IBZConfigurationDAO _bService,
@@ -65,51 +79,53 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
 
 //        add(TextFieldBuilder.<String> createRequired("reminderAlert", bugServer, "reminderAlert")
 //                .withTooltip(getString("bugzillapage.save.form.field.tooltip.reminder")).build());
-        // button
-        final Model<String> conModel = Model.of("");
+        // panel de test de connexion
+        // dialog
+        stackTraceDialog = Model.of("Test d'affichage");
+        IModel<String> titleTraceDialog = Model.of(getString("bugzillapage.connexion.dialog.title"));
+
+        final DisplayTraceDialog dialog = new DisplayTraceDialog("dialogStackTrace", titleTraceDialog, stackTraceDialog);
+        this.add(dialog);
+        // autre
+        conModel = Model.of(" ");
+        final Label conMessage = new Label("labelerror", conModel);
+        conMessage.setOutputMarkupId(true);
 
         messageCon = new ManageMessageConnexion();
-        contSuccess = new WebMarkupContainer("success") {
 
-            @Override
-            public boolean isVisible() {
-                return messageCon.visibleSuccess();
-            }
-        };
+        globalContenaire = new WebMarkupContainer("global");
+        globalContenaire.setOutputMarkupId(true);
+        globalContenaire.setOutputMarkupPlaceholderTag(true);
+        add(globalContenaire);
+
+        contSuccess = new WebMarkupContainer("success");
         contSuccess.setVisible(false);
         contSuccess.setOutputMarkupId(true);
         contSuccess.setOutputMarkupPlaceholderTag(true);
-        add(contSuccess);
+        globalContenaire.add(contSuccess);
 
-        contError = new WebMarkupContainer("errors") {
-
-            @Override
-            public boolean isVisible() {
-                return messageCon.visibleError();
-            }
-        };
+        contError = new WebMarkupContainer("errors");
         contError.setVisible(false);
         contError.setOutputMarkupId(true);
         contError.setOutputMarkupPlaceholderTag(true);
-        add(contError);
+        contError.add(conMessage);
+        globalContenaire.add(contError);
 
-        contWaiting = new WebMarkupContainer("waiting") {
-
-            @Override
-            public boolean isVisible() {
-                return messageCon.visibleWaiting();
-            }
-
-        };
+        contWaiting = new WebMarkupContainer("waiting");
         contWaiting.setVisible(false);
         contWaiting.setOutputMarkupId(true);
         contWaiting.setOutputMarkupPlaceholderTag(true);
-        add(contWaiting);
+        globalContenaire.add(contWaiting);
 
-//        final Label conMessage = new Label("testMessage", conModel);
-//        conMessage.setOutputMarkupId(true);
-//        conMessage.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(2)));
-//        add(conMessage);
+        // button
+        contError.add(new AjaxLink("openDialogTrace") {
+
+            @Override
+            public void onClick(final AjaxRequestTarget art) {
+                dialog.open(art);
+            }
+        });
+
         add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
 
             @Override
@@ -121,18 +137,16 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
         });
         // partie de 
 
-        final String success = getString("global.connexion.success");
-        final String error = getString("global.connexion.error");
+        final String erroraddress = getString("global.connexion.error.address");
 
-        AjaxButton testButton = new AjaxButton("testButton", this) {
+        AjaxButton testButton;
+        testButton = new AjaxButton("testButton", this) {
 
             @Override
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
 
                 feedBack.setVisible(true);
-                conModel.setObject(getString("global.connexion.error"));
                 target.add(feedBack);
-//                target.add(conMessage);
 
             }
 
@@ -142,48 +156,50 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
                 feedBack.setVisible(false);
                 target.add(feedBack);
                 messageCon.setEtat(Etat.WAITING);
-//                target.add(contWaiting);
-//                 target.add(contError);
-//                target.add(contSuccess);
-                contWaiting.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(2)) {
+                updateStatusServerTest();
+                target.add(BugZillaForm.this);
+                BugZillaForm.this.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(1)) {
 
                     @Override
                     protected void onPostProcessTarget(AjaxRequestTarget target) {
                         super.onPostProcessTarget(target); //To change body of generated methods, choose Tools | Templates.
-                        System.out.println("call ajax post porcess meth");
+                        updateStatusServerTest();
+                        System.out.print("time fonctionne");
+                        if (!messageCon.visibleWaiting()) {
+                            stop(target);
+                        }
                     }
                 }
                 );
-                contSuccess.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(2)));
-                contError.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(2)));
-//               
 
-//                conModel.setObject(getString("global.connexion.loading"));
-//                conMessage.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(2)));
-//                target.add(conMessage);
-                final RegisterLog registerLog = new RegisterLog(null, "");
                 ExecutorService executorService = Executors.newFixedThreadPool(1);
                 executorService.execute(new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println("begin td");
-                        if (bService.testConnexion(bugServer, registerLog)) {
-                            messageCon.setEtat(Etat.SUCCESS);
-                            System.out.println("true td");
-//                            conModel.setObject(success);
-                        } else {
-//                            conModel.setObject(error);
-                            messageCon.setEtat(Etat.ERROR);
-                            System.out.println("false  td");
+                        if (bugServer.getPassword() == null || "".equals(bugServer.getPassword())) {
+                            bugServer.setPassword(savPassword);
                         }
-                        System.out.println("end td");
+                        try {
+                            if (bService.testConnexion(bugServer)) {
+                                messageCon.setEtat(Etat.SUCCESS);
+                            } else {
+                                messageCon.setEtat(Etat.ERROR);
+                                conModel.setObject(erroraddress);
+                                stackTraceDialog.setObject("");
+                            }
+                        } catch (IOException ex) {
+                            registerExeption(ex);
+                        } catch (ConnectionException ex) {
+                            registerExeption(ex);
+                        } catch (BugzillaException ex) {
+                            registerExeption(ex);
+                        }
                     }
                 });
                 executorService.shutdown();
 
             }
         };
-//        testButton.setDefaultFormProcessing(false);
         add(testButton);
 
         // fin test connexion
@@ -211,6 +227,37 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
 
             }
         });
+    }
+
+     void registerExeption(Exception ex) {
+        messageCon.setEtat(Etat.ERROR);
+        conModel.setObject(ex.getMessage());
+        String recursiveDisplayTrace = recursiveDisplayTrace(ex);
+        stackTraceDialog.setObject(recursiveDisplayTrace);
+    }
+    public static final String ENDLINE = System.getProperty("line.separator"); 
+    
+
+    String recursiveDisplayTrace(Throwable cause) {
+        if (cause == null) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(cause.getMessage()).append(ENDLINE);
+        for (StackTraceElement element : cause.getStackTrace()) {
+            sb.append("    ");
+            sb.append(element.toString());
+            sb.append(ENDLINE);
+        }
+        sb.append(recursiveDisplayTrace(cause.getCause()));
+        return sb.toString();
+
+    }
+
+    private void updateStatusServerTest() {
+        contError.setVisible(messageCon.visibleError());
+        contSuccess.setVisible(messageCon.visibleSuccess());
+        contWaiting.setVisible(messageCon.visibleWaiting());
     }
 
     private static enum Etat {
