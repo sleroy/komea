@@ -25,12 +25,12 @@ import org.komea.product.plugins.kpi.standard.bugzilla.AbstractCEPQueryImplement
  *
  * @author sleroy
  */
-public class NumberOfFailedBuildPerDay extends AbstractCEPQueryImplementation {
+public class NumberOfFailedBuildPerProjectPerDay extends AbstractCEPQueryImplementation {
 
     /**
      *
      */
-    public NumberOfFailedBuildPerDay() {
+    public NumberOfFailedBuildPerProjectPerDay() {
 
         super(BackupDelay.DAY);
     }

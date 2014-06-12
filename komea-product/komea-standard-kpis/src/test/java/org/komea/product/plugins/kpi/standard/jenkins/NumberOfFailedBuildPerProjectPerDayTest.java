@@ -13,12 +13,12 @@ import org.junit.Test;
 /**
  * @author sleroy
  */
-public class NumberOfFailedBuildPerDayTest
+public class NumberOfFailedBuildPerProjectPerDayTest
 {
     
     
     /**
-     * Test method for {@link org.komea.product.plugins.kpi.standard.jenkins.NumberOfFailedBuildPerDay#NumberOfFailedBuildPerDay()}.
+     * Test method for {@link org.komea.product.plugins.kpi.standard.jenkins.NumberOfFailedBuildPerProjectPerDay#NumberOfFailedBuildPerDay()}.
      */
     @Test
     public final void testNumberOfFailedBuildPerDay() throws Exception {
