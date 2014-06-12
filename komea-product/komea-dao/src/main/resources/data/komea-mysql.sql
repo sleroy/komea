@@ -100,7 +100,7 @@ ENGINE = InnoDB;
 -- Table `komea`.`kom_msr`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `komea`.`kom_msr` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `idKpi` VARCHAR(100) NOT NULL ,
   `year` INT NOT NULL ,
   `month` INT NOT NULL ,
