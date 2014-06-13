@@ -19,43 +19,40 @@ import org.komea.product.plugins.model.IDynamicData;
  */
 public interface IIssue extends IDynamicData
 {
-
-
+    
+    
     String getBugTrackerURL();
-
-
+    
+    
     String getCategory();
-
-
+    
+    
     DateTime getDateSubmitted();
-
-
+    
+    
     Person getHandler();
-
-
+    
+    
     String getId();
-
-
-    /**
-     * @return
-     */
+    
+    
     String getPriority();
-
-
+    
+    
     Project getProduct();
-
-
+    
+    
     Person getReporter();
-
-
+    
+    
     IssueResolution getResolution();
-
-
+    
+    
     Severity getSeverity();
-
-
+    
+    
     IssueStatus getStatus();
-
-
+    
+    
     String getSummary();
 }

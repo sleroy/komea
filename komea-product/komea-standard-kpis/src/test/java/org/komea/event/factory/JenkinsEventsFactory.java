@@ -14,12 +14,12 @@ import org.komea.product.database.enums.BuildIndustrialization;
 
 public class JenkinsEventsFactory
 {
-    
-    
+
+
     private static final String URL_JENKINS = "http://";
-    
-    
-    
+
+
+
     public static EventSimpleDto createBuildBroken(
             final long start,
             final int buildNumber,
@@ -28,8 +28,8 @@ public class JenkinsEventsFactory
             final String user,
             final String projectKey,
             final String branch) {
-    
-    
+
+
         final String message =
                 "User " + user + " may have broken the build for job " + jenkinsProjectName;
         final Map<String, String> properties = new HashMap<String, String>(0);
@@ -51,8 +51,8 @@ public class JenkinsEventsFactory
         event.setValue(start);
         return event;
     }
-    
-    
+
+
     public static EventSimpleDto createBuildFixed(
             final long start,
             final int buildNumber,
@@ -61,8 +61,8 @@ public class JenkinsEventsFactory
             final String user,
             final String projectKey,
             final String branch) {
-    
-    
+
+
         final String message =
                 "User " + user + " may have fixed the build for job " + jenkinsProjectName;
         final Map<String, String> properties = new HashMap<String, String>(0);
@@ -84,8 +84,8 @@ public class JenkinsEventsFactory
         event.setValue(start);
         return event;
     }
-    
-    
+
+
     public static EventSimpleDto createCodeChangedEvent(
             final long start,
             final int buildNumber,
@@ -95,8 +95,8 @@ public class JenkinsEventsFactory
             final String commiter,
             final String projectKey,
             final String branch) {
-    
-    
+
+
         final String message =
                 "User "
                         + commiter + " did " + nbCommits + " comit(s) since last build of job "
@@ -120,8 +120,8 @@ public class JenkinsEventsFactory
         event.setValue(nbCommits);
         return event;
     }
-    
-    
+
+
     public static EventSimpleDto createIndustrializationEvent(
             final long start,
             final int buildNumber,
@@ -130,8 +130,8 @@ public class JenkinsEventsFactory
             final String projectKey,
             final String branch,
             final String industrialization) {
-    
-    
+
+
         final BuildIndustrialization indus = BuildIndustrialization.valueOf(industrialization);
         final String message =
                 "Jenkins build industrialization for job "
@@ -154,16 +154,16 @@ public class JenkinsEventsFactory
         event.setValue(indus.ordinal());
         return event;
     }
-    
-    
+
+
     public static EventSimpleDto createJobConfigurationChanged(
             final String jenkinsProjectName,
             final String providerUrl,
             final String user,
             final String projectKey,
             final String branch) {
-    
-    
+
+
         final String message =
                 "User " + user + " changed configuration of job " + jenkinsProjectName;
         final Map<String, String> properties = new HashMap<String, String>(0);
@@ -183,8 +183,8 @@ public class JenkinsEventsFactory
         event.setValue(new Date().getTime());
         return event;
     }
-    
-    
+
+
     public static EventSimpleDto createStartedByUser(
             final long start,
             final int buildNumber,
@@ -193,8 +193,8 @@ public class JenkinsEventsFactory
             final String user,
             final String projectKey,
             final String branch) {
-    
-    
+
+
         final String message = "User " + user + " started build for job " + jenkinsProjectName;
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(start));
@@ -215,8 +215,8 @@ public class JenkinsEventsFactory
         event.setValue(start);
         return event;
     }
-    
-    
+
+
     public static EventSimpleDto createStartEvent(
             final long start,
             final int buildNumber,
@@ -224,8 +224,8 @@ public class JenkinsEventsFactory
             final String providerUrl,
             final String projectKey,
             final String branch) {
-    
-    
+
+
         final String message = "Jenkins build started for job " + jenkinsProjectName;
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(start));
@@ -244,8 +244,8 @@ public class JenkinsEventsFactory
         event.setValue(start);
         return event;
     }
-    
-    
+
+
     public static EventSimpleDto createStringEvent(
             final long start,
             final long end,
@@ -255,8 +255,8 @@ public class JenkinsEventsFactory
             final String providerUrl,
             final String projectKey,
             final String branch) {
-    
-    
+
+
         final long duration = end - start;
         final Map<String, String> properties = new HashMap<String, String>(0);
         properties.put("date", String.valueOf(end));
@@ -294,15 +294,15 @@ public class JenkinsEventsFactory
         event.setValue(result.hashCode());
         return event;
     }
-    
-    
+
+
     public static String enumNameToDisplayName(final String enumName) {
-    
-    
+
+
         return enumName.charAt(0) + enumName.substring(1).replace("_", " ").toLowerCase();
     }
-    
-    
+
+
     /**
      * @param _projectName
      * @param _i
@@ -315,13 +315,13 @@ public class JenkinsEventsFactory
             final int _i,
             final String _branchName,
             final String _userName) {
-    
-    
+
+
         return createBuildBroken(0, 1, _projectName, "http://", _userName, _projectName,
                 _branchName);
     }
-    
-    
+
+
     /**
      * @param _projectName
      * @param _buildNumber
@@ -332,14 +332,14 @@ public class JenkinsEventsFactory
             final String _projectName,
             final int _buildNumber,
             final String _branchName) {
-    
-    
+
+
         return JenkinsEventsFactory.createStringEvent(0, 10, 1, "SUCCESS", _projectName, "http//",
                 _projectName, _branchName);
-        
+
     }
-    
-    
+
+
     /**
      * @param _projectName
      * @param _i
@@ -352,13 +352,13 @@ public class JenkinsEventsFactory
             final int _i,
             final String _branchName,
             final String _userName) {
-    
-    
+
+
         return JenkinsEventsFactory.createStringEvent(0, 10, 1, "SUCCESS", _projectName, "http//",
                 _projectName, _branchName);
     }
-    
-    
+
+
     /**
      * @param _string
      * @param _i
@@ -371,13 +371,13 @@ public class JenkinsEventsFactory
             final int _i,
             final String _branchName,
             final String _userName) {
-    
-    
+
+
         return JenkinsEventsFactory.createBuildFixed(new Date().getTime(), _i, _projectName
                 + " Build", "http://", _userName, _projectName, _branchName);
     }
-    
-    
+
+
     /**
      * @param _projectName
      * @param time
@@ -388,13 +388,13 @@ public class JenkinsEventsFactory
             final String _projectName,
             final int _buildNumber,
             final String _branchName) {
-    
-    
+
+
         return JenkinsEventsFactory.createStartEvent(new Date().getTime(), _buildNumber,
                 _projectName + " Build", "http://", _projectName, _branchName);
     }
-    
-    
+
+
     /**
      * @param _projectName
      * @param _i
@@ -407,15 +407,15 @@ public class JenkinsEventsFactory
             final int _i,
             final String _branchName,
             final String _userName) {
-    
-    
+
+
         return JenkinsEventsFactory.createStartedByUser(new Date().getTime(), _i, _projectName
                 + " Build", "http://", _userName, _projectName, _branchName);
     }
-    
-    
+
+
     private JenkinsEventsFactory() {
-    
-    
+
+
     }
 }
