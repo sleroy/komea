@@ -9,7 +9,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.eventory.CEPEngineTest;
 import org.komea.eventory.api.filters.IEventFilter;
 import org.komea.eventory.api.filters.IEventTransformer;
 import org.komea.eventory.api.filters.ITransformedEvent;
@@ -43,7 +42,7 @@ public class CEPEventStorageTest
                         .setFilter(Mockito.mock(IEventFilter.class))
                         .setEventTransformer(Mockito.mock(IEventTransformer.class));
         final CEPEventStorage<Serializable> cepEventStorage =
-                new CEPEventStorage<Serializable>(filterDefinition, CEPEngineTest.buildFakeCache());
+                new CEPEventStorage<Serializable>(filterDefinition);
         Assert.assertNotNull(cepEventStorage.getEventFilter());
         Assert.assertNotNull(cepEventStorage.getEventTransformer());
         Assert.assertNotNull(cepEventStorage.getCache());
@@ -62,7 +61,7 @@ public class CEPEventStorageTest
         final CEPEventStorage<Serializable> cepEventStorage =
                 new CEPEventStorage<Serializable>(FilterDefinition.create()
                         .setCacheConfiguration(CacheConfigurationBuilder.noConfiguration())
-                        .setFilter(mock).setEventTransformer(mock2), CEPEngineTest.buildFakeCache());
+                        .setFilter(mock).setEventTransformer(mock2));
         
         final String event = "glouglougla";
         // Enable filtering
@@ -94,7 +93,7 @@ public class CEPEventStorageTest
         final CEPEventStorage<Serializable> cepEventStorage =
                 new CEPEventStorage<Serializable>(FilterDefinition.create()
                         .setCacheConfiguration(CacheConfigurationBuilder.noConfiguration())
-                        .setFilter(mock).setEventTransformer(mock2), CEPEngineTest.buildFakeCache());
+                        .setFilter(mock).setEventTransformer(mock2));
         
         final String event = "glouglougla";
         // Enable filtering
@@ -125,7 +124,7 @@ public class CEPEventStorageTest
         final CEPEventStorage<Serializable> cepEventStorage =
                 new CEPEventStorage<Serializable>(FilterDefinition.create()
                         .setCacheConfiguration(CacheConfigurationBuilder.noConfiguration())
-                        .setFilter(mock).setEventTransformer(mock2), CEPEngineTest.buildFakeCache());
+                        .setFilter(mock).setEventTransformer(mock2));
         
         final String event = "glouglougla";
         cepEventStorage.notifyEvent(event);

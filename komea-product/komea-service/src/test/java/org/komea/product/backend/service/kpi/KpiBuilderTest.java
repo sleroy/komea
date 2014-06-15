@@ -126,7 +126,7 @@ public class KpiBuilderTest
                         .entityType(EntityType.DEPARTMENT).build();
         
         assertEquals(GroovyValidationStatus.OK,
-                groovyEngineService.isValidFormula(build.getEsperRequest()));
+                groovyEngineService.isValidQuery(build.getEsperRequest()));
         assertNotNull(groovyEngineService.parseQuery(build));
         
     }
@@ -145,7 +145,7 @@ public class KpiBuilderTest
                         .entityType(EntityType.DEPARTMENT).build();
         
         assertEquals(GroovyValidationStatus.OK,
-                groovyEngineService.isValidFormula(build.getEsperRequest()));
+                groovyEngineService.isValidQuery(build.getEsperRequest()));
         assertNotNull(groovyEngineService.parseQuery(build));
         
     }

@@ -7,6 +7,7 @@ package org.komea.product.backend.service.kpi;
 
 
 import org.komea.product.backend.api.IGroovyEngineService;
+import org.komea.product.backend.groovy.GroovyEngineService;
 import org.komea.product.database.model.Kpi;
 
 
@@ -18,8 +19,29 @@ public class KpiDefinitionLoader
 {
 
 
-    private static final String        SCRIPTS = "scripts/";
+    private static final String SCRIPTS = "scripts/";
+
+
+
+    /**
+     * Loads a kpi.
+     *
+     * @param _resourceName
+     *            the resource name
+     * @return the kpi definition.
+     */
+    public static KpiDefinition load(final String _resourceName) {
+
+
+        return new KpiDefinitionLoader(_resourceName).load();
+
+    }
+
+
+
     private final String               resourceName;
+
+
     private final IGroovyEngineService service;
 
 
@@ -28,6 +50,16 @@ public class KpiDefinitionLoader
 
 
         service = _service;
+        resourceName = _resourceName;
+
+
+    }
+
+
+    public KpiDefinitionLoader(final String _resourceName) {
+
+
+        service = GroovyEngineService.initStandalone();
         resourceName = _resourceName;
 
 

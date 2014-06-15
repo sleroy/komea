@@ -29,6 +29,16 @@ public interface IGroovyEngineService
 
 
     /**
+     * Parses the formula into a query.
+     *
+     * @param _formula
+     *            the formula
+     * @return true if the formula is valid.
+     */
+    public GroovyValidationStatus isValidQuery(final String _formula);
+
+
+    /**
      * Parses a groovy script
      *
      * @param _groovyScript
@@ -54,6 +64,16 @@ public interface IGroovyEngineService
      * @return the validation status.
      */
     GroovyValidationStatus isValidScript(String _formula);
+
+
+    /**
+     * Tests if a formula is a valid script
+     *
+     * @param _formula
+     *            the formula
+     * @return the validation status.
+     */
+    GroovyValidationStatus isValidGroovyScript(String _formula);
 
 
     /**

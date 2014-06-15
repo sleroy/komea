@@ -7,14 +7,13 @@ package org.komea.product.backend.service.kpi;
 
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.IOUtils;
 import org.komea.product.backend.api.IGroovyEngineService;
 import org.komea.product.backend.api.ISpringService;
+import org.komea.product.backend.utils.ThreadUtils;
 import org.komea.product.database.model.Kpi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,53 +33,56 @@ public class EmbeddedKpiCatalog implements IEmbeddedKpiCatalog
 {
 
 
-    private static final Logger      LOGGER         = LoggerFactory
-            .getLogger(EmbeddedKpiCatalog.class);
+    private static final Logger  LOGGER = LoggerFactory.getLogger(EmbeddedKpiCatalog.class);
 
 
     @Autowired
-    private IGroovyEngineService     groovyEngineService;
-
-    private final Set<KpiDefinition> kpiDefinitions = new HashSet<KpiDefinition>();
+    private IGroovyEngineService groovyEngineService;
 
     @Autowired
-    private ISpringService           springService;
+    private IKPIService          kpiService;
+    
+    
+    @Autowired
+    private ISpringService       springService;
 
-
-
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IEmbeddedKpiCatalog#getKpiDefinitions()
-     */
-    @Override
-    public Set<KpiDefinition> getKpiDefinitions() {
-
-
-        return kpiDefinitions;
-    }
 
 
     @PostConstruct
     public void init() throws IOException {
 
 
-        try {
-            for (final Resource resource : springService.getApplicationContext().getResources(
-                    "scripts/*.groovy")) {
+        final Runnable runnable = new Runnable()
+        {
+
+
+            @Override
+            public void run() {
+
+
                 try {
-                    final Kpi kpi = new Kpi();
-                    kpi.setName(resource.getFilename());
-                    kpi.setEsperRequest(IOUtils.toString(resource.getInputStream()));
-                    final KpiDefinition kpiDefinition =
-                            (KpiDefinition) groovyEngineService.parseScript(kpi).run();
-                    kpiDefinitions.add(kpiDefinition);
-                    LOGGER.info("Registering Embedded kpi '{}'", kpiDefinition.getKpi().getName());
+                    for (final Resource resource : springService.getApplicationContext()
+                            .getResources("scripts/*.groovy")) {
+                        try {
+                            final Kpi kpi = new Kpi();
+                            kpi.setName(resource.getFilename());
+                            kpi.setEsperRequest(IOUtils.toString(resource.getInputStream()));
+                            final KpiDefinition kpiDefinition =
+                                    (KpiDefinition) groovyEngineService.parseScript(kpi).run();
+                            LOGGER.info("Registering Embedded kpi '{}'", kpiDefinition.getKpi()
+                                    .getName());
+                            kpiService.saveOrUpdate(kpi);
+                        } catch (final Exception e) {
+                            LOGGER.error("Cannot load a script with reference '{}'", resource);
+                        }
+                    }
                 } catch (final Exception e) {
-                    LOGGER.error("Cannot load a script with reference '{}'", resource);
+                    LOGGER.error("Cannot initialize embedded kpi scripts");
                 }
+
+
             }
-        } catch (final Exception e) {
-            LOGGER.error("Cannot initialize embedded kpi scripts");
-        }
+        };
+        ThreadUtils.execThreadAsync("loading-embedded-kpis", runnable);
     }
 }

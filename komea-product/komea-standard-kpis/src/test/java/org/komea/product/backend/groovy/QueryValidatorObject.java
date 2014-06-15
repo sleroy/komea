@@ -40,7 +40,7 @@ public class QueryValidatorObject
         groovyEngineService.setSpringService(mock);
         groovyEngineService.init();
         final boolean res =
-                groovyEngineService.isValidFormula(_formula) == GroovyValidationStatus.OK;
+                groovyEngineService.isValidQuery(_formula) == GroovyValidationStatus.OK;
         groovyEngineService.destroy();
         return res;
     }

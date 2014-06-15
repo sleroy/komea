@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.eventory;
@@ -11,7 +11,6 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.Validate;
 import org.komea.eventory.api.bridge.IEventBridge;
-import org.komea.eventory.api.engine.ICEPConfiguration;
 import org.komea.eventory.api.engine.ICEPEngine;
 import org.komea.eventory.api.engine.IQueryAdministrator;
 import org.slf4j.Logger;
@@ -21,138 +20,121 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class is the implementation of the Komea custom CEP Engine.
- * 
+ *
  * @author sleroy
  */
 public class CEPEngine implements ICEPEngine
 {
-    
-    
+
+
     private enum CEPEngineMode {
         DESTROYED, NOT_STARTED, RUNNING
     }
-    
-    
-    
+
+
+
     private static final Logger LOGGER      = LoggerFactory.getLogger("cep-engine");
-    
-    private ICEPConfiguration   cepConfiguration;
+
     private IEventBridge        eventBridge = null;
-    
-    
+
+
     private CEPEngineMode       mode        = CEPEngineMode.NOT_STARTED;
-    
+
     private IQueryAdministrator queryAdministrator;
-    
-    
-    
+
+
+
     /**
      * Builds the CEP Engine with the given configuration.
-     * 
-     * @param _cepConfiguration
-     *            the cep configuration/
      */
     public CEPEngine() {
     
     
-        cepConfiguration = new CEPConfiguration();
-        
+        super();
         
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see java.io.Closeable#close()
      */
     @Override
     public void close() throws IOException {
-    
-    
+
+
         try {
             queryAdministrator = null;
             eventBridge = null;
         } finally {
             mode = CEPEngineMode.DESTROYED;
         }
-        
+
     }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.eventory.api.ICEPEngine#getConfiguration()
-     */
-    @Override
-    public ICEPConfiguration getConfiguration() {
-    
-    
-        return cepConfiguration;
-    }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.eventory.api.ICEPEngine#getQueryAdministration()
      */
     @Override
     public IQueryAdministrator getQueryAdministration() {
-    
-    
+
+
         return queryAdministrator;
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.eventory.api.ICEPEngine#initialize()
      */
     @Override
-    public void initialize(final ICEPConfiguration _configuration) throws IOException {
-    
-    
-        Validate.notNull(_configuration, "no configuration provided");
-        Validate.notNull(_configuration.getBridgeFactory(), "no bridge factory");
-        Validate.notNull(_configuration.getCacheStorageFactory(), "no cache storage factory");
-        Validate.notNull(_configuration.getStorageFolder(), "no storage folder");
-        cepConfiguration = _configuration;
+    public void initialize() throws IOException {
+
+
+        Validate.notNull(CEPConfiguration.getInstance(), "no configuration provided");
+        Validate.notNull(CEPConfiguration.getInstance().getBridgeFactory(), "no bridge factory");
+        Validate.notNull(CEPConfiguration.getInstance().getCacheStorageFactory(),
+                "no cache storage factory");
+        Validate.notNull(CEPConfiguration.getInstance().getStorageFolder(), "no storage folder");
         if (isInitialized()) {
             close();
         }
-        final int res = cepConfiguration.getNumberQueryListeners();
+        final int res = CEPConfiguration.getInstance().getNumberQueryListeners();
         LOGGER.debug("CEP Engine starts with {} query listeners", res);
-        eventBridge = cepConfiguration.getBridgeFactory().newBridge(cepConfiguration);
-        
+        eventBridge = CEPConfiguration.getInstance().getBridgeFactory().newBridge();
+
         queryAdministrator = new QueryAdministrator(eventBridge);
         mode = CEPEngineMode.RUNNING;
     }
-    
-    
+
+
     /**
      * Returns true if the engine is initialized.
      */
     public boolean isInitialized() {
-    
-    
+
+
         return mode == CEPEngineMode.RUNNING;
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.eventory.api.ICEPEngine#pushEvent(org.komea.product.database.alert.Serializable)
      */
     @Override
     public void pushEvent(final Serializable _event) {
-    
-    
+
+
         if (!isInitialized()) {
             throw new RuntimeException(
                     "The CEP engine has not been initialized, please invoke initialize() method");
         }
         Validate.notNull(_event, "null event provided");
-        
+
         eventBridge.notify(_event);
     }
-    
+
 }
