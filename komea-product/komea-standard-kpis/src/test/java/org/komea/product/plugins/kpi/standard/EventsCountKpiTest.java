@@ -12,30 +12,28 @@ import org.komea.product.cep.tester.CEPQueryTester;
 
 public class EventsCountKpiTest
 {
-
-
+    
+    
     @Test
     public final void test() throws Exception {
-
-
-        final EventsCountKpi kpi = new EventsCountKpi("closed_status_bugs", BackupDelay.DAY);
-
+    
+    
+        final EventsCountKpi kpi = new EventsCountKpi("build_complete", BackupDelay.DAY);
+        
         final CEPQueryTester newTest = CEPQueryTester.newTest();
         final JenkinsEventsFactory eventFactory = new JenkinsEventsFactory();
-
-        newTest.withQuery(kpi).sendEvent(
-                eventFactory.sendBuildComplete("SCERTIFY", 12, "closed_status_bugs"));
-        newTest.withQuery(kpi).sendEvent(
-                eventFactory.sendBuildComplete("SCERTIFY", 20, "closed_status_bugs"));
-        newTest.withQuery(kpi).sendEvent(
-                eventFactory.sendBuildComplete("KOMEA", 50, "closed_status_bugs"));
-        newTest.withQuery(kpi).sendEvent(eventFactory.sendBuildComplete("KOMEA", 30, "ncloc"));
-        newTest.withQuery(kpi).sendEvent(eventFactory.sendBuildComplete("CIFLOW", 20, "ncloc"));
-
+        
+        final CEPQueryTester withQuery = newTest.withQuery(kpi);
+        withQuery.sendEvent(eventFactory.sendBuildComplete("SCERTIFY", 12, "closed_status_bugs"));
+        withQuery.sendEvent(eventFactory.sendBuildComplete("SCERTIFY", 20, "closed_status_bugs"));
+        withQuery.sendEvent(eventFactory.sendBuildComplete("KOMEA", 50, "closed_status_bugs"));
+        withQuery.sendEvent(eventFactory.sendBuildComplete("KOMEA", 30, "ncloc"));
+        
+        
         newTest.dump().hasResults(new Object[][] {
                 {
-                    newTest.getMockProject().get("SCERTIFY").getEntityKey(), 2 }, {
-                        newTest.getMockProject().get("KOMEA").getEntityKey(), 1 } }).runTest();
-
+                        newTest.getMockProject().get("SCERTIFY").getEntityKey(), 2 }, {
+                        newTest.getMockProject().get("KOMEA").getEntityKey(), 2 } }).runTest();
+        
     }
 }
