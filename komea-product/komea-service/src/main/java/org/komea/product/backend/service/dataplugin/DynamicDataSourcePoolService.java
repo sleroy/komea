@@ -13,9 +13,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.komea.eventory.CEPConfiguration;
 import org.komea.eventory.api.cache.ICacheConfiguration;
-import org.komea.eventory.api.cache.ICacheStorage;
-import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.cache.CacheConfigurationBuilder;
 import org.komea.product.backend.api.ISpringService;
 import org.komea.product.database.utils.Validate;
@@ -47,8 +46,6 @@ public class DynamicDataSourcePoolService implements IDynamicDataSourcePool
             LoggerFactory
             .getLogger("datapool");
 
-    @Autowired
-    private ICacheStorageFactory                             cacheStorageFactory;
 
     private final Map<String, IDynamicDataSourceSession>     dataSessions        =
             Maps.newConcurrentMap();
@@ -170,8 +167,8 @@ public class DynamicDataSourcePoolService implements IDynamicDataSourcePool
 
         Validate.isTrue(!dataSessions.containsKey(_dataSourceName));
         LOGGER.info("Registering a new data source {} inside Komea", _dataSourceName);
-        final ICacheStorage cacheStorage = cacheStorageFactory.newCacheStorage(_cacheConfiguration);
-        return new DynamicDataSourceSession(_dataSourceName, cacheStorage, _sourcePool);
+        return new DynamicDataSourceSession(_dataSourceName, CEPConfiguration.getInstance()
+                .getCacheStorageFactory().newCacheStorage(_cacheConfiguration), _sourcePool);
     }
 
 }

@@ -2,11 +2,12 @@
  * 
  */
 
-package org.komea.product.backend.auth;
+package org.komea.product.backend.service.auth;
 
 
 
 import static org.junit.Assert.assertEquals;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,6 +15,7 @@ import static org.mockito.Mockito.when;
 import java.util.Collections;
 
 import org.junit.Test;
+import org.komea.product.backend.service.auth.UserAuthenticationService;
 import org.komea.product.backend.service.entities.IPersonRoleService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.enums.UserBdd;
@@ -36,7 +38,7 @@ public class UserAuthenticationServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.auth.UserAuthenticationService#UserAuthenticationService()}.
+     * Test method for {@link org.komea.product.backend.service.auth.UserAuthenticationService#UserAuthenticationService()}.
      */
     @Test (expected = UsernameNotFoundException.class)
     public void testUserAuthenticationService() throws Exception {
@@ -55,7 +57,7 @@ public class UserAuthenticationServiceTest
     
     
     /**
-     * Test method for {@link org.komea.product.backend.auth.UserAuthenticationService#UserAuthenticationService()}.
+     * Test method for {@link org.komea.product.backend.service.auth.UserAuthenticationService#UserAuthenticationService()}.
      */
     @Test ()
     public void testUserAuthenticationService2() throws Exception {

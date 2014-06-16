@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.backend.groovy;
@@ -28,37 +28,37 @@ import static org.mockito.Mockito.mock;
  */
 public class GroovyEngineServiceTest
 {
-    
-    
+
+
     private GroovyEngineService groovyEngineService;
-    
-    
-    
+
+
+
     @After
     public void after() {
-    
-    
+
+
         groovyEngineService.destroy();
     }
-    
-    
+
+
     @Before
     public void before() {
-    
-    
+
+
         groovyEngineService = new GroovyEngineService();
         groovyEngineService.setSpringService(mock(ISpringService.class));
         groovyEngineService.init();
     }
-    
-    
+
+
     /**
      * Test method for {@link org.komea.product.backend.groovy.GroovyEngineService#parseClass(java.io.File)} .
      */
     @Test
     public final void testParseClass() throws Exception {
-    
-    
+
+
         final String scriptExample =
                 "  \n"
                         + "    public  class GroovyEngineScript implements Comparator<Integer>\n"
@@ -79,17 +79,17 @@ public class GroovyEngineServiceTest
                         .parseClass(scriptExample));
         assertEquals("Test functionality ", comparator.compare(1, 2),
                 Integer.valueOf(1).compareTo(2));
-        
+
     }
-    
-    
+
+
     @Test
     public void testParseScript() {
-    
-    
+
+
         final Kpi kpi = new Kpi();
-        
-        kpi.setEsperRequest("query_from_implementation(new org.komea.eventory.query.predefined.EmptyQueryDefinition())");
+
+        kpi.setEsperRequest("new CEPQuery(new org.komea.eventory.query.predefined.EmptyQueryDefinition())");
         kpi.setId(1);
         final Script parseGroovyScript = groovyEngineService.parseScript(kpi);
         System.out.println(parseGroovyScript.run());

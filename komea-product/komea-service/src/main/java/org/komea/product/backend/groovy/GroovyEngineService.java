@@ -42,9 +42,9 @@ public class GroovyEngineService implements IGroovyEngineService
     
     
     private static final Logger LOGGER = LoggerFactory.getLogger("groovy-service");
-
-
-
+    
+    
+    
     /**
      * Initializes the groovy engine service as a standalone.
      *
@@ -60,9 +60,9 @@ public class GroovyEngineService implements IGroovyEngineService
         groovyEngineService.init();
         return groovyEngineService;
     }
-
-
-
+    
+    
+    
     private final Set<Class>  classImports   = Sets.newHashSet();
     
     
@@ -70,13 +70,13 @@ public class GroovyEngineService implements IGroovyEngineService
     
     
     private GroovyClassLoader groovyClassLoader;
-
-
+    
+    
     @Autowired
     private ISpringService    springService;
-
-
-
+    
+    
+    
     @PreDestroy
     public void destroy() {
     
@@ -107,6 +107,7 @@ public class GroovyEngineService implements IGroovyEngineService
         /**
          * Registering imports
          */
+        registerStarImport("org.komea.eventory.query");
         registerStarImport("org.komea.eventory.api.cache");
         registerStarImport("org.komea.product.database.alert");
         registerStarImport("org.komea.product.database.alert.enums");

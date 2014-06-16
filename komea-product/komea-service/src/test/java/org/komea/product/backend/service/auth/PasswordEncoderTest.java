@@ -1,5 +1,5 @@
 
-package org.komea.product.backend.auth;
+package org.komea.product.backend.service.auth;
 
 
 

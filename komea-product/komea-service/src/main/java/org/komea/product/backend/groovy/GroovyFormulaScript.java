@@ -9,7 +9,6 @@ package org.komea.product.backend.groovy;
 import groovy.lang.Script;
 
 import org.apache.commons.lang3.Validate;
-import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.eventory.query.CEPQuery;
@@ -104,14 +103,8 @@ public abstract class GroovyFormulaScript extends Script
         LOGGER.debug("Initialization of a cep query {}", _queryImplementation);
         final ICEPQueryImplementation queryImplementation =
                 org.springframework.beans.BeanUtils.instantiate(_queryImplementation);
-        return query_from_implementation(queryImplementation);
+        return new CEPQuery(queryImplementation);
     }
 
-
-    public CEPQuery query_from_implementation(final ICEPQueryImplementation queryImplementation) {
-
-
-        return autowired(new CEPQuery(queryImplementation, getService(ICacheStorageFactory.class)));
-    }
 
 }

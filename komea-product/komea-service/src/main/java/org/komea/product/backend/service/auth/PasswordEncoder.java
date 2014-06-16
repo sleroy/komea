@@ -1,9 +1,10 @@
 
-package org.komea.product.backend.auth;
+package org.komea.product.backend.service.auth;
 
 
 
 import org.apache.commons.lang3.Validate;
+import org.komea.product.backend.auth.IPasswordEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,7 +38,7 @@ public class PasswordEncoder implements IPasswordEncoder
     
     /*
      * (non-Javadoc)
-     * @see org.komea.product.backend.auth.IPasswordEncoder#encodePassword(java.lang.String)
+     * @see org.komea.product.backend.service.auth.IPasswordEncoder#encodePassword(java.lang.String)
      */
     @Override
     public String encodePassword(final String _rawPassword) {
