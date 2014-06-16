@@ -4,7 +4,7 @@ package org.komea.product.plugins.kpi.standard;
 
 
 import org.junit.Test;
-import org.komea.event.factory.JenkinsEventFactory;
+import org.komea.event.factory.JenkinsEventsFactory;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.product.cep.tester.CEPQueryTester;
 
@@ -21,7 +21,7 @@ public class EventsCountKpiTest
         final EventsCountKpi kpi = new EventsCountKpi("closed_status_bugs", BackupDelay.DAY);
 
         final CEPQueryTester newTest = CEPQueryTester.newTest();
-        final JenkinsEventFactory eventFactory = new JenkinsEventFactory();
+        final JenkinsEventsFactory eventFactory = new JenkinsEventsFactory();
 
         newTest.withQuery(kpi).sendEvent(
                 eventFactory.sendBuildComplete("SCERTIFY", 12, "closed_status_bugs"));

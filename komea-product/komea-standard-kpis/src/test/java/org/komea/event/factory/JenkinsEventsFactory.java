@@ -414,7 +414,7 @@ public class JenkinsEventsFactory
     }
 
 
-    private JenkinsEventsFactory() {
+    public JenkinsEventsFactory() {
 
 
     }
