@@ -21,7 +21,6 @@ import org.komea.eventory.api.bridge.IEventBridgeFactory;
 import org.komea.eventory.api.cache.ICacheConfiguration;
 import org.komea.eventory.api.cache.ICacheStorage;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
-import org.komea.eventory.api.engine.ICEPConfiguration;
 import org.komea.eventory.api.engine.ICEPEngine;
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
@@ -59,12 +58,10 @@ public class CEPQueryTester
 
 
         @Override
-        public IEventBridge newBridge(
-                final ICEPConfiguration _arg0) {
+        public IEventBridge newBridge() {
 
 
-            return new MemoryBridge(
-                    _arg0);
+            return new MemoryBridge();
         }
     };
 
@@ -119,7 +116,7 @@ public class CEPQueryTester
 
             cepConfiguration.setBridgeFactory(DEFAULT_BRIDGE_FACTORY);
             cepConfiguration.setCacheStorageFactory(DEFAULT_CACHE_FACTORY);
-            esperEngineBean.initialize(cepConfiguration);
+            esperEngineBean.initialize();
         } catch (final IOException e) {
             throw new IllegalArgumentException(e);
         }
@@ -379,9 +376,7 @@ public class CEPQueryTester
 
 
         if (cepQuery == null) {
-            cepQuery =
-                    new CEPQuery(queryImplementationDefinition, esperEngineBean.getConfiguration()
-                            .getCacheStorageFactory());
+            cepQuery = new CEPQuery(queryImplementationDefinition);
             esperEngineBean.getQueryAdministration().registerQuery("query-test", cepQuery);
         }
     }

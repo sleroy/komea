@@ -23,7 +23,7 @@
 
 
 
-	<root level="${log.level:-INFO}">
+	<root level="${log.level:-ERROR}">
 		<appender-ref ref="FILE" />
 		<appender-ref ref="STDOUT" />
 	</root>
