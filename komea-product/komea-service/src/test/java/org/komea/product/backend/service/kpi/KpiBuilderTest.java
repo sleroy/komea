@@ -18,7 +18,7 @@ import org.komea.eventory.api.formula.ICEPFormula;
 import org.komea.eventory.formula.NoCEPFormula;
 import org.komea.product.backend.api.ISpringService;
 import org.komea.product.backend.api.exceptions.GroovyScriptException.GroovyValidationStatus;
-import org.komea.product.backend.groovy.GroovyEngineService;
+import org.komea.product.backend.service.groovy.GroovyEngineService;
 import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.ValueDirection;

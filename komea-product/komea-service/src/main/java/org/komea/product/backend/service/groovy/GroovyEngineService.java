@@ -1,5 +1,5 @@
 
-package org.komea.product.backend.groovy;
+package org.komea.product.backend.service.groovy;
 
 
 
@@ -21,6 +21,7 @@ import org.komea.product.backend.api.IGroovyEngineService;
 import org.komea.product.backend.api.ISpringService;
 import org.komea.product.backend.api.exceptions.GroovyScriptException;
 import org.komea.product.backend.api.exceptions.GroovyScriptException.GroovyValidationStatus;
+import org.komea.product.backend.groovy.GroovyFormulaScript;
 import org.komea.product.backend.plugin.api.RequiresSpring;
 import org.komea.product.backend.service.SpringService;
 import org.komea.product.database.dto.KpiResult;

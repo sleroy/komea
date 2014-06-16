@@ -2,7 +2,7 @@
  *
  */
 
-package org.komea.product.backend.groovy;
+package org.komea.product.backend.service.groovy;
 
 
 
@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.komea.eventory.utils.ClassUtils;
 import org.komea.product.backend.api.ISpringService;
+import org.komea.product.backend.service.groovy.GroovyEngineService;
 import org.komea.product.database.model.Kpi;
 
 import static org.junit.Assert.assertEquals;
@@ -53,7 +54,7 @@ public class GroovyEngineServiceTest
 
 
     /**
-     * Test method for {@link org.komea.product.backend.groovy.GroovyEngineService#parseClass(java.io.File)} .
+     * Test method for {@link org.komea.product.backend.service.groovy.GroovyEngineService#parseClass(java.io.File)} .
      */
     @Test
     public final void testParseClass() throws Exception {

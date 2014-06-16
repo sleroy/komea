@@ -7,7 +7,7 @@ package org.komea.product.backend.service.kpi;
 
 
 import org.komea.product.backend.api.IGroovyEngineService;
-import org.komea.product.backend.groovy.GroovyEngineService;
+import org.komea.product.backend.service.groovy.GroovyEngineService;
 import org.komea.product.database.model.Kpi;
 
 
