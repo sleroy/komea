@@ -16,6 +16,7 @@ import org.komea.product.wicket.cronpage.CronPage;
 import org.komea.product.wicket.customer.CustomerEditPage;
 import org.komea.product.wicket.customer.CustomerPage;
 import org.komea.product.wicket.events.EventsPage;
+import org.komea.product.wicket.kpiimport.KpiImportPage;
 import org.komea.product.wicket.kpis.KpiEditPage;
 import org.komea.product.wicket.kpis.KpiPage;
 import org.komea.product.wicket.kpivalues.KpiValuesPage;
@@ -35,34 +36,35 @@ import org.komea.product.wicket.statistics.StatPage;
 
 /**
  * This class defines the web pages of the administration web site
- * 
+ *
  * @author sleroy
  */
 @MountAdminPages({
-        @MountPage(mount = "/departments", page = DepartmentPage.class),
-        @MountPage(mount = "/saveDepartment", page = DepartmentEditPage.class),
-        @MountPage(mount = "/teams", page = TeamPage.class),
-        @MountPage(mount = "/saveTeam", page = TeamEditPage.class),
-        @MountPage(mount = "/kpis", page = KpiPage.class),
-        @MountPage(mount = "/saveKpi", page = KpiEditPage.class),
-        @MountPage(mount = "/saveProject", page = ProjectEditPage.class),
-        @MountPage(mount = "/projects", page = ProjectPage.class),
-        @MountPage(mount = "/settings", page = SettingsPage.class),
-        @MountPage(mount = "/viewlog", page = ConsolePage.class),
-        @MountPage(mount = "/stats", page = StatPage.class),
-        @MountPage(mount = "/login", page = LoginPage.class),
-        @MountPage(mount = "/cronpage", page = CronPage.class),
-        @MountPage(mount = "/accessdenied", page = UnauthorizedPage.class),
-        @MountPage(mount = "/users", page = PersonPage.class),
-        @MountPage(mount = "/saveMember", page = PersonAddPage.class),
-        @MountPage(mount = "/events", page = EventsPage.class),
-        @MountPage(mount = "/plugins", page = ProviderPage.class),
-        @MountPage(mount = "/customers", page = CustomerPage.class),
-        @MountPage(mount = "/saveCustomer", page = CustomerEditPage.class),
-        @MountPage(mount = "/alerts", page = AlertPage.class),
-        @MountPage(mount = "/saveAlert", page = AlertEditPage.class),
-        @MountPage(mount = "/kpivalues", page = KpiValuesPage.class),
-        @MountPage(mount = "/adminactions", page = AdminActionPage.class) })
+    @MountPage(mount = "/departments", page = DepartmentPage.class),
+    @MountPage(mount = "/saveDepartment", page = DepartmentEditPage.class),
+    @MountPage(mount = "/teams", page = TeamPage.class),
+    @MountPage(mount = "/saveTeam", page = TeamEditPage.class),
+    @MountPage(mount = "/kpis", page = KpiPage.class),
+    @MountPage(mount = "/saveKpi", page = KpiEditPage.class),
+    @MountPage(mount = "/saveProject", page = ProjectEditPage.class),
+    @MountPage(mount = "/projects", page = ProjectPage.class),
+    @MountPage(mount = "/settings", page = SettingsPage.class),
+    @MountPage(mount = "/viewlog", page = ConsolePage.class),
+    @MountPage(mount = "/stats", page = StatPage.class),
+    @MountPage(mount = "/login", page = LoginPage.class),
+    @MountPage(mount = "/cronpage", page = CronPage.class),
+    @MountPage(mount = "/accessdenied", page = UnauthorizedPage.class),
+    @MountPage(mount = "/users", page = PersonPage.class),
+    @MountPage(mount = "/saveMember", page = PersonAddPage.class),
+    @MountPage(mount = "/events", page = EventsPage.class),
+    @MountPage(mount = "/plugins", page = ProviderPage.class),
+    @MountPage(mount = "/customers", page = CustomerPage.class),
+    @MountPage(mount = "/saveCustomer", page = CustomerEditPage.class),
+    @MountPage(mount = "/alerts", page = AlertPage.class),
+    @MountPage(mount = "/saveAlert", page = AlertEditPage.class),
+    @MountPage(mount = "/kpivalues", page = KpiValuesPage.class),
+    @MountPage(mount = "/kpiimport", page = KpiImportPage.class),
+    @MountPage(mount = "/adminactions", page = AdminActionPage.class) })
 public class AdministrationWebSite
 {
     //
