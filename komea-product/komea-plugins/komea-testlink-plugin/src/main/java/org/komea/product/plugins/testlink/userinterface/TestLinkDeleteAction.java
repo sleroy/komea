@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.komea.product.plugins.testlink.api.ITestLinkServerDAO;
 import org.komea.product.plugins.testlink.model.TestLinkServer;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.AbstractDeleteAction;
 
 /**
@@ -21,7 +21,7 @@ public class TestLinkDeleteAction extends AbstractDeleteAction<TestLinkServer> {
     private final List<TestLinkServer> serverAffiche;
     private final ITestLinkServerDAO testlinkService;
 
-    public TestLinkDeleteAction(List<TestLinkServer> serverAffiche, ITestLinkServerDAO testLinkService, LayoutPage page) {
+    public TestLinkDeleteAction(List<TestLinkServer> serverAffiche, ITestLinkServerDAO testLinkService, StatelessLayoutPage page) {
         super(page, "dialogdelete");
         this.serverAffiche = serverAffiche;
         this.testlinkService = testLinkService;

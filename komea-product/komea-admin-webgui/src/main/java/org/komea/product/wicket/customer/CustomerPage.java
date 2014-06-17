@@ -14,7 +14,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.entities.ICustomerService;
 import org.komea.product.database.model.Customer;
 import org.komea.product.database.model.CustomerCriteria;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
@@ -24,7 +24,7 @@ import org.komea.product.wicket.widget.model.ListDataModel;
  *
  * @author rgalerme
  */
-public final class CustomerPage extends LayoutPage {
+public final class CustomerPage extends StatelessLayoutPage {
 
     @SpringBean
     private ICustomerService customerService;

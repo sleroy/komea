@@ -20,7 +20,7 @@ import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.EventTypeStatistic;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ import com.googlecode.wickedcharts.wicket6.highcharts.Chart;
  * 
  * @author sleroy
  */
-public class StatPage extends LayoutPage
+public class StatPage extends StatelessLayoutPage
 {
     
     

@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:wicket="http://wicket.apache.org">
+    <head>
+        <wicket:head></wicket:head>
+        <meta charset="utf-8"></meta>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+        <meta content="Komea administration site" name="description"></meta>
+        <meta content="Komea" name="author"></meta>
+        <title>Komea Administration</title>
+        <link rel="stylesheet" href="static/bootstrap/css/bootstrap.css" type="text/css" media="screen"></link>
+        <link rel="stylesheet" href="static/bootstrap/css/bootstrap-theme.css" type="text/css" media="screen"></link>
+        <link rel="stylesheet" href="static/css/style.css" type="text/css"></link>
+        <link rel="stylesheet" href="static/images/sprites/sprites.css" type="text/css"></link>
+        <link rel="stylesheet" type="text/css" href="static/js/ui/themes/base/jquery-ui.css" />
+        <!--<link rel="stylesheet" type="text/css" href="static/css/jquery-ui-1.10.4.custom.css" />-->
+        <!-- Tablesorter: required for bootstrap -->
+        <!-- jQuery -->
+        <link rel="stylesheet" href="static/tablesorter/css/theme.bootstrap.css" />
+        <!-- Tablesorter: optional -->
+        <link rel="stylesheet" href="static/tablesorter/addons/pager/jquery.tablesorter.pager.css" />
+    </head>
+    <body>
+        <!--  BALISE HEADER -->
+        <header class="tocea-header"> <nav class="navbar navbar-inverse" role="navigation">
+                <div class="navbar-inner">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                            <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="p/home"><img src="static/images/logo.png" alt="logo" width="32" height="32" />&nbsp;<wicket:message key="home.kadmin">Komea Administration</wicket:message></a>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul wicket:id="signinpanel" class="nav navbar-nav navbar-right">
+                        </ul>
+                        <ul wicket:id="personalpanel" class="nav navbar-nav navbar-right">
+                        </ul>
+                        <wicket:fragment wicket:id="signin">
+                            <li class="dropdown"><a class="dropdown-toggle" href="p/login" data-toggle="dropdown"><wicket:message key="home.singin">Sign In </wicket:message><strong
+                                        class="caret"></strong></a></li>
+                        </wicket:fragment>
+                        <wicket:fragment wicket:id="personal">
+                            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> <wicket:message
+                                        key="home.welcome">Welcome, User</wicket:message> <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="https://github.org/sleroy/komea"><i class="glyphicon glyphicon-envelope"></i> <wicket:message key="home.support">Contact Support</wicket:message></a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="j_spring_security_logout"><i class="glyphicon glyphicon-off"></i> <wicket:message key="home.logout">Logout</wicket:message></a></li>
+                                </ul></li>
+                        </wicket:fragment>
+                    </div>
+                </div>
+            </nav> </header>
+        <ol class="breadcrumb">
+            <li wicket:id="bread"><a href="p" wicket:id="blink"><span wicket:id="text"></span></a></li>
+            <li class="active"><a href="#" wicket:id="breadactive"></a></li>
+        </ol>
+
+        <div class="container-full" style="margin-left: 15px; margin-right: 15px">
+
+            <div class="row">
+                <div class="col-sm-2 col-md-2">
+
+                    <div class="panel-group" id="accordion">
+
+
+                        <div wicket:id="accordion"></div>
+                                 <wicket:fragment wicket:id="panel-empty"></wicket:fragment>
+                        
+                        <wicket:fragment wicket:id="panel-1">
+                          <table class="table">
+                                <tr wicket:id="table-panel-1">
+                                    <td wicket:id="cells">
+                                        <span wicket:id="cell">cell content goes here</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </wicket:fragment>
+                                 <wicket:fragment wicket:id="panel-users">
+                                     <span class="glyphicon glyphicon-user "></span><a href="p/users"><wicket:message key="home.members">Members</wicket:message></a>
+                                 </wicket:fragment>
+                                 <wicket:fragment wicket:id="panel-teams">
+                                     <span class="glyphicon  glyphicon-th-large "></span><a href="p/teams"><wicket:message key="home.teams">Teams</wicket:message></a>
+                                 </wicket:fragment>
+                                 <wicket:fragment wicket:id="panel-departments">
+                                     <span class="glyphicon glyphicon-th"></span><a href="p/departments"><wicket:message key="home.departments">Departments</wicket:message></a>
+                                 </wicket:fragment>
+                                 <wicket:fragment wicket:id="panel-customers">
+                                     <span class="glyphicon glyphicon-usd "></span><a href="p/customers"><wicket:message key="home.customers">Customers</wicket:message></a>
+                                 </wicket:fragment>
+                                 <wicket:fragment wicket:id="panel-projects">
+                                     <span class="glyphicon glyphicon-briefcase "></span><a href="p/projects"><wicket:message key="home.projects">Projects</wicket:message></a>
+                                 </wicket:fragment>
+
+               
+ 
+                        <wicket:fragment wicket:id="panel-2">
+                            <table class="table">
+                                <tr wicket:id="table-panel-2">
+                                    <td wicket:id="cells">
+                                        <span wicket:id="cell">cell content goes here</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </wicket:fragment>
+                                    <wicket:fragment wicket:id="panel-kpis">
+                            <span class="glyphicon glyphicon-stats "></span><a href="p/kpis"><wicket:message key="home.kpis">Modify KPIs</wicket:message></a>
+                        </wicket:fragment>
+                        <wicket:fragment wicket:id="panel-alerts">
+                            <span class="glyphicon glyphicon-bell "></span><a href="p/alerts"><wicket:message key="home.alerts">Alerts</wicket:message></a>
+                        </wicket:fragment>
+                        <wicket:fragment wicket:id="panel-kpiview">
+                            <span class="glyphicon glyphicon-bell "></span><a href="p/kpivalues"><wicket:message key="home.kpiview">Draw KPI Charts</wicket:message></a>
+                        </wicket:fragment>
+
+
+
+
+
+
+                        <wicket:fragment wicket:id="panel-3">    
+                             <table class="table">
+                                <tr wicket:id="table-panel-3">
+                                    <td wicket:id="cells">
+                                        <span wicket:id="cell">cell content goes here</span>
+                                    </td>
+                                </tr>
+                            </table>
+                            </wicket:fragment>
+                                 <wicket:fragment wicket:id="panel-settings">
+                                     <span class="glyphicon glyphicon-cog "></span><a href="p/settings"><wicket:message key="home.settings">Settings</wicket:message></a>
+                                 </wicket:fragment>
+                                  <wicket:fragment wicket:id="panel-plugins">
+                                     <span class="glyphicon glyphicon-cloud-download "></span><a href="p/plugins"><wicket:message key="home.plugins">Plugins</wicket:message></a>
+                                 </wicket:fragment>
+                                  <wicket:fragment wicket:id="panel-viewlog">
+                                     <span class="glyphicon glyphicon-file "></span><a href="p/viewlog"><wicket:message key="home.logs">Logs</wicket:message></a>
+                                 </wicket:fragment>
+                                  <wicket:fragment wicket:id="panel-stats">
+                                     <span class="glyphicon glyphicon-stats "></span><a href="p/stats"><wicket:message key="home.statistics">Statistics</wicket:message></a>
+                                 </wicket:fragment>
+                                  <wicket:fragment wicket:id="panel-events">
+                                     <span class="glyphicon glyphicon-log-in "></span><a href="p/events"><wicket:message key="home.events">Events</wicket:message></a>
+                                 </wicket:fragment>
+                                  <wicket:fragment wicket:id="panel-cronpage">
+                                     <span class="glyphicon glyphicon-repeat "></span><a href="p/cronpage"><wicket:message key="home.crons">Crons</wicket:message></a>
+                                 </wicket:fragment>
+
+                    </div>
+                </div>
+                <div class="col-sm-10 col-md-10">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title" wicket:id="page_title">Dashboard</h3>
+                        </div>
+                        <div class="panel-body">
+                            <wicket:child />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        .
+        <footer class="tocea-footer">
+            <p>&copy; Komea.org</p>
+            <!--		<script src="static/js/jquery.js"></script>
+                    <script src="static/js/ui/jquery.js"></script>-->
+            <!--<script src="static/bootstrap/js/bootstrap.js" type="text/javascript"></script>--> 
+            <script src="static/tablesorter/js/jquery.tablesorter.js"></script> 
+            <script src="static/tablesorter/js/jquery.tablesorter.widgets.js"></script> 
+            <script src="static/tablesorter/addons/pager/jquery.tablesorter.pager.js"></script> <script
+                id="js">
+                    $(function() {
+
+                        $
+                                .extend(
+                                        $.tablesorter.themes.bootstrap,
+                                        {
+                                            // these classes are added to the table. To see other table classes available,
+                                            // look here: http://twitter.github.com/bootstrap/base-css.html#tables
+                                            table: 'table table-bordered table-condensed',
+                                            caption: 'caption',
+                                            header: 'bootstrap-header', // give the header a gradient background
+                                            footerRow: '',
+                                            footerCells: '',
+                                            icons: '', // add "icon-white" to make them white; this icon class is added to the <i> in the header
+                                            sortNone: 'bootstrap-icon-unsorted',
+                                            sortAsc: 'icon-chevron-up glyphicon glyphicon-chevron-up', // includes classes for Bootstrap v2 & v3
+                                            sortDesc: 'icon-chevron-down glyphicon glyphicon-chevron-down', // includes classes for Bootstrap v2 & v3
+                                            active: '', // applied when column is sorted
+                                            hover: '', // use custom css here - bootstrap class may not override it
+                                            filterRow: '', // filter row class
+                                            even: '', // odd row zebra striping
+                                            odd: '' // even row zebra striping
+                                        });
+
+                        // call the tablesorter plugin and apply the uitheme widget
+                        $("table").tablesorter({
+                            // this will apply the bootstrap theme if "uitheme" widget is included
+                            // the widgetOptions.uitheme is no longer required to be set
+                            theme: "bootstrap",
+                            widthFixed: true,
+                            headerTemplate: '{content} {icon}', // new in v2.7. Needed to add the bootstrap icon!
+
+                            // widget code contained in the jquery.tablesorter.widgets.js file
+                            // use the zebra stripe widget if you plan on hiding any rows (filter widget)
+                            widgets: ["uitheme", "filter", "zebra"],
+                            widgetOptions: {
+                                // using the default zebra striping class name, so it actually isn't included in the theme variable above
+                                // this is ONLY needed for bootstrap theming if you are using the filter widget, because rows are hidden
+                                zebra: ["even", "odd"],
+                                // reset filters button
+                                filter_reset: ".reset"
+
+                                        // set the uitheme widget to use the bootstrap theme class names
+                                        // this is no longer required, if theme is set
+                                        // ,uitheme : "bootstrap"
+
+                            }
+                        })
+                        //						.tablesorterPager(
+                        //								{
+                        //
+                        //									// target the pager markup - see the HTML block below
+                        ////									container : $(".ts-pager"),
+                        //
+                        //									// target the pager page select dropdown - choose a page
+                        ////									cssGoto : ".pagenum",
+                        //
+                        //									// remove rows from the table to speed up the sort of large tables.
+                        //									// setting this to false, only hides the non-visible rows; needed if you plan to add/remove rows with the pager enabled.
+                        ////									removeRows : false,
+                        //
+                        //									// output string - default is '{page}/{totalPages}';
+                        //									// possible variables: {page}, {totalPages}, {filteredPages}, {startRow}, {endRow}, {filteredRows} and {totalRows}
+                        ////									output : '{startRow} - {endRow} / {filteredRows} ({totalRows})'
+                        //
+                        //								});
+
+                    });
+            </script> </footer>
+    </body>
+</html>

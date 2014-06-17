@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.AbstractDeleteAction;
 
 /**
@@ -23,7 +23,7 @@ public class BugZillaDeleteAction extends AbstractDeleteAction<BZServerConfigura
     public BugZillaDeleteAction(
             final List<BZServerConfiguration> _listAffichage,
             final IBZConfigurationDAO bugZillaService,
-            LayoutPage page) {
+            StatelessLayoutPage page) {
 
         super(page, "dialogdelete");
         serverAffiche = _listAffichage;

@@ -9,7 +9,7 @@ package org.komea.product.plugins.scm.userinterface;
 import java.util.List;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.komea.product.plugins.scm.api.IScmRepositoryService;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.AbstractDeleteAction;
 
 /**
@@ -21,7 +21,7 @@ public class ScmDeleteAction extends AbstractDeleteAction<ScmRepositoryDefinitio
     private final IScmRepositoryService scmService;
     private final List<ScmRepositoryDefinition> pageAffiche;
 
-    public ScmDeleteAction(IScmRepositoryService scmService, List<ScmRepositoryDefinition> pageAffiche, LayoutPage _page) {
+    public ScmDeleteAction(IScmRepositoryService scmService, List<ScmRepositoryDefinition> pageAffiche, StatelessLayoutPage _page) {
         super(_page, "dialogdelete");
         this.scmService = scmService;
         this.pageAffiche = pageAffiche;

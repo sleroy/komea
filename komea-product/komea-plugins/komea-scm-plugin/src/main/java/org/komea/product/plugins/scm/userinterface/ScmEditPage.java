@@ -16,13 +16,13 @@ import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.plugins.repository.model.ScmExecutionStatus;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.komea.product.plugins.scm.api.IScmRepositoryService;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 
 /**
  *
  * @author rgalerme
  */
-public final class ScmEditPage extends LayoutPage {
+public final class ScmEditPage extends StatelessLayoutPage {
 
     @SpringBean
     private IScmRepositoryService scmService;

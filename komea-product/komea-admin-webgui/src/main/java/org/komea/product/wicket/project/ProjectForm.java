@@ -27,7 +27,7 @@ import org.komea.product.database.model.Customer;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.CustomUpdater;
 import org.komea.product.wicket.utils.DataListSelectDialogBuilder;
 import org.komea.product.wicket.utils.DialogFactory;
@@ -44,7 +44,7 @@ public class ProjectForm extends Form<Project> {
 
     private final IProjectService prService;
     private final Component feedBack;
-    private final LayoutPage page;
+    private final StatelessLayoutPage page;
     private final Project project;
     private final NameGeneric customerName;
     private final TextField customerFiel;
@@ -188,11 +188,11 @@ public class ProjectForm extends Form<Project> {
         DialogFactory.addMultipleListDialog(dataTeam);
 
         //button
-        add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
+        add(new AjaxLinkLayout<StatelessLayoutPage>("cancel", page) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
-                LayoutPage page = getCustom();
+                StatelessLayoutPage page = getCustom();
                 page.setResponsePage(new ProjectPage(page.getPageParameters()));
             }
         });

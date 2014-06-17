@@ -26,7 +26,7 @@ import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.CustomUpdater;
 import org.komea.product.wicket.utils.DataListSelectDialogBuilder;
 import org.komea.product.wicket.utils.DialogFactory;
@@ -42,7 +42,7 @@ public class DepartmentForm extends Form<PersonGroup> {
 
     private final IPersonGroupService prService;
     private final Component feedBack;
-    private final LayoutPage page;
+    private final StatelessLayoutPage page;
     private final PersonGroup personGroup;
     private final IPersonService personService;
     private final IProjectService projectService;
@@ -155,11 +155,11 @@ public class DepartmentForm extends Form<PersonGroup> {
 //        add(TextFieldBuilder.<String>create("idCustomer", this.project, "idCustomer").withTooltip("customer can be affected")
 //                .build());
         //button
-        add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
+        add(new AjaxLinkLayout<StatelessLayoutPage>("cancel", page) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
-                LayoutPage page = getCustom();
+                StatelessLayoutPage page = getCustom();
                 page.setResponsePage(new DepartmentPage(page.getPageParameters()));
             }
         });

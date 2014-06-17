@@ -14,7 +14,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.cron.CronDetails;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.database.model.PersonGroup;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.persongroup.department.DepartmentEditAction;
 import org.komea.product.wicket.utils.NameGeneric;
 import org.komea.product.wicket.widget.api.IAjaxEditAction;
@@ -29,7 +29,7 @@ import org.quartz.Trigger.TriggerState;
  *
  * @author sleroy
  */
-public class CronPage extends LayoutPage {
+public class CronPage extends StatelessLayoutPage {
 
     @SpringBean
     private ICronRegistryService cronService;

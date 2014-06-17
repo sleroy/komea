@@ -16,7 +16,7 @@ import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Provider;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.CountColumn;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
 import org.komea.product.wicket.widget.model.ListDataModel;
@@ -28,7 +28,7 @@ import org.komea.product.wicket.widget.model.ListDataModel;
  * 
  * @author sleroy
  */
-public class ProviderPage extends LayoutPage
+public class ProviderPage extends StatelessLayoutPage
 {
     
     

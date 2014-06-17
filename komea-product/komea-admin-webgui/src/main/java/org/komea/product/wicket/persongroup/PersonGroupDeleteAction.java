@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.database.model.PersonGroup;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.AbstractDeleteAction;
 
 /**
@@ -21,7 +21,7 @@ public class PersonGroupDeleteAction extends AbstractDeleteAction<PersonGroup> {
     final private IPersonGroupService personGroupService;
     private final List<PersonGroup> PersonGroupAffichage;
 
-    public PersonGroupDeleteAction(IPersonGroupService personGroupService, List<PersonGroup> _PersonGroupAffichage,LayoutPage page) {
+    public PersonGroupDeleteAction(IPersonGroupService personGroupService, List<PersonGroup> _PersonGroupAffichage,StatelessLayoutPage page) {
         super(page, "dialogdelete");
         this.personGroupService = personGroupService;
         this.PersonGroupAffichage = _PersonGroupAffichage;

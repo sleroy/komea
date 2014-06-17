@@ -7,7 +7,7 @@ import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressB
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.fs.IKomeaFS;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author sleroy
  */
-public class KpiImportPage extends LayoutPage
+public class KpiImportPage extends StatelessLayoutPage
 {
     
     

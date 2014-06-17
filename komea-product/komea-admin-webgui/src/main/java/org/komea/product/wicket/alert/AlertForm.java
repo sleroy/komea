@@ -25,7 +25,7 @@ import org.komea.product.database.enums.Operator;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.NameGeneric;
 import org.komea.product.wicket.utils.SelectDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
@@ -41,7 +41,7 @@ public class AlertForm extends StatelessForm<KpiAlertType> {
 
     private final IAlertTypeService alertService;
     private final Component feedBack;
-    private final LayoutPage page;
+    private final StatelessLayoutPage page;
     private final KpiAlertType alert;
     private final NameGeneric nameEntity;
     private final TextField customerField;
@@ -49,7 +49,7 @@ public class AlertForm extends StatelessForm<KpiAlertType> {
     private Boolean alertEnabled;
     private final boolean isNew;
 
-    public AlertForm(boolean _isNew, IKPIService _kpiService, IAlertTypeService _alertService, Component _feedBack, LayoutPage _page, KpiAlertType _alert, String id, IModel<KpiAlertType> model) {
+    public AlertForm(boolean _isNew, IKPIService _kpiService, IAlertTypeService _alertService, Component _feedBack, StatelessLayoutPage _page, KpiAlertType _alert, String id, IModel<KpiAlertType> model) {
         super(id, model);
         this.isNew = _isNew;
         this.alertService = _alertService;
@@ -106,11 +106,11 @@ public class AlertForm extends StatelessForm<KpiAlertType> {
         initSelectKpi();
 
         //button
-        add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
+        add(new AjaxLinkLayout<StatelessLayoutPage>("cancel", page) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
-                LayoutPage page = getCustom();
+                StatelessLayoutPage page = getCustom();
                 page.setResponsePage(new AlertPage(page.getPageParameters()));
             }
         });
@@ -159,7 +159,7 @@ public class AlertForm extends StatelessForm<KpiAlertType> {
 
         };
         add(DialogKpi);
-        add(new AjaxLinkLayout<LayoutPage>("kpiButton", null) {
+        add(new AjaxLinkLayout<StatelessLayoutPage>("kpiButton", null) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {

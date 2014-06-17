@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.model.Kpi;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.AbstractDeleteAction;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
@@ -24,7 +24,7 @@ public class KpiDeleteAction extends AbstractDeleteAction<Kpi> {
 
     private MessageDialog dialog;
 
-    public KpiDeleteAction(IKPIService kpiDao, List<Kpi> kpiAffichage, LayoutPage _page) {
+    public KpiDeleteAction(IKPIService kpiDao, List<Kpi> kpiAffichage, StatelessLayoutPage _page) {
         super(_page, "dialogdelete");
         this.kpiDao = kpiDao;
         this.kpiAffichage = kpiAffichage;

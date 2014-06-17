@@ -20,7 +20,7 @@ import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.dao.CustomerDao;
 import org.komea.product.database.model.CustomerCriteria;
 import org.komea.product.database.model.Project;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.SelectDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 
@@ -30,7 +30,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
  *
  * @author rgalerme
  */
-public class ProjectEditPage extends LayoutPage {
+public class ProjectEditPage extends StatelessLayoutPage {
 
     @SpringBean
     private IProjectService projectService;
@@ -102,7 +102,7 @@ public class ProjectEditPage extends LayoutPage {
 
         this.add(dialogCustomer);
         // Buttons //
-        projectForm.add(new AjaxLinkLayout<LayoutPage>("openDialogCustomer", this) {
+        projectForm.add(new AjaxLinkLayout<StatelessLayoutPage>("openDialogCustomer", this) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {

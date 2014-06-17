@@ -7,13 +7,13 @@
 package org.komea.product.wicket.resources;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 
 /**
  *
  * @author rgalerme
  */
-public class PageTest extends LayoutPage {
+public class PageTest extends StatelessLayoutPage {
 
     public PageTest(PageParameters _parameters) {
         super(_parameters);
