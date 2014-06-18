@@ -8,8 +8,6 @@ import java.util.Iterator;
 import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import static org.komea.product.wicket.LayoutPage.LOGGER;
-
 
 
 /**
@@ -19,25 +17,25 @@ import static org.komea.product.wicket.LayoutPage.LOGGER;
  */
 public abstract class StatelessLayoutPage extends LayoutPage
 {
-
-
+    
+    
     public StatelessLayoutPage(final PageParameters _parameters) {
-
-
+    
+    
         super(_parameters);
         setStatelessHint(true);
         // DEBUG MODE
         checkStateless();
-
+        
     }
-    
-    
+
+
     /**
      * Check if the page is stateless
      */
     public void checkStateless() {
-    
-    
+
+
         if (!isPageStateless()) {
             final Iterator<Component> iterator = this.iterator();
             while (iterator.hasNext()) {
@@ -48,5 +46,13 @@ public abstract class StatelessLayoutPage extends LayoutPage
                 }
             }
         }
+    }
+    
+    
+    @Override
+    public boolean isVersioned() {
+    
+    
+        return false;
     }
 }
