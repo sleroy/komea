@@ -257,6 +257,7 @@
 		<!-- test -->
 		<module>komea-integration-tests</module>
 
-		
+
+		<module>komea-cyfe-rest-api</module>
 	</modules>
 </project>
