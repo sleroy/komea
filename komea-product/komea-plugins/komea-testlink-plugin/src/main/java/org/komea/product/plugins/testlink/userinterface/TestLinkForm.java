@@ -21,7 +21,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 import org.komea.product.plugins.testlink.api.ITestLinkServerDAO;
 import org.komea.product.plugins.testlink.model.TestLinkServer;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
 
@@ -36,14 +36,14 @@ public class TestLinkForm extends Form<TestLinkServer>
     
     private final Component          feedBack;
     private final String             oldAdress;
-    private final LayoutPage         page;
+    private final StatelessLayoutPage         page;
     private final ITestLinkServerDAO testlinkService;
     private final TestLinkServer     testServer;
     
     
     
     public TestLinkForm(
-            final LayoutPage _page,
+            final StatelessLayoutPage _page,
             final TestLinkServer _testServer,
             final ITestLinkServerDAO _testlinkService,
             final Component _feedBack,
@@ -125,7 +125,7 @@ public class TestLinkForm extends Form<TestLinkServer>
         add(testButton);
         
         
-        add(new AjaxLinkLayout<LayoutPage>("cancel", page)
+        add(new AjaxLinkLayout<StatelessLayoutPage>("cancel", page)
         {
             
             
@@ -133,7 +133,7 @@ public class TestLinkForm extends Form<TestLinkServer>
             public void onClick(final AjaxRequestTarget art) {
             
             
-                final LayoutPage page = getCustom();
+                final StatelessLayoutPage page = getCustom();
                 page.setResponsePage(new TestLinkPage(page.getPageParameters()));
             }
         });

@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.komea.product.backend.service.entities.ICustomerService;
 import org.komea.product.database.model.Customer;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.AbstractDeleteAction;
 
 /**
@@ -22,7 +22,7 @@ public class CustomerDeleteAction extends AbstractDeleteAction<Customer> {
     private final List<Customer> customerAffichage;
     private final ICustomerService customerDao;
 
-    public CustomerDeleteAction(List<Customer> customerAffichage, ICustomerService customerDao,LayoutPage page) {
+    public CustomerDeleteAction(List<Customer> customerAffichage, ICustomerService customerDao,StatelessLayoutPage page) {
          super(page, "dialogdelete");
         this.customerAffichage = customerAffichage;
         this.customerDao = customerDao;

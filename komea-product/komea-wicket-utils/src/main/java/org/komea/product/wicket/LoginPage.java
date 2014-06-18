@@ -18,7 +18,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  * 
  * @author sleroy
  */
-public class LoginPage extends LayoutPage
+public class LoginPage extends StatelessLayoutPage
 {
     
     

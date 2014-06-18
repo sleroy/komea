@@ -28,7 +28,6 @@
 			<artifactId>komea-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>biz.futureware.mantis</groupId>
 			<artifactId>mantis-axis-soap-client</artifactId>

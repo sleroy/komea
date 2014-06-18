@@ -41,7 +41,7 @@ import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.TimeCoordinate;
 import org.komea.product.model.timeserie.TimeScale;
 import org.komea.product.service.dto.EntityKey;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +64,7 @@ import com.googlecode.wickedcharts.wicket6.highcharts.Chart;
  * 
  * @author sleroy
  */
-public class KpiValuesPage extends LayoutPage {
+public class KpiValuesPage extends StatelessLayoutPage {
     
     /**
      * @author sleroy

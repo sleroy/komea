@@ -10,7 +10,7 @@ import org.komea.product.backend.service.entities.IPersonRoleService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.CustomColumn;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
@@ -22,7 +22,7 @@ import org.komea.product.wicket.widget.model.ListDataModel;
  *
  * @author sleroy
  */
-public class PersonPage extends LayoutPage {
+public class PersonPage extends StatelessLayoutPage {
 
     @SpringBean
     private IPersonService personDAO;

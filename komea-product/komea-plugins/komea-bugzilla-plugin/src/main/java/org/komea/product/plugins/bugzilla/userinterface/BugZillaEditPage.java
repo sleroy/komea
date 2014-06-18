@@ -14,13 +14,13 @@ import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 
 /**
  *
  * @author rgalerme
  */
-public final class BugZillaEditPage extends LayoutPage {
+public final class BugZillaEditPage extends StatelessLayoutPage {
 
     @SpringBean
     private IBZConfigurationDAO bService;

@@ -11,7 +11,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.ISettingService;
 import org.komea.product.database.model.Setting;
 import org.komea.product.web.dto.SettingsDTO;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 
 
 
@@ -20,7 +20,7 @@ import org.komea.product.wicket.LayoutPage;
  * 
  * @author sleroy
  */
-public class SettingsPage extends LayoutPage
+public class SettingsPage extends StatelessLayoutPage
 {
     
     

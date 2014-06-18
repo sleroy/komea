@@ -9,13 +9,13 @@ package org.komea.product.api.service.errors.userinterface;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 
 /**
  *
  * @author rgalerme
  */
-public final class LdapEditPage extends LayoutPage {
+public final class LdapEditPage extends StatelessLayoutPage {
 
     public LdapEditPage(PageParameters _parameters) {
         super(_parameters);

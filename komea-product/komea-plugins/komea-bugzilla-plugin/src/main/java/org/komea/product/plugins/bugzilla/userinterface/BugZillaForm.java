@@ -30,7 +30,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 import org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.DisplayTraceDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
@@ -43,7 +43,7 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
     private final IBZConfigurationDAO bService;
     private final BZServerConfiguration bugServer;
     private final Component feedBack;
-    private final LayoutPage page;
+    private final StatelessLayoutPage page;
     private final ManageMessageConnexion messageCon;
     private String savPassword;
     private final WebMarkupContainer contSuccess;
@@ -57,7 +57,7 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
             final IBZConfigurationDAO _bService,
             final BZServerConfiguration _bugServer,
             final Component _feedBack,
-            final LayoutPage _page,
+            final StatelessLayoutPage _page,
             final String id,
             final IModel<BZServerConfiguration> model) {
 
@@ -126,12 +126,12 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
             }
         });
 
-        add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
+        add(new AjaxLinkLayout<StatelessLayoutPage>("cancel", page) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
 
-                final LayoutPage page = getCustom();
+                final StatelessLayoutPage page = getCustom();
                 page.setResponsePage(new BugZillaPage(page.getPageParameters()));
             }
         });

@@ -27,7 +27,7 @@ import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.PersonRole;
 import org.komea.product.database.model.Project;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.CustomUpdater;
 import org.komea.product.wicket.utils.DataListSelectDialogBuilder;
 import org.komea.product.wicket.utils.DialogFactory;
@@ -50,7 +50,7 @@ public final class PersonForm extends Form<Person> {
     private final NameGeneric groupName;
     private Boolean isAdmin;
     private final boolean isNew;
-    private final LayoutPage page;
+    private final StatelessLayoutPage page;
     private final IPasswordEncoder passEncoder;
     private PasswordTextField password;
     private final Person person;
@@ -76,7 +76,7 @@ public final class PersonForm extends Form<Person> {
             final IProjectService _projectService,
             final String _id,
             final CompoundPropertyModel<Person> _compoundPropertyModel,
-            final LayoutPage _page,
+            final StatelessLayoutPage _page,
             final IPersonGroupService _prService) {
 
         super(_id, _compoundPropertyModel);
@@ -216,7 +216,7 @@ public final class PersonForm extends Form<Person> {
 
         };
         page.add(dialogPersonGroup);
-        add(new AjaxLinkLayout<LayoutPage>("btnGroup", page) {
+        add(new AjaxLinkLayout<StatelessLayoutPage>("btnGroup", page) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
@@ -332,16 +332,16 @@ public final class PersonForm extends Form<Person> {
         this.selectedEntity = selectedEntity;
     }
 
-    private class AjaxLinkCancelButton extends AjaxLinkLayout<LayoutPage> {
+    private class AjaxLinkCancelButton extends AjaxLinkLayout<StatelessLayoutPage> {
 
-        public AjaxLinkCancelButton(String string, LayoutPage page) {
+        public AjaxLinkCancelButton(String string, StatelessLayoutPage page) {
             super(string, page);
         }
 
         @Override
         public void onClick(final AjaxRequestTarget art) {
 
-            final LayoutPage page = getCustom();
+            final StatelessLayoutPage page = getCustom();
             page.setResponsePage(new PersonPage(page.getPageParameters()));
         }
     }

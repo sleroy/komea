@@ -14,13 +14,13 @@ import org.komea.product.backend.service.entities.IPersonGroupService;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.model.PersonGroup;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 
 /**
  *
  * @author rgalerme
  */
-public class TeamEditPage extends LayoutPage {
+public class TeamEditPage extends StatelessLayoutPage {
 
     @SpringBean
     private IPersonGroupService prService;

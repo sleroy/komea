@@ -15,14 +15,14 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.plugins.testlink.api.ITestLinkServerDAO;
 import org.komea.product.plugins.testlink.model.TestLinkServer;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 
 
 
 /**
  * @author rgalerme
  */
-public final class TestLinkEditPage extends LayoutPage
+public final class TestLinkEditPage extends StatelessLayoutPage
 {
     
     

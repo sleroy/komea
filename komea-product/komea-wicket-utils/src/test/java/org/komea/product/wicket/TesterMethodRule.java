@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class initializes the required objects to produce unit tests with wicket. You will have to provide mock to enable it in your tests.
- * 
+ *
  * @author sleroy
  */
 class TesterMethodRule implements TestRule

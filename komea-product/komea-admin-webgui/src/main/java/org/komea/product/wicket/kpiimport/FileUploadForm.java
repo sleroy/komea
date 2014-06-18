@@ -4,6 +4,7 @@ package org.komea.product.wicket.kpiimport;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.wicket.markup.html.WebPage;
@@ -92,10 +93,18 @@ public class FileUploadForm extends Form<Void>
                     upload.writeTo(newFile);
 
                     kpiImportPage.info("saved file: " + upload.getClientFileName());
+
+                    try {
+                        setResponsePage(new KpiZipReadPage(kpiImportPage.getPageParameters(),
+                                uploads.get(0).writeToTempFile()));
+                    } catch (final IOException e) {
+                        error(e.getMessage());
+                    }
                 } catch (final Exception e) {
                     throw new IllegalStateException("Unable to write file", e);
                 }
             }
         }
+
     }
 }

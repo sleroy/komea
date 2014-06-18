@@ -16,7 +16,7 @@ import org.apache.wicket.model.IModel;
 import org.komea.product.api.service.ldap.ILdapService;
 import org.komea.product.backend.service.ldap.LdapAuthTypeEnum;
 import org.komea.product.backend.service.ldap.LdapServer;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.widget.builders.SelectBoxBuilder;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
 
@@ -28,9 +28,9 @@ public class LdapForm extends Form<LdapServer> {
     private final ILdapService ldapService;
     private final LdapServer   ldapServer;
     private final Component    feedBack;
-    private final LayoutPage   page;
+    private final StatelessLayoutPage   page;
     
-    public LdapForm(final ILdapService _ldapService, final LdapServer _ldapServer, final Component _feedBack, final LayoutPage _page,
+    public LdapForm(final ILdapService _ldapService, final LdapServer _ldapServer, final Component _feedBack, final StatelessLayoutPage _page,
             final String id, final IModel<LdapServer> model) {
     
         super(id, model);

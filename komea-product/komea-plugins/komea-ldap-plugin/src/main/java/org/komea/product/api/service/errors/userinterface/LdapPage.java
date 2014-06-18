@@ -14,12 +14,12 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.api.service.ldap.ILdapService;
 import org.komea.product.backend.service.ldap.LdapServer;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 
 /**
  * @author rgalerme
  */
-public final class LdapPage extends LayoutPage {
+public final class LdapPage extends StatelessLayoutPage {
     
     @SpringBean
     private ILdapService ldapService;

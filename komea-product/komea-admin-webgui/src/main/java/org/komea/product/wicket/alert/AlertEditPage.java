@@ -13,13 +13,13 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.alert.IAlertTypeService;
 import org.komea.product.database.model.KpiAlertType;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 
 /**
  *
  * @author rgalerme
  */
-public final class AlertEditPage extends LayoutPage {
+public final class AlertEditPage extends StatelessLayoutPage {
 
     @SpringBean
     private IAlertTypeService alertService;
