@@ -63,14 +63,16 @@ public class TimeSerieDTO implements Serializable {
         double sum = 0;
         int count = 0;
         for (final TimeCoordinateDTO coordinate : coordinates) {
-            final Double value = coordinate.getValue();
-            if (value != null) {
+            if (coordinate.hasValue()) {
                 sum += coordinate.getValue();
                 count++;
             }
         }
+        if (count < 1) {
+            return null;
+        }
         if (GroupFormula.AVG_VALUE.equals(kpi.getGroupFormula())) {
-            return count < 1 ? null : sum / count;
+            return sum / count;
         }
         return sum;
     }
