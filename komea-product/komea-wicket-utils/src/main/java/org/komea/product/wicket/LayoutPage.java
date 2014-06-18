@@ -4,44 +4,28 @@ package org.komea.product.wicket;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
 import javax.servlet.ServletRequest;
 
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.markup.html.repeater.data.grid.DataGridView;
-import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
-import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.komea.product.backend.service.esper.IEventStatisticsService;
 import org.komea.product.backend.utils.KomeaEntry;
+import org.komea.product.database.enums.Severity;
 import org.komea.product.wicket.utils.KomeaSecurityContextHolderAwareRequestWrapper;
 import org.komea.product.wicket.widget.RedirectPageLink;
-import org.komea.product.wicket.widget.model.ListDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.accordion.AccordionPanel;
 
 
 
@@ -54,115 +38,11 @@ public abstract class LayoutPage extends WebPage
 {
     
     
-    public static class FragmentPropertyColumn extends AbstractColumn<String, String>
-    {
-        
-        
-        private final AccordionPanel accordeon;
-        private final List<String>   menuAdministration = Arrays.asList("panel-settings",
-                                                                "panel-plugins", "panel-viewlog",
-                                                                "panel-stats", "panel-events",
-                                                                "panel-cronpage", "panel-empty");
-        
-        private final LayoutPage     page;
-        
-        
-        
-        public FragmentPropertyColumn(
-                final IModel<String> _displayModel,
-                final LayoutPage _page,
-                final AccordionPanel _accordion) {
-        
-        
-            super(_displayModel);
-            accordeon = _accordion;
-            page = _page;
-        }
-        
-        
-        @Override
-        public void populateItem(
-                final Item<ICellPopulator<String>> item,
-                final String string,
-                final IModel<String> imodel) {
-        
-        
-            final String object = imodel.getObject();
-            
-            item.add(new Fragment(string, object, page));
-            
-            if (testMenu(object, "panel-teams", "TeamPage", "TeamEditPage")
-                    || testMenu(object, "panel-users", "PersonPage", "PersonAddPage")
-                    || testMenu(object, "panel-departments", "DepartmentPage", "DepartmentEditPage")
-                    || testMenu(object, "panel-customers", "CustomerPage", "CustomerEditPage")
-                    || testMenu(object, "panel-projects", "ProjectPage", "ProjectEditPage")) {
-                accordeon.setActiveTab(COMPANY_INDEX);
-                item.add(new AttributeModifier("style", new Model("background-color: #C4E3F0")));
-            }
-            
-            if (testMenu(object, "panel-kpis", "KpiPage", "KpiEditPage")
-                    || testMenu(object, "panel-kpiview", "KpiChartPage")
-                    || testMenu(object, "panel-alerts", "AlertPage", "AlertEditPage")) {
-                accordeon.setActiveTab(KPIS_INDEX);
-                item.add(new AttributeModifier("style", new Model("background-color: #C4E3F0")));
-            }
-            
-            if (testMenu(object, "panel-settings", "SettingsPage")
-                    || testMenu(object, "panel-plugins", "ProviderPage", "ProviderPanel",
-                            "ProviderTableActionPanel")
-                    || testMenu(object, "panel-viewlog", "ConsolePage", "EditPage")
-                    || testMenu(object, "panel-stats", "StatPage", "EditPage")
-                    || testMenu(object, "panel-events", "EventsPage")
-                    || testMenu(object, "panel-cronpage", "CronPage")) {
-                accordeon.setActiveTab(ADMIN_INDEX);
-                item.add(new AttributeModifier("style", new Model("background-color: #C4E3F0")));
-            }
-            
-        }
-        
-        
-        private boolean testMenu(
-                final String _idPanel,
-                final String _idPanelConstruc,
-                final String... _pages) {
-        
-        
-            if (_idPanel.equals(_idPanelConstruc)) {
-                for (final String string : _pages) {
-                    if (string.equals(page.getClass().getSimpleName())) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-            
-        }
-        
-    }
+    protected static final Logger   LOGGER = LoggerFactory.getLogger(LayoutPage.class);
     
     
-    
-    public final static int       ADMIN_INDEX        = 2;
-    
-    public final static int       COMPANY_INDEX      = 0;
-    
-    public final static int       KPIS_INDEX         = 1;
-    
-    protected static final Logger LOGGER             = LoggerFactory.getLogger(LayoutPage.class);
-    
-    private AccordionPanel        accordion;
-    private final List<String>    menuAdministration = Arrays.asList("panel-settings",
-                                                             "panel-plugins", "panel-viewlog",
-                                                             "panel-stats", "panel-events",
-                                                             "panel-cronpage", "panel-empty");
-    private final List<String>    menuCompany        = Arrays.asList("panel-users", "panel-teams",
-                                                             "panel-departments",
-                                                             "panel-customers", "panel-projects",
-                                                             "panel-empty");
-    
-    private final List<String>    menuKpis           = Arrays.asList("panel-kpiview",
-                                                             "panel-alerts", "panel-kpis",
-                                                             "panel-empty");
+    @SpringBean(required = false)
+    private IEventStatisticsService eventStatisticsService;
     
     
     
@@ -171,25 +51,21 @@ public abstract class LayoutPage extends WebPage
     
     
         super(_parameters);
-        add(new Label("page_title", Model.of(getTitle())));
+        add(new Label("title", Model.of(getTitle())));
         
-        // jQueryBehavior = new JQueryBehavior("#accordion", "accordion");
-        // this.add(jQueryBehavior);
-        addAccordingPanel(this);
         
-        final KomeaSecurityContextHolderAwareRequestWrapper securityContextHolderAwareRequestWrapper =
-                new KomeaSecurityContextHolderAwareRequestWrapper((ServletRequest) getRequest()
-                        .getContainerRequest(), "");
+        new KomeaSecurityContextHolderAwareRequestWrapper((ServletRequest) getRequest()
+                .getContainerRequest(), "");
         
-        if (securityContextHolderAwareRequestWrapper.isUserInRole("ADMIN")) {
-            add(new WebMarkupContainer("signinpanel"));
-            add(new Fragment("personalpanel", "personal", this));
-        } else {
-            add(new Fragment("signinpanel", "signin", this));
-            add(new WebMarkupContainer("personalpanel"));
-        }
+        // if (securityContextHolderAwareRequestWrapper.isUserInRole("ADMIN")) {
+        // add(new WebMarkupContainer("signinpanel"));
+        // add(new Fragment("personalpanel", "personal", this));
+        // } else {
+        // add(new Fragment("signinpanel", "signin", this));
+        // add(new WebMarkupContainer("personalpanel"));
+        // }
         buildBreadCrumb();
-        
+        buildAlerts();
     }
     
     
@@ -245,31 +121,19 @@ public abstract class LayoutPage extends WebPage
     }
     
     
-    private void addAccordingPanel(final LayoutPage page) {
+    /**
+     *
+     */
+    private void buildAlerts() {
     
     
-        // Recommended options when using dynamic content (AjaxTab) //
-        final Options options = new Options();
-        options.set("heightStyle", Options.asString("content"));
+        if (eventStatisticsService != null) {
+            add(new Label("critical-alerts", Model.of(eventStatisticsService
+                    .getNumberOfAlerts(Severity.BLOCKER))));
+        } else {
+            add(new Label("critical-alerts", Model.of("NA")));
+        }
         
-        // Accordion //
-        accordion = new AccordionPanel("accordion", newTabList(page), options)
-        {
-            
-            
-            // target.add(accordion.setActiveTab(accordion.getLastTabIndex()));
-            private static final long serialVersionUID = 1L;
-            
-            
-            
-            @Override
-            public void onActivate(final AjaxRequestTarget target, final int index, final ITab tab) {
-            
-            
-            }
-        };
-        
-        page.add(accordion);
     }
     
     
@@ -295,102 +159,7 @@ public abstract class LayoutPage extends WebPage
             }
             
         });
-        add(new BookmarkablePageLink<Void>("breadactive", getPageClass()));
+        add(new Label("breadactive", getTitle()));
     }
     
-    
-    private List<ITab> newTabList(final LayoutPage page) {
-    
-    
-        final List<ITab> tabs = new ArrayList<ITab>();
-        // tab #3, using AbstractTab //
-        final AbstractTab tab1 = new AbstractTab(Model.of(getString("home.company")))
-        {
-            
-            
-            private static final long serialVersionUID = 1L;
-            
-            
-            
-            @Override
-            public WebMarkupContainer getPanel(final String panelId) {
-            
-            
-                List<IColumn<?, ?>> columns;
-                columns = new ArrayList<IColumn<?, ?>>();
-                FragmentPropertyColumn fcol;
-                fcol = new FragmentPropertyColumn(Model.of("titre"), page, accordion);
-                columns.add(fcol);
-                final ISortableDataProvider<String, String> dataProvider =
-                        new ListDataModel<String>(menuCompany);
-                final DataGridView defaultDataTable =
-                        new DataGridView("table-panel-1", columns, dataProvider);
-                final Fragment fragment = new Fragment(panelId, "panel-1", page);
-                fragment.add(defaultDataTable);
-                return fragment;
-            }
-        };
-        
-        tabs.add(tab1);
-        
-        tabs.add(new AbstractTab(Model.of(getString("home.kpis")))
-        {
-            
-            
-            private static final long serialVersionUID = 1L;
-            
-            
-            
-            @Override
-            public WebMarkupContainer getPanel(final String panelId) {
-            
-            
-                List<IColumn<?, ?>> columns;
-                columns = new ArrayList<IColumn<?, ?>>();
-                
-                FragmentPropertyColumn fcol;
-                fcol = new FragmentPropertyColumn(Model.of("titre"), page, accordion);
-                
-                columns.add(fcol);
-                final ISortableDataProvider<String, String> dataProvider =
-                        new ListDataModel<String>(menuKpis);
-                final DataGridView defaultDataTable =
-                        new DataGridView("table-panel-2", columns, dataProvider);
-                final Fragment fragment = new Fragment(panelId, "panel-2", page);
-                fragment.add(defaultDataTable);
-                return fragment;
-            }
-        });
-        
-        tabs.add(new AbstractTab(Model.of(getString("home.administration")))
-        {
-            
-            
-            private static final long serialVersionUID = 1L;
-            
-            
-            
-            @Override
-            public WebMarkupContainer getPanel(final String panelId) {
-            
-            
-                List<IColumn<?, ?>> columns;
-                columns = new ArrayList<IColumn<?, ?>>();
-                FragmentPropertyColumn fcol;
-                fcol = new FragmentPropertyColumn(Model.of("titre"), page, accordion);
-                columns.add(fcol);
-                final ISortableDataProvider<String, String> dataProvider =
-                        new ListDataModel<String>(menuAdministration);
-                final DataGridView defaultDataTable =
-                        new DataGridView("table-panel-3", columns, dataProvider);
-                
-                // defaultDataTable.get(1).add(new AttributeModifier("class",new Model("danger") ));
-                final Fragment fragment = new Fragment(panelId, "panel-3", page);
-                fragment.add(defaultDataTable);
-                return fragment;
-            }
-        });
-        
-        return tabs;
-    }
 }

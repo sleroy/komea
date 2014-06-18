@@ -6,6 +6,7 @@ package org.komea.product.wicket;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.core.request.handler.PageProvider;
@@ -124,14 +125,15 @@ public class WicketApplication extends AuthenticatedWebApplication
         if (isDebugMode()) {
             LOGGER.error("Wicket is starting in debug mode");
         }
-        
-        
+
+
         getDebugSettings().setAjaxDebugModeEnabled(isDebugMode());
         getDebugSettings().setOutputComponentPath(isDebugMode());
         getDebugSettings().setOutputMarkupContainerClassName(isDebugMode());
         getDebugSettings().setLinePreciseReportingOnNewComponentEnabled(isDebugMode());
         getDebugSettings().setLinePreciseReportingOnAddComponentEnabled(isDebugMode());
-        getDebugSettings().setDevelopmentUtilitiesEnabled(isDebugMode());
+        getDebugSettings().setDevelopmentUtilitiesEnabled(
+                isDebugMode() || getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT);
         getDebugSettings().setComponentUseCheck(isDebugMode());
         if (!isDebugMode()) {
             getComponentInstantiationListeners().add(new SpringComponentInjector(this));
@@ -188,8 +190,8 @@ public class WicketApplication extends AuthenticatedWebApplication
 
 
     private void pageMounting() {
-    
-    
+
+
         mountPage("/home", HomePage.class);
         mountPage("/error.html", MyInternalErrorPage.class);
         LOGGER.debug("#############################################################");
