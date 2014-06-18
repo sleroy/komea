@@ -4,8 +4,6 @@ package org.komea.product.wicket.kpiimport;
 
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +23,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.IKpiImportationService;
 import org.komea.product.backend.service.kpi.KpiDefinition;
+import org.komea.product.backend.utils.StackTracePrint;
 import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.kpiimport.KpiEntry.Status;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
 import org.komea.product.wicket.widget.model.ListDataModel;
 import org.slf4j.Logger;
@@ -72,27 +72,24 @@ public class KpiZipReadPage extends LayoutPage
         
             final KpiEntry kpiEntry = _rowModel.getObject();
             Component link = null;
-            if (kpiEntry.hasNoDef()) {
-                link = new Label("import", Model.of("Could not import the script"));
-                
-            } else {
-                
-                try {
-                    kpiService.saveOrUpdate(kpiEntry.getKpiDefinition().getKpi());
-                } catch (final Exception e) {
-                    error(e.getMessage());
-                    final StringWriter stringWriter = new StringWriter();
-                    e.printStackTrace(new PrintWriter(stringWriter));
-                    error(stringWriter.getBuffer().toString());
-                }
-                
-                if (kpiService.exists(kpiEntry.getKpiDefinition().getKpi().getKey())) {
-                    link = new Label("import", Model.of("Existing kpi upgraded"));
-                } else {
+            switch (kpiEntry.getStatus()) {
+                case ERROR:
+                    link = new Label("import", Model.of("Could not create the kpi"));
+                    break;
+                case IMPORTED:
                     link = new Label("import", Model.of("Kpi imported"));
-                }
-                
+                    break;
+                case NO_IMPORT:
+                    link = new Label("import", Model.of("Could not import the script"));
+                    break;
+                case UPDATED:
+                    link = new Label("import", Model.of("Existing kpi upgraded"));
+                    break;
+                default:
+                    throw new UnsupportedOperationException();
+                    
             }
+            
             _cellItem.add(new ImportPanel(_componentId, _rowModel, link));
             
         }
@@ -128,7 +125,7 @@ public class KpiZipReadPage extends LayoutPage
                         .addColumn(getString("kpiimport.kpikey"), "kpiDefinition.kpi.kpiKey")
                         .addColumn(new ImportColumn()).displayRows(100).withData(dataModel).build();
         add(build);
-
+        
         // In WebPage
         add(new FeedbackPanel("feedback"));
         
@@ -143,9 +140,24 @@ public class KpiZipReadPage extends LayoutPage
     
         final List<KpiEntry> entries = new ArrayList<KpiEntry>(_importCatalog.size());
         for (final Entry<String, KpiDefinition> catalogEntry : _importCatalog.entrySet()) {
+            Status status = Status.NO_IMPORT;
+            if (catalogEntry.getValue() != null) {
+                try {
+                    if (kpiService.exists(catalogEntry.getValue().getKpi().getKey())) {
+                        status = Status.UPDATED;
+                    } else {
+                        status = Status.IMPORTED;
+                    }
+                    kpiService.saveOrUpdate(catalogEntry.getValue().getKpi());
+                } catch (final Exception e) {
+                    error("Exception : " + StackTracePrint.printTrace(e));
+                    status = Status.ERROR;
+                }
+            }
             final KpiEntry kpiEntry = new KpiEntry();
             kpiEntry.setEntry(catalogEntry.getKey());
-            kpiEntry.setKpiDefinition(catalogEntry.getValue());
+            kpiEntry.setKpiName(catalogEntry.getValue().getKpi().getKey());
+            kpiEntry.setStatus(status);
             entries.add(kpiEntry);
         }
         

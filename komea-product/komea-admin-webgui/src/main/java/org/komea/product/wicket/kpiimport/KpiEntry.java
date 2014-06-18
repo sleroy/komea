@@ -8,18 +8,25 @@ package org.komea.product.wicket.kpiimport;
 
 import java.io.Serializable;
 
-import org.komea.product.backend.service.kpi.KpiDefinition;
-
 
 
 public class KpiEntry implements Serializable
 {
     
     
-    private String        entry;
-
-
-    private KpiDefinition kpiDefinition;
+    public enum Status {
+        ERROR, IMPORTED, NO_IMPORT, UPDATED
+    }
+    
+    
+    
+    private String entry;
+    
+    
+    private String kpiName;
+    
+    
+    private Status status;
 
 
 
@@ -29,31 +36,36 @@ public class KpiEntry implements Serializable
      * @return the entry
      */
     public String getEntry() {
-
-
+    
+    
         return entry;
     }
 
 
     /**
-     * Returns the value of the field kpiDefinition.
+     * Returns the value of the field kpiName.
      *
-     * @return the kpiDefinition
+     * @return the kpiName
      */
-    public KpiDefinition getKpiDefinition() {
-
-
-        return kpiDefinition;
-    }
-
-
-    public boolean hasNoDef() {
+    public String getKpiName() {
     
     
-        return kpiDefinition == null;
+        return kpiName;
     }
-
-
+    
+    
+    /**
+     * Returns the value of the field status.
+     *
+     * @return the status
+     */
+    public Status getStatus() {
+    
+    
+        return status;
+    }
+    
+    
     /**
      * Sets the field entry with the value of _entry.
      *
@@ -61,21 +73,36 @@ public class KpiEntry implements Serializable
      *            the entry to set
      */
     public void setEntry(final String _entry) {
-
-
+    
+    
         entry = _entry;
     }
 
 
     /**
-     * Sets the field kpiDefinition with the value of _kpiDefinition.
+     * Sets the field kpiName with the value of _kpiName.
      *
-     * @param _kpiDefinition
-     *            the kpiDefinition to set
+     * @param _kpiName
+     *            the kpiName to set
      */
-    public void setKpiDefinition(final KpiDefinition _kpiDefinition) {
-
-
-        kpiDefinition = _kpiDefinition;
+    public void setKpiName(final String _kpiName) {
+    
+    
+        kpiName = _kpiName;
     }
+    
+    
+    /**
+     * Sets the field status with the value of _status.
+     *
+     * @param _status
+     *            the status to set
+     */
+    public void setStatus(final Status _status) {
+    
+    
+        status = _status;
+    }
+    
+    
 }
