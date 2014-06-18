@@ -4,6 +4,7 @@ package org.komea.product.web.rest.api;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +29,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import com.google.common.collect.Lists;
 
 public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase {
     
@@ -61,13 +64,7 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         
         // HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
         // LimitCriteria limit = LimitCriteria.createDefaultLimitCriteria();
-        ManyHistoricalMeasureRequest request = new ManyHistoricalMeasureRequest();
-        PeriodCriteria period = new PeriodCriteria();
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2014, Calendar.JANUARY, 1);
-        period.setStartDate(calendar.getTime());
-        period.setEndDate(new Date());
-        request.setPeriod(period);
+        ManyHistoricalMeasureRequest request = getHistoricalRequest();
         String jsonMessage = IntegrationTestUtil.convertObjectToJSON(request);
         System.out.println(jsonMessage);
         
@@ -79,4 +76,71 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         
     }
     
+    private ManyHistoricalMeasureRequest getHistoricalRequest() {
+    
+        ManyHistoricalMeasureRequest request = new ManyHistoricalMeasureRequest();
+        PeriodCriteria period = new PeriodCriteria();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2014, Calendar.JANUARY, 1);
+        period.setStartDate(calendar.getTime());
+        period.setEndDate(new Date());
+        request.setPeriod(period);
+        return request;
+    }
+    
+    @Test
+    public void testAverageHistoricalWithEvolution_http_success() throws Exception {
+    
+        List<TimeSerieDTO> series = Lists.newArrayList();
+        ManyHistoricalMeasureRequest request = getHistoricalRequest();
+        Mockito.when(service.findMultipleHistoricalMeasure(request.getKpiKeyList(), request.getPeriod().previous())).thenReturn(series);
+        // .thenReturn(measures);
+        
+        // HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
+        // LimitCriteria limit = LimitCriteria.createDefaultLimitCriteria();
+        // MeasureEvolutionResult evolution = new MeasureEvolutionResult();
+        // MeasureResult measureResult = new MeasureResult();
+        // BaseEntityDto entity = new BaseEntityDto(EntityType.PROJECT, 1, "KOMEA", "KOMEA", "");
+        // measureResult.setEntity(entity);
+        // measureResult.setKpi(KpiBuilder.create().build());
+        // evolution.setMeasureResult(measureResult);
+        // evolution.set
+        String jsonMessage = IntegrationTestUtil.convertObjectToJSON(request);
+        System.out.println(jsonMessage);
+        
+        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/averageHistoricEvolution")
+                .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
+        
+        httpRequest.andDo(MockMvcResultHandlers.print());
+        httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
+        
+    }
+    
+    @Test
+    public void testAverageHistoricalWithEvolution_old_value() throws Exception {
+    
+        List<TimeSerieDTO> series = Lists.newArrayList();
+        ManyHistoricalMeasureRequest request = getHistoricalRequest();
+        Mockito.when(service.findMultipleHistoricalMeasure(request.getKpiKeyList(), request.getPeriod().previous())).thenReturn(series);
+        // .thenReturn(measures);
+        
+        // HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
+        // LimitCriteria limit = LimitCriteria.createDefaultLimitCriteria();
+        // MeasureEvolutionResult evolution = new MeasureEvolutionResult();
+        // MeasureResult measureResult = new MeasureResult();
+        // BaseEntityDto entity = new BaseEntityDto(EntityType.PROJECT, 1, "KOMEA", "KOMEA", "");
+        // measureResult.setEntity(entity);
+        // measureResult.setKpi(KpiBuilder.create().build());
+        // evolution.setMeasureResult(measureResult);
+        // evolution.set
+        String jsonMessage = IntegrationTestUtil.convertObjectToJSON(request);
+        System.out.println(jsonMessage);
+        
+        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/averageHistoricEvolution")
+                .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
+        
+        httpRequest.andDo(MockMvcResultHandlers.print());
+        httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
+        
+    }
 }
