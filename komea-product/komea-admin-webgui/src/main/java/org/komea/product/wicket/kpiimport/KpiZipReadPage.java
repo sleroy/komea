@@ -74,16 +74,16 @@ public class KpiZipReadPage extends LayoutPage
             Component link = null;
             switch (kpiEntry.getStatus()) {
                 case ERROR:
-                    link = new Label("import", Model.of("Could not create the kpi"));
+                    link = new Label("import", getString("kpiimport.error"));
                     break;
                 case IMPORTED:
-                    link = new Label("import", Model.of("Kpi imported"));
+                    link = new Label("import", getString("kpiimport.imported"));
                     break;
                 case NO_IMPORT:
-                    link = new Label("import", Model.of("Could not import the script"));
+                    link = new Label("import", getString("kpiimport.noimport"));
                     break;
                 case UPDATED:
-                    link = new Label("import", Model.of("Existing kpi upgraded"));
+                    link = new Label("import", getString("kpiimport.updated"));
                     break;
                 default:
                     throw new UnsupportedOperationException();
