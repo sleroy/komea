@@ -122,7 +122,7 @@ public class KpiZipReadPage extends LayoutPage
         final DataTable<KpiEntry, String> build =
                 DataTableBuilder.<KpiEntry, String> newTable("table")
                         .addColumn(getString("kpiimport.resource"), "entry")
-                        .addColumn(getString("kpiimport.kpikey"), "kpiDefinition.kpi.kpiKey")
+                        .addColumn(getString("kpiimport.kpikey"), "kpiName")
                         .addColumn(new ImportColumn()).displayRows(100).withData(dataModel).build();
         add(build);
         

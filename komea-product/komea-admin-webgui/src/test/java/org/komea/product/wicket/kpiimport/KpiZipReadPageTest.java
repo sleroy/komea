@@ -40,9 +40,9 @@ public class KpiZipReadPageTest extends AbstractSpringIntegrationTestCase
 
     @Autowired
     private IKPIService                 kpiService;
-    
-    
-    
+
+
+
     @Before
     public void before() {
 
@@ -72,6 +72,10 @@ public class KpiZipReadPageTest extends AbstractSpringIntegrationTestCase
             newWicketTester.debugComponentTrees();
 
         } finally {
+            if (newWicketTester.hasNoErrorMessage().wasFailed()) {
+
+                newWicketTester.dumpPage();
+            }
             if (newWicketTester != null) {
                 newWicketTester.destroy();
             }
