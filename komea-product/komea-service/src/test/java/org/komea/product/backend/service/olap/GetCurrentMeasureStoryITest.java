@@ -71,19 +71,6 @@ public class GetCurrentMeasureStoryITest extends AbstractSpringDBunitIntegration
         // Then the EntityNotFoundException exception must be launched
     }
 
-    @Test
-    @DatabaseSetup("measures.xml")
-    public void test_current_measure_for_kpi_branch_koverage_on_not_exinsting_project_many() {
-
-        // WHEN I ask for a the branch coverage kpi on not exintuing project
-        final KpiStringKey kpiKey = new KpiStringKey("NOT_EXIST",
-                new EntityStringKey(EntityType.PROJECT, "NOT_EXIST"));
-        final Double value = measureService.currentMeasure(kpiKey);
-
-        // Then the measures list must be empty
-        Assert.assertNull("Then the value must be null", value);
-    }
-
     @Test(expected = KPINotFoundRuntimeException.class)
     @DatabaseSetup("measures.xml")
     public void test_current_measure_for_not_exising_kpi_on_komea_project() {
@@ -95,16 +82,4 @@ public class GetCurrentMeasureStoryITest extends AbstractSpringDBunitIntegration
         // Then the KPINotFoundRuntimeException exception must be launched
     }
 
-    @Test
-    @DatabaseSetup("measures.xml")
-    public void test_current_measure_no_existing_kpi_on_komea_project_many() {
-
-        // WHEN I ask for a non existing kpi on the komea project
-        final KpiStringKey kpiKey = new KpiStringKey("NOT_EXIST",
-                new EntityStringKey(EntityType.PROJECT, "KOMEA"));
-        final Double value = measureService.currentMeasure(kpiKey);
-
-        // Then the measures list must be empty
-        Assert.assertNull("Then the value must be null", value);
-    }
 }
