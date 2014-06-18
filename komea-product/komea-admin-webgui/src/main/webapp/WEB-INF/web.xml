@@ -52,9 +52,13 @@
 	<filter>
 		<filter-name>wicket.komea</filter-name>
 		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
-		<init-param>
+		<init-param>		
+			<param-name>wicket.configuration</param-name>
+			<param-value>DEPLOYMENT</param-value>			
+		</init-param>
+		<init-param>		
 			<param-name>applicationClassName</param-name>
-			<param-value>org.komea.product.wicket.WicketApplication</param-value>
+			<param-value>org.komea.product.wicket.WicketApplication</param-value>			
 		</init-param>
 	</filter>
 
