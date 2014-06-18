@@ -107,9 +107,9 @@ public class KpiZipReadPage extends LayoutPage
     
     @SpringBean
     private IKPIService            kpiService;
-    
-    
-    
+
+
+
     public KpiZipReadPage(final PageParameters _parameters, final File _file) {
     
     
@@ -129,6 +129,14 @@ public class KpiZipReadPage extends LayoutPage
         // In WebPage
         add(new FeedbackPanel("feedback"));
         
+    }
+    
+    
+    @Override
+    public String getTitle() {
+    
+    
+        return getString("KpiZipReadPage.title");
     }
     
     

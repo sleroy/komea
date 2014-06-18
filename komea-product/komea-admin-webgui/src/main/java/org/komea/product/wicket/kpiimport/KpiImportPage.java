@@ -47,4 +47,11 @@ public class KpiImportPage extends StatelessLayoutPage
     }
     
     
+    @Override
+    public String getTitle() {
+    
+    
+        return getString("kpiimport.title");
+    }
+    
 }
