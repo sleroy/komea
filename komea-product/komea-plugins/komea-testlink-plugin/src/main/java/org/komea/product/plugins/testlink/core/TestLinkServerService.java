@@ -114,12 +114,9 @@ public class TestLinkServerService implements ITestLinkServerDAO {
     @Override
     public boolean testConnexion(final TestLinkServer server) {
         ITestLinkServerProxy newConnector = null;
-        try {
-         newConnector = factory.newConnector(server);
-        }catch(Exception e)
-        {
-        return false;
-        }
+
+        newConnector = factory.newConnector(server);
+
         return newConnector != null;
     }
 
