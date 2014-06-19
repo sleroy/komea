@@ -10,7 +10,12 @@
 			    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
 
-	<mvc:annotation-driven/>
+
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.komea.product.web.cyfe.rest.api.CsvMessageConverter"></bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
 
 	<!-- <mvc:resources mapping="/static/**" location="/static/" /> -->
 
