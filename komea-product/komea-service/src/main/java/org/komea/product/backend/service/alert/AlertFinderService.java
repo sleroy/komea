@@ -13,6 +13,8 @@ import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +35,7 @@ public class AlertFinderService implements IAlertFinderService {
 
     @Autowired
     private IKPIService kpiService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(AlertFinderService.class.getName());
 
     public IAlertService getAlertService() {
 
@@ -41,7 +44,12 @@ public class AlertFinderService implements IAlertFinderService {
 
     public KpiAlertDto findAlert(final KpiAlertType alertType, final BaseEntityDto entity, final Kpi kpi) {
 
-        final Double value = measureService.currentMeasure(kpi, entity);
+        Double value = null;
+        try {
+            value = measureService.currentMeasure(kpi, entity);
+        } catch (Exception ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        }
         final KpiAlertDto kpiAlert = new KpiAlertDto();
         kpiAlert.setKpiAlertType(alertType);
         kpiAlert.setKpi(kpi);
@@ -49,7 +57,6 @@ public class AlertFinderService implements IAlertFinderService {
         kpiAlert.setEntityName(entity.getDisplayName());
         kpiAlert.setValue(value);
         kpiAlert.setActivated(alertService.isAlertActivated(alertType, value));
-
         return kpiAlert;
     }
 
