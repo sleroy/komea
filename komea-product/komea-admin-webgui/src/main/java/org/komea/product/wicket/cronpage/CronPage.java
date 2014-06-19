@@ -54,6 +54,28 @@ public class CronPage extends StatelessLayoutPage {
                             }
 
                 };
+
+        final AbstractColumn<CronDetails, String> lastExecutionTime
+                = new AbstractColumn<CronDetails, String>(Model.of("Last execution time")) {
+
+                    @Override
+                    public void populateItem(
+                            final Item<ICellPopulator<CronDetails>> _cellItem,
+                            final String _componentId,
+                            final IModel<CronDetails> _rowModel) {
+                         Model<String> of;
+                                if (_rowModel.getObject().getLastTime() != null) {
+                                    of = Model.of(new PrettyTime().format(_rowModel.getObject().getLastTime()));
+
+                                } else {
+                                    of = Model.of("No last execution");
+                                }
+
+                                _cellItem.add(new Label(_componentId, of));
+
+                            }
+
+                };
         final AbstractColumn<CronDetails, String> statusCol
                 = new AbstractColumn<CronDetails, String>(Model.of("Cron status")) {
 
@@ -113,6 +135,7 @@ public class CronPage extends StatelessLayoutPage {
 
         dataTable = DataTableBuilder.<CronDetails, String>newTable("table").addColumn("Cron task", "cronName")
                 .addColumn(cexp)
+                .addColumn(lastExecutionTime)
                 .addColumn(nextExecutionTime)
                 .addColumn(statusCol).displayRows(40)
                 .addColumn(cLaunch)
