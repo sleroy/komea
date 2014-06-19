@@ -22,65 +22,65 @@ import org.komea.product.database.model.Kpi;
  */
 public class KpiDefinition implements IQuery<KpiResult>, Serializable
 {
-    
-    
+
+
     /**
      *
      */
     private static final long serialVersionUID = 2714853671066832899L;
-    
-    
+
+
     private Kpi               kpi;
-    
-    
+
+
     private IQuery<KpiResult> query;
-    
-    
-    
+
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.eventory.api.engine.IQuery#getBackupDelay()
      */
     @Override
     public BackupDelay getBackupDelay() {
-    
-    
+
+
         return query.getBackupDelay();
     }
-    
-    
+
+
     /**
      * Returns the value of the field kpi.
      *
      * @return the kpi
      */
     public Kpi getKpi() {
-    
-    
+
+
         return kpi;
     }
-    
-    
+
+
     /**
      * Returns the value of the field query.
      *
      * @return the query
      */
     public IQuery<KpiResult> getQuery() {
-    
-    
+
+
         return query;
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.eventory.api.engine.IQuery#getResult()
      */
     @Override
     public KpiResult getResult() {
-    
-    
+
+
         return query.getResult();
     }
     
@@ -92,12 +92,12 @@ public class KpiDefinition implements IQuery<KpiResult>, Serializable
      *            the kpi to set
      */
     public void setKpi(final Kpi _kpi) {
-    
-    
+
+
         kpi = _kpi;
     }
-    
-    
+
+
     /**
      * Sets the field query with the value of _query.
      *
@@ -105,8 +105,8 @@ public class KpiDefinition implements IQuery<KpiResult>, Serializable
      *            the query to set
      */
     public void setQuery(final IQuery<KpiResult> _query) {
-    
-    
+
+
         query = _query;
     }
 }
