@@ -557,7 +557,7 @@ public class ProjectServiceTest {
         final Project proj3 = new Project();
         proj3.setId(3);
         proj3.setProjectKey("project3");
-        proj3.setAlias(Arrays.asList("gradle", "project-alias", "maven"));
+        proj3.setAliasesList(Arrays.asList("gradle", "project-alias", "maven"));
 
         return Lists.newArrayList(proj1, proj2, proj3);
     }

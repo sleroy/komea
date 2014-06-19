@@ -286,7 +286,7 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         if (selectByKey == null) {
             final List<Project> projects = selectAll();
             for (final Project project : projects) {
-                if (project.getAliasList().contains(_alias)) {
+                if (project.hasAlias(_alias)) {
                     return project;
                 }
             }
