@@ -1,8 +1,8 @@
 package org.komea.product.wicket.events;
 
+import com.google.common.base.Strings;
 import java.util.Collections;
 import java.util.List;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -18,8 +18,6 @@ import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Project;
 import org.komea.product.wicket.StatelessLayoutPage;
 import org.ocpsoft.prettytime.PrettyTime;
-
-import com.google.common.base.Strings;
 
 /**
  * Events page
@@ -101,7 +99,6 @@ public class EventsPage extends StatelessLayoutPage {
 
         super(_parameters);
         final List<IEvent> hourEvents = service.getGlobalActivity();
-        Collections.reverse(hourEvents);
         List<IEvent> subList = hourEvents;
         if (!hourEvents.isEmpty()) {
             subList = hourEvents.subList(0, Math.min(hourEvents.size(), 100));
