@@ -1,10 +1,6 @@
-
 package org.komea.product.backend.service.entities;
 
-
-
 import java.util.List;
-
 import org.komea.product.backend.service.generic.IGenericService;
 import org.komea.product.database.dto.ProjectDto;
 import org.komea.product.database.model.Link;
@@ -14,8 +10,6 @@ import org.komea.product.database.model.Project;
 import org.komea.product.database.model.ProjectCriteria;
 import org.komea.product.database.model.Tag;
 
-
-
 /**
  * Komeap projects manager
  * <p>
@@ -24,18 +18,14 @@ import org.komea.product.database.model.Tag;
  * @since 12 févr. 2014
  * @version $Revision: 1.0 $
  */
-public interface IProjectService extends IGenericService<Project, Integer, ProjectCriteria>
-{
-
+public interface IProjectService extends IGenericService<Project, Integer, ProjectCriteria> {
 
     /**
      * delete project
      *
-     * @param _project
-     *            project
+     * @param _project project
      */
     void deleteProject(final Project _project);
-
 
     /**
      * This method list all stored projects
@@ -44,67 +34,55 @@ public interface IProjectService extends IGenericService<Project, Integer, Proje
      */
     List<ProjectDto> getAllProjectsAsDtos();
 
-
     /**
-     * Tries to find the project matching the ky. The key is tested against the project name and the alias.
+     * Tries to find the project matching the ky. The key is tested against the
+     * project name and the alias.
      *
-     * @param _projectKey
-     *            the project jkey
+     * @param _projectKey the project jkey
      * @return the project( from db) or a new instance.
      */
     Project getOrCreate(String _projectKey);
 
-
     /**
      * This method list all links associate to a project
      *
-     * @param _projectId
-     *            the project if
+     * @param _projectId the project if
      * @return the link list
      */
     List<Link> getProjectLinks(Integer _projectId);
 
-
     /**
      * get projects of a person
      *
-     * @param _personId
-     *            id of the person
+     * @param _personId id of the person
      * @return list of projects
      */
     List<Project> getProjectsOfAMember(final Integer _personId);
 
-
     /**
      * get projects of a personGroup
      *
-     * @param _personGroupId
-     *            id of the personGroup
+     * @param _personGroupId id of the personGroup
      * @return list of projects
      */
     List<Project> getProjectsOfPersonGroup(Integer _personGroupId);
-
 
     /**
      * Returns the list of projects from a person group by processing
      * recursively all the groups.
      *
-     * @param _personGroupId
-     *            the person group id to start the collection.
+     * @param _personGroupId the person group id to start the collection.
      * @return the list of projects.
      */
     List<Project> getProjectsOfPersonGroupRecursively(Integer _personGroupId);
 
-
     /**
      * This method list tags associate to a project
      *
-     * @param _projectId
-     *            the project id
+     * @param _projectId the project id
      * @return the tag list
      */
     List<String> getProjectTags(Integer _projectId);
-
 
     /**
      * @param _project
@@ -119,5 +97,7 @@ public interface IProjectService extends IGenericService<Project, Integer, Proje
             List<Person> _persons,
             List<Link> _links,
             List<PersonGroup> _teams);
+
+    Project selectByAlias(String _alias);
 
 }

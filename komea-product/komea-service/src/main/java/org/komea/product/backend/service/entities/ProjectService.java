@@ -281,10 +281,17 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
     }
 
     @Override
-    public List<Project> selectAll() {
-
-        final ProjectCriteria criteria = new ProjectCriteria();
-        return selectByCriteria(criteria);
+    public Project selectByAlias(final String _alias) {
+        final Project selectByKey = selectByKey(_alias);
+        if (selectByKey == null) {
+            final List<Project> projects = selectAll();
+            for (final Project project : projects) {
+                if (project.getAliasList().contains(_alias)) {
+                    return project;
+                }
+            }
+        }
+        return selectByKey;
     }
 
     /**
