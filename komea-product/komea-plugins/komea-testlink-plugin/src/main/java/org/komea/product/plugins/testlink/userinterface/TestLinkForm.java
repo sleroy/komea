@@ -5,7 +5,6 @@
  */
 package org.komea.product.plugins.testlink.userinterface;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.apache.wicket.Component;
@@ -33,7 +32,6 @@ import org.komea.product.wicket.widget.builders.TextFieldBuilder;
 public class TestLinkForm extends Form<TestLinkServer> {
 
     private final Component feedBack;
-    private final String oldAdress;
     private final StatelessLayoutPage         page;
     private final ITestLinkServerDAO testlinkService;
     private final TestLinkServer testServer;
@@ -58,7 +56,6 @@ public class TestLinkForm extends Form<TestLinkServer> {
         testServer = _testServer;
         testlinkService = _testlinkService;
         feedBack = _feedBack;
-        oldAdress = testServer.getAddress();
 
         feedBack.setVisible(false);
 
@@ -179,8 +176,8 @@ public class TestLinkForm extends Form<TestLinkServer> {
 //        testButton.setDefaultFormProcessing(false);
         add(testButton);
 
-        add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
-        add(new AjaxLinkLayout<StatelessLayoutPage>("cancel", page)
+      
+        add(new AjaxLinkLayout<StatelessLayoutPage>("cancel", page) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
