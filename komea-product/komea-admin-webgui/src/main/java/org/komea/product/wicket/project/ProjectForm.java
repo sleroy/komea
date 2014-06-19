@@ -101,7 +101,7 @@ public class ProjectForm extends Form<Project> {
         add(TextAreaBuilder.<String>create("description", this.project, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip(getString("global.field.tooltip.description")).build());
 
-        add(TextFieldBuilder.<String>create("aliases", this.project, "aliases").highlightOnErrors()
+        add(TextFieldBuilder.<String>create("aliases", this.project, "alias").highlightOnErrors()
                 .simpleValidator(0, 2048).withTooltip(getString("project.form.field.tooltip.aliases")).build());
 
         Customer selectByPrimaryKey = _customerService.selectByPrimaryKey(this.project.getIdCustomer());
