@@ -20,7 +20,6 @@ import org.komea.product.wicket.StatelessLayoutPage;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import com.google.common.base.Strings;
-import org.komea.product.wicket.widget.builders.DataTableBuilder;
 
 /**
  * Events page
@@ -102,6 +101,7 @@ public class EventsPage extends StatelessLayoutPage {
 
         super(_parameters);
         final List<IEvent> hourEvents = service.getGlobalActivity();
+        Collections.reverse(hourEvents);
         List<IEvent> subList = hourEvents;
         if (!hourEvents.isEmpty()) {
             subList = hourEvents.subList(0, Math.min(hourEvents.size(), 100));
