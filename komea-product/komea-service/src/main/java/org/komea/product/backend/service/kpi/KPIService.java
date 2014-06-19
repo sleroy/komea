@@ -9,11 +9,11 @@ import java.util.Set;
 import org.apache.commons.lang3.Validate;
 import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.api.exceptions.KpiAlreadyExistingException;
-import org.komea.product.backend.criterias.FindKpi;
-import org.komea.product.backend.criterias.FindKpiOrFail;
+import org.komea.product.backend.exceptions.KPINotFoundRuntimeException;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IEntityService;
+import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.HasSuccessFactorKpiDao;
 import org.komea.product.database.dao.IGenericDAO;
 import org.komea.product.database.dao.KpiAlertTypeDao;
@@ -31,7 +31,6 @@ import org.komea.product.database.model.KpiAlertTypeCriteria;
 import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.database.model.SuccessFactor;
-import org.komea.product.service.dto.KpiKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,37 +98,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         delete(kpi);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.cep.tester.IKPIService#findKPI(org.komea.product.service
-     * .dto.KpiKey)
-     */
-    @Override
-    public Kpi findKPI(final KpiKey _kpiKey) {
-
-        return selectByKey(_kpiKey.getKpiName());
-    }
-
-    @Override
-    public Kpi findKPI(final String _kpiKey) {
-
-        return selectByKey(_kpiKey);
-    }
-
-    /**
-     * Method findKPIOrFail.
-     *
-     * @param _kpiKey KpiKey
-     * @return Kpi
-     * @see org.komea.product.backend.api.IKPIService#findKPIOrFail(KpiKey)
-     */
-    @Override
-    public Kpi findKPIOrFail(final KpiKey _kpiKey) {
-
-        return new FindKpiOrFail(_kpiKey, requiredDAO).find();
-    }
-
     /**
      * (non-Javadoc)
      *
@@ -137,9 +105,23 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
      * org.komea.product.backend.api.IKPIService#findKPIOrFail(java.lang.String)
      */
     @Override
-    public Kpi findKPIOrFail(final String _kpiKey) {
+    public Kpi selectByKeyOrFail(final String _kpiKey) {
 
-        return new FindKpiOrFail(_kpiKey, requiredDAO).find();
+        final Kpi kpi = selectByKey(_kpiKey);
+        if (kpi == null) {
+            throw new KPINotFoundRuntimeException(_kpiKey);
+        }
+        return kpi;
+    }
+
+    @Override
+    public Kpi selectByPrimaryKeyOrFail(final Integer _kpiId) {
+
+        final Kpi kpi = selectByPrimaryKey(_kpiId);
+        if (kpi == null) {
+            throw new KPINotFoundRuntimeException(_kpiId);
+        }
+        return kpi;
     }
 
     /*
@@ -306,9 +288,10 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     public void saveOrUpdate(final Kpi _kpi) {
 
         if (_kpi.getId() == null) {
-            LOGGER.debug("Saving new KPI : {}", _kpi.getKpiKey());
-            if (findKPI(KpiKey.ofKpi(_kpi)) != null) {
-                throw new KpiAlreadyExistingException(_kpi.getKpiKey());
+            final String kpiKey = _kpi.getKpiKey();
+            LOGGER.debug("Saving new KPI : {}", kpiKey);
+            if (exists(kpiKey)) {
+                throw new KpiAlreadyExistingException(kpiKey);
             }
             requiredDAO.insert(_kpi);
         } else {
@@ -356,9 +339,14 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     }
 
     @Override
+    public List<Kpi> selectByCriteriaWithBLOBs(KpiCriteria _criteria) {
+        return requiredDAO.selectByCriteriaWithBLOBs(_criteria);
+    }
+
+    @Override
     public Kpi selectByKey(final String key) {
 
-        return new FindKpi(key, requiredDAO).find();
+        return CollectionUtil.singleOrNull(selectByCriteriaWithBLOBs(createKeyCriteria(key)));
     }
 
     /**

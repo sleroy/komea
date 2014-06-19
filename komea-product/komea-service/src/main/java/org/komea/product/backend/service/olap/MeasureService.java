@@ -56,7 +56,7 @@ public class MeasureService implements IMeasureService {
     @Override
     public Double currentMeasure(final KpiStringKey _kpiKey) {
 
-        final Kpi kpi = kpiService.findKPI(_kpiKey.getKpiName());
+        final Kpi kpi = kpiService.selectByKey(_kpiKey.getKpiName());
         if (kpi == null) {
             throw new KPINotFoundRuntimeException(_kpiKey.getKpiName());
         }
@@ -77,7 +77,7 @@ public class MeasureService implements IMeasureService {
         Validate.notNull(_kpiKey.getEntityKey().getEntityType());
         Validate.notNull(_period);
 
-        final Kpi kpi = kpiService.findKPI(_kpiKey.getKpiName());
+        final Kpi kpi = kpiService.selectByKey(_kpiKey.getKpiName());
         if (kpi == null) {
             throw new KPINotFoundRuntimeException(_kpiKey.getKpiName());
         }

@@ -1,10 +1,7 @@
 /**
  *
  */
-
 package org.komea.product.backend.service.kpi;
-
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,55 +29,47 @@ import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.Person;
-import org.komea.product.service.dto.KpiKey;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-
-
 /**
  * @author sleroy
  * @version $Revision: 1.0 $
  */
 @RunWith(MockitoJUnitRunner.class)
-public class KPIServiceTest
-{
-    
-    
-    private static final String  KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12 =
-                                                                               "KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12";
-    private static final String  SELECT_COUNT_FROM_ALERT               =
-                                                                               "SELECT COUNT(*) From Event";
+public class KPIServiceTest {
+
+    private static final String KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12
+            = "KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12";
+    private static final String SELECT_COUNT_FROM_ALERT
+            = "SELECT COUNT(*) From Event";
     @Mock
-    private IEventEngineService  cepEngine;
+    private IEventEngineService cepEngine;
     @Mock
     private ICronRegistryService cronRegistryService;
     @Mock
-    private KpiDao               kpiDAOMock;
-    
+    private KpiDao kpiDAOMock;
+
     @InjectMocks
-    private final KPIService     kpiService                            = new KPIService();
-    
+    private final KPIService kpiService = new KPIService();
+
     @Mock
-    private MeasureDao           measureDAOMock;
-    
-    
-    
+    private MeasureDao measureDAOMock;
+
     /**
-     * Test method for {@link org.komea.product.cep.tester.KPIService#deleteKpi(org.komea.product.database.model.Kpi)}.
+     * Test method for
+     * {@link org.komea.product.cep.tester.KPIService#deleteKpi(org.komea.product.database.model.Kpi)}.
      */
     @Test
     @Ignore
     public void testDeleteKpi() throws Exception {
-    
-    
+
         org.junit.Assert.assertTrue("not yet implemented", false);
     }
-    
-    
+
     /**
      * Test method for
      * {@link org.komea.product.cep.tester.KPIService#findKPIFacade(org.komea.product.backend.business.IEntityWithKPIFacade, java.lang.String)}
@@ -90,19 +79,18 @@ public class KPIServiceTest
      */
     @Test
     public final void testFindKpi() {
-    
-    
+
         final Person person = new Person();
         person.setId(12);
         person.setFirstName("John");
         person.setLastName("Dalton");
-        
+
         final List<Kpi> kpiList = new ArrayList<Kpi>();
         final Kpi kpi = new Kpi();
         kpi.setId(1);
         kpi.setEsperRequest(SELECT_COUNT_FROM_ALERT);
         kpi.setEntityType(EntityType.PERSON);
-        
+
         kpi.setDescription("Demo of KPI");
         kpi.setProviderType(ProviderType.OTHER);
         kpi.setKpiKey("PERSON_PRODUCTIVITY");
@@ -114,30 +102,27 @@ public class KPIServiceTest
         kpi.setGroupFormula(GroupFormula.AVG_VALUE);
         kpi.setProviderType(ProviderType.OTHER);
         kpiList.add(kpi);
-        
+
         Mockito.when(kpiDAOMock.selectByCriteriaWithBLOBs(Matchers.any(KpiCriteria.class)))
                 .thenReturn(kpiList);
-        
-        final ICacheStorageFactory cacheStorageFactory = new ICacheStorageFactory()
-        {
-            
-            
+
+        final ICacheStorageFactory cacheStorageFactory = new ICacheStorageFactory() {
+
             @Override
             public ICacheStorage newCacheStorage(final ICacheConfiguration _arg0) {
-            
-            
+
                 return new GoogleCacheStorage(_arg0);
             }
         };
         Mockito.when(cepEngine.getQueryOrFail(FormulaID.of(KPI_PERSON_PRODUCTIVITY_T_1_ENTITY_12)))
                 .thenReturn(
                         CEPQueryBuilder.create(new CountFormula(), cacheStorageFactory)
-                                .defineFilter(new NoEventFilter()).build());
-        
-        final Kpi findKPIFacade =
-                kpiService.findKPI(KpiKey.ofKpiNameAndEntity("PERSON_PRODUCTIVITY", person));
+                        .defineFilter(new NoEventFilter()).build());
+
+        final Kpi findKPIFacade
+                = kpiService.selectByKey("PERSON_PRODUCTIVITY");
         Assert.assertNotNull(findKPIFacade);
         Assert.assertEquals(kpi, findKPIFacade);
-        
+
     }
 }
