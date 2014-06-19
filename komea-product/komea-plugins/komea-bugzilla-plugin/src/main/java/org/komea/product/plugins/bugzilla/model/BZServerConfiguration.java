@@ -32,34 +32,36 @@ public class BZServerConfiguration implements Serializable, IHasId
     /**
      * This field describes
      */
-    private static final long           serialVersionUID   = 2673081036274879834L;
+    private static final long     serialVersionUID   = 2673081036274879834L;
 
-    private String                      address            = null;
+    private String                address            = null;
 
-    private boolean                     autocreateProjects = true;
+    private boolean               autocreateProjects = true;
 
-    private final StringList            closedStatus       = StringList.EMPTY;
+    private StringList            closedStatus       = StringList.EMPTY;
 
-    private final StringList            fixedStatus        = new StringList(
-            "closed,delivered, resolved");
+    private StringList            fixedStatus        = new StringList("closed,delivered, resolved");
 
-    private final String                handler_field      = "assigned_to";
-    private Integer                     id;
-    private String                      login;
-    private final StringList            notfixedStatus     = StringList.EMPTY;
-    private final StringList            openedStatus       =
+    private String                handler_field      = "assigned_to";
+    private Integer               id;
+
+
+    private String                login;
+
+
+    private StringList            notfixedStatus     = StringList.EMPTY;
+
+
+    private StringList            openedStatus       =
             new StringList(
                     "new,unconfirmed, onhold, accepted, assigned, opened, reopened");
+    private String                password;
+    private Integer               reminderAlert;
 
 
-    private String                      password;
+    private String                reporter_field     = "creator";
 
-    private Integer                     reminderAlert;
-
-    private String                      reporter_field     = "creator";
-
-
-    private final Map<String, Severity> severityMap        = new HashMap<String, Severity>();
+    private Map<String, Severity> severityMap        = new HashMap<String, Severity>();
 
 
 
@@ -86,6 +88,30 @@ public class BZServerConfiguration implements Serializable, IHasId
 
 
         return address;
+    }
+
+
+    /**
+     * Returns the value of the field closedStatus.
+     *
+     * @return the closedStatus
+     */
+    public StringList getClosedStatus() {
+
+
+        return closedStatus;
+    }
+
+
+    /**
+     * Returns the value of the field fixedStatus.
+     *
+     * @return the fixedStatus
+     */
+    public StringList getFixedStatus() {
+
+
+        return fixedStatus;
     }
 
 
@@ -116,6 +142,20 @@ public class BZServerConfiguration implements Serializable, IHasId
 
 
         return login;
+    }
+
+
+    public StringList getNotfixedStatus() {
+
+
+        return notfixedStatus;
+    }
+
+
+    public StringList getOpenedStatus() {
+
+
+        return openedStatus;
     }
 
 
@@ -220,6 +260,45 @@ public class BZServerConfiguration implements Serializable, IHasId
 
 
     /**
+     * Sets the field closedStatus with the value of _closedStatus.
+     *
+     * @param _closedStatus
+     *            the closedStatus to set
+     */
+    public void setClosedStatus(final StringList _closedStatus) {
+
+
+        closedStatus = _closedStatus;
+    }
+
+
+    /**
+     * Sets the field fixedStatus with the value of _fixedStatus.
+     *
+     * @param _fixedStatus
+     *            the fixedStatus to set
+     */
+    public void setFixedStatus(final StringList _fixedStatus) {
+
+
+        fixedStatus = _fixedStatus;
+    }
+
+
+    /**
+     * Sets the field handler_field with the value of _handler_field.
+     *
+     * @param _handler_field
+     *            the handler_field to set
+     */
+    public void setHandler_field(final String _handler_field) {
+
+
+        handler_field = _handler_field;
+    }
+
+
+    /**
      * @param _id
      *            the id to set
      */
@@ -241,6 +320,46 @@ public class BZServerConfiguration implements Serializable, IHasId
 
 
         this.login = login;
+    }
+
+
+    /**
+     * Sets the field notfixedStatus with the value of _notfixedStatus.
+     *
+     * @param _notfixedStatus
+     *            the notfixedStatus to set
+     */
+    public void setNotfixedStatus(final StringList _notfixedStatus) {
+
+
+        notfixedStatus = _notfixedStatus;
+    }
+
+
+    /**
+     * @param _openedStatus
+     * @param _closedStatus
+     */
+    public void setOpenClosedStatus(final StringList _openedStatus, final StringList _closedStatus) {
+
+
+        openedStatus = _openedStatus;
+        closedStatus = _closedStatus;
+        Validate.isTrue(openedStatus.isEmpty() ^ closedStatus.isEmpty());
+
+    }
+
+
+    /**
+     * Sets the field openedStatus with the value of _openedStatus.
+     *
+     * @param _openedStatus
+     *            the openedStatus to set
+     */
+    public void setOpenedStatus(final StringList _openedStatus) {
+
+
+        openedStatus = _openedStatus;
     }
 
 
@@ -268,6 +387,33 @@ public class BZServerConfiguration implements Serializable, IHasId
 
 
         reporter_field = _reporter_field;
+    }
+
+
+    /**
+     * @param _empty
+     * @param _stringList
+     */
+    public void setResolutions(final StringList _notFixed, final StringList _fixed) {
+
+
+        fixedStatus = _fixed;
+        notfixedStatus = _notFixed;
+        Validate.isTrue(fixedStatus.isEmpty() ^ notfixedStatus.isEmpty());
+
+    }
+
+
+    /**
+     * Sets the field severityMap with the value of _severityMap.
+     *
+     * @param _severityMap
+     *            the severityMap to set
+     */
+    public void setSeverityMap(final Map<String, Severity> _severityMap) {
+
+
+        severityMap = _severityMap;
     }
 
 

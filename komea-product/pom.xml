@@ -259,5 +259,6 @@
 
 
 		<module>komea-cyfe-rest-api</module>
+		<module>komea-csv</module>
 	</modules>
 </project>

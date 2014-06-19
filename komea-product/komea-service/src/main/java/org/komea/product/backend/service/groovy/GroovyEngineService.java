@@ -22,8 +22,6 @@ import org.komea.product.backend.api.ISpringService;
 import org.komea.product.backend.api.exceptions.GroovyScriptException;
 import org.komea.product.backend.api.exceptions.GroovyScriptException.GroovyValidationStatus;
 import org.komea.product.backend.groovy.GroovyFormulaScript;
-import org.komea.product.backend.plugin.api.RequiresSpring;
-import org.komea.product.backend.service.SpringService;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Kpi;
 import org.slf4j.Logger;
@@ -42,39 +40,20 @@ public class GroovyEngineService implements IGroovyEngineService
 {
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger("groovy-service");
+    private static final Logger LOGGER         = LoggerFactory.getLogger("groovy-service");
     
     
-    
-    /**
-     * Initializes the groovy engine service as a standalone.
-     *
-     * @return the groovy engine service.
-     */
-    public static GroovyEngineService initStandalone() {
+    private final Set<Class>    classImports   = Sets.newHashSet();
     
     
-        final SpringService springService2 = new SpringService();
-        
-        final GroovyEngineService groovyEngineService = new GroovyEngineService();
-        groovyEngineService.setSpringService(springService2);
-        groovyEngineService.init();
-        return groovyEngineService;
-    }
+    private final Set<String>   dynamicImports = Sets.newHashSet();
     
     
-    
-    private final Set<Class>  classImports   = Sets.newHashSet();
-    
-    
-    private final Set<String> dynamicImports = Sets.newHashSet();
-    
-    
-    private GroovyClassLoader groovyClassLoader;
+    private GroovyClassLoader   groovyClassLoader;
     
     
     @Autowired
-    private ISpringService    springService;
+    private ISpringService      springService;
     
     
     
@@ -128,6 +107,20 @@ public class GroovyEngineService implements IGroovyEngineService
         registerStarImport("org.komea.product.service.dto");
         registerStarImport("org.komea.product.service.dto.errors");
         registerStarImport("org.komea.product.backend.service.kpi");
+        
+    }
+    
+    
+    @Override
+    public void injectSpringIntoScript(final IQuery cast) throws Exception {
+    
+    
+        if (springService != null) {
+            springService.autowirePojo(cast);
+        } else {
+            LOGGER.error("Spring injection is disabled");
+        }
+        
         
     }
     
@@ -225,10 +218,9 @@ public class GroovyEngineService implements IGroovyEngineService
             
             resultOfScriptExecution = parseScript.run();
             cast = IQuery.class.cast(resultOfScriptExecution);
-            if (org.springframework.core.annotation.AnnotationUtils.isAnnotationInherited(
-                    RequiresSpring.class, cast.getClass())) {
-                springService.autowirePojo(cast);
-            }
+            
+            injectSpringIntoScript(cast);
+            
         } catch (final Exception e) {
             LOGGER.error("Exception during execution of a kpi  {}", e.getMessage(), e);
             throw new GroovyScriptException(_kpi, GroovyValidationStatus.EXECUTION_FAILED, e);
@@ -247,7 +239,6 @@ public class GroovyEngineService implements IGroovyEngineService
     public Script parseScript(final Kpi _kpi) {
     
     
-        Validate.notNull(springService, "spring service is not available.");
         Script parseScript = null;
         Validate.notNull(_kpi.getEsperRequest(), "Kpi should define a formula");
         final CompilerConfiguration config = new CompilerConfiguration();

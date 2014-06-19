@@ -10,6 +10,7 @@ import java.io.Serializable;
 
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IQuery;
+import org.komea.product.backend.plugin.api.RequiresSpring;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Kpi;
 
@@ -20,6 +21,7 @@ import org.komea.product.database.model.Kpi;
  *
  * @author sleroy
  */
+
 public class KpiDefinition implements IQuery<KpiResult>, Serializable
 {
 
@@ -32,7 +34,7 @@ public class KpiDefinition implements IQuery<KpiResult>, Serializable
 
     private Kpi               kpi;
 
-
+    @RequiresSpring
     private IQuery<KpiResult> query;
 
 

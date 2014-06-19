@@ -64,6 +64,7 @@ public class GroovyScriptLoader
         InputStream resourceAsStream = null;
         String script = "##notloaded##";
         try {
+
             resourceAsStream = classLoader.getResourceAsStream(resourcePath);
             script = IOUtils.toString(resourceAsStream);
             Validate.notNull(script);

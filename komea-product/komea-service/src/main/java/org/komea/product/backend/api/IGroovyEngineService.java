@@ -57,13 +57,13 @@ public interface IGroovyEngineService
 
 
     /**
-     * Tests if a formula is a valid script
+     * Injection of spring into a query.
      *
-     * @param _formula
-     *            the formula
-     * @return the validation status.
+     * @param _cast
+     *            the cast
+     * @throws Exception
      */
-    GroovyValidationStatus isValidScript(String _formula);
+    void injectSpringIntoScript(IQuery _cast) throws Exception;
 
 
     /**
@@ -74,6 +74,16 @@ public interface IGroovyEngineService
      * @return the validation status.
      */
     GroovyValidationStatus isValidGroovyScript(String _formula);
+
+
+    /**
+     * Tests if a formula is a valid script
+     *
+     * @param _formula
+     *            the formula
+     * @return the validation status.
+     */
+    GroovyValidationStatus isValidScript(String _formula);
 
 
     /**

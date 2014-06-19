@@ -12,6 +12,7 @@ import java.io.Closeable;
 import java.util.List;
 
 import com.j2bugzilla.base.Bug;
+import com.j2bugzilla.rpc.GetLegalValues.Fields;
 
 
 
@@ -20,29 +21,36 @@ import com.j2bugzilla.base.Bug;
  */
 public interface IBZServerProxy extends Closeable
 {
-    
-    
+
+
     /**
      * get list of bugs in bugzilla server
-     * 
+     *
      * @param _projectName
      * @return
      */
     public List<Bug> getBugs(String _projectName);
-    
-    
+
+
     public List<String> getPriorities();
-    
-    
+
+
     /**
      * @return
      */
     public List<String> getProductNames();
-    
-    
+
+
     public List<String> getSeverities();
-    
-    
+
+
     public boolean testConnexion();
-    
+
+
+    /**
+     * @param _field
+     * @return
+     */
+    List<String> GetLegalValues(Fields _field);
+
 }

@@ -32,15 +32,17 @@ public class BZIssueWrapper implements IIssue
 {
 
 
-    private static final Logger         LOGGER = LoggerFactory.getLogger(BZIssueWrapper.class);
-    private final Bug                   bug;
+    private static final Logger   LOGGER = LoggerFactory.getLogger(BZIssueWrapper.class);
+    private final Bug             bug;
 
-    private final Person                handler;
-    private final Project               project;
+    private final Person          handler;
+    private final IssueResolution issueResolution;
 
 
-    private final Person                reporter;
-    private final BZServerConfiguration serverConfiguration;
+    private IssueStatus           issueStatus;
+    private final Project         project;
+    private final Person          reporter;
+    private final Severity        severity;
 
 
 
@@ -52,14 +54,27 @@ public class BZIssueWrapper implements IIssue
             final BZServerConfiguration _serverConfiguration) {
 
 
+        Validate.notNull(_bug);
+        Validate.notNull(_project);
         bug = _bug;
         handler = _handler;
         reporter = _reporter;
         project = _project;
-        serverConfiguration = _serverConfiguration;
-        Validate.notNull(_bug);
-        Validate.notNull(project);
-        Validate.notNull(serverConfiguration);
+        issueResolution =
+                _serverConfiguration.isResolutionFixed(bug.getStatus())
+                ? IssueResolution.FIXED
+                        : IssueResolution.NOT_FIXED;
+        severity = _serverConfiguration.getSeverityMap().get(bug.getSeverity());
+
+        if (_serverConfiguration.isStatusOpened(bug.getStatus())) {
+            issueStatus = IssueStatus.OPENED;
+        } else if (_serverConfiguration.isStatusClosed(bug.getStatus())) {
+            issueStatus = IssueStatus.CLOSED;
+        } else {
+            LOGGER.error("Status {} unknown , please update your bugzilla server configuration");
+        }
+
+
     }
 
 
@@ -83,7 +98,7 @@ public class BZIssueWrapper implements IIssue
     public String getCategory() {
 
 
-        return "";
+        return (String) getCustomFields().getField("component");
     }
 
 
@@ -189,9 +204,7 @@ public class BZIssueWrapper implements IIssue
     public IssueResolution getResolution() {
 
 
-        return serverConfiguration.isResolutionFixed(bug.getStatus())
-                ? IssueResolution.FIXED
-                        : IssueResolution.NOT_FIXED;
+        return issueResolution;
 
 
     }
@@ -205,7 +218,7 @@ public class BZIssueWrapper implements IIssue
     public Severity getSeverity() {
 
 
-        return serverConfiguration.getSeverityMap().get(bug.getSeverity());
+        return severity;
     }
 
 
@@ -217,14 +230,7 @@ public class BZIssueWrapper implements IIssue
     public IssueStatus getStatus() {
 
 
-        if (serverConfiguration.isStatusOpened(bug.getStatus())) {
-            return IssueStatus.OPENED;
-        }
-        if (serverConfiguration.isStatusClosed(bug.getStatus())) {
-            return IssueStatus.CLOSED;
-        }
-        LOGGER.error("Status {} unknown , please update your bugzilla server configuration");
-        return null;
+        return issueStatus;
     }
 
 

@@ -298,6 +298,26 @@ public class KpiResult implements Serializable {
     }
 
 
+    /**
+     * @return Returns a smart display of the kpi result.
+     */
+    public String smartDisplay() {
+
+
+        if (hasFailed()) {
+            return "##ERROR##";
+        }
+        final StringBuilder sbBuilder = new StringBuilder();
+        sbBuilder.append("EntityKey;Value\n");
+        for (final Entry<EntityKey, Number> entry : map.entrySet()) {
+            sbBuilder.append(entry.getKey().toString()).append(";").append(entry.getValue())
+            .append("\n");
+        }
+
+        return sbBuilder.toString();
+    }
+
+
     /*
      * (non-Javadoc)
      * @see java.lang.Object#toString()
