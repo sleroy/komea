@@ -7,7 +7,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 
 
-public class HomePage extends LayoutPage
+public class HomePage extends StatelessLayoutPage
 {
     
     

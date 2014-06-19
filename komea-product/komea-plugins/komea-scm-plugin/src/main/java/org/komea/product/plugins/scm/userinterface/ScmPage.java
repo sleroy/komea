@@ -20,7 +20,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.plugins.repository.model.ScmExecutionStatus;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.komea.product.plugins.scm.api.IScmRepositoryService;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
@@ -31,7 +31,7 @@ import org.komea.product.wicket.widget.model.ListDataModel;
  *
  * @author rgalerme
  */
-public final class ScmPage extends LayoutPage {
+public final class ScmPage extends StatelessLayoutPage {
 
     @SpringBean
     private IScmRepositoryService scmService;
@@ -60,12 +60,12 @@ public final class ScmPage extends LayoutPage {
                 .displayRows(allRepositories.size() + 10).withData(dataProvider).build();
 
         add(build);
-        add(new AjaxLinkLayout<LayoutPage>("addPlugin", this) {
+        add(new AjaxLinkLayout<StatelessLayoutPage>("addPlugin", this) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
 
-                final LayoutPage page = getCustom();
+                final StatelessLayoutPage page = getCustom();
                 page.setResponsePage(new ScmEditPage(page.getPageParameters()));
             }
         });

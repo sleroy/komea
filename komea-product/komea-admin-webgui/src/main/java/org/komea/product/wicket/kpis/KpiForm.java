@@ -28,7 +28,7 @@ import org.komea.product.database.enums.ProviderType;
 import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.NameGeneric;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.SelectBoxBuilder;
@@ -53,7 +53,7 @@ public final class KpiForm extends Form<Kpi>
     private final Kpi                  kpi;
     private final IKPIService          kpiService;
     private final NameGeneric          nameEntity;
-    private final LayoutPage           page;
+    private final StatelessLayoutPage           page;
 
     private final TextField<Double>    textminValue;
 
@@ -67,7 +67,7 @@ public final class KpiForm extends Form<Kpi>
             final IProviderService _providerService,
             final Component _feedBack,
             final IModel<Kpi> _dto,
-            final LayoutPage _kpiPage,
+            final StatelessLayoutPage _kpiPage,
             final IGroovyEngineService _groovyEngineService) {
 
 
@@ -197,7 +197,7 @@ public final class KpiForm extends Form<Kpi>
 
         final Kpi myKpi = kpi;
 
-        add(new AjaxLinkLayout<LayoutPage>("btnnumbervalue", page)
+        add(new AjaxLinkLayout<StatelessLayoutPage>("btnnumbervalue", page)
                 {
 
 
@@ -215,7 +215,7 @@ public final class KpiForm extends Form<Kpi>
             }
                 });
 
-        add(new AjaxLinkLayout<LayoutPage>("cancel", page)
+        add(new AjaxLinkLayout<StatelessLayoutPage>("cancel", page)
                 {
 
 
@@ -223,7 +223,7 @@ public final class KpiForm extends Form<Kpi>
             public void onClick(final AjaxRequestTarget art) {
 
 
-                final LayoutPage page = getCustom();
+                final StatelessLayoutPage page = getCustom();
                 page.setResponsePage(new KpiPage(page.getPageParameters()));
             }
                 });

@@ -15,7 +15,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.IAdminAction;
 import org.komea.product.backend.service.IAdminActionServices;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 
 
 
@@ -24,7 +24,7 @@ import org.komea.product.wicket.LayoutPage;
  * 
  * @author sleroy
  */
-public class AdminActionPage extends LayoutPage
+public class AdminActionPage extends StatelessLayoutPage
 {
     
     

@@ -24,7 +24,7 @@ import org.komea.product.database.enums.PersonGroupType;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.DataListSelectDialogBuilder;
 import org.komea.product.wicket.utils.DialogFactory;
 import org.komea.product.wicket.utils.NameGeneric;
@@ -41,7 +41,7 @@ public class TeamForm extends Form<PersonGroup> {
 
     private final IPersonGroupService prService;
     private final Component feedBack;
-    private final LayoutPage page;
+    private final StatelessLayoutPage page;
     private final PersonGroup personGroup;
     private final NameGeneric parentName;
     private final TextField parentField;
@@ -139,11 +139,11 @@ public class TeamForm extends Form<PersonGroup> {
         dataProject.setTooltips(getString("teampage.save.form.field.multiple.projects"));
         DialogFactory.addMultipleListDialog(dataProject);
 
-        add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
+        add(new AjaxLinkLayout<StatelessLayoutPage>("cancel", page) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
-                LayoutPage page = getCustom();
+                StatelessLayoutPage page = getCustom();
                 page.setResponsePage(new TeamPage(page.getPageParameters()));
             }
         });
@@ -192,7 +192,7 @@ public class TeamForm extends Form<PersonGroup> {
 
         };
         add(dialogPersonGroup);
-        add(new AjaxLinkLayout<LayoutPage>("btnParent", null) {
+        add(new AjaxLinkLayout<StatelessLayoutPage>("btnParent", null) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {

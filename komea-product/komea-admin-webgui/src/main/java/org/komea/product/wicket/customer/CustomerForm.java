@@ -13,7 +13,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.komea.product.backend.service.entities.ICustomerService;
 import org.komea.product.database.model.Customer;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
 
@@ -25,11 +25,11 @@ public class CustomerForm extends Form<Customer> {
 
     private final ICustomerService customerService;
     private final Component feedBack;
-    private final LayoutPage page;
+    private final StatelessLayoutPage page;
     private final Customer customer;
     private final boolean isNew;
 
-    public CustomerForm(boolean _isNew, String form, CompoundPropertyModel<Customer> compoundPropertyModel, ICustomerService _customerService, Component _feedBack, LayoutPage _page, Customer _customer) {
+    public CustomerForm(boolean _isNew, String form, CompoundPropertyModel<Customer> compoundPropertyModel, ICustomerService _customerService, Component _feedBack, StatelessLayoutPage _page, Customer _customer) {
         super(form, compoundPropertyModel);
         this.isNew = _isNew;
         this.customerService = _customerService;
@@ -49,11 +49,11 @@ public class CustomerForm extends Form<Customer> {
         add(keyField.build());
 
         //button
-        add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
+        add(new AjaxLinkLayout<StatelessLayoutPage>("cancel", page) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
-                LayoutPage page = getCustom();
+                StatelessLayoutPage page = getCustom();
                 page.setResponsePage(new CustomerPage(page.getPageParameters()));
             }
         });

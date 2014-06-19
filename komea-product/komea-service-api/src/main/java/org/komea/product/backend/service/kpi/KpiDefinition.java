@@ -6,6 +6,8 @@ package org.komea.product.backend.service.kpi;
 
 
 
+import java.io.Serializable;
+
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.database.dto.KpiResult;
@@ -18,8 +20,14 @@ import org.komea.product.database.model.Kpi;
  *
  * @author sleroy
  */
-public class KpiDefinition implements IQuery<KpiResult>
+public class KpiDefinition implements IQuery<KpiResult>, Serializable
 {
+    
+    
+    /**
+     *
+     */
+    private static final long serialVersionUID = 2714853671066832899L;
     
     
     private Kpi               kpi;

@@ -24,7 +24,7 @@ import org.komea.product.plugins.repository.model.ScmExecutionStatus;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.komea.product.plugins.repository.model.ScmType;
 import org.komea.product.plugins.scm.api.IScmRepositoryService;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.NameGeneric;
 import org.komea.product.wicket.utils.SelectDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
@@ -40,14 +40,14 @@ public class ScmForm extends Form<ScmRepositoryDefinition> {
 
     private final IScmRepositoryService scmService;
     private final IProjectService projectService;
-    private final LayoutPage page;
+    private final StatelessLayoutPage page;
     private final Component feedBack;
     private final ScmRepositoryDefinition scmData;
     private final NameGeneric affichageDate;
     private final NameGeneric projectName;
     private final String savPassword;
 
-    public ScmForm(IProjectService _projectService, IScmRepositoryService _scmService, LayoutPage _page, Component _feedBack, ScmRepositoryDefinition _scmData, String id, IModel<ScmRepositoryDefinition> model, boolean _isNew) {
+    public ScmForm(IProjectService _projectService, IScmRepositoryService _scmService, StatelessLayoutPage _page, Component _feedBack, ScmRepositoryDefinition _scmData, String id, IModel<ScmRepositoryDefinition> model, boolean _isNew) {
         super(id, model);
         this.scmService = _scmService;
         this.page = _page;
@@ -102,12 +102,12 @@ public class ScmForm extends Form<ScmRepositoryDefinition> {
                 .simpleValidator(0, 255).withTooltip(getString("scm.save.form.tooltips.lastdate")).build());
 
         // select field
-        add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
+        add(new AjaxLinkLayout<StatelessLayoutPage>("cancel", page) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
 
-                final LayoutPage page = getCustom();
+                final StatelessLayoutPage page = getCustom();
                 page.setResponsePage(new ScmPage(page.getPageParameters()));
             }
         });
@@ -156,7 +156,7 @@ public class ScmForm extends Form<ScmRepositoryDefinition> {
 
         };
         page.add(dialogProject);
-        add(new AjaxLinkLayout<LayoutPage>("btnProject", page) {
+        add(new AjaxLinkLayout<StatelessLayoutPage>("btnProject", page) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {

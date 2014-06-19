@@ -1,10 +1,6 @@
-
 package org.komea.product.web.rest.api;
 
-
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -36,37 +32,28 @@ import com.google.common.collect.Lists;
 @Controller
 @RequestMapping(value = "/events")
 public class EventsController {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(EventsController.class);
-    
+
     @Autowired
-    private IEventPushService   eventPushService;
+    private IEventPushService eventPushService;
     @Autowired
     private IEventViewerService eventService;
     @Autowired
-    private IEntityService      entityService;
-    
+    private IEntityService entityService;
+
     /**
      * This method find events which have been stored into komea
      *
-     * @param _searchEvent
-     *            looking for event of some entities and of dome type
+     * @param _searchEvent looking for event of some entities and of dome type
      * @return an event list
      */
     @RequestMapping(method = RequestMethod.POST, value = "/find")
     @ResponseBody
     public List<IEvent> findEvents(@Valid @RequestBody final SearchEventDto _searchEvent) {
-    
+
         LOGGER.debug("call rest method /events/find to find events {}", _searchEvent);
         final List<IEvent> globalActivity = eventService.getGlobalActivity();
-        Collections.sort(globalActivity, new Comparator<IEvent>() {
-            
-            @Override
-            public int compare(final IEvent o1, final IEvent o2) {
-            
-                return o2.getDate().compareTo(o1.getDate());
-            }
-        });
         final List<IEvent> events = new ArrayList<IEvent>(_searchEvent.getMaxEvents());
         final Iterator<IEvent> iterator = globalActivity.iterator();
         while (iterator.hasNext() && events.size() < _searchEvent.getMaxEvents()) {
@@ -77,29 +64,28 @@ public class EventsController {
         }
         return events;
     }
-    
+
     public IEventPushService getEventPushService() {
-    
+
         return eventPushService;
     }
-    
+
     /**
      * This method push a new event into komea
      *
-     * @param _event
-     *            the event to push
+     * @param _event the event to push
      */
     @RequestMapping(method = RequestMethod.POST, value = "/push")
     @ResponseStatus(value = HttpStatus.OK)
     public void pushEvent(@Valid @RequestBody final EventSimpleDto _event) {
-    
+
         LOGGER.debug("call rest method /events/push to push event {}", _event.getMessage());
         // TODO
         eventPushService.sendEventDto(_event);
     }
-    
+
     private boolean eventMatches(final IEvent event, final SearchEventDto searchEvent) {
-    
+
         final Severity severity = searchEvent.getSeverityMin();
         final List<String> eventTypeKeys = searchEvent.getEventTypeKeys();
         final List<String> parentEntityKeys = searchEvent.getEntityKeys();

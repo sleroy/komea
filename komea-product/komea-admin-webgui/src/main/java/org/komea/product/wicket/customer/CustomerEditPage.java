@@ -12,13 +12,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.entities.ICustomerService;
 import org.komea.product.database.model.Customer;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 
 /**
  *
  * @author rgalerme
  */
-public final class CustomerEditPage extends LayoutPage {
+public final class CustomerEditPage extends StatelessLayoutPage {
 
     @SpringBean
     private ICustomerService customerService;

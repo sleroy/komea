@@ -5,12 +5,12 @@
  */
 package org.komea.product.wicket.utils;
 
+import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
@@ -25,19 +25,20 @@ public class DisplayTraceDialog extends AbstractDialog<String> {
 
     public DisplayTraceDialog(String id, IModel<String> title, IModel<String> text) {
         super(id, title);
-
-//        final ModalWindow modal;
-//        add(modal = new ModalWindow("modal"));
-//        modal.setCookieName("modal window 4");
-//        modal.setInitialWidth(650);
-//        modal.setInitialHeight(500);
-//        modal.setResizable(false);
         form = new Form<String>("formTrace");
         add(form);
         form.add(new Label("labelText", text));
     }
 
     protected final DialogButton btnSure = new DialogButton("Ok");
+
+    @Override
+    public void onConfigure(JQueryBehavior behavior) {
+        super.onConfigure(behavior); //To change body of generated methods, choose Tools | Templates.
+        behavior.setOption("width", 860);
+        behavior.setOption("height", 630);
+
+    }
 
     @Override
     public void onClose(AjaxRequestTarget art, DialogButton db) {

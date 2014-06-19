@@ -5,16 +5,9 @@
  */
 package org.komea.product.plugins.bugzilla.userinterface;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 import com.j2bugzilla.base.BugzillaException;
 import com.j2bugzilla.base.ConnectionException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Serializable;
-import java.io.StringWriter;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.apache.wicket.Component;
@@ -30,8 +23,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 import org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.DisplayTraceDialog;
+import org.komea.product.wicket.utils.ManageMessageConnexion;
+import org.komea.product.wicket.utils.ManageMessageConnexion.Etat;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
 
@@ -43,7 +38,7 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
     private final IBZConfigurationDAO bService;
     private final BZServerConfiguration bugServer;
     private final Component feedBack;
-    private final LayoutPage page;
+    private final StatelessLayoutPage page;
     private final ManageMessageConnexion messageCon;
     private String savPassword;
     private final WebMarkupContainer contSuccess;
@@ -57,7 +52,7 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
             final IBZConfigurationDAO _bService,
             final BZServerConfiguration _bugServer,
             final Component _feedBack,
-            final LayoutPage _page,
+            final StatelessLayoutPage _page,
             final String id,
             final IModel<BZServerConfiguration> model) {
 
@@ -126,12 +121,12 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
             }
         });
 
-        add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
+        add(new AjaxLinkLayout<StatelessLayoutPage>("cancel", page) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
 
-                final LayoutPage page = getCustom();
+                final StatelessLayoutPage page = getCustom();
                 page.setResponsePage(new BugZillaPage(page.getPageParameters()));
             }
         });
@@ -232,27 +227,10 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
      void registerExeption(Exception ex) {
         messageCon.setEtat(Etat.ERROR);
         conModel.setObject(ex.getMessage());
-        String recursiveDisplayTrace = recursiveDisplayTrace(ex);
+        String recursiveDisplayTrace = ManageMessageConnexion.recursiveDisplayTrace(ex);
         stackTraceDialog.setObject(recursiveDisplayTrace);
     }
-    public static final String ENDLINE = System.getProperty("line.separator"); 
-    
 
-    String recursiveDisplayTrace(Throwable cause) {
-        if (cause == null) {
-            return "";
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.append(cause.getMessage()).append(ENDLINE);
-        for (StackTraceElement element : cause.getStackTrace()) {
-            sb.append("    ");
-            sb.append(element.toString());
-            sb.append(ENDLINE);
-        }
-        sb.append(recursiveDisplayTrace(cause.getCause()));
-        return sb.toString();
-
-    }
 
     private void updateStatusServerTest() {
         contError.setVisible(messageCon.visibleError());
@@ -260,39 +238,6 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
         contWaiting.setVisible(messageCon.visibleWaiting());
     }
 
-    private static enum Etat {
 
-        ERROR, WAITING, SUCCESS, NONE
-    }
-
-    public static class ManageMessageConnexion implements Serializable {
-
-        private Etat etat;
-
-        public ManageMessageConnexion() {
-            etat = Etat.NONE;
-        }
-
-        public Etat getEtat() {
-            return etat;
-        }
-
-        public void setEtat(Etat etat) {
-            this.etat = etat;
-        }
-
-        public boolean visibleError() {
-            return etat.equals(Etat.ERROR);
-        }
-
-        public boolean visibleWaiting() {
-            return etat.equals(Etat.WAITING);
-        }
-
-        public boolean visibleSuccess() {
-            return etat.equals(Etat.SUCCESS);
-        }
-
-    }
 
 }

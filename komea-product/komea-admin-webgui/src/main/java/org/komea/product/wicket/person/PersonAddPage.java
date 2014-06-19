@@ -17,7 +17,7 @@ import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.backend.utils.KomeaEntry;
 import org.komea.product.database.api.IHasKey;
 import org.komea.product.database.model.Person;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.SelectDialog;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 
@@ -26,7 +26,7 @@ import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
  *
  * @author sleroy
  */
-public class PersonAddPage extends LayoutPage {
+public class PersonAddPage extends StatelessLayoutPage {
 
     @SpringBean
     private IPersonService personDAO;

@@ -6,17 +6,31 @@
 
 package org.komea.product.wicket.resources;
 
+
+
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
+
+
 
 /**
- *
  * @author rgalerme
  */
-public class PageTest extends LayoutPage {
-
-    public PageTest(PageParameters _parameters) {
+public class PageTest extends StatelessLayoutPage
+{
+    
+    
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    
+    
+    
+    public PageTest(final PageParameters _parameters) {
+    
+    
         super(_parameters);
     }
-    
+
 }

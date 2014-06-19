@@ -1,10 +1,8 @@
-
 package org.komea.product.backend.service.alert;
 
-
+import com.google.common.collect.Lists;
 import java.util.Date;
 import java.util.List;
-
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.IMeasureService;
@@ -15,42 +13,42 @@ import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
-import org.komea.product.service.dto.EntityStringKey;
-import org.komea.product.service.dto.KpiStringKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Lists;
-
 @Service
 public class AlertFinderService implements IAlertFinderService {
-    
+
     @Autowired
-    private IMeasureService   measureService;
-    
+    private IMeasureService measureService;
+
     @Autowired
-    private IAlertService     alertService;
-    
+    private IAlertService alertService;
+
     @Autowired
-    private IEntityService    entityService;
-    
+    private IEntityService entityService;
+
     @Autowired
     private IAlertTypeService alertTypeService;
-    
+
     @Autowired
-    private IKPIService       kpiService;
-    
+    private IKPIService kpiService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(AlertFinderService.class.getName());
+
     public IAlertService getAlertService() {
-    
+
         return alertService;
     }
-    
+
     public KpiAlertDto findAlert(final KpiAlertType alertType, final BaseEntityDto entity, final Kpi kpi) {
-    
-        Double value = measureService.currentMeasure(kpi, entity);
-        if (value == null) {
-            value = measureService.currentMeasure(new KpiStringKey(kpi.getKey(), new EntityStringKey(entity.getEntityType(), entity
-                    .getKey())));
+
+        Double value = null;
+        try {
+            value = measureService.currentMeasure(kpi, entity);
+        } catch (Exception ex) {
+            LOGGER.error(ex.getMessage(), ex);
         }
         final KpiAlertDto kpiAlert = new KpiAlertDto();
         kpiAlert.setKpiAlertType(alertType);
@@ -59,20 +57,19 @@ public class AlertFinderService implements IAlertFinderService {
         kpiAlert.setEntityName(entity.getDisplayName());
         kpiAlert.setValue(value);
         kpiAlert.setActivated(alertService.isAlertActivated(alertType, value));
-        
         return kpiAlert;
     }
-    
+
     @Override
     public List<KpiAlertDto> findAlerts(final SearchKpiAlertsDto _searchAlert) {
-    
+
         final ExtendedEntityType extendedEntityType = _searchAlert.getExtendedEntityType();
         final EntityType entityType = extendedEntityType.getEntityType();
         final List<KpiAlertType> alertTypesOfKpiAndSeverity = alertTypeService.getAlertTypes(extendedEntityType,
                 _searchAlert.getKpiAlertTypeKeys(), _searchAlert.getSeverityMin());
         final List<BaseEntityDto> parentEntities = entityService.getBaseEntityDTOS(entityType, _searchAlert.getEntityKeys());
         final List<BaseEntityDto> entities = entityService.getSubEntities(extendedEntityType, parentEntities);
-        
+
         final List<KpiAlertDto> filteredActivatedAlerts = Lists.newArrayList();
         for (final KpiAlertType alertType : alertTypesOfKpiAndSeverity) {
             final Kpi kpi = kpiService.selectByPrimaryKey(alertType.getIdKpi());
@@ -89,5 +86,5 @@ public class AlertFinderService implements IAlertFinderService {
         }
         return filteredActivatedAlerts;
     }
-    
+
 }

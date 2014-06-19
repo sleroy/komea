@@ -7,7 +7,7 @@ package org.komea.product.plugins.rss.bean;
 
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 
 
 
@@ -16,7 +16,7 @@ import org.komea.product.wicket.LayoutPage;
  * 
  * @author sleroy
  */
-public class RssRepositoryPage extends LayoutPage
+public class RssRepositoryPage extends StatelessLayoutPage
 {
     
     

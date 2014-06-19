@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.model.Project;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.AbstractDeleteAction;
 
 /**
@@ -22,7 +22,7 @@ public class ProjectDeleteAction extends AbstractDeleteAction<Project> {
     private final IProjectService projectService;
     private final List<Project> projectAffichage;
 
-    public ProjectDeleteAction(IProjectService projectService , List<Project> _ProjectAffichage,LayoutPage page) {
+    public ProjectDeleteAction(IProjectService projectService , List<Project> _ProjectAffichage,StatelessLayoutPage page) {
          super(page, "dialogdelete");
         this.projectService = projectService;
         this.projectAffichage = _ProjectAffichage;

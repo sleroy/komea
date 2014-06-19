@@ -14,7 +14,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.ISettingService;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author sleroy
  */
-public class ConsolePage extends LayoutPage {
+public class ConsolePage extends StatelessLayoutPage {
     
     /**
      * This field describes
