@@ -65,12 +65,9 @@ public class MeasuresController {
     @RequestMapping(method = RequestMethod.POST, value = "/averageHistoricEvolution", consumes = "application/json; charset=utf-8", produces = "application/json; charset=utf-8")
     @ResponseBody
     public List<MeasureEvolutionResult> averageHistoricalWithEvolution(@RequestBody final ManyHistoricalMeasureRequest _request) {
-        LOGGER.info("_request : " + _request);
         final List<MeasureResult> averageHistoricalMeasure = averageHistoricalMeasure(_request);
-        LOGGER.info("averageHistoricalMeasure : " + averageHistoricalMeasure);
         final List<TimeSerieDTO> oldTimeSerieDTOs = measureService.findMultipleHistoricalMeasure(
                 _request.getKpiKeyList(), _request.getPeriod().previous());
-        LOGGER.info("oldTimeSerieDTOs : " + oldTimeSerieDTOs);
         final Map<KpiKey, Double> oldValues = Maps.newHashMap();
         for (final TimeSerieDTO oldTimeSerieDTO : oldTimeSerieDTOs) {
             oldValues.put(KpiKey.ofKpiAndEntity(oldTimeSerieDTO.getKpi(), oldTimeSerieDTO.getEntity()),
@@ -81,7 +78,6 @@ public class MeasuresController {
             final Double oldValue = oldValues.get(KpiKey.ofKpiAndEntity(measureResult.getKpi(), measureResult.getEntity()));
             measureEvolutionResults.add(new MeasureEvolutionResult(measureResult, oldValue));
         }
-        LOGGER.info("measureEvolutionResults : " + measureEvolutionResults);
         return measureEvolutionResults;
     }
 }

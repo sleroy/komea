@@ -119,7 +119,6 @@ public class MeasureService implements IMeasureService {
                 series.add(timeSerieDTO);
             }
         }
-        LOGGER.info("findMultipleHistoricalMeasure : " + _kpiKeyList + " - " + _period + " = " + series);
         return series;
     }
 
@@ -135,6 +134,10 @@ public class MeasureService implements IMeasureService {
         final EntityKey entityKey = EntityKey.of(_entity);
 
         final TimeSerie timeSeries = statService.buildPeriodTimeSeries(_period, entityKey);
+        LOGGER.info(_kpi.getKey() + " / " + _entity.getKey() + " / "
+                + _period.getFromPeriod() + "(" + _period.getFromPeriod().getTime() + ") - "
+                + _period.getToPeriod() + "(" + _period.getToPeriod().getTime()
+                + ") = " + timeSeries.getCoordinates());
         return TimeSerieConvertor.build(timeSeries.getCoordinates(), _kpi, BaseEntityDto.newFromEntity(_entity));
 
     }
