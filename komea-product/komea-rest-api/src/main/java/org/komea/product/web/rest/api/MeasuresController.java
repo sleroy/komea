@@ -43,13 +43,10 @@ public class MeasuresController {
     @RequestMapping(method = RequestMethod.POST, value = "/averageHistoric", consumes = "application/json; charset=utf-8", produces = "application/json; charset=utf-8")
     @ResponseBody
     public List<MeasureResult> averageHistoricalMeasure(@RequestBody final ManyHistoricalMeasureRequest _request) {
-        LOGGER.info("averageHistoricalMeasure with " + _request);
         final List<TimeSerieDTO> timeSerieDTOs = measureService.findMultipleHistoricalMeasure(
                 _request.getKpiKeyList(), _request.getPeriod());
-        LOGGER.info("timeSerieDTOs : " + timeSerieDTOs);
         final List<MeasureResult> measureResults = Lists.newArrayList();
         final boolean addCurrentValues = _request.getPeriod().getEndDate().after(new Date());
-        LOGGER.info("addCurrentValues : " + addCurrentValues);
         for (final TimeSerieDTO timeSerieDTO : timeSerieDTOs) {
             if (addCurrentValues) {
                 Double value = null;
@@ -62,17 +59,18 @@ public class MeasuresController {
             }
             measureResults.add(timeSerieDTO.toMeasureResult());
         }
-        LOGGER.info("measureResults : " + measureResults);
         return measureResults;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/averageHistoricEvolution", consumes = "application/json; charset=utf-8", produces = "application/json; charset=utf-8")
     @ResponseBody
     public List<MeasureEvolutionResult> averageHistoricalWithEvolution(@RequestBody final ManyHistoricalMeasureRequest _request) {
-
+        LOGGER.info("_request : " + _request);
         final List<MeasureResult> averageHistoricalMeasure = averageHistoricalMeasure(_request);
+        LOGGER.info("averageHistoricalMeasure : " + averageHistoricalMeasure);
         final List<TimeSerieDTO> oldTimeSerieDTOs = measureService.findMultipleHistoricalMeasure(
                 _request.getKpiKeyList(), _request.getPeriod().previous());
+        LOGGER.info("oldTimeSerieDTOs : " + oldTimeSerieDTOs);
         final Map<KpiKey, Double> oldValues = Maps.newHashMap();
         for (final TimeSerieDTO oldTimeSerieDTO : oldTimeSerieDTOs) {
             oldValues.put(KpiKey.ofKpiAndEntity(oldTimeSerieDTO.getKpi(), oldTimeSerieDTO.getEntity()),
@@ -83,6 +81,7 @@ public class MeasuresController {
             final Double oldValue = oldValues.get(KpiKey.ofKpiAndEntity(measureResult.getKpi(), measureResult.getEntity()));
             measureEvolutionResults.add(new MeasureEvolutionResult(measureResult, oldValue));
         }
+        LOGGER.info("measureEvolutionResults : " + measureEvolutionResults);
         return measureEvolutionResults;
     }
 }
