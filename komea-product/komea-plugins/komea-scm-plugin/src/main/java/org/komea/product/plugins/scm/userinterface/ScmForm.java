@@ -12,15 +12,10 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.ContextRelativeResource;
-import org.apache.wicket.request.resource.PackageResourceReference;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.api.IHasKey;
-import org.komea.product.database.enums.ValueDirection;
 import org.komea.product.database.model.Project;
-import org.komea.product.plugins.repository.model.ScmExecutionStatus;
 import org.komea.product.plugins.repository.model.ScmRepositoryDefinition;
 import org.komea.product.plugins.repository.model.ScmType;
 import org.komea.product.plugins.scm.api.IScmRepositoryService;
@@ -60,9 +55,9 @@ public class ScmForm extends Form<ScmRepositoryDefinition> {
         projectName = new NameGeneric("");
         // url field
         ScmType type = scmData.getType();
-                add(SelectBoxBuilder.<ScmType>createWithEnum("type", scmData,
+        add(SelectBoxBuilder.<ScmType>createWithEnum("type", scmData,
                 ScmType.class).withTooltip(getString("scm.save.form.tooltips.type")).build());
-        
+
         add(TextFieldBuilder.createURL("url", scmData, "url")
                 .withTooltip(getString("scm.save.form.tooltips.url")).simpleValidator(3, 255).build());
         // required input text field
@@ -86,15 +81,14 @@ public class ScmForm extends Form<ScmRepositoryDefinition> {
         add(TextFieldBuilder.<String>createPasswordNoRequire("password", scmData, "password")
                 .simpleValidator(0, 255).withTooltip(getString("scm.save.form.tooltips.password")).build());
         Integer selectedProject = Integer.valueOf(0);
-        if(scmData.getProjectForRepository() != null)
-        {
-            Project selectByKey = projectService.selectByKey(scmData.getProjectForRepository());
-            if(selectByKey != null){
-            projectName.setName(selectByKey.getDisplayName());
-            selectedProject = selectByKey.getId();
+        if (scmData.getProjectForRepository() != null) {
+            Project selectByKey = projectService.selectByAlias(scmData.getProjectForRepository());
+            if (selectByKey != null) {
+                projectName.setName(selectByKey.getDisplayName());
+                selectedProject = selectByKey.getId();
             }
         }
-        
+
         final TextField<String> projectField = TextFieldBuilder.<String>create("project", projectName, "name")
                 .simpleValidator(0, 255).withTooltip(getString("scm.save.form.tooltips.project")).buildTextField();
         add(projectField);

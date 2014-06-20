@@ -1,9 +1,6 @@
-
 package org.komea.product.web.rest.api;
 
-
 import javax.validation.Valid;
-
 import org.joda.time.DateTime;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.service.entities.IProjectService;
@@ -28,7 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 /**
  * Komea Rest api to provide scm notifications
  * <p>
- * 
+ *
  * @author $Author: sleroy $
  * @since 4 févr. 2014
  */
@@ -36,33 +33,33 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequestMapping(value = "/scm/")
 @Transactional
 public class ScmCommitController {
-    
-    private static final Logger   LOGGER = LoggerFactory.getLogger(ScmCommitController.class);
-    
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScmCommitController.class);
+
     @Autowired
-    private IEventPushService     eventPushService;
-    
+    private IEventPushService eventPushService;
+
     @Autowired
-    private IPersonService        personService;
-    
+    private IPersonService personService;
+
     @Autowired
-    private IProjectService       projectService;
-    
+    private IProjectService projectService;
+
     @Autowired
     private IScmRepositoryService scmRepositoryService;
-    
+
     /**
      * This method push a new commit inside Komea.
      */
     @RequestMapping(method = RequestMethod.POST, value = "/new_commit")
     @ResponseStatus(value = HttpStatus.OK)
     public void pushNewCommit(@Valid @RequestBody final ScmCommitDto commitDTO) {
-    
+
         LOGGER.info("Received new commit notification {} {} {}", commitDTO.getProject(), commitDTO.getUser(), commitDTO);
         projectService.getOrCreate(commitDTO.getProject());
         final ScmCommit scmCommit = new ScmCommit();
         scmCommit.setAuthor(personService.findOrCreatePersonByLogin(commitDTO.getUser()));
-        scmCommit.setProject(projectService.selectByKey(commitDTO.getProject()));
+        scmCommit.setProject(projectService.selectByAlias(commitDTO.getProject()));
         scmCommit.setMessage(commitDTO.getMessage());
         scmCommit.setCommitTime(new DateTime());
         scmCommit.setId(commitDTO.getId());
@@ -71,11 +68,11 @@ public class ScmCommitController {
         scmCommit.setNumberOfModifiedFiles(commitDTO.getNumberOfModifiedFiles());
         LOGGER.debug("Pushing scm commit  : {}", scmCommit);
         eventPushService.sendCustomEvent(scmCommit);
-        
+
         triggerNewCOmmitEvent(commitDTO.getProject(), commitDTO.getUser(), scmCommit);
-        
+
     }
-    
+
     /**
      * This method push a new commit inside Komea.
      */
@@ -85,7 +82,7 @@ public class ScmCommitController {
             @PathVariable final String message, @PathVariable final Integer numberOfAddedlines,
             @PathVariable final Integer numberOfChangedLines, @PathVariable final Integer numberofDeletedLines,
             @PathVariable final Integer numberOfModifiedFiles) {
-    
+
         LOGGER.info("Received new commit notification");
         LOGGER.info("User {}\nProject {}\n", user, project);
         LOGGER.info("Message {}", message);
@@ -96,7 +93,7 @@ public class ScmCommitController {
         projectService.getOrCreate(project);
         final ScmCommit scmCommit = new ScmCommit();
         scmCommit.setAuthor(personService.findOrCreatePersonByLogin(user));
-        scmCommit.setProject(projectService.selectByKey(project));
+        scmCommit.setProject(projectService.selectByAlias(project));
         scmCommit.setMessage(message);
         scmCommit.setCommitTime(new DateTime());
         scmCommit.setNumberOfAddedlines(numberOfAddedlines);
@@ -107,20 +104,20 @@ public class ScmCommitController {
         eventPushService.sendCustomEvent(scmCommit);
         triggerNewCOmmitEvent(project, user, scmCommit);
     }
-    
+
     /**
      * This method push a new commit inside Komea.
      */
     @RequestMapping(method = RequestMethod.GET, value = "/new_commit_light/{project}/{user}/{message}")
     @ResponseStatus(value = HttpStatus.OK)
     public void pushNewCommitLight(@PathVariable final String project, @PathVariable final String user, @PathVariable final String message) {
-    
+
         LOGGER.info("Received new light commit notification");
         LOGGER.info("User {}\nProject {} Message {}\n", user, project, message);
         projectService.getOrCreate(project);
         final ScmCommit scmCommit = new ScmCommit();
         scmCommit.setAuthor(personService.findOrCreatePersonByLogin(user));
-        scmCommit.setProject(projectService.selectByKey(project));
+        scmCommit.setProject(projectService.selectByAlias(project));
         scmCommit.setMessage(message);
         scmCommit.setCommitTime(new DateTime());
         scmCommit.setNumberOfAddedlines(0);
@@ -131,9 +128,9 @@ public class ScmCommitController {
         eventPushService.sendCustomEvent(scmCommit);
         triggerNewCOmmitEvent(project, user, scmCommit);
     }
-    
+
     private void triggerNewCOmmitEvent(final String project, final String user, final ScmCommit scmCommit) {
-    
+
         eventPushService.sendEventDto(EventDtoBuilder.newAlert().at(scmCommit.getCommitTime().toDate()).eventType("scm-new-commit")
                 .message("New commit has been made by " + user + " in project " + project).project(project)
                 .provided(ScmRepositoryService.SCM_URL).build());
