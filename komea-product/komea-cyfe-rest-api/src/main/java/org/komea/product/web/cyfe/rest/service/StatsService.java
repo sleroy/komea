@@ -34,7 +34,8 @@ public class StatsService implements IStatsService {
 	
 	private Kpi getKpiFromString(String _kpiKey) {
 		
-		return kpiService.findKPIOrFail(_kpiKey);
+		return kpiService.selectByKeyOrFail(_kpiKey);
+		//return kpiService.findKPIOrFail(_kpiKey);
 		
 	}
 	
