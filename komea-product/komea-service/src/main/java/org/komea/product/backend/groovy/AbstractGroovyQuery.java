@@ -101,7 +101,7 @@ public abstract class AbstractGroovyQuery implements IQuery<KpiResult>
     public KpiValueProxy kpi(final String _kpiName) {
 
 
-        return new KpiValueProxy(ikpiService.findKPIOrFail(_kpiName), statisticsAPI);
+        return new KpiValueProxy(ikpiService.selectByKeyOrFail(_kpiName), statisticsAPI);
     }
 
 

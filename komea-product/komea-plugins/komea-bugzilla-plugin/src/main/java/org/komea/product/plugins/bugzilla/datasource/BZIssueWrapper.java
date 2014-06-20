@@ -33,13 +33,15 @@ public class BZIssueWrapper implements IIssue
 
 
     private static final Logger   LOGGER = LoggerFactory.getLogger(BZIssueWrapper.class);
+
+
     private final Bug             bug;
-
     private final Person          handler;
+
     private final IssueResolution issueResolution;
-
-
     private IssueStatus           issueStatus;
+
+
     private final Project         project;
     private final Person          reporter;
     private final Severity        severity;
@@ -61,20 +63,25 @@ public class BZIssueWrapper implements IIssue
         reporter = _reporter;
         project = _project;
         issueResolution =
-                _serverConfiguration.isResolutionFixed(bug.getStatus())
+                _serverConfiguration.isResolutionFixed(bug.getResolution())
                 ? IssueResolution.FIXED
                         : IssueResolution.NOT_FIXED;
         severity = _serverConfiguration.getSeverityMap().get(bug.getSeverity());
 
         if (_serverConfiguration.isStatusOpened(bug.getStatus())) {
             issueStatus = IssueStatus.OPENED;
-        } else if (_serverConfiguration.isStatusClosed(bug.getStatus())) {
-            issueStatus = IssueStatus.CLOSED;
         } else {
-            LOGGER.error("Status {} unknown , please update your bugzilla server configuration");
+            issueStatus = IssueStatus.CLOSED;
         }
 
 
+    }
+
+
+    public Bug getBug() {
+
+
+        return bug;
     }
 
 
@@ -116,10 +123,11 @@ public class BZIssueWrapper implements IIssue
         pluginDataCustomFields.put("platform", bug.getPlatform());
         pluginDataCustomFields.put("version", bug.getVersion());
 
+        if (bug.getParameterMap().containsKey("flags")) {
+            for (final Flag flag : bug.getFlags()) {
+                pluginDataCustomFields.put(flag.getName(), flag.getStatus().name());
 
-        for (final Flag flag : bug.getFlags()) {
-            pluginDataCustomFields.put(flag.getName(), flag.getStatus().name());
-
+            }
         }
         for (final java.util.Map.Entry<Object, Object> entry : bug.getParameterMap().entrySet()) {
             pluginDataCustomFields.put(entry.getKey().toString(), entry.getValue().toString());
@@ -243,6 +251,21 @@ public class BZIssueWrapper implements IIssue
 
 
         return bug.getSummary();
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+
+
+        return "BZIssueWrapper [\\n\\tbug="
+                + bug + ", \\n\\thandler=" + handler + ", \\n\\tissueResolution=" + issueResolution
+                + ", \\n\\tissueStatus=" + issueStatus + ", \\n\\tproject=" + project
+                + ", \\n\\treporter=" + reporter + ", \\n\\tseverity=" + severity + "]";
     }
 
 }

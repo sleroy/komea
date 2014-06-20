@@ -33,14 +33,14 @@ import com.j2bugzilla.base.Bug;
 @Transactional
 public class BugZillaToIssueConvertor
 {
-    
-    
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(BugZillaToIssueConvertor.class);
     @Autowired
     private IPersonService      personService;
-    
-    
-    
+
+
+
     /**
      * Convert a single bug into an issue;
      *
@@ -51,8 +51,8 @@ public class BugZillaToIssueConvertor
             final Bug _bug,
             final Project _project,
             final BZServerConfiguration _bzServerConfiguration) {
-    
-    
+
+
         LOGGER.trace("Received bug {}", _bug);
         final Person handler =
                 createPersonOrNull((String) _bug.getParameterMap().get(
@@ -61,11 +61,11 @@ public class BugZillaToIssueConvertor
                 createPersonOrNull((String) _bug.getParameterMap().get(
                         _bzServerConfiguration.getReporter_field()));
         return new BZIssueWrapper(_bug, handler, creator, _project, _bzServerConfiguration);
-        
-        
+
+
     }
-    
-    
+
+
     /**
      * Convert all the issues.
      *
@@ -77,34 +77,36 @@ public class BugZillaToIssueConvertor
             final List<Bug> _bugs,
             final Project _project,
             final BZServerConfiguration _serverConfiguration) {
-    
-    
+
+
         Validate.notNull(_project);
-        
+
         final List<IIssue> issues = Lists.newArrayList();
         for (final Bug bug : _bugs) {
             final IIssue issue = convert(bug, _project, _serverConfiguration);
             if (issue != null) {
                 issues.add(issue);
+            } else {
+                LOGGER.error("Could not convert an issue {}", bug);
             }
         }
-        
+
         return issues;
     }
-    
-    
+
+
     /**
      * @param _object
      * @return
      */
     private Person createPersonOrNull(final String _object) {
-    
-    
+
+
         if (_object == null) {
             return null;
         }
-        
+
         return personService.findOrCreatePersonByEmail(_object);
     }
-    
+
 }

@@ -6,6 +6,9 @@ package org.komea.product.backend.csv.service;
 
 
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +60,26 @@ public class CSVKpiResultService implements ICSVKpiResult
     
     
     
-    /* (non-Javadoc)
+    public void exportCSV(final KpiResult _result, final File _file) {
+    
+    
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(_file));
+            exportCSV(_result, writer);
+        } catch (final Exception e) {
+            throw new CSVConversionException(
+                    "Could not write the object into csv format in the file " + _file, e);
+        } finally {
+            IOUtils.closeQuietly(writer);
+            ;
+        }
+        
+    }
+    
+    
+    /*
+     * (non-Javadoc)
      * @see org.komea.product.backend.csv.service.ICSVKpiResult#exportCSV(org.komea.product.database.dto.KpiResult, java.io.Writer)
      */
     @Override
@@ -85,13 +107,27 @@ public class CSVKpiResultService implements ICSVKpiResult
     }
     
     
+    public IEntityService getEntityService() {
+    
+    
+        return entityService;
+    }
+    
+    
+    public void setEntityService(final IEntityService _entityService) {
+    
+    
+        entityService = _entityService;
+    }
+    
+    
     private Map<String, Number> convertKpiResult(final KpiResult _kpiResult) {
     
     
         final Map<String, Number> results = Maps.newHashMap();
         for (final Entry<EntityKey, Number> entry : _kpiResult.getMap().entrySet()) {
             final IEntity entityOrFail = entityService.getEntityOrFail(entry.getKey());
-
+            
             results.put(entityOrFail.getKey(), entry.getValue());
             
         }
