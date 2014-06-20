@@ -6,7 +6,7 @@ import org.komea.product.database.model.KpiAlertType;
 
 public interface IAlertService {
 
-    Boolean isAlertActivated(KpiAlertType _alertType, Number _value);
+    boolean isAlertActivated(KpiAlertType _alertType, Number _value);
 
     boolean isAlertFiltered(SearchKpiAlertsDto _filter, KpiAlertDto _kpiAlert);
 }
