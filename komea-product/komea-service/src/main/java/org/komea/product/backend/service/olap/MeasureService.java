@@ -107,12 +107,15 @@ public class MeasureService implements IMeasureService {
         final List<String> kpiKeys = new ArrayList<String>(_kpiKeyList.getKpiKeys());
         final List<String> entityKeys = new ArrayList<String>(_kpiKeyList.getEntityKeys());
         final EntityType entityType = _kpiKeyList.getEntityType();
+        LOGGER.info("_kpiKeyList : " + _kpiKeyList);
         final Collection<Kpi> kpis = kpiKeys.isEmpty()
                 ? kpiService.getAllKpisOfEntityType(entityType)
                 : kpiService.selectByKeys(kpiKeys);
+        LOGGER.info("kpis : " + kpis);
         final Collection<IEntity> entities = entityKeys.isEmpty()
                 ? entityService.getEntitiesByEntityType(entityType)
                 : entityService.getEntitiesByKey(entityType, entityKeys);
+        LOGGER.info("entities : " + entities);
         for (final IEntity entity : entities) {
             for (final Kpi kpi : kpis) {
                 options.setKpi(kpi);

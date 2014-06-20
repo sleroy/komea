@@ -43,11 +43,13 @@ public class MeasuresController {
     @RequestMapping(method = RequestMethod.POST, value = "/averageHistoric", consumes = "application/json; charset=utf-8", produces = "application/json; charset=utf-8")
     @ResponseBody
     public List<MeasureResult> averageHistoricalMeasure(@RequestBody final ManyHistoricalMeasureRequest _request) {
-
+        LOGGER.info("averageHistoricalMeasure with " + _request);
         final List<TimeSerieDTO> timeSerieDTOs = measureService.findMultipleHistoricalMeasure(
                 _request.getKpiKeyList(), _request.getPeriod());
+        LOGGER.info("timeSerieDTOs : " + timeSerieDTOs);
         final List<MeasureResult> measureResults = Lists.newArrayList();
         final boolean addCurrentValues = _request.getPeriod().getEndDate().after(new Date());
+        LOGGER.info("addCurrentValues : " + addCurrentValues);
         for (final TimeSerieDTO timeSerieDTO : timeSerieDTOs) {
             if (addCurrentValues) {
                 Double value = null;
@@ -60,6 +62,7 @@ public class MeasuresController {
             }
             measureResults.add(timeSerieDTO.toMeasureResult());
         }
+        LOGGER.info("measureResults : " + measureResults);
         return measureResults;
     }
 
