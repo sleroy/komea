@@ -38,36 +38,36 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class CSVKpiResultServiceTest
 {
-
-
+    
+    
     /**
      * @author sleroy
      */
     private final class AnswerImplementation implements Answer<IEntity>
     {
-
-
+        
+        
         @Override
         public IEntity answer(final InvocationOnMock _invocation) throws Throwable {
-
-
+        
+        
             final IEntity mock2 = mock(IEntity.class);
             when(mock2.getKey()).thenReturn(
                     "entity" + ((EntityKey) _invocation.getArguments()[0]).getId());
             return mock2;
         }
     }
-
-
-
+    
+    
+    
     @InjectMocks
-    private ICSVKpiResult  cSVKpiResultService;
+    private CSVKpiResultService  cSVKpiResultService;
     // @Mock
     private final IEntityService entityService = mock(IEntityService.class, Mockito.withSettings()
-            .verboseLogging());
-
-
-
+                                                       .verboseLogging());
+    
+    
+    
     /**
      * Test method for
      * {@link org.komea.product.backend.csv.service.CSVKpiResultService#exportCSV(org.komea.product.database.dto.KpiResult, java.io.Writer)}
@@ -75,15 +75,15 @@ public class CSVKpiResultServiceTest
      */
     @Test
     public final void testExportCSV() throws Exception {
-
-
+    
+    
         when(entityService.getEntityOrFail(any(EntityKey.class))).thenAnswer(
                 new AnswerImplementation());
-
-
+        
+        
         final StringWriter writer = new StringWriter();
         final KpiResult kpiResult = new KpiResult();
-
+        
         kpiResult.put(EntityKey.of(EntityType.PERSON, 1), 40);
         kpiResult.put(EntityKey.of(EntityType.PERSON, 2), 80);
         kpiResult.put(EntityKey.of(EntityType.PERSON, 3), 20);
@@ -91,10 +91,10 @@ public class CSVKpiResultServiceTest
         final FileInputStream fos = new FileInputStream(new File("src/test/resources/example.csv"));
         final String expected = IOUtils.toString(fos);
         IOUtils.closeQuietly(fos);
-
+        
         System.out.println(writer.getBuffer().toString());
         assertEquals(expected, writer.getBuffer().toString());
-
-
+        
+        
     }
 }
