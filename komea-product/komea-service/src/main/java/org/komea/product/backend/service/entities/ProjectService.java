@@ -127,7 +127,7 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
     @Override
     public Project getOrCreate(final String _projectKey) {
 
-        Project project = selectByKey(_projectKey);
+        Project project = selectByAlias(_projectKey);
         if (project == null) {
             project = createNewProjectFromKey(_projectKey);
         }
