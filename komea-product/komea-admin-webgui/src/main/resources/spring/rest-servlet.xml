@@ -13,7 +13,7 @@
 
 	<mvc:annotation-driven>
 		<mvc:message-converters register-defaults="true">
-			<bean class="org.komea.product.web.cyfe.rest.api.CsvMessageConverter"></bean>
+			<bean class="org.komea.product.backend.utils.CsvMessageConverter"></bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 

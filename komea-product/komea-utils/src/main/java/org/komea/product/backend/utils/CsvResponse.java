@@ -1,8 +1,14 @@
-package org.komea.product.web.cyfe.rest.utils;
+package org.komea.product.backend.utils;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CsvResponse {
+public class CsvResponse implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3134802114209356010L;
 	
 	private final String filename;
 	private final List<String[]> records;

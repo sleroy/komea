@@ -1,13 +1,12 @@
 package org.komea.product.web.cyfe.rest.api;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.komea.product.backend.utils.CsvResponse;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.model.timeserie.TimeScale;
 import org.komea.product.web.cyfe.rest.service.IStatsService;
-import org.komea.product.web.cyfe.rest.utils.CsvResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

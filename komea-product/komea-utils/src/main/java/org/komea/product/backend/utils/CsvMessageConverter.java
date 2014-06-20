@@ -1,11 +1,10 @@
-package org.komea.product.web.cyfe.rest.api;
+package org.komea.product.backend.utils;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 
-import org.komea.product.web.cyfe.rest.utils.CsvResponse;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -25,7 +24,8 @@ public class CsvMessageConverter extends AbstractHttpMessageConverter<CsvRespons
 	
 	@Override
 	protected boolean supports(Class<?> clazz) {
-		return CsvResponse.class.equals(clazz);
+		//return CsvResponse.class.equals(clazz);
+		return true;
 	}
 
 	@Override
