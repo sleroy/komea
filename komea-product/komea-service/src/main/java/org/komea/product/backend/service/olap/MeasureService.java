@@ -98,7 +98,6 @@ public class MeasureService implements IMeasureService {
         Validate.notNull(_kpiKeyList.getKpiKeys());
         Validate.notNull(_kpiKeyList.getEntityType());
         Validate.notNull(_period);
-
         final List<TimeSerieDTO> series = Lists.newArrayList();
         final PeriodTimeSerieOptions options = new PeriodTimeSerieOptions();
         options.setFromPeriod(new DateTime(_period.getStartDate()));
@@ -120,6 +119,7 @@ public class MeasureService implements IMeasureService {
                 series.add(timeSerieDTO);
             }
         }
+        LOGGER.info("findMultipleHistoricalMeasure : " + _kpiKeyList + " - " + _period + " = " + series);
         return series;
     }
 
