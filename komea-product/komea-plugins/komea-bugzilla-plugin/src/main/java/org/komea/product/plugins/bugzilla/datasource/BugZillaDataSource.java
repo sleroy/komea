@@ -1,14 +1,11 @@
 /**
  *
  */
-
 package org.komea.product.plugins.bugzilla.datasource;
 
-
-
+import com.j2bugzilla.base.Bug;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.komea.product.backend.service.dataplugin.IDynamicDataSourcePool;
@@ -27,38 +24,28 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.j2bugzilla.base.Bug;
-
-
-
 /**
  * @author sleroy
  */
 @Component("bugzilla-source")
-public class BugZillaDataSource implements IDynamicDataSource<IIssuePlugin>
-{
+public class BugZillaDataSource implements IDynamicDataSource<IIssuePlugin> {
 
-
-    private static final Logger      LOGGER = LoggerFactory.getLogger(BugZillaDataSource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BugZillaDataSource.class);
 
     @Autowired
-    private IBZConfigurationDAO      bugZillaConfiguration;
+    private IBZConfigurationDAO bugZillaConfiguration;
 
     @Autowired
     private BugZillaToIssueConvertor bugZillaToIssueConvertor;
 
+    @Autowired
+    private IDynamicDataSourcePool dataSourcePool;
 
     @Autowired
-    private IDynamicDataSourcePool   dataSourcePool;
-
-
-    @Autowired
-    private IProjectService          projectService;
+    private IProjectService projectService;
 
     @Autowired
-    private IBZServerProxyFactory    proxyFactory;
-
-
+    private IBZServerProxyFactory proxyFactory;
 
     /*
      * (non-Javadoc)
@@ -66,7 +53,6 @@ public class BugZillaDataSource implements IDynamicDataSource<IIssuePlugin>
      */
     @Override
     public IIssuePlugin fetchData() {
-
 
         final List<IIssue> issues = new ArrayList(1000);
         for (final BZServerConfiguration conf : bugZillaConfiguration.selectAll()) {
@@ -84,16 +70,13 @@ public class BugZillaDataSource implements IDynamicDataSource<IIssuePlugin>
     @Override
     public Class<IIssuePlugin> getDefinition() {
 
-
         return IIssuePlugin.class;
     }
-
 
     public void obtainIssuesForEachBugZillaServer(
             final List<IIssue> issues,
             final BZServerConfiguration conf,
             IBZServerProxy bugzillaProxy) {
-
 
         try {
             bugzillaProxy = proxyFactory.newConnector(conf);
@@ -111,13 +94,11 @@ public class BugZillaDataSource implements IDynamicDataSource<IIssuePlugin>
         }
     }
 
-
     public void obtainIssuesForProjectsOfAServer(
             final BZServerConfiguration conf,
             final IBZServerProxy bugzillaProxy,
             final List<IIssue> issues,
             final List<String> productNames) {
-
 
         for (final String productName : productNames) {
             final Project project = obtainProjectFromConfigurationAndProductName(conf, productName);
@@ -129,29 +110,20 @@ public class BugZillaDataSource implements IDynamicDataSource<IIssuePlugin>
         }
     }
 
-
     public Project obtainProjectFromConfigurationAndProductName(
             final BZServerConfiguration conf,
             final String projectKomeaName) {
 
-
-        Project project = projectService.selectByKey(projectKomeaName);
-        if (project == null) {
-            if (conf.isAutocreateProjects()) {
-                project = projectService.getOrCreate(projectKomeaName);
-            } else {
-
-            }
+        Project project = projectService.selectByAlias(projectKomeaName);
+        if (project == null && conf.isAutocreateProjects()) {
+            project = projectService.getOrCreate(projectKomeaName);
         }
         return project;
     }
-    
-    
-    public void setBugZillaConfiguration(final IBZConfigurationDAO _bugZillaConfiguration) {
 
+    public void setBugZillaConfiguration(final IBZConfigurationDAO _bugZillaConfiguration) {
 
         bugZillaConfiguration = _bugZillaConfiguration;
     }
-
 
 }
