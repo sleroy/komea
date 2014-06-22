@@ -2,13 +2,12 @@
  *
  */
 
-package org.komea.product.plugins.bugtracker.service;
+package org.komea.product.plugins.bugzilla.service;
 
 
 
 import org.komea.product.plugins.bugzilla.api.IBZServerProxy;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
-import org.komea.product.plugins.bugzilla.service.BZServerProxyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

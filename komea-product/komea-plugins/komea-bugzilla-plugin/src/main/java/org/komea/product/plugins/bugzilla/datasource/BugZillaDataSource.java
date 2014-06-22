@@ -20,6 +20,7 @@ import org.komea.product.plugins.bugtracking.model.IIssuePlugin;
 import org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO;
 import org.komea.product.plugins.bugzilla.api.IBZServerProxy;
 import org.komea.product.plugins.bugzilla.api.IBZServerProxyFactory;
+import org.komea.product.plugins.bugzilla.api.IBugZillaToIssueConvertor;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,7 @@ public class BugZillaDataSource implements IIssuePlugin
     private IBZConfigurationDAO      bugZillaConfiguration;
     
     @Autowired
-    private BugZillaToIssueConvertor bugZillaToIssueConvertor;
+    private IBugZillaToIssueConvertor bugZillaToIssueConvertor;
     
     
     @Autowired

@@ -14,6 +14,7 @@ import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Project;
 import org.komea.product.plugins.bugtracking.model.IIssue;
+import org.komea.product.plugins.bugzilla.api.IBugZillaToIssueConvertor;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ import com.j2bugzilla.base.Bug;
  */
 @Service
 @Transactional
-public class BugZillaToIssueConvertor
+public class BugZillaToIssueConvertor implements IBugZillaToIssueConvertor
 {
 
 
@@ -41,12 +42,12 @@ public class BugZillaToIssueConvertor
 
 
 
-    /**
-     * Convert a single bug into an issue;
-     *
-     * @param _bug
-     * @return
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.bugzilla.datasource.IBugZillaToIssueConvertor#convert(com.j2bugzilla.base.Bug,
+     * org.komea.product.database.model.Project, org.komea.product.plugins.bugzilla.model.BZServerConfiguration)
      */
+    @Override
     public IIssue convert(
             final Bug _bug,
             final Project _project,
@@ -66,13 +67,12 @@ public class BugZillaToIssueConvertor
     }
 
 
-    /**
-     * Convert all the issues.
-     *
-     * @param _bugs
-     * @param _serverConfiguration
-     * @return
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.bugzilla.datasource.IBugZillaToIssueConvertor#convertAll(java.util.List,
+     * org.komea.product.database.model.Project, org.komea.product.plugins.bugzilla.model.BZServerConfiguration)
      */
+    @Override
     public Collection<? extends IIssue> convertAll(
             final List<Bug> _bugs,
             final Project _project,

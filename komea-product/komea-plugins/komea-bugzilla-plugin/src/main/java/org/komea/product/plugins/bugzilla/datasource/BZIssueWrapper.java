@@ -6,6 +6,9 @@ package org.komea.product.plugins.bugzilla.datasource;
 
 
 
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.commons.lang3.Validate;
 import org.joda.time.DateTime;
 import org.komea.product.database.enums.Severity;
@@ -14,12 +17,14 @@ import org.komea.product.database.model.Project;
 import org.komea.product.plugins.bugtracking.model.IIssue;
 import org.komea.product.plugins.bugtracking.model.IssueResolution;
 import org.komea.product.plugins.bugtracking.model.IssueStatus;
+import org.komea.product.plugins.bugzilla.core.BugHistory;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.komea.product.plugins.datasource.DataCustomFields;
 import org.komea.product.plugins.model.IDataCustomFields;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Lists;
 import com.j2bugzilla.base.Bug;
 import com.j2bugzilla.base.Flag;
 
@@ -32,19 +37,25 @@ public class BZIssueWrapper implements IIssue
 {
 
 
-    private static final Logger   LOGGER = LoggerFactory.getLogger(BZIssueWrapper.class);
+    private static final Logger         LOGGER  = LoggerFactory.getLogger(BZIssueWrapper.class);
 
 
-    private final Bug             bug;
-    private final Person          handler;
+    private final Bug                   bug;
+    private final Person                handler;
 
-    private final IssueResolution issueResolution;
-    private IssueStatus           issueStatus;
+    private List<BugHistory>            history = Lists.newArrayList();
+    private final IssueResolution       issueResolution;
 
 
-    private final Project         project;
-    private final Person          reporter;
-    private final Severity        severity;
+    private IssueStatus                 issueStatus;
+    private final Project               project;
+    private final Person                reporter;
+
+
+    private final BZServerConfiguration serverConfiguration;
+    
+    
+    private final Severity              severity;
 
 
 
@@ -55,6 +66,8 @@ public class BZIssueWrapper implements IIssue
             final Project _project,
             final BZServerConfiguration _serverConfiguration) {
 
+
+        serverConfiguration = _serverConfiguration;
 
         Validate.notNull(_bug);
         Validate.notNull(_project);
@@ -160,6 +173,13 @@ public class BZIssueWrapper implements IIssue
     }
 
 
+    public List<BugHistory> getHistory() {
+    
+    
+        return Collections.unmodifiableList(history);
+    }
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.bugtracking.model.IIssue#getId()
@@ -218,6 +238,13 @@ public class BZIssueWrapper implements IIssue
     }
 
 
+    public BZServerConfiguration getServerConfiguration() {
+    
+    
+        return serverConfiguration;
+    }
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.bugtracking.model.IIssue#getSeverity()
@@ -254,6 +281,13 @@ public class BZIssueWrapper implements IIssue
     }
 
 
+    public void setHistory(final List<BugHistory> _history) {
+
+
+        history = _history;
+    }
+    
+    
     /*
      * (non-Javadoc)
      * @see java.lang.Object#toString()

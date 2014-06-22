@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.database.model.Project;
+import org.komea.product.plugins.bugzilla.api.IBugZillaToIssueConvertor;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -34,7 +35,7 @@ public class BugZillaToIssueConvertorTest
     
     
     @InjectMocks
-    private BugZillaToIssueConvertor bugZillaToIssueConvertor;
+    private IBugZillaToIssueConvertor bugZillaToIssueConvertor;
     @Mock
     private IPersonService           personService;
     
