@@ -50,7 +50,7 @@ import com.j2bugzilla.base.BugzillaException;
  */
 @Service
 @Transactional
-public class BZRebuildHistoryService implements IBugZillaRebuildHistory
+public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory
 {
 
 
@@ -115,10 +115,6 @@ public class BZRebuildHistoryService implements IBugZillaRebuildHistory
 
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.bugzilla.api.IBugZillaRebuildHistory#rebuildHistory()
-     */
-    /*
-     * (non-Javadoc)
      * @see org.komea.product.plugins.bugzilla.service.backup.IBZRebuildHistoryService#rebuildHistory()
      */
     
@@ -129,7 +125,7 @@ public class BZRebuildHistoryService implements IBugZillaRebuildHistory
 
         LOGGER.info("Rebuilding history of bugzilla servers");
         final List<IIssue> data = issuePlugin.getData();
-        LOGGER.info("Working on {} issues", data);
+        LOGGER.info("Working on {} issues", data.size());
         if (data.isEmpty()) {
             LOGGER.warn("No data");
             return;
