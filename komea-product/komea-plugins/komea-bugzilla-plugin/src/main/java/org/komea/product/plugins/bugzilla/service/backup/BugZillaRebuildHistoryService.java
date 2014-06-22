@@ -50,7 +50,7 @@ import com.j2bugzilla.base.BugzillaException;
  */
 @Service
 @Transactional
-public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory
+public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, Runnable
 {
 
 
@@ -109,65 +109,105 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory
     @Autowired
     private IBZServerProxyFactory                serverProxyFactory;
     @Autowired
-    IStatisticsAPI                               statisticsAPI;
-
+    private IStatisticsAPI                       statisticsAPI;
 
 
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.bugzilla.service.backup.IBZRebuildHistoryService#rebuildHistory()
      */
-    
-    
+
+    private Thread                               thread;
+
+
+
+    public synchronized boolean isLaunched() {
+
+
+        return thread != null;
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.bugzilla.api.IBugZillaRebuildHistory#isRunning()
+     */
     @Override
-    public void rebuildHistory() {
+    public synchronized boolean isRunning() {
+    
+    
+        return thread != null;
+    }
 
 
-        LOGGER.info("Rebuilding history of bugzilla servers");
-        final List<IIssue> data = issuePlugin.getData();
-        LOGGER.info("Working on {} issues", data.size());
-        if (data.isEmpty()) {
-            LOGGER.warn("No data");
+    @Override
+    public synchronized void rebuildHistory() {
+
+
+        if (thread != null) {
             return;
         }
-
-        final List<KpiAndQueryObject> kpis = getKpisWithBackupFunction();
-        if (kpis.isEmpty()) {
-            LOGGER.warn("No kpi");
-            return;
-        }
-        DateTime beginDate = computeBeginningTime(data);
-        LOGGER.info("Beginning at {}", beginDate);
-        final DateTime untilNow = new DateTime();
-        // Now iteration, one week per week
-        while (beginDate.isBefore(untilNow)) {
-
-            if (getNumberOfMeasuresForThisDate(beginDate) > 0) { // Already existing
-                LOGGER.info("Skip {} <  {}", beginDate, untilNow);
-                continue;
-            }
-            LOGGER.info("Iteration {} <  {}", beginDate, untilNow);
-            final List<IIssue> existedInPastIssues =
-                    CollectionUtil.filter(data, new FilterBugsExistingAtThisTime(beginDate));
-            LOGGER.info("At this period, we work on {} issues", existedInPastIssues.size());
-            loadHistoryForIssues(existedInPastIssues);
-            for (final KpiAndQueryObject kpiAndQueryObject : kpis) {
-                kpiAndQueryObject.getQuery().setIssuePlugins(new IIssuePlugin[] {
-                        new MockIssuePlugin(existedInPastIssues) });
-                final KpiResult result = kpiAndQueryObject.getQuery().getResult();
-                result.iterate(new StoreValueIntoMeasureResultIterator(statisticsAPI,
-                        kpiAndQueryObject.getKpi().getId(), beginDate));
-            }
-
-
-            beginDate = beginDate.plusWeeks(1); // WEEK PER WEEK
-
-        }
-
+        thread = new Thread(this);
+        thread.start();
 
     }
 
 
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Runnable#run()
+     */
+    @Override
+    public void run() {
+
+
+        try {
+            LOGGER.info("Rebuilding history of bugzilla servers");
+            final List<IIssue> data = issuePlugin.getData();
+            LOGGER.info("Working on {} issues", data.size());
+            if (data.isEmpty()) {
+                LOGGER.warn("No data");
+                return;
+            }
+
+            final List<KpiAndQueryObject> kpis = getKpisWithBackupFunction();
+            if (kpis.isEmpty()) {
+                LOGGER.warn("No kpi");
+                return;
+            }
+            DateTime beginDate = computeBeginningTime(data);
+            LOGGER.info("Beginning at {}", beginDate);
+            final DateTime untilNow = new DateTime();
+            // Now iteration, one week per week
+            while (beginDate.isBefore(untilNow)) {
+
+                if (getNumberOfMeasuresForThisDate(beginDate) > 0) { // Already existing
+                    LOGGER.info("Skip {} <  {}", beginDate, untilNow);
+                    continue;
+                }
+                LOGGER.info("Iteration {} <  {}", beginDate, untilNow);
+                final List<IIssue> existedInPastIssues =
+                        CollectionUtil.filter(data, new FilterBugsExistingAtThisTime(beginDate));
+                LOGGER.info("At this period, we work on {} issues", existedInPastIssues.size());
+                loadHistoryForIssues(existedInPastIssues);
+                for (final KpiAndQueryObject kpiAndQueryObject : kpis) {
+                    kpiAndQueryObject.getQuery().setIssuePlugins(new IIssuePlugin[] {
+                            new MockIssuePlugin(existedInPastIssues) });
+                    final KpiResult result = kpiAndQueryObject.getQuery().getResult();
+                    result.iterate(new StoreValueIntoMeasureResultIterator(statisticsAPI,
+                            kpiAndQueryObject.getKpi().getId(), beginDate));
+                }
+
+
+                beginDate = beginDate.plusWeeks(1); // WEEK PER WEEK
+
+            }
+        } finally {
+            removeThread();
+        }
+    }
+    
+    
     private DateTime computeBeginningTime(final List<IIssue> data) {
 
 
@@ -271,6 +311,13 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory
     }
 
 
+    private synchronized void removeThread() {
+    
+    
+        thread = null;
+    }
+    
+    
     private void sortHistoryFromMostRecentToOldest(final List<BugHistory> bugHistory) {
 
 
