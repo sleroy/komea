@@ -9,6 +9,7 @@ import groovy.lang.Script;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.exceptions.GroovyScriptException.GroovyValidationStatus;
+import org.komea.product.backend.service.queries.IQueryWithAnnotations;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Kpi;
 
@@ -57,15 +58,14 @@ public interface IGroovyEngineService
 
 
     /**
-     * Injection of spring into a query.
+     * Parses a query
      *
-     * @param _cast
-     *            the cast
-     * @throws Exception
+     * @param _kpi
+     * @return the instantiated query
      */
-    void injectSpringIntoScript(IQuery _cast) throws Exception;
-
-
+    public <T extends IQuery<KpiResult>> IQueryWithAnnotations<T> parseQueryAndAnnotations(Kpi _kp);
+    
+    
     /**
      * Tests if a formula is a valid script
      *

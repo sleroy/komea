@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @author sleroy
  */
-public interface IPluginDataCustomFields extends Serializable
+public interface IDataCustomFields extends Serializable
 {
     
     

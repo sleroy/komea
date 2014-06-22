@@ -79,6 +79,11 @@
                 </dependency>
                 <dependency>
                     <groupId>org.komea.plugins</groupId>
+                    <artifactId>komea-bugtracker-plugin</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.komea.plugins</groupId>
                     <artifactId>komea-ldap-plugin</artifactId>
                     <version>${project.version}</version>
                 </dependency>

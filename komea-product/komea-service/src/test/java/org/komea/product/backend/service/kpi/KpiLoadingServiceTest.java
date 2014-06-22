@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.backend.service.kpi;
@@ -37,7 +37,9 @@ public class KpiLoadingServiceTest
     
     
     @Mock
-    private IQueryService         kpiRegisterService;
+    private IQueryService            kpiRegisterService;
+
+
     @Mock
     private IKPIService              kpiService;
     

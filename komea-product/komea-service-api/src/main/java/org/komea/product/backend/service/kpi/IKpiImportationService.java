@@ -7,7 +7,9 @@ package org.komea.product.backend.service.kpi;
 
 
 import java.io.File;
-import java.util.Map;
+
+import org.komea.eventory.api.engine.IQuery;
+import org.komea.product.backend.service.queries.IQueryWithAnnotations;
 
 
 
@@ -20,6 +22,18 @@ public interface IKpiImportationService
 {
 
 
+    public interface KpiImportator
+    {
+
+
+        void iterate(
+                String _file,
+                IQueryWithAnnotations<IQuery> _kpiDefinition,
+                Throwable _throwable);
+    }
+
+
+
     /**
      * Import the catalog from the zip file
      *
@@ -27,6 +41,6 @@ public interface IKpiImportationService
      *            the zip file
      * @return the catalog.
      */
-    public Map<String, KpiDefinition> importCatalog(File _zipFile);
+    public void importCatalog(File _zipFile, KpiImportator _kpiImportator);
 
 }

@@ -6,8 +6,10 @@ package org.komea.product.plugins.bugzilla.datasource;
 
 
 
+import java.util.List;
+
 import org.junit.Test;
-import org.komea.product.plugins.bugtracking.model.IIssuePlugin;
+import org.komea.product.plugins.bugtracking.model.IIssue;
 import org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.komea.product.test.spring.AbstractSpringIntegrationTestCase;
@@ -30,41 +32,41 @@ import static org.mockito.Mockito.when;
 
 public class BugZillaDataSourceITest extends AbstractSpringIntegrationTestCase
 {
-
-
+    
+    
     private final IBZConfigurationDAO bugZillaConfiguration =
-            Mockito.mock(IBZConfigurationDAO.class);
-
+                                                                    Mockito.mock(IBZConfigurationDAO.class);
+    
     @Autowired
     private BugZillaDataSource        bugZillaDataSource;
-
-
-
+    
+    
+    
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.datasource.BugZillaDataSource#fetchData()}.
      */
     @Test
     public final void testFetchData() throws Exception {
-
-
+    
+    
         when(bugZillaConfiguration.selectAll()).thenReturn(Lists.newArrayList(fakeConfiguration()));
-
+        
         bugZillaDataSource.setBugZillaConfiguration(bugZillaConfiguration);
         // EXECUTION WITH PROXY CONTAINING TWO PROJECTS , with both 3 bugs
-        final IIssuePlugin fetchData = bugZillaDataSource.fetchData();
+        final List<IIssue> fetchData = bugZillaDataSource.getData();
         assertFalse(fetchData.isEmpty());
-
+        
     }
-
-
+    
+    
     /**
      * @return
      */
     private BZServerConfiguration fakeConfiguration() {
-
-
+    
+    
         final BZServerConfiguration bzServerConfiguration = new BZServerConfiguration();
-
+        
         bzServerConfiguration.setAddress("http://eos.tocea/bugzilla/");
         bzServerConfiguration.setLogin("jeremie.guidoux@tocea.com");
         bzServerConfiguration.setPassword("tocea35");
@@ -72,5 +74,5 @@ public class BugZillaDataSourceITest extends AbstractSpringIntegrationTestCase
         bzServerConfiguration.setAutocreateProjects(true);
         return bzServerConfiguration;
     }
-
+    
 }

@@ -8,6 +8,8 @@ package org.komea.product.backend.groovy;
 
 import groovy.lang.Script;
 
+import java.util.Map;
+
 import org.apache.commons.lang3.Validate;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
@@ -16,20 +18,25 @@ import org.komea.product.backend.api.ISpringService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Maps;
+
 
 
 /**
  * @author sleroy
  */
-public abstract class GroovyFormulaScript extends Script
+public abstract class AbstractGroovyScript extends Script
 {
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GroovyFormulaScript.class);
+    private static final Logger       LOGGER      = LoggerFactory
+                                                          .getLogger(AbstractGroovyScript.class);
 
-
-
-    public GroovyFormulaScript() {
+    private final Map<String, Object> annotations = Maps.newHashMap();
+    
+    
+    
+    public AbstractGroovyScript() {
 
 
         super();
@@ -51,8 +58,8 @@ public abstract class GroovyFormulaScript extends Script
         return _query;
 
     }
-
-
+    
+    
     /**
      * AUtowiring the cep event query.
      *
@@ -67,6 +74,13 @@ public abstract class GroovyFormulaScript extends Script
         getSpringService().autowirePojo(_query);
         return _query;
 
+    }
+
+
+    public void define(final String _annotationName, final Object _value) {
+    
+    
+        annotations.put(_annotationName, _value);
     }
 
 
@@ -104,6 +118,13 @@ public abstract class GroovyFormulaScript extends Script
         final ICEPQueryImplementation queryImplementation =
                 org.springframework.beans.BeanUtils.instantiate(_queryImplementation);
         return new CEPQuery(queryImplementation);
+    }
+
+
+    public Map<String, Object> getAnnotations() {
+    
+    
+        return annotations;
     }
 
 

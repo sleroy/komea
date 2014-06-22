@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author sleroy
  */
-public class PluginDataCustomFieldsTest
+public class DataCustomFieldsTest
 {
 
 
@@ -65,13 +65,13 @@ public class PluginDataCustomFieldsTest
     
     
     /**
-     * Test method for {@link org.komea.product.plugins.datasource.PluginDataCustomFields#containsField(java.lang.String)}.
+     * Test method for {@link org.komea.product.plugins.datasource.DataCustomFields#containsField(java.lang.String)}.
      */
     @Test
     public final void testContainsField() throws Exception {
     
     
-        final PluginDataCustomFields dataCustomFields = new PluginDataCustomFields();
+        final DataCustomFields dataCustomFields = new DataCustomFields();
         assertFalse(dataCustomFields.containsField("p1"));
 
         dataCustomFields.put("p1", "v");
@@ -80,13 +80,13 @@ public class PluginDataCustomFieldsTest
 
 
     /**
-     * Test method for {@link org.komea.product.plugins.datasource.PluginDataCustomFields#getField(java.lang.String)}.
+     * Test method for {@link org.komea.product.plugins.datasource.DataCustomFields#getField(java.lang.String)}.
      */
     @Test
     public final void testGetField() throws Exception {
     
     
-        final PluginDataCustomFields dataCustomFields = new PluginDataCustomFields();
+        final DataCustomFields dataCustomFields = new DataCustomFields();
         
         assertNull(dataCustomFields.getField("p2"));
         dataCustomFields.put("p2", "v");
@@ -95,13 +95,13 @@ public class PluginDataCustomFieldsTest
 
 
     /**
-     * Test method for {@link org.komea.product.plugins.datasource.PluginDataCustomFields#getFieldsAsMap()}.
+     * Test method for {@link org.komea.product.plugins.datasource.DataCustomFields#getFieldsAsMap()}.
      */
     @Test
     public final void testGetFieldsAsMap() throws Exception {
     
     
-        final PluginDataCustomFields dataCustomFields = new PluginDataCustomFields();
+        final DataCustomFields dataCustomFields = new DataCustomFields();
         
         dataCustomFields.put("p1", "v");
         dataCustomFields.put("p2", "v2");
@@ -112,13 +112,13 @@ public class PluginDataCustomFieldsTest
 
 
     /**
-     * Test method for {@link org.komea.product.plugins.datasource.PluginDataCustomFields#getPojo(java.lang.Class)}.
+     * Test method for {@link org.komea.product.plugins.datasource.DataCustomFields#getPojo(java.lang.Class)}.
      */
     @Test
     public final void testGetPojo() throws Exception {
     
     
-        final PluginDataCustomFields dataCustomFields = new PluginDataCustomFields();
+        final DataCustomFields dataCustomFields = new DataCustomFields();
         
         dataCustomFields.put("p1", "v");
         dataCustomFields.put("p2", "v2");

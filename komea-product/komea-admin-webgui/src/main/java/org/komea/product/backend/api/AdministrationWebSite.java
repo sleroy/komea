@@ -8,7 +8,6 @@ package org.komea.product.backend.api;
 
 import org.komea.product.wicket.LoginPage;
 import org.komea.product.wicket.UnauthorizedPage;
-import org.komea.product.wicket.adminactions.AdminActionPage;
 import org.komea.product.wicket.alert.AlertEditPage;
 import org.komea.product.wicket.alert.AlertPage;
 import org.komea.product.wicket.console.ConsolePage;
@@ -40,31 +39,30 @@ import org.komea.product.wicket.statistics.StatPage;
  * @author sleroy
  */
 @MountAdminPages({
-    @MountPage(mount = "/departments", page = DepartmentPage.class),
-    @MountPage(mount = "/saveDepartment", page = DepartmentEditPage.class),
-    @MountPage(mount = "/teams", page = TeamPage.class),
-    @MountPage(mount = "/saveTeam", page = TeamEditPage.class),
-    @MountPage(mount = "/kpis", page = KpiPage.class),
-    @MountPage(mount = "/saveKpi", page = KpiEditPage.class),
-    @MountPage(mount = "/saveProject", page = ProjectEditPage.class),
-    @MountPage(mount = "/projects", page = ProjectPage.class),
-    @MountPage(mount = "/settings", page = SettingsPage.class),
-    @MountPage(mount = "/viewlog", page = ConsolePage.class),
-    @MountPage(mount = "/stats", page = StatPage.class),
-    @MountPage(mount = "/login", page = LoginPage.class),
-    @MountPage(mount = "/cronpage", page = CronPage.class),
-    @MountPage(mount = "/accessdenied", page = UnauthorizedPage.class),
-    @MountPage(mount = "/users", page = PersonPage.class),
-    @MountPage(mount = "/saveMember", page = PersonAddPage.class),
-    @MountPage(mount = "/events", page = EventsPage.class),
-    @MountPage(mount = "/plugins", page = ProviderPage.class),
-    @MountPage(mount = "/customers", page = CustomerPage.class),
-    @MountPage(mount = "/saveCustomer", page = CustomerEditPage.class),
-    @MountPage(mount = "/alerts", page = AlertPage.class),
-    @MountPage(mount = "/saveAlert", page = AlertEditPage.class),
-    @MountPage(mount = "/kpivalues", page = KpiValuesPage.class),
-    @MountPage(mount = "/kpiimport", page = KpiImportPage.class),
-    @MountPage(mount = "/adminactions", page = AdminActionPage.class) })
+        @MountPage(mount = "/departments", page = DepartmentPage.class),
+        @MountPage(mount = "/saveDepartment", page = DepartmentEditPage.class),
+        @MountPage(mount = "/teams", page = TeamPage.class),
+        @MountPage(mount = "/saveTeam", page = TeamEditPage.class),
+        @MountPage(mount = "/kpis", page = KpiPage.class),
+        @MountPage(mount = "/saveKpi", page = KpiEditPage.class),
+        @MountPage(mount = "/saveProject", page = ProjectEditPage.class),
+        @MountPage(mount = "/projects", page = ProjectPage.class),
+        @MountPage(mount = "/settings", page = SettingsPage.class),
+        @MountPage(mount = "/viewlog", page = ConsolePage.class),
+        @MountPage(mount = "/stats", page = StatPage.class),
+        @MountPage(mount = "/login", page = LoginPage.class),
+        @MountPage(mount = "/cronpage", page = CronPage.class),
+        @MountPage(mount = "/accessdenied", page = UnauthorizedPage.class),
+        @MountPage(mount = "/users", page = PersonPage.class),
+        @MountPage(mount = "/saveMember", page = PersonAddPage.class),
+        @MountPage(mount = "/events", page = EventsPage.class),
+        @MountPage(mount = "/plugins", page = ProviderPage.class),
+        @MountPage(mount = "/customers", page = CustomerPage.class),
+        @MountPage(mount = "/saveCustomer", page = CustomerEditPage.class),
+        @MountPage(mount = "/alerts", page = AlertPage.class),
+        @MountPage(mount = "/saveAlert", page = AlertEditPage.class),
+        @MountPage(mount = "/kpivalues", page = KpiValuesPage.class),
+        @MountPage(mount = "/kpiimport", page = KpiImportPage.class) })
 public class AdministrationWebSite
 {
     //

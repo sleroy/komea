@@ -10,19 +10,16 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import jodd.bean.BeanUtil;
-
-import org.komea.product.plugins.model.IPluginDataCustomFields;
-import org.springframework.beans.BeanUtils;
+import org.komea.product.backend.utils.PojoUtils;
+import org.komea.product.plugins.model.IDataCustomFields;
 
 
 
 /**
  * @author sleroy
  */
-public class PluginDataCustomFields implements IPluginDataCustomFields
+public class DataCustomFields implements IDataCustomFields
 {
 
 
@@ -32,7 +29,7 @@ public class PluginDataCustomFields implements IPluginDataCustomFields
 
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.model.IPluginDataCustomFields#containsField(java.lang.String)
+     * @see org.komea.product.plugins.model.IDataCustomFields#containsField(java.lang.String)
      */
     @Override
     public boolean containsField(final String _field) {
@@ -44,7 +41,7 @@ public class PluginDataCustomFields implements IPluginDataCustomFields
 
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.model.IPluginDataCustomFields#getField(java.lang.String)
+     * @see org.komea.product.plugins.model.IDataCustomFields#getField(java.lang.String)
      */
     @Override
     public Serializable getField(final String _name) {
@@ -56,7 +53,7 @@ public class PluginDataCustomFields implements IPluginDataCustomFields
 
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.model.IPluginDataCustomFields#getFieldsAsMap()
+     * @see org.komea.product.plugins.model.IDataCustomFields#getFieldsAsMap()
      */
     @Override
     public Map<String, Serializable> getFieldsAsMap() {
@@ -68,17 +65,13 @@ public class PluginDataCustomFields implements IPluginDataCustomFields
 
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.model.IPluginDataCustomFields#getPojo(java.lang.Class)
+     * @see org.komea.product.plugins.model.IDataCustomFields#getPojo(java.lang.Class)
      */
     @Override
     public <T> T getPojo(final Class<T> _pojoClass) {
 
 
-        final T bean = BeanUtils.instantiate(_pojoClass);
-        for (final Entry<String, Serializable> entry : fields.entrySet()) {
-            BeanUtil.setProperty(bean, entry.getKey(), entry.getValue());
-        }
-        return bean;
+        return PojoUtils.injectInPojo(_pojoClass, fields);
     }
 
 

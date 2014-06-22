@@ -22,7 +22,7 @@ public interface IDynamicData extends Serializable
      *
      * @return the custom fields.
      */
-    IPluginDataCustomFields getCustomFields();
+    IDataCustomFields getCustomFields();
 
 
 }

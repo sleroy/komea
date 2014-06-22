@@ -11,17 +11,16 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
-import org.komea.product.backend.service.dataplugin.IDynamicDataSourcePool;
 import org.komea.product.backend.service.entities.IProjectService;
+import org.komea.product.backend.utils.CollectionUtil;
+import org.komea.product.backend.utils.IFilter;
 import org.komea.product.database.model.Project;
-import org.komea.product.plugins.bugtracker.datasource.IssuePlugin;
 import org.komea.product.plugins.bugtracking.model.IIssue;
 import org.komea.product.plugins.bugtracking.model.IIssuePlugin;
 import org.komea.product.plugins.mantis.api.IMantisConfigurationDAO;
 import org.komea.product.plugins.mantis.api.IMantisServerProxy;
 import org.komea.product.plugins.mantis.api.IMantisServerProxyFactory;
 import org.komea.product.plugins.mantis.model.MantisServerConfiguration;
-import org.komea.product.plugins.model.IDynamicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,14 +34,12 @@ import biz.futureware.mantis.rpc.soap.client.IssueData;
  * @author sleroy
  */
 @Component("mantis-source")
-public class MantisDataSource implements IDynamicDataSource<IIssuePlugin>
+public class MantisDataSource implements IIssuePlugin
 {
 
 
     private static final Logger       LOGGER = LoggerFactory.getLogger(MantisDataSource.class);
 
-    @Autowired
-    private IDynamicDataSourcePool    dataSourcePool;
 
     @Autowired
     private IMantisConfigurationDAO   mantisConfiguration;
@@ -62,34 +59,35 @@ public class MantisDataSource implements IDynamicDataSource<IIssuePlugin>
 
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.model.IDynamicDataSource#getData()
+     * @see org.komea.product.plugins.model.IDynamicDataTable#getData()
      */
     @Override
-    public IIssuePlugin fetchData() {
+    public List<IIssue> getData() {
 
 
         final List<IIssue> issues = new ArrayList(1000);
-        
+
         final List<MantisServerConfiguration> selectAll = mantisConfiguration.selectAll();
         LOGGER.info("Fetching issues from {} servers", selectAll.size());
         for (final MantisServerConfiguration conf : selectAll) {
-            
+
             final IMantisServerProxy bugzillaProxy = null;
             obtainIssuesForEachMantisServer(issues, conf, bugzillaProxy);
         }
-        return new IssuePlugin(issues);
+        return issues;
+
     }
 
 
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.model.IDynamicDataSource#getDefinition()
+     * @see org.komea.product.plugins.model.IDynamicDataTable#isEmpty()
      */
     @Override
-    public Class<IIssuePlugin> getDefinition() {
+    public boolean isEmpty() {
 
 
-        return IIssuePlugin.class;
+        return getData().isEmpty();
     }
 
 
@@ -151,6 +149,18 @@ public class MantisDataSource implements IDynamicDataSource<IIssuePlugin>
             }
         }
         return project;
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.model.IDynamicDataTable#searchData(org.komea.product.backend.utils.IFilter)
+     */
+    @Override
+    public List<IIssue> searchData(final IFilter<IIssue> _dataFilter) {
+
+
+        return CollectionUtil.filter(getData(), _dataFilter);
     }
 
 

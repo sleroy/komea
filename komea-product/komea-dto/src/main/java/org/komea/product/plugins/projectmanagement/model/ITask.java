@@ -13,7 +13,7 @@ import org.joda.time.DateTime;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Project;
 import org.komea.product.plugins.model.IDynamicData;
-import org.komea.product.plugins.model.IPluginDataCustomFields;
+import org.komea.product.plugins.model.IDataCustomFields;
 
 
 
@@ -65,7 +65,7 @@ public interface ITask extends IDynamicData
      * @return the extra fields.
      */
     @Override
-    IPluginDataCustomFields getCustomFields();
+    IDataCustomFields getCustomFields();
     
     
     /**

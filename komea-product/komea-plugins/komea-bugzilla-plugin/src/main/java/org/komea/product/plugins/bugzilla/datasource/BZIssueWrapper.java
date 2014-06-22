@@ -15,8 +15,8 @@ import org.komea.product.plugins.bugtracking.model.IIssue;
 import org.komea.product.plugins.bugtracking.model.IssueResolution;
 import org.komea.product.plugins.bugtracking.model.IssueStatus;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
-import org.komea.product.plugins.datasource.PluginDataCustomFields;
-import org.komea.product.plugins.model.IPluginDataCustomFields;
+import org.komea.product.plugins.datasource.DataCustomFields;
+import org.komea.product.plugins.model.IDataCustomFields;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,25 +114,25 @@ public class BZIssueWrapper implements IIssue
      * @see org.komea.product.plugins.model.IDynamicData#getCustomFields()
      */
     @Override
-    public IPluginDataCustomFields getCustomFields() {
+    public IDataCustomFields getCustomFields() {
 
 
-        final PluginDataCustomFields pluginDataCustomFields = new PluginDataCustomFields();
-        pluginDataCustomFields.put("component", bug.getComponent());
-        pluginDataCustomFields.put("os", bug.getOperatingSystem());
-        pluginDataCustomFields.put("platform", bug.getPlatform());
-        pluginDataCustomFields.put("version", bug.getVersion());
+        final DataCustomFields dataCustomFields = new DataCustomFields();
+        dataCustomFields.put("component", bug.getComponent());
+        dataCustomFields.put("os", bug.getOperatingSystem());
+        dataCustomFields.put("platform", bug.getPlatform());
+        dataCustomFields.put("version", bug.getVersion());
 
         if (bug.getParameterMap().containsKey("flags")) {
             for (final Flag flag : bug.getFlags()) {
-                pluginDataCustomFields.put(flag.getName(), flag.getStatus().name());
+                dataCustomFields.put(flag.getName(), flag.getStatus().name());
 
             }
         }
         for (final java.util.Map.Entry<Object, Object> entry : bug.getParameterMap().entrySet()) {
-            pluginDataCustomFields.put(entry.getKey().toString(), entry.getValue().toString());
+            dataCustomFields.put(entry.getKey().toString(), entry.getValue().toString());
         }
-        return pluginDataCustomFields;
+        return dataCustomFields;
     }
 
 

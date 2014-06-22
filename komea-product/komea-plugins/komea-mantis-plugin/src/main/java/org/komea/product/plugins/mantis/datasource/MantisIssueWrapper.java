@@ -14,9 +14,9 @@ import org.komea.product.database.model.Project;
 import org.komea.product.plugins.bugtracking.model.IIssue;
 import org.komea.product.plugins.bugtracking.model.IssueResolution;
 import org.komea.product.plugins.bugtracking.model.IssueStatus;
-import org.komea.product.plugins.datasource.PluginDataCustomFields;
+import org.komea.product.plugins.datasource.DataCustomFields;
 import org.komea.product.plugins.mantis.model.MantisServerConfiguration;
-import org.komea.product.plugins.model.IPluginDataCustomFields;
+import org.komea.product.plugins.model.IDataCustomFields;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,28 +95,28 @@ public class MantisIssueWrapper implements IIssue
      * @see org.komea.product.plugins.model.IDynamicData#getCustomFields()
      */
     @Override
-    public IPluginDataCustomFields getCustomFields() {
+    public IDataCustomFields getCustomFields() {
 
 
-        final PluginDataCustomFields pluginDataCustomFields = new PluginDataCustomFields();
-        pluginDataCustomFields.put("info", bug.getAdditional_information());
-        pluginDataCustomFields.put("os", bug.getOs());
-        pluginDataCustomFields.put("platform", bug.getPlatform());
-        pluginDataCustomFields.put("version", bug.getVersion());
-        pluginDataCustomFields.put("build", bug.getBuild());
-        pluginDataCustomFields.put("fixed_version", bug.getFixed_in_version());
-        pluginDataCustomFields.put("os_build", bug.getOs_build());
-        pluginDataCustomFields.put("steps", bug.getSteps_to_reproduce());
-        pluginDataCustomFields.put("target_version", bug.getTarget_version());
-        pluginDataCustomFields.put("submitted_date", bug.getDate_submitted());
-        pluginDataCustomFields.put("eta", bug.getEta().getName());
-        pluginDataCustomFields.put("last_update", bug.getLast_updated());
-        pluginDataCustomFields.put("projection", bug.getProjection());
-        pluginDataCustomFields.put("reproducibility", bug.getReproducibility());
-        pluginDataCustomFields.put("sponsorship", bug.getSponsorship_total());
-        pluginDataCustomFields.put("sticky", bug.getSticky());
-        pluginDataCustomFields.put("view_state", bug.getView_state());
-        return pluginDataCustomFields;
+        final DataCustomFields dataCustomFields = new DataCustomFields();
+        dataCustomFields.put("info", bug.getAdditional_information());
+        dataCustomFields.put("os", bug.getOs());
+        dataCustomFields.put("platform", bug.getPlatform());
+        dataCustomFields.put("version", bug.getVersion());
+        dataCustomFields.put("build", bug.getBuild());
+        dataCustomFields.put("fixed_version", bug.getFixed_in_version());
+        dataCustomFields.put("os_build", bug.getOs_build());
+        dataCustomFields.put("steps", bug.getSteps_to_reproduce());
+        dataCustomFields.put("target_version", bug.getTarget_version());
+        dataCustomFields.put("submitted_date", bug.getDate_submitted());
+        dataCustomFields.put("eta", bug.getEta().getName());
+        dataCustomFields.put("last_update", bug.getLast_updated());
+        dataCustomFields.put("projection", bug.getProjection());
+        dataCustomFields.put("reproducibility", bug.getReproducibility());
+        dataCustomFields.put("sponsorship", bug.getSponsorship_total());
+        dataCustomFields.put("sticky", bug.getSticky());
+        dataCustomFields.put("view_state", bug.getView_state());
+        return dataCustomFields;
     }
 
 

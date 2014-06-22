@@ -1,84 +1,102 @@
 /**
  *
  */
+
 package org.komea.product.plugins.bugzilla.datasource;
 
-import com.j2bugzilla.base.Bug;
+
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
-import org.komea.product.backend.service.dataplugin.IDynamicDataSourcePool;
 import org.komea.product.backend.service.entities.IProjectService;
+import org.komea.product.backend.utils.CollectionUtil;
+import org.komea.product.backend.utils.IFilter;
 import org.komea.product.database.model.Project;
-import org.komea.product.plugins.bugtracker.datasource.IssuePlugin;
 import org.komea.product.plugins.bugtracking.model.IIssue;
 import org.komea.product.plugins.bugtracking.model.IIssuePlugin;
 import org.komea.product.plugins.bugzilla.api.IBZConfigurationDAO;
 import org.komea.product.plugins.bugzilla.api.IBZServerProxy;
 import org.komea.product.plugins.bugzilla.api.IBZServerProxyFactory;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
-import org.komea.product.plugins.model.IDynamicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
+
+import com.j2bugzilla.base.Bug;
+
+
 
 /**
  * @author sleroy
  */
 @Component("bugzilla-source")
-public class BugZillaDataSource implements IDynamicDataSource<IIssuePlugin> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(BugZillaDataSource.class);
-
+public class BugZillaDataSource implements IIssuePlugin
+{
+    
+    
+    private static final Logger      LOGGER = LoggerFactory.getLogger(BugZillaDataSource.class);
+    
     @Autowired
-    private IBZConfigurationDAO bugZillaConfiguration;
-
+    private IBZConfigurationDAO      bugZillaConfiguration;
+    
     @Autowired
     private BugZillaToIssueConvertor bugZillaToIssueConvertor;
-
+    
+    
     @Autowired
-    private IDynamicDataSourcePool dataSourcePool;
-
+    private IProjectService          projectService;
+    
     @Autowired
-    private IProjectService projectService;
-
-    @Autowired
-    private IBZServerProxyFactory proxyFactory;
-
+    private IBZServerProxyFactory    proxyFactory;
+    
+    
+    
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.model.IDynamicDataSource#getData()
+     * @see org.komea.product.plugins.model.IDynamicDataTable#getData()
      */
+    @Cacheable("bugZillaCache")
     @Override
-    public IIssuePlugin fetchData() {
-
+    public List<IIssue> getData() {
+    
+    
         final List<IIssue> issues = new ArrayList(1000);
-        for (final BZServerConfiguration conf : bugZillaConfiguration.selectAll()) {
+        
+        final List<BZServerConfiguration> all = bugZillaConfiguration.selectAll();
+        LOGGER.info("Retrieving issues from bugzilla server configurations {}", all.size());
+        for (final BZServerConfiguration conf : all) {
             final IBZServerProxy bugzillaProxy = null;
             obtainIssuesForEachBugZillaServer(issues, conf, bugzillaProxy);
         }
-        return new IssuePlugin(issues);
+        return issues;
     }
-
-
+    
+    
     /*
      * (non-Javadoc)
-     * @see org.komea.product.plugins.model.IDynamicDataSource#getDefinition()
+     * @see org.komea.product.plugins.model.IDynamicDataTable#isEmpty()
      */
     @Override
-    public Class<IIssuePlugin> getDefinition() {
-
-        return IIssuePlugin.class;
+    public boolean isEmpty() {
+    
+    
+        return getData().isEmpty();
     }
-
+    
+    
     public void obtainIssuesForEachBugZillaServer(
             final List<IIssue> issues,
             final BZServerConfiguration conf,
             IBZServerProxy bugzillaProxy) {
-
+    
+    
         try {
+            LOGGER.info("Connection to  {}", conf.getAddress());
             bugzillaProxy = proxyFactory.newConnector(conf);
             Validate.notNull(bugzillaProxy);
             final List<String> productNames = bugzillaProxy.getProductNames();
@@ -93,13 +111,15 @@ public class BugZillaDataSource implements IDynamicDataSource<IIssuePlugin> {
             IOUtils.closeQuietly(bugzillaProxy);
         }
     }
-
+    
+    
     public void obtainIssuesForProjectsOfAServer(
             final BZServerConfiguration conf,
             final IBZServerProxy bugzillaProxy,
             final List<IIssue> issues,
             final List<String> productNames) {
-
+    
+    
         for (final String productName : productNames) {
             final Project project = obtainProjectFromConfigurationAndProductName(conf, productName);
             if (null == project) {
@@ -109,21 +129,37 @@ public class BugZillaDataSource implements IDynamicDataSource<IIssuePlugin> {
             issues.addAll(bugZillaToIssueConvertor.convertAll(bugs, project, conf));
         }
     }
-
+    
+    
     public Project obtainProjectFromConfigurationAndProductName(
             final BZServerConfiguration conf,
             final String projectKomeaName) {
-
+    
+    
         Project project = projectService.selectByAlias(projectKomeaName);
         if (project == null && conf.isAutocreateProjects()) {
             project = projectService.getOrCreate(projectKomeaName);
         }
         return project;
     }
-
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.model.IDynamicDataTable#searchData(org.komea.product.backend.utils.IFilter)
+     */
+    @Override
+    public List<IIssue> searchData(final IFilter<IIssue> _dataFilter) {
+    
+    
+        return CollectionUtil.filter(getData(), _dataFilter);
+    }
+    
+    
     public void setBugZillaConfiguration(final IBZConfigurationDAO _bugZillaConfiguration) {
-
+    
+    
         bugZillaConfiguration = _bugZillaConfiguration;
     }
-
+    
 }
