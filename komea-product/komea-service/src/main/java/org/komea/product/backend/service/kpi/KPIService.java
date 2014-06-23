@@ -76,11 +76,16 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
         final String kpiFormula = kpi.getEsperRequest();
         final Integer idKpi = kpi.getId();
 
-        // FIXME TODO : si kpiFormula n'est pas utilisee dans d'autres kpis alors supprimer les mesures
-        final boolean deleteMeasures = false;
+        boolean deleteMeasures = true;
+        final List<Kpi> allKpisOfEntityType = getAllKpisOfEntityType(kpi.getEntityType());
+        for (final Kpi kpiByEntityType : allKpisOfEntityType) {
+            if (kpiByEntityType.getId() != idKpi && kpiFormula.equals(kpiByEntityType.getEsperRequest())) {
+                deleteMeasures = false;
+            }
+        }
         if (deleteMeasures) {
             final MeasureCriteria measureCriteria = new MeasureCriteria();
-            measureCriteria.createCriteria().andIdKpiEqualTo(kpiFormula);
+            measureCriteria.createCriteria().andIdKpiEqualTo(FormulaID.of(kpi).getId());
             measureDao.deleteByCriteria(measureCriteria);
         }
 
