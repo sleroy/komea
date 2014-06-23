@@ -33,20 +33,20 @@ import org.komea.product.wicket.widget.model.ListDataModel;
  */
 public final class BugZillaPage extends StatelessLayoutPage
 {
-    
-    
+
+
     @SpringBean
     private IBugZillaRebuildHistory bugzillaBuildHistory;
     @SpringBean
     private IBZConfigurationDAO     bugZillaService;
-    
-    
-    
+
+
+
     public BugZillaPage(final PageParameters _parameters) {
-    
-    
+
+
         super(_parameters);
-        
+
         final List<BZServerConfiguration> listAffichage = bugZillaService.selectAll();
         final IDeleteAction<BZServerConfiguration> deleteAction =
                 new BugZillaDeleteAction(listAffichage, bugZillaService, this);
@@ -55,56 +55,56 @@ public final class BugZillaPage extends StatelessLayoutPage
                 new ListDataModel(listAffichage);
         final DataTable<BZServerConfiguration, String> build =
                 DataTableBuilder.<BZServerConfiguration, String> newTable("table")
-                        .addColumn(getString("bugzillapage.main.table.column.address"), "Address")
-                        .addColumn(getString("global.save.form.field.label.login"), "Login")
-                        .withEditDeleteColumn(deleteAction, editAction)
-                        .displayRows(listAffichage.size() + 10).withData(dataProvider).build();
+                .addColumn(getString("bugzillapage.main.table.column.address"), "Address")
+                .addColumn(getString("global.save.form.field.label.login"), "Login")
+                .withEditDeleteColumn(deleteAction, editAction)
+                .displayRows(listAffichage.size() + 10).withData(dataProvider).build();
         add(build);
-        
+
         add(new AjaxLinkLayout<StatelessLayoutPage>("addServer", this)
-        {
-            
-            
+                {
+
+
             @Override
             public void onClick(final AjaxRequestTarget art) {
-            
-            
+
+
                 final StatelessLayoutPage page = getCustom();
                 page.setResponsePage(new BugZillaEditPage(page.getPageParameters()));
             }
-        });
-        
+                });
+
         add(new AjaxLink("rebuildHistory")
         {
-            
-            
+
+
             /*
              * (non-Javadoc)
              * @see org.apache.wicket.Component#isEnabled()
              */
             @Override
             public boolean isEnabled() {
-            
-            
-                return bugzillaBuildHistory.isRunning();
+
+
+                return !bugzillaBuildHistory.isRunning();
             }
-            
-            
+
+
             @Override
             public void onClick(final AjaxRequestTarget art) {
-            
-            
+
+
                 bugzillaBuildHistory.rebuildHistory();
-                
+
             }
         });
     }
-    
-    
+
+
     @Override
     public String getTitle() {
-    
-    
+
+
         return getString("bugzillapage.main.title");
     }
 }

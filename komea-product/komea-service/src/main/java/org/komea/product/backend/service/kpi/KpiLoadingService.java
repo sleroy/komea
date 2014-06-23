@@ -30,8 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class KpiLoadingService implements IKpiLoadingService
 {
-    
-    
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger("kpi-loader");
 
     @Autowired
@@ -39,26 +39,26 @@ public class KpiLoadingService implements IKpiLoadingService
 
     @Autowired
     private IKPIService         kpiService;
-    
-    
-    
+
+
+
     /**
      * @return the kpiRegisterService
      */
     public IQueryService getKpiRegisterService() {
-    
-    
+
+
         return kpiRegisterService;
     }
-    
-    
+
+
     public IKPIService getKpiService() {
-    
-    
+
+
         return kpiService;
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.service.kpi.IKpiLoadingService#initLoadingService()
@@ -66,37 +66,49 @@ public class KpiLoadingService implements IKpiLoadingService
     @Override
     @PostConstruct
     public void initLoadingService() {
-    
-    
-        LOGGER.info("LOADING KPI FROM DATABASE");
 
-        final List<Kpi> allKpis = kpiService.selectAll();
-        LOGGER.info("found kpi in database  {}", allKpis.size());
-        for (final Kpi existingKpi : allKpis) {
-            try {
-                kpiRegisterService.createOrUpdateQueryFromKpi(existingKpi);
-            } catch (final Exception _e) {
-                LOGGER.error(_e.getMessage(), _e);
+
+        new Thread(new Runnable()
+        {
+
+
+            @Override
+            public void run() {
+
+
+                LOGGER.info("LOADING KPI FROM DATABASE");
+
+                final List<Kpi> allKpis = kpiService.selectAll();
+                LOGGER.info("found kpi in database  {}", allKpis.size());
+                for (final Kpi existingKpi : allKpis) {
+                    try {
+                        kpiRegisterService.createOrUpdateQueryFromKpi(existingKpi);
+                    } catch (final Exception _e) {
+                        LOGGER.error(_e.getMessage(), _e);
+                    }
+                }
+                LOGGER.info("----------------------------------------");
             }
-        }
-        LOGGER.info("----------------------------------------");
+        }).start();
+
+
     }
-    
-    
+
+
     /**
      * @param _kpiRegisterService
      *            the kpiRegisterService to set
      */
     public void setKpiRegisterService(final IQueryService _kpiRegisterService) {
-    
-    
+
+
         kpiRegisterService = _kpiRegisterService;
     }
-    
-    
+
+
     public void setKpiService(final IKPIService _kpiService) {
-    
-    
+
+
         kpiService = _kpiService;
     }
 
