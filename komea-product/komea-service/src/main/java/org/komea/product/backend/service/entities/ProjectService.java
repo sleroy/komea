@@ -259,6 +259,7 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         Validate.notNull(_links);
         Validate.notNull(_links);
         Validate.notNull(_teams);
+
         saveOrUpdate(_project);
         final Integer idProject = _project.getId();
 
@@ -278,6 +279,17 @@ public final class ProjectService extends AbstractService<Project, Integer, Proj
         for (final Link link : _links) {
             linkDAO.insert(link);
         }
+
+        for (final String alias : _project.getAliasesList()) {
+            if (exists(alias)) {
+                mergeProjects(_project, selectByKey(alias));
+            }
+        }
+    }
+
+    private void mergeProjects(final Project mainProject, final Project aliasProject) {
+        // TODO merge measures
+        deleteProject(aliasProject);
     }
 
     @Override
