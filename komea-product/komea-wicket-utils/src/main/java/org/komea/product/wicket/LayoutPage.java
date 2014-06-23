@@ -30,6 +30,7 @@ import org.komea.product.database.model.Person;
 import org.komea.product.wicket.utils.IKomeaSecurityController;
 import org.komea.product.wicket.utils.KomeaSecurityContextHolderAwareRequestWrapper;
 import org.komea.product.wicket.widget.RedirectPageLink;
+import org.komea.product.wicket.widget.gravatar.GravatarImageLink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -58,45 +59,51 @@ public abstract class LayoutPage extends WebPage
     
     // protected final JQueryBehavior jQueryBehavior;
     public LayoutPage(final PageParameters _parameters) {
-
-
+    
+    
         super(_parameters);
         add(new Label("title", Model.of(getTitle())));
         
         String firstName = "";
         String lastName = "";
-        
+        String email = "";
         final UserDetails userDetails = obtainSecurityDetails();
         if (userDetails != null) {
             firstName = userDetails.getUsername();
             lastName = "";
-
+            email = "";
             if (personService != null) {
                 final Person person = personService.selectByKey(firstName);
                 firstName = person.getFirstName();
                 lastName = person.getLastName();
-
+                email = person.getEmail();
             }
             
             
-            add(new Label("helloname", "Hello, " + firstName));
-        } else {
-            add(new Label("helloname", ""));
         }
         
         if (getSecurityController().isUserInRole("ADMIN")) {
             final Fragment fragment = new Fragment("signin", "signinfragment", this);
             fragment.add(new Label("fullname", firstName + " " + lastName));
             fragment.add(new Label("profile", firstName + " " + lastName));
+            fragment.add(new GravatarImageLink("avatar2", email, 215));
             buildAlerts(fragment);
             add(fragment);
-        } else {
+
+            final Fragment hellofrag = new Fragment("hellopanel", "hellofragment", this);
+            hellofrag.add(new Label("helloname", "Hello, " + firstName));
+            hellofrag.add(new GravatarImageLink("avatar", email, 215));
+
+            add(hellofrag);
             
-            final WebMarkupContainer webMarkupContainer = new WebMarkupContainer("signin");
-            add(webMarkupContainer);
+            
+        } else {
+            add(new WebMarkupContainer("signin"));
+            add(new WebMarkupContainer("hellopanel"));
+            
         }
         buildBreadCrumb();
-
+        
     }
     
     
@@ -115,8 +122,8 @@ public abstract class LayoutPage extends WebPage
         arrayList.add(new KomeaEntry<String, Class>(getTitle(), getClass()));
         return arrayList;
     }
-
-
+    
+    
     /**
      * Returns the page links in breadcrumb between home and active page.
      *
@@ -195,8 +202,8 @@ public abstract class LayoutPage extends WebPage
     
     
     protected IKomeaSecurityController getSecurityController() {
-
-
+    
+    
         final IKomeaSecurityController securityController =
                 new KomeaSecurityContextHolderAwareRequestWrapper((ServletRequest) getRequest()
                         .getContainerRequest(), "");
