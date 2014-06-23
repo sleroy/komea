@@ -279,23 +279,22 @@ public abstract class LayoutPage extends WebPage {
             }
         });
 //        
-        tabs.add(new AbstractTab(Model.of(getString("home.administration")))
-        {
+        tabs.add(new AbstractTab(Model.of(getString("home.administration"))) {
             private static final long serialVersionUID = 1L;
+
             @Override
             public WebMarkupContainer getPanel(final String panelId) {
-            
-            
+
                 List<IColumn<?, ?>> columns;
                 columns = new ArrayList<IColumn<?, ?>>();
                 FragmentPropertyColumn fcol;
                 fcol = new FragmentPropertyColumn(Model.of("titre"), page, accordion);
                 columns.add(fcol);
-                final ISortableDataProvider<String, String> dataProvider =
-                        new ListDataModel<String>(menuAdministration);
-                final DataGridView defaultDataTable =
-                        new DataGridView("table-panel-3", columns, dataProvider);
-                
+                final ISortableDataProvider<String, String> dataProvider
+                        = new ListDataModel<String>(menuAdministration);
+                final DataGridView defaultDataTable
+                        = new DataGridView("table-panel-3", columns, dataProvider);
+
                 // defaultDataTable.get(1).add(new AttributeModifier("class",new Model("danger") ));
                 final Fragment fragment = new Fragment(panelId, "panel-3", page);
                 fragment.add(defaultDataTable);
@@ -361,6 +360,7 @@ public abstract class LayoutPage extends WebPage {
 
             if (testMenu(object, "panel-kpis", "KpiPage", "KpiEditPage")
                     || testMenu(object, "panel-kpiview", "KpiChartPage")
+                    || testMenu(object, "panel-kpiview", "KpiValuesPage")
                     || testMenu(object, "panel-alerts", "AlertPage", "AlertEditPage")) {
                 accordeon.setActiveTab(KPIS_INDEX);
                 item.add(new AttributeModifier("style", new Model("background-color: " + COLORHILIGHT)));
