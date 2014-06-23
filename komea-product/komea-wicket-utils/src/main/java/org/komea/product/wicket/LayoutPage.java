@@ -42,6 +42,7 @@ import org.komea.product.wicket.utils.IKomeaSecurityController;
 import org.komea.product.wicket.utils.KomeaSecurityContextHolderAwareRequestWrapper;
 import org.komea.product.wicket.widget.RedirectPageLink;
 import org.komea.product.wicket.widget.gravatar.GravatarImageLink;
+import org.komea.product.wicket.widget.model.ListDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;

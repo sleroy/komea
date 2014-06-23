@@ -294,7 +294,7 @@ public final class PersonForm extends Form<Person> {
 
         final PropertyModel<Boolean> modelchcekBox = new PropertyModel<Boolean>(this, "isAdmin");
         final AjaxCheckBox checkBox = new AjaxCheckBox("isAdmin", modelchcekBox) {
-
+            
             @Override
             protected void onUpdate(final AjaxRequestTarget target) {
 
