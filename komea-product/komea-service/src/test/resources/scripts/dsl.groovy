@@ -6,7 +6,7 @@ import org.komea.product.database.enums.ValueDirection
 import org.komea.product.database.enums.ValueType
 import org.komea.product.database.model.Kpi
 import org.komea.eventory.api.engine.IQuery
-import org.komea.product.backend.service.kpi.KpiDefinition;
+
 
 /** 
  * This method accepts a closure which is essentially the DSL. Delegate the
@@ -19,7 +19,7 @@ import org.komea.product.backend.service.kpi.KpiDefinition;
 def kpibuilder = new ObjectGraphBuilder()
 kpibuilder.classNameResolver = "org.komea.product.database.model"
 
-def kpiDsl = new KpiDefinition()
+
 define "kpi", kpibuilder.kpi (
         description: "Number of closed bugs per project",
         entityType: EntityType.PROJECT,

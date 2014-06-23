@@ -199,7 +199,7 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
                 }
 
 
-                beginDate = beginDate.plusWeeks(1); // WEEK PER WEEK
+                beginDate = beginDate.plusMonths(1); // MONTH PER MONTH
 
             }
         } finally {
