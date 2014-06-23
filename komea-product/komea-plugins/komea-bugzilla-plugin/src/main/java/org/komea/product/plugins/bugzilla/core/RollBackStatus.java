@@ -24,17 +24,17 @@ public class RollBackStatus
 {
 
 
-    private final Bug              bug;
+    private final Map<?, ?>        bug;
     private final List<BugHistory> bugChanges;
 
 
 
-    public RollBackStatus(final Bug _bug, final List<BugHistory> _bugChanges) {
+    public RollBackStatus(final Map<?, ?> _bugProperties, final List<BugHistory> _bugChanges) {
 
 
         super();
 
-        bug = _bug;
+        bug = _bugProperties;
         bugChanges = _bugChanges;
 
 
@@ -44,7 +44,7 @@ public class RollBackStatus
     public Bug rollback(final DateTime _untilDate) {
 
 
-        final Map<String, Object> parameterMap = new HashMap(bug.getParameterMap());
+        final Map<String, Object> parameterMap = new HashMap(bug);
         for (final BugHistory history : bugChanges) {
             if (_untilDate.isAfter(new DateTime(history.getWhen()))) {
                 continue;

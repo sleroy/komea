@@ -25,46 +25,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 @DisallowConcurrentExecution
 public class EventStatsCron implements Job
 {
-    
-    
+
+
     private static final Logger     LOGGER = LoggerFactory.getLogger(EventStatsCron.class);
-    
+
     @Autowired
     private IEventStatisticsService service;
-    
-    
-    
+
+
+
     /*
      * (non-Javadoc)
      * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
      */
     @Override
     public void execute(final JobExecutionContext _context) throws JobExecutionException {
-    
-    
-        LOGGER.info("Backup of alert stats...");
+
+
+        LOGGER.debug("Backup of alert stats...");
         final long receivedAlertsIn24LastHours = service.getReceivedAlertsIn24LastHours();
         final Measure measure = new Measure();
         measure.setDate(new DateTime().toDate());
         measure.setIdKpi("-1");
         measure.setValue(new Double(receivedAlertsIn24LastHours));
         service.putHistory(new DateTime().hourOfDay().get(), measure);
-        LOGGER.info("Backup of alert stats finished...");
-        
+        LOGGER.debug("Backup of alert stats finished...");
+
     }
-    
-    
+
+
     public IEventStatisticsService getService() {
-    
-    
+
+
         return service;
     }
-    
-    
+
+
     public void setService(final IEventStatisticsService _service) {
-    
-    
+
+
         service = _service;
     }
-    
+
 }

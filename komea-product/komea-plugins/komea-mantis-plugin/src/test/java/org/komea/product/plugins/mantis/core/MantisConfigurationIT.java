@@ -6,7 +6,6 @@ package org.komea.product.plugins.mantis.core;
 
 
 
-import java.util.Collection;
 import java.util.List;
 
 import org.junit.Test;
@@ -31,16 +30,18 @@ public class MantisConfigurationIT extends AbstractSpringIntegrationTestCase
     @Autowired
     private IMantisConfigurationDAO mantisConfigurationDAO;
     
-    
-    
+    @Autowired
+    private IIssuePlugin[]          plugins;
+
+
+
     @Test
     public void test() {
     
     
         mantisConfigurationDAO.saveOrUpdate(configuration());
-        final Collection<IIssuePlugin> dataSourceOfType =
-                pool.getDataSourceOfType(IIssuePlugin.class);
-        for (final IIssuePlugin plugin : dataSourceOfType) {
+
+        for (final IIssuePlugin plugin : plugins) {
             final List<IIssue> data2 = plugin.getData();
             for (final IIssue data : data2) {
                 System.out.println(data.getSeverity());
@@ -52,7 +53,7 @@ public class MantisConfigurationIT extends AbstractSpringIntegrationTestCase
             System.out.println(data2);
             assertFalse(data2.isEmpty());
         }
-        assertFalse(dataSourceOfType.isEmpty());
+        assertFalse(plugins.length == 0);
     }
     
     

@@ -39,48 +39,118 @@
 							class="form-control" />
 					</form>
 					<hr />
-					<h1 wicket:id="kpi"></h1>
 
-					<table>
-						<thead>
-							<tr>
-								<th>Statistic</th>
-								<th>Details</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Type de KPI</td>
-								<td wicket:id="details"></td>
-							</tr>
-							<tr>
-								<td>Nombre de valeurs dans l'historique</td>
-								<td wicket:id="values"></td>
-							</tr>
-						</tbody>
-					</table>
-					<table>
-						<thead>
-							<tr>
-								<th>Entity Key</th>
-								<th>Last value</th>
-								<th>Current value</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr wicket:id="rows">
-								<td wicket:id="entity"></td>
-								<td wicket:id="lastvalue"></td>
-								<td wicket:id="currentvalue"></td>
+					<div class="row">
 
-							</tr>
-						</tbody>
-					</table>
-					<h2>List of events currently in the cache</h2>
-					<form class="form">
-						<select wicket:id="events" class="form-control"></select>
-					</form>
-					<div wicket:id="chart"></div>
+						<section class="col-lg-6 connectedSortable">
+						<div class="box box-primary">
+							<div class="box-header">
+
+								<i class="fa fa-map-marker"></i>
+								<h3 class="box-title" wicket:id="kpi">Kpi Informations</h3>
+							</div>
+							<div class="box-body no-padding">
+								<div class="table-responsive">
+									<!-- .table - Uses sparkline charts-->
+									<table class="table">
+										<thead>
+											<tr>
+												<th>Statistic</th>
+												<th>Details</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Type de KPI</td>
+												<td wicket:id="details"></td>
+											</tr>
+											<tr>
+												<td>Nombre de valeurs dans l'historique</td>
+												<td wicket:id="values"></td>
+											</tr>
+										</tbody>
+									</table>
+									<!-- /.table -->
+								</div>
+							</div>
+							<!-- /.box-body-->
+							<div class="box-footer"></div>
+						</div>
+						</section>
+
+						<section class="col-lg-6 connectedSortable">
+
+						<div class="box box-primary">
+							<div class="box-header">
+
+								<i class="fa fa-map-marker"></i>
+								<h3 class="box-title">Real time values</h3>
+							</div>
+							<div class="box-body no-padding">
+								<div class="table-responsive">
+									<!-- .table - Uses sparkline charts-->
+
+									<table class="table">
+										<thead>
+											<tr>
+												<th>Entity Key</th>
+												<th>Last value</th>
+												<th>Current value</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr wicket:id="rows">
+												<td wicket:id="entity"></td>
+												<td wicket:id="lastvalue"></td>
+												<td wicket:id="currentvalue"></td>
+
+											</tr>
+										</tbody>
+									</table>
+
+									<!-- /.table -->
+								</div>
+							</div>
+							<!-- /.box-body-->
+							<div class="box-footer"></div>
+						</div>
+						</section>
+					</div>
+
+					<div class="box box-primary">
+						<div class="box-header">
+
+							<i class="fa fa-map-marker"></i>
+							<h3 class="box-title">Events in the cache</h3>
+						</div>
+						<div class="box-body no-padding">
+							<div>
+								<form class="form">
+									<select wicket:id="events" class="form-control"></select>
+								</form>
+								<!-- /.table -->
+							</div>
+						</div>
+						<!-- /.box-body-->
+						<div class="box-footer"></div>
+					</div>
+
+					<div class="box box-primary">
+						<div class="box-header">
+
+							<i class="fa fa-map-marker"></i>
+							<h3 class="box-title">Chart</h3>
+						</div>
+						<div class="box-body no-padding">
+							<div>
+								<div wicket:id="chart"></div>
+								<!-- /.table -->
+							</div>
+						</div>
+						<!-- /.box-body-->
+						<div class="box-footer"></div>
+					</div>
+
 				</div>
 			</div>
 		</wicket:extend>
