@@ -52,127 +52,127 @@ import com.j2bugzilla.base.BugzillaException;
 @Transactional
 public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, Runnable
 {
-
-
+    
+    
     private final class FilterBugsExistingAtThisTime implements IFilter<IIssue>
     {
-
-
+        
+        
         private final DateTime beginDate;
-
-
-
+        
+        
+        
         public FilterBugsExistingAtThisTime(final DateTime _beginDate) {
-
-
+        
+        
             super();
             beginDate = _beginDate;
         }
-
-
+        
+        
         @Override
         public boolean matches(final IIssue _task) {
-
-
+        
+        
             return _task.getDateSubmitted().isBefore(beginDate)
                     || _task.getDateSubmitted().isEqual(beginDate);
         }
     }
-
-
-
+    
+    
+    
     private static final Logger                  LOGGER     =
-            LoggerFactory
-            .getLogger("bugzilla-history-service");
-
-
+                                                                    LoggerFactory
+                                                                            .getLogger("bugzilla-history-service");
+    
+    
     private final Map<String, BugzillaConnector> connectors = new HashMap();
     @Autowired
     private IBugZillaToIssueConvertor            convertorService;
-
+    
     @Autowired
     private IEventEngineService                  eventEngineService;
-
+    
     @Autowired()
     @Qualifier("bugzilla-source")
     private IIssuePlugin                         issuePlugin;
-
-
+    
+    
     @Autowired
     private IKPIService                          kpiService;
-
-
+    
+    
     @Autowired
     private MeasureDao                           measureDAO;
-
-
+    
+    
     @Autowired
     private IBZServerProxyFactory                serverProxyFactory;
     @Autowired
     private IStatisticsAPI                       statisticsAPI;
-
-
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.bugzilla.service.backup.IBZRebuildHistoryService#rebuildHistory()
      */
-
+    
     private Thread                               thread;
-
-
-
+    
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.bugzilla.api.IBugZillaRebuildHistory#getThread()
      */
     @Override
     public Thread getThread() {
-    
-    
+
+
         return thread;
     }
-
-
+    
+    
     public synchronized boolean isLaunched() {
-
-
+    
+    
         return thread != null;
     }
-
-
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.bugzilla.api.IBugZillaRebuildHistory#isRunning()
      */
     @Override
     public synchronized boolean isRunning() {
-    
-    
+
+
         return thread != null;
     }
-
-
+    
+    
     @Override
     public synchronized void rebuildHistory() {
-
-
+    
+    
         if (thread != null) {
             return;
         }
         thread = new Thread(this);
         thread.start();
-
+        
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see java.lang.Runnable#run()
      */
     @Override
     public void run() {
-    
-    
+
+
         List<KpiAndQueryObject> kpis = Lists.newArrayList();
         try {
             LOGGER.info("Rebuilding history of bugzilla servers");
@@ -182,8 +182,8 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
                 LOGGER.warn("No data");
                 return;
             }
-
-
+            
+            
             kpis = getKpisWithBackupFunction();
             if (kpis.isEmpty()) {
                 LOGGER.warn("No kpi");
@@ -194,7 +194,7 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
             final DateTime untilNow = new DateTime();
             // Now iteration, one week per week
             while (beginDate.isBefore(untilNow)) {
-
+                
                 if (getNumberOfMeasuresForThisDate(beginDate) > 0) { // Already existing
                     LOGGER.info("Skip {} <  {}", beginDate, untilNow);
                     continue;
@@ -206,17 +206,17 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
                 loadHistoryForIssues(existedInPastIssues);
                 for (final KpiAndQueryObject kpiAndQueryObject : kpis) {
                     kpiAndQueryObject.getQuery().setIssuePlugins(new IIssuePlugin[] {
-                            new MockIssuePlugin(existedInPastIssues) });
+                        new MockIssuePlugin(existedInPastIssues) });
                     ((RebuildFilter) kpiAndQueryObject.getQuery().getFilter())
-                    .setCheckTime(beginDate);
+                            .setCheckTime(beginDate);
                     final KpiResult result = kpiAndQueryObject.getQuery().getResult();
                     result.iterate(new StoreValueIntoMeasureResultIterator(statisticsAPI,
                             kpiAndQueryObject.getKpi().getId(), beginDate));
                 }
-
-
+                
+                
                 beginDate = beginDate.plusMonths(1); // MONTH PER MONTH
-
+                
             }
         } finally {
             removeThread();
@@ -225,11 +225,11 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
             }
         }
     }
-
-
+    
+    
     private DateTime computeBeginningTime(final List<IIssue> data) {
-
-
+    
+    
         DateTime beginDate = null;
         // Find begin date
         for (final IIssue issue : data) {
@@ -239,16 +239,16 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
         }
         return beginDate;
     }
-
-
+    
+    
     /**
      * Returns the list of kpis with backup functions
      *
      * @return
      */
     private List<KpiAndQueryObject> getKpisWithBackupFunction() {
-
-
+    
+    
         final List<KpiAndQueryObject> queries = Lists.newArrayList();
         for (final Kpi kpi : kpiService.selectAll()) {
             final IQuery query = eventEngineService.getQuery(FormulaID.of(kpi));
@@ -263,27 +263,27 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
         }
         return queries;
     }
-
-
+    
+    
     private int getNumberOfMeasuresForThisDate(final DateTime beginDate) {
-
-
+    
+    
         final MeasureCriteria measureCriteria = new MeasureCriteria();
         measureCriteria.createCriteria().andDateEqualTo(beginDate.toDate());
         return measureDAO.countByCriteria(measureCriteria);
     }
-
-
+    
+    
     private void loadHistory(final IIssue _issue) {
-
-
+    
+    
         final BZIssueWrapper issueWrapper = (BZIssueWrapper) _issue;
         // Already loaded
         if (!issueWrapper.getHistory().isEmpty()) {
             LOGGER.trace("History already loaded for {}", issueWrapper.getIdInt());
             return;
         }
-
+        
         final GetBugHistory getHistory = new GetBugHistory(issueWrapper.getIdInt());
         try {
             final String address = issueWrapper.getServerConfiguration().getAddress();
@@ -298,48 +298,48 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
         } catch (final BugzillaException e) {
             LOGGER.error(e.getMessage(), e);
         }
-
+        
     }
-
-
+    
+    
     private void loadHistoryForIssues(final List<IIssue> existedInPastIssues) {
-
-
+    
+    
         LOGGER.info("Fetching history of bugs...");
         for (final IIssue issue : existedInPastIssues) {
             loadHistory(issue);
         }
     }
-
-
+    
+    
     private BugzillaConnector obtainConnector(
             final BZIssueWrapper _issueWrapper,
             final String _address) {
-
-
+    
+    
         LOGGER.info("Obtaining connection on server to get history of the issue");
         BugzillaConnector bugzillaConnector = connectors.get(_address);
         if (bugzillaConnector == null) {
             bugzillaConnector =
                     serverProxyFactory.newConnector(_issueWrapper.getServerConfiguration())
-                    .getConnector();
+                            .getConnector();
             connectors.put(_address, bugzillaConnector);
-
+            
         }
         return bugzillaConnector;
     }
-    
-    
+
+
     private synchronized void removeThread() {
-    
-    
+
+
         thread = null;
     }
-    
-    
+
+
     private void sortHistoryFromMostRecentToOldest(final List<BugHistory> bugHistory) {
-
-
+    
+    
         Collections.sort(bugHistory, new MostRecentHistoryBefore());
     }
 }
