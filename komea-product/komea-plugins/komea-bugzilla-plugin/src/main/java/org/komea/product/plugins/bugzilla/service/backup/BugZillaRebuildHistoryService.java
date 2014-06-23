@@ -261,20 +261,20 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
         final BZIssueWrapper issueWrapper = (BZIssueWrapper) _issue;
         // Already loaded
         if (!issueWrapper.getHistory().isEmpty()) {
-            LOGGER.trace("History already loaded for {}", issueWrapper.getId());
+            LOGGER.trace("History already loaded for {}", issueWrapper.getIdInt());
             return;
         }
 
-        final GetBugHistory getHistory = new GetBugHistory(issueWrapper.getBug().getID());
+        final GetBugHistory getHistory = new GetBugHistory(issueWrapper.getIdInt());
         try {
             final String address = issueWrapper.getServerConfiguration().getAddress();
             final BugzillaConnector bugzillaConnector = obtainConnector(issueWrapper, address);
             bugzillaConnector.executeMethod(getHistory);
-            LOGGER.info("History loaded for bug {}", issueWrapper.getBug().getID());
+            LOGGER.info("History loaded for bug {}", issueWrapper.getId());
             final List<BugHistory> bugHistory = getHistory.getBugHistory();
             sortHistoryFromMostRecentToOldest(bugHistory);
-            LOGGER.debug("Sorting history of bug {} with  {} elements", issueWrapper.getBug()
-                    .getID(), bugHistory.size());
+            LOGGER.debug("Sorting history of bug {} with  {} elements", issueWrapper.getId(),
+                    bugHistory.size());
             issueWrapper.setHistory(bugHistory);
         } catch (final BugzillaException e) {
             LOGGER.error(e.getMessage(), e);
