@@ -185,16 +185,6 @@ public final class KPIService extends AbstractService<Kpi, Integer, KpiCriteria>
     }
 
     @Override
-    public List<Kpi> getKpisForGroups(final List<Kpi> simpleKpis) {
-
-        final List<Kpi> kpis = new ArrayList<Kpi>(simpleKpis.size() * 2);
-        for (final Kpi kpi : simpleKpis) {
-            kpis.addAll(Kpi.getKpisForGroups(kpi));
-        }
-        return kpis;
-    }
-
-    @Override
     public List<Kpi> getKpisOfGroupKpiKeys(final List<String> groupKpiKeys, final List<Kpi> kpis) {
 
         final Map<String, Kpi> kpiByKeys = new HashMap<String, Kpi>(kpis.size());

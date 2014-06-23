@@ -53,13 +53,7 @@ public class KpisController {
     @ResponseBody
     public List<Kpi> getKpis(@RequestBody final ExtendedEntityType extendedEntityType) {
 
-        final List<Kpi> kpis = kpiService.getAllKpisOfEntityType(extendedEntityType.getKpiType());
-        if (extendedEntityType.isForGroups()) {
-            final List<Kpi> kpisForGroups = kpiService.getKpisForGroups(kpis);
-            return kpisForGroups;
-        } else {
-            return kpis;
-        }
+        return kpiService.getAllKpisOfEntityType(extendedEntityType.getKpiType());
     }
 
     /**

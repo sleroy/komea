@@ -44,8 +44,6 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria> 
 
     List<Kpi> getBaseKpisOfGroupKpiKeys(List<String> groupKpiKeys);
 
-    List<Kpi> getKpisForGroups(List<Kpi> simpleKpis);
-
     List<Kpi> getKpisOfGroupKpiKeys(List<String> groupKpiKeys, List<Kpi> kpis);
 
     List<Kpi> getKpisOfProviderType(ProviderType providerType);
