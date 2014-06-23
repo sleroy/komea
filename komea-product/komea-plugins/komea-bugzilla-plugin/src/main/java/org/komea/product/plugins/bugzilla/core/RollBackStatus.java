@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.j2bugzilla.base.Bug;
 import com.j2bugzilla.base.BugFactory;
@@ -22,42 +24,56 @@ import com.j2bugzilla.base.BugFactory;
  */
 public class RollBackStatus
 {
-
-
+    
+    
+    private static final Logger    LOGGER = LoggerFactory.getLogger(RollBackStatus.class);
     private final Map<?, ?>        bug;
+    
+    
     private final List<BugHistory> bugChanges;
-
-
-
+    
+    
+    
     public RollBackStatus(final Map<?, ?> _bugProperties, final List<BugHistory> _bugChanges) {
-
-
+    
+    
         super();
-
+        
         bug = _bugProperties;
         bugChanges = _bugChanges;
-
-
+        
+        
     }
-
-
+    
+    
     public Bug rollback(final DateTime _untilDate) {
-
-
+    
+    
         final Map<String, Object> parameterMap = new HashMap(bug);
         for (final BugHistory history : bugChanges) {
-            if (_untilDate.isAfter(new DateTime(history.getWhen()))) {
+            final DateTime when = history.getWhen();
+            if (when == null) {
+                LOGGER.error("No date for the history {} of bug {}", history, bug);
+                continue;
+            }
+            final DateTime whenTime = new DateTime(when);
+            if (_untilDate.isAfter(whenTime)) {
                 continue;
             }
             for (final BugChange change : history.getBugChanges()) {
                 
-                parameterMap.put(change.getField_name(), change.getRemoved());
+                final String field_name = change.getField_name();
+                if ("id".equals(field_name)) {
+                    parameterMap.put(field_name, Integer.parseInt(change.getRemoved()));
+                } else {
+                    parameterMap.put(field_name, change.getRemoved());
+                }
             }
         }
-
-
+        
+        
         final BugFactory bugFactory = new BugFactory();
         return bugFactory.createBug(parameterMap);
-
+        
     }
 }

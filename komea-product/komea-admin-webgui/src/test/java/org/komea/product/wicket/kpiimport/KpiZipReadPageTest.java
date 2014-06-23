@@ -29,37 +29,37 @@ import static org.junit.Assert.assertEquals;
  */
 public class KpiZipReadPageTest extends AbstractSpringIntegrationTestCase
 {
-
-
+    
+    
     @Rule
     public final WicketTesterMethodRule wicketRule = new WicketTesterMethodRule();
-
-
+    
+    
     @Autowired
     private IKpiImportationService      kpiImportationService;
-
+    
     @Autowired
     private IKPIService                 kpiService;
-
-
-
+    
+    
+    
     @Before
     public void before() {
-
-
+    
+    
         wicketRule.getApplicationContextMock().putBean(kpiImportationService);
         wicketRule.getApplicationContextMock().putBean(kpiService);
-
+        
     }
-
-
+    
+    
     /**
      * Test method for {@link org.komea.product.wicket.kpis.KpiPage#KpiPage(org.apache.wicket.request.mapper.parameter.PageParameters)} .
      */
     @Test
     public final void testKpiPage() throws Exception {
-
-
+    
+    
         WicketTester newWicketTester = null;
         try {
             newWicketTester = wicketRule.newWicketTester();
@@ -68,18 +68,18 @@ public class KpiZipReadPageTest extends AbstractSpringIntegrationTestCase
                             "src/test/resources/scripts.zip")));
             final DataTable<KpiEntry, String> table =
                     (DataTable<KpiEntry, String>) page.get("table");
-            assertEquals(1, table.getDataProvider().size());
+            assertEquals(0, table.getDataProvider().size());
             newWicketTester.debugComponentTrees();
-
+            
         } finally {
             if (newWicketTester.hasNoErrorMessage().wasFailed()) {
-
+                
                 newWicketTester.dumpPage();
             }
             if (newWicketTester != null) {
                 newWicketTester.destroy();
             }
         }
-
+        
     }
 }

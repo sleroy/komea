@@ -5,11 +5,11 @@ package org.komea.product.plugins.bugzilla.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.Validate;
 import org.joda.time.DateTime;
 import org.komea.product.backend.utils.PojoUtils;
 
@@ -145,7 +145,7 @@ public class GetBugHistory implements BugzillaMethod
         for (final Object history0 : maps) {
             final Map curBugHistoryObjectMap = (Map) history0;
             final BugHistory bugHistory = new BugHistory();
-            bugHistory.setWhen(new DateTime((Date) curBugHistoryObjectMap.get("when")));
+            bugHistory.setWhen(new DateTime(curBugHistoryObjectMap.get("when")));
             bugHistory.setWho((String) curBugHistoryObjectMap.get("who"));
             final ArrayList<BugChange> changes = Lists.newArrayList();
             final Object[] changeArray = (Object[]) curBugHistoryObjectMap.get("changes");
@@ -153,6 +153,9 @@ public class GetBugHistory implements BugzillaMethod
                 changes.add(PojoUtils.injectInPojo(BugChange.class, (Map) changeData));
             }
             bugHistory.setBugChanges(changes);
+            Validate.notNull(bugHistory.getWhen());
+            Validate.notNull(bugHistory.getWho());
+            Validate.notNull(bugHistory.getBugChanges());
             histories.add(bugHistory);
         }
         return histories;
