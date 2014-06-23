@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import javax.servlet.ServletRequest;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.DataGridView;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
@@ -19,7 +20,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDat
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -61,8 +61,8 @@ public abstract class LayoutPage extends WebPage {
     private IEventStatisticsService eventStatisticsService;
 
     @SpringBean(required = false)
-    private IPersonService          personService;
-    
+    private IPersonService personService;
+
     // protected final JQueryBehavior jQueryBehavior;
     public LayoutPage(final PageParameters _parameters) {
 
@@ -83,8 +83,7 @@ public abstract class LayoutPage extends WebPage {
                 lastName = person.getLastName();
                 email = person.getEmail();
             }
-            
-            
+
         }
 
         if (getSecurityController().isUserInRole("ADMIN")) {
@@ -94,21 +93,21 @@ public abstract class LayoutPage extends WebPage {
             fragment.add(new GravatarImageLink("avatar2", email, 215));
             buildAlerts(fragment);
             add(fragment);
-        addAccordingPanel(this);
+
             final Fragment hellofrag = new Fragment("hellopanel", "hellofragment", this);
             hellofrag.add(new Label("helloname", "Hello, " + firstName));
             hellofrag.add(new GravatarImageLink("avatar", email, 215));
 
             add(hellofrag);
-            
-            
+
         } else {
             add(new WebMarkupContainer("signin"));
             add(new WebMarkupContainer("hellopanel"));
-            
+
         }
         buildBreadCrumb();
-        
+
+        addAccordingPanel(this);
     }
 
     /**
@@ -189,139 +188,125 @@ public abstract class LayoutPage extends WebPage {
         });
         add(new Label("breadactive", getTitle()));
     }
-    
-    
+
     protected IKomeaSecurityController getSecurityController() {
-    
-    
-        final IKomeaSecurityController securityController =
-                new KomeaSecurityContextHolderAwareRequestWrapper((ServletRequest) getRequest()
+
+        final IKomeaSecurityController securityController
+                = new KomeaSecurityContextHolderAwareRequestWrapper((ServletRequest) getRequest()
                         .getContainerRequest(), "");
         return securityController;
     }
-    
-    
+
     /**
      * Returns the user details
      *
      * @return
      */
     protected UserDetails obtainSecurityDetails() {
-    
-    
+
         final IKomeaSecurityController securityController = getSecurityController();
         final UserDetails userDetails = securityController.getUserDetails();
         return userDetails;
     }
-    
-        ///////////////////////////////////////////////////////:
+
+    ///////////////////////////////////////////////////////:
     // Menu accordeon wicket
     ///////////////////////////////////////////////////////
-    
     private void addAccordingPanel(final LayoutPage page) {
-    
+
         final Options options = new Options();
         options.set("heightStyle", Options.asString("content"));
-        
+
         // Accordion //
-        accordion = new AccordionPanel("accordion", newTabList(page), options)
-        {
+        accordion = new AccordionPanel("accordion", newTabList(page), options) {
             private static final long serialVersionUID = 1L;
-            
+
             @Override
             public void onActivate(final AjaxRequestTarget target, final int index, final ITab tab) {
                 // rien a faire
             }
         };
-        
+
         page.add(accordion);
     }
-    
 
     private List<ITab> newTabList(final LayoutPage page) {
-    
-    
+
         final List<ITab> tabs = new ArrayList<ITab>();
         // tab #3, using AbstractTab //
-        final AbstractTab tab1 = new AbstractTab(Model.of(""))
-        {
+        final AbstractTab tab1 = new AbstractTab(Model.of("Company")) {
             private static final long serialVersionUID = 1L;
-            
-            
-            
+
             @Override
             public WebMarkupContainer getPanel(final String panelId) {
-            
-            
+
                 List<IColumn<?, ?>> columns;
                 columns = new ArrayList<IColumn<?, ?>>();
                 FragmentPropertyColumn fcol;
                 fcol = new FragmentPropertyColumn(Model.of("titre"), page, accordion);
                 columns.add(fcol);
-                final ISortableDataProvider<String, String> dataProvider =
-                        new ListDataModel<String>(menuCompany);
-                final DataGridView defaultDataTable =
-                        new DataGridView("table-panel-1", columns, dataProvider);
+                final ISortableDataProvider<String, String> dataProvider
+                        = new ListDataModel<String>(menuCompany);
+                final DataGridView defaultDataTable
+                        = new DataGridView("table-panel-1", columns, dataProvider);
                 final Fragment fragment = new Fragment(panelId, "panel-1", page);
                 fragment.add(defaultDataTable);
                 return fragment;
             }
         };
-       
+
         tabs.add(tab1);
-        tabs.add(new AbstractTab(Model.of(getString("home.kpis")))
-        {
+        tabs.add(new AbstractTab(Model.of(getString("home.kpis"))) {
             private static final long serialVersionUID = 1L;
+
             @Override
             public WebMarkupContainer getPanel(final String panelId) {
-            
-            
+
                 List<IColumn<?, ?>> columns;
                 columns = new ArrayList<IColumn<?, ?>>();
-                
+
                 FragmentPropertyColumn fcol;
                 fcol = new FragmentPropertyColumn(Model.of("titre"), page, accordion);
-                
+
                 columns.add(fcol);
-                final ISortableDataProvider<String, String> dataProvider =
-                        new ListDataModel<String>(menuKpis);
-                final DataGridView defaultDataTable =
-                        new DataGridView("table-panel-2", columns, dataProvider);
+                final ISortableDataProvider<String, String> dataProvider
+                        = new ListDataModel<String>(menuKpis);
+                final DataGridView defaultDataTable
+                        = new DataGridView("table-panel-2", columns, dataProvider);
                 final Fragment fragment = new Fragment(panelId, "panel-2", page);
                 fragment.add(defaultDataTable);
                 return fragment;
             }
         });
 //        
-//        tabs.add(new AbstractTab(Model.of(getString("home.administration")))
-//        {
-//            private static final long serialVersionUID = 1L;
-//            @Override
-//            public WebMarkupContainer getPanel(final String panelId) {
-//            
-//            
-//                List<IColumn<?, ?>> columns;
-//                columns = new ArrayList<IColumn<?, ?>>();
-//                FragmentPropertyColumn fcol;
-//                fcol = new FragmentPropertyColumn(Model.of("titre"), page, accordion);
-//                columns.add(fcol);
-//                final ISortableDataProvider<String, String> dataProvider =
-//                        new ListDataModel<String>(menuAdministration);
-//                final DataGridView defaultDataTable =
-//                        new DataGridView("table-panel-3", columns, dataProvider);
-//                
-//                // defaultDataTable.get(1).add(new AttributeModifier("class",new Model("danger") ));
-//                final Fragment fragment = new Fragment(panelId, "panel-3", page);
-//                fragment.add(defaultDataTable);
-//                return fragment;
-//            }
-//        });
+        tabs.add(new AbstractTab(Model.of(getString("home.administration")))
+        {
+            private static final long serialVersionUID = 1L;
+            @Override
+            public WebMarkupContainer getPanel(final String panelId) {
+            
+            
+                List<IColumn<?, ?>> columns;
+                columns = new ArrayList<IColumn<?, ?>>();
+                FragmentPropertyColumn fcol;
+                fcol = new FragmentPropertyColumn(Model.of("titre"), page, accordion);
+                columns.add(fcol);
+                final ISortableDataProvider<String, String> dataProvider =
+                        new ListDataModel<String>(menuAdministration);
+                final DataGridView defaultDataTable =
+                        new DataGridView("table-panel-3", columns, dataProvider);
+                
+                // defaultDataTable.get(1).add(new AttributeModifier("class",new Model("danger") ));
+                final Fragment fragment = new Fragment(panelId, "panel-3", page);
+                fragment.add(defaultDataTable);
+                return fragment;
+            }
+        });
         return tabs;
     }
-    
 
-     private AccordionPanel        accordion;
-    
+    private AccordionPanel accordion;
+
     public final static int ADMIN_INDEX = 2;
 
     public final static int COMPANY_INDEX = 0;
@@ -371,14 +356,14 @@ public abstract class LayoutPage extends WebPage {
                     || testMenu(object, "panel-customers", "CustomerPage", "CustomerEditPage")
                     || testMenu(object, "panel-projects", "ProjectPage", "ProjectEditPage")) {
                 accordeon.setActiveTab(COMPANY_INDEX);
-                item.add(new AttributeModifier("style", new Model("background-color: "+COLORHILIGHT)));
+                item.add(new AttributeModifier("style", new Model("background-color: " + COLORHILIGHT)));
             }
 
             if (testMenu(object, "panel-kpis", "KpiPage", "KpiEditPage")
                     || testMenu(object, "panel-kpiview", "KpiChartPage")
                     || testMenu(object, "panel-alerts", "AlertPage", "AlertEditPage")) {
                 accordeon.setActiveTab(KPIS_INDEX);
-                item.add(new AttributeModifier("style", new Model("background-color: "+COLORHILIGHT)));
+                item.add(new AttributeModifier("style", new Model("background-color: " + COLORHILIGHT)));
             }
 
             if (testMenu(object, "panel-settings", "SettingsPage")
@@ -389,7 +374,7 @@ public abstract class LayoutPage extends WebPage {
                     || testMenu(object, "panel-events", "EventsPage")
                     || testMenu(object, "panel-cronpage", "CronPage")) {
                 accordeon.setActiveTab(ADMIN_INDEX);
-                item.add(new AttributeModifier("style", new Model("background-color: "+COLORHILIGHT)));
+                item.add(new AttributeModifier("style", new Model("background-color: " + COLORHILIGHT)));
             }
 
         }
