@@ -14,11 +14,19 @@ public interface IBugZillaRebuildHistory
     
     
     /**
+     * Returns the importation thread.
+     * 
+     * @return the importation thread.
+     */
+    Thread getThread();
+    
+    
+    /**
      * @return
      */
     boolean isRunning();
-    
-    
+
+
     /**
      * Launch a thread to build the history of the bugzilla servers.
      */
