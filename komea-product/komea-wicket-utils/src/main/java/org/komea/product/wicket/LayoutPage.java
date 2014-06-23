@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import javax.servlet.ServletRequest;
 
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -30,6 +31,7 @@ import org.komea.product.wicket.utils.KomeaSecurityContextHolderAwareRequestWrap
 import org.komea.product.wicket.widget.RedirectPageLink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 
@@ -55,19 +57,17 @@ public abstract class LayoutPage extends WebPage
     
     // protected final JQueryBehavior jQueryBehavior;
     public LayoutPage(final PageParameters _parameters) {
-    
-    
+
+
         super(_parameters);
         add(new Label("title", Model.of(getTitle())));
         
+        String firstName = "";
+        String lastName = "";
         
-        final KomeaSecurityContextHolderAwareRequestWrapper securityController =
-                new KomeaSecurityContextHolderAwareRequestWrapper((ServletRequest) getRequest()
-                        .getContainerRequest(), "");
-        if (securityController.getUserDetails() != null) {
-            String firstName = "";
-            firstName = securityController.getUserDetails().getUsername();
-            String lastName = "";
+        final UserDetails userDetails = obtainSecurityDetails();
+        if (userDetails != null) {
+            firstName = userDetails.getUsername();
             lastName = "";
 
             if (personService != null) {
@@ -76,25 +76,26 @@ public abstract class LayoutPage extends WebPage
                 lastName = person.getLastName();
 
             }
-
-
-            add(new Label("fullname", firstName + " " + lastName));
-            add(new Label("profile", firstName + " " + lastName));
+            
+            
             add(new Label("helloname", "Hello, " + firstName));
         } else {
-            add(new Label("fullname", ""));
             add(new Label("helloname", ""));
-            add(new Label("profile", ""));
         }
         
-        if (securityController.isUserInRole("ADMIN")) {
-            add(new Fragment("signin", "signinfragment", this));
+        if (getSecurityController().isUserInRole("ADMIN")) {
+            final Fragment fragment = new Fragment("signin", "signinfragment", this);
+            add(new Label("fullname", firstName + " " + lastName));
+            add(new Label("profile", firstName + " " + lastName));
+            buildAlerts(fragment);
+            add(fragment);
         } else {
             
-            add(new WebMarkupContainer("signin"));
+            final WebMarkupContainer webMarkupContainer = new WebMarkupContainer("signin");
+            add(webMarkupContainer);
         }
         buildBreadCrumb();
-        buildAlerts();
+
     }
     
     
@@ -113,8 +114,8 @@ public abstract class LayoutPage extends WebPage
         arrayList.add(new KomeaEntry<String, Class>(getTitle(), getClass()));
         return arrayList;
     }
-    
-    
+
+
     /**
      * Returns the page links in breadcrumb between home and active page.
      *
@@ -153,14 +154,14 @@ public abstract class LayoutPage extends WebPage
     /**
      *
      */
-    private void buildAlerts() {
+    private void buildAlerts(final MarkupContainer _fragment) {
     
     
         if (eventStatisticsService != null) {
-            add(new Label("critical-alerts", Model.of(eventStatisticsService
+            _fragment.add(new Label("critical-alerts", Model.of(eventStatisticsService
                     .getNumberOfAlerts(Severity.BLOCKER))));
         } else {
-            add(new Label("critical-alerts", Model.of("NA")));
+            _fragment.add(new Label("critical-alerts", Model.of("NA")));
         }
         
     }
@@ -189,6 +190,31 @@ public abstract class LayoutPage extends WebPage
             
         });
         add(new Label("breadactive", getTitle()));
+    }
+    
+    
+    private KomeaSecurityContextHolderAwareRequestWrapper getSecurityController() {
+
+
+        final KomeaSecurityContextHolderAwareRequestWrapper securityController =
+                new KomeaSecurityContextHolderAwareRequestWrapper((ServletRequest) getRequest()
+                        .getContainerRequest(), "");
+        return securityController;
+    }
+    
+    
+    /**
+     * Returns the user details
+     *
+     * @return
+     */
+    protected UserDetails obtainSecurityDetails() {
+    
+    
+        final KomeaSecurityContextHolderAwareRequestWrapper securityController =
+                getSecurityController();
+        final UserDetails userDetails = securityController.getUserDetails();
+        return userDetails;
     }
     
 }
