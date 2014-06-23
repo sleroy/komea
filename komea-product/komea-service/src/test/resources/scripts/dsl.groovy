@@ -20,7 +20,7 @@ def kpibuilder = new ObjectGraphBuilder()
 kpibuilder.classNameResolver = "org.komea.product.database.model"
 
 def kpiDsl = new KpiDefinition()
-kpiDsl.kpi = kpibuilder.kpi (
+define "kpi", kpibuilder.kpi (
         description: "Number of closed bugs per project",
         entityType: EntityType.PROJECT,
         groupFormula: GroupFormula.SUM_VALUE,
@@ -32,6 +32,6 @@ kpiDsl.kpi = kpibuilder.kpi (
         valueMin: 0d,
         valueType: ValueType.INT
         )
-kpiDsl.query = new StubQuery()
-kpiDsl;
+new StubQuery()
+
 

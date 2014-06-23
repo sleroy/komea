@@ -10,7 +10,7 @@ import org.joda.time.DateTime;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Project;
-import org.komea.product.plugins.model.IPluginDataCustomFields;
+import org.komea.product.plugins.model.IDataCustomFields;
 
 
 
@@ -23,7 +23,7 @@ public class Issue implements IIssue
     
     private String                  bugTrackerURL;
     private String                  category;
-    private IPluginDataCustomFields customFields;
+    private IDataCustomFields customFields;
     private DateTime                dateSubmitted;
     private Person                  handler;
     private String                  id;
@@ -78,7 +78,7 @@ public class Issue implements IIssue
      * @see org.komea.product.plugins.model.IDynamicData#getCustomFields()
      */
     @Override
-    public IPluginDataCustomFields getCustomFields() {
+    public IDataCustomFields getCustomFields() {
     
     
         return customFields;
@@ -237,7 +237,7 @@ public class Issue implements IIssue
      * @param _customFields
      *            the customFields to set
      */
-    public void setCustomFields(final IPluginDataCustomFields _customFields) {
+    public void setCustomFields(final IDataCustomFields _customFields) {
     
     
         customFields = _customFields;

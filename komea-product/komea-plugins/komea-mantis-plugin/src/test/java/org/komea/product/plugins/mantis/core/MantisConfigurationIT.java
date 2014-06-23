@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.junit.Test;
-import org.komea.product.backend.service.dataplugin.IDynamicDataSourcePool;
 import org.komea.product.plugins.bugtracking.model.IIssue;
 import org.komea.product.plugins.bugtracking.model.IIssuePlugin;
 import org.komea.product.plugins.mantis.api.IMantisConfigurationDAO;
@@ -27,21 +26,17 @@ import static org.junit.Assert.assertFalse;
  */
 public class MantisConfigurationIT extends AbstractSpringIntegrationTestCase
 {
-
-
+    
+    
     @Autowired
     private IMantisConfigurationDAO mantisConfigurationDAO;
-
-
-    @Autowired
-    private IDynamicDataSourcePool  pool;
-
-
-
+    
+    
+    
     @Test
     public void test() {
-
-
+    
+    
         mantisConfigurationDAO.saveOrUpdate(configuration());
         final Collection<IIssuePlugin> dataSourceOfType =
                 pool.getDataSourceOfType(IIssuePlugin.class);
@@ -59,14 +54,14 @@ public class MantisConfigurationIT extends AbstractSpringIntegrationTestCase
         }
         assertFalse(dataSourceOfType.isEmpty());
     }
-
-
+    
+    
     /**
      * @return
      */
     private MantisServerConfiguration configuration() {
-
-
+    
+    
         final MantisServerConfiguration serv = new MantisServerConfiguration();
         serv.setAddress("http://bugreport.tocea.fr/api/soap/mantisconnect.php");
         serv.setLogin("demoit");

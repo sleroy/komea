@@ -19,7 +19,9 @@ import com.google.common.collect.Lists;
 import com.j2bugzilla.base.Bug;
 import com.j2bugzilla.base.BugzillaConnector;
 import com.j2bugzilla.base.BugzillaException;
+import com.j2bugzilla.base.Comment;
 import com.j2bugzilla.base.Product;
+import com.j2bugzilla.rpc.BugComments;
 import com.j2bugzilla.rpc.BugSearch;
 import com.j2bugzilla.rpc.GetAccessibleProducts;
 import com.j2bugzilla.rpc.GetLegalValues;
@@ -43,7 +45,7 @@ public class BZServerProxy implements IBZServerProxy
     
     /**
      * Constructor for BZServerProxy.
-     * 
+     *
      * @param conn
      *            BugzillaConnector
      */
@@ -56,7 +58,7 @@ public class BZServerProxy implements IBZServerProxy
     
     /**
      * Method close.
-     * 
+     *
      * @see java.io.Closeable#close()
      */
     @Override
@@ -73,7 +75,7 @@ public class BZServerProxy implements IBZServerProxy
     
     /**
      * Method getListBugs.
-     * 
+     *
      * @param _productName
      * @return List<BugzillaBug>
      * @see org.komea.backend.IBZServerProxy.bugzilla.api.IBugZillaServerProxy#getListBugs(String)
@@ -101,14 +103,62 @@ public class BZServerProxy implements IBZServerProxy
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.bugzilla.api.IBZServerProxy#getComments(com.j2bugzilla.base.Bug)
+     */
+    @Override
+    public List<Comment> getComments(final Bug _bug) {
+    
+    
+        final BugComments bugComments = new BugComments(_bug);
+        try {
+            conn.executeMethod(bugComments);
+        } catch (final BugzillaException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return bugComments.getComments();
+
+    }
+    
+    
+    @Override
+    public BugzillaConnector getConnector() {
+
+
+        return conn;
+    }
+    
+    
+    /**
+     * Get legal values.
+     *
+     * @param field
+     * @return
+     */
+    @Override
+    public List<String> GetLegalValues(final GetLegalValues.Fields field) {
+    
+    
+        try {
+            final GetLegalValues legalValues = new GetLegalValues(field);
+            conn.executeMethod(legalValues);
+            return new ArrayList<String>(legalValues.getLegalValues());
+        } catch (final BugzillaException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        }
+        return Lists.newArrayList();
+    }
+    
+    
     @Override
     public List<String> getPriorities() {
     
     
         return GetLegalValues(GetLegalValues.Fields.PRIORITY);
     }
-    
-    
+
+
     @Override
     public List<String> getProductNames() {
     
@@ -140,26 +190,12 @@ public class BZServerProxy implements IBZServerProxy
     
         return GetLegalValues(GetLegalValues.Fields.SEVERITY);
     }
-    
-    
+
+
     @Override
     public boolean testConnexion() {
-    
-    
+
+
         return conn != null;
-    }
-    
-    
-    private List<String> GetLegalValues(final GetLegalValues.Fields field) {
-    
-    
-        try {
-            final GetLegalValues legalValues = new GetLegalValues(field);
-            conn.executeMethod(legalValues);
-            return new ArrayList<String>(legalValues.getLegalValues());
-        } catch (final BugzillaException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
-        return Lists.newArrayList();
     }
 }

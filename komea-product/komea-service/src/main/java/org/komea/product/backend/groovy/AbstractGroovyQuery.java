@@ -1,12 +1,15 @@
 /**
  *
  */
+
 package org.komea.product.backend.groovy;
 
+
+
 import java.util.List;
+
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.ISpringService;
-import org.komea.product.backend.plugin.api.RequiresSpring;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.kpi.IEntityKpiFormula;
 import org.komea.product.backend.service.kpi.IKPIService;
@@ -19,23 +22,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
+
 /**
  * @author sleroy
  */
-@RequiresSpring
-public abstract class AbstractGroovyQuery implements IQuery<KpiResult> {
+
+public abstract class AbstractGroovyQuery implements IQuery<KpiResult>
+{
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGroovyQuery.class);
 
     @Autowired
-    protected IEntityService entityService;
+    protected IEntityService    entityService;
     @Autowired
-    protected IKPIService ikpiService;
+    protected IKPIService       ikpiService;
+
 
     @Autowired
-    protected ISpringService springService;
+    protected ISpringService    springService;
     @Autowired
-    protected IStatisticsAPI statisticsAPI;
+    protected IStatisticsAPI    statisticsAPI;
+
+
 
     /**
      * Builds a groovy query
@@ -44,20 +54,25 @@ public abstract class AbstractGroovyQuery implements IQuery<KpiResult> {
      */
     public AbstractGroovyQuery() {
 
+
         super();
 
+
     }
+
 
     /**
      * Process for each entity.
      *
-     * @param _formula the formula
+     * @param _formula
+     *            the formula
      * @return the kpi result.
      */
     public KpiResult forEachEntity(final EntityType _entityType, final IEntityKpiFormula _formula) {
 
-        final List<IEntity> entitiesByEntityType
-                = entityService.getEntitiesByEntityType(_entityType);
+
+        final List<IEntity> entitiesByEntityType =
+                entityService.getEntitiesByEntityType(_entityType);
         final KpiResult kpiResult = new KpiResult();
         for (final IEntity entity : entitiesByEntityType) {
             final EntityKey key = entity.getEntityKey();
@@ -72,17 +87,22 @@ public abstract class AbstractGroovyQuery implements IQuery<KpiResult> {
 
     }
 
+
     /**
      * Returns a spring service implementing the given class.
      */
     public <T> T getService(final Class<T> _class) {
 
+
         return springService.getBean(_class);
     }
 
+
     public KpiValueProxy kpi(final String _kpiName) {
+
 
         return new KpiValueProxy(ikpiService.selectByKeyOrFail(_kpiName), statisticsAPI);
     }
+
 
 }

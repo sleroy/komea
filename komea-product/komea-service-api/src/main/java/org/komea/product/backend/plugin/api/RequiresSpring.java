@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.backend.plugin.api;
@@ -17,14 +17,14 @@ import java.lang.annotation.Target;
 
 /**
  * Defines a groovy query requiring Spring.
- * 
+ *
  * @author sleroy
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Target(value = {
-    ElementType.TYPE })
+        ElementType.FIELD })
 @Inherited
 public @interface RequiresSpring {
-    
+
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.backend.service.cron;
@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * This cron refresh current values of a kpi.
- * 
+ *
  * @author sleroy
  */
 public class KpiValueRefresherCron implements Job
@@ -54,7 +54,8 @@ public class KpiValueRefresherCron implements Job
         LOGGER.info("-- refreshing current values of kpis --");
         int i = 0;
         for (final Kpi kpi : selectAll) {
-            LOGGER.info("[{}/{}] obtaining value for the kpi {}", i, selectAll.size(), kpi.getKey());
+            LOGGER.debug("[{}/{}] obtaining value for the kpi {}", i, selectAll.size(),
+                    kpi.getKey());
             final KpiResult evaluateTheCurrentKpiValue =
                     statisticsAPI.evaluateTheCurrentKpiValues(kpi.getId());
             LOGGER.debug("[{}/{}] {} returned {}", i, selectAll.size(), kpi.getKey(),
@@ -68,7 +69,7 @@ public class KpiValueRefresherCron implements Job
     
     /**
      * Returns the value of the field kpiService.
-     * 
+     *
      * @return the kpiService
      */
     public IKPIService getKpiService() {
@@ -80,7 +81,7 @@ public class KpiValueRefresherCron implements Job
     
     /**
      * Returns the value of the field statisticsAPI.
-     * 
+     *
      * @return the statisticsAPI
      */
     public IStatisticsAPI getStatisticsAPI() {
@@ -92,7 +93,7 @@ public class KpiValueRefresherCron implements Job
     
     /**
      * Sets the field kpiService with the value of _kpiService.
-     * 
+     *
      * @param _kpiService
      *            the kpiService to set
      */
@@ -105,7 +106,7 @@ public class KpiValueRefresherCron implements Job
     
     /**
      * Sets the field statisticsAPI with the value of _statisticsAPI.
-     * 
+     *
      * @param _statisticsAPI
      *            the statisticsAPI to set
      */

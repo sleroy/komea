@@ -5,6 +5,7 @@
 package org.komea.product.backend.service.kpi;
 
 
+
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -18,35 +19,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+
 /**
  * This service performs the loading of existing KPI (extracted from Database).
- * 
+ *
  * @author sleroy
  */
 @Service
 @Transactional
-public class KpiLoadingService implements IKpiLoadingService {
+public class KpiLoadingService implements IKpiLoadingService
+{
+    
     
     private static final Logger LOGGER = LoggerFactory.getLogger("kpi-loader");
-    
+
     @Autowired
     private IQueryService       kpiRegisterService;
-    
+
     @Autowired
     private IKPIService         kpiService;
+    
+    
     
     /**
      * @return the kpiRegisterService
      */
     public IQueryService getKpiRegisterService() {
     
+    
         return kpiRegisterService;
     }
     
+    
     public IKPIService getKpiService() {
+    
     
         return kpiService;
     }
+    
     
     /*
      * (non-Javadoc)
@@ -56,8 +67,9 @@ public class KpiLoadingService implements IKpiLoadingService {
     @PostConstruct
     public void initLoadingService() {
     
+    
         LOGGER.info("LOADING KPI FROM DATABASE");
-        
+
         final List<Kpi> allKpis = kpiService.selectAll();
         LOGGER.info("found kpi in database  {}", allKpis.size());
         for (final Kpi existingKpi : allKpis) {
@@ -70,18 +82,22 @@ public class KpiLoadingService implements IKpiLoadingService {
         LOGGER.info("----------------------------------------");
     }
     
+    
     /**
      * @param _kpiRegisterService
      *            the kpiRegisterService to set
      */
     public void setKpiRegisterService(final IQueryService _kpiRegisterService) {
     
+    
         kpiRegisterService = _kpiRegisterService;
     }
     
+    
     public void setKpiService(final IKPIService _kpiService) {
+    
     
         kpiService = _kpiService;
     }
-    
+
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.plugins.bugtracker.kpis;
@@ -14,15 +14,12 @@ import java.util.List;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.product.backend.api.IGroovyEngineService;
 import org.komea.product.backend.groovy.AbstractDynamicQuery;
-import org.komea.product.backend.service.dataplugin.IDynamicDataSourcePool;
-import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.plugins.bugtracking.model.IIssue;
 import org.komea.product.plugins.bugtracking.model.IIssuePlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
 
 
 
@@ -35,21 +32,20 @@ AbstractDynamicQuery
 {
     
     
-    private Closure<KpiResult>     closure;
+    private Closure<KpiResult>   closure;
     @Autowired
-    private IDynamicDataSourcePool dataSourcePool;
-    private final String           dynamicSource;
+    private IIssuePlugin[]       connectors;
+    
     
     @Autowired
-    private IGroovyEngineService   groovyEngineService;
+    private IGroovyEngineService groovyEngineService;
     
     
     
-    public IssueKPI(final BackupDelay _delay, final String _dynamicSource) {
+    public IssueKPI(final BackupDelay _delay) {
     
     
         super(_delay);
-        dynamicSource = _dynamicSource;
     }
     
     
@@ -57,9 +53,11 @@ AbstractDynamicQuery
     public KpiResult evaluateResult() {
     
     
-        final ListMultimap<IEntity, IIssue> map = ArrayListMultimap.create();
+        ArrayListMultimap.create();
         final List<IIssue> list = new ArrayList(10000);
-        for (final IIssuePlugin plugin : dataSourcePool.getDataSourceOfType(IIssuePlugin.class)) {
+        LOGGER.info("Analyzing through {} connectors", getConnectors().length);
+        for (final IIssuePlugin plugin : getConnectors()) {
+            
             list.addAll(plugin.getData());
         }
         
@@ -76,11 +74,25 @@ AbstractDynamicQuery
     }
     
     
+    public IIssuePlugin[] getConnectors() {
+    
+    
+        return connectors;
+    }
+    
+    
     public IssueKPI setClosure(final Closure<KpiResult> _closure) {
     
     
         closure = _closure;
         return this;
+    }
+    
+    
+    public void setConnectors(final IIssuePlugin[] _connectors) {
+    
+    
+        connectors = _connectors;
     }
     
     

@@ -29,6 +29,12 @@
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>komea-csv</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>komea-dao</artifactId>
 			<version>${project.version}</version>
 		</dependency>

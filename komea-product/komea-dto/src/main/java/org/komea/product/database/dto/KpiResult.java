@@ -1,15 +1,18 @@
 /**
  *
  */
+
 package org.komea.product.database.dto;
 
-import com.google.common.collect.Maps;
+
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.komea.product.backend.groovy.QueryExecutionFailed;
@@ -21,37 +24,53 @@ import org.komea.product.service.dto.EntityKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Maps;
+
+
+
 /**
  * This object defines the container that stores the results of the execution of
  * a kpi.
  *
  * @author sleroy
  */
-public class KpiResult implements Serializable {
+public class KpiResult implements Serializable
+{
 
-    public static final KpiResult EMPTY = new KpiResult() {
+
+    public static final KpiResult EMPTY            = new KpiResult()
+    {
+
 
         /**
          * Puts a value into the map.
          *
-         * @param _entityKey the entity key
-         * @param _value the value;
+         * @param _entityKey
+         *            the entity key
+         * @param _value
+         *            the value;
          */
         @Override
         public void put(
                 final EntityKey _entityKey,
                 final Number _value) {
 
+
             throw new IllegalAccessError();
 
         }
     };
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(KpiResult.class);
 
-    private static final long serialVersionUID = -5012854632976327222L;
-
+    private static final Logger   LOGGER           = LoggerFactory.getLogger(KpiResult.class);
+    
+    
+    private static final long     serialVersionUID = -5012854632976327222L;
+    
+    
+    
     public static KpiResult newResults(final Map<EntityKey, Number> _results) {
+
 
         final KpiResult kpiResult = new KpiResult();
         for (final Entry<EntityKey, Number> entry : _results.entrySet()) {
@@ -59,8 +78,10 @@ public class KpiResult implements Serializable {
         }
         return kpiResult;
     }
-
+    
+    
     public static KpiResult newResults2(final Map<IEntity, Number> _results) {
+
 
         final KpiResult kpiResult = new KpiResult();
         for (final Entry<IEntity, Number> entry : _results.entrySet()) {
@@ -69,29 +90,40 @@ public class KpiResult implements Serializable {
         return kpiResult;
     }
 
-    private Map<EntityKey, Number> map = Maps.newHashMap();
 
-    private Throwable reasonOfFailure = null;
+
+    private Map<EntityKey, Number> map             = Maps.newHashMap();
+
+
+    private Throwable              reasonOfFailure = null;
+
+
 
     public KpiResult() {
 
+
         super();
     }
-
+    
+    
     public KpiResult(final Map<EntityKey, Number> _map) {
+
 
         super();
         map = _map;
 
     }
-
+    
+    
     /**
      * Computes the unique value from a group formula;
      *
-     * @param _groupFormula the group formula.
+     * @param _groupFormula
+     *            the group formula.
      * @return the group formula.
      */
     public Double computeUniqueValue(final GroupFormula _groupFormula) {
+
 
         checkNoFail();
 
@@ -107,6 +139,43 @@ public class KpiResult implements Serializable {
         }
     }
 
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(final Object obj) {
+
+
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final KpiResult other = (KpiResult) obj;
+        if (map == null) {
+            if (other.map != null) {
+                return false;
+            }
+        } else if (!map.equals(other.map)) {
+            return false;
+        }
+        if (reasonOfFailure == null) {
+            if (other.reasonOfFailure != null) {
+                return false;
+            }
+        } else if (!reasonOfFailure.equals(other.reasonOfFailure)) {
+            return false;
+        }
+        return true;
+    }
+
+
     /**
      * Fills the kpi result with an map and converts it into entity keys.
      *
@@ -115,6 +184,7 @@ public class KpiResult implements Serializable {
      * @return
      */
     public KpiResult fill(final List<EntityIdValue> _evaluateKpiValues, final EntityType _entityType) {
+
 
         checkNoFail();
         map = Maps.newHashMapWithExpectedSize(_evaluateKpiValues.size());
@@ -125,27 +195,33 @@ public class KpiResult implements Serializable {
         return this;
     }
 
+
     /**
      * Returns the value as a double value.
      *
-     * @param _entityKey the entity key.
+     * @param _entityKey
+     *            the entity key.
      * @return the double value converted from the original value.
      */
     public Double getDoubleValue(final EntityKey _entityKey) {
 
+
         checkNoFail();
-//        return getValue(_entityKey).doubleValue();
+        // return getValue(_entityKey).doubleValue();
         final Number value = getValue(_entityKey);
         return value == null ? null : value.doubleValue();
     }
 
+
     /**
      * Returns the numerical value as a double or null if not present.
      *
-     * @param _entityKey the entity key
+     * @param _entityKey
+     *            the entity key
      * @return a double value or null.
      */
     public Double getDoubleValueOrNull(final EntityKey _entityKey) {
+
 
         checkNoFail();
         final Number number = map.get(_entityKey);
@@ -156,50 +232,79 @@ public class KpiResult implements Serializable {
         return number.doubleValue();
     }
 
+
     public Map<EntityKey, Number> getMap() {
+
 
         checkNoFail();
 
         return Collections.unmodifiableMap(map);
     }
 
+
     public Throwable getReasonOfFailure() {
+
 
         return reasonOfFailure;
     }
 
+
     /**
      * Returns the value of an entity.
      *
-     * @param _entityKey the entity key.
+     * @param _entityKey
+     *            the entity key.
      * @return the value.
      */
     public Number getValue(final EntityKey _entityKey) {
 
+
         checkNoFail();
         return map.get(_entityKey);
-//        final Number number = map.get(_entityKey);
-//        if (number == null) {
-//            return 0d;
-//        }
-//        return number;
+        // final Number number = map.get(_entityKey);
+        // if (number == null) {
+        // return 0d;
+        // }
+        // return number;
     }
 
+
     public boolean hasFailed() {
+
 
         return reasonOfFailure != null;
     }
 
+
     /**
      * Marks the result has failed.
      *
-     * @param _reasonOfFailure the result;
+     * @param _reasonOfFailure
+     *            the result;
      */
     public void hasFailed(final Throwable _reasonOfFailure) {
+
 
         reasonOfFailure = _reasonOfFailure;
 
     }
+
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+
+
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (map == null ? 0 : map.hashCode());
+        result = prime * result + (reasonOfFailure == null ? 0 : reasonOfFailure.hashCode());
+        return result;
+    }
+
 
     /**
      * Tests if a key is present into the kpi result
@@ -209,16 +314,20 @@ public class KpiResult implements Serializable {
      */
     public boolean hasKey(final EntityKey _entityKey) {
 
+
         return map.containsKey(_entityKey);
     }
+
 
     /**
      * Generate minimal values when entities are missing.
      *
-     * @param entitiesByEntityType the list of entities.
+     * @param entitiesByEntityType
+     *            the list of entities.
      * @return the kpi result after modification
      */
     public KpiResult inferResults(final List<IEntity> entitiesByEntityType, final Double _minValue) {
+
 
         checkNoFail();
         final KpiResult kpiResult = new KpiResult(new HashMap<EntityKey, Number>(map));
@@ -237,6 +346,7 @@ public class KpiResult implements Serializable {
         return kpiResult;
     }
 
+
     /**
      * Tests if the result of the kpi is empty
      *
@@ -244,16 +354,38 @@ public class KpiResult implements Serializable {
      */
     public boolean isEmpty() {
 
+
         return map.isEmpty();
     }
+
+
+    /**
+     * Iterator on the results
+     *
+     * @param _kpiIterator
+     *            the iteration action
+     */
+    public void iterate(final KpiResultIterator _kpiIterator) {
+
+
+        checkNoFail();
+        for (final Entry<EntityKey, Number> entry : map.entrySet()) {
+            _kpiIterator.iterate(entry.getKey(), entry.getValue());
+        }
+
+    }
+
 
     /**
      * Puts a value into the map.
      *
-     * @param _entityKey the entity key
-     * @param _value the value;
+     * @param _entityKey
+     *            the entity key
+     * @param _value
+     *            the value;
      */
     public void put(final EntityKey _entityKey, final Number _value) {
+
 
         checkNoFail();
         if (_entityKey == null) {
@@ -265,11 +397,13 @@ public class KpiResult implements Serializable {
 
     }
 
+
     /**
      * @param _entity
      * @param _value
      */
     public void put(final IEntity _entity, final Number _value) {
+
 
         checkNoFail();
         Validate.notNull(_entity);
@@ -278,7 +412,9 @@ public class KpiResult implements Serializable {
 
     }
 
+
     public void putResults(final Map<IEntity, Number> _results) {
+
 
         checkNoFail();
 
@@ -288,13 +424,35 @@ public class KpiResult implements Serializable {
 
     }
 
+
     /**
      * Returns the size of the results stored
      */
     public int size() {
 
+
         checkNoFail();
         return map.size();
+    }
+
+
+    /**
+     * @return Returns a smart display of the kpi result.
+     */
+    public String smartDisplay() {
+
+
+        if (hasFailed()) {
+            return "##ERROR##";
+        }
+        final StringBuilder sbBuilder = new StringBuilder();
+        sbBuilder.append("EntityKey;Value\n");
+        for (final Entry<EntityKey, Number> entry : map.entrySet()) {
+            sbBuilder.append(entry.getKey().toString()).append(";").append(entry.getValue())
+            .append("\n");
+        }
+
+        return sbBuilder.toString();
     }
 
 
@@ -305,17 +463,22 @@ public class KpiResult implements Serializable {
     @Override
     public String toString() {
 
+
         return "KpiResult [\\n\\tmap=" + map + ", \\n\\treasonOfFailure=" + reasonOfFailure + "]";
     }
 
+
     private Double buildMean() {
+
 
         {
             return buildSum();
         }
     }
 
+
     private Double buildSum() {
+
 
         final DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
         for (final Number dbValue : map.values()) {
@@ -324,10 +487,12 @@ public class KpiResult implements Serializable {
         return descriptiveStatistics.getSum();
     }
 
+
     /**
      * Check if no failure happened.
      */
     private void checkNoFail() {
+
 
         if (hasFailed()) {
             throw new QueryExecutionFailed(reasonOfFailure);
