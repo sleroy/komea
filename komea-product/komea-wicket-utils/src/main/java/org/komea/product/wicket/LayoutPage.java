@@ -27,6 +27,7 @@ import org.komea.product.backend.service.esper.IEventStatisticsService;
 import org.komea.product.backend.utils.KomeaEntry;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Person;
+import org.komea.product.wicket.utils.IKomeaSecurityController;
 import org.komea.product.wicket.utils.KomeaSecurityContextHolderAwareRequestWrapper;
 import org.komea.product.wicket.widget.RedirectPageLink;
 import org.slf4j.Logger;
@@ -85,8 +86,8 @@ public abstract class LayoutPage extends WebPage
         
         if (getSecurityController().isUserInRole("ADMIN")) {
             final Fragment fragment = new Fragment("signin", "signinfragment", this);
-            add(new Label("fullname", firstName + " " + lastName));
-            add(new Label("profile", firstName + " " + lastName));
+            fragment.add(new Label("fullname", firstName + " " + lastName));
+            fragment.add(new Label("profile", firstName + " " + lastName));
             buildAlerts(fragment);
             add(fragment);
         } else {
@@ -193,10 +194,10 @@ public abstract class LayoutPage extends WebPage
     }
     
     
-    private KomeaSecurityContextHolderAwareRequestWrapper getSecurityController() {
+    protected IKomeaSecurityController getSecurityController() {
 
 
-        final KomeaSecurityContextHolderAwareRequestWrapper securityController =
+        final IKomeaSecurityController securityController =
                 new KomeaSecurityContextHolderAwareRequestWrapper((ServletRequest) getRequest()
                         .getContainerRequest(), "");
         return securityController;
@@ -211,8 +212,7 @@ public abstract class LayoutPage extends WebPage
     protected UserDetails obtainSecurityDetails() {
     
     
-        final KomeaSecurityContextHolderAwareRequestWrapper securityController =
-                getSecurityController();
+        final IKomeaSecurityController securityController = getSecurityController();
         final UserDetails userDetails = securityController.getUserDetails();
         return userDetails;
     }

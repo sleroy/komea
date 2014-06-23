@@ -9,9 +9,11 @@ package org.komea.product.wicket;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.junit.Rule;
 import org.junit.Test;
+import org.komea.product.wicket.utils.IKomeaSecurityController;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 
@@ -45,12 +47,26 @@ public class LayoutPageTest
         
         /*
          * (non-Javadoc)
+         * @see org.komea.product.wicket.LayoutPage#getSecurityController()
+         */
+        @Override
+        protected IKomeaSecurityController getSecurityController() {
+        
+        
+            final IKomeaSecurityController mock2 = mock(IKomeaSecurityController.class);
+            when(mock2.isUserInRole("ADMIN")).thenReturn(true);
+            return mock2;
+        }
+        
+        
+        /*
+         * (non-Javadoc)
          * @see org.komea.product.wicket.LayoutPage#obtainSecurityDetails()
          */
         @Override
         protected UserDetails obtainSecurityDetails() {
-
-
+        
+        
             return mock(UserDetails.class);
         }
     }
@@ -64,8 +80,8 @@ public class LayoutPageTest
     
     @Test
     public void testLayoutWithAuth() throws Exception {
-
-
+    
+    
         wicketRule.testStart(A.class);
     }
     
