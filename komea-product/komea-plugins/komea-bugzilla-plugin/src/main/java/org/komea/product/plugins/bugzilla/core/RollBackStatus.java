@@ -24,31 +24,31 @@ import com.j2bugzilla.base.BugFactory;
  */
 public class RollBackStatus
 {
-    
-    
+
+
     private static final Logger    LOGGER = LoggerFactory.getLogger(RollBackStatus.class);
     private final Map<?, ?>        bug;
-    
-    
+
+
     private final List<BugHistory> bugChanges;
-    
-    
-    
+
+
+
     public RollBackStatus(final Map<?, ?> _bugProperties, final List<BugHistory> _bugChanges) {
-    
-    
+
+
         super();
-        
+
         bug = _bugProperties;
         bugChanges = _bugChanges;
-        
-        
+
+
     }
-    
-    
+
+
     public Bug rollback(final DateTime _untilDate) {
-    
-    
+
+
         final Map<String, Object> parameterMap = new HashMap(bug);
         for (final BugHistory history : bugChanges) {
             final DateTime when = history.getWhen();
@@ -56,18 +56,19 @@ public class RollBackStatus
                 LOGGER.error("No date for the history {} of bug {}", history, bug);
                 continue;
             }
-            if (_untilDate.isAfter(new DateTime(when))) {
+            final DateTime whenTime = new DateTime(when);
+            if (_untilDate.isAfter(whenTime)) {
                 continue;
             }
             for (final BugChange change : history.getBugChanges()) {
-
+                
                 parameterMap.put(change.getField_name(), change.getRemoved());
             }
         }
-        
-        
+
+
         final BugFactory bugFactory = new BugFactory();
         return bugFactory.createBug(parameterMap);
-        
+
     }
 }
