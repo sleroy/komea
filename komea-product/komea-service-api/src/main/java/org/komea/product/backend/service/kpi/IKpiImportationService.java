@@ -43,4 +43,11 @@ public interface IKpiImportationService
      */
     public void importCatalog(File _zipFile, KpiImportator _kpiImportator);
 
+
+    /**
+     * @param _contextClassLoader
+     * @param _kpiImportator
+     */
+    public void importCatalogFromClassLoader(KpiImportator _kpiImportator);
+
 }
