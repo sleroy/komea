@@ -1,8 +1,10 @@
 package org.komea.product.backend.service.entities;
 
+import com.google.common.collect.Maps;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.Validate;
 import org.komea.product.backend.api.exceptions.EntityNotFoundException;
 import org.komea.product.database.api.IEntity;
@@ -157,6 +159,24 @@ public final class EntityService implements IEntityService {
             }
         }
         return Collections.unmodifiableList(listOfEntities);
+    }
+
+    @Override
+    public <TEntity extends IEntity> List<TEntity> getEntitiesByKey(
+            final ExtendedEntityType _entityType,
+            final List<String> _keys) {
+        final List<TEntity> parentEntities = getEntitiesByKey(_entityType.getEntityType(), _keys);
+        if (!_entityType.isForGroups()) {
+            return parentEntities;
+        }
+        final Map<Integer, TEntity> entities = Maps.newHashMap();
+        for (final TEntity parentEntity : parentEntities) {
+            final List<TEntity> subEntities = getSubEntities(parentEntity.getId(), _entityType);
+            for (final TEntity entity : subEntities) {
+                entities.put(entity.getId(), entity);
+            }
+        }
+        return new ArrayList<TEntity>(entities.values());
     }
 
     @Override

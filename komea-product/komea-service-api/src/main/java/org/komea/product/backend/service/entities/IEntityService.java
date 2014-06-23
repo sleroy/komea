@@ -50,6 +50,8 @@ public interface IEntityService {
 
     <TEntity extends IEntity> List<TEntity> getEntitiesByKey(EntityType _entityType, List<String> _keys);
 
+    <TEntity extends IEntity> List<TEntity> getEntitiesByKey(ExtendedEntityType _entityType, List<String> _keys);
+
     /**
      * Returns the entity or fail
      *

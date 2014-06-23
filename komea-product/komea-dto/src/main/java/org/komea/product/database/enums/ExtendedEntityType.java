@@ -4,6 +4,7 @@ public enum ExtendedEntityType {
 
     PROJECT,
     PERSON,
+    MEMBERS_PROJECT,
     MEMBERS_TEAM,
     MEMBERS_DEPARTMENT,
     PROJECTS_PERSON,
@@ -11,17 +12,17 @@ public enum ExtendedEntityType {
     PROJECTS_DEPARTMENT;
 
     public EntityType getEntityType() {
-        if (name().contains("_")) {
+        if (isForGroups()) {
             return EntityType.valueOf(name().split("_")[1]);
         }
         return EntityType.valueOf(name());
     }
 
     public EntityType getKpiType() {
-        return name().contains("PROJECT") ? EntityType.PROJECT : EntityType.PERSON;
+        return name().startsWith("PROJECT") ? EntityType.PROJECT : EntityType.PERSON;
     }
 
     public boolean isForGroups() {
-        return !PROJECT.equals(this) && !PERSON.equals(this);
+        return name().contains("_");
     }
 }

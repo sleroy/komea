@@ -16,7 +16,7 @@ import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.backend.service.kpi.TimeSerie;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.BaseEntityDto;
-import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.TimeSerieConvertor;
@@ -105,12 +105,12 @@ public class MeasureService implements IMeasureService {
         options.pickBestGranularity();
         final List<String> kpiKeys = new ArrayList<String>(_kpiKeyList.getKpiKeys());
         final List<String> entityKeys = new ArrayList<String>(_kpiKeyList.getEntityKeys());
-        final EntityType entityType = _kpiKeyList.getEntityType();
+        final ExtendedEntityType entityType = _kpiKeyList.getEntityType();
         final Collection<Kpi> kpis = kpiKeys.isEmpty()
-                ? kpiService.getAllKpisOfEntityType(entityType)
+                ? kpiService.getAllKpisOfEntityType(entityType.getKpiType())
                 : kpiService.selectByKeys(kpiKeys);
         final Collection<IEntity> entities = entityKeys.isEmpty()
-                ? entityService.getEntitiesByEntityType(entityType)
+                ? entityService.getEntitiesByEntityType(entityType.getKpiType())
                 : entityService.getEntitiesByKey(entityType, entityKeys);
         for (final IEntity entity : entities) {
             for (final Kpi kpi : kpis) {
