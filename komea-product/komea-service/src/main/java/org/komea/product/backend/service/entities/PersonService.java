@@ -1,9 +1,11 @@
 package org.komea.product.backend.service.entities;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import org.komea.product.backend.genericservice.AbstractService;
 import org.komea.product.backend.service.esper.IEventConversionAndValidationService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
@@ -218,6 +220,23 @@ public class PersonService extends AbstractService<Person, Integer, PersonCriter
             persons.addAll(getPersonsOfPersonGroupRecursively(child.getId()));
         }
         return persons;
+    }
+
+    @Override
+    public List<Person> getAllMembersOfProject(final Integer _projectId) {
+        final Map<Integer, Person> members = Maps.newHashMap();
+        final List<Person> personsOfProject = getPersonsOfProject(_projectId);
+        for (final Person person : personsOfProject) {
+            members.put(person.getId(), person);
+        }
+        final List<PersonGroup> teamsOfProject = groupService.getTeamsOfProject(_projectId);
+        for (final PersonGroup personGroup : teamsOfProject) {
+            final List<Person> persons = getPersonsOfPersonGroupRecursively(personGroup.getId());
+            for (Person person : persons) {
+                members.put(person.getId(), person);
+            }
+        }
+        return new ArrayList<Person>(members.values());
     }
 
     @Override
