@@ -95,15 +95,18 @@ public class KpiImportationService implements IKpiImportationService
     public void importCatalogFromClassLoader(final KpiImportator _kpiImportator) {
 
 
+        LOGGER.info("Importing KPI from Classloader");
+
         try {
             for (final Resource resource : springService.getApplicationContext().getResources(
                     "scripts/**/*.groovy")) {
+                LOGGER.info("Found script {}", resource);
                 addKpiToCatalog(resource.getFilename(), resource.getInputStream(), _kpiImportator);
             }
         } catch (final IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
-
+        LOGGER.info("Importation finished");
     }
 
 
