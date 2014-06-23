@@ -40,42 +40,47 @@
 					</form>
 					<hr />
 					<h1 wicket:id="kpi"></h1>
+					<div class="col-sm-12">
+						<div class="col-sm-4">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Statistic</th>
+										<th>Details</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Type de KPI</td>
+										<td wicket:id="details"></td>
+									</tr>
+									<tr>
+										<td>Nombre de valeurs dans l'historique</td>
+										<td wicket:id="values"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col-sm-8">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Entity Key</th>
+										<th>Last value</th>
+										<th>Current value</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr wicket:id="rows">
+										<td wicket:id="entity"></td>
+										<td wicket:id="lastvalue"></td>
+										<td wicket:id="currentvalue"></td>
 
-					<table>
-						<thead>
-							<tr>
-								<th>Statistic</th>
-								<th>Details</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Type de KPI</td>
-								<td wicket:id="details"></td>
-							</tr>
-							<tr>
-								<td>Nombre de valeurs dans l'historique</td>
-								<td wicket:id="values"></td>
-							</tr>
-						</tbody>
-					</table>
-					<table>
-						<thead>
-							<tr>
-								<th>Entity Key</th>
-								<th>Last value</th>
-								<th>Current value</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr wicket:id="rows">
-								<td wicket:id="entity"></td>
-								<td wicket:id="lastvalue"></td>
-								<td wicket:id="currentvalue"></td>
-
-							</tr>
-						</tbody>
-					</table>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
 					<h2>List of events currently in the cache</h2>
 					<form class="form">
 						<select wicket:id="events" class="form-control"></select>
