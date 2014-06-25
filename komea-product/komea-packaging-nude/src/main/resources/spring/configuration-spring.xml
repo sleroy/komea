@@ -16,4 +16,6 @@
     <!-- SALT FOR PASSWORDS -->
     <util:properties id="authProperties" location="classpath:/config/auth.properties">
     </util:properties>
+	<util:properties id="threadProperties" location="classpath:/config/thread.properties">
+	</util:properties>
 </beans>
