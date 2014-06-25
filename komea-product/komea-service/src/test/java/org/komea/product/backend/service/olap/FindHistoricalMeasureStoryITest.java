@@ -29,6 +29,8 @@ import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
+import static org.junit.Assert.assertTrue;
+
 
 
 @DatabaseTearDown(value = "measures.xml", type = DatabaseOperation.DELETE_ALL)
@@ -122,11 +124,10 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
     }
 
 
-    @Test(expected = IllegalArgumentException.class)
     @DatabaseSetup("measures.xml")
     public void test__only_one_get_historic_with_start_date_sup_end_date() {
-
-
+    
+    
         // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((1/05/2014)
@@ -141,7 +142,8 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         period.pickBestGranularity();
         period.setGroupFormula(GroupFormula.AVG_VALUE);
 
-        measureService.findHistoricalMeasure(kpiKey, period);
+        final TimeSerieDTO timeSerieDTO = measureService.findHistoricalMeasure(kpiKey, period);
+        assertTrue(timeSerieDTO.getCoordinates().isEmpty());
 
         // THEN the measure list must be empty
         // final List<TimeCoordinateDTO> historicalValues = measure.getCoordinates();
