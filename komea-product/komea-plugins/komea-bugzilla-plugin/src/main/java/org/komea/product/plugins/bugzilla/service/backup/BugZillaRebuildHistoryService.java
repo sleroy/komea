@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.joda.time.DateTime;
 import org.komea.eventory.api.engine.IQuery;
@@ -93,6 +95,9 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
     @Autowired
     private IEventEngineService                  eventEngineService;
     
+    private ExecutorService                      executor;
+    
+    
     @Autowired()
     @Qualifier("bugzilla-source")
     private IIssuePlugin                         issuePlugin;
@@ -104,20 +109,12 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
     
     @Autowired
     private MeasureDao                           measureDAO;
-    
-    
     @Autowired
     private IBZServerProxyFactory                serverProxyFactory;
+    
+    
     @Autowired
     private IStatisticsAPI                       statisticsAPI;
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.plugins.bugzilla.service.backup.IBZRebuildHistoryService#rebuildHistory()
-     */
-    
-    private Thread                               thread;
     
     
     
@@ -126,17 +123,17 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
      * @see org.komea.product.plugins.bugzilla.api.IBugZillaRebuildHistory#getThread()
      */
     @Override
-    public Thread getThread() {
-
-
-        return thread;
+    public ExecutorService getThread() {
+    
+    
+        return executor;
     }
     
     
     public synchronized boolean isLaunched() {
     
     
-        return thread != null;
+        return executor != null;
     }
     
     
@@ -145,34 +142,34 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
      * @see org.komea.product.plugins.bugzilla.api.IBugZillaRebuildHistory#isRunning()
      */
     @Override
-    public synchronized boolean isRunning() {
-
-
-        return thread != null;
+    public boolean isRunning() {
+    
+    
+        return executor.isTerminated();
     }
     
     
     @Override
     public synchronized void rebuildHistory() {
-    
-    
-        if (thread != null) {
+
+
+        if (!executor.isTerminated()) {
             return;
         }
-        thread = new Thread(this);
-        thread.start();
+        executor = Executors.newSingleThreadExecutor();
+        executor.execute(this);
         
     }
-
-
+    
+    
     /*
      * (non-Javadoc)
      * @see java.lang.Runnable#run()
      */
     @Override
     public void run() {
-
-
+    
+    
         List<KpiAndQueryObject> kpis = Lists.newArrayList();
         try {
             LOGGER.info("Rebuilding history of bugzilla servers");
@@ -219,7 +216,6 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
                 
             }
         } finally {
-            removeThread();
             for (final KpiAndQueryObject kpiAndQueryObject : kpis) {
                 kpiAndQueryObject.getQuery().setFilter(kpiAndQueryObject.getOriginalFilter());
             }
@@ -328,15 +324,8 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
         }
         return bugzillaConnector;
     }
-
-
-    private synchronized void removeThread() {
-
-
-        thread = null;
-    }
-
-
+    
+    
     private void sortHistoryFromMostRecentToOldest(final List<BugHistory> bugHistory) {
     
     
