@@ -24,6 +24,7 @@ import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
+import org.komea.product.database.utils.MeasureUtils;
 import org.komea.product.service.dto.EntityKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +82,7 @@ public class MeasureStorageService implements IMeasureStorageService
                 queryResult.size(), findKPI.getKey());
         for (final Entry<EntityKey, Number> kpiLineValue : queryResult.getMap().entrySet()) {
             if (kpiLineValue.getValue() == null) {
-                LOGGER.warn("Entity {} has not value for the kpi -> {}", findKPI.getDisplayName());
+                LOGGER.debug("Entity {} has not value for the kpi -> {}", findKPI.getDisplayName());
                 continue;
             }
             Validate.notNull(kpiLineValue.getKey());
@@ -107,7 +108,7 @@ public class MeasureStorageService implements IMeasureStorageService
             }
 
             // Simply refresh the value.
-            measure.setDateTime(new DateTime());
+            MeasureUtils.setMeasureDateTime(measure, new DateTime());
             measure.setValue(kpiLineValue.getValue().doubleValue());
             if (oldMeasure == null) {
                 measureDao.insert(measure);
