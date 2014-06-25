@@ -22,8 +22,6 @@
 	</util:properties>
 
 
-	<util:properties id="threadProperties" location="classpath:/config/thread.properties">
-	</util:properties>
 
 	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
 		<property name="cacheManager" ref="ehcache"></property>
