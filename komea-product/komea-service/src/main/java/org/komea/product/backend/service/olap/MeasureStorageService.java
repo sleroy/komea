@@ -43,41 +43,41 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MeasureStorageService implements IMeasureStorageService
 {
-    
-    
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MeasureStorageService.class);
     @Autowired
     private IEventEngineService engineService;
-    
+
     @Autowired
     private IQueryService       kpiQueryService;
     @Autowired
     private IKPIService         kpiService;
-    
-    
+
+
     @Autowired
     private MeasureDao          measureDao;
-    
-    
-    
+
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.service.olap.IMeasureStorageService#storeActualValueInHistory(java.lang.Integer,
      * org.komea.eventory.api.cache.BackupDelay)
      */
-    
+
     @Override
     public void storeActualValueInHistory(final Integer _kpiID, final BackupDelay _backupDelay)
             throws KPINotFoundException {
-    
-    
+
+
         Validate.notNull(_kpiID);
         LOGGER.debug("storeActualValueInHistory : {}", _kpiID);
         final Kpi findKPI = kpiService.selectByPrimaryKeyOrFail(_kpiID);
         final KpiResult queryResult = kpiQueryService.evaluateRealTimeValues(findKPI.getKey());// FIXME:/Performance
         Validate.notNull(queryResult);
-        
-        LOGGER.info("Storing all values[{}] of the kpi -> '{}' into the database.",
+
+        LOGGER.info("Storing all values[{}] of the kpi -> {} into the database.",
                 queryResult.size(), findKPI.getKey());
         for (final Entry<EntityKey, Number> kpiLineValue : queryResult.getMap().entrySet()) {
             if (kpiLineValue.getValue() == null) {
@@ -86,26 +86,26 @@ public class MeasureStorageService implements IMeasureStorageService
             }
             Validate.notNull(kpiLineValue.getKey());
             Validate.isTrue(kpiLineValue.getKey().isEntityReferenceKey());
-            
+
             HistoryKey.of(findKPI, kpiLineValue.getKey());
             Measure measure = new Measure();
             measure.setIdKpi(FormulaID.of(findKPI).getId());
             new ComputeDateForMeasureRefresh(_backupDelay, measure, "")
-                    .initializeMeasureWithDate(new DateTime());
+            .initializeMeasureWithDate(new DateTime());
             measure.setEntityID(kpiLineValue.getKey().getId());
             // Find or replace
             final MeasureCriteria measureCriteria = new MeasureCriteria();
             measureCriteria.createCriteria().andYearEqualTo(measure.getYear())
-                    .andMonthEqualTo(measure.getMonth()).andWeekEqualTo(measure.getWeek())
-                    .andDayEqualTo(measure.getDay()).andHourEqualTo(measure.getHour())
-                    .andEntityIDEqualTo(measure.getEntityID()).andIdKpiEqualTo(measure.getIdKpi());
-            
+            .andMonthEqualTo(measure.getMonth()).andWeekEqualTo(measure.getWeek())
+            .andDayEqualTo(measure.getDay()).andHourEqualTo(measure.getHour())
+            .andEntityIDEqualTo(measure.getEntityID()).andIdKpiEqualTo(measure.getIdKpi());
+
             final Measure oldMeasure =
                     CollectionUtil.singleOrNull(measureDao.selectByCriteria(measureCriteria));
             if (oldMeasure != null) {
                 measure = oldMeasure;
             }
-            
+
             // Simply refresh the value.
             measure.setDateTime(new DateTime());
             measure.setValue(kpiLineValue.getValue().doubleValue());
@@ -114,8 +114,8 @@ public class MeasureStorageService implements IMeasureStorageService
             } else {
                 measureDao.updateByPrimaryKey(measure);
             }
-            
+
         }
     }
-    
+
 }
