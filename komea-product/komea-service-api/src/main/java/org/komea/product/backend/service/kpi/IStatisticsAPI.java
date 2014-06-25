@@ -8,7 +8,6 @@ package org.komea.product.backend.service.kpi;
 
 import org.joda.time.DateTime;
 import org.joda.time.Period;
-import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.product.backend.service.history.HistoryKey;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.KpiResult;
@@ -26,16 +25,8 @@ import org.komea.product.service.dto.EntityKey;
  */
 public interface IStatisticsAPI
 {
-    
-    
-    /**
-     * Force backup of kpi measures according the given delay.
-     *
-     * @param _delay
-     */
-    void backupKpiValuesIntoHistory(BackupDelay _delay);
-    
-    
+
+
     /**
      * This method builds a time serie from the history given a list of options.
      * Basically the purpose of a time serie is to build charts. A time serie is
@@ -48,8 +39,8 @@ public interface IStatisticsAPI
      * @return the coordinates of the time serie
      */
     TimeSerie buildGlobalPeriodTimeSeries(PeriodTimeSerieOptions _timeSerieOptions);
-    
-    
+
+
     /**
      * Builsd period time and series
      *
@@ -58,8 +49,8 @@ public interface IStatisticsAPI
      * @return the coordinates
      */
     TimeSerie buildPeriodTimeSeries(PeriodTimeSerieOptions _timeSerieOptions, EntityKey _entityKey);
-    
-    
+
+
     /**
      * Builds period time and series
      *
@@ -68,11 +59,11 @@ public interface IStatisticsAPI
      * @return the coordinates
      */
     TimeSerie buildTimeSeries(TimeSerieOptions _timeSerieOptions, EntityKey _entityKey);
-    
-    
+
+
     int deleteMesuresOfEntity(IEntity _entity);
-    
-    
+
+
     /**
      * Returns the value represented by the kpi goal.
      *
@@ -81,11 +72,11 @@ public interface IStatisticsAPI
      * @return the value.
      */
     Double evaluateKpiGoalValue(KpiGoal _kpiGoal);
-    
-    
+
+
     /**
      * Returns the last value on the given time scale.
-     * 
+     *
      * @param _kpi
      *            the kpi
      * @param _timeScale
@@ -93,8 +84,8 @@ public interface IStatisticsAPI
      * @return the
      */
     KpiResult evaluateKpiLastValue(Kpi _kpi, TimeScale _timeScale);
-    
-    
+
+
     /**
      * Returns a value computed from kpi history given a formula. The formula
      * must provides the TimeScale and the formula used. It computes a value
@@ -102,8 +93,8 @@ public interface IStatisticsAPI
      * result is computed for an unique entity.
      */
     Double evaluateKpiValue(TimeSerieOptions _options, EntityKey _entityKey);
-    
-    
+
+
     /**
      * Returns a value computed from kpi history given a formula. The formula
      * must provides the TimeScale and the formula used. It computes a value
@@ -111,8 +102,8 @@ public interface IStatisticsAPI
      * result is computed for an unique entity.
      */
     Double evaluateKpiValueOnPeriod(PeriodTimeSerieOptions _options, EntityKey _entityKey);
-    
-    
+
+
     /**
      * Returns a value computed from kpi history given a formula. The formula
      * must provides the TimeScale and the formula used. It computes a value
@@ -120,8 +111,8 @@ public interface IStatisticsAPI
      * result is computed for an unique entity.
      */
     KpiResult evaluateKpiValues(TimeSerieOptions _options);
-    
-    
+
+
     /**
      * Returns a value computed from kpi history given a formula. The formula
      * must provides the TimeScale and the formula used. It computes a value
@@ -129,8 +120,8 @@ public interface IStatisticsAPI
      * result is computed for an unique entity.
      */
     KpiResult evaluateKpiValuesOnPeriod(PeriodTimeSerieOptions _options);
-    
-    
+
+
     /**
      * Returns the remaining effort to spent to achieve the goal. This result is
      * a percentage difference.
@@ -140,8 +131,8 @@ public interface IStatisticsAPI
      * @return the remaining effort.
      */
     Double getRemainingEffort(KpiGoal _kpiGoal);
-    
-    
+
+
     /**
      * Returns the remaining time
      *
@@ -150,8 +141,8 @@ public interface IStatisticsAPI
      * @return the remaining time before the goal exhaustion.
      */
     Period getRemainingTime(KpiGoal _kpiGoal);
-    
-    
+
+
     /**
      * Returns the last value.
      *
@@ -159,8 +150,8 @@ public interface IStatisticsAPI
      * @return the last value known in the history for this entity.
      */
     Double returnsTheLastValue(HistoryKey _lastKey);
-    
-    
+
+
     /**
      * Stores a value into the history
      *
@@ -170,8 +161,8 @@ public interface IStatisticsAPI
      *            the value to store
      */
     void storeValueInHistory(HistoryKey _kpiKey, Double _value);
-    
-    
+
+
     /**
      * Stores a value in history with the given date.
      *

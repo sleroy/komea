@@ -27,18 +27,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class KpiQueryRegisterService implements IKpiQueryRegisterService
 {
-    
-    
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger("kpi-query-register");
-    
+
     @Autowired
     private IEventEngineService esperEngine;
-    
+
     @Autowired
     private ISpringService      springService;
-    
-    
-    
+
+
+
     /*
      * (non-Javadoc)
      * @see
@@ -47,23 +47,25 @@ public class KpiQueryRegisterService implements IKpiQueryRegisterService
      */
     @Override
     public void registerQuery(@NotNull
-    final Kpi _kpi, final IQuery queryImplementation) {
-    
-    
+            final Kpi _kpi, final IQuery queryImplementation) {
+
+
         Validate.notNull(_kpi);
         Validate.notNull(queryImplementation);
         Validate.notEmpty(_kpi.getEsperRequest());
-        
+
         if (esperEngine.existQuery(FormulaID.of(_kpi))) {
             LOGGER.debug("KPI {} reuses the query {}.", _kpi.getEsperRequest());
             return;
         }
         LOGGER.debug("KPI {} provides a dynamic data query {}.", _kpi, queryImplementation);
         springService.autowirePojo(queryImplementation);
-        
+
         LOGGER.debug("KPI {} provides an event query {}.", _kpi, queryImplementation);
         esperEngine.createOrUpdateQuery(new QueryInformations(_kpi.getEsperRequest(),
                 queryImplementation));
-        
+
     }
+    
+    
 }

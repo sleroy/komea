@@ -12,6 +12,7 @@ import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IGroovyEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
+import org.komea.product.backend.api.IKpiRefreshingScheduler;
 import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IEntityService;
@@ -53,6 +54,10 @@ public class QueryService implements IQueryService
     private IKpiQueryRegisterService kpiQueryRegisterService;
 
     @Autowired
+    private IKpiRefreshingScheduler   kpiScheduler;
+
+
+    @Autowired
     private IKPIService              kpiService;
 
 
@@ -74,6 +79,7 @@ public class QueryService implements IQueryService
                     _kpi.getKpiKey());
             queryImplementation = new StubQuery();
         }
+        kpiScheduler.submitKpiRefresh(_kpi, queryImplementation.getBackupDelay());
         kpiQueryRegisterService.registerQuery(_kpi, queryImplementation);
 
     }
@@ -111,7 +117,7 @@ public class QueryService implements IQueryService
             result.hasFailed(e);
         }
         return new InferMissingEntityValuesIntoKpiResult(result, _kpi, entityService)
-                .inferEntityKeys();
+        .inferEntityKeys();
     }
 
 
@@ -172,6 +178,7 @@ public class QueryService implements IQueryService
     public void removeQuery(final Kpi _kpi) {
 
 
+        kpiScheduler.deleteCron(_kpi);
         esperEngine.removeQuery(FormulaID.of(_kpi));
 
     }
@@ -193,5 +200,4 @@ public class QueryService implements IQueryService
         LOGGER.debug("Result of the query is {}", result);
         return result;
     }
-
 }

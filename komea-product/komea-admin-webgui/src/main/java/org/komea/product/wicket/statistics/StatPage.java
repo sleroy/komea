@@ -14,10 +14,12 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.komea.eventory.api.cache.BackupDelay;
+import org.komea.product.backend.api.IKpiRefreshingScheduler;
 import org.komea.product.backend.service.esper.IEventStatisticsService;
+import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.database.enums.Severity;
+import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Measure;
 import org.komea.product.service.dto.EventTypeStatistic;
 import org.komea.product.wicket.StatelessLayoutPage;
@@ -43,7 +45,7 @@ import com.googlecode.wickedcharts.wicket6.highcharts.Chart;
 
 /**
  * Person admin page
- * 
+ *
  * @author sleroy
  */
 public class StatPage extends StatelessLayoutPage
@@ -79,11 +81,9 @@ public class StatPage extends StatelessLayoutPage
         
         
             LOGGER.info("Backup KPI values into the history");
-            
-            statisticsAPI.backupKpiValuesIntoHistory(BackupDelay.HOUR);
-            statisticsAPI.backupKpiValuesIntoHistory(BackupDelay.DAY);
-            statisticsAPI.backupKpiValuesIntoHistory(BackupDelay.WEEK);
-            statisticsAPI.backupKpiValuesIntoHistory(BackupDelay.MONTH);
+            for (final Kpi kpi : kpiService.selectAll()) {
+                kpiRefreshingScheduler.triggerKpiCron(kpi);
+            }
             
             _target.getPage().setResponsePage(StatPage.class);
             
@@ -119,18 +119,24 @@ public class StatPage extends StatelessLayoutPage
     
     
     @SpringBean
+    private IKpiRefreshingScheduler  kpiRefreshingScheduler;
+    
+    @SpringBean
+    private IKPIService             kpiService;
+    
+    @SpringBean
     private IStatisticsAPI          statisticsAPI;
     
     @SpringBean
     private IEventStatisticsService statService;
-    
-    
-    
+
+
+
     public StatPage(final PageParameters _parameters) {
     
     
         super(_parameters);
-                
+
         add(new Label("alert_number", new LoadableDetachableModelExtension()));
         generateLabelForAlertsWithCriticity(Severity.BLOCKER);
         generateLabelForAlertsWithCriticity(Severity.CRITICAL);
