@@ -19,7 +19,7 @@ public class CollectionUtil
     
     /**
      * Iterate on a container and apply a treatment/ function.
-     * 
+     *
      * @param _iterableContainer
      * @param _treatment
      */
@@ -38,7 +38,7 @@ public class CollectionUtil
     
     /**
      * Filter a list of elements
-     * 
+     *
      * @param _dataFilter
      * @return
      */
@@ -59,8 +59,26 @@ public class CollectionUtil
     
     
     /**
+     * Returns the first element of a criteria.
+     *
+     * @param _listOfItems
+     *            the list of items.
+     */
+    public static <T> T firstElement(final List<T> _listOfItems) {
+    
+    
+        Validate.notNull(_listOfItems);
+        if (_listOfItems.isEmpty()) {
+            return null;
+        }
+        return _listOfItems.get(0);
+
+    }
+    
+    
+    /**
      * Iterate on a container and apply a treatment/ function.
-     * 
+     *
      * @param _iterableContainer
      * @param _treatment
      */
@@ -78,7 +96,7 @@ public class CollectionUtil
     
     /**
      * Returns the first element of a list of only one elemnt or null.
-     * 
+     *
      * @param _elements
      *            the list
      * @return the unique element or null or an exception if the list contains more than one value

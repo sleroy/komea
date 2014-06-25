@@ -1,12 +1,15 @@
 /**
  *
  */
+
 package org.komea.product.backend.service.olap;
 
-import com.google.common.collect.Lists;
+
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
+
 import org.apache.commons.lang3.Validate;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
@@ -21,6 +24,7 @@ import org.komea.product.backend.service.kpi.FormulaID;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.backend.service.kpi.TimeSerie;
+import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.dto.KpiResult;
@@ -30,7 +34,6 @@ import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.KpiGoal;
 import org.komea.product.database.model.Measure;
 import org.komea.product.database.model.MeasureCriteria;
-import org.komea.product.database.utils.MeasureUtils;
 import org.komea.product.model.timeserie.EntityIdValue;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.TimeScale;
@@ -43,38 +46,42 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+
+
+
 /**
  * @author sleroy
  */
 @Service
 @Transactional
-public class StatisticsService implements IStatisticsAPI {
-
+public class StatisticsService implements IStatisticsAPI
+{
+    
+    
     private static final Logger LOGGER = LoggerFactory.getLogger("statistics-service");
-
+    
     @Autowired
     private IEventEngineService engineService;
-
+    
     @Autowired
-    private IKPIService kpiService;
-
+    private IKpiMathService     kpiMathService;
+    
     @Autowired
-    private IKpiMathService kpiMathService;
-
+    private IQueryService       kpiQueryService;
+    
     @Autowired
-    private IQueryService kpiQueryService;
-
+    private IKPIService         kpiService;
+    
     @Autowired
-    private MeasureDao measureDao;
-
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IKpiQueryService#
-     * backupKpiValuesIntoHistory()
-     */
+    private MeasureDao          measureDao;
+    
+    
+    
     @Override
     public void backupKpiValuesIntoHistory(final BackupDelay _backupDelay) {
-
+    
+    
         LOGGER.debug("Backup all kpis into the history...");
         for (final Kpi kpi : kpiService.selectByCriteriaWithBLOBs(new KpiCriteria())) {
             final FormulaID of = FormulaID.of(kpi);
@@ -85,67 +92,58 @@ public class StatisticsService implements IStatisticsAPI {
                         kpi.getKpiKey(), of, Arrays.toString(engineService.getQueryNames()));
                 continue;
             }
-
+            
             if (_backupDelay.equals(query.getBackupDelay())) {
                 LOGGER.debug("Kpi {} is backuping...", kpi.getKey());
-                storeActualValueInHistory(HistoryKey.of(kpi));
+                storeActualValueInHistory(kpi.getId(), _backupDelay);
             }
             LOGGER.debug("Kpi {} backup finished", kpi.getKey());
-
+            
         }
         LOGGER.debug("Backup finished for all kpis");
-
+        
     }
-
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#
-     * buildGlobalPeriodTimeSeries(org.komea.product.database.dao.timeserie.
-     * PeriodTimeSerieOptions)
-     */
+    
+    
     @Cacheable("buildGlobalPeriodTimeSeries")
     @Override
     public TimeSerie buildGlobalPeriodTimeSeries(final PeriodTimeSerieOptions _timeSerieOptions) {
-
+    
+    
         Validate.notNull(_timeSerieOptions);
         Validate.isTrue(_timeSerieOptions.isValid());
         LOGGER.debug("buildGlobalPeriodTimeSeries : {}", _timeSerieOptions);
-
+        
         final PeriodTimeSerieOptions options = generateFormulaID(_timeSerieOptions);
         return new TimeSerieImpl(measureDao.buildGlobalPeriodTimeSeries(options));
     }
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IStatisticsAPI#buildPeriodTimeSeries
-     * (org.komea.product.database.dao.timeserie. PeriodTimeSerieOptions,
-     * org.komea.product.service.dto.EntityKey)
-     */
+    
+    
     @Cacheable("buildPeriodTimeSeries")
     @Override
-    public TimeSerie buildPeriodTimeSeries(final PeriodTimeSerieOptions _timeSerieOptions, final EntityKey _entityKey) {
-
+    public TimeSerie buildPeriodTimeSeries(
+            final PeriodTimeSerieOptions _timeSerieOptions,
+            final EntityKey _entityKey) {
+    
+    
         Validate.notNull(_timeSerieOptions);
         Validate.notNull(_entityKey);
         Validate.isTrue(_entityKey.isEntityReferenceKey());
         Validate.isTrue(_timeSerieOptions.isValid());
         LOGGER.debug("buildPeriodTimeSeries : {}", _timeSerieOptions, _entityKey);
         final PeriodTimeSerieOptions serieOptions = generateFormulaID(_timeSerieOptions);
-        return new TimeSerieImpl(measureDao.buildPeriodTimeSeries(serieOptions, _entityKey), _entityKey);
+        return new TimeSerieImpl(measureDao.buildPeriodTimeSeries(serieOptions, _entityKey),
+                _entityKey);
     }
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IStatisticsAPI#buildTimeSeries(
-     * org.komea.product.database.dao.timeserie.TimeSerieOptions,
-     * org.komea.product.service.dto.EntityKey)
-     */
+    
+    
     @Cacheable("buildTimeSeries")
     @Override
-    public TimeSerie buildTimeSeries(final TimeSerieOptions _timeSerieOptions, final EntityKey _entityKey) {
-
+    public TimeSerie buildTimeSeries(
+            final TimeSerieOptions _timeSerieOptions,
+            final EntityKey _entityKey) {
+    
+    
         Validate.notNull(_timeSerieOptions);
         Validate.notNull(_entityKey);
         Validate.isTrue(_entityKey.isEntityReferenceKey());
@@ -154,9 +152,12 @@ public class StatisticsService implements IStatisticsAPI {
         final TimeSerieOptions options = generateFormulaID(_timeSerieOptions);
         return new TimeSerieImpl(measureDao.buildTimeSeries(options, _entityKey), _entityKey);
     }
-
+    
+    
     @Override
     public int deleteMesuresOfEntity(final IEntity _entity) {
+    
+    
         final List<Kpi> kpis = kpiService.getAllKpisOfEntityType(_entity.entityType());
         final List<String> formulaIds = Lists.newArrayList();
         for (final Kpi kpi : kpis) {
@@ -166,51 +167,41 @@ public class StatisticsService implements IStatisticsAPI {
         measureCriteria.createCriteria().andEntityIDEqualTo(_entity.getId()).andIdKpiIn(formulaIds);
         return measureDao.deleteByCriteria(measureCriteria);
     }
-
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#getKpiGoalValue(org.komea.product.database.model.KpiGoal)
-     */
+    
+    
     @Override
     public Double evaluateKpiGoalValue(final KpiGoal _kpiGoal) {
-
+    
+    
         final Kpi kpiPerId = kpiService.selectByPrimaryKeyOrFail(_kpiGoal.getIdKpi());
         final TimeScale timeScale = TimeScale.valueOf(_kpiGoal.getFrequency());
-
-        final KpiResult valuesOnPeriod = evaluateKpiLastValue(kpiPerId, timeScale);
-        return valuesOnPeriod.computeUniqueValue(kpiPerId.getGroupFormula());
-
+        return evaluateKpiLastValue(kpiPerId, timeScale).getDoubleValue(
+                EntityKey.of(kpiPerId.getEntityType(), _kpiGoal.getEntityID()));
+        
     }
-
-    /**
-     * Evaluate the last kpi value since a time scale.
-     *
-     * @param _kpiPerId the kpi
-     * @param _timeScale the time scale
-     * @return the kpi result.
-     */
-    @Override
-    public KpiResult evaluateKpiLastValue(final Kpi _kpiPerId, final TimeScale _timeScale) {
-
-        final PeriodTimeSerieOptions periodTimeSerieOptions = new PeriodTimeSerieOptions();
-        periodTimeSerieOptions.untilNow();
-        periodTimeSerieOptions.setKpi(_kpiPerId);
-        periodTimeSerieOptions.fromLastTimeScale(_timeScale);
-        periodTimeSerieOptions.setTimeScale(_timeScale);
-        return evaluateKpiValuesOnPeriod(generateFormulaID(periodTimeSerieOptions));
-    }
-
+    
+    
     /*
      * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IStatisticsAPI#getKpiValues(org
-     * .komea.product.database.dao.timeserie.TimeSerieOptions,
-     * org.komea.product.service.dto.EntityKey)
+     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#evaluateKpiLastValue(org.komea.product.database.model.Kpi,
+     * org.komea.product.model.timeserie.TimeScale)
      */
+    @Override
+    public KpiResult evaluateKpiLastValue(final Kpi _kpi, final TimeScale _timeScale) {
+    
+    
+        final Kpi kpiPerId = kpiService.selectByPrimaryKeyOrFail(_kpi.getId());
+        final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions(kpiPerId);
+        timeSerieOptions.fromLastTimeScale(_timeScale);
+        return evaluateKpiValuesOnPeriod(timeSerieOptions);
+    }
+    
+    
     @Cacheable("evaluateKpiValue")
     @Override
     public Double evaluateKpiValue(final TimeSerieOptions _options, final EntityKey _entityKey) {
-
+    
+    
         Validate.notNull(_options);
         Validate.notNull(_entityKey);
         Validate.isTrue(_entityKey.isEntityReferenceKey());
@@ -218,90 +209,63 @@ public class StatisticsService implements IStatisticsAPI {
         LOGGER.debug("evaluateKpiValue : {}", _options, _entityKey);
         return measureDao.evaluateKpiValue(generateFormulaID(_options), _entityKey);
     }
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IStatisticsAPI#getKpiOnPeriodValues
-     * (org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions ,
-     * org.komea.product.service.dto.EntityKey)
-     */
+    
+    
     @Cacheable("evaluateKpiValueOnPeriod")
     @Override
-    public Double evaluateKpiValueOnPeriod(final PeriodTimeSerieOptions _options, final EntityKey _entityKey) {
-
+    public Double evaluateKpiValueOnPeriod(
+            final PeriodTimeSerieOptions _options,
+            final EntityKey _entityKey) {
+    
+    
         Validate.notNull(_options);
         Validate.notNull(_entityKey);
         Validate.isTrue(_entityKey.isEntityReferenceKey());
         Validate.isTrue(_options.isValid());
-
+        
         final PeriodTimeSerieOptions generateFormulaID = generateFormulaID(_options);
-        final Double evaluateKpiValueOnPeriod = measureDao.evaluateKpiValueOnPeriod(generateFormulaID, _entityKey);
-        LOGGER.debug("evaluateKpiValueOnPeriod : {} ekey {}, return {}", _options, _entityKey, evaluateKpiValueOnPeriod);
+        final Double evaluateKpiValueOnPeriod =
+                measureDao.evaluateKpiValueOnPeriod(generateFormulaID, _entityKey);
+        LOGGER.debug("evaluateKpiValueOnPeriod : {} ekey {}, return {}", _options, _entityKey,
+                evaluateKpiValueOnPeriod);
         return evaluateKpiValueOnPeriod;
     }
-
+    
+    
     @Cacheable("evaluateKpiValues")
     @Override
     public KpiResult evaluateKpiValues(final TimeSerieOptions _options) {
-
+    
+    
         Validate.notNull(_options);
         Validate.isTrue(_options.isValid());
         LOGGER.debug("evaluateKpiValues : {}", _options);
         final Kpi findKpiPerId = kpiService.selectByPrimaryKeyOrFail(_options.getKpiID());
-        return new KpiResult().fill(measureDao.evaluateKpiValues(generateFormulaID(_options)), findKpiPerId.getEntityType());
+        return new KpiResult().fill(measureDao.evaluateKpiValues(generateFormulaID(_options)),
+                findKpiPerId.getEntityType());
     }
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IStatisticsAPI#getKpiOnPeriodValues
-     * (org.komea.product.database.dao.timeserie.PeriodTimeSerieOptions )
-     */
+    
+    
     @Cacheable("evaluateKpiValuesOnPeriod")
     @Override
     public KpiResult evaluateKpiValuesOnPeriod(final PeriodTimeSerieOptions _options) {
-
+    
+    
         Validate.notNull(_options);
         Validate.isTrue(_options.isValid());
         LOGGER.debug("evaluateKpiValuesOnPeriod : {}", _options);
         final Kpi findKpiPerId = kpiService.selectByPrimaryKeyOrFail(_options.getKpiID());
         final PeriodTimeSerieOptions periodTimeSerieOptions = generateFormulaID(_options);
-        final List<EntityIdValue> evaluateKpiValuesOnPeriod = measureDao.evaluateKpiValuesOnPeriod(periodTimeSerieOptions);
+        final List<EntityIdValue> evaluateKpiValuesOnPeriod =
+                measureDao.evaluateKpiValuesOnPeriod(periodTimeSerieOptions);
         return new KpiResult().fill(evaluateKpiValuesOnPeriod, findKpiPerId.getEntityType());
-
+        
     }
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IStatisticsAPI#getTheCurrentKpiValue
-     * (org.komea.product.service.dto.KpiKey)
-     */
-    @Override
-    public Double evaluateTheCurrentKpiValue(final HistoryKey _kpiKeys) {
-
-        Validate.isTrue(_kpiKeys.getEntityKey().isEntityReferenceKey());
-        LOGGER.debug("evaluateTheCurrentKpiValue : {}", _kpiKeys);
-        return evaluateTheCurrentKpiValues(_kpiKeys.getKpiID()).getDoubleValue(_kpiKeys.getEntityKey());
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IStatisticsAPI#getTheCurrentKpiValues
-     * (java.lang.String)
-     */
-    @Override
-    public KpiResult evaluateTheCurrentKpiValues(final Integer _kpiID) {
-
-        LOGGER.debug("evaluateTheCurrentKpiValues : {}", _kpiID);
-        return kpiQueryService.evaluateRealTimeValues(_kpiID);
-    }
-
-    @Override
+    
+    
     public Double getLastButOneStoredValueInHistory(final HistoryKey _key) {
-
+    
+    
         Validate.notNull(_key.hasEntityReference());
         final PeriodTimeSerieOptions periodTimeSerieOptions = new PeriodTimeSerieOptions();
         periodTimeSerieOptions.setTimeScale(TimeScale.PER_DAY);
@@ -311,127 +275,166 @@ public class StatisticsService implements IStatisticsAPI {
         periodTimeSerieOptions.setKpiID(_key.getKpiID());
         return evaluateKpiValueOnPeriod(periodTimeSerieOptions, _key.getEntityKey());
     }
-
+    
+    
     @Override
     public Double getRemainingEffort(final KpiGoal _kpiGoal) {
-
+    
+    
         final double goalValue = _kpiGoal.getValue();
         final double realValue = evaluateKpiGoalValue(_kpiGoal);
         final double remainEffort = 100.0d * ((realValue - goalValue) / (goalValue + 1.0d));
         return remainEffort;
-
+        
     }
-
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#getRemainingTime(org.komea.product.database.model.KpiGoal)
-     */
+    
+    
     @Override
     public Period getRemainingTime(final KpiGoal _kpiGoal) {
-
+    
+    
         Validate.notNull(_kpiGoal);
         if (_kpiGoal.getUntilDate() == null) {
             return new Period();
         }
-
+        
         return new Period(new DateTime(), new DateTime(_kpiGoal.getUntilDate()));
     }
-
-    public void storeActualValueInHistory(final HistoryKey _historyKey) throws KPINotFoundException {
-
-        Validate.notNull(_historyKey);
-        LOGGER.debug("storeActualValueInHistory : {}", _historyKey);
-        final Kpi findKPI = kpiService.selectByPrimaryKeyOrFail(_historyKey.getKpiID());
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.kpi.IStatisticsAPI#returnsTheLastValue(org.komea.product.backend.service.history.HistoryKey)
+     */
+    @Override
+    public Double returnsTheLastValue(final HistoryKey _lastKey) {
+    
+    
+        final MeasureCriteria measureCriteria = new MeasureCriteria();
+        measureCriteria.setOrderByClause("date DESC");
+        measureCriteria.createCriteria().andIdKpiEqualTo(generateKpiFormulaID(_lastKey.getKpiID()))
+                .andEntityIDEqualTo(_lastKey.getEntityKey().getId());
+        final Measure measure =
+                CollectionUtil.firstElement(measureDao.selectByCriteria(measureCriteria));
+        return measure == null ? Double.NaN : measure.getValue();
+    }
+    
+    
+    /**
+     * Stores actual value in history.
+     *
+     * @param _kpiID
+     *            the kpi ID
+     * @param _backupDelay
+     *            the backup delay.
+     * @throws KPINotFoundException
+     */
+    public void storeActualValueInHistory(final Integer _kpiID, final BackupDelay _backupDelay)
+            throws KPINotFoundException {
+    
+    
+        Validate.notNull(_kpiID);
+        LOGGER.debug("storeActualValueInHistory : {}", _kpiID);
+        final Kpi findKPI = kpiService.selectByPrimaryKeyOrFail(_kpiID);
         final KpiResult queryResult = kpiQueryService.evaluateRealTimeValues(findKPI.getKey());// FIXME:/Performance
         Validate.notNull(queryResult);
-        // problem
-        // Store all data
-        final DateTime actualTime = new DateTime();
-        if (_historyKey.hasEntityReference()) {
-            storeASingleEntityValue(_historyKey, findKPI, queryResult, actualTime);
-
-        } else {
-            storeAllValuesOfAKpi(findKPI, queryResult);
+        
+        LOGGER.info("Storing all values[{}] of the kpi {} into the database.", queryResult.size(),
+                findKPI.getKey());
+        for (final Entry<EntityKey, Number> kpiLineValue : queryResult.getMap().entrySet()) {
+            if (kpiLineValue.getValue() == null) {
+                LOGGER.warn("Entity {} has not value for the kpi {}", findKPI);
+                continue;
+            }
+            Validate.notNull(kpiLineValue.getKey());
+            Validate.isTrue(kpiLineValue.getKey().isEntityReferenceKey());
+            
+            HistoryKey.of(findKPI, kpiLineValue.getKey());
+            Measure measure = new Measure();
+            measure.setIdKpi(FormulaID.of(findKPI).getId());
+            new ComputeDateForMeasureRefresh(_backupDelay, measure, "")
+                    .initializeMeasureWithDate(new DateTime());
+            measure.setEntityID(kpiLineValue.getKey().getId());
+            // Find or replace
+            final MeasureCriteria measureCriteria = new MeasureCriteria();
+            measureCriteria.createCriteria().andYearEqualTo(measure.getYear())
+                    .andMonthEqualTo(measure.getMonth()).andWeekEqualTo(measure.getWeek())
+                    .andDayEqualTo(measure.getDay()).andHourEqualTo(measure.getHour())
+                    .andEntityIDEqualTo(measure.getEntityID()).andIdKpiEqualTo(measure.getIdKpi());
+            
+            final Measure oldMeasure =
+                    CollectionUtil.singleOrNull(measureDao.selectByCriteria(measureCriteria));
+            if (oldMeasure != null) {
+                measure = oldMeasure;
+            }
+            
+            // Simply refresh the value.
+            measure.setDateTime(new DateTime());
+            measure.setValue(kpiLineValue.getValue().doubleValue());
+            if (oldMeasure == null) {
+                measureDao.insert(measure);
+            } else {
+                measureDao.updateByPrimaryKey(measure);
+            }
+            
         }
     }
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IStatisticsAPI#storeValueInHistory
-     * (org.komea.product.backend.service.history.HistoryKey, java.lang.Double)
-     */
+    
+    
     @Override
     public void storeValueInHistory(final HistoryKey _kpiKey, final Double _value) {
-
+    
+    
         storeValueInHistory(_kpiKey, _value, new DateTime());
-
+        
     }
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.komea.product.backend.service.kpi.IStatisticsAPI#storeValueInHistory
-     * (org.komea.product.backend.service.history.HistoryKey, java.lang.Double,
-     * org.joda.time.DateTime)
-     */
+    
+    
     @Override
-    public void storeValueInHistory(final HistoryKey _historyKey, final Double _value, final DateTime _actualTime) {
-
+    public void storeValueInHistory(
+            final HistoryKey _historyKey,
+            final Double _value,
+            final DateTime _actualTime) {
+    
+    
         LOGGER.debug("storeValueInHistory : {}", _historyKey, _value, _actualTime);
         Validate.isTrue(_historyKey.hasEntityReference());
         Validate.notNull(_value);
         Validate.notNull(_actualTime);
-
-        final String idFromKpiFormula = generateKpiFormulaID(_historyKey.getKpiID());
-        final Measure measure = Measure.initializeMeasure(idFromKpiFormula, _historyKey.getEntityKey().getId());
-        measure.setValue(_value);
-        MeasureUtils.setMeasureDateTime(measure, _actualTime);
+        
+        final Measure measure = newMeasure(_historyKey, _value);
+        measure.setDateTime(_actualTime);
         measureDao.insert(measure);
-
+        
     }
-
+    
+    
     private <T extends TimeSerieOptions> T generateFormulaID(final T _timeSerieOptions) {
-
+    
+    
         _timeSerieOptions.setUniqueID(generateKpiFormulaID(_timeSerieOptions.getKpiID()));
         return _timeSerieOptions; // FIXME :: Should produce a clone.
     }
-
+    
+    
     private String generateKpiFormulaID(final Integer _kpiID) {
-
+    
+    
         final Kpi find = kpiService.selectByPrimaryKeyOrFail(_kpiID);
         final String idFromKpiFormula = FormulaID.of(find).getId();
         return idFromKpiFormula;
     }
-
-    private void storeAllValuesOfAKpi(final Kpi findKPI, final KpiResult queryResult) {
-
-        LOGGER.info("Storing all values[{}] of the kpi {} into the database.", queryResult.size(), findKPI.getKey());
-        for (final Entry<EntityKey, Number> kpiLineValue : queryResult.getMap().entrySet()) {
-            if (kpiLineValue.getValue() == null) {
-                LOGGER.debug("Entity {} has not value for the kpi {}", findKPI);
-                continue;
-            }
-
-            Validate.notNull(kpiLineValue.getKey());
-            Validate.isTrue(kpiLineValue.getKey().isEntityReferenceKey());
-            final HistoryKey hKey = HistoryKey.of(findKPI, kpiLineValue.getKey());
-            storeValueInHistory(hKey, kpiLineValue.getValue() == null ? null : kpiLineValue.getValue().doubleValue());
-
-        }
+    
+    
+    private Measure newMeasure(final HistoryKey _historyKey, final Double _value) {
+    
+    
+        final String idFromKpiFormula = generateKpiFormulaID(_historyKey.getKpiID());
+        final Measure measure =
+                Measure.initializeMeasure(idFromKpiFormula, _historyKey.getEntityKey().getId());
+        measure.setValue(_value);
+        return measure;
     }
-
-    private void storeASingleEntityValue(final HistoryKey _historyKey, final Kpi findKPI, final KpiResult queryResult,
-            final DateTime actualTime) {
-
-        LOGGER.info("Storing values of the kpi {} into the database for the reference {}", findKPI.getKey(), _historyKey.getEntityKey());
-        Validate.isTrue(_historyKey.getEntityKey().isEntityReferenceKey());
-        if (queryResult.hasKey(_historyKey.getEntityKey())) {
-            final Double value = queryResult.getDoubleValue(_historyKey.getEntityKey());
-            if (value != null) {
-                storeValueInHistory(_historyKey, value, actualTime);
-            }
-        }
-    }
-
+    
+    
 }

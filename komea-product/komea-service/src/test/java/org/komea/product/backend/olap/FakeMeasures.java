@@ -12,7 +12,6 @@ import java.util.Random;
 import org.joda.time.DateTime;
 import org.komea.product.backend.service.kpi.FormulaID;
 import org.komea.product.database.model.Measure;
-import org.komea.product.database.utils.MeasureUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
@@ -28,7 +27,7 @@ public class FakeMeasures
     
     /**
      * Generates jenkins event / every hour
-     * 
+     *
      * @param _numberOfProjects
      * @return
      */
@@ -59,7 +58,7 @@ public class FakeMeasures
     
     /**
      * Generates jenkins event / every hour
-     * 
+     *
      * @param _numberOfProjects
      * @return
      */
@@ -94,7 +93,7 @@ public class FakeMeasures
     
     
         final Measure measure = new Measure();
-        MeasureUtils.setMeasureDateTime(measure, _from);
+        measure.setDateTime(_from);
         measure.setValue(_d);
         measure.setEntityID(_idProject);
         measure.setIdKpi(_idKpi);

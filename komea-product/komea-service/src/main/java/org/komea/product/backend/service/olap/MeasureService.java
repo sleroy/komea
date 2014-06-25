@@ -62,7 +62,7 @@ public class MeasureService implements IMeasureService
         Validate.notNull(kpi);
         Validate.notNull(entity);
         final HistoryKey historyKey = HistoryKey.of(kpi, entity);
-        final Double currentKpiValue = statService.evaluateTheCurrentKpiValue(historyKey);
+        final Double currentKpiValue = statService.returnsTheLastValue(historyKey);
         LOGGER.debug("return statService.evaluateTheCurrentKpiValue({})={}", historyKey,
                 currentKpiValue);
         return currentKpiValue;

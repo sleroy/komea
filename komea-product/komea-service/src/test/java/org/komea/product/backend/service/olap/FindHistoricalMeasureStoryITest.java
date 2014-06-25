@@ -34,43 +34,43 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 @DatabaseTearDown(value = "measures.xml", type = DatabaseOperation.DELETE_ALL)
 public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegrationTest
 {
-    
-    
+
+
     @Autowired
     private IKpiLoadingService kpiLoading;
-    
+
     @Autowired
     private IKPIService        kpiService;
-    
+
     @Autowired
     private IMeasureService    measureService;
-    
-    
-    
+
+
+
     @Test
     @DatabaseSetup("measures.xml")
     public void getKpiId() {
-    
-    
+
+
         final Kpi kpi = kpiService.selectByPrimaryKey(2);
         System.out.println(FormulaID.of(kpi).getId());
-        
+
     }
-    
-    
+
+
     @Before
     public void setpUp() {
-    
-    
+
+
         kpiLoading.initLoadingService();
     }
-    
-    
+
+
     @Test
     @DatabaseSetup("measures.xml")
     public void test__only_one_get_historic_with_end_date_before_first_value() {
-    
-    
+
+
         // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((1/05/2014)
@@ -84,20 +84,20 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         period.setToPeriod(new DateTime(2014, 1, 1, 0, 0));
         period.pickBestGranularity();
         period.setGroupFormula(GroupFormula.AVG_VALUE);
-        
+
         final TimeSerieDTO measure = measureService.findHistoricalMeasure(kpiKey, period);
-        
+
         // THEN the measure must have only no values
         final List<TimeCoordinateDTO> historicalValues = measure.getCoordinates();
         Assert.assertEquals(0, historicalValues.size());
     }
-    
-    
+
+
     @Test
     @DatabaseSetup("measures.xml")
     public void test__only_one_get_historic_with_start_date_after_first_value() {
-    
-    
+
+
         // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((1/05/2014)
@@ -111,22 +111,22 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         period.setToPeriod(new DateTime());
         period.pickBestGranularity();
         period.setGroupFormula(GroupFormula.AVG_VALUE);
-        
+
         final TimeSerieDTO measure = measureService.findHistoricalMeasure(kpiKey, period);
-        
+
         // THEN the measure must have only one values
         final List<TimeCoordinateDTO> historicalValues = measure.getCoordinates();
         Assert.assertEquals(1, historicalValues.size());
         // the first value must be 60%
         Assert.assertEquals(60, historicalValues.get(0).getValue(), 0.001);
     }
-    
-    
+
+
     @Test(expected = IllegalArgumentException.class)
     @DatabaseSetup("measures.xml")
     public void test__only_one_get_historic_with_start_date_sup_end_date() {
-    
-    
+
+
         // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((1/05/2014)
@@ -140,20 +140,20 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         period.setToPeriod(new DateTime(2014, 4, 1, 0, 0, 0));
         period.pickBestGranularity();
         period.setGroupFormula(GroupFormula.AVG_VALUE);
-        
+
         measureService.findHistoricalMeasure(kpiKey, period);
-        
+
         // THEN the measure list must be empty
         // final List<TimeCoordinateDTO> historicalValues = measure.getCoordinates();
         // Assert.assertEquals(0, historicalValues.size());
     }
-    
-    
+
+
     @Test
     @DatabaseSetup("measures.xml")
     public void test_get_historic_measures() {
-    
-    
+
+
         // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((1/05/2014)
@@ -167,9 +167,9 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         period.setToPeriod(new DateTime());
         period.pickBestGranularity();
         period.setGroupFormula(GroupFormula.AVG_VALUE);
-        
+
         final TimeSerieDTO measure = measureService.findHistoricalMeasure(kpiKey, period);
-        
+
         // THEN the measure must have two values
         final List<TimeCoordinateDTO> historicalValues = measure.getCoordinates();
         Assert.assertEquals(2, historicalValues.size());
@@ -178,16 +178,16 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         // the second value must be 60%
         Assert.assertEquals(60, historicalValues.get(1).getValue(), 0.001);
         // TODO:: String id = FormulaID.of("1").getId();
-        
+
     }
-    
-    
+
+
     @Test
     @DatabaseSetup("measures2.xml")
     @DatabaseTearDown(value = "measures2.xml", type = DatabaseOperation.DELETE_ALL)
     public void test_get_historic_measures_with_average() {
-    
-    
+
+
         // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((14/05/2014)
@@ -202,9 +202,9 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         period.setToPeriod(new DateTime());
         period.pickBestGranularity();
         period.setGroupFormula(GroupFormula.AVG_VALUE);
-        
+
         final TimeSerieDTO measure = measureService.findHistoricalMeasure(kpiKey, period);
-        
+
         // THEN the measure must have two values
         final List<TimeCoordinateDTO> historicalValues = measure.getCoordinates();
         Assert.assertEquals(2, historicalValues.size());
@@ -212,15 +212,15 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         Assert.assertEquals(35, historicalValues.get(0).getValue(), 0.001);
         // the second value must be 65% (average between 60 and 70)
         Assert.assertEquals(65, historicalValues.get(1).getValue(), 0.001);
-        
+
     }
-    
-    
+
+
     @Test(expected = KPINotFoundRuntimeException.class)
     @DatabaseSetup("measures.xml")
     public void test_get_historic_not_existing_kpi() {
-    
-    
+
+
         // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((1/05/2014)
@@ -232,18 +232,18 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         period.setToPeriod(new DateTime(2014, 4, 1, 0, 0));
         period.pickBestGranularity();
         period.setGroupFormula(GroupFormula.AVG_VALUE);
-        
+
         measureService.findHistoricalMeasure(kpiKey, period);
-        
+
         // THEN a KPINotFoundRuntimeException must be launched
     }
-    
-    
+
+
     @Test(expected = EntityNotFoundException.class)
     @DatabaseSetup("measures.xml")
     public void test_get_historic_not_existing_Project() {
-    
-    
+
+
         // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((1/05/2014)
@@ -256,18 +256,18 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         period.setToPeriod(new DateTime(2014, 4, 1, 0, 0, 0));
         period.pickBestGranularity();
         period.setGroupFormula(GroupFormula.AVG_VALUE);
-        
+
         measureService.findHistoricalMeasure(kpiKey, period);
-        
+
         // THEN a KPINotFoundRuntimeException must be launched
     }
-    
-    
+
+
     @Test(expected = NullPointerException.class)
     @DatabaseSetup("measures.xml")
     public void test_get_historic_with_null_kpiKey() {
-    
-    
+
+
         // GIVEN the database contain the KPI branch_coverage
         // AND the project Komea has two value for this KPI : 35% (5/01/2014)
         // and 60% ((1/05/2014)
@@ -279,12 +279,11 @@ public class FindHistoricalMeasureStoryITest extends AbstractSpringDBunitIntegra
         period.setToPeriod(new DateTime(2014, 4, 1, 0, 0, 0));
         period.pickBestGranularity();
         period.setGroupFormula(GroupFormula.AVG_VALUE);
-        
-        measureService.findHistoricalMeasure(kpiKey, period);
-        
+
+        final TimeSerieDTO measure = measureService.findHistoricalMeasure(kpiKey, period);
+
         // THEN the measure list must be empty
-        // List<HistoricalValue> historicalValues =
-        // measure.getHistoricalValues();
-        // Assert.assertEquals(0, historicalValues.size());
+        final List<TimeCoordinateDTO> historicalValues = measure.getCoordinates();
+        Assert.assertEquals(0, historicalValues.size());
     }
 }
