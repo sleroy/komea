@@ -45,8 +45,7 @@ public class MeasureStorageService implements IMeasureStorageService
 {
     
     
-    private static final Logger LOGGER = LoggerFactory
-                                               .getLogger(MeasureStorageService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MeasureStorageService.class);
     @Autowired
     private IEventEngineService engineService;
     
@@ -61,8 +60,10 @@ public class MeasureStorageService implements IMeasureStorageService
     
     
     
-    /* (non-Javadoc)
-     * @see org.komea.product.backend.service.olap.IMeasureStorageService#storeActualValueInHistory(java.lang.Integer, org.komea.eventory.api.cache.BackupDelay)
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.service.olap.IMeasureStorageService#storeActualValueInHistory(java.lang.Integer,
+     * org.komea.eventory.api.cache.BackupDelay)
      */
     
     @Override
@@ -76,11 +77,11 @@ public class MeasureStorageService implements IMeasureStorageService
         final KpiResult queryResult = kpiQueryService.evaluateRealTimeValues(findKPI.getKey());// FIXME:/Performance
         Validate.notNull(queryResult);
         
-        LOGGER.info("Storing all values[{}] of the kpi {} into the database.", queryResult.size(),
-                findKPI.getKey());
+        LOGGER.info("Storing all values[{}] of the kpi -> '{}' into the database.",
+                queryResult.size(), findKPI.getKey());
         for (final Entry<EntityKey, Number> kpiLineValue : queryResult.getMap().entrySet()) {
             if (kpiLineValue.getValue() == null) {
-                LOGGER.warn("Entity {} has not value for the kpi {}", findKPI);
+                LOGGER.warn("Entity {} has not value for the kpi -> {}", findKPI.getDisplayName());
                 continue;
             }
             Validate.notNull(kpiLineValue.getKey());

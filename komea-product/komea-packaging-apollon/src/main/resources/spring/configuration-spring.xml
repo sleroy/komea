@@ -20,6 +20,5 @@
     <!-- SALT FOR PASSWORDS -->
     <util:properties id="authProperties" location="file:${KOMEA_HOME}/conf/secret.properties">
     </util:properties>
-	<util:properties id="threadProperties" location="classpath:/config/thread.properties">
-	</util:properties>
+
 </beans>
