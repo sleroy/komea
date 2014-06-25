@@ -25,6 +25,7 @@ import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.backend.service.kpi.TimeSerie;
 import org.komea.product.backend.utils.CollectionUtil;
+import org.komea.product.backend.utils.ObjectValidation;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.dto.KpiResult;
@@ -111,7 +112,7 @@ public class StatisticsService implements IStatisticsAPI
     
     
         Validate.notNull(_timeSerieOptions);
-        Validate.isTrue(_timeSerieOptions.isValid());
+        new ObjectValidation().validateObject(_timeSerieOptions);
         LOGGER.debug("buildGlobalPeriodTimeSeries : {}", _timeSerieOptions);
         
         final PeriodTimeSerieOptions options = generateFormulaID(_timeSerieOptions);
@@ -129,7 +130,7 @@ public class StatisticsService implements IStatisticsAPI
         Validate.notNull(_timeSerieOptions);
         Validate.notNull(_entityKey);
         Validate.isTrue(_entityKey.isEntityReferenceKey());
-        Validate.isTrue(_timeSerieOptions.isValid());
+        new ObjectValidation().validateObject(_timeSerieOptions);
         LOGGER.debug("buildPeriodTimeSeries : {}", _timeSerieOptions, _entityKey);
         final PeriodTimeSerieOptions serieOptions = generateFormulaID(_timeSerieOptions);
         return new TimeSerieImpl(measureDao.buildPeriodTimeSeries(serieOptions, _entityKey),
@@ -147,7 +148,7 @@ public class StatisticsService implements IStatisticsAPI
         Validate.notNull(_timeSerieOptions);
         Validate.notNull(_entityKey);
         Validate.isTrue(_entityKey.isEntityReferenceKey());
-        Validate.isTrue(_timeSerieOptions.isValid());
+        new ObjectValidation().validateObject(_timeSerieOptions);
         LOGGER.debug("buildTimeSeries : {}", _timeSerieOptions, _entityKey);
         final TimeSerieOptions options = generateFormulaID(_timeSerieOptions);
         return new TimeSerieImpl(measureDao.buildTimeSeries(options, _entityKey), _entityKey);
@@ -175,8 +176,14 @@ public class StatisticsService implements IStatisticsAPI
     
         final Kpi kpiPerId = kpiService.selectByPrimaryKeyOrFail(_kpiGoal.getIdKpi());
         final TimeScale timeScale = TimeScale.valueOf(_kpiGoal.getFrequency());
-        return evaluateKpiLastValue(kpiPerId, timeScale).getDoubleValue(
-                EntityKey.of(kpiPerId.getEntityType(), _kpiGoal.getEntityID()));
+        final KpiResult kpiLastValue = evaluateKpiLastValue(kpiPerId, timeScale);
+        if (_kpiGoal.isAssociatedToAnEntity()) {
+            return kpiLastValue.getDoubleValue(EntityKey.of(kpiPerId.getEntityType(),
+                    _kpiGoal.getEntityID()));
+        } else {
+            return kpiLastValue.computeUniqueValue(kpiPerId.getGroupFormula());
+        }
+        
         
     }
     
@@ -193,6 +200,7 @@ public class StatisticsService implements IStatisticsAPI
         final Kpi kpiPerId = kpiService.selectByPrimaryKeyOrFail(_kpi.getId());
         final PeriodTimeSerieOptions timeSerieOptions = new PeriodTimeSerieOptions(kpiPerId);
         timeSerieOptions.fromLastTimeScale(_timeScale);
+        timeSerieOptions.untilNow();
         return evaluateKpiValuesOnPeriod(timeSerieOptions);
     }
     
@@ -205,7 +213,7 @@ public class StatisticsService implements IStatisticsAPI
         Validate.notNull(_options);
         Validate.notNull(_entityKey);
         Validate.isTrue(_entityKey.isEntityReferenceKey());
-        Validate.isTrue(_options.isValid());
+        new ObjectValidation().validateObject(_options);
         LOGGER.debug("evaluateKpiValue : {}", _options, _entityKey);
         return measureDao.evaluateKpiValue(generateFormulaID(_options), _entityKey);
     }
@@ -221,7 +229,7 @@ public class StatisticsService implements IStatisticsAPI
         Validate.notNull(_options);
         Validate.notNull(_entityKey);
         Validate.isTrue(_entityKey.isEntityReferenceKey());
-        Validate.isTrue(_options.isValid());
+        new ObjectValidation().validateObject(_options);
         
         final PeriodTimeSerieOptions generateFormulaID = generateFormulaID(_options);
         final Double evaluateKpiValueOnPeriod =
@@ -238,7 +246,7 @@ public class StatisticsService implements IStatisticsAPI
     
     
         Validate.notNull(_options);
-        Validate.isTrue(_options.isValid());
+        new ObjectValidation().validateObject(_options);
         LOGGER.debug("evaluateKpiValues : {}", _options);
         final Kpi findKpiPerId = kpiService.selectByPrimaryKeyOrFail(_options.getKpiID());
         return new KpiResult().fill(measureDao.evaluateKpiValues(generateFormulaID(_options)),
@@ -252,7 +260,7 @@ public class StatisticsService implements IStatisticsAPI
     
     
         Validate.notNull(_options);
-        Validate.isTrue(_options.isValid());
+        new ObjectValidation().validateObject(_options);
         LOGGER.debug("evaluateKpiValuesOnPeriod : {}", _options);
         final Kpi findKpiPerId = kpiService.selectByPrimaryKeyOrFail(_options.getKpiID());
         final PeriodTimeSerieOptions periodTimeSerieOptions = generateFormulaID(_options);
@@ -281,9 +289,9 @@ public class StatisticsService implements IStatisticsAPI
     public Double getRemainingEffort(final KpiGoal _kpiGoal) {
     
     
-        final double goalValue = _kpiGoal.getValue();
-        final double realValue = evaluateKpiGoalValue(_kpiGoal);
-        final double remainEffort = 100.0d * ((realValue - goalValue) / (goalValue + 1.0d));
+        final Double goalValue = _kpiGoal.getValue();
+        final Double realValue = evaluateKpiGoalValue(_kpiGoal);
+        final Double remainEffort = 100.0d * ((realValue - goalValue) / (goalValue + 1.0d));
         return remainEffort;
         
     }

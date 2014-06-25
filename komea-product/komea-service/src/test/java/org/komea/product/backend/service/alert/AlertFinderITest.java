@@ -2,6 +2,7 @@
 package org.komea.product.backend.service.alert;
 
 
+
 import java.util.List;
 
 import org.junit.Assert;
@@ -19,48 +20,60 @@ import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
+
+
 @DatabaseTearDown(value = "alerts.xml", type = DatabaseOperation.DELETE_ALL)
-public class AlertFinderITest extends AbstractSpringDBunitIntegrationTest {
+public class AlertFinderITest extends AbstractSpringDBunitIntegrationTest
+{
+    
     
     @Autowired
     private IAlertFinderService finderService;
-    
+
     @Autowired
     private IKpiLoadingService  kpiLoading;
+    
+    
     
     @Before
     public void setUp() throws Exception {
     
+    
         kpiLoading.initLoadingService();
     }
+    
+    
     //
-    
-    @Test
-    public final void testFindAlerts_with_no_existing_alerts() throws Exception {
-    
-        SearchKpiAlertsDto searchAlert = new SearchKpiAlertsDto();
-        searchAlert.addAlertKey("COVERAGE_BRANCH_TOO_LOW");
-        searchAlert.addEntityKey("KOMEA");
-        searchAlert.setActivatedOnly(true);
-        searchAlert.setExtendedEntityType(ExtendedEntityType.PROJECT);
-        searchAlert.setSeverityMin(Severity.MINOR);
-        List<KpiAlertDto> alerts = finderService.findAlerts(searchAlert);
-        
-        Assert.assertTrue(alerts.isEmpty());
-    }
-    
+
     @Test
     @DatabaseSetup("alerts.xml")
     public final void testFindAlerts_with_existing_alerts() throws Exception {
     
-        SearchKpiAlertsDto searchAlert = new SearchKpiAlertsDto();
+    
+        final SearchKpiAlertsDto searchAlert = new SearchKpiAlertsDto();
         searchAlert.addAlertKey("COVERAGE_BRANCH_TOO_LOW");
         searchAlert.addEntityKey("KOMEA");
         searchAlert.setActivatedOnly(true);
         searchAlert.setExtendedEntityType(ExtendedEntityType.PROJECT);
         searchAlert.setSeverityMin(Severity.MINOR);
-        List<KpiAlertDto> alerts = finderService.findAlerts(searchAlert);
-        
+        final List<KpiAlertDto> alerts = finderService.findAlerts(searchAlert);
+
+        Assert.assertFalse(alerts.isEmpty());
+    }
+    
+    
+    @Test
+    public final void testFindAlerts_with_no_existing_alerts() throws Exception {
+    
+    
+        final SearchKpiAlertsDto searchAlert = new SearchKpiAlertsDto();
+        searchAlert.addAlertKey("COVERAGE_BRANCH_TOO_LOW");
+        searchAlert.addEntityKey("KOMEA");
+        searchAlert.setActivatedOnly(true);
+        searchAlert.setExtendedEntityType(ExtendedEntityType.PROJECT);
+        searchAlert.setSeverityMin(Severity.MINOR);
+        final List<KpiAlertDto> alerts = finderService.findAlerts(searchAlert);
+
         Assert.assertTrue(alerts.isEmpty());
     }
 }
