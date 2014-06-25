@@ -2,11 +2,9 @@ package org.komea.product.web.rest.api;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.komea.product.backend.service.kpi.IMeasureService;
-import org.komea.product.model.timeserie.dto.TimeCoordinateDTO;
 import org.komea.product.model.timeserie.dto.TimeSerieDTO;
 import org.komea.product.service.dto.KpiKey;
 import org.komea.product.service.dto.ManyHistoricalMeasureRequest;
@@ -34,8 +32,8 @@ public class MeasuresController {
     @ResponseBody
     public List<TimeSerieDTO> findHistoricalMeasure(@RequestBody final ManyHistoricalMeasureRequest _request) {
 
-        final List<TimeSerieDTO> timeSerieDTOs = measureService.findMultipleHistoricalMeasure(_request.getKpiKeyList(),
-                _request.getPeriod());
+        final List<TimeSerieDTO> timeSerieDTOs = measureService.findMultipleHistoricalMeasure(
+                _request.getKpiKeyList(), _request.getPeriod());
         LOGGER.debug("findHistoricalMeasure with params : {}\nResults : {}", _request, timeSerieDTOs);
         return timeSerieDTOs;
     }
@@ -45,21 +43,7 @@ public class MeasuresController {
     public List<MeasureResult> averageHistoricalMeasure(@RequestBody final ManyHistoricalMeasureRequest _request) {
         final List<TimeSerieDTO> timeSerieDTOs = measureService.findMultipleHistoricalMeasure(
                 _request.getKpiKeyList(), _request.getPeriod());
-        final List<MeasureResult> measureResults = Lists.newArrayList();
-        final boolean addCurrentValues = _request.getPeriod().getEndDate().after(new Date());
-        for (final TimeSerieDTO timeSerieDTO : timeSerieDTOs) {
-            if (addCurrentValues) {
-                Double value = null;
-                try {
-                    value = measureService.currentMeasure(timeSerieDTO.getKpi(), timeSerieDTO.getEntity());
-                } catch (Exception ex) {
-                    LOGGER.error(ex.getMessage(), ex);
-                }
-                timeSerieDTO.addCoordinate(new TimeCoordinateDTO(new Date(), value));
-            }
-            measureResults.add(timeSerieDTO.toMeasureResult());
-        }
-        return measureResults;
+        return TimeSerieDTO.timeSeriesToMeasureResults(timeSerieDTOs);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/averageHistoricEvolution", consumes = "application/json; charset=utf-8", produces = "application/json; charset=utf-8")
