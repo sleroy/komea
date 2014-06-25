@@ -1,51 +1,39 @@
 /**
  *
  */
-
 package org.komea.product.backend.service.olap;
-
-
 
 import org.joda.time.DateTime;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.product.database.model.Measure;
-
-
+import org.komea.product.database.utils.MeasureUtils;
 
 /**
  * @author sleroy
  */
-public class ComputeDateForMeasureRefresh
-{
-    
-    
+public class ComputeDateForMeasureRefresh {
+
     private final BackupDelay backupDelay;
-    private final Measure     measure;
-    private final String      sprint;
-    
-    
-    
+    private final Measure measure;
+    private final String sprint;
+
     public ComputeDateForMeasureRefresh(
             final BackupDelay _backupDelay,
             final Measure _measure,
             final String _sprint) {
-    
-    
+
         backupDelay = _backupDelay;
         measure = _measure;
         sprint = _sprint;
-        
-        
+
     }
-    
-    
+
     public Measure initializeMeasureWithDate(final DateTime _dateTime) {
-    
-    
+
         /**
          * Set default fields
          */
-        measure.setDateTime(_dateTime);
+        MeasureUtils.setMeasureDateTime(measure, _dateTime);
         measure.setSprint(sprint);
 
         /**
@@ -63,8 +51,8 @@ public class ComputeDateForMeasureRefresh
             default:
                 throw new UnsupportedOperationException();
         }
-        
+
         return measure;
     }
-    
+
 }

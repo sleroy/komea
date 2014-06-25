@@ -1,10 +1,7 @@
-
 package org.komea.product.backend.service.alert;
 
-
-
+import com.google.common.collect.Lists;
 import java.util.List;
-
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,43 +22,37 @@ import org.komea.product.database.enums.ValueType;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.database.model.Measure;
+import org.komea.product.database.utils.MeasureUtils;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.collect.Lists;
-
-
-
 @RunWith(MockitoJUnitRunner.class)
-public class AlertFinderTest
-{
-    
-    
+public class AlertFinderTest {
+
     @Mock
-    private IAlertService            alertSerice;
+    private IAlertService alertSerice;
 
     @InjectMocks
     private final AlertFinderService finderSerice = new AlertFinderService();
 
     @Mock
-    private IMeasureService          measureService;
-    
+    private IMeasureService measureService;
+
     @Mock
-    private IStatisticsAPI           statService;                             ;
+    private IStatisticsAPI statService;
+
+    ;
 
 
 
     @Before
     public void setUp() throws Exception {
-    
-    
-    }
-    
-    
-    //
 
+    }
+
+    //
     /**
      * Test method for
      * {@link org.komea.product.backend.service.alert.AlertService#findAlert(org.komea.product.database.enums.EntityType, org.komea.product.database.dto.BaseEntityDto, org.komea.product.database.model.KpiAlertType, java.util.List, java.util.Map)}
@@ -69,15 +60,14 @@ public class AlertFinderTest
      */
     @Test
     public final void testFindAlert() throws Exception {
-    
-    
+
         // GIVEN the kpi COVERAGE_BRANCH
-        final Kpi kpi =
-                KpiBuilder.create().key("COVERAGE_BRANCH").name("Branch coverage")
-                        .description("Give the branch coverage")
-                        .groupFormula(GroupFormula.AVG_VALUE).dynamicQuery(BranchCoverageKPI.class)
-                        .entityType(EntityType.PROJECT).providerType(ProviderType.QUALITY)
-                        .forProject().produceValue(ValueType.FLOAT, ValueDirection.BETTER).build();
+        final Kpi kpi
+                = KpiBuilder.create().key("COVERAGE_BRANCH").name("Branch coverage")
+                .description("Give the branch coverage")
+                .groupFormula(GroupFormula.AVG_VALUE).dynamicQuery(BranchCoverageKPI.class)
+                .entityType(EntityType.PROJECT).providerType(ProviderType.QUALITY)
+                .forProject().produceValue(ValueType.FLOAT, ValueDirection.BETTER).build();
 
         // AND the alert COVERAGE_BRANCH_TOO_LOW
         final KpiAlertType alertType = new KpiAlertType();
@@ -107,7 +97,7 @@ public class AlertFinderTest
         measure.setEntityID(1);
         measure.setValue(36D);
         final DateTime date = new DateTime();
-        measure.setDateTime(date);
+        MeasureUtils.setMeasureDateTime(measure, date);
         measures.add(measure);
 
         // AND the current branch coverage for the komea project is 36
@@ -119,19 +109,17 @@ public class AlertFinderTest
         // THEN an alert is launched because the current branch cooverage is 36 < 60
         org.junit.Assert.assertEquals("the result must be 36D", 36D, alert.getValue(), 0.001);
     }
-    
-    
+
     @Test
     public final void testFindAlert_no_alert() throws Exception {
-    
-    
+
         // GIVEN the kpi COVERAGE_BRANCH
-        final Kpi kpi =
-                KpiBuilder.create().key("COVERAGE_BRANCH").name("Branch coverage")
-                        .description("Give the branch coverage")
-                        .groupFormula(GroupFormula.AVG_VALUE).dynamicQuery(BranchCoverageKPI.class)
-                        .entityType(EntityType.PROJECT).providerType(ProviderType.QUALITY)
-                        .forProject().produceValue(ValueType.FLOAT, ValueDirection.BETTER).build();
+        final Kpi kpi
+                = KpiBuilder.create().key("COVERAGE_BRANCH").name("Branch coverage")
+                .description("Give the branch coverage")
+                .groupFormula(GroupFormula.AVG_VALUE).dynamicQuery(BranchCoverageKPI.class)
+                .entityType(EntityType.PROJECT).providerType(ProviderType.QUALITY)
+                .forProject().produceValue(ValueType.FLOAT, ValueDirection.BETTER).build();
 
         // AND the alert COVERAGE_BRANCH_TOO_LOW
         final KpiAlertType alertType = new KpiAlertType();
