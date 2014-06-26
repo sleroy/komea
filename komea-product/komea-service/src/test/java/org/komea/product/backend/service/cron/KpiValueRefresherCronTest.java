@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.backend.service.cron;
@@ -38,9 +38,7 @@ public class KpiValueRefresherCronTest extends AbstractSpringIntegrationTestCase
     public final void testExecute() throws Exception {
     
     
-        final KpiValueRefresherCron kpiValueRefresherCron = new KpiValueRefresherCron();
-        kpiValueRefresherCron.setKpiService(kpiService);
-        kpiValueRefresherCron.setStatisticsAPI(statisticsAPI);
+        final CronRefreshAndStoreKpiValue kpiValueRefresherCron = new CronRefreshAndStoreKpiValue();
         kpiValueRefresherCron.execute(mock(JobExecutionContext.class));
         
     }

@@ -29,17 +29,19 @@ public class CronRefreshAndStoreKpiValue implements Job
 
     private static final Logger    LOGGER = LoggerFactory
                                                   .getLogger(CronRefreshAndStoreKpiValue.class);
-
+    
+    
     private BackupDelay            backupDelay;
-
+    
+    
     private Kpi                    kpi;
-
-
+    
+    
     @Autowired
     private IMeasureStorageService statisticsAPI;
-
-
-
+    
+    
+    
     /*
      * (non-Javadoc)
      * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
@@ -50,6 +52,81 @@ public class CronRefreshAndStoreKpiValue implements Job
     
         run();
 
+    }
+    
+    
+    /**
+     * Returns the value of the field backupDelay.
+     * 
+     * @return the backupDelay
+     */
+    public BackupDelay getBackupDelay() {
+
+
+        return backupDelay;
+    }
+    
+    
+    /**
+     * Returns the value of the field kpi.
+     * 
+     * @return the kpi
+     */
+    public Kpi getKpi() {
+
+
+        return kpi;
+    }
+
+
+    /**
+     * Returns the value of the field statisticsAPI.
+     *
+     * @return the statisticsAPI
+     */
+    public IMeasureStorageService getStatisticsAPI() {
+    
+    
+        return statisticsAPI;
+    }
+    
+    
+    /**
+     * Sets the field backupDelay with the value of _backupDelay.
+     * 
+     * @param _backupDelay
+     *            the backupDelay to set
+     */
+    public void setBackupDelay(final BackupDelay _backupDelay) {
+
+
+        backupDelay = _backupDelay;
+    }
+
+
+    /**
+     * Sets the field kpi with the value of _kpi.
+     * 
+     * @param _kpi
+     *            the kpi to set
+     */
+    public void setKpi(final Kpi _kpi) {
+
+
+        kpi = _kpi;
+    }
+
+
+    /**
+     * Sets the field statisticsAPI with the value of _statisticsAPI.
+     *
+     * @param _statisticsAPI
+     *            the statisticsAPI to set
+     */
+    public void setStatisticsAPI(final IMeasureStorageService _statisticsAPI) {
+    
+    
+        statisticsAPI = _statisticsAPI;
     }
 
 
