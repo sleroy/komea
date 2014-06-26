@@ -6,32 +6,21 @@
 	<kom_kpi id="1" kpiKey="LINE_COVERAGE" name="Line coverage"
 		description="Line coverage" valueMin="5e-324" valueMax="1.7976931348623157e308"
 		valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-		esperRequest="package org.komea.product.backend.service.kpi;
-import org.komea.eventory.query.CEPQuery;
-import org.komea.eventory.query.CEPQueryImplementation;
-
-public class Gni extends StubQuery {
-
-	public Gni() {
-		super();
-
-	}
-}
-"
+		esperRequest="new StubQuery();"
 		cronExpression="0 0 0 /1 * ? *" providerType="QUALITY" groupFormula="AVG_VALUE"/>
 
 	<kom_kpi id="2" kpiKey="BRANCH_COVERAGE(%)" name="Branch coverage(%)"
 		description="Branch coverage(%)" valueMin="5e-324" valueMax="1.7976931348623157e308"
 		valueDirection="BETTER" valueType="INT" entityType="PROJECT"
-		esperRequest="autowired(new org.komea.product.backend.utils.exemples.kpi.BranchCoverageKPI())"
+		esperRequest="new org.komea.product.backend.utils.exemples.kpi.BranchCoverageKPI();"
 		cronExpression="0 0 0 /1 * ? *" providerType="QUALITY" groupFormula="AVG_VALUE"/>
 
 
 
 
-	<kom_msr id="1" idKpi="4f7b9a4f50fd9b1895ea554df177a61e" entityID="4" year="2014" month="1"
+	<kom_msr id="1" idKpi="11d8fc512d126ddd2155059e5d2bb7b3" entityID="4" year="2014" month="1"
 		day="6" week="1" value="35" date="2014-01-06 00:00:00" />
-	<kom_msr id="2" idKpi="4f7b9a4f50fd9b1895ea554df177a61e" entityID="4" year="2014" month="5"
+	<kom_msr id="2" idKpi="11d8fc512d126ddd2155059e5d2bb7b3" entityID="4" year="2014" month="5"
 		day="1" week="19" value="60" date="2014-05-01 00:00:00" />
 	<!-- <kom_msr id="3958" idKpi="2" entityID="5" year="2014" month="1" day="5" 
 		value="22" /> -->

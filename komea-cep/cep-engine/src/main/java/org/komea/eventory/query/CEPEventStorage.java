@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.eventory.query;
@@ -9,9 +9,9 @@ package org.komea.eventory.query;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.Validate;
+import org.komea.eventory.CEPConfiguration;
 import org.komea.eventory.api.cache.ICacheConfiguration;
 import org.komea.eventory.api.cache.ICacheStorage;
-import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.api.engine.ICEPEventStorage;
 import org.komea.eventory.api.filters.IEventFilter;
 import org.komea.eventory.api.filters.IEventTransformer;
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class defines a storage to store event previously filtered.
- * 
+ *
  * @author sleroy
  */
 public class CEPEventStorage<T extends Serializable> implements ICEPEventStorage<T>
@@ -44,15 +44,13 @@ public class CEPEventStorage<T extends Serializable> implements ICEPEventStorage
     
     /**
      * Builds a new CEP Event storage.
-     * 
+     *
      * @param _cacheConfiguration
      *            the cache configuration
      * @param _eventFilter
      *            the event filter;
      */
-    public CEPEventStorage(
-            final IFilterDefinition _filterDefinition,
-            final ICacheStorageFactory _cacheStorageFactory) {
+    public CEPEventStorage(final IFilterDefinition _filterDefinition) {
     
     
         super();
@@ -60,13 +58,15 @@ public class CEPEventStorage<T extends Serializable> implements ICEPEventStorage
         Validate.notEmpty(_filterDefinition.getFilterName(), "no filter name");
         Validate.notNull(_filterDefinition.getCacheConfiguration(), "no cache configuration");
         Validate.notNull(_filterDefinition.getFilter(), "no filter");
-        Validate.notNull(_cacheStorageFactory, "Cache storage factory should be provided");
+        
         
         LOGGER = LoggerFactory.getLogger("cepevent-storage-" + _filterDefinition.getFilterName());
         filterName = _filterDefinition.getFilterName();
         cacheConfiguration = _filterDefinition.getCacheConfiguration();
         eventFilter = _filterDefinition.getFilter();
-        storage = _cacheStorageFactory.newCacheStorage(cacheConfiguration);
+        storage =
+                CEPConfiguration.getInstance().getCacheStorageFactory().newCacheStorage(
+                        cacheConfiguration);
         eventTransfomer = _filterDefinition.getEventTransformer();
         
     }

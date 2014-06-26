@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.backend.service.esper;
@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.eventory.api.bridge.IEventBridgeFactory;
-import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.product.backend.service.fs.IKomeaFS;
 import org.komea.product.backend.service.kpi.FormulaID;
@@ -42,18 +41,15 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class EventEngineServiceTest
 {
-    
-    
-    private final ICacheStorageFactory cacheStorageFactory = CEPQueryTester.DEFAULT_CACHE_FACTORY;
-    
-    
-    private final IEventBridgeFactory  eventBridgeFactory  = CEPQueryTester.DEFAULT_BRIDGE_FACTORY;
+
+
+    private final IEventBridgeFactory eventBridgeFactory = CEPQueryTester.DEFAULT_BRIDGE_FACTORY;
     
     
     @InjectMocks
-    private EventEngineService         eventEngineService;
+    private EventEngineService        eventEngineService;
     @Mock
-    private IKomeaFS                   komeaFS;
+    private IKomeaFS                  komeaFS;
     
     
     
@@ -71,8 +67,6 @@ public class EventEngineServiceTest
     
     
         when(komeaFS.getFileSystemFolder(Mockito.anyString())).thenReturn(new File("target"));
-        eventEngineService.setCacheStorageFactory(cacheStorageFactory);
-        eventEngineService.setEventBridgeFactory(eventBridgeFactory);
         
         
         eventEngineService.init();

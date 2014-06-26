@@ -35,6 +35,7 @@
         <!-- Plugin conf -->
         <gpg.skip>true</gpg.skip>
         <javadoc.skip>true</javadoc.skip>
+ 	<sonar.version>2.2</sonar.version>
 
 
         <!-- Versions of artifacts -->
@@ -121,6 +122,12 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
+	<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>2.2</version>
+            </plugin>
+           
 
 	<plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -253,25 +260,6 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.1.201405082137</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
   
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -290,6 +278,39 @@
 
         </plugins>
 
+        <pluginManagement>
+        	<plugins>
+        		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        		<plugin>
+        			<groupId>org.eclipse.m2e</groupId>
+        			<artifactId>lifecycle-mapping</artifactId>
+        			<version>1.0.0</version>
+        			<configuration>
+        				<lifecycleMappingMetadata>
+        					<pluginExecutions>
+        						<pluginExecution>
+        							<pluginExecutionFilter>
+        								<groupId>org.jacoco</groupId>
+        								<artifactId>
+        									jacoco-maven-plugin
+        								</artifactId>
+        								<versionRange>
+        									[0.7.1.201405082137,)
+        								</versionRange>
+        								<goals>
+        									<goal>prepare-agent</goal>
+        								</goals>
+        							</pluginExecutionFilter>
+        							<action>
+        								<ignore></ignore>
+        							</action>
+        						</pluginExecution>
+        					</pluginExecutions>
+        				</lifecycleMappingMetadata>
+        			</configuration>
+        		</plugin>
+        	</plugins>
+        </pluginManagement>
     </build>
 
     <reporting>

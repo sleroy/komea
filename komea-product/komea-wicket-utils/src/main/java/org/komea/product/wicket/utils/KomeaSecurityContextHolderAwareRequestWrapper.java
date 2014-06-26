@@ -42,14 +42,15 @@ import org.springframework.util.Assert;
  * <li>{@link KomeaSecurityContextHolderAwareRequestWrapper#isUserInRole(String)}</li>
  * <li>{@link RequestWrapper#getRemoteUser()}.</li>
  * </ul>
- * 
+ *
  * @see SecurityContextHolderAwareRequestFilter
  * @author Orlando Garcia Carmona
  * @author Ben Alex
  * @author Luke Taylor
  * @author Rob Winch
  */
-public class KomeaSecurityContextHolderAwareRequestWrapper extends ServletRequestWrapper
+public class KomeaSecurityContextHolderAwareRequestWrapper extends ServletRequestWrapper implements
+        IKomeaSecurityController
 {
     
     
@@ -69,7 +70,7 @@ public class KomeaSecurityContextHolderAwareRequestWrapper extends ServletReques
     
     /**
      * Creates a new instance
-     * 
+     *
      * @param request
      *            the original {@link Request}
      * @param trustResolver
@@ -93,7 +94,7 @@ public class KomeaSecurityContextHolderAwareRequestWrapper extends ServletReques
     
     /**
      * Creates a new instance with {@link AuthenticationTrustResolverImpl}.
-     * 
+     *
      * @param request
      * @param rolePrefix
      */
@@ -108,55 +109,76 @@ public class KomeaSecurityContextHolderAwareRequestWrapper extends ServletReques
     
     // ~ Methods ========================================================================================================
     
-    /**
-     * Returns the principal's name, as obtained from the <code>SecurityContextHolder</code>. Properly handles
-     * both <code>String</code>-based and <code>UserDetails</code>-based principals.
-     * 
-     * @return the username or <code>null</code> if unavailable
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.wicket.utils.IKomeaSecurityController#getRemoteUser()
      */
     
+    @Override
     public String getRemoteUser() {
     
     
         final Authentication auth = getAuthentication();
         
-        if (auth == null || auth.getPrincipal() == null) { return null; }
+        if (auth == null || auth.getPrincipal() == null) {
+            return null;
+        }
         
-        if (auth.getPrincipal() instanceof UserDetails) { return ((UserDetails) auth.getPrincipal())
-                .getUsername(); }
+        if (auth.getPrincipal() instanceof UserDetails) {
+            return ((UserDetails) auth.getPrincipal()).getUsername();
+        }
         
         return auth.getPrincipal().toString();
     }
     
     
-    /**
-     * Returns the <code>Authentication</code> (which is a subclass of <code>Principal</code>), or <code>null</code> if unavailable.
-     * 
-     * @return the <code>Authentication</code>, or <code>null</code>
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.wicket.utils.IKomeaSecurityController#getUserDetails()
+     */
+    @Override
+    public UserDetails getUserDetails() {
+    
+    
+        final Authentication auth = getAuthentication();
+        
+        if (auth == null || auth.getPrincipal() == null) {
+            return null;
+        }
+        
+        if (auth.getPrincipal() instanceof UserDetails) {
+            return (UserDetails) auth.getPrincipal();
+        }
+        
+        return null;
+    }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.wicket.utils.IKomeaSecurityController#getUserPrincipal()
      */
     
+    @Override
     public Principal getUserPrincipal() {
     
     
         final Authentication auth = getAuthentication();
         
-        if (auth == null || auth.getPrincipal() == null) { return null; }
+        if (auth == null || auth.getPrincipal() == null) {
+            return null;
+        }
         
         return auth;
     }
     
     
-    /**
-     * Simple searches for an exactly matching {@link org.springframework.security.core.GrantedAuthority#getAuthority()}.
-     * <p>
-     * Will always return <code>false</code> if the <code>SecurityContextHolder</code> contains an <code>Authentication</code> with
-     * <code>null</code><code>principal</code> and/or <code>GrantedAuthority[]</code> objects.
-     * 
-     * @param role
-     *            the <code>GrantedAuthority</code><code>String</code> representation to check for
-     * @return <code>true</code> if an <b>exact</b> (case sensitive) matching granted authority is located, <code>false</code> otherwise
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.wicket.utils.IKomeaSecurityController#isUserInRole(java.lang.String)
      */
     
+    @Override
     public boolean isUserInRole(final String role) {
     
     
@@ -164,6 +186,11 @@ public class KomeaSecurityContextHolderAwareRequestWrapper extends ServletReques
     }
     
     
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.wicket.utils.IKomeaSecurityController#toString()
+     */
+
     @Override
     public String toString() {
     
@@ -174,7 +201,7 @@ public class KomeaSecurityContextHolderAwareRequestWrapper extends ServletReques
     
     /**
      * Obtain the current active <code>Authentication</code>
-     * 
+     *
      * @return the authentication object or <code>null</code>
      */
     private Authentication getAuthentication() {
@@ -182,7 +209,9 @@ public class KomeaSecurityContextHolderAwareRequestWrapper extends ServletReques
     
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         
-        if (!trustResolver.isAnonymous(auth)) { return auth; }
+        if (!trustResolver.isAnonymous(auth)) {
+            return auth;
+        }
         
         return null;
     }
@@ -197,15 +226,21 @@ public class KomeaSecurityContextHolderAwareRequestWrapper extends ServletReques
             role = rolePrefix + role;
         }
         
-        if (auth == null || auth.getPrincipal() == null) { return false; }
+        if (auth == null || auth.getPrincipal() == null) {
+            return false;
+        }
         
         final Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
         
-        if (authorities == null) { return false; }
+        if (authorities == null) {
+            return false;
+        }
         
         
         for (final GrantedAuthority grantedAuthority : authorities) {
-            if (role.equals(grantedAuthority.getAuthority())) { return true; }
+            if (role.equals(grantedAuthority.getAuthority())) {
+                return true;
+            }
         }
         
         return false;

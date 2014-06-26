@@ -20,7 +20,7 @@
 	<description>This project contain the core projects of komea to build the war application. </description>
 
 	<properties>
-		<eventory.version>1.0.61</eventory.version>
+		<eventory.version>1.0.65</eventory.version>
 		<komea.home>target/komea</komea.home>
 	</properties>
 
@@ -56,6 +56,8 @@
 							<ignore>org.komea.product.database.api.*</ignore>
 							<ignore>org.komea.product.database.alert.enums.*</ignore>
 							<ignore>org.komea.product.database.dto.errors.*</ignore>
+							<ignore>org.komea.product.test.spring.*</ignore>
+							
 						</ignores>
 						<excludes>
 							<exclude>org/komea/product/database/dto/**/*.class</exclude>
@@ -65,6 +67,8 @@
 							<exclude>org/komea/product/database/api/**/*.class</exclude>
 							<exclude>org/komea/product/database/alert/enums/**/*.class</exclude>
 							<exclude>org/komea/product/database/dto/errors/**/*.class</exclude>
+							<exclude>org/komea/product/test/spring/**/*.class</exclude>
+							
 						</excludes>
 					</instrumentation>
 
@@ -253,6 +257,8 @@
 		<!-- test -->
 		<module>komea-integration-tests</module>
 
-		
+
+		<module>komea-cyfe-rest-api</module>
+		<module>komea-csv</module>
 	</modules>
 </project>

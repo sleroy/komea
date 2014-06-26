@@ -8,7 +8,6 @@ package org.komea.product.backend.api;
 
 import org.komea.product.wicket.LoginPage;
 import org.komea.product.wicket.UnauthorizedPage;
-import org.komea.product.wicket.adminactions.AdminActionPage;
 import org.komea.product.wicket.alert.AlertEditPage;
 import org.komea.product.wicket.alert.AlertPage;
 import org.komea.product.wicket.console.ConsolePage;
@@ -16,6 +15,7 @@ import org.komea.product.wicket.cronpage.CronPage;
 import org.komea.product.wicket.customer.CustomerEditPage;
 import org.komea.product.wicket.customer.CustomerPage;
 import org.komea.product.wicket.events.EventsPage;
+import org.komea.product.wicket.kpiimport.KpiImportPage;
 import org.komea.product.wicket.kpis.KpiEditPage;
 import org.komea.product.wicket.kpis.KpiPage;
 import org.komea.product.wicket.kpivalues.KpiValuesPage;
@@ -35,7 +35,7 @@ import org.komea.product.wicket.statistics.StatPage;
 
 /**
  * This class defines the web pages of the administration web site
- * 
+ *
  * @author sleroy
  */
 @MountAdminPages({
@@ -62,7 +62,7 @@ import org.komea.product.wicket.statistics.StatPage;
         @MountPage(mount = "/alerts", page = AlertPage.class),
         @MountPage(mount = "/saveAlert", page = AlertEditPage.class),
         @MountPage(mount = "/kpivalues", page = KpiValuesPage.class),
-        @MountPage(mount = "/adminactions", page = AdminActionPage.class) })
+        @MountPage(mount = "/kpiimport", page = KpiImportPage.class) })
 public class AdministrationWebSite
 {
     //

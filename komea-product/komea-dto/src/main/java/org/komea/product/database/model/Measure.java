@@ -12,9 +12,12 @@ public class Measure implements Serializable {
     public static Comparator<Measure> DATE_MEASURE = new Comparator<Measure>() {
 
         @Override
-        public int compare(final Measure _arg0, final Measure _arg1) {
+        public int compare(
+                final Measure _arg0,
+                final Measure _arg1) {
 
-            return _arg0.getDate().compareTo(_arg1.getDate());
+            return _arg0.getDate().compareTo(
+                    _arg1.getDate());
         }
 
     };
@@ -27,11 +30,14 @@ public class Measure implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    public static Measure initializeMeasure(final Kpi _kpi, final Integer _entityID, final Double value) {
+    public static Measure initializeMeasure(
+            final Kpi _kpi,
+            final Integer _entityID,
+            final Double value) {
 
-        final Measure measureKey = Measure.initializeMeasure(_kpi.getEsperRequest(), _entityID);
-        measureKey.setValue(value);
-        return measureKey;
+        final Measure thisKey = Measure.initializeMeasure(_kpi.getEsperRequest(), _entityID);
+        thisKey.setValue(value);
+        return thisKey;
     }
 
     public static Measure initializeMeasure(final String _kpiID, final Integer _entityID) {
@@ -153,8 +159,17 @@ public class Measure implements Serializable {
      *
      * @mbggenerated Sat May 10 14:47:35 CEST 2014
      */
-    public Measure(final Integer id, final String idKpi, final Integer year, final Integer month, final Integer week,
-            final Integer day, final Integer hour, final Integer entityID, final Double value, final Date date,
+    public Measure(
+            final Integer id,
+            final String idKpi,
+            final Integer year,
+            final Integer month,
+            final Integer week,
+            final Integer day,
+            final Integer hour,
+            final Integer entityID,
+            final Double value,
+            final Date date,
             final String sprint) {
 
         this.id = id;
@@ -456,7 +471,7 @@ public class Measure implements Serializable {
         sb.append(", entityID=").append(entityID);
         sb.append(", value=").append(getValue());
         sb.append(", date=").append(date);
-        sb.append(", sprint=").append(sprint);
+        sb.append(", z=").append(sprint);
         sb.append("]");
         return sb.toString();
     }
@@ -467,6 +482,8 @@ public class Measure implements Serializable {
     @JsonIgnore
     private boolean hasMinimalDateReference() {
 
-        return year != null && month != null && week != null && day != null && hour != null && date != null;
+        return year != null
+                && month != null && week != null && day != null && hour != null && date != null;
     }
+
 }

@@ -22,6 +22,7 @@
 	</util:properties>
 
 
+
 	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
 		<property name="cacheManager" ref="ehcache"></property>
 	</bean>

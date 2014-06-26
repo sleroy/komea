@@ -17,7 +17,7 @@ import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.persongroup.PersonGroupDeleteAction;
 import org.komea.product.wicket.utils.CountColumn;
 import org.komea.product.wicket.utils.DialogFactory;
@@ -29,7 +29,7 @@ import org.komea.product.wicket.widget.model.ListDataModel;
 /**
  * @author rgalerme
  */
-public final class DepartmentPage extends LayoutPage {
+public final class DepartmentPage extends StatelessLayoutPage {
 
     @SpringBean
     private IPersonGroupService personGroupService;

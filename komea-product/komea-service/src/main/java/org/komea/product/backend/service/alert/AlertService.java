@@ -21,10 +21,10 @@ public class AlertService implements IAlertService {
      * @return
      */
     @Override
-    public Boolean isAlertActivated(final KpiAlertType alertType, final Number value) {
+    public boolean isAlertActivated(final KpiAlertType alertType, final Number value) {
 
         if (value == null) {
-            return null;
+            return false;
         }
         final int compareTo = Double.compare(value.doubleValue(), alertType.getValue());
         switch (alertType.getOperator()) {

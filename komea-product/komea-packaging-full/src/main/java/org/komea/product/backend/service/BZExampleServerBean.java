@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.backend.service;
@@ -25,9 +25,9 @@ public class BZExampleServerBean
     
     @Autowired
     private IBZConfigurationDAO serverDAO;
-    
-    
-    
+
+
+
     @PostConstruct
     public void init() {
     
@@ -41,6 +41,7 @@ public class BZExampleServerBean
             
             serverDAO.saveOrUpdate(bzServerConfiguration);
         }
+        
         
     }
 }

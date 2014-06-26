@@ -291,7 +291,7 @@ public class JenkinsEventsFactory
         event.setProperties(properties);
         event.setProvider(providerUrl);
         event.setUrl(URL_JENKINS);
-        event.setValue(result.hashCode());
+        event.setValue(0);
         return event;
     }
     
@@ -414,7 +414,7 @@ public class JenkinsEventsFactory
     }
     
     
-    private JenkinsEventsFactory() {
+    public JenkinsEventsFactory() {
     
     
     }

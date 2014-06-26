@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.eventory;
@@ -7,6 +7,7 @@ package org.komea.eventory;
 
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,25 +16,70 @@ import org.komea.eventory.api.bridge.IEventBridgeFactory;
 import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.api.engine.ICEPConfiguration;
 import org.komea.eventory.api.engine.RunningMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
 /**
  * This class defines the CEP Configuration
- * 
+ *
  * @author sleroy
  */
 public class CEPConfiguration implements ICEPConfiguration
 {
+
+
+    private static CEPConfiguration INSTANCE = null;
+    
+    
+    private static final Logger     LOGGER   = LoggerFactory.getLogger(CEPConfiguration.class);
+    
+    
+    
+    public static synchronized CEPConfiguration getInstance() {
+    
+    
+        if (INSTANCE == null) {
+            INSTANCE = loadConfiguration();
+        }
+        return INSTANCE;
+    }
+    
+    
+    /**
+     * @return
+     */
+    private static CEPConfiguration loadConfiguration() {
+
+
+        final CEPConfiguration configuration = new CEPConfiguration();
+        new CEPConfigurationLoader(configuration).load();
+        return configuration;
+    }
+    
     
     
     private IEventBridgeFactory       bridgeFactory;
     private ICacheStorageFactory      cacheStorageFactory;
     private final Map<String, String> extraProperties      = new HashMap<String, String>();
+    
+    
     private RunningMode               mode                 = RunningMode.AGILE;
+    
+    
     private int                       numberQueryListeners = 1;
+    
+    
     private File                      storageFolder;
     
+    
+    
+    public CEPConfiguration() {
+    
+    
+        super();
+    }
     
     
     @Override
@@ -60,7 +106,7 @@ public class CEPConfiguration implements ICEPConfiguration
     public Map<String, String> getExtraProperties() {
     
     
-        return extraProperties;
+        return Collections.unmodifiableMap(extraProperties);
     }
     
     
@@ -97,8 +143,20 @@ public class CEPConfiguration implements ICEPConfiguration
     
     
     /**
+     * @param _string
+     * @param _string2
+     */
+    public void put(final String _string, final String _string2) {
+
+
+        extraProperties.put(_string, _string2);
+        
+    }
+    
+    
+    /**
      * Puts an extra property
-     * 
+     *
      * @param _key
      *            the key
      * @param _value
@@ -146,8 +204,8 @@ public class CEPConfiguration implements ICEPConfiguration
     
         storageFolder = _storageFolder;
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see java.lang.Object#toString()

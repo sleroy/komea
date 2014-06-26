@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.backend.service.esper;
@@ -14,10 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.commons.lang3.Validate;
-import org.komea.eventory.CEPConfiguration;
 import org.komea.eventory.CEPEngine;
-import org.komea.eventory.api.bridge.IEventBridgeFactory;
-import org.komea.eventory.api.cache.ICacheStorageFactory;
 import org.komea.eventory.api.engine.ICEPEngine;
 import org.komea.eventory.api.engine.ICEPQueryImplementation;
 import org.komea.eventory.api.engine.IQuery;
@@ -40,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This type defines the esper engine bean. It initializes the Esper Engine.
- * 
+ *
  * @author sleroy
  * @version $Revision: 1.0 $
  */
@@ -51,13 +48,9 @@ public final class EventEngineService implements IEventEngineService
     
     
     private static final Logger           LOGGER = LoggerFactory.getLogger("komea-esper");
-    @Autowired
-    private ICacheStorageFactory          cacheStorageFactory;
     
     private ICEPEngine                    cepEngine;
     
-    @Autowired
-    private IEventBridgeFactory           eventBridgeFactory;
     
     /*
      * (non-Javadoc)
@@ -74,7 +67,7 @@ public final class EventEngineService implements IEventEngineService
     
     /**
      * Method createOrUpdateEPLQuery.
-     * 
+     *
      * @param _definition
      *            IQueryDefinition
      * @see org.komea.product.backend.api.IEventEngineService#createOrUpdateQuery(IQueryInformations)
@@ -97,7 +90,7 @@ public final class EventEngineService implements IEventEngineService
     
     /**
      * Method createEPL.
-     * 
+     *
      * @param _queryInformations
      *            IQueryDefinition
      * @return EPStatement
@@ -156,7 +149,7 @@ public final class EventEngineService implements IEventEngineService
     
     /**
      * Method existEPL.
-     * 
+     *
      * @param _metricKey
      *            String
      * @return boolean
@@ -168,31 +161,17 @@ public final class EventEngineService implements IEventEngineService
     
         return cepEngine.getQueryAdministration().existQuery(_metricKey.getId());
     }
-    
-    
-    public ICacheStorageFactory getCacheStorageFactory() {
-    
-    
-        return cacheStorageFactory;
-    }
-    
-    
+
+
     /**
      * Returns the cep engine.
-     * 
+     *
      * @return the cep engine.
      */
     public ICEPEngine getCepEngine() {
     
     
         return cepEngine;
-    }
-    
-    
-    public IEventBridgeFactory getEventBridgeFactory() {
-    
-    
-        return eventBridgeFactory;
     }
     
     
@@ -205,7 +184,7 @@ public final class EventEngineService implements IEventEngineService
     
     /**
      * Method getStatement.
-     * 
+     *
      * @param _formulaID
      *            String
      * @return EPStatement
@@ -224,7 +203,7 @@ public final class EventEngineService implements IEventEngineService
     
     /**
      * Method getStatementNames.
-     * 
+     *
      * @return String[]
      * @see org.komea.product.backend.api.IEventEngineService#getQueryNames()
      */
@@ -243,7 +222,7 @@ public final class EventEngineService implements IEventEngineService
     
     /**
      * Method getStatementOrFail.
-     * 
+     *
      * @param _formulaID
      *            String
      * @return EPStatement
@@ -273,11 +252,7 @@ public final class EventEngineService implements IEventEngineService
         cepEngine = new CEPEngine();
         LOGGER.debug("Initialization of CEP Engine");
         try {
-            final CEPConfiguration cepConfiguration = new CEPConfiguration();
-            cepConfiguration.setBridgeFactory(eventBridgeFactory);
-            cepConfiguration.setCacheStorageFactory(cacheStorageFactory);
-            cepConfiguration.setStorageFolder(komeaFS.getFileSystemFolder("eventory"));
-            cepEngine.initialize(cepConfiguration);
+            cepEngine.initialize();
         } catch (final IOException e) {
             throw new FatalBeanException("CEP Engine could not started, it crashed");
         }
@@ -313,7 +288,7 @@ public final class EventEngineService implements IEventEngineService
     
     /**
      * Method sendEvent.
-     * 
+     *
      * @param _event
      *            IEvent
      * @see org.komea.product.backend.api.IEventEngineService#sendEvent(IEvent)
@@ -327,24 +302,10 @@ public final class EventEngineService implements IEventEngineService
     }
     
     
-    public void setCacheStorageFactory(final ICacheStorageFactory _cacheStorageFactory) {
-    
-    
-        cacheStorageFactory = _cacheStorageFactory;
-    }
-    
-    
     public void setCepEngine(final ICEPEngine _cepEngine) {
     
     
         cepEngine = _cepEngine;
-    }
-    
-    
-    public void setEventBridgeFactory(final IEventBridgeFactory _eventBridgeFactory) {
-    
-    
-        eventBridgeFactory = _eventBridgeFactory;
     }
     
     

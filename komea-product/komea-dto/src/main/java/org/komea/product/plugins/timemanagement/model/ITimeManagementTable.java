@@ -6,7 +6,8 @@ package org.komea.product.plugins.timemanagement.model;
 
 
 
-import java.util.List;
+import org.komea.product.backend.utils.IFilter;
+import org.komea.product.plugins.model.IDynamicDataTable;
 
 
 
@@ -15,17 +16,18 @@ import java.util.List;
  * 
  * @author sleroy
  */
-public interface ITimeManagementTable
+public interface ITimeManagementTable extends IDynamicDataTable<ITimeManagementDataLine>
 {
     
     
     /**
      * Returns the sum of the time spent for an activity.
      * 
-     * @param _activityName
+     * @param _filter
+     *            the timeline filter
      * @return
      */
-    int getNumberOfTimeLines(ITimeManagementFilter _filter);
+    int getNumberOfTimeLines(IFilter<ITimeManagementDataLine> _filter);
     
     
     /**
@@ -34,13 +36,7 @@ public interface ITimeManagementTable
      * @param _activityName
      * @return
      */
-    Double getSumTime(ITimeManagementFilter _filter);
+    Double getSumTime(IFilter<ITimeManagementDataLine> _filter);
     
     
-    /**
-     * Returns the time lines
-     * 
-     * @return the time entries
-     */
-    List<ITimeManagementDataLine> getTimeLine();
 }

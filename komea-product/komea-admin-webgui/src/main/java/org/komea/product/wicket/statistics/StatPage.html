@@ -1,27 +1,36 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:wicket="http://wicket.apache.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+	xmlns:wicket="http://wicket.apache.org">
 <head>
 <meta charset="utf-8"></meta>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
 <meta content="Komea administration site" name="description"></meta>
 <meta content="Komea" name="author"></meta>
 <title>Komea Administration</title>
-<link rel="stylesheet" href="../../../../../../../main/webapp/static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
-<link rel="stylesheet" href="../../../../../../../main/webapp/static/css/style.css" type="text/css"></link>
-<link rel="stylesheet" type="text/css" href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
+<link rel="stylesheet"
+	href="../../../../../../../main/webapp/static/bootstrap/css/bootstrap.min.css"
+	type="text/css" media="screen"></link>
+<link rel="stylesheet"
+	href="../../../../../../../main/webapp/static/css/style.css"
+	type="text/css"></link>
+<link rel="stylesheet" type="text/css"
+	href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
 </head>
 <body>
 	<div class="container  container_father">
 		<div class="page-header">
 			<h1>
-				Komea Statistics <small>Statistics from data received per Komea.</small>
+				Komea Statistics <small>Statistics from data received per
+					Komea.</small>
 			</h1>
 		</div>
 		<wicket:extend>
 			<div class="row panel panel-default">
 				<div class="col-sm-3">
-				    <a href="" class="btn btn-lg btn-success" wicket:id="backup-values"><span class="glyphicon cicon-user"></span><wicket:message key="statpage.refreshKpiValues"></wicket:message></a>
+					<a href="" class="btn btn-lg btn-success" wicket:id="backup-values"><span
+						class="glyphicon cicon-user"></span> <wicket:message
+							key="statpage.refreshKpiValues"></wicket:message></a>
 					<table class="table">
 						<tbody>
 							<tr class="info">
@@ -56,16 +65,33 @@
 				</div>
 			</div>
 			<div class="row">
-				<h3>Type of events received.</h3>
-				<table wicket:id="table">
-				</table>
+				<div class="box box-primary">
+					<div class="box-header">
+
+						<i class="fa fa-map-marker"></i>
+						<h3 class="box-title">Type of events received.</h3>
+					</div>
+					<div class="box-body no-padding">
+						<div class="table-responsive">
+							<!-- .table - Uses sparkline charts-->
+							<table wicket:id="table">
+							</table>
+
+							<!-- /.table -->
+						</div>
+					</div>
+					<!-- /.box-body-->
+					<div class="box-footer"></div>
+				</div>
+
 			</div>
 		</wicket:extend>
 	</div>
 	<footer class="tocea-footer">
-		<p>&copy; Komea.org</p>
-		<script src="../../../../../../../main/webapp/static/js/ui/jquery.js"></script>
-		<script src="../../../../../../../main/webapp/static/bootstrap/js/bootstrap.min.js"></script>
+	<p>&copy; Komea.org</p>
+	<script src="../../../../../../../main/webapp/static/js/ui/jquery.js"></script>
+	<script
+		src="../../../../../../../main/webapp/static/bootstrap/js/bootstrap.min.js"></script>
 	</footer>
 </body>
 </html>

@@ -20,4 +20,5 @@
     <!-- SALT FOR PASSWORDS -->
     <util:properties id="authProperties" location="file:${KOMEA_HOME}/conf/secret.properties">
     </util:properties>
+
 </beans>

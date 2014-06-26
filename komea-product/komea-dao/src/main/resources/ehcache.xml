@@ -5,6 +5,9 @@
 	<defaultCache timeToLiveSeconds="300" timeToIdleSeconds="3600"
 		maxElementsInMemory="1000" overflowToDisk="false" />
 
+	<cache name="bugZillaCache" overflowToDisk="true"
+		maxElementsInMemory="10000" />
+
 
 	<cache name="buildGlobalPeriodTimeSeries" overflowToDisk="true"
 		maxElementsInMemory="10" />

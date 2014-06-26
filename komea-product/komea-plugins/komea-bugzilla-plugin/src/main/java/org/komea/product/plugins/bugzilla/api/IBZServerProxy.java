@@ -3,36 +3,69 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.komea.product.plugins.bugzilla.api;
+
+
 
 import java.io.Closeable;
 import java.util.List;
-import org.komea.product.plugins.bugzilla.model.BzBug;
+
+import com.j2bugzilla.base.Bug;
+import com.j2bugzilla.base.BugzillaConnector;
+import com.j2bugzilla.base.Comment;
+import com.j2bugzilla.rpc.GetLegalValues.Fields;
+
+
 
 /**
- *
  * @author rgalerme
  */
-public interface IBZServerProxy extends Closeable {
-
-    /**
-     *
-     * @return
-     */
-    public List<String> getProductNames();
-
+public interface IBZServerProxy extends Closeable
+{
+    
+    
     /**
      * get list of bugs in bugzilla server
      *
-     * @param Project
+     * @param _projectName
      * @return
      */
-    public List<BzBug> getBugs(String Project);
+    public List<Bug> getBugs(String _projectName);
+    
+    
+    /**
+     * @param _bug
+     * @return
+     */
+    public List<Comment> getComments(Bug _bug);
+    
+    
+    /**
+     * @return
+     */
+    public BugzillaConnector getConnector();
+    
+    
+    public List<String> getPriorities();
 
+
+    /**
+     * @return
+     */
+    public List<String> getProductNames();
+    
+    
     public List<String> getSeverities();
 
-    public List<String> getPriorities();
-    
-    public boolean testConnexion();
 
+    public boolean testConnexion();
+    
+    
+    /**
+     * @param _field
+     * @return
+     */
+    List<String> GetLegalValues(Fields _field);
+    
 }

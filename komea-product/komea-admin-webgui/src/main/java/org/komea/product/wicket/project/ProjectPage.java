@@ -16,7 +16,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.database.model.Project;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
@@ -27,7 +27,7 @@ import org.komea.product.wicket.widget.model.ListDataModel;
 /**
  * @author rgalerme
  */
-public class ProjectPage extends LayoutPage
+public class ProjectPage extends StatelessLayoutPage
 {
     
     

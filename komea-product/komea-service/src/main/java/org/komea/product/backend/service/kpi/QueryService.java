@@ -6,20 +6,18 @@ package org.komea.product.backend.service.kpi;
 
 
 
+import org.komea.eventory.api.engine.ICEPQuery;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.api.IGroovyEngineService;
 import org.komea.product.backend.api.IKpiQueryRegisterService;
+import org.komea.product.backend.api.IKpiRefreshingScheduler;
 import org.komea.product.backend.api.IQueryService;
-import org.komea.product.backend.criterias.FindKpiOrFail;
-import org.komea.product.backend.criterias.FindKpiPerId;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.entities.IEntityService;
-import org.komea.product.database.dao.KpiDao;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.model.Kpi;
-import org.komea.product.service.dto.KpiKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,30 +34,34 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class QueryService implements IQueryService
 {
-    
-    
+
+
     private static final Logger      LOGGER = LoggerFactory.getLogger("query-service");
-    
+
     @Autowired
     private ICronRegistryService     cronRegistry;
-    
+
     @Autowired
     private IEntityService           entityService;
-    
+
     @Autowired
     private IEventEngineService      esperEngine;
-    
+
     @Autowired
     private IGroovyEngineService     groovyEngineService;
-    
-    @Autowired
-    private KpiDao                   kpiDao;
-    
+
     @Autowired
     private IKpiQueryRegisterService kpiQueryRegisterService;
-    
-    
-    
+
+    @Autowired
+    private IKpiRefreshingScheduler   kpiScheduler;
+
+
+    @Autowired
+    private IKPIService              kpiService;
+
+
+
     /*
      * (non-Javadoc)
      * @see
@@ -68,8 +70,8 @@ public class QueryService implements IQueryService
      */
     @Override
     public void createOrUpdateQueryFromKpi(final Kpi _kpi) {
-    
-    
+
+
         LOGGER.debug("Refreshing Esper with KPI {}", _kpi.getKpiKey());
         IQuery queryImplementation = groovyEngineService.parseQuery(_kpi);
         if (queryImplementation == null) {
@@ -77,24 +79,25 @@ public class QueryService implements IQueryService
                     _kpi.getKpiKey());
             queryImplementation = new StubQuery();
         }
+        kpiScheduler.submitKpiRefresh(_kpi, queryImplementation.getBackupDelay());
         kpiQueryRegisterService.registerQuery(_kpi, queryImplementation);
-        
+
     }
-    
-    
+
+
     @Cacheable(value = "kpi-realtime-value-cache")
     @Override
     public KpiResult evaluateRealTimeValues(final Integer _kpiID) {
-    
-    
-        final Kpi selectKpiByKey = new FindKpiPerId(_kpiID, kpiDao).find();
+
+
+        final Kpi selectKpiByKey = kpiService.selectByPrimaryKeyOrFail(_kpiID);
         final KpiResult queryValueFromKpi = evaluateRealTimeValues(selectKpiByKey);
         LOGGER.debug("Returns the real time measure for -> {} is {}", selectKpiByKey,
                 queryValueFromKpi);
         return queryValueFromKpi;
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see
@@ -104,8 +107,8 @@ public class QueryService implements IQueryService
     @Override
     @Cacheable(value = "kpi-realtime-value-cache")
     public KpiResult evaluateRealTimeValues(final Kpi _kpi) {
-    
-    
+
+
         KpiResult result = new KpiResult();
         try {
             result = getKpiResultFromKpi(_kpi);
@@ -114,10 +117,10 @@ public class QueryService implements IQueryService
             result.hasFailed(e);
         }
         return new InferMissingEntityValuesIntoKpiResult(result, _kpi, entityService)
-                .inferEntityKeys();
+        .inferEntityKeys();
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see
@@ -126,63 +129,75 @@ public class QueryService implements IQueryService
      */
     @Override
     public KpiResult evaluateRealTimeValues(final String _kpiName) {
-    
-    
+
+
         LOGGER.debug("Obtain the real time measure for -> {}", _kpiName);
-        final Kpi selectKpiByKey = new FindKpiOrFail(KpiKey.ofKpiName(_kpiName), kpiDao).find();
-        
+        final Kpi selectKpiByKey = kpiService.selectByKeyOrFail(_kpiName);
+
         return evaluateRealTimeValues(selectKpiByKey.getId());
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.api.IQueryService#isDynamicQuery(org.komea.product.database.model.Kpi)
      */
     @Override
     public boolean isDynamicQuery(final Kpi _kpiChoice) {
-    
-    
+
+
         return esperEngine.getQuery(FormulaID.of(_kpiChoice)) instanceof IDynamicDataQuery;
     }
-    
-    
+
+
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.backend.api.IQueryService#isEventQuery(org.komea.product.database.model.Kpi)
+     */
+    @Override
+    public boolean isEventQuery(final Kpi _kpiChoice) {
+
+
+        return esperEngine.getQuery(FormulaID.of(_kpiChoice)) instanceof ICEPQuery;
+    }
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.api.IQueryService#isQueryOfKpiRegistered(org.komea.product.database.model.Kpi)
      */
     @Override
     public boolean isQueryOfKpiRegistered(final Kpi _kpi) {
-    
-    
+
+
         return esperEngine.existQuery(FormulaID.of(_kpi));
     }
-    
-    
+
+
     @Override
     public void removeQuery(final Kpi _kpi) {
-    
-    
+
+
+        kpiScheduler.deleteCron(_kpi);
         esperEngine.removeQuery(FormulaID.of(_kpi));
-        
+
     }
-    
-    
+
+
     private KpiResult getKpiResultFromKpi(final Kpi _kpi) {
-    
-    
+
+
         KpiResult result = new KpiResult();
-        
+
         LOGGER.trace("Request value from KPI {}", _kpi.getKpiKey());
         try {
             result =
                     KpiResult.class
-                            .cast(esperEngine.getQueryOrFail(FormulaID.of(_kpi)).getResult());
-        } catch (final ClassCastException e) {
+                    .cast(esperEngine.getQueryOrFail(FormulaID.of(_kpi)).getResult());
+        } catch (final Exception e) {
             LOGGER.error("Query of {} should returns a kpiResult value", _kpi.getKpiKey(), e);
         }
         LOGGER.debug("Result of the query is {}", result);
         return result;
     }
-    
 }

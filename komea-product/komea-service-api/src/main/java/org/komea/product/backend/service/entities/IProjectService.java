@@ -35,8 +35,11 @@ public interface IProjectService extends IGenericService<Project, Integer, Proje
     List<ProjectDto> getAllProjectsAsDtos();
 
     /**
-     * @param _projectKey
-     * @return
+     * Tries to find the project matching the ky. The key is tested against the
+     * project name and the alias.
+     *
+     * @param _projectKey the project jkey
+     * @return the project( from db) or a new instance.
      */
     Project getOrCreate(String _projectKey);
 
@@ -94,5 +97,7 @@ public interface IProjectService extends IGenericService<Project, Integer, Proje
             List<Person> _persons,
             List<Link> _links,
             List<PersonGroup> _teams);
+
+    Project selectByAlias(String _alias);
 
 }

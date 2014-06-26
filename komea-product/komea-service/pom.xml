@@ -29,6 +29,12 @@
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>komea-csv</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>komea-dao</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -64,6 +70,7 @@
 			<artifactId>xpp3</artifactId>
 			<version>1.1.4c</version>
 		</dependency>
+
 
 	</dependencies>
 

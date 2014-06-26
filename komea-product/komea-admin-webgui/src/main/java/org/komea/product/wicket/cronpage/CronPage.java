@@ -14,7 +14,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.cron.CronDetails;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.database.model.PersonGroup;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.persongroup.department.DepartmentEditAction;
 import org.komea.product.wicket.utils.NameGeneric;
 import org.komea.product.wicket.widget.api.IAjaxEditAction;
@@ -29,7 +29,7 @@ import org.quartz.Trigger.TriggerState;
  *
  * @author sleroy
  */
-public class CronPage extends LayoutPage {
+public class CronPage extends StatelessLayoutPage {
 
     @SpringBean
     private ICronRegistryService cronService;
@@ -50,6 +50,28 @@ public class CronPage extends LayoutPage {
 
                                 _cellItem.add(new Label(_componentId, Model.of(new PrettyTime()
                                                         .format(_rowModel.getObject().getNextTime()))));
+
+                            }
+
+                };
+
+        final AbstractColumn<CronDetails, String> lastExecutionTime
+                = new AbstractColumn<CronDetails, String>(Model.of("Last execution time")) {
+
+                    @Override
+                    public void populateItem(
+                            final Item<ICellPopulator<CronDetails>> _cellItem,
+                            final String _componentId,
+                            final IModel<CronDetails> _rowModel) {
+                         Model<String> of;
+                                if (_rowModel.getObject().getLastTime() != null) {
+                                    of = Model.of(new PrettyTime().format(_rowModel.getObject().getLastTime()));
+
+                                } else {
+                                    of = Model.of("No last execution");
+                                }
+
+                                _cellItem.add(new Label(_componentId, of));
 
                             }
 
@@ -76,6 +98,8 @@ public class CronPage extends LayoutPage {
                                         _cellItem.add(SexyLabel.newWarningLabel(_componentId, getString("cronpage.status.paused")));
                                         break;
                                     case NORMAL:
+                                        _cellItem.add(SexyLabel.newSuccessLabel(_componentId, getString("cronpage.status.complete")));
+                                        break;
                                     case COMPLETE:
                                         _cellItem.add(SexyLabel.newSuccessLabel(_componentId, getString("cronpage.status.normal")));
                                         break;
@@ -111,6 +135,7 @@ public class CronPage extends LayoutPage {
 
         dataTable = DataTableBuilder.<CronDetails, String>newTable("table").addColumn("Cron task", "cronName")
                 .addColumn(cexp)
+                .addColumn(lastExecutionTime)
                 .addColumn(nextExecutionTime)
                 .addColumn(statusCol).displayRows(40)
                 .addColumn(cLaunch)

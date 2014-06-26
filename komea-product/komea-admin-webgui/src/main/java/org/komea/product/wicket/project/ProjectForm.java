@@ -7,7 +7,6 @@ package org.komea.product.wicket.project;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -27,7 +26,7 @@ import org.komea.product.database.model.Customer;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.PersonGroup;
 import org.komea.product.database.model.Project;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.CustomUpdater;
 import org.komea.product.wicket.utils.DataListSelectDialogBuilder;
 import org.komea.product.wicket.utils.DialogFactory;
@@ -44,7 +43,7 @@ public class ProjectForm extends Form<Project> {
 
     private final IProjectService prService;
     private final Component feedBack;
-    private final LayoutPage page;
+    private final StatelessLayoutPage page;
     private final Project project;
     private final NameGeneric customerName;
     private final TextField customerFiel;
@@ -102,6 +101,9 @@ public class ProjectForm extends Form<Project> {
         add(TextAreaBuilder.<String>create("description", this.project, "description")
                 .simpleValidator(0, 2048).highlightOnErrors().withTooltip(getString("global.field.tooltip.description")).build());
 
+        add(TextFieldBuilder.<String>create("aliases", this.project, "alias").highlightOnErrors()
+                .simpleValidator(0, 2048).withTooltip(getString("project.form.field.tooltip.aliases")).build());
+
         Customer selectByPrimaryKey = _customerService.selectByPrimaryKey(this.project.getIdCustomer());
         if (selectByPrimaryKey != null) {
             customerName.setName(selectByPrimaryKey.getName());
@@ -116,7 +118,7 @@ public class ProjectForm extends Form<Project> {
             for (IHasKey personGroup : currentPersonGroupList) {
                 teamPersonList.addAll(personService.getPersonsOfPersonGroup(personGroup.getId()));
             }
-            DialogFactory.removeDistictList(projectPersonList,teamPersonList );
+            DialogFactory.removeDistictList(projectPersonList, teamPersonList);
             DialogFactory.addDistictList(currentPersonList, projectPersonList);
             DialogFactory.addDistictList(currentPersonList, teamPersonList);
         }
@@ -188,11 +190,11 @@ public class ProjectForm extends Form<Project> {
         DialogFactory.addMultipleListDialog(dataTeam);
 
         //button
-        add(new AjaxLinkLayout<LayoutPage>("cancel", page) {
+        add(new AjaxLinkLayout<StatelessLayoutPage>("cancel", page) {
 
             @Override
             public void onClick(final AjaxRequestTarget art) {
-                LayoutPage page = getCustom();
+                StatelessLayoutPage page = getCustom();
                 page.setResponsePage(new ProjectPage(page.getPageParameters()));
             }
         });

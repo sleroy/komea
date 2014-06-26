@@ -12,7 +12,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.model.Kpi;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
 import org.komea.product.wicket.widget.builders.DataTableBuilder;
@@ -25,7 +25,7 @@ import org.komea.product.wicket.widget.model.ListDataModel;
  * 
  * @author sleroy
  */
-public class KpiPage extends LayoutPage
+public class KpiPage extends StatelessLayoutPage
 {
     
     

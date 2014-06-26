@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
-import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ExtendedEntityType;
 
 public class KpiStringKeyList implements Serializable {
 
@@ -12,13 +12,13 @@ public class KpiStringKeyList implements Serializable {
 
     private Set<String> kpiKeys;
     private Set<String> entityKeys;
-    private EntityType entityType;
+    private ExtendedEntityType entityType;
 
     public KpiStringKeyList() {
 
         kpiKeys = Sets.newHashSet();
         entityKeys = Sets.newHashSet();
-        entityType = EntityType.PROJECT;
+        entityType = ExtendedEntityType.PROJECT;
     }
 
     public void setKpiKeys(final Set<String> _kpiKeys) {
@@ -31,12 +31,12 @@ public class KpiStringKeyList implements Serializable {
         entityKeys = _entityKeys;
     }
 
-    public void setEntityType(final EntityType _entityType) {
+    public void setEntityType(final ExtendedEntityType _entityType) {
 
         entityType = _entityType;
     }
 
-    public KpiStringKeyList(final Set<String> _kpiKey, final Set<String> _entityKeys, final EntityType _entityType) {
+    public KpiStringKeyList(final Set<String> _kpiKey, final Set<String> _entityKeys, final ExtendedEntityType _entityType) {
 
         super();
         kpiKeys = _kpiKey;
@@ -69,7 +69,7 @@ public class KpiStringKeyList implements Serializable {
         return entityKeys;
     }
 
-    public EntityType getEntityType() {
+    public ExtendedEntityType getEntityType() {
 
         return entityType;
     }
@@ -81,7 +81,7 @@ public class KpiStringKeyList implements Serializable {
 
     @Override
     public String toString() {
-        return "KpiStringKeyList{" + "kpiKeys=" + kpiKeys + ", entityKeys=" + entityKeys + ", entityType=" + entityType + '}';
+        return "KpiStringKeyList{" + "kpiKeys=" + kpiKeys + ", entityKeys=" + entityKeys + ", extendedEntityType=" + entityType + '}';
     }
 
 }

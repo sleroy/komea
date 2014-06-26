@@ -1,15 +1,17 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.backend.groovy;
 
 
 
+import org.apache.commons.lang.Validate;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.product.database.dto.KpiResult;
-import org.komea.product.database.enums.EntityType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -24,11 +26,14 @@ public abstract class AbstractDynamicQuery extends AbstractGroovyQuery implement
     private final BackupDelay delay;
     
     
+    protected final Logger    LOGGER = LoggerFactory.getLogger(getClass());
     
-    public AbstractDynamicQuery(final EntityType _entityType, final BackupDelay _delay) {
     
     
-        super(_entityType);
+    public AbstractDynamicQuery(final BackupDelay _delay) {
+    
+    
+        super();
         delay = _delay;
         
     }
@@ -39,7 +44,7 @@ public abstract class AbstractDynamicQuery extends AbstractGroovyQuery implement
      * @see org.komea.eventory.api.engine.IQuery#getBackupDelay()
      */
     @Override
-    public BackupDelay getBackupDelay() {
+    public final BackupDelay getBackupDelay() {
     
     
         return delay;
@@ -51,6 +56,21 @@ public abstract class AbstractDynamicQuery extends AbstractGroovyQuery implement
      * @see org.komea.eventory.api.engine.IQuery#getResult()
      */
     @Override
-    public abstract KpiResult getResult();
+    public final KpiResult getResult() throws QueryExecutionFailed {
+    
+    
+        KpiResult res = new KpiResult();
+        try {
+            res = evaluateResult();
+            Validate.notNull(res);
+        } catch (final Exception e) {
+            res.hasFailed(e);
+            LOGGER.error(e.getMessage(), e);
+        }
+        return res;
+    }
+    
+    
+    protected abstract KpiResult evaluateResult();
     
 }

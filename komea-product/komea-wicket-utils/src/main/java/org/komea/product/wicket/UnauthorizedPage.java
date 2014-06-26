@@ -12,7 +12,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  * 
  * @author sleroy
  */
-public class UnauthorizedPage extends LayoutPage
+public class UnauthorizedPage extends StatelessLayoutPage
 {
     
     

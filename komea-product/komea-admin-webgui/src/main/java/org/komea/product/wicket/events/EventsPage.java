@@ -1,8 +1,8 @@
 package org.komea.product.wicket.events;
 
+import com.google.common.base.Strings;
 import java.util.Collections;
 import java.util.List;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -16,18 +16,15 @@ import org.komea.product.backend.service.esper.IEventViewerService;
 import org.komea.product.database.alert.IEvent;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Project;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.ocpsoft.prettytime.PrettyTime;
-
-import com.google.common.base.Strings;
-import org.komea.product.wicket.widget.builders.DataTableBuilder;
 
 /**
  * Events page
  *
  * @author sleroy
  */
-public class EventsPage extends LayoutPage {
+public class EventsPage extends StatelessLayoutPage {
 
     private static final class EventTable extends ListView<IEvent> {
 

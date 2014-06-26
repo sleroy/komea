@@ -2,7 +2,6 @@ package org.komea.product.database.dto;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
 
@@ -13,12 +12,12 @@ public class KpiAlertDto implements Serializable {
     private KpiAlertType kpiAlertType;
     private Kpi kpi;
     private String entityName;
-    private Boolean activated;
+    private boolean activated;
     private Double value;
     private Date date;
 
     public KpiAlertDto(KpiAlertType kpiAlertType, Kpi kpi, String entityName,
-            Boolean activated, Double value, Date date) {
+            boolean activated, Double value, Date date) {
         this.kpiAlertType = kpiAlertType;
         this.kpi = kpi;
         this.entityName = entityName;
@@ -54,12 +53,12 @@ public class KpiAlertDto implements Serializable {
         this.entityName = entityName;
     }
 
-    public Boolean isActivated() {
+    public boolean isActivated() {
         return activated;
     }
 
-    public void setActivated(Boolean enabled) {
-        this.activated = enabled;
+    public void setActivated(boolean activated) {
+        this.activated = activated;
     }
 
     public Double getValue() {
@@ -68,6 +67,10 @@ public class KpiAlertDto implements Serializable {
 
     public void setValue(Double value) {
         this.value = value;
+    }
+
+    public boolean hasValue() {
+        return value != null;
     }
 
     public Date getDate() {

@@ -1,12 +1,8 @@
-
 package org.komea.product.web.rest.api;
-
 
 import java.util.Collections;
 import java.util.List;
-
 import javax.validation.Valid;
-
 import org.komea.product.backend.service.IKpiGoalService;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.kpi.IKPIService;
@@ -28,18 +24,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping(value = "/kpis")
 public class KpisController {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(KpisController.class);
-    
+
     @Autowired
-    private IKPIService         kpiService;
-    
+    private IKPIService kpiService;
+
     @Autowired
-    private IKpiGoalService     goalService;
-    
+    private IKpiGoalService goalService;
+
     @Autowired
-    private IEntityService      entityService;
-    
+    private IEntityService entityService;
+
     /**
      * This method return the kpi list
      *
@@ -48,38 +44,32 @@ public class KpisController {
     @RequestMapping(method = RequestMethod.GET, value = "/all")
     @ResponseBody
     public List<Kpi> allKpis() {
-    
+
         LOGGER.debug("call rest method /kpis/all/");
         return kpiService.selectAll();
     }
-    
+
     @RequestMapping(method = RequestMethod.POST, value = "/get", produces = "application/json")
     @ResponseBody
     public List<Kpi> getKpis(@RequestBody final ExtendedEntityType extendedEntityType) {
-    
-        final List<Kpi> kpis = kpiService.getAllKpisOfEntityType(extendedEntityType.getKpiType());
-        if (extendedEntityType.isForGroups()) {
-            final List<Kpi> kpisForGroups = kpiService.getKpisForGroups(kpis);
-            return kpisForGroups;
-        } else {
-            return kpis;
-        }
+
+        return kpiService.getAllKpisOfEntityType(extendedEntityType.getKpiType());
     }
-    
+
     /**
      * Returns a list of kpi goals for a given entity and a kpi.
-     * 
+     *
      * @return the list of kpi goals.
      */
     @RequestMapping(method = RequestMethod.POST, value = "/goals", produces = "application/json")
     @ResponseBody
     List<KpiGoal> findKpiGoals(@Valid @RequestBody final KpiStringKey _kpiKey) {
-    
+
         final IEntity entity = entityService.findEntityByEntityStringKey(_kpiKey.getEntityKey());
         if (entity == null) {
             return Collections.emptyList();
         }
-        final Kpi kpi = kpiService.findKPI(_kpiKey.getKpiName());
+        final Kpi kpi = kpiService.selectByKey(_kpiKey.getKpiName());
         if (kpi == null) {
             return Collections.emptyList();
         }

@@ -95,15 +95,19 @@ public final class TestsByStatusKPI implements IDynamicDataQuery {
             final ITestLinkServerProxy openProxy) {
 
         final List<TestLinkProject> listProject = openProxy.getListProject();
-        for (final TestLinkProject projet : listProject) {
-            LOGGER.debug("Testlink : checking update from project {} of server {}.", projet.getName(),
+        for (final TestLinkProject testlinkProject : listProject) {
+            LOGGER.debug("Testlink : checking update from project {} of server {}.", testlinkProject.getName(),
                     testlinkServer.getName());
-            final Project project = projectService.selectByKey(projet.getName());
+            final String alias = testlinkProject.getName();
+            Project project = projectService.selectByAlias(alias);
+            if (project == null /*&& conf.isAutocreateProjects()*/) {
+                project = projectService.getOrCreate(alias);
+            }
             if (project == null) {
                 continue;
             }
 
-            final List<TestCase> testCases = openProxy.getTotalTests(projet);
+            final List<TestCase> testCases = openProxy.getTotalTests(testlinkProject);
             final int cpt = countNumberOfTestCases(testCases);
             _kpiResult.put(project.getEntityKey(), cpt);
         }

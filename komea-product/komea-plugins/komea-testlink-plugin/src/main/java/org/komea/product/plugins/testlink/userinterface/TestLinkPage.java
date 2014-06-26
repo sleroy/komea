@@ -17,7 +17,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.komea.product.plugins.testlink.api.ITestLinkServerDAO;
 import org.komea.product.plugins.testlink.model.TestLinkServer;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.widget.api.IDeleteAction;
 import org.komea.product.wicket.widget.api.IEditAction;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
@@ -29,7 +29,7 @@ import org.komea.product.wicket.widget.model.ListDataModel;
 /**
  * @author rgalerme
  */
-public final class TestLinkPage extends LayoutPage
+public final class TestLinkPage extends StatelessLayoutPage
 {
     
     
@@ -55,7 +55,7 @@ public final class TestLinkPage extends LayoutPage
                         .displayRows(listAffichage.size() + 10).withData(dataProvider).build();
         add(build);
         
-        add(new AjaxLinkLayout<LayoutPage>("addServer", this)
+        add(new AjaxLinkLayout<StatelessLayoutPage>("addServer", this)
         {
             
             
@@ -63,7 +63,7 @@ public final class TestLinkPage extends LayoutPage
             public void onClick(final AjaxRequestTarget art) {
             
             
-                final LayoutPage page = getCustom();
+                final StatelessLayoutPage page = getCustom();
                 page.setResponsePage(new TestLinkEditPage(page.getPageParameters()));
             }
         });

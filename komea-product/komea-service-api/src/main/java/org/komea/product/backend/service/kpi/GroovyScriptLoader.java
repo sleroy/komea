@@ -55,7 +55,7 @@ public class GroovyScriptLoader
     
     /**
      * Loads the script
-     * 
+     *
      * @return the script text
      */
     public String load() {
@@ -64,6 +64,7 @@ public class GroovyScriptLoader
         InputStream resourceAsStream = null;
         String script = "##notloaded##";
         try {
+
             resourceAsStream = classLoader.getResourceAsStream(resourcePath);
             script = IOUtils.toString(resourceAsStream);
             Validate.notNull(script);
@@ -73,6 +74,7 @@ public class GroovyScriptLoader
             
         } catch (final Exception e) {
             LOGGER.error("Impossible to retrieve Groovy script template : script {}", script, e);
+            throw new RuntimeException("Could not load the script " + script, e);
         } finally {
             IOUtils.closeQuietly(resourceAsStream);
         }

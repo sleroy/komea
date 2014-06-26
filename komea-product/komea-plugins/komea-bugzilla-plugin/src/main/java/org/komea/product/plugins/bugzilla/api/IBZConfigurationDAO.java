@@ -8,6 +8,9 @@ package org.komea.product.plugins.bugzilla.api;
 
 
 
+import com.j2bugzilla.base.BugzillaException;
+import com.j2bugzilla.base.ConnectionException;
+import java.io.IOException;
 import java.util.List;
 
 import org.komea.product.backend.service.plugins.IPluginStorageService;
@@ -70,5 +73,5 @@ public interface IBZConfigurationDAO
      */
     public void setServerProxyFactory(IBZServerProxyFactory serverProxyFactory);
     
-    public boolean testConnexion(BZServerConfiguration server);
+    public boolean testConnexion(BZServerConfiguration server)throws IOException, ConnectionException, BugzillaException;
 }

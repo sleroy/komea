@@ -8,6 +8,8 @@ package org.komea.product.model.timeserie;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.komea.product.database.enums.GroupFormula;
 import org.komea.product.database.model.Kpi;
@@ -24,14 +26,14 @@ public class TimeSerieOptions implements Serializable
     
     protected static final org.slf4j.Logger LOGGER = LoggerFactory
                                                            .getLogger(PeriodTimeSerieOptions.class);
-    
+
     private String                          uniqueID;
     
     protected GroupFormula                  groupFormula;
-    
+    @NotNull
     protected Integer                       kpiID;
     
-    
+    @NotNull
     protected TimeScale                     timeScale;
     
     
@@ -148,18 +150,8 @@ public class TimeSerieOptions implements Serializable
     
         return kpiID != null;
     }
-    
-    
-    /**
-     * @return
-     */
-    public boolean isValid() {
-    
-    
-        return groupFormula != null && timeScale != null && kpiID != null;
-    }
-    
-    
+
+
     public void setGroupFormula(final GroupFormula _groupFormula) {
     
     

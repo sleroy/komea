@@ -8,11 +8,13 @@ package org.komea.product.plugins.bugzilla.service;
 import org.komea.product.plugins.bugzilla.api.IBZServerProxy;
 import org.komea.product.plugins.bugzilla.api.IBZServerProxyFactory;
 import org.komea.product.plugins.bugzilla.core.BZServerProxy;
-import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.springframework.stereotype.Service;
 
 import com.j2bugzilla.base.BugzillaConnector;
+import com.j2bugzilla.base.BugzillaException;
+import com.j2bugzilla.base.ConnectionException;
 import com.j2bugzilla.rpc.LogIn;
+import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 
 /**
  * @author rgalerme
@@ -32,7 +34,7 @@ public class BZServerProxyFactory implements IBZServerProxyFactory {
         BugzillaConnector conn = null;
         try {
             conn = new BugzillaConnector();
-            conn.connectTo(_server.getAddress().toString());
+            conn.connectTo(_server.getAddress());
             final LogIn logIn = new LogIn(_server.getLogin(), _server.getPassword());
             conn.executeMethod(logIn);
         } catch (final Exception ex) {
@@ -41,17 +43,12 @@ public class BZServerProxyFactory implements IBZServerProxyFactory {
         return conn;
     }
 
-    private BugzillaConnector testConnexion(final BZServerConfiguration _server) {
-
+    private BugzillaConnector testConnexion(final BZServerConfiguration _server) throws ConnectionException, BugzillaException {
         BugzillaConnector conn = null;
-        try {
-            conn = new BugzillaConnector();
-            conn.connectTo(_server.getAddress().toString());
-            final LogIn logIn = new LogIn(_server.getLogin(), _server.getPassword());
-            conn.executeMethod(logIn);
-        } catch (final Exception ex) {
-            conn = null;
-        }
+        conn = new BugzillaConnector();
+        conn.connectTo(_server.getAddress());
+        final LogIn logIn = new LogIn(_server.getLogin(), _server.getPassword());
+        conn.executeMethod(logIn);
         return conn;
     }
 
@@ -70,14 +67,9 @@ public class BZServerProxyFactory implements IBZServerProxyFactory {
     }
 
     @Override
-    public IBZServerProxy newTestConnector(final BZServerConfiguration serv) {
+    public IBZServerProxy newTestConnector(final BZServerConfiguration serv) throws ConnectionException, BugzillaException {
 
         return new BZServerProxy(testConnexion(serv));
     }
 
-    /*
-     * BZServerProxy servProx = new BZServerProxy(bugzillaConnector);
-     * this.serverController = servProx;
-     * servProx.connexion();
-     */
 }

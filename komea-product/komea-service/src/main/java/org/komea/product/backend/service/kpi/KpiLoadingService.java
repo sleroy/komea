@@ -6,6 +6,8 @@ package org.komea.product.backend.service.kpi;
 
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.annotation.PostConstruct;
 
@@ -20,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This service performs the loading of existing KPI (extracted from Database).
- * 
+ *
  * @author sleroy
  */
 @Service
@@ -56,18 +58,27 @@ public class KpiLoadingService implements IKpiLoadingService {
     @PostConstruct
     public void initLoadingService() {
     
-        LOGGER.info("LOADING KPI FROM DATABASE");
-        
-        final List<Kpi> allKpis = kpiService.selectAll();
-        LOGGER.info("found kpi in database  {}", allKpis.size());
-        for (final Kpi existingKpi : allKpis) {
-            try {
-                kpiRegisterService.createOrUpdateQueryFromKpi(existingKpi);
-            } catch (final Exception _e) {
-                LOGGER.error(_e.getMessage(), _e);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            
+            @Override
+            public void run() {
+            
+                LOGGER.info("LOADING KPI FROM DATABASE");
+                
+                final List<Kpi> allKpis = kpiService.selectAll();
+                LOGGER.info("found kpi in database  {}", allKpis.size());
+                for (final Kpi existingKpi : allKpis) {
+                    try {
+                        kpiRegisterService.createOrUpdateQueryFromKpi(existingKpi);
+                    } catch (final Exception _e) {
+                        LOGGER.error(_e.getMessage(), _e);
+                    }
+                }
+                LOGGER.info("----------------------------------------");
             }
-        }
-        LOGGER.info("----------------------------------------");
+        });
+        
     }
     
     /**

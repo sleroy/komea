@@ -8,34 +8,10 @@ import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiAlertType;
 import org.komea.product.database.model.KpiCriteria;
 import org.komea.product.database.model.SuccessFactor;
-import org.komea.product.service.dto.KpiKey;
 
 /**
  */
 public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria> {
-
-    /**
-     * Finds a KPI if existing.
-     *
-     * @param _kpiKey KpiKey
-     * @return the kpi./
-     */
-    public Kpi findKPI(KpiKey _kpiKey);
-
-    /**
-     * Finds a KPI if existing.
-     *
-     * @param _kpiKey KpiKey
-     * @return the kpi./
-     */
-    public Kpi findKPI(String _kpiKey);
-
-    /**
-     * Finds a KPI or throws an exception
-     *
-     * @param _kpiKey KpiKey // * @return the KPI or an exception.
-     */
-    public Kpi findKPIOrFail(KpiKey _kpiKey);
 
     /**
      * Finds a KPI or throws an exception
@@ -43,13 +19,15 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria> 
      * @param _kpiKey KpiKey
      * @return the KPI or an exception.
      */
-    public Kpi findKPIOrFail(String _kpiKey);
+    Kpi selectByKeyOrFail(String _kpiKey);
+
+    Kpi selectByPrimaryKeyOrFail(Integer _kpiId);
 
     /**
      * @param _entityType
      * @return
      */
-    public List<Kpi> getAllKpisOfEntityType(EntityType _entityType);
+    List<Kpi> getAllKpisOfEntityType(EntityType _entityType);
 
     /**
      * Creates a new KPI.
@@ -57,7 +35,7 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria> 
      * @param _kpi a new KPI.
      */
     @Override
-    public void saveOrUpdate(Kpi _kpi);
+    void saveOrUpdate(Kpi _kpi);
 
     /**
      * @param kpi
@@ -65,8 +43,6 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria> 
     void deleteKpi(Kpi kpi);
 
     List<Kpi> getBaseKpisOfGroupKpiKeys(List<String> groupKpiKeys);
-
-    List<Kpi> getKpisForGroups(List<Kpi> simpleKpis);
 
     List<Kpi> getKpisOfGroupKpiKeys(List<String> groupKpiKeys, List<Kpi> kpis);
 
@@ -104,5 +80,7 @@ public interface IKPIService extends IGenericService<Kpi, Integer, KpiCriteria> 
      * @param successFactors
      */
     void saveOrUpdateKpi(Kpi kpi, List<KpiAlertType> alertTypes, List<SuccessFactor> successFactors);
+
+    List<Kpi> selectByCriteriaWithBLOBs(KpiCriteria _criteria);
 
 }

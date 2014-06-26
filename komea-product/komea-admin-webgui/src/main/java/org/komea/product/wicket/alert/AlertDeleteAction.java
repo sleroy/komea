@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.komea.product.backend.service.alert.IAlertTypeService;
 import org.komea.product.database.model.KpiAlertType;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 import org.komea.product.wicket.utils.AbstractDeleteAction;
 
 /**
@@ -21,7 +21,7 @@ public class AlertDeleteAction extends AbstractDeleteAction<KpiAlertType> {
     private final List<KpiAlertType> alertAffichage;
     private final IAlertTypeService alertService;
 
-    public AlertDeleteAction(List<KpiAlertType> alertAffichage, IAlertTypeService alertService,LayoutPage page) {
+    public AlertDeleteAction(List<KpiAlertType> alertAffichage, IAlertTypeService alertService,StatelessLayoutPage page) {
         super(page, "dialogdelete");
         this.alertAffichage = alertAffichage;
         this.alertService = alertService;

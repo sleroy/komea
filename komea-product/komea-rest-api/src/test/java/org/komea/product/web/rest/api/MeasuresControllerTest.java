@@ -1,10 +1,9 @@
-
 package org.komea.product.web.rest.api;
 
-
+import com.google.common.collect.Lists;
 import java.util.Calendar;
 import java.util.Date;
-
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.product.backend.service.kpi.IMeasureService;
@@ -30,37 +29,51 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase {
-    
+
     @Autowired
     private WebApplicationContext context;
-    
-    private MockMvc               mockMvc;
-    
+
+    private MockMvc mockMvc;
+
     @Autowired
     @InjectMocks
-    private MeasuresController    measureController;
-    
+    private MeasuresController measureController;
+
     @Mock
-    private IMeasureService       service;
-    
+    private IMeasureService service;
+
     @Before
     public void setUp() {
-    
+
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
         MockitoAnnotations.initMocks(this);
-        
+
     }
-    
+
     @Test
     public void testfindHistoricalMeasure() throws Exception {
-    
+
         TimeSerieDTO serie = new TimeSerieDTO();
         Mockito.when(service.findHistoricalMeasure(Matchers.any(KpiStringKey.class), Matchers.any(PeriodTimeSerieOptions.class)))
                 .thenReturn(serie);
         // .thenReturn(measures);
-        
+
         // HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
         // LimitCriteria limit = LimitCriteria.createDefaultLimitCriteria();
+        ManyHistoricalMeasureRequest request = getHistoricalRequest();
+        String jsonMessage = IntegrationTestUtil.convertObjectToJSON(request);
+        System.out.println(jsonMessage);
+
+        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/historic")
+                .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
+
+        httpRequest.andDo(MockMvcResultHandlers.print());
+        httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+
+    private ManyHistoricalMeasureRequest getHistoricalRequest() {
+
         ManyHistoricalMeasureRequest request = new ManyHistoricalMeasureRequest();
         PeriodCriteria period = new PeriodCriteria();
         Calendar calendar = Calendar.getInstance();
@@ -68,15 +81,62 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         period.setStartDate(calendar.getTime());
         period.setEndDate(new Date());
         request.setPeriod(period);
+        return request;
+    }
+
+    @Test
+    public void testAverageHistoricalWithEvolution_http_success() throws Exception {
+
+        List<TimeSerieDTO> series = Lists.newArrayList();
+        ManyHistoricalMeasureRequest request = getHistoricalRequest();
+        Mockito.when(service.findMultipleHistoricalMeasure(request.getKpiKeyList(), request.getPeriod().previous())).thenReturn(series);
+        // .thenReturn(measures);
+
+        // HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
+        // LimitCriteria limit = LimitCriteria.createDefaultLimitCriteria();
+        // MeasureEvolutionResult evolution = new MeasureEvolutionResult();
+        // MeasureResult measureResult = new MeasureResult();
+        // BaseEntityDto entity = new BaseEntityDto(EntityType.PROJECT, 1, "KOMEA", "KOMEA", "");
+        // measureResult.setEntity(entity);
+        // measureResult.setKpi(KpiBuilder.create().build());
+        // evolution.setMeasureResult(measureResult);
+        // evolution.set
         String jsonMessage = IntegrationTestUtil.convertObjectToJSON(request);
         System.out.println(jsonMessage);
-        
-        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/historic")
+
+        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/averageHistoricEvolution")
                 .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
-        
+
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        
+
     }
-    
+
+    @Test
+    public void testAverageHistoricalWithEvolution_old_value() throws Exception {
+
+        List<TimeSerieDTO> series = Lists.newArrayList();
+        ManyHistoricalMeasureRequest request = getHistoricalRequest();
+        Mockito.when(service.findMultipleHistoricalMeasure(request.getKpiKeyList(), request.getPeriod().previous())).thenReturn(series);
+        // .thenReturn(measures);
+
+        // HistoryStringKeyList history = new HistoryStringKeyList(ExtendedEntityType.PROJECT);
+        // LimitCriteria limit = LimitCriteria.createDefaultLimitCriteria();
+        // MeasureEvolutionResult evolution = new MeasureEvolutionResult();
+        // MeasureResult measureResult = new MeasureResult();
+        // BaseEntityDto entity = new BaseEntityDto(EntityType.PROJECT, 1, "KOMEA", "KOMEA", "");
+        // measureResult.setEntity(entity);
+        // measureResult.setKpi(KpiBuilder.create().build());
+        // evolution.setMeasureResult(measureResult);
+        // evolution.set
+        String jsonMessage = IntegrationTestUtil.convertObjectToJSON(request);
+        System.out.println(jsonMessage);
+
+        final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.post("/measures/averageHistoricEvolution")
+                .contentType(MediaType.APPLICATION_JSON).content(jsonMessage));
+
+        httpRequest.andDo(MockMvcResultHandlers.print());
+        httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
 }

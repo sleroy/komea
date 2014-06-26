@@ -9,13 +9,14 @@ package org.komea.product.plugins.timemanagement.model;
 import org.joda.time.DateTime;
 import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Project;
+import org.komea.product.plugins.model.IDynamicData;
 
 
 
 /**
  * @author sleroy
  */
-public interface ITimeManagementDataLine
+public interface ITimeManagementDataLine extends IDynamicData
 {
     
     

@@ -71,8 +71,8 @@ public final class PeriodCriteria {
 
     public PeriodCriteria previous() {
         final PeriodCriteria periodCriteria = new PeriodCriteria();
-        periodCriteria.setStartDate(new Date(2 * startDate.getTime() - endDate.getTime()));
-        periodCriteria.setEndDate(new Date(startDate.getTime()));
+        periodCriteria.setStartDate(new Date(2 * startDate.getTime() - endDate.getTime() - 1));
+        periodCriteria.setEndDate(new Date(startDate.getTime() - 1));
         return periodCriteria;
     }
 

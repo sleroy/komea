@@ -9,7 +9,7 @@ import org.komea.product.database.api.IEntity;
 
 /**
  */
-public class KPINotFoundException extends KomeaException
+public class KPINotFoundException extends KomeaRuntimeException
 {
     
     

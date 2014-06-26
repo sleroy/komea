@@ -13,7 +13,7 @@ import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.entities.IProviderService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.database.model.Kpi;
-import org.komea.product.wicket.LayoutPage;
+import org.komea.product.wicket.StatelessLayoutPage;
 
 
 
@@ -22,7 +22,7 @@ import org.komea.product.wicket.LayoutPage;
  * 
  * @author sleroy
  */
-public class KpiEditPage extends LayoutPage
+public class KpiEditPage extends StatelessLayoutPage
 {
     
     
