@@ -70,6 +70,7 @@ public class MeasureService implements IMeasureService {
         return currentMeasure(kpi, entity);
     }
 
+    @Deprecated
     @Override
     public TimeSerieDTO findHistoricalMeasure(
             final KpiStringKey _kpiKey,
@@ -109,6 +110,7 @@ public class MeasureService implements IMeasureService {
         Validate.notNull(_kpiKeyList.getKpiKeys());
         Validate.notNull(_kpiKeyList.getEntityType());
         Validate.notNull(_period);
+        
         final List<TimeSerieDTO> series = Lists.newArrayList();
         final PeriodTimeSerieOptions options = new PeriodTimeSerieOptions();
         options.setFromPeriod(new DateTime(_period.getStartDate()));

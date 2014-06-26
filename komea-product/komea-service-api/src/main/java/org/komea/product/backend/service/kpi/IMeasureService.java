@@ -53,11 +53,13 @@ public interface IMeasureService
      * @param _period
      *            the period to find measure (start --> end). If the period
      *            is not valid an IllegalArgumentException is launched
+     * @deprecated method no more longer used, use the findHistoricalMeasure with the other parameter.
      * @return a series of measure with these date
      */
+    @Deprecated
     TimeSerieDTO findHistoricalMeasure(KpiStringKey _kpiKey, PeriodTimeSerieOptions _period);
-
-
+    
+    
     /**
      * this method find historical measure for a list of kpi apply on a list of
      * entities during a period
@@ -73,5 +75,5 @@ public interface IMeasureService
     List<TimeSerieDTO> findMultipleHistoricalMeasure(
             KpiStringKeyList _kpiKeyList,
             PeriodCriteria _period);
-
+    
 }
