@@ -11,6 +11,7 @@ import java.util.List;
 import org.junit.Test;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
+import org.komea.product.backend.api.IMeasureStorageService;
 import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.backend.service.kpi.FormulaID;
@@ -104,28 +105,31 @@ public class FindHistoricalMeasuresITest extends AbstractSpringIntegrationTestCa
     
     
     
-    private static final String PROJECT_YYY_ZZZ = "PROJECT YYY ZZZ";
+    private static final String    PROJECT_YYY_ZZZ = "PROJECT YYY ZZZ";
 
     @Autowired
-    private IKPIService         kpiAPI;
+    private IKPIService            kpiAPI;
 
     @Autowired
-    private IQueryService       kpiQueryService;
+    private IQueryService          kpiQueryService;
 
     @Autowired
-    private IKPIService         kpiService;
+    private IKPIService            kpiService;
 
     @Autowired
-    private MeasureDao          measureDao;
+    private MeasureDao             measureDao;
 
     @Autowired
-    private IMeasureService     measureService;
+    private IMeasureService        measureService;
 
     @Autowired
-    private IProjectService     projectService;
+    private IMeasureStorageService measureStorageService;
 
     @Autowired
-    private IStatisticsAPI      statisticsAPI;
+    private IProjectService        projectService;
+    
+    @Autowired
+    private IStatisticsAPI         statisticsAPI;
     
     
     
@@ -150,7 +154,7 @@ public class FindHistoricalMeasuresITest extends AbstractSpringIntegrationTestCa
         // AND QUERY SHOULD HAVE BEEN REGISTERED
         assertTrue(kpiQueryService.isQueryOfKpiRegistered(build));
         // FORCE BACKUP
-        statisticsAPI.backupKpiValuesIntoHistory(BackupDelay.DAY);
+        measureStorageService.storeActualValueInHistory(build.getId(), BackupDelay.DAY);
         // WE SHOULD HAVE ONE VALUE FOR THIS KPI IN MEASURE
         final MeasureCriteria example = new MeasureCriteria();
         example.createCriteria().andIdKpiEqualTo(FormulaID.of(build).getId());

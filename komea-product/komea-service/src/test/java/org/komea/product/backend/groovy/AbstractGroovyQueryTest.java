@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.backend.groovy;
@@ -11,6 +11,7 @@ import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IGroovyEngineService;
+import org.komea.product.backend.api.IMeasureStorageService;
 import org.komea.product.backend.service.kpi.GroovyScriptLoader;
 import org.komea.product.backend.service.kpi.IEntityKpiFormula;
 import org.komea.product.backend.service.kpi.IKPIService;
@@ -87,13 +88,16 @@ public class AbstractGroovyQueryTest extends AbstractSpringIntegrationTestCase
     
     
     @Autowired
-    private IGroovyEngineService groovyEngineService;
+    private IGroovyEngineService   groovyEngineService;
     
     @Autowired
-    private IKPIService          kpiService;
+    private IKPIService            kpiService;
     
     @Autowired
-    private IStatisticsAPI       statisticsAPI;
+    private IMeasureStorageService measureStorageService;
+    
+    @Autowired
+    private IStatisticsAPI         statisticsAPI;
     
     
     
@@ -101,10 +105,15 @@ public class AbstractGroovyQueryTest extends AbstractSpringIntegrationTestCase
     public void testGroovyScript() {
     
     
-        kpiService.saveOrUpdate(fakeKpi("DEMO_KPI_GROOVY1"));
-        kpiService.saveOrUpdate(fakeKpi("DEMO_KPI_GROOVY2"));
-        final GroovyScriptLoader groovyScriptLoader = new GroovyScriptLoader("groovyScript.groovy");
-        statisticsAPI.backupKpiValuesIntoHistory(BackupDelay.DAY);
+        final Kpi fakeKpi = fakeKpi("DEMO_KPI_GROOVY1");
+        kpiService.saveOrUpdate(fakeKpi);
+        final Kpi fakeKpi2 = fakeKpi("DEMO_KPI_GROOVY2");
+        kpiService.saveOrUpdate(fakeKpi2);
+        measureStorageService.storeActualValueInHistory(fakeKpi.getId(), BackupDelay.DAY);
+        measureStorageService.storeActualValueInHistory(fakeKpi2.getId(), BackupDelay.DAY);
+        final GroovyScriptLoader groovyScriptLoader =
+                new GroovyScriptLoader("scripts/groovyScript.groovy");
+        
         final Kpi kpi = new Kpi();
         kpi.setEntityType(EntityType.PERSON);
         kpi.setEsperRequest(groovyScriptLoader.load());
@@ -116,7 +125,7 @@ public class AbstractGroovyQueryTest extends AbstractSpringIntegrationTestCase
     
     /**
      * Fake kpi
-     * 
+     *
      * @param _string
      * @return
      */
