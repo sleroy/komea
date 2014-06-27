@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<kom_customer id="1" name="SIGMA" />
+	<kom_pero id="1" name="tocea" />
+	<kom_pe id="1" idPersonRole="1" firstName="jeremie" lastName="Guidoux"
+		login="jguidoux" email="jeremie.guidoux@tocea.com" userBdd="KOMEA" />
+	<kom_pe id="2" idPersonRole="1" firstName="sylvain" lastName="Leroy"
+		login="sleroy" email="sylvain.leroy@tocea.com@tocea.com" userBdd="KOMEA" />
+
+	<kom_proj id="1" projectKey="komea" name="komea" description="kpi alert" />
+	<kom_proj id="2" projectKey="techdebt" name="techdebt"
+		description="tech debt calculator" />
+
+
+
+	<kom_kpi id="1" kpiKey="LINE_COVERAGE" name="Line coverage"
+		description="Line coverage" valueMin="5e-324" valueMax="1.7976931348623157e308"
+		valueDirection="BETTER" valueType="INT" entityType="PROJECT"
+		esperRequest="package org.komea.product.backend.service.kpi;
+import org.komea.eventory.query.CEPQuery;
+import org.komea.eventory.query.CEPQueryImplementation;
+
+public class Gni extends StubQuery {
+
+	public Gni() {
+		super();
+
+	}
+}
+"
+		cronExpression="0 0 0 /1 * ? *" providerType="QUALITY" groupFormula="AVG_VALUE" />
+
+	<kom_kpi id="2" kpiKey="BRANCH_COVERAGE(%)" name="Branch coverage(%)"
+		description="Branch coverage(%)" valueMin="5e-324" valueMax="1.7976931348623157e308"
+		valueDirection="BETTER" valueType="INT" entityType="PROJECT"
+		esperRequest="package org.komea.product.backend.service.kpi;
+import org.komea.eventory.query.CEPQuery;
+import org.komea.eventory.query.CEPQueryImplementation;
+
+public class Gni3 extends StubQuery {
+
+	public Gni3() {
+		super();
+
+	}
+}
+"
+		cronExpression="0 0 0 /1 * ? *" providerType="QUALITY" groupFormula="AVG_VALUE" />
+
+	<kom_kpi id="3" kpiKey="LINE_COVERAGE_MISSING" name="Branch coverage(%)"
+		description="Branch coverage(%)" valueMin="5e-324" valueMax="1.7976931348623157e308"
+		valueDirection="BETTER" valueType="INT" entityType="PROJECT"
+		esperRequest="package org.komea.product.backend.service.kpi;
+import org.komea.eventory.query.CEPQuery;
+import org.komea.eventory.query.CEPQueryImplementation;
+
+public class Gni2 extends StubQuery {
+
+	public Gni2() {
+		super();
+
+	}
+}
+"
+		cronExpression="0 0 0 /1 * ? *" providerType="QUALITY" groupFormula="AVG_VALUE" />
+
+
+	<kom_msr id="1" idKpi="4651f38cf755a6615cfdfe9a1e65b6f6"
+		entityID="1" year="2014" month="1" day="6" week="1" value="35"
+		date="2014-01-06 00:00:00" />
+	<kom_msr id="2" idKpi="4651f38cf755a6615cfdfe9a1e65b6f6"
+		entityID="2" year="2014" month="5" day="1" week="19" value="60"
+		date="2014-05-01 00:00:00" />
+
+
+	<kom_msr id="3" idKpi="20c553971b955db06c5ffb98d415e518"
+		entityID="1" year="2014" month="1" day="6" week="1" value="35"
+		date="2014-01-06 00:00:00" />
+	<kom_msr id="4" idKpi="20c553971b955db06c5ffb98d415e518"
+		entityID="2" year="2014" month="5" day="1" week="19" value="60"
+		date="2014-05-01 00:00:00" />
+
+	<kom_msr id="5" idKpi="b0b6b514e832eb75406aa9c7417f93d4"
+		entityID="1" year="2014" month="1" day="6" week="1" value="35"
+		date="2014-01-06 00:00:00" />
+
+
+</dataset>
