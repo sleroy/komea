@@ -49,16 +49,30 @@
 	</filter-mapping>
 
 
+	<filter-mapping>
+		<filter-name>dumpFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>dumpFilter</filter-name>
+		<filter-class>org.komea.product.web.rest.api.DumpFilter</filter-class>
+
+	</filter>
+
+
+
+
 	<filter>
 		<filter-name>wicket.komea</filter-name>
 		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
-		<init-param>		
+		<init-param>
 			<param-name>wicket.configuration</param-name>
-			<param-value>DEPLOYMENT</param-value>			
+			<param-value>DEPLOYMENT</param-value>
 		</init-param>
-		<init-param>		
+		<init-param>
 			<param-name>applicationClassName</param-name>
-			<param-value>org.komea.product.wicket.WicketApplication</param-value>			
+			<param-value>org.komea.product.wicket.WicketApplication</param-value>
 		</init-param>
 	</filter>
 

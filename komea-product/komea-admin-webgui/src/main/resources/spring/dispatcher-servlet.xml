@@ -9,12 +9,13 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 			    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
-	
+
 
 	<import resource="thymeleaf-servlet.xml" />
 
 	<mvc:annotation-driven>
 	</mvc:annotation-driven>
+
 
 	<!-- <mvc:resources mapping="/static/**" location="/static/" /> -->
 
@@ -35,7 +36,7 @@
 			</props>
 		</property>
 	</bean>
-	
-	
+
+
 
 </beans>
