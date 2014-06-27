@@ -9,6 +9,8 @@ import org.komea.product.database.api.IEntity;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.dto.TimeSerieDTO;
+import org.komea.product.model.timeserie.table.dto.TimeSerieOptionsDTO;
+import org.komea.product.model.timeserie.table.dto.TimeSerieTableDTO;
 import org.komea.product.service.dto.KpiStringKey;
 import org.komea.product.service.dto.KpiStringKeyList;
 import org.komea.product.service.dto.PeriodCriteria;
@@ -17,8 +19,22 @@ import org.komea.product.service.dto.PeriodCriteria;
 
 public interface IMeasureService
 {
-    
-    
+
+
+    /**
+     * Builds a time serie for an entity and a list of kpis.
+     *
+     * @param _entityType
+     * @param _entityKey
+     * @param _timeSerieOptionsDTO
+     * @return
+     */
+    TimeSerieTableDTO buildTimeLineForEntity(
+            String _entityType,
+            String _entityKey,
+            TimeSerieOptionsDTO _timeSerieOptionsDTO);
+
+
     /**
      * This method return the current value of the kpi on an entity
      *
@@ -29,8 +45,8 @@ public interface IMeasureService
      * @return the current value
      */
     Double currentMeasure(Kpi kpi, IEntity entity);
-    
-    
+
+
     /**
      * This method return the current value of the kpi on an entity If the kpi
      * does not exist a KPINotFoundRuntimeException is launched If the entity
@@ -41,8 +57,8 @@ public interface IMeasureService
      * @return the current value
      */
     Double currentMeasure(KpiStringKey _kpiKey);
-    
-    
+
+
     /**
      * this method find historical measure for a kpi on an entity during a
      * period
@@ -58,8 +74,8 @@ public interface IMeasureService
      */
     @Deprecated
     TimeSerieDTO findHistoricalMeasure(KpiStringKey _kpiKey, PeriodTimeSerieOptions _period);
-    
-    
+
+
     /**
      * this method find historical measure for a list of kpi apply on a list of
      * entities during a period
@@ -75,5 +91,5 @@ public interface IMeasureService
     List<TimeSerieDTO> findMultipleHistoricalMeasure(
             KpiStringKeyList _kpiKeyList,
             PeriodCriteria _period);
-    
+
 }

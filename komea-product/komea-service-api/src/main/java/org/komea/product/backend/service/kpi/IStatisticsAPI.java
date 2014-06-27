@@ -15,6 +15,7 @@ import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.KpiGoal;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.TimeScale;
+import org.komea.product.model.timeserie.TimeSerie;
 import org.komea.product.model.timeserie.TimeSerieOptions;
 import org.komea.product.service.dto.EntityKey;
 

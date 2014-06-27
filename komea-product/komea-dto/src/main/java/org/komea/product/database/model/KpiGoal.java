@@ -3,7 +3,6 @@ package org.komea.product.database.model;
 
 
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.validation.constraints.Size;
@@ -13,7 +12,7 @@ import org.komea.product.database.api.IKeyVisitor;
 
 
 
-public class KpiGoal implements Serializable, IHasKey
+public class KpiGoal implements IHasKey
 {
 
 
