@@ -1,7 +1,4 @@
-
 package org.komea.product.wicket.kpiimport;
-
-
 
 import java.io.File;
 import java.io.IOException;
@@ -14,30 +11,22 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.util.file.Files;
 import org.apache.wicket.util.lang.Bytes;
 
-
-
 /**
  * Form for uploads.
  */
-public class FileUploadForm extends Form<Void>
-{
-
+public class FileUploadForm extends Form<Void> {
 
     private final WebPage kpiImportPage;
-    private final File    uploadFolder;
-    FileUploadField       fileUploadField;
-
-
+    private final File uploadFolder;
+    FileUploadField fileUploadField;
 
     /**
      * Construct.
      *
-     * @param _name
-     *            Component name
+     * @param _name Component name
      * @param _kpiImportPage
      */
     public FileUploadForm(final String _name, final File _uploadFolder, final WebPage _kpiImportPage) {
-
 
         super(_name);
         uploadFolder = _uploadFolder;
@@ -53,15 +42,12 @@ public class FileUploadForm extends Form<Void>
 
     }
 
-
     /**
      * Check whether the file allready exists, and if so, try to delete it.
      *
-     * @param newFile
-     *            the file to check
+     * @param newFile the file to check
      */
     private void checkFileExists(final File newFile) {
-
 
         if (newFile.exists()) {
             // Try to delete the file
@@ -71,13 +57,11 @@ public class FileUploadForm extends Form<Void>
         }
     }
 
-
     /**
      * @see org.apache.wicket.markup.html.form.Form#onSubmit()
      */
     @Override
     protected void onSubmit() {
-
 
         final List<FileUpload> uploads = fileUploadField.getFileUploads();
         if (uploads != null) {
@@ -90,16 +74,21 @@ public class FileUploadForm extends Form<Void>
                 try {
                     // Save to new file
                     newFile.createNewFile();
+//                    System.out.println("step 1 " + newFile.getAbsolutePath());
                     upload.writeTo(newFile);
 
+//                    System.out.println("saved file: " + upload.getClientFileName());
                     kpiImportPage.info("saved file: " + upload.getClientFileName());
 
-                    try {
-                        setResponsePage(new KpiZipReadPage(kpiImportPage.getPageParameters(),
-                                uploads.get(0).writeToTempFile()));
-                    } catch (final IOException e) {
-                        error(e.getMessage());
-                    }
+//                    try {
+//                        File writeToTempFile = uploads.get(0).writeToTempFile();
+//                        System.out.println("step 2 "+writeToTempFile.getAbsolutePath());
+                    setResponsePage(new KpiZipReadPage(kpiImportPage.getPageParameters(),
+                            newFile));
+//                    } catch (final IOException e) {
+//                        error(e.getMessage());
+//                        e.printStackTrace();
+//                    }
                 } catch (final Exception e) {
                     throw new IllegalStateException("Unable to write file", e);
                 }
