@@ -34,15 +34,15 @@ import com.google.common.collect.Maps;
 @RequestMapping(value = "/measures")
 public class MeasuresController
 {
-    
-    
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MeasuresController.class);
-    
+
     @Autowired
     private IMeasureService     measureService;
-    
-    
-    
+
+
+
     /**
      * Utilisé pour les bubble charts et les bar charts.
      *
@@ -56,9 +56,9 @@ public class MeasuresController
             produces = "application/json; charset=utf-8")
     @ResponseBody
     public List<MeasureResult> averageHistoricalMeasure(@RequestBody
-    final ManyHistoricalMeasureRequest _request) {
-    
-    
+            final ManyHistoricalMeasureRequest _request) {
+
+
         LOGGER.info("REQUEST : averageHistoricalMeasure {}", _request);
         List<MeasureResult> timeSeriesToMeasureResults = Collections.EMPTY_LIST;
         try {
@@ -66,15 +66,15 @@ public class MeasuresController
                     measureService.findMultipleHistoricalMeasure(_request.getKpiKeyList(),
                             _request.getPeriod());
             timeSeriesToMeasureResults = TimeSerieDTO.timeSeriesToMeasureResults(timeSerieDTOs);
-            
+
         } catch (final Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
         LOGGER.info("RESPONSE : averageHistoricalMeasure {}", timeSeriesToMeasureResults);
         return timeSeriesToMeasureResults;
     }
-    
-    
+
+
     /**
      * Utilisé pour les tableaux.
      *
@@ -88,9 +88,9 @@ public class MeasuresController
             produces = "application/json; charset=utf-8")
     @ResponseBody
     public List<MeasureEvolutionResult> averageHistoricalWithEvolution(@RequestBody
-    final ManyHistoricalMeasureRequest _request) {
-    
-    
+            final ManyHistoricalMeasureRequest _request) {
+
+
         LOGGER.info("REQUEST : averageHistoricalWithEvolution {}", _request);
         final List<MeasureEvolutionResult> measureEvolutionResults = Lists.newArrayList();
         try {
@@ -103,7 +103,7 @@ public class MeasuresController
                 oldValues.put(KpiKey.ofKpiAndEntity(oldTimeSerieDTO.getKpi(),
                         oldTimeSerieDTO.getEntity()), oldTimeSerieDTO.getGroupFormulaValue());
             }
-            
+
             for (final MeasureResult measureResult : averageHistoricalMeasure) {
                 final Double oldValue =
                         oldValues.get(KpiKey.ofKpiAndEntity(measureResult.getKpi(),
@@ -116,8 +116,8 @@ public class MeasuresController
         LOGGER.info("RESPONSE : averageHistoricalWithEvolution {}", measureEvolutionResults);
         return measureEvolutionResults;
     }
-    
-    
+
+
     /**
      * Utilisée pour la génération des timecharts avec une table comme DTO
      *
@@ -125,17 +125,17 @@ public class MeasuresController
      * @return
      */
     @RequestMapping(
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             value = "/timeline/{entityType}/{entityKey}",
             consumes = "application/json; charset=utf-8",
             produces = "application/json; charset=utf-8")
     @ResponseBody
     public TimeSerieTableDTO buildTimeline(@PathVariable
-    final String entityType, @PathVariable
-    final String entityKey, @RequestBody()
+            final String entityType, @PathVariable
+            final String entityKey, @RequestBody()
     final TimeSerieOptionsDTO _timeSerieOptions) {
-    
-    
+
+
         LOGGER.info("REQUEST : findHistoricalMeasure {} {} {}", entityType, entityKey,
                 _timeSerieOptions);
         TimeSerieTableDTO timeserie = null;
@@ -147,15 +147,15 @@ public class MeasuresController
             timeserie =
                     measureService.buildTimeLineForEntity(entityType, entityKey,
                             timeSerieOptionsDTO);
-            
+
         } catch (final Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
         LOGGER.info("RESPONSE : findHistoricalMeasure {}", timeserie);
         return timeserie;
     }
-    
-    
+
+
     /**
      * Utilisée pour la génération des timecharts
      *
@@ -169,19 +169,19 @@ public class MeasuresController
             produces = "application/json; charset=utf-8")
     @ResponseBody
     public List<TimeSerieDTO> findHistoricalMeasure(@RequestBody
-    final ManyHistoricalMeasureRequest _request) {
-    
-    
+            final ManyHistoricalMeasureRequest _request) {
+
+
         LOGGER.info("REQUEST : findHistoricalMeasure {}", _request);
         final List<TimeSerieDTO> timeSerieDTOs = Collections.EMPTY_LIST;
         try {
-            
-            
+
+
             measureService.findMultipleHistoricalMeasure(_request.getKpiKeyList(),
                     _request.getPeriod());
             LOGGER.debug("findHistoricalMeasure with params : {}\nResults : {}", _request,
                     timeSerieDTOs);
-            
+
         } catch (final Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
