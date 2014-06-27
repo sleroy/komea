@@ -16,7 +16,7 @@ public class GlobalControllerExceptionHandler {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
     
-    @ExceptionHandler
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ErrorMessage handleException(final Throwable _ex) {
