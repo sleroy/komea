@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -187,11 +188,11 @@ public class DumpFilter implements Filter
     
     
     
-    private static final Logger LOGGER = LoggerFactory.getLogger("logtransaction");
-    private boolean             dumpRequest;
+    private static final Logger LOGGER       = LoggerFactory.getLogger("logtransaction");
+    private boolean             dumpRequest  = true;
 
 
-    private boolean             dumpResponse;
+    private boolean             dumpResponse = true;
 
 
 
@@ -209,11 +210,18 @@ public class DumpFilter implements Filter
             final FilterChain filterChain) throws IOException, ServletException {
 
 
+        if (!(servletRequest instanceof HttpServletRequest)) {
+            return;
+        }
         final HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         final BufferedRequestWrapper bufferedRequest = new BufferedRequestWrapper(httpRequest);
 
         if (dumpRequest) {
             LOGGER.info("REQUEST -> " + new String(bufferedRequest.getBuffer()));
+            
+            printRequestAttributes(httpRequest);
+            
+            printRequestParameters(httpRequest);
         }
 
         final HttpServletResponse response = (HttpServletResponse) servletResponse;
@@ -256,5 +264,43 @@ public class DumpFilter implements Filter
     
         dumpRequest = Boolean.valueOf(filterConfig.getInitParameter("dumpRequest"));
         dumpResponse = Boolean.valueOf(filterConfig.getInitParameter("dumpResponse"));
+    }
+    
+    
+    /**
+     * This method prints all the request attributes that are
+     * available on the HttpServletRequest.
+     * The result will be printed back to the browser.
+     */
+    private void printRequestAttributes(final HttpServletRequest req) {
+    
+    
+        LOGGER.info("IN---- {}", req.getRequestURI());
+        
+        final Enumeration<String> requestAttributes = req.getAttributeNames();
+        while (requestAttributes.hasMoreElements()) {
+            final String attributeName = requestAttributes.nextElement();
+            LOGGER.info("REQUEST + attr {} : value {} ", attributeName,
+                    req.getAttribute(attributeName).toString());
+        }
+        LOGGER.info("");
+    }
+    
+    
+    /**
+     * This method prints all the request parameters that are
+     * available on the HttpServletRequest.
+     * The result will be printed back to the browser
+     */
+    private void printRequestParameters(final HttpServletRequest req) {
+
+
+        final Enumeration<String> requestParameters = req.getParameterNames();
+        while (requestParameters.hasMoreElements()) {
+            final String paramName = requestParameters.nextElement();
+            LOGGER.info("REQUEST + param {} : value {} ", paramName,
+                    req.getAttribute(req.getParameter(paramName)).toString());
+            
+        }
     }
 }

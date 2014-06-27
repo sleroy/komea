@@ -53,12 +53,16 @@ public class MeasuresController
     @ResponseBody
     public List<MeasureResult> averageHistoricalMeasure(@RequestBody
             final ManyHistoricalMeasureRequest _request) {
-
-
+    
+    
+        LOGGER.info("REQUEST : averageHistoricalMeasure {}", _request);
         final List<TimeSerieDTO> timeSerieDTOs =
                 measureService.findMultipleHistoricalMeasure(_request.getKpiKeyList(),
                         _request.getPeriod());
-        return TimeSerieDTO.timeSeriesToMeasureResults(timeSerieDTOs);
+        final List<MeasureResult> timeSeriesToMeasureResults =
+                TimeSerieDTO.timeSeriesToMeasureResults(timeSerieDTOs);
+        LOGGER.info("RESPONSE : averageHistoricalMeasure {}", timeSeriesToMeasureResults);
+        return timeSeriesToMeasureResults;
     }
 
 
@@ -78,6 +82,7 @@ public class MeasuresController
             final ManyHistoricalMeasureRequest _request) {
 
 
+        LOGGER.info("REQUEST : averageHistoricalWithEvolution {}", _request);
         final List<MeasureResult> averageHistoricalMeasure = averageHistoricalMeasure(_request);
         final List<TimeSerieDTO> oldTimeSerieDTOs =
                 measureService.findMultipleHistoricalMeasure(_request.getKpiKeyList(), _request
@@ -95,6 +100,7 @@ public class MeasuresController
                             measureResult.getEntity()));
             measureEvolutionResults.add(new MeasureEvolutionResult(measureResult, oldValue));
         }
+        LOGGER.info("RESPONSE : averageHistoricalWithEvolution {}", measureEvolutionResults);
         return measureEvolutionResults;
     }
 
@@ -115,11 +121,13 @@ public class MeasuresController
             final ManyHistoricalMeasureRequest _request) {
 
 
+        LOGGER.info("REQUEST : findHistoricalMeasure {}", _request);
         final List<TimeSerieDTO> timeSerieDTOs =
                 measureService.findMultipleHistoricalMeasure(_request.getKpiKeyList(),
                         _request.getPeriod());
         LOGGER.debug("findHistoricalMeasure with params : {}\nResults : {}", _request,
                 timeSerieDTOs);
+        LOGGER.info("RESPONSE : findHistoricalMeasure {}", timeSerieDTOs);
         return timeSerieDTOs;
     }
 }
