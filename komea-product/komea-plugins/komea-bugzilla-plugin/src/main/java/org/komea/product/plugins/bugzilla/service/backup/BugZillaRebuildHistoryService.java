@@ -152,12 +152,13 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
     @Override
     public synchronized void rebuildHistory() {
     
-    
-        if (!executor.isTerminated()) {
-            return;
-        }
-        executor = Executors.newSingleThreadExecutor();
+     executor = Executors.newSingleThreadExecutor();
+//        if (!executor.isTerminated()) {
+//            return;
+//        }
+       
         executor.execute(this);
+        
 
     }
 
