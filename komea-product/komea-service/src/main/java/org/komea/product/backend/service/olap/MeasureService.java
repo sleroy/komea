@@ -52,21 +52,21 @@ import com.google.common.collect.Lists;
 @Service
 public class MeasureService implements IMeasureService
 {
-
-
+    
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(MeasureService.class.getName());
-
+    
     @Autowired
     private IEntityService      entityService;
-
+    
     @Autowired
     private IKPIService         kpiService;
-
+    
     @Autowired
     private IStatisticsAPI      statService;
-
-
-
+    
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.service.kpi.IMeasureService#buildTimeLineForEntity(java.lang.String, java.lang.String,
@@ -77,14 +77,14 @@ public class MeasureService implements IMeasureService
             final String _entityType,
             final String _entityKey,
             final TimeSerieOptionsDTO _timeSerieOptionsDTO) {
-
-
+    
+    
         final EntityType entityType = EntityType.valueOf(_entityType);
         final IEntity entity =
                 entityService.findEntityByEntityStringKey(EntityStringKey
                         .of(entityType, _entityKey));
         if (entity == null) {
-
+            
             return new TimeSerieTableDTO();
         }
         List<Kpi> kpis = Lists.newArrayList();
@@ -94,19 +94,19 @@ public class MeasureService implements IMeasureService
             kpis = kpiService.getAllKpisOfEntityType(entityType);
         }
         final TimeSerieTableDTO timeSerieTableDTO = new TimeSerieTableDTO();
-
+        
         CollectionUtil.convertAll(kpis, new Converter<Kpi, String>()
-                {
-
-
+        {
+            
+            
             @Override
             public String convert(final Kpi _source) {
-
-
+            
+            
                 return _source.getName();
             }
-
-                });
+            
+        });
         final ArrayList<TimeSerieSimpleDTO> coordinates = new ArrayList<TimeSerieSimpleDTO>();
         for (final Kpi kpi : kpis) {
             TimeSerieImpl timeSerie;
@@ -120,9 +120,9 @@ public class MeasureService implements IMeasureService
                 timeSerie =
                         (TimeSerieImpl) statService.buildPeriodTimeSeries(periodTimeSerieOptions,
                                 entity.getEntityKey());
-
+                
             } else {
-
+                
                 final TimeSerieOptions timeSerieOptions = new TimeSerieOptions(kpi);
                 timeSerieOptions.setTimeScale(TimeScale.PER_MONTH);
                 timeSerie =
@@ -130,19 +130,19 @@ public class MeasureService implements IMeasureService
                                 entity.getEntityKey());
             }
             coordinates.add(convertTimeSerieIntoDTO(timeSerie));
-
+            
         }
         timeSerieTableDTO.setItems(coordinates);
         return timeSerieTableDTO;
-
-
+        
+        
     }
-
-
+    
+    
     @Override
     public Double currentMeasure(final Kpi kpi, final IEntity entity) {
-
-
+    
+    
         Validate.notNull(kpi);
         Validate.notNull(entity);
         final HistoryKey historyKey = HistoryKey.of(kpi, entity);
@@ -151,12 +151,12 @@ public class MeasureService implements IMeasureService
                 currentKpiValue);
         return currentKpiValue;
     }
-
-
+    
+    
     @Override
     public Double currentMeasure(final KpiStringKey _kpiKey) {
-
-
+    
+    
         final Kpi kpi = kpiService.selectByKey(_kpiKey.getKpiName());
         if (kpi == null) {
             throw new KPINotFoundRuntimeException(_kpiKey.getKpiName());
@@ -167,22 +167,22 @@ public class MeasureService implements IMeasureService
         }
         return currentMeasure(kpi, entity);
     }
-
-
+    
+    
     @Deprecated
     @Override
     public TimeSerieDTO findHistoricalMeasure(
             final KpiStringKey _kpiKey,
             final PeriodTimeSerieOptions _period) {
-
-
+    
+    
         Validate.notNull(_kpiKey);
         Validate.notNull(_kpiKey.getKpiName());
         Validate.notNull(_kpiKey.getEntityKey());
         Validate.notNull(_kpiKey.getEntityKey().getKey());
         Validate.notNull(_kpiKey.getEntityKey().getEntityType());
         Validate.notNull(_period);
-
+        
         final Kpi kpi = kpiService.selectByKey(_kpiKey.getKpiName());
         if (kpi == null) {
             throw new KPINotFoundRuntimeException(_kpiKey.getKpiName());
@@ -192,40 +192,45 @@ public class MeasureService implements IMeasureService
         if (entity == null) {
             throw new EntityNotFoundException(_kpiKey.getEntityKey());
         }
-
+        
         final TimeSerieDTO findHistoricalMeasure = findHistoricalMeasure(kpi, entity, _period);
         LOGGER.debug("findHistoricalMeasure {} {} {}={}", kpi, entity, _period,
                 findHistoricalMeasure);
         return findHistoricalMeasure;
-
+        
     }
-
-
+    
+    
     @Override
     public List<TimeSerieDTO> findMultipleHistoricalMeasure(
             final KpiStringKeyList _kpiKeyList,
             final PeriodCriteria _period) {
-
-
+    
+    
         Validate.notNull(_kpiKeyList);
         Validate.notNull(_kpiKeyList.getEntityKeys());
         Validate.notNull(_kpiKeyList.getKpiKeys());
         Validate.notNull(_kpiKeyList.getEntityType());
         Validate.notNull(_period);
-
+        
         final List<TimeSerieDTO> series = Lists.newArrayList();
         final PeriodTimeSerieOptions options = new PeriodTimeSerieOptions();
         options.setFromPeriod(new DateTime(_period.getStartDate()));
         options.setToPeriod(new DateTime(_period.getEndDate()));
         options.pickBestGranularity();
         final List<String> kpiKeys = new ArrayList<String>(_kpiKeyList.getKpiKeys());
+        LOGGER.info("KpiKeys {}", kpiKeys);
         final List<String> entityKeys = new ArrayList<String>(_kpiKeyList.getEntityKeys());
-
+        LOGGER.info("EntityKeys {}", entityKeys);
+        
         final ExtendedEntityType entityType = _kpiKeyList.getEntityType();
+        LOGGER.info("EntityType {}", entityType);
         final Collection<Kpi> kpis = obtainListOfKpis(kpiKeys, entityType);
+        LOGGER.info("Kpis {}", kpis);
         final Collection<IEntity> entities = obtainListOfEntities(entityKeys, entityType);
+        LOGGER.info("Entities {}", entities);
         for (final IEntity entity : entities) {
-            
+
             for (final Kpi kpi : kpis) {
                 LOGGER.trace("Entity {} and Kpi {} : build serie", entity, kpi);
                 try {
@@ -245,8 +250,8 @@ public class MeasureService implements IMeasureService
                 _kpiKeyList, _period, series);
         return series;
     }
-
-
+    
+    
     /**
      * Converts coordinate into points DTO
      *
@@ -255,38 +260,38 @@ public class MeasureService implements IMeasureService
      * @return
      */
     private List<PointDTO> convertCoordinates(final List<TimeCoordinate> _coordinates) {
-
-
+    
+    
         return CollectionUtil.convertAll(_coordinates, new TimeCoordinateToPointDTO());
     }
-
-
+    
+    
     private TimeSerieSimpleDTO convertTimeSerieIntoDTO(final TimeSerieImpl _timeSerie) {
-
-
+    
+    
         final TimeSerieSimpleDTO timeSerieSimpleDTO = new TimeSerieSimpleDTO();
         timeSerieSimpleDTO.setCoordinates(convertCoordinates(_timeSerie.getCoordinates()));
         timeSerieSimpleDTO.setEntityKey(_timeSerie.getEntityKey());
         timeSerieSimpleDTO.setKpiName(_timeSerie.getKpiName());
         return timeSerieSimpleDTO;
     }
-
-
+    
+    
     private TimeSerieDTO findHistoricalMeasure(
             final Kpi _kpi,
             final IEntity _entity,
             final PeriodTimeSerieOptions _period) {
-
-
+    
+    
         if (_period.getKpiID() == null) {
             _period.setKpiID(_kpi.getId());
         }
         if (_period.getGroupFormula() == null) {
             _period.setGroupFormula(_kpi.getGroupFormula());
         }
-
+        
         final EntityKey entityKey = EntityKey.of(_entity);
-
+        
         final TimeSerie timeSeries = statService.buildPeriodTimeSeries(_period, entityKey);
         LOGGER.debug("findHistoricalMeasure kpi= {}, entity= {}, period= {}", _kpi.getKey(),
                 _entity.getKey(), _period);
@@ -295,15 +300,15 @@ public class MeasureService implements IMeasureService
                         BaseEntityDto.newFromEntity(_entity));
         LOGGER.debug("findHistoricalMeasure result : ", timeSerieDTO);
         return timeSerieDTO;
-
+        
     }
-
-
+    
+    
     private Collection<IEntity> obtainListOfEntities(
             final List<String> entityKeys,
             final ExtendedEntityType entityType) {
-
-
+    
+    
         final Collection<IEntity> entities;
         if (entityKeys.isEmpty()) {
             entities = entityService.getEntitiesByEntityType(entityType.getKpiType());
@@ -312,13 +317,13 @@ public class MeasureService implements IMeasureService
         }
         return entities;
     }
-
-
+    
+    
     private Collection<Kpi> obtainListOfKpis(
             final List<String> kpiKeys,
             final ExtendedEntityType entityType) {
-
-
+    
+    
         final Collection<Kpi> kpis;
         if (kpiKeys.isEmpty()) {
             kpis = kpiService.getAllKpisOfEntityType(entityType.getKpiType());
