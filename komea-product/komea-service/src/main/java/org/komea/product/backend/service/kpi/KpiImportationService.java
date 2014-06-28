@@ -13,7 +13,10 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.io.IOUtils;
+import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IGroovyEngineService;
 import org.komea.product.backend.api.ISpringService;
 import org.komea.product.backend.service.queries.IQueryWithAnnotations;
@@ -38,10 +41,13 @@ public class KpiImportationService implements IKpiImportationService
 
 
     @Autowired
+    private IKPIService          kpiService;
+
+    @Autowired
     private ISpringService       springService;
-
-
-
+    
+    
+    
     public void addKpiToCatalog(
             final String _fileName,
             final InputStream _inputStream,
@@ -107,6 +113,45 @@ public class KpiImportationService implements IKpiImportationService
             LOGGER.error(e.getMessage(), e);
         }
         LOGGER.info("Importation finished");
+    }
+
+
+    @PostConstruct
+    public void initCatalog() {
+
+
+        importCatalogFromClassLoader(new KpiImportator()
+        {
+            
+            
+            @Override
+            public void iterate(
+                    final String _file,
+                    final IQueryWithAnnotations<IQuery> _kpiDefinition,
+                    final Throwable _throwable) {
+
+
+                if (_kpiDefinition != null) {
+                    final Kpi kpi = _kpiDefinition.getAnnotations().getAnnotation("kpi");
+
+                    try {
+                        
+                        if (kpiService.exists(kpi.getKey())) {
+                            return;
+                        }
+                        LOGGER.info("Saving the KPI into komea " + _kpiDefinition);
+                        kpiService.saveOrUpdate(kpi);
+                    } catch (final Exception e) {
+                        LOGGER.error("Exception during importation {}: ", e);
+                    }
+                } else {
+                    LOGGER.error("Could not import the file " + _file + "  for the reason {} ",
+                            _throwable.getMessage(), _throwable);
+                }
+                
+                
+            }
+        });
     }
 
 

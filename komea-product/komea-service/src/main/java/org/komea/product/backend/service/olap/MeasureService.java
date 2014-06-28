@@ -219,16 +219,16 @@ public class MeasureService implements IMeasureService
         options.setToPeriod(new DateTime(_period.getEndDate()));
         options.pickBestGranularity();
         final List<String> kpiKeys = new ArrayList<String>(_kpiKeyList.getKpiKeys());
-        LOGGER.info("KpiKeys {}", kpiKeys);
+        LOGGER.trace("KpiKeys {}", kpiKeys);
         final List<String> entityKeys = new ArrayList<String>(_kpiKeyList.getEntityKeys());
-        LOGGER.info("EntityKeys {}", entityKeys);
+        LOGGER.trace("EntityKeys {}", entityKeys);
         
         final ExtendedEntityType entityType = _kpiKeyList.getEntityType();
-        LOGGER.info("EntityType {}", entityType);
+        LOGGER.trace("EntityType {}", entityType);
         final Collection<Kpi> kpis = obtainListOfKpis(kpiKeys, entityType);
-        LOGGER.info("Kpis {}", kpis);
+        LOGGER.trace("Kpis {}", kpis);
         final Collection<IEntity> entities = obtainListOfEntities(entityKeys, entityType);
-        LOGGER.info("Entities {}", entities);
+        LOGGER.trace("Entities {}", entities);
         for (final IEntity entity : entities) {
 
             for (final Kpi kpi : kpis) {

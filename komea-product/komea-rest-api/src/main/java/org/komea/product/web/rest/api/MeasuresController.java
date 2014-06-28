@@ -59,7 +59,7 @@ public class MeasuresController
             final ManyHistoricalMeasureRequest _request) {
 
 
-        LOGGER.info("REQUEST : averageHistoricalMeasure {}", _request);
+        LOGGER.debug("REQUEST : averageHistoricalMeasure {}", _request);
         List<MeasureResult> timeSeriesToMeasureResults = Collections.EMPTY_LIST;
         try {
             final List<TimeSerieDTO> timeSerieDTOs =
@@ -70,7 +70,7 @@ public class MeasuresController
         } catch (final Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
-        LOGGER.info("RESPONSE : averageHistoricalMeasure {}", timeSeriesToMeasureResults);
+        LOGGER.debug("RESPONSE : averageHistoricalMeasure {}", timeSeriesToMeasureResults);
         return timeSeriesToMeasureResults;
     }
 
@@ -91,7 +91,7 @@ public class MeasuresController
             final ManyHistoricalMeasureRequest _request) {
 
 
-        LOGGER.info("REQUEST : averageHistoricalWithEvolution {}", _request);
+        LOGGER.debug("REQUEST : averageHistoricalWithEvolution {}", _request);
         final List<MeasureEvolutionResult> measureEvolutionResults = Lists.newArrayList();
         try {
             final List<MeasureResult> averageHistoricalMeasure = averageHistoricalMeasure(_request);
@@ -113,7 +113,7 @@ public class MeasuresController
         } catch (final Throwable e) {
             LOGGER.error(e.getMessage(), e);
         }
-        LOGGER.info("RESPONSE : averageHistoricalWithEvolution {}", measureEvolutionResults);
+        LOGGER.debug("RESPONSE : averageHistoricalWithEvolution {}", measureEvolutionResults);
         return measureEvolutionResults;
     }
 
@@ -136,7 +136,7 @@ public class MeasuresController
     final TimeSerieOptionsDTO _timeSerieOptions) {
 
 
-        LOGGER.info("REQUEST : findHistoricalMeasure {} {} {}", entityType, entityKey,
+        LOGGER.debug("REQUEST : findHistoricalMeasure {} {} {}", entityType, entityKey,
                 _timeSerieOptions);
         TimeSerieTableDTO timeserie = null;
         try {
@@ -151,7 +151,7 @@ public class MeasuresController
         } catch (final Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
-        LOGGER.info("RESPONSE : findHistoricalMeasure {}", timeserie);
+        LOGGER.debug("RESPONSE : findHistoricalMeasure {}", timeserie);
         return timeserie;
     }
 
@@ -168,11 +168,11 @@ public class MeasuresController
             consumes = "application/json; charset=utf-8",
             produces = "application/json; charset=utf-8")
     @ResponseBody
-    public List<TimeSerieDTO> findHistoricalMeasure(@RequestBody
+    public List<TimeSerieDTO> buildTimeLine(@RequestBody
             final ManyHistoricalMeasureRequest _request) {
 
 
-        LOGGER.info("REQUEST : findHistoricalMeasure {}", _request);
+        LOGGER.debug("REQUEST : buildTimeLine {}", _request);
         List<TimeSerieDTO> timeSerieDTOs = Collections.EMPTY_LIST;
         try {
 
@@ -180,13 +180,12 @@ public class MeasuresController
             timeSerieDTOs =
                     measureService.findMultipleHistoricalMeasure(_request.getKpiKeyList(),
                             _request.getPeriod());
-            LOGGER.debug("findHistoricalMeasure with params : {}\nResults : {}", _request,
-                    timeSerieDTOs);
+            LOGGER.debug("buildTimeLine with params : {}\nResults : {}", _request, timeSerieDTOs);
 
         } catch (final Exception e) {
-            LOGGER.error("RESPONSE : {}", e.getMessage(), e);
+            LOGGER.error("RESPONSE_ERROR : {}", e.getMessage(), e);
         } finally {
-            LOGGER.info("RESPONSE : findHistoricalMeasure {}", timeSerieDTOs);
+            LOGGER.debug("RESPONSE : buildTimeLine {}", timeSerieDTOs);
         }
         return timeSerieDTOs;
     }
