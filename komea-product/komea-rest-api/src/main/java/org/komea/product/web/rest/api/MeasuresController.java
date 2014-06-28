@@ -173,19 +173,21 @@ public class MeasuresController
 
 
         LOGGER.info("REQUEST : findHistoricalMeasure {}", _request);
-        final List<TimeSerieDTO> timeSerieDTOs = Collections.EMPTY_LIST;
+        List<TimeSerieDTO> timeSerieDTOs = Collections.EMPTY_LIST;
         try {
 
 
-            measureService.findMultipleHistoricalMeasure(_request.getKpiKeyList(),
-                    _request.getPeriod());
+            timeSerieDTOs =
+                    measureService.findMultipleHistoricalMeasure(_request.getKpiKeyList(),
+                            _request.getPeriod());
             LOGGER.debug("findHistoricalMeasure with params : {}\nResults : {}", _request,
                     timeSerieDTOs);
 
         } catch (final Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            LOGGER.error("RESPONSE : {}", e.getMessage(), e);
+        } finally {
+            LOGGER.info("RESPONSE : findHistoricalMeasure {}", timeSerieDTOs);
         }
-        LOGGER.info("RESPONSE : findHistoricalMeasure {}", timeSerieDTOs);
         return timeSerieDTOs;
     }
 }

@@ -220,17 +220,24 @@ public class MeasureService implements IMeasureService
         options.pickBestGranularity();
         final List<String> kpiKeys = new ArrayList<String>(_kpiKeyList.getKpiKeys());
         final List<String> entityKeys = new ArrayList<String>(_kpiKeyList.getEntityKeys());
+
         final ExtendedEntityType entityType = _kpiKeyList.getEntityType();
         final Collection<Kpi> kpis = obtainListOfKpis(kpiKeys, entityType);
         final Collection<IEntity> entities = obtainListOfEntities(entityKeys, entityType);
         for (final IEntity entity : entities) {
+            
             for (final Kpi kpi : kpis) {
+                LOGGER.trace("Entity {} and Kpi {} : build serie", entity, kpi);
                 try {
                     options.setKpi(kpi);
                     final TimeSerieDTO timeSerieDTO = findHistoricalMeasure(kpi, entity, options);
+                    LOGGER.trace("TimeSerie for kpi={} entity={} : ---> \n\t{}", kpi, entity,
+                            timeSerieDTO);
                     series.add(timeSerieDTO);
                 } catch (final Exception ex) {
                     LOGGER.error(ex.getMessage(), ex);
+                } finally {
+                    LOGGER.trace("Series stored before return {}", series.size());
                 }
             }
         }

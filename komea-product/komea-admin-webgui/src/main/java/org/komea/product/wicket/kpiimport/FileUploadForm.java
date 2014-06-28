@@ -91,13 +91,13 @@ public class FileUploadForm extends Form<Void> {
 //                    }
                 } catch (final Exception e) {
 
-                    setResponsePage(new MyInternalErrorPage(getPage().getPageParameters(),
-                            new IllegalStateException("Unable to write file", e)));
+                    error(e.getMessage());
+                        e.printStackTrace();
                 }
             }
         } else {
-            setResponsePage(new MyInternalErrorPage(getPage().getPageParameters(),
-                    new IllegalArgumentException("No file has been uploaded")));
+//            setResponsePage(new MyInternalErrorPage(getPage().getPageParameters(),
+//                    new IllegalArgumentException("No file has been uploaded")));
         }
 
     }
