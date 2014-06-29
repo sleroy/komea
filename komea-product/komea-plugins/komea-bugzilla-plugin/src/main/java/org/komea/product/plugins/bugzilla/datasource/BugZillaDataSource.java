@@ -39,34 +39,34 @@ import com.j2bugzilla.base.Bug;
 @Component("bugzilla-source")
 public class BugZillaDataSource implements IIssuePlugin
 {
-
-
+    
+    
     private static final Logger       LOGGER = LoggerFactory.getLogger(BugZillaDataSource.class);
-
+    
     @Autowired
     private IBZConfigurationDAO       bugZillaConfiguration;
-
+    
     @Autowired
     private IBugZillaToIssueConvertor bugZillaToIssueConvertor;
-
-
+    
+    
     @Autowired
     private IProjectService           projectService;
-
+    
     @Autowired
     private IBZServerProxyFactory     proxyFactory;
-
-
-
+    
+    
+    
     @Override
     @CacheEvict(allEntries = true, value = "bugZillaCache")
     public void cleanCache() {
-    
-    
+
+
         LOGGER.error("Cleaning cache for bugzilla...");
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataTable#getData()
@@ -74,10 +74,10 @@ public class BugZillaDataSource implements IIssuePlugin
     @Cacheable("bugZillaCache")
     @Override
     public List<IIssue> getData() {
-
-
+    
+    
         final List<IIssue> issues = new ArrayList(1000);
-
+        
         final List<BZServerConfiguration> all = bugZillaConfiguration.selectAll();
         LOGGER.info("Retrieving issues from bugzilla server configurations {}", all.size());
         for (final BZServerConfiguration conf : all) {
@@ -86,26 +86,26 @@ public class BugZillaDataSource implements IIssuePlugin
         }
         return issues;
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataTable#isEmpty()
      */
     @Override
     public boolean isEmpty() {
-
-
+    
+    
         return getData().isEmpty();
     }
-
-
+    
+    
     public void obtainIssuesForEachBugZillaServer(
             final List<IIssue> issues,
             final BZServerConfiguration conf,
             IBZServerProxy bugzillaProxy) {
-
-
+    
+    
         try {
             LOGGER.info("Connection to  {}", conf.getAddress());
             bugzillaProxy = proxyFactory.newConnector(conf);
@@ -122,15 +122,15 @@ public class BugZillaDataSource implements IIssuePlugin
             IOUtils.closeQuietly(bugzillaProxy);
         }
     }
-
-
+    
+    
     public void obtainIssuesForProjectsOfAServer(
             final BZServerConfiguration conf,
             final IBZServerProxy bugzillaProxy,
             final List<IIssue> issues,
             final List<String> productNames) {
-
-
+    
+    
         for (final String productName : productNames) {
             final Project project = obtainProjectFromConfigurationAndProductName(conf, productName);
             if (null == project) {
@@ -140,37 +140,37 @@ public class BugZillaDataSource implements IIssuePlugin
             issues.addAll(bugZillaToIssueConvertor.convertAll(bugs, project, conf));
         }
     }
-
-
+    
+    
     public Project obtainProjectFromConfigurationAndProductName(
             final BZServerConfiguration conf,
             final String projectKomeaName) {
-
-
-        Project project = projectService.selectByAlias(projectKomeaName);
+    
+    
+        Project project = projectService.selectByKey(projectKomeaName);
         if (project == null && conf.isAutocreateProjects()) {
             project = projectService.getOrCreate(projectKomeaName);
         }
         return project;
     }
-
-
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataTable#searchData(org.komea.product.backend.utils.IFilter)
      */
     @Override
     public List<IIssue> searchData(final IFilter<IIssue> _dataFilter) {
-
-
+    
+    
         return CollectionUtil.filter(getData(), _dataFilter);
     }
-
-
+    
+    
     public void setBugZillaConfiguration(final IBZConfigurationDAO _bugZillaConfiguration) {
-
-
+    
+    
         bugZillaConfiguration = _bugZillaConfiguration;
     }
-
+    
 }
