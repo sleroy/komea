@@ -17,4 +17,10 @@ public interface IIssuePlugin extends IDynamicDataTable<IIssue>
 {
 
 
+    /**
+     *
+     */
+    void cleanCache();
+    
+    
 }
