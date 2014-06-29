@@ -2,7 +2,6 @@
 package org.komea.product.web.rest.api;
 
 
-
 import java.util.Date;
 
 import org.joda.time.DateTime;
@@ -26,29 +25,21 @@ import org.springframework.web.context.WebApplicationContext;
 import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
-
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations = {
-        "classpath:/spring/application-context-test.xml",
-"classpath*:/spring/dispatcher-servlet-test.xml" })
+        "classpath:/spring/application-context-test.xml", "classpath*:/spring/dispatcher-servlet-test.xml" })
 @TransactionConfiguration(defaultRollback = true)
 @TestExecutionListeners({
-    DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class,
-    TransactionDbUnitTestExecutionListener.class })
-public class MeasureControllerBugTest extends AbstractSpringIntegrationTestCase
-{
-
-
+        DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
+        TransactionDbUnitTestExecutionListener.class })
+public class MeasureControllerBugTest extends AbstractSpringIntegrationTestCase {
+    
     @Autowired
     private WebApplicationContext context;
     
     @Autowired
     private MeasuresController    measureController;
-    
-    
     
     /**
      * Test method for
@@ -57,9 +48,8 @@ public class MeasureControllerBugTest extends AbstractSpringIntegrationTestCase
      */
     @Test
     @Transactional
-    @DatabaseSetup("/dbunit/findMultipleHistoricalMeasure.xml")
+    @DatabaseSetup("findMultipleHistoricalMeasure.xml")
     public final void testFindMultipleHistoricalMeasureWithAllMeasuresAndKpi() throws Exception {
-    
     
         final ManyHistoricalMeasureRequest request = new ManyHistoricalMeasureRequest();
         final KpiStringKeyList kpiKeyList = new KpiStringKeyList();
@@ -71,13 +61,12 @@ public class MeasureControllerBugTest extends AbstractSpringIntegrationTestCase
         final PeriodCriteria period = new PeriodCriteria();
         period.setStartDate(new DateTime().minusYears(2).toDate());
         period.setEndDate(new Date());
-
+        
         request.setKpiKeyList(kpiKeyList);
         request.setPeriod(period);
-
+        
         measureController.averageHistoricalWithEvolution(request);
-
-
+        
     }
-
+    
 }
