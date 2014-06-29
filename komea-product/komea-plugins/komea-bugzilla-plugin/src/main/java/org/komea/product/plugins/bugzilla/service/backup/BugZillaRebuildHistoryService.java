@@ -170,8 +170,8 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
      */
     @Override
     public void run() {
-
-
+    
+    
         List<KpiAndQueryObject> kpis = Lists.newArrayList();
         try {
             issuePlugin.cleanCache();
@@ -205,13 +205,18 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
                 LOGGER.info("At this period, we work on {} issues", existedInPastIssues.size());
                 loadHistoryForIssues(existedInPastIssues);
                 for (final KpiAndQueryObject kpiAndQueryObject : kpis) {
-                    kpiAndQueryObject.getQuery().setIssuePlugins(new IIssuePlugin[] {
+                    try {
+                        kpiAndQueryObject.getQuery().setIssuePlugins(new IIssuePlugin[] {
                             new MockIssuePlugin(existedInPastIssues) });
-                    ((RebuildFilter) kpiAndQueryObject.getQuery().getFilter())
-                    .setCheckTime(untilNow);
-                    final KpiResult result = kpiAndQueryObject.getQuery().getResult();
-                    result.iterate(new StoreValueIntoMeasureResultIterator(statisticsAPI,
-                            kpiAndQueryObject.getKpi().getId(), untilNow));
+                        ((RebuildFilter) kpiAndQueryObject.getQuery().getFilter())
+                                .setCheckTime(untilNow);
+                        final KpiResult result = kpiAndQueryObject.getQuery().getResult();
+                        result.iterate(new StoreValueIntoMeasureResultIterator(statisticsAPI,
+                                kpiAndQueryObject.getKpi().getId(), untilNow));
+                    } catch (final Exception e) {
+                        LOGGER.error("Could not create data at {} with kpi {}", untilNow,
+                                kpiAndQueryObject.getKpi(), e);
+                    }
                 }
 
 
