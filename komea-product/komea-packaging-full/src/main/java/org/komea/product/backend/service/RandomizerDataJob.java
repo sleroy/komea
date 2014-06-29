@@ -5,7 +5,6 @@
 package org.komea.product.backend.service;
 
 
-
 import javax.annotation.PostConstruct;
 
 import org.joda.time.DateTime;
@@ -20,55 +19,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 /**
  * @author sleroy
  */
 @Service
 @Transactional
-public class RandomizerDataJob
-{
-
-
-    public static class LastDateStorage
-    {
-
-
+public class RandomizerDataJob {
+    
+    public static class LastDateStorage {
+        
         private DateTime dateTime;
-
-
-
+        
         public DateTime getDateTime() {
-
-
+        
             return dateTime;
         }
-
-
+        
         public boolean hasNoDateTime() {
-
-
+        
             return dateTime == null;
         }
-
-
+        
         public void setDateTime(final DateTime _dateTime) {
-
-
+        
             dateTime = _dateTime;
         }
     }
-
-
-
+    
     static final Logger LOGGER = LoggerFactory.getLogger(RandomizerDataJob.class);
-
-
-
+    
     public static Double randomValue(final Kpi _kpi, final Double lastValue) {
-
-
+    
         Double min = _kpi.getValueMin();
         Double max = _kpi.getValueMax();
         if (min == null) {
@@ -90,22 +71,15 @@ public class RandomizerDataJob
         }
         return value;
     }
-
-
-
+    
     @Autowired
     private ICronRegistryService cronRegistryService;
-
-
-
+    
     @PostConstruct
     public void execute() {
-
-
-        cronRegistryService.registerCronTask("RANDOMIZER_JOB", BackupDelay.HOUR,
-                RandomizerCron.class, new JobDataMap());
-
-
+    
+        cronRegistryService.registerCronTask("RANDOMIZER_JOB", BackupDelay.HOUR, Randomizer.class, new JobDataMap());
+        
     }
-
+    
 }
