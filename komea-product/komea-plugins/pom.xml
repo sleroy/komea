@@ -30,6 +30,7 @@
 		<module>komea-mantis-plugin</module>
 		<module>komea-testlink-plugin</module>
 		<module>komea-bugtracker-plugin</module>
+		<module>komea-bugzilla-batch-history</module>
 	</modules>
 
 
