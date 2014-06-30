@@ -38,6 +38,80 @@ public class KpiResult implements Serializable
 {
 
 
+    public static interface IOperator
+    {
+
+
+        public Double compute(Number _firstOperand, Number _secondOperand);
+    }
+    
+    
+    
+    private static final class AddOperator implements IOperator
+    {
+
+
+        @Override
+        public Double compute(final Number _firstOperand, final Number _secondOperand) {
+
+
+            return _firstOperand.doubleValue() + _secondOperand.doubleValue();
+        }
+    }
+    
+    
+    
+    /**
+     * @author sleroy
+     */
+    private static final class DivideOperator implements IOperator
+    {
+
+
+        @Override
+        public Double compute(final Number _firstOperand, final Number _secondOperand) {
+
+
+            if (_secondOperand.doubleValue() == 0.0d) {
+                return Double.NaN;
+            }
+            return _firstOperand.doubleValue() / _secondOperand.doubleValue();
+        }
+    }
+
+
+
+    /**
+     * @author sleroy
+     */
+    private static final class MinusOperator implements IOperator
+    {
+        
+        
+        @Override
+        public Double compute(final Number _firstOperand, final Number _secondOperand) {
+
+
+            return _firstOperand.doubleValue() - _secondOperand.doubleValue();
+        }
+    }
+    
+    
+    
+    private static final class MultiplyOperator implements IOperator
+    {
+
+
+        @Override
+        public Double compute(final Number _firstOperand, final Number _secondOperand) {
+
+
+            return _firstOperand.doubleValue() * _secondOperand.doubleValue();
+        }
+    }
+
+
+
     public static final KpiResult EMPTY            = new KpiResult()
     {
 
@@ -63,12 +137,12 @@ public class KpiResult implements Serializable
 
 
     private static final Logger   LOGGER           = LoggerFactory.getLogger(KpiResult.class);
-    
-    
+
+
     private static final long     serialVersionUID = -5012854632976327222L;
-    
-    
-    
+
+
+
     public static KpiResult newResults(final Map<EntityKey, Number> _results) {
 
 
@@ -78,8 +152,8 @@ public class KpiResult implements Serializable
         }
         return kpiResult;
     }
-    
-    
+
+
     public static KpiResult newResults2(final Map<IEntity, Number> _results) {
 
 
@@ -104,8 +178,8 @@ public class KpiResult implements Serializable
 
         super();
     }
-    
-    
+
+
     public KpiResult(final Map<EntityKey, Number> _map) {
 
 
@@ -113,8 +187,16 @@ public class KpiResult implements Serializable
         map = _map;
 
     }
-    
-    
+
+
+    public KpiResult add(final KpiResult _kpiResult) {
+
+
+        return performArithmetic(_kpiResult, new AddOperator());
+
+    }
+
+
     /**
      * Computes the unique value from a group formula;
      *
@@ -140,6 +222,14 @@ public class KpiResult implements Serializable
     }
 
 
+    public KpiResult divide(final KpiResult _kpiResult) {
+
+
+        return performArithmetic(_kpiResult, new DivideOperator());
+
+    }
+    
+    
     /*
      * (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
@@ -174,8 +264,8 @@ public class KpiResult implements Serializable
         }
         return true;
     }
-
-
+    
+    
     /**
      * Fills the kpi result with an map and converts it into entity keys.
      *
@@ -377,6 +467,29 @@ public class KpiResult implements Serializable
 
 
     /**
+     * Performs substraction of results for kpi.
+     *
+     * @param _secondOperand
+     *            the kpi result.
+     * @return the addition.
+     */
+    public KpiResult minus(final KpiResult _secondOperand) {
+
+
+        return performArithmetic(_secondOperand, new MinusOperator());
+
+    }
+
+
+    public KpiResult multiply(final KpiResult _kpiResult) {
+
+
+        return performArithmetic(_kpiResult, new MultiplyOperator());
+
+    }
+
+
+    /**
      * Puts a value into the map.
      *
      * @param _entityKey
@@ -464,7 +577,16 @@ public class KpiResult implements Serializable
     public String toString() {
 
 
-        return "KpiResult [\\n\\tmap=" + map + ", \\n\\treasonOfFailure=" + reasonOfFailure + "]";
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Failure ? " + (reasonOfFailure != null ? reasonOfFailure.getMessage() : ""))
+        .append("\n");
+        for (final Entry<EntityKey, Number> entry : map.entrySet()) {
+            sb.append(entry.getKey().getEntityType()).append(":").append(entry.getKey().getId())
+            .append("->").append(entry.getValue()).append(" \n");
+        }
+
+        return sb.toString();
+        // return "KpiResult [\\n\\tmap=" + map + ", \\n\\treasonOfFailure=" + reasonOfFailure + "]";
     }
 
 
@@ -498,5 +620,28 @@ public class KpiResult implements Serializable
             throw new QueryExecutionFailed(reasonOfFailure);
         }
 
+    }
+
+
+    private KpiResult performArithmetic(final KpiResult _secondOperand, final IOperator operator) {
+
+
+        final Map<EntityKey, Number> hashMap = Maps.newHashMap(map);
+        for (final Entry<EntityKey, Number> entry : _secondOperand.getMap().entrySet()) {
+            Number operandA = map.get(entry.getKey());
+            if (operandA == null) {
+                operandA = 0.0d;
+            }
+            Number operandB = entry.getValue();
+            if (operandB == null) {
+                operandB = 0.0d;
+
+            }
+            hashMap.put(entry.getKey(), operator.compute(operandA, operandB));
+
+
+        }
+
+        return new KpiResult(hashMap);
     }
 }

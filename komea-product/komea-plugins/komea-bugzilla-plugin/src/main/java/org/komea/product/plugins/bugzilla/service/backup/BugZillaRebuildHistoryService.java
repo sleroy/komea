@@ -117,9 +117,9 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
 
     @Autowired
     private IStatisticsAPI                       statisticsAPI;
-    
-    
-    
+
+
+
     @PreDestroy
     public void destroy() {
     
@@ -233,7 +233,7 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
                 }
 
 
-                untilNow = untilNow.minusMonths(1); // MONTH PER MONTH
+                untilNow = untilNow.minusWeeks(1); // MONTH PER MONTH
 
             }
         } finally {
