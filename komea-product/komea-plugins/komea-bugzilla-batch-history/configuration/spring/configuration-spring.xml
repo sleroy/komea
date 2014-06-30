@@ -11,9 +11,13 @@
                                                    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
                                                    ">
 
-	<context:property-placeholder
-		location="classpath:/config/bdd-embed.properties" />
-	
+	<context:property-placeholder location="classpath:/config/bdd-embed.properties" />
+
+	<!-- SALT FOR PASSWORDS -->
+	<util:properties id="authProperties">
+		<prop key="salt">komeasalt</prop>
+		<prop key="defaultAdminPassword">admin</prop>
+	</util:properties>
 
 
 </beans>

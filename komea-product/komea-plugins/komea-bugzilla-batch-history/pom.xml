@@ -22,6 +22,18 @@
 			<groupId>org.komea.product</groupId>
 			<artifactId>komea-dao</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.komea.plugins</groupId>
+			<artifactId>komea-bugzilla-plugin</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.komea.product</groupId>
+			<artifactId>komea-dao</artifactId>
+			<version>${project.version}</version>
 
 		</dependency>
 		<dependency>
@@ -35,13 +47,6 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.batch</groupId>
-			<artifactId>spring-batch-core</artifactId>
-			<version>3.0.0.RELEASE</version>
-		</dependency>
-
-
+	
 	</dependencies>
 </project>

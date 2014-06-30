@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.komea.product.database.dao.BugzillaDao">
+
+
+	<resultMap type="org.komea.product.database.dto.BZUser"
+		id="BZUser">
+		<result column="login_name" property="login_name" />
+		
+	</resultMap>
+
+	<resultMap type="org.komea.product.database.dto.BugHistory"
+		id="BugHistory">
+		<result column="bug_id" property="bug_id" />
+		<result column="who" property="who" />
+		<result column="bug_when" property="bug_when" />
+		<result column="field" property="field" />
+		<result column="added" property="added" />
+		<result column="removed" property="removed" />
+	</resultMap>
+
+	<resultMap type="org.komea.product.database.dto.BugBugZilla"
+		id="BugBugZilla">
+		<result column="bug_id" property="bug_id" />
+		<result column="assigned_to" property="assigned_to" />
+		<result column="bug_file_loc" property="bug_file_loc" />
+		<result column="bug_severity" property="bug_severity" />
+		<result column="bug_status" property="bug_status" />
+		<result column="creation_ts" property="creation_ts" />
+		<result column="delta_ts" property="delta_ts" />
+		<result column="short_desc" property="short_desc" />
+		<result column="op_sys" property="op_sys" />
+		<result column="priority" property="priority" />
+		<result column="product_id" property="product_id" />
+		<result column="rep_platform" property="rep_platform" />
+		<result column="reporter" property="reporterId" />
+		<result column="version" property="version" />
+		<result column="component_id" property="component_id" />
+		<result column="resolution" property="resolutionName" />
+		<result column="target_milestone" property="target_milestone" />
+		<result column="qa_contact" property="qa_contact" />
+		<result column="status_whiteboard" property="status_whiteboard" />
+		<result column="lastdiffed" property="lastdiffed" />
+		<result column="everconfirmed" property="everconfirmed" />
+		<result column="reporter_accessible" property="reporter_accessible" />
+		<result column="cclist_accessible" property="cclist_accessible" />
+		<result column="estimated_time" property="estimated_time" />
+		<result column="remaining_time" property="remaining_time" />
+		<result column="alias" property="alias" />
+	</resultMap>
+
+
+	<select id="getUser" resultMap="BZUser" parameterType="map">
+		SELECT
+		`login_name` FROM `profiles` WHERE `userid` = #{userId}
+	</select>
+
+
+	<select id="listBugs" resultMap="BugBugZilla" parameterType="map">
+		SELECT
+		*
+		FROM
+		bugs, `products` b
+		WHERE
+		product_id=b.id AND b.name =
+		#{productId}
+		;
+	</select>
+
+	<select id="getHistory" resultMap="BugHistory" parameterType="map">
+		SELECT `bug_id`, `who`, `bug_when`,b.name as `field` , `added`,
+		`removed` FROM `bugs_activity` a,`fielddefs` b WHERE a.`fieldid` =
+		b.id AND `bug_id`=#{bugID}
+	</select>
+
+</mapper>
