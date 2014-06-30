@@ -6,6 +6,7 @@ package org.komea.product.plugins.bugzilla.service;
 
 
 
+import org.apache.commons.io.IOUtils;
 import org.komea.product.plugins.bugzilla.api.IBZServerProxy;
 import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.slf4j.Logger;
@@ -20,15 +21,15 @@ import com.j2bugzilla.rpc.GetLegalValues.Fields;
  */
 public class BugZillaInformationService
 {
-    
-    
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(BugZillaInformationService.class);
-    
-    
-    
+
+
+
     public void displayInformations(final BZServerConfiguration configuration) {
-    
-    
+
+
         final BZServerProxyFactory bzServerProxyFactory = new BZServerProxyFactory();
         final IBZServerProxy connector = bzServerProxyFactory.newConnector(configuration);
         LOGGER.info("Priorities {}", connector.getPriorities());
@@ -38,6 +39,6 @@ public class BugZillaInformationService
         LOGGER.info("Priority {}", connector.GetLegalValues(Fields.PRIORITY));
         LOGGER.info("Status {}", connector.GetLegalValues(Fields.STATUS));
         LOGGER.info("Component {}", connector.GetLegalValues(Fields.COMPONENT));
-        
+        IOUtils.closeQuietly(connector);
     }
 }

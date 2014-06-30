@@ -2,12 +2,11 @@
  * 
  */
 
-package org.komea.product.backend.service.kpi;
+package org.komea.product.model.timeserie;
 
 import java.io.Serializable;
 import java.util.List;
 
-import org.komea.product.model.timeserie.TimeCoordinate;
 import org.komea.product.service.dto.EntityKey;
 
 /**

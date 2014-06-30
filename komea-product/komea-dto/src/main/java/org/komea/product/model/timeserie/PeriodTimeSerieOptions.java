@@ -30,13 +30,13 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions
                                                                                   DateTimeComparator
                                                                                           .getInstance(DateTimeFieldType
                                                                                                   .hourOfDay());
-
+    
     private static final int                MAX_DAYS_FOR_HOURTIMESCALE    = 2;
-
+    
     private static final int                MAX_MONTH_FOR_DAYTIMESCALE    = 1;
-
+    
     private static final int                MAX_MONTH_FOR_WEEK_TIMESCALE  = 6;
-
+    
     private static final int                MAX_YEARS_FOR_MONTH_TIMESCALE = 2;
     
     
@@ -159,6 +159,19 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions
     
     
     /**
+     * Retutrns true if the period defined is valid.
+     * 
+     * @return
+     */
+    public boolean isPeriodValid() {
+    
+    
+        return fromPeriod != null
+                && toPeriod != null && new DateTime(fromPeriod).isBefore(new DateTime(toPeriod));
+    }
+    
+    
+    /**
      * Tests if the timescale is per year.
      */
     @JsonIgnore
@@ -167,13 +180,13 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions
     
         return timeScale == TimeScale.PER_YEAR;
     }
-
-
+    
+    
     public void lastYears(final int _numberOfYears) {
     
     
         fromPeriod = new DateTime().minusYears(_numberOfYears).toDate();
-
+        
     }
     
     
@@ -184,11 +197,15 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions
     public void pickBestGranularity() {
     
     
+        if (fromPeriod == null || toPeriod == null) {
+            timeScale = TimeScale.PER_MONTH;
+            return;
+        }
         Validate.notNull(fromPeriod);
         Validate.notNull(toPeriod);
         final DateTime startInstant = new DateTime(fromPeriod);
         final DateTime endInstant = new DateTime(toPeriod);
-
+        
         if (Days.daysBetween(startInstant, endInstant).getDays() <= MAX_DAYS_FOR_HOURTIMESCALE) {
             timeScale = TimeScale.PER_HOUR;
         } else if (Months.monthsBetween(startInstant, endInstant).getMonths() <= MAX_MONTH_FOR_DAYTIMESCALE) {
@@ -200,7 +217,7 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions
         } else {
             timeScale = TimeScale.PER_MONTH;
         }
-
+        
     }
     
     
@@ -249,7 +266,7 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions
     
     
         toPeriod = new DateTime().toDate();
-
+        
     }
     
     
@@ -275,8 +292,8 @@ public class PeriodTimeSerieOptions extends TimeSerieOptions
                 return new DateTime().minusYears(nb).toDate();
             default:
                 throw new UnsupportedOperationException("Enum not known " + timeScale);
-
+                
         }
-
+        
     }
 }

@@ -25,6 +25,7 @@ import org.komea.product.plugins.bugzilla.model.BZServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
@@ -40,23 +41,32 @@ public class BugZillaDataSource implements IIssuePlugin
 {
     
     
-    private static final Logger      LOGGER = LoggerFactory.getLogger(BugZillaDataSource.class);
+    private static final Logger       LOGGER = LoggerFactory.getLogger(BugZillaDataSource.class);
     
     @Autowired
-    private IBZConfigurationDAO      bugZillaConfiguration;
+    private IBZConfigurationDAO       bugZillaConfiguration;
     
     @Autowired
     private IBugZillaToIssueConvertor bugZillaToIssueConvertor;
     
     
     @Autowired
-    private IProjectService          projectService;
+    private IProjectService           projectService;
     
     @Autowired
-    private IBZServerProxyFactory    proxyFactory;
+    private IBZServerProxyFactory     proxyFactory;
     
     
     
+    @Override
+    @CacheEvict(allEntries = true, value = "bugZillaCache")
+    public void cleanCache() {
+
+
+        LOGGER.error("Cleaning cache for bugzilla...");
+    }
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataTable#getData()
@@ -76,8 +86,8 @@ public class BugZillaDataSource implements IIssuePlugin
         }
         return issues;
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataTable#isEmpty()
@@ -137,7 +147,7 @@ public class BugZillaDataSource implements IIssuePlugin
             final String projectKomeaName) {
     
     
-        Project project = projectService.selectByAlias(projectKomeaName);
+        Project project = projectService.selectByKey(projectKomeaName);
         if (project == null && conf.isAutocreateProjects()) {
             project = projectService.getOrCreate(projectKomeaName);
         }

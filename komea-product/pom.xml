@@ -248,7 +248,7 @@
 		<module>komea-standard-kpis</module>
 
 		<!-- packaging -->
-		<module>komea-packaging-full</module>
+		<!--<module>komea-packaging-full</module>-->
 		<module>komea-packaging-bundle</module>
 		<module>komea-packaging-nude</module>
 		<module>komea-packaging-apollon</module>

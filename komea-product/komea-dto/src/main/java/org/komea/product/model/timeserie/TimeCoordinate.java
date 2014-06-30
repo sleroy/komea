@@ -11,41 +11,41 @@ import org.joda.time.DateTime;
 
 public class TimeCoordinate implements Serializable
 {
-    
-    
+
+
     private int    day;
-    
+
     private int    entityID;
-    
+
     private int    hour;
-    
+
     private String idKpi;
-    
+
     private int    month = 1;
-    
-    private Double value = 0D;
-    
+
+    private Double value = 0d;
+
     private int    week;
-    
+
     private int    year;
-    
-    
-    
+
+
+
     public TimeCoordinate() {
-    
-    
+
+
         super();
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
     public boolean equals(final Object obj) {
-    
-    
+
+
         if (this == obj) {
             return true;
         }
@@ -90,97 +90,97 @@ public class TimeCoordinate implements Serializable
         }
         return true;
     }
-    
-    
+
+
     /**
      * Returns the period.
-     * 
+     *
      * @return the period.
      */
     public DateTime getDate() {
-    
-    
+
+
         final int dayCalculate = findDayOfMonth();
         final DateTime dateTime = new DateTime(year, month, dayCalculate, hour, 0);
-        
+
         return dateTime;
     }
-    
-    
+
+
     public int getDay() {
-    
-    
+
+
         return day;
     }
-    
-    
+
+
     /**
      * Returns the value of the field entityID.
-     * 
+     *
      * @return the entityID
      */
     public int getEntityID() {
-    
-    
+
+
         return entityID;
     }
-    
-    
+
+
     public int getHour() {
-    
-    
+
+
         return hour;
     }
-    
-    
+
+
     /**
      * Returns the value of the field idKpi.
-     * 
+     *
      * @return the idKpi
      */
     public String getIdKpi() {
-    
-    
+
+
         return idKpi;
     }
-    
-    
+
+
     public int getMonth() {
-    
-    
+
+
         return month;
     }
-    
-    
+
+
     public Double getValue() {
-    
-    
+
+
         return value;
     }
-    
-    
+
+
     public int getWeek() {
-    
-    
+
+
         return week;
     }
-    
-    
+
+
     public int getYear() {
-    
-    
+
+
         return year;
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see java.lang.Object#hashCode()
      */
     @Override
     public int hashCode() {
-    
-    
+
+
         final int prime = 31;
         int result = 1;
         result = prime * result + day;
@@ -193,106 +193,106 @@ public class TimeCoordinate implements Serializable
         result = prime * result + year;
         return result;
     }
-    
-    
+
+
     public void setDay(final int _day) {
-    
-    
+
+
         day = _day;
     }
-    
-    
+
+
     /**
      * Sets the field entityID with the value of _entityID.
-     * 
+     *
      * @param _entityID
      *            the entityID to set
      */
     public void setEntityID(final int _entityID) {
-    
-    
+
+
         entityID = _entityID;
     }
-    
-    
+
+
     public void setHour(final int _hour) {
-    
-    
+
+
         hour = _hour;
     }
-    
-    
+
+
     /**
      * Sets the field idKpi with the value of _kpiID.
-     * 
+     *
      * @param _kpiID
      *            the idKpi to set
      */
     public void setIdKpi(final String _kpiID) {
-    
-    
+
+
         idKpi = _kpiID;
     }
-    
-    
+
+
     public void setMonth(final int _month) {
-    
-    
+
+
         month = _month;
     }
-    
-    
+
+
     public void setValue(final Double _value) {
-    
-    
+
+
         value = _value;
     }
-    
-    
+
+
     public void setWeek(final int _week) {
-    
-    
+
+
         week = _week;
     }
-    
-    
+
+
     public void setYear(final int _year) {
-    
-    
+
+
         year = _year;
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
-    
-    
+
+
         return "TimeCoordinate [day="
                 + day + ", entityID=" + entityID + ", hour=" + hour + ", idKpi=" + idKpi
                 + ", month=" + month + ", value=" + value + ", week=" + week + ", year=" + year
                 + "]";
     }
-    
-    
+
+
     /**
      * find a day valid in the week of this month is is suppose month and week
      * are valid This method
-     * 
+     *
      * @return
      */
     int findDayOfMonth() {
-    
-    
+
+
         if (day != 0) {
             return day;
         }
         if (week == 0) {
             return 1;
-            
+
         }
         DateTime dateTime = new DateTime(year, month, 1, hour, 0);
         int weekyear = dateTime.getWeekOfWeekyear();
