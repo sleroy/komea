@@ -17,6 +17,7 @@ import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.database.api.IEntity;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.enums.EntityType;
+import org.komea.product.model.timeserie.TimeScale;
 import org.komea.product.service.dto.EntityKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,6 +103,14 @@ public abstract class AbstractGroovyQuery implements IQuery<KpiResult>
 
 
         return new KpiValueProxy(ikpiService.selectByKeyOrFail(_kpiName), statisticsAPI);
+    }
+
+
+    public KpiResult kpiResult(final String _kpiName, final TimeScale _timeScale) {
+
+
+        return new KpiValueProxy(ikpiService.selectByKeyOrFail(_kpiName), statisticsAPI)
+        .getValue(_timeScale);
     }
 
 
