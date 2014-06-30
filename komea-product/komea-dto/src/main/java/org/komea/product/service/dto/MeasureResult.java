@@ -1,9 +1,19 @@
 package org.komea.product.service.dto;
 
+import java.util.List;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.model.Kpi;
 
 public class MeasureResult {
+
+    public static boolean hasValues(List<MeasureResult> measureResults) {
+        for (final MeasureResult measureResult : measureResults) {
+            if (measureResult.hasValue()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     //
     private BaseEntityDto entity;
@@ -39,6 +49,11 @@ public class MeasureResult {
         return value;
     }
 
+    public boolean hasValue() {
+
+        return value != null;
+    }
+
     public void setEntity(final BaseEntityDto _entity) {
 
         entity = _entity;
@@ -54,13 +69,12 @@ public class MeasureResult {
         value = _value;
     }
 
-    public boolean hasValue() {
-        return value != null;
-    }
-
     @Override
     public String toString() {
-        return "MeasureResult{" + "entity=" + entity + ", kpi=" + kpi + ", value=" + value + '}';
+
+        return "MeasureResult{"
+                + "entity=" + entity.getDisplayName() + ", kpi=" + kpi.getDisplayName()
+                + ", value=" + value + '}';
     }
 
 }

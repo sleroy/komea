@@ -3,6 +3,7 @@ package org.komea.product.model.timeserie.dto;
 import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import org.komea.product.database.dto.BaseEntityDto;
 import org.komea.product.database.enums.GroupFormula;
@@ -13,8 +14,20 @@ public class TimeSerieDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public static List<MeasureResult> timeSeriesToMeasureResults(
+            final List<TimeSerieDTO> timeSerieDTOs) {
+
+        final List<MeasureResult> measureResults
+                = new ArrayList<MeasureResult>(timeSerieDTOs.size());
+        for (final TimeSerieDTO timeSerieDTO : timeSerieDTOs) {
+            measureResults.add(timeSerieDTO.toMeasureResult());
+        }
+        return measureResults;
+    }
+
     private List<TimeCoordinateDTO> coordinates = Lists.newArrayList();
     private BaseEntityDto entity;
+
     private Kpi kpi;
 
     public TimeSerieDTO() {
@@ -46,21 +59,21 @@ public class TimeSerieDTO implements Serializable {
         return entity;
     }
 
-    public Double getGroupFormulaValue() {
-
+    private double getSum() {
         double sum = 0;
-        int count = 0;
         for (final TimeCoordinateDTO coordinate : coordinates) {
-            if (coordinate.hasValue()) {
-                sum += coordinate.getValue();
-                count++;
-            }
+            sum += coordinate.getValue();
         }
-        if (count < 1) {
+        return sum;
+    }
+
+    public Double getGroupFormulaValue() {
+        if (coordinates.isEmpty()) {
             return null;
         }
+        final double sum = getSum();
         if (GroupFormula.AVG_VALUE.equals(kpi.getGroupFormula())) {
-            return sum / count;
+            return sum / coordinates.size();
         }
         return sum;
     }
@@ -85,20 +98,20 @@ public class TimeSerieDTO implements Serializable {
         kpi = _kpi;
     }
 
-    public static List<MeasureResult> timeSeriesToMeasureResults(final List<TimeSerieDTO> timeSerieDTOs) {
-        final List<MeasureResult> measureResults = new ArrayList<MeasureResult>(timeSerieDTOs.size());
-        for (final TimeSerieDTO timeSerieDTO : timeSerieDTOs) {
-            measureResults.add(timeSerieDTO.toMeasureResult());
-        }
-        return measureResults;
-    }
-
     public MeasureResult toMeasureResult() {
 
         final Double average = getGroupFormulaValue();
         return new MeasureResult(entity, kpi, average);
     }
 
+    public static boolean hasValues(final Collection<TimeSerieDTO> timeSeries) {
+        for (final TimeSerieDTO timeSerie : timeSeries) {
+            if (!timeSerie.getCoordinates().isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /*
      * (non-Javadoc)
@@ -108,7 +121,8 @@ public class TimeSerieDTO implements Serializable {
     public String toString() {
 
         return "TimeSerieDTO [\\n\\tcoordinates="
-                + coordinates + ", \\n\\tkpi=" + kpi.getKey() + ", \\n\\tentity=" + entity + "]";
+                + coordinates + ", \\n\\tkpi=" + kpi.getDisplayName() + ", \\n\\tentity="
+                + entity.getDisplayName() + "]";
     }
 
 }

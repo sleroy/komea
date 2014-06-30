@@ -3,7 +3,7 @@ package org.komea.product.model.timeserie.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-public class TimeCoordinateDTO implements Serializable {
+public class TimeCoordinateDTO implements Serializable, Comparable<TimeCoordinateDTO> {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,13 +40,14 @@ public class TimeCoordinateDTO implements Serializable {
         value = _value;
     }
 
-    public boolean hasValue() {
-        return value != null;
-    }
-
     @Override
     public String toString() {
         return "TimeCoordinateDTO{" + "date=" + date + ", value=" + value + '}';
+    }
+
+    @Override
+    public int compareTo(TimeCoordinateDTO o) {
+        return getDate().compareTo(o.getDate());
     }
 
 }

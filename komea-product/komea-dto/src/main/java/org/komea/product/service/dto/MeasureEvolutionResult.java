@@ -1,10 +1,20 @@
 package org.komea.product.service.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class MeasureEvolutionResult implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    public static boolean hasValues(List<MeasureEvolutionResult> measureEvolutionResults) {
+        for (final MeasureEvolutionResult measureEvolutionResult : measureEvolutionResults) {
+            if (measureEvolutionResult.getMeasureResult().hasValue()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private MeasureResult measureResult;
     private Double oldValue;
