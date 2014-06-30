@@ -36,67 +36,80 @@ import biz.futureware.mantis.rpc.soap.client.IssueData;
 @Component("mantis-source")
 public class MantisDataSource implements IIssuePlugin
 {
-
-
+    
+    
     private static final Logger       LOGGER = LoggerFactory.getLogger(MantisDataSource.class);
-
-
+    
+    
     @Autowired
     private IMantisConfigurationDAO   mantisConfiguration;
-
-
+    
+    
     @Autowired
     private MantisToIssueConvertor    mantisToIssueConvertor;
-
-
+    
+    
     @Autowired
     private IProjectService           projectService;
-
+    
     @Autowired
     private IMantisServerProxyFactory proxyFactory;
+    
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see org.komea.product.plugins.bugtracking.model.IIssuePlugin#cleanCache()
+     */
+    @Override
+    public void cleanCache() {
 
 
+        //
 
+    }
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataTable#getData()
      */
     @Override
     public List<IIssue> getData() {
-
-
+    
+    
         final List<IIssue> issues = new ArrayList(1000);
-
+        
         final List<MantisServerConfiguration> selectAll = mantisConfiguration.selectAll();
         LOGGER.info("Fetching issues from {} servers", selectAll.size());
         for (final MantisServerConfiguration conf : selectAll) {
-
+            
             final IMantisServerProxy bugzillaProxy = null;
             obtainIssuesForEachMantisServer(issues, conf, bugzillaProxy);
         }
         return issues;
-
+        
     }
-
-
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataTable#isEmpty()
      */
     @Override
     public boolean isEmpty() {
-
-
+    
+    
         return getData().isEmpty();
     }
-
-
+    
+    
     public void obtainIssuesForEachMantisServer(
             final List<IIssue> issues,
             final MantisServerConfiguration conf,
             IMantisServerProxy mantisProxy) {
-
-
+    
+    
         try {
             LOGGER.info("Scanning issues from {}", conf.getAddress());
             mantisProxy = proxyFactory.newConnector(conf);
@@ -113,15 +126,15 @@ public class MantisDataSource implements IIssuePlugin
             IOUtils.closeQuietly(mantisProxy);
         }
     }
-
-
+    
+    
     public void obtainIssuesForProjectsOfAServer(
             final MantisServerConfiguration conf,
             final IMantisServerProxy mantisProxy,
             final List<IIssue> issues,
             final List<String> productNames) {
-
-
+    
+    
         for (final String productName : productNames) {
             LOGGER.info("Fetching issues for the project {}", productName);
             final Project project = obtainProjectFromConfigurationAndProductName(conf, productName);
@@ -133,52 +146,52 @@ public class MantisDataSource implements IIssuePlugin
             LOGGER.info("issues {} collected for the project {}", bugs.size(), productName);
         }
     }
-
-
+    
+    
     public Project obtainProjectFromConfigurationAndProductName(
             final MantisServerConfiguration conf,
             final String projectName) {
-
-
+    
+    
         Project project = projectService.selectByKey(projectName);
         if (project == null) {
             if (conf.isAutocreateProjects()) {
                 project = projectService.getOrCreate(projectName);
             } else {
-
+                
             }
         }
         return project;
     }
-
-
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataTable#searchData(org.komea.product.backend.utils.IFilter)
      */
     @Override
     public List<IIssue> searchData(final IFilter<IIssue> _dataFilter) {
-
-
+    
+    
         return CollectionUtil.filter(getData(), _dataFilter);
     }
-
-
+    
+    
     public void setMantisConfiguration(final IMantisConfigurationDAO _mantisConfiguration) {
-
-
+    
+    
         mantisConfiguration = _mantisConfiguration;
     }
-
-
+    
+    
     /*
      * (non-Javadoc)
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
-
-
+    
+    
         return "mantis-datasource";
     }
 }

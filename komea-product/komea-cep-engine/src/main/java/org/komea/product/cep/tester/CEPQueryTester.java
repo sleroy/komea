@@ -191,10 +191,9 @@ public class CEPQueryTester
     public IEvent convertDto(final EventSimpleDto _eventDto) {
 
 
-        if (_eventDto == null) {
-            _eventDto.setDate(new Date());
+        _eventDto.setDate(new Date());
 
-        }
+
         buildProviderMock(_eventDto);
         final String eventTypeName = buildEventTypeMock(_eventDto);
 
@@ -617,6 +616,6 @@ public class CEPQueryTester
 
         return expectedStorageSize != null;
     }
-    
-    
+
+
 }

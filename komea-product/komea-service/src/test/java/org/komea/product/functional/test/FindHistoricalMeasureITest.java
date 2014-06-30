@@ -9,6 +9,7 @@ package org.komea.product.functional.test;
 import org.junit.Test;
 import org.komea.eventory.api.cache.BackupDelay;
 import org.komea.eventory.api.engine.IDynamicDataQuery;
+import org.komea.product.backend.api.IMeasureStorageService;
 import org.komea.product.backend.api.IQueryService;
 import org.komea.product.backend.service.entities.IProjectService;
 import org.komea.product.backend.service.kpi.FormulaID;
@@ -16,7 +17,6 @@ import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.IMeasureService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
 import org.komea.product.backend.service.kpi.KpiBuilder;
-import org.komea.product.backend.service.kpi.TimeSerie;
 import org.komea.product.backend.utils.ObjectValidation;
 import org.komea.product.database.dao.MeasureDao;
 import org.komea.product.database.dto.KpiResult;
@@ -29,6 +29,7 @@ import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.MeasureCriteria;
 import org.komea.product.database.model.Project;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
+import org.komea.product.model.timeserie.TimeSerie;
 import org.komea.product.model.timeserie.dto.TimeSerieDTO;
 import org.komea.product.service.dto.EntityStringKey;
 import org.komea.product.service.dto.KpiStringKey;
@@ -48,69 +49,72 @@ import static org.junit.Assert.assertTrue;
  */
 public class FindHistoricalMeasureITest extends AbstractSpringIntegrationTestCase
 {
-    
-    
+
+
     public static class DemoDynamicQuery implements IDynamicDataQuery<KpiResult>
     {
-        
-        
-        public static final double VALUE = 2.0;
 
+
+        public static final double VALUE = 2.0;
+        
         @Autowired
         private IProjectService    projectService;
-        
-        
-        
+
+
+
         /*
          * (non-Javadoc)
          * @see org.komea.eventory.api.engine.IQuery#getBackupDelay()
          */
         @Override
         public BackupDelay getBackupDelay() {
-        
-        
+
+
             return BackupDelay.DAY;
         }
-        
-        
+
+
         /*
          * (non-Javadoc)
          * @see org.komea.eventory.api.engine.IQuery#getResult()
          */
         @Override
         public KpiResult getResult() {
-        
-        
+
+
             final KpiResult kpiResult = new KpiResult();
             kpiResult.put(projectService.selectByKey(PROJECT_NAME).getEntityKey(), VALUE);
             return kpiResult;
         }
     }
+
+
+
+    private static final String    PROJECT_NAME = "XYZXYZXYZ";
     
+    @Autowired
+    private IKPIService            kpiAPI;
     
+    @Autowired
+    private IQueryService          kpiQueryService;
     
-    private static final String PROJECT_NAME = "XYZXYZXYZ";
+    @Autowired
+    private IKPIService            kpiService;
+    
+    @Autowired
+    private MeasureDao             measureDao;
+    
+    @Autowired
+    private IMeasureService        measureService;
+    
+    @Autowired
+    private IMeasureStorageService measureStorageService;
+    
+    @Autowired
+    private IProjectService        projectService;
 
     @Autowired
-    private IKPIService         kpiAPI;
-
-    @Autowired
-    private IQueryService       kpiQueryService;
-
-    @Autowired
-    private IKPIService         kpiService;
-
-    @Autowired
-    private MeasureDao          measureDao;
-
-    @Autowired
-    private IMeasureService     measureService;
-
-    @Autowired
-    private IProjectService     projectService;
-
-    @Autowired
-    private IStatisticsAPI      statisticsAPI;
+    private IStatisticsAPI         statisticsAPI;
     
     
     
@@ -124,17 +128,17 @@ public class FindHistoricalMeasureITest extends AbstractSpringIntegrationTestCas
                         .groupFormula(GroupFormula.AVG_VALUE).interval(0d, 100d)
                         .providerType(ProviderType.BUGTRACKER).dynamicQuery(DemoDynamicQuery.class)
                         .produceValue(ValueType.INT, ValueDirection.BETTER).build();
-
+        
         // AND I REGISTER THIS KPI
         kpiService.saveOrUpdate(build);
         final Project orCreate = projectService.getOrCreate(PROJECT_NAME);
-
+        
         // AND KPI SHOULD EXISTS
         assertTrue(kpiService.exists(build.getKpiKey()));
         // AND QUERY SHOULD HAVE BEEN REGISTERED
         assertTrue(kpiQueryService.isQueryOfKpiRegistered(build));
         // FORCE BACKUP
-        statisticsAPI.backupKpiValuesIntoHistory(BackupDelay.DAY);
+        measureStorageService.storeActualValueInHistory(build.getId(), BackupDelay.DAY);
         // WE SHOULD HAVE ONE VALUE FOR THIS KPI IN MEASURE
         final MeasureCriteria example = new MeasureCriteria();
         example.createCriteria().andIdKpiEqualTo(FormulaID.of(build).getId());
@@ -157,6 +161,6 @@ public class FindHistoricalMeasureITest extends AbstractSpringIntegrationTestCas
                                 EntityStringKey.of(EntityType.PROJECT, PROJECT_NAME)),
                         timeSerieOptions);
         assertEquals(1, findHistoricalMeasure.getCoordinates().size());
-
+        
     }
 }

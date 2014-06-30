@@ -93,7 +93,6 @@ public final class BugZillaPage extends StatelessLayoutPage
             @Override
             public void onClick(final AjaxRequestTarget art) {
 
-
                 bugzillaBuildHistory.rebuildHistory();
 
             }

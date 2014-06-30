@@ -1,6 +1,7 @@
 package org.komea.product.wicket.events;
 
 import com.google.common.base.Strings;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import org.apache.wicket.markup.html.basic.Label;
@@ -26,7 +27,7 @@ import org.ocpsoft.prettytime.PrettyTime;
  */
 public class EventsPage extends StatelessLayoutPage {
 
-    private static final class EventTable extends ListView<IEvent> {
+    private static final class EventTable extends ListView<IEvent> implements Serializable {
 
         private EventTable(final String _id, final IModel<? extends List<? extends IEvent>> _model) {
 
@@ -74,7 +75,7 @@ public class EventsPage extends StatelessLayoutPage {
         }
     }
 
-    private static final class UserList extends ListView<Person> {
+    private static final class UserList extends ListView<Person> implements Serializable {
 
         private UserList(final String _id, final List<Person> _persons) {
 

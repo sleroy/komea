@@ -95,7 +95,7 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
     @Autowired
     private IEventEngineService                  eventEngineService;
     
-    private ExecutorService                      executor;
+    private ExecutorService                      executor   = Executors.newSingleThreadExecutor();
     
     
     @Autowired()
@@ -151,13 +151,15 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
     
     @Override
     public synchronized void rebuildHistory() {
-
-
-        if (!executor.isTerminated()) {
-            return;
-        }
+    
+    
         executor = Executors.newSingleThreadExecutor();
+        // if (!executor.isTerminated()) {
+        // return;
+        // }
+        
         executor.execute(this);
+        
         
     }
     
@@ -168,10 +170,11 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
      */
     @Override
     public void run() {
-    
-    
+
+
         List<KpiAndQueryObject> kpis = Lists.newArrayList();
         try {
+            issuePlugin.cleanCache();
             LOGGER.info("Rebuilding history of bugzilla servers");
             final List<IIssue> data = issuePlugin.getData();
             LOGGER.info("Working on {} issues", data.size());
@@ -186,33 +189,38 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
                 LOGGER.warn("No kpi");
                 return;
             }
-            DateTime beginDate = computeBeginningTime(data);
+            final DateTime beginDate = computeBeginningTime(data);
             LOGGER.info("Beginning at {}", beginDate);
-            final DateTime untilNow = new DateTime();
+            DateTime untilNow = new DateTime();
             // Now iteration, one week per week
-            while (beginDate.isBefore(untilNow)) {
+            while (untilNow.isAfter(beginDate)) {
                 
-                if (getNumberOfMeasuresForThisDate(beginDate) > 0) { // Already existing
+                if (getNumberOfMeasuresForThisDate(untilNow) > 0) { // Already existing
                     LOGGER.info("Skip {} <  {}", beginDate, untilNow);
                     continue;
                 }
                 LOGGER.info("Iteration {} <  {}", beginDate, untilNow);
                 final List<IIssue> existedInPastIssues =
-                        CollectionUtil.filter(data, new FilterBugsExistingAtThisTime(beginDate));
+                        CollectionUtil.filter(data, new FilterBugsExistingAtThisTime(untilNow));
                 LOGGER.info("At this period, we work on {} issues", existedInPastIssues.size());
                 loadHistoryForIssues(existedInPastIssues);
                 for (final KpiAndQueryObject kpiAndQueryObject : kpis) {
-                    kpiAndQueryObject.getQuery().setIssuePlugins(new IIssuePlugin[] {
-                        new MockIssuePlugin(existedInPastIssues) });
-                    ((RebuildFilter) kpiAndQueryObject.getQuery().getFilter())
-                            .setCheckTime(beginDate);
-                    final KpiResult result = kpiAndQueryObject.getQuery().getResult();
-                    result.iterate(new StoreValueIntoMeasureResultIterator(statisticsAPI,
-                            kpiAndQueryObject.getKpi().getId(), beginDate));
+                    try {
+                        kpiAndQueryObject.getQuery().setIssuePlugins(new IIssuePlugin[] {
+                                new MockIssuePlugin(existedInPastIssues) });
+                        ((RebuildFilter) kpiAndQueryObject.getQuery().getFilter())
+                        .setCheckTime(untilNow);
+                        final KpiResult result = kpiAndQueryObject.getQuery().getResult();
+                        result.iterate(new StoreValueIntoMeasureResultIterator(statisticsAPI,
+                                kpiAndQueryObject.getKpi().getId(), untilNow));
+                    } catch (final Exception e) {
+                        LOGGER.error("Could not create data at {} with kpi {}", untilNow,
+                                kpiAndQueryObject.getKpi(), e);
+                    }
                 }
                 
                 
-                beginDate = beginDate.plusMonths(1); // MONTH PER MONTH
+                untilNow = untilNow.minusMonths(1); // MONTH PER MONTH
                 
             }
         } finally {
@@ -301,9 +309,12 @@ public class BugZillaRebuildHistoryService implements IBugZillaRebuildHistory, R
     private void loadHistoryForIssues(final List<IIssue> existedInPastIssues) {
     
     
+        int number = 0;
         LOGGER.info("Fetching history of bugs...");
         for (final IIssue issue : existedInPastIssues) {
+            LOGGER.info("Fetching history for bug {}/{}", number, existedInPastIssues.size());
             loadHistory(issue);
+            number++;
         }
     }
     

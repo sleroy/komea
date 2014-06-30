@@ -58,8 +58,9 @@ public class RebuildFilter implements IFilter<IIssue>
     public boolean matches(final IIssue _task) {
     
     
-        Validate.notNull(checkTime);
-        
+        if (checkTime == null) {
+            return filter.matches(_task);
+        }
         final BZIssueWrapper bzIssueWrapper = (BZIssueWrapper) _task;
         final RollBackStatus rollBackStatus =
                 new RollBackStatus(bzIssueWrapper.getDataCustomFields().getFieldsAsMap(),
