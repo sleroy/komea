@@ -44,61 +44,61 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class BugZillaDataSourceTest
 {
-
-
+    
+    
     /**
      * @return
      */
     public static BZServerConfiguration fakeConfiguration() {
-
-
+    
+    
         final BZServerConfiguration bzServerConfiguration = new BZServerConfiguration();
-
+        
         bzServerConfiguration.setAddress("http://eos/bugzilla/");
         bzServerConfiguration.setLogin("jeremie.guidoux@tocea.com");
         bzServerConfiguration.setPassword("tocea35");
         bzServerConfiguration.setReminderAlert(10);
-
+        
         return bzServerConfiguration;
     }
-    
-    
-    
+
+
+
     @Mock
     private IBZConfigurationDAO             bugZillaConfiguration;
-
+    
     @InjectMocks
     private BugZillaDataSource              bugZillaDataSource;
-
+    
     @Spy
     private final IBugZillaToIssueConvertor bugZillaToIssueConvertor =
-                                                                             new BugZillaToIssueConvertor();
+    new BugZillaToIssueConvertor();
     @Mock
     private IProjectService                 projectService;
-    
-    
+
+
     @Mock
     private IBZServerProxyFactory           proxyFactory;
-    
-    
-    
+
+
+
     /**
      * Test method for {@link org.komea.product.plugins.bugzilla.datasource.BugZillaDataSource#fetchData()}.
      */
     @Test
     public final void testFetchData() throws Exception {
-
-
+    
+    
         when(bugZillaConfiguration.selectAll()).thenReturn(Lists.newArrayList(fakeConfiguration()));
         when(projectService.getOrCreate(Mockito.anyString())).thenReturn(new Project());
         final IBZServerProxy proxy = mock(IBZServerProxy.class);
         when(proxyFactory.newConnector(Mockito.any(BZServerConfiguration.class))).thenReturn(proxy);
         when(proxy.getProductNames()).thenReturn(Lists.newArrayList("S1", "S2"));
-
+        
         final Bug bug = mock(Bug.class);
         when(proxy.getBugs("S1")).thenReturn(Lists.newArrayList(bug, bug, bug));
         when(proxy.getBugs("S2")).thenReturn(Lists.newArrayList(bug, bug, bug));
-
+        
         // EXECUTION WITH PROXY CONTAINING TWO PROJECTS , with both 3 bugs
         final List<IIssue> fetchData = bugZillaDataSource.getData();
         assertEquals(6, fetchData.size());
@@ -106,5 +106,5 @@ public class BugZillaDataSourceTest
         verify(projectService, times(2)).selectByAlias(Mockito.anyString());
         verify(projectService, times(2)).getOrCreate(Mockito.anyString());
     }
-
+    
 }

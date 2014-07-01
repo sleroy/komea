@@ -73,7 +73,7 @@ public class BugZillaDataSource implements IIssuePlugin
      */
     @Cacheable("bugZillaCache")
     @Override
-    public List<IIssue> getData() {
+    public synchronized List<IIssue> getData() {
     
     
         final List<IIssue> issues = new ArrayList(1000);
@@ -147,7 +147,7 @@ public class BugZillaDataSource implements IIssuePlugin
             final String projectKomeaName) {
     
     
-        Project project = projectService.selectByKey(projectKomeaName);
+        Project project = projectService.selectByAlias(projectKomeaName);
         if (project == null && conf.isAutocreateProjects()) {
             project = projectService.getOrCreate(projectKomeaName);
         }

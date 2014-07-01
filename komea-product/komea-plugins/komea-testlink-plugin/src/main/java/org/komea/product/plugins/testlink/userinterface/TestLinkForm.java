@@ -3,10 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.komea.product.plugins.testlink.userinterface;
+
+
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
@@ -26,23 +31,29 @@ import org.komea.product.wicket.utils.ManageMessageConnexion;
 import org.komea.product.wicket.widget.builders.AjaxLinkLayout;
 import org.komea.product.wicket.widget.builders.TextFieldBuilder;
 
+
+
 /**
  * @author rgalerme
  */
-public class TestLinkForm extends Form<TestLinkServer> {
-
-    private final Component feedBack;
-    private final StatelessLayoutPage         page;
-    private final ITestLinkServerDAO testlinkService;
-    private final TestLinkServer testServer;
+public class TestLinkForm extends Form<TestLinkServer>
+{
+    
+    
+    private final IModel<String>         conModel;
+    private final WebMarkupContainer     contError;
+    private final WebMarkupContainer     contSuccess;
+    private final WebMarkupContainer     contWaiting;
+    private final Component              feedBack;
+    private final WebMarkupContainer     globalContenaire;
     private final ManageMessageConnexion messageCon;
-    private final WebMarkupContainer contSuccess;
-    private final WebMarkupContainer contWaiting;
-    private final WebMarkupContainer contError;
-    private final WebMarkupContainer globalContenaire;
-    private final IModel<String> conModel;
-    private final IModel<String> stackTraceDialog;
-
+    private final StatelessLayoutPage    page;
+    private final IModel<String>         stackTraceDialog;
+    private final ITestLinkServerDAO     testlinkService;
+    private final TestLinkServer         testServer;
+    
+    
+    
     public TestLinkForm(
             final StatelessLayoutPage _page,
             final TestLinkServer _testServer,
@@ -50,177 +61,218 @@ public class TestLinkForm extends Form<TestLinkServer> {
             final Component _feedBack,
             final String id,
             final IModel<TestLinkServer> model) {
-
+    
+    
         super(id, model);
         page = _page;
         testServer = _testServer;
         testlinkService = _testlinkService;
         feedBack = _feedBack;
-
+        
         feedBack.setVisible(false);
-
-        add(TextFieldBuilder.<String>createRequired("name", testServer, "name")
-                .withTooltip(getString("testlinkpage.save.add.title")).simpleValidator(3, 255).build());
-        add(TextFieldBuilder.<String>createRequired("address", testServer, "address")
-                .simpleValidator(4, 255).withTooltip(getString("global.save.form.field.tooltip.serverloc")).build());
-        add(TextFieldBuilder
-                .<String>createRequired("key", testServer, "key")
-                .simpleValidator(1, 255)
-                .withTooltip(
-                        getString("testlinkpage.save.tooltip.key"))
+        
+        add(TextFieldBuilder.<String> createRequired("name", testServer, "name")
+                .withTooltip(getString("testlinkpage.save.add.title")).simpleValidator(3, 255)
                 .build());
-
+        add(TextFieldBuilder.<String> createRequired("address", testServer, "address")
+                .simpleValidator(4, 255)
+                .withTooltip(getString("global.save.form.field.tooltip.serverloc")).build());
+        add(TextFieldBuilder.<String> createRequired("key", testServer, "key")
+                .simpleValidator(1, 255).withTooltip(getString("testlinkpage.save.tooltip.key"))
+                .build());
+        
         // button
         stackTraceDialog = Model.of("Test d'affichage");
-        IModel<String> titleTraceDialog = Model.of(getString("testlink.connexion.dialog.title"));
-
-        final DisplayTraceDialog dialog = new DisplayTraceDialog("dialogStackTrace", titleTraceDialog, stackTraceDialog);
+        final IModel<String> titleTraceDialog =
+                Model.of(getString("testlink.connexion.dialog.title"));
+        
+        final DisplayTraceDialog dialog =
+                new DisplayTraceDialog("dialogStackTrace", titleTraceDialog, stackTraceDialog);
         this.add(dialog);
         // autre
         conModel = Model.of(" ");
         final Label conMessage = new Label("labelerror", conModel);
         conMessage.setOutputMarkupId(true);
-
+        
         messageCon = new ManageMessageConnexion();
-
+        
         globalContenaire = new WebMarkupContainer("global");
         globalContenaire.setOutputMarkupId(true);
         globalContenaire.setOutputMarkupPlaceholderTag(true);
         add(globalContenaire);
-
+        
         contSuccess = new WebMarkupContainer("success");
         contSuccess.setVisible(false);
         contSuccess.setOutputMarkupId(true);
         contSuccess.setOutputMarkupPlaceholderTag(true);
         globalContenaire.add(contSuccess);
-
+        
         contError = new WebMarkupContainer("errors");
         contError.setVisible(false);
         contError.setOutputMarkupId(true);
         contError.setOutputMarkupPlaceholderTag(true);
         contError.add(conMessage);
         globalContenaire.add(contError);
-
+        
         contWaiting = new WebMarkupContainer("waiting");
         contWaiting.setVisible(false);
         contWaiting.setOutputMarkupId(true);
         contWaiting.setOutputMarkupPlaceholderTag(true);
         globalContenaire.add(contWaiting);
-
+        
         // button
-        contError.add(new AjaxLink("openDialogTrace") {
-
+        contError.add(new AjaxLink("openDialogTrace")
+        {
+            
+            
             @Override
             public void onClick(final AjaxRequestTarget art) {
+            
+            
                 dialog.open(art);
             }
         });
         final String erroraddress = getString("global.connexion.error.address");
-        AjaxButton testButton = new AjaxButton("testButton", this) {
-
+        final AjaxButton testButton = new AjaxButton("testButton", this)
+        {
+            
+            
             @Override
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
-
+            
+            
                 feedBack.setVisible(true);
                 conModel.setObject(getString("global.connexion.error"));
                 target.add(feedBack);
                 target.add(conMessage);
-
+                
             }
-
+            
+            
             @Override
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-
+            
+            
                 feedBack.setVisible(false);
                 target.add(feedBack);
                 messageCon.setEtat(ManageMessageConnexion.Etat.WAITING);
                 updateStatusServerTest();
                 target.add(TestLinkForm.this);
-                TestLinkForm.this.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(1)) {
-
+                TestLinkForm.this.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(1))
+                {
+                    
+                    
                     @Override
-                    protected void onPostProcessTarget(AjaxRequestTarget target) {
-                        super.onPostProcessTarget(target); //To change body of generated methods, choose Tools | Templates.
+                    protected void onPostProcessTarget(final AjaxRequestTarget target) {
+                    
+                    
+                        super.onPostProcessTarget(target); // To change body of generated methods, choose Tools | Templates.
                         updateStatusServerTest();
                         System.out.print("time fonctionne");
                         if (!messageCon.visibleWaiting()) {
                             stop(target);
                         }
                     }
-                }
-                );
-
-                ExecutorService executorService = Executors.newFixedThreadPool(1);
-                executorService.execute(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        try {
-                            if (testlinkService.testConnexion(testServer)) {
-                                messageCon.setEtat(ManageMessageConnexion.Etat.SUCCESS);
-                            } else {
-                                messageCon.setEtat(ManageMessageConnexion.Etat.ERROR);
-                                conModel.setObject(erroraddress);
-                                stackTraceDialog.setObject("");
-
-                            }
-                        } catch (Exception e) {
-                            registerExeption(e);
-                        }
-                    }
                 });
-                executorService.shutdown();
-
+                
+                final ExecutorService executorService = Executors.newFixedThreadPool(1);
+                try {
+                    executorService.execute(new Runnable()
+                    {
+                        
+                        
+                        @Override
+                        public void run() {
+                        
+                        
+                            try {
+                                if (testlinkService.testConnexion(testServer)) {
+                                    messageCon.setEtat(ManageMessageConnexion.Etat.SUCCESS);
+                                } else {
+                                    messageCon.setEtat(ManageMessageConnexion.Etat.ERROR);
+                                    conModel.setObject(erroraddress);
+                                    stackTraceDialog.setObject("");
+                                    
+                                }
+                            } catch (final Exception e) {
+                                registerExeption(e);
+                            }
+                        }
+                    });
+                } finally {
+                    try {
+                        executorService.awaitTermination(2, TimeUnit.MINUTES);
+                    } catch (final InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    executorService.shutdownNow();
+                }
+                
             }
         };
-//        testButton.setDefaultFormProcessing(false);
+        // testButton.setDefaultFormProcessing(false);
         add(testButton);
-
-      
-        add(new AjaxLinkLayout<StatelessLayoutPage>("cancel", page) {
-
+        
+        
+        add(new AjaxLinkLayout<StatelessLayoutPage>("cancel", page)
+        {
+            
+            
             @Override
             public void onClick(final AjaxRequestTarget art) {
-
+            
+            
                 final StatelessLayoutPage page = getCustom();
                 page.setResponsePage(new TestLinkPage(page.getPageParameters()));
             }
         });
-
-        add(new AjaxButton("submit", this) {
-
+        
+        add(new AjaxButton("submit", this)
+        {
+            
+            
             @Override
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
-
+            
+            
                 feedBack.setVisible(true);
                 // repaint the feedback panel so errors are shown
                 target.add(feedBack);
             }
-
+            
+            
             @Override
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-
+            
+            
                 feedBack.setVisible(false);
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
                 testlinkService.saveOrUpdate(testServer);
                 page.setResponsePage(new TestLinkPage(page.getPageParameters()));
-
+                
             }
         });
     }
-
+    
+    
     private void updateStatusServerTest() {
+    
+    
         contError.setVisible(messageCon.visibleError());
         contSuccess.setVisible(messageCon.visibleSuccess());
         contWaiting.setVisible(messageCon.visibleWaiting());
     }
-
-    void registerExeption(Exception ex) {
+    
+    
+    void registerExeption(final Exception ex) {
+    
+    
         messageCon.setEtat(ManageMessageConnexion.Etat.ERROR);
         conModel.setObject(ex.getMessage());
-        String recursiveDisplayTrace = ManageMessageConnexion.recursiveDisplayTrace(ex);
+        final String recursiveDisplayTrace = ManageMessageConnexion.recursiveDisplayTrace(ex);
         stackTraceDialog.setObject(recursiveDisplayTrace);
     }
-
+    
 }
