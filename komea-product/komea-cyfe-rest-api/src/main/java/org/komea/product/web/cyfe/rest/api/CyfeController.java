@@ -1,11 +1,30 @@
 package org.komea.product.web.cyfe.rest.api;
 
-import java.util.Date;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
-import org.komea.product.backend.utils.CsvResponse;
+import javax.servlet.http.HttpServletResponse;
+
+import org.joda.time.DateTime;
+import org.komea.product.backend.csv.utils.CSVExport;
+import org.komea.product.backend.service.IKpiGoalService;
+import org.komea.product.backend.service.entities.IEntityService;
+import org.komea.product.backend.utils.StringToEntityConvertor;
+import org.komea.product.backend.utils.StringToKpiConvertor;
+import org.komea.product.database.alert.IEvent;
+import org.komea.product.database.api.IEntity;
+import org.komea.product.database.dto.KpiResult;
+import org.komea.product.database.dto.SearchEventDto;
+import org.komea.product.database.enums.EntityType;
+import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.enums.Severity;
+import org.komea.product.database.model.Kpi;
+import org.komea.product.database.model.KpiGoal;
 import org.komea.product.model.timeserie.TimeScale;
+import org.komea.product.model.timeserie.TimeSerie;
+import org.komea.product.service.dto.KpiKey;
+import org.komea.product.web.cyfe.rest.service.ICyfeService;
 import org.komea.product.web.cyfe.rest.service.IStatsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +39,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
 
+
 @Controller
 @RequestMapping(value = "/cyfe")
 public class CyfeController {
@@ -27,90 +47,167 @@ public class CyfeController {
 	@Autowired
 	private IStatsService service;
 	
+	@Autowired
+	private IEntityService entityService;
+	
+	@Autowired
+	private IKpiGoalService goalService;
+	
+	@Autowired
+	private ICyfeService cyfeService;
+	
+	@Autowired
+	private StringToKpiConvertor kpiConverter;
+	
+	@Autowired
+	private StringToEntityConvertor entityConverter;
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CyfeController.class);
+
 	
+	private List<IEntity> getSelectedEntitiesOrAll(EntityType _type, List<String> _entityKeys) {
+		
+		List<IEntity> entities = Lists.newArrayList();		
+		if (_entityKeys != null && !_entityKeys.isEmpty()) {
+			entities = entityConverter.convert(_type, _entityKeys);	
+		}else{
+			entities = entityService.getEntitiesByEntityType(_type);
+		}
+		return entities;	
+		
+	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/value/{kpiKey}/{entityKey}", produces = "text/csv; charset=utf-8")
+	private Double getKpiGoal(Kpi _kpi) {
+		KpiKey key = KpiKey.ofKpi(_kpi);
+		List<KpiGoal> goals = goalService.findKpiGoals(key);		
+		if (goals != null && !goals.isEmpty()) {
+			for(KpiGoal goal : goals) {
+				if (goal.getEntityID() == null) {
+					return goal.getValue();
+				}
+			}
+		}
+		return null;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/value/{kpiKey}/{entityKey}", produces = "text/csv;charset=UTF-8")
 	@ResponseBody
-	public CsvResponse getValue(@PathVariable(value="kpiKey") final String _kpiKey, 
+	public CSVExport getValue(@PathVariable(value="kpiKey") final String _kpiKey, 
 			@PathVariable(value="entityKey") final String _entityKey,
 			@RequestParam(value="timescale", required=false) final TimeScale _timescale,
-			@RequestParam(value="date", required=false) @DateTimeFormat(pattern="ddmmyyyy") Date _date,
-			@RequestParam(value="goal", required=false) final Double _goal) {
+			@RequestParam(value="date", required=false) @DateTimeFormat(pattern="yyyy-MM-dd") DateTime _date,
+			@RequestParam(value="goal", required=false) Double _goal,
+			HttpServletResponse _response) throws IOException {
 		
-		LOGGER.debug("cyfe/value called with params : {}, {}", _kpiKey, _entityKey);	
+		Kpi kpi = kpiConverter.convert(_kpiKey);
+		IEntity entity = entityConverter.convert(kpi.getEntityType(), _entityKey); 
+		
+		LOGGER.debug("cyfe/value called with params : {}, {}", kpi, _entityKey);	
+		
+		if (_goal == null) {
+			_goal = this.getKpiGoal(kpi);
+		}
 		
 		Double kpiValue;
 		
 		if (_date == null) {
-			kpiValue = service.evaluateKpiValue(_kpiKey, _entityKey, _timescale);
+			kpiValue = service.evaluateKpiValue(kpi, entity, _timescale);
 		}else{
-			kpiValue = service.evaluateKpiValueWithDate(_kpiKey, _entityKey, _timescale, _date);
-		}
-        
-		List<String[]> test = Lists.newArrayList();
-		test.add(new String[] { "test1", "test2" });
-		return new CsvResponse(test, "test.csv");
+			kpiValue = service.evaluateKpiValueWithDate(kpi, entity, _timescale, _date.toDate());
+		}     
 		
+		return (CSVExport) cyfeService.buildValue(kpi, entity, kpiValue, _goal);
+
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/values", produces = "text/csv; charset=utf-8")
+	@RequestMapping(method = RequestMethod.GET, value = "/values", produces = "text/csv; charset=UTF-8")
 	@ResponseBody
-	public String getValues(@RequestParam(value="kpiKeys") List<String> _kpiKeys, 
+	public CSVExport getValues(@RequestParam(value="kpiKeys") List<String> _kpiKeys, 
 			@RequestParam(value="entityKeys", required=false) List<String> _entityKeys,
 			@RequestParam(value="timescale", required=false) final TimeScale _timescale,
-			@RequestParam(value="date", required=false) @DateTimeFormat(pattern="ddmmyyyy") Date _date) {
+			@RequestParam(value="date", required=false) @DateTimeFormat(pattern="yyyy-MM-dd") DateTime _date) {
 		
 		LOGGER.debug("cyfe/values called with params : {}, {}", _kpiKeys, _entityKeys);
 		
-		return "";
+		List<Kpi> kpis = kpiConverter.convert(_kpiKeys);
+		List<IEntity> entities = this.getSelectedEntitiesOrAll(kpis.get(0).getEntityType(), _entityKeys);
+		Map<Kpi, KpiResult> results = service.evaluateKpiValues(kpis, entities, _timescale, _date != null ? _date.toDate() : null);
+		
+		return cyfeService.buildValues(entities, results);
 		
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/serie/{kpiKey}", produces = "text/csv; charset=utf-8")
 	@ResponseBody
-	public String getSerie(@PathVariable(value="kpiKey") final String kpiKey,
-			@RequestParam(value="entityKeys", required=false) List<String> entityKeys,
-			@RequestParam(value="timescale", required=false) final TimeScale timeScale,
-			@RequestParam(value="since", required=false) @DateTimeFormat(pattern="ddmmyyyy") Date since,
-			@RequestParam(value="colors", required=false) List<String> colors,
-			@RequestParam(value="types", required=false) List<String> types) {
+	public CSVExport getSerie(@PathVariable(value="kpiKey") final String _kpiKey,
+			@RequestParam(value="entityKeys", required=false) List<String> _entityKeys,
+			@RequestParam(value="timescale", required=false) final TimeScale _timeScale,
+			@RequestParam(value="since", required=false) @DateTimeFormat(pattern="yyyy-MM-dd") DateTime _since,
+			@RequestParam(value="colors", required=false) List<String> _colors,
+			@RequestParam(value="types", required=false) List<String> _types) {
 		
-		return "";
+		Kpi kpi = kpiConverter.convert(_kpiKey);
+		List<IEntity> entities = this.getSelectedEntitiesOrAll(kpi.getEntityType(), _entityKeys);
+		List<TimeSerie> timeSeries = service.buildTimeSeries(kpi, entities, _timeScale, _since != null ? _since.toDate() : null);
+		
+		return cyfeService.buildSerie(kpi, entities, timeSeries, _colors, _types);
 		
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/pie/{kpiKey}", produces = "text/csv; charset=utf-8")
 	@ResponseBody
-	public String getPie(@PathVariable(value="kpiKey") final String kpiKey,
-			@RequestParam(value="entityKeys", required=false) List<String> entityKeys,
-			@RequestParam(value="colors", required=false) List<String> colors) {
+	public CSVExport getPie(@PathVariable(value="kpiKey") final String _kpiKey,
+			@RequestParam(value="entityKeys", required=false) List<String> _entityKeys,
+			@RequestParam(value="timescale", required=false) TimeScale _timescale,
+			@RequestParam(value="colors", required=false) List<String> _colors) {
 		
-		return "";
+		Kpi kpi = kpiConverter.convert(_kpiKey);
+		List<IEntity> entities = this.getSelectedEntitiesOrAll(kpi.getEntityType(), _entityKeys);
+		
+		KpiResult result = service.evaluateKpiValues(kpi, entities, _timescale);
+		
+		return cyfeService.buildPiechart(kpi, entities, result, _colors);
 		
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/events/{entityType}", produces = "text/csv; charset=utf-8")
 	@ResponseBody
-	public String getEvents(@PathVariable(value="entityType") final String entityType,
-			@RequestParam(value="severityMin") final Severity severityMin,
-			@RequestParam(value="sizeMax") final Integer sizeMax,
-			@RequestParam(value="eventKeys") List<String> eventKeys,
-			@RequestParam(value="entityKeys", required=false) List<String> entityKeys) {
+	public CSVExport getEvents(@PathVariable(value="entityType") final ExtendedEntityType _entityType,
+			@RequestParam(value="severityMin") final Severity _severityMin,
+			@RequestParam(value="sizeMax") final Integer _sizeMax,
+			@RequestParam(value="eventKeys") List<String> _eventKeys,
+			@RequestParam(value="entityKeys", required=false) List<String> _entityKeys) {
+
+		SearchEventDto search = new SearchEventDto();
+		search.setEntityType(_entityType);
+		search.setSeverityMin(_severityMin);
+		search.setMaxEvents(_sizeMax);
+		search.setEntityKeys(_entityKeys);
+		search.setEventTypeKeys(_eventKeys);
 		
-		return "";
+		List<IEvent> events = service.findEvents(search);
+		return cyfeService.buildEventsTable(events);
 		
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/cohort/{kpiKey}", produces = "text/csv; charset=utf-8")
 	@ResponseBody
-	public String getCohort(@PathVariable(value="kpiKey") final String kpiKey,
-			@RequestParam(value="entityKeys", required=false) List<String> entityKeys,
-			@RequestParam(value="timescale") final TimeScale timeScale,
-			@RequestParam(value="since") @DateTimeFormat(pattern="ddmmyyyy") Date since,
-			@RequestParam(value="goal", required=false) final Double goal) {
+	public CSVExport getCohort(@PathVariable(value="kpiKey") final String _kpiKey,
+			@RequestParam(value="entityKeys", required=false) List<String> _entityKeys,
+			@RequestParam(value="timescale", required=false) final TimeScale _timeScale,
+			@RequestParam(value="since", required=false) @DateTimeFormat(pattern="yyyy-MM-dd") DateTime _since,
+			@RequestParam(value="goal", required=false) Double _goal) {
 		
-		return "";
+		Kpi kpi = kpiConverter.convert(_kpiKey);
+		List<IEntity> entities = this.getSelectedEntitiesOrAll(kpi.getEntityType(), _entityKeys);
+		
+		if (_goal == null) {
+			_goal = this.getKpiGoal(kpi);
+		}
+		
+		List<TimeSerie> timeSeries = service.buildTimeSeries(kpi, entities, _timeScale, _since != null ? _since.toDate() : null);
+		
+		return cyfeService.buildCohort(kpi, entities, timeSeries, _goal);
 		
 	}
 	

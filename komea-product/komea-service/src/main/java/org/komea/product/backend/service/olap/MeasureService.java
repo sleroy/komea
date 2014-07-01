@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.Validate;
 import org.joda.time.DateTime;
-import org.komea.product.backend.api.exceptions.EntityNotFoundException;
+import org.komea.product.backend.exceptions.EntityNotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundRuntimeException;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.history.HistoryKey;

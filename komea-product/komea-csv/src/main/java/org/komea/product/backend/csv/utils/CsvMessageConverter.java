@@ -1,4 +1,4 @@
-package org.komea.product.backend.utils;
+package org.komea.product.backend.csv.utils;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,10 +11,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.stereotype.Component;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
-public class CsvMessageConverter extends AbstractHttpMessageConverter<CsvResponse> {
+@Component
+public class CsvMessageConverter extends AbstractHttpMessageConverter<CSVExport> {
 	
 	public static final MediaType MEDIA_TYPE = new MediaType("text", "csv", Charset.forName("utf-8"));
 	
@@ -22,29 +24,30 @@ public class CsvMessageConverter extends AbstractHttpMessageConverter<CsvRespons
 		super(MEDIA_TYPE);
 	}
 	
+	public CsvMessageConverter(MediaType... supportedMediaTypes) {
+		super(supportedMediaTypes);	
+	}
+	
 	@Override
 	protected boolean supports(Class<?> clazz) {
-		//return CsvResponse.class.equals(clazz);
-		return true;
+		return CSVExport.class.isAssignableFrom(clazz);
 	}
 
 	@Override
-	protected CsvResponse readInternal(Class<? extends CsvResponse> clazz,
+	protected CSVExport readInternal(Class<? extends CSVExport> clazz,
 			HttpInputMessage inputMessage) throws IOException,
 			HttpMessageNotReadableException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected void writeInternal(CsvResponse _response, HttpOutputMessage _output)
+	protected void writeInternal(CSVExport _response, HttpOutputMessage _output)
 			throws IOException, HttpMessageNotWritableException {
-		_output.getHeaders().set("Accept", "text/csv");
 		_output.getHeaders().setContentType(MEDIA_TYPE);
-		_output.getHeaders().set("Content-Disposition", "attachment; filename=\"" + _response.getFilename() + "\"");
+		//_output.getHeaders().set("Content-Disposition", "attachment; filename=\"" + _response.getFilename() + "\"");
 		OutputStream out = _output.getBody();
-		CSVWriter writer = new CSVWriter(new OutputStreamWriter(out), '\u0009');
-		writer.writeAll(_response.getRecords());
+		CSVWriter writer = new CSVWriter(new OutputStreamWriter(out), ',', CSVWriter.NO_QUOTE_CHARACTER);
+		writer.writeAll(_response.convertToStringList());
 	    writer.close();
 	}
 

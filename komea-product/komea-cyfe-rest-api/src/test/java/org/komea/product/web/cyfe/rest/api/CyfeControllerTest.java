@@ -8,11 +8,12 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.komea.product.backend.api.exceptions.EntityNotFoundException;
+import org.komea.product.backend.exceptions.EntityNotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundException;
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.kpi.IKPIService;
 import org.komea.product.backend.service.kpi.IStatisticsAPI;
+import org.komea.product.backend.utils.StringToKpiConvertor;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Person;
 import org.komea.product.model.timeserie.TimeScale;
@@ -28,7 +29,9 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -52,9 +55,13 @@ public class CyfeControllerTest extends AbstractSpringWebIntegrationTestCase {
     @InjectMocks
     private CyfeController CyfeController;
     
-    /*@Mock
+    @Autowired
+    private StringToKpiConvertor convertor;
+    
+    @Autowired
     private IKPIService kpiService;
     
+    /*
     @Mock
     private IEntityService entityService;
     
@@ -70,14 +77,14 @@ public class CyfeControllerTest extends AbstractSpringWebIntegrationTestCase {
     
     @Before
     public void setUp() {
-    
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-        MockitoAnnotations.initMocks(this);
-        
+    	
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();   
+        MockitoAnnotations.initMocks(this);  
+        //Mockito.spy(kpiService);
+//        convertor.setService(kpiService);
     }
     
     @Test
-    @Ignore
     public void testGetValueOk() throws Exception {
     	
     	String kpiKey = "COMMIT_MESSAGE_LENGTH";
@@ -86,26 +93,31 @@ public class CyfeControllerTest extends AbstractSpringWebIntegrationTestCase {
     	String dateAsString = "10012014";
     	Double goal = 98.20;
     	
-    	/*Kpi kpi = new Kpi();
-    	Mockito.when(kpiService.findKPIOrFail(kpiKey)).thenReturn(kpi);
+    	Kpi kpi = new Kpi();
+    	//Mockito.when(kpiService.selectByKeyOrFail(Matchers.anyString())).thenReturn(kpi);    	
+    	Mockito.doReturn(kpi).when(kpiService).selectByKeyOrFail(kpiKey);
+    	//Mockito.doReturn(kpi).when(convertor).convert(Matchers.anyString());
+    	//Mockito.when(convertor.convert(Matchers.anyString())).thenReturn(kpi);
     	
+    	/*
     	IEntity entity = new Person();
     	Mockito.when(entityService.getEntityOrFail(Matchers.any(EntityStringKey.class))).thenReturn(entity);  	    	
     	*/
     	Double kpiValue = Double.valueOf(92);
     	//Mockito.when(statisticsAPI.evaluateKpiValue(Matchers.any(TimeSerieOptions.class),Matchers.any(EntityKey.class))).thenReturn(kpiValue);
     	
-    	Mockito.when(service.evaluateKpiValueWithDate(Matchers.anyString(), Matchers.anyString(), Matchers.any(TimeScale.class), Matchers.any(Date.class))).thenReturn(kpiValue);
+    	Mockito.when(service.evaluateKpiValueWithDate(Matchers.any(Kpi.class), Matchers.any(IEntity.class), Matchers.any(TimeScale.class), Matchers.any(Date.class))).thenReturn(kpiValue);
     	
     	final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.get(PATH+"/value/{kpiKey}/{entityKey}", kpiKey, entityKey)
     			.param("timescale", timescale.toString())
     			.param("date", dateAsString)
     			.param("goal", goal.toString())
-    			.accept(new MediaType("text", "csv", Charset.forName("utf-8"))));
+    			.accept(MediaType.parseMediaType("text/csv;charset=UTF-8")));
         
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(this.CSV_CONTENT_TYPE));
+        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(new MediaType("text", "csv", Charset.forName("utf-8"))));
+        //httpRequest.andExpect(MockMvcResultMatchers.content().string(entityKey + "\n" + kpiValue.toString()));
         
     }
     
@@ -118,7 +130,7 @@ public class CyfeControllerTest extends AbstractSpringWebIntegrationTestCase {
     	
     	//Mockito.when(kpiService.findKPIOrFail(kpiKey)).thenThrow(KPINotFoundException.class);
     	
-    	Mockito.when(service.evaluateKpiValue(Matchers.anyString(), Matchers.anyString(), Matchers.any(TimeScale.class))).thenThrow(KPINotFoundException.class);
+    	Mockito.when(service.evaluateKpiValue(Matchers.any(Kpi.class), Matchers.any(IEntity.class), Matchers.any(TimeScale.class))).thenThrow(KPINotFoundException.class);
     	
     	final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.get(PATH+"/value/{kpiKey}/{entityKey}", kpiKey, entityKey));
         
@@ -139,7 +151,7 @@ public class CyfeControllerTest extends AbstractSpringWebIntegrationTestCase {
     	
     	Mockito.when(entityService.getEntityOrFail(Matchers.any(EntityStringKey.class))).thenThrow(EntityNotFoundException.class);*/
     	
-    	Mockito.when(service.evaluateKpiValue(Matchers.anyString(), Matchers.anyString(), Matchers.any(TimeScale.class))).thenThrow(EntityNotFoundException.class);  	
+    	Mockito.when(service.evaluateKpiValue(Matchers.any(Kpi.class), Matchers.any(IEntity.class), Matchers.any(TimeScale.class))).thenThrow(EntityNotFoundException.class);  	
     	    	
     	final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.get(PATH+"/value/{kpiKey}/{entityKey}", kpiKey, entityKey));
         

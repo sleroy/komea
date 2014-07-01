@@ -1,8 +1,10 @@
 package org.komea.product.backend.utils;
 
 import com.google.common.collect.Lists;
+
 import java.util.Iterator;
 import java.util.List;
+
 import org.komea.product.backend.service.entities.IEntityService;
 import org.komea.product.backend.service.esper.IEventViewerService;
 import org.komea.product.database.alert.IEvent;
@@ -12,33 +14,30 @@ import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.ExtendedEntityType;
 import org.komea.product.database.enums.Severity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EventsFilter {
 
     @Autowired
     private IEventViewerService eventService;
+    
     @Autowired
     private IEntityService entityService;
 
-    final SearchEventDto searchEvent;
-
-    public EventsFilter(SearchEventDto searchEvent) {
-        this.searchEvent = searchEvent;
-    }
-
-    public List<IEvent> filterEvents(final List<IEvent> _events) {
+    public List<IEvent> filterEvents(SearchEventDto searchEvent, final List<IEvent> _events) {   	
         final List<IEvent> result = Lists.newArrayList();
         final Iterator<IEvent> iterator = _events.iterator();
         while (iterator.hasNext() && _events.size() < searchEvent.getMaxEvents()) {
             final IEvent event = iterator.next();
-            if (eventMatches(event)) {
+            if (eventMatches(searchEvent, event)) {
                 _events.add(event);
             }
         }
         return result;
     }
 
-    private boolean eventMatches(final IEvent event) {
+    private boolean eventMatches(SearchEventDto searchEvent, final IEvent event) {
         final Severity severity = searchEvent.getSeverityMin();
         final List<String> eventTypeKeys = searchEvent.getEventTypeKeys();
         final List<String> parentEntityKeys = searchEvent.getEntityKeys();

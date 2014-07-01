@@ -28,10 +28,15 @@ public class EventsController {
 
     @Autowired
     private IEventPushService eventPushService;
+    
     @Autowired
     private IEventViewerService eventService;
+    
     @Autowired
     private IEntityService entityService;
+    
+    @Autowired
+    private EventsFilter eventsFilter;
 
     /**
      * This method find events which have been stored into komea
@@ -44,9 +49,9 @@ public class EventsController {
     public List<IEvent> findEvents(@Valid @RequestBody final SearchEventDto _searchEvent) {
 
         LOGGER.debug("call rest method /events/find to find events {}", _searchEvent);
-        final List<IEvent> globalActivity = eventService.getGlobalActivity();
-        final EventsFilter eventsFilter = new EventsFilter(_searchEvent);
-        return eventsFilter.filterEvents(globalActivity);
+        final List<IEvent> globalActivity = eventService.getGlobalActivity();     
+        return eventsFilter.filterEvents(_searchEvent, globalActivity);
+        
     }
 
     public IEventPushService getEventPushService() {

@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.product.backend.api.IKpiLoadingService;
-import org.komea.product.backend.api.exceptions.EntityNotFoundException;
+import org.komea.product.backend.exceptions.EntityNotFoundException;
 import org.komea.product.backend.exceptions.KPINotFoundRuntimeException;
 import org.komea.product.backend.service.kpi.FormulaID;
 import org.komea.product.backend.service.kpi.IKPIService;

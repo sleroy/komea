@@ -11,23 +11,23 @@
    <!-- <import resource="security-spring-test.xml" /> -->
    <import resource="thymeleaf-spring-test.xml" />
 
-   <mvc:annotation-driven>
-   </mvc:annotation-driven>
 
    <mvc:resources mapping="/static/**" location="/static/" />
 
 
    <context:component-scan base-package="org.komea.product.web" />
 
+	<!-- 
    <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
 
    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
       <property name="messageConverters">
          <list>
             <ref bean="jacksonMessageConverter" />
+            <bean class="org.komea.product.backend.utils.CsvMessageConverter"/>  
          </list>
       </property>
    </bean>
-
+	-->
 
 </beans>

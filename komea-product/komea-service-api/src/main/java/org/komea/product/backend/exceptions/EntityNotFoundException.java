@@ -1,5 +1,5 @@
 
-package org.komea.product.backend.api.exceptions;
+package org.komea.product.backend.exceptions;
 
 
 

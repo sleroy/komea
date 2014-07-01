@@ -10,18 +10,49 @@
 			    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
 
-	<mvc:annotation-driven>
+<!--  	<bean id="conversionService" class="org.komea.product.backend.utils.KomeaConversionService" /> -->
+<!--  conversion-service="conversionService" -->
+
+
+	<!-- <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+	    <property name="converters">
+	        <list merge="true">
+	        	<bean class="org.komea.product.backend.utils.StringToKpiConvertor" />
+	        </list>
+	    </property>
+	    <property name="formatters">
+	        <list>
+	            <bean class="org.springframework.format.datetime.DateFormatter">
+	                <property name="pattern" value="yyyy-MM-dd" />
+	                <property name="lenient" value="false" />
+	            </bean>
+	        </list>
+    	</property>  
+	</bean>-->
+<!-- 	conversion-service="conversionService" -->
+	 <mvc:annotation-driven>
 		<mvc:message-converters register-defaults="true">
-			<bean class="org.komea.product.backend.utils.CsvMessageConverter"></bean>
+			<bean class="org.komea.product.backend.csv.utils.CsvMessageConverter"></bean>
+			<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
 		</mvc:message-converters>
-	</mvc:annotation-driven>
+	</mvc:annotation-driven> 
+	
+	<!--<mvc:annotation-driven />-->
+	
+	<!--<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+	        <property name="messageConverters">
+	            <list>
+	                 <bean class="org.komea.product.backend.utils.CsvMessageConverter"/>
+	            </list>
+	        </property>
+	</bean> -->
 
 	<!-- <mvc:resources mapping="/static/**" location="/static/" /> -->
 
 
 	<context:component-scan base-package="org.komea.product.web.rest.api" />
 
-
+	
 
 
 	<context:annotation-config></context:annotation-config>
@@ -34,5 +65,8 @@
 			</props>
 		</property>
 	</bean>
+	
+	
+<!-- 	<mvc:annotation-driven conversion-service="conversionService"/> -->
 
 </beans>
