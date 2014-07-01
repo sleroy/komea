@@ -51,45 +51,45 @@ import com.google.common.collect.Lists;
 
 public class RebuildHistoryService implements Runnable, IRebuildHistoryService, IIssuePlugin
 {
-    
-    
+
+
     private final class FilterBugsExistingAtThisTime implements IFilter<IIssue>
     {
-        
-        
+
+
         private final DateTime beginDate;
-        
-        
-        
+
+
+
         public FilterBugsExistingAtThisTime(final DateTime _beginDate) {
-        
-        
+
+
             super();
             beginDate = _beginDate;
         }
-        
-        
+
+
         @Override
         public boolean matches(final IIssue _task) {
-        
-        
+
+
             return _task.getDateSubmitted().isBefore(beginDate)
                     || _task.getDateSubmitted().isEqual(beginDate);
         }
     }
-    
-    
-    
+
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger("bugzilla-history-service");
-    
-    
-    
+
+
+
     /**
      * @return
      */
     public static BZServerConfiguration configuration() {
-    
-    
+
+
         final BZServerConfiguration bzServerConfiguration = new BZServerConfiguration();
         bzServerConfiguration.setAutocreateProjects(true);
         bzServerConfiguration.setOpenClosedStatus(StringList.EMPTY, new StringList("CLOSED"));
@@ -100,126 +100,126 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
         bzServerConfiguration.getSeverityMap().put("major (G1)", Severity.MAJOR);
         bzServerConfiguration.getSeverityMap().put("minor (G2)", Severity.MINOR);
         bzServerConfiguration.getSeverityMap().put("blocker", Severity.BLOCKER);
-        
-        
+
+
         bzServerConfiguration.setAddress("https://bugzilla.softathome.com/bugzilla");
         bzServerConfiguration.setLogin("sylvain.leroy@tocea.com");
         bzServerConfiguration.setPassword("Pyz17Xgt");
         bzServerConfiguration.setReminderAlert(10);
-        
+
         return bzServerConfiguration;
     }
-    
-    
-    
+
+
+
     @Autowired
     private IBugZillaToIssueConvertor convertorService;
     @Autowired
     private IEventEngineService       eventEngineService;
-    
+
     @Autowired
     private IKPIService               kpiService;
-    
-    
+
+
     private final BugzillaDao         mapper;
-    
-    
+
+
     @Autowired
     private MeasureDao                measureDAO;
     private SqlSession                openSession;
-    
-    
+
+
     @Autowired
     private IPersonService            personService;
-    
-    
+
+
     private final String              productID;
-    
+
     @Autowired
     private IProjectService           projectService;
-    
-    
+
+
     @Autowired
     private IBZServerProxyFactory     serverProxyFactory;
     @Autowired
     private IStatisticsAPI            statisticsAPI;
-    
-    
-    
+
+
+
     /**
      *
      */
     public RebuildHistoryService(final String productID, final BugzillaDao _bugZillaDAOMapper) {
-    
-    
+
+
         super();
         this.productID = productID;
         mapper = _bugZillaDAOMapper;
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.bugtracking.model.IIssuePlugin#cleanCache()
      */
     @Override
     public void cleanCache() {
-    
-    
+
+
         //
-        
+
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataTable#getData()
      */
     @Override
     public List<IIssue> getData() {
-    
-    
+
+
         return convertIssues(mapper.listBugs(productID));
     }
-    
-    
+
+
     public IPersonService getPersonService() {
-    
-    
+
+
         return personService;
     }
-    
-    
+
+
     public IProjectService getProjectService() {
-    
-    
+
+
         return projectService;
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataTable#isEmpty()
      */
     @Override
     public boolean isEmpty() {
-    
-    
+
+
         return false;
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.batch.IRebuildHistoryService#run()
      */
     @Override
     public void run() {
-    
-    
+
+
         List<KpiAndQueryObject> kpis = Lists.newArrayList();
         try {
-            
+
             LOGGER.debug("Rebuilding history of bugzilla servers");
             final List<IIssue> data = getData();
             LOGGER.debug("Working on {} issues", data.size());
@@ -227,8 +227,8 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
                 LOGGER.warn("No data");
                 return;
             }
-            
-            
+
+
             kpis = getKpisWithBackupFunction();
             if (kpis.isEmpty()) {
                 LOGGER.warn("No kpi");
@@ -241,8 +241,8 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
             final int weeks = Weeks.weeksBetween(beginDate, untilNow).getWeeks();
             int weekIdx = 1;
             while (untilNow.isAfter(beginDate)) {
-                
-                
+
+
                 LOGGER.debug("############ Iteration {} <  {} : {}%", beginDate, untilNow, weekIdx
                         * 100 / weeks);
                 final List<IIssue> existedInPastIssues =
@@ -251,15 +251,16 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
                 loadHistoryForIssues(existedInPastIssues);
                 for (final KpiAndQueryObject kpiAndQueryObject : kpis) {
                     try {
-                        if (getNumberOfMeasuresForThisDate(untilNow, kpiAndQueryObject) > 0) { // Already existing
-                            continue;
-                        }
                         
-                        
+                        // if (getNumberOfMeasuresForThisDate(untilNow, kpiAndQueryObject) > 0) { // Already existing
+                        // continue;
+                        // }
+
+
                         kpiAndQueryObject.getQuery().setIssuePlugins(new IIssuePlugin[] {
-                            new MockIssuePlugin(existedInPastIssues) });
+                                new MockIssuePlugin(existedInPastIssues) });
                         ((RebuildFilter) kpiAndQueryObject.getQuery().getFilter())
-                                .setCheckTime(untilNow);
+                        .setCheckTime(untilNow);
                         final KpiResult result = kpiAndQueryObject.getQuery().getResult();
                         result.iterate(new StoreValueIntoMeasureResultIterator(statisticsAPI,
                                 kpiAndQueryObject.getKpi().getId(), untilNow));
@@ -268,8 +269,8 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
                                 kpiAndQueryObject.getKpi(), e);
                     }
                 }
-                
-                
+
+
                 untilNow = untilNow.minusWeeks(1); // WEEK PER WEEK
                 weekIdx++;
             }
@@ -279,51 +280,51 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
             }
         }
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataTable#searchData(org.komea.product.backend.utils.IFilter)
      */
     @Override
     public List<IIssue> searchData(final IFilter<IIssue> _dataFilter) {
-    
-    
+
+
         throw new UnsupportedOperationException();
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.batch.IRebuildHistoryService#setMyBatis(org.apache.ibatis.session.SqlSession)
      */
     @Override
     public void setMyBatis(final SqlSession _openSession) {
-    
-    
+
+
         openSession = _openSession;
-        
-        
+
+
     }
-    
-    
+
+
     public void setPersonService(final PersonService _personService) {
-    
-    
+
+
         personService = _personService;
     }
-    
-    
+
+
     public void setProjectService(final IProjectService _projectService) {
-    
-    
+
+
         projectService = _projectService;
     }
-    
-    
+
+
     private DateTime computeBeginningTime(final List<IIssue> data) {
-    
-    
+
+
         DateTime beginDate = null;
         // Find begin date
         for (final IIssue issue : data) {
@@ -333,15 +334,15 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
         }
         return beginDate;
     }
-    
-    
+
+
     /**
      * @param _listBugs
      * @return
      */
     private List<IIssue> convertIssues(final List<BugBugZilla> _listBugs) {
-    
-    
+
+
         for (final BugBugZilla bug : _listBugs) {
             bug.setProject(projectService.getOrCreate(productID));
             bug.setBzServerConfiguration(configuration());
@@ -350,20 +351,20 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
             final DataCustomFields customFields = (DataCustomFields) bug.getCustomFields();
             customFields.put("status", bug.getBug_status());
             customFields.put("resolutino", bug.getResolutionName());
-            
+
         }
         return (List) _listBugs;
     }
-    
-    
+
+
     /**
      * Returns the list of kpis with backup functions
      *
      * @return
      */
     private List<KpiAndQueryObject> getKpisWithBackupFunction() {
-    
-    
+
+
         final List<KpiAndQueryObject> queries = Lists.newArrayList();
         for (final Kpi kpi : kpiService.selectAll()) {
             final IQuery query = eventEngineService.getQuery(FormulaID.of(kpi));
@@ -373,20 +374,20 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
                         new KpiAndQueryObject(kpi, filterKpi.getFilter(), filterKpi);
                 queries.add(kpiAndQueryObject);
                 filterKpi.setIssuePlugins(new IIssuePlugin[] {
-                    this });
+                        this });
                 filterKpi.setFilter(new RebuildFilter(kpiAndQueryObject.getOriginalFilter(),
                         convertorService));
             }
         }
         return queries;
     }
-    
-    
+
+
     private int getNumberOfMeasuresForThisDate(
             final DateTime beginDate,
             final KpiAndQueryObject _kpiAndQueryObject) {
-    
-    
+
+
         final MeasureCriteria measureCriteria = new MeasureCriteria();
         measureCriteria.createCriteria().andDateEqualTo(beginDate.toDate());
         measureCriteria.createCriteria().andIdKpiEqualTo(
@@ -394,20 +395,20 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
         final int countByCriteria = measureDAO.countByCriteria(measureCriteria);
         return countByCriteria;
     }
-    
-    
+
+
     @SuppressWarnings("boxing")
     private void loadHistory(final IIssue _issue) {
-    
-    
+
+
         final BugBugZilla issueWrapper = (BugBugZilla) _issue;
         // Already loaded
         if (!issueWrapper.getHistory().isEmpty()) {
             LOGGER.trace("History already loaded for {}", issueWrapper.getBug_id());
             return;
         }
-        
-        
+
+
         final List<org.komea.product.database.dto.BugHistory> history =
                 mapper.getHistory(issueWrapper.getBug_id());
         LOGGER.trace("History loaded for bug {}", issueWrapper.getId());
@@ -416,11 +417,11 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
                 history.size());
         issueWrapper.setHistory(history);
     }
-    
-    
+
+
     private void loadHistoryForIssues(final List<IIssue> existedInPastIssues) {
-    
-    
+
+
         int number = 1;
         LOGGER.debug("Fetching history of bugs...");
         for (final IIssue issue : existedInPastIssues) {
@@ -429,13 +430,13 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
             number++;
         }
     }
-    
-    
+
+
     private void sortHistoryFromMostRecentToOldest(
             final List<org.komea.product.database.dto.BugHistory> _history) {
-    
-    
+
+
         Collections.sort(_history, new MostRecentHistoryBefore());
-        
+
     }
 }

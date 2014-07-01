@@ -69,10 +69,10 @@ public class BugBugZilla implements IIssue
     public Integer getAssigned_to() {
 
 
-        return (Integer) attributes.get("assigned_to");
+        return castToInt(attributes.get("assigned_to"));
     }
-
-
+    
+    
     public Map<String, Object> getAttributes() {
 
 
@@ -88,7 +88,7 @@ public class BugBugZilla implements IIssue
     public Integer getBug_id() {
 
 
-        return (Integer) attributes.get("bug_id");
+        return castToInt(attributes.get("bug_id"));
     }
 
 
@@ -100,7 +100,7 @@ public class BugBugZilla implements IIssue
     public String getBug_severity() {
 
 
-        return (String) attributes.get("bug_severity");
+        return attributes.get("bug_severity").toString();
     }
 
 
@@ -112,7 +112,7 @@ public class BugBugZilla implements IIssue
     public String getBug_status() {
 
 
-        return (String) attributes.get("bug_status");
+        return attributes.get("bug_status").toString();
     }
 
 
@@ -167,7 +167,7 @@ public class BugBugZilla implements IIssue
     public Integer getComponent_id() {
 
 
-        return (Integer) attributes.get("component_id");
+        return castToInt(attributes.get("component_id"));
     }
 
 
@@ -283,7 +283,7 @@ public class BugBugZilla implements IIssue
     public Integer getProduct_id() {
 
 
-        return (Integer) attributes.get("product_id");
+        return castToInt(attributes.get("product_id"));
     }
 
 
@@ -302,7 +302,7 @@ public class BugBugZilla implements IIssue
     public Double getRemaining_time() {
 
 
-        return (Double) attributes.get("remaining_time");
+        return castToDouble(attributes.get("remaining_time"));
     }
 
 
@@ -333,7 +333,7 @@ public class BugBugZilla implements IIssue
     public Integer getReporterId() {
 
 
-        return (Integer) attributes.get("reporterId");
+        return castToInt(attributes.get("reporterId"));
     }
 
 
@@ -576,6 +576,26 @@ public class BugBugZilla implements IIssue
 
 
         attributes.put("resolution", _resolution);
+    }
+
+
+    private Double castToDouble(final Object obj) {
+    
+    
+        if (obj instanceof Double) {
+            return (Double) obj;
+        }
+        return Double.parseDouble(obj.toString());
+    }
+    
+    
+    private Integer castToInt(final Object obj) {
+
+
+        if (obj instanceof Integer) {
+            return (Integer) obj;
+        }
+        return Integer.parseInt(obj.toString());
     }
 
 

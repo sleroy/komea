@@ -50,8 +50,8 @@ final class StoreValueIntoMeasureResultIterator implements KpiResultIterator
     
     @Override
     public void iterate(final EntityKey _key, final Number _number) {
-
-
+    
+    
         final HistoryKey historyKey = HistoryKey.of(kpiID, _key);
         LOGGER.debug("HistoryKey -> {} = {}, dateTime={}", historyKey, _number, beginDateTime);
         statisticsAPI.storeValueInHistory(historyKey, _number.doubleValue(), beginDateTime);
