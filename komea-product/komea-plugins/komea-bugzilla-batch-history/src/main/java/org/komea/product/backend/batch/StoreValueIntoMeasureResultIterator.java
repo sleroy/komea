@@ -21,40 +21,40 @@ import org.slf4j.LoggerFactory;
  */
 final class StoreValueIntoMeasureResultIterator implements KpiResultIterator
 {
-    
-    
+
+
     private static final Logger  LOGGER =
-                                                LoggerFactory
-                                                        .getLogger(StoreValueIntoMeasureResultIterator.class);
+            LoggerFactory
+            .getLogger(StoreValueIntoMeasureResultIterator.class);
     private final DateTime       beginDateTime;
     private final Integer        kpiID;
-    
-    
+
+
     private final IStatisticsAPI statisticsAPI;
-    
-    
-    
+
+
+
     public StoreValueIntoMeasureResultIterator(
             final IStatisticsAPI _statisticsAPI,
             final Integer _kpiID,
             final DateTime _beginDateTime) {
-    
-    
+
+
         statisticsAPI = _statisticsAPI;
         kpiID = _kpiID;
         beginDateTime = _beginDateTime;
-        
-        
+
+
     }
-
-
+    
+    
     @Override
     public void iterate(final EntityKey _key, final Number _number) {
-    
-    
+
+
         final HistoryKey historyKey = HistoryKey.of(kpiID, _key);
-        LOGGER.info("HistoryKey -> {} = {}, dateTime={}", historyKey, _number, beginDateTime);
+        LOGGER.trace("HistoryKey -> {} = {}, dateTime={}", historyKey, _number, beginDateTime);
         statisticsAPI.storeValueInHistory(historyKey, _number.doubleValue(), beginDateTime);
-        
+
     }
 }
