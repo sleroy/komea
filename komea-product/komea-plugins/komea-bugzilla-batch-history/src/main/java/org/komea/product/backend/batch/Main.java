@@ -6,6 +6,7 @@ package org.komea.product.backend.batch;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -16,6 +17,8 @@ import org.komea.product.backend.api.ISpringService;
 import org.komea.product.backend.service.cron.CronRegistryService;
 import org.komea.product.backend.service.cron.ICronRegistryService;
 import org.komea.product.backend.service.kpi.IKpiImportationService;
+import org.komea.product.database.dao.BugzillaDao;
+import org.komea.product.database.dto.ProjectDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -24,25 +27,25 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 public class Main
 {
-
-
+    
+    
     private static final String BATCH_CONF                                   = "batch-conf.xml";
-
+    
     private static final String CONFIGURATION_SPRING_APPLICATION_CONTEXT_XML =
-            "configuration/spring/application-context.xml";
-
+                                                                                     "configuration/spring/application-context.xml";
+    
     private static final Logger LOGGER                                       =
-            LoggerFactory
-            .getLogger(Main.class);
-
-
+                                                                                     LoggerFactory
+                                                                                             .getLogger(Main.class);
+    
+    
     private static final int    NUMBER_ARGS                                  = 2;
-
-
-
+    
+    
+    
     public static void main(final String[] args) throws IOException {
-
-
+    
+    
         // ARG0 = ProjectName
         // ARG1 = Configuration Folder
         if (args.length != NUMBER_ARGS) {
@@ -52,7 +55,7 @@ public class Main
         final File configFolder = new File(args[1]).getAbsoluteFile();
         LOGGER.info("Project selected {}", PROJECT_NAME);
         LOGGER.info("Configuration folder : {}", configFolder);
-        
+
         InputStream inputStream = null;
         SqlSession openSession = null;
         FileSystemXmlApplicationContext fileSystemXmlApplicationContext = null;
@@ -62,8 +65,11 @@ public class Main
             final SqlSessionFactory build = new SqlSessionFactoryBuilder().build(inputStream);
             LOGGER.info("Opening database session");
             openSession = build.openSession();
-            
-            
+            final BugzillaDao mapper = openSession.getMapper(BugzillaDao.class);
+            final List<ProjectDto> projects = mapper.getProjects();
+            LOGGER.info("List of projects {}", projects);
+            System.out.println(projects);
+
             LOGGER.info("Opening Spring session");
             fileSystemXmlApplicationContext =
                     new FileSystemXmlApplicationContext(
@@ -74,35 +80,43 @@ public class Main
             kpiImportationService.importFolder(configFolder);
             final ISpringService springService =
                     fileSystemXmlApplicationContext.getBean(ISpringService.class);
+            
+            
             LOGGER.info("Rebuilding history for the project {}", PROJECT_NAME);
-            launchRebuilding(PROJECT_NAME, openSession, fileSystemXmlApplicationContext,
-                    springService);
+            for (final ProjectDto project : projects) {
+                
+                launchRebuilding(project.getName(), openSession, fileSystemXmlApplicationContext,
+                        springService, mapper);
+            }
         } finally {
             IOUtils.closeQuietly(fileSystemXmlApplicationContext);
             IOUtils.closeQuietly(openSession);
             IOUtils.closeQuietly(inputStream);
         }
         ;
-
+        
     }
-
-
+    
+    
     private static void launchRebuilding(
             final String PROJECT_NAME,
             final SqlSession openSession,
             final FileSystemXmlApplicationContext fileSystemXmlApplicationContext,
-            final ISpringService springService) {
+            final ISpringService springService,
+            final BugzillaDao _mapper) {
 
+
+        LOGGER.info("------------------>>>>>>>>>>>>>>>> Treating the project {}", PROJECT_NAME);
 
         final IRebuildHistoryService rebuildHistoryService =
-                new RebuildHistoryService(PROJECT_NAME);
+                new RebuildHistoryService(PROJECT_NAME, _mapper);
         springService.autowirePojo(rebuildHistoryService);
         rebuildHistoryService.setMyBatis(openSession);
         final ICronRegistryService bean =
                 fileSystemXmlApplicationContext.getBean(ICronRegistryService.class);
         ((CronRegistryService) bean).destroy();
-
-
+        
+        
         rebuildHistoryService.run();
     }
 }

@@ -2,11 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.komea.product.database.dao.BugzillaDao">
 
+	<resultMap type="org.komea.product.database.dto.ProjectDto"
+		id="ProjectDto">
+		<result column="name" property="name" />
 
-	<resultMap type="org.komea.product.database.dto.BZUser"
-		id="BZUser">
+	</resultMap>
+	<resultMap type="org.komea.product.database.dto.BZUser" id="BZUser">
 		<result column="login_name" property="login_name" />
-		
+
 	</resultMap>
 
 	<resultMap type="org.komea.product.database.dto.BugHistory"
@@ -32,6 +35,10 @@
 		<result column="resolution" property="resolution" />
 	</resultMap>
 
+	<select id="getProjects" resultMap="ProjectDto" parameterType="map">
+		SELECT
+		`name` FROM `products`;
+	</select>
 
 	<select id="getUser" resultMap="BZUser" parameterType="map">
 		SELECT

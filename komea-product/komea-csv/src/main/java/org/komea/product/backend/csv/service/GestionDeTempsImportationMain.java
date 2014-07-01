@@ -8,7 +8,6 @@ package org.komea.product.backend.csv.service;
 
 import java.util.Date;
 
-import org.apache.commons.math3.stat.descriptive.summary.Sum;
 import org.komea.product.backend.service.entities.IPersonService;
 import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.api.IEntity;
@@ -38,18 +37,18 @@ public class GestionDeTempsImportationMain
         csvKpi.loadFromFile("/home/sleroy/Téléchargements/data.csv");
         csvKpi.beginRow(1);
         csvKpi.beginCol(0);
-        
+
         final CSVConverter csvConverter = new CSVConverter();
         csvConverter.defineColumns("time", "date", "month", "year", "Head", "Manager", "Worker",
                 "Site", "By", "Activity Code", "Activity Name", "Cost Code", "Cost Name",
                 "Project Code", "Project Customer", "Project Product", "Project Version",
                 "Project Integrator", "Project Customer", "Project Model");
-        
+
         csvConverter.defineColumnType("time", Double.class);
         csvConverter.defineColumnType("date", new Converter<String, Date>()
                 {
-            
-            
+
+
             @Override
             public Date convert(final String _source) {
 
@@ -68,13 +67,13 @@ public class GestionDeTempsImportationMain
 
 
             @Override
-            public Date convert(final String _workerName) {
+            public IEntity convert(final String _workerName) {
 
 
                 final PersonCriteria personCriteria = new PersonCriteria();
                 personCriteria.createCriteria().andLastNameEqualTo(_workerName);
                 return CollectionUtil.singleOrNull(personService.selectByCriteria(personCriteria));
-                
+
             }
 
                 });
@@ -91,28 +90,29 @@ public class GestionDeTempsImportationMain
             }
 
                 });
-        csvConverter.filterRows("Activity Name", "AWAY"); // FILTER2
-        
-        
+        csvConverter.filterRowsWithValue("Activity Name", "AWAY"); // FILTER2
+
+
         csvConverter.filterColumns("time", "Worker");
 
         csvConverter.groupBy("Worker");
-        
+
         // GROUP BY, date, Worker, Activity Name
-        csvConverter.convertRemainginColumns(new CSVRemainingColumnsConverter()
+        csvConverter.convertRemaininColumns(new CSVRemainingColumnsConverter()
         {
 
 
+            @Override
             public void groupColumns(final CSVEntry[] _entries, final CSVEntry _newEntry) {
 
 
                 _newEntry.defineColumn("sum");
-                _newEntry.setValue("sum", new Sum(_entries));
+                _newEntry.setValue("sum", new Sum(_entries).compute());
             }
         });
 
 
         csvKpi.setCsvConverter(csvConverter);
-        
+
     }
 }
