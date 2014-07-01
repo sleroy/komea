@@ -53,7 +53,7 @@ final class StoreValueIntoMeasureResultIterator implements KpiResultIterator
 
 
         final HistoryKey historyKey = HistoryKey.of(kpiID, _key);
-        LOGGER.trace("HistoryKey -> {} = {}, dateTime={}", historyKey, _number, beginDateTime);
+        LOGGER.debug("HistoryKey -> {} = {}, dateTime={}", historyKey, _number, beginDateTime);
         statisticsAPI.storeValueInHistory(historyKey, _number.doubleValue(), beginDateTime);
 
     }

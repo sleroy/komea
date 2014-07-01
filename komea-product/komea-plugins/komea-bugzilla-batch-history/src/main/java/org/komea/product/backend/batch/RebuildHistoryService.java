@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.joda.time.DateTime;
-import org.joda.time.Days;
+import org.joda.time.Weeks;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.service.entities.IPersonService;
@@ -121,25 +121,26 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
     private IKPIService               kpiService;
     
     
+    private final BugzillaDao         mapper;
+    
+    
     @Autowired
     private MeasureDao                measureDAO;
-    
-    
     private SqlSession                openSession;
+    
+    
     @Autowired
     private IPersonService            personService;
     
     
     private final String              productID;
     
-    
     @Autowired
     private IProjectService           projectService;
     
+    
     @Autowired
     private IBZServerProxyFactory     serverProxyFactory;
-    
-    
     @Autowired
     private IStatisticsAPI            statisticsAPI;
     
@@ -148,11 +149,12 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
     /**
      *
      */
-    public RebuildHistoryService(final String productID) {
+    public RebuildHistoryService(final String productID, final BugzillaDao _bugZillaDAOMapper) {
     
     
         super();
         this.productID = productID;
+        mapper = _bugZillaDAOMapper;
     }
     
     
@@ -177,7 +179,7 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
     public List<IIssue> getData() {
     
     
-        return convertIssues(openSession.getMapper(BugzillaDao.class).listBugs(productID));
+        return convertIssues(mapper.listBugs(productID));
     }
     
     
@@ -218,9 +220,9 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
         List<KpiAndQueryObject> kpis = Lists.newArrayList();
         try {
             
-            LOGGER.info("Rebuilding history of bugzilla servers");
+            LOGGER.debug("Rebuilding history of bugzilla servers");
             final List<IIssue> data = getData();
-            LOGGER.info("Working on {} issues", data.size());
+            LOGGER.debug("Working on {} issues", data.size());
             if (data.isEmpty()) {
                 LOGGER.warn("No data");
                 return;
@@ -233,19 +235,19 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
                 return;
             }
             final DateTime beginDate = computeBeginningTime(data);
-            LOGGER.info("Begin of history ====> {}", beginDate);
+            LOGGER.debug("Begin of history ====> {}", beginDate);
             DateTime untilNow = new DateTime();
             // Now iteration, one week per week
-            final int weeks = Days.daysBetween(beginDate, untilNow).getDays();
+            final int weeks = Weeks.weeksBetween(beginDate, untilNow).getWeeks();
             int weekIdx = 1;
             while (untilNow.isAfter(beginDate)) {
                 
                 
-                LOGGER.info("############ Iteration {} <  {} : {}%", beginDate, untilNow, weekIdx
+                LOGGER.debug("############ Iteration {} <  {} : {}%", beginDate, untilNow, weekIdx
                         * 100 / weeks);
                 final List<IIssue> existedInPastIssues =
                         CollectionUtil.filter(data, new FilterBugsExistingAtThisTime(untilNow));
-                LOGGER.info("At this period, we work on {} issues", existedInPastIssues.size());
+                LOGGER.debug("At this period, we work on {} issues", existedInPastIssues.size());
                 loadHistoryForIssues(existedInPastIssues);
                 for (final KpiAndQueryObject kpiAndQueryObject : kpis) {
                     try {
@@ -268,7 +270,7 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
                 }
                 
                 
-                untilNow = untilNow.minusDays(1); // MONTH PER MONTH
+                untilNow = untilNow.minusWeeks(1); // WEEK PER WEEK
                 weekIdx++;
             }
         } finally {
@@ -344,7 +346,7 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
             bug.setProject(projectService.getOrCreate(productID));
             bug.setBzServerConfiguration(configuration());
             bug.setPersonService(personService);
-            bug.setBugzillaDao(openSession.getMapper(BugzillaDao.class));
+            bug.setBugzillaDao(mapper);
             final DataCustomFields customFields = (DataCustomFields) bug.getCustomFields();
             customFields.put("status", bug.getBug_status());
             customFields.put("resolutino", bug.getResolutionName());
@@ -389,7 +391,8 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
         measureCriteria.createCriteria().andDateEqualTo(beginDate.toDate());
         measureCriteria.createCriteria().andIdKpiEqualTo(
                 FormulaID.of(_kpiAndQueryObject.getKpi()).getId());
-        return measureDAO.countByCriteria(measureCriteria);
+        final int countByCriteria = measureDAO.countByCriteria(measureCriteria);
+        return countByCriteria;
     }
     
     
@@ -404,8 +407,9 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
             return;
         }
         
+        
         final List<org.komea.product.database.dto.BugHistory> history =
-                openSession.getMapper(BugzillaDao.class).getHistory(issueWrapper.getBug_id());
+                mapper.getHistory(issueWrapper.getBug_id());
         LOGGER.trace("History loaded for bug {}", issueWrapper.getId());
         sortHistoryFromMostRecentToOldest(history);
         LOGGER.debug("Sorting history of bug {} with  {} elements", issueWrapper.getId(),

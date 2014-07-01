@@ -8,6 +8,7 @@ import java.util.List;
 import org.komea.product.database.dto.BZUser;
 import org.komea.product.database.dto.BugBugZilla;
 import org.komea.product.database.dto.BugHistory;
+import org.komea.product.database.dto.ProjectDto;
 
 
 
@@ -19,6 +20,14 @@ public interface BugzillaDao
 
 
     /**
+     * Returns the list of projects
+     *
+     * @return the list of projects
+     */
+    public List<ProjectDto> getProjects();
+
+
+    /**
      * Returns the information about an user;
      *
      * @param userID
@@ -26,8 +35,8 @@ public interface BugzillaDao
      * @return the user.
      */
     public List<BZUser> getUser(Integer userID);
-    
-    
+
+
     /**
      * Lists bugs for the project name
      *

@@ -62,13 +62,14 @@ public class RebuildFilter implements IFilter<IIssue>
         }
         final BugBugZilla bugBugZilla = (BugBugZilla) _task;
         final BugBugZilla bugBugZilla2 = new BugBugZilla();
-        try {
-            org.springframework.beans.BeanUtils.copyProperties(bugBugZilla, bugBugZilla2);
-
-        } catch (final Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        
+        bugBugZilla2.setAttributes(bugBugZilla.getAttributes());
+        bugBugZilla2.setBugzillaDao(bugBugZilla.getBugzillaDao());
+        bugBugZilla2.setBzServerConfiguration(bugBugZilla.getBzServerConfiguration());
+        bugBugZilla2.setHistory(bugBugZilla.getHistory());
+        bugBugZilla2.setPersonService(bugBugZilla.getPersonService());
+        bugBugZilla2.setProject(bugBugZilla.getProject());
+        
         new RollBackStatus(bugBugZilla2, bugBugZilla.getHistory()).rollback(checkTime);
         return filter.matches(bugBugZilla2);
     }
