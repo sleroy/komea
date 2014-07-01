@@ -24,7 +24,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 @ContextConfiguration(locations = {
         "classpath:/spring/application-context-test.xml",
-        "classpath*:/spring/dispatcher-servlet-test.xml" })
+        "classpath*:/spring/dispatcher-servlet-test.xml",
+        "classpath*:/spring/rest-servlet-test.xml"})
 @TransactionConfiguration(defaultRollback = true)
 public abstract class AbstractSpringWebIntegrationTestCase
 {

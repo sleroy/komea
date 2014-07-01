@@ -34,7 +34,6 @@ import org.springframework.web.context.WebApplicationContext;
 import com.google.common.collect.Lists;
 
 
-
 public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
 {
     
