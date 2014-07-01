@@ -24,25 +24,25 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 public class Main
 {
-    
-    
+
+
     private static final String BATCH_CONF                                   = "batch-conf.xml";
-    
+
     private static final String CONFIGURATION_SPRING_APPLICATION_CONTEXT_XML =
-                                                                                     "configuration/spring/application-context.xml";
-    
+            "configuration/spring/application-context.xml";
+
     private static final Logger LOGGER                                       =
-                                                                                     LoggerFactory
-                                                                                             .getLogger(Main.class);
-    
-    
+            LoggerFactory
+            .getLogger(Main.class);
+
+
     private static final int    NUMBER_ARGS                                  = 2;
-    
-    
-    
+
+
+
     public static void main(final String[] args) throws IOException {
-    
-    
+
+
         // ARG0 = ProjectName
         // ARG1 = Configuration Folder
         if (args.length != NUMBER_ARGS) {
@@ -50,8 +50,9 @@ public class Main
         }
         final String PROJECT_NAME = args[0];
         final File configFolder = new File(args[1]).getAbsoluteFile();
+        LOGGER.info("Project selected {}", PROJECT_NAME);
         LOGGER.info("Configuration folder : {}", configFolder);
-
+        
         InputStream inputStream = null;
         SqlSession openSession = null;
         FileSystemXmlApplicationContext fileSystemXmlApplicationContext = null;
@@ -61,8 +62,8 @@ public class Main
             final SqlSessionFactory build = new SqlSessionFactoryBuilder().build(inputStream);
             LOGGER.info("Opening database session");
             openSession = build.openSession();
-
-
+            
+            
             LOGGER.info("Opening Spring session");
             fileSystemXmlApplicationContext =
                     new FileSystemXmlApplicationContext(
@@ -82,17 +83,17 @@ public class Main
             IOUtils.closeQuietly(inputStream);
         }
         ;
-        
+
     }
-    
-    
+
+
     private static void launchRebuilding(
             final String PROJECT_NAME,
             final SqlSession openSession,
             final FileSystemXmlApplicationContext fileSystemXmlApplicationContext,
             final ISpringService springService) {
-    
-    
+
+
         final IRebuildHistoryService rebuildHistoryService =
                 new RebuildHistoryService(PROJECT_NAME);
         springService.autowirePojo(rebuildHistoryService);
@@ -100,8 +101,8 @@ public class Main
         final ICronRegistryService bean =
                 fileSystemXmlApplicationContext.getBean(ICronRegistryService.class);
         ((CronRegistryService) bean).destroy();
-        
-        
+
+
         rebuildHistoryService.run();
     }
 }
