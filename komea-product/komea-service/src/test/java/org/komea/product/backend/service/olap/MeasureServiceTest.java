@@ -1,17 +1,17 @@
 /**
  *
  */
-
 package org.komea.product.backend.service.olap;
 
-
-
+import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.joda.time.DateTime;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.backend.service.kpi.FormulaID;
@@ -30,33 +30,20 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/spring/application-context-test.xml")
 @TransactionConfiguration(defaultRollback = true)
 @TestExecutionListeners({
     DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class,
-    TransactionDbUnitTestExecutionListener.class })
-public class MeasureServiceTest extends AbstractSpringIntegrationTestCase
-{
-    
-    
-    @Autowired
-    private IKPIService     kpiService;
+    TransactionDbUnitTestExecutionListener.class})
+public class MeasureServiceTest extends AbstractSpringIntegrationTestCase {
 
+    @Autowired
+    private IKPIService kpiService;
 
     @Autowired
     private IMeasureService measureService;
-
-
 
     /**
      * Test method for
@@ -68,24 +55,17 @@ public class MeasureServiceTest extends AbstractSpringIntegrationTestCase
     @DatabaseSetup("/dbunit/findMultipleHistoricalMeasure.xml")
     public final void testFindMultipleHistoricalMeasureWithAllMeasuresAndKpi() throws Exception {
 
-
         final KpiStringKeyList kpiKeyList = new KpiStringKeyList();
         final PeriodCriteria period = new PeriodCriteria();
         period.setStartDate(new DateTime().minusYears(2).toDate());
         period.setEndDate(new Date());
-        final List<TimeSerieDTO> findMultipleHistoricalMeasure =
-                measureService.findMultipleHistoricalMeasure(kpiKeyList, period);
-        final Set<String> kpiKey = new HashSet<String>();
+        final List<TimeSerieDTO> findMultipleHistoricalMeasure
+                = measureService.findMultipleHistoricalMeasure(kpiKeyList, period);
         for (final TimeSerieDTO dto : findMultipleHistoricalMeasure) {
-            kpiKey.add(dto.getKpi().getKey());
+            assertTrue(dto.getCoordinates().isEmpty());
         }
-        assertTrue(kpiKey.contains("BRANCH_COVERAGE(%)"));
-        assertTrue(kpiKey.contains("LINE_COVERAGE"));
-
-
     }
-    
-    
+
     /**
      * Test method for
      * {@link org.komea.product.backend.service.olap.MeasureService#findMultipleHistoricalMeasure(org.komea.product.service.dto.KpiStringKeyList, org.komea.product.service.dto.PeriodCriteria)}
@@ -96,20 +76,17 @@ public class MeasureServiceTest extends AbstractSpringIntegrationTestCase
     @DatabaseSetup("/dbunit/findMultipleHistoricalMeasure.xml")
     public final void testFindMultipleHistoricalMeasureWIthoutPeriod() throws Exception {
 
-
         final KpiStringKeyList kpiKeyList = new KpiStringKeyList();
         final PeriodCriteria period = new PeriodCriteria();
-        
-        final List<TimeSerieDTO> findMultipleHistoricalMeasure =
-                measureService.findMultipleHistoricalMeasure(kpiKeyList, period);
+
+        final List<TimeSerieDTO> findMultipleHistoricalMeasure
+                = measureService.findMultipleHistoricalMeasure(kpiKeyList, period);
         for (final TimeSerieDTO timeSerieDTO : findMultipleHistoricalMeasure) {
             assertTrue(timeSerieDTO.getCoordinates().isEmpty());
         }
 
-
     }
-    
-    
+
     /**
      * Test method for
      * {@link org.komea.product.backend.service.olap.MeasureService#findMultipleHistoricalMeasure(org.komea.product.service.dto.KpiStringKeyList, org.komea.product.service.dto.PeriodCriteria)}
@@ -120,7 +97,6 @@ public class MeasureServiceTest extends AbstractSpringIntegrationTestCase
     @DatabaseSetup("/dbunit/findMultipleHistoricalMeasure.xml")
     public final void testFindMultipleHistoricalMeasureWithSomeKpiAndSomeMeasure() throws Exception {
 
-
         final KpiStringKeyList kpiKeyList = new KpiStringKeyList();
         kpiKeyList.addKpiKey("BRANCH_COVERAGE(%)");
         kpiKeyList.addKpiKey("LINE_COVERAGE");
@@ -130,8 +106,8 @@ public class MeasureServiceTest extends AbstractSpringIntegrationTestCase
         final PeriodCriteria period = new PeriodCriteria();
         period.setStartDate(new DateTime().minusYears(2).toDate());
         period.setEndDate(new Date());
-        final List<TimeSerieDTO> findMultipleHistoricalMeasure =
-                measureService.findMultipleHistoricalMeasure(kpiKeyList, period);
+        final List<TimeSerieDTO> findMultipleHistoricalMeasure
+                = measureService.findMultipleHistoricalMeasure(kpiKeyList, period);
         final Set<String> kpiKey = new HashSet<String>();
         for (final TimeSerieDTO dto : findMultipleHistoricalMeasure) {
             kpiKey.add(dto.getKpi().getKey());
@@ -140,9 +116,7 @@ public class MeasureServiceTest extends AbstractSpringIntegrationTestCase
         assertTrue(kpiKey.contains("BRANCH_COVERAGE(%)"));
         assertTrue(kpiKey.contains("LINE_COVERAGE"));
 
-
     }
-
 
     /**
      * Test method for
@@ -154,7 +128,6 @@ public class MeasureServiceTest extends AbstractSpringIntegrationTestCase
     @DatabaseSetup("/dbunit/findMultipleHistoricalMeasure.xml")
     public final void testFindMultipleHistoricalMeasureWithSomeKpiAndSomeMeasureAndMIssingValues()
             throws Exception {
-
 
         System.out.println(FormulaID.of(kpiService.selectByKey("BRANCH_COVERAGE(%)")).getId());
         System.out.println(FormulaID.of(kpiService.selectByKey("LINE_COVERAGE")).getId());
@@ -170,12 +143,11 @@ public class MeasureServiceTest extends AbstractSpringIntegrationTestCase
         final PeriodCriteria period = new PeriodCriteria();
         period.setStartDate(new DateTime().minusYears(2).toDate());
         period.setEndDate(new Date());
-        final List<TimeSerieDTO> findMultipleHistoricalMeasure =
-                measureService.findMultipleHistoricalMeasure(kpiKeyList, period);
+        final List<TimeSerieDTO> findMultipleHistoricalMeasure
+                = measureService.findMultipleHistoricalMeasure(kpiKeyList, period);
         final Set<String> kpiKey = new HashSet<String>();
         for (final TimeSerieDTO dto : findMultipleHistoricalMeasure) {
             kpiKey.add(dto.getKpi().getKey());
-
 
         }
         assertTrue(kpiKey.contains("BRANCH_COVERAGE(%)"));
