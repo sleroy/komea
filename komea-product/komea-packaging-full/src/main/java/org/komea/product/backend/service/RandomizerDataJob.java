@@ -78,7 +78,7 @@ public class RandomizerDataJob {
     @PostConstruct
     public void execute() {
     
-        cronRegistryService.registerCronTask("RANDOMIZER_JOB", BackupDelay.HOUR, Randomizer.class, new JobDataMap());
+        cronRegistryService.registerCronTask("RANDOMIZER_JOB", BackupDelay.HOUR, RandomizerCron.class, new JobDataMap());
         
     }
     
