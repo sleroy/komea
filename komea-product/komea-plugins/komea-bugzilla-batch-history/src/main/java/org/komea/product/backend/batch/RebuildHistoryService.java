@@ -81,15 +81,15 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
     
     
     private static final Logger LOGGER = LoggerFactory.getLogger("bugzilla-history-service");
-
-
-
+    
+    
+    
     /**
      * @return
      */
     public static BZServerConfiguration configuration() {
-
-
+    
+    
         final BZServerConfiguration bzServerConfiguration = new BZServerConfiguration();
         bzServerConfiguration.setAutocreateProjects(true);
         bzServerConfiguration.setOpenClosedStatus(StringList.EMPTY, new StringList("CLOSED"));
@@ -100,18 +100,18 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
         bzServerConfiguration.getSeverityMap().put("major (G1)", Severity.MAJOR);
         bzServerConfiguration.getSeverityMap().put("minor (G2)", Severity.MINOR);
         bzServerConfiguration.getSeverityMap().put("blocker", Severity.BLOCKER);
-
-
+        
+        
         bzServerConfiguration.setAddress("https://bugzilla.softathome.com/bugzilla");
         bzServerConfiguration.setLogin("sylvain.leroy@tocea.com");
         bzServerConfiguration.setPassword("Pyz17Xgt");
         bzServerConfiguration.setReminderAlert(10);
-
+        
         return bzServerConfiguration;
     }
-
-
-
+    
+    
+    
     @Autowired
     private IBugZillaToIssueConvertor convertorService;
     @Autowired
@@ -131,20 +131,20 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
     
     
     private final String              productID;
-
-
+    
+    
     @Autowired
     private IProjectService           projectService;
-
+    
     @Autowired
     private IBZServerProxyFactory     serverProxyFactory;
-
-
+    
+    
     @Autowired
     private IStatisticsAPI            statisticsAPI;
-
-
-
+    
+    
+    
     /**
      *
      */
@@ -252,8 +252,8 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
                         if (getNumberOfMeasuresForThisDate(untilNow, kpiAndQueryObject) > 0) { // Already existing
                             continue;
                         }
-
-
+                        
+                        
                         kpiAndQueryObject.getQuery().setIssuePlugins(new IIssuePlugin[] {
                             new MockIssuePlugin(existedInPastIssues) });
                         ((RebuildFilter) kpiAndQueryObject.getQuery().getFilter())
@@ -277,8 +277,8 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
             }
         }
     }
-
-
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataTable#searchData(org.komea.product.backend.utils.IFilter)
@@ -289,8 +289,8 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
     
         throw new UnsupportedOperationException();
     }
-
-
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.backend.batch.IRebuildHistoryService#setMyBatis(org.apache.ibatis.session.SqlSession)
@@ -303,15 +303,15 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
         
         
     }
-
-
+    
+    
     public void setPersonService(final PersonService _personService) {
     
     
         personService = _personService;
     }
-
-
+    
+    
     public void setProjectService(final IProjectService _projectService) {
     
     
@@ -348,7 +348,7 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
             final DataCustomFields customFields = (DataCustomFields) bug.getCustomFields();
             customFields.put("status", bug.getBug_status());
             customFields.put("resolutino", bug.getResolutionName());
-
+            
         }
         return (List) _listBugs;
     }
@@ -391,8 +391,8 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
                 FormulaID.of(_kpiAndQueryObject.getKpi()).getId());
         return measureDAO.countByCriteria(measureCriteria);
     }
-
-
+    
+    
     @SuppressWarnings("boxing")
     private void loadHistory(final IIssue _issue) {
     
@@ -406,21 +406,21 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
         
         final List<org.komea.product.database.dto.BugHistory> history =
                 openSession.getMapper(BugzillaDao.class).getHistory(issueWrapper.getBug_id());
-        LOGGER.info("History loaded for bug {}", issueWrapper.getId());
+        LOGGER.trace("History loaded for bug {}", issueWrapper.getId());
         sortHistoryFromMostRecentToOldest(history);
         LOGGER.debug("Sorting history of bug {} with  {} elements", issueWrapper.getId(),
                 history.size());
         issueWrapper.setHistory(history);
     }
-
-
+    
+    
     private void loadHistoryForIssues(final List<IIssue> existedInPastIssues) {
     
     
         int number = 1;
-        LOGGER.info("Fetching history of bugs...");
+        LOGGER.debug("Fetching history of bugs...");
         for (final IIssue issue : existedInPastIssues) {
-            LOGGER.info("Fetching history for bug {}/{}", number, existedInPastIssues.size());
+            LOGGER.trace("Fetching history for bug {}/{}", number, existedInPastIssues.size());
             loadHistory(issue);
             number++;
         }
