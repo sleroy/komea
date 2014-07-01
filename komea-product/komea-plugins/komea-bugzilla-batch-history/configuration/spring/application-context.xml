@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:p="http://www.springframework.org/schema/p" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring" xmlns:tasks="http://www.springframework.org/schema/task"
-	xmlns:util="http://www.springframework.org/schema/util" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:tasks="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:cache="http://www.springframework.org/schema/cache"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
@@ -14,67 +12,25 @@
 
 
 
+	<import resource="database-spring.xml" />
 
 
-	<context:property-placeholder location="classpath:/config/bdd-embed.properties" />
-
-	<!-- SALT FOR PASSWORDS -->
-	<util:properties id="authProperties">
-		<prop key="salt">komeasalt</prop>
-		<prop key="defaultAdminPassword">admin</prop>
-	</util:properties>
 
 
-	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-		p:driverClassName="org.h2.Driver"
-		p:url="jdbc:h2:mem:komea;MODE=MySQL;CACHE_SIZE=65536;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false;LOG=0;UNDO_LOG=0;LOCK_MODE=0;INIT=CREATE SCHEMA IF NOT EXISTS 'KOMEA'\\;SET SCHEMA 'KOMEA'\\;;"
-		p:username="sa" p:password="" />
+	<cache:annotation-driven />
 
+	<tasks:annotation-driven />
 
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<!-- <property name="mapperLocations" value="classpath*:org/komea/product/database/sqlmap/*.xml" 
-			/> -->
-		<property name="configLocation" value="classpath:/data/mybatis-conf.xml" />
-	</bean>
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="ehcache"></property>
 	</bean>
 
-	<bean class="org.mybatis.spring.MyBatisExceptionTranslator">
-		<constructor-arg>
-			<ref bean="dataSource"></ref>
-		</constructor-arg>
-		<constructor-arg>
-			<value>false</value>
-		</constructor-arg>
+	<!-- Ehcache library setup -->
+	<bean id="ehcache"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:/ehcache.xml"></property>
+		<property name="shared" value="true"></property>
 	</bean>
-
-
-	<bean
-		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
-
-	<tx:annotation-driven transaction-manager="transactionManager" />
-
-
-	<mybatis:scan base-package="org.komea.product.database.dao" />
-
-	<jdbc:initialize-database data-source="dataSource"
-		enabled="true" ignore-failures="NONE">
-		<jdbc:script separator="#"
-			location="classpath:/data/komea-h2-procedure.sql" />
-		<jdbc:script location="classpath:/data/komea-h2.sql" />
-		<jdbc:script location="classpath:/data/komea-h2-indexes.sql" />
-	</jdbc:initialize-database>
-
-	<bean id="validator"
-		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
-
-	<bean
-		class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor" />
-
 
 	<context:component-scan base-package="org.komea.product" />
 
