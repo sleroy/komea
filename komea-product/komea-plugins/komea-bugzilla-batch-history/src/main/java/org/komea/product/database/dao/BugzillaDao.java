@@ -16,7 +16,19 @@ public interface BugzillaDao
 {
 
 
+    public List<BZUser> findUser(String userID);
+
+
     public List<BugHistory> getHistory(int bugID);
+
+
+    /**
+     * Returns the project
+     *
+     * @param _product_id
+     *            the project id.
+     */
+    public List<ProjectDto> getProject(Integer product_id);
 
 
     /**
@@ -38,10 +50,16 @@ public interface BugzillaDao
 
 
     /**
+     * @return
+     */
+    public List<BZUser> getUsers();
+
+
+    /**
      * Lists bugs for the project name
      *
      * @param _projectName
      *            the project name
      */
-    public List<BugBugZilla> listBugs(String productID);
+    public List<BugBugZilla> listBugs();
 }

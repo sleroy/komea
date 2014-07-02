@@ -78,15 +78,18 @@ public class Main
                     fileSystemXmlApplicationContext.getBean(IKpiImportationService.class);
             LOGGER.info("Force importation of kpis if necessary");
             kpiImportationService.importFolder(configFolder);
-            final ISpringService springService =
-                    fileSystemXmlApplicationContext.getBean(ISpringService.class);
-
-
+            fileSystemXmlApplicationContext.getBean(ISpringService.class);
+            final ICronRegistryService bean =
+                    fileSystemXmlApplicationContext.getBean(ICronRegistryService.class);
+            ((CronRegistryService) bean).destroy();
+            
+            
             for (final ProjectDto project : projects) {
-
-                launchRebuilding(project.getName(), openSession, fileSystemXmlApplicationContext,
-                        springService, mapper);
+                System.out.println(project.getName());
             }
+            launchRebuilding(openSession,
+                    fileSystemXmlApplicationContext.getBean(IRebuildHistoryService.class), mapper);
+
         } finally {
             IOUtils.closeQuietly(fileSystemXmlApplicationContext);
             IOUtils.closeQuietly(openSession);
@@ -98,24 +101,14 @@ public class Main
 
 
     private static void launchRebuilding(
-            final String PROJECT_NAME,
             final SqlSession openSession,
-            final FileSystemXmlApplicationContext fileSystemXmlApplicationContext,
-            final ISpringService springService,
+            final IRebuildHistoryService _iRebuildHistoryService,
             final BugzillaDao _mapper) {
     
     
-        LOGGER.info("------------------>>>>>>>>>>>>>>>> Treating the project {}", PROJECT_NAME);
-        
-        final IRebuildHistoryService rebuildHistoryService =
-                new RebuildHistoryService(PROJECT_NAME, _mapper);
-        springService.autowirePojo(rebuildHistoryService);
-        rebuildHistoryService.setMyBatis(openSession);
-        final ICronRegistryService bean =
-                fileSystemXmlApplicationContext.getBean(ICronRegistryService.class);
-        ((CronRegistryService) bean).destroy();
+        _iRebuildHistoryService.setMapper(_mapper);
 
 
-        rebuildHistoryService.run();
+        _iRebuildHistoryService.run();
     }
 }

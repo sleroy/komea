@@ -1,23 +1,22 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.backend.batch;
 
 
 
-import org.apache.ibatis.session.SqlSession;
+import org.komea.product.database.dao.BugzillaDao;
 
 
 
 /**
  * @author sleroy
- *
  */
 public interface IRebuildHistoryService
 {
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see java.lang.Runnable#run()
@@ -26,8 +25,9 @@ public interface IRebuildHistoryService
     
     
     /**
-     * @param _openSession
+     * @param _mapper
      */
-    public abstract void setMyBatis(SqlSession _openSession);
-    
+    void setMapper(BugzillaDao _mapper);
+
+
 }

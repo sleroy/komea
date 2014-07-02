@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.komea.product.database.dao.BugzillaDao">
-
+<cache ></cache>
 	<resultMap type="org.komea.product.database.dto.ProjectDto"
 		id="ProjectDto">
 		<result column="name" property="name" />
+		<result column="id" property="id" />
 
 	</resultMap>
 	<resultMap type="org.komea.product.database.dto.BZUser" id="BZUser">
 		<result column="login_name" property="login_name" />
+		<result column="userid" property="userid" />
 
 	</resultMap>
 
@@ -39,10 +41,30 @@
 		SELECT
 		`name` FROM `products`;
 	</select>
-
+	
+	<select id="getProject" resultMap="ProjectDto" parameterType="map">
+		SELECT
+		`name` FROM `products` WHERE id = #{product_id};
+	</select>
+	
+	
 	<select id="getUser" resultMap="BZUser" parameterType="map">
 		SELECT
-		`login_name` FROM `profiles` WHERE `userid` = #{userId}
+		*
+		FROM `profiles` WHERE `userid` = #{userId}
+	</select>
+	
+	<select id="getUsers" resultMap="BZUser" parameterType="map">
+		SELECT
+		*
+		FROM `profiles`;
+	</select>
+	
+
+	<select id="findUser" resultMap="BZUser" parameterType="map">
+		SELECT
+		*
+		FROM `profiles` WHERE `login_name` = #{userId}
 	</select>
 
 
@@ -50,10 +72,7 @@
 		SELECT
 		*
 		FROM
-		bugs, `products` b
-		WHERE
-		product_id=b.id AND b.name =
-		#{productId}
+		bugs
 		;
 	</select>
 

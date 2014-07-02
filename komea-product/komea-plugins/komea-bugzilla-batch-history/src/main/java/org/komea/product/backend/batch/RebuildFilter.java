@@ -9,6 +9,7 @@ package org.komea.product.backend.batch;
 import org.apache.commons.lang.Validate;
 import org.joda.time.DateTime;
 import org.komea.product.backend.utils.IFilter;
+import org.komea.product.database.dao.BugzillaDao;
 import org.komea.product.database.dto.BugBugZilla;
 import org.komea.product.plugins.bugtracking.model.IIssue;
 import org.komea.product.plugins.bugzilla.api.IBugZillaToIssueConvertor;
@@ -24,14 +25,18 @@ public class RebuildFilter implements IFilter<IIssue>
 {
     
     
+    private final BugzillaDao               bugZillaDAO;
     private DateTime                        checkTime;
-    private final IBugZillaToIssueConvertor convertor;
     
+    private final IBugZillaToIssueConvertor convertor;
     private final IFilter<IIssue>           filter;
     
     
     
-    public RebuildFilter(final IFilter<IIssue> _filter, final IBugZillaToIssueConvertor _convertor) {
+    public RebuildFilter(
+            final IFilter<IIssue> _filter,
+            final IBugZillaToIssueConvertor _convertor,
+            final BugzillaDao _bugZillaDAO) {
     
     
         super();
@@ -39,6 +44,7 @@ public class RebuildFilter implements IFilter<IIssue>
         convertor = _convertor;
         Validate.notNull(filter);
         Validate.notNull(convertor);
+        bugZillaDAO = _bugZillaDAO;
     }
     
     
@@ -69,8 +75,9 @@ public class RebuildFilter implements IFilter<IIssue>
         bugBugZilla2.setHistory(bugBugZilla.getHistory());
         bugBugZilla2.setPersonService(bugBugZilla.getPersonService());
         bugBugZilla2.setProject(bugBugZilla.getProject());
+        bugBugZilla2.setUsers(bugBugZilla.getUsers());
         
-        new RollBackStatus(bugBugZilla2, bugBugZilla.getHistory()).rollback(checkTime);
+        new RollBackStatus(bugBugZilla2, bugBugZilla.getHistory(), bugZillaDAO).rollback(checkTime);
         return filter.matches(bugBugZilla2);
     }
     
