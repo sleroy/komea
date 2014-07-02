@@ -260,5 +260,6 @@
 
 		<module>komea-cyfe-rest-api</module>
 		<module>komea-csv</module>
+		<module>komea-kpi-randomizer</module>
 	</modules>
 </project>
