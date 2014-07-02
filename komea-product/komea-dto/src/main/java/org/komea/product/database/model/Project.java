@@ -2,6 +2,7 @@ package org.komea.product.database.model;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -327,6 +328,20 @@ public class Project implements IEntity {
 
     public List<String> getAliasesList() {
         return ALIASES_SPLITTER.splitToList(alias);
+    }
+
+    public void removeAlias(final String alias) {
+        final List<String> aliasesList = new ArrayList<String>(getAliasesList());
+        aliasesList.remove(alias);
+        setAliasesList(aliasesList);
+    }
+
+    public void addAlias(final String alias) {
+        final List<String> aliasesList = new ArrayList<String>(getAliasesList());
+        if (!aliasesList.contains(alias)) {
+            aliasesList.add(alias);
+        }
+        setAliasesList(aliasesList);
     }
 
     public void setAliasesList(final List<String> aliasesList) {
