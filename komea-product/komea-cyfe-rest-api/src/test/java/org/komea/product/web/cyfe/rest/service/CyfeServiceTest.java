@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.joda.time.DateTime;
+import org.junit.Before;
 import org.junit.Test;
 import org.komea.product.database.alert.Event;
 import org.komea.product.database.alert.IEvent;
@@ -20,17 +21,21 @@ import org.komea.product.database.model.Person;
 import org.komea.product.model.timeserie.TimeCoordinate;
 import org.komea.product.model.timeserie.TimeSerie;
 import org.komea.product.service.dto.EntityKey;
-import org.komea.product.test.spring.AbstractSpringWebIntegrationTestCase;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 
-public class CyfeServiceTest extends AbstractSpringWebIntegrationTestCase {
-
-	@Autowired
+public class CyfeServiceTest {
+	
 	private ICyfeService cyfeService;
+	
+	@Before
+	public void setUp() {
+		
+		cyfeService = new CyfeService();
+		
+	}
 	
 	private Person getPerson1() {
 		Person entity1 = new Person();
@@ -82,8 +87,8 @@ public class CyfeServiceTest extends AbstractSpringWebIntegrationTestCase {
 	
 	@Test
 	public void testBuildValue() {
-		Kpi kpi = this.getKpi1();
-		Person entity = this.getPerson1();
+		Kpi kpi = getKpi1();
+		Person entity = getPerson1();
 		Double value = 53.00;
 		List<String[]> result = cyfeService.buildValue(kpi, entity, value, null).convertToStringList();
 		assertEquals(2, result.size());
@@ -93,8 +98,8 @@ public class CyfeServiceTest extends AbstractSpringWebIntegrationTestCase {
 	
 	@Test
 	public void testBuildValueWithGoal() {
-		Kpi kpi = this.getKpi1();
-		Person entity = this.getPerson2();
+		Kpi kpi = getKpi1();
+		Person entity = getPerson2();
 		Double value = 53.00;
 		Double goal = 70.00;
 		List<String[]> result = cyfeService.buildValue(kpi, entity, value, goal).convertToStringList();
@@ -109,10 +114,10 @@ public class CyfeServiceTest extends AbstractSpringWebIntegrationTestCase {
 		Map<Kpi, KpiResult> values = Maps.newHashMap();
 		Map<EntityKey, Number> result1 = Maps.newHashMap();
 		Map<EntityKey, Number> result2 = Maps.newHashMap();
-		List<IEntity> entities = Lists.newArrayList((IEntity) this.getPerson1(), this.getPerson2());
+		List<IEntity> entities = Lists.newArrayList((IEntity) getPerson1(), getPerson2());
 		
-		Kpi kpi1 = this.getKpi1();	
-		Kpi kpi2 = this.getKpi2();
+		Kpi kpi1 = getKpi1();	
+		Kpi kpi2 = getKpi2();
 		
 		Double[] doubles = new Double[] { 5.0, 10.0, 15.0, 20.0 };
 		
@@ -136,9 +141,9 @@ public class CyfeServiceTest extends AbstractSpringWebIntegrationTestCase {
 	@Test
 	public void testBuildSeries() {
 		
-		Kpi kpi = this.getKpi1();
+		Kpi kpi = getKpi1();
 		
-		List<IEntity> entities = Lists.newArrayList((IEntity) this.getPerson1(), this.getPerson2());
+		List<IEntity> entities = Lists.newArrayList((IEntity) getPerson1(), getPerson2());
 		
 		final TimeCoordinate c1 = new TimeCoordinate();
 		c1.setValue(5.0);
@@ -235,11 +240,11 @@ public class CyfeServiceTest extends AbstractSpringWebIntegrationTestCase {
 	@Test
 	public void testBuildPiechart() {
 	
-		Kpi kpi = this.getKpi1();
+		Kpi kpi = getKpi1();
 		Double val1 = 45.0;
 		Double val2 = 55.0;
 		
-		List<IEntity> entities = Lists.newArrayList((IEntity) this.getPerson1(), this.getPerson2());
+		List<IEntity> entities = Lists.newArrayList((IEntity) getPerson1(), getPerson2());
 		List<String> colors = Lists.newArrayList("#FFFFFF", "#98EE12");
 		
 		Map<EntityKey, Number> values = Maps.newHashMap();
@@ -261,8 +266,8 @@ public class CyfeServiceTest extends AbstractSpringWebIntegrationTestCase {
 	public void testBuildCohort() {
 		
 		Double goal = 50.0;
-		Kpi kpi = this.getKpi1();
-		List<IEntity> entities = Lists.newArrayList((IEntity) this.getPerson1(), this.getPerson2());
+		Kpi kpi = getKpi1();
+		List<IEntity> entities = Lists.newArrayList((IEntity) getPerson1(), getPerson2());
 		
 		final TimeCoordinate c1 = new TimeCoordinate();
 		c1.setValue(5.0);

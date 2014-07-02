@@ -36,7 +36,9 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations = {
-        "classpath*:/spring/application-context-test.xml", "classpath*:/spring/dispatcher-servlet-test.xml", })
+        "classpath*:/spring/application-context-test.xml", 
+        "classpath*:/spring/dispatcher-servlet-test.xml", 
+        "classpath*:/spring/rest-servlet-test.xml" })
 @TestExecutionListeners({
         DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class })

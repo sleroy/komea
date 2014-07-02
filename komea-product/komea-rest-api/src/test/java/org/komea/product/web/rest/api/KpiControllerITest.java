@@ -31,7 +31,9 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations = {
-        "classpath*:/spring/application-context-test.xml", "classpath*:/spring/dispatcher-servlet-test.xml" })
+        "classpath*:/spring/application-context-test.xml", 
+        "classpath*:/spring/dispatcher-servlet-test.xml",
+        "classpath*:/spring/rest-servlet-test.xml" })
 @TransactionConfiguration(defaultRollback = true)
 @DatabaseTearDown(value = "measures.xml", type = DatabaseOperation.DELETE_ALL)
 public class KpiControllerITest extends AbstractSpringDBunitIntegrationTest {

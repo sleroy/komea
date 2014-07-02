@@ -30,7 +30,7 @@ public class CsvMessageConverterTest {
 	);
 	
 	@Before
-	public void testUp() {
+	public void setUp() {
 		csvConverter = new CsvMessageConverter();
 	}
 	

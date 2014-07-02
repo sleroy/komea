@@ -211,7 +211,7 @@ public class CyfeControllerITest extends AbstractSpringDBunitIntegrationTest{
 
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(this.CSV_CONTENT_TYPE));
+        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(CSV_CONTENT_TYPE));
     	
     }
     
@@ -224,7 +224,7 @@ public class CyfeControllerITest extends AbstractSpringDBunitIntegrationTest{
 
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(this.CSV_CONTENT_TYPE));
+        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(CSV_CONTENT_TYPE));
     	
     }
 	
@@ -280,7 +280,7 @@ public class CyfeControllerITest extends AbstractSpringDBunitIntegrationTest{
 
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(this.CSV_CONTENT_TYPE));
+        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(CSV_CONTENT_TYPE));
     	
     }
     
@@ -292,7 +292,7 @@ public class CyfeControllerITest extends AbstractSpringDBunitIntegrationTest{
     	
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(this.CSV_CONTENT_TYPE));
+        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(CSV_CONTENT_TYPE));
     	
     }
     
@@ -345,7 +345,7 @@ public class CyfeControllerITest extends AbstractSpringDBunitIntegrationTest{
     	
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(this.CSV_CONTENT_TYPE));
+        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(CSV_CONTENT_TYPE));
     	
     }
     
@@ -360,7 +360,7 @@ public class CyfeControllerITest extends AbstractSpringDBunitIntegrationTest{
     	
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(this.CSV_CONTENT_TYPE));
+        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(CSV_CONTENT_TYPE));
     	
     }
     
@@ -375,7 +375,7 @@ public class CyfeControllerITest extends AbstractSpringDBunitIntegrationTest{
     	
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(this.CSV_CONTENT_TYPE));
+        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(CSV_CONTENT_TYPE));
     	
     }
     
@@ -387,7 +387,7 @@ public class CyfeControllerITest extends AbstractSpringDBunitIntegrationTest{
     	
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(this.CSV_CONTENT_TYPE));
+        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(CSV_CONTENT_TYPE));
     	
     }
     
@@ -407,7 +407,7 @@ public class CyfeControllerITest extends AbstractSpringDBunitIntegrationTest{
     	
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(this.CSV_CONTENT_TYPE));
+        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(CSV_CONTENT_TYPE));
     	
     }
     
@@ -424,7 +424,8 @@ public class CyfeControllerITest extends AbstractSpringDBunitIntegrationTest{
     	
         httpRequest.andDo(MockMvcResultHandlers.print());
         httpRequest.andExpect(MockMvcResultMatchers.status().isOk());
-        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(this.CSV_CONTENT_TYPE));
+        httpRequest.andExpect(MockMvcResultMatchers.content().contentType(CSV_CONTENT_TYPE));
     	
     }
+    
 }

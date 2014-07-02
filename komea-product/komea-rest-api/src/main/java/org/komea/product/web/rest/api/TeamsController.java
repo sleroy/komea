@@ -29,7 +29,7 @@ public class TeamsController {
      * @return the team list
      */
     @ResponseBody
-    @RequestMapping(method = RequestMethod.GET, value = "/all")
+    @RequestMapping(method = RequestMethod.GET, value = "/all", produces = "application/json")
     public List<TeamDto> allTeams() {
     
         LOGGER.debug("call rest method /teams/all/");

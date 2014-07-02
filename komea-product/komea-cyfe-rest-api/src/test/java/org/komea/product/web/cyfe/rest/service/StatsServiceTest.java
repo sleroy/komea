@@ -1,6 +1,6 @@
 package org.komea.product.web.cyfe.rest.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,7 +18,6 @@ import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.Person;
 import org.komea.product.model.timeserie.PeriodTimeSerieOptions;
 import org.komea.product.model.timeserie.TimeScale;
-import org.komea.product.model.timeserie.TimeSerie;
 import org.komea.product.model.timeserie.TimeSerieOptions;
 import org.komea.product.service.dto.EntityKey;
 import org.komea.product.test.spring.AbstractSpringWebIntegrationTestCase;
@@ -130,6 +129,26 @@ public class StatsServiceTest extends AbstractSpringWebIntegrationTestCase {
 		PeriodTimeSerieOptions options = new PeriodTimeSerieOptions(kpi);
 	    options.setTimeScale(timescale);
 	    options.setToPeriod(new DateTime(formatter.parse("2014-02-01")));
+	    options.setFromPeriod(new DateTime(formatter.parse("2014-01-01")));
+	    
+		service.evaluateKpiValueWithDate(kpi, entity, timescale, date);		
+		Mockito.verify(statisticsAPI).evaluateKpiValueOnPeriod(options, entity.getEntityKey());		
+		
+	}
+	
+	@Test
+	public void testEvaluateKpiValueWithPerYearTimescale() throws Exception {
+		
+		Kpi kpi = getKpi1();
+		IEntity entity = getPerson1();
+		TimeScale timescale = TimeScale.PER_YEAR;
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = formatter.parse("2014-09-15");
+		
+		PeriodTimeSerieOptions options = new PeriodTimeSerieOptions(kpi);
+	    options.setTimeScale(timescale);
+	    options.setToPeriod(new DateTime(formatter.parse("2014-12-31")));
 	    options.setFromPeriod(new DateTime(formatter.parse("2014-01-01")));
 	    
 		service.evaluateKpiValueWithDate(kpi, entity, timescale, date);		
