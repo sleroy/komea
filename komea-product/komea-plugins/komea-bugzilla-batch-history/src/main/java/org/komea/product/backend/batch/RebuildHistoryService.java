@@ -31,6 +31,7 @@ import org.komea.product.database.dto.BZUser;
 import org.komea.product.database.dto.BugBugZilla;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.dto.ProjectDto;
+import org.komea.product.database.enums.EntityType;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.MeasureCriteria;
@@ -302,7 +303,12 @@ public class RebuildHistoryService implements IRebuildHistoryService
 
                 for (final KpiAndQueryObject kpiAndQueryObject : kpis) {
                     try {
-
+                        if (kpiAndQueryObject.getKpi().getEntityType() == EntityType.PERSON) {
+                            continue;
+                        } else {
+                            LOGGER.info("Kpi : per project {}", kpiAndQueryObject.getKpi()
+                                    .getDisplayName());
+                        }
                         // if (getNumberOfMeasuresForThisDate(untilNow, kpiAndQueryObject) > 0) { // Already existing
                         // continue;
                         // }
@@ -379,6 +385,7 @@ public class RebuildHistoryService implements IRebuildHistoryService
         for (final BugBugZilla bug : _listBugs) {
 
             bug.setProject(products.get(bug.getProduct_id()));
+            Validate.notNull(bug.getProject());
             bug.setBzServerConfiguration(configuration());
             bug.setPersonService(personService);
             bug.setBugzillaDao(getMapper());
