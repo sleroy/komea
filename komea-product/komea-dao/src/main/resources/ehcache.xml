@@ -30,6 +30,9 @@
 
 	<cache name="kpi-realtime-value-cache" overflowToDisk="false"
 		maxElementsInMemory="1000" timeToLiveSeconds="600" timeToIdleSeconds="3600" />
+		
+		<cache name="findOrCreatePersonByEmail" overflowToDisk="false"
+		maxElementsInMemory="100" timeToLiveSeconds="10" timeToIdleSeconds="60" />
 
 
 

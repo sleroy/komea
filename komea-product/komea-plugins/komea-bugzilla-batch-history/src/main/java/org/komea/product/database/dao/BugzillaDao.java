@@ -14,22 +14,31 @@ import org.komea.product.database.dto.ProjectDto;
 
 public interface BugzillaDao
 {
-    
-    
+
+
     public List<BZUser> findUser(String userID);
-    
-    
+
+
     public List<BugHistory> getHistory(int bugID);
-    
-    
+
+
+    /**
+     * Returns the project
+     *
+     * @param _product_id
+     *            the project id.
+     */
+    public List<ProjectDto> getProject(Integer product_id);
+
+
     /**
      * Returns the list of projects
      *
      * @return the list of projects
      */
     public List<ProjectDto> getProjects();
-    
-    
+
+
     /**
      * Returns the information about an user;
      *
@@ -38,13 +47,13 @@ public interface BugzillaDao
      * @return the user.
      */
     public List<BZUser> getUser(Integer userID);
-    
-    
+
+
     /**
      * Lists bugs for the project name
      *
      * @param _projectName
      *            the project name
      */
-    public List<BugBugZilla> listBugs(String productID);
+    public List<BugBugZilla> listBugs();
 }

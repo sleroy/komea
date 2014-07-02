@@ -15,19 +15,19 @@ import org.komea.product.database.dao.BugzillaDao;
  */
 public interface IRebuildHistoryService
 {
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see java.lang.Runnable#run()
      */
-    public abstract void run(String _projectID);
-
-
+    public abstract void run();
+    
+    
     /**
      * @param _mapper
      */
     void setMapper(BugzillaDao _mapper);
-    
-    
+
+
 }

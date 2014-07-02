@@ -40,15 +40,23 @@
 		SELECT
 		`name` FROM `products`;
 	</select>
-
-	<select id="getUser" resultMap="BZUser" parameterType="map">
+	
+	<select id="getProject" resultMap="ProjectDto" parameterType="map">
 		SELECT
-		* FROM `profiles` WHERE `userid` = #{userId}
+		`name` FROM `products` WHERE id = #{product_id};
 	</select>
 	
-		<select id="findUser" resultMap="BZUser" parameterType="map">
+	
+	<select id="getUser" resultMap="BZUser" parameterType="map">
 		SELECT
-		* FROM `profiles` WHERE `login_name` = #{userId}
+		*
+		FROM `profiles` WHERE `userid` = #{userId}
+	</select>
+
+	<select id="findUser" resultMap="BZUser" parameterType="map">
+		SELECT
+		*
+		FROM `profiles` WHERE `login_name` = #{userId}
 	</select>
 
 
@@ -56,10 +64,7 @@
 		SELECT
 		*
 		FROM
-		bugs, `products` b
-		WHERE
-		product_id=b.id AND b.name =
-		#{productId}
+		bugs
 		;
 	</select>
 
