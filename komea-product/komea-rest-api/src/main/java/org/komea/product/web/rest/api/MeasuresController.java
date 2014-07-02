@@ -171,22 +171,11 @@ public class MeasuresController
     public List<TimeSerieDTO> buildTimeLine(@RequestBody
             final ManyHistoricalMeasureRequest _request) {
 
-
         LOGGER.debug("REQUEST : buildTimeLine {}", _request);
-        List<TimeSerieDTO> timeSerieDTOs = Collections.EMPTY_LIST;
-        try {
-
-
-            timeSerieDTOs =
-                    measureService.findMultipleHistoricalMeasure(_request.getKpiKeyList(),
-                            _request.getPeriod());
-            LOGGER.debug("buildTimeLine with params : {}\nResults : {}", _request, timeSerieDTOs);
-
-        } catch (final Exception e) {
-            LOGGER.error("RESPONSE_ERROR : {}", e.getMessage(), e);
-        } finally {
-            LOGGER.debug("RESPONSE : buildTimeLine {}", timeSerieDTOs);
-        }
+        List<TimeSerieDTO> timeSerieDTOs = measureService.findMultipleHistoricalMeasure(_request.getKpiKeyList(),
+                        _request.getPeriod());
+        LOGGER.debug("buildTimeLine with params : {}\nResults : {}", _request, timeSerieDTOs);
+        
         return timeSerieDTOs;
     }
 }

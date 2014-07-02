@@ -179,8 +179,7 @@ public class MeasuresControllerTest extends AbstractSpringWebIntegrationTestCase
         
     }
     
-    @Test
-    // (expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testValidate() throws Exception {
     
         Validate.isTrue(false);
