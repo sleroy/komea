@@ -50,6 +50,12 @@ public interface BugzillaDao
 
 
     /**
+     * @return
+     */
+    public List<BZUser> getUsers();
+
+
+    /**
      * Lists bugs for the project name
      *
      * @param _projectName

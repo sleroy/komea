@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.komea.product.database.dao.BugzillaDao">
-
+<cache ></cache>
 	<resultMap type="org.komea.product.database.dto.ProjectDto"
 		id="ProjectDto">
 		<result column="name" property="name" />
+		<result column="id" property="id" />
 
 	</resultMap>
 	<resultMap type="org.komea.product.database.dto.BZUser" id="BZUser">
@@ -52,6 +53,13 @@
 		*
 		FROM `profiles` WHERE `userid` = #{userId}
 	</select>
+	
+	<select id="getUsers" resultMap="BZUser" parameterType="map">
+		SELECT
+		*
+		FROM `profiles`;
+	</select>
+	
 
 	<select id="findUser" resultMap="BZUser" parameterType="map">
 		SELECT

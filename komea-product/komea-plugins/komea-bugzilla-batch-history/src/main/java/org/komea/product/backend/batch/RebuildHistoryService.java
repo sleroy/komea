@@ -7,7 +7,9 @@ package org.komea.product.backend.batch;
 
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 import org.joda.time.DateTime;
@@ -25,12 +27,15 @@ import org.komea.product.backend.utils.IFilter;
 import org.komea.product.backend.utils.StringList;
 import org.komea.product.database.dao.BugzillaDao;
 import org.komea.product.database.dao.MeasureDao;
+import org.komea.product.database.dto.BZUser;
 import org.komea.product.database.dto.BugBugZilla;
 import org.komea.product.database.dto.KpiResult;
 import org.komea.product.database.dto.ProjectDto;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Kpi;
 import org.komea.product.database.model.MeasureCriteria;
+import org.komea.product.database.model.Person;
+import org.komea.product.database.model.Project;
 import org.komea.product.plugins.bugtracker.kpis.IssueFilterKPI;
 import org.komea.product.plugins.bugtracking.model.IIssue;
 import org.komea.product.plugins.bugtracking.model.IIssuePlugin;
@@ -43,9 +48,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 
 
@@ -56,38 +61,37 @@ import com.google.common.collect.Lists;
 
 @Service
 @Scope(value = "prototype")
-@Transactional
 public class RebuildHistoryService implements IRebuildHistoryService
 {
-    
-    
+
+
     private final class FilterBugsExistingAtThisTime implements IFilter<IIssue>
     {
-        
-        
+
+
         private final DateTime beginDate;
-        
-        
-        
+
+
+
         public FilterBugsExistingAtThisTime(final DateTime _beginDate) {
-        
-        
+
+
             super();
             beginDate = _beginDate;
         }
-        
-        
+
+
         @Override
         public boolean matches(final IIssue _task) {
-        
-        
+
+
             return _task.getDateSubmitted().isBefore(beginDate)
                     || _task.getDateSubmitted().isEqual(beginDate);
         }
     }
-    
-    
-    
+
+
+
     /**
      * @author sleroy
      */
@@ -100,14 +104,14 @@ public class RebuildHistoryService implements IRebuildHistoryService
 
 
             //
-            
+
         }
 
 
         @Override
         public List<IIssue> getData() {
-        
-        
+
+
             return RebuildHistoryService.this.getData();
 
         }
@@ -128,19 +132,19 @@ public class RebuildHistoryService implements IRebuildHistoryService
             return null;
         }
     }
-    
-    
-    
+
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger("bugzilla-history-service");
-    
-    
-    
+
+
+
     /**
      * @return
      */
     public static BZServerConfiguration configuration() {
-    
-    
+
+
         final BZServerConfiguration bzServerConfiguration = new BZServerConfiguration();
         bzServerConfiguration.setAutocreateProjects(true);
         bzServerConfiguration.setOpenClosedStatus(StringList.EMPTY, new StringList("CLOSED"));
@@ -151,55 +155,49 @@ public class RebuildHistoryService implements IRebuildHistoryService
         bzServerConfiguration.getSeverityMap().put("major (G1)", Severity.MAJOR);
         bzServerConfiguration.getSeverityMap().put("minor (G2)", Severity.MINOR);
         bzServerConfiguration.getSeverityMap().put("blocker", Severity.BLOCKER);
-        
-        
+
+
         bzServerConfiguration.setAddress("https://bugzilla.softathome.com/bugzilla");
         bzServerConfiguration.setLogin("sylvain.leroy@tocea.com");
         bzServerConfiguration.setPassword("Pyz17Xgt");
         bzServerConfiguration.setReminderAlert(10);
-        
+
         return bzServerConfiguration;
     }
-    
-    
-    
-    @Autowired
-    private IBugZillaToIssueConvertor convertorService;
-    @Autowired
-    private IEventEngineService       eventEngineService;
-    
-    @Autowired
-    private IKPIService               kpiService;
-    
-    
-    private BugzillaDao               mapper;
-    
-    
-    @Autowired
-    private MeasureDao                measureDAO;
-    
-    
-    @Autowired
-    private IPersonService            personService;
+
 
 
     @Autowired
-    private IProjectService           projectService;
-    
-    
+    private IBugZillaToIssueConvertor  convertorService;
     @Autowired
-    private IBZServerProxyFactory     serverProxyFactory;
-    @Autowired
-    private IStatisticsAPI            statisticsAPI;
-    
-    
-    
-    public RebuildHistoryService() {
-    
-    
-        super();
+    private IEventEngineService        eventEngineService;
 
-    }
+    @Autowired
+    private IKPIService                kpiService;
+
+
+    private BugzillaDao                mapper;
+
+
+    @Autowired
+    private MeasureDao                 measureDAO;
+
+
+    private final Map<Integer, Person> persons  = Maps.newHashMap();
+
+
+    @Autowired
+    private IPersonService             personService;
+
+
+    @Autowired
+    private IProjectService            projectService;
+    @Autowired
+    private IBZServerProxyFactory      serverProxyFactory;
+
+
+    @Autowired
+    private IStatisticsAPI             statisticsAPI;
 
 
     /*
@@ -207,34 +205,46 @@ public class RebuildHistoryService implements IRebuildHistoryService
      * @see org.komea.product.plugins.model.IDynamicDataTable#getData()
      */
 
+    Map<Integer, Project>              products = new HashMap();
+
+
+
+    public RebuildHistoryService() {
+
+
+        super();
+
+    }
+
+
     public List<IIssue> getData() {
-    
-    
+
+
         if (getMapper() == null) {
             System.out.println();
         }
         Validate.notNull(getMapper());
         return convertIssues(getMapper().listBugs());
     }
-    
-    
+
+
     public BugzillaDao getMapper() {
-    
-    
+
+
         return mapper;
     }
-    
-    
+
+
     public IPersonService getPersonService() {
-    
-    
+
+
         return personService;
     }
-    
-    
+
+
     public IProjectService getProjectService() {
-    
-    
+
+
         return projectService;
     }
     
@@ -247,9 +257,17 @@ public class RebuildHistoryService implements IRebuildHistoryService
     public void run() {
 
 
+        for (final ProjectDto dto : mapper.getProjects()) {
+            products.put(dto.getId(), projectService.getOrCreate(dto.getName()));
+        }
+        for (final BZUser bzUser : mapper.getUsers()) {
+            persons.put(bzUser.getUserid(),
+                    personService.findOrCreatePersonByEmail(bzUser.getLogin_name()));
+        }
+
         List<KpiAndQueryObject> kpis = Lists.newArrayList();
         try {
-            
+
             LOGGER.info("Rebuilding history of bugzilla servers");
             final List<IIssue> data = getData();
             LOGGER.debug("Working on {} issues", data.size());
@@ -257,8 +275,8 @@ public class RebuildHistoryService implements IRebuildHistoryService
                 LOGGER.warn("No data");
                 return;
             }
-            
-            
+
+
             kpis = getKpisWithBackupFunction();
             if (kpis.isEmpty()) {
                 LOGGER.warn("No kpi");
@@ -273,26 +291,26 @@ public class RebuildHistoryService implements IRebuildHistoryService
             LOGGER.info("Loading history for issues");
             loadHistoryForIssues(data);
             while (untilNow.isAfter(beginDate)) {
-                
-                
+
+
                 LOGGER.info("############ Iteration {} <  {} : {}%", beginDate, untilNow, weekIdx
                         * 100 / weeks);
                 final List<IIssue> existedInPastIssues =
                         CollectionUtil.filter(data, new FilterBugsExistingAtThisTime(untilNow));
                 LOGGER.debug("At this period, we work on {} issues", existedInPastIssues.size());
-                
+
                 for (final KpiAndQueryObject kpiAndQueryObject : kpis) {
                     try {
 
                         // if (getNumberOfMeasuresForThisDate(untilNow, kpiAndQueryObject) > 0) { // Already existing
                         // continue;
                         // }
-                        
-                        
+
+
                         kpiAndQueryObject.getQuery().setIssuePlugins(new IIssuePlugin[] {
-                            new MockIssuePlugin(existedInPastIssues) });
+                                new MockIssuePlugin(existedInPastIssues) });
                         ((RebuildFilter) kpiAndQueryObject.getQuery().getFilter())
-                                .setCheckTime(untilNow);
+                        .setCheckTime(untilNow);
                         final KpiResult result = kpiAndQueryObject.getQuery().getResult();
                         result.iterate(new StoreValueIntoMeasureResultIterator(statisticsAPI,
                                 kpiAndQueryObject.getKpi().getId(), untilNow));
@@ -301,8 +319,8 @@ public class RebuildHistoryService implements IRebuildHistoryService
                                 kpiAndQueryObject.getKpi(), e);
                     }
                 }
-                
-                
+
+
                 untilNow = untilNow.minusWeeks(1); // WEEK PER WEEK
                 weekIdx++;
             }
@@ -312,33 +330,33 @@ public class RebuildHistoryService implements IRebuildHistoryService
             }
         }
     }
-    
-    
+
+
     @Override
     public void setMapper(final BugzillaDao _mapper) {
-    
-    
+
+
         mapper = _mapper;
     }
-    
-    
+
+
     public void setPersonService(final PersonService _personService) {
-    
-    
+
+
         personService = _personService;
     }
-    
-    
+
+
     public void setProjectService(final IProjectService _projectService) {
-    
-    
+
+
         projectService = _projectService;
     }
-    
-    
+
+
     private DateTime computeBeginningTime(final List<IIssue> data) {
-    
-    
+
+
         DateTime beginDate = null;
         // Find begin date
         for (final IIssue issue : data) {
@@ -348,39 +366,39 @@ public class RebuildHistoryService implements IRebuildHistoryService
         }
         return beginDate;
     }
-    
-    
+
+
     /**
      * @param _listBugs
      * @return
      */
     private List<IIssue> convertIssues(final List<BugBugZilla> _listBugs) {
-    
-    
+
+
         for (final BugBugZilla bug : _listBugs) {
-            final ProjectDto projectDto =
-                    CollectionUtil.singleOrNull(mapper.getProject(bug.getProduct_id()));
-            bug.setProject(projectService.getOrCreate(projectDto.getName()));
+
+            bug.setProject(products.get(bug.getProduct_id()));
             bug.setBzServerConfiguration(configuration());
             bug.setPersonService(personService);
             bug.setBugzillaDao(getMapper());
+            bug.setUsers(persons);
             final DataCustomFields customFields = (DataCustomFields) bug.getCustomFields();
             customFields.put("status", bug.getBug_status());
             customFields.put("resolutino", bug.getResolutionName());
-            
+
         }
         return (List) _listBugs;
     }
-    
-    
+
+
     /**
      * Returns the list of kpis with backup functions
      *
      * @return
      */
     private List<KpiAndQueryObject> getKpisWithBackupFunction() {
-    
-    
+
+
         final List<KpiAndQueryObject> queries = Lists.newArrayList();
         for (final Kpi kpi : kpiService.selectAll()) {
             final IQuery query = eventEngineService.getQuery(FormulaID.of(kpi));
@@ -390,20 +408,20 @@ public class RebuildHistoryService implements IRebuildHistoryService
                         new KpiAndQueryObject(kpi, filterKpi.getFilter(), filterKpi);
                 queries.add(kpiAndQueryObject);
                 filterKpi.setIssuePlugins(new IIssuePlugin[] {
-                    new IIssuePluginImplementation() });
+                        new IIssuePluginImplementation() });
                 filterKpi.setFilter(new RebuildFilter(kpiAndQueryObject.getOriginalFilter(),
                         convertorService, getMapper()));
             }
         }
         return queries;
     }
-    
-    
+
+
     private int getNumberOfMeasuresForThisDate(
             final DateTime beginDate,
             final KpiAndQueryObject _kpiAndQueryObject) {
-    
-    
+
+
         final MeasureCriteria measureCriteria = new MeasureCriteria();
         measureCriteria.createCriteria().andDateEqualTo(beginDate.toDate())
         .andIdKpiEqualTo(FormulaID.of(_kpiAndQueryObject.getKpi()).getId());
@@ -414,16 +432,16 @@ public class RebuildHistoryService implements IRebuildHistoryService
 
     @SuppressWarnings("boxing")
     private void loadHistory(final IIssue _issue) {
-    
-    
+
+
         final BugBugZilla issueWrapper = (BugBugZilla) _issue;
         // Already loaded
         if (!issueWrapper.getHistory().isEmpty()) {
             LOGGER.trace("History already loaded for {}", issueWrapper.getBug_id());
             return;
         }
-        
-        
+
+
         final List<org.komea.product.database.dto.BugHistory> history =
                 getMapper().getHistory(issueWrapper.getBug_id());
         LOGGER.trace("History loaded for bug {}", issueWrapper.getId());
@@ -435,8 +453,8 @@ public class RebuildHistoryService implements IRebuildHistoryService
 
 
     private void loadHistoryForIssues(final List<IIssue> existedInPastIssues) {
-    
-    
+
+
         int number = 1;
         LOGGER.debug("Fetching history of bugs...");
         for (final IIssue issue : existedInPastIssues) {
@@ -447,13 +465,13 @@ public class RebuildHistoryService implements IRebuildHistoryService
             number++;
         }
     }
-    
-    
+
+
     private void sortHistoryFromMostRecentToOldest(
             final List<org.komea.product.database.dto.BugHistory> _history) {
-    
-    
+
+
         Collections.sort(_history, new MostRecentHistoryBefore());
-        
+
     }
 }

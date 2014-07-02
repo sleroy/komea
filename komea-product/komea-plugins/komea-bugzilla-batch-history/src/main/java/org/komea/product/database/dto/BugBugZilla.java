@@ -10,11 +10,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.Validate;
-import org.apache.wicket.util.string.Strings;
 import org.joda.time.DateTime;
 import org.komea.product.backend.service.entities.IPersonService;
-import org.komea.product.backend.utils.CollectionUtil;
 import org.komea.product.database.dao.BugzillaDao;
 import org.komea.product.database.enums.Severity;
 import org.komea.product.database.model.Person;
@@ -38,6 +35,8 @@ public class BugBugZilla implements IIssue
 {
     
     
+    private static final String REPORTER_ID = "reporterId";
+
     private Map<String, Object>   attributes = Maps.newHashMap();
     
     private BugzillaDao           bugzillaDao;
@@ -45,12 +44,18 @@ public class BugBugZilla implements IIssue
     private BZServerConfiguration bzServerConfiguration;
     
     
+    private Person                handler;
+    
+    
     private List<BugHistory>      history    = Lists.newArrayList();
     
+    private Map<Integer, Person>  persons;
     
     private IPersonService        personService;
     
     private Project               project;
+
+    private Person                reporter;
     
     
     
@@ -215,15 +220,7 @@ public class BugBugZilla implements IIssue
     public Person getHandler() {
     
     
-        if (getAssigned_to() == null) {
-            return null;
-        }
-        final List<BZUser> users = bugzillaDao.getUser(getAssigned_to());
-        final BZUser bzUser = CollectionUtil.singleOrNull(users);
-        if (bzUser == null) {
-            return null;
-        }
-        return personService.findOrCreatePersonByEmail(bzUser.getLogin_name());
+        return persons.get(getAssigned_to());
         
     }
     
@@ -318,13 +315,7 @@ public class BugBugZilla implements IIssue
     public Person getReporter() {
     
     
-        final String login_name =
-                CollectionUtil.singleOrNull(
-                        bugzillaDao.getUser((Integer) attributes.get("reporterId")))
-                        .getLogin_name();
-        Validate.isTrue(!Strings.isEmpty(login_name));
-        return personService.findOrCreatePersonByEmail(login_name);
-        
+        return persons.get(attributes.get(REPORTER_ID));
     }
     
     
@@ -337,7 +328,7 @@ public class BugBugZilla implements IIssue
     public Integer getReporterId() {
     
     
-        return castToInt(attributes.get("reporterId"));
+        return castToInt(attributes.get(REPORTER_ID));
     }
     
     
@@ -402,6 +393,16 @@ public class BugBugZilla implements IIssue
     
     
         return (String) attributes.get("summary");
+    }
+    
+    
+    /**
+     * @return
+     */
+    public Map<Integer, Person> getUsers() {
+
+
+        return persons;
     }
     
     
@@ -566,7 +567,7 @@ public class BugBugZilla implements IIssue
     public void setReporterId(final Integer _reporter) {
     
     
-        attributes.put("reporterId", _reporter);
+        attributes.put(REPORTER_ID, _reporter);
     }
     
     
@@ -580,6 +581,18 @@ public class BugBugZilla implements IIssue
     
     
         attributes.put("resolution", _resolution);
+    }
+    
+    
+    /**
+     * @param _persons
+     */
+    public void setUsers(final Map<Integer, Person> _persons) {
+
+
+        persons = _persons;
+
+
     }
     
     
