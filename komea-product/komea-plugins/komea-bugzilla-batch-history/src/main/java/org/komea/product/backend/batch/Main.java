@@ -27,27 +27,27 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 public class Main
 {
-
-
+    
+    
     private static final String BATCH_CONF                                   = "batch-conf.xml";
-
+    
     private static final int    CONF_FOLDER                                  = 0;
-
+    
     private static final String CONFIGURATION_SPRING_APPLICATION_CONTEXT_XML =
-            "configuration/spring/application-context.xml";
-
+                                                                                     "configuration/spring/application-context.xml";
+    
     private static final Logger LOGGER                                       =
-            LoggerFactory
-            .getLogger(Main.class);
-
-
+                                                                                     LoggerFactory
+                                                                                             .getLogger(Main.class);
+    
+    
     private static final int    NUMBER_ARGS                                  = 1;
-
-
-
+    
+    
+    
     public static void main(final String[] args) throws IOException {
-
-
+    
+    
         // ARG0 = ProjectName
         if (args.length != NUMBER_ARGS) {
             System.err.println("Configuration folder argument is required.");
@@ -55,7 +55,7 @@ public class Main
         }
         final File configFolder = new File(args[CONF_FOLDER]).getAbsoluteFile();
         LOGGER.info("Configuration folder : {}", configFolder);
-        
+
         InputStream inputStream = null;
         SqlSession openSession = null;
         FileSystemXmlApplicationContext fileSystemXmlApplicationContext = null;
@@ -69,7 +69,7 @@ public class Main
             final List<ProjectDto> projects = mapper.getProjects();
             LOGGER.info("List of projects {}", projects);
             System.out.println(projects);
-            
+
             LOGGER.info("Opening Spring session");
             fileSystemXmlApplicationContext =
                     new FileSystemXmlApplicationContext(
@@ -78,14 +78,17 @@ public class Main
                     fileSystemXmlApplicationContext.getBean(IKpiImportationService.class);
             LOGGER.info("Force importation of kpis if necessary");
             kpiImportationService.importFolder(configFolder);
-            final ISpringService springService =
-                    fileSystemXmlApplicationContext.getBean(ISpringService.class);
+            fileSystemXmlApplicationContext.getBean(ISpringService.class);
+            final ICronRegistryService bean =
+                    fileSystemXmlApplicationContext.getBean(ICronRegistryService.class);
+            ((CronRegistryService) bean).destroy();
 
 
             for (final ProjectDto project : projects) {
-
-                launchRebuilding(project.getName(), openSession, fileSystemXmlApplicationContext,
-                        springService, mapper);
+                
+                launchRebuilding(project.getName(), openSession,
+                        fileSystemXmlApplicationContext.getBean(IRebuildHistoryService.class),
+                        mapper);
             }
         } finally {
             IOUtils.closeQuietly(fileSystemXmlApplicationContext);
@@ -93,29 +96,23 @@ public class Main
             IOUtils.closeQuietly(inputStream);
         }
         ;
-
+        
     }
-
-
+    
+    
     private static void launchRebuilding(
             final String PROJECT_NAME,
             final SqlSession openSession,
-            final FileSystemXmlApplicationContext fileSystemXmlApplicationContext,
-            final ISpringService springService,
+            final IRebuildHistoryService _iRebuildHistoryService,
             final BugzillaDao _mapper) {
-    
-    
+
+
         LOGGER.info("------------------>>>>>>>>>>>>>>>> Treating the project {}", PROJECT_NAME);
+
+
+        _iRebuildHistoryService.setMapper(_mapper);
         
-        final IRebuildHistoryService rebuildHistoryService =
-                new RebuildHistoryService(PROJECT_NAME, _mapper);
-        springService.autowirePojo(rebuildHistoryService);
-        rebuildHistoryService.setMyBatis(openSession);
-        final ICronRegistryService bean =
-                fileSystemXmlApplicationContext.getBean(ICronRegistryService.class);
-        ((CronRegistryService) bean).destroy();
-
-
-        rebuildHistoryService.run();
+        
+        _iRebuildHistoryService.run(PROJECT_NAME);
     }
 }

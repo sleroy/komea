@@ -9,6 +9,7 @@
 	</resultMap>
 	<resultMap type="org.komea.product.database.dto.BZUser" id="BZUser">
 		<result column="login_name" property="login_name" />
+		<result column="userid" property="userid" />
 
 	</resultMap>
 
@@ -42,7 +43,12 @@
 
 	<select id="getUser" resultMap="BZUser" parameterType="map">
 		SELECT
-		`login_name` FROM `profiles` WHERE `userid` = #{userId}
+		* FROM `profiles` WHERE `userid` = #{userId}
+	</select>
+	
+		<select id="findUser" resultMap="BZUser" parameterType="map">
+		SELECT
+		* FROM `profiles` WHERE `login_name` = #{userId}
 	</select>
 
 

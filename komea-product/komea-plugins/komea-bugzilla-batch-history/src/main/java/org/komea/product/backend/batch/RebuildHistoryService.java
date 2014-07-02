@@ -9,7 +9,6 @@ package org.komea.product.backend.batch;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
 import org.joda.time.DateTime;
 import org.joda.time.Weeks;
 import org.komea.eventory.api.engine.IQuery;
@@ -40,6 +39,9 @@ import org.komea.product.plugins.datasource.DataCustomFields;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
@@ -49,7 +51,11 @@ import com.google.common.collect.Lists;
  * @author sleroy
  */
 
-public class RebuildHistoryService implements Runnable, IRebuildHistoryService, IIssuePlugin
+
+@Service
+@Scope(value = "prototype")
+@Transactional
+public class RebuildHistoryService implements IRebuildHistoryService, IIssuePlugin
 {
 
 
@@ -121,19 +127,18 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
     private IKPIService               kpiService;
 
 
-    private final BugzillaDao         mapper;
+    private BugzillaDao               mapper;
 
 
     @Autowired
     private MeasureDao                measureDAO;
-    private SqlSession                openSession;
 
 
     @Autowired
     private IPersonService            personService;
 
 
-    private final String              productID;
+    private String                    productID;
 
     @Autowired
     private IProjectService           projectService;
@@ -146,15 +151,11 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
 
 
 
-    /**
-     *
-     */
-    public RebuildHistoryService(final String productID, final BugzillaDao _bugZillaDAOMapper) {
+    public RebuildHistoryService() {
 
 
         super();
-        this.productID = productID;
-        mapper = _bugZillaDAOMapper;
+        
     }
 
 
@@ -179,7 +180,14 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
     public List<IIssue> getData() {
 
 
-        return convertIssues(mapper.listBugs(productID));
+        return convertIssues(getMapper().listBugs(productID));
+    }
+
+
+    public BugzillaDao getMapper() {
+
+
+        return mapper;
     }
 
 
@@ -214,9 +222,11 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
      * @see org.komea.product.backend.batch.IRebuildHistoryService#run()
      */
     @Override
-    public void run() {
+    public void run(final String _projectName) {
 
 
+        productID = _projectName;
+        
         List<KpiAndQueryObject> kpis = Lists.newArrayList();
         try {
 
@@ -280,31 +290,26 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
             }
         }
     }
-
-
+    
+    
     /*
      * (non-Javadoc)
      * @see org.komea.product.plugins.model.IDynamicDataTable#searchData(org.komea.product.backend.utils.IFilter)
      */
     @Override
     public List<IIssue> searchData(final IFilter<IIssue> _dataFilter) {
-
-
-        throw new UnsupportedOperationException();
+    
+    
+        // TODO Auto-generated method stub
+        return null;
     }
-
-
-    /*
-     * (non-Javadoc)
-     * @see org.komea.product.backend.batch.IRebuildHistoryService#setMyBatis(org.apache.ibatis.session.SqlSession)
-     */
+    
+    
     @Override
-    public void setMyBatis(final SqlSession _openSession) {
+    public void setMapper(final BugzillaDao _mapper) {
 
 
-        openSession = _openSession;
-
-
+        mapper = _mapper;
     }
 
 
@@ -347,7 +352,7 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
             bug.setProject(projectService.getOrCreate(productID));
             bug.setBzServerConfiguration(configuration());
             bug.setPersonService(personService);
-            bug.setBugzillaDao(mapper);
+            bug.setBugzillaDao(getMapper());
             final DataCustomFields customFields = (DataCustomFields) bug.getCustomFields();
             customFields.put("status", bug.getBug_status());
             customFields.put("resolutino", bug.getResolutionName());
@@ -376,7 +381,7 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
                 filterKpi.setIssuePlugins(new IIssuePlugin[] {
                         this });
                 filterKpi.setFilter(new RebuildFilter(kpiAndQueryObject.getOriginalFilter(),
-                        convertorService));
+                        convertorService, getMapper()));
             }
         }
         return queries;
@@ -389,14 +394,13 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
 
 
         final MeasureCriteria measureCriteria = new MeasureCriteria();
-        measureCriteria.createCriteria().andDateEqualTo(beginDate.toDate());
-        measureCriteria.createCriteria().andIdKpiEqualTo(
-                FormulaID.of(_kpiAndQueryObject.getKpi()).getId());
+        measureCriteria.createCriteria().andDateEqualTo(beginDate.toDate())
+                .andIdKpiEqualTo(FormulaID.of(_kpiAndQueryObject.getKpi()).getId());
         final int countByCriteria = measureDAO.countByCriteria(measureCriteria);
         return countByCriteria;
     }
-
-
+    
+    
     @SuppressWarnings("boxing")
     private void loadHistory(final IIssue _issue) {
 
@@ -410,15 +414,15 @@ public class RebuildHistoryService implements Runnable, IRebuildHistoryService, 
 
 
         final List<org.komea.product.database.dto.BugHistory> history =
-                mapper.getHistory(issueWrapper.getBug_id());
+                getMapper().getHistory(issueWrapper.getBug_id());
         LOGGER.trace("History loaded for bug {}", issueWrapper.getId());
         sortHistoryFromMostRecentToOldest(history);
         LOGGER.debug("Sorting history of bug {} with  {} elements", issueWrapper.getId(),
                 history.size());
         issueWrapper.setHistory(history);
     }
-
-
+    
+    
     private void loadHistoryForIssues(final List<IIssue> existedInPastIssues) {
 
 

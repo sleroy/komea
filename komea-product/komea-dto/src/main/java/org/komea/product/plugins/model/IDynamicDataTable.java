@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.komea.product.plugins.model;
@@ -22,7 +22,7 @@ public interface IDynamicDataTable<TData extends Serializable> extends Serializa
     
     /**
      * Returns the list of task.
-     * 
+     *
      * @return the list of tasks.
      */
     List<TData> getData();
@@ -36,7 +36,7 @@ public interface IDynamicDataTable<TData extends Serializable> extends Serializa
     
     /**
      * Returns the list of task.
-     * 
+     *
      * @return the list of tasks.
      */
     List<TData> searchData(IFilter<TData> _dataFilter);
