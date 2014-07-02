@@ -13,10 +13,8 @@
 
 	<mvc:annotation-driven>
 		<mvc:message-converters register-defaults="true">
-					<bean
-				class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"></bean>
-			<bean class="org.komea.product.backend.utils.CsvMessageConverter"></bean>
-
+			<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+			<bean class="org.komea.product.backend.csv.utils.CsvMessageConverter"></bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
