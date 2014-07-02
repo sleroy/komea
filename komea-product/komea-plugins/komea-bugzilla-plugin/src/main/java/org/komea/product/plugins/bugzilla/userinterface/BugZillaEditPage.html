@@ -10,6 +10,16 @@
         <link rel="stylesheet" href="../../../../../../../main/webapp/static/bootstrap/css/bootstrap.min.css" type="text/css" media="screen"></link>
         <link rel="stylesheet" href="../../../../../../../main/webapp/static/css/style.css" type="text/css"></link>
         <link rel="stylesheet" type="text/css" href="../../../../../../../main/webapp/static/js/ui/themes/base/jquery-ui.css" />
+        <wicket:head>
+            <title>Wicket - jQuery UI: sortable (connect with)</title>
+            <style type="text/css">
+                .sortable { list-style-type: none; margin: 0; padding: 0;height: 200px }
+                .sortable li { margin: 0.3em; padding: 0.3em; x-padding-left: 1.5em; font-size: 1.1em; background-color: #fff; }
+                .sortable li .ui-icon { position: absolute; }
+                .sortable li .item { margin-left: 1.3em; }
+
+            </style>
+        </wicket:head>
     </head>
     <body>
         <div class="container">
@@ -38,7 +48,7 @@
                                         <a wicket:id="openDialogTrace"><wicket:message key="bugzillapage.connexion.dialog.open"></wicket:message></a>
                                     </div>
                                 </div>
-                                 <div wicket:id="dialogStackTrace">[dialog]</div>
+                                <div wicket:id="dialogStackTrace">[dialog]</div>
                                 <!-- Text input-->
                                 <div class="form-group">
                                     <div class="row">
@@ -66,6 +76,66 @@
                                         </div>
                                     </div>
                                 </div>
+                                <legend  ><wicket:message key="bugzillapage.save.form.field.legend.status"></wicket:message></legend>
+                                <form wicket:id="formAddStatus" role="form">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <label class="col-md-3" for="inputEmail1"><wicket:message key="bugzillapage.save.form.field.addstatus"></wicket:message></label>
+                                            <div class="col-md-3">
+                                                <input id="addstatus" name="addstatus" type="text" wicket:message="placeholder:bugzillapage.save.form.placeholder.addstatus" class="form-control"  wicket:id="addstatus" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button type="button" class="btn btn-info col-md-3" wicket:id="btnAddstatus"><wicket:message key="global.button.addstatus"></wicket:message></button>
+                                                <button type="button" style="margin-left: 5px" class="btn btn-info col-md-3" wicket:id="btnAddresolution"><wicket:message key="global.button.addresolution"></wicket:message></button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="bugzillapage.save.form.field.label.selectstatus"></wicket:message></label>
+                                        <div class="col-md-8">
+                                            <div class="col-md-2">
+                                                <label  for="inputEmail1"><wicket:message key="bugzillapage.save.form.field.label.openstatus"></wicket:message></label>
+                                                <ul wicket:id="sortable1" class="sortable">
+                                                    <li wicket:id="items">
+                                                        <span wicket:id="icon">[icon]</span>
+                                                        <span wicket:id="item" class="item">[label]</span>
+                                                    </li>
+                                                </ul>
+                                            </div> <div class="col-md-2">
+                                                <label  for="inputEmail1"><wicket:message key="bugzillapage.save.form.field.label.closedstatus"></wicket:message></label>
+                                                <ul wicket:id="sortable2" class=" sortable ">
+                                                    <li wicket:id="items"  >
+                                                        <span wicket:id="icon">[icon]</span>
+                                                        <span wicket:id="item" class="item">[label]</span>
+                                                    </li>
+                                                </ul>
+                                            </div> <div class="col-md-2">
+                                                <label  for="inputEmail1"><wicket:message key="bugzillapage.save.form.field.label.fixedstatus"></wicket:message></label>
+                                                <ul wicket:id="sortable3" class="sortable ">
+                                                    <li wicket:id="items">
+                                                        <span wicket:id="icon">[icon]</span>
+                                                        <span wicket:id="item" class="item">[label]</span>
+                                                    </li>
+                                                </ul>
+                                            </div> <div class="col-md-2">
+                                                <label  for="inputEmail1"><wicket:message key="bugzillapage.save.form.field.label.notfixedstatus"></wicket:message></label>
+                                                <ul wicket:id="sortable4" class=" sortable ">
+                                                    <li wicket:id="items"  >
+                                                        <span wicket:id="icon">[icon]</span>
+                                                        <span wicket:id="item" class="item">[label]</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <!--<br style="clear: both;" />-->
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
 
                                 <!--                                <div class="form-group">
                                                                     <div class="row">
@@ -75,19 +145,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>-->
-                                <!--                                <div class="form-group">
-                                                                    <div class="row">
-                                
-                                                                        <label class="col-md-3" for="inputEmail1"><wicket:message key="global.save.form.label.testconnexion"></wicket:message></label>
-                                                                        <div class="col-md-2">
-                                                                            <button id="testbtn" name="testbtn" class="btn btn-primary" wicket:id="testButton"><wicket:message key="global.button.testconnexion"></wicket:message></button>
-                                                                        </div>
-                                                                        <label class="col-md-4" for="inputEmail1" wicket:id="testMessage"></label>
-                                                                                                                 <div class="col-md-4">
-                                                                                                                <img class="img-responsive img-thumbnail" width="28" height="28"  align="center" wicket:id="loading" />
-                                                                                                                 </div>
-                                                                    </div>
-                                                                </div>-->
+
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-4">

@@ -13,7 +13,6 @@
 */
 html,
 body {
-  overflow-x: hidden!important;
   font-family: 'Source Sans Pro', sans-serif;
   -webkit-font-smoothing: antialiased;
   min-height: 100%;
@@ -732,7 +731,6 @@ body > .header .logo .icon {
   margin: 0;
   padding: 0;
   list-style: none;
-  overflow-x: hidden;
 }
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a,
 .navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a,
