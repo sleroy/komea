@@ -13,7 +13,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 import org.joda.time.DateTime;
-import org.joda.time.Weeks;
+import org.joda.time.Months;
 import org.komea.eventory.api.engine.IQuery;
 import org.komea.product.backend.api.IEventEngineService;
 import org.komea.product.backend.service.entities.IPersonService;
@@ -286,7 +286,7 @@ public class RebuildHistoryService implements IRebuildHistoryService
             LOGGER.info("Begin of history ====> {}", beginDate);
             DateTime untilNow = new DateTime();
             // Now iteration, one week per week
-            final int weeks = Weeks.weeksBetween(beginDate, untilNow).getWeeks();
+            final int weeks = Months.monthsBetween(beginDate, untilNow).getMonths();
             int weekIdx = 1;
             LOGGER.info("Loading history for issues");
             loadHistoryForIssues(data);
@@ -295,9 +295,10 @@ public class RebuildHistoryService implements IRebuildHistoryService
 
                 LOGGER.info("############ Iteration {} <  {} : {}%", beginDate, untilNow, weekIdx
                         * 100 / weeks);
+                LOGGER.info("Filtering {} bugs for this period", data.size());
                 final List<IIssue> existedInPastIssues =
                         CollectionUtil.filter(data, new FilterBugsExistingAtThisTime(untilNow));
-                LOGGER.debug("At this period, we work on {} issues", existedInPastIssues.size());
+                LOGGER.info("At this period, we work on {} issues", existedInPastIssues.size());
 
                 for (final KpiAndQueryObject kpiAndQueryObject : kpis) {
                     try {
@@ -321,7 +322,7 @@ public class RebuildHistoryService implements IRebuildHistoryService
                 }
 
 
-                untilNow = untilNow.minusWeeks(1); // WEEK PER WEEK
+                untilNow = untilNow.minusMonths(1); // WEEK PER WEEK
                 weekIdx++;
             }
         } finally {

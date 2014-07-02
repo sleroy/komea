@@ -35,9 +35,9 @@ public class BugBugZilla implements IIssue
 {
     
     
-    private static final String REPORTER_ID = "reporterId";
+    private static final String   REPORTER_ID = "reporterId";
 
-    private Map<String, Object>   attributes = Maps.newHashMap();
+    private Map<String, Object>   attributes  = Maps.newHashMap();
     
     private BugzillaDao           bugzillaDao;
     
@@ -47,7 +47,7 @@ public class BugBugZilla implements IIssue
     private Person                handler;
     
     
-    private List<BugHistory>      history    = Lists.newArrayList();
+    private List<BugHistory>      history     = Lists.newArrayList();
     
     private Map<Integer, Person>  persons;
     
