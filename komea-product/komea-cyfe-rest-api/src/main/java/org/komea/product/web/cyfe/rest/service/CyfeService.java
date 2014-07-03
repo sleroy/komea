@@ -33,8 +33,8 @@ public class CyfeService implements ICyfeService {
 
 	
 	@Override
-	public CSVExport buildValue(Kpi _kpi, IEntity _entity,
-			Double _value, Double _goal) {
+	public CSVExport buildValue(final Kpi _kpi, final IEntity _entity,
+			final Double _value, final Double _goal) {
 		
 		IColumnTable table = new ColumnTable();
 		
@@ -46,12 +46,12 @@ public class CyfeService implements ICyfeService {
 			table.newLine().addNewCells(_value.toString(), _goal.toString());
 		}
 		
-		return (CSVExport) table;
+		return table;
 		
 	}
 	
 	@Override
-	public CSVExport buildValues(List<IEntity> _entities, Map<Kpi, KpiResult> _resultMap) {
+	public CSVExport buildValues(final List<IEntity> _entities, final Map<Kpi, KpiResult> _resultMap) {
 		
 		MixedTable table = new MixedTable();
 		
@@ -59,7 +59,7 @@ public class CyfeService implements ICyfeService {
 		headers.add("Label");
 		headers.addAll(Lists.transform(_entities, new Function<IEntity, String>() {
 			@Override
-			public String apply(IEntity _entity) {
+			public String apply(final IEntity _entity) {
 				return _entity.getDisplayName();
 			}		
 		}));
@@ -69,7 +69,7 @@ public class CyfeService implements ICyfeService {
 		List<Kpi> kpis = new ArrayList<Kpi>(_resultMap.keySet());
 		Collections.sort(kpis, new Comparator<Kpi>() {
 			@Override
-			public int compare(Kpi kpi1, Kpi kpi2) {
+			public int compare(final Kpi kpi1, final Kpi kpi2) {
 				return kpi2.getDisplayName().compareTo(kpi1.getDisplayName());
 			}
 		});
@@ -79,10 +79,11 @@ public class CyfeService implements ICyfeService {
 			KpiResult result = _resultMap.get(kpi);
 			for (IEntity e : _entities) {
 				Number value = result.getMap().get(e.getEntityKey());
-				if (value != null) 
+				if (value != null) {
 					line.addNewCell(value.toString());
-				else
+				} else {
 					line.addNewCell("");
+				}
 			}
 		}
 		
@@ -91,9 +92,9 @@ public class CyfeService implements ICyfeService {
 	}
 
 	@Override
-	public CSVExport buildSerie(Kpi _kpi, List<IEntity> _entities,
-			List<TimeSerie> _timeSeries, List<String> _colors,
-			List<String> _types) {
+	public CSVExport buildSerie(final Kpi _kpi, final List<IEntity> _entities,
+			final List<TimeSerie> _timeSeries, final List<String> _colors,
+			final List<String> _types) {
 		
 		MixedTable table = new MixedTable();
 		
@@ -111,7 +112,7 @@ public class CyfeService implements ICyfeService {
 			timeSerie =  getTimeSerieOf(entity, _timeSeries);
 			List<String> values = Lists.transform(timeSerie.getCoordinates(), new Function<TimeCoordinate, String>() {
 				@Override
-				public String apply(TimeCoordinate c) {
+				public String apply(final TimeCoordinate c) {
 					return c.getValue().toString();
 				}		
 			});
@@ -132,7 +133,7 @@ public class CyfeService implements ICyfeService {
 		
 	}
 	
-	private TimeSerie getTimeSerieOf(IEntity _entity, List<TimeSerie> _timeSeries) {
+	private TimeSerie getTimeSerieOf(final IEntity _entity, final List<TimeSerie> _timeSeries) {
 		
 		for(TimeSerie t : _timeSeries) {
 			if (t.getEntityKey().equals(_entity.getEntityKey())) {
@@ -144,7 +145,7 @@ public class CyfeService implements ICyfeService {
 	}
 
 	@Override
-	public CSVExport buildEventsTable(List<IEvent> events) {
+	public CSVExport buildEventsTable(final List<IEvent> events) {
 		
 		ColumnTable table = new ColumnTable();
 		table.setColumnHeaders("Event", "Message", "Time");
@@ -152,14 +153,14 @@ public class CyfeService implements ICyfeService {
 		for(IEvent e : events) {		
 			table.newLine().addNewCell(e.getEventType().getDisplayName()).
 							addNewCell(e.getMessage()).
-							addNewCell(this.getDateDiffAsString(new DateTime(e.getDate()), DateTime.now()));
+							addNewCell(getDateDiffAsString(new DateTime(e.getDate()), DateTime.now()));
 		}
 		
 		return table;
 	
 	}
 	
-	private String getDateDiffAsString(DateTime _fromDate, DateTime _toDate) {
+	private String getDateDiffAsString(DateTime _fromDate, final DateTime _toDate) {
 		
 		StringBuilder s = new StringBuilder();
 		
@@ -199,18 +200,24 @@ public class CyfeService implements ICyfeService {
 			
 		}
 		
-		return s.append("ago").toString();
+		if (s.length() == 0) {
+			s.append("now");
+		}else{
+			s.append("ago");
+		}
+		
+		return s.toString();
 		
 	}
 
 	@Override
-	public CSVExport buildPiechart(Kpi _kpi, List<IEntity> _entities,
-			KpiResult _result, List<String> _colors) {
+	public CSVExport buildPiechart(final Kpi _kpi, final List<IEntity> _entities,
+			final KpiResult _result, final List<String> _colors) {
 		
 		MixedTable table = new MixedTable();
 		List<String> headers = Lists.transform(_entities, new Function<IEntity, String>() {
 			@Override
-			public String apply(IEntity e) {
+			public String apply(final IEntity e) {
 				return e.getDisplayName();
 			}		
 		});
@@ -236,7 +243,7 @@ public class CyfeService implements ICyfeService {
 	}
 
 	@Override
-	public CSVExport buildCohort(Kpi _kpi, List<IEntity> _entities, List<TimeSerie> _timeSeries, Double _goal) {
+	public CSVExport buildCohort(final Kpi _kpi, final List<IEntity> _entities, final List<TimeSerie> _timeSeries, final Double _goal) {
 		
 		MixedTable table = new MixedTable();
 		
@@ -254,7 +261,7 @@ public class CyfeService implements ICyfeService {
 			timeSerie =  getTimeSerieOf(entity, _timeSeries);		
 			List<String> values = Lists.transform(timeSerie.getCoordinates(), new Function<TimeCoordinate, String>() {
 				@Override
-				public String apply(TimeCoordinate c) {
+				public String apply(final TimeCoordinate c) {
 					return c.getValue().toString();
 				}		
 			}); 		
