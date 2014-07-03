@@ -21,7 +21,7 @@
 	<!-- <mvc:resources mapping="/static/**" location="/static/" /> -->
 
 
-	<context:component-scan base-package="org.komea.product.web.rest.api" />
+	<context:component-scan base-package="org.komea.product.web.rest.api, org.komea.product.web.cyfe.rest.api" />
 
 
 
