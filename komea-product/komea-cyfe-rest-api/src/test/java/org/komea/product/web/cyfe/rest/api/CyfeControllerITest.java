@@ -102,6 +102,33 @@ public class CyfeControllerITest extends AbstractSpringDBunitIntegrationTest{
 			"BUILD_LAUNCHED", "demo_alert"
 	);
     
+	private List<IEvent> getEvents() {
+
+		EventType type = new EventType(1, "JenkinsBuild", "Jenkins build", Severity.INFO, true, "jenkins build completed", EntityType.PROJECT, ProviderType.CI_BUILD);
+		
+    	Event e1 = new Event();
+		e1.setEventType(type);
+		e1.setMessage("Jenkins build performed for Komea Bundle");	
+		e1.setDate(DateTime.now().toDate());
+		
+		Event e2 = new Event();
+		e2.setEventType(type);
+		e2.setMessage("Jenkins build performed for Cyfe API");
+		e2.setDate(DateTime.now().toDate());
+		
+		Event e3 = new Event();
+		e3.setEventType(type);
+		e3.setMessage("Jenkins build performed for Komea");
+		e3.setDate(DateTime.now().toDate());
+		
+		Event e4 = new Event();
+		e4.setEventType(type);
+		e4.setMessage("Jenkins build performed for Komea");
+		e4.setDate(DateTime.now().toDate());
+    	
+    	return Lists.newArrayList((IEvent) e1, e2, e3, e4);
+	}
+	
 	@Before
 	public void setUp() {
 	
@@ -311,29 +338,8 @@ public class CyfeControllerITest extends AbstractSpringDBunitIntegrationTest{
     @DatabaseSetup("database.xml")
     public void testGetEvents() throws Exception {
     	
-    	EventType type = new EventType(1, "JenkinsBuild", "Jenkins build", Severity.INFO, true, "jenkins build completed", EntityType.PROJECT, ProviderType.CI_BUILD);
-		
-    	Event e1 = new Event();
-		e1.setEventType(type);
-		e1.setMessage("Jenkins build performed for Komea Bundle");	
-		e1.setDate(DateTime.now().toDate());
-		
-		Event e2 = new Event();
-		e2.setEventType(type);
-		e2.setMessage("Jenkins build performed for Cyfe API");
-		e2.setDate(DateTime.now().toDate());
-		
-		Event e3 = new Event();
-		e3.setEventType(type);
-		e3.setMessage("Jenkins build performed for Komea");
-		e3.setDate(DateTime.now().toDate());
-		
-		Event e4 = new Event();
-		e4.setEventType(type);
-		e4.setMessage("Jenkins build performed for Komea");
-		e4.setDate(DateTime.now().toDate());
+    	List<IEvent> events = getEvents();
     	
-    	List<IEvent> events = Lists.newArrayList((IEvent) e1, e2, e3, e4);
     	Mockito.when(eventService.getGlobalActivity()).thenReturn(events); 
     	Mockito.when(eventsFilter.filterEvents(Matchers.any(SearchEventDto.class), Matchers.anyListOf(IEvent.class))).thenReturn(events);
     	
@@ -352,6 +358,11 @@ public class CyfeControllerITest extends AbstractSpringDBunitIntegrationTest{
     @Test
     @DatabaseSetup("database.xml")
     public void testGetEventsWithoutOptionalParams() throws Exception {
+    	
+    	List<IEvent> events = getEvents();
+    	
+    	Mockito.when(eventService.getGlobalActivity()).thenReturn(events); 
+    	Mockito.when(eventsFilter.filterEvents(Matchers.any(SearchEventDto.class), Matchers.anyListOf(IEvent.class))).thenReturn(events);
     	
     	final ResultActions httpRequest = mockMvc.perform(MockMvcRequestBuilders.get(PATH+"/events/{entityType}", ExtendedEntityType.PROJECT)
     			.param("severityMin", Severity.INFO.toString())
