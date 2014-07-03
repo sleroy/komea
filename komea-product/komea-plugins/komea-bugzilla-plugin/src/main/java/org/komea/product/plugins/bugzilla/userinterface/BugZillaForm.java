@@ -10,7 +10,6 @@ import com.j2bugzilla.base.BugzillaException;
 import com.j2bugzilla.base.ConnectionException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -23,6 +22,7 @@ import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
@@ -155,14 +155,24 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
         add(TextFieldBuilder.<String>createRequired("login", bugServer, "login")
                 .simpleValidator(0, 255).withTooltip(getString("global.save.form.field.tooltip.login")).build());
         savPassword = bugServer.getPassword();
-        add(TextFieldBuilder.<String>createPasswordNoRequire("password", bugServer, "password")
-                .simpleValidator(0, 255).withTooltip(getString("global.save.form.field.tooltip.password")).build());
+        if (savPassword == null || "".equals(savPassword)) {
+            savPassword = "";
+        } else {
+            bugServer.setPassword("00000");
+        }
 
+        PasswordTextField password = (PasswordTextField) TextFieldBuilder.<String>createPassword("password", bugServer, "password")
+                .simpleValidator(1, 255).withTooltip(getString("global.save.form.field.tooltip.password")).buildTextField();
+        add(password);
+        password.setConvertEmptyInputStringToNull(false);
+        password.setResetPassword(false);
+        password.setOutputMarkupId(true);
+        password.setOutputMarkupPlaceholderTag(true);
 //        add(TextFieldBuilder.<String> createRequired("reminderAlert", bugServer, "reminderAlert")
 //                .withTooltip(getString("bugzillapage.save.form.field.tooltip.reminder")).build());
         // panel de test de connexion
         // dialog
-        stackTraceDialog = Model.of("Test d'affichage");
+        stackTraceDialog = Model.of("");
         IModel<String> titleTraceDialog = Model.of(getString("bugzillapage.connexion.dialog.title"));
 
         final DisplayTraceDialog dialog = new DisplayTraceDialog("dialogStackTrace", titleTraceDialog, stackTraceDialog);
@@ -256,11 +266,16 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
                 executorService.execute(new Runnable() {
                     @Override
                     public void run() {
-                        if (bugServer.getPassword() == null || "".equals(bugServer.getPassword())) {
-                            bugServer.setPassword(savPassword);
+                        BZServerConfiguration bservertemp = new BZServerConfiguration();
+                        bservertemp.setAddress(bugServer.getAddress());
+                        bservertemp.setLogin(bugServer.getLogin());
+                        if (bugServer.getPassword() == null  || "00000".equals(bugServer.getPassword())) {
+                            bservertemp.setPassword(savPassword);
+                        } else {
+                            bservertemp.setPassword(bugServer.getPassword());
                         }
                         try {
-                            if (bService.testConnexion(bugServer)) {
+                            if (bService.testConnexion(bservertemp)) {
                                 messageCon.setEtat(Etat.SUCCESS);
                             } else {
                                 messageCon.setEtat(Etat.ERROR);
@@ -299,7 +314,7 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
                 feedBack.setVisible(false);
                 // repaint the feedback panel so that it is hidden
                 target.add(feedBack);
-                if (bugServer.getPassword() == null || "".equals(bugServer.getPassword())) {
+                if (bugServer.getPassword() == null || "".equals(bugServer.getPassword()) || "00000".equals(bugServer.getPassword())) {
                     bugServer.setPassword(savPassword);
                 }
 
@@ -326,24 +341,6 @@ public class BugZillaForm extends Form<BZServerConfiguration> {
         contError.setVisible(messageCon.visibleError());
         contSuccess.setVisible(messageCon.visibleSuccess());
         contWaiting.setVisible(messageCon.visibleWaiting());
-    }
-
-    private String getChaineWithList(List<String> chaineString) {
-        StringBuilder builder = new StringBuilder("");
-        if (!chaineString.isEmpty()) {
-            for (int i = 0; i < chaineString.size() - 1; i++) {
-                builder.append(chaineString.get(i));
-                builder.append(",");
-            }
-            builder.append(chaineString.get(chaineString.size() - 1));
-        }
-
-        return builder.toString();
-    }
-
-    private List<String> getChaineWithList(String chaineString) {
-        String[] split = chaineString.split(",");
-        return Arrays.asList(split);
     }
 
     private void addConnectTable(Form page, List<String> open, List<String> close, List<String> fixe, List<String> notfixe) {
