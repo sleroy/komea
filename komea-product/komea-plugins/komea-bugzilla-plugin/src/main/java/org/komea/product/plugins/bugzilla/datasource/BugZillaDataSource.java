@@ -63,7 +63,7 @@ public class BugZillaDataSource implements IIssuePlugin
     public void cleanCache() {
 
 
-        LOGGER.error("Cleaning cache for bugzilla...");
+        LOGGER.info("Cleaning cache for bugzilla...");
     }
 
 

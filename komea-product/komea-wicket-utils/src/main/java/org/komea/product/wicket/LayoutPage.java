@@ -93,6 +93,7 @@ public abstract class LayoutPage extends WebPage
             final String object = imodel.getObject();
 
             item.add(new Fragment(string, object, page));
+            String modelString = "margin-bottom: 8px;margin-top: 8px; background-color: "+ COLORHILIGHT;
 
             if (testMenu(object, "panel-teams", "TeamPage", "TeamEditPage")
                     || testMenu(object, "panel-users", "PersonPage", "PersonAddPage")
@@ -100,8 +101,7 @@ public abstract class LayoutPage extends WebPage
                     || testMenu(object, "panel-customers", "CustomerPage", "CustomerEditPage")
                     || testMenu(object, "panel-projects", "ProjectPage", "ProjectEditPage")) {
                 accordeon.setActiveTab(COMPANY_INDEX);
-                item.add(new AttributeModifier("style", new Model("background-color: "
-                        + COLORHILIGHT)));
+                item.add(new AttributeModifier("style", new Model(modelString)));
             }
 
             if (testMenu(object, "panel-kpis", "KpiPage", "KpiEditPage")
@@ -109,8 +109,7 @@ public abstract class LayoutPage extends WebPage
                     || testMenu(object, "panel-kpiview", "KpiValuesPage")
                     || testMenu(object, "panel-alerts", "AlertPage", "AlertEditPage")) {
                 accordeon.setActiveTab(KPIS_INDEX);
-                item.add(new AttributeModifier("style", new Model("background-color: "
-                        + COLORHILIGHT)));
+                item.add(new AttributeModifier("style", new Model(modelString)));
             }
 
             if (testMenu(object, "panel-settings", "SettingsPage")
@@ -121,8 +120,7 @@ public abstract class LayoutPage extends WebPage
                     || testMenu(object, "panel-events", "EventsPage")
                     || testMenu(object, "panel-cronpage", "CronPage")) {
                 accordeon.setActiveTab(ADMIN_INDEX);
-                item.add(new AttributeModifier("style", new Model("background-color: "
-                        + COLORHILIGHT)));
+                item.add(new AttributeModifier("style", new Model(modelString)));
             }
 
         }

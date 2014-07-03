@@ -137,7 +137,7 @@ public class CronPage extends StatelessLayoutPage {
                 .addColumn(cexp)
                 .addColumn(lastExecutionTime)
                 .addColumn(nextExecutionTime)
-                .addColumn(statusCol).displayRows(40)
+                .addColumn(statusCol).displayRows(cronTasks.size()+10)
                 .addColumn(cLaunch)
                 .withListData(cronTasks).build();
 
