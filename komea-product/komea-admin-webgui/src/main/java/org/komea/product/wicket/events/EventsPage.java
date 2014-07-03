@@ -1,9 +1,9 @@
 package org.komea.product.wicket.events;
 
-import com.google.common.base.Strings;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -19,6 +19,8 @@ import org.komea.product.database.model.Person;
 import org.komea.product.database.model.Project;
 import org.komea.product.wicket.StatelessLayoutPage;
 import org.ocpsoft.prettytime.PrettyTime;
+
+import com.google.common.base.Strings;
 
 /**
  * Events page
@@ -57,8 +59,9 @@ public class EventsPage extends StatelessLayoutPage {
             };
             _item.add(link);
             link.add(new Label("message", event.getMessage()));
-            _item.add(new Label("severity", event.getEventType().getName()));
-
+            _item.add(new Label("severity", event.getEventType().getSeverity().toString()));
+            _item.add(new Label("eventType", event.getEventType().getName()));
+            _item.add(new Label("eventKey", event.getEventType().getEventKey()));
             _item.add(new Label("icon", event.getProvider().getIcon()));
 
             final PrettyTime prettyTime = new PrettyTime();

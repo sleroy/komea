@@ -29,10 +29,18 @@
 						<td><img src="../rest/local_resources/pic/jenkins.png" wicket:id="icon" width="16" height="16"></img></td>
 						<td><strong wicket:id="project">Project XYZ</strong></td>
 						<td><span wicket:id="severity">BLOCKER</span></td>
-						<td><a href="" wicket:id="url"><span wicket:id="message">Build started for Project XYZ</span></a><br /> Users associated :<br />
+						<td>
+							<a href="" wicket:id="url">
+								<span wicket:id="message">Build started for Project XYZ</span>
+							</a>
+							<br/> Event key : <b wicket:id="eventKey"></b>
+							<br/> Event type : <b wicket:id="eventType"></b>
+							<br /> Users associated :<br />
 							<ul wicket:id="users">
 								<li wicket:id="useritem">sleroy</li>
-							</ul> Group associated : <b wicket:id="group"></b></td>
+							</ul> 
+							Group associated : <b wicket:id="group"></b>
+						</td>
 						<td><span wicket:id="date">11:23 PM</span></td>
 					</tr>
 				</tbody>
