@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-	<kom_pvd id="1" providerType="CI_BUILD" name="MyProvider" icon="file://"
-		url="http://" />
-	<kom_evt id="1"  eventKey="EventUN" name="MyEvent"
-		description="a description" severity="CRITICAL" enabled="1"
-		entityType="PERSON" />
-</dataset>

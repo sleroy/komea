@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<site>
-   <feature url="features/org.komea.events.dsl.feature_1.0.0.201402131421.jar" id="org.komea.events.dsl.feature" version="1.0.0.201402131421">
-      <category name="Komea"/>
-   </feature>
-   <category-def name="Komea" label="Komea"/>
-</site>

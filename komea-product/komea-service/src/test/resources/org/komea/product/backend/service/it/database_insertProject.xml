@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-
-   <kom_proj id="1" projectKey="SYSTEM" name="Komea System" description="System project for Komea Statistics" />
-   <kom_proj id="4" projectKey="KOMEA" name="Komea" description="Software to measure and produces KPI from CI systems" />
-   <kom_proj id="5" projectKey="SCERTIFY" name="Scertify" description="Scertify Code is a static code analysis solution" />
-   <kom_proj id="6" projectKey="P1" name="name" />
-</dataset>

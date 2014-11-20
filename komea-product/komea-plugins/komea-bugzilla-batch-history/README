@@ -1,5 +1,0 @@
-mvn assembly:single
-configurer la conf dans le repertoire configuration (notamment la partie configuration-spring.xml)
-
-java -jar target/komea-bugzilla-batch-history-2.0.1-SNAPSHOT-jar-with-dependencies.jar configuration/
-
