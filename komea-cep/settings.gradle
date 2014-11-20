@@ -1,8 +1,0 @@
-rootProject.name = 'komea-eventory'
-
-include "cep-engine"
-include "cep-bridge-memory"
-//include "cep-bridge-activemq"
-include "cep-cache-guava"
-//include "cep-cache-ehcache"
-include "cep-engine-api"
