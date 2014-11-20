@@ -1,0 +1,48 @@
+/**
+ * Package of dependencies
+ */
+
+
+
+
+
+allprojects {
+    group= "org.komea.product"
+      configurations.all {
+          resolutionStrategy {
+                force    'org.objenesis:objenesis:1.3'          
+                force   "commons-logging:commons-logging:$APACHE_COMMONLOG"
+                force   "org.slf4j:slf4j-api:$LOG_SLF4J"
+                force   "commons-io:commons-io:$APACHE_COMMONIO"
+                force   "commons-lang:commons-lang:$APACHE_COMMONLANG"
+                force   "org.jboss.logging:jboss-logging:3.1.4.GA"                
+        }
+    }    
+    
+    test {
+  
+	
+	  // set a system property for the test JVM(s)
+	  //systemProperty 'some.prop', 'value'
+	
+	  // explicitly include or exclude tests
+	 // include 'org/foo/**'
+	 // exclude 'org/boo/**'
+	
+	
+	  // set heap size for the test JVM(s)
+	  minHeapSize = "128m"
+	  maxHeapSize = "512m"
+	
+	  // set JVM arguments for the test JVM(s)
+	  jvmArgs '-XX:MaxPermSize=256m'
+	
+	 }
+
+
+ }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = GRADLE_VERSION
+
+}

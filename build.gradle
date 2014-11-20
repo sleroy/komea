@@ -1,0 +1,10 @@
+/**
+ * Package of dependencies
+ */
+
+
+
+apply from: "$rootDir/config/tocea-integ.gradle"
+
+
+
