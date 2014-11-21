@@ -1,6 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,600,700,300,800);
 
 
+
 /*************************
 *******Typography******
 **************************/
@@ -262,45 +263,56 @@ input.search-form:hover {
   margin:0;
 }
 
+.logo{
+	margin-left: 30px;
+}
+
 .navbar {
   border-radius: 0;
   margin-bottom: 0;
-  background: #151515;
-  padding: 15px 0;
+  background: #EA5E00;
+
   padding-bottom: 0;
 }
 
  .navbar-nav{
-  margin-top: 12px;
+
+ }
+ 
+ .navbar-brand img{
+ 	width: 100px;
  }
 
+
 .navbar-nav>li{
-  margin-left: 35px;
-  padding-bottom: 28px;
+	line-height: 12px;
+  padding-bottom: 8px;
 }
 
 .navbar-inverse .navbar-nav > li > a {
-  padding: 5px 12px;
-  margin: 0;
-  border-radius: 3px;
-  color: #fff;
-  line-height: 24px;
-  display: inline-block;
+	
+ 	 color: #fff;
+	//border-right: 1px solid #ffffff;
+	padding-top:0px ;
+	padding-bottom: 0px;
+	border-left: 1px solid #FF9A51;
 }
 
 .navbar-inverse .navbar-nav > li > a:hover{
-	background-color: #ff6600;
-  color: #fff;
+	color: black;
+
 }
 
 .navbar-inverse {
   border: none;
+  padding-top: 10px;
 }
 
 .navbar-inverse .navbar-brand {
-  font-size: 36px;
+  font-size: 50px;
   line-height: 50px;
-  color: #fff;
+ color: #000;
+ color: #fff;
 }
 
 .navbar-inverse .navbar-nav > .active > a,
@@ -309,8 +321,7 @@ input.search-form:hover {
 .navbar-inverse .navbar-nav > .open > a,
 .navbar-inverse .navbar-nav > .open > a:hover,
 .navbar-inverse .navbar-nav > .open > a:focus {
-  background-color: #ff6600;
-  color: #fff;
+	background-color: inherit;
 }
 
 .navbar-inverse .navbar-nav .dropdown-menu {
@@ -340,7 +351,7 @@ input.search-form:hover {
 .navbar-inverse .navbar-nav .dropdown-menu > li:focus > a,
 .navbar-inverse .navbar-nav .dropdown-menu > li.active > a {
   background-color: #ff6600;
-  color: #fff;
+   color: #000;
 }
 
 .navbar-inverse .navbar-nav .dropdown-menu > li:last-child > a {
@@ -363,6 +374,73 @@ input.search-form:hover {
 **************************/
 
 
+article li{
+	list-style: none;
+	font-size: 16px;
+	color: #4c4c4c;
+	font-weight: bold;
+	font-family: "HelveticaNeue-CondensedBold","Open Sans Condensed","Helvetica",sans-serif;
+}     
+article ul li:before {
+	content: "►";
+	
+	top: 8px;
+	left: 0;
+	
+	color: #ccc;
+	font-size: 10px;
+	margin-right: 5px;
+}
+
+.content{
+	max-width: 350px;
+}
+
+.content h2{
+	color: #4c4c4c;
+	font-family: "HelveticaNeue-CondensedBold","Open Sans Condensed","Helvetica",sans-serif;
+	font-size: 2em;
+}
+
+
+.left .content{
+	float: right;
+	margin-left: 5%;
+}
+
+.right .content{
+	float: left;
+	margin-right: 5%;
+}
+
+
+.feature{
+	margin-top: 200px;
+	max-width: 600px;
+	height: 200px;
+	margin-left: auto;
+	margin-right: auto;
+
+}
+
+.left{
+	margin-left: 10%!important;
+}
+
+.right{
+	margin-right: 10%!important;
+}
+
+.left img{
+	float: left;
+	max-width:200px;	
+}
+
+.right img{
+	float: right;
+	max-width:200px;	
+}
+
 #main-slider {
   position: relative;
 }
@@ -377,7 +455,7 @@ input.search-form:hover {
 }
 
 #main-slider .carousel .slide-margin{
-  margin-top: 140px;
+  margin-top: 0px;
 }
 
 #main-slider .carousel h2 {
@@ -400,6 +478,7 @@ input.search-form:hover {
 
 
 #main-slider .carousel .item {
+  background:#EA5E00 ;
   background-position: 50%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -409,7 +488,7 @@ input.search-form:hover {
   position: absolute;
   width: 100%;
   display: block !important;
-  height: 730px;
+  height: 430px;
   -webkit-transition: opacity ease-in-out 500ms;
   -moz-transition: opacity ease-in-out 500ms;
   -o-transition: opacity ease-in-out 500ms;
