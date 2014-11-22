@@ -3,5 +3,5 @@ rootProject.name = 'komea'
 
 
 include "prototypes:sql-eventory-server"
-include "prototypes:mongodb-eventory-server"
+include "prototypes:orientdb-eventory-server"
 
