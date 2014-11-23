@@ -1,12 +1,9 @@
 buildscript {
-	ext { springBootVersion = '1.1.9.RELEASE' }
 	repositories { mavenCentral() }
 	dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
 }
 
 ext.H2_DB =  "com.h2database:h2:$H2_BASE";
-
-ext.JOSQL_LIB = "com.tocea.framework.josql:josql:$JOSQL_VERSION"
 ext.MYBATIS = "org.mybatis:mybatis:$MYBATIS_VERSION"
 
 
@@ -27,13 +24,13 @@ repositories { mavenCentral() }
 configurations { providedRuntime }
 
 dependencies {
-	compile("org.springframework.boot:spring-boot-starter-jdbc")
-	compile("org.springframework.boot:spring-boot-starter-hornetq")
-	compile("org.springframework.boot:spring-boot-starter-web")
-	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-	compile("org.springframework.boot:spring-boot-starter-actuator")
-	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
-	testCompile("org.springframework.boot:spring-boot-starter-test")
+	compile("org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-hornetq:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}")
+	testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 
 	compile "org.mybatis:mybatis:$MYBATIS_VERSION"
 	compile('org.mybatis:mybatis-spring:1.2.2') { exclude group: 'org.springframwork' }
@@ -52,4 +49,4 @@ eclipse {
 	}
 }
 
-task wrapper(type: Wrapper) { gradleVersion = '1.12' }
+

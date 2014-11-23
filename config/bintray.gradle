@@ -104,7 +104,7 @@ allprojects {
         bintray {
             user = project.bintrayUsername
             key = project.bintrayApiKey
-            publications = ['mavenJava']
+            publications = ['mavenCustom']
             pkg {
                 repo = 'maven'
                 userOrg = 'sleroy'

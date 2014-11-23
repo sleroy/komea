@@ -1,5 +1,4 @@
 buildscript {
-	ext { springBootVersion = '1.1.9.RELEASE' }
 	repositories { mavenCentral() }
 	dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
 }
@@ -21,19 +20,19 @@ repositories { mavenCentral() }
 configurations { providedRuntime }
 
 dependencies {
-	compile("org.springframework.boot:spring-boot-starter-web")
-	compile("org.springframework.boot:spring-boot-starter-actuator")
-	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
-	testCompile("org.springframework.boot:spring-boot-starter-test")
+	compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}")
+	testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 
 	compile 'org.apache.commons:commons-lang3:3.3.2'
 	compile "joda-time:joda-time:$JODA_TIME"
 	compile "com.google.guava:guava:$GUAVA"
 
-	compile 'com.orientechnologies:orient-commons:1.7.9'
-	compile 'com.orientechnologies:orientdb-core:1.7.9'
-	compile 'com.orientechnologies:orientdb-graphdb:1.7.9'
-	compile 'com.orientechnologies:orientdb-client:1.7.9'
+	compile "com.orientechnologies:orient-commons:${ORIENTDB_VERSION}"
+	compile "com.orientechnologies:orientdb-core:${ORIENTDB_VERSION}"
+	compile "com.orientechnologies:orientdb-graphdb:${ORIENTDB_VERSION}"
+	compile "com.orientechnologies:orientdb-client:${ORIENTDB_VERSION}"
 }
 
 eclipse {
@@ -43,4 +42,4 @@ eclipse {
 	}
 }
 
-task wrapper(type: Wrapper) { gradleVersion = '1.12' }
+
