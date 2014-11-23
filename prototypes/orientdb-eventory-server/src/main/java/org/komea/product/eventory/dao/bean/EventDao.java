@@ -42,6 +42,7 @@ public class EventDao implements IEventDao {
 		Validate.notEmpty(event.getEventKey());
 		final ODocument newDocument = this.dsf.newDocument(event.getEventKey());
 		event.serialize(newDocument);
+		System.out.println(newDocument.toJSON());
 		newDocument.save();
 	}
 

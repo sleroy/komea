@@ -2,11 +2,14 @@ package org.komea.product.eventory;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.product.eventory.dao.api.IEventDao;
 import org.komea.product.eventory.database.model.AggregationFormula;
+import org.komea.product.eventory.database.model.EntityValue;
 import org.komea.product.eventory.rest.dto.SimpleEventDto;
 import org.komea.product.eventory.sql.api.ISqlQueryService;
 import org.komea.product.eventory.storage.api.IEventStorageService;
@@ -53,8 +56,12 @@ public class ApplicationTests {
 		aggregationFormula.setTo(new DateTime().plusYears(1).toDate());
 		aggregationFormula.setFilter("AND provider='jenkins'");
 		aggregationFormula.setGroupBy("entityKey1");
-		assertEquals(1,
-				this.sqlQueryService.aggregateOnPeriod(aggregationFormula)
-				.size());
+		final List<EntityValue> aggregateOnPeriod = this.sqlQueryService
+				.aggregateOnPeriod(aggregationFormula);
+		assertEquals(1, aggregateOnPeriod.size());
+		assertEquals("Same entity", "personA", aggregateOnPeriod.get(0)
+				.getEntity());
+		assertEquals("Correct aggregation", Double.valueOf(1.0d),
+				aggregateOnPeriod.get(0).getValue());
 	}
 }

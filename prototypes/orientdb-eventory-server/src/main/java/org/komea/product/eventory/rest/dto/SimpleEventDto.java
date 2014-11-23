@@ -118,10 +118,10 @@ public class SimpleEventDto implements IEventSerializable {
 		_document.field("value4", this.value4);
 		_document.field("value5", this.value5);
 
-		_document.field("entityKey1", this.value);
-		_document.field("entityKey2", this.value2);
-		_document.field("entityKey3", this.value3);
-		_document.field("entityKey4", this.value4);
+		_document.field("entityKey1", this.entityKey1);
+		_document.field("entityKey2", this.entityKey1);
+		_document.field("entityKey3", this.entityKey3);
+		_document.field("entityKey4", this.entityKey4);
 
 		_document.field("message", this.message);
 

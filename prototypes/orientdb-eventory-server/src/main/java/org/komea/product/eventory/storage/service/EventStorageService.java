@@ -31,7 +31,6 @@ public class EventStorageService implements IEventStorageService {
 	public void store(final IEventSerializable eventStorage) {
 		this.eventStorageValidator.validate(eventStorage);
 		this.eventStorageDao.insertPojo(eventStorage);
-
 	}
 
 	@Override
