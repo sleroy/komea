@@ -67,6 +67,16 @@ def getGitBranch()  {
 
 ext.VERSION_ID=KOMEAAPI_VERSION
 
+buildscript {
+	repositories {
+		mavenCentral()
+		jcenter()
+	}
+
+	dependencies {
+		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
+	}
+}
 
 
 allprojects {
@@ -310,3 +320,5 @@ codeCoverageReport.dependsOn { subprojects*.test }
  : http://gradle.codehaus.org/Cookbook
  : http://stackoverflow.com/questions/8343871/mark-gradle-build-unstable-in-jenkins-when-junit-tests-fail
  */
+ 
+ 
