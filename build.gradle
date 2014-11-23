@@ -2,9 +2,23 @@
  * Package of dependencies
  */
 
+group="org.komea"
+
+buildscript {
+	repositories {
+		mavenCentral()
+		jcenter()
+	}
+
+	dependencies {
+		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
+	        classpath 'net.saliman:gradle-cobertura-plugin:2.2.5'
+	}
+}
 
 
 apply from: "$rootDir/config/tocea-integ.gradle"
+apply from: "$rootDir/config/bintray.gradle"
 
 
 

@@ -1,5 +1,29 @@
+apply plugin: "sonar-runner"
+apply plugin: "jacoco"
 
+task help() {
 
+println "---------------------------------------------------------------------------------------"
+println "How to use Komea build script :                                                        "
+println "HINT : To activate integration tests, relaunch gradle with the parameters -Pintegration"
+println "HINT : To skip dependency check, parameter -Pnodep"
+println "HINT : To overload the version, uses -Pbranch=branchName and -Pincrement=incrementNumber to release"
+println "HINT : To print unit tests logs uses -PlogTest"
+println "HINT : To upload to bintray , set the properties         -Dbintray_net_user= -Dbintray_net_key="
+
+println "---------------------------------------------------------------------------------------"
+}
+/**
+sonarRunner {
+	sonarProperties {
+		property "sonar.host.url", "http://192.168.1.1:9000"
+		property "sonar.jdbc.url", "jdbc:mysql://192.168.1.1:3306/sonar?useUnicode=true&characterEncoding=utf8"
+		property "sonar.jdbc.driverClassName", "com.mysql.jdbc.Driver"
+		property "sonar.jdbc.username", "sonar"
+		property "sonar.jdbc.password", "sonar"
+	}
+}
+**/
 ext.JUNIT= "junit:junit:4.11";
 
 //TEST FRAMEWORKS DEPENDENCIES
@@ -12,29 +36,6 @@ ext.tests_frameworks = [
 	"com.carrotsearch:junit-benchmarks:0.7.2",
 	'org.hamcrest:hamcrest-all:1.3'
 ]
-
-apply plugin: "sonar-runner"
-apply plugin: "jacoco"
-
-println "---------------------------------------------------------------------------------------"
-println "How to use Komea build script :                                                        "
-println "HINT : To activate integration tests, relaunch gradle with the parameters -Pintegration"
-println "HINT : To skip dependency check, parameter -Pnodep"
-println "HINT : To overload the version, uses -Pbranch=branchName and -Pincrement=incrementNumber to release"
-println "HINT : To print unit tests logs uses -PlogTest"
-println "---------------------------------------------------------------------------------------"
-
-
-
-sonarRunner {
-	sonarProperties {
-		property "sonar.host.url", "http://192.168.1.1:9000"
-		property "sonar.jdbc.url", "jdbc:mysql://192.168.1.1:3306/sonar?useUnicode=true&characterEncoding=utf8"
-		property "sonar.jdbc.driverClassName", "com.mysql.jdbc.Driver"
-		property "sonar.jdbc.username", "sonar"
-		property "sonar.jdbc.password", "sonar"
-	}
-}
 
 ext.GIT = "git"
 
@@ -66,17 +67,6 @@ def getGitBranch()  {
 
 
 ext.VERSION_ID=KOMEAAPI_VERSION
-
-buildscript {
-	repositories {
-		mavenCentral()
-		jcenter()
-	}
-
-	dependencies {
-		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
-	}
-}
 
 
 allprojects {
@@ -157,8 +147,7 @@ allprojects {
 			version = "$VERSION_ID-BUILD";
 		}
 	} else {
-
-		version = BRANCH_ID;
+		version = "${VERSION_ID}-${BRANCH_ID}";
 	}
 
 
@@ -320,5 +309,4 @@ codeCoverageReport.dependsOn { subprojects*.test }
  : http://gradle.codehaus.org/Cookbook
  : http://stackoverflow.com/questions/8343871/mark-gradle-build-unstable-in-jenkins-when-junit-tests-fail
  */
- 
  
