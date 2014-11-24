@@ -417,7 +417,7 @@ article ul li:before {
 .feature{
 	margin-top: 200px;
 	max-width: 600px;
-	height: 200px;
+	height: 250px;
 	margin-left: auto;
 	margin-right: auto;
 
@@ -478,7 +478,7 @@ article ul li:before {
 
 
 #main-slider .carousel .item {
-  background:#EA5E00 ;
+  background:#22222 ;
   background-position: 50%;
   background-repeat: no-repeat;
   background-size: cover;
