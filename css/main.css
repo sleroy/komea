@@ -121,7 +121,7 @@ body > section {
 
 .center {
   text-align: center;
-  padding-bottom: 55px;
+  padding-bottom: 100px;
 }
 
 .scaleIn {
@@ -129,11 +129,28 @@ body > section {
   animation-name: scaleIn;
 }
 
+.lead strong {
+  font-size: 200%;
+}
+
 .lead{
-  font-size: 16px;
+  font-size: 18px;
   line-height: 24px;
   font-weight: 400;
+  line-height: 1.3em;
+  margin: 1em 0px;
+  padding: 0px;
+  border: 0px none;
+  outline: 0px none;
+  font-weight: inherit;
+  font-style: inherit;
+  font-family: inherit;
+  font-size: 140%;
+  vertical-align: baseline;
+  padding-bottom:20px;
 }
+
+
 
 .transparent-bg {
   background-color: transparent !important;
@@ -415,7 +432,7 @@ article ul li:before {
 
 
 .feature{
-	margin-top: 200px;
+	margin-top: 130px;
 	max-width: 600px;
 	height: 250px;
 	margin-left: auto;
@@ -614,7 +631,7 @@ article ul li:before {
 
 #feature {
   background: #f2f2f2;
-  padding-bottom: 40px;
+  padding-bottom: 50px;
 }
 
 .features{

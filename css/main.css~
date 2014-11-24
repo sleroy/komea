@@ -129,11 +129,27 @@ body > section {
   animation-name: scaleIn;
 }
 
+.lead strong {
+  font-size: 200%;
+}
+
 .lead{
-  font-size: 16px;
+  font-size: 18px;
   line-height: 24px;
   font-weight: 400;
+  line-height: 1.3em;
+  margin: 1em 0px;
+  padding: 0px;
+border: 0px none;
+outline: 0px none;
+font-weight: inherit;
+font-style: inherit;
+font-family: inherit;
+font-size: 140%;
+vertical-align: baseline;
 }
+
+
 
 .transparent-bg {
   background-color: transparent !important;
@@ -478,7 +494,7 @@ article ul li:before {
 
 
 #main-slider .carousel .item {
-  background:#22222 ;
+  background:#222222 ;
   background-position: 50%;
   background-repeat: no-repeat;
   background-size: cover;

@@ -35,7 +35,7 @@
 
 	<header id="header">
 
-		<nav class="navbar navbar-inverse" role="banner">
+		<nav class="navbar navbar-inverse" role="banner" >
 			<div class="container">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -83,7 +83,8 @@
 						<div class="row slide-margin">
 							<div class="col-sm-6">
 								<div class="carousel-content">
-									<h1 class="animation animated-item-1">Gather informations from your software factory</h1>
+									<h1 class="animation animated-item-1">Gather informations
+										from your software factory</h1>
 									<h2 class="animation animated-item-2">Several connectors
 										available for CI System, SCM, Bugtrackers, requirements</h2>
 									<a class="btn-slide animation animated-item-3"
@@ -108,8 +109,10 @@
 						<div class="row slide-margin">
 							<div class="col-sm-6">
 								<div class="carousel-content">
-									<h1 class="animation animated-item-1">Build statistics on your software factory</h1>
-									<h2 class="animation animated-item-2">Dashboard as a service</h2>
+									<h1 class="animation animated-item-1">Build statistics on
+										your software factory</h1>
+									<h2 class="animation animated-item-2">Dashboard as a
+										service</h2>
 									<a class="btn-slide animation animated-item-3"
 										href="documentation.html">Read More</a>
 								</div>
@@ -152,13 +155,12 @@
 				</p>
 				<div class="col-sm-6">
 					<p class="lead">Komea is our answer to the growing need to
-						extract indicators and metrics from software factories.</p>
-					<p> Each time
+						extract indicators and metrics from software factories. Each time
 						you are integrating a new tool in your factory, the flow of
 						informations grows and multiple new feedbacks to your developers
 						and managers are created.</p>
-					<p class="lead">Consolidate your data to :
-					<ul > 
+					<p class="lead">Consolidate this data allows you to :
+					<ul class="lead">
 						<li>Create your factory metrics</li>
 						<li>To build an history of your factory</li>
 						<li>Track and identify bottlenecks and problems in your
