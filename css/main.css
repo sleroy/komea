@@ -121,7 +121,7 @@ body > section {
 
 .center {
   text-align: center;
-  padding-bottom: 100px;
+  padding-bottom: 20px;
 }
 
 .scaleIn {
@@ -282,6 +282,11 @@ input.search-form:hover {
 
 .logo{
 	margin-left: 30px;
+	background-image: url("../images/klogo.png");
+   background-position: center 118px;
+   background-repeat: no-repeat;
+   margin-bottom: 100px;
+	
 }
 
 .navbar {
@@ -439,6 +444,16 @@ article ul li:before {
 	margin-right: auto;
 
 }
+
+.mainfeature{
+	max-width: 900px;
+	height:250px;
+	margin-top:0px;
+	margin-left: auto;
+	margin-right: auto;
+
+}
+
 
 .left{
 	margin-left: 10%!important;

@@ -121,7 +121,7 @@ body > section {
 
 .center {
   text-align: center;
-  padding-bottom: 55px;
+  padding-bottom: 20px;
 }
 
 .scaleIn {
@@ -140,13 +140,14 @@ body > section {
   line-height: 1.3em;
   margin: 1em 0px;
   padding: 0px;
-border: 0px none;
-outline: 0px none;
-font-weight: inherit;
-font-style: inherit;
-font-family: inherit;
-font-size: 140%;
-vertical-align: baseline;
+  border: 0px none;
+  outline: 0px none;
+  font-weight: inherit;
+  font-style: inherit;
+  font-family: inherit;
+  font-size: 140%;
+  vertical-align: baseline;
+  padding-bottom:20px;
 }
 
 
@@ -281,6 +282,11 @@ input.search-form:hover {
 
 .logo{
 	margin-left: 30px;
+	    background-image: url("../images/klogo.png");
+    background-position: center 118px;
+    background-repeat: no-repeat;
+    margin-bottom: 100px;
+	
 }
 
 .navbar {
@@ -431,13 +437,23 @@ article ul li:before {
 
 
 .feature{
-	margin-top: 200px;
+	margin-top: 130px;
 	max-width: 600px;
 	height: 250px;
 	margin-left: auto;
 	margin-right: auto;
 
 }
+
+.mainfeature{
+	max-width: 900px;
+	height:250px;
+	margin-top:0px;
+	margin-left: auto;
+	margin-right: auto;
+
+}
+
 
 .left{
 	margin-left: 10%!important;
@@ -630,7 +646,7 @@ article ul li:before {
 
 #feature {
   background: #f2f2f2;
-  padding-bottom: 40px;
+  padding-bottom: 50px;
 }
 
 .features{
