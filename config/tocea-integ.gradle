@@ -90,6 +90,7 @@ allprojects {
 	apply plugin: "project-report"
 	apply plugin: "jacoco"
 	apply plugin: 'findbugs'
+	apply plugin: 'coveralls'
 	apply plugin : 'maven-publish'
 
 
