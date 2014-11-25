@@ -1,102 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:ror="http://rorweb.com/0.1/" >
 <channel>
-  <title>ROR Sitemap for http://sleroy.github.io/komea/</title>
-  <link>http://sleroy.github.io/komea/</link>
+  <title>ROR Sitemap for http://sleroy.github.io/komea</title>
+  <link>http://sleroy.github.io/komea</link>
 
 <item>
      <link>http://sleroy.github.io/komea/</link>
-     <title>Home | Komea</title>
-     <description>Home | Komea</description>
-     <ror:updatePeriod>weekly</ror:updatePeriod>
+     <title>Komea makes it easy to build dashboard and to measure metrics from your software factory.</title>
+     <description>Komea is an opensource framework. Komea is our answer to the growing need to extract indicators and metrics from software factories.</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
      <ror:sortOrder>0</ror:sortOrder>
      <ror:resourceOf>sitemap</ror:resourceOf>
 </item>
 <item>
      <link>http://sleroy.github.io/komea/index.html</link>
-     <title>Home | Komea</title>
-     <description>Home | Komea</description>
-     <ror:updatePeriod>weekly</ror:updatePeriod>
+     <title>Komea makes it easy to build dashboard and to measure metrics from your software factory.</title>
+     <description>Komea is an opensource framework. Komea is our answer to the growing need to extract indicators and metrics from software factories.</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
      <ror:sortOrder>1</ror:sortOrder>
      <ror:resourceOf>sitemap</ror:resourceOf>
 </item>
 <item>
-     <link>http://sleroy.github.io/komea/blog.html</link>
-     <title>Blog | Corlate</title>
-     <description>Blog | Corlate</description>
-     <ror:updatePeriod>weekly</ror:updatePeriod>
+     <link>http://sleroy.github.io/komea/documentation.html</link>
+     <title>Komea makes it easy to build dashboard and to measure metrics from your software factory.</title>
+     <description>Komea is an opensource framework. Komea is our answer to the growing need to extract indicators and metrics from software factories.</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
      <ror:sortOrder>1</ror:sortOrder>
-     <ror:resourceOf>sitemap</ror:resourceOf>
-</item>
-<item>
-     <link>http://sleroy.github.io/komea/download.html</link>
-     <title>Komea | Download</title>
-     <description>Komea | Download</description>
-     <ror:updatePeriod>weekly</ror:updatePeriod>
-     <ror:sortOrder>1</ror:sortOrder>
-     <ror:resourceOf>sitemap</ror:resourceOf>
-</item>
-<item>
-     <link>http://sleroy.github.io/komea/about-us.html</link>
-     <title>About Us | Corlate</title>
-     <description>About Us | Corlate</description>
-     <ror:updatePeriod>weekly</ror:updatePeriod>
-     <ror:sortOrder>2</ror:sortOrder>
      <ror:resourceOf>sitemap</ror:resourceOf>
 </item>
 <item>
      <link>http://sleroy.github.io/komea/services.html</link>
-     <title>Services | Corlate</title>
-     <description>Services | Corlate</description>
-     <ror:updatePeriod>weekly</ror:updatePeriod>
-     <ror:sortOrder>2</ror:sortOrder>
+     <title>Komea makes it easy to build dashboard and to measure metrics from your software factory.</title>
+     <description>Komea is an opensource framework. Komea is our answer to the growing need to extract indicators and metrics from software factories.</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>1</ror:sortOrder>
      <ror:resourceOf>sitemap</ror:resourceOf>
 </item>
 <item>
-     <link>http://sleroy.github.io/komea/portfolio.html</link>
-     <title>Portfolio | Corlate</title>
-     <description>Portfolio | Corlate</description>
-     <ror:updatePeriod>weekly</ror:updatePeriod>
-     <ror:sortOrder>2</ror:sortOrder>
-     <ror:resourceOf>sitemap</ror:resourceOf>
-</item>
-<item>
-     <link>http://sleroy.github.io/komea/blog-item.html</link>
-     <title>Blog Single | Corlate</title>
-     <description>Blog Single | Corlate</description>
-     <ror:updatePeriod>weekly</ror:updatePeriod>
-     <ror:sortOrder>2</ror:sortOrder>
-     <ror:resourceOf>sitemap</ror:resourceOf>
-</item>
-<item>
-     <link>http://sleroy.github.io/komea/pricing.html</link>
-     <title>About Us | Corlate</title>
-     <description>About Us | Corlate</description>
-     <ror:updatePeriod>weekly</ror:updatePeriod>
-     <ror:sortOrder>2</ror:sortOrder>
-     <ror:resourceOf>sitemap</ror:resourceOf>
-</item>
-<item>
-     <link>http://sleroy.github.io/komea/404.html</link>
-     <title>404 | Corlate</title>
-     <description>404 | Corlate</description>
-     <ror:updatePeriod>weekly</ror:updatePeriod>
-     <ror:sortOrder>2</ror:sortOrder>
-     <ror:resourceOf>sitemap</ror:resourceOf>
-</item>
-<item>
-     <link>http://sleroy.github.io/komea/shortcodes.html</link>
-     <title>Home | Corlate</title>
-     <description>Home | Corlate</description>
-     <ror:updatePeriod>weekly</ror:updatePeriod>
-     <ror:sortOrder>2</ror:sortOrder>
-     <ror:resourceOf>sitemap</ror:resourceOf>
-</item>
-<item>
-     <link>http://sleroy.github.io/komea/contact-us.html</link>
-     <title>Blog Single | Corlate</title>
-     <description>Blog Single | Corlate</description>
-     <ror:updatePeriod>weekly</ror:updatePeriod>
+     <link>http://sleroy.github.io/komea/documentation</link>
+     <title>Komea makes it easy to build dashboard and to measure metrics from your software factory.</title>
+     <description>Komea is an opensource framework. Komea is our answer to the growing need to extract indicators and metrics from software factories.</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
      <ror:sortOrder>2</ror:sortOrder>
      <ror:resourceOf>sitemap</ror:resourceOf>
 </item>

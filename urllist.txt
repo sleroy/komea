@@ -1,12 +1,5 @@
 http://sleroy.github.io/komea/
 http://sleroy.github.io/komea/index.html
-http://sleroy.github.io/komea/blog.html
-http://sleroy.github.io/komea/download.html
-http://sleroy.github.io/komea/about-us.html
+http://sleroy.github.io/komea/documentation.html
 http://sleroy.github.io/komea/services.html
-http://sleroy.github.io/komea/portfolio.html
-http://sleroy.github.io/komea/blog-item.html
-http://sleroy.github.io/komea/pricing.html
-http://sleroy.github.io/komea/404.html
-http://sleroy.github.io/komea/shortcodes.html
-http://sleroy.github.io/komea/contact-us.html
+http://sleroy.github.io/komea/documentation
