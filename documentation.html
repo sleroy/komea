@@ -84,39 +84,31 @@
 		<!--/nav-->
 
 	</header>
-
-    <section id="feature" class="transparent-bg">
+	<!--/header-->
+    <section id="portfolio">
         <div class="container">
-           <div class="center wow fadeInDown">
-                <h2>Our sponsors</h2>
-                <p class="lead">Komea framework is sponsored by two companies :</p>
+				<div class="get-started center wow fadeInDown animated" style="visibility: visible; -webkit-animation: fadeInDown;">
+                <h2>Get some technical details ?</h2>
+                <p class="lead">All our technical documentation is on our wiki.</p>
+                <div class="request">
+                    <h4><a href="https://github.com/sleroy/komea/wiki">Technical details on Wiki</a></h4>
+                </div>
             </div>
-
             <div class="row">
-                <div class="features">
-                    <div class="col-md-6 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
-                        <div class="feature-wrap">
-                        <a href="http://www.tocea.fr">
-                            <img src="http://www.tocea.fr/wp-content/uploads/2014/10/tocea-seul-300x1501.png" alt="Tocea company logo" class="thumbnail">
-                            <h2>Tocea</h2>
-                            <h3>Continuous delivery and quality tools</h3>
-                            </a>
-                        </div>
-                    </div><!--/.col-md-6-->
-
-                    <div class="col-md-6 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
-                        <div class="feature-wrap">
-                            <img src="http://www.metrixware.com/wp-content/uploads/2014/05/Logo-Metrixware-+-Texte-noir.png" class="thumbnail" alt="Tocea company logo">
-                            <h2>Metrixware</h2>
-                            <h3>Modernisation and development process industrialization</h3>
-                        </div>
-                    </div><!--/.col-md-6-->
-
-                </div><!--/.services-->
-            </div><!--/.row--> 
-
-
-       	</div>
+            <h2>FAQ</h2>
+				<ul class="faq">
+				<li>What is Komea ?</li>
+ 				<span>Komea is an opensource framework to easily build indicator and metrics to monitor your development process and your build factory</span>
+				
+				<li>How I can use it ?</li>
+				<span>Simply creates a maven project or gradle project and follow the quickstart. We will also provide some demo applications on our <a href="http://github.com/sleroy/komea">github repository</a>. Stay informed!</span>
+				<li>What are the technologies used in Komea?</li>
+				<span>As a framework, we want to be the less intrusive in our customer software. We are mainly using <strong>Java, Groovy, OrientDB database and common libraries (guava, ...)</strong>. Check <a href="https://github.com/sleroy/komea/wiki/Technological-stack">our technological stack</a> for more informations.</span>								
+				</ul>
+            <h2>Presentations</h2>
+            <iframe src="http://www.slideshare.net/slideshow/embed_code/41992884" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//fr.slideshare.net/SylvainLeroy/solution-pour-dashboard" title="Software Factory Dashboard : indicateurs et métriques avec Komea" target="_blank">Software Factory Dashboard : indicateurs et métriques avec Komea</a> </strong> from <strong><a href="//www.slideshare.net/SylvainLeroy" target="_blank">Sylvain Leroy</a></strong> </div>
+            </div>
+			</div>        
     </section><!--/#bottom-->
 
 
@@ -140,12 +132,27 @@
 		</div>
 	</footer>
 	<!--/#footer-->
-
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.prettyPhoto.js"></script>
-    <script src="js/jquery.isotope.min.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/wow.min.js"></script>
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.prettyPhoto.js"></script>
+	<script src="js/jquery.isotope.min.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/wow.min.js"></script>
+	<script>
+		(function(i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r;
+			i[r] = i[r] || function() {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date();
+			a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+			a.async = 1;
+			a.src = g;
+			m.parentNode.insertBefore(a, m)
+		})(window, document, 'script',
+				'//www.google-analytics.com/analytics.js', 'ga');
+		
+		ga('create', 'UA-57038567-1', 'auto');
+		ga('send', 'pageview');
+	</script>
 </body>
 </html>
