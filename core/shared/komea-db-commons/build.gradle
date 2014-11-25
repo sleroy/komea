@@ -1,0 +1,9 @@
+dependencies {
+	compile 'org.apache.commons:commons-lang3:3.3.2'
+	compile "com.google.guava:guava:$GUAVA"
+	compile "org.slf4j:slf4j-api:$LOG_SLF4J"
+	compile "org.slf4j:slf4j-log4j12:$LOG_SLF4J"
+	
+	compile "com.orientechnologies:orientdb-core:${ORIENTDB_VERSION}"
+	compile "com.orientechnologies:orientdb-graphdb:${ORIENTDB_VERSION}"
+}
