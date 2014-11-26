@@ -4,4 +4,5 @@ include "prototypes:sql-eventory-server"
 include "prototypes:orientdb-eventory-server"
 include "core:shared:komea-db-commons"
 include "core:komea-software-model"
+include "core:komea-events"
 
