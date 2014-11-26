@@ -17,9 +17,18 @@ import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
  * @see ODatabaseDocumentTx
  */
 public class OrientDocumentDatabaseFactory
-		extends
-		AbstractOrientDatabaseFactory<ODatabaseDocumentTx, ODatabaseDocumentPool>
-		implements IDocumentSessionFactory {
+extends
+AbstractOrientDatabaseFactory<ODatabaseDocumentTx, ODatabaseDocumentPool>
+implements IDocumentSessionFactory {
+
+	public OrientDocumentDatabaseFactory() {
+		super();
+	}
+
+	public OrientDocumentDatabaseFactory(
+			final DatabaseConfiguration _configuration) {
+		super(_configuration);
+	}
 
 	@Override
 	public ODocument newDocument() {

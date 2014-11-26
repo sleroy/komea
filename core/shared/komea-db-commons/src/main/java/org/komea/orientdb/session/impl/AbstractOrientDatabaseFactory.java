@@ -28,6 +28,15 @@ implements Closeable {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AbstractOrientDatabaseFactory.class);
 
+	public AbstractOrientDatabaseFactory() {
+		super();
+	}
+
+	public AbstractOrientDatabaseFactory(
+			final DatabaseConfiguration _configuration) {
+		this.init(_configuration);
+	}
+
 	@Override
 	public void close() throws IOException {
 		LOGGER.debug("Closing connexion pool ");

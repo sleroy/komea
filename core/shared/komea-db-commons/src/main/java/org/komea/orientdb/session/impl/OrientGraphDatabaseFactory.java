@@ -10,6 +10,13 @@ public class OrientGraphDatabaseFactory
 extends
 AbstractOrientDatabaseFactory<ODatabaseDocumentTx, ODatabaseDocumentPool>
 implements IGraphSessionFactory {
+	public OrientGraphDatabaseFactory() {
+		super();
+	}
+
+	public OrientGraphDatabaseFactory(final DatabaseConfiguration _configuration) {
+		super(_configuration);
+	}
 
 	/*
 	 * (non-Javadoc)
