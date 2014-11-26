@@ -1,11 +1,12 @@
 package org.komea.orientdb.session;
 
+import java.io.Closeable;
 import java.util.List;
 
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 
-public interface IDocumentSessionFactory {
+public interface IDocumentSessionFactory extends Closeable {
 
 	/**
 	 * Obtains the database session. Returns null if not created / existing.
