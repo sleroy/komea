@@ -114,6 +114,7 @@ allprojects {
 		//enable compilation in a separate daemon process
 		options.fork = true
 		sourceCompatibility = 1.6
+                targetCompatibility = 1.6		
 		//enable incremental compilation
 		options.incremental = true
 	}
@@ -182,8 +183,8 @@ allprojects {
 
 		testCompile(       "org.easymock:easymock:3.1") { exclude group: 'org.objenesis' }
 		testRuntime 'org.apache.logging.log4j:log4j-core:2.0.2'
+                testCompile 'org.codehaus.groovy:groovy-all:2.3.7'
 		testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
-        	testCompile 'org.codehaus.groovy:groovy-all:2.3.7'
         	compile 'com.google.code.findbugs:jsr305:3.0.0'
 	}
     

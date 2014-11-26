@@ -3,6 +3,8 @@ package org.komea.orientdb.session;
 import java.io.Closeable;
 import java.util.List;
 
+import org.komea.orientdb.session.document.IODocument;
+
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 
@@ -24,7 +26,7 @@ public interface IDocumentSessionFactory extends Closeable {
 	 *
 	 * @return the document
 	 */
-	public ODocument newDocument();
+	public IODocument newDocument();
 
 	/**
 	 * Creates a new document with the given class name.
@@ -33,7 +35,7 @@ public interface IDocumentSessionFactory extends Closeable {
 	 *            the class name
 	 * @return the document
 	 */
-	public ODocument newDocument(String className);
+	public IODocument newDocument(String className);
 
 	/**
 	 * Executes an sql query

@@ -3,6 +3,7 @@ package org.komea.orientdb.session.impl;
 import java.util.List;
 
 import org.komea.orientdb.session.IDocumentSessionFactory;
+import org.komea.orientdb.session.document.IODocument;
 
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentPool;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
@@ -17,9 +18,9 @@ import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
  * @see ODatabaseDocumentTx
  */
 public class OrientDocumentDatabaseFactory
-extends
-AbstractOrientDatabaseFactory<ODatabaseDocumentTx, ODatabaseDocumentPool>
-implements IDocumentSessionFactory {
+		extends
+		AbstractOrientDatabaseFactory<ODatabaseDocumentTx, ODatabaseDocumentPool>
+		implements IDocumentSessionFactory {
 
 	public OrientDocumentDatabaseFactory() {
 		super();
@@ -31,15 +32,17 @@ implements IDocumentSessionFactory {
 	}
 
 	@Override
-	public ODocument newDocument() {
+	public IODocument newDocument() {
 
-		return this.getOrCreateDatabaseSession().newInstance();
+		return new ODocumentProxy(this.getOrCreateDatabaseSession()
+				.newInstance());
 	}
 
 	@Override
-	public ODocument newDocument(final String className) {
+	public IODocument newDocument(final String className) {
 
-		return this.getOrCreateDatabaseSession().newInstance(className);
+		return new ODocumentProxy(this.getOrCreateDatabaseSession()
+				.newInstance(className));
 	}
 
 	@Override
@@ -57,7 +60,7 @@ implements IDocumentSessionFactory {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * org.springframework.orm.orient.AbstractOrientDatabaseFactory#doCreatePool
 	 * ()
@@ -71,7 +74,7 @@ implements IDocumentSessionFactory {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * org.springframework.orm.orient.AbstractOrientDatabaseFactory#newDatabase
 	 * ()
