@@ -26,7 +26,6 @@ println "HINT : To upload to bintray , set the properties         -Dbintray_net_
 
 println "---------------------------------------------------------------------------------------"
 
-group="org.komea"
 
 
 //TEST FRAMEWORKS DEPENDENCIES
@@ -273,7 +272,7 @@ apply from: "$rootDir/config/bintray.gradle"
  
 
 task wrapper(type: Wrapper) {
-    gradleVersion = 2.1
+    gradleVersion = GRADLE_VERSION
 
 }
 
