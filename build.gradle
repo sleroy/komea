@@ -85,6 +85,7 @@ allprojects {
 	apply plugin: "eclipse"
 	apply plugin: "idea"
 	apply plugin: "project-report"
+	apply plugin: 'groovy'
 	apply plugin: 'findbugs'
 	apply plugin : 'maven-publish'
 
@@ -155,6 +156,7 @@ allprojects {
 			compileClasspath += configurations.provided
 			runtimeClasspath += configurations.provided
 		}
+		
 	}
 	
 	if (project.hasProperty("nodep")) {
@@ -180,9 +182,14 @@ allprojects {
 
 		testCompile(       "org.easymock:easymock:3.1") { exclude group: 'org.objenesis' }
 		testRuntime 'org.apache.logging.log4j:log4j-core:2.0.2'
-		
+		testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+        	testCompile 'org.codehaus.groovy:groovy-all:2.3.7'
         	compile 'com.google.code.findbugs:jsr305:3.0.0'
 	}
+    
+        task unitTest(type : Test) {
+                exclude "**/**IT"
+        }
     
         /**
           TESTS
@@ -201,8 +208,7 @@ allprojects {
 			        testLogging.showStandardStreams = true
 
 		        }
-	
-	
+	 
 	
 	  // set heap size for the test JVM(s)
 	  minHeapSize = "128m"
@@ -214,9 +220,7 @@ allprojects {
 	 }
 
 
-	test {
-		
-	}       
+	      
 
 	task print <<  { println "$rootProject.buildDir.path" }
 
