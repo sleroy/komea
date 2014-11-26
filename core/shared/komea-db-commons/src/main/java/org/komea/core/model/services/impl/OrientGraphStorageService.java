@@ -62,9 +62,9 @@ public class OrientGraphStorageService implements IStorageService {
 	 * needed.
 	 */
 	@Override
-	public void update(final IKomeaSchema schema) {
-		final OrientGraph graph = getGraph();
-		new OrientGraphSchemaUpdater(graph).update(schema);
+	public void update(final IKomeaSchema _schema) {
+		final OrientGraph graphInstance = getGraph();
+		new OrientGraphSchemaUpdater(graphInstance).update(_schema);
 	}
 
 }

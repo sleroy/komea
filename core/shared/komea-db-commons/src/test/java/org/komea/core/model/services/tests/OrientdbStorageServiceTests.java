@@ -11,6 +11,7 @@ import org.komea.core.schema.IKomeaSchema;
 import org.komea.core.schema.IKomeaSchemaFactory;
 import org.komea.core.schema.IPrimitiveType.Primitive;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
+import org.komea.orientdb.session.impl.DatabaseConfiguration;
 import org.komea.orientdb.session.impl.OrientGraphDatabaseFactory;
 
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType;
@@ -22,10 +23,12 @@ public class OrientdbStorageServiceTests {
 	@Before
 	public void init() {
 		this.sessionsFactory = new OrientGraphDatabaseFactory();
-		this.sessionsFactory.setUrl("memory:test");
-		this.sessionsFactory.setUsername("admin");
-		this.sessionsFactory.setPassword("admin");
-		this.sessionsFactory.init();
+
+		final DatabaseConfiguration databaseConfiguration = new DatabaseConfiguration();
+		databaseConfiguration.setUrl("memory:test");
+		databaseConfiguration.setUsername("admin");
+		databaseConfiguration.setPassword("admin");
+		this.sessionsFactory.init(databaseConfiguration);
 		this.factory = new KomeaSchemaFactory();
 	}
 

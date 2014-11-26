@@ -19,7 +19,7 @@ public class ValidatorService implements IValidatorService {
 		}
 		final List<IReference> properties = entity.getType().getProperties();
 		for (final IReference property : properties) {
-			if (!validate(entity, property)) {
+			if (!this.validate(entity, property)) {
 				return false;
 			}
 		}
@@ -33,10 +33,10 @@ public class ValidatorService implements IValidatorService {
 			return false;
 		}
 		if (property.isMany()) {
-			return validateManyReference(property, value);
+			return this.validateManyReference(property, value);
 		} else {
 
-			return validateType(value, property.getType());
+			return this.validateType(value, property.getType());
 		}
 	}
 
@@ -47,7 +47,7 @@ public class ValidatorService implements IValidatorService {
 		}
 		final Collection<?> collection = (Collection<?>) value;
 		for (final Object element : collection) {
-			if (!validateType(element, property.getType())) {
+			if (!this.validateType(element, property.getType())) {
 				return false;
 			}
 		}

@@ -21,6 +21,31 @@ public class OrientDocumentDatabaseFactory
 		AbstractOrientDatabaseFactory<ODatabaseDocumentTx, ODatabaseDocumentPool>
 		implements IDocumentSessionFactory {
 
+	@Override
+	public ODocument newDocument() {
+
+		return this.getOrCreateDatabaseSession().newInstance();
+	}
+
+	@Override
+	public ODocument newDocument(final String className) {
+
+		return this.getOrCreateDatabaseSession().newInstance(className);
+	}
+
+	@Override
+	public List<ODocument> query(final String _sqlQuery) {
+
+		return this.getOrCreateDatabaseSession().query(
+				new OSQLSynchQuery<ODocument>(_sqlQuery));
+	}
+
+	@Override
+	public void save(final ODocument _event) {
+		this.getOrCreateDatabaseSession().save(_event);
+
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -29,8 +54,10 @@ public class OrientDocumentDatabaseFactory
 	 * ()
 	 */
 	@Override
-	protected ODatabaseDocumentPool doCreatePool() {
-		return new ODatabaseDocumentPool(getUrl(), getUsername(), getPassword());
+	protected ODatabaseDocumentPool doCreatePool(
+			final DatabaseConfiguration _configuration) {
+		return new ODatabaseDocumentPool(_configuration.getUrl(),
+				_configuration.getUsername(), _configuration.getPassword());
 	}
 
 	/*
@@ -41,32 +68,8 @@ public class OrientDocumentDatabaseFactory
 	 * ()
 	 */
 	@Override
-	protected ODatabaseDocumentTx newDatabase() {
-		return new ODatabaseDocumentTx(getUrl());
-	}
-
-	@Override
-	public ODocument newDocument() {
-
-		return getOrCreateDatabaseSession().newInstance();
-	}
-
-	@Override
-	public ODocument newDocument(final String className) {
-
-		return getOrCreateDatabaseSession().newInstance(className);
-	}
-
-	@Override
-	public List<ODocument> query(final String _sqlQuery) {
-
-		return getOrCreateDatabaseSession().query(
-				new OSQLSynchQuery<ODocument>(_sqlQuery));
-	}
-
-	@Override
-	public void save(final ODocument _event) {
-		getOrCreateDatabaseSession().save(_event);
-
+	protected ODatabaseDocumentTx newDatabase(
+			final DatabaseConfiguration _configuration) {
+		return new ODatabaseDocumentTx(_configuration.getUrl());
 	}
 }
