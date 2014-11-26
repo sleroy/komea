@@ -49,6 +49,7 @@ implements Closeable {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public final T getDatabaseSession() {
 		return (T) ODatabaseRecordThreadLocal.INSTANCE.get().getDatabaseOwner();
 	}
