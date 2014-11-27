@@ -9,6 +9,7 @@ import org.komea.orientdb.session.document.IODocument;
 import com.google.common.collect.Iterators;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentPool;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
+import com.orientechnologies.orient.core.iterator.ORecordIteratorClass;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 
@@ -34,6 +35,20 @@ implements IDocumentSessionFactory {
 	}
 
 	@Override
+	public ORecordIteratorClass<ODocument> browseClass(final String _eventType) {
+
+		return this.getOrCreateDatabaseSession().browseClass(_eventType);
+	}
+
+	@Override
+	public ORecordIteratorClass<ODocument> browseClass(final String _eventType,
+			final boolean _polymorphic) {
+
+		return this.getOrCreateDatabaseSession().browseClass(_eventType,
+				_polymorphic);
+	}
+
+	@Override
 	public IODocument newDocument() {
 
 		return new ODocumentProxy(this.getOrCreateDatabaseSession()
@@ -56,7 +71,7 @@ implements IDocumentSessionFactory {
 
 	@Override
 	public List<ODocument> rawQuery(final String _sqlQuery) {
-
+		LOGGER.trace("Executing query {}", _sqlQuery);
 		return this.getOrCreateDatabaseSession().query(
 				new OSQLSynchQuery<ODocument>(_sqlQuery));
 	}

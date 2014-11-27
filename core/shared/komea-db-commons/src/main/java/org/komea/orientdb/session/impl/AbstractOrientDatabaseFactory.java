@@ -19,13 +19,13 @@ import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
  *            the type of database to handle
  */
 public abstract class AbstractOrientDatabaseFactory<T extends ODatabase, P extends ODatabasePoolBase<T>>
-		implements Closeable {
+implements Closeable {
 
 	private P pool;
 
 	private T db;
 
-	private static final Logger LOGGER = LoggerFactory
+	protected static final Logger LOGGER = LoggerFactory
 			.getLogger(AbstractOrientDatabaseFactory.class);
 
 	public AbstractOrientDatabaseFactory() {
@@ -56,7 +56,7 @@ public abstract class AbstractOrientDatabaseFactory<T extends ODatabase, P exten
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.springframework.orm.orient.AbstractOrientDatabaseFactory#openDatabase
 	 * ()

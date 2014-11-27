@@ -7,9 +7,19 @@ import java.util.List;
 import org.komea.orientdb.session.document.IODocument;
 
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
+import com.orientechnologies.orient.core.iterator.ORecordIteratorClass;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 
 public interface IDocumentSessionFactory extends Closeable {
+
+	/**
+	 * Browse all events of a class
+	 *
+	 * @param _eventType
+	 *            the event type
+	 * @return the list of events as documents.
+	 */
+	public ORecordIteratorClass<ODocument> browseClass(String _eventType);
 
 	/**
 	 * Obtains the database session. Returns null if not created / existing.
@@ -56,5 +66,8 @@ public interface IDocumentSessionFactory extends Closeable {
 	public List<ODocument> rawQuery(String _sqlQuery);
 
 	public void save(ODocument _event);
+
+	ORecordIteratorClass<ODocument> browseClass(String _eventType,
+			boolean _polymorphic);
 
 }
