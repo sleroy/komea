@@ -1,5 +1,12 @@
 package org.komea.orientdb.session.impl;
 
+/**
+ * This class defines the required settings to initialize a database connection
+ * (to OrientDB). Main parameters are the URL, the username and password.
+ *
+ * @author sleroy
+ *
+ */
 public class DatabaseConfiguration {
 	/**
 	 * URL to initialize the orient db database.
