@@ -12,7 +12,7 @@ public interface IODocument {
 
 	/**
 	 * Dump the content of a document into a string
-	 * 
+	 *
 	 * @return the content.
 	 */
 	String dump();
@@ -45,4 +45,12 @@ public interface IODocument {
 	 * Serialization in Json
 	 */
 	String toJSON();
+
+	/**
+	 * Infer the fields into the pojo.
+	 * 
+	 * @param _pojo
+	 *            the pojo.
+	 */
+	void toPojo(Object _pojo);
 }

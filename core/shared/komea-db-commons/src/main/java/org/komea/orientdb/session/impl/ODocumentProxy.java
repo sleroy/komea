@@ -3,6 +3,7 @@ package org.komea.orientdb.session.impl;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.apache.commons.beanutils.BeanMap;
 import org.apache.commons.lang.Validate;
 import org.komea.orientdb.session.document.IODocument;
 
@@ -33,7 +34,7 @@ public class ODocumentProxy implements IODocument {
 			map.put(entry, this.newInstance.field(entry));
 		}
 		sb.append("Document of class ").append(this.newInstance.getClassName())
-				.append("with fields ").append(map.toString());
+		.append("with fields ").append(map.toString());
 		return sb.toString();
 	}
 
@@ -64,6 +65,15 @@ public class ODocumentProxy implements IODocument {
 	public String toJSON() {
 
 		return this.newInstance.toJSON();
+	}
+
+	@Override
+	public void toPojo(final Object _pojo) {
+		final BeanMap beanMap = new BeanMap(_pojo);
+		for (final String field : this.newInstance.fieldNames()) {
+			beanMap.put(field, this.newInstance.field(field));
+		}
+
 	}
 
 	@Override

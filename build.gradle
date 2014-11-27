@@ -113,8 +113,8 @@ allprojects {
 	compileJava {
 		//enable compilation in a separate daemon process
 		options.fork = true
-		sourceCompatibility = 1.6
-                targetCompatibility = 1.6		
+		sourceCompatibility = 1.7
+                targetCompatibility = 1.7		
 		//enable incremental compilation
 		options.incremental = true
 	}
