@@ -30,4 +30,11 @@ public interface IEventStorage extends Closeable {
 	 *            the event.
 	 */
 	public void storeFlatEvent(IFlatEvent _event);
+
+	/**
+	 * Provides directly a pojo that will be converted into a flat event.
+	 * 
+	 * @param _pojo
+	 */
+	public void storePojoAsEvent(Object _pojo);
 }

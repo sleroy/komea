@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 
+import org.apache.commons.beanutils.BeanMap;
 import org.komea.event.model.api.IFlatEvent;
 
 import com.google.common.collect.Maps;
@@ -19,7 +20,7 @@ public class FlatEvent implements IFlatEvent {
 	private Map<String, Serializable> properties = Maps.newHashMap();
 
 	public FlatEvent() {
-		super();
+		this(Maps.newHashMap());
 	}
 
 	/**
@@ -28,9 +29,13 @@ public class FlatEvent implements IFlatEvent {
 	 * @param _map
 	 *            the map.
 	 */
-	public FlatEvent(final Map<String, ? extends Serializable> _map) {
-		super();
-		this.properties = (Map) _map;
+	public FlatEvent(final Map<String, Serializable> _map) {
+		this.properties = _map;
+	}
+
+	public FlatEvent(final Object _pojo) {
+		this(Maps.newHashMap(new BeanMap(_pojo)));
+
 	}
 
 	/**

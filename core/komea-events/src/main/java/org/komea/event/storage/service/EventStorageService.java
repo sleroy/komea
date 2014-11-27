@@ -5,9 +5,11 @@ package org.komea.event.storage.service;
 
 import java.io.IOException;
 
+import org.apache.commons.lang.Validate;
 import org.komea.event.model.api.IBasicEvent;
 import org.komea.event.model.api.IComplexEvent;
 import org.komea.event.model.api.IFlatEvent;
+import org.komea.event.model.beans.FlatEvent;
 import org.komea.event.storage.api.IEventStorage;
 import org.komea.event.storage.convertor.BasicEventDocumentConvertor;
 import org.komea.event.storage.convertor.ComplexEventDocumentConvertor;
@@ -94,5 +96,12 @@ public class EventStorageService implements IEventStorage {
 		} else {
 			_document.save();
 		}
+	}
+
+	@Override
+	public void storePojoAsEvent(Object _pojo) {
+		Validate.notNull(_pojo);
+		storeFlatEvent(new FlatEvent(_pojo));
+		
 	}
 }
