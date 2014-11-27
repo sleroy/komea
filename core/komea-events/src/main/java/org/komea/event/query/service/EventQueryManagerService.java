@@ -10,7 +10,7 @@ import org.komea.orientdb.session.impl.OrientDocumentDatabaseFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EventQueryManager implements IEventQueryManager {
+public class EventQueryManagerService implements IEventQueryManager {
 	private final IDocumentSessionFactory documentDatabaseFactory;
 
 	private static final Logger LOGGER = LoggerFactory
@@ -19,14 +19,14 @@ public class EventQueryManager implements IEventQueryManager {
 	/**
 	 *
 	 */
-	public EventQueryManager(final DatabaseConfiguration _configuration) {
+	public EventQueryManagerService(final DatabaseConfiguration _configuration) {
 		this(new OrientDocumentDatabaseFactory(_configuration));
 	}
 
 	/**
 	 *
 	 */
-	public EventQueryManager(final IDocumentSessionFactory _factory) {
+	public EventQueryManagerService(final IDocumentSessionFactory _factory) {
 		super();
 		this.documentDatabaseFactory = _factory;
 
