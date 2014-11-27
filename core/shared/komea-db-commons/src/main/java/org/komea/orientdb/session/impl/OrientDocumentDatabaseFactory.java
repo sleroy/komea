@@ -1,10 +1,12 @@
 package org.komea.orientdb.session.impl;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.komea.orientdb.session.IDocumentSessionFactory;
 import org.komea.orientdb.session.document.IODocument;
 
+import com.google.common.collect.Iterators;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentPool;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.record.impl.ODocument;
@@ -18,9 +20,9 @@ import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
  * @see ODatabaseDocumentTx
  */
 public class OrientDocumentDatabaseFactory
-		extends
-		AbstractOrientDatabaseFactory<ODatabaseDocumentTx, ODatabaseDocumentPool>
-		implements IDocumentSessionFactory {
+extends
+AbstractOrientDatabaseFactory<ODatabaseDocumentTx, ODatabaseDocumentPool>
+implements IDocumentSessionFactory {
 
 	public OrientDocumentDatabaseFactory() {
 		super();
@@ -46,7 +48,14 @@ public class OrientDocumentDatabaseFactory
 	}
 
 	@Override
-	public List<ODocument> query(final String _sqlQuery) {
+	public Iterator<IODocument> query(final String _query) {
+		final List<ODocument> results = this.rawQuery(_query);
+		return Iterators
+				.transform(results.iterator(), new IODocumentFunction());
+	}
+
+	@Override
+	public List<ODocument> rawQuery(final String _sqlQuery) {
 
 		return this.getOrCreateDatabaseSession().query(
 				new OSQLSynchQuery<ODocument>(_sqlQuery));
@@ -60,7 +69,7 @@ public class OrientDocumentDatabaseFactory
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.springframework.orm.orient.AbstractOrientDatabaseFactory#doCreatePool
 	 * ()
@@ -74,7 +83,7 @@ public class OrientDocumentDatabaseFactory
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.springframework.orm.orient.AbstractOrientDatabaseFactory#newDatabase
 	 * ()
