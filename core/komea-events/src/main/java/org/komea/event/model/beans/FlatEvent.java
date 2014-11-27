@@ -30,7 +30,7 @@ public class FlatEvent implements IFlatEvent {
 	 */
 	public FlatEvent(final Map<String, ? extends Serializable> _map) {
 		super();
-		this.properties = Collections.unmodifiableMap(_map);
+		this.properties = (Map) _map;
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class FlatEvent implements IFlatEvent {
 	@Override
 	public Map<String, ? extends Serializable> getProperties() {
 
-		return this.properties;
+		return Collections.unmodifiableMap(this.properties);
 	}
 
 	@Override
