@@ -1,10 +1,12 @@
 package org.komea.orientdb.session.impl;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 import org.komea.orientdb.session.document.IODocument;
 
+import com.google.common.collect.Maps;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 
 public class ODocumentProxy implements IODocument {
@@ -15,6 +17,30 @@ public class ODocumentProxy implements IODocument {
 		this.newInstance = _newInstance;
 		Validate.notNull(_newInstance);
 
+	}
+
+	@Override
+	public boolean containsField(final String _fieldDate) {
+
+		return this.newInstance.containsField(_fieldDate);
+	}
+
+	@Override
+	public String dump() {
+		final StringBuilder sb = new StringBuilder();
+		final Map<String, Object> map = Maps.newHashMap();
+		for (final String entry : this.newInstance.fieldNames()) {
+			map.put(entry, this.newInstance.field(entry));
+		}
+		sb.append("Document of class ").append(this.newInstance.getClassName())
+				.append("with fields ").append(map.toString());
+		return sb.toString();
+	}
+
+	@Override
+	public Object field(final String _fieldDate) {
+
+		return this.newInstance.field(_fieldDate);
 	}
 
 	@Override
@@ -32,6 +58,17 @@ public class ODocumentProxy implements IODocument {
 	public void save() {
 		this.newInstance.save();
 
+	}
+
+	@Override
+	public String toJSON() {
+
+		return this.newInstance.toJSON();
+	}
+
+	@Override
+	public String toString() {
+		return "ODocumentProxy [newInstance=" + this.newInstance + "]";
 	}
 
 }

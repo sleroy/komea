@@ -44,7 +44,7 @@ public class IEventStorageSpecificationTest {
 	@Before
 	public void setup() {
 		this.dbc = Mockito.mock(IDocumentSessionFactory.class);
-		this.es = new EventStorage(this.dbc);
+		this.es = new EventStorageService(this.dbc);
 	}
 
 	/**
@@ -56,11 +56,16 @@ public class IEventStorageSpecificationTest {
 		// WHEN
 		final IODocument odocument = Mockito.mock(IODocument.class);
 		Mockito.when(this.dbc.newDocument(NEW_BUG)).thenReturn(odocument);
+
 		final Date newDate = new Date();
 		final ComplexEvent complexEvent = new ComplexEvent(BUGZILLA, NEW_BUG,
 				newDate);
 		complexEvent.addField(FIELD_EXTRA, FIELD_EXTRA_VALUE);
+		configureMock(odocument, newDate);
+
+		// WHEN
 		this.es.storeComplexEvent(complexEvent);
+
 		// THEN
 		Mockito.verify(this.dbc, Mockito.times(1)).newDocument(NEW_BUG);
 		Mockito.verify(odocument, Mockito.times(1)).field(
@@ -71,6 +76,7 @@ public class IEventStorageSpecificationTest {
 				IBasicEventInformations.FIELD_DATE, newDate);
 		Mockito.verify(odocument, Mockito.times(1)).field(FIELD_EXTRA,
 				FIELD_EXTRA_VALUE);
+		Mockito.verify(odocument, Mockito.times(1)).save();
 	}
 
 	/**
@@ -84,6 +90,8 @@ public class IEventStorageSpecificationTest {
 		Mockito.when(this.dbc.newDocument(NEW_BUG)).thenReturn(odocument);
 		final Date newDate = new Date();
 		final BasicEvent be1 = new BasicEvent(BUGZILLA, NEW_BUG, newDate);
+		configureMock(odocument, newDate);
+
 		this.es.storeEvent(be1);
 		// THEN
 		Mockito.verify(this.dbc, Mockito.times(1)).newDocument(NEW_BUG);
@@ -93,6 +101,7 @@ public class IEventStorageSpecificationTest {
 				IBasicEventInformations.FIELD_EVENT_TYPE, NEW_BUG);
 		Mockito.verify(odocument, Mockito.times(1)).field(
 				IBasicEventInformations.FIELD_DATE, newDate);
+		Mockito.verify(odocument, Mockito.times(1)).save();
 	}
 
 	/**
@@ -110,7 +119,8 @@ public class IEventStorageSpecificationTest {
 		flatEvent.addField(IBasicEventInformations.FIELD_DATE, newDate);
 		flatEvent.addField(IBasicEventInformations.FIELD_EVENT_TYPE, NEW_BUG);
 		flatEvent.addField(IBasicEventInformations.FIELD_PROVIDER, BUGZILLA);
-
+		// ODOCUMENT Mocking
+		configureMock(odocument, newDate);
 		this.es.storeFlatEvent(flatEvent);
 		// THEN
 		Mockito.verify(this.dbc, Mockito.times(1)).newDocument(NEW_BUG);
@@ -120,5 +130,25 @@ public class IEventStorageSpecificationTest {
 				IBasicEventInformations.FIELD_EVENT_TYPE, NEW_BUG);
 		Mockito.verify(odocument, Mockito.times(1)).field(
 				IBasicEventInformations.FIELD_DATE, newDate);
+		Mockito.verify(odocument, Mockito.times(1)).save();
+	}
+
+	private void configureMock(final IODocument odocument, final Date newDate) {
+		Mockito.when(
+				odocument.containsField(IBasicEventInformations.FIELD_DATE))
+				.thenReturn(true);
+		Mockito.when(
+				odocument
+				.containsField(IBasicEventInformations.FIELD_EVENT_TYPE))
+				.thenReturn(true);
+		Mockito.when(
+				odocument.containsField(IBasicEventInformations.FIELD_PROVIDER))
+				.thenReturn(true);
+		Mockito.when(odocument.field(IBasicEventInformations.FIELD_DATE))
+				.thenReturn(newDate);
+		Mockito.when(odocument.field(IBasicEventInformations.FIELD_EVENT_TYPE))
+				.thenReturn(NEW_BUG);
+		Mockito.when(odocument.field(IBasicEventInformations.FIELD_PROVIDER))
+				.thenReturn(BUGZILLA);
 	}
 }

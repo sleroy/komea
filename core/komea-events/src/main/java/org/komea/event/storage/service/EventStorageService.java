@@ -26,24 +26,26 @@ import org.slf4j.LoggerFactory;
  * @author sleroy
  *
  */
-public class EventStorage implements IEventStorage {
+public class EventStorageService implements IEventStorage {
 
 	private final IDocumentSessionFactory documentDatabaseFactory;
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(EventStorage.class);
+			.getLogger(EventStorageService.class);
+
+	private final EventStorageValidatorService validator = new EventStorageValidatorService();
 
 	/**
 	 *
 	 */
-	public EventStorage(final DatabaseConfiguration _configuration) {
+	public EventStorageService(final DatabaseConfiguration _configuration) {
 		this(new OrientDocumentDatabaseFactory(_configuration));
 	}
 
 	/**
 	 *
 	 */
-	public EventStorage(final IDocumentSessionFactory _factory) {
+	public EventStorageService(final IDocumentSessionFactory _factory) {
 		super();
 		this.documentDatabaseFactory = _factory;
 
@@ -63,7 +65,7 @@ public class EventStorage implements IEventStorage {
 		final IODocument newDocument = this.documentDatabaseFactory
 				.newDocument(_event.getEventType());
 		new ComplexEventDocumentConvertor(_event).convert(newDocument);
-		newDocument.save();
+		this.save(newDocument);
 
 	}
 
@@ -73,7 +75,7 @@ public class EventStorage implements IEventStorage {
 				.newDocument(_event.getEventType());
 		new BasicEventDocumentConvertor<IBasicEvent>(_event)
 				.convert(newDocument);
-		newDocument.save();
+		this.save(newDocument);
 
 	}
 
@@ -82,8 +84,15 @@ public class EventStorage implements IEventStorage {
 
 		final IODocument document = new FlatEventDocumentConvertor(
 				this.documentDatabaseFactory, _event).convert();
-		document.save();
+		this.save(document);
 
 	}
 
+	private void save(final IODocument _document) {
+		if (!this.validator.validate(_document)) {
+			LOGGER.error("Event has been rejected {}", _document.dump());
+		} else {
+			_document.save();
+		}
+	}
 }

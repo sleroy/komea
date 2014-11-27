@@ -3,7 +3,7 @@ package org.komea.event.query.service;
 import java.io.IOException;
 
 import org.komea.event.query.api.IEventQueryManager;
-import org.komea.event.storage.service.EventStorage;
+import org.komea.event.storage.service.EventStorageService;
 import org.komea.orientdb.session.IDocumentSessionFactory;
 import org.komea.orientdb.session.impl.DatabaseConfiguration;
 import org.komea.orientdb.session.impl.OrientDocumentDatabaseFactory;
@@ -14,7 +14,7 @@ public class EventQueryManager implements IEventQueryManager {
 	private final IDocumentSessionFactory documentDatabaseFactory;
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(EventStorage.class);
+			.getLogger(EventStorageService.class);
 
 	/**
 	 *

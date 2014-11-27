@@ -19,7 +19,7 @@ import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
  *            the type of database to handle
  */
 public abstract class AbstractOrientDatabaseFactory<T extends ODatabase, P extends ODatabasePoolBase<T>>
-implements Closeable {
+		implements Closeable {
 
 	private P pool;
 
@@ -56,7 +56,7 @@ implements Closeable {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * org.springframework.orm.orient.AbstractOrientDatabaseFactory#openDatabase
 	 * ()
@@ -85,9 +85,14 @@ implements Closeable {
 		this.pool = pool;
 	}
 
+	private boolean isRemoteDatabaseUrl(
+			final DatabaseConfiguration _configuration) {
+		return !_configuration.getUrl().startsWith("remote:");
+	}
+
 	protected void createDatabase(final ODatabase _database,
 			final DatabaseConfiguration _configuration) {
-		if (!_configuration.getUrl().startsWith("remote:")) {
+		if (this.isRemoteDatabaseUrl(_configuration)) {
 			if (!_database.exists()) {
 				LOGGER.debug("Renewing local database");
 				_database.create();
@@ -110,7 +115,7 @@ implements Closeable {
 	/**
 	 * Do create pool.
 	 *
-	 * @return the o database pool base
+	 * @return the database pool base
 	 */
 	protected abstract P doCreatePool(DatabaseConfiguration _configuration);
 
