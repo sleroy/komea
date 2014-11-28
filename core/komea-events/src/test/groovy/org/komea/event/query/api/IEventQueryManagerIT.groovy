@@ -5,13 +5,13 @@ import org.komea.event.query.service.EventQueryManagerService
 import org.komea.event.storage.service.EventStorageService
 import org.komea.event.storage.service.NewBugzillaBugEvent
 import org.komea.orientdb.session.impl.OrientDocumentDatabaseFactory
-import org.komea.orientdb.session.impl.RandomMemoryDatabaseTestConfiguration
+import org.komea.orientdb.session.impl.TestDatabaseConfiguration
 
 import spock.lang.Specification
 
 class IEventQueryManagerIT extends Specification{
 
-	RandomMemoryDatabaseTestConfiguration dbc
+	TestDatabaseConfiguration dbc
 
 	OrientDocumentDatabaseFactory ogf
 	EventStorageService eventStorage
@@ -19,7 +19,7 @@ class IEventQueryManagerIT extends Specification{
 
 	def setup() {
 
-		dbc = new RandomMemoryDatabaseTestConfiguration()
+		dbc = new TestDatabaseConfiguration()
 		ogf = new OrientDocumentDatabaseFactory(dbc)
 		eventStorage = new EventStorageService(ogf)
 		queryservice = new EventQueryManagerService(ogf)

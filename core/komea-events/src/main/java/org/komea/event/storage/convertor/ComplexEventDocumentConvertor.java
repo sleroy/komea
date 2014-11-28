@@ -13,7 +13,7 @@ import org.komea.orientdb.session.document.IODocument;
  *
  */
 public class ComplexEventDocumentConvertor extends
-		BasicEventDocumentConvertor<IComplexEvent> {
+BasicEventDocumentConvertor<IComplexEvent> {
 
 	public ComplexEventDocumentConvertor(final IComplexEvent _event) {
 		super(_event);
@@ -25,6 +25,7 @@ public class ComplexEventDocumentConvertor extends
 		for (final Entry<String, ? extends Serializable> entry : this.event
 				.getProperties().entrySet()) {
 			_newDocument.field(entry.getKey(), entry.getValue());
+
 		}
 	}
 }
