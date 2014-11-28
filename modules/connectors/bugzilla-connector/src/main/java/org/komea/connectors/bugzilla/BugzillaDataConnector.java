@@ -29,11 +29,8 @@ import com.j2bugzilla.base.ConnectionException;
  * @author sleroy
  *
  */
-public class BugzillaDataConnector {
+public class BugzillaDataConnector implements IBugzillaConnectorInformations {
 
-	private static final String EVENT_NEWBUG = "newbug";
-	private static final String EVENT_UPDATED = "bugupdated";
-	private static final String BUG = "bug";
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(BugzillaDataConnector.class);
 
@@ -64,12 +61,12 @@ public class BugzillaDataConnector {
 			}
 			if (this.isRecentlyCreated(bug, this.bugzillaAPI)) {
 				final IComplexEvent complexEventDto = this.createBugEvent(bug,
-						EVENT_NEWBUG);
+						EVENT_NEW_BUG);
 				this.eventStorage.storeComplexEvent(complexEventDto);
 			}
 			if (this.isRecentlyUpdated(bug, this.bugzillaAPI)) {
 				final IComplexEvent complexEventDto = this.createBugEvent(bug,
-						EVENT_UPDATED);
+						EVENT_UPDATED_BUG);
 				this.eventStorage.storeComplexEvent(complexEventDto);
 			}
 			numberOfBugsProcessed++;
@@ -122,20 +119,19 @@ public class BugzillaDataConnector {
 			throw new BugzillaPluginException(ex);
 		} finally {
 			LOGGER.info("Closing connection");
-
 		}
 
 	}
 
 	private IComplexEvent createBugEvent(final Bug bug, final String eventName) {
 		final ComplexEvent complexEventDto = new ComplexEvent();
-		complexEventDto.setProvider(BUG);
+		complexEventDto.setProvider(PROVIDER_BUG);
 		complexEventDto.setEventKey(eventName);
 		final Map<String, Serializable> properties = Maps.newHashMap();
 		for (final Entry<Object, Object> entry : bug.getParameterMap()
 				.entrySet()) {
 			if (entry.getValue() instanceof Serializable) {
-				properties.put(entry.toString(),
+				properties.put(entry.getKey().toString(),
 						(Serializable) entry.getValue());
 			}
 		}
@@ -148,7 +144,7 @@ public class BugzillaDataConnector {
 	}
 
 	private void launchBugs() throws ConnectionException, BugzillaException {
-		this.bugzillaAPI.initConnection();
+		this.bugzillaAPI.initConnection(this.configuration.getServerURL());
 		if (this.hasLogin()) {
 			this.bugzillaAPI.login(this.configuration.getUser(),
 					this.configuration.getPassword());

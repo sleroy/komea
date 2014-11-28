@@ -24,12 +24,14 @@ public interface IBugzillaAPI {
 	public DateTime getUpdatedTime(Bug bug);
 
 	/**
-	 * Obtains a new bugzilla connection.
-	 *
-	 * @return
+	 * Obtains a new bugzilla connection
+	 * 
+	 * @param _serverURL
+	 *            the server url.
+	 * 
 	 * @throws ConnectionException
 	 */
-	public void initConnection() throws ConnectionException;
+	public void initConnection(String _serverURL) throws ConnectionException;
 
 	public void login(String _user, String _password) throws BugzillaException;
 

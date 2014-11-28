@@ -32,16 +32,18 @@ public class BugzillaAPI implements IBugzillaAPI, Closeable {
 	 */
 	public static final String CREATION_TIME = "creation_time";
 
-	private final String serverURL;
+	/**
+	 * Defines the default field in bugzilla that stores the last change time.
+	 */
+	public static final String UPDATED_TIME = "last_change_time";
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(BugzillaAPI.class);
 
 	private BugzillaConnector conn;
 
-	public BugzillaAPI(final String _serverURL) {
+	public BugzillaAPI() {
 		super();
-		this.serverURL = _serverURL;
 	}
 
 	@Override
@@ -51,7 +53,7 @@ public class BugzillaAPI implements IBugzillaAPI, Closeable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.komea.connectors.bugzilla.IBugzillaAPI#getBugList(java.lang.String)
 	 */
@@ -66,7 +68,7 @@ public class BugzillaAPI implements IBugzillaAPI, Closeable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.komea.connectors.bugzilla.IBugzillaAPI#getCreationTime(com.j2bugzilla
 	 * .base.Bug)
@@ -78,32 +80,33 @@ public class BugzillaAPI implements IBugzillaAPI, Closeable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.komea.connectors.bugzilla.IBugzillaAPI#getUpdatedTime(com.j2bugzilla
 	 * .base.Bug)
 	 */
 	@Override
 	public DateTime getUpdatedTime(final Bug bug) {
-		return new DateTime(bug.getParameterMap().get(CREATION_TIME));
+		return new DateTime(bug.getParameterMap().get(UPDATED_TIME));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.komea.connectors.bugzilla.IBugzillaAPI#initConnection()
 	 */
 	@Override
-	public void initConnection() throws ConnectionException {
-		LOGGER.info("Creating bugzilla connector {}", this.serverURL);
+	public void initConnection(final String _serverURL)
+			throws ConnectionException {
+		LOGGER.info("Creating bugzilla connector {}", _serverURL);
 
 		this.conn = new BugzillaConnector();
-		this.conn.connectTo(this.serverURL);
+		this.conn.connectTo(_serverURL);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.komea.connectors.bugzilla.IBugzillaAPI#login(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -118,7 +121,7 @@ public class BugzillaAPI implements IBugzillaAPI, Closeable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.komea.connectors.bugzilla.IBugzillaAPI#obtainProductList()
 	 */
 	@Override
