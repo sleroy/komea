@@ -1,0 +1,4 @@
+dependencies {
+	compile "com.j2bugzilla:j2bugzilla:2.2.1"
+	compile project(":core:komea-events")
+}

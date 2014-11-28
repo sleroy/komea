@@ -73,4 +73,8 @@ public class ComplexEvent extends BasicEvent implements IComplexEvent {
 		return "ComplexEvent [properties=" + this.properties + "]";
 	}
 
+	public void setProperties(Map<String, Serializable> _properties) {
+		properties = _properties;
+	}
+
 }
