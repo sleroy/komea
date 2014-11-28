@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.BeanMap;
 import org.apache.commons.lang.Validate;
+import org.komea.orientdb.session.PojoCreationException;
 import org.komea.orientdb.session.document.IODocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,6 +76,19 @@ public class ODocumentProxy implements IODocument {
 	public String toJSON() {
 
 		return this.newInstance.toJSON();
+	}
+
+	@Override
+	public <T> T toPojo(final Class<T> _impl) {
+		T t;
+		try {
+			t = _impl.newInstance();
+			this.toPojo(t);
+			return t;
+		} catch (final Exception e) {
+			throw new PojoCreationException(e);
+		}
+
 	}
 
 	@Override

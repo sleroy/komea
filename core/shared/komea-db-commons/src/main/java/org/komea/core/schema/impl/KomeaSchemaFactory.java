@@ -7,12 +7,19 @@ import org.komea.core.schema.IPrimitiveType;
 import org.komea.core.schema.IPrimitiveType.Primitive;
 import org.komea.core.schema.IReference;
 import org.komea.core.schema.IType;
+import org.komea.core.schema.SchemaBuilder;
 
 public class KomeaSchemaFactory implements IKomeaSchemaFactory {
 
 	@Override
 	public IReference newAttribute(final String name, final Primitive type) {
-		return new Reference(name, newPrimitive(type), false, true);
+		return new Reference(name, this.newPrimitive(type), false, true);
+	}
+
+	@Override
+	public SchemaBuilder newBuilder(final String _name) {
+
+		return new SchemaBuilder(_name);
 	}
 
 	@Override

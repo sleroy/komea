@@ -47,8 +47,16 @@ public interface IODocument {
 	String toJSON();
 
 	/**
-	 * Infer the fields into the pojo.
+	 * Converts the ODocument into a pojo of the given implementation.
 	 * 
+	 * @param _impl
+	 *            the implementation.
+	 */
+	<T> T toPojo(Class<T> _impl);
+
+	/**
+	 * Infer the fields into the pojo.
+	 *
 	 * @param _pojo
 	 *            the pojo.
 	 */
