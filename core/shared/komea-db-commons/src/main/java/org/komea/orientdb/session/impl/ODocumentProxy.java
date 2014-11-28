@@ -6,6 +6,8 @@ import java.util.Map;
 import org.apache.commons.beanutils.BeanMap;
 import org.apache.commons.lang.Validate;
 import org.komea.orientdb.session.document.IODocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
 import com.orientechnologies.orient.core.record.impl.ODocument;
@@ -13,6 +15,9 @@ import com.orientechnologies.orient.core.record.impl.ODocument;
 public class ODocumentProxy implements IODocument {
 
 	private final ODocument newInstance;
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(ODocumentProxy.class);
 
 	public ODocumentProxy(final ODocument _newInstance) {
 		this.newInstance = _newInstance;
@@ -34,7 +39,7 @@ public class ODocumentProxy implements IODocument {
 			map.put(entry, this.newInstance.field(entry));
 		}
 		sb.append("Document of class ").append(this.newInstance.getClassName())
-		.append("with fields ").append(map.toString());
+				.append("with fields ").append(map.toString());
 		return sb.toString();
 	}
 
@@ -46,7 +51,12 @@ public class ODocumentProxy implements IODocument {
 
 	@Override
 	public void field(final String _key, final Serializable _value) {
-		this.newInstance.field(_key, _value);
+		try {
+			this.newInstance.field(_key, _value);
+		} catch (final Exception e) {
+			LOGGER.error("Invalid field or value has been rejected {} -> {}",
+					_key, _value, e);
+		}
 
 	}
 
@@ -80,5 +90,4 @@ public class ODocumentProxy implements IODocument {
 	public String toString() {
 		return "ODocumentProxy [newInstance=" + this.newInstance + "]";
 	}
-
 }
