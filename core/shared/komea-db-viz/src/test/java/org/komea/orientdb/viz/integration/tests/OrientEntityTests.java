@@ -1,4 +1,5 @@
-package org.komea.core.model.integration.tests;
+package org.komea.orientdb.viz.integration.tests;
+
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -13,6 +14,7 @@ import org.komea.core.model.IKomeaEntity;
 import org.komea.core.model.IKomeaEntityFactory;
 import org.komea.core.model.impl.OKomeaModelFactory;
 import org.komea.core.model.storage.impl.OKomeaGraphStorage;
+import org.komea.core.model.viz.KomeaModelViewer;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
 import org.komea.core.schema.IKomeaSchemaFactory;
@@ -94,6 +96,8 @@ public class OrientEntityTests {
 
 		IKomeaEntity next = references.iterator().next();
 		assertEquals("Bob", next.value("name"));
+		KomeaModelViewer.display("test", this.storage);
+		System.out.println();
 	}
 
 	@Test
