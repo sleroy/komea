@@ -31,9 +31,9 @@ public class Schema implements IKomeaSchema {
 	}
 
 	@Override
-	public IEntityType findType(final String name) {
+	public IEntityType findType(final String _name) {
 		for (IEntityType type : this.types) {
-			if(type.getName().equals(name)){
+			if(type.getName().equals(_name)){
 				return type;
 			}
 		}
