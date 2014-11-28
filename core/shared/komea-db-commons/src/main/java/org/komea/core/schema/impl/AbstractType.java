@@ -2,15 +2,23 @@ package org.komea.core.schema.impl;
 
 import org.komea.core.schema.IType;
 
+import com.google.common.base.Objects;
+
 public abstract class AbstractType implements IType {
 
 	@Override
 	public String toString() {
 		return getName();
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return getName().hashCode();
+	}
+
 	@Override
 	public boolean equals(final Object obj) {
+
 		if (this == obj) {
 			return true;
 		}
@@ -21,14 +29,7 @@ public abstract class AbstractType implements IType {
 			return false;
 		}
 		EntityType other = (EntityType) obj;
-		if (getName() == null) {
-			if (other.getName() != null) {
-				return false;
-			}
-		} else if (!getName().equals(other.getName())) {
-			return false;
-		}
-		return true;
+		return Objects.equal(getName(),other.getName());
 	}
-	
+
 }
