@@ -2,14 +2,14 @@ package org.komea.core.model.impl;
 
 import org.apache.commons.lang.Validate;
 import org.komea.core.model.IKomeaEntity;
-import org.komea.core.model.IKomeaFactory;
+import org.komea.core.model.IKomeaEntityFactory;
 import org.komea.core.model.storage.impl.OKomeaGraphStorage;
 import org.komea.core.schema.IEntityType;
 
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientVertex;
 
-public class OKomeaModelFactory implements IKomeaFactory{
+public class OKomeaModelFactory implements IKomeaEntityFactory{
 	private final OKomeaGraphStorage storageService;
 
 

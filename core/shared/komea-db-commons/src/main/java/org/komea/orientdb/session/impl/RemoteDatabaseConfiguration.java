@@ -22,7 +22,7 @@ public class RemoteDatabaseConfiguration extends DatabaseConfiguration {
 	private String buildURL(final String _url, final int _port,
 			final String _databaseName) {
 		// remote:<server>:[<port>]/db-name
-		return MessageFormat.format("remote:{0}:{1}/{2}", _url, _port,
+		return MessageFormat.format("remote:{0}/{2}", _url, _port,
 				_databaseName);
 	}
 

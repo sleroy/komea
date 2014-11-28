@@ -65,6 +65,7 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 
 	@Override
 	public void close() throws IOException {
+		getGraph().commit();
 		getGraph().shutdown();
 	}
 
