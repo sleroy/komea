@@ -1,4 +1,4 @@
-package org.komea.core.schema.tests;
+package org.komea.core.model.tests;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -6,24 +6,15 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.komea.core.model.IKomeaEntity;
+import org.komea.core.model.validation.KomeaModelValidator;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IReference;
-import org.komea.core.schema.services.IValidatorService;
-import org.komea.core.schema.services.impl.ValidatorService;
 
 import com.google.common.collect.Lists;
 
-public class SchemaValidatorTests {
-
-	private IValidatorService validator;
-
-	@Before
-	public void init() {
-		this.validator = new ValidatorService();
-	}
+public class ModelValidatorTests {
 
 	@Test
 	public void testManyRefefenceValidation() {
@@ -59,9 +50,9 @@ public class SchemaValidatorTests {
 				Lists.newArrayList(companyMembers));
 
 		// then validator should not validate the company
-		Assert.assertFalse(this.validator.validate(notValidCompanyMock));
+		Assert.assertFalse(KomeaModelValidator.validate(notValidCompanyMock));
 
-		// if the members of a company is not containing some computers
+		// if the members of a company contains some computers
 		final IKomeaEntity validCompanyMock = mock(IKomeaEntity.class);
 		when(validCompanyMock.getType()).thenReturn(company);
 		when(validCompanyMock.value(companyMembers)).thenReturn(validEntites);
@@ -69,7 +60,7 @@ public class SchemaValidatorTests {
 				Lists.newArrayList(companyMembers));
 
 		// then validator should not validate the company
-		Assert.assertTrue(this.validator.validate(validCompanyMock));
+		Assert.assertTrue(KomeaModelValidator.validate(validCompanyMock));
 	}
 
 }

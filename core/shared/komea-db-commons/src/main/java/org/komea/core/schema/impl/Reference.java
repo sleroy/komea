@@ -7,6 +7,7 @@ public class Reference implements IReference {
 	private boolean many;
 	private boolean containment;
 	private boolean mandatory;
+	private boolean aggregation;
 	private final IType type;
 	private final String name;
 
@@ -30,6 +31,17 @@ public class Reference implements IReference {
 	}
 
 	@Override
+	public boolean isAggregation() {
+		return this.aggregation;
+	}
+	
+	@Override
+	public IReference setAggregation(final boolean aggregation) {
+		this.aggregation = aggregation;
+		return this;
+	}
+	
+	@Override
 	public boolean isContainment() {
 		return this.containment;
 	}
@@ -45,19 +57,22 @@ public class Reference implements IReference {
 	}
 
 	@Override
-	public void setContainment(final boolean containment) {
+	public IReference setContainment(final boolean containment) {
 		this.containment = containment;
+		return this;
 	}
 
 	@Override
-	public void setMandatory(final boolean mandatory) {
+	public IReference setMandatory(final boolean mandatory) {
 		this.mandatory = mandatory;
+		return this;
 
 	}
 
 	@Override
-	public void setMany(final boolean many) {
+	public IReference setMany(final boolean many) {
 		this.many = many;
+		return this;
 	}
 
 }

@@ -2,16 +2,21 @@ package org.komea.core.schema;
 
 import org.komea.core.schema.IPrimitiveType.Primitive;
 
+/**
+ * Factory to create types and references that will be stored in a schema.
+ * 
+ * @author afloch
+ *
+ */
 public interface IKomeaSchemaFactory {
 
-	IReference newAttribute(String name, Primitive type, boolean isMany);
+	IReference newAttribute(String name, Primitive type);
 
 	IEntityType newEntity(String name);
 
 	IPrimitiveType newPrimitive(Primitive primitive);
 
-	IReference newReference(String name, IType type, boolean isMany,
-			boolean isContainment);
+	IReference newReference(String name, IType type);
 
 	IKomeaSchema newSchema(String name);
 }

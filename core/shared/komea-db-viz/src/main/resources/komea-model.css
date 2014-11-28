@@ -1,0 +1,14 @@
+node {
+
+  	size: 50px, 50px;
+ 	shape:diamond;
+    fill-color: #dcebf2;
+    stroke-mode: plain;
+    stroke-color: #80bad4;
+    stroke-width:4;
+    size-mode:fit;
+ 
+}
+node.marked {
+    fill-color: red;
+}

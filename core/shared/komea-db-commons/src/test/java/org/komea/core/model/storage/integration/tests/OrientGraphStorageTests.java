@@ -1,10 +1,14 @@
-package org.komea.core.model.services.tests;
+package org.komea.core.model.storage.integration.tests;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.komea.core.model.IKomeaEntity;
+import org.komea.core.model.impl.OKomeaModelFactory;
 import org.komea.core.model.storage.impl.OKomeaGraphStorage;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
@@ -17,17 +21,22 @@ import org.komea.orientdb.session.impl.OrientGraphDatabaseFactory;
 
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType;
 
-public class OrientdbStorageServiceTests {
+public class OrientGraphStorageTests {
 	OrientGraphDatabaseFactory sessionsFactory;
 	IKomeaSchemaFactory factory;
 
 	@Before
 	public void init() {
 		this.sessionsFactory = new OrientGraphDatabaseFactory();
-
-		DatabaseConfiguration databaseConfiguration = new MemoryDatabaseConfiguration("test");
-		this.sessionsFactory.init(databaseConfiguration);
+		DatabaseConfiguration conf = new MemoryDatabaseConfiguration("test");
+		this.sessionsFactory.init(conf);
 		this.factory = new KomeaSchemaFactory();
+
+	}
+
+	@After
+	public void end() {
+		this.sessionsFactory.getGraph().drop();
 	}
 
 	@Test
@@ -44,7 +53,7 @@ public class OrientdbStorageServiceTests {
 
 		final IEntityType company = this.factory.newEntity("Company");
 		company.addProperty(this.factory.newReference("members", person)
-				.setMany(true).setContainment(true));
+				.setContainment(true).setMany(true));
 		company.addProperty(this.factory.newAttribute("values",
 				Primitive.INTEGER).setMany(true));
 		schema.addType(company);
@@ -72,5 +81,52 @@ public class OrientdbStorageServiceTests {
 		final OrientVertexType personVertextype = service.getGraph()
 				.getVertexType(person.getName());
 		assertTrue(personVertextype.existsProperty("adress"));
+	}
+
+	@Test
+	public void getAllEntitiesTest() {
+		final IKomeaSchema schema = this.factory.newSchema("company");
+		final IEntityType person = this.factory.newEntity("Person");
+		schema.addType(person);
+
+		final OKomeaGraphStorage storage = new OKomeaGraphStorage(schema,
+				this.sessionsFactory);
+		storage.update(schema);
+
+		final OKomeaModelFactory factory = new OKomeaModelFactory(storage);
+		factory.newInstance(person);
+		assertTrue(storage.entities().iterator().hasNext());
+	}
+
+	@Test
+	public void getEntitiesTest() {
+		final IKomeaSchema schema = this.factory.newSchema("company");
+		final IEntityType person = this.factory.newEntity("Person");
+		schema.addType(person);
+
+		final OKomeaGraphStorage storage = new OKomeaGraphStorage(schema,
+				this.sessionsFactory);
+		storage.update(schema);
+
+		final OKomeaModelFactory factory = new OKomeaModelFactory(storage);
+		factory.newInstance(person);
+		assertTrue(storage.entities(person).iterator().hasNext());
+	}
+
+	@Test
+	public void removeTest() {
+		final IKomeaSchema schema = this.factory.newSchema("company");
+		final IEntityType person = this.factory.newEntity("Person");
+		schema.addType(person);
+
+		final OKomeaGraphStorage storage = new OKomeaGraphStorage(schema,
+				this.sessionsFactory);
+		storage.update(schema);
+
+		final OKomeaModelFactory factory = new OKomeaModelFactory(storage);
+		IKomeaEntity instance = factory.newInstance(person);
+		assertTrue(storage.entities(person).iterator().hasNext());
+		storage.delete(instance);
+		assertFalse(storage.entities(person).iterator().hasNext());
 	}
 }

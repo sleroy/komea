@@ -1,4 +1,4 @@
-package org.komea.core.model.services.impl;
+package org.komea.core.model.storage.impl;
 
 import java.util.Collection;
 import java.util.Set;
@@ -12,29 +12,22 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Sets;
 import com.orientechnologies.orient.core.metadata.schema.OProperty;
 import com.orientechnologies.orient.core.metadata.schema.OType;
-import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.impls.orient.OrientEdgeType;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType;
 
-public class OrientGraphSchemaUpdater {
-	public static final String REFERENCE_EDGE = "ref";
-	public static final String CONTAINMENT_EDGE = "contains";
+public class OGraphSchemaUpdater {
+	public static final String REFERENCE_EDGE = "reference";
+	public static final String CONTAINMENT_EDGE = "containment";
+	public static final String AGGREGATION_EDGE = "aggregation";
+
 	private final OrientGraph graph;
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger("Orient DB schema updater");
 
-	public OrientGraphSchemaUpdater(final OrientGraph graph) {
+	public OGraphSchemaUpdater(final OrientGraph graph) {
 		super();
 		this.graph = graph;
-	}
-
-	private void addProperties(final OrientVertexType vtype,
-			final IEntityType type) {
-		for (final IReference property : type.getProperties()) {
-			final OProperty oproperty = createProperty(vtype, type, property);
-			oproperty.setMandatory(property.isMandatory());
-		}
 	}
 
 	private OrientVertexType create(final IEntityType type,
@@ -56,31 +49,39 @@ public class OrientGraphSchemaUpdater {
 		return vtype;
 	}
 
-	private OProperty createProperty(final OrientVertexType vtype,
-			final IEntityType type, final IReference property) {
-		OProperty oproperty;
-		if (property.getType().isPrimitive()) {
-
-			if (property.isMany()) {
-				LOGGER.trace("Create {} list for <{}> property of {}",
-						property.getType(), property.getName(), type.getName());
-				oproperty = vtype.createProperty(property.getName(),
-						OType.EMBEDDEDLIST);
-			} else {
-				LOGGER.trace("Create {} attribute for <{}> property of {}",
-						property.getType(), property.getName(), type.getName());
-				oproperty = vtype.createProperty(
-						property.getName(),
-						OType.valueOf(property.getType().getName()
-								.toUpperCase()));
+	private void addProperties(final OrientVertexType vtype,
+			final IEntityType type) {
+		for (final IReference property : type.getProperties()) {
+			//we only need to create properties for attributes (references on primitive types)
+			if (isAttribute(property)) {
+				final OProperty oproperty = createAttribute(vtype, type,
+						property);
+				oproperty.setMandatory(property.isMandatory());
 			}
-
-		} else {
-			LOGGER.trace("Create {} reference for <{}> property of {}",
-					property.getType(), property.getName(), type.getName());
-			oproperty = vtype.createEdgeProperty(Direction.OUT,
-					property.getName());
 		}
+	}
+
+	private boolean isAttribute(final IReference property) {
+		return property.getType().isPrimitive();
+	}
+
+	private OProperty createAttribute(final OrientVertexType vtype,
+			final IEntityType type, final IReference property) {
+
+		OProperty oproperty;
+
+		if (property.isMany()) {
+			LOGGER.trace("Create {} list for <{}> property of {}",
+					property.getType(), property.getName(), type.getName());
+			oproperty = vtype.createProperty(property.getName(),
+					OType.EMBEDDEDLIST);
+		} else {
+			LOGGER.trace("Create {} attribute for <{}> property of {}",
+					property.getType(), property.getName(), type.getName());
+			oproperty = vtype.createProperty(property.getName(),
+					OType.valueOf(property.getType().getName().toUpperCase()));
+		}
+
 		return oproperty;
 	}
 
@@ -97,7 +98,8 @@ public class OrientGraphSchemaUpdater {
 		return vertexType;
 	}
 
-	private void initializeEdges() {
+	private void initializeEdgesTypes(final IKomeaSchema schema) {
+
 		final OrientEdgeType reference = this.graph.getEdgeType(REFERENCE_EDGE);
 		if (reference == null) {
 			this.graph.createEdgeType(REFERENCE_EDGE);
@@ -107,12 +109,62 @@ public class OrientGraphSchemaUpdater {
 		if (containment == null) {
 			this.graph.createEdgeType(CONTAINMENT_EDGE);
 		}
+		final OrientEdgeType aggregation = this.graph
+				.getEdgeType(AGGREGATION_EDGE);
+		if (aggregation == null) {
+			this.graph.createEdgeType(AGGREGATION_EDGE);
+		}
 
+		for (final IEntityType type : schema.getTypes()) {
+			initializeReferencesEdgesTypes(type);
+
+		}
+	}
+
+	/**
+	 * Create all edges types for the entity references
+	 * 
+	 * @param type
+	 */
+	private void initializeReferencesEdgesTypes(final IEntityType type) {
+		for (IReference property : type.getProperties()) {
+			if (!isAttribute(property)) {
+				String fqn = etype(type, property);
+				if (this.graph.getEdgeType(fqn) != null) {
+					this.graph.dropEdgeType(fqn);
+				}
+				this.graph.createEdgeType(fqn, findEdgeBaseType(property));
+
+			}
+		}
+	}
+
+	/**
+	 * Returns the type of an edge reference.
+	 * 
+	 * @param type
+	 * @param reference
+	 * @return
+	 */
+	public static String etype(final IEntityType type,
+			final IReference reference) {
+
+		return type.getName().toLowerCase() + "_" + reference.getName();
+	}
+
+	private static String findEdgeBaseType(final IReference reference) {
+		String etype = OGraphSchemaUpdater.REFERENCE_EDGE;
+		if (reference.isAggregation()) {
+			etype = OGraphSchemaUpdater.AGGREGATION_EDGE;
+		} else if (reference.isContainment()) {
+			etype = OGraphSchemaUpdater.CONTAINMENT_EDGE;
+		}
+		return etype;
 	}
 
 	private void initializeTypes(final IKomeaSchema schema) {
 		final Set<IEntityType> updated = Sets.newHashSet();
-		for (final IEntityType type : schema.getEntities()) {
+		for (final IEntityType type : schema.getTypes()) {
 			getOrUpdateType(type, updated);
 		}
 	}
@@ -122,9 +174,9 @@ public class OrientGraphSchemaUpdater {
 		this.graph.setAutoStartTx(false);
 		this.graph.getRawGraph().commit(true);
 
-		initializeEdges();
-
+		initializeEdgesTypes(schema);
 		initializeTypes(schema);
+
 		this.graph.setAutoStartTx(tx);
 	}
 

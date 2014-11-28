@@ -2,8 +2,12 @@ rootProject.name = 'komea'
 
 include "prototypes:sql-eventory-server"
 include "prototypes:orientdb-eventory-server"
+
 include "core:shared:komea-db-commons"
+include "core:shared:komea-db-viz"
+
 include "core:komea-software-model"
 include "core:komea-events"
 include "services:event-server"
+
 include "modules:connectors:bugzilla-connector"
