@@ -1,7 +1,19 @@
 package org.komea.core.schema;
 
+/**
+ * Primitive data type.
+ * 
+ * @author afloch
+ *
+ */
 public interface IPrimitiveType extends IType {
 
+	/**
+	 * Supported primitive types.
+	 * 
+	 * @author afloch
+	 *
+	 */
 	public enum Primitive {
 		INTEGER("Integer"), DOUBLE("Double"), BOOLEAN("Boolean"), STRING(
 				"String");
@@ -17,6 +29,11 @@ public interface IPrimitiveType extends IType {
 		}
 	}
 
+	/**
+	 * Get the primitive type singleton.
+	 * 
+	 * @return
+	 */
 	Primitive getPrimitive();
 
 }

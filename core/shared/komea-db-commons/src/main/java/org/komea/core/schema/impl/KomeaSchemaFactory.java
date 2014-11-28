@@ -11,9 +11,8 @@ import org.komea.core.schema.IType;
 public class KomeaSchemaFactory implements IKomeaSchemaFactory {
 
 	@Override
-	public IReference newAttribute(final String name, final Primitive type,
-			final boolean isMany) {
-		return new Reference(name, newPrimitive(type), isMany, true);
+	public IReference newAttribute(final String name, final Primitive type) {
+		return new Reference(name, newPrimitive(type), false, true);
 	}
 
 	@Override
@@ -27,9 +26,8 @@ public class KomeaSchemaFactory implements IKomeaSchemaFactory {
 	}
 
 	@Override
-	public IReference newReference(final String name, final IType type,
-			final boolean isMany, final boolean isContainment) {
-		return new Reference(name, type, isMany, isContainment);
+	public IReference newReference(final String name, final IType type) {
+		return new Reference(name, type, false, false);
 	}
 
 	@Override

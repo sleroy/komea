@@ -32,7 +32,9 @@ public class OrientGraphDatabaseFactory
 	 */
 	@Override
 	public OrientGraph getGraph() {
-		return new OrientGraph(getOrCreateDatabaseSession());
+		OrientGraph graph = new OrientGraph(getOrCreateDatabaseSession());
+		graph.setUseLightweightEdges(false);
+		return graph;
 	}
 
 	/*

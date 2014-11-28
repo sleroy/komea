@@ -22,7 +22,7 @@ public class SchemaTests {
 	public void testEntityFindProperty() {
 		final IEntityType entityType = this.factory.newEntity("MyEntity");
 		final IReference attribute = this.factory.newAttribute("att",
-				Primitive.STRING, false);
+				Primitive.STRING);
 		entityType.addProperty(attribute);
 		assertNotNull(entityType.findProperty(attribute.getName()));
 	}

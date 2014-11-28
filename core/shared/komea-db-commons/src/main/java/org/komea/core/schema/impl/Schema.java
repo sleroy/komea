@@ -9,22 +9,35 @@ import com.google.common.collect.Lists;
 
 public class Schema implements IKomeaSchema {
 	private final String name;
-	private final List<IEntityType> entities;
+	private final List<IEntityType> types;
 
 	public Schema(final String name) {
 		super();
 		this.name = name;
-		this.entities = Lists.newArrayList();
+		this.types = Lists.newArrayList();
 	}
 
 	@Override
 	public void addType(final IEntityType type) {
-		this.entities.add(type);
+		this.types.add(type);
+		if(type instanceof EntityType){
+			((EntityType) type).setSchema(this);
+		}
 	}
 
 	@Override
-	public List<IEntityType> getEntities() {
-		return this.entities;
+	public List<IEntityType> getTypes() {
+		return this.types;
+	}
+
+	@Override
+	public IEntityType findType(final String name) {
+		for (IEntityType type : this.types) {
+			if(type.getName().equals(name)){
+				return type;
+			}
+		}
+		return null;
 	}
 
 	@Override
