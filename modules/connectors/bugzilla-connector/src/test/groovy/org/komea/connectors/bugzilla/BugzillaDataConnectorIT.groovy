@@ -2,7 +2,6 @@ package org.komea.connectors.bugzilla
 
 import static org.junit.Assert.*
 
-import org.joda.time.DateTime
 import org.junit.Test
 import org.komea.event.query.service.EventQueryManagerService
 import org.komea.event.storage.service.EventStorageService
@@ -19,7 +18,7 @@ class BugzillaDataConnectorIT extends Specification {
 		def bzServerConfiguration = new BugzillaServerConfiguration()
 		bzServerConfiguration.serverURL = 'https://issues.apache.org/bugzilla/'
 		bzServerConfiguration.project= 'POI'
-		bzServerConfiguration.since = new DateTime().minusYears 1
+		//bzServerConfiguration.since = new DateTime().minusYears 1
 
 		def bugAPI =  new BugzillaAPI()
 		def dbc = new TestDatabaseConfiguration()
@@ -33,8 +32,11 @@ class BugzillaDataConnectorIT extends Specification {
 		def dataConnector = new BugzillaDataConnector(bugAPI, eventStorage, bzServerConfiguration)
 		dataConnector.launch()
 		// "I query Komea for the number of new bugs and updated bugs"
-		def newBugs = println("Number of new bugs found " + queryservice.countEventsOfType(IBugzillaConnectorInformations.EVENT_NEW_BUG))
-		def updatedBugs = println("Number of update bugs found " + queryservice.countEventsOfType(IBugzillaConnectorInformations.EVENT_UPDATED_BUG))
+		def newBugs = queryservice.countEventsOfType(IBugzillaConnectorInformations.EVENT_NEW_BUG)
+		println "Number of new bugs found ${newBugs}"
+		def updatedBugs = queryservice.countEventsOfType(IBugzillaConnectorInformations.EVENT_UPDATED_BUG)
+		println "Number of update bugs found ${updatedBugs}"
+
 		then: "I obtain positive values (bug created, bug updated)"
 		newBugs > 0
 		updatedBugs > 0
