@@ -3,9 +3,6 @@ package org.komea.product.eventory.database.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import org.komea.product.eventory.dao.api.IEventSerializable;
 
 import com.orientechnologies.orient.core.record.impl.ODocument;
@@ -32,8 +29,7 @@ public class BasicEvent implements IEventSerializable, Serializable {
 	 *
 	 * @mbggenerated Sun Nov 16 12:30:58 CET 2014
 	 */
-	@NotNull
-	@Size(min = 0, max = 255)
+
 	private String provider;
 
 	/**
@@ -42,8 +38,7 @@ public class BasicEvent implements IEventSerializable, Serializable {
 	 *
 	 * @mbggenerated Sun Nov 16 12:30:58 CET 2014
 	 */
-	@NotNull
-	@Size(min = 0, max = 255)
+
 	private String eventKey;
 
 	/**
@@ -52,8 +47,20 @@ public class BasicEvent implements IEventSerializable, Serializable {
 	 *
 	 * @mbggenerated Sun Nov 16 12:30:58 CET 2014
 	 */
-	@NotNull
+
 	private Date date;
+
+	public BasicEvent() {
+		super();
+	}
+
+	public BasicEvent(final String _provider, final String _eventKey,
+			final Date _date) {
+		super();
+		this.provider = _provider;
+		this.eventKey = _eventKey;
+		this.date = _date;
+	}
 
 	public final Date getDate() {
 		return this.date;

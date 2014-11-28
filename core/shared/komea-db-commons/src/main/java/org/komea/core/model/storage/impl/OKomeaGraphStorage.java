@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.commons.lang.Validate;
 import org.komea.core.model.IKomeaEntity;
 import org.komea.core.model.impl.OKomeaEntity;
-import org.komea.core.model.storage.IGraphModelStorage;
+import org.komea.core.model.storage.IKomeaGraphStorage;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
 import org.komea.orientdb.session.IGraphSessionFactory;
@@ -22,14 +22,14 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraph;
  * @author afloch
  *
  */
-public class OGraphModelStorage implements IGraphModelStorage {
+public class OKomeaGraphStorage implements IKomeaGraphStorage {
 	private final IGraphSessionFactory sessionsFactory;
 	private IKomeaSchema schema;
 	private OrientGraph graph;
 	private final static Logger LOGGER = LoggerFactory
-			.getLogger(OGraphModelStorage.class);
+			.getLogger(OKomeaGraphStorage.class);
 
-	public OGraphModelStorage(final IKomeaSchema schema,
+	public OKomeaGraphStorage(final IKomeaSchema schema,
 			final IGraphSessionFactory sessionsFactory) {
 		super();
 		this.sessionsFactory = sessionsFactory;

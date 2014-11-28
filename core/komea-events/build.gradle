@@ -1,1 +1,12 @@
 
+dependencies {
+	compile project(":core:shared:komea-db-commons")	
+	compile "joda-time:joda-time:$JODA_TIME"
+	
+
+}
+
+dependencies {
+
+
+}

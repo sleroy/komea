@@ -17,9 +17,6 @@ public class EventStorageService implements IEventStorageService {
 	@Autowired
 	private EventStorageValidator eventStorageValidator;
 
-	// private static final Logger LOGGER = LoggerFactory
-	// .getLogger(EventStorageService.class);
-
 	@Override
 	public void store(final ComplexEventDto _event) {
 		this.eventStorageValidator.validateAndRefine(_event);

@@ -3,7 +3,7 @@ package org.komea.core.model.viz;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.komea.core.model.storage.IGraphModelStorage;
+import org.komea.core.model.storage.IKomeaGraphStorage;
 import org.komea.orientdb.viz.GraphStreamViewer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,12 +15,12 @@ public class KomeaModelViewer extends GraphStreamViewer{
 	}
 
 	
-	public static void  display(final String name, final IGraphModelStorage storage){
+	public static void  display(final String name, final IKomeaGraphStorage storage){
 		KomeaModelViewer viewer = new KomeaModelViewer();
 		viewer.run(name, storage);
 	}
 	
-	private void run(final String name, final IGraphModelStorage storage){
+	private void run(final String name, final IKomeaGraphStorage storage){
 		InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("komea-model.css");
 		try {
 			display(name, resourceAsStream, storage.getGraph());

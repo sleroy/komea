@@ -10,21 +10,23 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.core.model.IKomeaEntity;
-import org.komea.core.model.IKomeaModelFactory;
+import org.komea.core.model.IKomeaFactory;
 import org.komea.core.model.impl.OKomeaModelFactory;
-import org.komea.core.model.storage.impl.OGraphModelStorage;
+import org.komea.core.model.storage.impl.OKomeaGraphStorage;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
 import org.komea.core.schema.IKomeaSchemaFactory;
 import org.komea.core.schema.IPrimitiveType.Primitive;
 import org.komea.core.schema.IReference;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
+import org.komea.orientdb.session.impl.DatabaseConfiguration;
+import org.komea.orientdb.session.impl.MemoryDatabaseConfiguration;
 import org.komea.orientdb.session.impl.OrientGraphDatabaseFactory;
 
 public class OrientEntityTests {
-	private IKomeaModelFactory mfactory;
+	private IKomeaFactory mfactory;
 	private IKomeaSchema schema;
-	private OGraphModelStorage storage;
+	private OKomeaGraphStorage storage;
 
 	@Before
 	public void init() {
@@ -42,12 +44,10 @@ public class OrientEntityTests {
 		this.schema.addType(type);
 
 		OrientGraphDatabaseFactory sessionsFactory = new OrientGraphDatabaseFactory();
-		sessionsFactory.setUrl("memory:test");
-		sessionsFactory.setUsername("admin");
-		sessionsFactory.setPassword("admin");
-		sessionsFactory.init();
+		DatabaseConfiguration databaseConfiguration = new MemoryDatabaseConfiguration("test");
+		sessionsFactory.init(databaseConfiguration);
 
-		this.storage = new OGraphModelStorage(this.schema, sessionsFactory);
+		this.storage = new OKomeaGraphStorage(this.schema, sessionsFactory);
 
 		this.mfactory = new OKomeaModelFactory(this.storage);
 

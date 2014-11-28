@@ -37,9 +37,9 @@ public class EntityType extends AbstractType implements IEntityType {
 	}
 
 	@Override
-	public IReference findProperty(final String name) {
+	public IReference findProperty(final String _name) {
 		for (final IReference ref : this.references) {
-			if (ref.getName().equals(name)) {
+			if (ref.getName().equals(_name)) {
 				return ref;
 			}
 		}

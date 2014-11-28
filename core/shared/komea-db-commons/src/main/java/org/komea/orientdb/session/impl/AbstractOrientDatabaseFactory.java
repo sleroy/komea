@@ -1,6 +1,11 @@
 package org.komea.orientdb.session.impl;
 
-import javax.annotation.PostConstruct;
+import java.io.Closeable;
+import java.io.IOException;
+
+import org.apache.commons.lang.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.orientechnologies.orient.core.db.ODatabase;
 import com.orientechnologies.orient.core.db.ODatabasePoolBase;
@@ -13,73 +18,40 @@ import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
  * @param <T>
  *            the type of database to handle
  */
-public abstract class AbstractOrientDatabaseFactory<T extends ODatabase, P extends ODatabasePoolBase<T>> {
-
-	/** Default minimum pool size. */
-	public static final int DEFAULT_MIN_POOL_SIZE = 1;
-
-	/** Default maximum pool size. */
-	public static final int DEFAULT_MAX_POOL_SIZE = 20;
-
-	/** The username. */
-	private String username;
-
-	/** The password. */
-	private String password;
-
-	/** The min pool size. */
-	private int minPoolSize = DEFAULT_MIN_POOL_SIZE;
-
-	/** The max pool size. */
-	private int maxPoolSize = DEFAULT_MAX_POOL_SIZE;
-
-	private String url;
+public abstract class AbstractOrientDatabaseFactory<T extends ODatabase, P extends ODatabasePoolBase<T>>
+implements Closeable {
 
 	private P pool;
 
 	private T db;
 
-	protected void createDatabase(final ODatabase _database) {
-		if (!this.getUrl().startsWith("remote:")) {
-			if (!_database.exists()) {
-				_database.create();
-				_database.close();
-			}
+	protected static final Logger LOGGER = LoggerFactory
+			.getLogger(AbstractOrientDatabaseFactory.class);
+
+	public AbstractOrientDatabaseFactory() {
+		super();
+	}
+
+	public AbstractOrientDatabaseFactory(
+			final DatabaseConfiguration _configuration) {
+		this.init(_configuration);
+	}
+
+	@Override
+	public void close() throws IOException {
+		LOGGER.debug("Closing connexion pool ");
+		if (this.pool != null) {
+			this.pool.close();
+		}
+		LOGGER.debug("Closing database connection");
+		if (this.db != null) {
+			this.db.close();
 		}
 	}
 
-	protected void createPool() {
-		this.pool = this.doCreatePool();
-		this.pool.setup(this.minPoolSize, this.maxPoolSize);
-	}
-
-	/**
-	 * Do create pool.
-	 *
-	 * @return the o database pool base
-	 */
-	protected abstract P doCreatePool();
-
+	@SuppressWarnings("unchecked")
 	public final T getDatabaseSession() {
 		return (T) ODatabaseRecordThreadLocal.INSTANCE.get().getDatabaseOwner();
-	}
-
-	/**
-	 * Gets the max pool size.
-	 *
-	 * @return the max pool size
-	 */
-	public int getMaxPoolSize() {
-		return this.maxPoolSize;
-	}
-
-	/**
-	 * Gets the min pool size.
-	 *
-	 * @return the min pool size
-	 */
-	public int getMinPoolSize() {
-		return this.minPoolSize;
 	}
 
 	/*
@@ -94,99 +66,59 @@ public abstract class AbstractOrientDatabaseFactory<T extends ODatabase, P exten
 		return this.db;
 	}
 
-	/**
-	 * Gets the password.
-	 *
-	 * @return the password
-	 */
-	public String getPassword() {
-		return this.password;
-	}
-
 	public P getPool() {
 		return this.pool;
 	}
 
-	/**
-	 * Gets the database url.
-	 *
-	 * @return the url
-	 */
-	public String getUrl() {
-		return this.url;
-	}
+	public void init(final DatabaseConfiguration _configuration) {
 
-	/**
-	 * Gets the username.
-	 *
-	 * @return the username
-	 */
-	public String getUsername() {
-		return this.username;
-	}
-
-	@PostConstruct
-	public void init() {
-
-		final ODatabase createdDB = this.newDatabase();
-		this.createDatabase(createdDB);
-		this.createPool();
-	}
-
-	protected abstract T newDatabase();
-
-	/**
-	 * Sets the max pool size.
-	 *
-	 * @param maxPoolSize
-	 *            the new max pool size
-	 */
-	public void setMaxPoolSize(final int maxPoolSize) {
-		this.maxPoolSize = maxPoolSize;
-	}
-
-	/**
-	 * Sets the min pool size.
-	 *
-	 * @param minPoolSize
-	 *            the new min pool size
-	 */
-	public void setMinPoolSize(final int minPoolSize) {
-		this.minPoolSize = minPoolSize;
-	}
-
-	/**
-	 * Sets the password.
-	 *
-	 * @param password
-	 *            the new password
-	 */
-	public void setPassword(final String password) {
-		this.password = password;
+		Validate.notNull(_configuration, "A database configuration is required");
+		LOGGER.debug("Accessing to the database in{} ", _configuration.getUrl());
+		final ODatabase createdDB = this.newDatabase(_configuration);
+		this.createDatabase(createdDB, _configuration);
+		LOGGER.debug("Creation of the connexion pool {} ",
+				_configuration.getUrl());
+		this.createPool(_configuration);
 	}
 
 	public void setPool(final P pool) {
 		this.pool = pool;
 	}
 
-	/**
-	 * Sets the database url.
-	 *
-	 * @param url
-	 *            the new url
-	 */
-	public void setUrl(final String url) {
-		this.url = url;
+	private boolean isRemoteDatabaseUrl(
+			final DatabaseConfiguration _configuration) {
+		return !_configuration.getUrl().startsWith("remote:");
+	}
+
+	protected void createDatabase(final ODatabase _database,
+			final DatabaseConfiguration _configuration) {
+		if (this.isRemoteDatabaseUrl(_configuration)) {
+			if (!_database.exists()) {
+				LOGGER.debug("Renewing local database");
+				_database.create();
+				_database.close();
+			}
+		} else {
+			LOGGER.debug("Working on a remote database");
+		}
+	}
+
+	protected void createPool(final DatabaseConfiguration _configuration) {
+		this.pool = this.doCreatePool(_configuration);
+		LOGGER.debug("Configuration of the connexion pool min={}, max={}",
+				_configuration.getMinPoolSize(),
+				_configuration.getMaxPoolSize());
+		this.pool.setup(_configuration.getMinPoolSize(),
+				_configuration.getMaxPoolSize());
 	}
 
 	/**
-	 * Sets the username.
+	 * Do create pool.
 	 *
-	 * @param username
-	 *            the new username
+	 * @return the database pool base
 	 */
-	public void setUsername(final String username) {
-		this.username = username;
-	}
+	protected abstract P doCreatePool(DatabaseConfiguration _configuration);
+
+	protected abstract T newDatabase(DatabaseConfiguration _configuration);
 
 }

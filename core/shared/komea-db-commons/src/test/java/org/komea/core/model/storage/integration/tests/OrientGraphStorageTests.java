@@ -1,6 +1,7 @@
 package org.komea.core.model.storage.integration.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
@@ -8,12 +9,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.komea.core.model.IKomeaEntity;
 import org.komea.core.model.impl.OKomeaModelFactory;
-import org.komea.core.model.storage.impl.OGraphModelStorage;
+import org.komea.core.model.storage.impl.OKomeaGraphStorage;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
 import org.komea.core.schema.IKomeaSchemaFactory;
 import org.komea.core.schema.IPrimitiveType.Primitive;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
+import org.komea.orientdb.session.impl.DatabaseConfiguration;
+import org.komea.orientdb.session.impl.MemoryDatabaseConfiguration;
 import org.komea.orientdb.session.impl.OrientGraphDatabaseFactory;
 
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType;
@@ -25,12 +28,10 @@ public class OrientGraphStorageTests {
 	@Before
 	public void init() {
 		this.sessionsFactory = new OrientGraphDatabaseFactory();
-		this.sessionsFactory.setUrl("memory:test");
-		this.sessionsFactory.setUsername("admin");
-		this.sessionsFactory.setPassword("admin");
-		this.sessionsFactory.init();
+		DatabaseConfiguration conf = new MemoryDatabaseConfiguration("test");
+		this.sessionsFactory.init(conf);
 		this.factory = new KomeaSchemaFactory();
-		
+
 	}
 
 	@After
@@ -57,7 +58,7 @@ public class OrientGraphStorageTests {
 				Primitive.INTEGER).setMany(true));
 		schema.addType(company);
 
-		final OGraphModelStorage service = new OGraphModelStorage(schema,
+		final OKomeaGraphStorage service = new OKomeaGraphStorage(schema,
 				this.sessionsFactory);
 
 		// Entities of the schema must be in graph as a vertex type
@@ -87,8 +88,8 @@ public class OrientGraphStorageTests {
 		final IKomeaSchema schema = this.factory.newSchema("company");
 		final IEntityType person = this.factory.newEntity("Person");
 		schema.addType(person);
-		
-		final OGraphModelStorage storage = new OGraphModelStorage(schema,
+
+		final OKomeaGraphStorage storage = new OKomeaGraphStorage(schema,
 				this.sessionsFactory);
 		storage.update(schema);
 
@@ -96,14 +97,14 @@ public class OrientGraphStorageTests {
 		factory.newInstance(person);
 		assertTrue(storage.entities().iterator().hasNext());
 	}
-	
+
 	@Test
 	public void getEntitiesTest() {
 		final IKomeaSchema schema = this.factory.newSchema("company");
 		final IEntityType person = this.factory.newEntity("Person");
 		schema.addType(person);
-		
-		final OGraphModelStorage storage = new OGraphModelStorage(schema,
+
+		final OKomeaGraphStorage storage = new OKomeaGraphStorage(schema,
 				this.sessionsFactory);
 		storage.update(schema);
 
@@ -111,14 +112,14 @@ public class OrientGraphStorageTests {
 		factory.newInstance(person);
 		assertTrue(storage.entities(person).iterator().hasNext());
 	}
-	
+
 	@Test
 	public void removeTest() {
 		final IKomeaSchema schema = this.factory.newSchema("company");
 		final IEntityType person = this.factory.newEntity("Person");
 		schema.addType(person);
-		
-		final OGraphModelStorage storage = new OGraphModelStorage(schema,
+
+		final OKomeaGraphStorage storage = new OKomeaGraphStorage(schema,
 				this.sessionsFactory);
 		storage.update(schema);
 

@@ -9,7 +9,7 @@ import com.tinkerpop.blueprints.Graph;
  * @author afloch
  *
  */
-public interface IGraphModelStorage extends IModelStorage {
+public interface IKomeaGraphStorage extends IKomeaStorage {
 
 	/**
 	 * Get the blueprints graph used to store entities and relations.

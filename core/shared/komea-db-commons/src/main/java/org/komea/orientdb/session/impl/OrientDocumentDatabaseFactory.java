@@ -1,11 +1,15 @@
 package org.komea.orientdb.session.impl;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.komea.orientdb.session.IDocumentSessionFactory;
+import org.komea.orientdb.session.document.IODocument;
 
+import com.google.common.collect.Iterators;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentPool;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
+import com.orientechnologies.orient.core.iterator.ORecordIteratorClass;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 
@@ -17,9 +21,66 @@ import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
  * @see ODatabaseDocumentTx
  */
 public class OrientDocumentDatabaseFactory
-		extends
-		AbstractOrientDatabaseFactory<ODatabaseDocumentTx, ODatabaseDocumentPool>
-		implements IDocumentSessionFactory {
+extends
+AbstractOrientDatabaseFactory<ODatabaseDocumentTx, ODatabaseDocumentPool>
+implements IDocumentSessionFactory {
+
+	public OrientDocumentDatabaseFactory() {
+		super();
+	}
+
+	public OrientDocumentDatabaseFactory(
+			final DatabaseConfiguration _configuration) {
+		super(_configuration);
+	}
+
+	@Override
+	public ORecordIteratorClass<ODocument> browseClass(final String _eventType) {
+
+		return this.getOrCreateDatabaseSession().browseClass(_eventType);
+	}
+
+	@Override
+	public ORecordIteratorClass<ODocument> browseClass(final String _eventType,
+			final boolean _polymorphic) {
+
+		return this.getOrCreateDatabaseSession().browseClass(_eventType,
+				_polymorphic);
+	}
+
+	@Override
+	public IODocument newDocument() {
+
+		return new ODocumentProxy(this.getOrCreateDatabaseSession()
+				.newInstance());
+	}
+
+	@Override
+	public IODocument newDocument(final String className) {
+
+		return new ODocumentProxy(this.getOrCreateDatabaseSession()
+				.newInstance(className));
+	}
+
+	@Override
+	public Iterator<IODocument> query(final String _query) {
+		final List<ODocument> results = this.rawQuery(_query);
+		return Iterators
+				.transform(results.iterator(), new IODocumentFunction());
+	}
+
+	@Override
+	public List<ODocument> rawQuery(final String _sqlQuery) {
+		LOGGER.trace("Executing query {}", _sqlQuery);
+		return this.getOrCreateDatabaseSession().query(
+				new OSQLSynchQuery<ODocument>(_sqlQuery));
+	}
+
+	@Override
+	public void save(final ODocument _event) {
+		this.getOrCreateDatabaseSession().save(_event);
+
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -29,8 +90,10 @@ public class OrientDocumentDatabaseFactory
 	 * ()
 	 */
 	@Override
-	protected ODatabaseDocumentPool doCreatePool() {
-		return new ODatabaseDocumentPool(getUrl(), getUsername(), getPassword());
+	protected ODatabaseDocumentPool doCreatePool(
+			final DatabaseConfiguration _configuration) {
+		return new ODatabaseDocumentPool(_configuration.getUrl(),
+				_configuration.getUsername(), _configuration.getPassword());
 	}
 
 	/*
@@ -41,32 +104,8 @@ public class OrientDocumentDatabaseFactory
 	 * ()
 	 */
 	@Override
-	protected ODatabaseDocumentTx newDatabase() {
-		return new ODatabaseDocumentTx(getUrl());
-	}
-
-	@Override
-	public ODocument newDocument() {
-
-		return getOrCreateDatabaseSession().newInstance();
-	}
-
-	@Override
-	public ODocument newDocument(final String className) {
-
-		return getOrCreateDatabaseSession().newInstance(className);
-	}
-
-	@Override
-	public List<ODocument> query(final String _sqlQuery) {
-
-		return getOrCreateDatabaseSession().query(
-				new OSQLSynchQuery<ODocument>(_sqlQuery));
-	}
-
-	@Override
-	public void save(final ODocument _event) {
-		getOrCreateDatabaseSession().save(_event);
-
+	protected ODatabaseDocumentTx newDatabase(
+			final DatabaseConfiguration _configuration) {
+		return new ODatabaseDocumentTx(_configuration.getUrl());
 	}
 }

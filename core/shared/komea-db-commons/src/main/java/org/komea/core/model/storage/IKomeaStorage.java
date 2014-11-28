@@ -15,7 +15,7 @@ import org.komea.core.schema.IKomeaSchema;
  * @author afloch
  *
  */
-public interface IModelStorage extends Closeable {
+public interface IKomeaStorage extends Closeable {
 
 	/**
 	 * Delete an entity from the storage.
