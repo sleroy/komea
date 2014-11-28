@@ -96,8 +96,8 @@ public class OrientGraphStorageTests {
 				this.sessionsFactory);
 		storage.update(schema);
 
-		final OKomeaModelFactory factory = new OKomeaModelFactory(storage);
-		factory.newInstance(person);
+		final OKomeaModelFactory localFactory = new OKomeaModelFactory(storage);
+		localFactory.newInstance(person);
 		assertTrue(storage.entities().iterator().hasNext());
 	}
 
@@ -111,8 +111,8 @@ public class OrientGraphStorageTests {
 				this.sessionsFactory);
 		storage.update(schema);
 
-		final OKomeaModelFactory factory = new OKomeaModelFactory(storage);
-		factory.newInstance(person);
+		final OKomeaModelFactory localFactory = new OKomeaModelFactory(storage);
+		localFactory.newInstance(person);
 		assertTrue(storage.entities(person).iterator().hasNext());
 	}
 
@@ -126,8 +126,8 @@ public class OrientGraphStorageTests {
 				this.sessionsFactory);
 		storage.update(schema);
 
-		final OKomeaModelFactory factory = new OKomeaModelFactory(storage);
-		IKomeaEntity instance = factory.newInstance(person);
+		final OKomeaModelFactory localFactory = new OKomeaModelFactory(storage);
+		IKomeaEntity instance = localFactory.newInstance(person);
 		assertTrue(storage.entities(person).iterator().hasNext());
 		storage.delete(instance);
 		assertFalse(storage.entities(person).iterator().hasNext());
