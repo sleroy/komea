@@ -20,13 +20,14 @@ import org.komea.core.schema.IPrimitiveType.Primitive;
 import org.komea.core.schema.IReference;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
 import org.komea.orientdb.session.impl.DatabaseConfiguration;
-import org.komea.orientdb.session.impl.MemoryDatabaseConfiguration;
 import org.komea.orientdb.session.impl.OrientGraphDatabaseFactory;
+import org.komea.orientdb.session.impl.TestDatabaseConfiguration;
 
 public class OrientEntityTests {
 	private IKomeaFactory mfactory;
 	private IKomeaSchema schema;
 	private OKomeaGraphStorage storage;
+	private OrientGraphDatabaseFactory sessionsFactory;
 
 	@Before
 	public void init() {
@@ -36,18 +37,19 @@ public class OrientEntityTests {
 		final IEntityType type = sfactory.newEntity("Person");
 		IReference name = sfactory.newAttribute("name", Primitive.STRING);
 		type.addProperty(name);
-		IReference values = sfactory.newAttribute("values", Primitive.INTEGER).setMany(true);
+		IReference values = sfactory.newAttribute("values", Primitive.INTEGER)
+				.setMany(true);
 		type.addProperty(values);
 		IReference references = sfactory.newReference("family", type).setMany(
 				true);
 		type.addProperty(references);
 		this.schema.addType(type);
 
-		OrientGraphDatabaseFactory sessionsFactory = new OrientGraphDatabaseFactory();
-		DatabaseConfiguration databaseConfiguration = new MemoryDatabaseConfiguration("test");
-		sessionsFactory.init(databaseConfiguration);
+		this.sessionsFactory = new OrientGraphDatabaseFactory();
+		DatabaseConfiguration databaseConfiguration = new TestDatabaseConfiguration();
+		this.sessionsFactory.init(databaseConfiguration);
 
-		this.storage = new OKomeaGraphStorage(this.schema, sessionsFactory);
+		this.storage = new OKomeaGraphStorage(this.schema, this.sessionsFactory);
 
 		this.mfactory = new OKomeaModelFactory(this.storage);
 
@@ -55,7 +57,8 @@ public class OrientEntityTests {
 
 	@After
 	public void end() throws IOException {
-		this.storage.close();
+		this.sessionsFactory.getGraph().drop();
+		this.sessionsFactory.close();
 	}
 
 	@Test
@@ -80,10 +83,10 @@ public class OrientEntityTests {
 		IKomeaEntity p2 = this.mfactory.newInstance(type);
 		p2.set("name", "Bob");
 		p1.add("family", p2);
-		
+
 		IKomeaEntity p3 = this.mfactory.newInstance(type);
 		p3.set("name", "Bobby");
-		
+
 		p2.add("family", p3);
 
 		Iterable<IKomeaEntity> references = p1.references("family");

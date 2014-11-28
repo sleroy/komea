@@ -3,6 +3,8 @@ package org.komea.core.model.services.tests;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.core.model.storage.impl.OKomeaGraphStorage;
@@ -25,9 +27,15 @@ public class OrientdbStorageServiceTests {
 	public void init() {
 		this.sessionsFactory = new OrientGraphDatabaseFactory();
 
-		DatabaseConfiguration databaseConfiguration = new MemoryDatabaseConfiguration("test");
+		DatabaseConfiguration databaseConfiguration = new MemoryDatabaseConfiguration(
+				"test");
 		this.sessionsFactory.init(databaseConfiguration);
 		this.factory = new KomeaSchemaFactory();
+	}
+
+	public void end() throws IOException {
+		this.sessionsFactory.getGraph().drop();
+		this.sessionsFactory.close();
 	}
 
 	@Test

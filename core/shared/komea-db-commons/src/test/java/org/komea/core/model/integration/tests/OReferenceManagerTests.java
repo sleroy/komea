@@ -19,15 +19,16 @@ import org.komea.core.schema.IPrimitiveType.Primitive;
 import org.komea.core.schema.IReference;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
 import org.komea.orientdb.session.impl.DatabaseConfiguration;
-import org.komea.orientdb.session.impl.MemoryDatabaseConfiguration;
 import org.komea.orientdb.session.impl.OrientGraphDatabaseFactory;
+import org.komea.orientdb.session.impl.TestDatabaseConfiguration;
 
 public class OReferenceManagerTests {
 	private OKomeaGraphStorage storage;
 	private IKomeaSchemaFactory sfactory;
 	private IKomeaFactory mfactory;
 	private IEntityType type;
-
+	private OrientGraphDatabaseFactory sessionsFactory;
+	
 	@Before
 	public void init() {
 		this.sfactory = new KomeaSchemaFactory();
@@ -41,13 +42,13 @@ public class OReferenceManagerTests {
 
 		IKomeaSchema schema = this.sfactory.newSchema("Test");
 		schema.addType(this.type);
-
-		OrientGraphDatabaseFactory sessionsFactory = new OrientGraphDatabaseFactory();
-		DatabaseConfiguration databaseConfiguration = new MemoryDatabaseConfiguration("test");
-		sessionsFactory.init(databaseConfiguration);
+		
+		this.sessionsFactory = new OrientGraphDatabaseFactory();
+		DatabaseConfiguration databaseConfiguration = new TestDatabaseConfiguration();
+		this.sessionsFactory.init(databaseConfiguration);
 	
 
-		this.storage = new OKomeaGraphStorage(schema, sessionsFactory);
+		this.storage = new OKomeaGraphStorage(schema, this.sessionsFactory);
 
 		this.mfactory = new OKomeaModelFactory(this.storage);
 
@@ -55,7 +56,8 @@ public class OReferenceManagerTests {
 
 	@After
 	public void end() throws IOException {
-		this.storage.close();
+		this.sessionsFactory.getGraph().drop();
+		this.sessionsFactory.close();
 	}
 
 	@Test

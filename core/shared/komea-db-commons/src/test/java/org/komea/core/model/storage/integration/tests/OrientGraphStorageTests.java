@@ -4,6 +4,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,8 +37,9 @@ public class OrientGraphStorageTests {
 	}
 
 	@After
-	public void end() {
+	public void end() throws IOException {
 		this.sessionsFactory.getGraph().drop();
+		this.sessionsFactory.close();
 	}
 
 	@Test
