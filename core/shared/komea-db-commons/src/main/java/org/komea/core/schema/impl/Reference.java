@@ -113,5 +113,10 @@ public class Reference implements IReference {
 	public boolean isUnique() {
 		return this.unique;
 	}
+	
+	@Override
+	public String toString() {
+		return this.name;
+	}
 
 }
