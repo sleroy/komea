@@ -18,22 +18,20 @@ import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
  * @param <T>
  *            the type of database to handle
  */
-public abstract class AbstractOrientDatabaseFactory<T extends ODatabase, P extends ODatabasePoolBase<T>>
-implements Closeable {
+public abstract class AbstractOrientDatabaseFactory<T extends ODatabase, P extends ODatabasePoolBase<T>> implements
+        Closeable {
 
-	private P pool;
+	private P	                  pool;
 
-	private T db;
+	private T	                  db;
 
-	protected static final Logger LOGGER = LoggerFactory
-			.getLogger(AbstractOrientDatabaseFactory.class);
+	protected static final Logger	LOGGER	= LoggerFactory.getLogger(AbstractOrientDatabaseFactory.class);
 
 	public AbstractOrientDatabaseFactory() {
 		super();
 	}
 
-	public AbstractOrientDatabaseFactory(
-			final DatabaseConfiguration _configuration) {
+	public AbstractOrientDatabaseFactory(final DatabaseConfiguration _configuration) {
 		this.init(_configuration);
 	}
 
@@ -56,7 +54,7 @@ implements Closeable {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * org.springframework.orm.orient.AbstractOrientDatabaseFactory#openDatabase
 	 * ()
@@ -70,14 +68,14 @@ implements Closeable {
 		return this.pool;
 	}
 
+	@SuppressWarnings("resource")
 	public void init(final DatabaseConfiguration _configuration) {
 
 		Validate.notNull(_configuration, "A database configuration is required");
 		LOGGER.debug("Accessing to the database in{} ", _configuration.getUrl());
 		final ODatabase createdDB = this.newDatabase(_configuration);
 		this.createDatabase(createdDB, _configuration);
-		LOGGER.debug("Creation of the connexion pool {} ",
-				_configuration.getUrl());
+		LOGGER.debug("Creation of the connexion pool {} ", _configuration.getUrl());
 		this.createPool(_configuration);
 	}
 
@@ -85,13 +83,11 @@ implements Closeable {
 		this.pool = pool;
 	}
 
-	private boolean isRemoteDatabaseUrl(
-			final DatabaseConfiguration _configuration) {
+	private boolean isRemoteDatabaseUrl(final DatabaseConfiguration _configuration) {
 		return !_configuration.getUrl().startsWith("remote:");
 	}
 
-	protected void createDatabase(final ODatabase _database,
-			final DatabaseConfiguration _configuration) {
+	protected void createDatabase(final ODatabase _database, final DatabaseConfiguration _configuration) {
 		if (this.isRemoteDatabaseUrl(_configuration)) {
 			if (!_database.exists()) {
 				LOGGER.debug("Renewing local database");
@@ -105,11 +101,9 @@ implements Closeable {
 
 	protected void createPool(final DatabaseConfiguration _configuration) {
 		this.pool = this.doCreatePool(_configuration);
-		LOGGER.debug("Configuration of the connexion pool min={}, max={}",
-				_configuration.getMinPoolSize(),
-				_configuration.getMaxPoolSize());
-		this.pool.setup(_configuration.getMinPoolSize(),
-				_configuration.getMaxPoolSize());
+		LOGGER.debug("Configuration of the connexion pool min={}, max={}", _configuration.getMinPoolSize(),
+		        _configuration.getMaxPoolSize());
+		this.pool.setup(_configuration.getMinPoolSize(), _configuration.getMaxPoolSize());
 	}
 
 	/**

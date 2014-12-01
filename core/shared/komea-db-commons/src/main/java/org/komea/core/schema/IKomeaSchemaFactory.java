@@ -14,7 +14,13 @@ public interface IKomeaSchemaFactory {
 
 	SchemaBuilder newBuilder(String name);
 
+	IReference newContainmentReference(String _name, IType _type);
+
 	IEntityType newEntity(String name);
+
+	IReference newManyContainmentReference(String _name, IType _type);
+
+	IReference newManyReference(String _name, IType _type);
 
 	IPrimitiveType newPrimitive(Primitive primitive);
 

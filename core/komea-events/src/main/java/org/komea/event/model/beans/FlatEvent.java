@@ -3,9 +3,12 @@ package org.komea.event.model.beans;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import org.apache.commons.beanutils.BeanMap;
+import org.komea.core.utils.PojoToMap;
 import org.komea.event.model.api.IFlatEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
 
@@ -17,10 +20,12 @@ import com.google.common.collect.Maps;
  */
 public class FlatEvent implements IFlatEvent {
 
-	private Map<String, Serializable> properties = Maps.newHashMap();
+	private Map<String, Serializable>	properties	= Maps.newHashMap();
+
+	private static final Logger	      LOGGER	   = LoggerFactory.getLogger(FlatEvent.class);
 
 	public FlatEvent() {
-		this(Maps.newHashMap());
+		this.properties = Maps.newHashMap();
 	}
 
 	/**
@@ -34,7 +39,15 @@ public class FlatEvent implements IFlatEvent {
 	}
 
 	public FlatEvent(final Object _pojo) {
-		this(Maps.newHashMap(new BeanMap(_pojo)));
+		this();
+		final Map<String, Object> convertPojoInMap = new PojoToMap().convertPojoInMap(_pojo);
+		for (final Entry<String, Object> entry : convertPojoInMap.entrySet()) {
+			if (entry.getValue() instanceof Serializable) {
+				this.properties.put(entry.getKey(), (Serializable) entry.getValue());
+			} else {
+				LOGGER.error("This field is not serializable {}", entry.getKey());
+			}
+		}
 
 	}
 

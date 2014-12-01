@@ -23,6 +23,14 @@ public class EntityTypeBuilder {
 
 	}
 
+	public EntityTypeBuilder addContainmentReferenceProperty(
+			final String _fieldName, final IEntityType _type) {
+		this.entityType.addProperty(this.schemaFactory.newContainmentReference(
+				_fieldName, _type));
+		return this;
+
+	}
+
 	public EntityTypeBuilder addDateProperty(final String _fieldName) {
 
 		return this.addProperty(_fieldName, Primitive.DATE);
@@ -41,10 +49,26 @@ public class EntityTypeBuilder {
 
 	}
 
+	public EntityTypeBuilder addManyContainmentReferenceProperty(
+			final String _fieldName, final IEntityType _type) {
+		this.entityType.addProperty(this.schemaFactory
+				.newManyContainmentReference(_fieldName, _type));
+		return this;
+
+	}
+
+	public EntityTypeBuilder addManyReferenceProperty(final String _fieldName,
+			final IEntityType _type) {
+		this.entityType.addProperty(this.schemaFactory.newManyReference(
+				_fieldName, _type));
+		return this;
+
+	}
+
 	public EntityTypeBuilder addProperty(final String _fieldName,
-			final Primitive _date) {
-		this.entityType.addProperty(this.schemaFactory.newReference(_fieldName,
-				this.schemaFactory.newPrimitive(_date)));
+			final Primitive _primitiveType) {
+		this.entityType.addProperty(this.schemaFactory.newAttribute(_fieldName,
+				_primitiveType));
 		return this;
 
 	}

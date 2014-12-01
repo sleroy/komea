@@ -1,5 +1,9 @@
 package org.komea.event.storage.api;
 
-public class InvalidEventException {
+import org.komea.core.exceptions.KomeaRuntimeException;
 
+public class InvalidEventException extends KomeaRuntimeException {
+	public InvalidEventException() {
+		super("An invalid event has been provided and rejected.");
+	}
 }

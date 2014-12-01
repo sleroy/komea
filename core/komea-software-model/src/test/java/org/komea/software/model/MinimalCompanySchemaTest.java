@@ -13,8 +13,8 @@ public class MinimalCompanySchemaTest {
 	public void testBuild() throws Exception {
 		final ICompanySchema build = new MinimalCompanySchema();
 		assertNotNull(build.getHumanType());
-		assertEquals(1, build.getTypes().size());
-		assertTrue(build.getTypes().contains(build.getHumanType()));
+		assertEquals(1, build.getSchema().getTypes().size());
+		assertTrue(build.getSchema().getTypes().contains(build.getHumanType()));
 
 	}
 

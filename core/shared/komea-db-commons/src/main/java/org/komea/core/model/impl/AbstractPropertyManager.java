@@ -33,7 +33,7 @@ public abstract class AbstractPropertyManager {
 
 	public abstract void remove(final Object value);
 
-	public void add(final Object value) {
+	public void addReference(final Object value) {
 		Validate.isTrue(this.reference.isMany(),
 				"Reference is not a collection: use set to update its content.");
 		validateType(value);

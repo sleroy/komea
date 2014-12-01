@@ -15,10 +15,9 @@ import com.orientechnologies.orient.core.record.impl.ODocument;
 
 public class ODocumentProxy implements IODocument {
 
-	private final ODocument newInstance;
+	private final ODocument	    newInstance;
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ODocumentProxy.class);
+	private static final Logger	LOGGER	= LoggerFactory.getLogger(ODocumentProxy.class);
 
 	public ODocumentProxy(final ODocument _newInstance) {
 		this.newInstance = _newInstance;
@@ -39,8 +38,8 @@ public class ODocumentProxy implements IODocument {
 		for (final String entry : this.newInstance.fieldNames()) {
 			map.put(entry, this.newInstance.field(entry));
 		}
-		sb.append("Document of class ").append(this.newInstance.getClassName())
-				.append("with fields ").append(map.toString());
+		sb.append("Document of class ").append(this.newInstance.getClassName()).append("with fields ")
+		.append(map.toString());
 		return sb.toString();
 	}
 
@@ -55,8 +54,7 @@ public class ODocumentProxy implements IODocument {
 		try {
 			this.newInstance.field(_key, _value);
 		} catch (final Exception e) {
-			LOGGER.error("Invalid field or value has been rejected {} -> {}",
-					_key, _value, e);
+			LOGGER.error("Invalid field or value has been rejected {} -> {}", _key, _value, e);
 		}
 
 	}
@@ -93,9 +91,9 @@ public class ODocumentProxy implements IODocument {
 
 	@Override
 	public void toPojo(final Object _pojo) {
-		final BeanMap beanMap = new BeanMap(_pojo);
+		final Map<String, Object> komeaBeanMap = new BeanMap(_pojo);
 		for (final String field : this.newInstance.fieldNames()) {
-			beanMap.put(field, this.newInstance.field(field));
+			komeaBeanMap.put(field, this.newInstance.field(field));
 		}
 
 	}

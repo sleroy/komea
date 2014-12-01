@@ -23,8 +23,25 @@ public class KomeaSchemaFactory implements IKomeaSchemaFactory {
 	}
 
 	@Override
+	public IReference newContainmentReference(final String name,
+			final IType type) {
+		return new Reference(name, type, false, true);
+	}
+
+	@Override
 	public IEntityType newEntity(final String name) {
 		return new EntityType(name);
+	}
+
+	@Override
+	public IReference newManyContainmentReference(final String name,
+			final IType type) {
+		return new Reference(name, type, true, true);
+	}
+
+	@Override
+	public IReference newManyReference(final String name, final IType type) {
+		return new Reference(name, type, true, false);
 	}
 
 	@Override

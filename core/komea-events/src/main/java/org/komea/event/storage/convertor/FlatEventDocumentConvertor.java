@@ -17,12 +17,10 @@ import org.komea.orientdb.session.document.IODocument;
  */
 public class FlatEventDocumentConvertor {
 
-	private final IDocumentSessionFactory documentDatabaseFactory;
-	private final IFlatEvent event;
+	private final IDocumentSessionFactory	documentDatabaseFactory;
+	private final IFlatEvent	          event;
 
-	public FlatEventDocumentConvertor(
-			final IDocumentSessionFactory _documentDatabaseFactory,
-			final IFlatEvent _event) {
+	public FlatEventDocumentConvertor(final IDocumentSessionFactory _documentDatabaseFactory, final IFlatEvent _event) {
 		this.documentDatabaseFactory = _documentDatabaseFactory;
 		this.event = _event;
 		Validate.notNull(_event);
@@ -32,23 +30,14 @@ public class FlatEventDocumentConvertor {
 
 	public IODocument convert() {
 
-		if (!this.event.getProperties().containsKey(
-				IBasicEventInformations.FIELD_EVENT_TYPE)) {
-			throw new IllegalArgumentException(
-					"Missing event type : an event must provide the field "
-							+ IBasicEventInformations.FIELD_EVENT_TYPE);
-		}
-		final Serializable rawEventType = this.event.getProperties().get(
-				IBasicEventInformations.FIELD_EVENT_TYPE);
-		if (!(rawEventType instanceof String)) {
-			throw new IllegalArgumentException(
-					"Event type field must be provided as a string");
-		}
+		if (!this.event.getProperties().containsKey(IBasicEventInformations.FIELD_EVENT_TYPE)) { throw new IllegalArgumentException(
+				"Missing event type : an event must provide the field " + IBasicEventInformations.FIELD_EVENT_TYPE); }
+		final Serializable rawEventType = this.event.getProperties().get(IBasicEventInformations.FIELD_EVENT_TYPE);
+		if (!(rawEventType instanceof String)) { throw new IllegalArgumentException(
+				"Event type field must be provided as a string"); }
 		final String eventType = String.class.cast(rawEventType);
-		final IODocument newDocument = this.documentDatabaseFactory
-				.newDocument(eventType);
-		for (final Entry<String, ? extends Serializable> entry : this.event
-				.getProperties().entrySet()) {
+		final IODocument newDocument = this.documentDatabaseFactory.newDocument(eventType);
+		for (final Entry<String, ? extends Serializable> entry : this.event.getProperties().entrySet()) {
 			newDocument.field(entry.getKey(), entry.getValue());
 		}
 		return newDocument;

@@ -72,8 +72,8 @@ public class OAttributeManagerTests {
 		IReference name = this.sfactory.newAttribute("values", Primitive.INTEGER).setMany(true);
 		OEntityAttributeManager updater = new OEntityAttributeManager(
 				this.vertex, name);
-		updater.add(1);
-		updater.add(2);
+		updater.addReference(1);
+		updater.addReference(2);
 		List<Integer> values = updater.get();
 		assertEquals(values.size(), 2);
 	}
@@ -85,7 +85,7 @@ public class OAttributeManagerTests {
 				this.vertex, name);
 
 		try{
-			updater.add("a");
+			updater.addReference("a");
 			//we can not add a String in an integer collection attribute
 			fail();
 		}catch(IllegalArgumentException e){

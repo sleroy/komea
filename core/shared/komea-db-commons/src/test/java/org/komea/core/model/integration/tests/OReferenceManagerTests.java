@@ -81,7 +81,7 @@ public class OReferenceManagerTests {
 		IReference property = this.type.findProperty("family");
 		OEntityReferenceManager updater = new OEntityReferenceManager(p1,
 				property);
-		updater.add(p2);
+		updater.addReference(p2);
 		Iterable<IKomeaEntity> family = updater.get();
 		Assert.assertTrue(family.iterator().hasNext());
 	}

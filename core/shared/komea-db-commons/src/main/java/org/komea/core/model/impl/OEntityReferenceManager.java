@@ -73,7 +73,7 @@ public class OEntityReferenceManager extends AbstractPropertyManager {
 	@Override
 	protected void doAddAll(final Collection<?> input) {
 		for (Object object : input) {
-			add(object);
+			addReference(object);
 		}
 	}
 
