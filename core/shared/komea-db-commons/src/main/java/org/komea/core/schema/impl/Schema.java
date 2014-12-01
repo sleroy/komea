@@ -10,9 +10,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class Schema implements IKomeaSchema {
-	private final String name;
-	private final List<IEntityType> types;
-	private transient Map<String, IEntityType> typesFromName;
+	private final String	                   name;
+	private final List<IEntityType>	           types;
+	private transient Map<String, IEntityType>	typesFromName;
 
 	public Schema(final String name) {
 		super();
@@ -30,17 +30,12 @@ public class Schema implements IKomeaSchema {
 	}
 
 	@Override
-	public List<IEntityType> getTypes() {
-		return this.types;
-	}
-
-	@Override
 	public IEntityType findType(final String _name) {
-		IEntityType result = this.typesFromName.get(name);
+		final IEntityType result = this.typesFromName.get(_name);
 		if (result == null) {
-			for (IEntityType type : this.types) {
-				if (type.getName().equals(name)) {
-					this.typesFromName.put(name, type);
+			for (final IEntityType type : this.types) {
+				if (type.getName().equals(_name)) {
+					this.typesFromName.put(_name, type);
 					return type;
 				}
 			}
@@ -51,6 +46,11 @@ public class Schema implements IKomeaSchema {
 	@Override
 	public String getName() {
 		return this.name;
+	}
+
+	@Override
+	public List<IEntityType> getTypes() {
+		return this.types;
 	}
 
 }
