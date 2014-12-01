@@ -13,6 +13,7 @@ import org.komea.core.model.impl.OEntityAttributeManager;
 import org.komea.core.schema.IKomeaSchemaFactory;
 import org.komea.core.schema.IPrimitiveType.Primitive;
 import org.komea.core.schema.IReference;
+import org.komea.core.schema.ReferenceArity;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
 import org.komea.orientdb.session.impl.DatabaseConfiguration;
 import org.komea.orientdb.session.impl.OrientGraphDatabaseFactory;
@@ -69,7 +70,7 @@ public class OAttributeManagerTests {
 	
 	@Test
 	public void setPrimitiveCollectionReferenceTest() {
-		IReference name = this.sfactory.newAttribute("values", Primitive.INTEGER).setMany(true);
+		IReference name = this.sfactory.newAttribute("values", Primitive.INTEGER).setArity(ReferenceArity.MANY);
 		OEntityAttributeManager updater = new OEntityAttributeManager(
 				this.vertex, name);
 		updater.addReference(1);
@@ -80,7 +81,7 @@ public class OAttributeManagerTests {
 	
 	@Test
 	public void setPrimitiveCollectionValidationReferenceTest() {
-		IReference name = this.sfactory.newAttribute("values", Primitive.INTEGER).setMany(true);
+		IReference name = this.sfactory.newAttribute("values", Primitive.INTEGER).setArity(ReferenceArity.MANY);
 		OEntityAttributeManager updater = new OEntityAttributeManager(
 				this.vertex, name);
 

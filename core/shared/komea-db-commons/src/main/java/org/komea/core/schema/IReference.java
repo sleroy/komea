@@ -23,6 +23,20 @@ public interface IReference {
 	IType getType();
 
 	/**
+	 * Get the {@link ReferenceKind} of the reference.
+	 * 
+	 * @return
+	 */
+	ReferenceKind getKind();
+
+	/**
+	 * Get the {@link ReferenceArity} of the reference.
+	 * 
+	 * @return
+	 */
+	ReferenceArity getArity();
+	
+	/**
 	 * Test if the reference is a containment.
 	 * 
 	 * @return
@@ -42,7 +56,23 @@ public interface IReference {
 	 * @return
 	 */
 	boolean isMandatory();
+	
+	/**
+	 * Test if the reference is unique.
+	 * 
+	 * @return
+	 */
+	boolean isUnique();
 
+
+	/**
+	 * Test if the reference is indexed.
+	 * 
+	 * @return
+	 */
+	boolean isIndexed();
+
+	
 	/**
 	 * Test if the reference instance can store multiple values.
 	 * 
@@ -51,38 +81,75 @@ public interface IReference {
 	boolean isMany();
 
 	/**
-	 * Set the reference containment property. It returns the updated reference
+	 * Set the reference kind property (e.g., Containment). It returns the updated reference
 	 * for a fluent initialization.
 	 * 
-	 * @param containment
+	 * @param kind
 	 * @return the updated reference
 	 */
-	IReference setContainment(boolean containment);
-
+	IReference setKind(ReferenceKind kind);
+	
 	/**
-	 * Set the reference mandatory property. It returns the updated reference
+	 * Set the reference arity property (One or Many). It returns the updated reference
 	 * for a fluent initialization.
 	 * 
-	 * @param mandatory
+	 * @param kind
 	 * @return the updated reference
 	 */
-	IReference setMandatory(boolean mandatory);
+	IReference setArity(ReferenceArity arity);
 
+	
+	
 	/**
-	 * Set the reference mant property. It returns the updated reference for a
-	 * fluent initialization.
-	 * 
-	 * @param many
-	 * @return the updated reference
-	 */
-	IReference setMany(boolean many);
-
-	/**
-	 * Set the reference aggregation property. It returns the updated reference
+	 * Set the mandatory property of the reference. It returns the updated reference
 	 * for a fluent initialization.
 	 * 
-	 * @param aggregation
 	 * @return the updated reference
 	 */
-	IReference setAggregation(boolean aggregation);
+	IReference enableMandatory();
+
+
+	/**
+	 * Unset the mandatory property of the reference. It returns the updated reference
+	 * for a fluent initialization.
+	 * 
+	 * @return the updated reference
+	 */
+	IReference disableMandatory();
+	
+	/**
+	 * Enable the indexation of the reference. It returns the updated reference
+	 * for a fluent initialization.
+	 * 
+	 * @return the updated reference
+	 */
+	IReference enableIndexation();
+
+
+	/**
+	 * Disable the indexation of the reference. It returns the updated reference
+	 * for a fluent initialization.
+	 * 
+	 * @return the updated reference
+	 */
+	IReference disableIndexation();
+	
+	
+	/**
+	 * Set the unique property of the reference. It returns the updated reference
+	 * for a fluent initialization.
+	 * 
+	 * @return the updated reference
+	 */
+	IReference enableUnique();
+
+
+	/**
+	 * Unset the unique property of the reference. It returns the updated reference
+	 * for a fluent initialization.
+	 * 
+	 * @return the updated reference
+	 */
+	IReference disableUnique();
+	
 }

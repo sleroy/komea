@@ -16,6 +16,7 @@ import org.komea.core.model.storage.impl.OKomeaGraphStorage;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
 import org.komea.core.schema.IKomeaSchemaFactory;
+import org.komea.core.schema.ReferenceArity;
 import org.komea.core.schema.IPrimitiveType.Primitive;
 import org.komea.core.schema.IReference;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
@@ -37,11 +38,9 @@ public class OrientEntityTests {
 		final IEntityType type = sfactory.newEntity("Person");
 		IReference name = sfactory.newAttribute("name", Primitive.STRING);
 		type.addProperty(name);
-		IReference values = sfactory.newAttribute("values", Primitive.INTEGER)
-				.setMany(true);
+		IReference values = sfactory.newAttribute("values", Primitive.INTEGER).setArity(ReferenceArity.MANY);
 		type.addProperty(values);
-		IReference references = sfactory.newReference("family", type).setMany(
-				true);
+		IReference references = sfactory.newReference("family", type).setArity(ReferenceArity.MANY);
 		type.addProperty(references);
 		this.schema.addType(type);
 

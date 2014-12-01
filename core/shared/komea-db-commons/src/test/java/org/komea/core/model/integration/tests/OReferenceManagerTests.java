@@ -15,6 +15,7 @@ import org.komea.core.model.storage.impl.OKomeaGraphStorage;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
 import org.komea.core.schema.IKomeaSchemaFactory;
+import org.komea.core.schema.ReferenceArity;
 import org.komea.core.schema.IPrimitiveType.Primitive;
 import org.komea.core.schema.IReference;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
@@ -38,7 +39,7 @@ public class OReferenceManagerTests {
 				Primitive.STRING));
 		this.type.addProperty(this.sfactory.newReference("partner", this.type));
 		this.type.addProperty(this.sfactory.newReference("family", this.type)
-				.setMany(true));
+				.setArity(ReferenceArity.MANY));
 
 		IKomeaSchema schema = this.sfactory.newSchema("Test");
 		schema.addType(this.type);

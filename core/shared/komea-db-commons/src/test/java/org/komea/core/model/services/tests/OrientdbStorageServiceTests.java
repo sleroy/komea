@@ -11,7 +11,9 @@ import org.komea.core.model.storage.impl.OKomeaGraphStorage;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
 import org.komea.core.schema.IKomeaSchemaFactory;
+import org.komea.core.schema.ReferenceArity;
 import org.komea.core.schema.IPrimitiveType.Primitive;
+import org.komea.core.schema.ReferenceKind;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
 import org.komea.orientdb.session.impl.DatabaseConfiguration;
 import org.komea.orientdb.session.impl.MemoryDatabaseConfiguration;
@@ -52,9 +54,9 @@ public class OrientdbStorageServiceTests {
 
 		final IEntityType company = this.factory.newEntity("Company");
 		company.addProperty(this.factory.newReference("members", person)
-				.setMany(true).setContainment(true));
+				.setArity(ReferenceArity.MANY).setKind(ReferenceKind.CONTAINMENT));
 		company.addProperty(this.factory.newAttribute("values",
-				Primitive.INTEGER).setMany(true));
+				Primitive.INTEGER).setArity(ReferenceArity.MANY));
 		schema.addType(company);
 
 		final OKomeaGraphStorage service = new OKomeaGraphStorage(schema,

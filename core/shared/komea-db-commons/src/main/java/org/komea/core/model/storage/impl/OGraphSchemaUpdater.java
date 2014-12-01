@@ -6,6 +6,7 @@ import java.util.Set;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
 import org.komea.core.schema.IReference;
+import org.komea.core.schema.ReferenceKind;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,11 +16,8 @@ import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.tinkerpop.blueprints.impls.orient.OrientEdgeType;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType;
-
 public class OGraphSchemaUpdater {
-	public static final String REFERENCE_EDGE = "reference";
-	public static final String CONTAINMENT_EDGE = "containment";
-	public static final String AGGREGATION_EDGE = "aggregation";
+
 
 	private final OrientGraph graph;
 	private final static Logger LOGGER = LoggerFactory
@@ -100,19 +98,22 @@ public class OGraphSchemaUpdater {
 
 	private void initializeEdgesTypes(final IKomeaSchema schema) {
 
-		final OrientEdgeType reference = this.graph.getEdgeType(REFERENCE_EDGE);
+		String refEdge = ReferenceKind.REFERENCE.name();
+		final OrientEdgeType reference = this.graph.getEdgeType(refEdge);
 		if (reference == null) {
-			this.graph.createEdgeType(REFERENCE_EDGE);
+			this.graph.createEdgeType(refEdge);
 		}
+		String contEdge = ReferenceKind.CONTAINMENT.name();
 		final OrientEdgeType containment = this.graph
-				.getEdgeType(CONTAINMENT_EDGE);
+				.getEdgeType(contEdge);
 		if (containment == null) {
-			this.graph.createEdgeType(CONTAINMENT_EDGE);
+			this.graph.createEdgeType(contEdge);
 		}
+		String aggEdge = ReferenceKind.AGGREGATION.name();
 		final OrientEdgeType aggregation = this.graph
-				.getEdgeType(AGGREGATION_EDGE);
+				.getEdgeType(aggEdge);
 		if (aggregation == null) {
-			this.graph.createEdgeType(AGGREGATION_EDGE);
+			this.graph.createEdgeType(aggEdge);
 		}
 
 		for (final IEntityType type : schema.getTypes()) {
@@ -153,13 +154,7 @@ public class OGraphSchemaUpdater {
 	}
 
 	private static String findEdgeBaseType(final IReference reference) {
-		String etype = OGraphSchemaUpdater.REFERENCE_EDGE;
-		if (reference.isAggregation()) {
-			etype = OGraphSchemaUpdater.AGGREGATION_EDGE;
-		} else if (reference.isContainment()) {
-			etype = OGraphSchemaUpdater.CONTAINMENT_EDGE;
-		}
-		return etype;
+		return reference.getKind().name();
 	}
 
 	private void initializeTypes(final IKomeaSchema schema) {

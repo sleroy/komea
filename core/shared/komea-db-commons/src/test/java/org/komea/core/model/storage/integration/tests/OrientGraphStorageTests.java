@@ -15,6 +15,8 @@ import org.komea.core.model.storage.impl.OKomeaGraphStorage;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
 import org.komea.core.schema.IKomeaSchemaFactory;
+import org.komea.core.schema.ReferenceArity;
+import org.komea.core.schema.ReferenceKind;
 import org.komea.core.schema.IPrimitiveType.Primitive;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
 import org.komea.orientdb.session.impl.DatabaseConfiguration;
@@ -100,8 +102,8 @@ public class OrientGraphStorageTests {
 		schema.addType(person);
 
 		final IEntityType company = this.factory.newEntity("Company");
-		company.addProperty(this.factory.newReference("members", person).setContainment(true).setMany(true));
-		company.addProperty(this.factory.newAttribute("values", Primitive.INTEGER).setMany(true));
+		company.addProperty(this.factory.newReference("members", person).setKind(ReferenceKind.CONTAINMENT).setArity(ReferenceArity.MANY));
+		company.addProperty(this.factory.newAttribute("values", Primitive.INTEGER).setArity(ReferenceArity.MANY));
 		schema.addType(company);
 
 		final OKomeaGraphStorage service = new OKomeaGraphStorage(schema, this.sessionsFactory);

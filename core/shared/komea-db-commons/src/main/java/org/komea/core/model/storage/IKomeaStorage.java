@@ -52,6 +52,9 @@ public interface IKomeaStorage extends Closeable {
 	 * @param entity
 	 */
 	void save(IKomeaEntity entity);
+	
+	
+	void commit();
 
 	/**
 	 * Update the schema used to type the stored entities.

@@ -1,9 +1,8 @@
-package org.komea.core.model.storage.impl;
+package org.komea.core.model.impl;
 
 import java.util.Iterator;
 
 import org.komea.core.model.IKomeaEntity;
-import org.komea.core.model.impl.OKomeaEntity;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
 
@@ -11,16 +10,16 @@ import com.google.common.collect.AbstractIterator;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientVertex;
 
-public class OKomeaEntityIterable implements Iterable<IKomeaEntity>{
+public class OEntityIterable implements Iterable<IKomeaEntity>{
 	
 	private final Iterator<Vertex> vertices;
 	private final IKomeaSchema schema;
 	private Iterator<IKomeaEntity> iterator;
 
-	public OKomeaEntityIterable(final Iterator<Vertex> edges,
+	public OEntityIterable(final Iterator<Vertex> vertices,
 			final IKomeaSchema schema) {
 		super();
-		this.vertices = edges;
+		this.vertices = vertices;
 		this.schema = schema;
 	}
 
@@ -51,7 +50,6 @@ public class OKomeaEntityIterable implements Iterable<IKomeaEntity>{
 				return new OKomeaEntity(type, next);
 			}
 			return endOfData();
-
 		}
 	}
 

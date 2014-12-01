@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.commons.lang.Validate;
 import org.komea.core.model.IKomeaEntity;
+import org.komea.core.model.impl.OEntityIterable;
 import org.komea.core.model.impl.OKomeaEntity;
 import org.komea.core.model.storage.IKomeaGraphStorage;
 import org.komea.core.schema.IEntityType;
@@ -62,7 +63,7 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 	@Override
 	public Iterable<IKomeaEntity> entities() {
 		final Iterable<Vertex> vertices = this.graph.getVertices();
-		return new OKomeaEntityIterable(vertices.iterator(), this.schema);
+		return new OEntityIterable(vertices.iterator(), this.schema);
 	}
 
 	@Override
@@ -70,9 +71,14 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 		Validate.isTrue(type.getSchema() != null && type.getSchema().equals(this.schema),
 		        "Type is not defined in the same schema than the one used by the storage");
 		final Iterable<Vertex> vertices = this.graph.getVerticesOfClass(type.getName());
-		return new OKomeaEntityIterable(vertices.iterator(), this.schema);
+		return new OEntityIterable(vertices.iterator(), this.schema);
 	}
 
+	@Override
+	public void commit() {
+		this.graph.commit();
+	}
+	
 	@Override
 	public OrientGraph getGraph() {
 		if (this.graph == null) {
