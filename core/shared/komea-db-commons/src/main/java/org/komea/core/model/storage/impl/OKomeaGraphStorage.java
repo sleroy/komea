@@ -25,21 +25,18 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraph;
  *
  */
 public class OKomeaGraphStorage implements IKomeaGraphStorage {
-	private final IGraphSessionFactory sessionsFactory;
-	private IKomeaSchema schema;
-	private OrientGraph graph;
-	private final static Logger LOGGER = LoggerFactory
-			.getLogger(OKomeaGraphStorage.class);
+	private final IGraphSessionFactory	sessionsFactory;
+	private IKomeaSchema	           schema;
+	private OrientGraph	               graph;
+	private final static Logger	       LOGGER	= LoggerFactory.getLogger(OKomeaGraphStorage.class);
 
-	public OKomeaGraphStorage(final IKomeaSchema schema,
-			final DatabaseConfiguration _configuration) {
+	public OKomeaGraphStorage(final IKomeaSchema schema, final DatabaseConfiguration _configuration) {
 		super();
 		this.sessionsFactory = new OrientGraphDatabaseFactory(_configuration);
 		this.update(schema);
 	}
 
-	public OKomeaGraphStorage(final IKomeaSchema schema,
-			final IGraphSessionFactory sessionsFactory) {
+	public OKomeaGraphStorage(final IKomeaSchema schema, final IGraphSessionFactory sessionsFactory) {
 		super();
 		this.sessionsFactory = sessionsFactory;
 		this.update(schema);
@@ -47,6 +44,7 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 
 	@Override
 	public void close() throws IOException {
+		this.getGraph().commit();
 		this.getGraph().shutdown();
 	}
 
@@ -56,9 +54,7 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 			final OKomeaEntity oEntity = (OKomeaEntity) entity;
 			this.graph.removeVertex(oEntity.getVertex());
 		} else {
-			LOGGER.warn(
-					"Entity {} can't be managed by the storage. It won't be deleted",
-					entity.getClass());
+			LOGGER.warn("Entity {} can't be managed by the storage. It won't be deleted", entity.getClass());
 		}
 
 	}
@@ -71,12 +67,9 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 
 	@Override
 	public Iterable<IKomeaEntity> entities(final IEntityType type) {
-		Validate.isTrue(
-				type.getSchema() != null
-						&& type.getSchema().equals(this.schema),
-				"Type is not defined in the same schema than the one used by the storage");
-		final Iterable<Vertex> vertices = this.graph.getVerticesOfClass(type
-				.getName());
+		Validate.isTrue(type.getSchema() != null && type.getSchema().equals(this.schema),
+		        "Type is not defined in the same schema than the one used by the storage");
+		final Iterable<Vertex> vertices = this.graph.getVerticesOfClass(type.getName());
 		return new OKomeaEntityIterable(vertices.iterator(), this.schema);
 	}
 
@@ -89,7 +82,6 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 	}
 
 	@Override
-		getGraph().commit();
 	public IKomeaSchema getSchema() {
 		return this.schema;
 	}
