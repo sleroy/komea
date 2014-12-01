@@ -18,9 +18,7 @@ class BugzillaDataConnectorIT extends Specification {
 		def bzServerConfiguration = new BugzillaServerConfiguration()
 		bzServerConfiguration.serverURL = 'https://issues.apache.org/bugzilla/'
 		bzServerConfiguration.project= 'POI'
-		//bzServerConfiguration.since = new DateTime().minusYears 1
 
-		def bugAPI =  new BugzillaAPI()
 		def dbc = new TestDatabaseConfiguration()
 		// ORIENTDB
 		def ogf = new OrientDocumentDatabaseFactory(dbc)
@@ -28,8 +26,8 @@ class BugzillaDataConnectorIT extends Specification {
 		def queryservice = new EventQueryManagerService(ogf)
 
 
-		when: "I inject the history of bugzilla from the past year of Apache POI"
-		def dataConnector = new BugzillaDataConnector(bugAPI, eventStorage, bzServerConfiguration)
+		when: "I inject the history of bugzilla  of Apache POI"
+		def dataConnector = new BugzillaEventConnector(eventStorage, bzServerConfiguration)
 		dataConnector.launch()
 		// "I query Komea for the number of new bugs and updated bugs"
 		def newBugs = queryservice.countEventsOfType(IBugzillaConnectorInformations.EVENT_NEW_BUG)

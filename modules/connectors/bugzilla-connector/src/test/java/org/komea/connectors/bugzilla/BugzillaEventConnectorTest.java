@@ -20,7 +20,7 @@ import com.google.common.collect.Lists;
 import com.j2bugzilla.base.Bug;
 
 @RunWith(MockitoJUnitRunner.class)
-public class BugzillaDataConnectorTest {
+public class BugzillaEventConnectorTest {
 	private final BugzillaServerConfiguration configuration = new BugzillaServerConfiguration();
 
 	@Mock
@@ -31,7 +31,7 @@ public class BugzillaDataConnectorTest {
 
 	@Test
 	public void testIsRecentlyCreated_moreRecentDate() throws Exception {
-		final BugzillaDataConnector bugzillaDataConnector = new BugzillaDataConnector(
+		final BugzillaEventConnector bugzillaDataConnector = new BugzillaEventConnector(
 				this.bugzillaAPI, this.eventStorage, this.configuration);
 		// NOW TIME
 		this.configuration.setSince(new DateTime());
@@ -46,7 +46,7 @@ public class BugzillaDataConnectorTest {
 
 	@Test
 	public void testIsRecentlyCreated_noDate() throws Exception {
-		final BugzillaDataConnector bugzillaDataConnector = new BugzillaDataConnector(
+		final BugzillaEventConnector bugzillaDataConnector = new BugzillaEventConnector(
 				this.bugzillaAPI, this.eventStorage, this.configuration);
 		// NO DATE
 		this.configuration.setSince(null);
@@ -60,7 +60,7 @@ public class BugzillaDataConnectorTest {
 
 	@Test
 	public void testIsRecentlyCreated_olderDate() throws Exception {
-		final BugzillaDataConnector bugzillaDataConnector = new BugzillaDataConnector(
+		final BugzillaEventConnector bugzillaDataConnector = new BugzillaEventConnector(
 				this.bugzillaAPI, this.eventStorage, this.configuration);
 		// NOW TIME
 		this.configuration.setSince(new DateTime());
@@ -75,7 +75,7 @@ public class BugzillaDataConnectorTest {
 
 	@Test
 	public void testIsRecentlyUpdated_moreRecentDate() throws Exception {
-		final BugzillaDataConnector bugzillaDataConnector = new BugzillaDataConnector(
+		final BugzillaEventConnector bugzillaDataConnector = new BugzillaEventConnector(
 				this.bugzillaAPI, this.eventStorage, this.configuration);
 		// NOW TIME
 		this.configuration.setSince(new DateTime());
@@ -90,7 +90,7 @@ public class BugzillaDataConnectorTest {
 
 	@Test
 	public void testIsRecentlyUpdated_noDate() throws Exception {
-		final BugzillaDataConnector bugzillaDataConnector = new BugzillaDataConnector(
+		final BugzillaEventConnector bugzillaDataConnector = new BugzillaEventConnector(
 				this.bugzillaAPI, this.eventStorage, this.configuration);
 		// NO DATE
 		this.configuration.setSince(null);
@@ -104,7 +104,7 @@ public class BugzillaDataConnectorTest {
 
 	@Test
 	public void testIsRecentlyUpdated_olderDate() throws Exception {
-		final BugzillaDataConnector bugzillaDataConnector = new BugzillaDataConnector(
+		final BugzillaEventConnector bugzillaDataConnector = new BugzillaEventConnector(
 				this.bugzillaAPI, this.eventStorage, this.configuration);
 		// NOW TIME
 		this.configuration.setSince(new DateTime());
@@ -127,7 +127,7 @@ public class BugzillaDataConnectorTest {
 		when(this.bugzillaAPI.getBugList("DEMO_PROJECT")).thenReturn(
 				Lists.newArrayList(bug, bug2));
 
-		final BugzillaDataConnector bugzillaDataConnector = new BugzillaDataConnector(
+		final BugzillaEventConnector bugzillaDataConnector = new BugzillaEventConnector(
 				this.bugzillaAPI, this.eventStorage, this.configuration);
 		bugzillaDataConnector.launch();
 		verify(this.eventStorage, times(4)).storeComplexEvent(
@@ -137,7 +137,7 @@ public class BugzillaDataConnectorTest {
 
 	@Test
 	public void testLaunchWithoutConfiguration() throws Exception {
-		final BugzillaDataConnector bugzillaDataConnector = new BugzillaDataConnector(
+		final BugzillaEventConnector bugzillaDataConnector = new BugzillaEventConnector(
 				this.bugzillaAPI, this.eventStorage, this.configuration);
 		bugzillaDataConnector.launch();
 

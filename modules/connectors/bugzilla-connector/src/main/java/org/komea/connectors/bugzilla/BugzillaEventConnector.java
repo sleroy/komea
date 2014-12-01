@@ -29,20 +29,28 @@ import com.j2bugzilla.base.ConnectionException;
  * @author sleroy
  *
  */
-public class BugzillaDataConnector implements IBugzillaConnectorInformations {
+public class BugzillaEventConnector implements IBugzillaConnectorInformations {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(BugzillaDataConnector.class);
+			.getLogger(BugzillaEventConnector.class);
 
 	private final IEventStorage eventStorage;
 	private final IBugzillaAPI bugzillaAPI;
 	private final BugzillaServerConfiguration configuration;
 
-	public BugzillaDataConnector(final IBugzillaAPI _bugzillaAPI,
+	public BugzillaEventConnector(final IBugzillaAPI _bugzillaAPI,
 			final IEventStorage _eventStorage,
 			final BugzillaServerConfiguration _configuration) {
 		this.eventStorage = _eventStorage;
 		this.bugzillaAPI = _bugzillaAPI;
+		this.configuration = _configuration;
+
+	}
+
+	public BugzillaEventConnector(final IEventStorage _eventStorage,
+			final BugzillaServerConfiguration _configuration) {
+		this.eventStorage = _eventStorage;
+		this.bugzillaAPI = new BugzillaAPI();
 		this.configuration = _configuration;
 
 	}
