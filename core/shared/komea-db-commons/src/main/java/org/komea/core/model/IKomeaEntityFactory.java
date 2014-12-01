@@ -8,6 +8,6 @@ import org.komea.core.schema.IEntityType;
  * @author afloch
  *
  */
-public interface IKomeaFactory {
+public interface IKomeaEntityFactory {
 	IKomeaEntity newInstance(IEntityType type);
 }

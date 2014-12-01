@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.core.model.IKomeaEntity;
-import org.komea.core.model.IKomeaFactory;
+import org.komea.core.model.IKomeaEntityFactory;
 import org.komea.core.model.impl.OEntityReferenceManager;
 import org.komea.core.model.impl.OKomeaEntity;
 import org.komea.core.model.impl.OKomeaModelFactory;
@@ -25,7 +25,7 @@ import org.komea.orientdb.session.impl.TestDatabaseConfiguration;
 public class OReferenceManagerTests {
 	private OKomeaGraphStorage storage;
 	private IKomeaSchemaFactory sfactory;
-	private IKomeaFactory mfactory;
+	private IKomeaEntityFactory mfactory;
 	private IEntityType type;
 	private OrientGraphDatabaseFactory sessionsFactory;
 	

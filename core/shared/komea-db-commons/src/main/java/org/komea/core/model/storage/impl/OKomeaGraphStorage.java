@@ -89,6 +89,7 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 	}
 
 	@Override
+		getGraph().commit();
 	public IKomeaSchema getSchema() {
 		return this.schema;
 	}

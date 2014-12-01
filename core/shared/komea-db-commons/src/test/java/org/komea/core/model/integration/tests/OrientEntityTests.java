@@ -10,7 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.core.model.IKomeaEntity;
-import org.komea.core.model.IKomeaFactory;
+import org.komea.core.model.IKomeaEntityFactory;
 import org.komea.core.model.impl.OKomeaModelFactory;
 import org.komea.core.model.storage.impl.OKomeaGraphStorage;
 import org.komea.core.schema.IEntityType;
@@ -24,7 +24,7 @@ import org.komea.orientdb.session.impl.OrientGraphDatabaseFactory;
 import org.komea.orientdb.session.impl.TestDatabaseConfiguration;
 
 public class OrientEntityTests {
-	private IKomeaFactory mfactory;
+	private IKomeaEntityFactory mfactory;
 	private IKomeaSchema schema;
 	private OKomeaGraphStorage storage;
 	private OrientGraphDatabaseFactory sessionsFactory;
@@ -64,9 +64,9 @@ public class OrientEntityTests {
 	@Test
 	public void setAttributeTest() {
 		IEntityType type = this.schema.findType("Person");
-
+		
 		IKomeaEntity p1 = this.mfactory.newInstance(type);
-
+		
 		p1.set("name", "John Doe");
 
 		String name = p1.value("name");

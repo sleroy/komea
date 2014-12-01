@@ -27,7 +27,9 @@ implements IGraphSessionFactory {
 	 */
 	@Override
 	public OrientGraph getGraph() {
-		return new OrientGraph(this.getOrCreateDatabaseSession());
+		OrientGraph orientGraph = new OrientGraph(this.getOrCreateDatabaseSession());
+		orientGraph.setUseLightweightEdges(false);
+		return orientGraph;
 	}
 
 	/*
