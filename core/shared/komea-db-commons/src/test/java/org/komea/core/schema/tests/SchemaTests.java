@@ -11,12 +11,7 @@ import org.komea.core.schema.Primitive;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
 
 public class SchemaTests {
-	private IKomeaSchemaFactory factory;
-
-	@Before
-	public void init() {
-		this.factory = new KomeaSchemaFactory();
-	}
+	private final IKomeaSchemaFactory factory = new KomeaSchemaFactory();
 
 	@Test
 	public void testEntityFindProperty() {
@@ -26,4 +21,5 @@ public class SchemaTests {
 		entityType.addProperty(attribute);
 		assertNotNull(entityType.findProperty(attribute.getName()));
 	}
+
 }
