@@ -48,16 +48,6 @@ public class DatabaseConfiguration {
 		this.password = _password;
 	}
 
-	public DatabaseConfiguration(final String _url, final String _username, final String _password,
-	        final int _minPoolSize, final int _maxPoolSize) {
-		super();
-		this.url = _url;
-		this.username = _username;
-		this.password = _password;
-		this.minPoolSize = _minPoolSize;
-		this.maxPoolSize = _maxPoolSize;
-	}
-
 	public Map<String, Object> getExtraConfiguration() {
 		return this.extraConfiguration;
 	}
@@ -117,6 +107,6 @@ public class DatabaseConfiguration {
 	@Override
 	public String toString() {
 		return "DatabaseConfiguration [url=" + this.url + ", username=" + this.username + ", minPoolSize="
-		        + this.minPoolSize + ", maxPoolSize=" + this.maxPoolSize + "]";
+				+ this.minPoolSize + ", maxPoolSize=" + this.maxPoolSize + "]";
 	}
 }

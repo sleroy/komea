@@ -1,6 +1,8 @@
 package org.komea.orientdb.session.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -84,6 +86,18 @@ public class ODocumentProxyTest {
 		verify(odoc, times(1)).field(fieldName, serializableValue);
 	}
 
+	@Test()
+	public void testFieldStringSerializableException() throws Exception {
+		final ODocument odoc = mock(ODocument.class);
+
+		final ODocumentProxy oDocumentProxy = new ODocumentProxy(odoc);
+		final String serializableValue = "serializableValue";
+		final String fieldName = "champ";
+		when(odoc.field(fieldName, serializableValue)).thenThrow(IllegalArgumentException.class);
+		oDocumentProxy.field(fieldName, serializableValue);
+		verify(odoc, times(1)).field(fieldName, serializableValue);
+	}
+
 	@Test
 	public void testSave() throws Exception {
 		final ODocument odoc = mock(ODocument.class);
@@ -114,6 +128,14 @@ public class ODocumentProxyTest {
 		assertEquals(CONSTANT_STRING, pojo2.getFieldA());
 		assertEquals(CONSTANT_INT, pojo2.getFieldB());
 
+	}
+
+	@Test
+	public void testToString() throws Exception {
+		final ODocument odoc = mock(ODocument.class);
+		final ODocumentProxy oDocumentProxy = new ODocumentProxy(odoc);
+		assertNotNull(oDocumentProxy.toString());
+		assertFalse(oDocumentProxy.toString().isEmpty());
 	}
 
 }
