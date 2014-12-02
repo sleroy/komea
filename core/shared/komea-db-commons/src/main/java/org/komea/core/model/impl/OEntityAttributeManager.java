@@ -40,7 +40,15 @@ public class OEntityAttributeManager extends AbstractPropertyManager {
 
 	@Override
 	public void remove(final Object value) {
-		// TODO Auto-generated method stub
+		if(this.reference.isMany()){
+			@SuppressWarnings("unchecked")
+			Collection<Object> values = (Collection<Object>) this.vertex
+					.getProperty(this.reference.getName());
+			values.remove(value);
+			this.vertex.setProperty(this.reference.getName(), values);
+		}else{
+			this.vertex.removeProperty(this.reference.getName());
+		}
 
 	}
 
