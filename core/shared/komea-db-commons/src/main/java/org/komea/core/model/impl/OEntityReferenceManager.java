@@ -53,7 +53,13 @@ public class OEntityReferenceManager extends AbstractPropertyManager {
 
 	@Override
 	public void remove(final Object value) {
-		// TODO Auto-generated method stub
+		OKomeaEntity target = (OKomeaEntity) value;
+
+		for (Edge e : this.vertex.getEdges(Direction.OUT, etype())) {
+			if (e.getVertex(Direction.IN).equals(target.getVertex())) {
+				e.remove();
+			}
+		}
 
 	}
 
@@ -68,8 +74,6 @@ public class OEntityReferenceManager extends AbstractPropertyManager {
 		return OGraphSchemaUpdater.etype(this.owner.getType(), this.reference);
 	}
 
-	
-
 	@Override
 	protected void doAddAll(final Collection<?> input) {
 		for (Object object : input) {
@@ -77,8 +81,7 @@ public class OEntityReferenceManager extends AbstractPropertyManager {
 		}
 	}
 
-	private static class DestinationsIterable implements
-			Iterable<IKomeaEntity> {
+	private static class DestinationsIterable implements Iterable<IKomeaEntity> {
 		private final Iterator<Edge> edges;
 		private final IKomeaSchema schema;
 		private Iterator<IKomeaEntity> iterator;
@@ -93,7 +96,8 @@ public class OEntityReferenceManager extends AbstractPropertyManager {
 		@Override
 		public Iterator<IKomeaEntity> iterator() {
 			if (this.iterator == null) {
-				this.iterator = new DestinationsIterator(this.edges, this.schema);
+				this.iterator = new DestinationsIterator(this.edges,
+						this.schema);
 			}
 			return this.iterator;
 		}
