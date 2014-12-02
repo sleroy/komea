@@ -44,7 +44,7 @@ public class EntityType extends AbstractType implements IEntityType {
 			}
 		}
 		if(this.superType!=null){
-			return this.superType.findProperty(name);
+			return this.superType.findProperty(_name);
 		}
 		return null;
 	}
