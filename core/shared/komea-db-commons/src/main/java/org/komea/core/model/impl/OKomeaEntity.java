@@ -2,9 +2,8 @@ package org.komea.core.model.impl;
 
 import java.util.Collection;
 
-import org.apache.commons.lang.Validate;
 import org.komea.core.model.IKomeaEntity;
-import org.komea.core.model.validation.KomeaModelValidator;
+import org.komea.core.model.MissingFieldException;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IReference;
 
@@ -34,14 +33,21 @@ public class OKomeaEntity implements IKomeaEntity {
 	private AbstractPropertyManager buildReferenceManager(
 			final IReference property) {
 		AbstractPropertyManager updater;
-		Validate.isTrue(this.type.findProperty(property.getName())!=null,
-				"Property "+property.getName()+ " doesn't exists in the entity type "+getType().getName());
 		if (property.getType().isPrimitive()) {
 			updater = new OEntityAttributeManager(this.vertex, property);
 		} else {
 			updater = new OEntityReferenceManager(this, property);
 		}
 		return updater;
+	}
+
+	private IReference getPropertyOrFail(final String propertyName) {
+		final IReference property = this.type.findProperty(propertyName);
+		if (property == null) {
+			throw new MissingFieldException(propertyName);
+		} else {
+			return property;
+		}
 	}
 
 	@Override
@@ -61,8 +67,7 @@ public class OKomeaEntity implements IKomeaEntity {
 
 	@Override
 	public void remove(final String propertyName, final Object value) {
-		IReference property = this.type.findProperty(propertyName);
-		Validate.notNull(property, "Property doesn't exists in the entity type");
+		IReference property = getPropertyOrFail(propertyName);
 		remove(property, value);
 	}
 
@@ -78,22 +83,19 @@ public class OKomeaEntity implements IKomeaEntity {
 
 	@Override
 	public <T> T value(final String propertyName) {
-		IReference property = this.type.findProperty(propertyName);
-		Validate.notNull(property, "Property "+propertyName+" doesn't exists in the entity type");
-		return value(this.type.findProperty(propertyName));
+		IReference property = getPropertyOrFail(propertyName);
+		return value(property);
 	}
 
 	@Override
 	public void add(final String propertyName, final Object value) {
-		IReference property = this.type.findProperty(propertyName);
-		Validate.notNull(property, "Property"+propertyName+" doesn't exists in the entity type");
+		IReference property = getPropertyOrFail(propertyName);
 		add(property, value);
 	}
 
 	@Override
 	public void set(final String propertyName, final Object value) {
-		IReference property = this.type.findProperty(propertyName);
-		Validate.notNull(property, "Property "+propertyName+" doesn't exists in the entity type");
+		IReference property = getPropertyOrFail(propertyName);
 		set(property, value);
 	}
 
@@ -104,8 +106,7 @@ public class OKomeaEntity implements IKomeaEntity {
 
 	@Override
 	public void addAll(final String propertyName, final Collection<?> values) {
-		IReference property = this.type.findProperty(propertyName);
-		Validate.notNull(property, "Property "+propertyName+" doesn't exists in the entity type");
+		IReference property = getPropertyOrFail(propertyName);
 		addAll(property, values);
 	}
 
@@ -116,7 +117,8 @@ public class OKomeaEntity implements IKomeaEntity {
 
 	@Override
 	public String toString() {
-		return "OKomeaEntity [type=" + this.type + ", vertex=" + this.vertex + "]";
+		return "OKomeaEntity [type=" + this.type + ", vertex=" + this.vertex
+				+ "]";
 	}
 
 	@Override
@@ -148,8 +150,7 @@ public class OKomeaEntity implements IKomeaEntity {
 
 	@Override
 	public Iterable<IKomeaEntity> references(final String propertyName) {
-		IReference property = this.type.findProperty(propertyName);
-		Validate.notNull(property, "Property doesn't exists in the entity type");
+		IReference property = getPropertyOrFail(propertyName);
 		return references(property);
 	}
 
