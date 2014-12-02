@@ -16,6 +16,16 @@ public class SchemaBuilderTest {
 	private IKomeaSchema	schema;
 
 	@Test
+	public final void testEntityAggregatesMany() throws Exception {
+		final SchemaBuilder schemaBuilder = new SchemaBuilder("example");
+		final IEntityType entity1 = new EntityType("e1");
+		final IEntityType entity2 = new EntityType("e2");
+		final String fieldReference = "field1";
+		schemaBuilder.entityAggregatesMany(fieldReference, entity1, entity2);
+		assertEquals(entity1.getAllProperties().get(0).getKind(), ReferenceKind.AGGREGATION);
+	}
+
+	@Test
 	public final void testEntityContainsMany() throws Exception {
 		final SchemaBuilder schemaBuilder = new SchemaBuilder("example");
 		final IEntityType entity1 = new EntityType("e1");
@@ -23,16 +33,6 @@ public class SchemaBuilderTest {
 		final String fieldReference = "field1";
 		schemaBuilder.entityContainsMany(fieldReference, entity1, entity2);
 		assertEquals(entity1.getAllProperties().get(0).getKind(), ReferenceKind.CONTAINMENT);
-	}
-
-	@Test
-	public final void testEntityRefersMany() throws Exception {
-		final SchemaBuilder schemaBuilder = new SchemaBuilder("example");
-		final IEntityType entity1 = new EntityType("e1");
-		final IEntityType entity2 = new EntityType("e2");
-		final String fieldReference = "field1";
-		schemaBuilder.entityRefersMany(fieldReference, entity1, entity2);
-		assertEquals(entity1.getAllProperties().get(0).getKind(), ReferenceKind.REFERENCE);
 	}
 
 	@Test

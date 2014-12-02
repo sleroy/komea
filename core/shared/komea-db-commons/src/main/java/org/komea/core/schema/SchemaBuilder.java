@@ -32,7 +32,7 @@ public class SchemaBuilder {
 
 	}
 
-	public void entityRefersMany(final String _fieldName, final IEntityType _entity, final IEntityType _entity2) {
+	public void entityAggregatesMany(final String _fieldName, final IEntityType _entity, final IEntityType _entity2) {
 		_entity.addProperty(this.schemaFactory.newReference(_fieldName, _entity2).setKind(ReferenceKind.AGGREGATION)
 		        .setArity(ReferenceArity.MANY));
 

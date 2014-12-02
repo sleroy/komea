@@ -42,12 +42,12 @@ public class BugzillaSchemaBuilder {
 		this.bugzillaPlatform = schemaBuilder.newEntity("BugzillaPlatform").addStringProperty("name").build();
 
 		schemaBuilder.entityContainsMany("versions", this.bugzillaProduct, this.bugzillaProductVersion);
-		schemaBuilder.entityRefersMany("components", this.bugzillaProduct, this.bugzillaProductComponent);
-		schemaBuilder.entityRefersMany("owned_by", this.bugzillaProductComponent, this.bugzillaProduct);
-		schemaBuilder.entityRefersMany("platforms_supported", this.bugzillaProduct, this.bugzillaPlatform);
-		schemaBuilder.entityRefersMany("os_supported", this.bugzillaProduct, this.bugzillaOS);
-		schemaBuilder.entityRefersMany("platforms_supported", this.bugzillaProductComponent, this.bugzillaPlatform);
-		schemaBuilder.entityRefersMany("os_supported", this.bugzillaProductComponent, this.bugzillaOS);
+		schemaBuilder.entityAggregatesMany("components", this.bugzillaProduct, this.bugzillaProductComponent);
+		schemaBuilder.entityAggregatesMany("owned_by", this.bugzillaProductComponent, this.bugzillaProduct);
+		schemaBuilder.entityAggregatesMany("platforms_supported", this.bugzillaProduct, this.bugzillaPlatform);
+		schemaBuilder.entityAggregatesMany("os_supported", this.bugzillaProduct, this.bugzillaOS);
+		schemaBuilder.entityAggregatesMany("platforms_supported", this.bugzillaProductComponent, this.bugzillaPlatform);
+		schemaBuilder.entityAggregatesMany("os_supported", this.bugzillaProductComponent, this.bugzillaOS);
 		this.schema = _schema.getSchema();
 
 	}
