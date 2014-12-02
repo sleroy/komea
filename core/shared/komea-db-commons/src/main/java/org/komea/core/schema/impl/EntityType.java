@@ -19,17 +19,6 @@ public class EntityType extends AbstractType implements IEntityType {
 		this.references = Lists.newArrayList();
 	}
 
-	
-	@Override
-	public IKomeaSchema getSchema() {
-		return this.schema;
-	}
-	
-	
-	public void setSchema(final IKomeaSchema schema) {
-		this.schema = schema;
-	}
-	
 	@Override
 	public void addProperty(final IReference reference) {
 		this.references.add(reference);
@@ -50,6 +39,18 @@ public class EntityType extends AbstractType implements IEntityType {
 	}
 
 	@Override
+	public List<IReference> getAllProperties() {
+		final List<IReference> allReferences = Lists.newArrayList();
+		allReferences.addAll(this.references);
+		IEntityType parent = this.superType;
+		while (parent != null) {
+			allReferences.addAll(parent.getProperties());
+			parent = parent.getSuperType();
+		}
+		return allReferences;
+	}
+
+	@Override
 	public String getName() {
 		return this.name;
 	}
@@ -57,6 +58,11 @@ public class EntityType extends AbstractType implements IEntityType {
 	@Override
 	public List<IReference> getProperties() {
 		return this.references;
+	}
+
+	@Override
+	public IKomeaSchema getSchema() {
+		return this.schema;
 	}
 
 	@Override
@@ -69,6 +75,10 @@ public class EntityType extends AbstractType implements IEntityType {
 		return false;
 	}
 
+	public void setSchema(final IKomeaSchema schema) {
+		this.schema = schema;
+	}
+
 	@Override
 	public void setSuperType(final IEntityType type) {
 		this.superType = type;
@@ -76,15 +86,9 @@ public class EntityType extends AbstractType implements IEntityType {
 
 
 	@Override
-	public List<IReference> getAllProperties() {
-		List<IReference> allReferences = Lists.newArrayList();
-		allReferences.addAll(this.references);
-		IEntityType parent = this.superType;
-		while(parent!=null){
-			allReferences.addAll(parent.getProperties());
-			parent = parent.getSuperType();
-		}
-		return allReferences;
+	public String toString() {
+		return "EntityType [references=" + this.references + ", superType=" + this.superType + ", name=" + this.name
+		        + ", schema=" + this.schema + "]";
 	}
 
 	

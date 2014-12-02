@@ -1,6 +1,7 @@
 package org.komea.connectors.bugzilla
 
 import org.joda.time.DateTime
+import org.komea.connectors.bugzilla.schema.impl.BugzillaSchemaBuilder;
 import org.komea.core.model.impl.OKomeaModelFactory
 import org.komea.orientdb.session.impl.OrientGraphDatabaseFactory
 import org.komea.orientdb.session.impl.TestDatabaseConfiguration

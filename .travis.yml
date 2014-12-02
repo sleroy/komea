@@ -1,10 +1,8 @@
 language: java
-
-jdk:
-- oraclejdk7
-
+script: ./gradlew build jacocoTestReport
+jdk: oraclejdk7
 env:
+matrix:
 - TERM=dumb
-
 after_success:
-- ./gradlew cobertura coveralls
+- ./gradlew jacocoRootReport coveralls 

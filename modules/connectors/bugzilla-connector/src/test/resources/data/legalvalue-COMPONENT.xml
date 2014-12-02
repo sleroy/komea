@@ -1,0 +1,379 @@
+<set>
+  <string>Util</string>
+  <string>mod_info</string>
+  <string>APR test</string>
+  <string>image writer</string>
+  <string>Unknown</string>
+  <string>mod_session</string>
+  <string>mod_mime_magic</string>
+  <string>DB Engine</string>
+  <string>mod_watchdog</string>
+  <string>mod_authn_file</string>
+  <string>Response Taglib</string>
+  <string>Utilities</string>
+  <string>APR</string>
+  <string>Configurator</string>
+  <string>libapreq2</string>
+  <string>mod_dialup</string>
+  <string>awt renderer</string>
+  <string>Library</string>
+  <string>mod_sed</string>
+  <string>mpm_perchild</string>
+  <string>GVT Filters</string>
+  <string>Servlets:WebDAV</string>
+  <string>Platform</string>
+  <string>Connector:HTTP</string>
+  <string>mod_deflate</string>
+  <string>mod_dav_fs</string>
+  <string>mod_authn_default</string>
+  <string>Webapps</string>
+  <string>mod_jk</string>
+  <string>GVT</string>
+  <string>Cache  Taglib</string>
+  <string>mod_auth</string>
+  <string>i18n (Internationalization)</string>
+  <string>Server</string>
+  <string>mod_firehose</string>
+  <string>Serialization</string>
+  <string>Connectors</string>
+  <string>Layout</string>
+  <string>Rivet Core Commands</string>
+  <string>Optional Tasks</string>
+  <string>EL</string>
+  <string>AntUnit</string>
+  <string>Docs</string>
+  <string>Resolver</string>
+  <string>mod_ident</string>
+  <string>XWPF</string>
+  <string>String Taglib</string>
+  <string>Kupu Integration</string>
+  <string>APR-util</string>
+  <string>mod_dir</string>
+  <string>Standard Taglib</string>
+  <string>C++ Signature</string>
+  <string>DBTags Taglib</string>
+  <string>Gnat Taglib</string>
+  <string>GVT Text</string>
+  <string>Other Modules</string>
+  <string>Integration</string>
+  <string>Which</string>
+  <string>mod_echo</string>
+  <string>SVG DOM</string>
+  <string>Scheduler</string>
+  <string>SVG Rasterizer</string>
+  <string>mod_authz_ldap</string>
+  <string>Scripting</string>
+  <string>WMLDOM</string>
+  <string>SAX</string>
+  <string>Client</string>
+  <string>Miscellaneous</string>
+  <string>mpm_netware</string>
+  <string>Core tasks</string>
+  <string>HPBF</string>
+  <string>mod_authn_alias</string>
+  <string>mod_proxy_ftp</string>
+  <string>SVG Viewer</string>
+  <string>Workflow</string>
+  <string>mod_authn_core</string>
+  <string>Scrape Taglib</string>
+  <string>mpm_simple</string>
+  <string>JNDI Taglib</string>
+  <string>Tomcat Lite</string>
+  <string>mod_proxy_express</string>
+  <string>mod_cern_meta</string>
+  <string>Unknown Taglib</string>
+  <string>mod_remoteip</string>
+  <string>mod_privileges</string>
+  <string>Servlet &amp; JSP API</string>
+  <string>JSP</string>
+  <string>Connector:HTTP/1.1 (deprecated)</string>
+  <string>documentation</string>
+  <string>Manager application</string>
+  <string>mod_ext_filter</string>
+  <string>XPath</string>
+  <string>mod_cache</string>
+  <string>Companions</string>
+  <string>RDC Taglib</string>
+  <string>mod_cgi</string>
+  <string>mod_reqtimeout</string>
+  <string>mod_fcgid</string>
+  <string>HTTP</string>
+  <string>pdf</string>
+  <string>java2D</string>
+  <string>mod_log_config</string>
+  <string>Props Antlib</string>
+  <string>Build Process</string>
+  <string>Webapps:Administration</string>
+  <string>mod_proxy_fcgi</string>
+  <string>mod_substitute</string>
+  <string>mod_authn_socache</string>
+  <string>Servlet</string>
+  <string>mod_proxy_connect</string>
+  <string>Build</string>
+  <string>Session</string>
+  <string>HSSF</string>
+  <string>Page Taglib</string>
+  <string>XSSF</string>
+  <string>Mailer Taglib</string>
+  <string>Versioning</string>
+  <string>Webapps:Documentation</string>
+  <string>Bayeux</string>
+  <string>xmp</string>
+  <string>Examples</string>
+  <string>mod_authz_owner</string>
+  <string>mod_speling</string>
+  <string>Encryption</string>
+  <string>DBPatch Antlib</string>
+  <string>Test Suite</string>
+  <string>rtf</string>
+  <string>mod_dumpio</string>
+  <string>Session Taglib</string>
+  <string>pcl</string>
+  <string>Jasper</string>
+  <string>Catalina:Cluster</string>
+  <string>mod_session_cookie</string>
+  <string>mod_xml2enc</string>
+  <string>mod_buffer</string>
+  <string>Connector:AJP</string>
+  <string>Forrest Integration</string>
+  <string>mod_ftp</string>
+  <string>TinyMCE Integration</string>
+  <string>jdbc-pool</string>
+  <string>mod_vhost_alias</string>
+  <string>Random Taglib</string>
+  <string>mod_version</string>
+  <string>(RFE) Request For Extension</string>
+  <string>Encoding</string>
+  <string>Antidote</string>
+  <string>Compress Antlib</string>
+  <string>Installable Packages</string>
+  <string>mod_socache_(dbm|dc|memcache|shmcb)</string>
+  <string>JK2</string>
+  <string>mod_userdir</string>
+  <string>Signature</string>
+  <string>image codecs</string>
+  <string>SS Common</string>
+  <string>BSF Taglib</string>
+  <string>Main</string>
+  <string>Web Site</string>
+  <string>Manager</string>
+  <string>mod_request</string>
+  <string>I18N Taglib</string>
+  <string>mod_authz_groupfile</string>
+  <string>VSS Antlib</string>
+  <string>mod_cache_disk / mod_disk_cache</string>
+  <string>Catalina:Modules</string>
+  <string>mod_actions</string>
+  <string>svn Antlib</string>
+  <string>mod_proxy_html</string>
+  <string>DateTime Taglib</string>
+  <string>mod_ssl</string>
+  <string>mod_authn_dbd</string>
+  <string>svg</string>
+  <string>mod_lua</string>
+  <string>mod_lbmethod_(bybusyness|byrequests|bytraffic|heartbeat|rr)</string>
+  <string>Connector:JK/AJP</string>
+  <string>Canonicalization</string>
+  <string>Lucene Integration</string>
+  <string>mod_file_cache</string>
+  <string>mod_alias</string>
+  <string>mod_suexec</string>
+  <string>mod_heartmonitor</string>
+  <string>mod_authn_dbm</string>
+  <string>DIO</string>
+  <string>Appender</string>
+  <string>fo tree</string>
+  <string>general</string>
+  <string>mod_slotmem_plain / mod_slotmem_shm</string>
+  <string>Transaction Manager</string>
+  <string>nsapi</string>
+  <string>Xopus Integration</string>
+  <string>mod_proxy_wstunnel</string>
+  <string>mod_imap</string>
+  <string>core</string>
+  <string>isapi</string>
+  <string>mod_ratelimit</string>
+  <string>mod_ldap</string>
+  <string>ps</string>
+  <string>mod_bucketeer</string>
+  <string>Search</string>
+  <string>JAXP</string>
+  <string>mod_expires</string>
+  <string>Navigation Framework</string>
+  <string>mod_log_debug</string>
+  <string>mod_session_crypto</string>
+  <string>javadoc</string>
+  <string>Regexp Taglib</string>
+  <string>Cluster</string>
+  <string>Servlets:SSI</string>
+  <string>Log Taglib</string>
+  <string>Runtime Config</string>
+  <string>mod_authz_dbm</string>
+  <string>mpm_winnt</string>
+  <string>mod_authn_anon</string>
+  <string>Connector:Coyote</string>
+  <string>mod_data</string>
+  <string>Xalan</string>
+  <string>mod_isapi</string>
+  <string>Connector:Webapp</string>
+  <string>Packaging</string>
+  <string>APR-iconv</string>
+  <string>Default</string>
+  <string>support</string>
+  <string>mod_authnz_ldap</string>
+  <string>mod_unique_id</string>
+  <string>Input Taglib</string>
+  <string>mod_session_dbd</string>
+  <string>mod_cgid</string>
+  <string>DTD</string>
+  <string>mod_reflector</string>
+  <string>Publisher</string>
+  <string>Connector:Other</string>
+  <string>mod_dav_lock</string>
+  <string>mod_auth_anon</string>
+  <string>WebSocket</string>
+  <string>Samples</string>
+  <string>fonts</string>
+  <string>mod_negotiation</string>
+  <string>chainsaw</string>
+  <string>mod_mime</string>
+  <string>.NET Antlib</string>
+  <string>mod_proxy</string>
+  <string>Other mods</string>
+  <string>Config</string>
+  <string>mod_authn_ldap</string>
+  <string>page-master/layout</string>
+  <string>Native:Integration</string>
+  <string>mod_proxy_ajp</string>
+  <string>mod_mbox</string>
+  <string>postscript</string>
+  <string>POI Overall</string>
+  <string>mod_authz_host</string>
+  <string>Request Taglib</string>
+  <string>HDGF</string>
+  <string>Jasper 2</string>
+  <string>HTMLDOM</string>
+  <string>Common</string>
+  <string>Ant Integration</string>
+  <string>mod_status</string>
+  <string>Catalina</string>
+  <string>mod_heartbeat</string>
+  <string>mod_auth_ldap</string>
+  <string>WebDAV Server</string>
+  <string>Specification APIs</string>
+  <string>Site &amp; Docs</string>
+  <string>Webapps:Examples</string>
+  <string>XmlStylebook</string>
+  <string>mod_dav</string>
+  <string>C++ Canonicalization</string>
+  <string>File Upload</string>
+  <string>Default Publication</string>
+  <string>Native:Packaging</string>
+  <string>Servlets:CGI</string>
+  <string>mod_dbd</string>
+  <string>mod_authz_dbd</string>
+  <string>framework</string>
+  <string>Access Control</string>
+  <string>mod_so</string>
+  <string>Revision Controller</string>
+  <string>Optional SCM tasks</string>
+  <string>SXSSF</string>
+  <string>mod_allowmethods</string>
+  <string>mod_autoindex</string>
+  <string>mod_serf</string>
+  <string>WebDAV client</string>
+  <string>mod_proxy_balancer</string>
+  <string>Test Tools</string>
+  <string>All</string>
+  <string>mod_auth_form</string>
+  <string>Myrmidon</string>
+  <string>Sandbox Taglibs</string>
+  <string>Auth/Access</string>
+  <string>XTags Taglib</string>
+  <string>mpm_prefork</string>
+  <string>SVGGraphics2D</string>
+  <string>mod_asis</string>
+  <string>HPSF</string>
+  <string>Schema-Structures</string>
+  <string>HSMF</string>
+  <string>mpm_event</string>
+  <string>mod_access_compat</string>
+  <string>utilities</string>
+  <string>XSLF</string>
+  <string>mod_setenvif</string>
+  <string>Wrapper scripts</string>
+  <string>HDF</string>
+  <string>POIFS</string>
+  <string>Bitflux Integration</string>
+  <string>mod_authz_user</string>
+  <string>mod_unixd</string>
+  <string>Auth</string>
+  <string>mod_include</string>
+  <string>Animation engine</string>
+  <string>mod_usertrack</string>
+  <string>CSS</string>
+  <string>Other</string>
+  <string>Site Management</string>
+  <string>Repository Integration</string>
+  <string>Form Editor</string>
+  <string>Connector:Coyote JK 2 (deprecated)</string>
+  <string>mod_proxy_fdpass</string>
+  <string>Security</string>
+  <string>DOM</string>
+  <string>mod_noloris</string>
+  <string>flood</string>
+  <string>Tests</string>
+  <string>HSLF</string>
+  <string>Build System</string>
+  <string>images</string>
+  <string>mod_proxy_scgi</string>
+  <string>Tester</string>
+  <string>mod_rewrite</string>
+  <string>Usecase Framework</string>
+  <string>mod_mem_cache</string>
+  <string>Documentation</string>
+  <string>other</string>
+  <string>XML:DB API</string>
+  <string>Driver: embed</string>
+  <string>Bridge</string>
+  <string>mod_rivet</string>
+  <string>blog</string>
+  <string>HMEF</string>
+  <string>mod_env</string>
+  <string>JMS Taglib</string>
+  <string>Form</string>
+  <string>mod_imagemap</string>
+  <string>mod_case_filter / mod_case_filter_in</string>
+  <string>mod_access</string>
+  <string>mpm_worker</string>
+  <string>mod_logio</string>
+  <string>Application Taglib</string>
+  <string>Win32 MSI Installer</string>
+  <string>mod_authz_default</string>
+  <string>Stores</string>
+  <string>mod_proxy_http</string>
+  <string>OPC</string>
+  <string>mod_charset_lite</string>
+  <string>mod_auth_dbm</string>
+  <string>Webapps:Manager</string>
+  <string>mod_headers</string>
+  <string>HWPF</string>
+  <string>mod_log_forensic</string>
+  <string>Website</string>
+  <string>Creator</string>
+  <string>mod_authz_core</string>
+  <string>Core</string>
+  <string>mod_auth_basic</string>
+  <string>mod_filter</string>
+  <string>Driver: XMLRPC</string>
+  <string>Replicator</string>
+  <string>mod_auth_digest</string>
+  <string>Meta</string>
+  <string>Connector:Coyote HTTP/1.1</string>
+  <string>Schema-Datatypes</string>
+  <string>WebSH</string>
+  <string>mod_policy</string>
+  <string>IO Taglib</string>
+  <string>Ultradev 4 CTLX</string>
+  <string>Benchmark Taglib</string>
+</set>

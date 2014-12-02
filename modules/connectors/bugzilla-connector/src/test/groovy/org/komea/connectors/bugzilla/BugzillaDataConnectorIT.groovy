@@ -3,6 +3,9 @@ package org.komea.connectors.bugzilla
 import static org.junit.Assert.*
 
 import org.junit.Test
+import org.komea.connectors.bugzilla.events.IBugzillaConnectorInformations;
+import org.komea.connectors.bugzilla.events.impl.BugzillaEventConnector;
+import org.komea.connectors.bugzilla.proxy.impl.BugzillaServerConfiguration;
 import org.komea.event.query.service.EventQueryManagerService
 import org.komea.event.storage.service.EventStorageService
 import org.komea.orientdb.session.impl.OrientDocumentDatabaseFactory

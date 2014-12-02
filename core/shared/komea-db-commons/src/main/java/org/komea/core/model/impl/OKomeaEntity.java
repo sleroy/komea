@@ -18,6 +18,7 @@ import com.tinkerpop.blueprints.impls.orient.OrientVertex;
  */
 public class OKomeaEntity implements IKomeaEntity {
 	private final IEntityType type;
+
 	private final OrientVertex vertex;
 
 	public OKomeaEntity(final IEntityType type, final OrientVertex vertex) {
@@ -111,6 +112,11 @@ public class OKomeaEntity implements IKomeaEntity {
 	@Override
 	public int hashCode() {
 		return ((this.vertex == null) ? 0 : this.vertex.hashCode());
+	}
+
+	@Override
+	public String toString() {
+		return "OKomeaEntity [type=" + this.type + ", vertex=" + this.vertex + "]";
 	}
 
 	@Override

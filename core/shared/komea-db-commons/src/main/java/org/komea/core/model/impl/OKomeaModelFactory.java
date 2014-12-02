@@ -52,7 +52,7 @@ public class OKomeaModelFactory implements IKomeaEntityFactory{
 	}
 
 	public IKomeaGraphStorage getStorageService() {
-	    return storageService;
+	    return this.storageService;
     }
 
 }

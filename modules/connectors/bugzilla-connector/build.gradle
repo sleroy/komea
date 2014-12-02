@@ -2,5 +2,6 @@ dependencies {
 	compile "com.j2bugzilla:j2bugzilla:2.2.1"
 	compile project(":core:komea-events")
 	compile project(":core:komea-software-model")
-
+	compile 'com.thoughtworks.xstream:xstream:1.4.7'
+	testCompile project(":core:shared:komea-db-viz")
 }
