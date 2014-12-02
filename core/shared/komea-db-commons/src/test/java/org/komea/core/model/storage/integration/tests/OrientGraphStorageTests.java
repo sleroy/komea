@@ -24,7 +24,7 @@ import org.komea.core.schema.ReferenceArity;
 import org.komea.core.schema.ReferenceKind;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
 import org.komea.orientdb.session.impl.DatabaseConfiguration;
-import org.komea.orientdb.session.impl.MemoryDatabaseConfiguration;
+import org.komea.orientdb.session.impl.TestDatabaseConfiguration;
 
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType;
 
@@ -72,12 +72,12 @@ public class OrientGraphStorageTests {
 
 		final IEntityType company = this.factory.newEntity("Company");
 		company.addProperty(this.factory.newReference("members", person).setArity(ReferenceArity.MANY)
-				.setKind(ReferenceKind.CONTAINMENT));
+		        .setKind(ReferenceKind.CONTAINMENT));
 		company.addProperty(this.factory.newAttribute("values", Primitive.INTEGER).setArity(ReferenceArity.MANY));
 		this.schema.addType(company);
 
 		// initialize storage
-		final DatabaseConfiguration db = new MemoryDatabaseConfiguration("test");
+		final DatabaseConfiguration db = new TestDatabaseConfiguration();
 		this.storage = new OKomeaGraphStorage(this.schema, db);
 	}
 
