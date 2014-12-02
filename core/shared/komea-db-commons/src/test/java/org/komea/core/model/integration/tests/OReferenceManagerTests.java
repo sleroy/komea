@@ -11,6 +11,7 @@ import org.komea.core.model.IKomeaEntityFactory;
 import org.komea.core.model.impl.OEntityReferenceManager;
 import org.komea.core.model.impl.OKomeaEntity;
 import org.komea.core.model.impl.OKomeaModelFactory;
+import org.komea.core.model.storage.IKomeaGraphStorage;
 import org.komea.core.model.storage.impl.OKomeaGraphStorage;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
@@ -24,7 +25,7 @@ import org.komea.orientdb.session.impl.OrientGraphDatabaseFactory;
 import org.komea.orientdb.session.impl.TestDatabaseConfiguration;
 
 public class OReferenceManagerTests {
-	private OKomeaGraphStorage storage;
+	private IKomeaGraphStorage storage;
 	private IKomeaSchemaFactory sfactory;
 	private IKomeaEntityFactory mfactory;
 	private IEntityType type;
@@ -63,8 +64,8 @@ public class OReferenceManagerTests {
 
 	@Test
 	public void setEntityReferenceTest() {
-		OKomeaEntity p1 = (OKomeaEntity) this.mfactory.newInstance(this.type);
-		OKomeaEntity p2 = (OKomeaEntity) this.mfactory.newInstance(this.type);
+		OKomeaEntity p1 = (OKomeaEntity) this.mfactory.create(this.type);
+		OKomeaEntity p2 = (OKomeaEntity) this.mfactory.create(this.type);
 
 		IReference property = this.type.findProperty("partner");
 		OEntityReferenceManager updater = new OEntityReferenceManager(p1,
@@ -76,8 +77,8 @@ public class OReferenceManagerTests {
 
 	@Test
 	public void addEntityReferenceTest() {
-		OKomeaEntity p1 = (OKomeaEntity) this.mfactory.newInstance(this.type);
-		OKomeaEntity p2 = (OKomeaEntity) this.mfactory.newInstance(this.type);
+		OKomeaEntity p1 = (OKomeaEntity) this.mfactory.create(this.type);
+		OKomeaEntity p2 = (OKomeaEntity) this.mfactory.create(this.type);
 
 		IReference property = this.type.findProperty("family");
 		OEntityReferenceManager updater = new OEntityReferenceManager(p1,

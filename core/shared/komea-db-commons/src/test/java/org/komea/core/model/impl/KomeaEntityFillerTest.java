@@ -68,7 +68,7 @@ public class KomeaEntityFillerTest {
 		entity.setName("sylvain");
 		entity.setAge(31);
 		final IKomeaEntity komeaEntity = mock(IKomeaEntity.class);
-		when(this.oKomeaModelFactory.newInstance(this.entityType)).thenReturn(komeaEntity);
+		when(this.oKomeaModelFactory.create(this.entityType)).thenReturn(komeaEntity);
 		this.komeaEntityFiller.put(entity);
 		verify(komeaEntity, Mockito.times(1)).set("name", "sylvain");
 		verify(komeaEntity, Mockito.times(1)).set("age", 31);

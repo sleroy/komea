@@ -1,9 +1,9 @@
 package org.komea.core.model.storage;
 
-import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 
 /**
- * A Komea storage using a blueprints Graph implementation to store entities and
+ * A Komea storage using an Orient DB Graph implementation to store entities and
  * their relationships.
  * 
  * @author afloch
@@ -12,9 +12,11 @@ import com.tinkerpop.blueprints.Graph;
 public interface IKomeaGraphStorage extends IKomeaStorage {
 
 	/**
-	 * Get the blueprints graph used to store entities and relations.
+	 * Get the Orient DB graph used to store entities and relations.
 	 * 
 	 * @return
 	 */
-	Graph getGraph();
+	OrientGraph getGraph();
+
+
 }

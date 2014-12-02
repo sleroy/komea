@@ -9,5 +9,5 @@ import org.komea.core.schema.IEntityType;
  *
  */
 public interface IKomeaEntityFactory {
-	IKomeaEntity newInstance(IEntityType type);
+	IKomeaEntity create(IEntityType type);
 }

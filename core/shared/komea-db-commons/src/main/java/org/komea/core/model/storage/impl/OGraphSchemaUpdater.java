@@ -11,14 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
+import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OProperty;
 import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.tinkerpop.blueprints.impls.orient.OrientEdgeType;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType;
 public class OGraphSchemaUpdater {
-
-
+	
 	private final OrientGraph graph;
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger("Orient DB schema updater");
@@ -79,7 +79,12 @@ public class OGraphSchemaUpdater {
 			oproperty = vtype.createProperty(property.getName(),
 					OType.valueOf(property.getType().getName().toUpperCase()));
 		}
-
+		if(property.isUnique()){
+			oproperty.createIndex(OClass.INDEX_TYPE.UNIQUE);
+		}
+		else if(property.isIndexed()){
+			oproperty.createIndex(OClass.INDEX_TYPE.NOTUNIQUE);
+		}
 		return oproperty;
 	}
 

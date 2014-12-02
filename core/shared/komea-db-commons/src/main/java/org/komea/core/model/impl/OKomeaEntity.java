@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.apache.commons.lang.Validate;
 import org.komea.core.model.IKomeaEntity;
+import org.komea.core.model.validation.KomeaModelValidator;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IReference;
 
@@ -32,8 +33,8 @@ public class OKomeaEntity implements IKomeaEntity {
 	private AbstractPropertyManager buildReferenceManager(
 			final IReference property) {
 		AbstractPropertyManager updater;
-		Validate.isTrue(this.type.getProperties().contains(property),
-				"Property doesn't exists in the entity type");
+		Validate.isTrue(this.type.findProperty(property.getName())!=null,
+				"Property "+property.getName()+ " doesn't exists in the entity type "+getType().getName());
 		if (property.getType().isPrimitive()) {
 			updater = new OEntityAttributeManager(this.vertex, property);
 		} else {
@@ -77,21 +78,21 @@ public class OKomeaEntity implements IKomeaEntity {
 	@Override
 	public <T> T value(final String propertyName) {
 		IReference property = this.type.findProperty(propertyName);
-		Validate.notNull(property, "Property doesn't exists in the entity type");
+		Validate.notNull(property, "Property "+propertyName+" doesn't exists in the entity type");
 		return value(this.type.findProperty(propertyName));
 	}
 
 	@Override
 	public void add(final String propertyName, final Object value) {
 		IReference property = this.type.findProperty(propertyName);
-		Validate.notNull(property, "Property doesn't exists in the entity type");
+		Validate.notNull(property, "Property"+propertyName+" doesn't exists in the entity type");
 		add(property, value);
 	}
 
 	@Override
 	public void set(final String propertyName, final Object value) {
 		IReference property = this.type.findProperty(propertyName);
-		Validate.notNull(property, "Property doesn't exists in the entity type");
+		Validate.notNull(property, "Property "+propertyName+" doesn't exists in the entity type");
 		set(property, value);
 	}
 
@@ -103,7 +104,7 @@ public class OKomeaEntity implements IKomeaEntity {
 	@Override
 	public void addAll(final String propertyName, final Collection<?> values) {
 		IReference property = this.type.findProperty(propertyName);
-		Validate.notNull(property, "Property doesn't exists in the entity type");
+		Validate.notNull(property, "Property "+propertyName+" doesn't exists in the entity type");
 		addAll(property, values);
 	}
 

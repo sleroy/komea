@@ -1,9 +1,12 @@
 package org.komea.core.model.storage.impl;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.apache.commons.lang.Validate;
 import org.komea.core.model.IKomeaEntity;
+import org.komea.core.model.impl.IKomeaEntityFiller;
+import org.komea.core.model.impl.KomeaEntityFiller;
 import org.komea.core.model.impl.OEntityIterable;
 import org.komea.core.model.impl.OKomeaEntity;
 import org.komea.core.model.storage.IKomeaGraphStorage;
@@ -17,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
+import com.tinkerpop.blueprints.impls.orient.OrientVertex;
 
 /**
  * A storage service that will store Komea entities as nodes in a graph OrientDB
@@ -26,26 +30,84 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraph;
  *
  */
 public class OKomeaGraphStorage implements IKomeaGraphStorage {
-	private final IGraphSessionFactory	sessionsFactory;
-	private IKomeaSchema	           schema;
-	private OrientGraph	               graph;
-	private final static Logger	       LOGGER	= LoggerFactory.getLogger(OKomeaGraphStorage.class);
+	private final IGraphSessionFactory sessionsFactory;
+	private IKomeaSchema schema;
+	private OrientGraph graph;
+	private final static Logger LOGGER = LoggerFactory
+			.getLogger(OKomeaGraphStorage.class);
 
-	public OKomeaGraphStorage(final IKomeaSchema schema, final DatabaseConfiguration _configuration) {
+	public OKomeaGraphStorage(final IKomeaSchema schema,
+			final DatabaseConfiguration _configuration) {
 		super();
 		this.sessionsFactory = new OrientGraphDatabaseFactory(_configuration);
 		this.update(schema);
 	}
 
-	public OKomeaGraphStorage(final IKomeaSchema schema, final IGraphSessionFactory sessionsFactory) {
+	public OKomeaGraphStorage(final IKomeaSchema schema,
+			final IGraphSessionFactory sessionsFactory) {
 		super();
 		this.sessionsFactory = sessionsFactory;
 		this.update(schema);
 	}
 
+	public <T> IKomeaEntityFiller<T> newEntityFiller(
+			final IEntityType _humanType) {
+
+		return new KomeaEntityFiller<T>(this, _humanType);
+	}
+
+	@Override
+	public IKomeaEntity create(final IEntityType type) {
+		Validate.isTrue(
+				type.getSchema() != null
+						&& type.getSchema().equals(getSchema()),
+				"Type is not defined in the same schema than the one used by the storage");
+		final OrientVertex vertex = this.graph.addVertex("class:"
+				+ type.getName());
+		return new OKomeaEntity(type, vertex);
+	}
+
+
+	@Override
+	public Iterable<IKomeaEntity> find(final IEntityType type, final String index, final Object value){
+		Validate.notNull(
+				type.findProperty(index),
+				"Property " + type.getName() + "." + index
+						+ " doesn't exists in the entity type "
+						+ type.getName());
+		Validate.isTrue(type.findProperty(index).isIndexed(), "Property "
+				+ type.getName() + "." + index + " is not indexed");
+		Iterator<Vertex> vertices = this.graph.getVertices(
+				type.getName() + "." + index, value).iterator();
+		return new OEntityIterable(vertices, this.schema);
+	}
+	
+	@Override
+	public IKomeaEntity getOrCreate(final IEntityType type,
+			final String index, final Object value) {
+		Validate.notNull(
+				type.findProperty(index),
+				"Property " + type.getName() + "." + index
+						+ " doesn't exists in the entity type "
+						+ type.getName());
+		Validate.isTrue(type.findProperty(index).isUnique(), "Property "
+				+ type.getName() + "." + index + " is not a unique index");
+		Iterator<Vertex> vertices = this.graph.getVertices(
+				type.getName() + "." + index, value).iterator();
+		if (vertices.hasNext()) {
+			Vertex next = vertices.next();
+			OKomeaEntity oKomeaEntity = new OKomeaEntity(type,
+					(OrientVertex) next);
+			return oKomeaEntity;
+		} else {
+			IKomeaEntity created = create(type);
+			created.set(index, value);
+			return created;
+		}
+	}
+
 	@Override
 	public void close() throws IOException {
-		this.getGraph().commit();
 		this.getGraph().shutdown();
 	}
 
@@ -55,7 +117,9 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 			final OKomeaEntity oEntity = (OKomeaEntity) entity;
 			this.graph.removeVertex(oEntity.getVertex());
 		} else {
-			LOGGER.warn("Entity {} can't be managed by the storage. It won't be deleted", entity.getClass());
+			LOGGER.warn(
+					"Entity {} can't be managed by the storage. It won't be deleted",
+					entity.getClass());
 		}
 
 	}
@@ -68,9 +132,12 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 
 	@Override
 	public Iterable<IKomeaEntity> entities(final IEntityType type) {
-		Validate.isTrue(type.getSchema() != null && type.getSchema().equals(this.schema),
-		        "Type is not defined in the same schema than the one used by the storage");
-		final Iterable<Vertex> vertices = this.graph.getVerticesOfClass(type.getName());
+		Validate.isTrue(
+				type.getSchema() != null
+						&& type.getSchema().equals(this.schema),
+				"Type is not defined in the same schema than the one used by the storage");
+		final Iterable<Vertex> vertices = this.graph.getVerticesOfClass(type
+				.getName());
 		return new OEntityIterable(vertices.iterator(), this.schema);
 	}
 
@@ -78,7 +145,7 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 	public void commit() {
 		this.graph.commit();
 	}
-	
+
 	@Override
 	public OrientGraph getGraph() {
 		if (this.graph == null) {

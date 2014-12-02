@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.komea.core.model.IKomeaEntity;
 import org.komea.core.model.impl.OEntityIterable;
 import org.komea.core.model.query.IEntitiesQueryManager;
+import org.komea.core.model.storage.IKomeaGraphStorage;
 import org.komea.core.model.storage.IKomeaStorage;
 import org.komea.core.model.storage.impl.OKomeaGraphStorage;
 import org.komea.core.schema.IEntityType;
@@ -16,9 +17,9 @@ import com.orientechnologies.orient.core.sql.OCommandSQL;
 import com.tinkerpop.blueprints.Vertex;
 
 public class OEntitiesQueryManager implements IEntitiesQueryManager {
-	private final OKomeaGraphStorage storage;
+	private final IKomeaGraphStorage storage;
 
-	public OEntitiesQueryManager(final OKomeaGraphStorage storage) {
+	public OEntitiesQueryManager(final IKomeaGraphStorage storage) {
 		super();
 		this.storage = storage;
 	}
@@ -57,7 +58,7 @@ public class OEntitiesQueryManager implements IEntitiesQueryManager {
 			return new OEntityIterable(results.iterator(),
 					this.storage.getSchema());
 		} catch (Exception e) {
-			throw new KomeaQueryException(e);
+			throw new KomeaQueryException("Unable to execute query "+query,e);
 		}
 	}
 

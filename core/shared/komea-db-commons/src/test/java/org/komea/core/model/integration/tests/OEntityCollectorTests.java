@@ -18,14 +18,14 @@ public class OEntityCollectorTests extends AbstractIntegrationTest {
 	public void aggregationTest() {
 		IEntityType type = this.schema.findType("Person");
 
-		IKomeaEntity p1 = this.mfactory.newInstance(type);
+		IKomeaEntity p1 = this.mfactory.create(type);
 		p1.set("name", "John");
 
-		IKomeaEntity p2 = this.mfactory.newInstance(type);
+		IKomeaEntity p2 = this.mfactory.create(type);
 		p2.set("name", "Bob");
 		p1.add("children", p2);
 
-		IKomeaEntity p3 = this.mfactory.newInstance(type);
+		IKomeaEntity p3 = this.mfactory.create(type);
 		p3.set("name", "Bobby");
 		p2.add("children", p3);
 
@@ -48,7 +48,7 @@ public class OEntityCollectorTests extends AbstractIntegrationTest {
 	public void aggregationPerfsTest() {
 		IEntityType type = this.schema.findType("Person");
 
-		IKomeaEntity parent = this.mfactory.newInstance(type);
+		IKomeaEntity parent = this.mfactory.create(type);
 		parent.set("name", "person" + 0);
 		int depth = 20;
 		int nbChildren = 2000;
@@ -88,7 +88,7 @@ public class OEntityCollectorTests extends AbstractIntegrationTest {
 			this.depth++;
 			if (this.depth <= this.maxDepth) {
 				for (int j = 0; j <= this.nbChildren; j++) {
-					IKomeaEntity child = this.mFactory.newInstance(this.type);
+					IKomeaEntity child = this.mFactory.create(this.type);
 					child.set("name", "person" + this.id++);
 					parent.add("children", child);
 					generateChildren(child);

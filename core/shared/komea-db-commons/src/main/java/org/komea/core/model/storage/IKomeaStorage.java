@@ -3,6 +3,7 @@ package org.komea.core.model.storage;
 import java.io.Closeable;
 
 import org.komea.core.model.IKomeaEntity;
+import org.komea.core.model.IKomeaEntityFactory;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
 
@@ -15,7 +16,7 @@ import org.komea.core.schema.IKomeaSchema;
  * @author afloch
  *
  */
-public interface IKomeaStorage extends Closeable {
+public interface IKomeaStorage extends Closeable, IKomeaEntityFactory {
 
 	/**
 	 * Delete an entity from the storage.
@@ -52,9 +53,31 @@ public interface IKomeaStorage extends Closeable {
 	 * @param entity
 	 */
 	void save(IKomeaEntity entity);
-	
-	
+
 	void commit();
+
+	/**
+	 * Get an existing entity from its unique index value or create a new
+	 * instance if it does'nt exits. Indexed value will be set in that case.
+	 * 
+	 * @param type entity type
+	 * @param index index name
+	 * @param value indexed value
+	 * @return
+	 */
+	IKomeaEntity getOrCreate(final IEntityType type, final String index,
+			final Object value);
+
+	/**
+	 * Find all entities of a given type that use the same indexed value.
+	 * 
+	 * @param type
+	 * @param index
+	 * @param value
+	 * @return
+	 */
+	Iterable<IKomeaEntity> find(final IEntityType type, final String index,
+			final Object value);
 
 	/**
 	 * Update the schema used to type the stored entities.
@@ -62,4 +85,5 @@ public interface IKomeaStorage extends Closeable {
 	 * @param schema
 	 */
 	void update(IKomeaSchema schema);
+
 }
