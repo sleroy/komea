@@ -1,5 +1,8 @@
 package org.komea.orientdb.session.impl;
 
+import java.util.Collections;
+import java.util.Map;
+
 /**
  * This class defines the required settings to initialize a database connection
  * (to OrientDB). Main parameters are the URL, the username and password.
@@ -11,25 +14,29 @@ public class DatabaseConfiguration {
 	/**
 	 * URL to initialize the orient db database.
 	 */
-	private String url;
+	private String	            url;
 
 	/** Default minimum pool size. */
-	public static final int DEFAULT_MIN_POOL_SIZE = 1;
+	public static final int	    DEFAULT_MIN_POOL_SIZE	= 1;
 
 	/** Default maximum pool size. */
-	public static final int DEFAULT_MAX_POOL_SIZE = 20;
+	public static final int	    DEFAULT_MAX_POOL_SIZE	= 20;
 
 	/** The username. */
-	private String username;
+	private String	            username;
 
 	/** The password. */
-	private String password;
+	private String	            password;
 
 	/** The min pool size. */
-	private int minPoolSize = DEFAULT_MIN_POOL_SIZE;
+	private int	                minPoolSize	          = DEFAULT_MIN_POOL_SIZE;
 
 	/** The max pool size. */
-	private int maxPoolSize = DEFAULT_MAX_POOL_SIZE;
+	private int	                maxPoolSize	          = DEFAULT_MAX_POOL_SIZE;
+
+	private boolean	            keepOpen	          = false;
+
+	private Map<String, Object>	extraConfiguration	  = Collections.emptyMap();
 
 	public DatabaseConfiguration() {
 		super();
@@ -41,15 +48,18 @@ public class DatabaseConfiguration {
 		this.password = _password;
 	}
 
-	public DatabaseConfiguration(final String _url, final String _username,
-			final String _password, final int _minPoolSize,
-			final int _maxPoolSize) {
+	public DatabaseConfiguration(final String _url, final String _username, final String _password,
+	        final int _minPoolSize, final int _maxPoolSize) {
 		super();
 		this.url = _url;
 		this.username = _username;
 		this.password = _password;
 		this.minPoolSize = _minPoolSize;
 		this.maxPoolSize = _maxPoolSize;
+	}
+
+	public Map<String, Object> getExtraConfiguration() {
+		return this.extraConfiguration;
 	}
 
 	public int getMaxPoolSize() {
@@ -70,6 +80,18 @@ public class DatabaseConfiguration {
 
 	public String getUsername() {
 		return this.username;
+	}
+
+	public boolean isKeepOpen() {
+		return this.keepOpen;
+	}
+
+	public void setExtraConfiguration(final Map<String, Object> _extraConfiguration) {
+		this.extraConfiguration = _extraConfiguration;
+	}
+
+	public void setKeepOpen(final boolean _keepOpen) {
+		this.keepOpen = _keepOpen;
 	}
 
 	public void setMaxPoolSize(final int _maxPoolSize) {
@@ -94,8 +116,7 @@ public class DatabaseConfiguration {
 
 	@Override
 	public String toString() {
-		return "DatabaseConfiguration [url=" + this.url + ", username="
-				+ this.username + ", minPoolSize=" + this.minPoolSize
-				+ ", maxPoolSize=" + this.maxPoolSize + "]";
+		return "DatabaseConfiguration [url=" + this.url + ", username=" + this.username + ", minPoolSize="
+		        + this.minPoolSize + ", maxPoolSize=" + this.maxPoolSize + "]";
 	}
 }

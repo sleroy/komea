@@ -1,15 +1,22 @@
 package org.komea.core.schema;
 
-import org.komea.core.schema.impl.KomeaSchemaFactory;
 
 public class EntityTypeBuilder {
 
-	private final KomeaSchemaFactory schemaFactory;
-	private final IEntityType entityType;
-	private final IKomeaSchema schema;
+	private final IKomeaSchemaFactory	schemaFactory;
+	private final IEntityType	      entityType;
+	private final IKomeaSchema	      schema;
 
-	public EntityTypeBuilder(final KomeaSchemaFactory _schemaFactory,
-			final IKomeaSchema _schema, final String _entityType) {
+	public EntityTypeBuilder(final IKomeaSchemaFactory _schemaFactory, final IKomeaSchema _schema,
+	        final IEntityType _entityType) {
+		this.schemaFactory = _schemaFactory;
+		this.schema = _schema;
+		this.entityType = _entityType;
+
+	}
+
+	public EntityTypeBuilder(final IKomeaSchemaFactory _schemaFactory, final IKomeaSchema _schema,
+			final String _entityType) {
 		this.schemaFactory = _schemaFactory;
 		this.schema = _schema;
 		this.entityType = this.schemaFactory.newEntity(_entityType);
@@ -22,10 +29,8 @@ public class EntityTypeBuilder {
 
 	}
 
-	public EntityTypeBuilder addContainmentReferenceProperty(
-			final String _fieldName, final IEntityType _type) {
-		this.entityType.addProperty(this.schemaFactory.newContainmentReference(
-				_fieldName, _type));
+	public EntityTypeBuilder addContainmentReferenceProperty(final String _fieldName, final IEntityType _type) {
+		this.entityType.addProperty(this.schemaFactory.newContainmentReference(_fieldName, _type));
 		return this;
 
 	}
@@ -48,26 +53,20 @@ public class EntityTypeBuilder {
 
 	}
 
-	public EntityTypeBuilder addManyContainmentReferenceProperty(
-			final String _fieldName, final IEntityType _type) {
-		this.entityType.addProperty(this.schemaFactory
-				.newManyContainmentReference(_fieldName, _type));
+	public EntityTypeBuilder addManyContainmentReferenceProperty(final String _fieldName, final IEntityType _type) {
+		this.entityType.addProperty(this.schemaFactory.newManyContainmentReference(_fieldName, _type));
 		return this;
 
 	}
 
-	public EntityTypeBuilder addManyReferenceProperty(final String _fieldName,
-			final IEntityType _type) {
-		this.entityType.addProperty(this.schemaFactory.newManyReference(
-				_fieldName, _type));
+	public EntityTypeBuilder addManyReferenceProperty(final String _fieldName, final IEntityType _type) {
+		this.entityType.addProperty(this.schemaFactory.newManyReference(_fieldName, _type));
 		return this;
 
 	}
 
-	public EntityTypeBuilder addProperty(final String _fieldName,
-			final Primitive _primitiveType) {
-		this.entityType.addProperty(this.schemaFactory.newAttribute(_fieldName,
-				_primitiveType));
+	public EntityTypeBuilder addProperty(final String _fieldName, final Primitive _primitiveType) {
+		this.entityType.addProperty(this.schemaFactory.newAttribute(_fieldName, _primitiveType));
 		return this;
 
 	}

@@ -30,85 +30,41 @@ import com.tinkerpop.blueprints.impls.orient.OrientVertex;
  *
  */
 public class OKomeaGraphStorage implements IKomeaGraphStorage {
-	private final IGraphSessionFactory sessionsFactory;
-	private IKomeaSchema schema;
-	private OrientGraph graph;
-	private final static Logger LOGGER = LoggerFactory
-			.getLogger(OKomeaGraphStorage.class);
+	private final IGraphSessionFactory	sessionsFactory;
+	private IKomeaSchema	           schema;
+	private OrientGraph	               graph;
+	private final static Logger	       LOGGER	= LoggerFactory.getLogger(OKomeaGraphStorage.class);
 
-	public OKomeaGraphStorage(final IKomeaSchema schema,
-			final DatabaseConfiguration _configuration) {
+	public OKomeaGraphStorage(final IKomeaSchema schema, final DatabaseConfiguration _configuration) {
 		super();
 		this.sessionsFactory = new OrientGraphDatabaseFactory(_configuration);
 		this.update(schema);
 	}
 
-	public OKomeaGraphStorage(final IKomeaSchema schema,
-			final IGraphSessionFactory sessionsFactory) {
+	public OKomeaGraphStorage(final IKomeaSchema schema, final IGraphSessionFactory sessionsFactory) {
 		super();
 		this.sessionsFactory = sessionsFactory;
 		this.update(schema);
 	}
 
-	public <T> IKomeaEntityFiller<T> newEntityFiller(
-			final IEntityType _humanType) {
+	@Override
+	public void close() throws IOException {
+		if (graph != null) graph.shutdown();
+		this.graph = null;
+		this.sessionsFactory.close();
+	}
 
-		return new KomeaEntityFiller<T>(this, _humanType);
+	@Override
+	public void commit() {
+		this.graph.commit();
 	}
 
 	@Override
 	public IKomeaEntity create(final IEntityType type) {
-		Validate.isTrue(
-				type.getSchema() != null
-						&& type.getSchema().equals(getSchema()),
+		Validate.isTrue(type.getSchema() != null && type.getSchema().equals(this.getSchema()),
 				"Type is not defined in the same schema than the one used by the storage");
-		final OrientVertex vertex = this.graph.addVertex("class:"
-				+ type.getName());
+		final OrientVertex vertex = this.graph.addVertex("class:" + type.getName());
 		return new OKomeaEntity(type, vertex);
-	}
-
-
-	@Override
-	public Iterable<IKomeaEntity> find(final IEntityType type, final String index, final Object value){
-		Validate.notNull(
-				type.findProperty(index),
-				"Property " + type.getName() + "." + index
-						+ " doesn't exists in the entity type "
-						+ type.getName());
-		Validate.isTrue(type.findProperty(index).isIndexed(), "Property "
-				+ type.getName() + "." + index + " is not indexed");
-		Iterator<Vertex> vertices = this.graph.getVertices(
-				type.getName() + "." + index, value).iterator();
-		return new OEntityIterable(vertices, this.schema);
-	}
-	
-	@Override
-	public IKomeaEntity getOrCreate(final IEntityType type,
-			final String index, final Object value) {
-		Validate.notNull(
-				type.findProperty(index),
-				"Property " + type.getName() + "." + index
-						+ " doesn't exists in the entity type "
-						+ type.getName());
-		Validate.isTrue(type.findProperty(index).isUnique(), "Property "
-				+ type.getName() + "." + index + " is not a unique index");
-		Iterator<Vertex> vertices = this.graph.getVertices(
-				type.getName() + "." + index, value).iterator();
-		if (vertices.hasNext()) {
-			Vertex next = vertices.next();
-			OKomeaEntity oKomeaEntity = new OKomeaEntity(type,
-					(OrientVertex) next);
-			return oKomeaEntity;
-		} else {
-			IKomeaEntity created = create(type);
-			created.set(index, value);
-			return created;
-		}
-	}
-
-	@Override
-	public void close() throws IOException {
-		this.getGraph().shutdown();
 	}
 
 	@Override
@@ -117,9 +73,7 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 			final OKomeaEntity oEntity = (OKomeaEntity) entity;
 			this.graph.removeVertex(oEntity.getVertex());
 		} else {
-			LOGGER.warn(
-					"Entity {} can't be managed by the storage. It won't be deleted",
-					entity.getClass());
+			LOGGER.warn("Entity {} can't be managed by the storage. It won't be deleted", entity.getClass());
 		}
 
 	}
@@ -132,18 +86,20 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 
 	@Override
 	public Iterable<IKomeaEntity> entities(final IEntityType type) {
-		Validate.isTrue(
-				type.getSchema() != null
-						&& type.getSchema().equals(this.schema),
+		Validate.isTrue(type.getSchema() != null && type.getSchema().equals(this.schema),
 				"Type is not defined in the same schema than the one used by the storage");
-		final Iterable<Vertex> vertices = this.graph.getVerticesOfClass(type
-				.getName());
+		final Iterable<Vertex> vertices = this.graph.getVerticesOfClass(type.getName());
 		return new OEntityIterable(vertices.iterator(), this.schema);
 	}
 
 	@Override
-	public void commit() {
-		this.graph.commit();
+	public Iterable<IKomeaEntity> find(final IEntityType type, final String index, final Object value) {
+		Validate.notNull(type.findProperty(index), "Property " + type.getName() + "." + index
+				+ " doesn't exists in the entity type " + type.getName());
+		Validate.isTrue(type.findProperty(index).isIndexed(), "Property " + type.getName() + "." + index
+				+ " is not indexed");
+		final Iterator<Vertex> vertices = this.graph.getVertices(type.getName() + "." + index, value).iterator();
+		return new OEntityIterable(vertices, this.schema);
 	}
 
 	@Override
@@ -155,8 +111,31 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 	}
 
 	@Override
+	public IKomeaEntity getOrCreate(final IEntityType type, final String index, final Object value) {
+		Validate.notNull(type.findProperty(index), "Property " + type.getName() + "." + index
+				+ " doesn't exists in the entity type " + type.getName());
+		Validate.isTrue(type.findProperty(index).isUnique(), "Property " + type.getName() + "." + index
+				+ " is not a unique index");
+		final Iterator<Vertex> vertices = this.graph.getVertices(type.getName() + "." + index, value).iterator();
+		if (vertices.hasNext()) {
+			final Vertex next = vertices.next();
+			final OKomeaEntity oKomeaEntity = new OKomeaEntity(type, (OrientVertex) next);
+			return oKomeaEntity;
+		} else {
+			final IKomeaEntity created = this.create(type);
+			created.set(index, value);
+			return created;
+		}
+	}
+
+	@Override
 	public IKomeaSchema getSchema() {
 		return this.schema;
+	}
+
+	public <T> IKomeaEntityFiller<T> newEntityFiller(final IEntityType _humanType) {
+
+		return new KomeaEntityFiller<T>(this, _humanType);
 	}
 
 	@Override

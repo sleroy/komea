@@ -44,17 +44,17 @@ public class ODocumentProxy implements IODocument {
 	}
 
 	@Override
-	public Object field(final String _fieldDate) {
+	public Object field(final String _fieldName) {
 
-		return this.newInstance.field(_fieldDate);
+		return this.newInstance.field(_fieldName);
 	}
 
 	@Override
-	public void field(final String _key, final Serializable _value) {
+	public void field(final String _fieldName, final Serializable _value) {
 		try {
-			this.newInstance.field(_key, _value);
+			this.newInstance.field(_fieldName, _value);
 		} catch (final Exception e) {
-			LOGGER.error("Invalid field or value has been rejected {} -> {}", _key, _value, e);
+			LOGGER.error("Invalid field or value has been rejected {} -> {}", _fieldName, _value, e);
 		}
 
 	}

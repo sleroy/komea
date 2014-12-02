@@ -10,12 +10,11 @@ import java.util.Random;
  * @author sleroy
  *
  */
-public class TestDatabaseConfiguration extends
-		MemoryDatabaseConfiguration {
+public class TestDatabaseConfiguration extends MemoryDatabaseConfiguration {
 
 	public TestDatabaseConfiguration() {
-		super("database" + Long.toString(new Date().getTime())
-				+ new Random().nextInt());
+		super("database" + Long.toString(new Date().getTime()) + new Random().nextInt());
+		this.setKeepOpen(false);
 	}
 
 }

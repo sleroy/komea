@@ -66,7 +66,7 @@ implements IDocumentSessionFactory {
 	public Iterator<IODocument> query(final String _query) {
 		final List<ODocument> results = this.rawQuery(_query);
 		return Iterators
-				.transform(results.iterator(), new IODocumentFunction());
+				.transform(results.iterator(), new ODocumentProxyConversionFunction());
 	}
 
 	@Override

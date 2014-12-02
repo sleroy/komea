@@ -22,11 +22,6 @@ public interface IDocumentSessionFactory extends Closeable {
 	public ORecordIteratorClass<ODocument> browseClass(String _eventType);
 
 	/**
-	 * Obtains the database session. Returns null if not created / existing.
-	 */
-	public ODatabaseDocumentTx getDatabaseSession();
-
-	/**
 	 * Obtains the database session. Creates it if not already created through a
 	 * pool of connexion.
 	 */
@@ -67,7 +62,6 @@ public interface IDocumentSessionFactory extends Closeable {
 
 	public void save(ODocument _event);
 
-	ORecordIteratorClass<ODocument> browseClass(String _eventType,
-			boolean _polymorphic);
+	ORecordIteratorClass<ODocument> browseClass(String _eventType, boolean _polymorphic);
 
 }
