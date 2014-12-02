@@ -12,7 +12,7 @@ import org.komea.orientdb.session.impl.DatabaseConfiguration;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientVertex;
 
-public class OKomeaModelFactory implements IKomeaEntityFactory{
+public class OKomeaModelFactory implements IKomeaEntityFactory {
 	private final OKomeaGraphStorage	storageService;
 
 	public OKomeaModelFactory(final IKomeaSchema schema, final DatabaseConfiguration _configuration) {
@@ -36,6 +36,10 @@ public class OKomeaModelFactory implements IKomeaEntityFactory{
 		Validate.notNull(storageService.getSchema());
 	}
 
+	public OKomeaGraphStorage getStorageService() {
+		return this.storageService;
+	}
+
 	public <T> IKomeaEntityFiller<T> newEntityFiller(final IEntityType _humanType) {
 
 		return new KomeaEntityFiller<T>(this, _humanType);
@@ -44,14 +48,10 @@ public class OKomeaModelFactory implements IKomeaEntityFactory{
 	@Override
 	public IKomeaEntity newInstance(final IEntityType type) {
 		Validate.isTrue(type.getSchema() != null && type.getSchema().equals(this.storageService.getSchema()),
-				"Type is not defined in the same schema than the one used by the storage");
+		        "Type is not defined in the same schema than the one used by the storage");
 		final OrientGraph graph = this.storageService.getGraph();
 		final OrientVertex vertex = graph.addVertex("class:" + type.getName());
 		return new OKomeaEntity(type, vertex);
 	}
-
-	public OKomeaGraphStorage getStorageService() {
-	    return storageService;
-    }
 
 }

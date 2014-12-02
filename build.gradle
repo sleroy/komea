@@ -9,7 +9,6 @@ buildscript {
 
         dependencies {
 	        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
-                classpath 'net.saliman:gradle-cobertura-plugin:2.2.5'
                 classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'	        
         }
 }
@@ -74,10 +73,9 @@ ext.VERSION_ID=KOMEAAPI_VERSION
 
 
 allprojects {
-  
+ 
 
 
-        apply plugin: 'cobertura'
         apply plugin: 'com.github.kt3k.coveralls'
 
 	apply plugin: "java"
@@ -85,9 +83,13 @@ allprojects {
 	apply plugin: "eclipse"
 	apply plugin: "idea"
 	apply plugin: "project-report"
+        apply plugin: 'jacoco'
+
 	apply plugin: 'groovy'
 	apply plugin: 'findbugs'
 	apply plugin : 'maven-publish'
+
+
 
         /** REPOSITORIES */
 	repositories {
@@ -191,10 +193,16 @@ allprojects {
         task unitTest(type : Test) {
                 exclude "**/**IT"
         }
+        
     
         /**
           TESTS
         */
+        
+        jacoco {
+        toolVersion = '0.7.1.201405082137'
+        }
+        
         test {
           if (project.hasProperty("logTest")) {
 			        // listen to events in the test execution lifecycle
@@ -221,8 +229,6 @@ allprojects {
 	 }
 
 
-	      
-
 	task print <<  { println "$rootProject.buildDir.path" }
 
 	task "create-dirs" << {
@@ -245,8 +251,8 @@ allprojects {
 			)
 
 
-
-       cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report
+ 
+      
        
 	gradle.taskGraph.whenReady { taskGraph ->
 		tasks.findbugsMain.onlyIf { taskGraph.hasTask((tasks.findbugs)) }
@@ -265,6 +271,34 @@ allprojects {
 
  
 }
+
+subprojects {        
+ 
+        jacocoTestReport {
+                reports {
+                        html.enabled = true
+                        xml.enabled = true
+                        csv.enabled = false
+                }
+        }
+}
+  
+coveralls {
+        sourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs).files.absolutePath
+} 
+
+task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
+dependsOn = subprojects.test
+sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
+classDirectories = files(subprojects.sourceSets.main.output)
+executionData = files(subprojects.jacocoTestReport.executionData)
+reports {
+html.enabled = true
+xml.enabled = true
+csv.enabled = false
+xml.destination = "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+}
+} 
 /** BINTRAY CONFIGURATION */
 apply from: "$rootDir/config/bintray.gradle"
 
