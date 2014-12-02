@@ -2,8 +2,6 @@ package org.komea.core.model.integration.tests;
 
 import static junit.framework.Assert.assertEquals;
 
-import java.util.Iterator;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.komea.core.model.IKomeaEntity;
@@ -11,6 +9,8 @@ import org.komea.core.model.IKomeaEntityFactory;
 import org.komea.core.model.impl.OEntityCollector;
 import org.komea.core.model.impl.OKomeaEntity;
 import org.komea.core.schema.IEntityType;
+
+import com.google.common.collect.Iterables;
 
 public class OEntityCollectorTests extends AbstractIntegrationTest {
 
@@ -89,15 +89,29 @@ public class OEntityCollectorTests extends AbstractIntegrationTest {
 				(OKomeaEntity) p1);
 		final Iterable<IKomeaEntity> allChildren = collector
 				.findAllAggregatedEntities();
-		int count = 0;
-		final Iterator<IKomeaEntity> iterator = allChildren.iterator();
-		while (iterator.hasNext()) {
-			iterator.next();
-			count++;
 
-		}
+		assertEquals(2, Iterables.size(allChildren));
+	}
 
-		assertEquals(2, count);
+	@Test
+	public void aggregationCountTest() {
+		final IEntityType type = this.schema.findType("Person");
+
+		final IKomeaEntity p1 = this.mfactory.create(type);
+		p1.set("name", "John");
+
+		final IKomeaEntity p2 = this.mfactory.create(type);
+		p2.set("name", "Bob");
+		p1.add("children", p2);
+
+		final IKomeaEntity p3 = this.mfactory.create(type);
+		p3.set("name", "Bobby");
+		p2.add("children", p3);
+
+		final OEntityCollector collector = new OEntityCollector(
+				(OKomeaEntity) p1);
+
+		assertEquals(2, collector.countAllAggregatedEntities());
 	}
 
 }

@@ -25,6 +25,9 @@ import org.komea.orientdb.session.impl.DatabaseConfiguration;
 import org.komea.orientdb.session.impl.OrientGraphDatabaseFactory;
 import org.komea.orientdb.session.impl.TestDatabaseConfiguration;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 public class OrientEntityTests {
 	private IKomeaEntityFactory mfactory;
 	private IKomeaSchema schema;
@@ -91,7 +94,7 @@ public class OrientEntityTests {
 	}
 
 	@Test
-	public void setReferenceTest() {
+	public void addReferenceTest() {
 		final IEntityType type = this.schema.findType("Person");
 
 		final IKomeaEntity p1 = this.mfactory.create(type);
@@ -111,6 +114,55 @@ public class OrientEntityTests {
 
 		final IKomeaEntity next = references.iterator().next();
 		assertEquals("Bob", next.value("name"));
-
 	}
+	
+	@Test
+	public void removeAttributeTest(){
+		final IEntityType type = this.schema.findType("Person");
+
+		final IKomeaEntity p1 = this.mfactory.create(type);
+		p1.set("name", "John");
+		p1.add("values", 1);
+		p1.add("values", 2);
+		
+		assertEquals(2, Iterables.size(p1.references("values")));
+		p1.remove("values", 1);
+		assertEquals(1, Iterables.size(p1.references("values")));
+	}
+	
+	
+	@Test
+	public void removeReferenceTest(){
+		final IEntityType type = this.schema.findType("Person");
+
+		final IKomeaEntity p1 = this.mfactory.create(type);
+		p1.set("name", "John");
+
+		final IKomeaEntity p2 = this.mfactory.create(type);
+		p2.set("name", "Bob");
+		p1.add("family", p2);
+		
+		assertEquals(1, Iterables.size(p1.references("family")));
+		p1.remove("family", p2);
+		assertEquals(0, Iterables.size(p1.references("family")));
+	}
+	
+	
+	@Test
+	public void addAllTest(){
+		final IEntityType type = this.schema.findType("Person");
+
+		final IKomeaEntity p1 = this.mfactory.create(type);
+		p1.set("name", "John");
+
+		final IKomeaEntity p2 = this.mfactory.create(type);
+		p2.set("name", "Bob");
+	
+		final IKomeaEntity p3 = this.mfactory.create(type);
+		p3.set("name", "Bobby");
+		
+		p1.addAll("family", Lists.newArrayList(p2,p3));
+		assertEquals(2, Iterables.size(p1.references("family")));
+	}
+	
 }
