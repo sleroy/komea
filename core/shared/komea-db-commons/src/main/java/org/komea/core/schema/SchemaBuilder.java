@@ -26,12 +26,12 @@ public class SchemaBuilder {
 		return this.schema;
 	}
 
-	public void entity_contains_many(final String _fieldName, final IEntityType _entity, final IEntityType _entity2) {
+	public void entityContainsMany(final String _fieldName, final IEntityType _entity, final IEntityType _entity2) {
 		_entity.addProperty(this.schemaFactory.newManyContainmentReference(_fieldName, _entity2));
 
 	}
 
-	public void entity_refers_many(final String _fieldName, final IEntityType _entity, final IEntityType _entity2) {
+	public void entityRefersMany(final String _fieldName, final IEntityType _entity, final IEntityType _entity2) {
 		_entity.addProperty(this.schemaFactory.newManyReference(_fieldName, _entity2));
 
 	}

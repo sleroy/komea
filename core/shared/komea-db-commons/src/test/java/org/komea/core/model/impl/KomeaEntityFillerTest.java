@@ -50,12 +50,12 @@ public class KomeaEntityFillerTest {
 	}
 
 	@Mock
-	private IEntityType	       entityType;
+	private IEntityType	                entityType;
 	@Mock
-	private OKomeaModelFactory	oKomeaModelFactory;
+	private OKomeaModelFactory	        oKomeaModelFactory;
 
 	@InjectMocks
-	private KomeaEntityFiller	komeaEntityFiller;
+	private KomeaEntityFiller<HumanDto>	komeaEntityFiller;
 
 	/**
 	 * Test method for

@@ -27,7 +27,7 @@ public class KomeaEntityFiller<T> implements IKomeaEntityFiller<T> {
 	}
 
 	@Override
-	public void put(final T _entity) {
+	public IKomeaEntity put(final T _entity) {
 		final Map<String, Object> beanMap = new PojoToMap().convertPojoInMap(_entity);
 		final IKomeaEntity newInstance = this.oKomeaModelFactory.newInstance(this.entityType);
 		final Iterator<Entry<String, Object>> it = beanMap.entrySet().iterator();
@@ -35,6 +35,7 @@ public class KomeaEntityFiller<T> implements IKomeaEntityFiller<T> {
 			final Entry<String, Object> entry = it.next();
 			newInstance.set(entry.getKey().toString(), entry.getValue());
 		}
+		return newInstance;
 	}
 
 }
