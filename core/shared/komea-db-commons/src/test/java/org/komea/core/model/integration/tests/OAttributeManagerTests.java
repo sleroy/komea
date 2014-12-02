@@ -11,8 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.komea.core.model.impl.OEntityAttributeManager;
 import org.komea.core.schema.IKomeaSchemaFactory;
-import org.komea.core.schema.IPrimitiveType.Primitive;
 import org.komea.core.schema.IReference;
+import org.komea.core.schema.Primitive;
 import org.komea.core.schema.ReferenceArity;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
 import org.komea.orientdb.session.impl.DatabaseConfiguration;
@@ -21,21 +21,12 @@ import org.komea.orientdb.session.impl.TestDatabaseConfiguration;
 
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientVertex;
+
 public class OAttributeManagerTests {
 	private OrientVertex vertex;
 	private final IKomeaSchemaFactory sfactory = new KomeaSchemaFactory();
 	private OrientGraph graph;
 	private OrientGraphDatabaseFactory sessionsFactory;
-
-	@Before
-	public void init() {
-		this.sessionsFactory = new OrientGraphDatabaseFactory();
-		DatabaseConfiguration databaseConfiguration = new TestDatabaseConfiguration();
-		this.sessionsFactory.init(databaseConfiguration);
-		this.graph = this.sessionsFactory.getGraph();
-		this.vertex = this.graph.addVertex(null);
-
-	}
 
 	@After
 	public void end() throws IOException {
@@ -43,56 +34,69 @@ public class OAttributeManagerTests {
 		this.sessionsFactory.close();
 	}
 
-	@Test
-	public void setPrimitiveReferenceTest() {
-		IReference name = this.sfactory.newAttribute("name", Primitive.STRING);
-		OEntityAttributeManager updater = new OEntityAttributeManager(
-				this.vertex, name);
-		updater.set("John Doe");
-		String value = updater.get();
-		assertEquals("John Doe", value);
-	}
-	
-	@Test
-	public void setPrimitiveValidationReferenceTest() {
-		IReference name = this.sfactory.newAttribute("name", Primitive.STRING);
-		OEntityAttributeManager updater = new OEntityAttributeManager(
-				this.vertex, name);
+	@Before
+	public void init() {
+		this.sessionsFactory = new OrientGraphDatabaseFactory();
+		final DatabaseConfiguration databaseConfiguration = new TestDatabaseConfiguration();
+		this.sessionsFactory.init(databaseConfiguration);
+		this.graph = this.sessionsFactory.getGraph();
+		this.vertex = this.graph.addVertex(null);
 
-		try{
-			updater.set(1);
-			//we can not set an integer in a string attribute
-			fail();
-		}catch(IllegalArgumentException e){
-			//succeed
-		}
 	}
-	
+
 	@Test
 	public void setPrimitiveCollectionReferenceTest() {
-		IReference name = this.sfactory.newAttribute("values", Primitive.INTEGER).setArity(ReferenceArity.MANY);
-		OEntityAttributeManager updater = new OEntityAttributeManager(
+		final IReference name = this.sfactory.newAttribute("values",
+				Primitive.INTEGER).setArity(ReferenceArity.MANY);
+		final OEntityAttributeManager updater = new OEntityAttributeManager(
 				this.vertex, name);
 		updater.addReference(1);
 		updater.addReference(2);
-		List<Integer> values = updater.get();
+		final List<Integer> values = updater.get();
 		assertEquals(values.size(), 2);
 	}
-	
+
 	@Test
 	public void setPrimitiveCollectionValidationReferenceTest() {
-		IReference name = this.sfactory.newAttribute("values", Primitive.INTEGER).setArity(ReferenceArity.MANY);
-		OEntityAttributeManager updater = new OEntityAttributeManager(
+		final IReference name = this.sfactory.newAttribute("values",
+				Primitive.INTEGER).setArity(ReferenceArity.MANY);
+		final OEntityAttributeManager updater = new OEntityAttributeManager(
 				this.vertex, name);
 
-		try{
+		try {
 			updater.addReference("a");
-			//we can not add a String in an integer collection attribute
+			// we can not add a String in an integer collection attribute
 			fail();
-		}catch(IllegalArgumentException e){
-			//succeed
+		} catch (final IllegalArgumentException e) {
+			// succeed
 		}
 	}
-	
-	
+
+	@Test
+	public void setPrimitiveReferenceTest() {
+		final IReference name = this.sfactory.newAttribute("name",
+				Primitive.STRING);
+		final OEntityAttributeManager updater = new OEntityAttributeManager(
+				this.vertex, name);
+		updater.set("John Doe");
+		final String value = updater.get();
+		assertEquals("John Doe", value);
+	}
+
+	@Test
+	public void setPrimitiveValidationReferenceTest() {
+		final IReference name = this.sfactory.newAttribute("name",
+				Primitive.STRING);
+		final OEntityAttributeManager updater = new OEntityAttributeManager(
+				this.vertex, name);
+
+		try {
+			updater.set(1);
+			// we can not set an integer in a string attribute
+			fail();
+		} catch (final IllegalArgumentException e) {
+			// succeed
+		}
+	}
+
 }

@@ -1,6 +1,5 @@
 package org.komea.core.schema;
 
-import org.komea.core.schema.IPrimitiveType.Primitive;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
 
 public class EntityTypeBuilder {

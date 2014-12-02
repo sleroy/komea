@@ -6,8 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchemaFactory;
-import org.komea.core.schema.IPrimitiveType.Primitive;
 import org.komea.core.schema.IReference;
+import org.komea.core.schema.Primitive;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
 
 public class SchemaTests {

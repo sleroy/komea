@@ -19,7 +19,7 @@ import org.komea.core.model.storage.impl.OKomeaGraphStorage;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
 import org.komea.core.schema.IKomeaSchemaFactory;
-import org.komea.core.schema.IPrimitiveType.Primitive;
+import org.komea.core.schema.Primitive;
 import org.komea.core.schema.ReferenceArity;
 import org.komea.core.schema.ReferenceKind;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
