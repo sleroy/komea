@@ -72,11 +72,15 @@ def getGitBranch()  {
 ext.VERSION_ID=KOMEAAPI_VERSION
 
 
+/**
+        Specific parent plugin
+ */
+apply plugin: 'com.github.kt3k.coveralls'
+
+
 allprojects {
  
 
-
-        apply plugin: 'com.github.kt3k.coveralls'
 
 	apply plugin: "java"
 	apply plugin: "maven"
@@ -282,6 +286,8 @@ subprojects {
                 }
         }
 }
+
+
   
 coveralls {
         sourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs).files.absolutePath
