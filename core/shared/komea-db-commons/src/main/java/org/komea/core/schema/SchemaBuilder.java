@@ -4,7 +4,7 @@ import org.komea.core.schema.impl.KomeaSchemaFactory;
 
 /**
  * This class is a builder to create easily an schema.
- * 
+ *
  * @author sleroy
  *
  */
@@ -27,12 +27,14 @@ public class SchemaBuilder {
 	}
 
 	public void entityContainsMany(final String _fieldName, final IEntityType _entity, final IEntityType _entity2) {
-		_entity.addProperty(this.schemaFactory.newManyContainmentReference(_fieldName, _entity2));
+		_entity.addProperty(this.schemaFactory.newReference(_fieldName, _entity2).setKind(ReferenceKind.CONTAINMENT)
+		        .setArity(ReferenceArity.MANY));
 
 	}
 
 	public void entityRefersMany(final String _fieldName, final IEntityType _entity, final IEntityType _entity2) {
-		_entity.addProperty(this.schemaFactory.newManyReference(_fieldName, _entity2));
+		_entity.addProperty(this.schemaFactory.newReference(_fieldName, _entity2).setKind(ReferenceKind.AGGREGATION)
+		        .setArity(ReferenceArity.MANY));
 
 	}
 

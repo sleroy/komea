@@ -1,6 +1,5 @@
 package org.komea.core.schema;
 
-
 /**
  * Factory to create types and references that will be stored in a schema.
  *
@@ -13,13 +12,7 @@ public interface IKomeaSchemaFactory {
 
 	SchemaBuilder newBuilder(String name);
 
-	IReference newContainmentReference(String _name, IType _type);
-
 	IEntityType newEntity(String name);
-
-	IReference newManyContainmentReference(String _name, IType _type);
-
-	IReference newManyReference(String _name, IType _type);
 
 	IReference newReference(String name, IType type);
 

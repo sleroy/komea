@@ -1,6 +1,5 @@
 package org.komea.core.schema;
 
-
 public class EntityTypeBuilder {
 
 	private final IKomeaSchemaFactory	schemaFactory;
@@ -29,12 +28,6 @@ public class EntityTypeBuilder {
 
 	}
 
-	public EntityTypeBuilder addContainmentReferenceProperty(final String _fieldName, final IEntityType _type) {
-		this.entityType.addProperty(this.schemaFactory.newContainmentReference(_fieldName, _type));
-		return this;
-
-	}
-
 	public EntityTypeBuilder addDateProperty(final String _fieldName) {
 
 		return this.addProperty(_fieldName, Primitive.DATE);
@@ -50,18 +43,6 @@ public class EntityTypeBuilder {
 	public EntityTypeBuilder addIntegerProperty(final String _fieldName) {
 
 		return this.addProperty(_fieldName, Primitive.INTEGER);
-
-	}
-
-	public EntityTypeBuilder addManyContainmentReferenceProperty(final String _fieldName, final IEntityType _type) {
-		this.entityType.addProperty(this.schemaFactory.newManyContainmentReference(_fieldName, _type));
-		return this;
-
-	}
-
-	public EntityTypeBuilder addManyReferenceProperty(final String _fieldName, final IEntityType _type) {
-		this.entityType.addProperty(this.schemaFactory.newManyReference(_fieldName, _type));
-		return this;
 
 	}
 
