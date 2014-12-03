@@ -72,11 +72,15 @@ def getGitBranch()  {
 ext.VERSION_ID=KOMEAAPI_VERSION
 
 
+/**
+        Specific parent plugin
+ */
+apply plugin: 'com.github.kt3k.coveralls'
+
+
 allprojects {
  
 
-
-        apply plugin: 'com.github.kt3k.coveralls'
 
 	apply plugin: "java"
 	apply plugin: "maven"
@@ -282,22 +286,30 @@ subprojects {
                 }
         }
 }
+
+
   
 coveralls {
         sourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs).files.absolutePath
 } 
 
 task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
-dependsOn = subprojects.test
-sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
-classDirectories = files(subprojects.sourceSets.main.output)
-executionData = files(subprojects.jacocoTestReport.executionData)
-reports {
-html.enabled = true
-xml.enabled = true
-csv.enabled = false
-xml.destination = "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
-}
+        dependsOn = subprojects.test
+        sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
+        classDirectories = files(subprojects.sourceSets.main.output)
+        executionData = files(subprojects.jacocoTestReport.executionData)
+        reports {
+        html.enabled = true
+        xml.enabled = true
+        csv.enabled = false
+        xml.destination = "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+        }
+        onlyIf = {
+                true
+        }
+        doFirst {
+                executionData = files(executionData.findAll { it.exists() })
+        }
 } 
 /** BINTRAY CONFIGURATION */
 apply from: "$rootDir/config/bintray.gradle"

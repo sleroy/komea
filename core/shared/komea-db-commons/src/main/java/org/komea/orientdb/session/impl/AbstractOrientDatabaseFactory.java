@@ -7,9 +7,9 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.orientechnologies.orient.core.config.OGlobalConfiguration;
 import com.orientechnologies.orient.core.db.ODatabase;
 import com.orientechnologies.orient.core.db.ODatabasePoolBase;
-import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
 
 /**
  * A base factory for creating {@link ODatabase} objects.
@@ -19,7 +19,7 @@ import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
  *            the type of database to handle
  */
 public abstract class AbstractOrientDatabaseFactory<T extends ODatabase, P extends ODatabasePoolBase<T>> implements
-        Closeable {
+Closeable {
 
 	private P	                  pool;
 
@@ -37,24 +37,19 @@ public abstract class AbstractOrientDatabaseFactory<T extends ODatabase, P exten
 
 	@Override
 	public void close() throws IOException {
-		LOGGER.debug("Closing connexion pool ");
+		LOGGER.info("Closing connexion pool ");
 		if (this.pool != null) {
 			this.pool.close();
 		}
-		LOGGER.debug("Closing database connection");
+		LOGGER.info("Closing database connection");
 		if (this.db != null) {
 			this.db.close();
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public final T getDatabaseSession() {
-		return (T) ODatabaseRecordThreadLocal.INSTANCE.get().getDatabaseOwner();
-	}
-
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.springframework.orm.orient.AbstractOrientDatabaseFactory#openDatabase
 	 * ()
@@ -72,6 +67,8 @@ public abstract class AbstractOrientDatabaseFactory<T extends ODatabase, P exten
 	public void init(final DatabaseConfiguration _configuration) {
 
 		Validate.notNull(_configuration, "A database configuration is required");
+		OGlobalConfiguration.STORAGE_KEEP_OPEN.setValue(_configuration.isKeepOpen());
+		OGlobalConfiguration.setConfiguration(_configuration.getExtraConfiguration());
 		LOGGER.debug("Accessing to the database in{} ", _configuration.getUrl());
 		final ODatabase createdDB = this.newDatabase(_configuration);
 		this.createDatabase(createdDB, _configuration);
@@ -84,15 +81,17 @@ public abstract class AbstractOrientDatabaseFactory<T extends ODatabase, P exten
 	}
 
 	private boolean isRemoteDatabaseUrl(final DatabaseConfiguration _configuration) {
-		return !_configuration.getUrl().startsWith("remote:");
+		return _configuration.getUrl().startsWith("remote:");
 	}
 
 	protected void createDatabase(final ODatabase _database, final DatabaseConfiguration _configuration) {
-		if (this.isRemoteDatabaseUrl(_configuration)) {
+		if (!this.isRemoteDatabaseUrl(_configuration)) {
+
 			if (!_database.exists()) {
-				LOGGER.debug("Renewing local database");
+				LOGGER.info("Creating local database");
 				_database.create();
-				_database.close();
+			} else {
+				LOGGER.info("Reusing local database");
 			}
 		} else {
 			LOGGER.debug("Working on a remote database");
@@ -102,7 +101,7 @@ public abstract class AbstractOrientDatabaseFactory<T extends ODatabase, P exten
 	protected void createPool(final DatabaseConfiguration _configuration) {
 		this.pool = this.doCreatePool(_configuration);
 		LOGGER.debug("Configuration of the connexion pool min={}, max={}", _configuration.getMinPoolSize(),
-		        _configuration.getMaxPoolSize());
+				_configuration.getMaxPoolSize());
 		this.pool.setup(_configuration.getMinPoolSize(), _configuration.getMaxPoolSize());
 	}
 

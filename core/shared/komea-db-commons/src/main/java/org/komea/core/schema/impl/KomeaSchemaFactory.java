@@ -6,7 +6,6 @@ import org.komea.core.schema.IKomeaSchemaFactory;
 import org.komea.core.schema.IReference;
 import org.komea.core.schema.IType;
 import org.komea.core.schema.Primitive;
-import org.komea.core.schema.ReferenceArity;
 import org.komea.core.schema.ReferenceKind;
 import org.komea.core.schema.SchemaBuilder;
 
@@ -24,27 +23,9 @@ public class KomeaSchemaFactory implements IKomeaSchemaFactory {
 	}
 
 	@Override
-	public IReference newContainmentReference(final String name,
-			final IType type) {
-		return new Reference(name, type).setKind(ReferenceKind.CONTAINMENT);
-	}
-
-	@Override
 	public IEntityType newEntity(final String name) {
 		return new EntityType(name);
 	}
-
-	@Override
-	public IReference newManyContainmentReference(final String name,
-			final IType type) {
-		return new Reference(name, type).setKind(ReferenceKind.CONTAINMENT).setArity(ReferenceArity.MANY);
-	}
-
-	@Override
-	public IReference newManyReference(final String name, final IType type) {
-		return new Reference(name, type).setArity(ReferenceArity.MANY);
-	}
-
 
 	@Override
 	public IReference newReference(final String name, final IType type) {
