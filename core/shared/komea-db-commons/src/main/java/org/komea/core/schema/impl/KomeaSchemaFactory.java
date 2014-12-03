@@ -7,7 +7,6 @@ import org.komea.core.schema.IReference;
 import org.komea.core.schema.IType;
 import org.komea.core.schema.Primitive;
 import org.komea.core.schema.ReferenceKind;
-import org.komea.core.schema.SchemaBuilder;
 
 public class KomeaSchemaFactory implements IKomeaSchemaFactory {
 

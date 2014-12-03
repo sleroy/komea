@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.core.schema.impl.EntityType;
+import org.komea.core.schema.impl.EntityTypeBuilder;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;

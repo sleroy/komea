@@ -1,4 +1,9 @@
-package org.komea.core.schema;
+package org.komea.core.schema.impl;
+
+import org.komea.core.schema.IEntityType;
+import org.komea.core.schema.IKomeaSchema;
+import org.komea.core.schema.IKomeaSchemaFactory;
+import org.komea.core.schema.Primitive;
 
 public class EntityTypeBuilder {
 

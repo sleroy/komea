@@ -2,7 +2,7 @@ package org.komea.connectors.bugzilla.schema.impl;
 
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
-import org.komea.core.schema.SchemaBuilder;
+import org.komea.core.schema.impl.SchemaBuilder;
 import org.komea.software.model.ICompanySchema;
 
 /**

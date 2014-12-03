@@ -1,6 +1,9 @@
-package org.komea.core.schema;
+package org.komea.core.schema.impl;
 
-import org.komea.core.schema.impl.KomeaSchemaFactory;
+import org.komea.core.schema.IEntityType;
+import org.komea.core.schema.IKomeaSchema;
+import org.komea.core.schema.ReferenceArity;
+import org.komea.core.schema.ReferenceKind;
 
 /**
  * This class is a builder to create easily an schema.

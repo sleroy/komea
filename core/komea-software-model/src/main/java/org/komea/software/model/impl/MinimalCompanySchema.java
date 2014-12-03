@@ -3,8 +3,8 @@ package org.komea.software.model.impl;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
 import org.komea.core.schema.Primitive;
-import org.komea.core.schema.SchemaBuilder;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
+import org.komea.core.schema.impl.SchemaBuilder;
 import org.komea.software.model.ICompanySchema;
 import org.komea.software.model.ICompanySchemaInformations;
 

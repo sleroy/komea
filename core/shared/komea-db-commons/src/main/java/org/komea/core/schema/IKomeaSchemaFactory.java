@@ -1,5 +1,7 @@
 package org.komea.core.schema;
 
+import org.komea.core.schema.impl.SchemaBuilder;
+
 /**
  * Factory to create types and references that will be stored in a schema.
  *

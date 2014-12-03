@@ -7,6 +7,8 @@ import static org.mockito.Mockito.when;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.core.schema.impl.EntityType;
+import org.komea.core.schema.impl.EntityTypeBuilder;
+import org.komea.core.schema.impl.SchemaBuilder;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
