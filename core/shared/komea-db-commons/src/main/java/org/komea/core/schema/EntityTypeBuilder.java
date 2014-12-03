@@ -78,6 +78,12 @@ public class EntityTypeBuilder {
 
 	}
 
+
+	public EntityTypeBuilder setExtends(final IEntityType type){
+		this.entityType.setSuperType(type);
+		return this;
+	}
+	
 	public IEntityType build() {
 		this.schema.addType(this.entityType);
 		return this.entityType;
