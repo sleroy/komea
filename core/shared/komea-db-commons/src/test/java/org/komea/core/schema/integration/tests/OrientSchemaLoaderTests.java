@@ -2,9 +2,10 @@
 package org.komea.core.schema.integration.tests;
 
 
-import java.io.File;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.junit.Test;
@@ -13,7 +14,6 @@ import org.komea.core.schema.IKomeaSchema;
 import org.komea.core.schema.IReference;
 import org.komea.core.schema.ReferenceKind;
 import org.komea.core.schema.impl.OrientSchemaLoader;
-import org.komea.core.schema.utils.YUMLExport;
 
 import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OType;
@@ -22,8 +22,6 @@ import com.tinkerpop.blueprints.impls.orient.OrientEdgeType;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType;
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType.OrientVertexProperty;
-
-import static org.junit.Assert.*;
 
 public class OrientSchemaLoaderTests
 {
@@ -64,8 +62,8 @@ public class OrientSchemaLoaderTests
     }
 
     private OrientGraph buildExampleGraph() {
-    
-        OrientGraph graph = new OrientGraph("memory:test");
+        
+        OrientGraph graph = new OrientGraph("memory:test-"+System.currentTimeMillis());
         graph.setAutoStartTx(false);
         graph.getRawGraph().commit(true);
         
