@@ -59,7 +59,8 @@ public class OrientSchemaLoaderTests
         assertNotNull(name);
         assertTrue(name.isUnique());
         
-        YUMLExport.exportToHtml(new FileOutputStream(new File("schema.html")), schema);
+        graph.shutdown();
+  
     }
 
     private OrientGraph buildExampleGraph() {
