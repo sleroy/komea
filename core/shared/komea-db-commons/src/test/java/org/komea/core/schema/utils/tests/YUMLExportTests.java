@@ -1,7 +1,11 @@
-package org.komea.core.schema.tests;
+package org.komea.core.schema.utils.tests;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+
+import junit.framework.Assert;
 
 import org.junit.Test;
 import org.komea.core.schema.IEntityType;
@@ -11,23 +15,26 @@ import org.komea.core.schema.Primitive;
 import org.komea.core.schema.ReferenceArity;
 import org.komea.core.schema.ReferenceKind;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
-import org.komea.core.schema.impl.YUMLExport;
+import org.komea.core.schema.utils.YUMLExport;
 
-public class SchemaUMLTests {
+public class YUMLExportTests {
 
 	private final IKomeaSchemaFactory factory = new KomeaSchemaFactory();
 
 	@Test
 	public void yumlUrlTest() {
 		IKomeaSchema schema = buildSchema();
-		YUMLExport.buildYumlSchemaUrl(schema);
-		
+		String url = YUMLExport.buildYumlSchemaUrl(schema);
+		Assert.assertTrue(url.contains("http"));
 	}
 
 	@Test
 	public void htmlExportTest() throws IOException {
 		IKomeaSchema schema = buildSchema();
-		YUMLExport.exportToHtml(new File("build/output.html"), schema);
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		YUMLExport.exportToHtml(output, schema);
+		String content = output.toString();
+		Assert.assertTrue(content.contains("<html>"));
 	}
 
 	private IKomeaSchema buildSchema() {

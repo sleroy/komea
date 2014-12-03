@@ -1,10 +1,11 @@
-package org.komea.core.schema.impl;
+package org.komea.core.schema.utils;
 
-import java.io.File;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Iterator;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
 import org.komea.core.schema.IReference;
@@ -30,13 +31,13 @@ public class YUMLExport {
 		return sb.toString();
 	}
 	
-	public static void exportToHtml(final File output, final IKomeaSchema schema) throws IOException{
+	public static void exportToHtml(final OutputStream output, final IKomeaSchema schema) throws IOException{
 		StringBuilder sb = new StringBuilder();
 		sb.append("<html>\n<body>\n<img src='");
 		sb.append(buildYumlSchemaUrl(schema));
 		sb.append("'>\n</body>\n</html>");
 
-		FileUtils.write(output, sb.toString());
+		IOUtils.write(sb.toString(), output);
 	}
 
 	private static void edges(final IEntityType type, final StringBuilder sb) {
@@ -44,7 +45,7 @@ public class YUMLExport {
 		// inheritancy
 		if(type.getSuperType()!=null){
 			sb.append("[").append(type.getName()).append("]");
-			sb.append("^-");
+			sb.append("-^");
 			sb.append("[").append(type.getSuperType().getName()).append("]");
 			first=false;
 		}
