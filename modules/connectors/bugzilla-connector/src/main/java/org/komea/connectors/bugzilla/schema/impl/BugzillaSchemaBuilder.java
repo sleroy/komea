@@ -22,6 +22,8 @@ public class BugzillaSchemaBuilder {
 	private final IEntityType	bugzillaOS;
 
 	private final IEntityType	bugzillaPlatform;
+	
+	private final IEntityType	user;
 
 	private final IKomeaSchema	schema;
 
@@ -29,6 +31,9 @@ public class BugzillaSchemaBuilder {
 
 		final SchemaBuilder schemaBuilder = new SchemaBuilder(_schema.getSchema());
 
+		/*
+		 * Resources
+		 */
 		this.bugzillaProduct = schemaBuilder.newEntity("BugzillaProduct").addStringProperty("name")
 		        .addIntegerProperty("productId").addStringProperty("description").build();
 
@@ -40,7 +45,13 @@ public class BugzillaSchemaBuilder {
 		this.bugzillaOS = schemaBuilder.newEntity("BugzillaOperationSystem").addStringProperty("name").build();
 
 		this.bugzillaPlatform = schemaBuilder.newEntity("BugzillaPlatform").addStringProperty("name").build();
+		
+		/*
+		 * Persons
+		 */
+		this.user = schemaBuilder.newEntity("BugzillaUser").addStringProperty("bz_email").setExtends(_schema.getHumanType()).build();
 
+		
 		schemaBuilder.entityContainsMany("versions", this.bugzillaProduct, this.bugzillaProductVersion);
 		schemaBuilder.entityRefersMany("components", this.bugzillaProduct, this.bugzillaProductComponent);
 		schemaBuilder.entityRefersMany("owned_by", this.bugzillaProductComponent, this.bugzillaProduct);
@@ -70,6 +81,10 @@ public class BugzillaSchemaBuilder {
 
 	public IEntityType getBugzillaProductVersion() {
 		return this.bugzillaProductVersion;
+	}
+	
+	public IEntityType getUser() {
+		return this.user;
 	}
 
 	public IKomeaSchema getSchema() {
