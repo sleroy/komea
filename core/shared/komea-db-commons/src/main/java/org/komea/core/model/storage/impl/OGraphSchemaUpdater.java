@@ -7,6 +7,8 @@ import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
 import org.komea.core.schema.IReference;
 import org.komea.core.schema.ReferenceKind;
+import org.komea.core.schema.impl.SchemaNamingConvention;
+import org.komea.core.schema.impl.SchemaNamingConvention.EdgeDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +20,13 @@ import com.tinkerpop.blueprints.impls.orient.OrientEdgeType;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType;
 public class OGraphSchemaUpdater {
-	
+    public static final String SEPARATOR = "_";
+    public static final String TRUE = "true";
+    public static final String INDEXED = "indexed";
+    public static final String UNIQUE = "unique";
+    public static final String MANDATORY = "mandatory";
+    public static final String TYPE = "type";
+    
 	private final OrientGraph graph;
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger("Orient DB schema updater");
@@ -140,7 +148,6 @@ public class OGraphSchemaUpdater {
 					this.graph.dropEdgeType(fqn);
 				}
 				this.graph.createEdgeType(fqn, findEdgeBaseType(property));
-
 			}
 		}
 	}
@@ -154,8 +161,7 @@ public class OGraphSchemaUpdater {
 	 */
 	public static String etype(final IEntityType type,
 			final IReference reference) {
-
-		return type.getName().toLowerCase() + "_" + reference.getName();
+		return SchemaNamingConvention.formatEdgeType(new EdgeDefinition(type.getName(), reference.getName()));
 	}
 
 	private static String findEdgeBaseType(final IReference reference) {

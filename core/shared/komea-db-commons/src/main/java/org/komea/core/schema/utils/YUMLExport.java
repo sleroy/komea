@@ -104,10 +104,13 @@ public class YUMLExport {
 				} else {
 					first = false;
 				}
+				if(property.isUnique()){
+				    sb.append("%23%20");
+				}
 				sb.append(property.getName()).append(" : ")
 						.append(property.getType().getName());
 				if (property.isMany()) {
-					sb.append("*");
+					sb.append("%20*");
 				}
 			}
 		}
