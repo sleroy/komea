@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="process" nsURI="http://www.tocea.fr/komea/process" nsPrefix="org.komea">
+  <eSubpackages name="humans">
+    <eClassifiers xsi:type="ecore:EClass" name="Team">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+          eType="#//humans/Member" containment="true" eOpposite="#//humans/Member/team"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Member">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="login" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="creationDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="roles" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="team" lowerBound="1"
+          eType="#//humans/Team" eOpposite="#//humans/Team/members"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="management">
+    <eClassifiers xsi:type="ecore:EClass" name="Customer">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ProjectManagement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sprints" upperBound="-1"
+          eType="#//management/Sprint" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="customers" upperBound="-1"
+          eType="#//management/Customer"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Sprint">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="involvedComponents" upperBound="-1"
+          eType="#//portfolio/Component"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="portfolio">
+    <eClassifiers xsi:type="ecore:EClass" name="Component">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="usedByVersions" upperBound="-1"
+          eType="#//portfolio/Version"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OS" eSuperTypes="#//portfolio/Configuration"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Configuration">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Hardware" eSuperTypes="#//portfolio/Configuration">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cpu" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="memory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="disk" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Portfolio">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="applications" upperBound="-1"
+          eType="#//portfolio/Application" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="modules" upperBound="-1"
+          eType="#//code/TechnicalModule" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
+          eType="#//portfolio/Component" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Version">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="customers" upperBound="-1"
+          eType="#//management/Customer"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Application">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="versions" upperBound="-1"
+          eType="#//portfolio/Version" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
+          eType="#//portfolio/Component"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="supportedConfigurations"
+          upperBound="-1" eType="#//portfolio/Configuration"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="code">
+    <eClassifiers xsi:type="ecore:EClass" name="SCMFolder">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativePath" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subfolders" upperBound="-1"
+          eType="#//code/SCMFolder" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="files" upperBound="-1"
+          eType="#//code/SCMFile" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SCMFile">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativePath" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="contributors" upperBound="-1"
+          eType="#//humans/Member"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TechnicalModule">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="artifactId" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="groupId" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="folders" upperBound="-1"
+          eType="#//code/SCMFolder"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="implementedComponents"
+          upperBound="-1" eType="#//portfolio/Component"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

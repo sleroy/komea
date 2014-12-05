@@ -1,0 +1,95 @@
+@namespace(uri="http://www.tocea.fr/komea/process", prefix="org.komea")
+package process;
+
+//Humans
+
+class Team {
+  unique attr String[1] name;
+  val Member[*]#team members;
+}
+
+class Member {
+  attr String firstName;
+  attr String lastName;
+  attr String email;
+  unique attr String[1] login;
+  attr EDate creationDate;
+  attr String[*] roles;
+  ref Team[1]#members team;
+}
+
+//SCM
+
+class SCMFile {
+  attr String[1] name;
+  attr String[1] relativePath;
+  ref Member[*] contributors;
+}
+
+class SCMFolder {
+  attr String[1] name;
+  attr String[1] relativePath;
+  val SCMFolder[*] subfolders;
+  val SCMFile[*] files;
+}
+
+class SCMRepositoy {
+  unique attr String[1] name;
+  attr String[1] url;
+  attr String[1] type;
+  val SCMFolder[*] folders;
+}
+
+//Software
+class TechnicalModule {
+  attr String[1] artifactId;
+  attr String[1] groupId;
+  attr String[1] type;
+  ref SCMFolder[*] folders;
+  ref Component[*] components;
+}
+
+class Version {
+	attr String[1] name;
+	ref Customer[*] customers;
+}
+
+class Application {
+	unique attr String[1] name;
+	val Version[*] versions;
+	ref Component[*] components;
+}
+
+class Component {
+  unique attr String[1] name;
+  ref Configuration[*] configurations;
+  ref Version[*] applicationVersions;
+}
+
+class Configuration {
+	 attr String[1] name;	
+}
+
+class OS extends Configuration {
+	
+}
+
+class Hardware extends Configuration {
+	
+}
+
+//Projects
+
+class ProjectManagement{
+    attr String[1] name;	
+	val Sprint[*] sprints;
+	ref Customer[*] customers;
+}
+class Sprint{
+	attr String[1] name;	
+	ref Component[*] components;
+}
+
+class Customer{
+	attr String[1] name;	
+}
