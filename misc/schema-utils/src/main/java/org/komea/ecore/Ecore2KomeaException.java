@@ -2,7 +2,7 @@ package org.komea.ecore;
 
 import org.komea.core.exceptions.KomeaRuntimeException;
 
-class Ecore2KomeaException extends KomeaRuntimeException
+public class Ecore2KomeaException extends KomeaRuntimeException
 {
     
 
