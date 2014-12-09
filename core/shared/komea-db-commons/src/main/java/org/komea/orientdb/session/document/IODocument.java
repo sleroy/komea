@@ -33,6 +33,16 @@ public interface IODocument {
 	void field(String _key, Serializable _value);
 
 	/**
+	 * Sets a field of the document.
+	 *
+	 * @param _key
+	 *            the key
+	 * @param _value
+	 *            the value.
+	 */
+	<T extends Serializable> T getField(String _key, Class<T> _value);
+
+	/**
 	 * Returns the OrientDB document.
 	 *
 	 * @return the document
@@ -48,7 +58,7 @@ public interface IODocument {
 
 	/**
 	 * Converts the ODocument into a pojo of the given implementation.
-	 * 
+	 *
 	 * @param _impl
 	 *            the implementation.
 	 */

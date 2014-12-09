@@ -3,7 +3,7 @@ package org.komea.event.storage.convertor;
 import java.io.Serializable;
 import java.util.Map.Entry;
 
-import org.komea.event.model.api.IComplexEvent;
+import org.komea.event.model.beans.ComplexEvent;
 import org.komea.orientdb.session.document.IODocument;
 
 /**
@@ -12,18 +12,18 @@ import org.komea.orientdb.session.document.IODocument;
  * @author sleroy
  *
  */
-public class ComplexEventDocumentConvertor extends
-BasicEventDocumentConvertor<IComplexEvent> {
+public class ComplexEventDocumentConvertor {
 
-	public ComplexEventDocumentConvertor(final IComplexEvent _event) {
-		super(_event);
+	private final ComplexEvent	event;
+
+	public ComplexEventDocumentConvertor(final ComplexEvent _event) {
+		this.event = _event;
+
 	}
 
-	@Override
 	public void convert(final IODocument _newDocument) {
-		super.convert(_newDocument);
-		for (final Entry<String, ? extends Serializable> entry : this.event
-				.getProperties().entrySet()) {
+		new BasicEventDocumentConvertor(this.event).convert(_newDocument);
+		for (final Entry<String, ? extends Serializable> entry : this.event.getProperties().entrySet()) {
 			_newDocument.field(entry.getKey(), entry.getValue());
 
 		}

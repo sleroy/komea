@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
-import org.komea.event.model.api.IComplexEvent;
-
 import com.google.common.collect.Maps;
 
 /**
@@ -15,9 +13,9 @@ import com.google.common.collect.Maps;
  * @author sleroy
  *
  */
-public class ComplexEvent extends BasicEvent implements IComplexEvent {
+public class ComplexEvent extends AbstractEvent {
 
-	private Map<String, Serializable> properties = Maps.newHashMap();
+	private Map<String, Serializable>	properties	= Maps.newHashMap();
 
 	public ComplexEvent() {
 		super();
@@ -44,8 +42,7 @@ public class ComplexEvent extends BasicEvent implements IComplexEvent {
 	 * @param _newDate
 	 *            the new date
 	 */
-	public ComplexEvent(final String _provider, final String _eventType,
-			final Date _newDate) {
+	public ComplexEvent(final String _provider, final String _eventType, final Date _newDate) {
 		super(_provider, _eventType, _newDate);
 	}
 
@@ -62,19 +59,18 @@ public class ComplexEvent extends BasicEvent implements IComplexEvent {
 
 	}
 
-	@Override
 	public Map<String, ? extends Serializable> getProperties() {
 
 		return this.properties;
 	}
 
+	public void setProperties(final Map<String, Serializable> _properties) {
+		this.properties = _properties;
+	}
+
 	@Override
 	public String toString() {
 		return "ComplexEvent [properties=" + this.properties + "]";
-	}
-
-	public void setProperties(Map<String, Serializable> _properties) {
-		properties = _properties;
 	}
 
 }

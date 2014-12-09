@@ -4,9 +4,9 @@ import org.komea.connectors.bugzilla.proxy.impl.BugzillaServerConfiguration
 import org.komea.connectors.bugzilla.schema.impl.BugzillaSchemaBuilder
 import org.komea.connectors.bugzilla.schema.impl.BugzillaSchemaConnector
 import org.komea.core.model.impl.OKomeaModelFactory
-import org.komea.orientdb.session.impl.OrientGraphDatabaseFactory
-import org.komea.orientdb.session.impl.TestDatabaseConfiguration
 import org.komea.software.model.impl.MinimalCompanySchema
+import org.springframework.orientdb.session.impl.OrientSessionFactory
+import org.springframework.orientdb.session.impl.TestDatabaseConfiguration
 
 import spock.lang.Specification
 
@@ -21,7 +21,7 @@ class BugzillaFromPOISchemaIT extends Specification{
 		setup:
 		def dbc = new TestDatabaseConfiguration()
 		// ORIENTDB
-		def ogf = new OrientGraphDatabaseFactory(dbc)
+		def ogf = new OrientSessionFactory(dbc)
 		def bzServerConfiguration = new BugzillaServerConfiguration()
 		bzServerConfiguration.serverURL = 'https://issues.apache.org/bugzilla/'
 		bzServerConfiguration.project = "POI"
@@ -39,7 +39,7 @@ class BugzillaFromPOISchemaIT extends Specification{
 		when:
 		def companySchema = new MinimalCompanySchema()
 		def bzSchema = new BugzillaSchemaBuilder(companySchema)
-		def modelFactory = new OKomeaModelFactory(companySchema.getSchema(), ogf)
+		def modelFactory = new OKomeaModelFactory(companySchema.getSchema(), ogf.getGraph())
 		def connector = new BugzillaSchemaConnector(new XStreamBugzillaUnserializerAPI(), ogf, bzServerConfiguration)
 		connector.updateSchema()
 

@@ -1,12 +1,12 @@
 package org.komea.connectors.bugzilla
 
 import org.joda.time.DateTime
-import org.komea.connectors.bugzilla.schema.impl.BugzillaSchemaBuilder;
+import org.komea.connectors.bugzilla.schema.impl.BugzillaSchemaBuilder
 import org.komea.core.model.impl.OKomeaModelFactory
-import org.komea.orientdb.session.impl.OrientGraphDatabaseFactory
-import org.komea.orientdb.session.impl.TestDatabaseConfiguration
 import org.komea.software.model.impl.MinimalCompanySchema
 import org.komea.software.model.pojo.Human
+import org.springframework.orientdb.session.impl.OrientSessionFactory
+import org.springframework.orientdb.session.impl.TestDatabaseConfiguration
 
 import spock.lang.Specification
 
@@ -21,7 +21,7 @@ class BugzillaSchemaIT extends Specification{
 		setup:
 		def dbc = new TestDatabaseConfiguration()
 		// ORIENTDB
-		def ogf = new OrientGraphDatabaseFactory(dbc)
+		def ogf = new OrientSessionFactory(dbc)
 
 
 
@@ -29,7 +29,7 @@ class BugzillaSchemaIT extends Specification{
 		when:
 		def companySchema = new MinimalCompanySchema()
 		def bzSchema = new BugzillaSchemaBuilder(companySchema)
-		def modelFactory = new OKomeaModelFactory(companySchema.getSchema(), ogf)
+		def modelFactory = new OKomeaModelFactory(companySchema.getSchema(), ogf.getGraph())
 
 		def entityFiller = modelFactory.newEntityFiller(companySchema.getSchema().findType('Human'))
 		def human = new Human()

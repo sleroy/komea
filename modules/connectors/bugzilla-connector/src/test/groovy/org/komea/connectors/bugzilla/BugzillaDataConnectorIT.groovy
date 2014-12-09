@@ -3,13 +3,13 @@ package org.komea.connectors.bugzilla
 import static org.junit.Assert.*
 
 import org.junit.Test
-import org.komea.connectors.bugzilla.events.IBugzillaConnectorInformations;
-import org.komea.connectors.bugzilla.events.impl.BugzillaEventConnector;
-import org.komea.connectors.bugzilla.proxy.impl.BugzillaServerConfiguration;
-import org.komea.event.query.service.EventQueryManagerService
-import org.komea.event.storage.service.EventStorageService
-import org.komea.orientdb.session.impl.OrientDocumentDatabaseFactory
-import org.komea.orientdb.session.impl.TestDatabaseConfiguration
+import org.komea.connectors.bugzilla.events.IBugzillaConnectorInformations
+import org.komea.connectors.bugzilla.events.impl.BugzillaEventConnector
+import org.komea.connectors.bugzilla.proxy.impl.BugzillaServerConfiguration
+import org.komea.event.query.impl.EventQueryManager
+import org.komea.event.storage.impl.EventStorage
+import org.springframework.orientdb.session.impl.OrientSessionFactory
+import org.springframework.orientdb.session.impl.TestDatabaseConfiguration
 
 import spock.lang.Specification
 
@@ -24,9 +24,9 @@ class BugzillaDataConnectorIT extends Specification {
 
 		def dbc = new TestDatabaseConfiguration()
 		// ORIENTDB
-		def ogf = new OrientDocumentDatabaseFactory(dbc)
-		def eventStorage = new EventStorageService(ogf)
-		def queryservice = new EventQueryManagerService(ogf)
+		def ogf = new OrientSessionFactory(dbc)
+		def eventStorage = new EventStorage(ogf)
+		def queryservice = new EventQueryManager(ogf)
 
 
 		when: "I inject the history of bugzilla  of Apache POI"

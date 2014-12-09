@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.komea.core.utils.PojoToMap;
-import org.komea.event.model.api.IFlatEvent;
+import org.komea.event.model.IFlatEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,8 +44,12 @@ public class FlatEvent implements IFlatEvent {
 		for (final Entry<String, Object> entry : convertPojoInMap.entrySet()) {
 			if (entry.getValue() instanceof Serializable) {
 				this.properties.put(entry.getKey(), (Serializable) entry.getValue());
+			} else if (entry.getValue() == null) {
+				LOGGER.trace("Field {} is null", entry.getKey());
+				this.properties.put(entry.getKey(), (Serializable) entry.getValue());
 			} else {
-				LOGGER.error("This field is not serializable {}", entry.getKey());
+				LOGGER.error("This field is not serializable {}=>{} , class={}", entry.getKey(), entry.getValue(),
+						entry.getValue() != null ? entry.getValue().getClass() : null);
 			}
 		}
 

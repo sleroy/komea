@@ -8,23 +8,21 @@ import org.komea.core.model.IKomeaEntityFactory;
 import org.komea.core.model.impl.OKomeaModelFactory;
 import org.komea.core.model.storage.IKomeaGraphStorage;
 import org.komea.core.model.storage.impl.OKomeaGraphStorage;
-import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
-import org.komea.core.schema.IKomeaSchemaFactory;
-import org.komea.core.schema.IReference;
-import org.komea.core.schema.Primitive;
-import org.komea.core.schema.ReferenceArity;
-import org.komea.core.schema.ReferenceKind;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
-import org.komea.orientdb.session.impl.DatabaseConfiguration;
-import org.komea.orientdb.session.impl.OrientGraphDatabaseFactory;
-import org.komea.orientdb.session.impl.TestDatabaseConfiguration;
+import org.springframework.orientdb.session.impl.DatabaseConfiguration;
+import org.springframework.orientdb.session.impl.OrientSessionFactory;
+import org.springframework.orientdb.session.impl.TestDatabaseConfiguration;
 
-public class AbstractIntegrationTest {
-	protected IKomeaEntityFactory mfactory;
-	protected IKomeaSchema schema;
-	protected IKomeaGraphStorage storage;
-	private OrientGraphDatabaseFactory sessionsFactory;
+import com.tinkerpop.blueprints.impls.orient.OrientGraph;
+
+public abstract class AbstractIntegrationTest {
+	private IKomeaEntityFactory	 mfactory;
+	private IKomeaSchema	     schema;
+	private IKomeaGraphStorage	 storage;
+	private OrientSessionFactory	sessionsFactory;
+	private OrientGraph	         graph;
+	private KomeaSchemaFactory	 schemaFactory;
 
 	@After
 	public void end() throws IOException {
@@ -32,27 +30,52 @@ public class AbstractIntegrationTest {
 		this.sessionsFactory.close();
 	}
 
+	public OrientGraph getGraph() {
+		return this.graph;
+	}
+
+	public IKomeaEntityFactory getMfactory() {
+		return this.mfactory;
+	}
+
+	public IKomeaSchema getSchema() {
+		return this.schema;
+	}
+
+	public OrientSessionFactory getSessionsFactory() {
+		return this.sessionsFactory;
+	}
+
+	public KomeaSchemaFactory getSchemaFactory() {
+		return this.schemaFactory;
+	}
+
+	public IKomeaGraphStorage getStorage() {
+		return this.storage;
+
+	}
+
 	@Before
-	public void init() {
-		final IKomeaSchemaFactory sfactory = new KomeaSchemaFactory();
-		this.schema = sfactory.newSchema("Test");
+	public final void init() {
+		this.schemaFactory = new KomeaSchemaFactory();
+		this.schema = this.schemaFactory.newSchema("Test");
 
-		final IEntityType type = sfactory.newEntity("Person");
-		final IReference name = sfactory.newAttribute("name", Primitive.STRING);
-		type.addProperty(name);
-		final IReference references = sfactory.newReference("children", type)
-				.setArity(ReferenceArity.MANY)
-				.setKind(ReferenceKind.AGGREGATION);
-		type.addProperty(references);
-		this.schema.addType(type);
+		this.initSchema();
 
-		this.sessionsFactory = new OrientGraphDatabaseFactory();
+		this.sessionsFactory = new OrientSessionFactory();
 		final DatabaseConfiguration databaseConfiguration = new TestDatabaseConfiguration();
 		this.sessionsFactory.init(databaseConfiguration);
-
-		this.storage = new OKomeaGraphStorage(this.schema, this.sessionsFactory);
+		this.graph = this.sessionsFactory.getGraph();
+		this.storage = new OKomeaGraphStorage(this.schema, this.sessionsFactory.getGraph());
 
 		this.mfactory = new OKomeaModelFactory(this.storage);
 
 	}
+
+	public void setSfactory(final KomeaSchemaFactory _sfactory) {
+		this.schemaFactory = _sfactory;
+	}
+
+	protected abstract void initSchema();
+
 }

@@ -22,6 +22,10 @@ configurations { providedRuntime }
 dependencies {
 	compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
 	compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+	compile "org.springframework.data:orient-connector:${ORIENTDB_CONNECTOR}"
+	compile "org.springframework.data:spring-orient:${ORIENTDB_CONNECTOR}"
+	
+	
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}")
 	testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 

@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.Validate;
-import org.komea.event.model.api.IBasicEventInformations;
-import org.komea.event.model.api.IFlatEvent;
-import org.komea.orientdb.session.IDocumentSessionFactory;
+import org.komea.event.model.IBasicEventInformations;
+import org.komea.event.model.IFlatEvent;
 import org.komea.orientdb.session.document.IODocument;
+import org.komea.orientdb.session.document.IODocumentToolbox;
 
 /**
  * This class defines a convertor from a flat structure to an event.
@@ -17,14 +17,14 @@ import org.komea.orientdb.session.document.IODocument;
  */
 public class FlatEventDocumentConvertor {
 
-	private final IDocumentSessionFactory	documentDatabaseFactory;
-	private final IFlatEvent	          event;
+	private final IODocumentToolbox	documentDatabaseFactory;
+	private final IFlatEvent	    event;
 
-	public FlatEventDocumentConvertor(final IDocumentSessionFactory _documentDatabaseFactory, final IFlatEvent _event) {
-		this.documentDatabaseFactory = _documentDatabaseFactory;
+	public FlatEventDocumentConvertor(final IODocumentToolbox _toolbox, final IFlatEvent _event) {
+		this.documentDatabaseFactory = _toolbox;
 		this.event = _event;
 		Validate.notNull(_event);
-		Validate.notNull(_documentDatabaseFactory);
+		Validate.notNull(_toolbox);
 
 	}
 

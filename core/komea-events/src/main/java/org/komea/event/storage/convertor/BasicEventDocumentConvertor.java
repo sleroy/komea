@@ -1,8 +1,10 @@
 package org.komea.event.storage.convertor;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.Validate;
-import org.komea.event.model.api.IBasicEvent;
-import org.komea.event.model.api.IBasicEventInformations;
+import org.komea.event.model.IBasicEventInformations;
+import org.komea.event.model.beans.AbstractEvent;
 import org.komea.orientdb.session.document.IODocument;
 
 /**
@@ -11,11 +13,11 @@ import org.komea.orientdb.session.document.IODocument;
  * @author sleroy
  *
  */
-public class BasicEventDocumentConvertor<TEvent extends IBasicEvent> {
+public class BasicEventDocumentConvertor {
 
-	protected final TEvent event;
+	protected final AbstractEvent	event;
 
-	public BasicEventDocumentConvertor(final TEvent _event) {
+	public BasicEventDocumentConvertor(final AbstractEvent _event) {
 		super();
 		this.event = _event;
 		Validate.notNull(_event);
@@ -25,15 +27,14 @@ public class BasicEventDocumentConvertor<TEvent extends IBasicEvent> {
 
 		Validate.notNull(this.event.getProvider());
 		Validate.notNull(this.event.getEventType());
+		if (this.event.getDate() == null) {
+			this.event.setDate(new Date());
+		}
 		Validate.notNull(this.event.getDate());
 
-		_newDocument.field(IBasicEventInformations.FIELD_DATE,
-				this.event.getDate());
-		_newDocument.field(IBasicEventInformations.FIELD_EVENT_TYPE,
-				this.event.getEventType());
-		_newDocument.field(IBasicEventInformations.FIELD_PROVIDER,
-				this.event.getProvider());
+		_newDocument.field(IBasicEventInformations.FIELD_DATE, this.event.getDate());
+		_newDocument.field(IBasicEventInformations.FIELD_EVENT_TYPE, this.event.getEventType());
+		_newDocument.field(IBasicEventInformations.FIELD_PROVIDER, this.event.getProvider());
 
 	}
-
 }

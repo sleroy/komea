@@ -23,8 +23,9 @@ import org.komea.core.schema.Primitive;
 import org.komea.core.schema.ReferenceArity;
 import org.komea.core.schema.ReferenceKind;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
-import org.komea.orientdb.session.impl.DatabaseConfiguration;
-import org.komea.orientdb.session.impl.TestDatabaseConfiguration;
+import org.springframework.orientdb.session.impl.DatabaseConfiguration;
+import org.springframework.orientdb.session.impl.OrientSessionFactory;
+import org.springframework.orientdb.session.impl.TestDatabaseConfiguration;
 
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType;
 
@@ -35,10 +36,12 @@ public class OrientGraphStorageTests {
 	private IKomeaSchema	          schema;
 	private IKomeaGraphStorage	      storage;
 
+	private OrientSessionFactory	  osf;
+
 	@After
 	public void end() throws IOException {
-		this.storage.getGraph().drop();
 		this.storage.close();
+		this.osf.close();
 	}
 
 	@Test
@@ -60,7 +63,6 @@ public class OrientGraphStorageTests {
 
 	@Before
 	public void init() {
-
 		// create tests shared schema
 		this.schema = this.factory.newSchema("company");
 		final IEntityType person = this.factory.newEntity("Person");
@@ -78,7 +80,10 @@ public class OrientGraphStorageTests {
 
 		// initialize storage
 		final DatabaseConfiguration db = new TestDatabaseConfiguration();
-		this.storage = new OKomeaGraphStorage(this.schema, db);
+
+		this.osf = new OrientSessionFactory(db);
+		this.storage = new OKomeaGraphStorage(this.schema, this.osf.getGraph());
+
 	}
 
 	@Test
