@@ -43,7 +43,7 @@ import com.j2bugzilla.rpc.GetLegalValues;
 public class BugzillaSchemaConnector implements IBugzillaConnectorInformations {
 
 	private static final Logger	              LOGGER	          = LoggerFactory
-	                                                                      .getLogger(BugzillaSchemaConnector.class);
+			.getLogger(BugzillaSchemaConnector.class);
 
 	private final IKomeaGraphStorage	      graphStorage;
 	private final IBugzillaAPI	              bugzillaAPI;
@@ -54,18 +54,18 @@ public class BugzillaSchemaConnector implements IBugzillaConnectorInformations {
 	private final Map<String, IKomeaEntity>	  platformToEntities	= Maps.newHashMap();
 	private final Map<String, IKomeaEntity>	  osToEntities	      = Maps.newHashMap();
 
-	public BugzillaSchemaConnector(final IBugzillaAPI _bugzillaAPI, final IKomeaGraphStorage _graphStorage,
-	        final BugzillaServerConfiguration _configuration) {
+	public BugzillaSchemaConnector(final BugzillaServerConfiguration _configuration,
+			final IKomeaGraphStorage _graphStorage) {
 		this.graphStorage = _graphStorage;
-		this.bugzillaAPI = _bugzillaAPI;
+		this.bugzillaAPI = new BugzillaAPI();
 		this.configuration = _configuration;
 
 	}
 
-	public BugzillaSchemaConnector(final IKomeaGraphStorage _graphStorage,
-	        final BugzillaServerConfiguration _configuration) {
+	public BugzillaSchemaConnector(final IBugzillaAPI _bugzillaAPI, final IKomeaGraphStorage _graphStorage,
+			final BugzillaServerConfiguration _configuration) {
 		this.graphStorage = _graphStorage;
-		this.bugzillaAPI = new BugzillaAPI();
+		this.bugzillaAPI = _bugzillaAPI;
 		this.configuration = _configuration;
 
 	}
@@ -104,16 +104,16 @@ public class BugzillaSchemaConnector implements IBugzillaConnectorInformations {
 				products = this.bugzillaAPI.getProducts();
 			} else {
 				products = Collections.singletonList(this.bugzillaAPI.getProductDefinition(this.configuration
-				        .getProject()));
+						.getProject()));
 			}
 
 			for (final Product product : products) {
 				final IKomeaEntityFiller<BugzillaProduct> productFiller = modelFactory
-				        .newEntityFiller(bugzillaSchemaBuilder.getBugzillaProduct());
+						.newEntityFiller(bugzillaSchemaBuilder.getBugzillaProduct());
 				final IKomeaEntity productEntity = this.getOrCreateProductEntity(product, productFiller);
 				for (final ProductVersion pv : product.getProductVersions()) {
 					final IKomeaEntity versionEntity = this.getOrCreateProductVersion(bugzillaSchemaBuilder,
-					        modelFactory, pv);
+							modelFactory, pv);
 					productEntity.add("versions", versionEntity);
 				}
 
@@ -169,43 +169,43 @@ public class BugzillaSchemaConnector implements IBugzillaConnectorInformations {
 	}
 
 	private void getOrCreateComponentEntity(final BugzillaSchemaBuilder bugzillaSchemaBuilder,
-	        final OKomeaModelFactory modelFactory, final String component) {
+			final OKomeaModelFactory modelFactory, final String component) {
 		final IKomeaEntityFiller<BugzillaComponent> componentFiller = modelFactory
-		        .newEntityFiller(bugzillaSchemaBuilder.getBugzillaProductComponent());
+				.newEntityFiller(bugzillaSchemaBuilder.getBugzillaProductComponent());
 		this.componentToEntities.put(component, componentFiller.put(new BugzillaComponent(component)));
 
 	}
 
 	private IKomeaEntity getOrCreateOperationSystem(final BugzillaSchemaBuilder bugzillaSchemaBuilder,
-	        final OKomeaModelFactory modelFactory, final String os) {
+			final OKomeaModelFactory modelFactory, final String os) {
 		final IKomeaEntityFiller<BugzillaOS> osFiller = modelFactory.newEntityFiller(bugzillaSchemaBuilder
-		        .getBugzillaOS());
+				.getBugzillaOS());
 		final IKomeaEntity entity = osFiller.put(new BugzillaOS(os));
 		this.osToEntities.put(os, entity);
 		return entity;
 	}
 
 	private IKomeaEntity getOrCreatePlatformEntity(final BugzillaSchemaBuilder bugzillaSchemaBuilder,
-	        final OKomeaModelFactory modelFactory, final String platform) {
+			final OKomeaModelFactory modelFactory, final String platform) {
 		final IKomeaEntityFiller<BugzillaPlatform> platformFiller = modelFactory.newEntityFiller(bugzillaSchemaBuilder
-		        .getBugzillaPlatform());
+				.getBugzillaPlatform());
 		final IKomeaEntity entity = platformFiller.put(new BugzillaPlatform(platform));
 		this.platformToEntities.put(platform, entity);
 		return entity;
 	}
 
 	private IKomeaEntity getOrCreateProductEntity(final Product product,
-	        final IKomeaEntityFiller<BugzillaProduct> productFiller) {
+			final IKomeaEntityFiller<BugzillaProduct> productFiller) {
 		final IKomeaEntity productEntity = productFiller.put(new BugzillaProduct(product.getID(), product.getName(),
-		        product.getDescription()));
+				product.getDescription()));
 		this.productToEntities.put(product.getName(), productEntity);
 		return productEntity;
 	}
 
 	private IKomeaEntity getOrCreateProductVersion(final BugzillaSchemaBuilder bugzillaSchemaBuilder,
-	        final OKomeaModelFactory modelFactory, final ProductVersion pv) {
+			final OKomeaModelFactory modelFactory, final ProductVersion pv) {
 		final IKomeaEntityFiller<BugzillaProductVersion> versionFiller = modelFactory
-		        .newEntityFiller(bugzillaSchemaBuilder.getBugzillaProductVersion());
+				.newEntityFiller(bugzillaSchemaBuilder.getBugzillaProductVersion());
 		final IKomeaEntity versionEntity = versionFiller.put(new BugzillaProductVersion(pv.getID(), pv.getName()));
 		return versionEntity;
 	}

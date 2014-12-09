@@ -4,6 +4,7 @@ import org.komea.connectors.bugzilla.proxy.impl.BugzillaServerConfiguration
 import org.komea.connectors.bugzilla.schema.impl.BugzillaSchemaBuilder
 import org.komea.connectors.bugzilla.schema.impl.BugzillaSchemaConnector
 import org.komea.core.model.impl.OKomeaModelFactory
+import org.komea.core.model.storage.impl.OKomeaGraphStorage
 import org.komea.software.model.impl.MinimalCompanySchema
 import org.springframework.orientdb.session.impl.OrientSessionFactory
 import org.springframework.orientdb.session.impl.TestDatabaseConfiguration
@@ -37,11 +38,16 @@ class BugzillaFromPOISchemaIT extends Specification{
 		//bzServerConfiguration.serverURL = 'https://bugzilla.gentoo.org'
 
 
-		when:
+		/** "Schema Factories" **/
+
 		def companySchema = new MinimalCompanySchema()
+		def orientGraph = ogf.getGraph()
+		def modelFactory = new OKomeaModelFactory(companySchema.getSchema(), orientGraph)
+
+		when: "When we connect to bugzilla and fill the model."
 		def bzSchema = new BugzillaSchemaBuilder(companySchema)
-		def modelFactory = new OKomeaModelFactory(companySchema.getSchema(), ogf.getGraph())
-		def connector = new BugzillaSchemaConnector(new XStreamBugzillaUnserializerAPI(), ogf, bzServerConfiguration)
+		def okomeaGraphStorage = new OKomeaGraphStorage(bzSchema, orientGraph)
+		def connector = new BugzillaSchemaConnector(new XStreamBugzillaUnserializerAPI(), okomeaGraphStorage, bzServerConfiguration)
 		connector.updateSchema()
 
 		println Iterators.size(modelFactory.getStorageService().entities().iterator())
