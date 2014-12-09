@@ -22,6 +22,7 @@ class BugzillaFromPOISchemaIT extends Specification{
 		def dbc = new TestDatabaseConfiguration()
 		// ORIENTDB
 		def ogf = new OrientSessionFactory(dbc)
+		ogf.getOrCreateDatabaseSession()
 		def bzServerConfiguration = new BugzillaServerConfiguration()
 		bzServerConfiguration.serverURL = 'https://issues.apache.org/bugzilla/'
 		bzServerConfiguration.project = "POI"

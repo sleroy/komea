@@ -41,7 +41,7 @@ public class BugzillaEventConnector implements IBugzillaConnectorInformations {
 	private final BugzillaServerConfiguration	configuration;
 
 	public BugzillaEventConnector(final IBugzillaAPI _bugzillaAPI, final IEventStorage _eventStorage,
-			final BugzillaServerConfiguration _configuration) {
+	        final BugzillaServerConfiguration _configuration) {
 		this.eventStorage = _eventStorage;
 		this.bugzillaAPI = _bugzillaAPI;
 		this.configuration = _configuration;
@@ -56,7 +56,7 @@ public class BugzillaEventConnector implements IBugzillaConnectorInformations {
 	}
 
 	public void analysisOfProjectBug(final String _productName, final IBugzillaAPI _bugzillaAPI)
-			throws BugzillaException {
+	        throws BugzillaException {
 		LOGGER.info("Fetching bugs");
 		final List<Bug> bugList = _bugzillaAPI.getBugList(_productName);
 		LOGGER.info("Bugs found {}", bugList.size());
@@ -123,7 +123,7 @@ public class BugzillaEventConnector implements IBugzillaConnectorInformations {
 	private ComplexEvent createBugEvent(final Bug bug, final String eventName) {
 		final ComplexEvent complexEventDto = new ComplexEvent();
 		complexEventDto.setProvider(PROVIDER_BUG);
-		complexEventDto.setEventKey(eventName);
+		complexEventDto.setEventType(eventName);
 		final Map<String, Serializable> properties = Maps.newHashMap();
 		for (final Entry<Object, Object> entry : bug.getParameterMap().entrySet()) {
 			if (entry.getValue() instanceof Serializable) {
