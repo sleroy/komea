@@ -24,6 +24,22 @@ class BugzillaFromPOISchemaIT extends Specification{
 		// ORIENTDB
 		def ogf = new OrientSessionFactory(dbc)
 		ogf.getOrCreateDatabaseSession()
+
+		/** "Schema Factories" **/
+
+		def companySchema = new MinimalCompanySchema()
+		def orientGraph = ogf.getGraph()
+		def modelFactory = new OKomeaModelFactory(companySchema.getSchema(), orientGraph)
+
+		when: "We update the schema"
+		def bzSchema = new BugzillaSchemaBuilder(companySchema)
+
+		and: "We create the model factory"
+
+		def okomeaGraphStorage = new OKomeaGraphStorage(companySchema.getSchema(), orientGraph)
+
+		and: "We connect to bugzilla"
+
 		def bzServerConfiguration = new BugzillaServerConfiguration()
 		bzServerConfiguration.serverURL = 'https://issues.apache.org/bugzilla/'
 		bzServerConfiguration.project = "POI"
@@ -36,23 +52,17 @@ class BugzillaFromPOISchemaIT extends Specification{
 		//bzServerConfiguration.serverURL = 'https://bugzilla.kernel.org'
 		//bzServerConfiguration.serverURL = 'https://bugzilla.redhat.org'
 		//bzServerConfiguration.serverURL = 'https://bugzilla.gentoo.org'
+		and: "We fill the model with new entities from an extract of a bugzilla server"
 
-
-		/** "Schema Factories" **/
-
-		def companySchema = new MinimalCompanySchema()
-		def orientGraph = ogf.getGraph()
-		def modelFactory = new OKomeaModelFactory(companySchema.getSchema(), orientGraph)
-
-		when: "When we connect to bugzilla and fill the model."
-		def bzSchema = new BugzillaSchemaBuilder(companySchema)
-		def okomeaGraphStorage = new OKomeaGraphStorage(bzSchema, orientGraph)
 		def connector = new BugzillaSchemaConnector(new XStreamBugzillaUnserializerAPI(), okomeaGraphStorage, bzServerConfiguration)
 		connector.updateSchema()
 
 		println Iterators.size(modelFactory.getStorageService().entities().iterator())
 
-		then:
+		println "Count vertices " + orientGraph.countVertices()
+		println "Count edges " + orientGraph.countEdges()
+
+		then: "We should obtain a model with a given number of entities"
 		Iterators.size(modelFactory.getStorageService().entities().iterator()) == 463 // FOR NO REGRESSION
 
 

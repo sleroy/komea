@@ -2,7 +2,6 @@ package org.komea.core.model.integration.tests;
 
 import static junit.framework.Assert.assertEquals;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.komea.core.model.IKomeaEntity;
 import org.komea.core.model.IKomeaEntityFactory;
@@ -27,7 +26,7 @@ public class OEntityCollectorTests extends AbstractIntegrationTest {
 		private int		                  depth;
 
 		public ChildrenGenerator(final int maxDepth, final int nbChildren, final IEntityType type,
-				final IKomeaEntityFactory mFactory) {
+		        final IKomeaEntityFactory mFactory) {
 			super();
 			this.maxDepth = maxDepth;
 			this.nbChildren = nbChildren;
@@ -69,17 +68,18 @@ public class OEntityCollectorTests extends AbstractIntegrationTest {
 	}
 
 	@Test
-	@Ignore("Perfs tests")
+	// @Ignore("Perfs tests")
 	public void aggregationPerfsTest() {
+		System.out.println("Init");
 		final IEntityType type = this.getSchema().findType("Person");
-
+		System.out.println("Step1");
 		final IKomeaEntity parent = this.getMfactory().create(type);
 		parent.set("name", "person" + 0);
 		final int depth = 20;
 		final int nbChildren = 2000;
 		final ChildrenGenerator generator = new ChildrenGenerator(depth, nbChildren, type, this.getMfactory());
 		generator.generateChildren(parent);
-
+		System.out.println("Step2");
 		final OEntityCollector collector = new OEntityCollector((OKomeaEntity) parent);
 		final long t1 = System.currentTimeMillis();
 		final long count = collector.countAllAggregatedEntities();
@@ -118,8 +118,8 @@ public class OEntityCollectorTests extends AbstractIntegrationTest {
 		final IEntityType type = this.getSchemaFactory().newEntity("Person");
 		final IReference name = this.getSchemaFactory().newAttribute("name", Primitive.STRING);
 		type.addProperty(name);
-		final IReference references = this.getSchemaFactory().newReference("children", type).setArity(ReferenceArity.MANY)
-		        .setKind(ReferenceKind.AGGREGATION);
+		final IReference references = this.getSchemaFactory().newReference("children", type)
+		        .setArity(ReferenceArity.MANY).setKind(ReferenceKind.AGGREGATION);
 		type.addProperty(references);
 		this.getSchema().addType(type);
 

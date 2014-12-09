@@ -43,7 +43,7 @@ import com.j2bugzilla.rpc.GetLegalValues;
 public class BugzillaSchemaConnector implements IBugzillaConnectorInformations {
 
 	private static final Logger	              LOGGER	          = LoggerFactory
-			.getLogger(BugzillaSchemaConnector.class);
+	                                                                      .getLogger(BugzillaSchemaConnector.class);
 
 	private final IKomeaGraphStorage	      graphStorage;
 	private final IBugzillaAPI	              bugzillaAPI;
@@ -55,7 +55,7 @@ public class BugzillaSchemaConnector implements IBugzillaConnectorInformations {
 	private final Map<String, IKomeaEntity>	  osToEntities	      = Maps.newHashMap();
 
 	public BugzillaSchemaConnector(final BugzillaServerConfiguration _configuration,
-			final IKomeaGraphStorage _graphStorage) {
+	        final IKomeaGraphStorage _graphStorage) {
 		this.graphStorage = _graphStorage;
 		this.bugzillaAPI = new BugzillaAPI();
 		this.configuration = _configuration;
@@ -63,7 +63,7 @@ public class BugzillaSchemaConnector implements IBugzillaConnectorInformations {
 	}
 
 	public BugzillaSchemaConnector(final IBugzillaAPI _bugzillaAPI, final IKomeaGraphStorage _graphStorage,
-			final BugzillaServerConfiguration _configuration) {
+	        final BugzillaServerConfiguration _configuration) {
 		this.graphStorage = _graphStorage;
 		this.bugzillaAPI = _bugzillaAPI;
 		this.configuration = _configuration;
@@ -90,122 +90,116 @@ public class BugzillaSchemaConnector implements IBugzillaConnectorInformations {
 	private void createSchemaAndEntities() throws Exception {
 		final BugzillaSchemaBuilder bugzillaSchemaBuilder = new BugzillaSchemaBuilder(new MinimalCompanySchema());
 		OKomeaModelFactory modelFactory = null;
-		try {
 
-			modelFactory = new OKomeaModelFactory(bugzillaSchemaBuilder.getSchema(), this.graphStorage.getGraph());
+		modelFactory = new OKomeaModelFactory(bugzillaSchemaBuilder.getSchema(), this.graphStorage.getGraph());
 
-			this.initBugzillaConnection();
+		this.initBugzillaConnection();
 
-			/**
-			 * Fill product and versions
-			 */
-			final List<Product> products;
-			if (Strings.isNullOrEmpty(this.configuration.getProject())) {
-				products = this.bugzillaAPI.getProducts();
-			} else {
-				products = Collections.singletonList(this.bugzillaAPI.getProductDefinition(this.configuration
-						.getProject()));
+		/**
+		 * Fill product and versions
+		 */
+		final List<Product> products;
+		if (Strings.isNullOrEmpty(this.configuration.getProject())) {
+			products = this.bugzillaAPI.getProducts();
+		} else {
+			products = Collections
+			        .singletonList(this.bugzillaAPI.getProductDefinition(this.configuration.getProject()));
+		}
+
+		for (final Product product : products) {
+			final IKomeaEntityFiller<BugzillaProduct> productFiller = modelFactory
+			        .newEntityFiller(bugzillaSchemaBuilder.getBugzillaProduct());
+			final IKomeaEntity productEntity = this.getOrCreateProductEntity(product, productFiller);
+			for (final ProductVersion pv : product.getProductVersions()) {
+				final IKomeaEntity versionEntity = this.getOrCreateProductVersion(bugzillaSchemaBuilder, modelFactory,
+				        pv);
+				productEntity.add("versions", versionEntity);
 			}
 
-			for (final Product product : products) {
-				final IKomeaEntityFiller<BugzillaProduct> productFiller = modelFactory
-						.newEntityFiller(bugzillaSchemaBuilder.getBugzillaProduct());
-				final IKomeaEntity productEntity = this.getOrCreateProductEntity(product, productFiller);
-				for (final ProductVersion pv : product.getProductVersions()) {
-					final IKomeaEntity versionEntity = this.getOrCreateProductVersion(bugzillaSchemaBuilder,
-							modelFactory, pv);
-					productEntity.add("versions", versionEntity);
+		}
+
+		/**
+		 * Fill platform fields
+		 */
+		for (final String platform : this.bugzillaAPI.getLegalValues(GetLegalValues.Fields.REP_PLATFORM)) {
+			this.getOrCreatePlatformEntity(bugzillaSchemaBuilder, modelFactory, platform);
+
+		}
+		/**
+		 * Fill os fields.
+		 */
+		for (final String os : this.bugzillaAPI.getLegalValues(GetLegalValues.Fields.OP_SYS)) {
+			this.getOrCreateOperationSystem(bugzillaSchemaBuilder, modelFactory, os);
+
+		}
+
+		for (final String component : this.bugzillaAPI.getLegalValues(GetLegalValues.Fields.COMPONENT)) {
+			this.getOrCreateComponentEntity(bugzillaSchemaBuilder, modelFactory, component);
+		}
+
+		/**
+		 * Building links platform/os/components/products
+		 */
+		LOGGER.info("Processing bugs to create network");
+		for (final Product product : products) {
+			LOGGER.info("Processing product {}", product.getName());
+			final IKomeaEntity productEntity = this.productToEntities.get(product.getName());
+			for (final Bug bug : this.bugzillaAPI.getBugList(product.getName())) {
+				if (!Strings.isNullOrEmpty(bug.getPlatform())) {
+					productEntity.add("platforms_supported", this.platformToEntities.get(bug.getPlatform()));
+				}
+				if (!Strings.isNullOrEmpty(bug.getOperatingSystem())) {
+					productEntity.add("os_supported", this.osToEntities.get(bug.getOperatingSystem()));
+				}
+				if (!Strings.isNullOrEmpty(bug.getComponent())) {
+					final IKomeaEntity componentEntity = this.componentToEntities.get(bug.getComponent());
+
+					productEntity.add("components", componentEntity);
+					componentEntity.add("owned_by", productEntity);
 				}
 
-			}
-
-			/**
-			 * Fill platform fields
-			 */
-			for (final String platform : this.bugzillaAPI.getLegalValues(GetLegalValues.Fields.REP_PLATFORM)) {
-				this.getOrCreatePlatformEntity(bugzillaSchemaBuilder, modelFactory, platform);
-
-			}
-			/**
-			 * Fill os fields.
-			 */
-			for (final String os : this.bugzillaAPI.getLegalValues(GetLegalValues.Fields.OP_SYS)) {
-				this.getOrCreateOperationSystem(bugzillaSchemaBuilder, modelFactory, os);
-
-			}
-
-			for (final String component : this.bugzillaAPI.getLegalValues(GetLegalValues.Fields.COMPONENT)) {
-				this.getOrCreateComponentEntity(bugzillaSchemaBuilder, modelFactory, component);
-			}
-
-			/**
-			 * Building links platform/os/components/products
-			 */
-			LOGGER.info("Processing bugs to create network");
-			for (final Product product : products) {
-				LOGGER.info("Processing product {}", product.getName());
-				final IKomeaEntity productEntity = this.productToEntities.get(product.getName());
-				for (final Bug bug : this.bugzillaAPI.getBugList(product.getName())) {
-					if (!Strings.isNullOrEmpty(bug.getPlatform())) {
-						productEntity.add("platforms_supported", this.platformToEntities.get(bug.getPlatform()));
-					}
-					if (!Strings.isNullOrEmpty(bug.getOperatingSystem())) {
-						productEntity.add("os_supported", this.osToEntities.get(bug.getOperatingSystem()));
-					}
-					if (!Strings.isNullOrEmpty(bug.getComponent())) {
-						final IKomeaEntity componentEntity = this.componentToEntities.get(bug.getComponent());
-
-						productEntity.add("components", componentEntity);
-						componentEntity.add("owned_by", productEntity);
-					}
-
-				}
-			}
-		} finally {
-			if (modelFactory != null) {
-				modelFactory.close();
 			}
 		}
 	}
 
 	private void getOrCreateComponentEntity(final BugzillaSchemaBuilder bugzillaSchemaBuilder,
-			final OKomeaModelFactory modelFactory, final String component) {
+	        final OKomeaModelFactory modelFactory, final String component) {
 		final IKomeaEntityFiller<BugzillaComponent> componentFiller = modelFactory
-				.newEntityFiller(bugzillaSchemaBuilder.getBugzillaProductComponent());
+		        .newEntityFiller(bugzillaSchemaBuilder.getBugzillaProductComponent());
 		this.componentToEntities.put(component, componentFiller.put(new BugzillaComponent(component)));
 
 	}
 
 	private IKomeaEntity getOrCreateOperationSystem(final BugzillaSchemaBuilder bugzillaSchemaBuilder,
-			final OKomeaModelFactory modelFactory, final String os) {
+	        final OKomeaModelFactory modelFactory, final String os) {
 		final IKomeaEntityFiller<BugzillaOS> osFiller = modelFactory.newEntityFiller(bugzillaSchemaBuilder
-				.getBugzillaOS());
+		        .getBugzillaOS());
 		final IKomeaEntity entity = osFiller.put(new BugzillaOS(os));
 		this.osToEntities.put(os, entity);
 		return entity;
 	}
 
 	private IKomeaEntity getOrCreatePlatformEntity(final BugzillaSchemaBuilder bugzillaSchemaBuilder,
-			final OKomeaModelFactory modelFactory, final String platform) {
+	        final OKomeaModelFactory modelFactory, final String platform) {
 		final IKomeaEntityFiller<BugzillaPlatform> platformFiller = modelFactory.newEntityFiller(bugzillaSchemaBuilder
-				.getBugzillaPlatform());
+		        .getBugzillaPlatform());
 		final IKomeaEntity entity = platformFiller.put(new BugzillaPlatform(platform));
 		this.platformToEntities.put(platform, entity);
 		return entity;
 	}
 
 	private IKomeaEntity getOrCreateProductEntity(final Product product,
-			final IKomeaEntityFiller<BugzillaProduct> productFiller) {
+	        final IKomeaEntityFiller<BugzillaProduct> productFiller) {
 		final IKomeaEntity productEntity = productFiller.put(new BugzillaProduct(product.getID(), product.getName(),
-				product.getDescription()));
+		        product.getDescription()));
 		this.productToEntities.put(product.getName(), productEntity);
 		return productEntity;
 	}
 
 	private IKomeaEntity getOrCreateProductVersion(final BugzillaSchemaBuilder bugzillaSchemaBuilder,
-			final OKomeaModelFactory modelFactory, final ProductVersion pv) {
+	        final OKomeaModelFactory modelFactory, final ProductVersion pv) {
 		final IKomeaEntityFiller<BugzillaProductVersion> versionFiller = modelFactory
-				.newEntityFiller(bugzillaSchemaBuilder.getBugzillaProductVersion());
+		        .newEntityFiller(bugzillaSchemaBuilder.getBugzillaProductVersion());
 		final IKomeaEntity versionEntity = versionFiller.put(new BugzillaProductVersion(pv.getID(), pv.getName()));
 		return versionEntity;
 	}
