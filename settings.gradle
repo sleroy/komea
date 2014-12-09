@@ -11,4 +11,5 @@ include "core:komea-events"
 include "services:event-server"
 
 include "modules:connectors:bugzilla-connector"
+include "modules:connectors:jira-connector"
 include "misc:schema-utils"

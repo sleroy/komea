@@ -1,0 +1,12 @@
+
+
+dependencies {
+    // TODO: Add dependencies here ...
+    // You can read more about how to add dependency here:
+    //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:how_to_declare_your_dependencies
+    compile project(":core:komea-events")
+    compile project(":core:komea-software-model")
+    compile 'net.rcarz:jira-client:0.5'
+    testCompile project(":core:shared:komea-db-viz")
+//    testCompile group: 'junit', name: 'junit', version: '4.10'
+}
