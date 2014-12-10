@@ -13,14 +13,14 @@ import org.komea.connectors.git.impl.GitRepository;
 public abstract class AbstractLocalGitTest
 {
     
-    protected final File    folder = new File("src/main/resources/github-gmail");
+    protected final File    folder = new File("src/test/resources/github-gmail/git/");
     protected GitRepository repository;
     
     @Before
     public void init() {
     
         assertTrue(this.folder.exists());
-        this.repository = new GitRepository(this.folder,"https://github.com/muan/github-gmail.git");
+        this.repository = new GitRepository(this.folder, "https://github.com/muan/github-gmail.git");
     }
     
     @After
@@ -29,7 +29,8 @@ public abstract class AbstractLocalGitTest
         this.repository.close();
     }
     
-    protected int getExpectedNumberOfCommits(){
+    protected int getExpectedNumberOfCommits() {
+    
         return 139;
     }
     
