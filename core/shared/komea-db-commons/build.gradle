@@ -2,10 +2,7 @@ dependencies {
 	compile "org.apache.commons:commons-lang3:$APACHE_COMMONLANG3"
 	compile "commons-io:commons-io:$APACHE_COMMONIO"
 	compile "com.google.guava:guava:$GUAVA"
-	compile "org.slf4j:slf4j-api:$LOG_SLF4J"
-	compile "org.slf4j:jcl-over-slf4j:$LOG_SLF4J"
-	compile "org.slf4j:log4j-over-slf4j:$LOG_SLF4J"
-	testCompile "ch.qos.logback:logback-classic:$LOG_LOGBACK"
+
 
 	compile "com.orientechnologies:orientdb-core:${ORIENTDB_VERSION}"
 	compile "com.orientechnologies:orientdb-graphdb:${ORIENTDB_VERSION}"

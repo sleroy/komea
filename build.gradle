@@ -185,9 +185,15 @@ allprojects {
 
 
 	dependencies {
+	
+		compile "org.slf4j:slf4j-api:$LOG_SLF4J"
+         	compile "org.slf4j:jcl-over-slf4j:$LOG_SLF4J"
+         	compile "org.slf4j:log4j-over-slf4j:$LOG_SLF4J"
+        	testCompile "ch.qos.logback:logback-classic:$LOG_LOGBACK"
+	
 		testCompile tests_frameworks // TEST FRAMEWORKS
 
-		testCompile(       "org.easymock:easymock:3.1") { exclude group: 'org.objenesis' }
+		testCompile("org.easymock:easymock:3.1") { exclude group: 'org.objenesis' }
 		testRuntime 'org.apache.logging.log4j:log4j-core:2.0.2'
                 testCompile 'org.codehaus.groovy:groovy-all:2.3.7'
 		testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
