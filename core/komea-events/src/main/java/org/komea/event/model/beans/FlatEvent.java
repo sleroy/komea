@@ -40,10 +40,10 @@ public class FlatEvent implements IFlatEvent {
 
 	public FlatEvent(final Object _pojo) {
 		this();
-		final Map<String, Object> convertPojoInMap = new PojoToMap().convertPojoInMap(_pojo);
-		for (final Entry<String, Object> entry : convertPojoInMap.entrySet()) {
+		final Map<String, Serializable> convertPojoInMap = new PojoToMap().convertPojoInMap(_pojo);
+		for (final Entry<String, Serializable> entry : convertPojoInMap.entrySet()) {
 			if (entry.getValue() instanceof Serializable) {
-				this.properties.put(entry.getKey(), (Serializable) entry.getValue());
+				this.properties.put(entry.getKey(), entry.getValue());
 			} else {
 				LOGGER.error("This field is not serializable {}", entry.getKey());
 			}

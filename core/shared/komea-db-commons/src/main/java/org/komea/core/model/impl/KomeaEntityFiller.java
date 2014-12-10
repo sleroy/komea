@@ -1,5 +1,6 @@
 package org.komea.core.model.impl;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -29,11 +30,11 @@ public class KomeaEntityFiller<T> implements IKomeaEntityFiller<T> {
 
 	@Override
 	public IKomeaEntity put(final T _entity) {
-		final Map<String, Object> beanMap = new PojoToMap().convertPojoInMap(_entity);
+		final Map<String, Serializable> beanMap = new PojoToMap().convertPojoInMap(_entity);
 		final IKomeaEntity newInstance = this.oKomeaModelFactory.create(this.entityType);
-		final Iterator<Entry<String, Object>> it = beanMap.entrySet().iterator();
+		final Iterator<Entry<String, Serializable>> it = beanMap.entrySet().iterator();
 		while (it.hasNext()) {
-			final Entry<String, Object> entry = it.next();
+			final Entry<String, Serializable> entry = it.next();
 			newInstance.set(entry.getKey().toString(), entry.getValue());
 		}
 		return newInstance;
