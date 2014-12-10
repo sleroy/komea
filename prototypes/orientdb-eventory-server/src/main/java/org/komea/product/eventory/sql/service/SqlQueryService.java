@@ -31,7 +31,7 @@ public class SqlQueryService implements ISqlQueryService {
 		final OSQLSynchQuery<ODocument> osqlSynchQuery = new OSQLSynchQuery<ODocument>(
 				sqlQuery);
 		final List<ODocument> documentList = this.dsf
-				.getOrCreateDatabaseSession().query(osqlSynchQuery);
+				.getOrCreateDB().query(osqlSynchQuery);
 		final List<EntityValue> entityValues = Lists.newArrayList();
 		for (final ODocument document : documentList) {
 			final String entity = document.field("entity", String.class);

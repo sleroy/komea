@@ -16,7 +16,7 @@ public interface IDocumentSessionFactory {
 	 * Obtains the database session. Creates it if not already created through a
 	 * pool of connexion.
 	 */
-	public ODatabaseDocumentTx getOrCreateDatabaseSession();
+	public ODatabaseDocumentTx getOrCreateDB();
 
 	/**
 	 * Creates a new document

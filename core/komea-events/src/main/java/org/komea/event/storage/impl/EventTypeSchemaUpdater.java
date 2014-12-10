@@ -28,8 +28,8 @@ public class EventTypeSchemaUpdater implements IEventTypeSchemaUpdater {
 	 */
 	@Override
 	public void updateSchemaWithEvent(final String _eventType) {
-		if (!this.documentTx.getOrCreateDatabaseSession().getMetadata().getSchema().existsClass(_eventType)) {
-			this.documentTx.getOrCreateDatabaseSession().getMetadata().getSchema().createClass(_eventType);
+		if (!this.documentTx.getOrCreateDB().getMetadata().getSchema().existsClass(_eventType)) {
+			this.documentTx.getOrCreateDB().getMetadata().getSchema().createClass(_eventType);
 		} else {
 			LOGGER.trace("Document class is already existing {}", _eventType);
 		}

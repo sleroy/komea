@@ -27,7 +27,9 @@ public class JiraServerAPITestTest {
 	public void testNewBugs() {
 		final TestDatabaseConfiguration dbc = new TestDatabaseConfiguration();
 		// ORIENTDB;
+
 		final OrientSessionFactory ogf = new OrientSessionFactory(dbc);
+		ogf.getOrCreateDB();
 		final EventQueryManager queryservice = new EventQueryManager(ogf);
 		queryservice.countEventsOfType("Event_new_jira_bug");
 

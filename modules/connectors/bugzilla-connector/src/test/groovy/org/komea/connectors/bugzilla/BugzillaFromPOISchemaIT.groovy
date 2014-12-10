@@ -23,7 +23,6 @@ class BugzillaFromPOISchemaIT extends Specification{
 		def dbc = new TestDatabaseConfiguration()
 		// ORIENTDB
 		def ogf = new OrientSessionFactory(dbc)
-		ogf.getOrCreateDatabaseSession()
 
 		/** "Schema Factories" **/
 

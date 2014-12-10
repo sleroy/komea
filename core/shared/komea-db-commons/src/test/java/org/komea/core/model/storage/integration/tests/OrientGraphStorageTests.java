@@ -40,7 +40,7 @@ public class OrientGraphStorageTests {
 
 	@After
 	public void end() throws IOException {
-		this.storage.close();
+		// this.storage.close();
 		this.osf.close();
 	}
 
@@ -74,7 +74,7 @@ public class OrientGraphStorageTests {
 
 		final IEntityType company = this.factory.newEntity("Company");
 		company.addProperty(this.factory.newReference("members", person).setArity(ReferenceArity.MANY)
-		        .setKind(ReferenceKind.CONTAINMENT));
+				.setKind(ReferenceKind.CONTAINMENT));
 		company.addProperty(this.factory.newAttribute("values", Primitive.INTEGER).setArity(ReferenceArity.MANY));
 		this.schema.addType(company);
 
@@ -82,7 +82,7 @@ public class OrientGraphStorageTests {
 		final DatabaseConfiguration db = new TestDatabaseConfiguration();
 
 		this.osf = new OrientSessionFactory(db);
-		this.storage = new OKomeaGraphStorage(this.schema, this.osf.getGraph());
+		this.storage = new OKomeaGraphStorage(this.schema, this.osf.getGraphTx());
 
 	}
 

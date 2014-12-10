@@ -21,7 +21,7 @@ class IEventQueryManagerIT extends Specification{
 
 		dbc = new TestDatabaseConfiguration()
 		ogf = new OrientSessionFactory(dbc)
-		ogf.getOrCreateDatabaseSession()
+		ogf.getOrCreateDB()
 		eventStorage = new EventStorage(ogf)
 		queryservice = new EventQueryManager(ogf)
 	}

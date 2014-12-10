@@ -24,11 +24,12 @@ public class EventQueryManager implements IEventQueryManager {
 	private static final Logger	        LOGGER	= LoggerFactory.getLogger(EventStorage.class);
 
 	private final IODocumentToolbox	    oDocumentToolbox;
+	
 
 	public EventQueryManager(final DatabaseConfiguration _configuration) {
 		this(new OrientSessionFactory(_configuration));
 		// Lazy init the database session
-		this.documentDatabase.getOrCreateDatabaseSession();
+		this.documentDatabase.getOrCreateDB();
 	}
 
 	public EventQueryManager(final IOrientSessionFactory _factory) {
@@ -46,7 +47,7 @@ public class EventQueryManager implements IEventQueryManager {
 
 	@Override
 	public void close() throws IOException {
-		LOGGER.debug("Closing event query manager");
+		LOGGER.info("Closing event query manager and its database connection");
 		if (this.documentDatabase != null) {
 			this.documentDatabase.close();
 		}

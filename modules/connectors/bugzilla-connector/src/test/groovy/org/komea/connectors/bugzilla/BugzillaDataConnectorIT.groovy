@@ -25,7 +25,6 @@ class BugzillaDataConnectorIT extends Specification {
 		def dbc = new TestDatabaseConfiguration()
 		// ORIENTDB
 		def ogf = new OrientSessionFactory(dbc)
-		ogf.getOrCreateDatabaseSession()
 		def eventStorage = new EventStorage(ogf)
 		def queryservice = new EventQueryManager(ogf)
 

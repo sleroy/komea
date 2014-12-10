@@ -24,7 +24,7 @@ public class EventDao implements IEventDao {
 
 	@Override
 	public long countEvents(final String _className) {
-		return this.dsf.getOrCreateDatabaseSession().countClusterElements(
+		return this.dsf.getOrCreateDB().countClusterElements(
 				_className);
 
 	}

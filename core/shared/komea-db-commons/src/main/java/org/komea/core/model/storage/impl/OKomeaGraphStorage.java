@@ -27,21 +27,13 @@ import com.tinkerpop.blueprints.impls.orient.OrientVertex;
  */
 public class OKomeaGraphStorage implements IKomeaGraphStorage {
 	private IKomeaSchema	    schema;
-	private OrientGraph	        graph;
+	private final OrientGraph	graph;
 	private final static Logger	LOGGER	= LoggerFactory.getLogger(OKomeaGraphStorage.class);
 
 	public OKomeaGraphStorage(final IKomeaSchema schema, final OrientGraph _graph) {
 		super();
 		this.graph = _graph;
 		this.update(schema);
-	}
-
-	@Override
-	public void close() {
-		if (this.graph != null) {
-			this.graph.shutdown();
-		}
-		this.graph = null;
 	}
 
 	@Override
@@ -52,7 +44,7 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 	@Override
 	public IKomeaEntity create(final IEntityType type) {
 		Validate.isTrue(type.getSchema() != null && type.getSchema().equals(this.getSchema()),
-		        "Type is not defined in the same schema than the one used by the storage");
+				"Type is not defined in the same schema than the one used by the storage");
 		final OrientVertex vertex = this.graph.addVertex("class:" + type.getName());
 		return new OKomeaEntity(type, vertex);
 	}
@@ -77,7 +69,7 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 	@Override
 	public Iterable<IKomeaEntity> entities(final IEntityType type) {
 		Validate.isTrue(type.getSchema() != null && type.getSchema().equals(this.schema),
-		        "Type is not defined in the same schema than the one used by the storage");
+				"Type is not defined in the same schema than the one used by the storage");
 		final Iterable<Vertex> vertices = this.graph.getVerticesOfClass(type.getName());
 		return new OEntityIterable(vertices.iterator(), this.schema);
 	}
@@ -85,9 +77,9 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 	@Override
 	public Iterable<IKomeaEntity> find(final IEntityType type, final String index, final Object value) {
 		Validate.notNull(type.findProperty(index), "Property " + type.getName() + "." + index
-		        + " doesn't exists in the entity type " + type.getName());
+				+ " doesn't exists in the entity type " + type.getName());
 		Validate.isTrue(type.findProperty(index).isIndexed(), "Property " + type.getName() + "." + index
-		        + " is not indexed");
+				+ " is not indexed");
 		final Iterator<Vertex> vertices = this.graph.getVertices(type.getName() + "." + index, value).iterator();
 		return new OEntityIterable(vertices, this.schema);
 	}
@@ -101,9 +93,9 @@ public class OKomeaGraphStorage implements IKomeaGraphStorage {
 	@Override
 	public IKomeaEntity getOrCreate(final IEntityType type, final String index, final Object value) {
 		Validate.notNull(type.findProperty(index), "Property " + type.getName() + "." + index
-		        + " doesn't exists in the entity type " + type.getName());
+				+ " doesn't exists in the entity type " + type.getName());
 		Validate.isTrue(type.findProperty(index).isUnique(), "Property " + type.getName() + "." + index
-		        + " is not a unique index");
+				+ " is not a unique index");
 		final Iterator<Vertex> vertices = this.graph.getVertices(type.getName() + "." + index, value).iterator();
 		if (vertices.hasNext()) {
 			final Vertex next = vertices.next();

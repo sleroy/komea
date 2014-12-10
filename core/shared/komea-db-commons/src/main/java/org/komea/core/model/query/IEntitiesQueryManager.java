@@ -1,23 +1,14 @@
 package org.komea.core.model.query;
 
-import java.io.Closeable;
-
 import org.komea.core.model.IKomeaEntity;
 import org.komea.core.model.storage.IKomeaStorage;
 import org.komea.core.schema.IEntityType;
 
-public interface IEntitiesQueryManager extends Closeable{
-
-	/**
-	 * Get the storage used by the query manager.
-	 * 
-	 * @return
-	 */
-	IKomeaStorage getStorage();
+public interface IEntitiesQueryManager {
 
 	/**
 	 * Count all entities stored in the storage.
-	 * 
+	 *
 	 * @return
 	 */
 	long count();
@@ -25,7 +16,7 @@ public interface IEntitiesQueryManager extends Closeable{
 	/**
 	 * Count the number of entities stored in the storage that are instance of
 	 * an entity type.
-	 * 
+	 *
 	 * @param storage
 	 * @param type
 	 * @return
@@ -33,8 +24,15 @@ public interface IEntitiesQueryManager extends Closeable{
 	long count(IEntityType type);
 
 	/**
+	 * Get the storage used by the query manager.
+	 *
+	 * @return
+	 */
+	IKomeaStorage getStorage();
+
+	/**
 	 * Execute an entities selection query on the storage.
-	 * 
+	 *
 	 * @param query
 	 * @return
 	 */

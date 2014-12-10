@@ -24,25 +24,25 @@ public class OrientDocumentDatabaseFactory
 	@Override
 	public ODocument newDocument() {
 
-		return this.getOrCreateDatabaseSession().newInstance();
+		return this.getOrCreateDB().newInstance();
 	}
 
 	@Override
 	public ODocument newDocument(final String className) {
 
-		return this.getOrCreateDatabaseSession().newInstance(className);
+		return this.getOrCreateDB().newInstance(className);
 	}
 
 	@Override
 	public List<ODocument> query(final String _sqlQuery) {
 
-		return this.getOrCreateDatabaseSession().query(
+		return this.getOrCreateDB().query(
 				new OSQLSynchQuery<ODocument>(_sqlQuery));
 	}
 
 	@Override
 	public void save(final ODocument _event) {
-		this.getOrCreateDatabaseSession().save(_event);
+		this.getOrCreateDB().save(_event);
 
 	}
 

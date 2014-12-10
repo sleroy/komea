@@ -16,11 +16,6 @@ import org.komea.core.schema.IKomeaSchema;
  */
 public interface IKomeaStorage extends IKomeaEntityFactory {
 
-	/**
-	 * Close the database resource associated.
-	 */
-	void close();
-
 	void commit();
 
 	/**

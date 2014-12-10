@@ -46,7 +46,7 @@ public class EventStorage implements IEventStorage {
 	public EventStorage(final DatabaseConfiguration _configuration) {
 		this(new OrientSessionFactory(_configuration));
 		// Lazy init the database session
-		this.orientSessionFactory.getOrCreateDatabaseSession();
+		this.orientSessionFactory.getOrCreateDB();
 	}
 
 	public EventStorage(final IOrientSessionFactory _sessionFactory) {
@@ -63,7 +63,7 @@ public class EventStorage implements IEventStorage {
 
 	@Override
 	public void close() throws IOException {
-		LOGGER.debug("Closing event storage");
+		LOGGER.info("Closing the event storage and its database connection.");
 
 		if (this.orientSessionFactory != null) {
 			this.orientSessionFactory.close();

@@ -70,7 +70,7 @@ public abstract class AbstractOrientDatabaseFactory<T extends ODatabase, P exten
 	 * org.springframework.orm.orient.AbstractOrientDatabaseFactory#openDatabase
 	 * ()
 	 */
-	public final T getOrCreateDatabaseSession() {
+	public final T getOrCreateDB() {
 		this.db = this.pool.acquire();
 		return this.db;
 	}

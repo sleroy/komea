@@ -42,6 +42,7 @@ public class JiraConnector implements IEventConnector<JiraConfiguration>, IOrgan
 		try {
 			final TestDatabaseConfiguration dbc = new TestDatabaseConfiguration();
 			this.orient = new OrientSessionFactory(dbc);
+			this.orient.getOrCreateDB();
 			final EventStorage event = new EventStorage(this.orient);
 			this.komeaAPI = new KomeaServerAPI(event);
 			this.jiraAPI = JiraServerAPI.getNewInstance(_configuration);

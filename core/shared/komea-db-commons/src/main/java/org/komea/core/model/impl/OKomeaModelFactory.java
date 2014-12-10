@@ -7,12 +7,16 @@ import org.komea.core.model.storage.IKomeaGraphStorage;
 import org.komea.core.model.storage.impl.OKomeaGraphStorage;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientVertex;
 
 public class OKomeaModelFactory implements IKomeaEntityFactory {
 	private final IKomeaGraphStorage	storageService;
+
+	private static final Logger	     LOGGER	= LoggerFactory.getLogger(OKomeaModelFactory.class);
 
 	public OKomeaModelFactory(final IKomeaGraphStorage storageService) {
 		super();
@@ -26,11 +30,6 @@ public class OKomeaModelFactory implements IKomeaEntityFactory {
 		this.storageService = new OKomeaGraphStorage(schema, _orientGraph);
 		Validate.notNull(this.storageService);
 		Validate.notNull(this.storageService.getSchema());
-	}
-
-	public void close() {
-		this.storageService.close();
-
 	}
 
 	@Override
