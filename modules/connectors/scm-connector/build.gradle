@@ -1,0 +1,6 @@
+dependencies {
+	compile project(":core:shared:komea-db-commons")
+	compile "com.googlecode.java-diff-utils:diffutils:1.3.0"
+	
+	
+}

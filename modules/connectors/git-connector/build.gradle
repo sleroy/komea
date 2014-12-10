@@ -1,0 +1,13 @@
+dependencies{
+	compile project(":core:komea-events")
+	compile project(":modules:connectors:scm-connector")
+
+	compile "commons-io:commons-io:$APACHE_COMMONIO"
+	compile "org.eclipse.jgit:org.eclipse.jgit:3.3.2.201404171909-r"
+	compile 'joda-time:joda-time:2.6'
+	compile "args4j:args4j:2.0.21"
+	
+	compile "org.slf4j:slf4j-api:$LOG_SLF4J"
+	compile "org.slf4j:jcl-over-slf4j:$LOG_SLF4J"
+	compile "org.slf4j:log4j-over-slf4j:$LOG_SLF4J"
+}	
