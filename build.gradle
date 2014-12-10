@@ -110,6 +110,10 @@ allprojects {
 			// Look for POMs and artifacts, such as JARs, here
 			url "http://repo.jenkins-ci.org/public"
 		}
+		
+		maven {		
+			url "http://dl.bintray.com/sleroy/maven"
+		}
 
 
 	}
