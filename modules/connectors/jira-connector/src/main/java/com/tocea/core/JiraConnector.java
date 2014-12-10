@@ -5,16 +5,19 @@
  */
 package com.tocea.core;
 
-import com.tocea.core.generalplugin.BadConfigurationException;
-import com.tocea.core.generalplugin.IEventConnector;
-import com.tocea.core.generalplugin.IOrganisationConnector;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.komea.event.query.service.EventQueryManagerService;
-import org.komea.event.storage.service.EventStorageService;
-import org.komea.orientdb.session.impl.OrientDocumentDatabaseFactory;
-import org.komea.orientdb.session.impl.TestDatabaseConfiguration;
+
+import org.komea.event.query.impl.EventQueryManager;
+import org.komea.event.storage.impl.EventStorage;
+import org.springframework.orientdb.orm.session.IOrientSessionFactory;
+import org.springframework.orientdb.session.impl.OrientSessionFactory;
+import org.springframework.orientdb.session.impl.TestDatabaseConfiguration;
+
+import com.tocea.core.generalplugin.BadConfigurationException;
+import com.tocea.core.generalplugin.IEventConnector;
+import com.tocea.core.generalplugin.IOrganisationConnector;
 
 /**
  *
@@ -22,46 +25,46 @@ import org.komea.orientdb.session.impl.TestDatabaseConfiguration;
  */
 public class JiraConnector implements IEventConnector<JiraConfiguration>, IOrganisationConnector<JiraConfiguration> {
 
-    private JiraServerAPI jiraAPI;
-    private KomeaServerAPI komeaAPI;
-    private OrientDocumentDatabaseFactory orient;
+	private JiraServerAPI	      jiraAPI;
+	private KomeaServerAPI	      komeaAPI;
+	private IOrientSessionFactory	orient;
 
-    public JiraConnector() {
+	public JiraConnector() {
 
-    }
+	}
 
-    @Override
-    public void updateEvents(Date _lastLaunchDate) {
-        JiraService.importNewIssue(jiraAPI, komeaAPI, _lastLaunchDate);
-        JiraService.importUpdateIssue(jiraAPI, komeaAPI, _lastLaunchDate);
+	public EventQueryManager getQueryService() {
+		return new EventQueryManager(this.orient);
+	}
 
-    }
+	@Override
+	public void initConnector(final JiraConfiguration _configuration) {
+		try {
+			final TestDatabaseConfiguration dbc = new TestDatabaseConfiguration();
+			this.orient = new OrientSessionFactory(dbc);
+			final EventStorage event = new EventStorage(this.orient);
+			this.komeaAPI = new KomeaServerAPI(event);
+			this.jiraAPI = JiraServerAPI.getNewInstance(_configuration);
+		} catch (final BadConfigurationException ex) {
+			Logger.getLogger(JiraConnector.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
 
-    @Override
-    public void updateOrganisation() {
+	@Override
+	public void initOrganisation() {
 
-    }
+	}
 
-    @Override
-    public void initConnector(JiraConfiguration _configuration) {
-        try {
-            TestDatabaseConfiguration dbc = new TestDatabaseConfiguration();
-            orient = new OrientDocumentDatabaseFactory(dbc);
-            EventStorageService event = new EventStorageService(orient);
-            komeaAPI = new KomeaServerAPI(event);
-            jiraAPI = JiraServerAPI.getNewInstance(_configuration);
-        } catch (BadConfigurationException ex) {
-            Logger.getLogger(JiraConnector.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+	@Override
+	public void updateEvents(final Date _lastLaunchDate) {
+		JiraService.importNewIssue(this.jiraAPI, this.komeaAPI, _lastLaunchDate);
+		JiraService.importUpdateIssue(this.jiraAPI, this.komeaAPI, _lastLaunchDate);
 
-    public EventQueryManagerService getQueryService() {
-        return new EventQueryManagerService(orient);
-    }
+	}
 
-    @Override
-    public void initOrganisation() {
+	@Override
+	public void updateOrganisation() {
 
-    }
+	}
 
 }

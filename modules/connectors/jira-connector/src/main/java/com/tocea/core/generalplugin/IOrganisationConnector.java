@@ -5,7 +5,6 @@
  */
 package com.tocea.core.generalplugin;
 
-import java.util.Date;
 
 /**
  *

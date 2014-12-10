@@ -5,11 +5,11 @@
  */
 package com.tocea.core;
 
-import com.tocea.core.generalplugin.BadConfigurationException;
-import java.util.Map;
 import net.rcarz.jiraclient.BasicCredentials;
 import net.rcarz.jiraclient.JiraClient;
 import net.rcarz.jiraclient.greenhopper.GreenHopperClient;
+
+import com.tocea.core.generalplugin.BadConfigurationException;
 
 /**
  *

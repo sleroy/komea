@@ -5,23 +5,17 @@
  */
 package com.tocea.core;
 
-import com.google.common.collect.Maps;
 import java.io.Serializable;
-import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.rcarz.jiraclient.Field;
+
 import net.rcarz.jiraclient.Issue;
-import net.rcarz.jiraclient.JiraException;
-import static net.rcarz.jiraclient.Resource.getBaseUri;
-import net.rcarz.jiraclient.RestClient;
-import net.sf.json.JSON;
-import net.sf.json.JSONObject;
-import org.komea.event.model.api.IComplexEvent;
+
 import org.komea.event.model.beans.ComplexEvent;
+
+import com.google.common.collect.Maps;
 
 /**
  *
@@ -29,50 +23,52 @@ import org.komea.event.model.beans.ComplexEvent;
  */
 public class KomeaService {
 
-    public static final String EVENT_NEW_BUG = "new_bug";
-    public static final String EVENT_UPDATE_BUG = "update_bug";
-    public static final String PROVIDER_BUG = "jira";
+	public static void sendNewIssue(final KomeaServerAPI komeaApi, final List<Issue> issues) {
 
-    public static void sendNewIssue(KomeaServerAPI komeaApi, List<Issue> issues) {
+		sendEvent(komeaApi, issues, EVENT_NEW_BUG);
+	}
 
-        sendEvent(komeaApi, issues, EVENT_NEW_BUG);
-    }
+	public static void sendUpdateIssue(final KomeaServerAPI komeaApi, final List<Issue> issues) {
+		sendEvent(komeaApi, issues, EVENT_UPDATE_BUG);
+	}
 
-    public static void sendUpdateIssue(KomeaServerAPI komeaApi, List<Issue> issues) {
-        sendEvent(komeaApi, issues, EVENT_UPDATE_BUG);
-    }
+	private static ComplexEvent createBugEvent(final Issue bug, final String eventName) {
+		final ComplexEvent complexEventDto = new ComplexEvent();
+		complexEventDto.setProvider(PROVIDER_BUG);
+		complexEventDto.setEventType(eventName);
+		Map<String, Serializable> properties = Maps.newHashMap();
 
-    private static void sendEvent(KomeaServerAPI komeaApi, List<Issue> issues, String eventName) {
-        IComplexEvent complexEventDto;
-        for (Issue sue : issues) {
+		try {
+			final java.lang.reflect.Field declaredField = Issue.class.getDeclaredField("fields");
+			declaredField.setAccessible(true);
+			properties = (Map<String, Serializable>) declaredField.get(bug);
+		} catch (final NoSuchFieldException ex) {
+			Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (final SecurityException ex) {
+			Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (final IllegalArgumentException ex) {
+			Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (final IllegalAccessException ex) {
+			Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
-            complexEventDto = createBugEvent(sue, eventName);
-            komeaApi.getEventStorage().storeComplexEvent(complexEventDto);
-        }
-    }
+		complexEventDto.setProperties(properties);
+		return complexEventDto;
+	}
 
-    private static IComplexEvent createBugEvent(final Issue bug, final String eventName) {
-        final ComplexEvent complexEventDto = new ComplexEvent();
-        complexEventDto.setProvider(PROVIDER_BUG);
-        complexEventDto.setEventKey(eventName);
-        Map<String, Serializable> properties = Maps.newHashMap();
+	private static void sendEvent(final KomeaServerAPI komeaApi, final List<Issue> issues, final String eventName) {
+		ComplexEvent complexEventDto;
+		for (final Issue sue : issues) {
 
-        try {
-            java.lang.reflect.Field declaredField = Issue.class.getDeclaredField("fields");
-            declaredField.setAccessible(true);
-            properties = (Map<String, Serializable>) declaredField.get(bug);
-        } catch (NoSuchFieldException ex) {
-            Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+			complexEventDto = createBugEvent(sue, eventName);
+			komeaApi.getEventStorage().storeComplexEvent(complexEventDto);
+		}
+	}
 
-        complexEventDto.setProperties(properties);
-        return complexEventDto;
-    }
+	public static final String	EVENT_NEW_BUG	 = "new_bug";
+
+	public static final String	EVENT_UPDATE_BUG	= "update_bug";
+
+	public static final String	PROVIDER_BUG	 = "jira";
 
 }

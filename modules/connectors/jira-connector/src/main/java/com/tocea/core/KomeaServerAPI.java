@@ -5,7 +5,7 @@
  */
 package com.tocea.core;
 
-import org.komea.event.storage.api.IEventStorage;
+import org.komea.event.storage.IEventStorage;
 
 /**
  *

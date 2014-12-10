@@ -8,12 +8,11 @@ package com.tocea.core;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.junit.Before;
+
 import org.junit.Test;
-import org.komea.event.query.service.EventQueryManagerService;
-import org.komea.event.storage.service.EventStorageService;
-import org.komea.orientdb.session.impl.OrientDocumentDatabaseFactory;
-import org.komea.orientdb.session.impl.TestDatabaseConfiguration;
+import org.komea.event.query.impl.EventQueryManager;
+import org.springframework.orientdb.session.impl.OrientSessionFactory;
+import org.springframework.orientdb.session.impl.TestDatabaseConfiguration;
 
 /**
  *
@@ -21,32 +20,27 @@ import org.komea.orientdb.session.impl.TestDatabaseConfiguration;
  */
 public class JiraServerAPITestTest {
 
-    public JiraServerAPITestTest() {
-    }
+	public JiraServerAPITestTest() {
+	}
 
-    @Before
-    public void setUp() {
-    }
+	@Test
+	public void testNewBugs() {
+		final TestDatabaseConfiguration dbc = new TestDatabaseConfiguration();
+		// ORIENTDB;
+		final OrientSessionFactory ogf = new OrientSessionFactory(dbc);
+		final EventQueryManager queryservice = new EventQueryManager(ogf);
+		queryservice.countEventsOfType("Event_new_jira_bug");
 
-    @Test
-    public void testSomeMethod() {
-        try {
-            JiraServerAPITest js = new JiraServerAPITest();
-            js.test();
-        } catch (ParseException ex) {
-            Logger.getLogger(JiraServerAPITestTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+	}
 
-    @Test
-    public void testNewBugs() {
-        TestDatabaseConfiguration dbc = new TestDatabaseConfiguration();
-        // ORIENTDB;
-        OrientDocumentDatabaseFactory ogf = new OrientDocumentDatabaseFactory(dbc);
-        EventStorageService eventStorage = new EventStorageService(ogf);
-        EventQueryManagerService queryservice = new EventQueryManagerService(ogf);
-        queryservice.countEventsOfType("Event_new_jira_bug");
-
-    }
+	@Test
+	public void testSomeMethod() {
+		try {
+			final JiraServerAPITest js = new JiraServerAPITest();
+			js.test();
+		} catch (final ParseException ex) {
+			Logger.getLogger(JiraServerAPITestTest.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
 
 }

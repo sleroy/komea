@@ -5,7 +5,6 @@
  */
 package com.tocea.core;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import net.rcarz.jiraclient.Component;
 import net.rcarz.jiraclient.Field;
 import net.rcarz.jiraclient.Issue;
@@ -22,13 +22,10 @@ import net.rcarz.jiraclient.JiraClient;
 import net.rcarz.jiraclient.JiraException;
 import net.rcarz.jiraclient.Priority;
 import net.rcarz.jiraclient.Project;
-import net.rcarz.jiraclient.User;
 import net.rcarz.jiraclient.WorkLog;
-import net.rcarz.jiraclient.greenhopper.Backlog;
 import net.rcarz.jiraclient.greenhopper.GreenHopperClient;
 import net.rcarz.jiraclient.greenhopper.RapidView;
 import net.rcarz.jiraclient.greenhopper.Sprint;
-import net.rcarz.jiraclient.greenhopper.SprintIssue;
 
 /**
  *
