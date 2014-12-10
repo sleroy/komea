@@ -28,7 +28,7 @@ class BugzillaFromPOISchemaIT extends Specification{
 		/** "Schema Factories" **/
 
 		def companySchema = new MinimalCompanySchema()
-		def orientGraph = ogf.getGraph()
+		def orientGraph = ogf.getGraphTx()
 		def modelFactory = new OKomeaModelFactory(companySchema.getSchema(), orientGraph)
 
 		when: "We update the schema"

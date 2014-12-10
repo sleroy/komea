@@ -3,8 +3,6 @@ package org.komea.core.model.query.integration.tests;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
 
-import java.io.IOException;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.core.model.IKomeaEntity;
@@ -22,22 +20,20 @@ import com.google.common.collect.Iterables;
 public class OEntitiesQueryManagerTests extends AbstractIntegrationTest {
 
 	@Test
-	public void countTest() throws IOException {
+	public void countTest() {
 
 		final OEntitiesQueryManager queryManager = new OEntitiesQueryManager(this.getStorage());
 
 		assertEquals(3, queryManager.count());
-		queryManager.close();
 	}
 
 	@Test
-	public void countTypeTest() throws IOException {
+	public void countTypeTest() {
 		final IEntityType type = this.getSchema().findType("Person");
 
 		final OEntitiesQueryManager queryManager = new OEntitiesQueryManager(this.getStorage());
 
 		assertEquals(3, queryManager.count(type));
-		queryManager.close();
 	}
 
 	@Before
@@ -60,7 +56,7 @@ public class OEntitiesQueryManagerTests extends AbstractIntegrationTest {
 	}
 
 	@Test
-	public void selectTest() throws IOException {
+	public void selectTest() {
 
 		final OEntitiesQueryManager queryManager = new OEntitiesQueryManager(this.getStorage());
 		try {
@@ -72,16 +68,15 @@ public class OEntitiesQueryManagerTests extends AbstractIntegrationTest {
 		final Iterable<IKomeaEntity> selected = queryManager.select("SELECT * FROM Person");
 
 		assertEquals(3, Iterables.size(selected));
-		queryManager.close();
 	}
 
 	@Override
 	protected void initSchema() {
-		final IEntityType type = getSchemaFactory().newEntity("Person");
-		final IReference name = getSchemaFactory().newAttribute("name", Primitive.STRING);
+		final IEntityType type = this.getSchemaFactory().newEntity("Person");
+		final IReference name = this.getSchemaFactory().newAttribute("name", Primitive.STRING);
 		type.addProperty(name);
-		final IReference references = getSchemaFactory().newReference("children", type).setArity(ReferenceArity.MANY)
-				.setKind(ReferenceKind.AGGREGATION);
+		final IReference references = this.getSchemaFactory().newReference("children", type)
+		        .setArity(ReferenceArity.MANY).setKind(ReferenceKind.AGGREGATION);
 		type.addProperty(references);
 		this.getSchema().addType(type);
 

@@ -26,7 +26,7 @@ public class OEntityCollectorTests extends AbstractIntegrationTest {
 		private int		                  depth;
 
 		public ChildrenGenerator(final int maxDepth, final int nbChildren, final IEntityType type,
-		        final IKomeaEntityFactory mFactory) {
+				final IKomeaEntityFactory mFactory) {
 			super();
 			this.maxDepth = maxDepth;
 			this.nbChildren = nbChildren;
@@ -119,7 +119,7 @@ public class OEntityCollectorTests extends AbstractIntegrationTest {
 		final IReference name = this.getSchemaFactory().newAttribute("name", Primitive.STRING);
 		type.addProperty(name);
 		final IReference references = this.getSchemaFactory().newReference("children", type)
-		        .setArity(ReferenceArity.MANY).setKind(ReferenceKind.AGGREGATION);
+				.setArity(ReferenceArity.MANY).setKind(ReferenceKind.AGGREGATION);
 		type.addProperty(references);
 		this.getSchema().addType(type);
 

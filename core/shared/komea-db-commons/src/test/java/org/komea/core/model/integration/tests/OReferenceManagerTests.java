@@ -1,8 +1,5 @@
 package org.komea.core.model.integration.tests;
 
-import java.io.IOException;
-
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.core.model.IKomeaEntity;
@@ -27,13 +24,6 @@ public class OReferenceManagerTests extends AbstractIntegrationTest {
 		updater.addReference(p2);
 		final Iterable<IKomeaEntity> family = updater.get();
 		Assert.assertTrue(family.iterator().hasNext());
-	}
-
-	@Override
-	@After
-	public void end() throws IOException {
-		this.getSessionsFactory().getGraph().drop();
-		this.getSessionsFactory().close();
 	}
 
 	@Test

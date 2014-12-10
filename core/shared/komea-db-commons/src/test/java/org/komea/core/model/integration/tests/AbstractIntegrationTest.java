@@ -25,9 +25,11 @@ public abstract class AbstractIntegrationTest {
 	private KomeaSchemaFactory	 schemaFactory;
 
 	@After
-	public void end() throws IOException {
-		this.sessionsFactory.getGraph().drop();
-		this.sessionsFactory.close();
+	public final void end() throws IOException {
+		this.graph.drop();
+		if (this.sessionsFactory != null) {
+			this.sessionsFactory.close();
+		}
 	}
 
 	public OrientGraph getGraph() {
@@ -42,12 +44,12 @@ public abstract class AbstractIntegrationTest {
 		return this.schema;
 	}
 
-	public OrientSessionFactory getSessionsFactory() {
-		return this.sessionsFactory;
-	}
-
 	public KomeaSchemaFactory getSchemaFactory() {
 		return this.schemaFactory;
+	}
+
+	public OrientSessionFactory getSessionsFactory() {
+		return this.sessionsFactory;
 	}
 
 	public IKomeaGraphStorage getStorage() {
@@ -65,8 +67,8 @@ public abstract class AbstractIntegrationTest {
 		this.sessionsFactory = new OrientSessionFactory();
 		final DatabaseConfiguration databaseConfiguration = new TestDatabaseConfiguration();
 		this.sessionsFactory.init(databaseConfiguration);
-		this.graph = this.sessionsFactory.getGraph();
-		this.storage = new OKomeaGraphStorage(this.schema, this.sessionsFactory.getGraph());
+		this.graph = this.sessionsFactory.getGraphTx();
+		this.storage = new OKomeaGraphStorage(this.schema, this.graph);
 
 		this.mfactory = new OKomeaModelFactory(this.storage);
 

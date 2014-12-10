@@ -29,7 +29,7 @@ class BugzillaSchemaIT extends Specification{
 		when:
 		def companySchema = new MinimalCompanySchema()
 		def bzSchema = new BugzillaSchemaBuilder(companySchema)
-		def modelFactory = new OKomeaModelFactory(companySchema.getSchema(), ogf.getGraph())
+		def modelFactory = new OKomeaModelFactory(companySchema.getSchema(), ogf.getGraphTx())
 
 		def entityFiller = modelFactory.newEntityFiller(companySchema.getSchema().findType('Human'))
 		def human = new Human()
