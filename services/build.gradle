@@ -1,1 +1,28 @@
+subprojects {
+    apply plugin: 'war'
+    apply plugin: 'jetty'
 
+    group = "org.komea.product.packaging"
+
+
+
+    webAppDirName = "$projectDir/../static-resources"
+
+    buildscript {
+        repositories { jcenter() }
+
+        dependencies { classpath 'org.gradle.api.plugins:gradle-cargo-plugin:1.5.1' }
+    }
+
+    // END OF DEPLOY CONF
+
+    //http://tstacked.blogspot.fr/2013/06/gradle-war-overlay-plugin.html
+
+
+    task wrapper(type: Wrapper) {
+        gradleVersion = GRADLE_VERSION
+
+    }
+
+
+}

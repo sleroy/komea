@@ -3,6 +3,12 @@ buildscript {
 	dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
 }
 
+
+
+jettyRun.contextPath = "eventory"
+jettyRunWar.contextPath = "eventory"
+
+
 apply plugin: 'java'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'idea'

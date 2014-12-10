@@ -33,7 +33,6 @@ public class SqlQueryController {
 	@RequestMapping(method = RequestMethod.POST, value = "/sql")
 	public EntityValueQueryDto executeSQLQuery(@RequestBody final AggregationFormula sqlQuery) {
 		final List<EntityValue> aggregateOnPeriod = this.sqlQueryRepository.aggregateOnPeriod(sqlQuery);
-		new EntityValueQueryDto();
 		final List<EntityValueDto> dtos = Lists.newArrayList();
 		for (final EntityValue value : aggregateOnPeriod) {
 			dtos.add(new EntityValueDto(value));

@@ -34,14 +34,16 @@ import com.j2bugzilla.base.ConnectionException;
  */
 public class BugzillaEventConnector implements IBugzillaConnectorInformations {
 
-	private static final Logger	              LOGGER	= LoggerFactory.getLogger(BugzillaEventConnector.class);
+	private static final String	              BUGZILLA_PRODUCT	= "bugzilla_product";
+
+	private static final Logger	              LOGGER	       = LoggerFactory.getLogger(BugzillaEventConnector.class);
 
 	private final IEventStorage	              eventStorage;
 	private final IBugzillaAPI	              bugzillaAPI;
 	private final BugzillaServerConfiguration	configuration;
 
 	public BugzillaEventConnector(final IBugzillaAPI _bugzillaAPI, final IEventStorage _eventStorage,
-	        final BugzillaServerConfiguration _configuration) {
+			final BugzillaServerConfiguration _configuration) {
 		this.eventStorage = _eventStorage;
 		this.bugzillaAPI = _bugzillaAPI;
 		this.configuration = _configuration;
@@ -56,7 +58,7 @@ public class BugzillaEventConnector implements IBugzillaConnectorInformations {
 	}
 
 	public void analysisOfProjectBug(final String _productName, final IBugzillaAPI _bugzillaAPI)
-	        throws BugzillaException {
+			throws BugzillaException {
 		LOGGER.info("Fetching bugs");
 		final List<Bug> bugList = _bugzillaAPI.getBugList(_productName);
 		LOGGER.info("Bugs found {}", bugList.size());
@@ -67,11 +69,11 @@ public class BugzillaEventConnector implements IBugzillaConnectorInformations {
 				LOGGER.info("Processing {}/{}", numberOfBugsProcessed, bugList.size());
 			}
 			if (this.isRecentlyCreated(bug, this.bugzillaAPI)) {
-				final ComplexEvent complexEventDto = this.createBugEvent(bug, EVENT_NEW_BUG);
+				final ComplexEvent complexEventDto = this.createBugEvent(bug, EVENT_NEW_BUG, _productName);
 				this.eventStorage.storeComplexEvent(complexEventDto);
 			}
 			if (this.isRecentlyUpdated(bug, this.bugzillaAPI)) {
-				final ComplexEvent complexEventDto = this.createBugEvent(bug, EVENT_UPDATED_BUG);
+				final ComplexEvent complexEventDto = this.createBugEvent(bug, EVENT_UPDATED_BUG, _productName);
 				this.eventStorage.storeComplexEvent(complexEventDto);
 			}
 			numberOfBugsProcessed++;
@@ -120,11 +122,13 @@ public class BugzillaEventConnector implements IBugzillaConnectorInformations {
 
 	}
 
-	private ComplexEvent createBugEvent(final Bug bug, final String eventName) {
+	private ComplexEvent createBugEvent(final Bug bug, final String eventName, final String _productName) {
 		final ComplexEvent complexEventDto = new ComplexEvent();
 		complexEventDto.setProvider(PROVIDER_BUG);
 		complexEventDto.setEventType(eventName);
+
 		final Map<String, Serializable> properties = Maps.newHashMap();
+		properties.put(BUGZILLA_PRODUCT, _productName);
 		for (final Entry<Object, Object> entry : bug.getParameterMap().entrySet()) {
 			if (entry.getValue() instanceof Serializable) {
 				properties.put(entry.getKey().toString(), (Serializable) entry.getValue());

@@ -2,21 +2,23 @@ package org.komea.microservices.events.database.model;
 
 import java.util.Date;
 
+import org.joda.time.DateTime;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class AggregationFormula {
 
-	private String groupBy = "";
+	private String	groupBy	   = "";
 
-	private String filter = "";
+	private String	filter	   = "";
 
-	private String aggformula = "";
+	private String	aggformula	= "";
 
-	private String fromClause = "";
+	private String	fromClause	= "";
 
-	private Date from = null;
+	private Date	fromDateTime	   = null;
 
-	private Date to = new Date();
+	private Date	toDateTime	       = new Date();
 
 	public String getAggformula() {
 		return this.aggformula;
@@ -27,7 +29,7 @@ public class AggregationFormula {
 	}
 
 	public Date getFrom() {
-		return this.from;
+		return this.fromDateTime;
 	}
 
 	public String getFromClause() {
@@ -39,7 +41,7 @@ public class AggregationFormula {
 	}
 
 	public Date getTo() {
-		return this.to;
+		return this.toDateTime;
 	}
 
 	public void setAggformula(final String aggformula) {
@@ -51,7 +53,12 @@ public class AggregationFormula {
 	}
 
 	public void setFrom(final Date from) {
-		this.from = from;
+		this.fromDateTime = from;
+	}
+
+	public void setFromDateTime(final DateTime _fromPeriod) {
+		this.fromDateTime = _fromPeriod.toDate();
+
 	}
 
 	public void setFromClause(final String from) {
@@ -63,25 +70,27 @@ public class AggregationFormula {
 	}
 
 	public void setTo(final Date to) {
-		this.to = to;
+		this.toDateTime = to;
+	}
+
+	public void setToDateTime(final DateTime _toPeriod) {
+		this.toDateTime = _toPeriod.toDate();
+
 	}
 
 	@Override
 	public String toString() {
-		return "AggregationFormula ["
-				+ (this.groupBy != null ? "groupBy=" + this.groupBy + ", " : "")
-				+ (this.filter != null ? "filter=" + this.filter + ", " : "")
-				+ (this.aggformula != null ? "aggformula=" + this.aggformula
-						+ ", " : "")
-						+ (this.fromClause != null ? "fromClause=" + this.fromClause
-								+ ", " : "")
-								+ (this.from != null ? "from=" + this.from + ", " : "")
-								+ (this.to != null ? "to=" + this.to : "") + "]";
+		return "AggregationFormula [" + (this.groupBy != null ? "groupBy=" + this.groupBy + ", " : "")
+		        + (this.filter != null ? "filter=" + this.filter + ", " : "")
+		        + (this.aggformula != null ? "aggformula=" + this.aggformula + ", " : "")
+		        + (this.fromClause != null ? "fromClause=" + this.fromClause + ", " : "")
+		        + (this.fromDateTime != null ? "from=" + this.fromDateTime + ", " : "") + (this.toDateTime != null ? "to=" + this.toDateTime : "")
+		        + "]";
 	}
 
 	@JsonIgnore
 	public void untilNow() {
-		this.to = new Date();
+		this.toDateTime = new Date();
 
 	}
 
