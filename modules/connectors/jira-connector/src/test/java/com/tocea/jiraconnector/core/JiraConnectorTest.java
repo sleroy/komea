@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.tocea.core;
+package com.tocea.jiraconnector.core;
 
-import static org.junit.Assert.assertTrue;
-
+import com.tocea.jiraconnector.service.KomeaService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;

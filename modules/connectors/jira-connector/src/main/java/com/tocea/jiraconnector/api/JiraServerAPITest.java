@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.tocea.core;
+package com.tocea.jiraconnector.api;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,7 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import net.rcarz.jiraclient.Component;
 import net.rcarz.jiraclient.Field;
 import net.rcarz.jiraclient.Issue;
@@ -22,10 +22,13 @@ import net.rcarz.jiraclient.JiraClient;
 import net.rcarz.jiraclient.JiraException;
 import net.rcarz.jiraclient.Priority;
 import net.rcarz.jiraclient.Project;
+import net.rcarz.jiraclient.User;
 import net.rcarz.jiraclient.WorkLog;
+import net.rcarz.jiraclient.greenhopper.Backlog;
 import net.rcarz.jiraclient.greenhopper.GreenHopperClient;
 import net.rcarz.jiraclient.greenhopper.RapidView;
 import net.rcarz.jiraclient.greenhopper.Sprint;
+import net.rcarz.jiraclient.greenhopper.SprintIssue;
 
 /**
  *
@@ -107,11 +110,14 @@ public class JiraServerAPITest {
 
 //            Priority priority = issue.getPriority();
 //            issue.getAssignee();
-            RapidView next = rapidViews.iterator().next();
-            next.getSprints();
+            for (RapidView rapidView : rapidViews) {
+                List<Sprint> sprints = rapidView.getSprints();
                 
                 
-           
+                for (Sprint sprint : sprints) {
+                    System.out.println("sprint :" + sprint);
+                }
+            }
 //
 //                Backlog backlogData = rapidView.getBacklogData();
 //                List<SprintIssue> issues = backlogData.getIssues();
@@ -121,7 +127,13 @@ public class JiraServerAPITest {
 //                }
 //            }
 
-      
+            List<Component> componentsAllowedValues = jira.getComponentsAllowedValues("projet", "issuetype");
+            for (Component componentsAllowedValue : componentsAllowedValues) {
+
+            }
+            Project proejct = jira.getProject("project");
+            
+         
 
         } catch (JiraException ex) {
             Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);

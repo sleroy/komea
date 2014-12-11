@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.tocea.core;
+package com.tocea.jiraconnector.core;
 
+import com.tocea.jiraconnector.generalplugin.BadConfigurationException;
 
 /**
  *

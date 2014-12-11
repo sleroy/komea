@@ -3,16 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.tocea.core.generalplugin;
+package com.tocea.jiraconnector.generalplugin;
 
-import java.util.Date;
 
 /**
  *
  * @author rgalerme
  */
-public interface IEventConnector<TConf> extends IConfigurationConnector<TConf> {
-
-    public void updateEvents(Date _lastLaunchDate);
-
+public interface IOrganisationConnector<TConf> extends IConfigurationConnector<TConf> {
+   
+    public void updateOrganisation();
 }

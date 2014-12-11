@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.tocea.core;
+package com.tocea.jiraconnector.core;
 
+import com.tocea.jiraconnector.core.JiraConfiguration;
+import com.tocea.jiraconnector.generalplugin.BadConfigurationException;
+import java.text.SimpleDateFormat;
 import net.rcarz.jiraclient.BasicCredentials;
 import net.rcarz.jiraclient.JiraClient;
 import net.rcarz.jiraclient.greenhopper.GreenHopperClient;
@@ -15,12 +18,16 @@ import com.tocea.core.generalplugin.BadConfigurationException;
  *
  * @author rgalerme
  */
-public class JiraServerAPI {
+public class JiraServerContext {
+    
+     
+    public final static SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+    public final static Integer GetOccurence = 1000;
 
     private JiraClient jiraClient;
     private GreenHopperClient greenHopper;
 
-    public static JiraServerAPI getNewInstance(JiraConfiguration configuration) throws BadConfigurationException {
+    public static JiraServerContext getNewInstance(JiraConfiguration configuration) throws BadConfigurationException {
 
         if ("".equals(configuration.getUrl())) {
             throw new BadConfigurationException("Map of jira configuration deos not contain the correct field");
@@ -31,7 +38,7 @@ public class JiraServerAPI {
         } else {
             client = new JiraClient(configuration.getUrl());
         }
-        return new JiraServerAPI(client);
+        return new JiraServerContext(client);
     }
 
     private static boolean containUser(JiraConfiguration configuration) {
@@ -42,7 +49,7 @@ public class JiraServerAPI {
         return !result;
     }
 
-    private JiraServerAPI(JiraClient gh) {
+    private JiraServerContext(JiraClient gh) {
         this.jiraClient = gh;
         greenHopper = new GreenHopperClient(gh);
     }

@@ -40,6 +40,17 @@ public class SchemaBuilder {
 		        .setArity(ReferenceArity.MANY));
 
 	}
+	public void entityContainsOne(final String _fieldName, final IEntityType _entity, final IEntityType _entity2) {
+		_entity.addProperty(this.schemaFactory.newReference(_fieldName, _entity2).setKind(ReferenceKind.CONTAINMENT)
+		        .setArity(ReferenceArity.ONE));
+
+	}
+
+	public void entityAggregatesOne(final String _fieldName, final IEntityType _entity, final IEntityType _entity2) {
+		_entity.addProperty(this.schemaFactory.newReference(_fieldName, _entity2).setKind(ReferenceKind.AGGREGATION)
+		        .setArity(ReferenceArity.ONE));
+
+	}
 
 	public KomeaSchemaFactory getSchemaFactory() {
 		return this.schemaFactory;
