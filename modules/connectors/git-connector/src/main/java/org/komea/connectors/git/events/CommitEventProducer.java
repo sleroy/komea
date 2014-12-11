@@ -11,7 +11,6 @@ import org.komea.connectors.git.IGitCommit;
 import org.komea.connectors.git.IGitCommitProcessor;
 import org.komea.connectors.git.impl.GitCommit;
 import org.komea.core.utils.PojoToMap;
-import org.komea.event.model.beans.AbstractEvent;
 import org.komea.event.model.beans.ComplexEvent;
 import org.komea.event.storage.IEventStorage;
 import org.slf4j.Logger;
@@ -37,14 +36,14 @@ public final class CommitEventProducer implements IGitCommitProcessor
     public void process(final RevCommit commit, final RevWalk revWalk, final IGitCommit convertGitCommit) {
     
         try {
-            this.eventStorage.storeEvent(newCommitEvent(convertGitCommit));
+            this.eventStorage.storeComplexEvent(newCommitEvent(convertGitCommit));
             
         } catch (final Exception e) {
             LOGGER.error("GIT Commit exception {} for {}", e.getMessage(),convertGitCommit,e);
         }
     }
     
-    private AbstractEvent newCommitEvent(final IGitCommit convertGitCommit) {
+    private ComplexEvent newCommitEvent(final IGitCommit convertGitCommit) {
     
         final ComplexEvent event = new ComplexEvent();
         event.setProvider(GitCommit.GIT);

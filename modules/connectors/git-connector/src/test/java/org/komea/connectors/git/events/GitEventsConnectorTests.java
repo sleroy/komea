@@ -18,7 +18,7 @@ public class GitEventsConnectorTests extends AbstractLocalGitTest
         GitEventsConnector connector = new GitEventsConnector(storage);
         DateTime since = new DateTime(2000, 01, 01, 0, 0);
         DateTime until = DateTime.now();
-        GitConnectorConfiguration conf = new GitConnectorConfiguration("github-gmail", this.folder, since, until);
+        GitConnectorConfiguration conf = new GitConnectorConfiguration("https://github.com/mikel/mail.git","github-gmail", this.folder, since, until);
         
         connector.launch(conf);
         Assert.assertTrue(storage.count > 0);

@@ -29,7 +29,7 @@ public class GitEventsConnector
     
         Validate.notNull(options.getRepositoryFolder());
         Validate.isTrue(options.getRepositoryFolder().exists());
-        final IGitRepository gitRepository = new GitRepository(options.getRepositoryFolder(),options.getProject());
+        final IGitRepository gitRepository = new GitRepository(options.getRepositoryFolder(),options.getRepositoryUrl());
         try {
             
             LOGGER.info("Processing commits of GIT repository");

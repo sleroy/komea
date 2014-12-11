@@ -43,9 +43,9 @@ public class FileModificationEventProducer implements IGitCommitProcessor
             final List<DiffEntry> entriesFromCommit = computation.obtainDiffEntriesFromCommit(new DiffFormatter(new NullOutputStream()));
             for (final DiffEntry entry : entriesFromCommit) {
                 if (isNotNewPath(entry)) {
-                    this.storage.storeEvent(newFileModificationEvent(commit, convertGitCommit, entry, false));
+                    this.storage.storeComplexEvent(newFileModificationEvent(commit, convertGitCommit, entry, false));
                 } else {
-                    this.storage.storeEvent(newFileModificationEvent(commit, convertGitCommit, entry, true));
+                    this.storage.storeComplexEvent(newFileModificationEvent(commit, convertGitCommit, entry, true));
                 }
             }
         } catch (Exception e) {

@@ -13,14 +13,16 @@ public class GitConnectorConfiguration
     private final String   project;
     private final DateTime until;
     private final File     repositoryFolder;
+    private final String   url;
     
-    public GitConnectorConfiguration(final String project, final File repositoryFolder, final DateTime since, final DateTime until) {
+    public GitConnectorConfiguration(final String url,final String project, final File repositoryFolder, final DateTime since, final DateTime until) {
     
         super();
         this.since = since;
         this.until = until;
         this.repositoryFolder = repositoryFolder;
         this.project = project;
+        this.url = url;
     }
     
     public DateTime getSince() {
@@ -38,6 +40,9 @@ public class GitConnectorConfiguration
         return this.project;
     }
     
+    public String getRepositoryUrl(){
+        return this.url;
+    }
     public File getRepositoryFolder() {
     
         return this.repositoryFolder;
