@@ -51,21 +51,19 @@ public class JiraProcessConnector {
                     IKomeaEntity createComponent = createComponent(component, newCompanyStorage);
                     entityProjet.add("components", createComponent);
                 }
-                
+
                 List<Version> versions = project.getVersions();
                 for (Version version : versions) {
                     IKomeaEntity createVersion = createVersion(version, newCompanyStorage);
                     entityProjet.add("verions", createVersion);
                 }
-                
+
                 Map<String, String> roles = project.getRoles();
                 Set<Map.Entry<String, String>> entrySet = roles.entrySet();
                 for (Map.Entry<String, String> rolesSet : entrySet) {
                     IKomeaEntity createRole = createRole(rolesSet.getKey(), rolesSet.getValue(), newCompanyStorage);
                     entityProjet.add("roles", createRole);
                 }
-                
-                
 
             }
 
@@ -75,54 +73,58 @@ public class JiraProcessConnector {
 
     }
 
+    private String getString(String chaine) {
+        if (chaine == null) {
+            return "";
+        } else {
+            return chaine;
+        }
+    }
+    
+   
+
     private IKomeaEntity createProject(Project projet, IKomeaGraphStorage storage) {
         IKomeaEntity entityProjet = storage.create(komeaContext.getSchemaAPI().getProject());
-        entityProjet.set("key", projet.getKey());
-        entityProjet.set("name", projet.getName());
-        entityProjet.set("description", projet.getDescription());
-        entityProjet.set("assigneeType", projet.getAssigneeType());
+        entityProjet.set("key", getString(projet.getKey()));
+        entityProjet.set("name", getString(projet.getName()));
+        entityProjet.set("description", getString(projet.getDescription()));
+        entityProjet.set("assigneeType", getString(projet.getAssigneeType()));
         return entityProjet;
     }
 
     private IKomeaEntity createUser(User user, IKomeaGraphStorage storage) {
         IKomeaEntity entityUser = storage.create(komeaContext.getSchemaAPI().getUser());
-        entityUser.set("name", user.getName());
-        entityUser.set("email", user.getEmail());
-        entityUser.set("displayName", user.getDisplayName());
+        entityUser.set("name", getString(user.getName()));
+        entityUser.set("email", getString(user.getEmail()));
+        entityUser.set("displayName", getString(user.getDisplayName()));
         entityUser.set("active", user.isActive());
         return entityUser;
     }
-    
-    private IKomeaEntity createComponent(Component component, IKomeaGraphStorage storage)
-    {
-     IKomeaEntity entityComponent = storage.create(komeaContext.getSchemaAPI().getComponent());
-     entityComponent.set("name", component.getName());
-     entityComponent.set("description", component.getDescription());
-     entityComponent.set("isAssignedTypeValid", component.isAssigneeTypeValid());
-             
-     return entityComponent;
-    }
-    
-    private IKomeaEntity createRole(String roleKey,String roleValue, IKomeaGraphStorage storage)
-    {
-     IKomeaEntity entityRole = storage.create(komeaContext.getSchemaAPI().getRoles());
-     entityRole.set("roleId", roleKey);
-     entityRole.set("name", roleValue);
-     return entityRole;
-    }
-    
-    private IKomeaEntity createVersion(Version version, IKomeaGraphStorage storage)
-    {
-     IKomeaEntity entityVersion = storage.create(komeaContext.getSchemaAPI().getVersion());
-     entityVersion.set("name", version.getName());
-     entityVersion.set("releaseDate", version.getReleaseDate());
-     entityVersion.set("description", version.getDescription());
-     entityVersion.set("archived", version.isArchived());
-     entityVersion.set("released", version.isReleased());
-    return entityVersion;
+
+    private IKomeaEntity createComponent(Component component, IKomeaGraphStorage storage) {
+        IKomeaEntity entityComponent = storage.create(komeaContext.getSchemaAPI().getComponent());
+        entityComponent.set("name", getString(component.getName()));
+        entityComponent.set("description", getString(component.getDescription()));
+        entityComponent.set("isAssignedTypeValid", component.isAssigneeTypeValid());
+
+        return entityComponent;
     }
 
-    private void updateKomeaOrganisation(KomeaServerContext komeaApi) {
-//        OKomeaGraphStorage companyStorage = komeaApi.getNewCompanyStorage();
+    private IKomeaEntity createRole(String roleKey, String roleValue, IKomeaGraphStorage storage) {
+        IKomeaEntity entityRole = storage.create(komeaContext.getSchemaAPI().getRoles());
+        entityRole.set("roleId", roleKey);
+        entityRole.set("name", roleValue);
+        return entityRole;
     }
+
+    private IKomeaEntity createVersion(Version version, IKomeaGraphStorage storage) {
+        IKomeaEntity entityVersion = storage.create(komeaContext.getSchemaAPI().getVersion());
+        entityVersion.set("name", getString(version.getName()));
+        entityVersion.set("releaseDate", getString(version.getReleaseDate()));
+        entityVersion.set("description", getString(version.getDescription()));
+        entityVersion.set("archived", version.isArchived());
+        entityVersion.set("released", version.isReleased());
+        return entityVersion;
+    }
+
 }

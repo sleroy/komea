@@ -6,7 +6,6 @@
 package com.tocea.jiraconnector.service;
 
 import com.google.common.collect.Maps;
-import com.tocea.jiraconnector.api.JiraServerAPITest;
 import com.tocea.jiraconnector.core.JiraServerContext;
 import com.tocea.jiraconnector.core.KomeaServerContext;
 import java.io.Serializable;
@@ -33,7 +32,6 @@ public class JiraEventConnector {
         this.komeaContext = komeaContext;
     }
 
-    
     public void importNewIssue(Date date) {
         try {
             String format = JiraServerContext.FORMATTER.format(date);
@@ -43,7 +41,7 @@ public class JiraEventConnector {
             if (searchIssues.total > searchIssues.max) {
                 for (int i = searchIssues.max; i < searchIssues.total; i = i + searchIssues.max) {
 
-                    Issue.SearchResult parcourIssues = jiraContext.getClient().searchIssues("created > \"" + format + "\"", null, Integer.MAX_VALUE, i);
+                    Issue.SearchResult parcourIssues = jiraContext.getClient().searchIssues("created > \"" + format + "\"", null, JiraServerContext.GetOccurence, i);
                     sendNewIssue(parcourIssues.issues);
                 }
             }
@@ -62,7 +60,7 @@ public class JiraEventConnector {
             if (searchIssues.total > searchIssues.max) {
                 for (int i = searchIssues.max; i < searchIssues.total; i = i + searchIssues.max) {
 
-                    Issue.SearchResult parcourIssues = jiraContext.getClient().searchIssues("updated > \"" + format + "\"", null, Integer.MAX_VALUE, i);
+                    Issue.SearchResult parcourIssues = jiraContext.getClient().searchIssues("updated > \"" + format + "\"", null, JiraServerContext.GetOccurence, i);
                     sendUpdateIssue(parcourIssues.issues);
                 }
             }
@@ -101,16 +99,47 @@ public class JiraEventConnector {
             declaredField.setAccessible(true);
             properties = (Map<String, Serializable>) declaredField.get(bug);
         } catch (NoSuchFieldException ex) {
-            Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JiraEventConnector.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SecurityException ex) {
-            Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JiraEventConnector.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalArgumentException ex) {
-            Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JiraEventConnector.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JiraEventConnector.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         complexEventDto.setProperties(properties);
         return complexEventDto;
     }
+
+    /**
+     * 
+     * @param _date
+     * @param limit must be lower that 1000
+     */
+    public void importNewIssueLimit(Date _date, int limit) {
+        try {
+            String format = JiraServerContext.FORMATTER.format(_date);
+            Issue.SearchResult searchIssues = jiraContext.getClient().searchIssues("created > \"" + format + "\"", limit);
+            sendNewIssue(searchIssues.issues);
+        } catch (JiraException ex) {
+            Logger.getLogger(JiraEventConnector.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * 
+     * @param _date
+     * @param limit must be lower that 1000
+     */
+    public void importUpdateIssueLimit(Date _date, int limit) {
+        try {
+            String format = JiraServerContext.FORMATTER.format(_date);
+            Issue.SearchResult searchIssues = jiraContext.getClient().searchIssues("updated > \"" + format + "\"", limit);
+            sendUpdateIssue(searchIssues.issues);
+        } catch (JiraException ex) {
+            Logger.getLogger(JiraEventConnector.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }

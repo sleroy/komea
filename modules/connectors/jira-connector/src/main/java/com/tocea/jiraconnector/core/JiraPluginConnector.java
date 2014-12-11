@@ -34,11 +34,16 @@ public class JiraPluginConnector implements IEventConnector<JiraConfiguration>, 
 
     @Override
     public void updateEvents(Date _lastLaunchDate) {
-        
+
         jCon.importNewIssue(_lastLaunchDate);
         jCon.importUpdateIssue(_lastLaunchDate);
-        
 
+    }
+
+    public void updateEvents(Date _date, int limit) {
+       
+        jCon.importNewIssueLimit(_date,limit);
+        jCon.importUpdateIssueLimit(_date,limit);
     }
 
     @Override
@@ -69,11 +74,12 @@ public class JiraPluginConnector implements IEventConnector<JiraConfiguration>, 
         TestDatabaseConfiguration dbc = new TestDatabaseConfiguration();
         OrientSessionFactory orientSessionFactory = new OrientSessionFactory(dbc);
         JiraSchema jiraSchema = new JiraSchema(new MinimalCompanySchema());
-        return new KomeaServerContext(orientSessionFactory, jiraSchema);
+        this.komeaContext = new KomeaServerContext(orientSessionFactory, jiraSchema);
+        return komeaContext;
     }
 
-    public EventQueryManager getQueryService() {
-        return komeaContext.getQueryService();
+    public KomeaServerContext getKomeaContext() {
+        return komeaContext;
     }
 
 }
