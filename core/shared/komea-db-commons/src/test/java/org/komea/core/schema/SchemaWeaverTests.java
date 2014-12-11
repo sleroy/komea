@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.komea.core.schema.impl.KomeaSchemaFactory;
 import org.komea.core.schema.impl.SchemaWeaver;
@@ -26,7 +27,7 @@ public class SchemaWeaverTests
         
         SchemaWeaver weaver = new SchemaWeaver();
         IKomeaSchema weaved = weaver.weave("weaved", Lists.newArrayList(schema1,schema2));
-        YUMLExport.exportToHtml(new FileOutputStream("weaved.html"), weaved);
+        Assert.assertTrue(weaved.findType("Person").getProperties().size()==2);
     }
     
     private IKomeaSchema buildSchema2() {
