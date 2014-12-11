@@ -17,7 +17,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.JiraException;
-import org.komea.event.model.api.IComplexEvent;
 import org.komea.event.model.beans.ComplexEvent;
 
 /**
@@ -83,7 +82,7 @@ public class JiraEventConnector {
     }
 
     private void sendEvent(List<Issue> issues, String eventName) {
-        IComplexEvent complexEventDto;
+        ComplexEvent complexEventDto;
         for (Issue sue : issues) {
 
             complexEventDto = createBugEvent(sue, eventName);
@@ -91,10 +90,10 @@ public class JiraEventConnector {
         }
     }
 
-    private IComplexEvent createBugEvent(final Issue bug, final String eventName) {
+    private ComplexEvent createBugEvent(final Issue bug, final String eventName) {
         final ComplexEvent complexEventDto = new ComplexEvent();
         complexEventDto.setProvider(KomeaServerContext.PROVIDER_BUG);
-        complexEventDto.setEventKey(eventName);
+        complexEventDto.setEventType(eventName);
         Map<String, Serializable> properties = Maps.newHashMap();
 
         try {

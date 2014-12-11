@@ -7,11 +7,10 @@ package com.tocea.jiraconnector.core;
 
 import org.komea.core.model.storage.IKomeaGraphStorage;
 import org.komea.core.model.storage.impl.OKomeaGraphStorage;
-import org.komea.event.storage.api.IEventStorage;
-import org.komea.event.storage.service.EventStorageService;
-import org.komea.orientdb.session.impl.DatabaseConfiguration;
-import org.komea.event.query.service.EventQueryManagerService;
-import org.komea.orientdb.session.impl.OrientDocumentDatabaseFactory;
+import org.komea.event.query.impl.EventQueryManager;
+import org.komea.event.storage.IEventStorage;
+import org.komea.event.storage.impl.EventStorage;
+import org.springframework.orientdb.session.impl.OrientSessionFactory;
 
 /**
  *
@@ -25,13 +24,13 @@ public class KomeaServerContext {
 
     private final IEventStorage eventStorage;
     private final JiraSchema schemaAPI;
-    private final DatabaseConfiguration db;
-    private final OrientDocumentDatabaseFactory orient;
+    private final OrientSessionFactory orientSession;
+//    private final OrientDocumentDatabaseFactory orient;
 
-    public KomeaServerContext(DatabaseConfiguration db, JiraSchema schemaAPI) {
-        this.db = db;
-        this.orient = new OrientDocumentDatabaseFactory(db);
-        this.eventStorage = new EventStorageService(orient);
+    public KomeaServerContext(OrientSessionFactory db, JiraSchema schemaAPI) {
+//        this.db = db;
+        this.orientSession = db;
+        this.eventStorage = new EventStorage(orientSession);
         this.schemaAPI = schemaAPI;
     }
 
@@ -45,11 +44,10 @@ public class KomeaServerContext {
 
     public IKomeaGraphStorage getNewCompanyStorage() {
 
-        return new OKomeaGraphStorage(schemaAPI.getSchema(), db);
+        return new OKomeaGraphStorage(schemaAPI.getSchema(), orientSession.getGraphTx());
     }
 
-    public EventQueryManagerService getQueryService() {
-        return new EventQueryManagerService(orient);
+    public EventQueryManager getQueryService() {
+        return new EventQueryManager(orientSession);
     }
-
 }

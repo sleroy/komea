@@ -13,9 +13,10 @@ import com.tocea.jiraconnector.service.JiraProcessConnector;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.komea.event.query.service.EventQueryManagerService;
-import org.komea.orientdb.session.impl.TestDatabaseConfiguration;
+import org.komea.event.query.impl.EventQueryManager;
 import org.komea.software.model.impl.MinimalCompanySchema;
+import org.springframework.orientdb.session.impl.OrientSessionFactory;
+import org.springframework.orientdb.session.impl.TestDatabaseConfiguration;
 
 /**
  *
@@ -66,11 +67,12 @@ public class JiraPluginConnector implements IEventConnector<JiraConfiguration>, 
 
     private KomeaServerContext initKomeaconnector() {
         TestDatabaseConfiguration dbc = new TestDatabaseConfiguration();
+        OrientSessionFactory orientSessionFactory = new OrientSessionFactory(dbc);
         JiraSchema jiraSchema = new JiraSchema(new MinimalCompanySchema());
-        return new KomeaServerContext(dbc, jiraSchema);
+        return new KomeaServerContext(orientSessionFactory, jiraSchema);
     }
 
-    public EventQueryManagerService getQueryService() {
+    public EventQueryManager getQueryService() {
         return komeaContext.getQueryService();
     }
 

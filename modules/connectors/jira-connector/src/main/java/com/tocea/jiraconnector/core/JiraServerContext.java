@@ -5,22 +5,18 @@
  */
 package com.tocea.jiraconnector.core;
 
-import com.tocea.jiraconnector.core.JiraConfiguration;
 import com.tocea.jiraconnector.generalplugin.BadConfigurationException;
 import java.text.SimpleDateFormat;
 import net.rcarz.jiraclient.BasicCredentials;
 import net.rcarz.jiraclient.JiraClient;
 import net.rcarz.jiraclient.greenhopper.GreenHopperClient;
 
-import com.tocea.core.generalplugin.BadConfigurationException;
-
 /**
  *
  * @author rgalerme
  */
 public class JiraServerContext {
-    
-     
+
     public final static SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy/MM/dd HH:mm");
     public final static Integer GetOccurence = 1000;
 
@@ -42,10 +38,10 @@ public class JiraServerContext {
     }
 
     private static boolean containUser(JiraConfiguration configuration) {
-        
-       boolean result;
+
+        boolean result;
         result = "".equals(configuration.getLogin()) || configuration.getLogin() == null || configuration.getPass() == null || "".equals(configuration.getPass());
-        
+
         return !result;
     }
 
