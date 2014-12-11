@@ -1,11 +1,10 @@
-package org.komea.connectors.bugzilla.events.impl;
+package org.komea.connectors.bugzilla;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.komea.connectors.bugzilla.events.IBugzillaConnectorInformations;
 import org.komea.connectors.bugzilla.proxy.BugzillaPluginException;
 import org.komea.connectors.bugzilla.proxy.IBugzillaAPI;
 import org.komea.connectors.bugzilla.proxy.impl.BugzillaAPI;
@@ -32,8 +31,21 @@ import com.j2bugzilla.base.ConnectionException;
  * @author sleroy
  *
  */
-public class BugzillaEventConnector implements IBugzillaConnectorInformations {
+public class BugzillaEventConnector  {
+    /**
+     * Name of the event sent for newly created bugs
+     */
+    public static final String EVENT_NEW_BUG = "new_bug";
 
+    /**
+     * Name of the event for bug recently updated
+     */
+    public static final String EVENT_UPDATED_BUG = "updated_bug";
+    /**
+     * Provider name
+     */
+    public static final String PROVIDER_BUG = "bugzilla";
+    
 	private static final String	              BUGZILLA_PRODUCT	= "bugzilla_product";
 
 	private static final Logger	              LOGGER	       = LoggerFactory.getLogger(BugzillaEventConnector.class);

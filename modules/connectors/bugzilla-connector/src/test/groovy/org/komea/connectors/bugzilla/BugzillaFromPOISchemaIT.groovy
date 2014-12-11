@@ -2,8 +2,6 @@ package org.komea.connectors.bugzilla
 
 import org.komea.connectors.bugzilla.proxy.impl.BugzillaServerConfiguration
 import org.komea.connectors.bugzilla.schema.impl.BugzillaSchemaBuilder
-import org.komea.connectors.bugzilla.schema.impl.BugzillaSchemaConnector
-import org.komea.core.model.impl.OKomeaModelFactory
 import org.komea.core.model.storage.impl.OKomeaGraphStorage
 import org.komea.software.model.impl.MinimalCompanySchema
 import org.springframework.orientdb.session.impl.OrientSessionFactory
@@ -28,15 +26,16 @@ class BugzillaFromPOISchemaIT extends Specification{
 
 		def companySchema = new MinimalCompanySchema()
 		def orientGraph = ogf.getGraphTx()
-		def modelFactory = new OKomeaModelFactory(companySchema.getSchema(), orientGraph)
-
+	
 		when: "We update the schema"
 		def bzSchema = new BugzillaSchemaBuilder(companySchema)
 
 		and: "We create the model factory"
 
-		def okomeaGraphStorage = new OKomeaGraphStorage(companySchema.getSchema(), orientGraph)
-
+		def storage = new OKomeaGraphStorage(companySchema.getSchema(), orientGraph)
+     
+        
+        
 		and: "We connect to bugzilla"
 
 		def bzServerConfiguration = new BugzillaServerConfiguration()
@@ -53,16 +52,16 @@ class BugzillaFromPOISchemaIT extends Specification{
 		//bzServerConfiguration.serverURL = 'https://bugzilla.gentoo.org'
 		and: "We fill the model with new entities from an extract of a bugzilla server"
 
-		def connector = new BugzillaSchemaConnector(new XStreamBugzillaUnserializerAPI(), okomeaGraphStorage, bzServerConfiguration)
-		connector.updateSchema()
+		def connector = new BugzillaProcessConnector(new XStreamBugzillaUnserializerAPI(), storage, bzServerConfiguration)
+		connector.process()
 
-		println Iterators.size(modelFactory.getStorageService().entities().iterator())
+		println Iterators.size(storage.entities().iterator())
 
 		println "Count vertices " + orientGraph.countVertices()
 		println "Count edges " + orientGraph.countEdges()
 
 		then: "We should obtain a model with a given number of entities"
-		Iterators.size(modelFactory.getStorageService().entities().iterator()) == 463 // FOR NO REGRESSION
+		Iterators.size(storage.entities().iterator()) == 463 // FOR NO REGRESSION
 
 
 	}

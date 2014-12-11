@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.komea.connectors.bugzilla.BugzillaEventConnector;
 import org.komea.connectors.bugzilla.proxy.IBugzillaAPI;
 import org.komea.connectors.bugzilla.proxy.impl.BugzillaServerConfiguration;
 import org.komea.event.model.beans.ComplexEvent;
