@@ -36,13 +36,12 @@ public class JiraConnectorTest {
 		final JiraConfiguration jconf = new JiraConfiguration("https://jira.atlassian.com/", null, null);
 		final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 		try {
-			final Date parse = dateFormat.parse("2014/12/08 11:00");
+			final Date parse = dateFormat.parse("2014/12/11 11:00");
 			jc.initConnector(jconf);
 			jc.updateEvents(parse);
 
 			final EventQueryManager queryService = jc.getQueryService();
 			final long countEventsOfType = queryService.countEventsOfType(KomeaService.EVENT_NEW_BUG);
-			System.out.println(countEventsOfType);
 			assertTrue(countEventsOfType > 0);
 		} catch (final ParseException ex) {
 			Logger.getLogger(JiraConnectorTest.class.getName()).log(Level.SEVERE, null, ex);

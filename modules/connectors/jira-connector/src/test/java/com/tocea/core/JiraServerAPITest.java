@@ -107,14 +107,11 @@ public class JiraServerAPITest {
 
 //            Priority priority = issue.getPriority();
 //            issue.getAssignee();
-            for (RapidView rapidView : rapidViews) {
-                List<Sprint> sprints = rapidView.getSprints();
+            RapidView next = rapidViews.iterator().next();
+            next.getSprints();
                 
                 
-                for (Sprint sprint : sprints) {
-                    System.out.println("sprint :" + sprint);
-                }
-            }
+           
 //
 //                Backlog backlogData = rapidView.getBacklogData();
 //                List<SprintIssue> issues = backlogData.getIssues();
@@ -124,13 +121,7 @@ public class JiraServerAPITest {
 //                }
 //            }
 
-            List<Component> componentsAllowedValues = jira.getComponentsAllowedValues("projet", "issuetype");
-            for (Component componentsAllowedValue : componentsAllowedValues) {
-
-            }
-            Project proejct = jira.getProject("project");
-            
-         
+      
 
         } catch (JiraException ex) {
             Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);

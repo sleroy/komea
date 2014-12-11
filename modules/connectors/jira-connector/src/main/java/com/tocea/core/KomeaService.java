@@ -43,13 +43,13 @@ public class KomeaService {
 			declaredField.setAccessible(true);
 			properties = (Map<String, Serializable>) declaredField.get(bug);
 		} catch (final NoSuchFieldException ex) {
-			Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(KomeaService.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (final SecurityException ex) {
-			Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(KomeaService.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (final IllegalArgumentException ex) {
-			Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(KomeaService.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (final IllegalAccessException ex) {
-			Logger.getLogger(JiraServerAPITest.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(KomeaService.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
 		complexEventDto.setProperties(properties);
