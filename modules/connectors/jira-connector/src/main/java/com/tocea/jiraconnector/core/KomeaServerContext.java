@@ -7,10 +7,10 @@ package com.tocea.jiraconnector.core;
 
 import org.komea.core.model.storage.IKomeaGraphStorage;
 import org.komea.core.model.storage.impl.OKomeaGraphStorage;
-import org.komea.event.query.service.EventQueryManagerService;
 import org.komea.event.storage.api.IEventStorage;
 import org.komea.event.storage.service.EventStorageService;
 import org.komea.orientdb.session.impl.DatabaseConfiguration;
+import org.komea.event.query.service.EventQueryManagerService;
 import org.komea.orientdb.session.impl.OrientDocumentDatabaseFactory;
 
 /**

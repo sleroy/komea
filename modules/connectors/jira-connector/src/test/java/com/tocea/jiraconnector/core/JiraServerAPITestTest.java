@@ -32,4 +32,10 @@ public class JiraServerAPITestTest {
 		}
 	}
 
+//        TestDatabaseConfiguration dbc = new TestDatabaseConfiguration();
+//        // ORIENTDB;
+//        OrientDocumentDatabaseFactory ogf = new OrientDocumentDatabaseFactory(dbc);
+//        EventStorageService eventStorage = new EventStorageService(ogf);
+//        EventQueryManagerService queryservice = new EventQueryManagerService(ogf);
+//        queryservice.countEventsOfType("Event_new_jira_bug");
 }
