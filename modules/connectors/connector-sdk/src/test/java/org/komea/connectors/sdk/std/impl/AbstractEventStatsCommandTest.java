@@ -14,35 +14,35 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest("server.port=9991")
-public class AbstractPurgeEventsCommandTest {
+public class AbstractEventStatsCommandTest {
 
 	@Test
 	public void testRun() throws Exception {
-		final AbstractPurgeEventsCommand abstractPurgeEventsCommand = new AbstractPurgeEventsCommand() {
+		final AbstractEventStatsCommand eventStatsCommand = new AbstractEventStatsCommand() {
 
 			@Override
 			public String[] getEventTypes() {
 
-				return new String[] { "new_bug" };
+				return new String[] { "new_bug", "new_bug2" };
 			}
 		};
-		abstractPurgeEventsCommand.setServerURL("http://localhost:9991");
-		abstractPurgeEventsCommand.run();
+		eventStatsCommand.setServerURL("http://localhost:9991");
+		eventStatsCommand.run();
 
 	}
 
 	@Test(expected = ProcessingException.class)
 	public void testRunFail() throws Exception {
-		final AbstractPurgeEventsCommand abstractPurgeEventsCommand = new AbstractPurgeEventsCommand() {
+		final AbstractEventStatsCommand eventStatsCommand = new AbstractEventStatsCommand() {
 
 			@Override
 			public String[] getEventTypes() {
 
-				return new String[] { "new_bug" };
+				return new String[] { "new_bug", "new_bug2" };
 			}
 		};
-		abstractPurgeEventsCommand.setServerURL("http://localhost:9992");
-		abstractPurgeEventsCommand.run();
+		eventStatsCommand.setServerURL("http://localhost:9992");
+		eventStatsCommand.run();
 
 	}
 }

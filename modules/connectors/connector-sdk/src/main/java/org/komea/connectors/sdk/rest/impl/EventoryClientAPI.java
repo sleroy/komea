@@ -11,8 +11,18 @@ public class EventoryClientAPI extends AbstractClientAPI {
 		super();
 	}
 
+	public Integer countEvents(final String _eventType) throws ConnectException, ServerException {
+
+		return this.get("/database/count", Integer.class, _eventType);
+	}
+
 	public void purgeEvents(final String _eventType) throws ConnectException, ServerException {
 		this.get("/storage/clear", _eventType);
+
+	}
+
+	public void testConnexion() throws ConnectException, ServerException {
+		this.get("hello");
 
 	}
 
@@ -21,5 +31,4 @@ public class EventoryClientAPI extends AbstractClientAPI {
 
 		return _target;
 	}
-
 }
