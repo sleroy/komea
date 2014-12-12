@@ -14,35 +14,22 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest("server.port=9991")
-public class AbstractEventStatsCommandTest {
+public class PurgeEventsCommandTest {
 
 	@Test
 	public void testRun() throws Exception {
-		final AbstractEventStatsCommand eventStatsCommand = new AbstractEventStatsCommand() {
-
-			@Override
-			public String[] getEventTypes() {
-
-				return new String[] { "new_bug", "new_bug2" };
-			}
-		};
-		eventStatsCommand.setServerURL("http://localhost:9991");
-		eventStatsCommand.run();
+		final PurgeEventsCommand purgeEventsCommand = new PurgeEventsCommand("new_bug");
+		purgeEventsCommand.setServerURL("http://localhost:9991");
+		purgeEventsCommand.run();
 
 	}
 
 	@Test(expected = ProcessingException.class)
 	public void testRunFail() throws Exception {
-		final AbstractEventStatsCommand eventStatsCommand = new AbstractEventStatsCommand() {
-
-			@Override
-			public String[] getEventTypes() {
-
-				return new String[] { "new_bug", "new_bug2" };
-			}
-		};
-		eventStatsCommand.setServerURL("http://localhost:9992");
-		eventStatsCommand.run();
+		// WHEN I LAUNCH THE ACTION ON A WRONG URL
+		final PurgeEventsCommand purgeEventsCommand = new PurgeEventsCommand("new_bug");
+		purgeEventsCommand.setServerURL("http://localhost:9992");
+		purgeEventsCommand.run();
 
 	}
 }

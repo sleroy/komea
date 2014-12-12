@@ -12,7 +12,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
-import org.easymock.internal.ErrorMessage;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
@@ -220,9 +219,9 @@ public abstract class AbstractClientAPI implements IRestClientAPI {
 	private void validateResponse(final Response response) throws ServerException {
 
 		if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
-			final ErrorMessage errorMessage = response.readEntity(ErrorMessage.class);
+			final String errorMessage = response.readEntity(String.class);
 			final ServerException errorException = new ServerException("Exception happened in Server Side : "
-					+ errorMessage.getMessage());
+					+ errorMessage);
 
 			throw errorException;
 		}
