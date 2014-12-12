@@ -11,8 +11,16 @@ import org.komea.event.model.beans.ComplexEvent;
 
 public interface IEventStorage {
 	/**
-	 * Closes the document database used by this service.
+	 * Clear of all the events of the type
 	 * 
+	 * @param _eventType
+	 *            the event type;
+	 */
+	public void clearEventsOfType(String _eventType);
+
+	/**
+	 * Closes the document database used by this service.
+	 *
 	 * @throws IOException
 	 */
 	public void close() throws IOException;

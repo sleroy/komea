@@ -12,6 +12,7 @@ import org.komea.event.storage.IEventTypeSchemaUpdater;
 import org.komea.microservices.events.database.model.ValueEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,10 +29,18 @@ public class StorageController {
 	@Autowired
 	private IEventTypeSchemaUpdater	eventSchemaUpdater;
 
+	@Transactional
+	@RequestMapping(method = RequestMethod.GET, value = "/clear/{eventType}")
+	@ResponseStatus(value = HttpStatus.OK)
+	public void clearEvent(@PathVariable final String eventType) {
+		this.eventStorageService.clearEventsOfType(eventType);
+
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value = "/push/{provider}/{eventName}/{value}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public void pushGetEvent(@PathVariable final String provider, @NotEmpty @PathVariable final String eventName,
-	        @NotNull @PathVariable final Double value) {
+			@NotNull @PathVariable final Double value) {
 
 		final ValueEvent valueEvent = new ValueEvent();
 

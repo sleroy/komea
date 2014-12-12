@@ -29,7 +29,7 @@ public abstract class AbstractOrientDocumentToolbox implements IODocumentToolbox
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.komea.orientdb.session.impl.IOrientDocumentToolbox#browseClass(java
 	 * .lang.String)
@@ -42,7 +42,7 @@ public abstract class AbstractOrientDocumentToolbox implements IODocumentToolbox
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.komea.orientdb.session.impl.IOrientDocumentToolbox#browseClass(java
 	 * .lang.String, boolean)
@@ -53,9 +53,15 @@ public abstract class AbstractOrientDocumentToolbox implements IODocumentToolbox
 		return this.getDocumentTx().browseClass(_eventType, _polymorphic);
 	}
 
+	@Override
+	public boolean exists(final String _eventType) {
+
+		return this.getDocumentTx().getMetadata().getSchema().existsClass(_eventType);
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.komea.orientdb.session.impl.IOrientDocumentToolbox#newDocument()
 	 */
 	@Override
@@ -66,7 +72,7 @@ public abstract class AbstractOrientDocumentToolbox implements IODocumentToolbox
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.komea.orientdb.session.impl.IOrientDocumentToolbox#newDocument(java
 	 * .lang.String)
@@ -79,7 +85,7 @@ public abstract class AbstractOrientDocumentToolbox implements IODocumentToolbox
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.komea.orientdb.session.impl.IOrientDocumentToolbox#query(java.lang
 	 * .String)
@@ -90,9 +96,16 @@ public abstract class AbstractOrientDocumentToolbox implements IODocumentToolbox
 		return Iterators.transform(results.iterator(), new ODocumentProxyConversionFunction());
 	}
 
+	@Override
+	public void query_no_result(final String _query) {
+		LOGGER.trace("Executing query {}", _query);
+		this.getDocumentTx().query(new OSQLSynchQuery<ODocument>(_query));
+
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.komea.orientdb.session.impl.IOrientDocumentToolbox#rawQuery(java.
 	 * lang.String)
@@ -105,7 +118,7 @@ public abstract class AbstractOrientDocumentToolbox implements IODocumentToolbox
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.komea.orientdb.session.impl.IOrientDocumentToolbox#save(com.
 	 * orientechnologies.orient.core.record.impl.ODocument)
 	 */
