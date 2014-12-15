@@ -5,3 +5,8 @@ dependencies {
 	compile 'com.thoughtworks.xstream:xstream:1.4.7'
 	testCompile project(":core:shared:komea-db-viz")
 }
+
+
+// the gatjar is now executable and launch the class 'org.komea.connectors.bugzilla.launch.Launcher'
+fatJar.manifest.attributes 'Main-Class': 'org.komea.connectors.bugzilla.launch.Launcher'
+
