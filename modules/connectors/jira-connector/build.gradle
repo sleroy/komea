@@ -6,7 +6,7 @@ dependencies {
     //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:how_to_declare_your_dependencies
     compile project(":core:komea-events")
     compile project(":core:komea-software-model")
-    compile 'net.rcarz:jira-client:0.5'
+    compile 'net.rcarz:jira-client:0.6-SNAPSHOT'
     testCompile project(":core:shared:komea-db-viz")
 //    testCompile group: 'junit', name: 'junit', version: '4.10'
 }
