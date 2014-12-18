@@ -11,6 +11,7 @@ include "core:komea-software-model"
 include "core:komea-events"
 include "services:event-server"
 
+include "modules:connectors:connector-sdk"
 include "modules:connectors:bugzilla-connector"
 include "modules:connectors:git-connector"
 include "modules:connectors:jira-connector"

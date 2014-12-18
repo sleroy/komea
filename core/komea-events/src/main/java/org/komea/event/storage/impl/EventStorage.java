@@ -62,6 +62,15 @@ public class EventStorage implements IEventStorage {
 	}
 
 	@Override
+	public void clearEventsOfType(final String _eventType) {
+		if (this.toolbox.exists(_eventType)) {
+			// SQL INJECTION THERE
+			this.toolbox.query_no_result("TRUNCATE CLASS " + _eventType);
+		}
+
+	}
+
+	@Override
 	public void close() throws IOException {
 		LOGGER.info("Closing the event storage and its database connection.");
 

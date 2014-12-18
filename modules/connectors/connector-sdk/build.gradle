@@ -1,0 +1,13 @@
+dependencies {
+	compile "args4j:args4j:$ARGS4J"
+	compile ('org.jboss.resteasy:resteasy-client:3.0.10.Final') { exclude group: 'org.codehaus.jackson' }
+	compile 'org.jboss.resteasy:resteasy-jackson2-provider:3.0.10.Final'
+	compile "com.fasterxml.jackson.core:jackson-databind:$JACKSON"
+	compile "com.fasterxml.jackson.core:jackson-core:$JACKSON"
+
+	compile project(":core:komea-events")
+	
+	testCompile project(":services:event-server")
+	testRuntime("org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}")
+	testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+}

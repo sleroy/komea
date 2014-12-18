@@ -99,6 +99,13 @@ public class CommitEventProducerTests extends AbstractLocalGitTest
             this.counter++;
             throw new RuntimeException("Storage is throwing exeception for test purpose.");
         }
+
+        @Override
+        public void clearEventsOfType(final String _eventType) {
+        
+            // TODO Auto-generated method stub
+            
+        }
         
     }
 }

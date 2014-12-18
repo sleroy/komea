@@ -66,5 +66,12 @@ public class BasicEventsListStorage implements IEventStorage
     
         return this.events;
     }
+
+    @Override
+    public void clearEventsOfType(final String _eventType) {
+    
+        
+        
+    }
     
 }

@@ -31,4 +31,5 @@ public class OrientDocumentToolbox extends AbstractOrientDocumentToolbox {
 
 		return this.documentTx.db();
 	}
+
 }
