@@ -14,7 +14,7 @@ public abstract class AbstractLocalGitTest
 {
     
     protected final File    folder = new File("src/test/resources/github-gmail/git/");
-    protected GitRepository repository;
+    protected IGitRepository repository;
     
     @Before
     public void init() {

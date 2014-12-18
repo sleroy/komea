@@ -14,7 +14,7 @@ public class FileModificationEventProducerTests extends AbstractLocalGitTest
     public void testEventsProduction() {
     
         CountingStorage storage = new CountingStorage();
-        FileModificationEventProducer producer = new FileModificationEventProducer(storage, this.repository.getGit());
+        FileModificationEventProducer producer = new FileModificationEventProducer(storage);
         this.repository.processAllCommits(producer);
         Assert.assertEquals(266, storage.count);
     }

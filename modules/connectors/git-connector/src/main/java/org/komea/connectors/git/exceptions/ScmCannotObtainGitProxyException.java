@@ -1,12 +1,8 @@
 /**
- * 
+ *
  */
 
 package org.komea.connectors.git.exceptions;
-
-
-
-
 
 
 /**
@@ -15,11 +11,9 @@ package org.komea.connectors.git.exceptions;
 public class ScmCannotObtainGitProxyException extends GitRuntimeException
 {
     
-    
     public ScmCannotObtainGitProxyException(final String _string, final Throwable _e) {
-    
     
         super(_string, _e);
     }
-    
+
 }

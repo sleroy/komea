@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jgit.api.Git;
@@ -16,6 +17,7 @@ import org.junit.Test;
 import org.komea.connectors.git.AbstractLocalGitTest;
 import org.komea.connectors.git.IGitCommit;
 import org.komea.connectors.git.IGitCommitProcessor;
+import org.komea.connectors.git.IGitRepository;
 import org.komea.connectors.git.exceptions.ScmCannotObtainGitProxyException;
 
 import com.google.common.collect.Lists;
@@ -33,7 +35,7 @@ public class GitRepositoryTests extends AbstractLocalGitTest
     @Test
     public void getNotExistingGitTest() {
     
-        GitRepository lrepository = new GitRepository(new File("bidon/"), "https://github.com/muan/github-gmail.git");
+        IGitRepository lrepository = new GitRepository(new File("bidon/"), "https://github.com/muan/github-gmail.git");
         boolean catched = false;
         try {
             lrepository.getGit();
@@ -47,14 +49,14 @@ public class GitRepositoryTests extends AbstractLocalGitTest
     @Test
     public void getBranchesTest() {
     
-        List<Ref> branches = this.repository.getBranches();
+        List<Ref> branches = this.repository.getAllBranches();
         assertEquals(4, branches.size());
     }
     
     @Test
     public void getBranchesTagsTest() {
     
-        Set<String> tags = this.repository.getAllTagsFromABranch("remotes/origin/eval");
+        Map<String, Ref> tags = this.repository.getTagsForBranch("refs/heads/master");
         assertEquals(22, tags.size());
     }
     
