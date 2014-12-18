@@ -40,13 +40,15 @@ public class GitEventTagProducer implements IGitCommitProcessor
         try {
             for (final Ref tag : git.tagList().call()) {
                 final RevObject revObject = walk.parseAny(tag.getObjectId());
-
+                final String tagName = Repository.shortenRefName(tag.getName());
                 if (revObject instanceof RevTag) {
                     final RevTag jtag = (RevTag) revObject;
-                    final String tagName = jtag.getTagName();
+                  
                     final RevObject tagged = walk.parseAny(jtag.getObject().getId());
                     final RevCommit referencedCommit = walk.parseCommit(repository.resolve(tagged.getName()));
                     this.tagsMap.put(referencedCommit.getId().name(), tagName);
+                }else{
+                    this.tagsMap.put(revObject.getId().name(), tagName);
                 }
             }
         } catch (final Exception e) {
