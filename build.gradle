@@ -114,6 +114,11 @@ allprojects {
 		maven {		
 			url "http://dl.bintray.com/sleroy/maven"
 		}
+		
+		maven {		
+			url "http://zeus:8081/nexus/content/repositories/snapshots/"
+		}
+		
 
 
 	}
