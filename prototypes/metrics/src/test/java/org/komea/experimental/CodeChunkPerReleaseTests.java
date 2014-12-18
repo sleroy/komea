@@ -4,6 +4,7 @@ package org.komea.experimental;
 
 import java.io.File;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.komea.event.query.impl.EventQueryManager;
 import org.komea.experimental.kpis.CodeChunkPerRelease;
@@ -17,6 +18,7 @@ public class CodeChunkPerReleaseTests
 {
     
     @Test
+    @Ignore
     public void test() {
     
         KomeaConfiguration komea = new KomeaConfiguration("localhost:2424", "localhost:2424");
