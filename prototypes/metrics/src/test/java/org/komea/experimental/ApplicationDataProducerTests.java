@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.komea.experimental.model.SoftwareFactoryConfiguration;
+import org.komea.experimental.model.KomeaConfiguration;
 
 public class ApplicationDataProducerTests
 {
@@ -14,12 +16,12 @@ public class ApplicationDataProducerTests
     public void test() throws IOException {
     
         KomeaConfiguration komea = new KomeaConfiguration("localhost:2424", "localhost:2424");
-        ApplicationConfiguration configuration = new ApplicationConfiguration(new File("/Users/afloch/Documents/git/mongo"),
+        SoftwareFactoryConfiguration configuration = new SoftwareFactoryConfiguration(new File("/Users/afloch/Documents/git/mongo"),
                 "https://jira.mongodb.org/", "mongodb");
         
-        ApplicationAnalyzer analyzer = new ApplicationAnalyzer(configuration, komea);
+        ApplicationEventsProducer analyzer = new ApplicationEventsProducer(configuration, komea);
         analyzer.connect("root", "root");
-        analyzer.pushGitEvents();
+        analyzer.pushJiraEvents();
         
         analyzer.close();
     }

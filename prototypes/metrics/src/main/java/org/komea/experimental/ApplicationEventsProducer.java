@@ -3,23 +3,30 @@ package org.komea.experimental;
 
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.apache.commons.lang.Validate;
 import org.komea.connectors.git.events.GitConnectorConfiguration;
 import org.komea.connectors.git.events.GitEventsConnector;
+import org.komea.connectors.jira.JiraConfiguration;
+import org.komea.connectors.jira.JiraEventsConnector;
+import org.komea.connectors.jira.exceptions.BadConfigurationException;
+import org.komea.core.exceptions.KomeaRuntimeException;
 import org.komea.event.storage.IEventStorage;
 import org.komea.event.storage.impl.EventStorage;
+import org.komea.experimental.model.KomeaConfiguration;
+import org.komea.experimental.model.SoftwareFactoryConfiguration;
 import org.springframework.orientdb.session.impl.RemoteDatabaseConfiguration;
 
-public class ApplicationAnalyzer
+public class ApplicationEventsProducer
 {
     
-    private final ApplicationConfiguration configuration;
-    private final KomeaConfiguration       komea;
+    private final SoftwareFactoryConfiguration configuration;
+    private final KomeaConfiguration           komea;
     
-    private IEventStorage                  eventStorage;
+    private IEventStorage                      eventStorage;
     
-    public ApplicationAnalyzer(final ApplicationConfiguration configuration, final KomeaConfiguration komea) {
+    public ApplicationEventsProducer(final SoftwareFactoryConfiguration configuration, final KomeaConfiguration komea) {
     
         super();
         this.configuration = configuration;
@@ -57,12 +64,17 @@ public class ApplicationAnalyzer
     
     public void pushJiraEvents() {
     
-//        Validate.isTrue(this.eventStorage != null, "Database are not connected.");
-//        
-//        JiraConfiguration config = new JiraConfiguration(this.configuration.getJiraUrl());
-//        JiraEventsConnector connector = new JiraEventsConnector(8, config, this.eventStorage);
-//        
-//        connector.process();
+        Validate.isTrue(this.eventStorage != null, "Database are not connected.");
+        
+        JiraConfiguration config = new JiraConfiguration(this.configuration.getJiraUrl());
+        
+        JiraEventsConnector jira = new JiraEventsConnector(this.eventStorage);
+        try {
+            jira.push(config, new Date(1900, 1, 1));
+        } catch (BadConfigurationException e) {
+            throw new KomeaRuntimeException(e);
+        }
+        
     }
     
     @Override

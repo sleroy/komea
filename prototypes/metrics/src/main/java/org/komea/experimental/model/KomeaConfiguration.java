@@ -1,4 +1,4 @@
-package org.komea.experimental;
+package org.komea.experimental.model;
 
 
 public class KomeaConfiguration

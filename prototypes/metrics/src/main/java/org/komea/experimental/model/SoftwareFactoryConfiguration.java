@@ -1,17 +1,17 @@
 
-package org.komea.experimental;
+package org.komea.experimental.model;
 
 
 import java.io.File;
 
-public class ApplicationConfiguration
+public class SoftwareFactoryConfiguration
 {
     
     private final File   repositoryFolder;
     private final String jiraUrl;
     private final String name;
     
-    public ApplicationConfiguration(final File repositoryFolder, final String jiraUrl, final String name) {
+    public SoftwareFactoryConfiguration(final File repositoryFolder, final String jiraUrl, final String name) {
     
         super();
         this.repositoryFolder = repositoryFolder;
