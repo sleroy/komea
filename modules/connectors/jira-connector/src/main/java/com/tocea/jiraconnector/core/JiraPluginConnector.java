@@ -27,11 +27,17 @@ public class JiraPluginConnector implements IEventConnector<JiraConfiguration>, 
     private JiraEventConnector jCon;
     private JiraProcessConnector jPross;
     private KomeaServerContext komeaContext;
+    private IJiraConnectorFactory factory;
 
-    public JiraPluginConnector() {
-
+    public JiraPluginConnector() {  
+        
+        factory = JiraConnectorFactory.getInstance();
     }
 
+     void setFactory(IJiraConnectorFactory factory) {
+        this.factory = factory;
+    }
+ 
     @Override
     public void updateEvents(Date _lastLaunchDate) {
 
@@ -39,11 +45,10 @@ public class JiraPluginConnector implements IEventConnector<JiraConfiguration>, 
         jCon.importUpdateIssue(_lastLaunchDate);
 
     }
-
-    public void updateEvents(Date _date, int limit) {
-       
-        jCon.importNewIssueLimit(_date,limit);
-        jCon.importUpdateIssueLimit(_date,limit);
+    
+    public void setOccurence(int i)
+    {
+    jCon.setOccurence(i);
     }
 
     @Override
@@ -63,7 +68,7 @@ public class JiraPluginConnector implements IEventConnector<JiraConfiguration>, 
 
     private JiraServerContext initJiraConnector(JiraConfiguration _configuration) {
         try {
-            return JiraServerContext.getNewInstance(_configuration);
+            return factory.getNewJiraServerContext(_configuration);
         } catch (BadConfigurationException ex) {
             Logger.getLogger(JiraPluginConnector.class.getName()).log(Level.SEVERE, null, ex);
         }

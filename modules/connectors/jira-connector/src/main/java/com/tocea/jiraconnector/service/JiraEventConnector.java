@@ -26,22 +26,24 @@ public class JiraEventConnector {
 
     private final JiraServerContext jiraContext;
     private final KomeaServerContext komeaContext;
+    private int occurence;
 
     public JiraEventConnector(JiraServerContext jiraContext, KomeaServerContext komeaContext) {
         this.jiraContext = jiraContext;
         this.komeaContext = komeaContext;
+        this.occurence = JiraServerContext.GetOccurence;
     }
 
     public void importNewIssue(Date date) {
         try {
             String format = JiraServerContext.FORMATTER.format(date);
-            Issue.SearchResult searchIssues = jiraContext.getClient().searchIssues("created > \"" + format + "\"", JiraServerContext.GetOccurence);
+            Issue.SearchResult searchIssues = jiraContext.getClient().searchIssues("created > \"" + format + "\"", null, this.occurence, 0);
             sendNewIssue(searchIssues.issues);
 
             if (searchIssues.total > searchIssues.max) {
                 for (int i = searchIssues.max; i < searchIssues.total; i = i + searchIssues.max) {
 
-                    Issue.SearchResult parcourIssues = jiraContext.getClient().searchIssues("created > \"" + format + "\"", null, JiraServerContext.GetOccurence, i);
+                    Issue.SearchResult parcourIssues = jiraContext.getClient().searchIssues("created > \"" + format + "\"", null, this.occurence, i);
                     sendNewIssue(parcourIssues.issues);
                 }
             }
@@ -54,13 +56,13 @@ public class JiraEventConnector {
         try {
 
             String format = JiraServerContext.FORMATTER.format(date);
-            Issue.SearchResult searchIssues = jiraContext.getClient().searchIssues("updated > \"" + format + "\"", JiraServerContext.GetOccurence);
+            Issue.SearchResult searchIssues = jiraContext.getClient().searchIssues("updated > \"" + format + "\"", null, this.occurence, 0);
             sendUpdateIssue(searchIssues.issues);
 
             if (searchIssues.total > searchIssues.max) {
                 for (int i = searchIssues.max; i < searchIssues.total; i = i + searchIssues.max) {
 
-                    Issue.SearchResult parcourIssues = jiraContext.getClient().searchIssues("updated > \"" + format + "\"", null, JiraServerContext.GetOccurence, i);
+                    Issue.SearchResult parcourIssues = jiraContext.getClient().searchIssues("updated > \"" + format + "\"", null, this.occurence, i);
                     sendUpdateIssue(parcourIssues.issues);
                 }
             }
@@ -92,54 +94,12 @@ public class JiraEventConnector {
         final ComplexEvent complexEventDto = new ComplexEvent();
         complexEventDto.setProvider(KomeaServerContext.PROVIDER_BUG);
         complexEventDto.setEventType(eventName);
-        Map<String, Serializable> properties = Maps.newHashMap();
-
-        try {
-            java.lang.reflect.Field declaredField = Issue.class.getDeclaredField("fields");
-            declaredField.setAccessible(true);
-            properties = (Map<String, Serializable>) declaredField.get(bug);
-        } catch (NoSuchFieldException ex) {
-            Logger.getLogger(JiraEventConnector.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(JiraEventConnector.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(JiraEventConnector.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(JiraEventConnector.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        complexEventDto.setProperties(properties);
+        complexEventDto.setProperties(bug.getFields());
         return complexEventDto;
     }
 
-    /**
-     * 
-     * @param _date
-     * @param limit must be lower that 1000
-     */
-    public void importNewIssueLimit(Date _date, int limit) {
-        try {
-            String format = JiraServerContext.FORMATTER.format(_date);
-            Issue.SearchResult searchIssues = jiraContext.getClient().searchIssues("created > \"" + format + "\"", limit);
-            sendNewIssue(searchIssues.issues);
-        } catch (JiraException ex) {
-            Logger.getLogger(JiraEventConnector.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    /**
-     * 
-     * @param _date
-     * @param limit must be lower that 1000
-     */
-    public void importUpdateIssueLimit(Date _date, int limit) {
-        try {
-            String format = JiraServerContext.FORMATTER.format(_date);
-            Issue.SearchResult searchIssues = jiraContext.getClient().searchIssues("updated > \"" + format + "\"", limit);
-            sendUpdateIssue(searchIssues.issues);
-        } catch (JiraException ex) {
-            Logger.getLogger(JiraEventConnector.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void setOccurence(int occurence) {
+        this.occurence = occurence;
     }
 
 }
