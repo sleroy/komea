@@ -13,6 +13,7 @@ import net.rcarz.jiraclient.JiraException;
 import net.rcarz.jiraclient.Version;
 
 import org.komea.connectors.jira.exceptions.BadConfigurationException;
+import org.komea.connectors.jira.utils.IJiraServerFactory;
 import org.komea.connectors.jira.utils.JiraServerContext;
 import org.komea.event.model.beans.ComplexEvent;
 import org.komea.event.storage.IEventStorage;
@@ -22,56 +23,60 @@ import org.slf4j.LoggerFactory;
 public class JiraEventsConnector
 {
     
-    private final static Logger LOGGER           = LoggerFactory.getLogger(JiraEventsConnector.class);
+    private final static Logger      LOGGER           = LoggerFactory.getLogger(JiraEventsConnector.class);
     
-    public static final String  JIRA             = "jira";
+    public static final String       JIRA             = "jira";
     
-    public static final String  EVENT_UPDATE_BUG = "issue_update";
+    public static final String       EVENT_UPDATE_BUG = "issue_update";
     
-    public static final String  EVENT_NEW_BUG    = "issue_new";
+    public static final String       EVENT_NEW_BUG    = "issue_new";
     
-    private final IEventStorage storage;
+    private final IEventStorage      storage;
     
-    private JiraServerContext   jira;
+    private final IJiraServerFactory jiraServerFactory;
+    private JiraServerContext        jira;
     
-    public JiraEventsConnector(final IEventStorage storage) {
+    public JiraEventsConnector(final IEventStorage storage, final IJiraServerFactory jiraServerFactory) {
     
         super();
         this.storage = storage;
+        this.jiraServerFactory = jiraServerFactory;
         
     }
     
     public void push(final JiraConfiguration configuration, final Date since) throws BadConfigurationException {
     
-        this.jira = new JiraServerContext(configuration);
-        importNewIssue(since);
-        importUpdateIssue(since);
+        this.jira = this.jiraServerFactory.getNewJiraServerContext(configuration);
+        importNewIssue(since, -1);
+        importUpdateIssue(since, -1);
     }
     
     public void push(final JiraConfiguration configuration, final Date since, final int max) throws BadConfigurationException {
     
-        this.jira = new JiraServerContext(configuration);
-        importNewIssueLimit(since, max);
-        importUpdateIssueLimit(since, max);
+        this.jira = this.jiraServerFactory.getNewJiraServerContext(configuration);
+        importNewIssue(since, max);
+        importUpdateIssue(since, max);
     }
     
-    private void importNewIssue(final Date date) {
+    private void importNewIssue(final Date date, final int max) {
     
         try {
             String format = JiraServerContext.FORMATTER.format(date);
-            Issue.SearchResult searchIssues = this.jira.getClient().searchIssues("created > \"" + format + "\"",
-                    JiraServerContext.GetOccurence);
-            sendIssues(searchIssues.issues);
             
-            if (searchIssues.total > searchIssues.max) {
-                
-                for (int i = searchIssues.max; i < searchIssues.total; i = i + searchIssues.max) {
+            int limit = max >= 0 ? max : JiraServerContext.GetOccurence;
+            String jql = "created > \"" + format + "\"";
+            Issue.SearchResult searchIssues = this.jira.getClient().searchIssues(jql,null, limit,0);
+            sendIssues(searchIssues.issues);
+            if (max > -1 && searchIssues.total<max) {
+                if (searchIssues.total > searchIssues.max) {
                     
-                    searchIssues = this.jira.getClient().searchIssues("created > \"" + format + "\"", null, JiraServerContext.GetOccurence,
-                            i);
-                    
-                    sendIssues(searchIssues.issues);
-                    log(searchIssues);
+                    for (int i = searchIssues.max; i < searchIssues.total; i = i + searchIssues.max) {
+                        
+                        searchIssues = this.jira.getClient().searchIssues(jql, null, limit, i);
+                        
+                        sendIssues(searchIssues.issues);
+                        log(searchIssues);
+                    }
                 }
             }
         } catch (JiraException ex) {
@@ -87,21 +92,22 @@ public class JiraEventsConnector
         
     }
     
-    private void importUpdateIssue(final Date date) {
+    private void importUpdateIssue(final Date date, final int max) {
     
         try {
-            
+            int limit = max >= 0 ? max : JiraServerContext.GetOccurence;
             String format = JiraServerContext.FORMATTER.format(date);
-            Issue.SearchResult searchIssues = this.jira.getClient().searchIssues("updated > \"" + format + "\"",
-                    JiraServerContext.GetOccurence);
+            Issue.SearchResult searchIssues = this.jira.getClient().searchIssues("updated > \"" + format + "\"",null, limit,0);
             sendUpdateIssue(searchIssues.issues);
             
-            if (searchIssues.total > searchIssues.max) {
-                for (int i = searchIssues.max; i < searchIssues.total; i = i + searchIssues.max) {
-                    
-                    Issue.SearchResult parcourIssues = this.jira.getClient().searchIssues("updated > \"" + format + "\"", null,
-                            JiraServerContext.GetOccurence, i);
-                    sendUpdateIssue(parcourIssues.issues);
+            if (max > -1  && searchIssues.total<max ) {
+                if (searchIssues.total > searchIssues.max) {
+                    for (int i = searchIssues.max; i < searchIssues.total; i = i + searchIssues.max) {
+                        
+                        Issue.SearchResult parcourIssues = this.jira.getClient().searchIssues("updated > \"" + format + "\"", null, limit,
+                                i);
+                        sendUpdateIssue(parcourIssues.issues);
+                    }
                 }
             }
             
@@ -135,10 +141,9 @@ public class JiraEventsConnector
         
         event.addField("id", bug.getId());
         event.addField("key", bug.getKey());
-
-     
+        
         event.addField("description", bug.getDescription());
-        if(bug.getProject()!=null){
+        if (bug.getProject() != null) {
             event.addField("project", bug.getProject().getName());
         }
         if (bug.getStatus() != null) {
@@ -150,35 +155,4 @@ public class JiraEventsConnector
         this.storage.storeComplexEvent(event);
     }
     
-    /**
-     * @param _date
-     * @param limit
-     *            must be lower that 1000
-     */
-    private void importNewIssueLimit(final Date _date, final int limit) {
-    
-        try {
-            String format = JiraServerContext.FORMATTER.format(_date);
-            Issue.SearchResult searchIssues = this.jira.getClient().searchIssues("created > \"" + format + "\"", limit);
-            sendIssues(searchIssues.issues);
-        } catch (JiraException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
-    }
-    
-    /**
-     * @param _date
-     * @param limit
-     *            must be lower that 1000
-     */
-    private void importUpdateIssueLimit(final Date _date, final int limit) {
-    
-        try {
-            String format = JiraServerContext.FORMATTER.format(_date);
-            Issue.SearchResult searchIssues = this.jira.getClient().searchIssues("updated > \"" + format + "\"", limit);
-            sendUpdateIssue(searchIssues.issues);
-        } catch (JiraException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
-    }
 }

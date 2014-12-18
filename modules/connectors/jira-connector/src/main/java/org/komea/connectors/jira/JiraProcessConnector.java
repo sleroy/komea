@@ -16,6 +16,7 @@ import net.rcarz.jiraclient.Version;
 
 import org.komea.connectors.jira.exceptions.BadConfigurationException;
 import org.komea.connectors.jira.schema.JiraSchema;
+import org.komea.connectors.jira.utils.IJiraServerFactory;
 import org.komea.connectors.jira.utils.JiraServerContext;
 import org.komea.core.model.IKomeaEntity;
 import org.komea.core.model.storage.IKomeaGraphStorage;
@@ -24,21 +25,22 @@ public class JiraProcessConnector
 {
     
     private final IKomeaGraphStorage storage;
+    private final IJiraServerFactory jiraServerFactory;
     private final JiraSchema         schema;
     
-    public JiraProcessConnector(final IKomeaGraphStorage storage, final JiraSchema schema) {
+    public JiraProcessConnector(final IKomeaGraphStorage storage, final JiraSchema schema, final IJiraServerFactory jiraServerFactory) {
     
         super();
         this.storage = storage;
         this.schema = schema;
+        this.jiraServerFactory = jiraServerFactory;
         
     }
     
     public void push(final JiraConfiguration configuration) throws BadConfigurationException {
     
-       
         try {
-            JiraServerContext jira = new JiraServerContext(configuration);
+            JiraServerContext jira = this.jiraServerFactory.getNewJiraServerContext(configuration);
             List<Project> projects = jira.getClient().getProjects();
             for (Project project : projects) {
                 IKomeaEntity entityProjet = createProject(project);
