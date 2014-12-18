@@ -11,6 +11,7 @@ import org.komea.connectors.git.events.GitEventsConnector;
 import org.komea.connectors.jira.JiraConfiguration;
 import org.komea.connectors.jira.JiraEventsConnector;
 import org.komea.connectors.jira.exceptions.BadConfigurationException;
+import org.komea.connectors.jira.utils.JiraConnectorFactory;
 import org.komea.core.exceptions.KomeaRuntimeException;
 import org.komea.event.storage.IEventStorage;
 import org.komea.event.storage.impl.EventStorage;
@@ -68,7 +69,7 @@ public class ApplicationEventsProducer
         
         JiraConfiguration config = new JiraConfiguration(this.configuration.getJiraUrl());
         
-        JiraEventsConnector jira = new JiraEventsConnector(this.eventStorage);
+        JiraEventsConnector jira = new JiraEventsConnector(this.eventStorage,JiraConnectorFactory.getInstance());
         try {
             jira.push(config, new Date(1900, 1, 1));
         } catch (BadConfigurationException e) {
