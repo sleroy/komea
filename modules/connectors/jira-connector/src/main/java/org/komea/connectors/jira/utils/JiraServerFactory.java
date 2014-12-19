@@ -11,10 +11,10 @@ import org.komea.connectors.jira.exceptions.BadConfigurationException;
 /**
  * @author rgalerme
  */
-public class JiraConnectorFactory implements IJiraServerFactory
+public class JiraServerFactory implements IJiraServerFactory
 {
     
-    private static IJiraServerFactory INSTANCE = new JiraConnectorFactory();
+    private static IJiraServerFactory INSTANCE = new JiraServerFactory();
     
     public static IJiraServerFactory getInstance() {
     
@@ -24,7 +24,7 @@ public class JiraConnectorFactory implements IJiraServerFactory
     @Override
     public JiraServerContext getNewJiraServerContext(final JiraConfiguration configuration) throws BadConfigurationException {
     
-        if ("".equals(configuration.getUrl())) {
+        if ("".equals(configuration.getUrl()) || configuration.getUrl() == null) {
             throw new BadConfigurationException("Map of jira configuration deos not contain the correct field");
         }
         BasicCredentials bcred = null;

@@ -9,7 +9,7 @@ import java.io.IOException;
 import org.junit.Test;
 import org.komea.connectors.jira.exceptions.BadConfigurationException;
 import org.komea.connectors.jira.schema.JiraSchema;
-import org.komea.connectors.jira.utils.JiraConnectorFactory;
+import org.komea.connectors.jira.utils.JiraServerFactory;
 import org.komea.core.model.IKomeaEntity;
 import org.komea.core.model.storage.IKomeaGraphStorage;
 import org.komea.core.model.storage.impl.OKomeaGraphStorage;
@@ -32,7 +32,7 @@ public class JiraProcessConnectorTests
         OrientSessionFactory<ODatabaseDocumentTx> sessions = new OrientSessionFactory<ODatabaseDocumentTx>(new TestDatabaseConfiguration());
         
         IKomeaGraphStorage storage = new OKomeaGraphStorage(schema.getSchema(), sessions.getGraphTx());
-        JiraProcessConnector jc = new JiraProcessConnector(storage, schema, JiraConnectorFactory.getInstance());
+        JiraProcessConnector jc = new JiraProcessConnector(storage, schema, JiraServerFactory.getInstance());
         
         jc.push(config);
         
