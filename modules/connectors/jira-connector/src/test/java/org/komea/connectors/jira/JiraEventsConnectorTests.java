@@ -2,7 +2,6 @@ package org.komea.connectors.jira;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,12 +17,10 @@ import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.JiraClient;
 import net.rcarz.jiraclient.JiraException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.komea.connectors.jira.exceptions.BadConfigurationException;
 import org.komea.connectors.jira.utils.JiraServerFactory;
 import org.komea.connectors.jira.utils.JiraServerContext;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 public class JiraEventsConnectorTests {
@@ -202,9 +199,9 @@ public class JiraEventsConnectorTests {
     private void createReturnIssue(final JiraClient mockJiraClient, int occurence, int start, Issue.SearchResult rs) throws ParseException, JiraException {
         Date since = DATE_FORMAT.parse(DATE);
         String jql1 = "created > \"" + JiraServerContext.FORMATTER.format(since) + "\"";
-        Mockito.when(mockJiraClient.searchIssues(jql1, null, occurence, start)).thenReturn(rs);
+        Mockito.when(mockJiraClient.searchIssues(jql1, JiraEventsConnector.SELECT_FIELDS, occurence, start)).thenReturn(rs);
         String jql2 = "updated > \"" + JiraServerContext.FORMATTER.format(since) + "\"";
-        Mockito.when(mockJiraClient.searchIssues(jql2, null, occurence, start)).thenReturn(rs);
+        Mockito.when(mockJiraClient.searchIssues(jql2, JiraEventsConnector.SELECT_FIELDS, occurence, start)).thenReturn(rs);
     }
 
     private List<Issue> createIssues(final int nb, final int start) {

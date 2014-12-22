@@ -27,6 +27,8 @@ public class JiraEventsConnector {
     public static final String EVENT_UPDATE_BUG = "issue_update";
 
     public static final String EVENT_NEW_BUG = "issue_new";
+    
+    public static final String SELECT_FIELDS = "issuetype,status,assignee,resolution,project,created,updated,creator";
 
     private final IEventStorage storage;
     private int Occurence;
@@ -96,13 +98,13 @@ public class JiraEventsConnector {
 
         int limit = (max >= 0 && max < this.Occurence) ? max : this.Occurence;
 
-        Issue.SearchResult searchIssues = this.jira.getClient().searchIssues(jql, null, limit, 0);
+        Issue.SearchResult searchIssues = this.jira.getClient().searchIssues(jql, SELECT_FIELDS, limit, 0);
         sendIssues(searchIssues.issues, type);
         for (int i = searchIssues.max; i < searchIssues.total && (i < max || max == -1); i = i + searchIssues.max) {
             if (max != -1 && i + searchIssues.max > max) {
                 limit = max - i;
             }
-            Issue.SearchResult parcourIssues = this.jira.getClient().searchIssues(jql, null, limit, i);
+            Issue.SearchResult parcourIssues = this.jira.getClient().searchIssues(jql, SELECT_FIELDS, limit, i);
             sendIssues(parcourIssues.issues, type);
             log(searchIssues);
         }
@@ -111,6 +113,7 @@ public class JiraEventsConnector {
     private void sendIssues(final List<Issue> issues, String type) {
 
         for (Issue issue : issues) {
+            
             sendEvent(issue, type);
         }
 
