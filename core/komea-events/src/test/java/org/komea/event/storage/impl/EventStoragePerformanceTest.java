@@ -1,6 +1,7 @@
 package org.komea.event.storage.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -26,6 +27,7 @@ import org.komea.event.storage.IEventDBFactory;
 import org.komea.event.storage.mysql.impl.DataSourceConnectionFactory;
 import org.komea.event.storage.mysql.impl.MySQLEventDBFactory;
 import org.komea.event.storage.orientdb.impl.OEventDBFactory;
+import org.skife.jdbi.v2.ResultIterator;
 import org.springframework.orientdb.session.impl.LocalDiskDatabaseConfiguration;
 import org.springframework.orientdb.session.impl.OrientSessionFactory;
 import org.springframework.orientdb.session.impl.TestDatabaseConfiguration;
@@ -41,10 +43,10 @@ import com.tocea.frameworks.bench4j.reports.jfreechart.JFreeChartBenchmarkReport
 @RunWith(Parameterized.class)
 public class EventStoragePerformanceTest {
 
-	@Parameters(name = "events={0}, threads={1}")
+	@Parameters(name = "events={0},threads={1},fetch_all={2}")
 	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] { { 100, 1 }, { 1000, 1 }, { 1000, 10 }, { 10000, 1 }, { 10000, 10 },
-		        { 100000, 10 } });
+		return Arrays.asList(new Object[][] { { 100, 1, false }, { 100, 10, true }, { 1000, 1, false },
+		        { 1000, 10, true }, { 10000, 1, false }, { 10000, 10, true } });
 	}
 
 	@BeforeClass
@@ -64,7 +66,7 @@ public class EventStoragePerformanceTest {
 	private static final String	     H2_EXTRA_OPTONS	= ";MODE=MYSQL;INIT=RUNSCRIPT FROM 'src/main/resources/schema-eventsh2.sql'";
 
 	public static final IBenchReport	report	     = new JFreeChartBenchmarkReport(new File("build/charts"), 1024,
-			768);
+	                                                         768);
 
 	/**
 	 * Enables the benchmark rule.
@@ -78,6 +80,8 @@ public class EventStoragePerformanceTest {
 	public int	                     NUMBER_EVENTS	 = 2000;
 	@Parameter(value = 1)
 	public int	                     NUMBER_THREADS	 = 10;
+	@Parameter(value = 2)
+	public boolean	                 FETCH_ALL	     = true;
 
 	public static final FlatEvent	 DEMO_EVENT	     = new FlatEvent();
 
@@ -227,6 +231,13 @@ public class EventStoragePerformanceTest {
 
 		final long count = _eventDBFactory.getEventDB(NEW_BUG).count();
 		assertEquals(NUMBER_EVENTS * NUMBER_THREADS, count);
+		if (FETCH_ALL) {
+			final ResultIterator<FlatEvent> loadAll = _eventDBFactory.getEventDB(NEW_BUG).loadAll();
+			while (loadAll.hasNext()) {
+
+				assertNotNull(loadAll.next());
+			}
+		}
 
 		_eventDBFactory.getEventDB(NEW_BUG).removeAll();
 		assertEquals(0, _eventDBFactory.getEventDB(NEW_BUG).count());
