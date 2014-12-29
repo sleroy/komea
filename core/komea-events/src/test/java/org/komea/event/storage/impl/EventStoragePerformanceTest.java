@@ -180,7 +180,7 @@ public class EventStoragePerformanceTest {
 			final OEventDBFactory eventDBFactory = new OEventDBFactory(orientSessionFactory);
 			performTests(executorService, eventDBFactory);
 		} finally {
-
+			orientSessionFactory.getOrCreateDB().drop();
 			orientSessionFactory.close();
 			Orient.instance().closeAllStorages();
 
@@ -202,6 +202,7 @@ public class EventStoragePerformanceTest {
 			final OEventDBFactory eventDBFactory = new OEventDBFactory(orientSessionFactory);
 			performTests(executorService, eventDBFactory);
 		} finally {
+			orientSessionFactory.getOrCreateDB().drop();
 
 			orientSessionFactory.close();
 			Orient.instance().closeAllStorages();
