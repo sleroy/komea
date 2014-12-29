@@ -1,7 +1,5 @@
 package org.komea.event.storage.mysql.kryo.impl;
 
-import groovy.json.internal.Exceptions;
-
 import java.io.ByteArrayInputStream;
 
 import org.komea.event.storage.EventStorageException;
