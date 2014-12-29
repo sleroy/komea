@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Map.Entry;
 
 import org.komea.event.model.beans.ComplexEvent;
-import org.komea.orientdb.session.document.IODocument;
+import org.komea.event.model.beans.FlatEvent;
 
 /**
  * This class defines a convertor from a complex event to OrientDB.
@@ -21,10 +21,10 @@ public class ComplexEventDocumentConvertor {
 
 	}
 
-	public void convert(final IODocument _newDocument) {
+	public void convert(final FlatEvent _newDocument) {
 		new BasicEventDocumentConvertor(this.event).convert(_newDocument);
 		for (final Entry<String, ? extends Serializable> entry : this.event.getProperties().entrySet()) {
-			_newDocument.field(entry.getKey(), entry.getValue());
+			_newDocument.put(entry.getKey(), entry.getValue());
 
 		}
 	}

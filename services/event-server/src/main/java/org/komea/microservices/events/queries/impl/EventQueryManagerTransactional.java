@@ -1,6 +1,5 @@
 package org.komea.microservices.events.queries.impl;
 
-import org.komea.event.query.impl.EventQueryManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orientdb.orm.session.IOrientSessionFactory;
 import org.springframework.stereotype.Repository;

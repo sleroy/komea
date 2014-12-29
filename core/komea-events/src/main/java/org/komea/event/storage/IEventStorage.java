@@ -1,29 +1,22 @@
 package org.komea.event.storage;
 
-import java.io.IOException;
+import java.io.Closeable;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.komea.event.model.IFlatEvent;
 import org.komea.event.model.beans.AbstractEvent;
 import org.komea.event.model.beans.BasicEvent;
 import org.komea.event.model.beans.ComplexEvent;
+import org.komea.event.model.beans.FlatEvent;
 
-public interface IEventStorage {
+public interface IEventStorage extends Closeable {
 	/**
 	 * Clear of all the events of the type
-	 * 
+	 *
 	 * @param _eventType
 	 *            the event type;
 	 */
 	public void clearEventsOfType(String _eventType);
-
-	/**
-	 * Closes the document database used by this service.
-	 *
-	 * @throws IOException
-	 */
-	public void close() throws IOException;
 
 	/**
 	 * Stores a event with basic informations.
@@ -55,7 +48,7 @@ public interface IEventStorage {
 	 * @param _event
 	 *            the event.
 	 */
-	public void storeFlatEvent(IFlatEvent _event);
+	public void storeFlatEvent(FlatEvent _event);
 
 	/**
 	 * Stores a event with a flattened structure.

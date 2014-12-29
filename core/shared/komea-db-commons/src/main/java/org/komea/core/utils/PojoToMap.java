@@ -59,15 +59,15 @@ public class PojoToMap
      * by super classes.
      * 
      * @param propertyDescriptor
-     * @param clazz
+     * @param _clazz
      * @return true if the property from propertyDescriptor in class clazz is
      *         transient
      */
     private boolean isTransient(final PropertyDescriptor propertyDescriptor,
-                    final Class<?> clazz) {
+                    final Class<?> _clazz) {
             try {
-                    if (clazz != null) {
-                            Field field = clazz.getDeclaredField(propertyDescriptor
+                    if (_clazz != null) {
+                            Field field = _clazz.getDeclaredField(propertyDescriptor
                                             .getName());
                             return Modifier.isTransient(field.getModifiers());
                     } else {// if we are here this mean we processed
@@ -84,11 +84,11 @@ public class PojoToMap
             } catch (NoSuchFieldException e) {
                     // in this case we will go upper with parent and interfaces
                     // check parent class
-                    if (isTransient(propertyDescriptor, clazz.getSuperclass())) {
+                    if (isTransient(propertyDescriptor, _clazz.getSuperclass())) {
                         return true;
                     }
                     // check implemented interfaces
-                    Class<?>[] interfaces = clazz.getInterfaces();
+                    Class<?>[] interfaces = _clazz.getInterfaces();
                     for (Class<?> _interfase : interfaces) {
                             if (isTransient(propertyDescriptor, _interfase)) {
                                 return true;

@@ -7,24 +7,19 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.apache.commons.lang.Validate;
-import org.komea.event.model.IFlatEvent;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.Validate;
 import org.komea.event.model.beans.AbstractEvent;
 import org.komea.event.model.beans.BasicEvent;
 import org.komea.event.model.beans.ComplexEvent;
 import org.komea.event.model.beans.FlatEvent;
+import org.komea.event.storage.IEventDB;
 import org.komea.event.storage.IEventStorage;
+import org.komea.event.storage.IEventDBFactory;
 import org.komea.event.storage.convertor.BasicEventDocumentConvertor;
 import org.komea.event.storage.convertor.ComplexEventDocumentConvertor;
-import org.komea.event.storage.convertor.FlatEventDocumentConvertor;
-import org.komea.orientdb.session.document.IODocument;
-import org.komea.orientdb.session.document.IODocumentToolbox;
-import org.komea.orientdb.session.document.impl.OrientDocumentToolbox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.orientdb.orm.session.IOrientSessionFactory;
-import org.springframework.orientdb.session.impl.DatabaseConfiguration;
-import org.springframework.orientdb.session.impl.OrientSessionFactory;
 
 /**
  * This class implements the service to store events into the OrientDB database.
@@ -35,62 +30,47 @@ import org.springframework.orientdb.session.impl.OrientSessionFactory;
  */
 public class EventStorage implements IEventStorage {
 
-	private final IOrientSessionFactory	       orientSessionFactory;
+	private static final String	               EVENT_KEYS	= "eventKeys";
 
 	private static final Logger	               LOGGER	  = LoggerFactory.getLogger(EventStorage.class);
 
 	private final EventStorageValidatorService	validator	= new EventStorageValidatorService();
 
-	private final IODocumentToolbox	           toolbox;
+	private final IEventDBFactory	           eventDBFactory;
 
-	public EventStorage(final DatabaseConfiguration _configuration) {
-		this(new OrientSessionFactory(_configuration));
-		// Lazy init the database session
-		this.orientSessionFactory.getOrCreateDB();
-	}
-
-	public EventStorage(final IOrientSessionFactory _sessionFactory) {
-		this(_sessionFactory, new OrientDocumentToolbox(_sessionFactory));
-	}
-
-	public EventStorage(final IOrientSessionFactory _factory, final IODocumentToolbox _toolbox) {
-		super();
-		this.orientSessionFactory = _factory;
-		this.toolbox = _toolbox;
-		new EventTypeSchemaUpdater(_factory);
-
+	public EventStorage(final IEventDBFactory _eventDBFactory) {
+		this.eventDBFactory = _eventDBFactory;
 	}
 
 	@Override
 	public void clearEventsOfType(final String _eventType) {
-		if (this.toolbox.exists(_eventType)) {
-			// SQL INJECTION THERE
-			this.toolbox.query_no_result("TRUNCATE CLASS " + _eventType);
+		IEventDB storage = null;
+		try {
+			storage = this.eventDBFactory.getEventDB(_eventType);
+			storage.removeAll();
+		} finally {
+			IOUtils.closeQuietly(storage);
 		}
-
 	}
 
 	@Override
 	public void close() throws IOException {
 		LOGGER.info("Closing the event storage and its database connection.");
-
-		if (this.orientSessionFactory != null) {
-			this.orientSessionFactory.close();
-		}
+		this.eventDBFactory.close();
 
 	}
 
 	@Override
 	public void storeBasicEvent(final BasicEvent _event) {
-		final IODocument newDocument = this.toolbox.newDocument(_event.getEventType());
-		new BasicEventDocumentConvertor(_event).convert(newDocument);
-		this.save(newDocument);
+		final FlatEvent flatEvent = new FlatEvent();
+		new BasicEventDocumentConvertor(_event).convert(flatEvent);
+		this.save(flatEvent);
 
 	}
 
 	@Override
 	public void storeComplexEvent(final ComplexEvent _event) {
-		final IODocument newDocument = this.toolbox.newDocument(_event.getEventType());
+		final FlatEvent newDocument = new FlatEvent();
 		new ComplexEventDocumentConvertor(_event).convert(newDocument);
 		this.save(newDocument);
 
@@ -103,10 +83,9 @@ public class EventStorage implements IEventStorage {
 	}
 
 	@Override
-	public void storeFlatEvent(final IFlatEvent _event) {
+	public void storeFlatEvent(final FlatEvent _event) {
 
-		final IODocument document = new FlatEventDocumentConvertor(this.toolbox, _event).convert();
-		this.save(document);
+		this.save(_event);
 
 	}
 
@@ -123,11 +102,12 @@ public class EventStorage implements IEventStorage {
 
 	}
 
-	private void save(final IODocument _document) {
+	private void save(final FlatEvent _document) {
 		if (!this.validator.validate(_document)) {
-			LOGGER.error("Event has been rejected {}", _document.dump());
+			LOGGER.error("Event has been rejected {}", _document);
 		} else {
-			_document.save();
+			final IEventDB storage = this.eventDBFactory.getEventDB(_document.getEventType());
+			storage.put(_document);
 		}
 	}
 }
