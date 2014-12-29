@@ -17,6 +17,24 @@ public class ReleaseCodeChunk
         this.chunk = chunk;
     }
     
+    
+    public Release getRelease() {
+    
+        return this.release;
+    }
+    
+    
+    
+    public int getChunk() {
+    
+        return this.chunk;
+    }
+    
+    public Release getPreviousRelease() {
+    
+        return this.previousRelease;
+    }
+    
     @Override
     public String toString() {
     

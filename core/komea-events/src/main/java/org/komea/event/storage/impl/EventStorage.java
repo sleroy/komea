@@ -1,7 +1,9 @@
 /**
  *
  */
+
 package org.komea.event.storage.impl;
+
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -31,103 +33,120 @@ import org.springframework.orientdb.session.impl.OrientSessionFactory;
  * .
  *
  * @author sleroy
- *
  */
-public class EventStorage implements IEventStorage {
-
-	private final IOrientSessionFactory	       orientSessionFactory;
-
-	private static final Logger	               LOGGER	  = LoggerFactory.getLogger(EventStorage.class);
-
-	private final EventStorageValidatorService	validator	= new EventStorageValidatorService();
-
-	private final IODocumentToolbox	           toolbox;
-
-	public EventStorage(final DatabaseConfiguration _configuration) {
-		this(new OrientSessionFactory(_configuration));
-		// Lazy init the database session
-		this.orientSessionFactory.getOrCreateDB();
-	}
-
-	public EventStorage(final IOrientSessionFactory _sessionFactory) {
-		this(_sessionFactory, new OrientDocumentToolbox(_sessionFactory));
-	}
-
-	public EventStorage(final IOrientSessionFactory _factory, final IODocumentToolbox _toolbox) {
-		super();
-		this.orientSessionFactory = _factory;
-		this.toolbox = _toolbox;
-		new EventTypeSchemaUpdater(_factory);
-
-	}
-
-	@Override
-	public void clearEventsOfType(final String _eventType) {
-		if (this.toolbox.exists(_eventType)) {
-			// SQL INJECTION THERE
-			this.toolbox.query_no_result("TRUNCATE CLASS " + _eventType);
-		}
-
-	}
-
-	@Override
-	public void close() throws IOException {
-		LOGGER.info("Closing the event storage and its database connection.");
-
-		if (this.orientSessionFactory != null) {
-			this.orientSessionFactory.close();
-		}
-
-	}
-
-	@Override
-	public void storeBasicEvent(final BasicEvent _event) {
-		final IODocument newDocument = this.toolbox.newDocument(_event.getEventType());
-		new BasicEventDocumentConvertor(_event).convert(newDocument);
-		this.save(newDocument);
-
-	}
-
-	@Override
-	public void storeComplexEvent(final ComplexEvent _event) {
-		final IODocument newDocument = this.toolbox.newDocument(_event.getEventType());
-		new ComplexEventDocumentConvertor(_event).convert(newDocument);
-		this.save(newDocument);
-
-	}
-
-	@Override
-	public void storeEvent(final AbstractEvent _event) {
-		this.storeFlatEvent(new FlatEvent(_event));
-
-	}
-
-	@Override
-	public void storeFlatEvent(final IFlatEvent _event) {
-
-		final IODocument document = new FlatEventDocumentConvertor(this.toolbox, _event).convert();
-		this.save(document);
-
-	}
-
-	@Override
-	public void storeMap(final Map<String, Serializable> _fieldMap) {
-		this.storeFlatEvent(new FlatEvent(_fieldMap));
-
-	}
-
-	@Override
-	public void storePojo(final Object _pojo) {
-		Validate.notNull(_pojo);
-		this.storeFlatEvent(new FlatEvent(_pojo));
-
-	}
-
-	private void save(final IODocument _document) {
-		if (!this.validator.validate(_document)) {
-			LOGGER.error("Event has been rejected {}", _document.dump());
-		} else {
-			_document.save();
-		}
-	}
+public class EventStorage implements IEventStorage
+{
+    
+    private final IOrientSessionFactory        orientSessionFactory;
+    
+    private static final Logger                LOGGER    = LoggerFactory.getLogger(EventStorage.class);
+    
+    private final EventStorageValidatorService validator = new EventStorageValidatorService();
+    
+    private final IODocumentToolbox            toolbox;
+    
+    public EventStorage(final DatabaseConfiguration _configuration) {
+    
+        this(new OrientSessionFactory(_configuration));
+        // Lazy init the database session
+        this.orientSessionFactory.getOrCreateDB();
+    }
+    
+    public EventStorage(final IOrientSessionFactory _sessionFactory) {
+    
+        this(_sessionFactory, new OrientDocumentToolbox(_sessionFactory));
+    }
+    
+    public EventStorage(final IOrientSessionFactory _factory, final IODocumentToolbox _toolbox) {
+    
+        super();
+        this.orientSessionFactory = _factory;
+        this.toolbox = _toolbox;
+        
+    }
+    
+    @Override
+    public void clearEventsOfType(final String _eventType) {
+    
+        if (this.toolbox.exists(_eventType)) {
+            // SQL INJECTION THERE
+            this.toolbox.query_no_result("TRUNCATE CLASS " + _eventType);
+        }
+        
+    }
+    
+    @Override
+    public void close() throws IOException {
+    
+        LOGGER.info("Closing the event storage and its database connection.");
+        
+        if (this.orientSessionFactory != null) {
+            this.orientSessionFactory.close();
+        }
+        
+    }
+    
+    @Override
+    public void storeBasicEvent(final BasicEvent _event) {
+    
+        final IODocument newDocument = this.toolbox.newDocument(_event.getEventType());
+        new BasicEventDocumentConvertor(_event).convert(newDocument);
+        this.save(newDocument);
+        
+    }
+    
+    @Override
+    public void storeComplexEvent(final ComplexEvent _event) {
+    
+        final IODocument newDocument = this.toolbox.newDocument(_event.getEventType());
+        new ComplexEventDocumentConvertor(_event).convert(newDocument);
+        this.save(newDocument);
+        
+    }
+    
+    @Override
+    public void storeEvent(final AbstractEvent _event) {
+    
+        this.storeFlatEvent(new FlatEvent(_event));
+        
+    }
+    
+    @Override
+    public void storeFlatEvent(final IFlatEvent _event) {
+    
+        final IODocument document = new FlatEventDocumentConvertor(this.toolbox, _event).convert();
+        this.save(document);
+        
+    }
+    
+    @Override
+    public void storeMap(final Map<String, Serializable> _fieldMap) {
+    
+        this.storeFlatEvent(new FlatEvent(_fieldMap));
+        
+    }
+    
+    @Override
+    public void storePojo(final Object _pojo) {
+    
+        Validate.notNull(_pojo);
+        this.storeFlatEvent(new FlatEvent(_pojo));
+        
+    }
+    
+    private void save(final IODocument _document) {
+    
+        if (!this.validator.validate(_document)) {
+            LOGGER.error("Event has been rejected {}", _document.dump());
+        } else {
+            _document.save();
+        }
+    }
+    
+    @Override
+    public void declareEventType(final String type) {
+    
+        new EventTypeSchemaUpdater(this.orientSessionFactory).updateSchemaWithEvent(type);
+        
+    }
 }

@@ -18,21 +18,23 @@ import org.slf4j.LoggerFactory;
 
 public final class CommitEventProducer implements IGitCommitProcessor
 {
-
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(CommitEventProducer.class);
-
+    
     private final IEventStorage eventStorage;
-
+    
     private final PojoToMap     commitPojoToMap;
-
+    
     public CommitEventProducer(final IEventStorage eventStorage) {
-
+    
         this.eventStorage = eventStorage;
+        this.eventStorage.declareEventType(IGitEvent.COMMIT);
         this.commitPojoToMap = new PojoToMap();
+        
     }
-
+    
     private ComplexEvent newCommitEvent(final IGitCommit convertGitCommit) {
-
+    
         final ComplexEvent event = new ComplexEvent();
         event.setProvider(IGitEvent.PROVIDER);
         event.setEventType(IGitEvent.COMMIT);
@@ -41,17 +43,17 @@ public final class CommitEventProducer implements IGitCommitProcessor
         event.setProperties(properties);
         return event;
     }
-
+    
     @Override
     public void process(final RevCommit commit, final RevWalk walk, final IGitCommit convertGitCommit) {
-
+    
         try {
-
+            
             this.eventStorage.storeComplexEvent(newCommitEvent(convertGitCommit));
-
+            
         } catch (final Exception e) {
             LOGGER.error("GIT Commit exception {} for {}", e.getMessage(), convertGitCommit, e);
         }
     }
-
+    
 }

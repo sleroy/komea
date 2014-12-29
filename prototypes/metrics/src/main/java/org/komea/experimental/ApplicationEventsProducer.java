@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.apache.commons.lang.Validate;
+import org.joda.time.DateTime;
 import org.komea.connectors.git.events.GitConnectorConfiguration;
 import org.komea.connectors.git.events.GitEventsConnector;
 import org.komea.connectors.jira.JiraConfiguration;
@@ -71,7 +72,7 @@ public class ApplicationEventsProducer
         
         JiraEventsConnector jira = new JiraEventsConnector(this.eventStorage,JiraConnectorFactory.getInstance());
         try {
-            jira.push(config, new Date(1900, 1, 1));
+            jira.push(config, new DateTime(1900, 1, 1, 0, 0).toDate());
         } catch (BadConfigurationException e) {
             throw new KomeaRuntimeException(e);
         }

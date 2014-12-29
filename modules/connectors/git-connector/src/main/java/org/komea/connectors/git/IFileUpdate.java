@@ -9,5 +9,7 @@ public interface IFileUpdate
 
     int getNumberOfDeletedLines();
     String getPath();
+    
+    String getOldPath();
 
 }

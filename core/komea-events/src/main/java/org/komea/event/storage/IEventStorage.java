@@ -71,4 +71,7 @@ public interface IEventStorage {
 	 * @param _pojo
 	 */
 	public void storePojo(Object _pojo);
+	
+	
+	public void declareEventType(String type);
 }

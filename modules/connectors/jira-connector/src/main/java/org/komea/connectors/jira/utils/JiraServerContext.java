@@ -14,7 +14,7 @@ public class JiraServerContext
 {
     
     public final static SimpleDateFormat FORMATTER    = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-    public final static Integer          GetOccurence = 1000;
+    public final static Integer          GetOccurence = 500;
     
     private final JiraClient             jiraClient;
     private final GreenHopperClient      greenHopper;

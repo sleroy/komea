@@ -17,7 +17,7 @@ public interface IGitCommit
      */
     String getAuthor();
 
-    String getBranch();
+    List<String> getBranches();
 
     /**
      * Returns the message of the commit
@@ -83,7 +83,7 @@ public interface IGitCommit
      */
     int getTotalNumberOfModifiedLines();
 
-    void setBranch(String name);
+    void setBranches(List<String> branches);
 
     void setNumberOfAddedLines(int addedLines);
 

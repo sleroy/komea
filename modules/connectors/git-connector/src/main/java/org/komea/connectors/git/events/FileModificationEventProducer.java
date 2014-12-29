@@ -2,6 +2,8 @@
 package org.komea.connectors.git.events;
 
 
+import java.io.Serializable;
+
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.komea.connectors.git.IFileUpdate;
@@ -20,6 +22,7 @@ public class FileModificationEventProducer implements IGitCommitProcessor
 
         super();
         this.storage = storage;
+        this.storage.declareEventType(IGitEvent.UPDATE);
 
     }
     @Override
@@ -43,9 +46,9 @@ public class FileModificationEventProducer implements IGitCommitProcessor
         event.addField("total_updated_lines", update.getNumberOfAddedLines() + update.getNumberOfDeletedLines());
         event.addField("added_lines", update.getNumberOfAddedLines());
         event.addField("deleted_lines", update.getNumberOfDeletedLines());
-        event.addField("branch", commit.getBranch());
+        event.addField("branches", (Serializable) commit.getBranches());
         event.addField("project", commit.getShProject());
-
+        event.addField("old_file", update.getOldPath());
         this.storage.storeComplexEvent(event);
     }
 }

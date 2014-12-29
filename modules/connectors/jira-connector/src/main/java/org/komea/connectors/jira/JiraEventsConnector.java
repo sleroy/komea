@@ -2,7 +2,6 @@
 package org.komea.connectors.jira;
 
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import net.rcarz.jiraclient.Field;
 import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.Issue.SearchResult;
 import net.rcarz.jiraclient.JiraException;
-import net.rcarz.jiraclient.Version;
 
 import org.komea.connectors.jira.exceptions.BadConfigurationException;
 import org.komea.connectors.jira.utils.IJiraServerFactory;
@@ -41,21 +39,22 @@ public class JiraEventsConnector
         super();
         this.storage = storage;
         this.jiraServerFactory = jiraServerFactory;
-        
+        storage.declareEventType(EVENT_NEW_BUG);
+        storage.clearEventsOfType(EVENT_UPDATE_BUG);
     }
     
     public void push(final JiraConfiguration configuration, final Date since) throws BadConfigurationException {
     
         this.jira = this.jiraServerFactory.getNewJiraServerContext(configuration);
         importNewIssue(since, -1);
-        importUpdateIssue(since, -1);
+       // importUpdateIssue(since, -1);
     }
     
     public void push(final JiraConfiguration configuration, final Date since, final int max) throws BadConfigurationException {
     
         this.jira = this.jiraServerFactory.getNewJiraServerContext(configuration);
         importNewIssue(since, max);
-        importUpdateIssue(since, max);
+       // importUpdateIssue(since, max);
     }
     
     private void importNewIssue(final Date date, final int max) {
@@ -65,14 +64,14 @@ public class JiraEventsConnector
             
             int limit = max >= 0 ? max : JiraServerContext.GetOccurence;
             String jql = "created > \"" + format + "\"";
-            Issue.SearchResult searchIssues = this.jira.getClient().searchIssues(jql,null, limit,0);
+            Issue.SearchResult searchIssues = this.jira.getClient().searchIssues(jql, getJiraIssueSelectedFields(), limit, 0);
             sendIssues(searchIssues.issues);
-            if (max > -1 && searchIssues.total<max) {
+            if (max == -1 || searchIssues.total < max) {
                 if (searchIssues.total > searchIssues.max) {
                     
                     for (int i = searchIssues.max; i < searchIssues.total; i = i + searchIssues.max) {
                         
-                        searchIssues = this.jira.getClient().searchIssues(jql, null, limit, i);
+                        searchIssues = this.jira.getClient().searchIssues(jql, getJiraIssueSelectedFields(), limit, i);
                         
                         sendIssues(searchIssues.issues);
                         log(searchIssues);
@@ -97,10 +96,10 @@ public class JiraEventsConnector
         try {
             int limit = max >= 0 ? max : JiraServerContext.GetOccurence;
             String format = JiraServerContext.FORMATTER.format(date);
-            Issue.SearchResult searchIssues = this.jira.getClient().searchIssues("updated > \"" + format + "\"",null, limit,0);
+            Issue.SearchResult searchIssues = this.jira.getClient().searchIssues("updated > \"" + format + "\"", null, limit, 0);
             sendUpdateIssue(searchIssues.issues);
             
-            if (max > -1  && searchIssues.total<max ) {
+            if (max == -1 || searchIssues.total < max) {
                 if (searchIssues.total > searchIssues.max) {
                     for (int i = searchIssues.max; i < searchIssues.total; i = i + searchIssues.max) {
                         
@@ -139,20 +138,12 @@ public class JiraEventsConnector
         event.setEventType(eventName);
         event.setDate(Field.getDate(bug.getField("created")));
         
-        event.addField("id", bug.getId());
-        event.addField("key", bug.getKey());
-        
-        event.addField("description", bug.getDescription());
-        if (bug.getProject() != null) {
-            event.addField("project", bug.getProject().getName());
-        }
-        if (bug.getStatus() != null) {
-            event.addField("status", bug.getStatus().getName());
-        }
-        if (bug.getIssueType() != null) {
-            event.addField("type", bug.getIssueType().getName());
-        }
+        event.setProperties(bug.getFields());
         this.storage.storeComplexEvent(event);
     }
     
+    private String getJiraIssueSelectedFields() {
+    
+        return "id,key,created,issuetype,priority,assignee,reporter,description,project,status,versions,resolution";
+    }
 }

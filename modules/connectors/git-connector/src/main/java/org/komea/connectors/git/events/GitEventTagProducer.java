@@ -2,6 +2,7 @@
 package org.komea.connectors.git.events;
 
 
+import java.io.Serializable;
 import java.util.Map;
 
 import org.eclipse.jgit.api.Git;
@@ -73,7 +74,7 @@ public class GitEventTagProducer implements IGitCommitProcessor
         event.setProvider(IGitEvent.PROVIDER);
         event.addField("name", tag);
         event.addField("project", convertGitCommit.getShProject());
-        event.addField("branch", convertGitCommit.getBranch());
+        event.addField("branches", (Serializable) convertGitCommit.getBranches());
         event.setDate(convertGitCommit.getCommitTime());
         event.addField("commit", convertGitCommit.getId());
 

@@ -30,12 +30,12 @@ public class GitEventsConnector
         processor.addCommitProcessor(new CommitProjectSetter(options.getProject()));
         processor.addCommitProcessor(new CommitEventProducer(this.storage));
         processor.addCommitProcessor(new FileModificationEventProducer(this.storage));
-        // processor.addCommitProcessor(new GitEventTagProducer( this.storage,git));
+        processor.addCommitProcessor(new GitEventTagProducer( this.storage,git));
         return processor;
     }
 
     public void launch(final GitConnectorConfiguration options) {
-
+    
         Validate.notNull(options.getRepositoryFolder());
         Validate.isTrue(options.getRepositoryFolder().exists());
         final IGitRepository gitRepository = new GitRepository(options.getRepositoryFolder(), options.getRepositoryUrl());
