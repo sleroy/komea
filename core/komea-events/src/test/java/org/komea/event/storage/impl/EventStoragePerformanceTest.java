@@ -35,9 +35,9 @@ import org.vibur.dbcp.ViburDBCPDataSource;
 
 import com.orientechnologies.orient.core.Orient;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
-import com.tocea.frameworks.bench4j.BenchRule;
 import com.tocea.frameworks.bench4j.BenchmarkOptions;
 import com.tocea.frameworks.bench4j.IBenchReport;
+import com.tocea.frameworks.bench4j.impl.BenchRule;
 import com.tocea.frameworks.bench4j.reports.jfreechart.JFreeChartBenchmarkReport;
 
 @RunWith(Parameterized.class)
@@ -46,8 +46,7 @@ public class EventStoragePerformanceTest {
 	@Parameters(name = "events={0},threads={1},fetch_all={2}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] { { 100, 1, false }, { 100, 10, true }, { 1000, 1, false },
-		        { 1000, 10, false }, { 1000, 10, true }, { 1000, 10, false }, { 10000, 1, false }, { 10000, 10, true },
-		        { 10000, 10, false } });
+		        { 1000, 1, true }, { 1000, 10, false }, { 1000, 10, true } });
 	}
 
 	@BeforeClass
@@ -67,7 +66,7 @@ public class EventStoragePerformanceTest {
 	private static final String	     H2_EXTRA_OPTONS	= ";MODE=MYSQL;INIT=RUNSCRIPT FROM 'src/main/resources/schema-eventsh2.sql'";
 
 	public static final IBenchReport	report	     = new JFreeChartBenchmarkReport(new File("build/charts"), 1024,
-	                                                         768);
+	                                                         768, true);
 
 	/**
 	 * Enables the benchmark rule.

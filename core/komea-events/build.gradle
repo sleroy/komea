@@ -15,7 +15,7 @@ dependencies {
 	testCompile 'mysql:mysql-connector-java:5.1.34'
 	testCompile 'com.h2database:h2:1.4.184'
 	testCompile 'org.vibur:vibur-dbcp:1.2.0'
-	testCompile "com.tocea.frameworks:bench4j:0.1.0"
+	
 	
 
 	
