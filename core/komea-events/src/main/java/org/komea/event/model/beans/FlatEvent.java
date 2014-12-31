@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.joda.time.DateTime;
 import org.komea.core.utils.PojoToMap;
 import org.komea.event.model.IBasicEventInformations;
 import org.slf4j.Logger;
@@ -27,8 +28,8 @@ public class FlatEvent implements IBasicEventInformations {
 	private static final Logger	      LOGGER	   = LoggerFactory.getLogger(FlatEvent.class);
 
 	public FlatEvent() {
-		this.properties = Maps.newHashMap();
-		this.properties.put(IBasicEventInformations.FIELD_DATE, new Date());
+		properties = Maps.newHashMap();
+		properties.put(IBasicEventInformations.FIELD_DATE, new Date());
 	}
 
 	/**
@@ -38,7 +39,7 @@ public class FlatEvent implements IBasicEventInformations {
 	 *            the map.
 	 */
 	public FlatEvent(final Map<String, Serializable> _map) {
-		this.properties = _map;
+		properties = _map;
 	}
 
 	public FlatEvent(final Object _pojo) {
@@ -46,7 +47,7 @@ public class FlatEvent implements IBasicEventInformations {
 		final Map<String, Serializable> convertPojoInMap = new PojoToMap().convertPojoInMap(_pojo);
 
 		for (final Entry<String, Serializable> entry : convertPojoInMap.entrySet()) {
-			this.properties.put(entry.getKey(), entry.getValue());
+			properties.put(entry.getKey(), entry.getValue());
 
 		}
 
@@ -60,15 +61,16 @@ public class FlatEvent implements IBasicEventInformations {
 	 * @param _objecton
 	 *            the object
 	 */
+	@JsonIgnore
 	public void addField(final String _fieldName, final Serializable _object) {
-		this.properties.put(_fieldName, _object);
+		properties.put(_fieldName, _object);
 
 	}
 
 	@JsonIgnore
 	public boolean containsField(final String _fieldDate) {
 
-		return this.properties.containsKey(_fieldDate);
+		return properties.containsKey(_fieldDate);
 	}
 
 	/**
@@ -82,7 +84,39 @@ public class FlatEvent implements IBasicEventInformations {
 	@JsonIgnore
 	public <T> T field(final String _key) {
 
-		return (T) this.properties.get(_key);
+		return (T) properties.get(_key);
+	}
+
+	/**
+	 * Returns a field expecting the given thpe
+	 * 
+	 * @param _fieldName
+	 *            the field name
+	 * @param _class
+	 *            the field typ
+	 * @return the value or null.
+	 */
+	public <T> T field(String _fieldName, Class<T> _class) {
+
+		return _class.cast(field(_fieldName));
+	}
+
+	/**
+	 * Tests if a fields is equals to the given value
+	 *
+	 * @param _fieldName
+	 * @param _value
+	 * @return
+	 */
+	@JsonIgnore
+	public boolean fieldEquals(String _fieldName, Object _value) {
+		if (_value == null) { return _value == field(_fieldName); }
+		return _value.equals(_fieldName);
+	}
+
+	public Date getDate() {
+
+		return (Date) properties.get(FIELD_DATE);
 	}
 
 	/**
@@ -91,12 +125,42 @@ public class FlatEvent implements IBasicEventInformations {
 	 * @return the event type.
 	 */
 	public String getEventType() {
-		return (String) this.properties.get(FIELD_EVENT_TYPE);
+		return (String) properties.get(FIELD_EVENT_TYPE);
 	}
 
 	public Map<String, ? extends Serializable> getProperties() {
 
-		return Collections.unmodifiableMap(this.properties);
+		return Collections.unmodifiableMap(properties);
+	}
+
+	public String getProvider() {
+
+		return (String) properties.get(FIELD_PROVIDER);
+	}
+
+	/**
+	 * Tests if the event is after that time.
+	 *
+	 * @param _dateTime
+	 *            the date time.
+	 * @return true if the event has been sent before this date.
+	 */
+	@JsonIgnore
+	public boolean isAfter(DateTime _previousDate) {
+		return getDateTime().isAfter(_previousDate);
+	}
+
+	/**
+	 * Tests if the event is before that time.
+	 *
+	 * @param _dateTime
+	 *            the date time.
+	 * @return true if the event has been sent before this date.
+	 */
+	@JsonIgnore
+	public boolean isBefore(DateTime _dateTime) {
+
+		return getDateTime().isBefore(_dateTime);
 	}
 
 	/**
@@ -107,23 +171,25 @@ public class FlatEvent implements IBasicEventInformations {
 	 * @param _object
 	 *            the object;
 	 */
+	@JsonIgnore
 	public void put(final String _key, final Serializable _object) {
-		this.properties.put(_key, _object);
+		properties.put(_key, _object);
 	}
 
 	@Override
 	public String toString() {
-		return "FlatEvent [properties=" + this.properties + "]";
+		return "FlatEvent [properties=" + properties + "]";
 	}
 
-	public Date getDate() {
+	/**
+	 * Return the date in joda time.
+	 *
+	 * @return the date
+	 */
+	@JsonIgnore
+	private DateTime getDateTime() {
 
-	    return (Date) properties.get(FIELD_DATE);
-    }
-
-	public String getProvider() {
-
-	    return (String) properties.get(FIELD_PROVIDER);
-    }
+		return new DateTime(getDate());
+	}
 
 }

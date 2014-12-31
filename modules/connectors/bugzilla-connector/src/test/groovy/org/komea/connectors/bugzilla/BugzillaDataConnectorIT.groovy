@@ -2,10 +2,8 @@ package org.komea.connectors.bugzilla
 
 import static org.junit.Assert.*
 
-
 import org.junit.Test
 import org.komea.connectors.bugzilla.proxy.impl.BugzillaServerConfiguration
-import org.komea.event.query.impl.EventQueryManager
 import org.komea.event.storage.impl.EventStorage
 import org.springframework.orientdb.session.impl.OrientSessionFactory
 import org.springframework.orientdb.session.impl.TestDatabaseConfiguration

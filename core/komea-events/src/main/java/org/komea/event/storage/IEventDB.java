@@ -10,7 +10,7 @@ public interface IEventDB extends Closeable {
 
 	/**
 	 * Count the number of values
-	 * 
+	 *
 	 * @return the number of values.
 	 */
 	long count();
@@ -20,6 +20,12 @@ public interface IEventDB extends Closeable {
 	 * that are persistent.
 	 */
 	ResultIterator<FlatEvent> loadAll();
+
+	/**
+	 * Load All Values. This is good for in-memory caches that have some keys
+	 * that are persistent.
+	 */
+	ResultIterator<FlatEvent> loadOnPeriod(DateInterval _period);
 
 	/**
 	 * Puts a events into the storage.
@@ -38,5 +44,4 @@ public interface IEventDB extends Closeable {
 	 * Remove all values
 	 */
 	void removeAll();
-
 }
