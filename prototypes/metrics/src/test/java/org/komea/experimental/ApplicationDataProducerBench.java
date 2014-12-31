@@ -8,22 +8,15 @@ import java.util.Date;
 import java.util.List;
 
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.errors.AmbiguousObjectException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.errors.RevisionSyntaxException;
-import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.treewalk.AbstractTreeIterator;
-import org.eclipse.jgit.treewalk.CanonicalTreeParser;
-import org.eclipse.jgit.treewalk.EmptyTreeIterator;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.komea.connectors.git.impl.DiffComputation;
 import org.komea.connectors.git.impl.GitCommit;
@@ -33,12 +26,10 @@ import org.komea.experimental.model.SoftwareFactoryConfiguration;
 
 import com.google.common.collect.Lists;
 
-public class ApplicationDataProducerTests
+public class ApplicationDataProducerBench
 {
     
-    @Test
-    // @Ignore
-    public void test() throws IOException {
+    public static void main(final String[] args) throws Exception {
     
         KomeaConfiguration komea = new KomeaConfiguration("localhost:2424", "localhost:2424");
         SoftwareFactoryConfiguration configuration = new SoftwareFactoryConfiguration(new File("/Users/afloch/Documents/git/mongo"),
@@ -46,12 +37,13 @@ public class ApplicationDataProducerTests
         
         ApplicationEventsProducer analyzer = new ApplicationEventsProducer(configuration, komea);
         analyzer.connect("root", "root");
-        analyzer.pushJiraEvents();
-        //analyzer.pushGitEvents();
+        // analyzer.pushJiraEvents();
+        analyzer.pushGitEvents();
         analyzer.close();
     }
     
-    public static void main(final String[] args) throws Exception {
+    private static void experience() throws AmbiguousObjectException, IncorrectObjectTypeException, IOException, MissingObjectException,
+            Exception {
     
         GitRepository repo = new GitRepository(new File("/Users/afloch/Documents/git/mongo"), "");
         String doubleBranchCommit = "451dccb3ec7801b0929a870f30adaf2f78286922";
@@ -63,13 +55,11 @@ public class ApplicationDataProducerTests
         
         GitCommit gitcommit = new GitCommit(parseCommit.getName(), parseCommit.getAuthorIdent(), parseCommit.getCommitterIdent(),
                 parseCommit.getFullMessage());
-   
+        
         DiffComputation diffComputation = new DiffComputation(repo.getGit(), gitcommit, parseCommit);
         diffComputation.update();
         System.out.println(branches);
     }
-    
-    
     
     private static List<String> getBranches(final Git git, final String name, final List<Ref> branches) throws RevisionSyntaxException,
             MissingObjectException, IncorrectObjectTypeException, AmbiguousObjectException, IOException {

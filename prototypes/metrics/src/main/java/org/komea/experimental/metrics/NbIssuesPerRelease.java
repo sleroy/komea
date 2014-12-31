@@ -10,13 +10,19 @@ public class NbIssuesPerRelease
 {
     
     private final IssuesDao dao;
-    private final boolean         strict = false;
+    private  boolean         strict = false;
 
     
     public NbIssuesPerRelease(final IssuesDao dao) {
     
         super();
         this.dao = dao;
+    }
+    
+    
+    public void setStrict(final boolean strict) {
+    
+        this.strict = strict;
     }
     
     public int countNbIssues(final Release release) {
