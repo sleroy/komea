@@ -415,7 +415,7 @@ public class GitRepository implements IGitRepository
          *            commit name
          * @param currentBranch
          *            current walked branch
-         * @param branches
+         * @param _branches
          *            branches of the commit
          * @return
          * @throws RevisionSyntaxException
@@ -424,14 +424,14 @@ public class GitRepository implements IGitRepository
          * @throws AmbiguousObjectException
          * @throws IOException
          */
-        public boolean requireFurtherProcessing(final String commit, final String currentBranch, final List<String> branches)
+        public boolean requireFurtherProcessing(final String commit, final String currentBranch, final List<String> _branches)
                 throws RevisionSyntaxException, MissingObjectException, IncorrectObjectTypeException, AmbiguousObjectException, IOException {
         
             GitForkCommit fork = this.forkDetector.getFork(commit);
             if (fork != null) {
                 return !fork.isAncestorOfBranch(currentBranch);
             } else {
-                this.forkDetector.createForkIfNeeded(commit, branches);
+                this.forkDetector.createForkIfNeeded(commit, _branches);
             }
             
             return true;

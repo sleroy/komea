@@ -1,6 +1,5 @@
 package org.komea.event.storage.mysql.kryo.impl;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,18 +14,32 @@ import org.skife.jdbi.v2.tweak.ConnectionFactory;
 import com.esotericsoftware.kryo.Kryo;
 
 public class KryoMySQLEventDB extends MySQLStorageSupport implements IEventDB {
-
+	
 	private final KryoByteArrayToObjectConverter<FlatEvent>	unserializer;
 	private final KryoObjectToByteArrayConverter<FlatEvent>	serializer;
-
-	public KryoMySQLEventDB(final ConnectionFactory _dataSource, final String _tableName, String _eventType)  {
+	
+	public KryoMySQLEventDB(final ConnectionFactory _dataSource,
+	        final String _tableName, final String _eventType) {
 		super(_dataSource, _tableName, _eventType);
-		this.unserializer = new KryoByteArrayToObjectConverter<FlatEvent>(this.initKryo(), FlatEvent.class);
-		this.serializer = new KryoObjectToByteArrayConverter<FlatEvent>(this.initKryo(), FlatEvent.class);
+		unserializer = new KryoByteArrayToObjectConverter<FlatEvent>(
+		        initKryo(), FlatEvent.class);
+		serializer = new KryoObjectToByteArrayConverter<FlatEvent>(initKryo(),
+		        FlatEvent.class);
 	}
-
+	
+	@Override
+	public byte[] serialize(final FlatEvent _entry) {
+		return serializer.apply(_entry);
+	}
+	
+	@Override
+	public FlatEvent unserialize(final byte[] _entry) {
+		
+		return unserializer.apply(_entry);
+	}
+	
 	private Kryo initKryo() {
-
+		
 		final Kryo kryo = new Kryo();
 		kryo.register(List.class);
 		kryo.register(ArrayList.class);
@@ -37,16 +50,5 @@ public class KryoMySQLEventDB extends MySQLStorageSupport implements IEventDB {
 		kryo.register(FlatEvent.class);
 		return kryo;
 	}
-
-	@Override
-	public byte[] serialize(FlatEvent _entry) {
-		return serializer.apply(_entry);
-	}
-
-	@Override
-	public FlatEvent unserialize(byte[] _entry) {
-
-		return unserializer.apply(_entry);
-	}
-
+	
 }

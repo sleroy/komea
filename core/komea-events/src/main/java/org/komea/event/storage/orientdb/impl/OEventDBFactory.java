@@ -13,7 +13,6 @@ import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
  * This class provides an implementation of the event storage with OrientDB.
  *
  * @author sleroy
- *
  */
 public class OEventDBFactory implements IEventDBFactory {
 
@@ -24,23 +23,35 @@ public class OEventDBFactory implements IEventDBFactory {
 		this(new OrientSessionFactory(_databaseConfiguration));
 	}
 
-	public OEventDBFactory(final OrientSessionFactory<ODatabaseDocumentTx> _orientSessionFactory) {
-		this.orientSessionFactory = _orientSessionFactory;
+	public OEventDBFactory(
+			final OrientSessionFactory<ODatabaseDocumentTx> _orientSessionFactory) {
+		orientSessionFactory = _orientSessionFactory;
 
 	}
 
 	@Override
 	public void close() throws IOException {
-		this.orientSessionFactory.close();
+		orientSessionFactory.close();
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * org.komea.event.storage.IEventDBFactory#declareEventType(java.lang.String
+	 * )
+	 */
+	@Override
+	public void declareEventType(final String _type) {
+		orientSessionFactory.getOrCreateDB().getMetadata().getSchema()
+		        .createClass(_type);
 
+	}
 
 	@Override
 	public IEventDB getEventDB(final String _storageName) {
 
-		return new OrientDBEventDB(this.orientSessionFactory, _storageName);
+		return new OrientDBEventDB(orientSessionFactory, _storageName);
 	}
 
 }

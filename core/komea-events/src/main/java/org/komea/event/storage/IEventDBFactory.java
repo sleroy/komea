@@ -7,11 +7,14 @@ import java.io.Closeable;
  * key-value storage is associated to a name.
  *
  * @author sleroy
- *
  */
 public interface IEventDBFactory extends Closeable {
-
-
+	
+	/**
+	 * @param _type
+	 */
+	void declareEventType(String _type);
+	
 	/**
 	 * Returns a storage with the given name
 	 *
