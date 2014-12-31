@@ -73,5 +73,12 @@ public class BasicEventsListStorage implements IEventStorage
         
         
     }
+
+    @Override
+    public void declareEventType(final String type) {
+    
+        // TODO Auto-generated method stub
+        
+    }
     
 }

@@ -12,18 +12,21 @@ public class AnalyzedApplication
     private final String                       name;
     private final String                       branch;
     
-    private final List<String>                 sourcePaths;
+    private final List<String>                 excludedPaths;
     
     private final SoftwareFactoryConfiguration configuration;
     
-    public AnalyzedApplication(final SoftwareFactoryConfiguration config, final String branch, final String path) {
+    public AnalyzedApplication(final SoftwareFactoryConfiguration config, final String branch, final String ...paths) {
     
         super();
         this.name = config.getName();
         this.branch = branch;
-        this.sourcePaths = Lists.newArrayList();
+        this.excludedPaths = Lists.newArrayList();
         this.configuration = config;
-        addSourcePath(path);
+        for (int i = 0; i < paths.length; i++) {
+            addExcludedPath(paths[i]);
+        }
+       
     }
     
     public SoftwareFactoryConfiguration getConfiguration() {
@@ -41,14 +44,14 @@ public class AnalyzedApplication
         return this.name;
     }
     
-    public List<String> getSourcePaths() {
+    public List<String> getExcludedPaths() {
     
-        return this.sourcePaths;
+        return this.excludedPaths;
     }
     
-    public void addSourcePath(final String path) {
+    public void addExcludedPath(final String path) {
     
-        this.sourcePaths.add(path);
+        this.excludedPaths.add(path);
     }
     
 }

@@ -106,6 +106,13 @@ public class CommitEventProducerTests extends AbstractLocalGitTest
             // TODO Auto-generated method stub
             
         }
+
+        @Override
+        public void declareEventType(final String type) {
+        
+            // TODO Auto-generated method stub
+            
+        }
         
     }
 }

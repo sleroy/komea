@@ -1,4 +1,6 @@
+
 package org.komea.connectors.jira;
+
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,7 +10,6 @@ import net.rcarz.jiraclient.Field;
 import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.Issue.SearchResult;
 import net.rcarz.jiraclient.JiraException;
-import net.rcarz.jiraclient.Version;
 
 import org.komea.connectors.jira.exceptions.BadConfigurationException;
 import org.komea.connectors.jira.utils.IJiraServerFactory;
@@ -18,15 +19,16 @@ import org.komea.event.storage.IEventStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JiraEventsConnector {
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(JiraEventsConnector.class);
-
-    public static final String JIRA = "jira";
-
-    public static final String EVENT_UPDATE_BUG = "issue_update";
-
-    public static final String EVENT_NEW_BUG = "issue_new";
+public class JiraEventsConnector
+{
+    
+    private final static Logger      LOGGER           = LoggerFactory.getLogger(JiraEventsConnector.class);
+    
+    public static final String       JIRA             = "jira";
+    
+    public static final String       EVENT_UPDATE_BUG = "issue_update";
+    
+    public static final String       EVENT_NEW_BUG    = "issue_new";
     
     public static final String SELECT_FIELDS = "issuetype,status,assignee,resolution,project,created,updated,creator";
 
@@ -34,15 +36,17 @@ public class JiraEventsConnector {
     private int Occurence;
 
     private final IJiraServerFactory jiraServerFactory;
-    private JiraServerContext jira;
-
+    private JiraServerContext        jira;
+    
     public JiraEventsConnector(final IEventStorage storage, final IJiraServerFactory jiraServerFactory) {
-
+    
         super();
         this.storage = storage;
         this.Occurence = JiraServerContext.GetOccurence;
         this.jiraServerFactory = jiraServerFactory;
-
+	 storage.declareEventType(EVENT_NEW_BUG);
+        storage.clearEventsOfType(EVENT_UPDATE_BUG);
+        
     }
 
     public void setOccurence(int Occurence) {
@@ -50,20 +54,20 @@ public class JiraEventsConnector {
     }
 
     public void push(final JiraConfiguration configuration, final Date since) throws BadConfigurationException {
-
+    
         this.jira = this.jiraServerFactory.getNewJiraServerContext(configuration);
         importNewIssue(since, -1);
         importUpdateIssue(since, -1);
     }
-
+    
     public void push(final JiraConfiguration configuration, final Date since, final int max) throws BadConfigurationException {
-
+    
         this.jira = this.jiraServerFactory.getNewJiraServerContext(configuration);
         importNewIssue(since, max);
         importUpdateIssue(since, max);
     }
-
-    private void importNewIssue(final Date date, final int max) {
+    
+     private void importNewIssue(final Date date, final int max) {
 
         try {
             String type = EVENT_NEW_BUG;
@@ -121,25 +125,18 @@ public class JiraEventsConnector {
 
     private void sendEvent(final Issue bug, final String eventName) {
 
-        final ComplexEvent event = new ComplexEvent();
+       final ComplexEvent event = new ComplexEvent();
         event.setProvider(JIRA);
         event.setEventType(eventName);
         event.setDate(Field.getDate(bug.getField("created")));
-
-        event.addField("id", bug.getId());
-        event.addField("key", bug.getKey());
-
-        event.addField("description", bug.getDescription());
-        if (bug.getProject() != null) {
-            event.addField("project", bug.getProject().getName());
-        }
-        if (bug.getStatus() != null) {
-            event.addField("status", bug.getStatus().getName());
-        }
-        if (bug.getIssueType() != null) {
-            event.addField("type", bug.getIssueType().getName());
-        }
+        
+        event.setProperties(bug.getFields());
         this.storage.storeComplexEvent(event);
+    }
+
+    private String getJiraIssueSelectedFields() {
+    
+        return "id,key,created,issuetype,priority,assignee,reporter,description,project,status,versions,resolution";
     }
 
 }

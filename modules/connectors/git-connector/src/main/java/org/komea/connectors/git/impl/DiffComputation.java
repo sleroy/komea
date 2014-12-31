@@ -105,7 +105,8 @@ public class DiffComputation
         AbstractTreeIterator oldTreeIter;
         if (hasCommitParent()) {
 
-            final AnyObjectId oldHead = this.commit.getParent(0).getTree().getId();
+            RevCommit parent = this.commit.getParent(0);
+            final AnyObjectId oldHead = parent.getTree().getId();
             oldTreeIter = new CanonicalTreeParser();
             ((CanonicalTreeParser) oldTreeIter).reset(reader, oldHead);
 
@@ -127,7 +128,7 @@ public class DiffComputation
         DiffFormatter df;
         df = new DiffFormatter(out);
         df.setRepository(this.git.getRepository());
-        df.setDiffComparator(RawTextComparator.DEFAULT);
+        df.setDiffComparator(RawTextComparator.WS_IGNORE_TRAILING);
         df.setDetectRenames(true);
         return df;
     }
