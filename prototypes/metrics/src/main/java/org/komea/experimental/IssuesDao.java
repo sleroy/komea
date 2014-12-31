@@ -24,7 +24,7 @@ public class IssuesDao extends ApplicationDAO
 
     public int countIssues(final Release release, final String type) {
     
-        String query = "SELECT COUNT(*) FROM issue_new WHERE issuetype.name='"+type+"' AND versions.name CONTAINS '" + release.geReleaseName() + "'";
+        String query = "SELECT COUNT(*) FROM issue_new WHERE issuetype.name='"+type+"'AND (status.name ='Open' OR resolution.name='Fixed') AND versions.name CONTAINS '" + release.geReleaseName() + "'";
         Iterator<IODocument> tags = this.queries.query(query);
         if (tags.hasNext()) {
             IODocument tag = tags.next();
