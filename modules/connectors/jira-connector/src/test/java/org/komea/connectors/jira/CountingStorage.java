@@ -79,5 +79,11 @@ public class CountingStorage implements IEventStorage {
 		}
 		counters.put(type, current + 1);
 	}
+    @Override
+    public void declareEventType(final String type) {
+    
+        // TODO Auto-generated method stub
+        
+    }
 
 }

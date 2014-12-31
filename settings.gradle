@@ -1,8 +1,5 @@
 rootProject.name = 'komea'
 
-//include "prototypes:sql-eventory-server"
-//include "prototypes:orientdb-eventory-server"
-//include "prototypes:metrics"
 
 include "core:shared:komea-db-commons"
 include "core:shared:komea-db-viz"

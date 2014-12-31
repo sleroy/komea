@@ -64,4 +64,7 @@ public interface IEventStorage extends Closeable {
 	 * @param _pojo
 	 */
 	public void storePojo(Object _pojo);
+	
+	
+	public void declareEventType(String type);
 }

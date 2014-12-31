@@ -67,4 +67,11 @@ public class CountingStorage implements IEventStorage {
 		count++;
 	}
 
+    @Override
+    public void declareEventType(final String type) {
+    
+        // TODO Auto-generated method stub
+        
+    }
+    
 }
