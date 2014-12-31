@@ -106,7 +106,10 @@ public class GitRepository implements IGitRepository
         final GitCommit scmCommit = new GitCommit(_commit.getId().name(), author, committer, _commit.getFullMessage());
         scmCommit.setRepositoryUrl(this.repositoryUrl);
         scmCommit.setCommitMessageSize(_commit.getFullMessage().length());
-        
+        RevCommit[] parents = _commit.getParents();
+        for (int i = 0; i < parents.length; i++) {
+            scmCommit.getParents().add(parents[i].getName());
+        }
         final DiffComputation gitDiffComputation = new DiffComputation(this.git, scmCommit, _commit);
         gitDiffComputation.update();
         

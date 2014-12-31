@@ -49,6 +49,7 @@ public class GitCommit implements IGitCommit, Serializable
     private String                      shProject;
     
     private List<String>                branches;
+    private  List<String>          parents;
     private transient List<IFileUpdate> modifications;
     
     public GitCommit(final String _id, final PersonIdent author, final PersonIdent committer, final String fullMessage) {
@@ -60,6 +61,7 @@ public class GitCommit implements IGitCommit, Serializable
         this.committer = committer.getEmailAddress();
         this.modifications = Lists.newArrayList();
         this.branches = Lists.newArrayList();
+        this.parents = Lists.newArrayList();
         
     }
     
@@ -84,6 +86,19 @@ public class GitCommit implements IGitCommit, Serializable
     
         return this.branches;
     }
+    
+    @Override
+    public List<String> getParents() {
+    
+        return this.parents;
+    }
+    
+    
+    public void setParents(final List<String> parents) {
+    
+        this.parents = parents;
+    }
+    
     
     /**
      * @return the commitMessage

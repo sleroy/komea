@@ -41,6 +41,7 @@ public class FileModificationEventProducer implements IGitCommitProcessor
         event.setEventType(IGitEvent.UPDATE);
 
         event.setDate(commit.getCommitTime());
+        event.addField("merge", commit.getParents().size()>1);
         event.addField("commit", commit.getId());
         event.addField("file", update.getPath());
         event.addField("total_updated_lines", update.getNumberOfAddedLines() + update.getNumberOfDeletedLines());

@@ -43,6 +43,8 @@ public interface IGitCommit
      * @return the id
      */
     String getId();
+    
+    List<String> getParents();
 
     List<IFileUpdate> getModifications();
 
