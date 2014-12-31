@@ -1,5 +1,0 @@
-dependencies{
-    compile project(":modules:connectors:git-connector")
-    compile project(":modules:connectors:jira-connector")
-
-}
