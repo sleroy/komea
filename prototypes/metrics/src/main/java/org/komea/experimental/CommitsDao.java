@@ -22,7 +22,7 @@ public class CommitsDao extends ApplicationDAO
 
     public int countNumberOfModifiedLines(final Date previous, final Date releaseDate) {
     
-        String query = "SELECT SUM(total_updated_lines) AS chunk FROM file_update WHERE " + applicationClause() + " AND  date BETWEEN '" + format(previous) + "' AND '" + format(releaseDate) + "'" + pathClause(this.application);
+        String query = "SELECT SUM(total_updated_lines) AS chunk FROM file_update WHERE " + applicationClause() +" AND merge ='false'"+ " AND  date BETWEEN '" + format(previous) + "' AND '" + format(releaseDate) + "'" + pathClause(this.application);
         Iterator<IODocument> tags = this.queries.query(query);
         if (tags.hasNext()) {
             IODocument tag = tags.next();
