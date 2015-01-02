@@ -5,8 +5,5 @@ CREATE TABLE IF NOT EXISTS `events` (
   `eventType` varchar(255) NOT NULL,
   `data` blob NOT NULL
 );
---
---ALTER TABLE `events` ADD KEY `event_evt_type` (`eventType`);
---ALTER TABLE `events` ADD KEY `event_basic_filter` (`date`,`eventType`);
---ALTER TABLE `events` ADD KEY `event_date` (`date`);
---ALTER TABLE `events` ADD KEY `event_provider_event_type` (`provider`,`eventType`);
+
+CREATE INDEX IF NOT EXISTS `events_date` ON `events`(`date` ASC);

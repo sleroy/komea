@@ -1,6 +1,8 @@
-package org.komea.event.storage.orientdb.impl;
+package org.komea.event.storage.orient.impl;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.komea.event.storage.IEventDB;
 import org.komea.event.storage.IEventDBFactory;
@@ -15,26 +17,31 @@ import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
  * @author sleroy
  */
 public class OEventDBFactory implements IEventDBFactory {
-
+	
 	private final OrientSessionFactory<ODatabaseDocumentTx>	orientSessionFactory;
 	private DatabaseConfiguration	                        databaseConfiguration;
-
+	
+	private final Map<String, IEventDB>	                    eventsDB	= new ConcurrentHashMap<>();
+	
 	public OEventDBFactory(final DatabaseConfiguration _databaseConfiguration) {
 		this(new OrientSessionFactory(_databaseConfiguration));
 	}
-
+	
 	public OEventDBFactory(
 			final OrientSessionFactory<ODatabaseDocumentTx> _orientSessionFactory) {
 		orientSessionFactory = _orientSessionFactory;
-
+		
 	}
-
+	
 	@Override
 	public void close() throws IOException {
+		for (final IEventDB db : eventsDB.values()) {
+			db.close();
+		}
 		orientSessionFactory.close();
-
+		
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see
@@ -44,14 +51,21 @@ public class OEventDBFactory implements IEventDBFactory {
 	@Override
 	public void declareEventType(final String _type) {
 		orientSessionFactory.getOrCreateDB().getMetadata().getSchema()
-		        .createClass(_type);
-
+		.createClass(_type);
+		
 	}
 
 	@Override
 	public IEventDB getEventDB(final String _storageName) {
+		IEventDB iEventDB = eventsDB.get(_storageName);
+		if (iEventDB == null) {
+			final OrientDBEventDB orientDBEventDB = new OrientDBEventDB(
+					orientSessionFactory, _storageName);
+			eventsDB.put(_storageName, orientDBEventDB);
+			iEventDB = orientDBEventDB;
+		}
 
-		return new OrientDBEventDB(orientSessionFactory, _storageName);
+		return iEventDB;
 	}
-
+	
 }

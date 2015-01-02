@@ -14,7 +14,7 @@ import org.komea.event.queries.executor.QueryExecutor;
 import org.komea.event.queries.executor.QueryResult;
 import org.komea.event.queries.impl.EventQuery;
 import org.komea.event.storage.impl.EventStorage;
-import org.komea.event.storage.orientdb.impl.OEventDBFactory;
+import org.komea.event.storage.orient.impl.OEventDBFactory;
 import org.springframework.orientdb.session.impl.TestDatabaseConfiguration;
 
 import com.orientechnologies.orient.core.Orient;

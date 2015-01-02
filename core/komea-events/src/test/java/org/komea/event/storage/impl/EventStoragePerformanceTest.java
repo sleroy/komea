@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -24,9 +25,10 @@ import org.junit.runners.Parameterized.Parameters;
 import org.komea.event.model.IBasicEventInformations;
 import org.komea.event.model.beans.FlatEvent;
 import org.komea.event.storage.IEventDBFactory;
+import org.komea.event.storage.ehcache.impl.EhCacheEventDBFactory;
 import org.komea.event.storage.mysql.impl.DataSourceConnectionFactory;
 import org.komea.event.storage.mysql.impl.MySQLEventDBFactory;
-import org.komea.event.storage.orientdb.impl.OEventDBFactory;
+import org.komea.event.storage.orient.impl.OEventDBFactory;
 import org.skife.jdbi.v2.ResultIterator;
 import org.springframework.orientdb.session.impl.LocalDiskDatabaseConfiguration;
 import org.springframework.orientdb.session.impl.OrientSessionFactory;
@@ -45,9 +47,15 @@ public class EventStoragePerformanceTest {
 
 	@Parameters(name = "events={0},threads={1},fetch_all={2}")
 	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] { { 100, 1, false }, { 100, 10, true }, { 1000, 1, false },
-		        { 1000, 1, true }, { 1000, 10, false }, { 1000, 10, true } });
+		return Arrays.asList(new Object[][] { { 100, 1, false },
+				{ 100, 10, true }, { 1000, 1, false },
+				{ 1000, 1, true }, { 1000, 10, false }, { 1000, 10, true } });
 	}
+	
+	// @Parameters(name = "events={0},threads={1},fetch_all={2}")
+	// public static Collection<Object[]> data() {
+	// return Arrays.asList(new Object[][] { { 10000, 1, false } });
+	// }
 
 	@BeforeClass
 	public static void setup() {
@@ -59,13 +67,21 @@ public class EventStoragePerformanceTest {
 		DEMO_EVENT.put("reporter", "rgalerme");
 	}
 
+	/**
+	 * Table name.
+	 */
+	private static final String	     TABLE_EVENTS	 = "events";
+
 	private static final int	     BENCH	         = 2;
 
 	private static final int	     WARMUP	         = 1;
 
 	private static final String	     H2_EXTRA_OPTONS	= ";MODE=MYSQL;INIT=RUNSCRIPT FROM 'src/main/resources/schema-eventsh2.sql'";
 
-	public static final IBenchReport	report	     = new JFreeChartBenchmarkReport(new File("build/charts"), 1024,
+	public static final IBenchReport	report	     = new JFreeChartBenchmarkReport(
+			new File(
+					"build/charts"),
+					1024,
 	                                                         768, true);
 
 	/**
@@ -92,7 +108,8 @@ public class EventStoragePerformanceTest {
 	@Rule
 	public final TemporaryFolder	 temporaryFolder	= new TemporaryFolder();
 
-	public ViburDBCPDataSource createDataSourceWithStatementsCache(final String _url, String user, String password) {
+	public ViburDBCPDataSource createDataSourceWithStatementsCache(
+			final String _url, final String user, final String password) {
 		final ViburDBCPDataSource ds = new ViburDBCPDataSource();
 		ds.setJdbcUrl(_url);
 		ds.setUsername(user);
@@ -113,104 +130,8 @@ public class EventStoragePerformanceTest {
 		return ds;
 	}
 
-	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
-	@Test
-	public void testH2Local() throws IOException, InterruptedException {
-		final TemporaryFolder temporaryFolder2 = new TemporaryFolder();
-		temporaryFolder2.create();
-		final ViburDBCPDataSource dataSource = createDataSourceWithStatementsCache("jdbc:h2:"
-		        + temporaryFolder2.getRoot().getPath() + H2_EXTRA_OPTONS, "sa", "");
-		try {
-			final ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_THREADS);
-			final MySQLEventDBFactory eventDBFactory = new MySQLEventDBFactory(new DataSourceConnectionFactory(
-			        dataSource), "events");
-			performTests(executorService, eventDBFactory);
-		} finally {
-
-			dataSource.terminate();
-		}
-	}
-
-	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
-	@Test
-	public void testH2Mem() throws InterruptedException {
-		final ViburDBCPDataSource dataSource = createDataSourceWithStatementsCache(
-		        "jdbc:h2:mem:event" + new Date().getTime() + H2_EXTRA_OPTONS, "sa", "");
-		try {
-			final ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_THREADS);
-			final MySQLEventDBFactory eventDBFactory = new MySQLEventDBFactory(new DataSourceConnectionFactory(
-			        dataSource), "events");
-			performTests(executorService, eventDBFactory);
-		} finally {
-			dataSource.terminate();
-		}
-	}
-
-	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
-	@Test
-	public void testMySQL() throws IOException, InterruptedException {
-		final TemporaryFolder temporaryFolder2 = new TemporaryFolder();
-		temporaryFolder2.create();
-		final ViburDBCPDataSource dataSource = createDataSourceWithStatementsCache("jdbc:mysql://localhost/events",
-		        "root", "root");
-		try {
-			final ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_THREADS);
-			final MySQLEventDBFactory eventDBFactory = new MySQLEventDBFactory(new DataSourceConnectionFactory(
-			        dataSource), "event");
-			performTests(executorService, eventDBFactory);
-		} finally {
-
-			dataSource.terminate();
-		}
-	}
-
-	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
-	@Test
-	public void testOrientDB() throws IOException, InterruptedException {
-		// BUG moisi avec les storages restant ouverts...
-		final LocalDiskDatabaseConfiguration configuration = new LocalDiskDatabaseConfiguration(temporaryFolder
-		        .getRoot().getPath(), "events" + new Date().getTime());
-		configuration.setMaxPoolSize(MAX_SIZE);//
-		configuration.setMinPoolSize(MIN_SIZE);
-		final OrientSessionFactory<ODatabaseDocumentTx> orientSessionFactory = new OrientSessionFactory<>(configuration);
-		try {
-			// orientSessionFactory.db().drop();
-			final ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_THREADS);
-
-			final OEventDBFactory eventDBFactory = new OEventDBFactory(orientSessionFactory);
-			performTests(executorService, eventDBFactory);
-		} finally {
-			orientSessionFactory.getOrCreateDB().drop();
-			orientSessionFactory.close();
-			Orient.instance().closeAllStorages();
-
-		}
-	}
-
-	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
-	@Test
-	public void testOrientDBMem() throws IOException, InterruptedException {
-		// BUG moisi avec les storages restant ouverts...
-		final TestDatabaseConfiguration configuration = new TestDatabaseConfiguration();
-		configuration.setMaxPoolSize(MAX_SIZE);//
-		configuration.setMinPoolSize(MIN_SIZE);
-		final OrientSessionFactory<ODatabaseDocumentTx> orientSessionFactory = new OrientSessionFactory<>(configuration);
-		try {
-			// orientSessionFactory.db().drop();
-			final ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_THREADS);
-
-			final OEventDBFactory eventDBFactory = new OEventDBFactory(orientSessionFactory);
-			performTests(executorService, eventDBFactory);
-		} finally {
-			orientSessionFactory.getOrCreateDB().drop();
-
-			orientSessionFactory.close();
-			Orient.instance().closeAllStorages();
-
-		}
-	}
-
-	private void performTests(final ExecutorService executorService, final IEventDBFactory _eventDBFactory)
+	public void performTests(final ExecutorService executorService,
+			final IEventDBFactory _eventDBFactory)
 	        throws InterruptedException {
 		_eventDBFactory.getEventDB(NEW_BUG).removeAll();
 		assertEquals(0, _eventDBFactory.getEventDB(NEW_BUG).count());
@@ -221,20 +142,23 @@ public class EventStoragePerformanceTest {
 				@Override
 				public void run() {
 					for (int j = 0; j < NUMBER_EVENTS; ++j) {
-						eventStorage.storeFlatEvent(EventStoragePerformanceTest.DEMO_EVENT);
+						eventStorage
+						.storeFlatEvent(EventStoragePerformanceTest.DEMO_EVENT);
 					}
 				}
 			});
 		}
 		executorService.shutdown();
-		final boolean awaitTermination = executorService.awaitTermination(10, TimeUnit.MINUTES);
+		final boolean awaitTermination = executorService.awaitTermination(10,
+				TimeUnit.MINUTES);
 		assertTrue(awaitTermination);
 
 		final long count = _eventDBFactory.getEventDB(NEW_BUG).count();
 		assertEquals(NUMBER_EVENTS * NUMBER_THREADS, count);
 		if (FETCH_ALL) {
 			int read = 0;
-			final ResultIterator<FlatEvent> loadAll = _eventDBFactory.getEventDB(NEW_BUG).loadAll();
+			final ResultIterator<FlatEvent> loadAll = _eventDBFactory
+					.getEventDB(NEW_BUG).loadAll();
 			while (loadAll.hasNext()) {
 
 				assertNotNull(loadAll.next());
@@ -245,6 +169,141 @@ public class EventStoragePerformanceTest {
 
 		_eventDBFactory.getEventDB(NEW_BUG).removeAll();
 		assertEquals(0, _eventDBFactory.getEventDB(NEW_BUG).count());
+	}
+
+	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
+	@Test
+	public void testEhCache() throws IOException, InterruptedException {
+		EhCacheEventDBFactory eventDBFactory = null;
+		try {
+			// orientSessionFactory.db().drop();
+			final ExecutorService executorService = Executors
+					.newFixedThreadPool(NUMBER_THREADS);
+
+			eventDBFactory = new EhCacheEventDBFactory(new File("/tmp/ehcache"
+					+ new Random().nextInt()));
+			performTests(executorService, eventDBFactory);
+		} finally {
+			if (eventDBFactory != null) {
+				eventDBFactory.close();
+			}
+
+		}
+	}
+
+	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
+	// @Test
+	public void testH2Local() throws IOException, InterruptedException {
+		final TemporaryFolder temporaryFolder2 = new TemporaryFolder();
+		temporaryFolder2.create();
+		final ViburDBCPDataSource dataSource = createDataSourceWithStatementsCache(
+				"jdbc:h2:"
+						+ temporaryFolder2.getRoot().getPath()
+						+ H2_EXTRA_OPTONS, "sa", "");
+		try {
+			final ExecutorService executorService = Executors
+					.newFixedThreadPool(NUMBER_THREADS);
+			final MySQLEventDBFactory eventDBFactory = new MySQLEventDBFactory(
+					new DataSourceConnectionFactory(
+							dataSource), TABLE_EVENTS);
+			performTests(executorService, eventDBFactory);
+		} finally {
+
+			dataSource.terminate();
+		}
+	}
+
+	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
+	// @Test
+	public void testH2Mem() throws InterruptedException {
+		final ViburDBCPDataSource dataSource = createDataSourceWithStatementsCache(
+		        "jdbc:h2:mem:event" + new Date().getTime() + H2_EXTRA_OPTONS,
+				"sa", "");
+		try {
+			final ExecutorService executorService = Executors
+					.newFixedThreadPool(NUMBER_THREADS);
+			final MySQLEventDBFactory eventDBFactory = new MySQLEventDBFactory(
+					new DataSourceConnectionFactory(
+							dataSource), TABLE_EVENTS);
+			performTests(executorService, eventDBFactory);
+		} finally {
+			dataSource.terminate();
+		}
+	}
+
+	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
+	// @Test
+	public void testMySQL() throws IOException, InterruptedException {
+		final TemporaryFolder temporaryFolder2 = new TemporaryFolder();
+		temporaryFolder2.create();
+		final ViburDBCPDataSource dataSource = createDataSourceWithStatementsCache(
+				"jdbc:mysql://localhost/events",
+		        "root", "root");
+		try {
+			final ExecutorService executorService = Executors
+					.newFixedThreadPool(NUMBER_THREADS);
+			final MySQLEventDBFactory eventDBFactory = new MySQLEventDBFactory(
+					new DataSourceConnectionFactory(
+							dataSource), TABLE_EVENTS);
+			performTests(executorService, eventDBFactory);
+		} finally {
+
+			dataSource.terminate();
+		}
+	}
+	
+	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
+	// @Test
+	public void testOrientDB() throws IOException, InterruptedException {
+		// BUG moisi avec les storages restant ouverts...
+		final LocalDiskDatabaseConfiguration configuration = new LocalDiskDatabaseConfiguration(
+				temporaryFolder
+				.getRoot().getPath(), TABLE_EVENTS
+				+ new Date().getTime());
+		configuration.setMaxPoolSize(MAX_SIZE);//
+		configuration.setMinPoolSize(MIN_SIZE);
+		final OrientSessionFactory<ODatabaseDocumentTx> orientSessionFactory = new OrientSessionFactory<>(
+				configuration);
+		try {
+			// orientSessionFactory.db().drop();
+			final ExecutorService executorService = Executors
+					.newFixedThreadPool(NUMBER_THREADS);
+
+			final OEventDBFactory eventDBFactory = new OEventDBFactory(
+					orientSessionFactory);
+			performTests(executorService, eventDBFactory);
+		} finally {
+			orientSessionFactory.getOrCreateDB().drop();
+			orientSessionFactory.close();
+			Orient.instance().closeAllStorages();
+
+		}
+	}
+
+	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
+	// @Test
+	public void testOrientDBMem() throws IOException, InterruptedException {
+		// BUG moisi avec les storages restant ouverts...
+		final TestDatabaseConfiguration configuration = new TestDatabaseConfiguration();
+		configuration.setMaxPoolSize(MAX_SIZE);//
+		configuration.setMinPoolSize(MIN_SIZE);
+		final OrientSessionFactory<ODatabaseDocumentTx> orientSessionFactory = new OrientSessionFactory<>(
+				configuration);
+		try {
+			// orientSessionFactory.db().drop();
+			final ExecutorService executorService = Executors
+					.newFixedThreadPool(NUMBER_THREADS);
+
+			final OEventDBFactory eventDBFactory = new OEventDBFactory(
+					orientSessionFactory);
+			performTests(executorService, eventDBFactory);
+		} finally {
+			orientSessionFactory.getOrCreateDB().drop();
+
+			orientSessionFactory.close();
+			Orient.instance().closeAllStorages();
+
+		}
 	}
 
 }

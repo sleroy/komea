@@ -19,19 +19,19 @@ import com.google.common.collect.Maps;
  * This class defines the implementation of a complex event.
  *
  * @author sleroy
- *
  */
-public class FlatEvent implements IBasicEventInformations {
-
+public class FlatEvent implements IBasicEventInformations, Serializable {
+	
 	private Map<String, Serializable>	properties	= Maps.newHashMap();
-
-	private static final Logger	      LOGGER	   = LoggerFactory.getLogger(FlatEvent.class);
-
+	
+	private static final Logger	      LOGGER	   = LoggerFactory
+	                                                       .getLogger(FlatEvent.class);
+	
 	public FlatEvent() {
 		properties = Maps.newHashMap();
 		properties.put(IBasicEventInformations.FIELD_DATE, new Date());
 	}
-
+	
 	/**
 	 * Builds a complex event with a map of properties
 	 *
@@ -41,18 +41,20 @@ public class FlatEvent implements IBasicEventInformations {
 	public FlatEvent(final Map<String, Serializable> _map) {
 		properties = _map;
 	}
-
+	
 	public FlatEvent(final Object _pojo) {
 		this();
-		final Map<String, Serializable> convertPojoInMap = new PojoToMap().convertPojoInMap(_pojo);
-
-		for (final Entry<String, Serializable> entry : convertPojoInMap.entrySet()) {
+		final Map<String, Serializable> convertPojoInMap = new PojoToMap()
+		        .convertPojoInMap(_pojo);
+		
+		for (final Entry<String, Serializable> entry : convertPojoInMap
+		        .entrySet()) {
 			properties.put(entry.getKey(), entry.getValue());
-
+			
 		}
-
+		
 	}
-
+	
 	/**
 	 * Adds a field to the complex even.
 	 *
@@ -64,15 +66,15 @@ public class FlatEvent implements IBasicEventInformations {
 	@JsonIgnore
 	public void addField(final String _fieldName, final Serializable _object) {
 		properties.put(_fieldName, _object);
-
+		
 	}
-
+	
 	@JsonIgnore
 	public boolean containsField(final String _fieldDate) {
-
+		
 		return properties.containsKey(_fieldDate);
 	}
-
+	
 	/**
 	 * Returns the field associated to the given key and cast it in the expected
 	 * return type
@@ -83,24 +85,24 @@ public class FlatEvent implements IBasicEventInformations {
 	 */
 	@JsonIgnore
 	public <T> T field(final String _key) {
-
+		
 		return (T) properties.get(_key);
 	}
-
+	
 	/**
 	 * Returns a field expecting the given thpe
-	 * 
+	 *
 	 * @param _fieldName
 	 *            the field name
 	 * @param _class
 	 *            the field typ
 	 * @return the value or null.
 	 */
-	public <T> T field(String _fieldName, Class<T> _class) {
-
+	public <T> T field(final String _fieldName, final Class<T> _class) {
+		
 		return _class.cast(field(_fieldName));
 	}
-
+	
 	/**
 	 * Tests if a fields is equals to the given value
 	 *
@@ -109,16 +111,16 @@ public class FlatEvent implements IBasicEventInformations {
 	 * @return
 	 */
 	@JsonIgnore
-	public boolean fieldEquals(String _fieldName, Object _value) {
+	public boolean fieldEquals(final String _fieldName, final Object _value) {
 		if (_value == null) { return _value == field(_fieldName); }
 		return _value.equals(_fieldName);
 	}
-
+	
 	public Date getDate() {
-
+		
 		return (Date) properties.get(FIELD_DATE);
 	}
-
+	
 	/**
 	 * Returns the event type
 	 *
@@ -127,17 +129,17 @@ public class FlatEvent implements IBasicEventInformations {
 	public String getEventType() {
 		return (String) properties.get(FIELD_EVENT_TYPE);
 	}
-
+	
 	public Map<String, ? extends Serializable> getProperties() {
-
+		
 		return Collections.unmodifiableMap(properties);
 	}
-
+	
 	public String getProvider() {
-
+		
 		return (String) properties.get(FIELD_PROVIDER);
 	}
-
+	
 	/**
 	 * Tests if the event is after that time.
 	 *
@@ -146,10 +148,10 @@ public class FlatEvent implements IBasicEventInformations {
 	 * @return true if the event has been sent before this date.
 	 */
 	@JsonIgnore
-	public boolean isAfter(DateTime _previousDate) {
+	public boolean isAfter(final DateTime _previousDate) {
 		return getDateTime().isAfter(_previousDate);
 	}
-
+	
 	/**
 	 * Tests if the event is before that time.
 	 *
@@ -158,11 +160,11 @@ public class FlatEvent implements IBasicEventInformations {
 	 * @return true if the event has been sent before this date.
 	 */
 	@JsonIgnore
-	public boolean isBefore(DateTime _dateTime) {
-
+	public boolean isBefore(final DateTime _dateTime) {
+		
 		return getDateTime().isBefore(_dateTime);
 	}
-
+	
 	/**
 	 * Adds a new field to the event
 	 *
@@ -175,12 +177,12 @@ public class FlatEvent implements IBasicEventInformations {
 	public void put(final String _key, final Serializable _object) {
 		properties.put(_key, _object);
 	}
-
+	
 	@Override
 	public String toString() {
 		return "FlatEvent [properties=" + properties + "]";
 	}
-
+	
 	/**
 	 * Return the date in joda time.
 	 *
@@ -188,8 +190,8 @@ public class FlatEvent implements IBasicEventInformations {
 	 */
 	@JsonIgnore
 	private DateTime getDateTime() {
-
+		
 		return new DateTime(getDate());
 	}
-
+	
 }

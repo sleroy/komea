@@ -1,4 +1,4 @@
-package org.komea.event.storage.orientdb.impl;
+package org.komea.event.storage.orient.impl;
 
 import java.io.IOException;
 import java.util.Collection;
