@@ -47,9 +47,11 @@ public class EventStoragePerformanceTest {
 
 	@Parameters(name = "events={0},threads={1},fetch_all={2}")
 	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] { { 100, 1, false },
+		return Arrays.asList(new Object[][] { { 100, 1, true },
 				{ 100, 10, true }, { 1000, 1, false },
-				{ 1000, 1, true }, { 1000, 10, false }, { 1000, 10, true } });
+				{ 1000, 1, true }, { 10000, 10, false }, { 10000, 10, true },
+		        { 100000, 10, false }, { 100000, 10, true },
+		        { 1000000, 10, false }, { 1000000, 10, true } });
 	}
 	
 	// @Parameters(name = "events={0},threads={1},fetch_all={2}")
