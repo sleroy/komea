@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.Validate;
 import org.joda.time.DateTime;
 import org.komea.core.utils.PojoToMap;
 import org.komea.event.model.IBasicEventInformations;
@@ -21,17 +22,17 @@ import com.google.common.collect.Maps;
  * @author sleroy
  */
 public class FlatEvent implements IBasicEventInformations, Serializable {
-	
+
 	private Map<String, Serializable>	properties	= Maps.newHashMap();
-	
+
 	private static final Logger	      LOGGER	   = LoggerFactory
-	                                                       .getLogger(FlatEvent.class);
-	
+			.getLogger(FlatEvent.class);
+
 	public FlatEvent() {
 		properties = Maps.newHashMap();
 		properties.put(IBasicEventInformations.FIELD_DATE, new Date());
 	}
-	
+
 	/**
 	 * Builds a complex event with a map of properties
 	 *
@@ -41,20 +42,20 @@ public class FlatEvent implements IBasicEventInformations, Serializable {
 	public FlatEvent(final Map<String, Serializable> _map) {
 		properties = _map;
 	}
-	
+
 	public FlatEvent(final Object _pojo) {
 		this();
 		final Map<String, Serializable> convertPojoInMap = new PojoToMap()
-		        .convertPojoInMap(_pojo);
-		
+		.convertPojoInMap(_pojo);
+
 		for (final Entry<String, Serializable> entry : convertPojoInMap
-		        .entrySet()) {
+				.entrySet()) {
 			properties.put(entry.getKey(), entry.getValue());
-			
+
 		}
-		
+
 	}
-	
+
 	/**
 	 * Adds a field to the complex even.
 	 *
@@ -66,15 +67,15 @@ public class FlatEvent implements IBasicEventInformations, Serializable {
 	@JsonIgnore
 	public void addField(final String _fieldName, final Serializable _object) {
 		properties.put(_fieldName, _object);
-		
+
 	}
-	
+
 	@JsonIgnore
 	public boolean containsField(final String _fieldDate) {
-		
+
 		return properties.containsKey(_fieldDate);
 	}
-	
+
 	/**
 	 * Returns the field associated to the given key and cast it in the expected
 	 * return type
@@ -85,10 +86,10 @@ public class FlatEvent implements IBasicEventInformations, Serializable {
 	 */
 	@JsonIgnore
 	public <T> T field(final String _key) {
-		
+
 		return (T) properties.get(_key);
 	}
-	
+
 	/**
 	 * Returns a field expecting the given thpe
 	 *
@@ -99,10 +100,10 @@ public class FlatEvent implements IBasicEventInformations, Serializable {
 	 * @return the value or null.
 	 */
 	public <T> T field(final String _fieldName, final Class<T> _class) {
-		
+
 		return _class.cast(field(_fieldName));
 	}
-	
+
 	/**
 	 * Tests if a fields is equals to the given value
 	 *
@@ -115,12 +116,12 @@ public class FlatEvent implements IBasicEventInformations, Serializable {
 		if (_value == null) { return _value == field(_fieldName); }
 		return _value.equals(_fieldName);
 	}
-	
+
 	public Date getDate() {
-		
+
 		return (Date) properties.get(FIELD_DATE);
 	}
-	
+
 	/**
 	 * Returns the event type
 	 *
@@ -129,17 +130,17 @@ public class FlatEvent implements IBasicEventInformations, Serializable {
 	public String getEventType() {
 		return (String) properties.get(FIELD_EVENT_TYPE);
 	}
-	
+
 	public Map<String, ? extends Serializable> getProperties() {
-		
+
 		return Collections.unmodifiableMap(properties);
 	}
-	
+
 	public String getProvider() {
-		
+
 		return (String) properties.get(FIELD_PROVIDER);
 	}
-	
+
 	/**
 	 * Tests if the event is after that time.
 	 *
@@ -151,7 +152,7 @@ public class FlatEvent implements IBasicEventInformations, Serializable {
 	public boolean isAfter(final DateTime _previousDate) {
 		return getDateTime().isAfter(_previousDate);
 	}
-	
+
 	/**
 	 * Tests if the event is before that time.
 	 *
@@ -161,10 +162,10 @@ public class FlatEvent implements IBasicEventInformations, Serializable {
 	 */
 	@JsonIgnore
 	public boolean isBefore(final DateTime _dateTime) {
-		
+
 		return getDateTime().isBefore(_dateTime);
 	}
-	
+
 	/**
 	 * Adds a new field to the event
 	 *
@@ -177,7 +178,34 @@ public class FlatEvent implements IBasicEventInformations, Serializable {
 	public void put(final String _key, final Serializable _object) {
 		properties.put(_key, _object);
 	}
+
+	public void setDate(final Date _date) {
+		properties.put(FIELD_DATE, _date);
+		
+	}
+
+	public void setDateTime(final DateTime _date) {
+		Validate.notNull(_date);
+		properties.put(FIELD_DATE, _date.toDate());
+		
+	}
 	
+	/**
+	 * @param _string
+	 */
+	public void setEventType(final String _string) {
+		properties.put(FIELD_EVENT_TYPE, _string);
+		
+	}
+	
+	/**
+	 * @param _string
+	 */
+	public void setProvider(final String _string) {
+		properties.put(FIELD_PROVIDER, _string);
+
+	}
+
 	@Override
 	public String toString() {
 		return "FlatEvent [properties=" + properties + "]";
@@ -190,8 +218,8 @@ public class FlatEvent implements IBasicEventInformations, Serializable {
 	 */
 	@JsonIgnore
 	private DateTime getDateTime() {
-		
+
 		return new DateTime(getDate());
 	}
-	
+
 }

@@ -1,4 +1,4 @@
-package org.komea.event.storage.mysql.kryo.impl;
+package org.komea.event.utils.kryo.impl;
 
 import java.io.ByteArrayOutputStream;
 

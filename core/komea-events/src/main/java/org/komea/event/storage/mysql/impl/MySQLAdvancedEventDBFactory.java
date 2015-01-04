@@ -1,6 +1,5 @@
 package org.komea.event.storage.mysql.impl;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -9,21 +8,17 @@ import javax.sql.DataSource;
 import org.komea.event.storage.IEventDB;
 import org.skife.jdbi.v2.tweak.ConnectionFactory;
 
-public class MySQLEventDBFactory extends AbstractEventDBFactory {
+public class MySQLAdvancedEventDBFactory extends AbstractEventDBFactory {
 
 	private ConnectionFactory	dataSource;
-	private final String	  tableName;
 
-	public MySQLEventDBFactory(final ConnectionFactory _dataSource,
-			final String _defaultTableName) {
+	public MySQLAdvancedEventDBFactory(final ConnectionFactory _dataSource) {
 		super();
 		dataSource = _dataSource;
-		tableName = _defaultTableName;
 
 	}
 
-	public MySQLEventDBFactory(final DataSource _dataSource,
-			final String _defaultTableName) {
+	public MySQLAdvancedEventDBFactory(final DataSource _dataSource) {
 		super();
 		dataSource = new ConnectionFactory() {
 
@@ -32,10 +27,9 @@ public class MySQLEventDBFactory extends AbstractEventDBFactory {
 				return _dataSource.getConnection();
 			}
 		};
-		tableName = _defaultTableName;
 
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see
@@ -55,18 +49,18 @@ public class MySQLEventDBFactory extends AbstractEventDBFactory {
 	public void setDataSource(final ConnectionFactory _dataSource) {
 		dataSource = _dataSource;
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see
 	 * org.komea.event.storage.mysql.impl.AbstractEventDBFactory#closeStorage()
 	 */
 	@Override
-	protected void closeStorage() throws IOException {
+	protected void closeStorage() {
 		dataSource = null;
-
+		
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see
@@ -75,7 +69,7 @@ public class MySQLEventDBFactory extends AbstractEventDBFactory {
 	 */
 	@Override
 	protected IEventDB newEventDB(final String _eventType) {
-		return new KryoMySQLEventDB(dataSource, tableName, _eventType);
+		return new KryoMySQLAdvancedEventDB(dataSource, _eventType);
 	}
 
 }

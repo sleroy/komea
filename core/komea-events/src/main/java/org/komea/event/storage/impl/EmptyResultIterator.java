@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.komea.event.storage.impl;
 
@@ -9,8 +9,10 @@ import org.skife.jdbi.v2.ResultIterator;
 /**
  * @author sleroy
  */
-final class EmptyResultIterator implements
+public final class EmptyResultIterator implements
 ResultIterator<FlatEvent> {
+	public static final ResultIterator<FlatEvent>	EMPTY	= new EmptyResultIterator();
+
 	@Override
 	public void close() {
 

@@ -5,16 +5,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
-import java.util.Random;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -22,21 +20,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
-import org.komea.event.model.IBasicEventInformations;
 import org.komea.event.model.beans.FlatEvent;
+import org.komea.event.queries.demo.EventStorageFactory;
+import org.komea.event.queries.demo.Impl;
 import org.komea.event.storage.IEventDBFactory;
-import org.komea.event.storage.ehcache.impl.EhCacheEventDBFactory;
-import org.komea.event.storage.mysql.impl.DataSourceConnectionFactory;
-import org.komea.event.storage.mysql.impl.MySQLEventDBFactory;
-import org.komea.event.storage.orient.impl.OEventDBFactory;
 import org.skife.jdbi.v2.ResultIterator;
-import org.springframework.orientdb.session.impl.LocalDiskDatabaseConfiguration;
-import org.springframework.orientdb.session.impl.OrientSessionFactory;
-import org.springframework.orientdb.session.impl.TestDatabaseConfiguration;
-import org.vibur.dbcp.ViburDBCPDataSource;
 
-import com.orientechnologies.orient.core.Orient;
-import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
+import com.google.common.collect.Lists;
 import com.tocea.frameworks.bench4j.BenchmarkOptions;
 import com.tocea.frameworks.bench4j.IBenchReport;
 import com.tocea.frameworks.bench4j.impl.BenchRule;
@@ -44,268 +34,215 @@ import com.tocea.frameworks.bench4j.reports.jfreechart.JFreeChartBenchmarkReport
 
 @RunWith(Parameterized.class)
 public class EventStoragePerformanceTest {
-
-	@Parameters(name = "events={0},threads={1},fetch_all={2}")
-	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] { { 100, 1, true },
-				{ 100, 10, true }, { 1000, 1, false },
-				{ 1000, 1, true }, { 10000, 10, false }, { 10000, 10, true },
-		        { 100000, 10, false }, { 100000, 10, true },
-		        { 1000000, 10, false }, { 1000000, 10, true } });
+	
+	public static enum EventsNumber {
+		
+		TEST_NUMBER(10), PICO_NUMBER(100), TINY_NUMBER(1000), VERY_SMALL_NUMBER(
+		        10000), MEDIUM_NUMBER(100000), BIG_NUMBER(1000000);
+		
+		public int	value;
+		
+		/**
+		 *
+		 */
+		private EventsNumber(final int _value) {
+			value = _value;
+		}
 	}
 	
-	// @Parameters(name = "events={0},threads={1},fetch_all={2}")
-	// public static Collection<Object[]> data() {
-	// return Arrays.asList(new Object[][] { { 10000, 1, false } });
-	// }
-
-	@BeforeClass
-	public static void setup() {
-		DEMO_EVENT.put(IBasicEventInformations.FIELD_EVENT_TYPE, NEW_BUG);
-		DEMO_EVENT.put(IBasicEventInformations.FIELD_PROVIDER, "bugzilla");
-		DEMO_EVENT.put("bug_id", 12);
-		DEMO_EVENT.put("message", "Call to XXX creates premature exception");
-		DEMO_EVENT.put("author", "sleroy");
-		DEMO_EVENT.put("reporter", "rgalerme");
+	public static enum EventsTypeNumber {
+		
+		MANY_EVENT_TYPES(10), SINGLE_EVENT_TYPE(1), ;
+		
+		public int	value;
+		
+		/**
+		 *
+		 */
+		private EventsTypeNumber(final int _value) {
+			value = _value;
+		}
 	}
-
-	/**
-	 * Table name.
-	 */
-	private static final String	     TABLE_EVENTS	 = "events";
-
+	
+	public static enum ThreadNumber {
+		
+		MULTITHREAD(10), MONOTHREAD(1)
+		
+		;
+		
+		public final int	value;
+		
+		private ThreadNumber(final int _value) {
+			value = _value;
+		}
+	}
+	
+	@Parameters(name = "number_events={0},type_events={1},threads={2},impl={3}")
+	public static Collection<Object[]> data() {
+		return Arrays
+		        .asList(new Object[][] {
+		        {
+		        EventsNumber.TEST_NUMBER, EventsTypeNumber.MANY_EVENT_TYPES, ThreadNumber.MULTITHREAD, Impl.H2_MEM
+		        }, {
+		        EventsNumber.VERY_SMALL_NUMBER, EventsTypeNumber.MANY_EVENT_TYPES, ThreadNumber.MULTITHREAD, Impl.H2_DISK
+		        }, {
+		        EventsNumber.VERY_SMALL_NUMBER, EventsTypeNumber.MANY_EVENT_TYPES, ThreadNumber.MULTITHREAD, Impl.H2_ADV_DISK,
+		        },
+		        });
+	}
+	
 	private static final int	     BENCH	         = 2;
-
+	
 	private static final int	     WARMUP	         = 1;
-
-	private static final String	     H2_EXTRA_OPTONS	= ";MODE=MYSQL;INIT=RUNSCRIPT FROM 'src/main/resources/schema-eventsh2.sql'";
-
+	
 	public static final IBenchReport	report	     = new JFreeChartBenchmarkReport(
-			new File(
-					"build/charts"),
-					1024,
-	                                                         768, true);
-
+	                                                         new File(
+	                                                                 "build/charts"),
+	                                                         1024, 768, true);
+	
 	/**
 	 * Enables the benchmark rule.
 	 */
 	@Rule
 	public BenchRule	             benchmarkRun	 = new BenchRule(report);
-
-	private static final String	     NEW_BUG	     = "new_bug";
-
+	
 	@Parameter(value = 0)
-	public int	                     NUMBER_EVENTS	 = 2000;
+	public EventsNumber	             NUMBER_EVENTS;
+	
 	@Parameter(value = 1)
-	public int	                     NUMBER_THREADS	 = 10;
+	public EventsTypeNumber	         TYPE_EVENTS;
+	
 	@Parameter(value = 2)
-	public boolean	                 FETCH_ALL	     = true;
-
-	public static final FlatEvent	 DEMO_EVENT	     = new FlatEvent();
-
-	private static final int	     MAX_SIZE	     = 100;
-
-	private static final int	     MIN_SIZE	     = 2;
-
+	public ThreadNumber	             NUMBER_THREADS;
+	
+	@Parameter(value = 3)
+	public Impl	                     impl;
+	
+	public final List<FlatEvent>	 DEMO_EVENT	     = Lists.newArrayList();
+	
 	@Rule
 	public final TemporaryFolder	 temporaryFolder	= new TemporaryFolder();
-
-	public ViburDBCPDataSource createDataSourceWithStatementsCache(
-			final String _url, final String user, final String password) {
-		final ViburDBCPDataSource ds = new ViburDBCPDataSource();
-		ds.setJdbcUrl(_url);
-		ds.setUsername(user);
-		ds.setPassword(password);
-
-		ds.setPoolInitialSize(MIN_SIZE);
-		ds.setPoolMaxSize(MAX_SIZE);
-
-		ds.setConnectionIdleLimitInSeconds(30);
-		ds.setTestConnectionQuery("isValid");
-
-		ds.setLogQueryExecutionLongerThanMs(500);
-		ds.setLogStackTraceForLongQueryExecution(true);
-
-		ds.setStatementCacheMaxSize(200);
-
-		ds.start();
-		return ds;
+	
+	@Before
+	public void before() {
+		DEMO_EVENT.clear();
+		for (int t = 0; t < EventsTypeNumber.MANY_EVENT_TYPES.value; ++t) {
+			final FlatEvent flatEvent = new FlatEvent();
+			flatEvent.setProvider("bugzilla");
+			flatEvent.setEventType(getEventType(t));
+			flatEvent.put("bug_id", 12);
+			flatEvent.put("message", "Call to XXX creates premature exception");
+			flatEvent.put("author", "sleroy");
+			flatEvent.put("reporter", "rgalerme");
+			
+			DEMO_EVENT.add(flatEvent);
+		}
 	}
-
-	public void performTests(final ExecutorService executorService,
-			final IEventDBFactory _eventDBFactory)
+	
+	public void performInsertion(final EventStorage _eFactory)
 	        throws InterruptedException {
-		_eventDBFactory.getEventDB(NEW_BUG).removeAll();
-		assertEquals(0, _eventDBFactory.getEventDB(NEW_BUG).count());
-
-		final EventStorage eventStorage = new EventStorage(_eventDBFactory);
-		for (int i = 0; i < NUMBER_THREADS; ++i) {
+		final IEventDBFactory eventDBFactory = _eFactory.getEventDBFactory();
+		performDeletion(_eFactory);
+		final ExecutorService executorService = Executors
+		        .newFixedThreadPool(NUMBER_THREADS.value);
+		
+		for (int i = 0; i < NUMBER_THREADS.value; ++i) {
 			executorService.execute(new Runnable() {
 				@Override
 				public void run() {
-					for (int j = 0; j < NUMBER_EVENTS; ++j) {
-						eventStorage
-						.storeFlatEvent(EventStoragePerformanceTest.DEMO_EVENT);
+					int res = 0;
+					for (int j = 0; j < NUMBER_EVENTS.value; ++j) {
+						for (final FlatEvent fe : DEMO_EVENT) {
+							res++;
+							_eFactory.storeFlatEvent(fe);
+						}
 					}
+					System.out.println("Inserted " + res);
 				}
 			});
 		}
 		executorService.shutdown();
 		final boolean awaitTermination = executorService.awaitTermination(10,
-				TimeUnit.MINUTES);
+		        TimeUnit.MINUTES);
 		assertTrue(awaitTermination);
-
-		final long count = _eventDBFactory.getEventDB(NEW_BUG).count();
-		assertEquals(NUMBER_EVENTS * NUMBER_THREADS, count);
-		if (FETCH_ALL) {
-			int read = 0;
-			final ResultIterator<FlatEvent> loadAll = _eventDBFactory
-					.getEventDB(NEW_BUG).loadAll();
-			while (loadAll.hasNext()) {
-
-				assertNotNull(loadAll.next());
-				read++;
-			}
-			assertEquals(count, read);
+		
+		for (int t = 0; t < TYPE_EVENTS.value; ++t) {
+			final long count = eventDBFactory.getEventDB(getEventType(t))
+			        .count();
+			System.out.println("Number of events : " + count);
+			assertEquals(NUMBER_EVENTS.value * NUMBER_THREADS.value, count);
+			
 		}
-
-		_eventDBFactory.getEventDB(NEW_BUG).removeAll();
-		assertEquals(0, _eventDBFactory.getEventDB(NEW_BUG).count());
-	}
-
-	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
-	@Test
-	public void testEhCache() throws IOException, InterruptedException {
-		EhCacheEventDBFactory eventDBFactory = null;
-		try {
-			// orientSessionFactory.db().drop();
-			final ExecutorService executorService = Executors
-					.newFixedThreadPool(NUMBER_THREADS);
-
-			eventDBFactory = new EhCacheEventDBFactory(new File("/tmp/ehcache"
-					+ new Random().nextInt()));
-			performTests(executorService, eventDBFactory);
-		} finally {
-			if (eventDBFactory != null) {
-				eventDBFactory.close();
-			}
-
-		}
-	}
-
-	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
-	// @Test
-	public void testH2Local() throws IOException, InterruptedException {
-		final TemporaryFolder temporaryFolder2 = new TemporaryFolder();
-		temporaryFolder2.create();
-		final ViburDBCPDataSource dataSource = createDataSourceWithStatementsCache(
-				"jdbc:h2:"
-						+ temporaryFolder2.getRoot().getPath()
-						+ H2_EXTRA_OPTONS, "sa", "");
-		try {
-			final ExecutorService executorService = Executors
-					.newFixedThreadPool(NUMBER_THREADS);
-			final MySQLEventDBFactory eventDBFactory = new MySQLEventDBFactory(
-					new DataSourceConnectionFactory(
-							dataSource), TABLE_EVENTS);
-			performTests(executorService, eventDBFactory);
-		} finally {
-
-			dataSource.terminate();
-		}
-	}
-
-	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
-	// @Test
-	public void testH2Mem() throws InterruptedException {
-		final ViburDBCPDataSource dataSource = createDataSourceWithStatementsCache(
-		        "jdbc:h2:mem:event" + new Date().getTime() + H2_EXTRA_OPTONS,
-				"sa", "");
-		try {
-			final ExecutorService executorService = Executors
-					.newFixedThreadPool(NUMBER_THREADS);
-			final MySQLEventDBFactory eventDBFactory = new MySQLEventDBFactory(
-					new DataSourceConnectionFactory(
-							dataSource), TABLE_EVENTS);
-			performTests(executorService, eventDBFactory);
-		} finally {
-			dataSource.terminate();
-		}
-	}
-
-	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
-	// @Test
-	public void testMySQL() throws IOException, InterruptedException {
-		final TemporaryFolder temporaryFolder2 = new TemporaryFolder();
-		temporaryFolder2.create();
-		final ViburDBCPDataSource dataSource = createDataSourceWithStatementsCache(
-				"jdbc:mysql://localhost/events",
-		        "root", "root");
-		try {
-			final ExecutorService executorService = Executors
-					.newFixedThreadPool(NUMBER_THREADS);
-			final MySQLEventDBFactory eventDBFactory = new MySQLEventDBFactory(
-					new DataSourceConnectionFactory(
-							dataSource), TABLE_EVENTS);
-			performTests(executorService, eventDBFactory);
-		} finally {
-
-			dataSource.terminate();
-		}
+		
 	}
 	
 	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
-	// @Test
-	public void testOrientDB() throws IOException, InterruptedException {
-		// BUG moisi avec les storages restant ouverts...
-		final LocalDiskDatabaseConfiguration configuration = new LocalDiskDatabaseConfiguration(
-				temporaryFolder
-				.getRoot().getPath(), TABLE_EVENTS
-				+ new Date().getTime());
-		configuration.setMaxPoolSize(MAX_SIZE);//
-		configuration.setMinPoolSize(MIN_SIZE);
-		final OrientSessionFactory<ODatabaseDocumentTx> orientSessionFactory = new OrientSessionFactory<>(
-				configuration);
+	@Test
+	public void testInsertion() throws Exception {
+		EventStorage eFactory = null;
 		try {
-			// orientSessionFactory.db().drop();
-			final ExecutorService executorService = Executors
-					.newFixedThreadPool(NUMBER_THREADS);
-
-			final OEventDBFactory eventDBFactory = new OEventDBFactory(
-					orientSessionFactory);
-			performTests(executorService, eventDBFactory);
+			eFactory = new EventStorageFactory().build(impl);
+			
+			performInsertion(eFactory);
+			performFetchAll(eFactory);
+			performDeletion(eFactory);
 		} finally {
-			orientSessionFactory.getOrCreateDB().drop();
-			orientSessionFactory.close();
-			Orient.instance().closeAllStorages();
-
+			if (eFactory != null) {
+				eFactory.close();
+			}
 		}
 	}
-
-	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
-	// @Test
-	public void testOrientDBMem() throws IOException, InterruptedException {
-		// BUG moisi avec les storages restant ouverts...
-		final TestDatabaseConfiguration configuration = new TestDatabaseConfiguration();
-		configuration.setMaxPoolSize(MAX_SIZE);//
-		configuration.setMinPoolSize(MIN_SIZE);
-		final OrientSessionFactory<ODatabaseDocumentTx> orientSessionFactory = new OrientSessionFactory<>(
-				configuration);
-		try {
-			// orientSessionFactory.db().drop();
-			final ExecutorService executorService = Executors
-					.newFixedThreadPool(NUMBER_THREADS);
-
-			final OEventDBFactory eventDBFactory = new OEventDBFactory(
-					orientSessionFactory);
-			performTests(executorService, eventDBFactory);
-		} finally {
-			orientSessionFactory.getOrCreateDB().drop();
-
-			orientSessionFactory.close();
-			Orient.instance().closeAllStorages();
-
-		}
+	
+	private String getEventType(final int t) {
+		return "eventType" + t;
 	}
-
+	
+	/**
+	 * @param _eFactory
+	 */
+	private void performDeletion(final EventStorage _eFactory) {
+		
+		final IEventDBFactory eventDBFactory = _eFactory.getEventDBFactory();
+		for (int t = 0; t < TYPE_EVENTS.value; ++t) {
+			final String eventType = getEventType(t);
+			eventDBFactory.getEventDB(eventType).removeAll();
+			assertEquals(0, eventDBFactory.getEventDB(eventType).count());
+		}
+		
+	}
+	
+	/**
+	 * @param _eFactory
+	 * @throws InterruptedException
+	 */
+	private void performFetchAll(final EventStorage _eFactory)
+	        throws InterruptedException {
+		final ExecutorService executorService = Executors
+		        .newFixedThreadPool(NUMBER_THREADS.value);
+		executorService.execute(new Runnable() {
+			@Override
+			public void run() {
+				for (int t = 0; t < TYPE_EVENTS.value; ++t) {
+					final String eventType = getEventType(t);
+					int read = 0;
+					final long count = _eFactory.getEventDBFactory()
+					        .getEventDB(eventType).count();
+					try (final ResultIterator<FlatEvent> loadAll = _eFactory
+					        .getEventDBFactory().getEventDB(eventType)
+					        .loadAll()) {
+						while (loadAll.hasNext()) {
+							
+							assertNotNull(loadAll.next());
+							read++;
+						}
+						assertEquals(count, read);
+					}
+				}
+			}
+		});
+		executorService.shutdown();
+		final boolean awaitTermination = executorService.awaitTermination(10,
+		        TimeUnit.MINUTES);
+		assertTrue(awaitTermination);
+	}
 }

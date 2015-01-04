@@ -122,4 +122,8 @@ public class EventStorage implements IEventStorage {
 			storage.put(_document);
 		}
 	}
+
+	public IEventDBFactory getEventDBFactory() {
+	    return eventDBFactory;
+    }
 }
