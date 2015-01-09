@@ -1,0 +1,8 @@
+
+dependencies {
+    compile (project(":core:komea-events")) {
+        transitive = false
+    }
+    compile("org.springframework:spring-jms:${SPRING_VERSION}")
+    compile("org.apache.activemq:activemq-client:${ACTIVEMQ_VERSION}")
+}

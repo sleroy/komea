@@ -1,6 +1,6 @@
 buildscript {
-	repositories { mavenCentral() }
-	dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
+    repositories { mavenCentral() }
+    dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
 }
 
 
@@ -26,24 +26,27 @@ repositories { mavenCentral() }
 configurations { providedRuntime }
 
 dependencies {
-	compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
-	compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
-	compile "org.springframework.data:orient-connector:${ORIENTDB_CONNECTOR}"
-	compile "org.springframework.data:spring-orient:${ORIENTDB_CONNECTOR}"
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+    compile "org.springframework.data:orient-connector:${ORIENTDB_CONNECTOR}"
+    compile "org.springframework.data:spring-orient:${ORIENTDB_CONNECTOR}"
 	
 	
-	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}")
-	testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}")
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 
-	compile project(":core:komea-events")
-	compile project(":core:shared:komea-db-commons")
+    compile project(":core:komea-events")
+    compile project(":core:shared:komea-db-commons")
+        
+    compile("org.springframework:spring-jms:${SPRING_VERSION}")
+    compile("org.apache.activemq:activemq-kahadb-store:${ACTIVEMQ_VERSION}")
 }
 
 eclipse {
-	classpath {
-		containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-		containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7'
-	}
+    classpath {
+        containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+        containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7'
+    }
 }
 
 
