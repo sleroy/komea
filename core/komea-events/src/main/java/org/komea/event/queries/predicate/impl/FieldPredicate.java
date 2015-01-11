@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.komea.event.queries.predicate;
+package org.komea.event.queries.predicate.impl;
 
 import org.komea.event.model.beans.FlatEvent;
 

@@ -30,7 +30,7 @@ public class MapRow implements IRow {
 	public <T> T field(final String _fieldName) {
 		return (T) map.get(_fieldName);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.komea.event.queries.rows.IRow#field(java.lang.String,
@@ -50,7 +50,7 @@ public class MapRow implements IRow {
 	public int fieldCount() {
 		return map.size();
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.komea.event.queries.rows.IRow#firstValue()
@@ -62,12 +62,8 @@ public class MapRow implements IRow {
 		return null;
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.komea.event.queries.rows.IRow#getUnderlyingObject()
-	 */
 	@Override
-	public Object getUnderlyingObject() {
-		return map;
+	public String toString() {
+		return "MapRow [map=" + map + "]";
 	}
 }

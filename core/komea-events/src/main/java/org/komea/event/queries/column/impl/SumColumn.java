@@ -49,12 +49,11 @@ public class SumColumn implements IColumn<FlatEvent, Double> {
 	 * @see org.komea.event.queries.IColumn#process(java.lang.Object)
 	 */
 	@Override
-	public Double process(final FlatEvent _event) {
+	public void process(final FlatEvent _event) {
 		final Number field = _event.field(fieldName, Number.class);
 		if (field != null) {
 			sum.increment(field.doubleValue());
 		}
-		return null;
 	}
 	
 }

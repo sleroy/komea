@@ -17,6 +17,7 @@ import org.komea.event.queries.rows.IRow;
 public class PojoRow implements IRow {
 	
 	private final Object	          underlyingPojo;
+	
 	private Map<String, Serializable>	pojoMap;
 	
 	public PojoRow(final Object _pojo) {
@@ -32,7 +33,7 @@ public class PojoRow implements IRow {
 		initIfNeeded();
 		return (T) pojoMap.get(_fieldName);
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.komea.event.queries.rows.IRow#field(java.lang.String,
@@ -64,14 +65,10 @@ public class PojoRow implements IRow {
 		throw new UnsupportedOperationException();
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.komea.event.queries.rows.IRow#getUnderlyingObject()
-	 */
 	@Override
-	public Object getUnderlyingObject() {
-		
-		return underlyingPojo;
+	public String toString() {
+		return "PojoRow [underlyingPojo=" + underlyingPojo + ", pojoMap="
+		        + pojoMap + "]";
 	}
 	
 	private void initIfNeeded() {

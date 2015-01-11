@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.komea.event.queries.executor;
+package org.komea.event.queries.executor.impl;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
 /**
  * @author sleroy
  */
-public class QueryResult {
+public class EventQueryResult {
 
 	private final List<IRow>	rows	= Lists.newArrayList();
 
@@ -24,6 +24,17 @@ public class QueryResult {
 	 */
 	public void addRow(final IRow _end) {
 		rows.add(_end);
+
+	}
+
+	/**
+	 * Adds the row
+	 *
+	 * @param _end
+	 *            the end
+	 */
+	public void addRows(final List<IRow> _end) {
+		rows.addAll(_end);
 
 	}
 
@@ -55,6 +66,16 @@ public class QueryResult {
 	public <T> T firstValue() {
 		if (rows.isEmpty()) { return null; }
 		return rows.get(0).firstValue();
+	}
+
+	/**
+	 * Returns the list of rows.
+	 *
+	 * @return the list of rows.
+	 */
+	public List<IRow> getRows() {
+
+		return rows;
 	}
 
 	public boolean isEmpty() {

@@ -45,9 +45,8 @@ public class CountColumn implements IColumn<FlatEvent, Integer> {
 	 * @see org.komea.event.queries.IColumn#process(java.lang.Object)
 	 */
 	@Override
-	public Integer process(final FlatEvent _event) {
+	public void process(final FlatEvent _event) {
 		sum++;
-		return null;
 	}
 	
 }

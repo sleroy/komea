@@ -10,9 +10,9 @@ import org.junit.Test;
 import org.komea.event.model.beans.BasicEvent;
 import org.komea.event.queries.column.impl.ColumnMapper;
 import org.komea.event.queries.column.impl.CountColumn;
-import org.komea.event.queries.executor.QueryExecutor;
-import org.komea.event.queries.executor.QueryResult;
-import org.komea.event.queries.impl.EventQuery;
+import org.komea.event.queries.executor.impl.EventQuery;
+import org.komea.event.queries.executor.impl.EventQueryExecutor;
+import org.komea.event.queries.executor.impl.EventQueryResult;
 import org.komea.event.storage.impl.EventStorage;
 import org.komea.event.storage.orient.impl.OEventDBFactory;
 import org.springframework.orientdb.session.impl.TestDatabaseConfiguration;
@@ -52,10 +52,10 @@ public class EventQuerySelectAllTest {
 		final EventQuery eventQuery = new EventQuery();
 		eventQuery.eventTypes(EVENT_NAME);
 		eventQuery.returnsEvents();
-		final QueryExecutor queryExecutor = new QueryExecutor(eventDBFactory,
+		final EventQueryExecutor eventQueryExecutor = new EventQueryExecutor(eventDBFactory,
 				eventQuery);
-		final QueryResult queryResult = queryExecutor.execute();
-		assertEquals(MAX_EVENTS, queryResult.countRows());
+		final EventQueryResult eventQueryResult = eventQueryExecutor.execute();
+		assertEquals(MAX_EVENTS, eventQueryResult.countRows());
 	}
 
 	@Test
@@ -70,9 +70,9 @@ public class EventQuerySelectAllTest {
 						new CountColumn())
 						.build());
 
-		final QueryExecutor queryExecutor = new QueryExecutor(eventDBFactory,
+		final EventQueryExecutor eventQueryExecutor = new EventQueryExecutor(eventDBFactory,
 				eventQuery);
-		final QueryResult queryResult = queryExecutor.execute();
-		assertEquals(MAX_EVENTS, queryResult.firstValue());
+		final EventQueryResult eventQueryResult = eventQueryExecutor.execute();
+		assertEquals(MAX_EVENTS, eventQueryResult.firstValue());
 	}
 }

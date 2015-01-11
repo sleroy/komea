@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.komea.event.queries.impl;
+package org.komea.event.queries.predicate.impl;
 
 import groovy.lang.Closure;
 
