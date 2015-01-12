@@ -11,4 +11,6 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
     compile("org.apache.activemq:activemq-broker:${ACTIVEMQ_VERSION}")
     compile("org.apache.activemq:activemq-kahadb-store:${ACTIVEMQ_VERSION}")
+    
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 }

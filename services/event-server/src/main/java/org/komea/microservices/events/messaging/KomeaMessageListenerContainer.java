@@ -1,4 +1,4 @@
-package org.komea.microservices.events.jms;
+package org.komea.microservices.events.messaging;
 
 import javax.annotation.PostConstruct;
 import org.apache.activemq.ActiveMQConnectionFactory;

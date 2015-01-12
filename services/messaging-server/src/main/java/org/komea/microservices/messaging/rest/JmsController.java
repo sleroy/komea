@@ -1,7 +1,7 @@
-package org.komea.messaging.rest;
+package org.komea.microservices.messaging.rest;
 
 import org.komea.event.messaging.IMessageSender;
-import org.komea.messaging.jms.JmsMessageSender;
+import org.komea.modules.messaging.producer.JmsMessageSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ public class JmsController {
     @RequestMapping(method = RequestMethod.POST, value = "/sendJsonEvent/{destinationName}")
     @ResponseStatus(value = HttpStatus.OK)
     public void sendJsonEvent(@PathVariable String destinationName, @RequestBody final String jsonEvent) {
-        LOGGER.info("JmsController - sendJsonEvent : " + jsonEvent);
+        LOGGER.debug("JmsController - sendJsonEvent : " + jsonEvent);
         messageSender.setDestinationName(destinationName);
         messageSender.sendJsonEvent(jsonEvent);
     }

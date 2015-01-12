@@ -1,4 +1,4 @@
-package org.komea.messaging.rest;
+package org.komea.modules.rest.client;
 
 import org.komea.event.messaging.IMessageSender;
 import org.slf4j.Logger;
@@ -10,7 +10,7 @@ public class RestMessageSender implements IMessageSender {
     private static final Logger LOGGER = LoggerFactory.getLogger(RestMessageSender.class.getName());
     private static final String BASE_REST_URL = "/rest/messaging";
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private RestTemplate restTemplate = new RestTemplate();
     private final String baseUrl;
     private String destinationName;
 
@@ -30,7 +30,7 @@ public class RestMessageSender implements IMessageSender {
 
     @Override
     public void sendJsonEvent(final String jsonEvent) {
-        LOGGER.info("RestMessageSender - sendJsonEvent : " + jsonEvent);
+        LOGGER.debug("RestMessageSender - sendJsonEvent : " + jsonEvent);
         post("sendJsonEvent", jsonEvent);
     }
 
@@ -42,4 +42,9 @@ public class RestMessageSender implements IMessageSender {
     private String getUrl(final String methodName) {
         return baseUrl + "/" + methodName + "/" + destinationName;
     }
+
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
 }

@@ -1,4 +1,4 @@
-package org.komea.messaging.jms;
+package org.komea.modules.messaging.producer;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -14,7 +14,7 @@ public class JmsMessageSender implements IMessageSender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JmsMessageSender.class.getName());
 
-    private final JmsTemplate jmsTemplate;
+    private JmsTemplate jmsTemplate;
 
     public JmsMessageSender(final String brokerUrl) {
         this(brokerUrl, DEFAULT_DESTINATION_NAME);
@@ -32,7 +32,7 @@ public class JmsMessageSender implements IMessageSender {
 
     @Override
     public void sendJsonEvent(final String jsonEvent) {
-        LOGGER.info("JmsMessageSender - sendJsonEvent : " + jsonEvent);
+        LOGGER.debug("JmsMessageSender - sendJsonEvent : " + jsonEvent);
         sendTextMessage(jsonEvent);
     }
 
@@ -52,6 +52,10 @@ public class JmsMessageSender implements IMessageSender {
 
     private void sendMessage(final MessageCreator messageCreator) {
         jmsTemplate.send(messageCreator);
+    }
+
+    public void setJmsTemplate(JmsTemplate jmsTemplate) {
+        this.jmsTemplate = jmsTemplate;
     }
 
 }

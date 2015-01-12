@@ -1,4 +1,4 @@
-package org.komea.messaging;
+package org.komea.microservices.messaging;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

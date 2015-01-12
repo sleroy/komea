@@ -1,4 +1,4 @@
-package org.komea.messaging;
+package org.komea.microservices.messaging;
 
 import javax.annotation.PostConstruct;
 import org.apache.activemq.broker.BrokerService;
