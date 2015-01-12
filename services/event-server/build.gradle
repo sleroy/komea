@@ -28,7 +28,7 @@ configurations { providedRuntime }
 dependencies {
 	compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
 	compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
-	compile 'org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}'		
+	compile("org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}")	
 	compile "org.springframework.data:orient-connector:${ORIENTDB_CONNECTOR}"
 	compile "org.springframework.data:spring-orient:${ORIENTDB_CONNECTOR}"
 	compile("org.springframework:spring-jms")

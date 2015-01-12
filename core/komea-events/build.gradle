@@ -1,5 +1,4 @@
 
-
 dependencies {
 	compile project(":core:shared:komea-db-commons")
 
@@ -10,7 +9,9 @@ dependencies {
 	compile 'org.jdbi:jdbi:2.55'
 	compile 'org.apache.commons:commons-math3:3.2'
 	compile "joda-time:joda-time:$JODA_TIME"
-	compile 'org.apache.kafka:kafka_2.10:0.8.1.1'
+	compile ('org.apache.kafka:kafka_2.10:0.8.1.1') {
+             exclude module: 'log4j'
+        }
 	compile 'com.fasterxml.jackson.core:jackson-databind:2.5.0'
 	
 	
