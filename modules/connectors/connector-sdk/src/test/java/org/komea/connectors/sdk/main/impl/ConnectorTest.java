@@ -16,7 +16,7 @@ public class ConnectorTest {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see org.komea.connectors.sdk.main.IConnectorCommand#action()
 		 */
 		@Override
@@ -26,7 +26,7 @@ public class ConnectorTest {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see org.komea.connectors.sdk.main.IConnectorCommand#description()
 		 */
 		@Override
@@ -36,7 +36,7 @@ public class ConnectorTest {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see org.komea.connectors.sdk.main.IConnectorCommand#init()
 		 */
 		@Override
@@ -47,7 +47,7 @@ public class ConnectorTest {
 
 		@Override
 		public void run() {
-			Assert.assertEquals("expected", argument);
+			Assert.assertEquals("action", argument);
 
 		}
 
