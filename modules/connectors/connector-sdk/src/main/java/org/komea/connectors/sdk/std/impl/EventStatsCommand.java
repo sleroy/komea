@@ -13,11 +13,12 @@ import com.google.common.collect.Lists;
 public final class EventStatsCommand implements IConnectorCommand {
 
 	@Option(name = "-url", usage = "URL of the event server")
-	private String	            serverURL;
+	private String serverURL;
 
-	private static final Logger	LOGGER	= LoggerFactory.getLogger(EventStatsCommand.class);
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(EventStatsCommand.class);
 
-	private final List<String>	eventTypes;
+	private final List<String> eventTypes;
 
 	/**
 	 * Builds the command for a fixed list of event types;
@@ -26,7 +27,7 @@ public final class EventStatsCommand implements IConnectorCommand {
 	 */
 	public EventStatsCommand(final List<String> _eventTypes) {
 		super();
-		this.eventTypes = _eventTypes;
+		eventTypes = _eventTypes;
 	}
 
 	public EventStatsCommand(final String... _eventTypes) {
@@ -43,20 +44,30 @@ public final class EventStatsCommand implements IConnectorCommand {
 		return "Computes stats about the events into the database.";
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.komea.connectors.sdk.main.IConnectorCommand#init()
+	 */
+	@Override
+	public void init() {
+
+	}
+
 	@Override
 	public void run() throws Exception {
 		try (EventoryClientAPI eventoryClientAPI = new EventoryClientAPI()) {
 
-			eventoryClientAPI.setServerBaseURL(this.serverURL);
-			for (final String eventType : this.eventTypes) {
-				LOGGER.info("Number of events of type ## {} ## => {}", eventType,
-				        eventoryClientAPI.countEvents(eventType));
+			eventoryClientAPI.setServerBaseURL(serverURL);
+			for (final String eventType : eventTypes) {
+				LOGGER.info("Number of events of type ## {} ## => {}",
+						eventType, eventoryClientAPI.countEvents(eventType));
 			}
 		}
 
 	}
 
 	public void setServerURL(final String _serverURL) {
-		this.serverURL = _serverURL;
+		serverURL = _serverURL;
 	}
 }

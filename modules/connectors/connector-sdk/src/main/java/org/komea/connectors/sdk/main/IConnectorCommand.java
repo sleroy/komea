@@ -16,8 +16,14 @@ public interface IConnectorCommand {
 	String description();
 
 	/**
+	 * @return
+	 */
+	void init();
+
+	/**
 	 * Executes the command.
-	 * @throws Exception 
+	 *
+	 * @throws Exception
 	 */
 	void run() throws Exception;
 }

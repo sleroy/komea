@@ -11,18 +11,18 @@ import com.google.common.collect.Lists;
 public class PurgeEventsCommand implements IConnectorCommand {
 
 	@Option(name = "-url", usage = "URL of the event server")
-	private String	           serverURL;
+	private String serverURL;
 
-	private final List<String>	eventTypes;
+	private final List<String> eventTypes;
 
 	public PurgeEventsCommand(final List<String> _eventTypes) {
 		super();
-		this.eventTypes = _eventTypes;
+		eventTypes = _eventTypes;
 	}
 
 	public PurgeEventsCommand(final String... _eventTypes) {
 		super();
-		this.eventTypes = Lists.newArrayList(_eventTypes);
+		eventTypes = Lists.newArrayList(_eventTypes);
 	}
 
 	@Override
@@ -37,12 +37,23 @@ public class PurgeEventsCommand implements IConnectorCommand {
 		return "Purge events on the server";
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.komea.connectors.sdk.main.IConnectorCommand#init()
+	 */
+	@Override
+	public void init() {
+		//
+
+	}
+
 	@Override
 	public void run() throws Exception {
 		try (EventoryClientAPI eventoryClientAPI = new EventoryClientAPI()) {
 
-			eventoryClientAPI.setServerBaseURL(this.serverURL);
-			for (final String eventType : this.eventTypes) {
+			eventoryClientAPI.setServerBaseURL(serverURL);
+			for (final String eventType : eventTypes) {
 				eventoryClientAPI.purgeEvents(eventType);
 			}
 		}
@@ -50,6 +61,6 @@ public class PurgeEventsCommand implements IConnectorCommand {
 	}
 
 	public void setServerURL(final String _serverURL) {
-		this.serverURL = _serverURL;
+		serverURL = _serverURL;
 	}
 }

@@ -1,4 +1,4 @@
-package org.komea.connectors.sdk.std.impl;
+package org.komea.connectors.sdk.std;
 
 public interface IEventTypeInformations {
 	/**
