@@ -12,13 +12,4 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "org.komea.microservices.events.storage")
 public class EventStorageSettings {
 
-	private String tableName;
-
-	public String getTableName() {
-		return tableName;
-	}
-
-	public void setTableName(final String _tableName) {
-		tableName = _tableName;
-	}
 }
