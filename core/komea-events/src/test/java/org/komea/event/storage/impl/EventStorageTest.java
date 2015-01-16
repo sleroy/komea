@@ -19,7 +19,6 @@ import org.komea.event.queries.factory.Impl;
 import org.komea.event.storage.DateInterval;
 import org.komea.event.storage.IEventDB;
 import org.komea.event.storage.IEventStorage;
-import org.komea.event.storage.impl.EventStorage;
 import org.skife.jdbi.v2.ResultIterator;
 
 public class EventStorageTest {
@@ -75,17 +74,14 @@ public class EventStorageTest {
             final int generatedEvents = eventGenerator.generate(numberDevelopers * commitPerDay, range, intervalDate);
             LOGGER.log(Level.INFO, "Has generated {0} events", generatedEvents);
 
-            long nbDays = intervalDate.toDuration().getStandardDays() + 1;
-            final long totalEvents = numberDevelopers * commitPerDay * nbDays;
-            Assert.assertEquals(totalEvents, generatedEvents);
-            Assert.assertEquals(totalEvents, eventDB.count());
-            Assert.assertEquals(totalEvents, countEvents(eventDB.loadAll()));
+            Assert.assertEquals(generatedEvents, eventDB.count());
+            Assert.assertEquals(generatedEvents, countEvents(eventDB.loadAll()));
 
             final DateTime now = DateTime.now();
             final DateTime from = now.minusDays(100);
             final DateTime to = now.minusDays(50);
             final DateInterval dateInterval = new DateInterval(from, to);
-            nbDays = new Interval(from, to).toDuration().getStandardDays();
+            final long nbDays = new Interval(from, to).toDuration().getStandardDays();
             Assert.assertEquals(50, nbDays);
             final long intervalEvents = numberDevelopers * commitPerDay * nbDays;
             Assert.assertEquals(intervalEvents, countEvents(eventDB.loadOnPeriod(dateInterval)));
