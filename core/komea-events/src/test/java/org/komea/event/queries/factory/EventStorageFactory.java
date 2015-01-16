@@ -1,131 +1,107 @@
 package org.komea.event.queries.factory;
 
-import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-import java.util.Random;
-import org.apache.commons.io.FileUtils;
 import org.komea.event.storage.IEventDBFactory;
 import org.komea.event.storage.SerializerType;
 import org.komea.event.storage.impl.EventStorage;
 import org.komea.event.storage.mysql.impl.EventDBFactory;
-import org.komea.event.storage.orient.impl.OEventDBFactory;
 import org.komea.event.utils.dpool.impl.DataSourceConnectionFactory;
-import org.springframework.orientdb.session.impl.LocalDiskDatabaseConfiguration;
-import org.springframework.orientdb.session.impl.OrientSessionFactory;
-import org.springframework.orientdb.session.impl.TestDatabaseConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.vibur.dbcp.ViburDBCPDataSource;
 
 public class EventStorageFactory {
 
-    private static final String TABLE_EVENTS = "events";
+	private static class EventStorageFactoryHolder {
 
-    private static final int MAX_SIZE = 100;
+		private static final EventStorageFactory INSTANCE = new EventStorageFactory();
 
-    private static final int MIN_SIZE = 2;
+		private EventStorageFactoryHolder() {
+		}
+	}
 
-    public static EventStorageFactory get() {
-        return EventStorageFactoryHolder.INSTANCE;
-    }
+	public static EventStorageFactory get() {
+		return EventStorageFactoryHolder.INSTANCE;
+	}
 
-    private EventStorageFactory() {
-    }
+	private static final int MAX_SIZE = 100;
 
-    /**
-     * @param _mpl
-     * @return
-     * @throws Exception
-     */
-    public EventStorage newEventStorage(final Impl _mpl) throws Exception {
-        switch (_mpl) {
-            case H2_DISK_JACKSON:
-                return newEventStorage(DbType.H2_FILE, SerializerType.JACKSON);
-            case H2_DISK_KRYO:
-                return newEventStorage(DbType.H2_FILE, SerializerType.KRYO);
-            case H2_MEM_JACKSON:
-                return newEventStorage(DbType.H2_MEM, SerializerType.JACKSON);
-            case H2_MEM_KRYO:
-                return newEventStorage(DbType.H2_MEM, SerializerType.KRYO);
-            case MYSQL_JACKSON:
-                return newEventStorage(DbType.MYSQL, SerializerType.JACKSON);
-            case MYSQL_KRYO:
-                return newEventStorage(DbType.MYSQL, SerializerType.KRYO);
-            case ORIENTDB_MEM:
-                return buildOrientDBMem();
-            case ORIENTDB_DISK:
-                return buildOrientDBDIsk();
-            default:
-                return null;
-        }
-    }
+	private static final int MIN_SIZE = 2;
 
-    public EventStorage newEventStorage(final DbType db_type, final SerializerType serializerType) {
-        return newEventStorage(db_type, serializerType, db_type.getDefaultUrl());
-    }
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(EventStorageFactory.class);
 
-    public EventStorage newEventStorage(final DbType db_type, final SerializerType serializerType, final String url) {
-        return newEventStorage(db_type, serializerType, url, db_type.getDefaultUser(), db_type.getDefaultPassword());
-    }
+	private EventStorageFactory() {
+	}
 
-    public EventStorage newEventStorage(final DbType db_type, final SerializerType serializerType, final String url, final String user, final String password) {
-        final ViburDBCPDataSource dataSource = createDataSourceWithStatementsCache(
-                "jdbc:" + db_type.getType() + ":" + url + db_type.getExtraOptions(), user, password);
-        final IEventDBFactory eventDBFactory = new EventDBFactory(new DataSourceConnectionFactory(dataSource));
-        return new EventStorage(eventDBFactory);
-    }
+	public EventStorage newEventStorage(final DbType db_type,
+			final SerializerType serializerType) {
+		return newEventStorage(db_type, serializerType, db_type.getDefaultUrl());
+	}
 
-    private ViburDBCPDataSource createDataSourceWithStatementsCache(final String _url, final String user, final String password) {
-        final ViburDBCPDataSource ds = new ViburDBCPDataSource();
-        ds.setJdbcUrl(_url);
-        ds.setUsername(user);
-        ds.setPassword(password);
+	public EventStorage newEventStorage(final DbType db_type,
+			final SerializerType serializerType, final String url) {
+		return newEventStorage(db_type, serializerType, url,
+				db_type.getDefaultUser(), db_type.getDefaultPassword());
+	}
 
-        ds.setPoolInitialSize(MIN_SIZE);
-        ds.setPoolMaxSize(MAX_SIZE);
+	public EventStorage newEventStorage(final DbType db_type,
+			final SerializerType serializerType, final String url,
+			final String user, final String password) {
+		final String jdbcURL = "jdbc:" + db_type.getType() + ":" + url
+				+ db_type.getExtraOptions();
+		LOGGER.info("URL {}", url);
+		LOGGER.info("JDBC URL {}", jdbcURL);
 
-        ds.setConnectionIdleLimitInSeconds(30);
-        ds.setTestConnectionQuery("isValid");
+		final ViburDBCPDataSource dataSource = createDataSourceWithStatementsCache(
+				jdbcURL, user, password);
+		final IEventDBFactory eventDBFactory = new EventDBFactory(
+				new DataSourceConnectionFactory(dataSource));
+		return new EventStorage(eventDBFactory);
+	}
 
-        ds.setLogQueryExecutionLongerThanMs(500);
-        ds.setLogStackTraceForLongQueryExecution(true);
+	/**
+	 * @param _mpl
+	 * @return
+	 * @throws Exception
+	 */
+	public EventStorage newEventStorage(final Impl _mpl) throws Exception {
+		switch (_mpl) {
+		case H2_DISK_JACKSON:
+			return newEventStorage(DbType.H2_FILE, SerializerType.JACKSON);
+		case H2_DISK_KRYO:
+			return newEventStorage(DbType.H2_FILE, SerializerType.KRYO);
+		case H2_MEM_JACKSON:
+			return newEventStorage(DbType.H2_MEM, SerializerType.JACKSON);
+		case H2_MEM_KRYO:
+			return newEventStorage(DbType.H2_MEM, SerializerType.KRYO);
+		case MYSQL_JACKSON:
+			return newEventStorage(DbType.MYSQL, SerializerType.JACKSON);
+		case MYSQL_KRYO:
+			return newEventStorage(DbType.MYSQL, SerializerType.KRYO);
+		default:
+			return null;
+		}
+	}
 
-        ds.setStatementCacheMaxSize(200);
+	private ViburDBCPDataSource createDataSourceWithStatementsCache(
+			final String _url, final String user, final String password) {
+		final ViburDBCPDataSource ds = new ViburDBCPDataSource();
+		ds.setJdbcUrl(_url);
+		ds.setUsername(user);
+		ds.setPassword(password);
 
-        ds.start();
-        return ds;
-    }
+		ds.setPoolInitialSize(MIN_SIZE);
+		ds.setPoolMaxSize(MAX_SIZE);
 
-    private EventStorage buildOrientDBDIsk() throws IOException {
-        final String path = new File(FileUtils.getTempDirectory(),
-                String.valueOf(new Random().nextLong())).getAbsolutePath();
-        final LocalDiskDatabaseConfiguration configuration = new LocalDiskDatabaseConfiguration(
-                path, TABLE_EVENTS + new Date().getTime());
-        configuration.setMaxPoolSize(MAX_SIZE);//
-        configuration.setMinPoolSize(MIN_SIZE);
-        final OrientSessionFactory<ODatabaseDocumentTx> orientSessionFactory = new OrientSessionFactory<>(
-                configuration);
-        return new EventStorage(new OEventDBFactory(orientSessionFactory));
-    }
+		ds.setConnectionIdleLimitInSeconds(30);
+		ds.setTestConnectionQuery("isValid");
 
-    /**
-     * @return @throws IOException
-     */
-    private EventStorage buildOrientDBMem() throws IOException {
-        // BUG moisi avec les storages restant ouverts...
-        final TestDatabaseConfiguration configuration = new TestDatabaseConfiguration();
-        configuration.setMaxPoolSize(MAX_SIZE);//
-        configuration.setMinPoolSize(MIN_SIZE);
-        final OrientSessionFactory<ODatabaseDocumentTx> orientSessionFactory = new OrientSessionFactory<>(
-                configuration);
-        return new EventStorage(new OEventDBFactory(orientSessionFactory));
-    }
+		ds.setLogQueryExecutionLongerThanMs(500);
+		ds.setLogStackTraceForLongQueryExecution(true);
 
-    private static class EventStorageFactoryHolder {
+		ds.setStatementCacheMaxSize(200);
 
-        private static final EventStorageFactory INSTANCE = new EventStorageFactory();
-
-        private EventStorageFactoryHolder() {
-        }
-    }
+		ds.start();
+		return ds;
+	}
 }
