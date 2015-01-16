@@ -3,9 +3,10 @@
  */
 package org.komea.event.queries.demo;
 
+import com.tocea.frameworks.bench4j.BenchmarkOptions;
+import com.tocea.frameworks.bench4j.impl.BenchRule;
 import java.io.IOException;
 import java.util.Random;
-
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.junit.AfterClass;
@@ -32,135 +33,133 @@ import org.komea.event.utils.date.impl.IntervalUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tocea.frameworks.bench4j.BenchmarkOptions;
-import com.tocea.frameworks.bench4j.impl.BenchRule;
-
 /**
  * @author sleroy
  */
 @BenchmarkOptions(warmupRounds = 10, benchmarkRounds = 20)
 public class PersonAddedLinesTest {
 
-	/**
-	 * @author sleroy
-	 */
-	private final class PersonAddedLinesKpi implements IKpi {
-		@Override
-		public QueryResult compute(final DateTime _beginPeriod,
-				final DateTime _endPeriod, final IEventDBFactory _eventDBFactory) {
-			final EventQuery eventQuery = new EventQuery();
-			eventQuery.forPeriod(_beginPeriod, _endPeriod);
-			eventQuery.eventTypes(NEW_COMMIT);
-			eventQuery.groupBy("author");
-			eventQuery.returnsResultMapper(new AggregateSumResultMapper(
-					"author", "numberOfAddedLines"));
-			final EventQueryExecutor eventQueryExecutor = new EventQueryExecutor(
-					_eventDBFactory, eventQuery);
-			final EventQueryResult execute = eventQueryExecutor.execute();
-			return new QueryResultBuilder(execute, "author",
-					"numberOfAddedLines").build();
-		}
+    /**
+     * @author sleroy
+     */
+    private final class PersonAddedLinesKpi implements IKpi {
 
-		@Override
-		public KpiRange getRange() {
+        @Override
+        public QueryResult compute(final DateTime _beginPeriod,
+                final DateTime _endPeriod, final IEventDBFactory _eventDBFactory) {
+            final EventQuery eventQuery = new EventQuery();
+            eventQuery.forPeriod(_beginPeriod, _endPeriod);
+            eventQuery.eventTypes(NEW_COMMIT);
+            eventQuery.groupBy("author");
+            eventQuery.returnsResultMapper(new AggregateSumResultMapper(
+                    "author", "numberOfAddedLines"));
+            final EventQueryExecutor eventQueryExecutor = new EventQueryExecutor(
+                    _eventDBFactory, eventQuery);
+            final EventQueryResult execute = eventQueryExecutor.execute();
+            return new QueryResultBuilder(execute, "author",
+                    "numberOfAddedLines").build();
+        }
 
-			return KpiRange.DAY;
-		}
-	}
+        @Override
+        public KpiRange getRange() {
 
-	@AfterClass
-	public static void after() throws IOException {
-		eventStorage.close();
-	}
+            return KpiRange.DAY;
+        }
+    }
 
-	@BeforeClass
-	public static void before() throws Exception {
-		eventStorage = new EventStorageFactory().build(Impl.H2_DISK);
+    @AfterClass
+    public static void after() throws IOException {
+        eventStorage.close();
+    }
 
-		eventGenerator = new EventGenerator(eventStorage,
-				new IEventDefinition() {
+    @BeforeClass
+    public static void before() throws Exception {
+        eventStorage = new EventStorageFactory().build(Impl.H2_DISK);
 
-			private final Random RANDOM = new Random();
+        eventGenerator = new EventGenerator(eventStorage,
+                new IEventDefinition() {
 
-			@Override
-			public void decorateEvent(final DateTime _date,
-					final int _nthEventOfDay, final FlatEvent _flatEvent) {
-				_flatEvent.put(
-						IBasicEventInformations.FIELD_EVENT_TYPE,
-						NEW_COMMIT);
-				_flatEvent.put(IBasicEventInformations.FIELD_PROVIDER,
-						"perforce");
-				_flatEvent.put("project", "KOMEA");
-				_flatEvent.put("numberOfChangedLines", 100);
-				_flatEvent.put("numberOfDeletedLines", 200);
-				_flatEvent.put("numberOfModifiedLines", 100);
-				_flatEvent.put("numberOfAddedLines", 100);
-				_flatEvent.put("commitMessage", "New commit happened");
-				_flatEvent.put("id", RANDOM.nextLong());
-				_flatEvent.put("author", "dev" + _nthEventOfDay
-						% numberDevelopers);
+                    private final Random RANDOM = new Random();
 
-			}
-		});
-		final int generatedEvents = eventGenerator.generate(commitPerDay
-				* numberDevelopers, range, intervalDate);
+                    @Override
+                    public void decorateEvent(final DateTime _date,
+                            final int _nthEventOfDay, final FlatEvent _flatEvent) {
+                        _flatEvent.put(
+                                IBasicEventInformations.FIELD_EVENT_TYPE,
+                                NEW_COMMIT);
+                        _flatEvent.put(IBasicEventInformations.FIELD_PROVIDER,
+                                "perforce");
+                        _flatEvent.put("project", "KOMEA");
+                        _flatEvent.put("numberOfChangedLines", 100);
+                        _flatEvent.put("numberOfDeletedLines", 200);
+                        _flatEvent.put("numberOfModifiedLines", 100);
+                        _flatEvent.put("numberOfAddedLines", 100);
+                        _flatEvent.put("commitMessage", "New commit happened");
+                        _flatEvent.put("id", RANDOM.nextLong());
+                        _flatEvent.put("author", "dev" + _nthEventOfDay
+                                % numberDevelopers);
 
-		LOGGER.info("Has generated {} events", generatedEvents);
-	}
+                    }
+                });
+        final int generatedEvents = eventGenerator.generate(commitPerDay
+                * numberDevelopers, range, intervalDate);
 
-	/**
-	 * Enables the benchmark rule.
-	 */
-	@Rule
-	public BenchRule benchmarkRun = new BenchRule();
+        LOGGER.info("Has generated {} events", generatedEvents);
+    }
 
-	/**
-	 *
-	 */
-	private static final String NEW_COMMIT = "new_commit";
+    /**
+     * Enables the benchmark rule.
+     */
+    @Rule
+    public BenchRule benchmarkRun = new BenchRule();
 
-	public static KpiRange range = KpiRange.DAY;
+    /**
+     *
+     */
+    private static final String NEW_COMMIT = "new_commit";
 
-	public static Interval intervalDate = new Interval(
-			new DateTime().minusYears(4), new DateTime());
+    public static KpiRange range = KpiRange.DAY;
 
-	public static int numberDevelopers = 80;
-	public static int commitPerDay = 10;
+    public static Interval intervalDate = new Interval(
+            new DateTime().minusYears(1), new DateTime());
 
-	public static EventStorage eventStorage;
+    public static int numberDevelopers = 1;
+    public static int commitPerDay = 1;
 
-	public static EventGenerator eventGenerator;
+    public static EventStorage eventStorage;
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(PersonAddedLinesTest.class);
+    public static EventGenerator eventGenerator;
 
-	@Test
-	public void evaluateBatch() {
-		final IKpi iKpi = new PersonAddedLinesKpi();
-		DateTime begin = intervalDate.getStart();
-		while (begin.isBefore(intervalDate.getEnd())) {
-			final DateTime nextPeriod = IntervalUtils.plus(begin,
-					iKpi.getRange());
-			iKpi.compute(begin, nextPeriod, eventStorage.getEventDBFactory());
-			begin = nextPeriod;
-		}
-	}
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(PersonAddedLinesTest.class);
 
-	@Test
-	public void evaluateCurrentValue() {
-		final IKpi iKpi = new PersonAddedLinesKpi();
-		final DateTime now = new DateTime();
-		final QueryResult compute = iKpi.compute(
-				IntervalUtils.minus(intervalDate.getEnd(), iKpi.getRange()),
-				now, eventStorage.getEventDBFactory());
-		System.out.println(compute);
-	}
+    @Test
+    public void evaluateBatch() {
+        final IKpi iKpi = new PersonAddedLinesKpi();
+        DateTime begin = intervalDate.getStart();
+        while (begin.isBefore(intervalDate.getEnd())) {
+            final DateTime nextPeriod = IntervalUtils.plus(begin,
+                    iKpi.getRange());
+            iKpi.compute(begin, nextPeriod, eventStorage.getEventDBFactory());
+            begin = nextPeriod;
+        }
+    }
 
-	@Test
-	public void evaluateGlobalValue() {
-		final IKpi iKpi = new PersonAddedLinesKpi();
-		final QueryResult compute = iKpi.compute(intervalDate.getStart(),
-				intervalDate.getEnd(), eventStorage.getEventDBFactory());
-		System.out.println(compute);
-	}
+    @Test
+    public void evaluateCurrentValue() {
+        final IKpi iKpi = new PersonAddedLinesKpi();
+        final DateTime now = new DateTime();
+        final QueryResult compute = iKpi.compute(
+                IntervalUtils.minus(intervalDate.getEnd(), iKpi.getRange()),
+                now, eventStorage.getEventDBFactory());
+        System.out.println(compute);
+    }
+
+    @Test
+    public void evaluateGlobalValue() {
+        final IKpi iKpi = new PersonAddedLinesKpi();
+        final QueryResult compute = iKpi.compute(intervalDate.getStart(),
+                intervalDate.getEnd(), eventStorage.getEventDBFactory());
+        System.out.println(compute);
+    }
 }

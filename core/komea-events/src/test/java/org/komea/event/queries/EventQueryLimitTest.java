@@ -1,10 +1,10 @@
 package org.komea.event.queries;
 
-import static org.junit.Assert.assertEquals;
-
+import com.orientechnologies.orient.core.Orient;
+import com.tocea.frameworks.bench4j.BenchmarkOptions;
 import java.io.IOException;
-
 import org.junit.After;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import org.komea.event.model.beans.BasicEvent;
@@ -17,63 +17,60 @@ import org.komea.event.storage.impl.EventStorage;
 import org.komea.event.storage.orient.impl.OEventDBFactory;
 import org.springframework.orientdb.session.impl.TestDatabaseConfiguration;
 
-import com.orientechnologies.orient.core.Orient;
-import com.tocea.frameworks.bench4j.BenchmarkOptions;
-
 @BenchmarkOptions(warmupRounds = 5, benchmarkRounds = 20)
 public class EventQueryLimitTest {
 
-	/**
-	 *
-	 */
-	private static final String	EVENT_NAME	= "new_bug";
-	private static final int	MAX_EVENTS	= 10000;
-	private EventStorage	    es;
-	private OEventDBFactory	    eventDBFactory;
-	
-	@After
-	public void after() throws IOException {
-		es.close();
-		Orient.instance().closeAllStorages();
-	}
+    /**
+     *
+     */
+    private static final String EVENT_NAME = "new_bug";
+    private static final int MAX_EVENTS = 10000;
+    private EventStorage es;
+    private OEventDBFactory eventDBFactory;
 
-	@Before
-	public void before() {
-		eventDBFactory = new OEventDBFactory(new TestDatabaseConfiguration());
-		es = new EventStorage(eventDBFactory);
-		for (int i = 0; i < MAX_EVENTS; ++i) {
-			es.storeBasicEvent(new BasicEvent("bugzilla", EVENT_NAME));
-		}
-	}
+    @After
+    public void after() throws IOException {
+        es.close();
+        Orient.instance().closeAllStorages();
+    }
 
-	@Test
-	public void testQueryCountRows() throws Exception {
+    @Before
+    public void before() {
+        eventDBFactory = new OEventDBFactory(new TestDatabaseConfiguration());
+        es = new EventStorage(eventDBFactory);
+        for (int i = 0; i < MAX_EVENTS; ++i) {
+            es.storeBasicEvent(new BasicEvent("bugzilla", EVENT_NAME));
+        }
+    }
 
-		final EventQuery eventQuery = new EventQuery();
-		eventQuery.eventTypes(EVENT_NAME);
-		eventQuery.returnsEvents();
-		eventQuery.limit(1);
-		final EventQueryExecutor eventQueryExecutor = new EventQueryExecutor(eventDBFactory,
-				eventQuery);
-		final EventQueryResult eventQueryResult = eventQueryExecutor.execute();
-		assertEquals(1, eventQueryResult.countRows());
-	}
+    @Test
+    public void testQueryCountRows() throws Exception {
 
-	@Test
-	public void testQueryCountRowsWithMapper() throws Exception {
+        final EventQuery eventQuery = new EventQuery();
+        eventQuery.eventTypes(EVENT_NAME);
+        eventQuery.returnsEvents();
+        eventQuery.limit(1);
+        final EventQueryExecutor eventQueryExecutor = new EventQueryExecutor(eventDBFactory,
+                eventQuery);
+        final EventQueryResult eventQueryResult = eventQueryExecutor.execute();
+        assertEquals(1, eventQueryResult.countRows());
+    }
 
-		final EventQuery eventQuery = new EventQuery();
-		eventQuery.eventTypes(EVENT_NAME);
-		eventQuery.returnsResultMapper(ColumnMapper
-				.create()
-				.newColumn(
-						"count",
-						new CountColumn())
-						.build());
-		eventQuery.limit(1);
-		final EventQueryExecutor eventQueryExecutor = new EventQueryExecutor(eventDBFactory,
-				eventQuery);
-		final EventQueryResult eventQueryResult = eventQueryExecutor.execute();
-		assertEquals(MAX_EVENTS, eventQueryResult.firstValue());
-	}
+    @Test
+    public void testQueryCountRowsWithMapper() throws Exception {
+
+        final EventQuery eventQuery = new EventQuery();
+        eventQuery.eventTypes(EVENT_NAME);
+        eventQuery.returnsResultMapper(ColumnMapper
+                .create()
+                .newColumn(
+                        "count",
+                        new CountColumn())
+                .build());
+        eventQuery.limit(1);
+        final EventQueryExecutor eventQueryExecutor = new EventQueryExecutor(eventDBFactory,
+                eventQuery);
+        final EventQueryResult eventQueryResult = eventQueryExecutor.execute();
+        assertEquals(MAX_EVENTS, eventQueryResult.firstValue());
+    }
 }
