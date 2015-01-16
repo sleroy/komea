@@ -11,6 +11,7 @@ import org.skife.jdbi.v2.tweak.ConnectionFactory;
 public class JacksonMySQLAdvancedEventDBFactory extends AbstractEventDBFactory {
 
 	private ConnectionFactory dataSource;
+	private String sourceSchema;
 
 	public JacksonMySQLAdvancedEventDBFactory(
 			final ConnectionFactory _dataSource) {
@@ -19,8 +20,13 @@ public class JacksonMySQLAdvancedEventDBFactory extends AbstractEventDBFactory {
 
 	}
 
-	public JacksonMySQLAdvancedEventDBFactory(final DataSource _dataSource) {
+	public JacksonMySQLAdvancedEventDBFactory(final DataSource _dataSource,
+			final String _sourceSchema) {
 		super();
+		/**
+		 * Contains the name of schema to autocreate tables
+		 */
+		sourceSchema = _sourceSchema;
 		dataSource = new ConnectionFactory() {
 
 			@Override
@@ -73,7 +79,8 @@ public class JacksonMySQLAdvancedEventDBFactory extends AbstractEventDBFactory {
 	 */
 	@Override
 	protected IEventDB newEventDB(final String _eventType) {
-		return new JacksonMySQLAdvancedEventDB(dataSource, _eventType);
+		return new JacksonMySQLAdvancedEventDB(dataSource, _eventType,
+				sourceSchema);
 	}
 
 }

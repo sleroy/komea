@@ -3,12 +3,7 @@ package org.komea.event.storage.mysql.impl;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
@@ -16,8 +11,8 @@ import org.komea.event.model.beans.FlatEvent;
 import org.komea.event.storage.DateInterval;
 import org.komea.event.storage.IEventDB;
 import org.komea.event.storage.impl.EmptyResultIterator;
-import org.komea.event.utils.kryo.impl.KryoByteArrayToObjectConverter;
-import org.komea.event.utils.kryo.impl.KryoObjectToByteArrayConverter;
+import org.komea.event.utils.jackson.impl.JacksonByteArrayToObjectConverter;
+import org.komea.event.utils.jackson.impl.JacksonObjectToByteArrayConverter;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.Query;
@@ -29,21 +24,22 @@ import org.skife.jdbi.v2.util.LongMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.esotericsoftware.kryo.Kryo;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Created by Richard on 4/9/14.
  *
  * @modified to remove the key support for primary key.
  */
-public class KryoMySQLEventDB implements IEventDB {
+public class JacksonMySQLEventDB implements IEventDB {
 
 	/**
 	 * @author sleroy
 	 *
 	 */
 	private final class UnserializeResultMapper implements
-			ResultSetMapper<FlatEvent> {
+	ResultSetMapper<FlatEvent> {
 		@Override
 		public FlatEvent map(final int _index, final ResultSet _r,
 				final StatementContext _ctx) throws SQLException {
@@ -53,7 +49,7 @@ public class KryoMySQLEventDB implements IEventDB {
 	}
 
 	protected static final Logger LOGGER = LoggerFactory
-			.getLogger(KryoMySQLEventDB.class);
+			.getLogger(JacksonMySQLEventDB.class);
 	private DBI db;
 
 	protected final String sqlColumnType;
@@ -65,15 +61,15 @@ public class KryoMySQLEventDB implements IEventDB {
 	private String loadAllSQL;
 	private final String eventType;
 
-	private final KryoByteArrayToObjectConverter<FlatEvent> unserializer;
+	private final JacksonByteArrayToObjectConverter<FlatEvent> unserializer;
 
-	private final KryoObjectToByteArrayConverter<FlatEvent> serializer;
+	private final JacksonObjectToByteArrayConverter<FlatEvent> serializer;
 	private final String table;
 	private String selectBetweenSQL;
 	private String selectFromSQL;
 	private String selectUntilSQL;
 
-	public KryoMySQLEventDB(final ConnectionFactory _dataSource,
+	public JacksonMySQLEventDB(final ConnectionFactory _dataSource,
 			final String _table, final String _eventType) {
 		Validate.notEmpty(_eventType);
 		Validate.notNull(_dataSource, "database connection required");
@@ -85,10 +81,10 @@ public class KryoMySQLEventDB implements IEventDB {
 
 		sqlColumnType = "BLOB";
 		createSQL();
-		unserializer = new KryoByteArrayToObjectConverter<FlatEvent>(
-				initKryo(), FlatEvent.class);
-		serializer = new KryoObjectToByteArrayConverter<FlatEvent>(initKryo(),
-				FlatEvent.class);
+		final ObjectMapper jackson = initJackson();
+		unserializer = new JacksonByteArrayToObjectConverter<FlatEvent>(
+				jackson, FlatEvent.class);
+		serializer = new JacksonObjectToByteArrayConverter<FlatEvent>(jackson);
 
 	}
 
@@ -141,8 +137,8 @@ public class KryoMySQLEventDB implements IEventDB {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.info("The following SQL statements will be used {}",
 					new String[] { "insert", insertStatementSQL, "LOAD",
-					loadAllSQL, "DELETE", deleteSQL, "CREATE_TABLE",
-					createStatementSQL, "COUNT", countSQL });
+							loadAllSQL, "DELETE", deleteSQL, "CREATE_TABLE",
+							createStatementSQL, "COUNT", countSQL });
 		}
 
 	}
@@ -168,7 +164,7 @@ public class KryoMySQLEventDB implements IEventDB {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * org.komea.event.storage.IEventDB#loadOnPeriod(org.komea.event.storage
 	 * .DateInterval)
@@ -221,10 +217,10 @@ public class KryoMySQLEventDB implements IEventDB {
 
 			// date, provider, eventType, data
 			open.createStatement(insertStatementSQL)
-			.bind("date", _entry.getDate())
-			.bind("provider", _entry.getProvider())
-			.bind("eventType", _entry.getEventType())
-			.bind("data", serialize(_entry)).execute();
+					.bind("date", _entry.getDate())
+					.bind("provider", _entry.getProvider())
+					.bind("eventType", _entry.getEventType())
+					.bind("data", serialize(_entry)).execute();
 		} catch (final Exception e) {
 			handle("Error with put query", e);
 		} finally {
@@ -293,17 +289,9 @@ public class KryoMySQLEventDB implements IEventDB {
 
 	}
 
-	private Kryo initKryo() {
-
-		final Kryo kryo = new Kryo();
-		kryo.register(List.class);
-		kryo.register(ArrayList.class);
-		kryo.register(HashMap.class);
-		kryo.register(Map.class);
-		kryo.register(HashSet.class);
-		kryo.register(String.class);
-		kryo.register(FlatEvent.class);
-		return kryo;
+	private ObjectMapper initJackson() {
+		final JsonFactory jf = new JsonFactory();
+		return new ObjectMapper(jf);
 	}
 
 }

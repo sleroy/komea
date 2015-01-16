@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS `events` (
   `date` DATETIME NOT NULL,
   `provider` varchar(128) NOT NULL,
   `eventType` varchar(255) NOT NULL,
-  `data` blob NOT NULL
+  `data` blob NOT NULLm
 );
 
 CREATE INDEX IF NOT EXISTS `events_date` ON `events`(`date` ASC);
