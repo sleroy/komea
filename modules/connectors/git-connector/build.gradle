@@ -1,5 +1,6 @@
 dependencies{
 	compile project(":core:komea-events")
+	compile project(":modules:connectors:connector-sdk")
 	
 	compile "commons-io:commons-io:$APACHE_COMMONIO"
 	compile "org.eclipse.jgit:org.eclipse.jgit:3.3.2.201404171909-r"
