@@ -74,7 +74,7 @@ public class PersonAddedLinesTest {
 
     @BeforeClass
     public static void before() throws Exception {
-        eventStorage = new EventStorageFactory().build(Impl.H2_DISK);
+        eventStorage = EventStorageFactory.get().newEventStorage(Impl.H2_DISK_JACKSON);
 
         eventGenerator = new EventGenerator(eventStorage,
                 new IEventDefinition() {
