@@ -1,5 +1,6 @@
 package org.komea.connectors.sdk.main.impl;
 
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +11,9 @@ import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.OptionHandlerFilter;
 import org.komea.connectors.sdk.main.IConnector;
 import org.komea.connectors.sdk.main.IConnectorCommand;
+import org.komea.connectors.sdk.std.impl.EventStatsCommand;
+import org.komea.connectors.sdk.std.impl.PurgeEventsCommand;
+import org.komea.connectors.sdk.std.impl.TestConnexionCommand;
 
 public class Connector implements IConnector {
 
@@ -35,6 +39,24 @@ public class Connector implements IConnector {
 	 */
 	public void addCommand(final IConnectorCommand _command) {
 		commands.put(_command.action(), _command);
+	}
+
+	/**
+	 * Adds the default commands configured for a list of event types.
+	 */
+	public void addDefaultCommands() {
+		addCommand(new TestConnexionCommand());
+
+	}
+
+	/**
+	 * Adds the default commands configured for a list of event types.
+	 */
+	public void addDefaultCommands(final String... eventTypes) {
+		addDefaultCommands();
+		addCommand(new PurgeEventsCommand(eventTypes));
+		addCommand(new EventStatsCommand(eventTypes));
+
 	}
 
 	public boolean isHasParsed() {
@@ -66,6 +88,17 @@ public class Connector implements IConnector {
 			System.err.println("java " + connectorName
 					+ " [options...] arguments...");
 			// print the list of available options
+			for (final IConnectorCommand command : commands.values()) {
+				final StringWriter stringWriter = new StringWriter();
+				stringWriter.write(String.format("%10s ", command.action()));
+				final StringWriter sw2 = new StringWriter();
+				new CmdLineParser(command).printSingleLineUsage(sw2, null);
+				stringWriter.write(String.format("   %3s",
+						command.description()));
+				System.err.println(stringWriter.toString());
+				System.err.println(String.format("\t%s", sw2.toString()));
+
+			}
 			parser.printUsage(System.err);
 			System.err.println();
 			// print option sample. This is useful some time
@@ -89,6 +122,7 @@ public class Connector implements IConnector {
 		try {
 			commandTrigger.init();
 			parser.parseArgument(Arrays.copyOfRange(args, 1, args.length));
+			commandTrigger.run();
 		} catch (final CmdLineException e) {
 			System.err.println(e.getMessage());
 			System.err.println("Command " + action
@@ -98,6 +132,9 @@ public class Connector implements IConnector {
 			System.err.println(" Example: java " + connectorName + " " + action
 					+ " " + parser.printExample(OptionHandlerFilter.ALL));
 			throw new ConnectorCommandCliException(action, e);
+		} catch (final Exception e) {
+
+			e.printStackTrace();
 		}
 
 	}

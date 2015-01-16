@@ -60,6 +60,7 @@ public class GitRepository implements IGitRepository
         super();
         this.storageFolder = _storageFolder;
         this.repositoryUrl = repositoryUrl;
+
     }
     
     /*

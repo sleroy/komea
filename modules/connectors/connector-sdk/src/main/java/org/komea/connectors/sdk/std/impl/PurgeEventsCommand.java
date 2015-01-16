@@ -2,16 +2,12 @@ package org.komea.connectors.sdk.std.impl;
 
 import java.util.List;
 
-import org.kohsuke.args4j.Option;
-import org.komea.connectors.sdk.main.IConnectorCommand;
 import org.komea.connectors.sdk.rest.impl.EventoryClientAPI;
+import org.komea.connectors.sdk.rest.impl.IEventoryClientAPI;
 
 import com.google.common.collect.Lists;
 
-public class PurgeEventsCommand implements IConnectorCommand {
-
-	@Option(name = "-url", usage = "URL of the event server")
-	private String serverURL;
+public class PurgeEventsCommand extends AbstractEventoryCommand {
 
 	private final List<String> eventTypes;
 
@@ -49,10 +45,11 @@ public class PurgeEventsCommand implements IConnectorCommand {
 	}
 
 	@Override
-	public void run() throws Exception {
+	public void runCommand(final IEventoryClientAPI _eventoryClientAPI)
+			throws Exception {
 		try (EventoryClientAPI eventoryClientAPI = new EventoryClientAPI()) {
 
-			eventoryClientAPI.setServerBaseURL(serverURL);
+			eventoryClientAPI.setServerBaseURL(getServerURL());
 			for (final String eventType : eventTypes) {
 				eventoryClientAPI.purgeEvents(eventType);
 			}
@@ -60,7 +57,4 @@ public class PurgeEventsCommand implements IConnectorCommand {
 
 	}
 
-	public void setServerURL(final String _serverURL) {
-		serverURL = _serverURL;
-	}
 }

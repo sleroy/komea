@@ -17,9 +17,9 @@ public interface IEventStorage extends Closeable {
 	 *            the event type;
 	 */
 	public void clearEventsOfType(String _eventType);
-	
+
 	public void declareEventType(String type);
-	
+
 	/**
 	 * Stores a event with basic informations.
 	 *
@@ -27,7 +27,7 @@ public interface IEventStorage extends Closeable {
 	 *            the event.
 	 */
 	public void storeBasicEvent(BasicEvent _event);
-	
+
 	/**
 	 * Stores a event with basic informations.
 	 *
@@ -35,7 +35,7 @@ public interface IEventStorage extends Closeable {
 	 *            the event.
 	 */
 	public void storeComplexEvent(ComplexEvent _event);
-	
+
 	/**
 	 * Stores a event with a flattened structure.
 	 *
@@ -43,7 +43,7 @@ public interface IEventStorage extends Closeable {
 	 *            the event.
 	 */
 	public void storeEvent(AbstractEvent _event);
-	
+
 	/**
 	 * Stores a event with a flattened structure.
 	 *
@@ -51,7 +51,7 @@ public interface IEventStorage extends Closeable {
 	 *            the event.
 	 */
 	public void storeFlatEvent(FlatEvent _event);
-	
+
 	/**
 	 * Stores a event with a flattened structure.
 	 *
@@ -59,7 +59,7 @@ public interface IEventStorage extends Closeable {
 	 *            the event.
 	 */
 	public void storeMap(Map<String, Serializable> _fieldMap);
-	
+
 	/**
 	 * Provides directly a pojo that will be converted into a flat event.
 	 *
