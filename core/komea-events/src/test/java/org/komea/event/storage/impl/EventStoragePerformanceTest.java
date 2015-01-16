@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import org.apache.commons.io.IOUtils;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -78,17 +79,17 @@ public class EventStoragePerformanceTest {
                 .asList(new Object[][]{
                     {EventsNumber.TEST_NUMBER,
                         EventsTypeNumber.MANY_EVENT_TYPES,
-                        ThreadNumber.MULTITHREAD, Impl.H2_MEM},
+                        ThreadNumber.MULTITHREAD, Impl.H2_MEM_JACKSON},
                     {EventsNumber.PICO_NUMBER,
                         EventsTypeNumber.MANY_EVENT_TYPES,
-                        ThreadNumber.MULTITHREAD, Impl.H2_DISK},
+                        ThreadNumber.MULTITHREAD, Impl.H2_DISK_JACKSON},
                     {EventsNumber.PICO_NUMBER,
                         EventsTypeNumber.MANY_EVENT_TYPES,
-                        ThreadNumber.MULTITHREAD, Impl.H2_ADV_DISK,},
+                        ThreadNumber.MULTITHREAD, Impl.H2_MEM_KRYO,},
                     {EventsNumber.PICO_NUMBER,
                         EventsTypeNumber.MANY_EVENT_TYPES,
                         ThreadNumber.MULTITHREAD,
-                        Impl.H2_JACKSON_ADV_DISK,},});
+                        Impl.H2_DISK_KRYO,},});
     }
 
     private static final int BENCH = 2;
@@ -177,17 +178,14 @@ public class EventStoragePerformanceTest {
     @BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
     @Test
     public void testInsertion() throws Exception {
-        EventStorage eFactory = null;
+        EventStorage eventStorage = null;
         try {
-            eFactory = new EventStorageFactory().build(impl);
-
-            performInsertion(eFactory);
-            performFetchAll(eFactory);
-            performDeletion(eFactory);
+            eventStorage = EventStorageFactory.get().newEventStorage(impl);
+            performInsertion(eventStorage);
+            performFetchAll(eventStorage);
+            performDeletion(eventStorage);
         } finally {
-            if (eFactory != null) {
-                eFactory.close();
-            }
+            IOUtils.closeQuietly(eventStorage);
         }
     }
 

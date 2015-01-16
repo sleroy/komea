@@ -9,18 +9,17 @@ import java.io.Closeable;
  * @author sleroy
  */
 public interface IEventDBFactory extends Closeable {
-	
-	/**
-	 * @param _type
-	 */
-	void declareEventType(String _type);
-	
-	/**
-	 * Returns a storage with the given name
-	 *
-	 * @param _eventType
-	 *            the name of the storage
-	 * @return the storage.
-	 */
-	IEventDB getEventDB(String _eventType);
+
+    /**
+     * @param _type
+     */
+    void declareEventType(String _type);
+
+    /**
+     * Returns a storage with the given name
+     *
+     * @param _eventType the name of the storage
+     * @return the storage.
+     */
+    IEventDB getEventDB(String _eventType);
 }
