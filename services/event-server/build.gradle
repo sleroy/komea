@@ -29,12 +29,9 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
 	compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
 	compile("org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}")	
-	compile "org.springframework.data:orient-connector:${ORIENTDB_CONNECTOR}"
-	compile "org.springframework.data:spring-orient:${ORIENTDB_CONNECTOR}"
 	compile("org.springframework:spring-jms:4.1.3.RELEASE")
 	compile("org.apache.activemq:activemq-broker:5.10.0")
-	
-	compile 'com.h2database:h2:1.4.184'
+	compile('com.h2database:h2:1.4.184')
 	
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}")
 	testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
