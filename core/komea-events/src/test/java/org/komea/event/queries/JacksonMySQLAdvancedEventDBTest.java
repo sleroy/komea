@@ -1,3 +1,4 @@
+package org.komea.event.queries;
 
 import java.util.Random;
 import java.util.logging.Logger;
