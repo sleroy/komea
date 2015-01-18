@@ -1,4 +1,4 @@
-
+apply plugin:'application'
 
 dependencies {
     // TODO: Add dependencies here ...

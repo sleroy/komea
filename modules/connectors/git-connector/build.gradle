@@ -1,3 +1,7 @@
+apply plugin:'application'
+mainClassName = "org.komea.connectors.git.launch.Launcher"
+
+
 dependencies{
 	compile project(":core:komea-events")
 	compile project(":modules:connectors:connector-sdk")
