@@ -35,7 +35,7 @@ public class PurgeEventsCommand extends AbstractEventoryCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.komea.connectors.sdk.main.IConnectorCommand#init()
 	 */
 	@Override
@@ -51,7 +51,8 @@ public class PurgeEventsCommand extends AbstractEventoryCommand {
 
 			eventoryClientAPI.setServerBaseURL(getServerURL());
 			for (final String eventType : eventTypes) {
-				eventoryClientAPI.purgeEvents(eventType);
+				eventoryClientAPI.getEventStorage()
+						.clearEventsOfType(eventType);
 			}
 		}
 

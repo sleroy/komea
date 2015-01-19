@@ -1,4 +1,4 @@
-package org.komea.microservices.events.rest.dto;
+package org.komea.microservices.events.query.dto;
 
 import java.util.List;
 

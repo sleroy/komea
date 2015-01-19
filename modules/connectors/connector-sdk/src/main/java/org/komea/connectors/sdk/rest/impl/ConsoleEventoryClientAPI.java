@@ -54,6 +54,21 @@ public class ConsoleEventoryClientAPI implements IEventoryClientAPI {
 
 	/*
 	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.komea.connectors.sdk.rest.IRestClientAPI#delete(java.lang.String,
+	 * java.lang.String[])
+	 */
+	@Override
+	public void delete(final String _url, final String[] _params)
+			throws ConnectException, ServerException {
+		LOGGER.info("DELETE>> {} with params {} expecting type {}", _url,
+				_params);
+
+	}
+
+	/*
+	 * (non-Javadoc)
 	 *
 	 * @see org.komea.connectors.sdk.rest.IRestClientAPI#get(java.lang.String,
 	 * java.lang.Class)
@@ -177,20 +192,6 @@ public class ConsoleEventoryClientAPI implements IEventoryClientAPI {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.komea.connectors.sdk.rest.impl.IEventoryClientAPI#purgeEvents(java
-	 * .lang.String)
-	 */
-	@Override
-	public void purgeEvents(final String _eventType) throws ConnectException,
-	ServerException {
-		LOGGER.info("REQUEST>> Purge event types {}", _eventType);
-
 	}
 
 	/*

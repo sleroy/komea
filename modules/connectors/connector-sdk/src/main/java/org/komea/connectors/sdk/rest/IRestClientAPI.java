@@ -17,6 +17,15 @@ import javax.ws.rs.core.GenericType;
 public interface IRestClientAPI extends Closeable {
 
 	/**
+	 * @param _url
+	 * @param _params
+	 * @throws ConnectException
+	 * @throws ServerException
+	 */
+	void delete(String _url, String[] _params) throws ConnectException,
+	ServerException;
+
+	/**
 	 * This method send a a http GET request to the server
 	 *
 	 * @param _url
@@ -29,7 +38,8 @@ public interface IRestClientAPI extends Closeable {
 	 * @throws ServerException
 	 *             launch if exception happened in server side
 	 */
-	<R> R get(String _url, Class<R> _returnType) throws ConnectException, ServerException;
+	<R> R get(String _url, Class<R> _returnType) throws ConnectException,
+			ServerException;
 
 	/**
 	 * This method send a a http GET request to the server
@@ -47,7 +57,8 @@ public interface IRestClientAPI extends Closeable {
 	 * @throws ServerException
 	 *             launch if exception happened in server side
 	 */
-	<R> R get(String _url, Class<R> _returnType, String... _params) throws ConnectException, ServerException;
+	<R> R get(String _url, Class<R> _returnType, String... _params)
+			throws ConnectException, ServerException;
 
 	/**
 	 * This method send a a http GET request to the server
@@ -65,7 +76,8 @@ public interface IRestClientAPI extends Closeable {
 	 * @throws ServerException
 	 *             launch if exception happened in server side
 	 */
-	<R> R get(String _url, GenericType<R> _returnType, String... _params) throws ConnectException, ServerException;
+	<R> R get(String _url, GenericType<R> _returnType, String... _params)
+			throws ConnectException, ServerException;
 
 	/**
 	 * This method send a a http GET request to the server
@@ -79,7 +91,8 @@ public interface IRestClientAPI extends Closeable {
 	 * @throws ServerException
 	 *             launch if exception happened in server side
 	 */
-	<T> void get(String _url, String... params) throws ConnectException, ServerException;
+	<T> void get(String _url, String... params) throws ConnectException,
+			ServerException;
 
 	/**
 	 * This method send a a http POST request to the server
@@ -93,7 +106,8 @@ public interface IRestClientAPI extends Closeable {
 	 * @throws ServerException
 	 *             launch if exception happened in server side
 	 */
-	<T> void post(String _url, T _objectToSend) throws ConnectException, ServerException;
+	<T> void post(String _url, T _objectToSend) throws ConnectException,
+			ServerException;
 
 	/**
 	 * This method send a a http POST request to the server
@@ -110,7 +124,8 @@ public interface IRestClientAPI extends Closeable {
 	 * @throws ServerException
 	 *             launch if exception happened in server side
 	 */
-	<T, R> R post(String _url, T _objectToSend, Class<R> _returnType) throws ConnectException, ServerException;
+	<T, R> R post(String _url, T _objectToSend, Class<R> _returnType)
+			throws ConnectException, ServerException;
 
 	/**
 	 * This method send a a http POST request to the server
@@ -131,7 +146,8 @@ public interface IRestClientAPI extends Closeable {
 	 * @throws ServerException
 	 *             launch if exception happened in server side
 	 */
-	<T, R> R post(String _url, T _objectToSend, GenericType<R> _returnType) throws ConnectException, ServerException;
+	<T, R> R post(String _url, T _objectToSend, GenericType<R> _returnType)
+			throws ConnectException, ServerException;
 
 	/**
 	 * This method set the server base url (http://localhost:8080/komea for
@@ -144,7 +160,8 @@ public interface IRestClientAPI extends Closeable {
 	 * @throws ConnectException
 	 *             launch if we can't connect to the server
 	 */
-	void setServerBaseURL(final String _serverURL) throws URISyntaxException, ConnectException;
+	void setServerBaseURL(final String _serverURL) throws URISyntaxException,
+			ConnectException;
 
 	/**
 	 * This method test if the connection id valid

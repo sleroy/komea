@@ -1,4 +1,4 @@
-package org.komea.microservices.events.rest.controllers;
+package org.komea.microservices.events.hello.rest.impl;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

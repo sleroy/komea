@@ -1,4 +1,4 @@
-package org.komea.microservices.events.rest.controllers;
+package org.komea.microservices.events.query.rest;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;

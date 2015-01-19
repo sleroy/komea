@@ -1,5 +1,5 @@
 
-package org.komea.connectors.jira;
+package org.komea.connectors.jira.impl;
 
 
 import java.util.List;
@@ -14,6 +14,7 @@ import net.rcarz.jiraclient.Project;
 import net.rcarz.jiraclient.User;
 import net.rcarz.jiraclient.Version;
 
+import org.komea.connectors.jira.IJiraConfiguration;
 import org.komea.connectors.jira.exceptions.BadConfigurationException;
 import org.komea.connectors.jira.schema.JiraSchema;
 import org.komea.connectors.jira.utils.IJiraServerFactory;
@@ -37,7 +38,7 @@ public class JiraProcessConnector
         
     }
     
-    public void push(final JiraConfiguration configuration) throws BadConfigurationException {
+    public void push(final IJiraConfiguration configuration) throws BadConfigurationException {
     
         try {
             JiraServerContext jira = this.jiraServerFactory.getNewJiraServerContext(configuration);

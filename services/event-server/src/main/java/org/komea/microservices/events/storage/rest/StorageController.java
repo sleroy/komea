@@ -1,4 +1,4 @@
-package org.komea.microservices.events.rest.controllers;
+package org.komea.microservices.events.storage.rest;
 
 import java.util.Date;
 
@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.komea.event.model.beans.BasicEvent;
 import org.komea.event.model.beans.ComplexEvent;
+import org.komea.event.model.beans.FlatEvent;
 import org.komea.event.storage.IEventStorage;
 import org.komea.microservices.events.database.model.ValueEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class StorageController {
 	private IEventStorage eventStorageService;
 
 	@Transactional
-	@RequestMapping(method = RequestMethod.GET, value = "/clear/{eventType}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/clear/{eventType}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public void clearEvent(@PathVariable final String eventType) {
 		eventStorageService.clearEventsOfType(eventType);
@@ -54,6 +55,13 @@ public class StorageController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public void pushPostComplexEvent(@RequestBody final ComplexEvent _event) {
 		eventStorageService.storeComplexEvent(_event);
+
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/push_flat")
+	@ResponseStatus(value = HttpStatus.OK)
+	public void pushPostComplexEvent(@RequestBody final FlatEvent _event) {
+		eventStorageService.storeFlatEvent(_event);
 
 	}
 

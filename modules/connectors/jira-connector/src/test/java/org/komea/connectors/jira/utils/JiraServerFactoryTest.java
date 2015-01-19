@@ -8,15 +8,20 @@ package org.komea.connectors.jira.utils;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import net.rcarz.jiraclient.BasicCredentials;
 import net.rcarz.jiraclient.ICredentials;
 import net.rcarz.jiraclient.JiraClient;
 import net.rcarz.jiraclient.RestClient;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
-import org.komea.connectors.jira.JiraConfiguration;
+
+import org.komea.connectors.jira.IJiraConfiguration;
 import org.komea.connectors.jira.exceptions.BadConfigurationException;
+import org.komea.connectors.jira.impl.JiraConfiguration;
 
 /**
  *
@@ -41,15 +46,15 @@ public class JiraServerFactoryTest {
         String login = "pierredutonerre";
         String pass = "pierre";
 
-        JiraConfiguration jconf0 = new JiraConfiguration(null, null, null);
-        JiraConfiguration jconf1 = new JiraConfiguration("", null, null);
-        JiraConfiguration jconf2 = new JiraConfiguration(url, null, null);
-        JiraConfiguration jconf3 = new JiraConfiguration(url, "", "");
-        JiraConfiguration jconf4 = new JiraConfiguration(url, null, "");
-        JiraConfiguration jconf5 = new JiraConfiguration(url, "", null);
-        JiraConfiguration jconf6 = new JiraConfiguration(url, login, pass);
-        JiraConfiguration jconf7 = new JiraConfiguration(url, login, null);
-        JiraConfiguration jconf8 = new JiraConfiguration(url, null, pass);
+        IJiraConfiguration jconf0 = new JiraConfiguration(null, null, null);
+        IJiraConfiguration jconf1 = new JiraConfiguration("", null, null);
+        IJiraConfiguration jconf2 = new JiraConfiguration(url, null, null);
+        IJiraConfiguration jconf3 = new JiraConfiguration(url, "", "");
+        IJiraConfiguration jconf4 = new JiraConfiguration(url, null, "");
+        IJiraConfiguration jconf5 = new JiraConfiguration(url, "", null);
+        IJiraConfiguration jconf6 = new JiraConfiguration(url, login, pass);
+        IJiraConfiguration jconf7 = new JiraConfiguration(url, login, null);
+        IJiraConfiguration jconf8 = new JiraConfiguration(url, null, pass);
         boolean tempvalid = false;
         try {
             factory.getNewJiraServerContext(jconf0);

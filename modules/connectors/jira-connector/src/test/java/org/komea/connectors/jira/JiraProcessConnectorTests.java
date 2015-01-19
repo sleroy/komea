@@ -21,6 +21,8 @@ import net.rcarz.jiraclient.Version;
 
 import org.junit.Test;
 import org.komea.connectors.jira.exceptions.BadConfigurationException;
+import org.komea.connectors.jira.impl.JiraConfiguration;
+import org.komea.connectors.jira.impl.JiraProcessConnector;
 import org.komea.connectors.jira.schema.JiraSchema;
 import org.komea.connectors.jira.utils.IJiraServerFactory;
 import org.komea.connectors.jira.utils.JiraServerContext;
@@ -39,7 +41,7 @@ public class JiraProcessConnectorTests {
 		final IKomeaEntity entity = mock(IKomeaEntity.class);
 		when(storage.create(Matchers.any(IEntityType.class))).thenReturn(entity);
 
-		final JiraConfiguration config = new JiraConfiguration("https://jira.mongodb.org/");
+		final IJiraConfiguration config = new JiraConfiguration("https://jira.mongodb.org/");
 		final JiraSchema schema = new JiraSchema(new MinimalCompanySchema());
 
 		// IKomeaGraphStorage storage = new

@@ -72,6 +72,7 @@ public class Connector implements IConnector {
 			if (args.length == 0) {
 				throw new CmdLineException(parser, "Missing action in argument");
 			}
+
 			// parse the arguments.
 			parser.parseArgument(args[0]);
 			// you can parse additional arguments if you want.

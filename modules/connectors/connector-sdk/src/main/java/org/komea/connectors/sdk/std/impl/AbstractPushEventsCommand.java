@@ -41,8 +41,7 @@ public abstract class AbstractPushEventsCommand extends AbstractEventoryCommand 
 			new ObjectMapper().writeValue(getLastLaunchFileName(),
 					new DateTime());
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error("Could not save the launch time {}", e.getMessage(), e);
 		}
 	}
 
@@ -62,13 +61,17 @@ public abstract class AbstractPushEventsCommand extends AbstractEventoryCommand 
 	 * @return
 	 */
 	private DateTime readLastLaunchTime() {
+		if (hasLastLaunchDate()) {
+			return getSince();
+		}
 		final File lastLaunchFileName = getLastLaunchFileName();
 		if (lastLaunchFileName.exists()) {
 			try {
 				return new ObjectMapper().readValue(lastLaunchFileName,
 						DateTime.class);
 			} catch (final IOException e) {
-				e.printStackTrace();
+				LOGGER.error("Could not read the launch time {}",
+						e.getMessage(), e);
 			}
 		}
 		return null;
@@ -76,10 +79,12 @@ public abstract class AbstractPushEventsCommand extends AbstractEventoryCommand 
 	}
 
 	/**
-	 * @param _eventoryClientAPI
+	 * @param _eventoryClientA
+	 * @throws Exception
 	 */
 	@Override
-	protected final void runCommand(final IEventoryClientAPI _eventoryClientAPI) {
+	protected final void runCommand(final IEventoryClientAPI _eventoryClientAPI)
+			throws Exception {
 		final DateTime readLastLaunchTime = readLastLaunchTime();
 		try {
 			sendEvents(_eventoryClientAPI, readLastLaunchTime);
@@ -90,8 +95,9 @@ public abstract class AbstractPushEventsCommand extends AbstractEventoryCommand 
 
 	/**
 	 * @param _eventoryClientAPI
+	 * @throws Exception
 	 */
 	protected abstract void sendEvents(IEventoryClientAPI _eventoryClientAPI,
-			final DateTime _lastExecution);
+			final DateTime _lastExecution) throws Exception;
 
 }

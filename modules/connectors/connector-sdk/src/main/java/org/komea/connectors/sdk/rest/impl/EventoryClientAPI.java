@@ -7,14 +7,19 @@ import javax.ws.rs.client.WebTarget;
 
 import org.komea.event.storage.IEventStorage;
 
-public class EventoryClientAPI extends AbstractClientAPI implements IEventoryClientAPI {
+public class EventoryClientAPI extends AbstractClientAPI implements
+		IEventoryClientAPI {
 
 	public EventoryClientAPI() {
 		super();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.komea.connectors.sdk.rest.impl.IEventoryClientAPI#countEvents(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.komea.connectors.sdk.rest.impl.IEventoryClientAPI#countEvents(java
+	 * .lang.String)
 	 */
 	@Override
 	public Integer countEvents(final String _eventType)
@@ -23,31 +28,27 @@ public class EventoryClientAPI extends AbstractClientAPI implements IEventoryCli
 		return this.get("/database/count", Integer.class, _eventType);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.komea.connectors.sdk.rest.impl.IEventoryClientAPI#getEventStorage()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.komea.connectors.sdk.rest.impl.IEventoryClientAPI#getEventStorage()
 	 */
 	@Override
 	public IEventStorage getEventStorage() {
-		// TODO Auto-generated method stub
-		return null;
+
+		return new EventStorageRestAPI(this);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.komea.connectors.sdk.rest.impl.IEventoryClientAPI#purgeEvents(java.lang.String)
-	 */
-	@Override
-	public void purgeEvents(final String _eventType) throws ConnectException,
-			ServerException {
-		this.get("/storage/clear", _eventType);
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.komea.connectors.sdk.rest.impl.IEventoryClientAPI#testConnexion()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.komea.connectors.sdk.rest.impl.IEventoryClientAPI#testConnexion()
 	 */
 	@Override
 	public void testConnexion() throws ConnectException, ServerException {
-		this.get("hello");
+		LOGGER.info(this.get("/hello", String.class));
 
 	}
 

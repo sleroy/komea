@@ -16,15 +16,12 @@ import org.komea.event.storage.IEventStorage;
 public interface IEventoryClientAPI extends IRestClientAPI {
 
 	public Integer countEvents(String _eventType) throws ConnectException,
-			ServerException;
+	ServerException;
 
 	/**
 	 * @return
 	 */
 	public IEventStorage getEventStorage();
-
-	public void purgeEvents(String _eventType) throws ConnectException,
-			ServerException;
 
 	public void testConnexion() throws ConnectException, ServerException;
 

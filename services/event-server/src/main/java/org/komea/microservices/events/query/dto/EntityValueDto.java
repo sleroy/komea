@@ -1,4 +1,4 @@
-package org.komea.microservices.events.rest.dto;
+package org.komea.microservices.events.query.dto;
 
 import org.komea.microservices.events.database.model.EntityValue;
 
@@ -13,16 +13,16 @@ public class EntityValueDto {
 	}
 
 	public EntityValueDto(final EntityValue _value) {
-		this.entity = _value.getEntity();
-		this.value = _value.getValue();
+		entity = _value.getEntity();
+		value = _value.getValue();
 	}
 
 	public String getEntity() {
-		return this.entity;
+		return entity;
 	}
 
 	public Double getValue() {
-		return this.value;
+		return value;
 	}
 
 	public void setEntity(final String entity) {
@@ -36,8 +36,8 @@ public class EntityValueDto {
 	@Override
 	public String toString() {
 		return "EntityValue ["
-				+ (this.entity != null ? "entity=" + this.entity + ", " : "")
-				+ (this.value != null ? "value=" + this.value : "") + "]";
+				+ (entity != null ? "entity=" + entity + ", " : "")
+				+ (value != null ? "value=" + value : "") + "]";
 	}
 
 }

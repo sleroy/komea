@@ -1,4 +1,4 @@
-package org.komea.microservices.events.storage.impl;
+package org.komea.microservices.events.storage.service;
 
 import org.komea.event.storage.IEventDBFactory;
 import org.komea.event.storage.impl.EventStorage;

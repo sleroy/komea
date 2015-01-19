@@ -17,8 +17,9 @@ public interface IConnectorCommand {
 
 	/**
 	 * @return
+	 * @throws Exception
 	 */
-	void init();
+	void init() throws Exception;
 
 	/**
 	 * Executes the command.
