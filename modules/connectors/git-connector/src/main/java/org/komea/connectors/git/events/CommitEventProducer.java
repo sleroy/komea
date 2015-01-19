@@ -9,35 +9,25 @@ import org.komea.event.storage.IEventStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class CommitEventProducer implements IGitCommitProcessor
-{
+public final class CommitEventProducer implements IGitCommitProcessor {
 
-	private static final Logger	     LOGGER	      = LoggerFactory
-			.getLogger(CommitEventProducer.class);
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(CommitEventProducer.class);
 
-	private final IEventStorage	     eventStorage;
+    private final IEventStorage eventStorage;
 
-	private final GitCommitConverter	converter	= new GitCommitConverter();
+    private final GitCommitConverter converter = new GitCommitConverter();
 
-	public CommitEventProducer(final IEventStorage eventStorage) {
+    public CommitEventProducer(final IEventStorage eventStorage) {
 
-		this.eventStorage = eventStorage;
-		this.eventStorage.declareEventType(IGitEvent.COMMIT);
+        this.eventStorage = eventStorage;
+        this.eventStorage.declareEventType(IGitEvent.COMMIT);
 
-	}
+    }
 
-	@Override
-	public void process(final RevCommit commit, final RevWalk walk,
-			final IGitCommit convertGitCommit) {
-
-		try {
-
-			eventStorage.storeComplexEvent(converter
-					.newCommitEvent(convertGitCommit));
-
-		} catch (final Exception e) {
-			LOGGER.error("GIT Commit exception {} for {}", e.getMessage(),
-					convertGitCommit, e);
-		}
-	}
+    @Override
+    public void process(final RevCommit commit, final RevWalk walk,
+            final IGitCommit convertGitCommit) {
+        eventStorage.storeComplexEvent(converter.newCommitEvent(convertGitCommit));
+    }
 }
