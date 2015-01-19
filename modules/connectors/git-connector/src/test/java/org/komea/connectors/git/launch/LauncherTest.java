@@ -15,17 +15,20 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class LauncherTest {
 
-	/**
-	 * Test method for
-	 * {@link org.komea.connectors.sdk.std.impl.AbstractPushEventsCommand#run()}
-	 * .
-	 */
-	@Test
-	public void testRun() throws Exception {
+    /**
+     * Test method for
+     * {@link org.komea.connectors.sdk.std.impl.AbstractPushEventsCommand#run()}
+     * .
+     */
+    @Test
+    public void testRun() {
+        Launcher.main(RunArgs.newArgs("push", "-m", "-url", "http://", "-git",
+                "src/test/resources/github-gmail", "-gitURL", "http://",
+                "-commit", "-tag").asMainArgs());
+    }
 
-		Launcher.main(RunArgs.newArgs("push", "-m", "-url", "http://", "-git",
-				"src/test/resources/github-gmail", "-gitURL", "http://",
-				"-commit", "-tag").asMainArgs());
-
-	}
+    @Test
+    public void testRunWithArgsFile() {
+        Launcher.main(RunArgs.newArgs("push", "@src/test/resources/git-connector.args").asMainArgs());
+    }
 }
