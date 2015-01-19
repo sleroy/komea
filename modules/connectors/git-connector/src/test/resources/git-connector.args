@@ -1,0 +1,9 @@
+-m
+-url
+http://
+-git
+src/test/resources/github-gmail
+-gitURL
+http://
+-commit
+-tag
