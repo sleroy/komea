@@ -29,7 +29,7 @@ println "-----------------------------------------------------------------------
 
 //TEST FRAMEWORKS DEPENDENCIES
 ext.JUNIT= "junit:junit:4.12";
-
+ext.LOGGING = "ch.qos.logback:logback-classic:$LOG_LOGBACK"
 ext.tests_frameworks = [
 	JUNIT,
 	"org.mockito:mockito-all:1.9.5",
@@ -191,14 +191,14 @@ allprojects {
 
 	/** DEPENDENCIES */
 
-
+        
 
 	dependencies {
 	
 		compile "org.slf4j:slf4j-api:$LOG_SLF4J"
          	compile "org.slf4j:jcl-over-slf4j:$LOG_SLF4J"
          	compile "org.slf4j:log4j-over-slf4j:$LOG_SLF4J"
-        	testCompile "ch.qos.logback:logback-classic:$LOG_LOGBACK"
+        	testCompile LOGGING
 	
 		testCompile tests_frameworks // TEST FRAMEWORKS
 

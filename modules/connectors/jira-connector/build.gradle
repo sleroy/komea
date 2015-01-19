@@ -6,7 +6,9 @@ dependencies {
     compile project(":core:komea-software-model")
     compile project(":modules:connectors:connector-sdk")
     
+    compile LOGGING
     compile 'org.komea.jiraclient:jira-client:0.6.3'
+    
     testCompile project(":core:shared:komea-db-viz")
     testCompile ("org.mockito:mockito-all:1.+")
 
