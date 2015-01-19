@@ -2,6 +2,7 @@ package org.komea.connectors.sdk.std.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 import org.joda.time.DateTime;
 import org.komea.connectors.sdk.rest.impl.IEventoryClientAPI;
@@ -38,8 +39,7 @@ public abstract class AbstractPushEventsCommand extends AbstractEventoryCommand 
 
 	public void saveActionDate() {
 		try {
-			new ObjectMapper().writeValue(getLastLaunchFileName(),
-					new DateTime());
+			new ObjectMapper().writeValue(getLastLaunchFileName(), new Date());
 		} catch (final IOException e) {
 			LOGGER.error("Could not save the launch time {}", e.getMessage(), e);
 		}
@@ -67,8 +67,8 @@ public abstract class AbstractPushEventsCommand extends AbstractEventoryCommand 
 		final File lastLaunchFileName = getLastLaunchFileName();
 		if (lastLaunchFileName.exists()) {
 			try {
-				return new ObjectMapper().readValue(lastLaunchFileName,
-						DateTime.class);
+				return new DateTime(new ObjectMapper().readValue(
+						lastLaunchFileName, Date.class));
 			} catch (final IOException e) {
 				LOGGER.error("Could not read the launch time {}",
 						e.getMessage(), e);
