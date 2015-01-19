@@ -1,10 +1,9 @@
 package org.komea.event.storage.impl;
 
-import com.google.common.collect.Lists;
-import com.tocea.frameworks.bench4j.BenchmarkOptions;
-import com.tocea.frameworks.bench4j.IBenchReport;
-import com.tocea.frameworks.bench4j.impl.BenchRule;
-import com.tocea.frameworks.bench4j.reports.jfreechart.JFreeChartBenchmarkReport;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,10 +11,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.commons.io.IOUtils;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,214 +27,224 @@ import org.komea.event.queries.factory.Impl;
 import org.komea.event.storage.IEventDBFactory;
 import org.skife.jdbi.v2.ResultIterator;
 
+import com.google.common.collect.Lists;
+import com.tocea.frameworks.bench4j.BenchmarkOptions;
+import com.tocea.frameworks.bench4j.IBenchReport;
+import com.tocea.frameworks.bench4j.impl.BenchRule;
+import com.tocea.frameworks.bench4j.reports.jfreechart.JFreeChartBenchmarkReport;
+
 @RunWith(Parameterized.class)
 public class EventStoragePerformanceTest {
 
-    public static enum EventsNumber {
+	public static enum EventsNumber {
 
-        TEST_NUMBER(10), PICO_NUMBER(100), TINY_NUMBER(1000), VERY_SMALL_NUMBER(
-                10000), MEDIUM_NUMBER(100000), BIG_NUMBER(1000000);
+		TEST_NUMBER(10), PICO_NUMBER(100), TINY_NUMBER(1000), VERY_SMALL_NUMBER(
+				10000), MEDIUM_NUMBER(100000), BIG_NUMBER(1000000);
 
-        public int value;
+		public int value;
 
-        /**
-         *
-         */
-        private EventsNumber(final int _value) {
-            value = _value;
-        }
-    }
+		/**
+		 *
+		 */
+		private EventsNumber(final int _value) {
+			value = _value;
+		}
+	}
 
-    public static enum EventsTypeNumber {
+	public static enum EventsTypeNumber {
 
-        MANY_EVENT_TYPES(10), SINGLE_EVENT_TYPE(1),;
+		MANY_EVENT_TYPES(10), SINGLE_EVENT_TYPE(1), ;
 
-        public int value;
+		public int value;
 
-        /**
-         *
-         */
-        private EventsTypeNumber(final int _value) {
-            value = _value;
-        }
-    }
+		/**
+		 *
+		 */
+		private EventsTypeNumber(final int _value) {
+			value = _value;
+		}
+	}
 
-    public static enum ThreadNumber {
+	public static enum ThreadNumber {
 
-        MULTITHREAD(10), MONOTHREAD(1);
+		MULTITHREAD(10), MONOTHREAD(1);
 
-        public final int value;
+		public final int value;
 
-        private ThreadNumber(final int _value) {
-            value = _value;
-        }
-    }
+		private ThreadNumber(final int _value) {
+			value = _value;
+		}
+	}
 
-    @Parameters(name = "number_events={0},type_events={1},threads={2},impl={3}")
-    public static Collection<Object[]> data() {
-        return Arrays
-                .asList(new Object[][]{
-                    {EventsNumber.TEST_NUMBER,
-                        EventsTypeNumber.MANY_EVENT_TYPES,
-                        ThreadNumber.MULTITHREAD, Impl.H2_MEM_JACKSON},
-                    {EventsNumber.PICO_NUMBER,
-                        EventsTypeNumber.MANY_EVENT_TYPES,
-                        ThreadNumber.MULTITHREAD, Impl.H2_DISK_JACKSON},
-                    {EventsNumber.PICO_NUMBER,
-                        EventsTypeNumber.MANY_EVENT_TYPES,
-                        ThreadNumber.MULTITHREAD, Impl.H2_MEM_KRYO,},
-                    {EventsNumber.PICO_NUMBER,
-                        EventsTypeNumber.MANY_EVENT_TYPES,
-                        ThreadNumber.MULTITHREAD,
-                        Impl.H2_DISK_KRYO,},});
-    }
+	@Parameters(name = "number_events={0},type_events={1},threads={2},impl={3}")
+	public static Collection<Object[]> data() {
+		return Arrays.asList(new Object[][] {
 
-    private static final int BENCH = 2;
+				{ EventsNumber.PICO_NUMBER, EventsTypeNumber.MANY_EVENT_TYPES,
+					ThreadNumber.MULTITHREAD, Impl.H2_DISK_JACKSON },
 
-    private static final int WARMUP = 1;
+				{ EventsNumber.PICO_NUMBER, EventsTypeNumber.MANY_EVENT_TYPES,
+						ThreadNumber.MULTITHREAD, Impl.H2_DISK_KRYO, }, });
+	}
 
-    public static final IBenchReport report = new JFreeChartBenchmarkReport(
-            new File("build/charts"), 1024, 768, true);
+	private static final int BENCH = 2;
 
-    /**
-     * Enables the benchmark rule.
-     */
-    @Rule
-    public BenchRule benchmarkRun = new BenchRule(report);
+	private static final int WARMUP = 1;
 
-    @Parameter(value = 0)
-    public EventsNumber NUMBER_EVENTS;
+	public static final IBenchReport report = new JFreeChartBenchmarkReport(
+			new File("build/charts"), 1024, 768, true);
 
-    @Parameter(value = 1)
-    public EventsTypeNumber TYPE_EVENTS;
+	/**
+	 * Enables the benchmark rule.
+	 */
+	@Rule
+	public BenchRule benchmarkRun = new BenchRule(report);
 
-    @Parameter(value = 2)
-    public ThreadNumber NUMBER_THREADS;
+	@Parameter(value = 0)
+	public EventsNumber NUMBER_EVENTS;
 
-    @Parameter(value = 3)
-    public Impl impl;
+	@Parameter(value = 1)
+	public EventsTypeNumber TYPE_EVENTS;
 
-    public final List<FlatEvent> DEMO_EVENT = Lists.newArrayList();
+	@Parameter(value = 2)
+	public ThreadNumber NUMBER_THREADS;
 
-    @Rule
-    public final TemporaryFolder temporaryFolder = new TemporaryFolder();
+	@Parameter(value = 3)
+	public Impl impl;
 
-    @Before
-    public void before() {
-        DEMO_EVENT.clear();
-        for (int t = 0; t < EventsTypeNumber.MANY_EVENT_TYPES.value; ++t) {
-            final FlatEvent flatEvent = new FlatEvent();
-            flatEvent.setProvider("bugzilla");
-            flatEvent.setEventType(getEventType(t));
-            flatEvent.put("bug_id", 12);
-            flatEvent.put("message", "Call to XXX creates premature exception");
-            flatEvent.put("author", "sleroy");
-            flatEvent.put("reporter", "rgalerme");
+	public final List<FlatEvent> DEMO_EVENT = Lists.newArrayList();
 
-            DEMO_EVENT.add(flatEvent);
-        }
-    }
+	@Rule
+	public final TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    public void performInsertion(final EventStorage _eFactory)
-            throws InterruptedException {
-        final IEventDBFactory eventDBFactory = _eFactory.getEventDBFactory();
-        performDeletion(_eFactory);
-        final ExecutorService executorService = Executors
-                .newFixedThreadPool(NUMBER_THREADS.value);
+	@Before
+	public void before() {
+		DEMO_EVENT.clear();
+		for (int t = 0; t < TYPE_EVENTS.value; ++t) {
+			final FlatEvent flatEvent = new FlatEvent();
+			flatEvent.setProvider("bugzilla");
+			flatEvent.setEventType(getEventType(t));
+			flatEvent.put("bug_id", 12);
+			flatEvent.put("message", "Call to XXX creates premature exception");
+			flatEvent.put("author", "sleroy");
+			flatEvent.put("reporter", "rgalerme");
+			DEMO_EVENT.add(flatEvent);
+		}
+	}
 
-        for (int i = 0; i < NUMBER_THREADS.value; ++i) {
-            executorService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    int res = 0;
-                    for (int j = 0; j < NUMBER_EVENTS.value; ++j) {
-                        for (final FlatEvent fe : DEMO_EVENT) {
-                            res++;
-                            _eFactory.storeFlatEvent(fe);
-                        }
-                    }
-                    System.out.println("Inserted " + res);
-                }
-            });
-        }
-        executorService.shutdown();
-        final boolean awaitTermination = executorService.awaitTermination(10,
-                TimeUnit.MINUTES);
-        assertTrue(awaitTermination);
+	public void performInsertion(final EventStorage _eFactory)
+			throws InterruptedException {
+		final IEventDBFactory eventDBFactory = _eFactory.getEventDBFactory();
+		performDeletion(_eFactory);
+		final ExecutorService executorService = Executors
+				.newFixedThreadPool(NUMBER_THREADS.value);
 
-        for (int t = 0; t < TYPE_EVENTS.value; ++t) {
-            final long count = eventDBFactory.getEventDB(getEventType(t))
-                    .count();
-            System.out.println("Number of events : " + count);
-            assertEquals(NUMBER_EVENTS.value * NUMBER_THREADS.value, count);
+		for (int i = 0; i < NUMBER_THREADS.value; ++i) {
+			executorService.execute(new Runnable() {
+				@Override
+				public void run() {
+					int res = 0;
+					for (int j = 0; j < NUMBER_EVENTS.value; ++j) {
+						for (final FlatEvent fe : DEMO_EVENT) {
+							res++;
 
-        }
+							_eFactory.storeFlatEvent(fe);
+						}
+					}
+					System.out.println("Inserted " + res);
+				}
+			});
+		}
+		executorService.shutdown();
+		final boolean awaitTermination = executorService.awaitTermination(10,
+				TimeUnit.MINUTES);
+		assertTrue(awaitTermination);
 
-    }
+		for (int t = 0; t < TYPE_EVENTS.value; ++t) {
+			final long count = eventDBFactory.getEventDB(getEventType(t))
+					.count();
+			System.out.println("Number of events : " + count);
+			assertEquals(NUMBER_EVENTS.value * NUMBER_THREADS.value, count);
 
-    @BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
-    @Test
-    public void testInsertion() throws Exception {
-        EventStorage eventStorage = null;
-        try {
-            eventStorage = EventStorageFactory.get().newEventStorage(impl);
-            performInsertion(eventStorage);
-            performFetchAll(eventStorage);
-            performDeletion(eventStorage);
-        } finally {
-            IOUtils.closeQuietly(eventStorage);
-        }
-    }
+		}
 
-    private String getEventType(final int t) {
-        return "eventType" + t;
-    }
+	}
 
-    /**
-     * @param _eFactory
-     */
-    private void performDeletion(final EventStorage _eFactory) {
+	@BenchmarkOptions(warmupRounds = WARMUP, benchmarkRounds = BENCH)
+	@Test
+	public void testInsertion() throws Exception {
+		EventStorage eventStorage = null;
+		try {
+			eventStorage = EventStorageFactory.get().newEventStorage(impl);
+			declareEventTypes(eventStorage);
+			performInsertion(eventStorage);
+			performFetchAll(eventStorage);
+			performDeletion(eventStorage);
+		} finally {
+			IOUtils.closeQuietly(eventStorage);
+		}
+	}
 
-        final IEventDBFactory eventDBFactory = _eFactory.getEventDBFactory();
-        for (int t = 0; t < TYPE_EVENTS.value; ++t) {
-            final String eventType = getEventType(t);
-            eventDBFactory.getEventDB(eventType).removeAll();
-            assertEquals(0, eventDBFactory.getEventDB(eventType).count());
-        }
+	/**
+	 * @param _eventStorage
+	 */
+	private void declareEventTypes(final EventStorage _eventStorage) {
+		for (int t = 0; t < TYPE_EVENTS.value; ++t) {
+			_eventStorage.declareEventType(getEventType(t));
+		}
 
-    }
+	}
 
-    /**
-     * @param _eFactory
-     * @throws InterruptedException
-     */
-    private void performFetchAll(final EventStorage _eFactory)
-            throws InterruptedException {
-        final ExecutorService executorService = Executors
-                .newFixedThreadPool(NUMBER_THREADS.value);
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                for (int t = 0; t < TYPE_EVENTS.value; ++t) {
-                    final String eventType = getEventType(t);
-                    int read = 0;
-                    final long count = _eFactory.getEventDBFactory()
-                            .getEventDB(eventType).count();
-                    try (final ResultIterator<FlatEvent> loadAll = _eFactory
-                            .getEventDBFactory().getEventDB(eventType)
-                            .loadAll()) {
-                        while (loadAll.hasNext()) {
-                            assertNotNull(loadAll.next());
-                            read++;
-                        }
-                        assertEquals(count, read);
-                    }
-                }
-            }
-        });
-        executorService.shutdown();
-        final boolean awaitTermination = executorService.awaitTermination(10,
-                TimeUnit.MINUTES);
-        assertTrue(awaitTermination);
-    }
+	private String getEventType(final int t) {
+
+		return "eventType" + t;
+	}
+
+	/**
+	 * @param _eFactory
+	 */
+	private void performDeletion(final EventStorage _eFactory) {
+
+		final IEventDBFactory eventDBFactory = _eFactory.getEventDBFactory();
+		for (int t = 0; t < TYPE_EVENTS.value; ++t) {
+			final String eventType = getEventType(t);
+			eventDBFactory.getEventDB(eventType).removeAll();
+			assertEquals(0, eventDBFactory.getEventDB(eventType).count());
+		}
+
+	}
+
+	/**
+	 * @param _eFactory
+	 * @throws InterruptedException
+	 */
+	private void performFetchAll(final EventStorage _eFactory)
+			throws InterruptedException {
+		final ExecutorService executorService = Executors
+				.newFixedThreadPool(NUMBER_THREADS.value);
+		executorService.execute(new Runnable() {
+			@Override
+			public void run() {
+				for (int t = 0; t < TYPE_EVENTS.value; ++t) {
+					final String eventType = getEventType(t);
+					int read = 0;
+					final long count = _eFactory.getEventDBFactory()
+							.getEventDB(eventType).count();
+					try (final ResultIterator<FlatEvent> loadAll = _eFactory
+							.getEventDBFactory().getEventDB(eventType)
+							.loadAll()) {
+						while (loadAll.hasNext()) {
+							assertNotNull(loadAll.next());
+							read++;
+						}
+						assertEquals(count, read);
+					}
+				}
+			}
+		});
+		executorService.shutdown();
+		final boolean awaitTermination = executorService.awaitTermination(10,
+				TimeUnit.MINUTES);
+		assertTrue(awaitTermination);
+	}
 }

@@ -6,6 +6,7 @@ package org.komea.connectors.jira.launch;
 import org.joda.time.DateTime;
 import org.kohsuke.args4j.Option;
 import org.komea.connectors.jira.IJiraConfiguration;
+import org.komea.connectors.jira.IJiraEvents;
 import org.komea.connectors.jira.impl.JiraEventsConnector;
 import org.komea.connectors.jira.utils.JiraServerFactory;
 import org.komea.connectors.sdk.rest.impl.IEventoryClientAPI;
@@ -92,6 +93,11 @@ IJiraConfiguration {
 	@Override
 	protected void sendEvents(final IEventoryClientAPI _eventoryClientAPI,
 			final DateTime _lastExecution) throws Exception {
+		_eventoryClientAPI.getEventStorage().declareEventType(
+				IJiraEvents.EVENT_NEW_BUG);
+		_eventoryClientAPI.getEventStorage().declareEventType(
+				IJiraEvents.EVENT_UPDATE_BUG);
+
 		final JiraEventsConnector jiraEventsConnector = new JiraEventsConnector(
 				_eventoryClientAPI.getEventStorage(),
 				JiraServerFactory.getInstance(), this);

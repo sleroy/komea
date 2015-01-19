@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS `#table#` (
   `date` DATETIME NOT NULL,
   `provider` VARCHAR(128) NOT NULL,
   `data` BLOB NOT NULL,
-  PRIMARY KEY (`id`),
   INDEX (`date`)
 );
 

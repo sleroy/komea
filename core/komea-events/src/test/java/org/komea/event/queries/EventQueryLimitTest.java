@@ -39,6 +39,7 @@ public class EventQueryLimitTest {
 	@Before
 	public void before() throws Exception {
 		es = EventStorageFactory.get().newEventStorage(Impl.H2_MEM_JACKSON);
+		es.declareEventType(EVENT_NAME);
 		for (int i = 0; i < MAX_EVENTS; ++i) {
 			es.storeBasicEvent(new BasicEvent("bugzilla", EVENT_NAME));
 		}

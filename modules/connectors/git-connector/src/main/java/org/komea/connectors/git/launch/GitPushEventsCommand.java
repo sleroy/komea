@@ -8,6 +8,7 @@ import java.io.File;
 import org.eclipse.jgit.api.Git;
 import org.joda.time.DateTime;
 import org.kohsuke.args4j.Option;
+import org.komea.connectors.git.IGitEvent;
 import org.komea.connectors.git.events.CommitEventProducer;
 import org.komea.connectors.git.events.FileModificationEventProducer;
 import org.komea.connectors.git.events.GitEventTagProducer;
@@ -115,6 +116,10 @@ public class GitPushEventsCommand extends AbstractPushEventsCommand {
 				throw new IllegalArgumentException("Repository does not exist");
 			}
 		}
+
+		_eventoryClientAPI.getEventStorage().declareEventType(IGitEvent.COMMIT);
+		_eventoryClientAPI.getEventStorage().declareEventType(IGitEvent.TAG);
+		_eventoryClientAPI.getEventStorage().declareEventType(IGitEvent.UPDATE);
 
 		final GitRepository gitRepository = new GitRepository(repositoryFile,
 				repositoryURL);

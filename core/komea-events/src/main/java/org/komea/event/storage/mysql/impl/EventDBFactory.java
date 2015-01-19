@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -11,13 +12,18 @@ import org.komea.event.storage.IEventDB;
 import org.komea.event.storage.IEventDBFactory;
 import org.komea.event.storage.SerializerType;
 import org.skife.jdbi.v2.tweak.ConnectionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 public class EventDBFactory implements IEventDBFactory {
 
 	private ConnectionFactory connectionFactory;
 	private SerializerType serializer;
+	private static final Set<String> createdTables = Sets
+			.newConcurrentHashSet();
 
 	private final ThreadLocal<Map<String, IEventDB>> eventsDB = new ThreadLocal<Map<String, IEventDB>>() {
 		@Override
@@ -25,6 +31,9 @@ public class EventDBFactory implements IEventDBFactory {
 			return Maps.newHashMap();
 		}
 	};
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(EventDBFactory.class);
 
 	public EventDBFactory() {
 		super();
@@ -66,8 +75,14 @@ public class EventDBFactory implements IEventDBFactory {
 	}
 
 	@Override
-	public void declareEventType(final String _type) {
-		// TODO Auto-generated method stub
+	public synchronized void declareEventType(final String _type) {
+		if (createdTables.contains(_type)) {
+			LOGGER.debug("Table for {} already created", _type);
+		} else {
+			EventDB.createTable(connectionFactory, _type);
+			createdTables.add(_type);
+		}
+
 	}
 
 	public ConnectionFactory getConnectionFactory() {
