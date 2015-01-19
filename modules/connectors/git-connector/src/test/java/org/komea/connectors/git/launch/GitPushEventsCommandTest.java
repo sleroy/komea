@@ -38,7 +38,8 @@ public class GitPushEventsCommandTest {
 			};
 		};
 		gitPushEventsCommand.setCommitMessage(true);
-		gitPushEventsCommand.setRepository("src/test/resources/github-gmail");
+		gitPushEventsCommand
+		.setRepository("src/test/resources/github-gmail/git");
 		gitPushEventsCommand.setRepositoryURL("http://");
 		gitPushEventsCommand.run();
 

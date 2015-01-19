@@ -23,6 +23,11 @@ import org.komea.connectors.sdk.std.impl.AbstractPushEventsCommand;
  *
  */
 public class GitPushEventsCommand extends AbstractPushEventsCommand {
+	/**
+	 *
+	 */
+	private static final String GIT = ".git";
+
 	@Option(name = "-git", usage = "Path to the  cloned repository", required = true)
 	protected String repository;
 
@@ -100,12 +105,15 @@ public class GitPushEventsCommand extends AbstractPushEventsCommand {
 	protected void sendEvents(final IEventoryClientAPI _eventoryClientAPI,
 			final DateTime _lastExecution) {
 		File repositoryFile = new File(repository);
-		if (!repositoryFile.getName().toLowerCase().endsWith(".git")) {
-			repositoryFile = new File(repositoryFile.getAbsolutePath(), ".git");
-		}
+
 		if (!repositoryFile.exists()) {
-			LOGGER.error("The path does not exist: {}", repository);
-			throw new IllegalArgumentException("Repository does not exist");
+			if (!repositoryFile.getName().toLowerCase().endsWith(GIT)) {
+				repositoryFile = new File(repositoryFile.getAbsolutePath(), GIT);
+			}
+			if (!repositoryFile.exists()) {
+				LOGGER.error("The path does not exist: {}", repository);
+				throw new IllegalArgumentException("Repository does not exist");
+			}
 		}
 
 		final GitRepository gitRepository = new GitRepository(repositoryFile,
