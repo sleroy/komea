@@ -41,7 +41,7 @@ import com.google.common.base.Function;
 public class EventDB implements IEventDB {
 
 	private class MysqlResultHandlerMapper implements
-	ResultSetMapper<FlatEvent> {
+			ResultSetMapper<FlatEvent> {
 
 		@Override
 		public FlatEvent map(final int _index, final ResultSet _r,
@@ -117,7 +117,7 @@ public class EventDB implements IEventDB {
 						@Override
 						public FlatEvent map(final int _index,
 								final ResultSet _r, final StatementContext _ctx)
-										throws SQLException {
+								throws SQLException {
 							return unserialize(_r.getBytes(COLUMN_DATA));
 						}
 					}).iterator();
@@ -131,7 +131,7 @@ public class EventDB implements IEventDB {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * org.komea.event.storage.IEventDB#loadOnPeriod(org.komea.event.storage
 	 * .DateInterval)
@@ -162,9 +162,9 @@ public class EventDB implements IEventDB {
 		try {
 			handle = db.open();
 			handle.createStatement(insertStatementSQL)
-			.bind(COLUMN_DATE, _entry.getDate())
-			.bind(COLUMN_PROVIDER, _entry.getProvider())
-			.bind(COLUMN_DATA, serialize(_entry)).execute();
+					.bind(COLUMN_DATE, _entry.getDate())
+					.bind(COLUMN_PROVIDER, _entry.getProvider())
+					.bind(COLUMN_DATA, serialize(_entry)).execute();
 		} catch (final Exception e) {
 			handle("Error with put query", e);
 		} finally {
@@ -226,8 +226,8 @@ public class EventDB implements IEventDB {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.info("The following SQL statements will be used {}",
 					new Object[] { "insert", insertStatementSQL, "LOAD",
-					loadAllSQL, "DELETE", deleteSQL, "CREATE_TABLE",
-					createStatementSQL, "COUNT", countSQL });
+							loadAllSQL, "DELETE", deleteSQL, "CREATE_TABLE",
+							createStatementSQL, "COUNT", countSQL });
 		}
 
 	}
@@ -304,7 +304,7 @@ public class EventDB implements IEventDB {
 
 	/**
 	 * Initializing Kryo
-	 * 
+	 *
 	 * @return
 	 */
 	private Kryo initKryo() {
