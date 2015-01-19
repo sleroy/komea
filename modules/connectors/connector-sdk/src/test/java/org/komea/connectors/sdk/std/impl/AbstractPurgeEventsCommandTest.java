@@ -18,14 +18,7 @@ public class AbstractPurgeEventsCommandTest {
 
 	@Test
 	public void testRun() throws Exception {
-		final AbstractPurgeEventsCommand abstractPurgeEventsCommand = new AbstractPurgeEventsCommand() {
-
-			@Override
-			public String[] getEventTypes() {
-
-				return new String[] { "new_bug" };
-			}
-		};
+		final PurgeEventsCommand abstractPurgeEventsCommand = new PurgeEventsCommand();
 		abstractPurgeEventsCommand.setServerURL("http://localhost:9991");
 		abstractPurgeEventsCommand.run();
 
@@ -33,14 +26,8 @@ public class AbstractPurgeEventsCommandTest {
 
 	@Test(expected = ProcessingException.class)
 	public void testRunFail() throws Exception {
-		final AbstractPurgeEventsCommand abstractPurgeEventsCommand = new AbstractPurgeEventsCommand() {
-
-			@Override
-			public String[] getEventTypes() {
-
-				return new String[] { "new_bug" };
-			}
-		};
+		final PurgeEventsCommand abstractPurgeEventsCommand = new PurgeEventsCommand(
+				"new_bug");
 		abstractPurgeEventsCommand.setServerURL("http://localhost:9992");
 		abstractPurgeEventsCommand.run();
 

@@ -5,7 +5,7 @@ package org.komea.connectors.jira.utils;
 import net.rcarz.jiraclient.BasicCredentials;
 import net.rcarz.jiraclient.JiraClient;
 
-import org.komea.connectors.jira.JiraConfiguration;
+import org.komea.connectors.jira.IJiraConfiguration;
 import org.komea.connectors.jira.exceptions.BadConfigurationException;
 
 /**
@@ -22,7 +22,7 @@ public class JiraServerFactory implements IJiraServerFactory
     }
     
     @Override
-    public JiraServerContext getNewJiraServerContext(final JiraConfiguration configuration) throws BadConfigurationException {
+    public JiraServerContext getNewJiraServerContext(final IJiraConfiguration configuration) throws BadConfigurationException {
     
         if ("".equals(configuration.getUrl()) || configuration.getUrl() == null) {
             throw new BadConfigurationException("Map of jira configuration deos not contain the correct field");
@@ -36,7 +36,7 @@ public class JiraServerFactory implements IJiraServerFactory
         return new JiraServerContext(client);
     }
     
-    private boolean containUser(final JiraConfiguration configuration) {
+    private boolean containUser(final IJiraConfiguration configuration) {
     
         boolean tmp = "".equals(configuration.getLogin()) || configuration.getLogin() == null || configuration.getPassword() == null
                 || "".equals(configuration.getPassword());

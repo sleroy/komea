@@ -2,28 +2,58 @@ package org.komea.connectors.sdk.main.impl;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.kohsuke.args4j.Argument;
-import org.komea.connectors.sdk.main.ConnectorCommand;
+import org.komea.connectors.sdk.main.IConnectorCommand;
 
 public class ConnectorTest {
 
-	@ConnectorCommand("println")
-	public static final class ExampleCommand {
+	public static final class ExampleCommand implements IConnectorCommand {
 		@Argument(index = 0, usage = "message")
-		private String	argument;
+		private String argument;
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.komea.connectors.sdk.main.IConnectorCommand#action()
+		 */
+		@Override
+		public String action() {
+			return "println";
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.komea.connectors.sdk.main.IConnectorCommand#description()
+		 */
+		@Override
+		public String description() {
+			return "";
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.komea.connectors.sdk.main.IConnectorCommand#init()
+		 */
+		@Override
+		public void init() {
+			//
+
+		}
+
+		@Override
 		public void run() {
-			Assert.assertEquals("expected", this.argument);
+			Assert.assertEquals("action", argument);
 
 		}
 
 	}
 
-	private static final String	TEST_JAR	= "Test.jar";
+	private static final String TEST_JAR = "Test.jar";
 
 	@Test
 	public void testRun() throws Exception {
@@ -43,7 +73,7 @@ public class ConnectorTest {
 	@Test
 	public void testRunWithCommand() {
 		final Connector connector = new Connector(TEST_JAR);
-		connector.addCommand(ExampleCommand.class);
+		connector.addCommand(new ExampleCommand());
 
 		connector.run(RunArgs.newArgs("println", "action").asMainArgs());
 		assertTrue(connector.isHasParsed());
@@ -52,16 +82,11 @@ public class ConnectorTest {
 	@Test(expected = ConnectorCommandCliException.class)
 	public void testRunWithCommandAndIllegalArguments() {
 		final Connector connector = new Connector(TEST_JAR);
-		connector.addCommand(ExampleCommand.class);
+		connector.addCommand(new ExampleCommand());
 
-		connector.run(RunArgs.newArgs("println", "action", "wrongArg").asMainArgs());
+		connector.run(RunArgs.newArgs("println", "action", "wrongArg")
+				.asMainArgs());
 		assertFalse(connector.isHasParsed());
 	}
 
-	@Test(expected = InvalidConnectorCommandException.class)
-	public void testRunWithInvalidCommand() {
-		final Connector connector = new Connector(TEST_JAR);
-		connector.addCommand(String.class);
-		fail("Should not be there");
-	}
 }

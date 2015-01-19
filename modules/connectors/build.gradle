@@ -1,16 +1,5 @@
-
-
-
-subprojects {
-   
-   // to create a jave with all dependency
-   // to make this jace executable : add 
-   //   fatJar.manifest.attributes 'Main-Class': 'ExecutableCall' in the build.gradle of your connector
-   task fatJar(type: Jar) {
-   	baseName = project.name + '-all'
-   	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    	with jar
-   }
-}
+dependencies {
+  compile "ch.qos.logback:logback-classic:$LOG_LOGBACK"
+} 
 
 

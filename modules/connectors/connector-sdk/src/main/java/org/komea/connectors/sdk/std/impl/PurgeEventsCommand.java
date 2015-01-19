@@ -2,27 +2,23 @@ package org.komea.connectors.sdk.std.impl;
 
 import java.util.List;
 
-import org.kohsuke.args4j.Option;
-import org.komea.connectors.sdk.main.IConnectorCommand;
 import org.komea.connectors.sdk.rest.impl.EventoryClientAPI;
+import org.komea.connectors.sdk.rest.impl.IEventoryClientAPI;
 
 import com.google.common.collect.Lists;
 
-public class PurgeEventsCommand implements IConnectorCommand {
+public class PurgeEventsCommand extends AbstractEventoryCommand {
 
-	@Option(name = "-url", usage = "URL of the event server")
-	private String	           serverURL;
-
-	private final List<String>	eventTypes;
+	private final List<String> eventTypes;
 
 	public PurgeEventsCommand(final List<String> _eventTypes) {
 		super();
-		this.eventTypes = _eventTypes;
+		eventTypes = _eventTypes;
 	}
 
 	public PurgeEventsCommand(final String... _eventTypes) {
 		super();
-		this.eventTypes = Lists.newArrayList(_eventTypes);
+		eventTypes = Lists.newArrayList(_eventTypes);
 	}
 
 	@Override
@@ -37,19 +33,29 @@ public class PurgeEventsCommand implements IConnectorCommand {
 		return "Purge events on the server";
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.komea.connectors.sdk.main.IConnectorCommand#init()
+	 */
 	@Override
-	public void run() throws Exception {
+	public void init() {
+		//
+
+	}
+
+	@Override
+	public void runCommand(final IEventoryClientAPI _eventoryClientAPI)
+			throws Exception {
 		try (EventoryClientAPI eventoryClientAPI = new EventoryClientAPI()) {
 
-			eventoryClientAPI.setServerBaseURL(this.serverURL);
-			for (final String eventType : this.eventTypes) {
-				eventoryClientAPI.purgeEvents(eventType);
+			eventoryClientAPI.setServerBaseURL(getServerURL());
+			for (final String eventType : eventTypes) {
+				eventoryClientAPI.getEventStorage()
+						.clearEventsOfType(eventType);
 			}
 		}
 
 	}
 
-	public void setServerURL(final String _serverURL) {
-		this.serverURL = _serverURL;
-	}
 }

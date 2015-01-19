@@ -1,12 +1,16 @@
+apply plugin:'application'
+mainClassName = "org.komea.connectors.bugzilla.launch.Launcher"
 dependencies {
 	compile "com.j2bugzilla:j2bugzilla:2.2.1"
+	compile 'com.thoughtworks.xstream:xstream:1.4.7'	
+        compile LOGGING
+        	
 	compile project(":core:komea-events")
 	compile project(":core:komea-software-model")
-	compile 'com.thoughtworks.xstream:xstream:1.4.7'
+	compile project(":modules:connectors:connector-sdk")
+		
+	
 	testCompile project(":core:shared:komea-db-viz")
 }
 
-
-// the gatjar is now executable and launch the class 'org.komea.connectors.bugzilla.launch.Launcher'
-fatJar.manifest.attributes 'Main-Class': 'org.komea.connectors.bugzilla.launch.Launcher'
 

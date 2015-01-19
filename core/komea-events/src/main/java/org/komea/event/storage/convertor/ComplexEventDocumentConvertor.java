@@ -1,10 +1,8 @@
 package org.komea.event.storage.convertor;
 
-import java.io.Serializable;
 import java.util.Map.Entry;
-
 import org.komea.event.model.beans.ComplexEvent;
-import org.komea.orientdb.session.document.IODocument;
+import org.komea.event.model.beans.FlatEvent;
 
 /**
  * This class defines a convertor from a complex event to OrientDB.
@@ -14,18 +12,18 @@ import org.komea.orientdb.session.document.IODocument;
  */
 public class ComplexEventDocumentConvertor {
 
-	private final ComplexEvent	event;
+    private final ComplexEvent event;
 
-	public ComplexEventDocumentConvertor(final ComplexEvent _event) {
-		this.event = _event;
+    public ComplexEventDocumentConvertor(final ComplexEvent _event) {
+        this.event = _event;
 
-	}
+    }
 
-	public void convert(final IODocument _newDocument) {
-		new BasicEventDocumentConvertor(this.event).convert(_newDocument);
-		for (final Entry<String, ? extends Serializable> entry : this.event.getProperties().entrySet()) {
-			_newDocument.field(entry.getKey(), entry.getValue());
+    public void convert(final FlatEvent _newDocument) {
+        new BasicEventDocumentConvertor(this.event).convert(_newDocument);
+        for (final Entry<String, Object> entry : this.event.getProperties().entrySet()) {
+            _newDocument.put(entry.getKey(), entry.getValue());
 
-		}
-	}
+        }
+    }
 }
