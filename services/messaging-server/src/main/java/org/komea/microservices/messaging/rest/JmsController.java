@@ -1,6 +1,7 @@
 package org.komea.microservices.messaging.rest;
 
 import org.komea.event.messaging.IMessageSender;
+import org.komea.event.model.beans.FlatEvent;
 import org.komea.modules.messaging.producer.JmsMessageSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +23,12 @@ public class JmsController {
 
     private final IMessageSender messageSender = new JmsMessageSender(BROKER_URL);
 
-    @RequestMapping(method = RequestMethod.POST, value = "/sendJsonEvent/{destinationName}")
+    @RequestMapping(method = RequestMethod.POST, value = "/pushFlatEvent/{destinationName}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void sendJsonEvent(@PathVariable String destinationName, @RequestBody final String jsonEvent) {
-        LOGGER.debug("JmsController - sendJsonEvent : " + jsonEvent);
+    public void pushFlatEvent(@PathVariable String destinationName, @RequestBody final FlatEvent flatEvent) {
+        LOGGER.debug("JmsController - pushFlatEvent : " + flatEvent);
         messageSender.setDestinationName(destinationName);
-        messageSender.sendJsonEvent(jsonEvent);
+        messageSender.pushFlatEvent(flatEvent);
     }
 
 }

@@ -1,10 +1,12 @@
 package org.komea.modules.messaging.producer;
 
+import java.io.Serializable;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.komea.event.messaging.IMessageSender;
+import org.komea.event.model.beans.FlatEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.core.JmsTemplate;
@@ -31,21 +33,21 @@ public class JmsMessageSender implements IMessageSender {
     }
 
     @Override
-    public void sendJsonEvent(final String jsonEvent) {
-        LOGGER.debug("JmsMessageSender - sendJsonEvent : " + jsonEvent);
-        sendTextMessage(jsonEvent);
+    public void pushFlatEvent(final FlatEvent flatEvent) {
+        LOGGER.debug("JmsMessageSender - pushFlatEvent : " + flatEvent);
+        sendObjectMessage(flatEvent);
     }
 
-    private void sendTextMessage(final String text) {
-        final MessageCreator messageCreator = createTextMessageCreator(text);
+    private void sendObjectMessage(final Object object) {
+        final MessageCreator messageCreator = createObjectMessageCreator(object);
         sendMessage(messageCreator);
     }
 
-    private MessageCreator createTextMessageCreator(final String text) {
+    private MessageCreator createObjectMessageCreator(final Object object) {
         return new MessageCreator() {
             @Override
             public Message createMessage(final Session session) throws JMSException {
-                return session.createTextMessage(text);
+                return session.createObjectMessage((Serializable) object);
             }
         };
     }

@@ -7,7 +7,7 @@ buildscript {
 apply plugin: 'spring-boot'
 
 dependencies {
-    compile project(":modules:event-message-producer")
+    compile(project(":modules:event-message-producer"))
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
     compile("org.apache.activemq:activemq-broker:${ACTIVEMQ_VERSION}")
     compile("org.apache.activemq:activemq-kahadb-store:${ACTIVEMQ_VERSION}")

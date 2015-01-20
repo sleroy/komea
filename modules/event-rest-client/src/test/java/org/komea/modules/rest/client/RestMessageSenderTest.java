@@ -3,6 +3,7 @@ package org.komea.modules.rest.client;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.event.messaging.IMessageSender;
+import org.komea.event.model.beans.FlatEvent;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -13,24 +14,34 @@ public class RestMessageSenderTest {
 
     public static void main(String[] args) {
         final IMessageSender restClient = new RestMessageSender("http://localhost:8080");
-        final String jsonEvent = "komeaEvent";
-        restClient.sendJsonEvent(jsonEvent);
+        restClient.pushFlatEvent(newFlatEvent());
+    }
+
+    private static FlatEvent newFlatEvent() {
+        final FlatEvent flatEvent = new FlatEvent();
+        flatEvent.setEventType("new_commit");
+        flatEvent.setProvider("GIT");
+        return flatEvent;
     }
 
     @Mock
     private RestTemplate restTemplate;
 
     @Test
-    public void sendMessageTest() {
+    public void pushFlatEventTest() {
         final RestMessageSender messageSender = new RestMessageSender("http://localhost:8080");
         messageSender.setDestinationName("myQueue");
         messageSender.setRestTemplate(restTemplate);
-        messageSender.sendJsonEvent("komeaEvent1");
+        FlatEvent flatEvent = newFlatEvent();
+        messageSender.pushFlatEvent(flatEvent);
         Mockito.verify(restTemplate, Mockito.times(1)).postForObject(
-                Mockito.anyString(), Mockito.eq("komeaEvent1"), Mockito.eq(Void.class));
-        messageSender.sendJsonEvent("komeaEvent2");
+                Mockito.anyString(), Mockito.eq(flatEvent), Mockito.eq(Void.class));
+        flatEvent = newFlatEvent();
+        messageSender.pushFlatEvent(flatEvent);
         Mockito.verify(restTemplate, Mockito.times(1)).postForObject(
-                Mockito.anyString(), Mockito.eq("komeaEvent2"), Mockito.eq(Void.class));
+                Mockito.anyString(), Mockito.eq(flatEvent), Mockito.eq(Void.class));
+        Mockito.verify(restTemplate, Mockito.times(2)).postForObject(
+                Mockito.anyString(), Mockito.any(FlatEvent.class), Mockito.eq(Void.class));
     }
 
 }
