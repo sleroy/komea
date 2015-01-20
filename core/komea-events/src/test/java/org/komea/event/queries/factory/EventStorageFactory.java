@@ -41,19 +41,21 @@ public class EventStorageFactory {
 	public EventStorage newEventStorage(final DbType db_type,
 			final SerializerType serializerType, final String url) {
 		return newEventStorage(db_type, serializerType, url,
-				db_type.getDefaultUser(), db_type.getDefaultPassword());
+				db_type.getDefaultUser(), db_type.getDefaultPassword(),
+				db_type.getDriverName());
 	}
 
 	public EventStorage newEventStorage(final DbType db_type,
 			final SerializerType serializerType, final String url,
-			final String user, final String password) {
+			final String user, final String password, final String _driver) {
 		final String jdbcURL = "jdbc:" + db_type.getType() + ":" + url
 				+ db_type.getExtraOptions();
 		LOGGER.info("URL {}", url);
 		LOGGER.info("JDBC URL {}", jdbcURL);
+		LOGGER.info("JDBC DRIVER {}", _driver);
 
 		final ViburDBCPDataSource dataSource = createDataSourceWithStatementsCache(
-				jdbcURL, user, password);
+				jdbcURL, user, password, _driver);
 		final IEventDBFactory eventDBFactory = new EventDBFactory(
 				new DataSourceConnectionFactory(dataSource));
 		return new EventStorage(eventDBFactory);
@@ -84,8 +86,10 @@ public class EventStorageFactory {
 	}
 
 	private ViburDBCPDataSource createDataSourceWithStatementsCache(
-			final String _url, final String user, final String password) {
+			final String _url, final String user, final String password,
+			final String _driver) {
 		final ViburDBCPDataSource ds = new ViburDBCPDataSource();
+		ds.setDriverClassName(_driver);
 		ds.setJdbcUrl(_url);
 		ds.setUsername(user);
 		ds.setPassword(password);

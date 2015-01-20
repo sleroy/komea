@@ -22,8 +22,7 @@ public class EventDBFactory implements IEventDBFactory {
 
 	private ConnectionFactory connectionFactory;
 	private SerializerType serializer;
-	private static final Set<String> createdTables = Sets
-			.newConcurrentHashSet();
+	private final Set<String> createdTables = Sets.newConcurrentHashSet();
 
 	private final ThreadLocal<Map<String, IEventDB>> eventsDB = new ThreadLocal<Map<String, IEventDB>>() {
 		@Override

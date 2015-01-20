@@ -79,12 +79,14 @@ public class EventStoragePerformanceTest {
 	@Parameters(name = "number_events={0},type_events={1},threads={2},impl={3}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
-
 				{ EventsNumber.PICO_NUMBER, EventsTypeNumber.MANY_EVENT_TYPES,
-					ThreadNumber.MULTITHREAD, Impl.H2_DISK_JACKSON },
-
-				{ EventsNumber.PICO_NUMBER, EventsTypeNumber.MANY_EVENT_TYPES,
-						ThreadNumber.MULTITHREAD, Impl.H2_DISK_KRYO, }, });
+					ThreadNumber.MULTITHREAD, Impl.H2_MEM_JACKSON },
+					{ EventsNumber.PICO_NUMBER, EventsTypeNumber.MANY_EVENT_TYPES,
+						ThreadNumber.MULTITHREAD, Impl.H2_DISK_JACKSON },
+						{ EventsNumber.PICO_NUMBER, EventsTypeNumber.MANY_EVENT_TYPES,
+							ThreadNumber.MULTITHREAD, Impl.H2_MEM_KRYO, },
+							{ EventsNumber.PICO_NUMBER, EventsTypeNumber.MANY_EVENT_TYPES,
+								ThreadNumber.MULTITHREAD, Impl.H2_DISK_KRYO, }, });
 	}
 
 	private static final int BENCH = 2;

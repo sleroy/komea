@@ -70,9 +70,11 @@ public class EventDB implements IEventDB {
 			String sqlQuery = IOUtils.toString(resourceAsStream);
 			sqlQuery = sqlQuery.replaceAll("#table#", table);
 			LOGGER.info("Name of the table created = '{}'", table);
-			handle.execute(sqlQuery);
+			final int[] execute = handle.createScript(sqlQuery).execute();
+			LOGGER.debug("Creation table result {}", execute);
+			// handle.execute(sqlQuery);
 			handle.commit();
-		} catch (final IOException ex) {
+		} catch (final Exception ex) {
 			handle("Error with createTable query", ex);
 		} finally {
 			IOUtils.closeQuietly(handle);
@@ -146,16 +148,15 @@ public class EventDB implements IEventDB {
 	 */
 	@Override
 	public long count() {
-		final Long res = 0L;
+		Long res = 0L;
 		Handle handle = null;
 		try {
 			handle = db.open();
 			final Query<Long> map = handle.createQuery(countSQL).map(
 					LongMapper.FIRST);
-			final Object obj = map.first();
-			return (Long) obj;
-		} catch (final Throwable e) {
-			handle("Error with count query", (Exception) e);
+			res = map.first();
+		} catch (final Exception e) {
+			handle("Error with count query", e);
 		} finally {
 			IOUtils.closeQuietly(handle);
 		}
@@ -218,10 +219,11 @@ public class EventDB implements IEventDB {
 		Handle handle = null;
 		try {
 			handle = db.open();
-			handle.createStatement(insertStatementSQL)
-			.bind(COLUMN_DATE, _entry.getDate())
-			.bind(COLUMN_PROVIDER, _entry.getProvider())
-			.bind(COLUMN_DATA, serialize(_entry)).execute();
+			final int execute = handle.createStatement(insertStatementSQL)
+					.bind(COLUMN_DATE, _entry.getDate())
+					.bind(COLUMN_PROVIDER, _entry.getProvider())
+					.bind(COLUMN_DATA, serialize(_entry)).execute();
+			LOGGER.trace("Insertion result {}", execute);
 		} catch (final Exception e) {
 			handle("Error with put query", e);
 		} finally {
@@ -276,7 +278,7 @@ public class EventDB implements IEventDB {
 				+ ", " + COLUMN_PROVIDER + ", " + COLUMN_DATA + ") VALUES (:"
 				+ COLUMN_DATE + ", :" + COLUMN_PROVIDER + ", :" + COLUMN_DATA
 				+ ");";
-		loadAllSQL = "SELECT " + COLUMN_DATA + " from `" + _table + "`;";
+		loadAllSQL = "SELECT " + COLUMN_DATA + " FROM `" + _table + "`;";
 		countSQL = "SELECT COUNT(*) from `" + _table + "`";
 		deleteSQL = "DELETE FROM `" + _table + "`;";
 
