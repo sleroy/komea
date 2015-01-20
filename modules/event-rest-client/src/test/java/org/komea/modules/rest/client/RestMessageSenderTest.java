@@ -1,0 +1,47 @@
+package org.komea.modules.rest.client;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.komea.event.messaging.IMessageSender;
+import org.komea.event.model.beans.FlatEvent;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.web.client.RestTemplate;
+
+@RunWith(MockitoJUnitRunner.class)
+public class RestMessageSenderTest {
+
+    public static void main(String[] args) {
+        final IMessageSender restClient = new RestMessageSender("http://localhost:8080");
+        restClient.pushFlatEvent(newFlatEvent());
+    }
+
+    private static FlatEvent newFlatEvent() {
+        final FlatEvent flatEvent = new FlatEvent();
+        flatEvent.setEventType("new_commit");
+        flatEvent.setProvider("GIT");
+        return flatEvent;
+    }
+
+    @Mock
+    private RestTemplate restTemplate;
+
+    @Test
+    public void pushFlatEventTest() {
+        final RestMessageSender messageSender = new RestMessageSender("http://localhost:8080");
+        messageSender.setDestinationName("myQueue");
+        messageSender.setRestTemplate(restTemplate);
+        FlatEvent flatEvent = newFlatEvent();
+        messageSender.pushFlatEvent(flatEvent);
+        Mockito.verify(restTemplate, Mockito.times(1)).postForObject(
+                Mockito.anyString(), Mockito.eq(flatEvent), Mockito.eq(Void.class));
+        flatEvent = newFlatEvent();
+        messageSender.pushFlatEvent(flatEvent);
+        Mockito.verify(restTemplate, Mockito.times(1)).postForObject(
+                Mockito.anyString(), Mockito.eq(flatEvent), Mockito.eq(Void.class));
+        Mockito.verify(restTemplate, Mockito.times(2)).postForObject(
+                Mockito.anyString(), Mockito.any(FlatEvent.class), Mockito.eq(Void.class));
+    }
+
+}

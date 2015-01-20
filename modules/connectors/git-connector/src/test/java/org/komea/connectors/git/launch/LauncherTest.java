@@ -23,7 +23,7 @@ public class LauncherTest {
     @Test
     public void testRun() {
         Launcher.main(RunArgs.newArgs("push", "-m", "-url", "http://", "-git",
-                "src/test/resources/github-gmail", "-gitURL", "http://",
+                "src/test/resources/github-gmail/git", "-gitURL", "http://",
                 "-commit", "-tag").asMainArgs());
     }
 

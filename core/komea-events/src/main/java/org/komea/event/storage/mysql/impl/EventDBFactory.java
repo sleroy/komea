@@ -63,15 +63,16 @@ public class EventDBFactory implements IEventDBFactory {
 		}, serializer);
 	}
 
-	@Override
-	public void close() throws IOException {
-		final Map<String, IEventDB> map = eventsDB.get();
-		for (final IEventDB db : map.values()) {
-			db.close();
-		}
-		eventsDB.remove();
-		closeStorage();
-	}
+    @Override
+    public void close() throws IOException {
+        final Map<String, IEventDB> map = eventsDB.get();
+        for (final IEventDB db : map.values()) {
+            db.close();
+        }
+        eventsDB.remove();
+        createdTables.clear();
+        closeStorage();
+    }
 
 	@Override
 	public synchronized void declareEventType(final String _type) {

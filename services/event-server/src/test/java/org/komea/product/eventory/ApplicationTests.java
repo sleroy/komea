@@ -22,15 +22,17 @@ public class ApplicationTests {
     @Autowired
     private IEventStorage eventStorage;
 
+    private static final String EVENT_TYPE = "start";
+
 //	@Autowired
 //	private IEventQueryManager	eventQueryManager;
     @Test
     public void contextLoads() {
 
         final BasicEvent simpleEventDto = new BasicEvent();
-        simpleEventDto.setEventType("start");
+        simpleEventDto.setEventType(EVENT_TYPE);
         simpleEventDto.setProvider("jenkins");
-
+        this.eventStorage.declareEventType(EVENT_TYPE);
         this.eventStorage.storeBasicEvent(simpleEventDto);
 //        FIXME
 //		assertEquals(1, this.eventQueryManager.countEventsOfType("start"));
