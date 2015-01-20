@@ -1,0 +1,7 @@
+
+dependencies {
+    compile(project(":core:komea-events")) {
+        exclude group: 'com.orientechnologies'
+    }
+    compile("org.springframework:spring-web:${SPRING_VERSION}")
+}
