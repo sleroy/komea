@@ -1,13 +1,9 @@
 package org.komea.microservices.events.storage.rest;
 
 import java.util.Date;
-
 import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.NotEmpty;
-import org.komea.event.model.beans.BasicEvent;
-import org.komea.event.model.beans.ComplexEvent;
-import org.komea.event.model.beans.FlatEvent;
+import org.komea.event.model.KomeaEvent;
 import org.komea.event.storage.IEventStorage;
 import org.komea.microservices.events.database.model.ValueEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,51 +20,37 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(method = RequestMethod.GET, value = "/storage")
 public class StorageController {
 
-	@Autowired
-	private IEventStorage eventStorageService;
+    @Autowired
+    private IEventStorage eventStorageService;
 
-	@Transactional
-	@RequestMapping(method = RequestMethod.DELETE, value = "/clear/{eventType}")
-	@ResponseStatus(value = HttpStatus.OK)
-	public void clearEvent(@PathVariable final String eventType) {
-		eventStorageService.clearEventsOfType(eventType);
+    @Transactional
+    @RequestMapping(method = RequestMethod.DELETE, value = "/clear/{eventType}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void clearEvent(@PathVariable final String eventType) {
+        eventStorageService.clearEventsOfType(eventType);
 
-	}
+    }
 
-	@RequestMapping(method = RequestMethod.GET, value = "/push/{provider}/{eventName}/{value}")
-	@ResponseStatus(value = HttpStatus.OK)
-	public void pushGetEvent(@PathVariable final String provider,
-			@NotEmpty @PathVariable final String eventName,
-			@NotNull @PathVariable final Double value) {
+    @RequestMapping(method = RequestMethod.GET, value = "/push/{provider}/{eventName}/{value}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void pushGetEvent(@PathVariable final String provider,
+            @NotEmpty @PathVariable final String eventName,
+            @NotNull @PathVariable final Double value) {
 
-		final ValueEvent valueEvent = new ValueEvent();
+        final ValueEvent valueEvent = new ValueEvent();
 
-		valueEvent.setEventType(eventName);
-		valueEvent.setValue(value);
-		valueEvent.setProvider(provider);
-		valueEvent.setDate(new Date());
-		eventStorageService.storeEvent(valueEvent);
+        valueEvent.setEventType(eventName);
+        valueEvent.setValue(value);
+        valueEvent.setProvider(provider);
+        valueEvent.setDate(new Date());
+        eventStorageService.storeEvent(valueEvent);
 
-	}
+    }
 
-	@RequestMapping(method = RequestMethod.POST, value = "/push_complex")
-	@ResponseStatus(value = HttpStatus.OK)
-	public void pushPostComplexEvent(@RequestBody final ComplexEvent _event) {
-		eventStorageService.storeComplexEvent(_event);
+    @RequestMapping(method = RequestMethod.POST, value = "/push_flat")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void pushPostEvent(@RequestBody final KomeaEvent _event) {
+        eventStorageService.storeEvent(_event);
 
-	}
-
-	@RequestMapping(method = RequestMethod.POST, value = "/push_flat")
-	@ResponseStatus(value = HttpStatus.OK)
-	public void pushPostComplexEvent(@RequestBody final FlatEvent _event) {
-		eventStorageService.storeFlatEvent(_event);
-
-	}
-
-	@RequestMapping(method = RequestMethod.POST, value = "/push")
-	@ResponseStatus(value = HttpStatus.OK)
-	public void pushPostEvent(@RequestBody final BasicEvent _event) {
-		eventStorageService.storeBasicEvent(_event);
-
-	}
+    }
 }

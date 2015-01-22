@@ -13,7 +13,7 @@ import org.komea.connectors.bugzilla.proxy.BugzillaPluginException;
 import org.komea.connectors.bugzilla.proxy.IBugzillaAPI;
 import org.komea.connectors.bugzilla.proxy.impl.BugzillaAPI;
 import org.komea.connectors.bugzilla.proxy.impl.BugzillaServerConfiguration;
-import org.komea.event.model.beans.ComplexEvent;
+import org.komea.event.model.KomeaEvent;
 import org.komea.event.storage.IEventStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,12 +80,12 @@ public class BugzillaEventConnector {
                 LOGGER.info("Processing {}/{}", numberOfBugsProcessed, bugList.size());
             }
             if (this.isRecentlyCreated(bug, this.bugzillaAPI)) {
-                final ComplexEvent complexEventDto = this.createBugEvent(bug, EVENT_NEW_BUG, _productName);
-                this.eventStorage.storeComplexEvent(complexEventDto);
+                final KomeaEvent complexEventDto = this.createBugEvent(bug, EVENT_NEW_BUG, _productName);
+                this.eventStorage.storeEvent(complexEventDto);
             }
             if (this.isRecentlyUpdated(bug, this.bugzillaAPI)) {
-                final ComplexEvent complexEventDto = this.createBugEvent(bug, EVENT_UPDATED_BUG, _productName);
-                this.eventStorage.storeComplexEvent(complexEventDto);
+                final KomeaEvent complexEventDto = this.createBugEvent(bug, EVENT_UPDATED_BUG, _productName);
+                this.eventStorage.storeEvent(complexEventDto);
             }
             numberOfBugsProcessed++;
         }
@@ -132,8 +132,8 @@ public class BugzillaEventConnector {
 
     }
 
-    private ComplexEvent createBugEvent(final Bug bug, final String eventName, final String _productName) {
-        final ComplexEvent complexEventDto = new ComplexEvent();
+    private KomeaEvent createBugEvent(final Bug bug, final String eventName, final String _productName) {
+        final KomeaEvent complexEventDto = new KomeaEvent();
         complexEventDto.setProvider(PROVIDER_BUG);
         complexEventDto.setEventType(eventName);
 
@@ -144,7 +144,7 @@ public class BugzillaEventConnector {
                 properties.put(entry.getKey().toString(), entry.getValue());
             }
         }
-        complexEventDto.setProperties(properties);
+        complexEventDto.addFields(properties);
         return complexEventDto;
     }
 

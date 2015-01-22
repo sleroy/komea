@@ -1,10 +1,8 @@
-
 package org.komea.connectors.git.events;
 
-
+import com.google.common.collect.Maps;
 import java.io.Serializable;
 import java.util.Map;
-
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
@@ -15,21 +13,18 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.komea.connectors.git.IGitCommit;
 import org.komea.connectors.git.IGitCommitProcessor;
 import org.komea.connectors.git.IGitEvent;
-import org.komea.event.model.beans.ComplexEvent;
+import org.komea.event.model.KomeaEvent;
 import org.komea.event.storage.IEventStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Maps;
+public class GitEventTagProducer implements IGitCommitProcessor {
 
-public class GitEventTagProducer implements IGitCommitProcessor
-{
-
-    private static final Logger       LOGGER = LoggerFactory.getLogger(GitEventTagProducer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GitEventTagProducer.class);
 
     private final Map<String, String> tagsMap;
 
-    private final IEventStorage       storage;
+    private final IEventStorage storage;
 
     public GitEventTagProducer(final IEventStorage storage, final Git git) {
 
@@ -44,11 +39,11 @@ public class GitEventTagProducer implements IGitCommitProcessor
                 final String tagName = Repository.shortenRefName(tag.getName());
                 if (revObject instanceof RevTag) {
                     final RevTag jtag = (RevTag) revObject;
-                  
+
                     final RevObject tagged = walk.parseAny(jtag.getObject().getId());
                     final RevCommit referencedCommit = walk.parseCommit(repository.resolve(tagged.getName()));
                     this.tagsMap.put(referencedCommit.getId().name(), tagName);
-                }else{
+                } else {
                     this.tagsMap.put(revObject.getId().name(), tagName);
                 }
             }
@@ -57,6 +52,7 @@ public class GitEventTagProducer implements IGitCommitProcessor
         }
 
     }
+
     @Override
     public void process(final RevCommit commit, final RevWalk walk, final IGitCommit convertGitCommit) {
 
@@ -69,7 +65,7 @@ public class GitEventTagProducer implements IGitCommitProcessor
 
     private void sendTag(final String tag, final IGitCommit convertGitCommit) {
 
-        final ComplexEvent event = new ComplexEvent();
+        final KomeaEvent event = new KomeaEvent();
         event.setEventType(IGitEvent.TAG);
         event.setProvider(IGitEvent.PROVIDER);
         event.addField("name", tag);
@@ -78,7 +74,7 @@ public class GitEventTagProducer implements IGitCommitProcessor
         event.setDate(convertGitCommit.getCommitTime());
         event.addField("commit", convertGitCommit.getId());
 
-        this.storage.storeComplexEvent(event);
+        this.storage.storeEvent(event);
 
     }
 

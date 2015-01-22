@@ -1,27 +1,27 @@
 package org.komea.microservices.events.database.model;
 
-import org.komea.event.model.beans.AbstractEvent;
+import org.komea.event.model.KomeaEvent;
 
-public class ValueEvent extends AbstractEvent {
+public class ValueEvent extends KomeaEvent {
 
-	private Double	value;
+    private Double value;
 
-	public ValueEvent() {
-		super();
+    public ValueEvent() {
+        super();
 
-	}
+    }
 
-	public Double getValue() {
-		return this.value;
-	}
+    public Double getValue() {
+        return this.value;
+    }
 
-	public void setValue(final Double _value) {
-		this.value = _value;
-	}
+    public void setValue(final Double _value) {
+        this.value = _value;
+    }
 
-	@Override
-	public String toString() {
-		return "ValueEvent [value=" + this.value + "]";
-	}
+    @Override
+    public String toString() {
+        return "ValueEvent [value=" + this.value + "]";
+    }
 
 }

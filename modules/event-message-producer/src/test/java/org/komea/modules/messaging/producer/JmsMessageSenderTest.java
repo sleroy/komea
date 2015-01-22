@@ -3,7 +3,7 @@ package org.komea.modules.messaging.producer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.event.messaging.IMessageSender;
-import org.komea.event.model.beans.FlatEvent;
+import org.komea.event.model.KomeaEvent;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -19,8 +19,8 @@ public class JmsMessageSenderTest {
         messageSender.pushFlatEvent(newFlatEvent());
     }
 
-    private static FlatEvent newFlatEvent() {
-        final FlatEvent flatEvent = new FlatEvent();
+    private static KomeaEvent newFlatEvent() {
+        final KomeaEvent flatEvent = new KomeaEvent();
         flatEvent.setEventType("new_commit");
         flatEvent.setProvider("GIT");
         return flatEvent;

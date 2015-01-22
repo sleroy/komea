@@ -3,7 +3,7 @@ package org.komea.modules.rest.client;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.event.messaging.IMessageSender;
-import org.komea.event.model.beans.FlatEvent;
+import org.komea.event.model.KomeaEvent;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -17,8 +17,8 @@ public class RestMessageSenderTest {
         restClient.pushFlatEvent(newFlatEvent());
     }
 
-    private static FlatEvent newFlatEvent() {
-        final FlatEvent flatEvent = new FlatEvent();
+    private static KomeaEvent newFlatEvent() {
+        final KomeaEvent flatEvent = new KomeaEvent();
         flatEvent.setEventType("new_commit");
         flatEvent.setProvider("GIT");
         return flatEvent;
@@ -32,7 +32,7 @@ public class RestMessageSenderTest {
         final RestMessageSender messageSender = new RestMessageSender("http://localhost:8080");
         messageSender.setDestinationName("myQueue");
         messageSender.setRestTemplate(restTemplate);
-        FlatEvent flatEvent = newFlatEvent();
+        KomeaEvent flatEvent = newFlatEvent();
         messageSender.pushFlatEvent(flatEvent);
         Mockito.verify(restTemplate, Mockito.times(1)).postForObject(
                 Mockito.anyString(), Mockito.eq(flatEvent), Mockito.eq(Void.class));
@@ -40,8 +40,7 @@ public class RestMessageSenderTest {
         messageSender.pushFlatEvent(flatEvent);
         Mockito.verify(restTemplate, Mockito.times(1)).postForObject(
                 Mockito.anyString(), Mockito.eq(flatEvent), Mockito.eq(Void.class));
-        Mockito.verify(restTemplate, Mockito.times(2)).postForObject(
-                Mockito.anyString(), Mockito.any(FlatEvent.class), Mockito.eq(Void.class));
+        Mockito.verify(restTemplate, Mockito.times(2)).postForObject(Mockito.anyString(), Mockito.any(KomeaEvent.class), Mockito.eq(Void.class));
     }
 
 }

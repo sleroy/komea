@@ -28,6 +28,6 @@ public final class CommitEventProducer implements IGitCommitProcessor {
     @Override
     public void process(final RevCommit commit, final RevWalk walk,
             final IGitCommit convertGitCommit) {
-        eventStorage.storeComplexEvent(converter.newCommitEvent(convertGitCommit));
+        eventStorage.storeEvent(converter.newCommitEvent(convertGitCommit));
     }
 }

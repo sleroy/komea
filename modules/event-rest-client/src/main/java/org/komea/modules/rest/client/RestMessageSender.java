@@ -1,7 +1,7 @@
 package org.komea.modules.rest.client;
 
 import org.komea.event.messaging.IMessageSender;
-import org.komea.event.model.beans.FlatEvent;
+import org.komea.event.model.KomeaEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
@@ -30,7 +30,7 @@ public class RestMessageSender implements IMessageSender {
     }
 
     @Override
-    public void pushFlatEvent(final FlatEvent flatEvent) {
+    public void pushFlatEvent(final KomeaEvent flatEvent) {
         LOGGER.debug("RestMessageSender - pushFlatEvent : " + flatEvent);
         post("pushFlatEvent", flatEvent);
     }

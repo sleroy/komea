@@ -2,7 +2,7 @@ package org.komea.product.eventory;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.event.model.beans.BasicEvent;
+import org.komea.event.model.KomeaEvent;
 import org.komea.event.storage.IEventStorage;
 import org.komea.microservices.events.Application;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +29,11 @@ public class ApplicationTests {
     @Test
     public void contextLoads() {
 
-        final BasicEvent simpleEventDto = new BasicEvent();
+        final KomeaEvent simpleEventDto = new KomeaEvent();
         simpleEventDto.setEventType(EVENT_TYPE);
         simpleEventDto.setProvider("jenkins");
         this.eventStorage.declareEventType(EVENT_TYPE);
-        this.eventStorage.storeBasicEvent(simpleEventDto);
+        this.eventStorage.storeEvent(simpleEventDto);
 //        FIXME
 //		assertEquals(1, this.eventQueryManager.countEventsOfType("start"));
 

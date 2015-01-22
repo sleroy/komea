@@ -4,7 +4,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import org.komea.event.model.beans.FlatEvent;
+import org.komea.event.model.KomeaEvent;
 import org.komea.event.storage.IEventStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +31,8 @@ public class KomeaMessageListener implements MessageListener {
     private void onObjectMessage(final ObjectMessage objectMessage) throws JMSException {
         final Object object = objectMessage.getObject();
         LOGGER.debug("onObjectMessage : " + object);
-        if (object instanceof FlatEvent) {
-            eventStorageService.storeFlatEvent((FlatEvent) object);
+        if (object instanceof KomeaEvent) {
+            eventStorageService.storeEvent((KomeaEvent) object);
         } else {
             LOGGER.warn("An object that is not a FlatEvent was received : " + object);
         }

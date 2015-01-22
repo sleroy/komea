@@ -6,7 +6,7 @@ import javax.jms.Message;
 import javax.jms.Session;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.komea.event.messaging.IMessageSender;
-import org.komea.event.model.beans.FlatEvent;
+import org.komea.event.model.KomeaEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.core.JmsTemplate;
@@ -33,7 +33,7 @@ public class JmsMessageSender implements IMessageSender {
     }
 
     @Override
-    public void pushFlatEvent(final FlatEvent flatEvent) {
+    public void pushFlatEvent(final KomeaEvent flatEvent) {
         LOGGER.debug("JmsMessageSender - pushFlatEvent : " + flatEvent);
         sendObjectMessage(flatEvent);
     }

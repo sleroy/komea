@@ -1,7 +1,7 @@
 package org.komea.microservices.messaging.rest;
 
 import org.komea.event.messaging.IMessageSender;
-import org.komea.event.model.beans.FlatEvent;
+import org.komea.event.model.KomeaEvent;
 import org.komea.modules.messaging.producer.JmsMessageSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ public class JmsController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/pushFlatEvent/{destinationName}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void pushFlatEvent(@PathVariable String destinationName, @RequestBody final FlatEvent flatEvent) {
+    public void pushFlatEvent(@PathVariable String destinationName, @RequestBody final KomeaEvent flatEvent) {
         LOGGER.debug("JmsController - pushFlatEvent : " + flatEvent);
         messageSender.setDestinationName(destinationName);
         messageSender.pushFlatEvent(flatEvent);

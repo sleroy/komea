@@ -1,16 +1,12 @@
 package org.komea.connectors.git.events;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.connectors.git.AbstractLocalGitTest;
 import org.komea.connectors.git.BasicEventsListStorage;
-import org.komea.event.model.beans.AbstractEvent;
-import org.komea.event.model.beans.BasicEvent;
-import org.komea.event.model.beans.ComplexEvent;
-import org.komea.event.model.beans.FlatEvent;
+import org.komea.event.model.KomeaEvent;
+import org.komea.event.storage.IEventDB;
 import org.komea.event.storage.IEventStorage;
 
 public class CommitEventProducerTests extends AbstractLocalGitTest {
@@ -44,51 +40,15 @@ public class CommitEventProducerTests extends AbstractLocalGitTest {
         }
 
         @Override
-        public void storeBasicEvent(final BasicEvent _event) {
-
-            counter++;
-            throw new RuntimeException(
-                    "Storage is throwing exeception for test purpose.");
-
-        }
-
-        @Override
-        public void storeComplexEvent(final ComplexEvent _event) {
-
+        public void storeEvent(final KomeaEvent _event) {
             counter++;
             throw new RuntimeException(
                     "Storage is throwing exeception for test purpose.");
         }
 
         @Override
-        public void storeEvent(final AbstractEvent _event) {
-
-            counter++;
-            throw new RuntimeException(
-                    "Storage is throwing exeception for test purpose.");
-        }
-
-        @Override
-        public void storeFlatEvent(final FlatEvent _event) {
-
-            throw new RuntimeException(
-                    "Storage is throwing exeception for test purpose.");
-        }
-
-        @Override
-        public void storeMap(final Map<String, Serializable> _fieldMap) {
-
-            counter++;
-            throw new RuntimeException(
-                    "Storage is throwing exeception for test purpose.");
-        }
-
-        @Override
-        public void storePojo(final Object _pojo) {
-
-            counter++;
-            throw new RuntimeException(
-                    "Storage is throwing exeception for test purpose.");
+        public IEventDB getEventDB(String eventType) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
 
     }
@@ -104,7 +64,7 @@ public class CommitEventProducerTests extends AbstractLocalGitTest {
         Assert.assertEquals(getExpectedNumberOfCommits(), storage.getEvents()
                 .size());
 
-        final ComplexEvent event = (ComplexEvent) storage.getEvents().get(0);
+        final KomeaEvent event = storage.getEvents().get(0);
         final String author = (String) event.getProperties().get("author");
         Assert.assertNotNull(author);
     }

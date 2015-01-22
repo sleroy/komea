@@ -26,20 +26,17 @@ repositories { mavenCentral() }
 configurations { providedRuntime }
 
 dependencies {
+    compile project(":core:komea-events")
+    
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
-	compile("org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}")	
-	compile("org.apache.activemq:activemq-broker:5.10.0")
-	compile('com.h2database:h2:1.4.184')
-	
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}")
-    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
-	
-    compile project(":core:komea-events")
-    compile project(":core:shared:komea-db-commons")
-	
+    compile("org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}")	
+    compile("org.apache.activemq:activemq-broker:5.10.0")
     compile("org.springframework:spring-jms:${SPRING_VERSION}")
     compile("org.apache.activemq:activemq-kahadb-store:${ACTIVEMQ_VERSION}")
+    
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}")
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 }
 
 eclipse {

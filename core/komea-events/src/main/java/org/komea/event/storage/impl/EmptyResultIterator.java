@@ -3,33 +3,34 @@
  */
 package org.komea.event.storage.impl;
 
-import org.komea.event.model.beans.FlatEvent;
+import org.komea.event.model.KomeaEvent;
 import org.skife.jdbi.v2.ResultIterator;
 
 /**
  * @author sleroy
  */
 public final class EmptyResultIterator implements
-ResultIterator<FlatEvent> {
-	public static final ResultIterator<FlatEvent>	EMPTY	= new EmptyResultIterator();
+        ResultIterator<KomeaEvent> {
 
-	@Override
-	public void close() {
+    public static final ResultIterator<KomeaEvent> EMPTY = new EmptyResultIterator();
 
-	}
+    @Override
+    public void close() {
 
-	@Override
-	public boolean hasNext() {
-		return false;
-	}
+    }
 
-	@Override
-	public FlatEvent next() {
-		return null;
-	}
+    @Override
+    public boolean hasNext() {
+        return false;
+    }
 
-	@Override
-	public void remove() {
+    @Override
+    public KomeaEvent next() {
+        return null;
+    }
 
-	}
+    @Override
+    public void remove() {
+
+    }
 }

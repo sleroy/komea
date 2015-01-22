@@ -1,20 +1,16 @@
-
 package org.komea.connectors.git.events;
 
-
 import java.io.Serializable;
-
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.komea.connectors.git.IFileUpdate;
 import org.komea.connectors.git.IGitCommit;
 import org.komea.connectors.git.IGitCommitProcessor;
 import org.komea.connectors.git.IGitEvent;
-import org.komea.event.model.beans.ComplexEvent;
+import org.komea.event.model.KomeaEvent;
 import org.komea.event.storage.IEventStorage;
 
-public class FileModificationEventProducer implements IGitCommitProcessor
-{
+public class FileModificationEventProducer implements IGitCommitProcessor {
 
     private final IEventStorage storage;
 
@@ -25,6 +21,7 @@ public class FileModificationEventProducer implements IGitCommitProcessor
         this.storage.declareEventType(IGitEvent.UPDATE);
 
     }
+
     @Override
     public void process(final RevCommit gcommit, final RevWalk revWalk, final IGitCommit commit) {
 
@@ -36,12 +33,12 @@ public class FileModificationEventProducer implements IGitCommitProcessor
 
     private void send(final IGitCommit commit, final IFileUpdate update) {
 
-        final ComplexEvent event = new ComplexEvent();
+        final KomeaEvent event = new KomeaEvent();
         event.setProvider(IGitEvent.PROVIDER);
         event.setEventType(IGitEvent.UPDATE);
 
         event.setDate(commit.getCommitTime());
-        event.addField("merge", commit.getParents().size()>1);
+        event.addField("merge", commit.getParents().size() > 1);
         event.addField("commit", commit.getId());
         event.addField("file", update.getPath());
         event.addField("total_updated_lines", update.getNumberOfAddedLines() + update.getNumberOfDeletedLines());
@@ -50,6 +47,6 @@ public class FileModificationEventProducer implements IGitCommitProcessor
         event.addField("branches", (Serializable) commit.getBranches());
         event.addField("project", commit.getShProject());
         event.addField("old_file", update.getOldPath());
-        this.storage.storeComplexEvent(event);
+        this.storage.storeEvent(event);
     }
 }
