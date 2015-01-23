@@ -1,10 +1,12 @@
 
 dependencies {
-	compile project(":core:shared:komea-db-commons")
 
 	compile "org.apache.commons:commons-lang3:$APACHE_COMMONLANG3"
 	compile "commons-io:commons-io:$APACHE_COMMONIO"
 	compile "com.google.guava:guava:$GUAVA"
+	compile (project(":core:shared:komea-db-commons")) {
+            transitive = false
+        }
 	compile 'com.esotericsoftware.kryo:kryo:2.24.0'
 	compile 'org.jdbi:jdbi:2.55'
 	compile 'org.apache.commons:commons-math3:3.2'

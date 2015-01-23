@@ -6,7 +6,7 @@ public interface IMessageSender {
 
     public static final String DEFAULT_DESTINATION_NAME = "komea-queue";
 
-    void pushFlatEvent(KomeaEvent flatEvent);
+    void pushEvent(KomeaEvent event);
 
     void setDestinationName(String destinationName);
 }

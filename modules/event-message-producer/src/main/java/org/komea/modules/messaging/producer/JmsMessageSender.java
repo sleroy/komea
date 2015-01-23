@@ -33,9 +33,9 @@ public class JmsMessageSender implements IMessageSender {
     }
 
     @Override
-    public void pushFlatEvent(final KomeaEvent flatEvent) {
-        LOGGER.debug("JmsMessageSender - pushFlatEvent : " + flatEvent);
-        sendObjectMessage(flatEvent);
+    public void pushEvent(final KomeaEvent event) {
+        LOGGER.info("JmsMessageSender - pushEvent : " + event);
+        sendObjectMessage(event);
     }
 
     private void sendObjectMessage(final Object object) {

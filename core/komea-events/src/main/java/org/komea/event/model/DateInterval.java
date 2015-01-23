@@ -3,6 +3,7 @@
  */
 package org.komea.event.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import org.apache.commons.lang3.Validate;
 
@@ -11,7 +12,9 @@ import org.apache.commons.lang3.Validate;
  *
  * @author sleroy
  */
-public class DateInterval {
+public class DateInterval implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public static DateInterval since(final Date _time) {
         return new DateInterval(_time, null);

@@ -16,7 +16,7 @@ public class JmsMessageSenderTest {
     public static void main(String[] args) {
         final IMessageSender messageSender = new JmsMessageSender(
                 "tcp://localhost:61616", IMessageSender.DEFAULT_DESTINATION_NAME);
-        messageSender.pushFlatEvent(newFlatEvent());
+        messageSender.pushEvent(newFlatEvent());
     }
 
     private static KomeaEvent newFlatEvent() {
@@ -34,9 +34,9 @@ public class JmsMessageSenderTest {
         final JmsMessageSender messageSender = new JmsMessageSender("tcp://localhost:61616");
         messageSender.setDestinationName("myQueue");
         messageSender.setJmsTemplate(jmsTemplate);
-        messageSender.pushFlatEvent(newFlatEvent());
+        messageSender.pushEvent(newFlatEvent());
         Mockito.verify(jmsTemplate, Mockito.times(1)).send(Mockito.any(MessageCreator.class));
-        messageSender.pushFlatEvent(newFlatEvent());
+        messageSender.pushEvent(newFlatEvent());
         Mockito.verify(jmsTemplate, Mockito.times(2)).send(Mockito.any(MessageCreator.class));
     }
 

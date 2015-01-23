@@ -20,7 +20,7 @@ public class QueriesRestClient {
 
     @SuppressWarnings("unchecked")
     public Map<String, Number> execute(final EventsQuery eventsQuery) {
-        LOGGER.debug("QueriesRestClient - execute : " + eventsQuery);
+        LOGGER.info("QueriesRestClient - execute : " + eventsQuery);
         return post("execute", eventsQuery, Map.class);
     }
 

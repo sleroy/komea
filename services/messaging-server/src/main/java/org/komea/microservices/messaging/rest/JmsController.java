@@ -23,12 +23,12 @@ public class JmsController {
 
     private final IMessageSender messageSender = new JmsMessageSender(BROKER_URL);
 
-    @RequestMapping(method = RequestMethod.POST, value = "/pushFlatEvent/{destinationName}")
+    @RequestMapping(method = RequestMethod.POST, value = "/pushEvent/{destinationName}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void pushFlatEvent(@PathVariable String destinationName, @RequestBody final KomeaEvent flatEvent) {
-        LOGGER.debug("JmsController - pushFlatEvent : " + flatEvent);
+    public void pushEvent(@PathVariable String destinationName, @RequestBody final KomeaEvent event) {
+        LOGGER.info("JmsController - pushEvent : " + event);
         messageSender.setDestinationName(destinationName);
-        messageSender.pushFlatEvent(flatEvent);
+        messageSender.pushEvent(event);
     }
 
 }

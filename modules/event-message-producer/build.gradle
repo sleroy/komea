@@ -1,8 +1,6 @@
 
 dependencies {
-    compile(project(":core:komea-events")) {
-        exclude group: 'com.orientechnologies'
-    }
+    compile project(":core:komea-events")
     compile("org.springframework:spring-jms:${SPRING_VERSION}")
     compile("org.apache.activemq:activemq-client:${ACTIVEMQ_VERSION}")
 }

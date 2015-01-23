@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.joda.time.DateTime;
 import org.komea.core.utils.PojoToMap;
 
@@ -211,7 +211,7 @@ public class KomeaEvent implements IKomeaEvent, Serializable {
 
     @Override
     public String toString() {
-        return "FlatEvent [properties=" + properties + "]";
+        return "KomeaEvent{" + "properties=" + properties + '}';
     }
 
     /**

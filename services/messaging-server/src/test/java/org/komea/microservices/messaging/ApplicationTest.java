@@ -13,17 +13,17 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 public class ApplicationTest {
 
-    private static KomeaEvent newFlatEvent() {
-        final KomeaEvent flatEvent = new KomeaEvent();
-        flatEvent.setEventType("new_commit");
-        flatEvent.setProvider("GIT");
-        return flatEvent;
+    private static KomeaEvent newEvent() {
+        final KomeaEvent event = new KomeaEvent();
+        event.setEventType("new_commit");
+        event.setProvider("GIT");
+        return event;
     }
 
     @Test
     public void contextLoads() {
         final JmsController controller = new JmsController();
-        controller.pushFlatEvent("komeaQueue", newFlatEvent());
-        controller.pushFlatEvent("komeaQueue", newFlatEvent());
+        controller.pushEvent("komeaQueue", newEvent());
+        controller.pushEvent("komeaQueue", newEvent());
     }
 }

@@ -1,6 +1,7 @@
 package org.komea.event.queries.formulas;
 
 import com.google.common.collect.Lists;
+import java.util.Date;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -11,24 +12,26 @@ public class FormulasTest {
 
     private static final List<KomeaEvent> events = Lists.newArrayList();
     private static final String KEY = "value";
+    private static final String NUMBER = "number";
 
     @BeforeClass
     public static void beforeClass() {
-        addEvent(null);
-        addEvent(5);
-        addEvent(1);
-        addEvent(9);
-        addEvent(3);
-        addEvent(null);
-        addEvent(8);
-        addEvent(7);
-        addEvent(2);
-        addEvent(null);
+        addEvent(null, null);
+        addEvent(5, (Number) null);
+        addEvent(1, (String) null);
+        addEvent(9, (Date) null);
+        addEvent(3, new Date());
+        addEvent(null, "");
+        addEvent(8, "123");
+        addEvent(7, "a");
+        addEvent(2, 456);
+        addEvent(null, Math.PI);
     }
 
-    private static void addEvent(final Number value) {
+    private static void addEvent(final Number value, final Object number) {
         final KomeaEvent event = new KomeaEvent();
         event.put(KEY, value);
+        event.put(NUMBER, number);
         events.add(event);
     }
 
@@ -87,6 +90,12 @@ public class FormulasTest {
     @Test
     public void testFormulaDiffTime() {
         assertResult(3d, FormulaType.DIFF_TIME);
+    }
+
+    @Test
+    public void testNumberValue() {
+        final FormulaSum sum = new FormulaSum(NUMBER);
+        sum.calculate(events);
     }
 
 }

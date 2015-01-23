@@ -1,13 +1,10 @@
-
 package org.komea.connectors.git.utils;
-
 
 import java.io.File;
 import java.io.IOException;
-
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
@@ -17,18 +14,17 @@ import org.komea.connectors.git.impl.ScmRepositoryDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GitCloner
-{
+public class GitCloner {
 
-    private static final Logger           LOGGER = LoggerFactory.getLogger(GitCloner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GitCloner.class);
 
-    private Repository                    fileRepository;
+    private Repository fileRepository;
 
-    private Git                           git;
+    private Git git;
 
-    private File                          scmClonedDirectory;
+    private File scmClonedDirectory;
     private final ScmRepositoryDefinition scmRepositoryDefinition;
-    private final File                    storageFolder;
+    private final File storageFolder;
 
     /**
      * Builds the repository.
@@ -78,7 +74,7 @@ public class GitCloner
 
         return this.git;
     }
-    
+
     /**
      * Initialize the storage folder.
      */

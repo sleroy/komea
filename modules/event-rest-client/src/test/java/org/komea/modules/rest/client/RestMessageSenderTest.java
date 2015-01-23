@@ -14,7 +14,7 @@ public class RestMessageSenderTest {
 
     public static void main(String[] args) {
         final IMessageSender restClient = new RestMessageSender("http://localhost:8080");
-        restClient.pushFlatEvent(newFlatEvent());
+        restClient.pushEvent(newFlatEvent());
     }
 
     private static KomeaEvent newFlatEvent() {
@@ -33,11 +33,11 @@ public class RestMessageSenderTest {
         messageSender.setDestinationName("myQueue");
         messageSender.setRestTemplate(restTemplate);
         KomeaEvent flatEvent = newFlatEvent();
-        messageSender.pushFlatEvent(flatEvent);
+        messageSender.pushEvent(flatEvent);
         Mockito.verify(restTemplate, Mockito.times(1)).postForObject(
                 Mockito.anyString(), Mockito.eq(flatEvent), Mockito.eq(Void.class));
         flatEvent = newFlatEvent();
-        messageSender.pushFlatEvent(flatEvent);
+        messageSender.pushEvent(flatEvent);
         Mockito.verify(restTemplate, Mockito.times(1)).postForObject(
                 Mockito.anyString(), Mockito.eq(flatEvent), Mockito.eq(Void.class));
         Mockito.verify(restTemplate, Mockito.times(2)).postForObject(Mockito.anyString(), Mockito.any(KomeaEvent.class), Mockito.eq(Void.class));

@@ -1,6 +1,7 @@
 package org.komea.event.queries.executor;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.annotation.Nonnull;
 import org.komea.event.model.DateInterval;
 import org.komea.event.queries.formulas.FormulaDto;
@@ -42,6 +43,10 @@ public class EventsQuery implements Serializable {
 
     public DateInterval getInterval() {
         return interval;
+    }
+
+    public void setInterval(final Date from, final Date to) {
+        setInterval(new DateInterval(from, to));
     }
 
     public void setInterval(final DateInterval interval) {

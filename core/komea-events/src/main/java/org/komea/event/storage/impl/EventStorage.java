@@ -53,6 +53,7 @@ public class EventStorage implements IEventStorage {
 
     @Override
     public void storeEvent(final KomeaEvent _event) {
+        LOGGER.info("storeEvent " + _event);
         save(_event);
     }
 
@@ -60,8 +61,9 @@ public class EventStorage implements IEventStorage {
         if (!validator.validate(_document)) {
             LOGGER.error("Event has been rejected {}", _document);
         } else {
-            final IEventDB storage = eventDBFactory.getEventDB(_document
-                    .getEventType());
+            final String eventType = _document.getEventType();
+            eventDBFactory.declareEventType(eventType);
+            final IEventDB storage = eventDBFactory.getEventDB(eventType);
             storage.put(_document);
         }
     }

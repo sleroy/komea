@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.komea.event.model.DateInterval;
 import org.komea.event.model.KomeaEvent;
 import org.komea.event.model.SerializerType;
@@ -71,7 +71,7 @@ public class EventDB implements IEventDB {
             // handle.execute(sqlQuery);
             handle.commit();
         } catch (final Exception ex) {
-            handle("Error with createTable query", ex);
+            handleException("Error with createTable query", ex);
         } finally {
             IOUtils.closeQuietly(handle);
         }
@@ -96,7 +96,7 @@ public class EventDB implements IEventDB {
         return sb.toString();
     }
 
-    public static void handle(final String _message, final Exception _e) {
+    public static void handleException(final String _message, final Exception _e) {
         // LOGGER.error(_message, _e);
         throw new RuntimeException(_message, _e);
     }
@@ -151,7 +151,7 @@ public class EventDB implements IEventDB {
                     LongMapper.FIRST);
             res = map.first();
         } catch (final Exception e) {
-            handle("Error with count query", e);
+            handleException("Error with count query", e);
         } finally {
             IOUtils.closeQuietly(handle);
         }
@@ -175,7 +175,7 @@ public class EventDB implements IEventDB {
                         }
                     }).iterator();
         } catch (final Exception e) {
-            handle("Error with loadAll query", e);
+            handleException("Error with loadAll query", e);
         } finally {
             IOUtils.closeQuietly(handle);
         }
@@ -202,7 +202,7 @@ public class EventDB implements IEventDB {
                     .bind("to", _period.getTo());
             return map.iterator();
         } catch (final Exception e) {
-            handle("Error with removeAll query", e);
+            handleException("Error with removeAll query", e);
         } finally {
             IOUtils.closeQuietly(handle);
         }
@@ -220,7 +220,7 @@ public class EventDB implements IEventDB {
                     .bind(COLUMN_DATA, serialize(_entry)).execute();
             LOGGER.trace("Insertion result {}", execute);
         } catch (final Exception e) {
-            handle("Error with put query", e);
+            handleException("Error with put query", e);
         } finally {
             IOUtils.closeQuietly(handle);
         }
@@ -241,7 +241,7 @@ public class EventDB implements IEventDB {
             }
             handle.commit();
         } catch (final Exception e) {
-            handle("Error with putAll query", e);
+            handleException("Error with putAll query", e);
         } finally {
             IOUtils.closeQuietly(handle);
         }

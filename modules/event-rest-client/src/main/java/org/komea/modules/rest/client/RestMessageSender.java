@@ -30,9 +30,9 @@ public class RestMessageSender implements IMessageSender {
     }
 
     @Override
-    public void pushFlatEvent(final KomeaEvent flatEvent) {
-        LOGGER.debug("RestMessageSender - pushFlatEvent : " + flatEvent);
-        post("pushFlatEvent", flatEvent);
+    public void pushEvent(final KomeaEvent event) {
+        LOGGER.info("RestMessageSender - pushEvent : " + event);
+        post("pushEvent", event);
     }
 
     private void post(final String methodName, final Object object) {
