@@ -1,35 +1,48 @@
 package org.komea.modules.messaging.producer;
 
 import java.io.Serializable;
+import javax.annotation.PostConstruct;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.komea.event.messaging.IMessageSender;
-import org.komea.event.model.KomeaEvent;
+import org.komea.events.jms.IMessageSender;
+import org.komea.events.dto.KomeaEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
+import org.springframework.stereotype.Service;
 
+@Service
 public class JmsMessageSender implements IMessageSender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JmsMessageSender.class.getName());
 
     private JmsTemplate jmsTemplate;
 
-    public JmsMessageSender(final String brokerUrl) {
-        this(brokerUrl, DEFAULT_DESTINATION_NAME);
-    }
+    @Value("${komea.broker.url}")
+    private String brokerUrl;
 
-    public JmsMessageSender(final String brokerUrl, final String destinationName) {
+    @Value("${komea.broker.destination:" + DEFAULT_DESTINATION_NAME + "}")
+    private String destinationName;
+
+    @PostConstruct
+    public void init() {
         jmsTemplate = new JmsTemplate(new ActiveMQConnectionFactory(brokerUrl));
         jmsTemplate.setDefaultDestinationName(destinationName);
     }
 
+    public void setBrokerUrl(final String brokerUrl) {
+        this.brokerUrl = brokerUrl;
+        init();
+    }
+
     @Override
     public void setDestinationName(final String destinationName) {
-        jmsTemplate.setDefaultDestinationName(destinationName);
+        this.destinationName = destinationName;
+        init();
     }
 
     @Override

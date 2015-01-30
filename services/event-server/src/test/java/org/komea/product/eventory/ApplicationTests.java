@@ -2,9 +2,9 @@ package org.komea.product.eventory;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.event.model.KomeaEvent;
-import org.komea.event.storage.IEventStorage;
-import org.komea.microservices.events.Application;
+import org.komea.events.dto.KomeaEvent;
+import org.komea.events.Application;
+import org.komea.events.service.IEventsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -20,12 +20,10 @@ public class ApplicationTests {
     public static final int PORT = 9991;
 
     @Autowired
-    private IEventStorage eventStorage;
+    private IEventsService eventStorage;
 
     private static final String EVENT_TYPE = "start";
 
-//	@Autowired
-//	private IEventQueryManager	eventQueryManager;
     @Test
     public void contextLoads() {
 
@@ -34,8 +32,6 @@ public class ApplicationTests {
         simpleEventDto.setProvider("jenkins");
         this.eventStorage.declareEventType(EVENT_TYPE);
         this.eventStorage.storeEvent(simpleEventDto);
-//        FIXME
-//		assertEquals(1, this.eventQueryManager.countEventsOfType("start"));
 
     }
 }

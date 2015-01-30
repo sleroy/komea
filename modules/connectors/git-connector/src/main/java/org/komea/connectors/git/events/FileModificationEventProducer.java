@@ -7,14 +7,14 @@ import org.komea.connectors.git.IFileUpdate;
 import org.komea.connectors.git.IGitCommit;
 import org.komea.connectors.git.IGitCommitProcessor;
 import org.komea.connectors.git.IGitEvent;
-import org.komea.event.model.KomeaEvent;
-import org.komea.event.storage.IEventStorage;
+import org.komea.events.api.IEventsClient;
+import org.komea.events.dto.KomeaEvent;
 
 public class FileModificationEventProducer implements IGitCommitProcessor {
 
-    private final IEventStorage storage;
+    private final IEventsClient storage;
 
-    public FileModificationEventProducer(final IEventStorage storage) {
+    public FileModificationEventProducer(final IEventsClient storage) {
 
         super();
         this.storage = storage;
@@ -47,6 +47,6 @@ public class FileModificationEventProducer implements IGitCommitProcessor {
         event.addField("branches", (Serializable) commit.getBranches());
         event.addField("project", commit.getShProject());
         event.addField("old_file", update.getOldPath());
-        this.storage.storeEvent(event);
+        this.storage.pushEvent(event);
     }
 }

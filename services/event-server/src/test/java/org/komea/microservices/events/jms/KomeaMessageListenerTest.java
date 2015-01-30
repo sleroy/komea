@@ -5,10 +5,10 @@ import javax.jms.ObjectMessage;
 import org.apache.activemq.command.ActiveMQObjectMessage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.event.model.DateInterval;
-import org.komea.event.model.KomeaEvent;
-import org.komea.event.storage.IEventStorage;
-import org.komea.microservices.events.messaging.KomeaMessageListener;
+import org.komea.events.dto.DateInterval;
+import org.komea.events.dto.KomeaEvent;
+import org.komea.events.service.IEventsService;
+import org.komea.events.jms.KomeaMessageListener;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -17,7 +17,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class KomeaMessageListenerTest {
 
     @Mock
-    private IEventStorage eventStorage;
+    private IEventsService eventStorage;
 
     @Test
     public void onMessageTest() throws Exception {

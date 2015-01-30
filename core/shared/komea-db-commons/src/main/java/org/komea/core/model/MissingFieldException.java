@@ -2,7 +2,7 @@ package org.komea.core.model;
 
 import java.text.MessageFormat;
 
-import org.komea.core.exceptions.KomeaRuntimeException;
+import org.komea.events.exceptions.KomeaRuntimeException;
 import org.komea.core.schema.IReference;
 
 public class MissingFieldException extends KomeaRuntimeException {

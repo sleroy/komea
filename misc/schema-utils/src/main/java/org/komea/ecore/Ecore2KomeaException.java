@@ -1,6 +1,6 @@
 package org.komea.ecore;
 
-import org.komea.core.exceptions.KomeaRuntimeException;
+import org.komea.events.exceptions.KomeaRuntimeException;
 
 public class Ecore2KomeaException extends KomeaRuntimeException
 {

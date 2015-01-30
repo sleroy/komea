@@ -6,7 +6,7 @@ import org.komea.connectors.git.IGitCommitProcessor;
 import org.komea.connectors.git.IGitRepository;
 import org.komea.connectors.git.exceptions.GitRuntimeException;
 import org.komea.connectors.git.impl.GitRepository;
-import org.komea.event.storage.IEventStorage;
+import org.komea.events.api.IEventsClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,9 +14,9 @@ public class GitEventsConnector {
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(GitEventsConnector.class);
-    private final IEventStorage storage;
+    private final IEventsClient storage;
 
-    public GitEventsConnector(final IEventStorage storage) {
+    public GitEventsConnector(final IEventsClient storage) {
 
         super();
         this.storage = storage;

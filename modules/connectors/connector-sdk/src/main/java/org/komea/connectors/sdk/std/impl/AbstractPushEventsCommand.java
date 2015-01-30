@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import org.joda.time.DateTime;
-import org.komea.connectors.sdk.rest.impl.IEventoryClientAPI;
+import org.komea.events.api.IEventsClient;
 
 public abstract class AbstractPushEventsCommand extends AbstractEventoryCommand {
 
@@ -76,23 +76,15 @@ public abstract class AbstractPushEventsCommand extends AbstractEventoryCommand 
 
     }
 
-    /**
-     * @param _eventoryClientA
-     * @throws Exception
-     */
     @Override
-    protected final void runCommand(final IEventoryClientAPI _eventoryClientAPI)
+    protected final void runCommand(final IEventsClient eventsClient)
             throws Exception {
         final DateTime readLastLaunchTime = readLastLaunchTime();
-        sendEvents(_eventoryClientAPI, readLastLaunchTime);
+        sendEvents(eventsClient, readLastLaunchTime);
         saveActionDate();
     }
 
-    /**
-     * @param _eventoryClientAPI
-     * @throws Exception
-     */
-    protected abstract void sendEvents(IEventoryClientAPI _eventoryClientAPI,
+    protected abstract void sendEvents(IEventsClient eventClient,
             final DateTime _lastExecution) throws Exception;
 
 }

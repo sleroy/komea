@@ -10,8 +10,8 @@ import org.junit.runner.RunWith;
 import org.komea.connectors.bugzilla.BugzillaEventConnector;
 import org.komea.connectors.bugzilla.proxy.IBugzillaAPI;
 import org.komea.connectors.bugzilla.proxy.impl.BugzillaServerConfiguration;
-import org.komea.event.model.KomeaEvent;
-import org.komea.event.storage.IEventStorage;
+import org.komea.events.api.IEventsClient;
+import org.komea.events.dto.KomeaEvent;
 import static org.mockito.Matchers.any;
 import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
@@ -26,7 +26,7 @@ public class BugzillaEventConnectorTest {
     private final BugzillaServerConfiguration configuration = new BugzillaServerConfiguration();
 
     @Mock
-    private IEventStorage eventStorage;
+    private IEventsClient eventsClient;
 
     @Mock
     private IBugzillaAPI bugzillaAPI;
@@ -34,7 +34,7 @@ public class BugzillaEventConnectorTest {
     @Test
     public void testIsRecentlyCreated_moreRecentDate() throws Exception {
         final BugzillaEventConnector bugzillaDataConnector = new BugzillaEventConnector(this.bugzillaAPI,
-                this.eventStorage, this.configuration);
+                this.eventsClient, this.configuration);
         // NOW TIME
         this.configuration.setSince(new DateTime());
         final Bug bug = mock(Bug.class);
@@ -47,7 +47,7 @@ public class BugzillaEventConnectorTest {
     @Test
     public void testIsRecentlyCreated_noDate() throws Exception {
         final BugzillaEventConnector bugzillaDataConnector = new BugzillaEventConnector(this.bugzillaAPI,
-                this.eventStorage, this.configuration);
+                this.eventsClient, this.configuration);
         // NO DATE
         this.configuration.setSince(null);
         final Bug bug = mock(Bug.class);
@@ -59,7 +59,7 @@ public class BugzillaEventConnectorTest {
     @Test
     public void testIsRecentlyCreated_olderDate() throws Exception {
         final BugzillaEventConnector bugzillaDataConnector = new BugzillaEventConnector(this.bugzillaAPI,
-                this.eventStorage, this.configuration);
+                this.eventsClient, this.configuration);
         // NOW TIME
         this.configuration.setSince(new DateTime());
         final Bug bug = mock(Bug.class);
@@ -72,7 +72,7 @@ public class BugzillaEventConnectorTest {
     @Test
     public void testIsRecentlyUpdated_moreRecentDate() throws Exception {
         final BugzillaEventConnector bugzillaDataConnector = new BugzillaEventConnector(this.bugzillaAPI,
-                this.eventStorage, this.configuration);
+                this.eventsClient, this.configuration);
         // NOW TIME
         this.configuration.setSince(new DateTime());
         final Bug bug = mock(Bug.class);
@@ -85,7 +85,7 @@ public class BugzillaEventConnectorTest {
     @Test
     public void testIsRecentlyUpdated_noDate() throws Exception {
         final BugzillaEventConnector bugzillaDataConnector = new BugzillaEventConnector(this.bugzillaAPI,
-                this.eventStorage, this.configuration);
+                this.eventsClient, this.configuration);
         // NO DATE
         this.configuration.setSince(null);
         final Bug bug = mock(Bug.class);
@@ -97,7 +97,7 @@ public class BugzillaEventConnectorTest {
     @Test
     public void testIsRecentlyUpdated_olderDate() throws Exception {
         final BugzillaEventConnector bugzillaDataConnector = new BugzillaEventConnector(this.bugzillaAPI,
-                this.eventStorage, this.configuration);
+                this.eventsClient, this.configuration);
         // NOW TIME
         this.configuration.setSince(new DateTime());
         final Bug bug = mock(Bug.class);
@@ -116,16 +116,16 @@ public class BugzillaEventConnectorTest {
         when(this.bugzillaAPI.getBugList("DEMO_PROJECT")).thenReturn(Lists.newArrayList(bug, bug2));
 
         final BugzillaEventConnector bugzillaDataConnector = new BugzillaEventConnector(this.bugzillaAPI,
-                this.eventStorage, this.configuration);
+                this.eventsClient, this.configuration);
         bugzillaDataConnector.launch();
-        verify(this.eventStorage, times(4)).storeEvent(any(KomeaEvent.class));
+        verify(this.eventsClient, times(4)).pushEvent(any(KomeaEvent.class));
 
     }
 
     @Test
     public void testLaunchWithoutConfiguration() throws Exception {
         final BugzillaEventConnector bugzillaDataConnector = new BugzillaEventConnector(this.bugzillaAPI,
-                this.eventStorage, this.configuration);
+                this.eventsClient, this.configuration);
         bugzillaDataConnector.launch();
 
     }

@@ -1,6 +1,6 @@
 package org.komea.core.schema.impl;
 
-import org.komea.core.exceptions.KomeaRuntimeException;
+import org.komea.events.exceptions.KomeaRuntimeException;
 
 public final class NamingConventionException extends KomeaRuntimeException
 {

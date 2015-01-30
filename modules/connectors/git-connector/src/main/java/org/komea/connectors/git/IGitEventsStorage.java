@@ -1,7 +1,7 @@
 package org.komea.connectors.git;
 
 import java.io.Closeable;
-import org.komea.event.model.KomeaEvent;
+import org.komea.events.dto.KomeaEvent;
 
 public interface IGitEventsStorage extends Closeable {
 

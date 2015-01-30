@@ -13,7 +13,7 @@ import org.komea.connectors.sdk.main.IConnectorCommand;
 import org.komea.connectors.sdk.std.impl.EventStatsCommand;
 import org.komea.connectors.sdk.std.impl.PurgeEventsCommand;
 import org.komea.connectors.sdk.std.impl.TestConnexionCommand;
-import org.komea.core.exceptions.KomeaRuntimeException;
+import org.komea.events.exceptions.KomeaRuntimeException;
 
 public class Connector implements IConnector {
 

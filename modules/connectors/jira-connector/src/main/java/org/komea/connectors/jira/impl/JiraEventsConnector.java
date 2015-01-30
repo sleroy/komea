@@ -11,8 +11,8 @@ import org.komea.connectors.jira.IJiraEvents;
 import org.komea.connectors.jira.exceptions.BadConfigurationException;
 import org.komea.connectors.jira.utils.IJiraServerFactory;
 import org.komea.connectors.jira.utils.JiraServerContext;
-import org.komea.event.model.KomeaEvent;
-import org.komea.event.storage.IEventStorage;
+import org.komea.events.api.IEventsClient;
+import org.komea.events.dto.KomeaEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +21,7 @@ public class JiraEventsConnector implements IJiraEvents {
     private final static Logger LOGGER = LoggerFactory
             .getLogger(JiraEventsConnector.class);
 
-    private final IEventStorage storage;
+    private final IEventsClient storage;
     private int Occurence;
 
     private final IJiraServerFactory jiraServerFactory;
@@ -29,7 +29,7 @@ public class JiraEventsConnector implements IJiraEvents {
 
     private final IJiraConfiguration configuration;
 
-    public JiraEventsConnector(final IEventStorage storage,
+    public JiraEventsConnector(final IEventsClient storage,
             final IJiraServerFactory jiraServerFactory,
             final IJiraConfiguration _configuration) {
 
@@ -125,7 +125,7 @@ public class JiraEventsConnector implements IJiraEvents {
         event.setDate(Field.getDate(bug.getField("created")));
 
         event.addFields(bug.getFields());
-        storage.storeEvent(event);
+        storage.pushEvent(event);
     }
 
     private void sendIssues(final List<Issue> issues, final String type) {

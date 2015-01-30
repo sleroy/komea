@@ -2,4 +2,5 @@
 dependencies {
     compile project(":core:komea-events")
     compile("org.springframework:spring-web:${SPRING_VERSION}")
+    compile("com.fasterxml.jackson.core:jackson-databind:2.5.0")
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class KomeaBrokerService {
 
-    @Value("${spring.activemq.broker-url}")
+    @Value("${komea.broker.url}")
     private String brokerUrl;
 
     @PostConstruct

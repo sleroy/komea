@@ -1,11 +1,14 @@
 package org.komea.connectors.git;
 
-import java.io.IOException;
-import org.komea.event.model.KomeaEvent;
-import org.komea.event.storage.IEventDB;
-import org.komea.event.storage.IEventStorage;
+import java.util.List;
+import java.util.Map;
+import org.komea.events.api.IEventsClient;
+import org.komea.events.dto.DateInterval;
+import org.komea.events.dto.EventsFilter;
+import org.komea.events.dto.EventsQuery;
+import org.komea.events.dto.KomeaEvent;
 
-public class CountingStorage implements IEventStorage {
+public class CountingStorage implements IEventsClient {
 
     public int count;
 
@@ -16,13 +19,7 @@ public class CountingStorage implements IEventStorage {
     }
 
     @Override
-    public void close() throws IOException {
-
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void storeEvent(final KomeaEvent _event) {
+    public void pushEvent(final KomeaEvent _event) {
 
         count++;
     }
@@ -34,7 +31,52 @@ public class CountingStorage implements IEventStorage {
     }
 
     @Override
-    public IEventDB getEventDB(String eventType) {
+    public void clearAllEvents() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public long countEventsOfType(String eventType) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Map<String, Number> executeQuery(EventsQuery eventsQuery) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<KomeaEvent> getEventsOfType(String eventType) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<KomeaEvent> getEventsOfTypeOnPeriod(String eventType, DateInterval interval) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<String> getEventTypes() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String testConnection() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<KomeaEvent> getEventsByFilter(EventsFilter filter) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public long countAllEvents() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<KomeaEvent> getAllEventsOnPeriod(DateInterval period, int limit) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

@@ -13,8 +13,8 @@ import org.komea.connectors.bugzilla.proxy.BugzillaPluginException;
 import org.komea.connectors.bugzilla.proxy.IBugzillaAPI;
 import org.komea.connectors.bugzilla.proxy.impl.BugzillaAPI;
 import org.komea.connectors.bugzilla.proxy.impl.BugzillaServerConfiguration;
-import org.komea.event.model.KomeaEvent;
-import org.komea.event.storage.IEventStorage;
+import org.komea.events.api.IEventsClient;
+import org.komea.events.dto.KomeaEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,20 +49,20 @@ public class BugzillaEventConnector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BugzillaEventConnector.class);
 
-    private final IEventStorage eventStorage;
+    private final IEventsClient eventsClient;
     private final IBugzillaAPI bugzillaAPI;
     private final BugzillaServerConfiguration configuration;
 
-    public BugzillaEventConnector(final IBugzillaAPI _bugzillaAPI, final IEventStorage _eventStorage,
+    public BugzillaEventConnector(final IBugzillaAPI _bugzillaAPI, final IEventsClient eventsClient,
             final BugzillaServerConfiguration _configuration) {
-        this.eventStorage = _eventStorage;
+        this.eventsClient = eventsClient;
         this.bugzillaAPI = _bugzillaAPI;
         this.configuration = _configuration;
 
     }
 
-    public BugzillaEventConnector(final IEventStorage _eventStorage, final BugzillaServerConfiguration _configuration) {
-        this.eventStorage = _eventStorage;
+    public BugzillaEventConnector(final IEventsClient eventsClient, final BugzillaServerConfiguration _configuration) {
+        this.eventsClient = eventsClient;
         this.bugzillaAPI = new BugzillaAPI();
         this.configuration = _configuration;
 
@@ -81,11 +81,11 @@ public class BugzillaEventConnector {
             }
             if (this.isRecentlyCreated(bug, this.bugzillaAPI)) {
                 final KomeaEvent complexEventDto = this.createBugEvent(bug, EVENT_NEW_BUG, _productName);
-                this.eventStorage.storeEvent(complexEventDto);
+                this.eventsClient.pushEvent(complexEventDto);
             }
             if (this.isRecentlyUpdated(bug, this.bugzillaAPI)) {
                 final KomeaEvent complexEventDto = this.createBugEvent(bug, EVENT_UPDATED_BUG, _productName);
-                this.eventStorage.storeEvent(complexEventDto);
+                this.eventsClient.pushEvent(complexEventDto);
             }
             numberOfBugsProcessed++;
         }

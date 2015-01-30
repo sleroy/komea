@@ -1,5 +1,8 @@
 package org.komea.event.queries.predicates;
 
+import org.komea.events.queries.predicates.PredicateType;
+import org.komea.events.queries.predicates.PredicateDto;
+import org.komea.events.queries.predicates.PredicateUtils;
 import com.google.common.base.Predicate;
 import java.util.Arrays;
 import java.util.Date;
@@ -7,7 +10,7 @@ import org.joda.time.DateTime;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-import org.komea.event.model.KomeaEvent;
+import org.komea.events.dto.KomeaEvent;
 
 public class PredicatesTest {
 

@@ -1,6 +1,6 @@
 package org.komea.core.model.query.impl;
 
-import org.komea.core.exceptions.KomeaRuntimeException;
+import org.komea.events.exceptions.KomeaRuntimeException;
 
 public class KomeaQueryException extends KomeaRuntimeException {
 

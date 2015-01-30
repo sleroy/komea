@@ -2,8 +2,7 @@ package org.komea.modules.messaging.producer;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.event.messaging.IMessageSender;
-import org.komea.event.model.KomeaEvent;
+import org.komea.events.dto.KomeaEvent;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -14,8 +13,8 @@ import org.springframework.jms.core.MessageCreator;
 public class JmsMessageSenderTest {
 
     public static void main(String[] args) {
-        final IMessageSender messageSender = new JmsMessageSender(
-                "tcp://localhost:61616", IMessageSender.DEFAULT_DESTINATION_NAME);
+        final JmsMessageSender messageSender = new JmsMessageSender();
+        messageSender.setBrokerUrl("tcp://localhost:61616");
         messageSender.pushEvent(newFlatEvent());
     }
 
@@ -31,7 +30,8 @@ public class JmsMessageSenderTest {
 
     @Test
     public void pushFlatEventTest() {
-        final JmsMessageSender messageSender = new JmsMessageSender("tcp://localhost:61616");
+        final JmsMessageSender messageSender = new JmsMessageSender();
+        messageSender.setBrokerUrl("tcp://localhost:61616");
         messageSender.setDestinationName("myQueue");
         messageSender.setJmsTemplate(jmsTemplate);
         messageSender.pushEvent(newFlatEvent());

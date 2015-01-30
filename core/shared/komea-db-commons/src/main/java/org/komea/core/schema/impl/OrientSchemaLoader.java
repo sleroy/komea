@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
-import org.komea.core.exceptions.KomeaRuntimeException;
+import org.komea.events.exceptions.KomeaRuntimeException;
 import org.komea.core.schema.IEntityType;
 import org.komea.core.schema.IKomeaSchema;
 import org.komea.core.schema.IKomeaSchemaFactory;

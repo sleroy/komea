@@ -7,7 +7,7 @@ import java.util.Map;
 import org.komea.connectors.git.IGitCommit;
 import org.komea.connectors.git.IGitEvent;
 import org.komea.core.utils.PojoToMap;
-import org.komea.event.model.KomeaEvent;
+import org.komea.events.dto.KomeaEvent;
 
 /**
  * @author sleroy

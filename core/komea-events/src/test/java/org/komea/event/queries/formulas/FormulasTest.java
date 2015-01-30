@@ -6,7 +6,12 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.komea.event.model.KomeaEvent;
+import org.komea.events.dto.KomeaEvent;
+import org.komea.events.queries.formulas.FormulaDto;
+import org.komea.events.queries.formulas.FormulaSum;
+import org.komea.events.queries.formulas.FormulaType;
+import org.komea.events.queries.formulas.FormulaUtils;
+import org.komea.events.queries.formulas.IFormula;
 
 public class FormulasTest {
 

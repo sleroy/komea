@@ -1,7 +1,7 @@
 
 package org.komea.connectors.jira.exceptions;
 
-import org.komea.core.exceptions.KomeaException;
+import org.komea.events.exceptions.KomeaException;
 
 
 /**

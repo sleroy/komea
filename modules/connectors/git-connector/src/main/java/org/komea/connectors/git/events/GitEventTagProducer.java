@@ -13,8 +13,8 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.komea.connectors.git.IGitCommit;
 import org.komea.connectors.git.IGitCommitProcessor;
 import org.komea.connectors.git.IGitEvent;
-import org.komea.event.model.KomeaEvent;
-import org.komea.event.storage.IEventStorage;
+import org.komea.events.api.IEventsClient;
+import org.komea.events.dto.KomeaEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,9 +24,9 @@ public class GitEventTagProducer implements IGitCommitProcessor {
 
     private final Map<String, String> tagsMap;
 
-    private final IEventStorage storage;
+    private final IEventsClient storage;
 
-    public GitEventTagProducer(final IEventStorage storage, final Git git) {
+    public GitEventTagProducer(final IEventsClient storage, final Git git) {
 
         this.storage = storage;
         this.tagsMap = Maps.newHashMap();
@@ -74,7 +74,7 @@ public class GitEventTagProducer implements IGitCommitProcessor {
         event.setDate(convertGitCommit.getCommitTime());
         event.addField("commit", convertGitCommit.getId());
 
-        this.storage.storeEvent(event);
+        this.storage.pushEvent(event);
 
     }
 

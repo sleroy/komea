@@ -5,7 +5,7 @@ dependencies {
 	compile "com.fasterxml.jackson.core:jackson-databind:$JACKSON"
 	compile "com.fasterxml.jackson.core:jackson-core:$JACKSON"
 
-	compile project(":core:komea-events")
+	compile project(":modules:event-rest-client")
 	
 	testCompile project(":services:event-server")
 	testRuntime("org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}")

@@ -18,7 +18,7 @@ import org.komea.connectors.git.IGitCommit;
 import org.komea.connectors.git.IGitCommitProcessor;
 import org.komea.connectors.git.IGitRepository;
 import org.komea.connectors.git.events.GitCommitConverter;
-import org.komea.event.model.KomeaEvent;
+import org.komea.events.dto.KomeaEvent;
 
 public class DumpDataRepositoryTests {
 
