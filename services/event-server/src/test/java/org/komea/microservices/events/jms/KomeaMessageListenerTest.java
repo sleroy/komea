@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.komea.event.model.impl.DateInterval;
 import org.komea.event.model.impl.KomeaEvent;
 import org.komea.event.storage.IEventStorage;
-import org.komea.microservices.events.messaging.KomeaMessageListener;
+import org.komea.microservices.events.messaging.service.KomeaMessageListener;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;

@@ -27,18 +27,20 @@ configurations { providedRuntime }
 
 dependencies {
     compile project(":core:komea-events")
+    compile(project(":modules:event-message-producer"))
     
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}")	
-    compile("org.apache.activemq:activemq-broker:5.10.0")
     compile("org.springframework:spring-jms:${SPRING_VERSION}")
     compile("org.apache.activemq:activemq-kahadb-store:${ACTIVEMQ_VERSION}")
+    compile("org.apache.activemq:activemq-broker:${ACTIVEMQ_VERSION}")
     
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}")
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
     testCompile('org.skyscreamer:jsonassert:1.0.0')
     testCompile('org.hamcrest:hamcrest-all:1.3')
+    
 }
 
 eclipse {

@@ -1,4 +1,4 @@
-package org.komea.microservices.events.messaging;
+package org.komea.microservices.events.messaging.service;
 
 import javax.jms.JMSException;
 import javax.jms.Message;

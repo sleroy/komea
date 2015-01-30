@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties(EventStorageSettings.class)
+@EnableConfigurationProperties({EventStorageSettings.class, MQSettings.class})
 public class SpringBeanFactory {
 
     @Autowired

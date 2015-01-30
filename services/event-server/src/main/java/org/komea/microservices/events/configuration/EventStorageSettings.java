@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author sleroy
  *
  */
-@ConfigurationProperties(prefix = "org.komea.microservices.events.storage")
+@ConfigurationProperties(prefix = "komea.storage")
 public class EventStorageSettings {
 
     @NotBlank
