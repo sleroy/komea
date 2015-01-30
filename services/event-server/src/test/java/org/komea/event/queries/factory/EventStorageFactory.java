@@ -1,11 +1,11 @@
 package org.komea.event.queries.factory;
 
-import org.komea.events.dto.SerializerType;
 import org.komea.events.dao.EventsDao;
+import org.komea.events.dto.SerializerType;
 import org.komea.events.serializer.EventsSerializer;
-import org.komea.events.service.EventsService;
 import org.komea.events.serializer.IEventsSerializer;
 import org.komea.events.service.EventStorageValidatorService;
+import org.komea.events.service.EventsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vibur.dbcp.ViburDBCPDataSource;

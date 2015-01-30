@@ -1,8 +1,5 @@
 package org.komea.event.queries.predicates;
 
-import org.komea.events.queries.predicates.PredicateType;
-import org.komea.events.queries.predicates.PredicateDto;
-import org.komea.events.queries.predicates.PredicateUtils;
 import com.google.common.base.Predicate;
 import java.util.Arrays;
 import java.util.Date;
@@ -11,6 +8,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.komea.events.dto.KomeaEvent;
+import org.komea.events.queries.predicates.PredicateDto;
+import org.komea.events.queries.predicates.PredicateType;
+import org.komea.events.queries.predicates.PredicateUtils;
 
 public class PredicatesTest {
 
@@ -25,7 +25,18 @@ public class PredicatesTest {
     }
 
     @Test
-    public void testPredicteStringEquals() {
+    public void testPredicateDto() {
+        PredicateDto predicate1 = PredicateDto.of(PredicateType.STRING_CONTAINS, "key", "value");
+        PredicateDto predicate2 = new PredicateDto();
+        predicate2.setType(PredicateType.NUMBER_LOWER);
+        predicate2.setPredicateValue(2);
+        PredicateDto predicate = PredicateDto.of(PredicateType.AND, Arrays.asList(predicate1, predicate2));
+        predicate.setPredicates(Arrays.asList(predicate1, predicate2));
+        predicate.toString();
+    }
+
+    @Test
+    public void testPredicateStringEquals() {
         final Predicate<KomeaEvent> predicate = PredicateUtils.fromPredicateDto(
                 new PredicateDto(PredicateType.STRING_EQUALS, "eventString", "azerty"));
         assertFalse(predicate.apply(newEvent("project_1", null, new DateTime().toDate(), 10)));
@@ -34,7 +45,7 @@ public class PredicatesTest {
     }
 
     @Test
-    public void testPredicteStringContains() {
+    public void testPredicateStringContains() {
         final Predicate<KomeaEvent> predicate = PredicateUtils.fromPredicateDto(
                 new PredicateDto(PredicateType.STRING_CONTAINS, "eventString", "zert"));
         assertFalse(predicate.apply(newEvent("project_1", null, new DateTime().toDate(), 10)));
@@ -43,7 +54,7 @@ public class PredicatesTest {
     }
 
     @Test
-    public void testPredicteNumberLower() {
+    public void testPredicateNumberLower() {
         final Predicate<KomeaEvent> predicate = PredicateUtils.fromPredicateDto(
                 new PredicateDto(PredicateType.NUMBER_LOWER, "eventNumber", 5));
         assertFalse(predicate.apply(newEvent("project_1", "azerty", new DateTime().toDate(), null)));
@@ -55,7 +66,7 @@ public class PredicatesTest {
     }
 
     @Test
-    public void testPredicteNumberGreater() {
+    public void testPredicateNumberGreater() {
         final Predicate<KomeaEvent> predicate = PredicateUtils.fromPredicateDto(
                 new PredicateDto(PredicateType.NUMBER_GREATER, "eventNumber", 5));
         assertFalse(predicate.apply(newEvent("project_1", "azerty", new DateTime().toDate(), null)));
@@ -68,7 +79,7 @@ public class PredicatesTest {
     }
 
     @Test
-    public void testPredicteDateBefore() {
+    public void testPredicateDateBefore() {
         final Predicate<KomeaEvent> predicate = PredicateUtils.fromPredicateDto(
                 new PredicateDto(PredicateType.DATE_BEFORE, "eventDate", new Date(114, 6, 10)));
         assertFalse(predicate.apply(newEvent("project_1", "azerty", null, 10)));
@@ -82,7 +93,7 @@ public class PredicatesTest {
     }
 
     @Test
-    public void testPredicteDateAfter() {
+    public void testPredicateDateAfter() {
         final Predicate<KomeaEvent> predicate = PredicateUtils.fromPredicateDto(
                 new PredicateDto(PredicateType.DATE_AFTER, "eventDate", new Date(114, 6, 10)));
         assertFalse(predicate.apply(newEvent("project_1", "azerty", null, 10)));
@@ -96,7 +107,7 @@ public class PredicatesTest {
     }
 
     @Test
-    public void testPredicteAnd() {
+    public void testPredicateAnd() {
         final PredicateDto predicate1 = new PredicateDto(PredicateType.NUMBER_GREATER, "eventNumber", 5);
         final PredicateDto predicate2 = new PredicateDto(PredicateType.STRING_EQUALS, "eventString", "azerty");
         final Predicate<KomeaEvent> predicate = PredicateUtils.fromPredicateDto(
@@ -109,7 +120,7 @@ public class PredicatesTest {
     }
 
     @Test
-    public void testPredicteOr() {
+    public void testPredicateOr() {
         final PredicateDto predicate1 = new PredicateDto(PredicateType.NUMBER_GREATER, "eventNumber", 5);
         final PredicateDto predicate2 = new PredicateDto(PredicateType.STRING_EQUALS, "eventString", "azerty");
         final Predicate<KomeaEvent> predicate = PredicateUtils.fromPredicateDto(

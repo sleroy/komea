@@ -105,7 +105,7 @@ public class KomeaEvent implements Serializable, Comparable<KomeaEvent> {
         if (_value == null) {
             return _value == field(_fieldName);
         }
-        return _value.equals(_fieldName);
+        return _value.equals(field(_fieldName));
     }
 
     public Date getDate() {
