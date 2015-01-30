@@ -8,9 +8,9 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
+import org.komea.event.model.SerializerType;
 import org.komea.event.storage.IEventDB;
 import org.komea.event.storage.IEventDBFactory;
-import org.komea.event.model.SerializerType;
 import org.skife.jdbi.v2.tweak.ConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,42 +63,42 @@ public class EventDBFactory implements IEventDBFactory {
 		}, serializer);
 	}
 
-    @Override
-    public void close() throws IOException {
-        final Map<String, IEventDB> map = eventsDB.get();
-        for (final IEventDB db : map.values()) {
-            db.close();
-        }
-        eventsDB.remove();
-        createdTables.clear();
-        closeStorage();
-    }
+	@Override
+	public void close() throws IOException {
+		final Map<String, IEventDB> map = this.eventsDB.get();
+		for (final IEventDB db : map.values()) {
+			db.close();
+		}
+		this.eventsDB.remove();
+		this.createdTables.clear();
+		this.closeStorage();
+	}
 
 	@Override
 	public synchronized void declareEventType(final String _type) {
-		if (createdTables.contains(_type)) {
+		if (this.createdTables.contains(_type)) {
 			LOGGER.debug("Table for {} already created", _type);
 		} else {
-			EventDB.createTable(connectionFactory, _type);
-			createdTables.add(_type);
+			EventDB.createTable(this.connectionFactory, _type);
+			this.createdTables.add(_type);
 		}
 
 	}
 
 	public ConnectionFactory getConnectionFactory() {
-		return connectionFactory;
+		return this.connectionFactory;
 	}
 
 	public ConnectionFactory getDataSource() {
-		return connectionFactory;
+		return this.connectionFactory;
 	}
 
 	@Override
 	public IEventDB getEventDB(final String _eventType) {
-		final Map<String, IEventDB> map = eventsDB.get();
+		final Map<String, IEventDB> map = this.eventsDB.get();
 		IEventDB iEventDB = map.get(_eventType);
 		if (iEventDB == null) {
-			final IEventDB newEventDB = newEventDB(_eventType);
+			final IEventDB newEventDB = this.newEventDB(_eventType);
 			map.put(_eventType, newEventDB);
 			iEventDB = newEventDB;
 		}
@@ -106,7 +106,7 @@ public class EventDBFactory implements IEventDBFactory {
 	}
 
 	public SerializerType getSerializer() {
-		return serializer;
+		return this.serializer;
 	}
 
 	public void setConnectionFactory(final ConnectionFactory connectionFactory) {
@@ -114,7 +114,7 @@ public class EventDBFactory implements IEventDBFactory {
 	}
 
 	public void setDataSource(final ConnectionFactory _dataSource) {
-		connectionFactory = _dataSource;
+		this.connectionFactory = _dataSource;
 	}
 
 	public void setSerializer(final SerializerType serializer) {
@@ -122,7 +122,7 @@ public class EventDBFactory implements IEventDBFactory {
 	}
 
 	protected void closeStorage() throws IOException {
-		connectionFactory = null;
+		this.connectionFactory = null;
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class EventDBFactory implements IEventDBFactory {
 	 * @return the new event db.
 	 */
 	protected IEventDB newEventDB(final String _eventType) {
-		return new EventDB(connectionFactory, _eventType, serializer);
+		return new EventDB(this.connectionFactory, _eventType, this.serializer);
 	}
 
 }

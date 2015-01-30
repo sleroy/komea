@@ -1,14 +1,16 @@
 package org.komea.connectors.git.events.rest;
 
 import com.google.common.collect.Lists;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.KomeaEvent;
 import org.komea.event.queries.executor.EventsQuery;
 import org.komea.event.queries.formulas.FormulaDto;
 import org.komea.event.queries.formulas.FormulaType;

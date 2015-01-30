@@ -4,7 +4,8 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import org.komea.event.model.KomeaEvent;
+
+import org.komea.event.model.impl.KomeaEvent;
 import org.komea.event.storage.IEventStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

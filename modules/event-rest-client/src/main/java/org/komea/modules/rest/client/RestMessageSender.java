@@ -1,7 +1,7 @@
 package org.komea.modules.rest.client;
 
 import org.komea.event.messaging.IMessageSender;
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.KomeaEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;

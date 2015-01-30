@@ -2,7 +2,7 @@ package org.komea.product.eventory;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.KomeaEvent;
 import org.komea.event.storage.IEventStorage;
 import org.komea.microservices.events.Application;
 import org.springframework.beans.factory.annotation.Autowired;

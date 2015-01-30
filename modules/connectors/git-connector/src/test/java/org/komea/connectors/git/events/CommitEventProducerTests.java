@@ -1,81 +1,106 @@
 package org.komea.connectors.git.events;
 
 import java.io.IOException;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.komea.connectors.git.AbstractLocalGitTest;
 import org.komea.connectors.git.BasicEventsListStorage;
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.KomeaEvent;
 import org.komea.event.storage.IEventDB;
 import org.komea.event.storage.IEventStorage;
 
 public class CommitEventProducerTests extends AbstractLocalGitTest {
 
-    private static class NotWorkingStorage implements IEventStorage {
+	private static class NotWorkingStorage implements IEventStorage {
 
-        int counter;
+		int	counter;
 
-        @Override
-        public void clearEventsOfType(final String _eventType) {
+		@Override
+		public void clearEventsOfType(final String _eventType) {
 
-            // TODO Auto-generated method stub
-        }
+			// TODO Auto-generated method stub
+		}
 
-        @Override
-        public void close() throws IOException {
+		@Override
+		public void close() throws IOException {
 
-            // TODO Auto-generated method stub
-        }
+			// TODO Auto-generated method stub
+		}
 
-        /*
-         * (non-Javadoc)
-         * @see
-         * org.komea.event.storage.IEventStorage#declareEventType(java.lang.
-         * String)
-         */
-        @Override
-        public void declareEventType(final String _type) {
-            //
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * org.komea.event.storage.IEventStorage#declareEventType(java.lang.
+		 * String)
+		 */
+		@Override
+		public void declareEventType(final String _type) {
+			//
 
-        }
+		}
 
-        @Override
-        public void storeEvent(final KomeaEvent _event) {
-            counter++;
-            throw new RuntimeException(
-                    "Storage is throwing exeception for test purpose.");
-        }
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * org.komea.event.storage.IEventStorage#existStorage(java.lang.String)
+		 */
+		@Override
+		public boolean existStorage(final String _eventType) {
+			// TODO Auto-generated method stub
+			return false;
+		}
 
-        @Override
-        public IEventDB getEventDB(String eventType) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+		@Override
+		public IEventDB getEventDB(final String eventType) {
+			throw new UnsupportedOperationException("Not supported yet.");
+		}
 
-    }
+		@Override
+		public void storeEvent(final KomeaEvent _event) {
+			this.counter++;
+			throw new RuntimeException("Storage is throwing exeception for test purpose.");
+		}
 
-    @Test
-    public void testEventsProduction() {
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * org.komea.event.storage.IEventStorage#storeEvent(java.lang.Object)
+		 */
+		@Override
+		public void storeEvent(final Object _object) {
+			// TODO Auto-generated method stub
 
-        final BasicEventsListStorage storage = new BasicEventsListStorage();
+		}
 
-        final CommitEventProducer producer = new CommitEventProducer(storage);
+	}
 
-        repository.processAllCommits(producer);
-        Assert.assertEquals(getExpectedNumberOfCommits(), storage.getEvents()
-                .size());
+	@Test
+	public void testEventsProduction() {
 
-        final KomeaEvent event = storage.getEvents().get(0);
-        final String author = (String) event.getProperties().get("author");
-        Assert.assertNotNull(author);
-    }
+		final BasicEventsListStorage storage = new BasicEventsListStorage();
 
-    @Test(expected = RuntimeException.class)
-    public void testExceptionInEventsProduction() {
+		final CommitEventProducer producer = new CommitEventProducer(storage);
 
-        final NotWorkingStorage storage = new NotWorkingStorage();
+		this.repository.processAllCommits(producer);
+		Assert.assertEquals(this.getExpectedNumberOfCommits(),
+		                    storage.getEvents().size());
 
-        final CommitEventProducer producer = new CommitEventProducer(storage);
+		final KomeaEvent event = storage.getEvents().get(0);
+		final String author = (String) event.getProperties().get("author");
+		Assert.assertNotNull(author);
+	}
 
-        repository.processAllCommits(producer);
-    }
+	@Test(expected = RuntimeException.class)
+	public void testExceptionInEventsProduction() {
+
+		final NotWorkingStorage storage = new NotWorkingStorage();
+
+		final CommitEventProducer producer = new CommitEventProducer(storage);
+
+		this.repository.processAllCommits(producer);
+	}
 }

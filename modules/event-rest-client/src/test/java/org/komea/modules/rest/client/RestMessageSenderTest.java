@@ -3,7 +3,7 @@ package org.komea.modules.rest.client;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.event.messaging.IMessageSender;
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.KomeaEvent;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;

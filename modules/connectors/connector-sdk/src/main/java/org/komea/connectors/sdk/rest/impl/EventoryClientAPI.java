@@ -2,9 +2,11 @@ package org.komea.connectors.sdk.rest.impl;
 
 import java.net.ConnectException;
 import java.rmi.ServerException;
+import java.util.Date;
 
 import javax.ws.rs.client.WebTarget;
 
+import org.joda.time.DateTime;
 import org.komea.event.storage.IEventStorage;
 
 public class EventoryClientAPI extends AbstractClientAPI implements
@@ -38,6 +40,29 @@ public class EventoryClientAPI extends AbstractClientAPI implements
 	public IEventStorage getEventStorage() {
 
 		return new EventStorageRestAPI(this);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.komea.connectors.sdk.rest.impl.IEventoryClientAPI#getLastEvent(java
+	 * .lang.String)
+	 */
+	@Override
+	public DateTime getLastEvent(final String _eventTypeName) {
+		Date date = null;
+		try {
+			date = this.get("/storage/last", Date.class, _eventTypeName);
+
+		} catch (ConnectException | ServerException e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+		if (date == null) {
+			return null;
+		}
+		return new DateTime(date);
+
 	}
 
 	/*

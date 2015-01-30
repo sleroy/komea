@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.komea.event.model;
+package org.komea.event.model.impl;
 
 import java.io.Serializable;
 import java.util.Date;

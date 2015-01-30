@@ -3,10 +3,12 @@ package org.komea.event.queries.executor;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.io.IOUtils;
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.KomeaEvent;
 import org.komea.event.queries.formulas.FormulaUtils;
 import org.komea.event.queries.formulas.IFormula;
 import org.komea.event.queries.predicates.PredicateDto;

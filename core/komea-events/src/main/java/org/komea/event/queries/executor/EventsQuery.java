@@ -2,8 +2,10 @@ package org.komea.event.queries.executor;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.annotation.Nonnull;
-import org.komea.event.model.DateInterval;
+
+import org.komea.event.model.impl.DateInterval;
 import org.komea.event.queries.formulas.FormulaDto;
 import org.komea.event.queries.predicates.PredicateDto;
 

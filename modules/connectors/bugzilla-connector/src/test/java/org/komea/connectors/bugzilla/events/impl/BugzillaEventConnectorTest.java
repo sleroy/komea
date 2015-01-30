@@ -2,22 +2,29 @@ package org.komea.connectors.bugzilla.events.impl;
 
 import com.google.common.collect.Lists;
 import com.j2bugzilla.base.Bug;
+
 import org.joda.time.DateTime;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.connectors.bugzilla.BugzillaEventConnector;
 import org.komea.connectors.bugzilla.proxy.IBugzillaAPI;
 import org.komea.connectors.bugzilla.proxy.impl.BugzillaServerConfiguration;
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.KomeaEvent;
 import org.komea.event.storage.IEventStorage;
+
 import static org.mockito.Matchers.any;
+
 import org.mockito.Mock;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)

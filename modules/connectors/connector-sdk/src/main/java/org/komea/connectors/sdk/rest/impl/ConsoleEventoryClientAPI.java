@@ -10,6 +10,7 @@ import java.rmi.ServerException;
 
 import javax.ws.rs.core.GenericType;
 
+import org.joda.time.DateTime;
 import org.komea.event.storage.IEventStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +70,34 @@ public class ConsoleEventoryClientAPI implements IEventoryClientAPI {
 
 	/*
 	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.komea.connectors.sdk.rest.IRestClientAPI#deleteURL(java.lang.String
+	 * [])
+	 */
+	@Override
+	public void deleteURL(final String[] _params) throws ConnectException,
+	ServerException {
+		LOGGER.info("DELETE>> {} ", _params);
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.komea.connectors.sdk.rest.IRestClientAPI#get(java.lang.Class,
+	 * java.lang.String[])
+	 */
+	@Override
+	public <R> R get(final Class<R> _returnType, final String... _params)
+			throws ConnectException, ServerException {
+		LOGGER.info("GET>> with params {} expecting type {}", _params,
+				_returnType);
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
 	 *
 	 * @see org.komea.connectors.sdk.rest.IRestClientAPI#get(java.lang.String,
 	 * java.lang.Class)
@@ -115,9 +144,9 @@ public class ConsoleEventoryClientAPI implements IEventoryClientAPI {
 	 * java.lang.String[])
 	 */
 	@Override
-	public <T> void get(final String _url, final String... _params)
+	public void get(final String _url, final String... _params)
 			throws ConnectException, ServerException {
-		LOGGER.info("GET>> {} with params {}", _url, _params);
+		LOGGER.info("GET>> {} with params {} expecting type {}", _url, _params);
 
 	}
 
@@ -131,6 +160,19 @@ public class ConsoleEventoryClientAPI implements IEventoryClientAPI {
 	public IEventStorage getEventStorage() {
 
 		return new ConsoleEventStorage();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.komea.connectors.sdk.rest.impl.IEventoryClientAPI#getLastEvent(java
+	 * .lang.String)
+	 */
+	@Override
+	public DateTime getLastEvent(final String _eventTypeName) {
+		LOGGER.info("GET >> LAST_EVENT  {}", _eventTypeName);
+		return null;
 	}
 
 	/*
@@ -196,6 +238,26 @@ public class ConsoleEventoryClientAPI implements IEventoryClientAPI {
 
 	/*
 	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.komea.connectors.sdk.rest.IRestClientAPI#postURL(java.lang.Object,
+	 * java.lang.String[])
+	 */
+	@Override
+	public <T> void postURL(final T _objectToSend, final String... _params)
+			throws ConnectException, ServerException {
+		try {
+			LOGGER.info("POST>> {} with {} ", _params,
+					new ObjectMapper().writeValueAsString(_objectToSend));
+		} catch (final JsonProcessingException e) {
+
+			e.printStackTrace();
+		}
+
+	}
+
+	/*
+	 * (non-Javadoc)
 	 *
 	 * @see
 	 * org.komea.connectors.sdk.rest.IRestClientAPI#setServerBaseURL(java.lang
@@ -230,5 +292,4 @@ public class ConsoleEventoryClientAPI implements IEventoryClientAPI {
 		//
 
 	}
-
 }

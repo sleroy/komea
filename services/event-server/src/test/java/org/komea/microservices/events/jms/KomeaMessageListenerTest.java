@@ -2,11 +2,12 @@ package org.komea.microservices.events.jms;
 
 import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
+
 import org.apache.activemq.command.ActiveMQObjectMessage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.komea.event.model.DateInterval;
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.DateInterval;
+import org.komea.event.model.impl.KomeaEvent;
 import org.komea.event.storage.IEventStorage;
 import org.komea.microservices.events.messaging.KomeaMessageListener;
 import org.mockito.Mock;

@@ -1,6 +1,7 @@
 package org.komea.modules.rest.client;
 
 import java.util.Map;
+
 import org.komea.event.queries.executor.EventsQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

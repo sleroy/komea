@@ -2,16 +2,18 @@ package org.komea.connectors.jira.impl;
 
 import java.util.Date;
 import java.util.List;
+
 import net.rcarz.jiraclient.Field;
 import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.Issue.SearchResult;
 import net.rcarz.jiraclient.JiraException;
+
 import org.komea.connectors.jira.IJiraConfiguration;
 import org.komea.connectors.jira.IJiraEvents;
 import org.komea.connectors.jira.exceptions.BadConfigurationException;
 import org.komea.connectors.jira.utils.IJiraServerFactory;
 import org.komea.connectors.jira.utils.JiraServerContext;
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.KomeaEvent;
 import org.komea.event.storage.IEventStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

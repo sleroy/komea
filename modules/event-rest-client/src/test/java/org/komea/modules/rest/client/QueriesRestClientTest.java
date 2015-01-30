@@ -1,13 +1,14 @@
 package org.komea.modules.rest.client;
 
 import java.util.Map;
+
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.komea.event.model.impl.DateInterval;
 import org.komea.event.queries.executor.EventsQuery;
 import org.komea.event.queries.formulas.FormulaDto;
 import org.komea.event.queries.formulas.FormulaType;
-import org.komea.event.model.DateInterval;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;

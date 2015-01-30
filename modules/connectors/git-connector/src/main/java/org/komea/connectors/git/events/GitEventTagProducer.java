@@ -1,8 +1,10 @@
 package org.komea.connectors.git.events;
 
 import com.google.common.collect.Maps;
+
 import java.io.Serializable;
 import java.util.Map;
+
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
@@ -13,7 +15,7 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.komea.connectors.git.IGitCommit;
 import org.komea.connectors.git.IGitCommitProcessor;
 import org.komea.connectors.git.IGitEvent;
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.KomeaEvent;
 import org.komea.event.storage.IEventStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

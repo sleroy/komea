@@ -1,6 +1,6 @@
 package org.komea.microservices.events.database.model;
 
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.KomeaEvent;
 
 public class ValueEvent extends KomeaEvent {
 

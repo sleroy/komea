@@ -35,11 +35,11 @@ public class GitPushEventsCommandTest {
 						mock(IEventStorage.class));
 				return mock;
 
-			};
+			}
 		};
 		gitPushEventsCommand.setCommitMessage(true);
 		gitPushEventsCommand
-		.setRepository("src/test/resources/github-gmail/git");
+				.setRepository("src/test/resources/github-gmail/git");
 		gitPushEventsCommand.setRepositoryURL("http://");
 		gitPushEventsCommand.run();
 

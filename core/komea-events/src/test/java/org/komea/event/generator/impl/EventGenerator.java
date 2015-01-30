@@ -8,7 +8,7 @@ import org.joda.time.Interval;
 import org.komea.event.generator.IEventArrayDefinition;
 import org.komea.event.generator.IEventDefinition;
 import org.komea.event.generator.KpiRange;
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.KomeaEvent;
 import org.komea.event.storage.IEventStorage;
 import org.komea.event.utils.date.impl.IntervalUtils;
 import org.slf4j.Logger;

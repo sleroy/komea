@@ -8,7 +8,7 @@ import java.io.Serializable;
 import org.joda.time.DateTime;
 import org.komea.event.generator.IEventArrayDefinition;
 import org.komea.event.generator.IEventDefinition;
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.KomeaEvent;
 
 /**
  * @author sleroy

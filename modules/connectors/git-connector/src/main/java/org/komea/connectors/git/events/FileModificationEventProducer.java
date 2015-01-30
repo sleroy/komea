@@ -1,13 +1,14 @@
 package org.komea.connectors.git.events;
 
 import java.io.Serializable;
+
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.komea.connectors.git.IFileUpdate;
 import org.komea.connectors.git.IGitCommit;
 import org.komea.connectors.git.IGitCommitProcessor;
 import org.komea.connectors.git.IGitEvent;
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.KomeaEvent;
 import org.komea.event.storage.IEventStorage;
 
 public class FileModificationEventProducer implements IGitCommitProcessor {

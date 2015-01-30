@@ -1,7 +1,8 @@
 package org.komea.event.queries.formulas;
 
 import java.util.List;
-import org.komea.event.model.KomeaEvent;
+
+import org.komea.event.model.impl.KomeaEvent;
 
 public class FormulaOldest extends AbstractFormula {
 

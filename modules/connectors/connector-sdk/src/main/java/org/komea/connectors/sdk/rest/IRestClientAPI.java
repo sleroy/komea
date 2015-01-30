@@ -23,7 +23,24 @@ public interface IRestClientAPI extends Closeable {
 	 * @throws ServerException
 	 */
 	void delete(String _url, String[] _params) throws ConnectException,
-	ServerException;
+			ServerException;
+
+	/**
+	 * @param _params
+	 * @throws ConnectException
+	 * @throws ServerException
+	 */
+	void deleteURL(String[] _params) throws ConnectException, ServerException;
+
+	/**
+	 * @param _returnType
+	 * @param _params
+	 * @return
+	 * @throws ConnectException
+	 * @throws ServerException
+	 */
+	<R> R get(Class<R> _returnType, String... _params) throws ConnectException,
+			ServerException;
 
 	/**
 	 * This method send a a http GET request to the server
@@ -91,7 +108,7 @@ public interface IRestClientAPI extends Closeable {
 	 * @throws ServerException
 	 *             launch if exception happened in server side
 	 */
-	<T> void get(String _url, String... params) throws ConnectException,
+	void get(String _url, String... params) throws ConnectException,
 			ServerException;
 
 	/**
@@ -147,6 +164,15 @@ public interface IRestClientAPI extends Closeable {
 	 *             launch if exception happened in server side
 	 */
 	<T, R> R post(String _url, T _objectToSend, GenericType<R> _returnType)
+			throws ConnectException, ServerException;
+
+	/**
+	 * @param _objectToSend
+	 * @param _params
+	 * @throws ConnectException
+	 * @throws ServerException
+	 */
+	<T> void postURL(final T _objectToSend, final String... params)
 			throws ConnectException, ServerException;
 
 	/**

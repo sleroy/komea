@@ -24,9 +24,7 @@ import org.komea.connectors.sdk.std.impl.AbstractPushEventsCommand;
  *
  */
 public class GitPushEventsCommand extends AbstractPushEventsCommand {
-	/**
-	 *
-	 */
+
 	private static final String GIT = ".git";
 
 	@Option(name = "-git", usage = "Path to the  cloned repository", required = true)
@@ -44,17 +42,21 @@ public class GitPushEventsCommand extends AbstractPushEventsCommand {
 	@Option(name = "-fileUpdate", usage = "Send file updates")
 	protected boolean fileUpdateMessage;
 
+	public GitPushEventsCommand() {
+		super(IGitEvent.COMMIT);
+	}
+
 	public String getRepository() {
-		return repository;
+		return this.repository;
 	}
 
 	public String getRepositoryURL() {
-		return repositoryURL;
+		return this.repositoryURL;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.komea.connectors.sdk.main.IConnectorCommand#init()
 	 */
 	@Override
@@ -64,40 +66,40 @@ public class GitPushEventsCommand extends AbstractPushEventsCommand {
 	}
 
 	public boolean isCommitMessage() {
-		return commitMessage;
+		return this.commitMessage;
 	}
 
 	public boolean isFileUpdateMessage() {
-		return fileUpdateMessage;
+		return this.fileUpdateMessage;
 	}
 
 	public boolean isTagMessage() {
-		return tagMessage;
+		return this.tagMessage;
 	}
 
 	public void setCommitMessage(final boolean _commitMessage) {
-		commitMessage = _commitMessage;
+		this.commitMessage = _commitMessage;
 	}
 
 	public void setFileUpdateMessage(final boolean _fileUpdateMessage) {
-		fileUpdateMessage = _fileUpdateMessage;
+		this.fileUpdateMessage = _fileUpdateMessage;
 	}
 
 	public void setRepository(final String _repository) {
-		repository = _repository;
+		this.repository = _repository;
 	}
 
 	public void setRepositoryURL(final String _repositoryURL) {
-		repositoryURL = _repositoryURL;
+		this.repositoryURL = _repositoryURL;
 	}
 
 	public void setTagMessage(final boolean _tagMessage) {
-		tagMessage = _tagMessage;
+		this.tagMessage = _tagMessage;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * org.komea.connectors.sdk.std.impl.AbstractPushEventsCommand#sendEvents
 	 * (org.komea.connectors.sdk.rest.impl.EventoryClientAPI)
@@ -105,14 +107,14 @@ public class GitPushEventsCommand extends AbstractPushEventsCommand {
 	@Override
 	protected void sendEvents(final IEventoryClientAPI _eventoryClientAPI,
 			final DateTime _lastExecution) {
-		File repositoryFile = new File(repository);
+		File repositoryFile = new File(this.repository);
 
 		if (!repositoryFile.exists()) {
 			if (!repositoryFile.getName().toLowerCase().endsWith(GIT)) {
 				repositoryFile = new File(repositoryFile.getAbsolutePath(), GIT);
 			}
 			if (!repositoryFile.exists()) {
-				LOGGER.error("The path does not exist: {}", repository);
+				LOGGER.error("The path does not exist: {}", this.repository);
 				throw new IllegalArgumentException("Repository does not exist");
 			}
 		}
@@ -122,24 +124,24 @@ public class GitPushEventsCommand extends AbstractPushEventsCommand {
 		_eventoryClientAPI.getEventStorage().declareEventType(IGitEvent.UPDATE);
 
 		final GitRepository gitRepository = new GitRepository(repositoryFile,
-				repositoryURL);
+				this.repositoryURL);
 		final Git git = gitRepository.getGit();
 
 		final DateTime now = new DateTime();
 		LOGGER.info("Processing between {} and {}", _lastExecution, now);
 		final TimedCompositeCommitProcessor processor = new TimedCompositeCommitProcessor(
 				_lastExecution, now);
-		if (commitMessage) {
+		if (this.commitMessage) {
 			LOGGER.info("Enabled commit events processor");
 			processor.addCommitProcessor(new CommitEventProducer(
 					_eventoryClientAPI.getEventStorage()));
 		}
-		if (tagMessage) {
+		if (this.tagMessage) {
 			LOGGER.info("Enabled tag events processor");
 			processor.addCommitProcessor(new GitEventTagProducer(
 					_eventoryClientAPI.getEventStorage(), git));
 		}
-		if (fileUpdateMessage) {
+		if (this.fileUpdateMessage) {
 			LOGGER.info("Enabled file update events processor");
 			processor.addCommitProcessor(new FileModificationEventProducer(
 					_eventoryClientAPI.getEventStorage()));

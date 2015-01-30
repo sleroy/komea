@@ -4,7 +4,7 @@
 package org.komea.event.generator;
 
 import org.joda.time.DateTime;
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.KomeaEvent;
 
 /**
  * @author sleroy

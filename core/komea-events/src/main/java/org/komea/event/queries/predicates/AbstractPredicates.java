@@ -1,8 +1,10 @@
 package org.komea.event.queries.predicates;
 
 import com.google.common.base.Predicate;
+
 import java.util.List;
-import org.komea.event.model.KomeaEvent;
+
+import org.komea.event.model.impl.KomeaEvent;
 
 public abstract class AbstractPredicates implements Predicate<KomeaEvent> {
 

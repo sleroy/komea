@@ -1,7 +1,8 @@
 package org.komea.event.storage.impl;
 
 import java.util.Date;
-import org.komea.event.model.KomeaEvent;
+
+import org.komea.event.model.impl.KomeaEvent;
 
 public class NewBugzillaBugEvent extends KomeaEvent {
 

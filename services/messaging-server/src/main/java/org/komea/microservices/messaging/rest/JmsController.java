@@ -1,7 +1,7 @@
 package org.komea.microservices.messaging.rest;
 
 import org.komea.event.messaging.IMessageSender;
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.KomeaEvent;
 import org.komea.modules.messaging.producer.JmsMessageSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,18 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/rest/messaging")
 public class JmsController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JmsController.class.getName());
+	private static final Logger		LOGGER			= LoggerFactory.getLogger(JmsController.class.getName());
 
-    private static final String BROKER_URL = "vm://localhost?create=false";
+	private static final String		BROKER_URL		= "vm://localhost?create=false";
 
-    private final IMessageSender messageSender = new JmsMessageSender(BROKER_URL);
+	private final IMessageSender	messageSender	= new JmsMessageSender(BROKER_URL);
 
-    @RequestMapping(method = RequestMethod.POST, value = "/pushEvent/{destinationName}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public void pushEvent(@PathVariable String destinationName, @RequestBody final KomeaEvent event) {
-        LOGGER.info("JmsController - pushEvent : " + event);
-        messageSender.setDestinationName(destinationName);
-        messageSender.pushEvent(event);
-    }
+	@RequestMapping(method = RequestMethod.POST, value = "/pushEvent/{destinationName}")
+	@ResponseStatus(value = HttpStatus.OK)
+	public void pushEvent(@PathVariable final String destinationName,
+			@RequestBody final KomeaEvent event) {
+		LOGGER.info("JmsController - pushEvent : " + event);
+		this.messageSender.setDestinationName(destinationName);
+		this.messageSender.pushEvent(event);
+	}
 
 }

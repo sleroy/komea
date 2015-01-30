@@ -1,98 +1,84 @@
 package org.komea.connectors.sdk.std.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
 import org.joda.time.DateTime;
 import org.komea.connectors.sdk.rest.impl.IEventoryClientAPI;
 
 public abstract class AbstractPushEventsCommand extends AbstractEventoryCommand {
 
-    public AbstractPushEventsCommand() {
-        super();
+	private final String eventTypeName;
 
-    }
+	public AbstractPushEventsCommand(final String _eventTypeName) {
+		super();
+		this.eventTypeName = _eventTypeName;
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.komea.connectors.sdk.main.IConnectorCommand#action()
-     */
-    @Override
-    public String action() {
+	}
 
-        return "push";
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.komea.connectors.sdk.main.IConnectorCommand#action()
+	 */
+	@Override
+	public String action() {
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.komea.connectors.sdk.main.IConnectorCommand#description()
-     */
-    @Override
-    public String description() {
-        return "Push events to the server";
-    }
+		return "push";
+	}
 
-    public void saveActionDate() {
-        try {
-            new ObjectMapper().writeValue(getLastLaunchFileName(), new Date());
-        } catch (final IOException e) {
-            LOGGER.error("Could not save the launch time {}", e.getMessage(), e);
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.komea.connectors.sdk.main.IConnectorCommand#description()
+	 */
+	@Override
+	public String description() {
+		return "Push events to the server";
+	}
 
-    /**
-     * Returns the last launch file name
-     *
-     * @return
-     */
-    private File getLastLaunchFileName() {
+	@Override
+	public void init() throws Exception {
+		//
 
-        return new File("LAST_PUSH");
-    }
+	}
 
-    /**
-     * Read the last launch time
-     *
-     * @return
-     */
-    private DateTime readLastLaunchTime() {
-        if (hasLastLaunchDate()) {
-            return getSince();
-        }
-        final File lastLaunchFileName = getLastLaunchFileName();
-        if (lastLaunchFileName.exists()) {
-            try {
-                return new DateTime(new ObjectMapper().readValue(
-                        lastLaunchFileName, Date.class));
-            } catch (final IOException e) {
-                LOGGER.error("Could not read the launch time {}",
-                        e.getMessage(), e);
-            }
-        }
-        return null;
+	/**
+	 * Read the last launch time
+	 *
+	 * @param _eventoryClientAPI
+	 *
+	 * @return
+	 */
+	private DateTime readLastLaunchTime(
+			final IEventoryClientAPI _eventoryClientAPI) {
 
-    }
+		DateTime lastEvent = null;
+		try {
+			lastEvent = _eventoryClientAPI.getLastEvent(this.eventTypeName);
+		} catch (final Exception e) {
+			LOGGER.error("Could not obtain last event of type {}",
+					this.eventTypeName);
+		}
 
-    /**
-     * @param _eventoryClientA
-     * @throws Exception
-     */
-    @Override
-    protected final void runCommand(final IEventoryClientAPI _eventoryClientAPI)
-            throws Exception {
-        final DateTime readLastLaunchTime = readLastLaunchTime();
-        sendEvents(_eventoryClientAPI, readLastLaunchTime);
-        saveActionDate();
-    }
+		return lastEvent;
 
-    /**
-     * @param _eventoryClientAPI
-     * @throws Exception
-     */
-    protected abstract void sendEvents(IEventoryClientAPI _eventoryClientAPI,
-            final DateTime _lastExecution) throws Exception;
+	}
+
+	/**
+	 * @param _eventoryClientA
+	 * @throws Exception
+	 */
+	@Override
+	protected final void runCommand(final IEventoryClientAPI _eventoryClientAPI)
+			throws Exception {
+		final DateTime readLastLaunchTime = this
+				.readLastLaunchTime(_eventoryClientAPI);
+		this.sendEvents(_eventoryClientAPI, readLastLaunchTime);
+	}
+
+	/**
+	 * @param _eventoryClientAPI
+	 * @throws Exception
+	 */
+	protected abstract void sendEvents(IEventoryClientAPI _eventoryClientAPI,
+			final DateTime _lastExecution) throws Exception;
 
 }

@@ -3,7 +3,7 @@
  */
 package org.komea.event.storage.impl;
 
-import org.komea.event.model.KomeaEvent;
+import org.komea.event.model.impl.KomeaEvent;
 import org.skife.jdbi.v2.ResultIterator;
 
 /**
