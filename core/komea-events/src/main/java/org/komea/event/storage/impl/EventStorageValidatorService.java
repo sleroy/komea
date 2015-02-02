@@ -39,7 +39,6 @@ public class EventStorageValidatorService {
         boolean valid = true;
         for (final String requiredField : requiredFields.keySet()) {
             final Object value = event.field(requiredField);
-            final List<? extends Class<? extends Serializable>> expectedClasses = requiredFields.get(requiredField);
             if (!event.containsField(requiredField)) {
                 LOGGER.error("Missing field '{}'", requiredField);
                 valid = false;
