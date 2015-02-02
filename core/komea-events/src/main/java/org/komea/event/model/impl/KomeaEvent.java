@@ -16,7 +16,7 @@ import org.komea.event.model.IKomeaEvent;
  *
  * @author sleroy
  */
-public class KomeaEvent implements IKomeaEvent, Serializable {
+public class KomeaEvent implements IKomeaEvent, Serializable, Comparable<KomeaEvent> {
 
     private static final long serialVersionUID = 1L;
 
@@ -242,6 +242,11 @@ public class KomeaEvent implements IKomeaEvent, Serializable {
     @JsonIgnore
     private DateTime getDateTime() {
         return new DateTime(this.getDate());
+    }
+
+    @Override
+    public int compareTo(final KomeaEvent o) {
+        return o.getDate().compareTo(getDate());
     }
 
 }

@@ -1,13 +1,21 @@
 package org.komea.event.queries.formulas;
 
 import java.io.Serializable;
-import javax.annotation.Nonnull;
+import javax.validation.constraints.NotNull;
 
 public class FormulaDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Nonnull
+    public static FormulaDto of(final FormulaType type) {
+        return new FormulaDto(type);
+    }
+
+    public static FormulaDto of(final FormulaType type, final String key) {
+        return new FormulaDto(type, key);
+    }
+
+    @NotNull
     private FormulaType type;
 
     private String key;

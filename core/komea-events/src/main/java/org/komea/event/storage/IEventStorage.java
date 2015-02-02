@@ -1,50 +1,69 @@
 package org.komea.event.storage;
 
 import java.io.Closeable;
-
+import java.util.List;
+import java.util.Map;
+import org.komea.event.model.impl.DateInterval;
 import org.komea.event.model.impl.KomeaEvent;
+import org.komea.event.queries.executor.EventsFilter;
+import org.komea.event.queries.executor.EventsQuery;
+import org.skife.jdbi.v2.ResultIterator;
 
 public interface IEventStorage extends Closeable {
 
-	/**
-	 * Clear of all the events of the type
-	 *
-	 * @param _eventType
-	 *            the event type;
-	 */
-	public void clearEventsOfType(String _eventType);
+    void clearAllEvents();
 
-	/**
-	 * Declares a new event type.
-	 *
-	 * @param type
-	 *            the new event type.
-	 */
-	public void declareEventType(String type);
+    /**
+     * Clear of all the events of the type
+     *
+     * @param _eventType the event type;
+     */
+    void clearEventsOfType(String _eventType);
 
-	/**
-	 * Tests if a storage exist for the event type.
-	 * 
-	 * @param _eventType
-	 * @return
-	 */
-	public boolean existStorage(String _eventType);
+    long countAllEvents();
 
-	/**
-	 * Stores a event with a flattened structure.
-	 *
-	 * @param _event
-	 *            the event.
-	 */
-	public void storeEvent(KomeaEvent _event);
+    long countEventsOfType(String eventType);
 
-	/**
-	 * Converts and store a pojo as a event.
-	 *
-	 * @param _object
-	 *            the object
-	 */
-	public void storeEvent(Object _object);
+    /**
+     * Declares a new event type.
+     *
+     * @param type the new event type.
+     */
+    void declareEventType(String type);
 
-	IEventDB getEventDB(String eventType);
+    Map<String, Number> executeQuery(EventsQuery eventsQuery);
+
+    /**
+     * Tests if a storage exist for the event type.
+     *
+     * @param _eventType
+     * @return
+     */
+    boolean existStorage(String _eventType);
+
+    List<KomeaEvent> getAllEventsOnPeriod(DateInterval period, int limit);
+
+    List<KomeaEvent> getEventsByFilter(EventsFilter filter);
+
+    ResultIterator<KomeaEvent> loadEventsOfType(String eventType);
+
+    ResultIterator<KomeaEvent> loadEventsOfTypeOnPeriod(String eventType, DateInterval interval);
+
+    List<String> getEventTypes();
+
+    /**
+     * Stores a event with a flattened structure.
+     *
+     * @param _event the event.
+     */
+    void storeEvent(KomeaEvent _event);
+
+    /**
+     * Converts and store a pojo as a event.
+     *
+     * @param _object the object
+     */
+    void storeEvent(Object _object);
+
+    IEventDB getEventDB(String eventType);
 }

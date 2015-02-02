@@ -1,4 +1,4 @@
-package org.komea.modules.rest.client;
+package org.komea.microservices.events.messaging.service;
 
 import org.komea.event.messaging.IMessageSender;
 import org.komea.event.model.impl.KomeaEvent;

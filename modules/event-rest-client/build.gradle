@@ -1,5 +1,0 @@
-
-dependencies {
-    compile project(":core:komea-events")
-    compile("org.springframework:spring-web:${SPRING_VERSION}")
-}

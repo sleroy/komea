@@ -1,5 +1,6 @@
 package org.komea.modules.rest.client;
 
+import org.komea.microservices.events.messaging.service.RestMessageSender;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.komea.event.messaging.IMessageSender;

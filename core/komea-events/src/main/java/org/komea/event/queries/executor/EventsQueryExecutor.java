@@ -3,18 +3,15 @@ package org.komea.event.queries.executor;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.io.IOUtils;
 import org.komea.event.model.impl.KomeaEvent;
 import org.komea.event.queries.formulas.FormulaUtils;
 import org.komea.event.queries.formulas.IFormula;
 import org.komea.event.queries.predicates.PredicateDto;
 import org.komea.event.queries.predicates.PredicateUtils;
-import org.komea.event.storage.IEventDB;
-import org.skife.jdbi.v2.ResultIterator;
+import org.komea.event.storage.IEventStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,16 +19,46 @@ public class EventsQueryExecutor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EventsQueryExecutor.class);
 
-    private final IEventDB eventDB;
-    private final EventsQuery eventsQuery;
+    public static List<KomeaEvent> filterEvents(final EventsFilter filter, final IEventStorage service) {
+        final List<KomeaEvent> events = Lists.newArrayList();
+        final Iterator<KomeaEvent> iterator;
+        if (filter.hasInterval()) {
+            iterator = service.loadEventsOfTypeOnPeriod(filter.getEventType(),
+                    filter.getInterval());
+        } else {
+            iterator = service.loadEventsOfType(filter.getEventType());
+        }
+        while (iterator.hasNext()) {
+            final KomeaEvent event = iterator.next();
+            if (eventMatches(event, filter)) {
+                events.add(event);
+            }
+        }
+        return events;
+    }
 
-    public EventsQueryExecutor(final IEventDB _eventDB, final EventsQuery _eventsQuery) {
-        eventDB = _eventDB;
-        eventsQuery = _eventsQuery;
+    private static boolean eventMatches(final KomeaEvent _event, final EventsFilter filter) {
+        if (_event == null) {
+            return false;
+        }
+        final PredicateDto predicateDto = filter.getWhere();
+        if (predicateDto == null) {
+            return true;
+        }
+        final Predicate<KomeaEvent> predicate = PredicateUtils.fromPredicateDto(predicateDto);
+        return predicate.apply(_event);
+    }
+
+    private final EventsQuery eventsQuery;
+    private final IEventStorage eventsService;
+
+    public EventsQueryExecutor(final IEventStorage eventStorage, final EventsQuery _eventsQuery) {
+        this.eventsService = eventStorage;
+        this.eventsQuery = _eventsQuery;
     }
 
     public Map<String, Number> execute() {
-        final List<KomeaEvent> filteredEvents = filterEvents();
+        final List<KomeaEvent> filteredEvents = filterEvents(eventsQuery.getFilter(), eventsService);
         final Map<String, List<KomeaEvent>> groupedEvents = groupEvents(filteredEvents);
         return calculateResults(groupedEvents);
     }
@@ -64,39 +91,6 @@ public class EventsQueryExecutor {
             groupedEvents.get(key).add(event);
         }
         return groupedEvents;
-    }
-
-    private List<KomeaEvent> filterEvents() {
-        final List<KomeaEvent> events = Lists.newArrayList();
-        ResultIterator<KomeaEvent> iterator = null;
-        try {
-            if (eventsQuery.hasInterval()) {
-                iterator = eventDB.loadOnPeriod(eventsQuery.getInterval());
-            } else {
-                iterator = eventDB.loadAll();
-            }
-            while (iterator.hasNext()) {
-                final KomeaEvent event = iterator.next();
-                if (eventMatches(event)) {
-                    events.add(event);
-                }
-            }
-        } finally {
-            IOUtils.closeQuietly(iterator);
-        }
-        return events;
-    }
-
-    private boolean eventMatches(final KomeaEvent _event) {
-        if (_event == null) {
-            return false;
-        }
-        final PredicateDto predicateDto = eventsQuery.getWhere();
-        if (predicateDto == null) {
-            return true;
-        }
-        final Predicate<KomeaEvent> predicate = PredicateUtils.fromPredicateDto(predicateDto);
-        return predicate.apply(_event);
     }
 
 }

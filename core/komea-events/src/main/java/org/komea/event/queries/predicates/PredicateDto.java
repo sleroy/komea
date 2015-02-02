@@ -3,17 +3,26 @@ package org.komea.event.queries.predicates;
 import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.List;
-import javax.annotation.Nonnull;
+import javax.validation.constraints.NotNull;
 
 public class PredicateDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Nonnull
+    public static PredicateDto of(final PredicateType type, final String key,
+            final Object predicateValue) {
+        return new PredicateDto(type, key, predicateValue);
+    }
+
+    public static PredicateDto of(final PredicateType type, final List<PredicateDto> predicates) {
+        return new PredicateDto(type, predicates);
+    }
+
+    @NotNull
     private PredicateType type;
     private String key;
     private Object predicateValue;
-    @Nonnull
+    @NotNull
     private List<PredicateDto> predicates = Lists.newArrayList();
 
     public PredicateDto() {
