@@ -1,9 +1,8 @@
 package org.komea.events.serializer.jackson;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import org.komea.events.dao.EventStorageException;
 
 public class JacksonObjectToByteArrayConverter<T> implements Function<T, byte[]> {
@@ -17,10 +16,8 @@ public class JacksonObjectToByteArrayConverter<T> implements Function<T, byte[]>
     @Override
     public byte[] apply(final T value) {
         try {
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
-            this.jackson.writeValue(baos, value);
-            return baos.toByteArray();
-        } catch (final IOException ex) {
+            return this.jackson.writeValueAsBytes(value);
+        } catch (final JsonProcessingException ex) {
             throw new EventStorageException(ex.getMessage(), ex);
         }
     }

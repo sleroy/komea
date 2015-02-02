@@ -5,6 +5,7 @@ package org.komea.events.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import org.apache.commons.lang3.Validate;
 
 /**
  * This class defines an interval between two dates.
@@ -38,7 +39,7 @@ public class DateInterval implements Serializable {
         super();
         from = _from;
         to = _to;
-//        Validate.isTrue(!(_from == null && _to == null));
+        Validate.isTrue(!(_from == null && _to == null));
     }
 
     public Date getFrom() {

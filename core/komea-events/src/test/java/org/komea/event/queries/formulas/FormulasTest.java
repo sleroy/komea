@@ -53,6 +53,16 @@ public class FormulasTest {
     }
 
     @Test
+    public void testFormulaDto() {
+        FormulaDto formula = new FormulaDto();
+        formula.setType(FormulaType.SUM);
+        formula = FormulaDto.of(FormulaType.COUNT);
+        formula.setKey("key");
+        formula = FormulaDto.of(FormulaType.SUM, "key");
+        formula.setKey("key2");
+    }
+
+    @Test
     public void testFormulaCount() {
         assertResult(10d, FormulaType.COUNT);
     }

@@ -22,6 +22,6 @@ public class KryoObjectToByteArrayConverter<T> implements Function<T, byte[]> {
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         final Output streamOut = new Output(outputStream, DEFAULT_SIZE);
         this.kryo.writeObject(streamOut, value);
-        return outputStream.toByteArray();
+        return streamOut.toBytes();
     }
 }

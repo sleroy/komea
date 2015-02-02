@@ -18,6 +18,9 @@ import org.springframework.stereotype.Component;
 public class KomeaMessageListenerContainer extends SimpleMessageListenerContainer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KomeaMessageListenerContainer.class.getName());
+    private static final int DEFAULT_DELAY_IN_SEC = 60 * 10;
+
+    private int delayInSec = DEFAULT_DELAY_IN_SEC;
 
     @Value("${spring.activemq.broker-url}")
     private String brokerUrl;
@@ -26,12 +29,12 @@ public class KomeaMessageListenerContainer extends SimpleMessageListenerContaine
     private String destination;
 
     @Autowired
-    private IEventsService eventsStorage;
+    private IEventsService eventsService;
 
     @PostConstruct
-    private void init() {
+    public void init() {
         this.setDestinationName(destination);
-        this.setMessageListener(new KomeaMessageListener(eventsStorage));
+        this.setMessageListener(new KomeaMessageListener(eventsService));
         this.setAutoStartup(false);
         this.setExceptionListener(new ExceptionListener() {
 
@@ -44,14 +47,14 @@ public class KomeaMessageListenerContainer extends SimpleMessageListenerContaine
     }
 
     private final void onJmsException(final JMSException ex) {
-        LOGGER.error("JMS Exception occured, try to reconnect in 10 minutes.", ex);
+        LOGGER.error("JMS Exception occured, try to reconnect in " + delayInSec + " seconds.", ex);
         Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
 
             @Override
             public void run() {
                 restart();
             }
-        }, 10, TimeUnit.MINUTES);
+        }, delayInSec, TimeUnit.SECONDS);
     }
 
     private final void restart() {
@@ -62,6 +65,22 @@ public class KomeaMessageListenerContainer extends SimpleMessageListenerContaine
         } catch (JMSException ex) {
             onJmsException(ex);
         }
+    }
+
+    public void setDelayInSec(final int delayInSec) {
+        this.delayInSec = delayInSec;
+    }
+
+    public void setDestination(final String destination) {
+        this.destination = destination;
+    }
+
+    public void setBrokerUrl(final String brokerUrl) {
+        this.brokerUrl = brokerUrl;
+    }
+
+    public void setEventsService(final IEventsService eventsService) {
+        this.eventsService = eventsService;
     }
 
 }
