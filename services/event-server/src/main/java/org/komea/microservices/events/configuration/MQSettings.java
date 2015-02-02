@@ -1,5 +1,6 @@
 package org.komea.microservices.events.configuration;
 
+import org.komea.event.messaging.IMessageSender;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -10,7 +11,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class MQSettings {
 
     private String brokerUrl;
-    private String destination = "komea-queue";
+    private String destination = IMessageSender.DEFAULT_DESTINATION;
+    private int retryDelayInSec = 60 * 10;
 
     public String getBrokerUrl() {
         return brokerUrl;
@@ -26,6 +28,14 @@ public class MQSettings {
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    public int getRetryDelayInSec() {
+        return retryDelayInSec;
+    }
+
+    public void setRetryDelayInSec(int retryDelayInSec) {
+        this.retryDelayInSec = retryDelayInSec;
     }
 
 }

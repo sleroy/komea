@@ -9,6 +9,7 @@ import org.komea.event.messaging.IMessageSender;
 import org.komea.event.model.impl.KomeaEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jms.JmsException;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 
@@ -19,7 +20,7 @@ public class JmsMessageSender implements IMessageSender {
     private JmsTemplate jmsTemplate;
 
     public JmsMessageSender(final String brokerUrl) {
-        this(brokerUrl, "komea-queue");
+        this(brokerUrl, DEFAULT_DESTINATION);
     }
 
     public JmsMessageSender(final String brokerUrl, final String destinationName) {
@@ -53,7 +54,11 @@ public class JmsMessageSender implements IMessageSender {
     }
 
     private void sendMessage(final MessageCreator messageCreator) {
-        this.jmsTemplate.send(messageCreator);
+        try {
+            this.jmsTemplate.send(messageCreator);
+        } catch (JmsException ex) {
+            LOGGER.error("Error while sending jms message. Event is lost !", ex);
+        }
     }
 
     private void sendObjectMessage(final Object object) {
