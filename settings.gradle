@@ -6,6 +6,7 @@ include "core:shared:komea-db-viz"
 
 include "core:komea-software-model"
 include "core:komea-events"
+include "core:komea-sql"
 include "services:event-server"
 
 include "modules:connectors:connector-sdk"
