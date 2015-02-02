@@ -1,4 +1,4 @@
-package org.komea.event.storage.impl;
+package org.komea.event.storage.sql.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +38,8 @@ import com.esotericsoftware.kryo.Kryo;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
+import org.komea.event.storage.impl.DateMapper;
+import org.komea.event.storage.impl.EmptyResultIterator;
 
 public class EventDB implements IEventDB {
 

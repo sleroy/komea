@@ -1,4 +1,4 @@
-package org.komea.event.storage.impl;
+package org.komea.event.storage.sql.impl;
 
 import java.io.IOException;
 import java.sql.Connection;

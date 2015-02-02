@@ -3,7 +3,7 @@ package org.komea.event.queries.factory;
 import org.komea.event.storage.IEventDBFactory;
 import org.komea.event.model.SerializerType;
 import org.komea.event.storage.impl.EventStorage;
-import org.komea.event.storage.impl.EventDBFactory;
+import org.komea.event.storage.sql.impl.EventDBFactory;
 import org.komea.event.utils.dpool.impl.DataSourceConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
