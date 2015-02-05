@@ -328,7 +328,7 @@ public class EventDB implements IEventDB {
             handle = this.db.open();
             handle.execute(this.deleteSQL);
         } catch (final Exception e) {
-            LOGGER.error("Error with removeAll query", e);
+            handleException("Error with removeAll query", e);
         } finally {
             IOUtils.closeQuietly(handle);
         }

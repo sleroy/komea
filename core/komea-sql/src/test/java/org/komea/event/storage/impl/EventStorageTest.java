@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sql.DataSource;
 import org.apache.commons.io.IOUtils;
+import org.h2.jdbcx.JdbcDataSource;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.junit.Assert;
@@ -16,6 +18,7 @@ import org.komea.event.generator.IEventDefinition;
 import org.komea.event.generator.KpiRange;
 import org.komea.event.generator.impl.EventGenerator;
 import org.komea.event.model.IKomeaEvent;
+import org.komea.event.model.SerializerType;
 import org.komea.event.model.impl.DateInterval;
 import org.komea.event.model.impl.KomeaEvent;
 import org.komea.event.queries.executor.EventsFilter;
@@ -23,6 +26,8 @@ import org.komea.event.queries.factory.EventStorageFactory;
 import org.komea.event.queries.factory.Impl;
 import org.komea.event.storage.IEventDB;
 import org.komea.event.storage.IEventStorage;
+import org.komea.event.storage.sql.impl.EventDB;
+import org.komea.event.utils.dpool.impl.DataSourceConnectionFactory;
 import org.skife.jdbi.v2.ResultIterator;
 
 public class EventStorageTest {
@@ -90,6 +95,61 @@ public class EventStorageTest {
         } finally {
             IOUtils.closeQuietly(eventStorage);
         }
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testCreateTableException() throws Exception {
+        final DataSource dataSource = new JdbcDataSource();
+        EventDB.createTable(new DataSourceConnectionFactory(dataSource), NEW_COMMIT);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testCountException() throws Exception {
+        final DataSource dataSource = new JdbcDataSource();
+        final EventDB eventDB = new EventDB(new DataSourceConnectionFactory(dataSource), NEW_COMMIT, SerializerType.JACKSON);
+        eventDB.count();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testGetLastEventException() throws Exception {
+        final DataSource dataSource = new JdbcDataSource();
+        final EventDB eventDB = new EventDB(new DataSourceConnectionFactory(dataSource), NEW_COMMIT, SerializerType.JACKSON);
+        eventDB.getLastEvent();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testLoadAllException() throws Exception {
+        final DataSource dataSource = new JdbcDataSource();
+        final EventDB eventDB = new EventDB(new DataSourceConnectionFactory(dataSource), NEW_COMMIT, SerializerType.JACKSON);
+        eventDB.loadAll();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testLoadOnPeriodException() throws Exception {
+        final DataSource dataSource = new JdbcDataSource();
+        final EventDB eventDB = new EventDB(new DataSourceConnectionFactory(dataSource), NEW_COMMIT, SerializerType.JACKSON);
+        eventDB.loadOnPeriod(new DateInterval(), 1);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testPutException() throws Exception {
+        final DataSource dataSource = new JdbcDataSource();
+        final EventDB eventDB = new EventDB(new DataSourceConnectionFactory(dataSource), NEW_COMMIT, SerializerType.JACKSON);
+        eventDB.put(new KomeaEvent());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testPutAllException() throws Exception {
+        final DataSource dataSource = new JdbcDataSource();
+        final EventDB eventDB = new EventDB(new DataSourceConnectionFactory(dataSource), NEW_COMMIT, SerializerType.JACKSON);
+        eventDB.putAll(Arrays.asList(new KomeaEvent()));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testRemoveAllException() throws Exception {
+        final DataSource dataSource = new JdbcDataSource();
+        final EventDB eventDB = new EventDB(new DataSourceConnectionFactory(dataSource), NEW_COMMIT, SerializerType.JACKSON);
+        eventDB.removeAll();
     }
 
     @Test
