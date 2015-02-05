@@ -117,7 +117,8 @@ public class CommitEventProducerTests extends AbstractLocalGitTest {
         }
 
         @Override
-        public ResultIterator<KomeaEvent> loadEventsOfTypeOnPeriod(String eventType, DateInterval interval) {
+        public ResultIterator<KomeaEvent> loadEventsOfTypeOnPeriod(String eventType,
+                DateInterval interval, int limit) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 

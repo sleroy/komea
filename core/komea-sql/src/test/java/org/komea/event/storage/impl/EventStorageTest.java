@@ -3,7 +3,6 @@ package org.komea.event.storage.impl;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
@@ -14,10 +13,10 @@ import org.komea.event.generator.IEventDefinition;
 import org.komea.event.generator.KpiRange;
 import org.komea.event.generator.impl.EventGenerator;
 import org.komea.event.model.IKomeaEvent;
-import org.komea.event.queries.factory.EventStorageFactory;
-import org.komea.event.queries.factory.Impl;
 import org.komea.event.model.impl.DateInterval;
 import org.komea.event.model.impl.KomeaEvent;
+import org.komea.event.queries.factory.EventStorageFactory;
+import org.komea.event.queries.factory.Impl;
 import org.komea.event.storage.IEventDB;
 import org.komea.event.storage.IEventStorage;
 import org.skife.jdbi.v2.ResultIterator;
@@ -59,7 +58,7 @@ public class EventStorageTest {
             final long intervalEvents = numberDevelopers * commitPerDay
                     * nbDays;
             Assert.assertEquals(intervalEvents,
-                    countEvents(eventDB.loadOnPeriod(dateInterval)));
+                    countEvents(eventDB.loadOnPeriod(dateInterval, Integer.MAX_VALUE)));
 
             eventDB.removeAll();
             Assert.assertEquals(0, eventDB.count());

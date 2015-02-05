@@ -24,7 +24,7 @@ public class EventsQueryExecutor {
         final Iterator<KomeaEvent> iterator;
         if (filter.hasInterval()) {
             iterator = service.loadEventsOfTypeOnPeriod(filter.getEventType(),
-                    filter.getInterval());
+                    filter.getInterval(), Integer.MAX_VALUE);
         } else {
             iterator = service.loadEventsOfType(filter.getEventType());
         }

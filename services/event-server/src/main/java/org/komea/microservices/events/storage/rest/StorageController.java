@@ -186,11 +186,11 @@ public class StorageController {
         return Lists.newArrayList(this.eventStorageService.loadEventsOfType(eventType));
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/getEventsOfTypeOnPeriod/{eventType}",
+    @RequestMapping(method = RequestMethod.POST, value = "/getEventsOfTypeOnPeriod/{eventType}/{limit}",
             consumes = "application/json", produces = "application/json")
     @ResponseBody
     public List<KomeaEvent> getEventsOfTypeOnPeriod(@PathVariable final String eventType,
-            @RequestBody @Valid final DateInterval interval) {
-        return Lists.newArrayList(this.eventStorageService.loadEventsOfTypeOnPeriod(eventType, interval));
+            @PathVariable final int limit, @RequestBody @Valid final DateInterval interval) {
+        return Lists.newArrayList(this.eventStorageService.loadEventsOfTypeOnPeriod(eventType, interval, limit));
     }
 }

@@ -190,10 +190,11 @@ public class EventStorageRestAPI implements IEventStorage {
 
     @Override
     public ResultIterator<KomeaEvent> loadEventsOfTypeOnPeriod(final String eventType,
-            final DateInterval interval) {
+            final DateInterval interval, int limit) {
         try {
             return fromCollection(Arrays.asList(this.eventoryClientAPI.post(
-                    interval, KomeaEvent[].class, "storage", "getEventsOfTypeOnPeriod", eventType)));
+                    interval, KomeaEvent[].class, "storage", "getEventsOfTypeOnPeriod",
+                    eventType, String.valueOf(limit))));
         } catch (ConnectException | ServerException e) {
             throw new RestClientException(e.getMessage(), e);
         }

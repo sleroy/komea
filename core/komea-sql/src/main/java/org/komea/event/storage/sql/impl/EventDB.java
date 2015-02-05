@@ -263,7 +263,7 @@ public class EventDB implements IEventDB {
      * .DateInterval)
      */
     @Override
-    public ResultIterator<KomeaEvent> loadOnPeriod(final DateInterval _period) {
+    public ResultIterator<KomeaEvent> loadOnPeriod(final DateInterval _period, final int limit) {
         final ResultIterator<KomeaEvent> iterator = EmptyResultIterator.EMPTY;
         final String query = this.getQuery(_period);
         Handle handle = null;
@@ -271,6 +271,7 @@ public class EventDB implements IEventDB {
             handle = this.db.open();
             final Query<KomeaEvent> map = handle.createQuery(query)
                     .map(new MysqlResultHandlerMapper())
+                    .bind("limit", limit)
                     .bind("from", _period.getFrom())
                     .bind("to", _period.getTo());
             return map.iterator();
@@ -362,14 +363,15 @@ public class EventDB implements IEventDB {
     }
 
     private String getQuery(final DateInterval _period) {
-        String query = "SELECT * FROM " + this.table;
+        String query = "SELECT * FROM " + this.table + " WHERE " + COLUMN_DATE + " ";
         if (_period.isCompleteInterval()) {
-            query += " WHERE " + COLUMN_DATE + " BETWEEN :from AND :to";
+            query += "BETWEEN :from AND :to";
         } else if (_period.hasFrom()) {
-            query += " WHERE " + COLUMN_DATE + " > :from";
+            query += "> :from";
         } else if (_period.hasTo()) {
-            query += " WHERE " + COLUMN_DATE + " < :to";
+            query += "< :to";
         }
+        query += " ORDER BY DATE DESC LIMIT :limit";
         return query;
     }
 

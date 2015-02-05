@@ -45,7 +45,7 @@ public interface IEventDB extends Closeable {
      * @param _period
      * @return the iterator
      */
-    ResultIterator<KomeaEvent> loadOnPeriod(DateInterval _period);
+    ResultIterator<KomeaEvent> loadOnPeriod(DateInterval _period, int limit);
 
     /**
      * Puts a events into the storage.

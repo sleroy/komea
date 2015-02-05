@@ -136,7 +136,8 @@ public class EventStorage implements IEventStorage {
     public List<KomeaEvent> getAllEventsOnPeriod(final DateInterval period, final int limit) {
         final List<KomeaEvent> events = new ArrayList<>(limit);
         for (final String eventType : getEventTypes()) {
-            final List<KomeaEvent> subList = Lists.newArrayList(this.loadEventsOfTypeOnPeriod(eventType, period));
+            final List<KomeaEvent> subList = Lists.newArrayList(
+                    this.loadEventsOfTypeOnPeriod(eventType, period, limit));
             events.addAll(subList);
             Collections.sort(events);
             if (events.size() > limit) {
@@ -157,8 +158,9 @@ public class EventStorage implements IEventStorage {
     }
 
     @Override
-    public ResultIterator<KomeaEvent> loadEventsOfTypeOnPeriod(final String eventType, final DateInterval interval) {
-        return this.eventDBFactory.getEventDB(eventType).loadOnPeriod(interval);
+    public ResultIterator<KomeaEvent> loadEventsOfTypeOnPeriod(final String eventType,
+            final DateInterval interval, final int limit) {
+        return this.eventDBFactory.getEventDB(eventType).loadOnPeriod(interval, limit);
     }
 
     @Override

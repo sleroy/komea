@@ -47,7 +47,8 @@ public interface IEventStorage extends Closeable {
 
     ResultIterator<KomeaEvent> loadEventsOfType(String eventType);
 
-    ResultIterator<KomeaEvent> loadEventsOfTypeOnPeriod(String eventType, DateInterval interval);
+    ResultIterator<KomeaEvent> loadEventsOfTypeOnPeriod(String eventType,
+            DateInterval interval, int limit);
 
     List<String> getEventTypes();
 
