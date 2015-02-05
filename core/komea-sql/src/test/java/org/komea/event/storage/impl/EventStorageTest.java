@@ -81,10 +81,10 @@ public class EventStorageTest {
                     dateInterval, 100).size());
             Assert.assertEquals(10, eventStorage.getAllEventsOnPeriod(
                     dateInterval, 10).size());
-            eventDB.putAll(Arrays.asList(new KomeaEvent("scm", NEW_COMMIT, now.toDate())));
+            eventDB.putAll(Arrays.asList(new KomeaEvent("scm", NEW_COMMIT, now.plusDays(1).toDate())));
+            Assert.assertEquals(now.plusDays(1), eventDB.getLastEvent());
             eventDB.loadOnPeriod(DateInterval.since(now.toDate()), 10);
             eventDB.loadOnPeriod(DateInterval.until(now.toDate()), 10);
-            Assert.assertEquals(now, eventDB.getLastEvent());
             eventDB.removeAll();
             Assert.assertEquals(0, eventDB.count());
         } finally {
