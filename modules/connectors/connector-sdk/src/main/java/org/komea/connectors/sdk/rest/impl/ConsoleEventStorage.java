@@ -75,7 +75,8 @@ public class ConsoleEventStorage implements IEventStorage {
 
     @Override
     public IEventDB getEventDB(final String eventType) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        LOGGER.info("getEventDB {}", eventType);
+        return null;
     }
 
     /*
@@ -116,47 +117,55 @@ public class ConsoleEventStorage implements IEventStorage {
 
     @Override
     public void clearAllEvents() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        LOGGER.info("clearAllEvents");
     }
 
     @Override
     public long countAllEvents() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        LOGGER.info("countAllEvents");
+        return 0;
     }
 
     @Override
     public long countEventsOfType(String eventType) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        LOGGER.info("countEventsOfType {}", eventType);
+        return 0;
     }
 
     @Override
     public Map<String, Number> executeQuery(EventsQuery eventsQuery) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        LOGGER.info("executeQuery {}", eventsQuery);
+        return null;
     }
 
     @Override
     public List<KomeaEvent> getAllEventsOnPeriod(DateInterval period, int limit) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        LOGGER.info("getAllEventsOnPeriod {} - {}", period, limit);
+        return null;
     }
 
     @Override
     public List<KomeaEvent> getEventsByFilter(EventsFilter filter) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        LOGGER.info("getEventsByFilter {}", filter);
+        return null;
     }
 
     @Override
     public ResultIterator<KomeaEvent> loadEventsOfType(String eventType) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        LOGGER.info("loadEventsOfType {}", eventType);
+        return null;
     }
 
     @Override
     public ResultIterator<KomeaEvent> loadEventsOfTypeOnPeriod(String eventType,
             DateInterval interval, int limit) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        LOGGER.info("loadEventsOfTypeOnPeriod {} - {} - {}", eventType, interval, limit);
+        return null;
     }
 
     @Override
     public List<String> getEventTypes() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        LOGGER.info("getEventTypes");
+        return null;
     }
 }
