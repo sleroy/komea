@@ -43,15 +43,14 @@ public class KomeaEvent implements IKomeaEvent, Serializable, Comparable<KomeaEv
     }
 
     public KomeaEvent(final String _provider, final String _eventType) {
-        this();
-        this.properties.put(IKomeaEvent.FIELD_PROVIDER, _provider);
-        this.properties.put(IKomeaEvent.FIELD_EVENT_TYPE, _eventType);
+        this(_provider, _eventType, new Date());
     }
 
     public KomeaEvent(final String _provider, final String _eventType,
             final Date _date) {
-        this(_provider, _eventType);
-        this.properties.put(IKomeaEvent.FIELD_DATE, new Date());
+        this.properties.put(IKomeaEvent.FIELD_PROVIDER, _provider);
+        this.properties.put(IKomeaEvent.FIELD_EVENT_TYPE, _eventType);
+        this.properties.put(IKomeaEvent.FIELD_DATE, _date);
     }
 
     /**
