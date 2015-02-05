@@ -18,7 +18,7 @@ public class EventStorageValidatorService {
     private final Map<String, List< ? extends Class<? extends Serializable>>> requiredFields = Maps.newHashMap();
 
     public EventStorageValidatorService() {
-        requiredFields.put(IKomeaEvent.FIELD_DATE, Arrays.asList(Date.class, Long.class));
+        requiredFields.put(IKomeaEvent.FIELD_DATE, Arrays.asList(Date.class, Long.class, String.class));
         requiredFields.put(IKomeaEvent.FIELD_EVENT_TYPE, Arrays.asList(String.class));
         requiredFields.put(IKomeaEvent.FIELD_PROVIDER, Arrays.asList(String.class));
     }

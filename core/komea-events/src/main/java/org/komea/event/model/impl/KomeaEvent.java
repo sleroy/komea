@@ -132,7 +132,9 @@ public class KomeaEvent implements IKomeaEvent, Serializable, Comparable<KomeaEv
     private Date getDateObject(final String key) {
         final Object date = field(key);
         if (date instanceof Long) {
-            return new Date((long) date);
+            return new Date((Long) date);
+        } else if (date instanceof String) {
+            return new Date(Long.valueOf((String) date));
         }
         return (Date) date;
     }
