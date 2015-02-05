@@ -1,5 +1,8 @@
 package org.komea.event.storage.impl;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,6 +18,7 @@ import org.komea.event.generator.impl.EventGenerator;
 import org.komea.event.model.IKomeaEvent;
 import org.komea.event.model.impl.DateInterval;
 import org.komea.event.model.impl.KomeaEvent;
+import org.komea.event.queries.executor.EventsFilter;
 import org.komea.event.queries.factory.EventStorageFactory;
 import org.komea.event.queries.factory.Impl;
 import org.komea.event.storage.IEventDB;
@@ -30,23 +34,35 @@ public class EventStorageTest {
             new DateTime().minusYears(1), new DateTime());
     private static final int numberDevelopers = 1;
     private static final int commitPerDay = 1;
-    private static final String NEW_COMMIT = "new_commit";
+    private static final String NEW_COMMIT = "newcommit";
 
     public void testDb(final Impl dbImpl) throws Exception {
         EventStorage eventStorage = null;
         try {
             eventStorage = EventStorageFactory.get().newEventStorage(dbImpl);
             eventStorage.declareEventType(NEW_COMMIT);
+            eventStorage.clearEventsOfType(NEW_COMMIT);
+            eventStorage.clearAllEvents();
+            List<String> eventTypes = eventStorage.getEventTypes();
+            Assert.assertEquals(1, eventTypes.size());
+            Assert.assertEquals(NEW_COMMIT, eventTypes.get(0));
+            eventStorage.getEventTypes();
             final IEventDB eventDB = eventStorage.getEventDB(NEW_COMMIT);
+            Assert.assertTrue(eventDB.existStorage());
             final EventGenerator eventGenerator = getEventGenerator(eventStorage);
             eventDB.removeAll();
             Assert.assertEquals(0, eventDB.count());
+            eventStorage.storeEvent(new HashMap<Object, Object>());
             final int generatedEvents = eventGenerator.generate(
                     numberDevelopers * commitPerDay, range, intervalDate);
             LOGGER.log(Level.INFO, "Has generated {0} events", generatedEvents);
 
+            Assert.assertEquals(generatedEvents, eventStorage.countAllEvents());
+            Assert.assertEquals(generatedEvents, eventStorage.countEventsOfType(NEW_COMMIT));
             Assert.assertEquals(generatedEvents, eventDB.count());
             Assert.assertEquals(generatedEvents, countEvents(eventDB.loadAll()));
+            Assert.assertEquals(generatedEvents, countEvents(eventStorage.loadEventsOfType(NEW_COMMIT)));
+            Assert.assertEquals(generatedEvents, eventStorage.getEventsByFilter(new EventsFilter(NEW_COMMIT)).size());
 
             final DateTime now = DateTime.now();
             final DateTime from = now.minusDays(100);
@@ -59,7 +75,16 @@ public class EventStorageTest {
                     * nbDays;
             Assert.assertEquals(intervalEvents,
                     countEvents(eventDB.loadOnPeriod(dateInterval, Integer.MAX_VALUE)));
-
+            Assert.assertEquals(intervalEvents, countEvents(eventStorage.loadEventsOfTypeOnPeriod(
+                    NEW_COMMIT, dateInterval, Integer.MAX_VALUE)));
+            Assert.assertEquals(intervalEvents, eventStorage.getAllEventsOnPeriod(
+                    dateInterval, 100).size());
+            Assert.assertEquals(10, eventStorage.getAllEventsOnPeriod(
+                    dateInterval, 10).size());
+            eventDB.putAll(Arrays.asList(new KomeaEvent("scm", NEW_COMMIT, now.toDate())));
+            eventDB.loadOnPeriod(DateInterval.since(now.toDate()), 10);
+            eventDB.loadOnPeriod(DateInterval.until(now.toDate()), 10);
+            Assert.assertEquals(now, eventDB.getLastEvent());
             eventDB.removeAll();
             Assert.assertEquals(0, eventDB.count());
         } finally {

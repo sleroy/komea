@@ -286,12 +286,18 @@ public class ConsoleEventoryClientAPI implements IEventoryClientAPI {
      */
     @Override
     public void testConnexion() throws ConnectException, ServerException {
-        //
+        LOGGER.info("testConnexion");
 
     }
 
     @Override
     public <T, R> R post(T _objectToSend, Class<R> _returnType, String... params) throws ConnectException, ServerException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try {
+            LOGGER.info("POST>> {} with {} expecting type {}", params,
+                    new ObjectMapper().writeValueAsString(_objectToSend), _returnType);
+        } catch (JsonProcessingException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }
