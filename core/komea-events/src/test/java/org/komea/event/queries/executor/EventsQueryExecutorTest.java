@@ -60,6 +60,15 @@ public class EventsQueryExecutorTest {
         executor.execute();
     }
 
+    @Test
+    public void testEventsQuery() {
+        final EventsQuery query = new EventsQuery();
+        query.setFilter(query.getFilter());
+        query.setFormula(query.getFormula());
+        query.setGroupBy(query.getGroupBy());
+        query.toString();
+    }
+
     private <T> ResultIterator<T> fromCollection(final Collection<T> collection) {
         final Iterator<T> iterator = collection.iterator();
         return new ResultIterator<T>() {

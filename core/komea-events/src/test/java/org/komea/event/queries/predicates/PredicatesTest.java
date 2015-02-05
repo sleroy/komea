@@ -1,15 +1,11 @@
 package org.komea.event.queries.predicates;
 
 import com.google.common.base.Predicate;
-
 import java.util.Arrays;
 import java.util.Date;
-
 import org.joda.time.DateTime;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 import org.komea.event.model.impl.KomeaEvent;
 
@@ -23,6 +19,16 @@ public class PredicatesTest {
         event.put("eventNumber", eventNumber);
         event.put("eventString", eventString);
         return event;
+    }
+
+    @Test
+    public void test() {
+        PredicateDto predicateDto = new PredicateDto();
+        predicateDto.setPredicates(predicateDto.getPredicates());
+        predicateDto.setPredicateValue(predicateDto.getPredicateValue());
+        predicateDto.setKey(predicateDto.getKey());
+        predicateDto.setType(predicateDto.getType());
+        PredicateDto.of(PredicateType.STRING_EQUALS, "provider", "jenkins").toString();
     }
 
     @Test

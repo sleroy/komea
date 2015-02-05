@@ -193,4 +193,13 @@ public class StorageController {
             @PathVariable final int limit, @RequestBody @Valid final DateInterval interval) {
         return Lists.newArrayList(this.eventStorageService.loadEventsOfTypeOnPeriod(eventType, interval, limit));
     }
+
+    public void setEventStorageService(IEventStorage eventStorageService) {
+        this.eventStorageService = eventStorageService;
+    }
+
+    public void setMessageSender(IMessageSender messageSender) {
+        this.messageSender = messageSender;
+    }
+
 }
