@@ -14,7 +14,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@IntegrationTest("server.port=" + ApplicationTests.PORT)
+@IntegrationTest({
+    "server.port=" + ApplicationTests.PORT,
+    "komea.messaging.embeddedBrokerUrl=vm://localhost?broker.persistent=false"
+})
 public class ApplicationTests {
 
     public static final int PORT = 9991;
@@ -24,8 +27,6 @@ public class ApplicationTests {
 
     private static final String EVENT_TYPE = "start";
 
-//	@Autowired
-//	private IEventQueryManager	eventQueryManager;
     @Test
     public void contextLoads() {
 
@@ -34,8 +35,5 @@ public class ApplicationTests {
         simpleEventDto.setProvider("jenkins");
         this.eventStorage.declareEventType(EVENT_TYPE);
         this.eventStorage.storeEvent(simpleEventDto);
-//        FIXME
-//		assertEquals(1, this.eventQueryManager.countEventsOfType("start"));
-
     }
 }
