@@ -16,7 +16,7 @@ public class RestMessageSender implements IMessageSender {
     private String destinationName;
 
     public RestMessageSender(final String host) {
-        this(host, "komea-queue");
+        this(host, IMessageSender.DEFAULT_DESTINATION);
     }
 
     public RestMessageSender(final String host, final String destinationName) {

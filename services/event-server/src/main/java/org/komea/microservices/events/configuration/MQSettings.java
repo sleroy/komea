@@ -10,7 +10,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "komea.messaging")
 public class MQSettings {
 
-    private String brokerUrl;
+    private String brokerUrl = "vm://localhost?create=false";
+    private String embeddedBrokerUrl = "vm://localhost";
     private String destination = IMessageSender.DEFAULT_DESTINATION;
     private int retryDelayInSec = 60 * 10;
 
@@ -36,6 +37,14 @@ public class MQSettings {
 
     public void setRetryDelayInSec(int retryDelayInSec) {
         this.retryDelayInSec = retryDelayInSec;
+    }
+
+    public String getEmbeddedBrokerUrl() {
+        return embeddedBrokerUrl;
+    }
+
+    public void setEmbeddedBrokerUrl(String embeddedBrokerUrl) {
+        this.embeddedBrokerUrl = embeddedBrokerUrl;
     }
 
 }

@@ -20,7 +20,7 @@ public class KomeaBrokerService {
         LOGGER.info("---------------------------------------------------------");
         LOGGER.info("Messaging connection to {}", mQSettings.getBrokerUrl());
         final BrokerService broker = new BrokerService();
-        broker.addConnector(mQSettings.getBrokerUrl());
+        broker.addConnector(mQSettings.getEmbeddedBrokerUrl());
         broker.start();
         LOGGER.info("---------------------------------------------------------");
     }
