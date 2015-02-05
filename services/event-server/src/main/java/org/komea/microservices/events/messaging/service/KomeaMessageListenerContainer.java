@@ -2,6 +2,7 @@ package org.komea.microservices.events.messaging.service;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.PostConstruct;
 import javax.jms.ExceptionListener;
 import javax.jms.JMSException;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -9,19 +10,24 @@ import org.komea.event.storage.IEventStorage;
 import org.komea.microservices.events.configuration.MQSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.listener.SimpleMessageListenerContainer;
+import org.springframework.stereotype.Component;
 
+@Component
 public class KomeaMessageListenerContainer extends SimpleMessageListenerContainer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KomeaMessageListenerContainer.class.getName());
 
-    private final MQSettings mQSettings;
+    @Autowired
+    private MQSettings mQSettings;
+    @Autowired
+    private IEventStorage eventStorage;
 
-    public KomeaMessageListenerContainer(final MQSettings mQSettings,
-            final IEventStorage eventsStorage) {
-        this.mQSettings = mQSettings;
+    @PostConstruct
+    public void init() {
         setDestinationName(mQSettings.getDestination());
-        setMessageListener(new KomeaMessageListener(eventsStorage));
+        setMessageListener(new KomeaMessageListener(eventStorage));
         this.setAutoStartup(false);
         this.setExceptionListener(new ExceptionListener() {
 
