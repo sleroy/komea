@@ -3,6 +3,7 @@
  */
 package org.komea.event.model.impl;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import org.apache.commons.lang3.Validate;
@@ -59,6 +60,7 @@ public class DateInterval implements Serializable {
         return to != null;
     }
 
+    @JsonIgnore
     public boolean isCompleteInterval() {
         return from != null && to != null;
     }
