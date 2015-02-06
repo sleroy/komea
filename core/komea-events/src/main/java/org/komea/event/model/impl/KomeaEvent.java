@@ -10,6 +10,8 @@ import org.apache.commons.lang3.Validate;
 import org.joda.time.DateTime;
 import org.komea.core.utils.PojoToMap;
 import org.komea.event.model.IKomeaEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class defines the implementation of a complex event.
@@ -19,6 +21,7 @@ import org.komea.event.model.IKomeaEvent;
 public class KomeaEvent implements IKomeaEvent, Serializable, Comparable<KomeaEvent> {
 
     private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = LoggerFactory.getLogger(KomeaEvent.class.getName());
 
     private Map<String, Object> properties = new HashMap<>();
 
@@ -130,12 +133,19 @@ public class KomeaEvent implements IKomeaEvent, Serializable, Comparable<KomeaEv
 
     private Date getDateObject(final String key) {
         final Object date = field(key);
-        if (date instanceof Long) {
-            return new Date((Long) date);
-        } else if (date instanceof String) {
+        if (date == null) {
+            return null;
+        } else if (date instanceof Number) {
+            return new Date(((Number) date).longValue());
+        } else if (date instanceof String && ((String) date).matches("\\d+")) {
             return new Date(Long.valueOf((String) date));
+        } else if (date instanceof Date) {
+            return (Date) date;
+        } else {
+            LOGGER.error("Cannot cast value '" + date
+                    + "' of class '" + date.getClass().getName() + "' to java.util.Date");
+            return null;
         }
-        return (Date) date;
     }
 
     /**
