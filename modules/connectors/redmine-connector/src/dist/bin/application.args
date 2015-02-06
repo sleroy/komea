@@ -1,0 +1,10 @@
+-url
+http://localhost:8081
+-r
+http://scm.tocea.com:90/redmine
+-u
+myLogin
+-p
+myPassword
+-s
+01/01/2015
