@@ -19,7 +19,7 @@ import org.komea.connectors.sdk.std.impl.AbstractPushEventsCommand;
  *
  */
 public class JiraPushEventsCommand extends AbstractPushEventsCommand implements
-		IJiraConfiguration {
+IJiraConfiguration {
 	@Option(name = "-jira", usage = "URL to the  jira server", required = true, aliases = { "-j" })
 	protected String	jiraURL;
 
@@ -41,7 +41,7 @@ public class JiraPushEventsCommand extends AbstractPushEventsCommand implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.komea.connectors.jira.impl.IJiraConfiguration#getLogin()
 	 */
 	@Override
@@ -51,7 +51,7 @@ public class JiraPushEventsCommand extends AbstractPushEventsCommand implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.komea.connectors.jira.impl.IJiraConfiguration#getPassword()
 	 */
 	@Override
@@ -61,7 +61,7 @@ public class JiraPushEventsCommand extends AbstractPushEventsCommand implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.komea.connectors.jira.impl.IJiraConfiguration#getSelectedFields()
 	 */
@@ -72,7 +72,7 @@ public class JiraPushEventsCommand extends AbstractPushEventsCommand implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.komea.connectors.jira.impl.IJiraConfiguration#getUrl()
 	 */
 	@Override
@@ -82,7 +82,7 @@ public class JiraPushEventsCommand extends AbstractPushEventsCommand implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.komea.connectors.sdk.main.IConnectorCommand#init()
 	 */
 	@Override
@@ -92,22 +92,22 @@ public class JiraPushEventsCommand extends AbstractPushEventsCommand implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.komea.connectors.sdk.std.impl.AbstractPushEventsCommand#sendEvents
 	 * (org.komea.connectors.sdk.rest.impl.EventoryClientAPI)
 	 */
 	@Override
-	protected void sendEvents(final IEventoryClientAPI _eventoryClientAPI,
+	public void sendEvents(final IEventoryClientAPI _eventoryClientAPI,
 			final DateTime _lastExecution) throws Exception {
 		_eventoryClientAPI.getEventStorage()
-							.declareEventType(IJiraEvents.EVENT_NEW_BUG);
+		.declareEventType(IJiraEvents.EVENT_NEW_BUG);
 		_eventoryClientAPI.getEventStorage()
-							.declareEventType(IJiraEvents.EVENT_UPDATE_BUG);
+		.declareEventType(IJiraEvents.EVENT_UPDATE_BUG);
 
 		final JiraEventsConnector jiraEventsConnector = new JiraEventsConnector(_eventoryClientAPI.getEventStorage(),
 		                                                                        JiraServerFactory.getInstance(),
-				this);
+		                                                                        this);
 		jiraEventsConnector.push(_lastExecution.toDate());
 	}
 }

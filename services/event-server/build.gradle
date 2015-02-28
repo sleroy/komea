@@ -35,9 +35,6 @@ dependencies {
     compile("org.springframework:spring-jms:${SPRING_VERSION}")
     compile("org.apache.activemq:activemq-kahadb-store:${ACTIVEMQ_VERSION}")
     compile("org.apache.activemq:activemq-broker:${ACTIVEMQ_VERSION}")
-    compile ('org.apache.kafka:kafka_2.10:0.8.1.1') {
-        exclude module: 'log4j'
-    }
     
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}")
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")

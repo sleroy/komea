@@ -40,7 +40,7 @@ public class KomeaMessageListenerContainer extends SimpleMessageListenerContaine
     }
 
     private void onJmsException(final JMSException ex) {
-        final int delayInSec = mQSettings.getRetryDelayInSec();;
+        final int delayInSec = mQSettings.getRetryDelayInSec();
         LOGGER.error("JMS Exception occured, try to reconnect in " + delayInSec + " seconds.", ex);
         Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
 

@@ -56,7 +56,7 @@ public class GitPushEventsCommand extends AbstractPushEventsCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.komea.connectors.sdk.main.IConnectorCommand#init()
 	 */
 	@Override
@@ -77,35 +77,15 @@ public class GitPushEventsCommand extends AbstractPushEventsCommand {
 		return this.tagMessage;
 	}
 
-	public void setCommitMessage(final boolean _commitMessage) {
-		this.commitMessage = _commitMessage;
-	}
-
-	public void setFileUpdateMessage(final boolean _fileUpdateMessage) {
-		this.fileUpdateMessage = _fileUpdateMessage;
-	}
-
-	public void setRepository(final String _repository) {
-		this.repository = _repository;
-	}
-
-	public void setRepositoryURL(final String _repositoryURL) {
-		this.repositoryURL = _repositoryURL;
-	}
-
-	public void setTagMessage(final boolean _tagMessage) {
-		this.tagMessage = _tagMessage;
-	}
-
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.komea.connectors.sdk.std.impl.AbstractPushEventsCommand#sendEvents
 	 * (org.komea.connectors.sdk.rest.impl.EventoryClientAPI)
 	 */
 	@Override
-	protected void sendEvents(final IEventoryClientAPI _eventoryClientAPI,
+	public void sendEvents(final IEventoryClientAPI _eventoryClientAPI,
 			final DateTime _lastExecution) {
 		File repositoryFile = new File(this.repository);
 
@@ -124,29 +104,49 @@ public class GitPushEventsCommand extends AbstractPushEventsCommand {
 		_eventoryClientAPI.getEventStorage().declareEventType(IGitEvent.UPDATE);
 
 		final GitRepository gitRepository = new GitRepository(repositoryFile,
-				this.repositoryURL);
+		                                                      this.repositoryURL);
 		final Git git = gitRepository.getGit();
 
 		final DateTime now = new DateTime();
 		LOGGER.info("Processing between {} and {}", _lastExecution, now);
 		final TimedCompositeCommitProcessor processor = new TimedCompositeCommitProcessor(
-				_lastExecution, now);
+		                                                                                  _lastExecution, now);
 		if (this.commitMessage) {
 			LOGGER.info("Enabled commit events processor");
 			processor.addCommitProcessor(new CommitEventProducer(
-					_eventoryClientAPI.getEventStorage()));
+			                                                     _eventoryClientAPI.getEventStorage()));
 		}
 		if (this.tagMessage) {
 			LOGGER.info("Enabled tag events processor");
 			processor.addCommitProcessor(new GitEventTagProducer(
-					_eventoryClientAPI.getEventStorage(), git));
+			                                                     _eventoryClientAPI.getEventStorage(), git));
 		}
 		if (this.fileUpdateMessage) {
 			LOGGER.info("Enabled file update events processor");
 			processor.addCommitProcessor(new FileModificationEventProducer(
-					_eventoryClientAPI.getEventStorage()));
+			                                                               _eventoryClientAPI.getEventStorage()));
 		}
 		gitRepository.processAllCommits(processor);
 
+	}
+
+	public void setCommitMessage(final boolean _commitMessage) {
+		this.commitMessage = _commitMessage;
+	}
+
+	public void setFileUpdateMessage(final boolean _fileUpdateMessage) {
+		this.fileUpdateMessage = _fileUpdateMessage;
+	}
+
+	public void setRepository(final String _repository) {
+		this.repository = _repository;
+	}
+
+	public void setRepositoryURL(final String _repositoryURL) {
+		this.repositoryURL = _repositoryURL;
+	}
+
+	public void setTagMessage(final boolean _tagMessage) {
+		this.tagMessage = _tagMessage;
 	}
 }

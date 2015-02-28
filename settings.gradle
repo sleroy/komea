@@ -16,3 +16,5 @@ include "modules:connectors:jira-connector"
 include "modules:connectors:redmine-connector"
 include "modules:event-message-producer"
 include "misc:schema-utils"
+
+include "demos:git-spy"

@@ -12,32 +12,32 @@ import org.slf4j.LoggerFactory;
 
 public class KomeaMessageListener implements MessageListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(KomeaMessageListener.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(KomeaMessageListener.class.getName());
 
-    private final IEventStorage eventStorage;
+	private final IEventStorage eventStorage;
 
-    public KomeaMessageListener(final IEventStorage eventStorage) {
-        this.eventStorage = eventStorage;
-    }
+	public KomeaMessageListener(final IEventStorage eventStorage) {
+		this.eventStorage = eventStorage;
+	}
 
-    @Override
-    public void onMessage(final Message message) {
-        try {
-            if (message instanceof ObjectMessage) {
-                onObjectMessage((ObjectMessage) message);
-            }
-        } catch (JMSException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
-    }
+	@Override
+	public void onMessage(final Message message) {
+		try {
+			if (message instanceof ObjectMessage) {
+				this.onObjectMessage((ObjectMessage) message);
+			}
+		} catch (final Exception ex) {
+			LOGGER.error(ex.getMessage(), ex);
+		}
+	}
 
-    private void onObjectMessage(final ObjectMessage objectMessage) throws JMSException {
-        final Object object = objectMessage.getObject();
-        LOGGER.info("onObjectMessage : " + object);
-        if (object instanceof KomeaEvent) {
-            eventStorage.storeEvent((KomeaEvent) object);
-        } else {
-            LOGGER.warn("An object that is not a FlatEvent was received : " + object);
-        }
-    }
+	private void onObjectMessage(final ObjectMessage objectMessage) throws JMSException {
+		final Object object = objectMessage.getObject();
+		LOGGER.trace("onObjectMessage : " + object);
+		if (object instanceof KomeaEvent) {
+			this.eventStorage.storeEvent((KomeaEvent) object);
+		} else {
+			LOGGER.warn("An object that is not a FlatEvent was received : " + object);
+		}
+	}
 }
