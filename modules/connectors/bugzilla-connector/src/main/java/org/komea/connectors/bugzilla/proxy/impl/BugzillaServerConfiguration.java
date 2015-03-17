@@ -1,60 +1,64 @@
 package org.komea.connectors.bugzilla.proxy.impl;
 
-import org.joda.time.DateTime;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Strings;
+import org.joda.time.DateTime;
 
 public class BugzillaServerConfiguration {
-	private String	 serverURL	= null;
-	private String	 user	   = "";
-	private String	 password	= "";
-	private String	 project	= "";
 
-	private DateTime	since;
+    private String serverURL = null;
+    private String user = "";
+    private String password = "";
+    private String project = "";
 
-	public String getPassword() {
-		return this.password;
-	}
+    private DateTime since;
 
-	public String getProject() {
-		return this.project;
-	}
+    public String getPassword() {
+        return this.password;
+    }
 
-	public String getServerURL() {
-		return this.serverURL;
-	}
+    public String getProject() {
+        return this.project;
+    }
 
-	public DateTime getSince() {
-		return this.since;
-	}
+    public String getServerURL() {
+        return this.serverURL;
+    }
 
-	public String getUser() {
-		return this.user;
-	}
+    public DateTime getSince() {
+        return this.since;
+    }
 
-	@JsonIgnore
-	public boolean hasLogin() {
-		return !Strings.isNullOrEmpty(this.getUser());
-	}
+    public String getUser() {
+        return this.user;
+    }
 
-	public void setPassword(final String password) {
-		this.password = password;
-	}
+    @JsonIgnore
+    public boolean hasLogin() {
+        return !Strings.isNullOrEmpty(this.getUser());
+    }
 
-	public void setProject(final String _project) {
-		this.project = _project;
-	}
+    public void setPassword(final String password) {
+        this.password = password;
+    }
 
-	public void setServerURL(final String serverURL) {
-		this.serverURL = serverURL;
-	}
+    public void setProject(final String _project) {
+        this.project = _project;
+    }
 
-	public void setSince(final DateTime since) {
-		this.since = since;
-	}
+    public void setServerURL(final String serverURL) {
+        this.serverURL = serverURL;
+    }
 
-	public void setUser(final String user) {
-		this.user = user;
-	}
+    public void setSince(final DateTime since) {
+        this.since = since;
+    }
+
+    public void setUser(final String user) {
+        this.user = user;
+    }
+
+    public boolean hasProject() {
+        return !Strings.isNullOrEmpty(project);
+    }
 }

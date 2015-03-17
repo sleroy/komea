@@ -1,0 +1,9 @@
+-m
+-url
+http://localhost:8081
+-bzUrl
+http://eos/bugzilla
+-bzUser
+jeremie.guidoux@tocea.com
+-bzPassword
+tocea35
