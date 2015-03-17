@@ -8,7 +8,7 @@ import org.komea.connectors.sdk.main.impl.Connector;
  */
 public class Launcher {
 	public static void main(final String[] args) {
-		final Connector connector = new Connector("Git Provider");
+		final Connector connector = new Connector("Jira Provider");
 		connector.addDefaultCommands(IJiraEvents.EVENT_NEW_BUG,
 				IJiraEvents.EVENT_UPDATE_BUG);
 		connector.addCommand(new JiraPushEventsCommand());

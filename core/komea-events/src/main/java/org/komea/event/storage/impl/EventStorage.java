@@ -80,7 +80,7 @@ public class EventStorage implements IEventStorage {
 
     @Override
     public void storeEvent(final KomeaEvent _event) {
-        LOGGER.info("storeEvent " + _event);
+        LOGGER.info("storeEvent " + _event.getEventType());
         this.save(_event);
     }
 

@@ -30,7 +30,7 @@ public class JmsMessageSender implements IMessageSender {
 
     @Override
     public void pushEvent(final KomeaEvent event) {
-        LOGGER.info("JmsMessageSender - pushEvent : " + event);
+        LOGGER.debug("JmsMessageSender - pushEvent : " + event);
         this.sendObjectMessage(event);
     }
 

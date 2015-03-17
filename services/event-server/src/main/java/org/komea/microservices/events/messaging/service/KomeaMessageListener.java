@@ -4,7 +4,6 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-
 import org.komea.event.model.impl.KomeaEvent;
 import org.komea.event.storage.IEventStorage;
 import org.slf4j.Logger;
@@ -33,7 +32,7 @@ public class KomeaMessageListener implements MessageListener {
 
     private void onObjectMessage(final ObjectMessage objectMessage) throws JMSException {
         final Object object = objectMessage.getObject();
-        LOGGER.info("onObjectMessage : " + object);
+        LOGGER.debug("onObjectMessage : " + object);
         if (object instanceof KomeaEvent) {
             eventStorage.storeEvent((KomeaEvent) object);
         } else {

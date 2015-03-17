@@ -70,7 +70,12 @@ public class KomeaEvent implements IKomeaEvent, Serializable, Comparable<KomeaEv
 
     @JsonIgnore
     public void addFields(final Map<String, ?> map) {
-        this.properties.putAll(map);
+        for (final String key : map.keySet()) {
+            final Object value = map.get(key);
+            if (value != null && !"null".equals(value.toString())) {
+                this.properties.put(key, value);
+            }
+        }
     }
 
     @JsonIgnore
