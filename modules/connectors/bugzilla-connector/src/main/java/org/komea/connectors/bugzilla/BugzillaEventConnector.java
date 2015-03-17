@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.joda.time.DateTime;
 import org.komea.connectors.bugzilla.proxy.BugzillaPluginException;
 import org.komea.connectors.bugzilla.proxy.IBugzillaAPI;
 import org.komea.connectors.bugzilla.proxy.impl.BugzillaAPI;
@@ -98,11 +99,12 @@ public class BugzillaEventConnector implements IBugTrackerAPI {
      */
     public boolean isRecentlyCreated(final Bug bug,
             final IBugzillaAPI _bugzillaAPI) {
+        final DateTime creationTime = _bugzillaAPI.getCreationTime(bug);
         if (this.configuration.getSince() == null) {
-            return true;
+            return !creationTime.isAfter(this.configuration.getTo());
         }
-        return _bugzillaAPI.getCreationTime(bug)
-                .isAfter(this.configuration.getSince());
+        return creationTime.isAfter(this.configuration.getSince())
+                && !creationTime.isAfter(this.configuration.getTo());
     }
 
     /**
@@ -112,11 +114,12 @@ public class BugzillaEventConnector implements IBugTrackerAPI {
      */
     public boolean isRecentlyUpdated(final Bug bug,
             final IBugzillaAPI _bugzillaAPI) {
+        final DateTime updatedTime = _bugzillaAPI.getUpdatedTime(bug);
         if (this.configuration.getSince() == null) {
-            return true;
+            return !updatedTime.isAfter(this.configuration.getTo());
         }
-        return _bugzillaAPI.getUpdatedTime(bug)
-                .isAfter(this.configuration.getSince());
+        return updatedTime.isAfter(this.configuration.getSince())
+                && !updatedTime.isAfter(this.configuration.getTo());
     }
 
     /**

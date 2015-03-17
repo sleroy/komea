@@ -12,6 +12,7 @@ public class BugzillaServerConfiguration {
     private String project = "";
 
     private DateTime since;
+    private DateTime to;
 
     public String getPassword() {
         return this.password;
@@ -31,6 +32,14 @@ public class BugzillaServerConfiguration {
 
     public String getUser() {
         return this.user;
+    }
+
+    public DateTime getTo() {
+        return to;
+    }
+
+    public void setTo(DateTime to) {
+        this.to = to;
     }
 
     @JsonIgnore

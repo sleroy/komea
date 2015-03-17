@@ -1,5 +1,7 @@
 package org.komea.connectors.sdk.std.impl;
 
+import java.io.File;
+import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 import org.komea.connectors.sdk.rest.impl.IEventoryClientAPI;
 
@@ -69,7 +71,9 @@ public abstract class AbstractPushEventsCommand extends AbstractEventoryCommand 
             throws Exception {
         final DateTime readLastLaunchTime = this
                 .readLastLaunchTime(_eventoryClientAPI);
-        this.sendEvents(_eventoryClientAPI, readLastLaunchTime);
+        final DateTime to = DateTime.now();
+        this.sendEvents(_eventoryClientAPI, readLastLaunchTime, to);
+        FileUtils.write(new File(IEventoryClientAPI.LAST_FETCH_DATE_FILE_NAME), String.valueOf(to.toDate().getTime()));
     }
 
     /**
@@ -77,6 +81,6 @@ public abstract class AbstractPushEventsCommand extends AbstractEventoryCommand 
      * @throws Exception
      */
     protected abstract void sendEvents(IEventoryClientAPI _eventoryClientAPI,
-            final DateTime _lastExecution) throws Exception;
+            final DateTime _from, final DateTime _to) throws Exception;
 
 }

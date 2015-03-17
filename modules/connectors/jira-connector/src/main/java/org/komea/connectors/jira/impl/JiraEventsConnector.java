@@ -2,12 +2,10 @@ package org.komea.connectors.jira.impl;
 
 import java.util.Date;
 import java.util.List;
-
 import net.rcarz.jiraclient.Field;
 import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.Issue.SearchResult;
 import net.rcarz.jiraclient.JiraException;
-
 import org.komea.connectors.jira.IJiraConfiguration;
 import org.komea.connectors.jira.IJiraEvents;
 import org.komea.connectors.jira.exceptions.BadConfigurationException;
@@ -45,19 +43,19 @@ public class JiraEventsConnector implements IJiraEvents {
 
     }
 
-    public void push(final Date since) throws BadConfigurationException {
+    public void push(final Date since, final Date to) throws BadConfigurationException {
 
         jira = jiraServerFactory.getNewJiraServerContext(configuration);
-        importNewIssue(since, -1);
-        importUpdateIssue(since, -1);
+        importNewIssue(since, to, -1);
+        importUpdateIssue(since, to, -1);
     }
 
-    public void push(final Date since, final int max)
+    public void push(final Date since, final Date to, final int max)
             throws BadConfigurationException {
 
         jira = jiraServerFactory.getNewJiraServerContext(configuration);
-        importNewIssue(since, max);
-        importUpdateIssue(since, max);
+        importNewIssue(since, to, max);
+        importUpdateIssue(since, to, max);
     }
 
     public void setOccurence(final int Occurence) {
@@ -85,24 +83,24 @@ public class JiraEventsConnector implements IJiraEvents {
         }
     }
 
-    private void importNewIssue(final Date date, final int max) {
+    private void importNewIssue(final Date from, final Date to, final int max) {
 
         try {
             final String type = EVENT_NEW_BUG;
-            final String jql = "created > \""
-                    + JiraServerContext.FORMATTER.format(date) + "\"";
+            final String jql = "created > \"" + JiraServerContext.FORMATTER.format(from) + "\" AND "
+                    + "created <= \"" + JiraServerContext.FORMATTER.format(to) + "\"";
             getAndSendIssues(type, jql, max);
         } catch (final JiraException ex) {
             LOGGER.error(ex.getMessage(), ex);
         }
     }
 
-    private void importUpdateIssue(final Date date, final int max) {
+    private void importUpdateIssue(final Date from, final Date to, final int max) {
 
         try {
             final String type = EVENT_UPDATE_BUG;
-            final String jql = "updated > \""
-                    + JiraServerContext.FORMATTER.format(date) + "\"";
+            final String jql = "updated > \"" + JiraServerContext.FORMATTER.format(from) + "\" AND "
+                    + "updated <= \"" + JiraServerContext.FORMATTER.format(to) + "\"";
             getAndSendIssues(type, jql, max);
 
         } catch (final JiraException ex) {

@@ -43,7 +43,7 @@ class RedminePushEventsCommand extends AbstractPushEventsCommand {
 
 
 	void sendEvents(final IEventoryClientAPI _eventoryClientAPI,
-			final DateTime _lastExecution) throws Exception {
+			final DateTime _from, final DateTime _to) throws Exception {
 
 		_eventoryClientAPI.eventStorage.declareEventType IBugTrackerAPI.EVENT_NEW_BUG
 		_eventoryClientAPI.eventStorage.declareEventType IBugTrackerAPI.EVENT_UPDATED_BUG
@@ -57,12 +57,12 @@ class RedminePushEventsCommand extends AbstractPushEventsCommand {
 			def issuemap = ["project_id": project.id.toString(), "status_id": "*"]
 
 			for (Issue issue in redmineManager.issueManager.getIssues(issuemap)) {
-				if (isBefore(_lastExecution, new DateTime(issue.createdOn))) {
+				if (isBetween(_from,_to, new DateTime(issue.createdOn))) {
 					println "\t> issue created $issue"
 					def event = new BugEvent("redmine", IBugTrackerAPI.EVENT_NEW_BUG, issue, project, project.getIdentifier())
 					_eventoryClientAPI.getEventStorage().storeEvent(event)
 				}
-				if (isBefore(_lastExecution, new DateTime(issue.updatedOn))) {
+				if (isBetween(_from, _to, new DateTime(issue.updatedOn))) {
 					println "\t> issue updated $issue"
 					def event = new BugEvent("redmine", IBugTrackerAPI.EVENT_UPDATED_BUG, issue, project, project.getIdentifier())
 					_eventoryClientAPI.getEventStorage().storeEvent(event)
@@ -71,7 +71,7 @@ class RedminePushEventsCommand extends AbstractPushEventsCommand {
 		}
 	}
 
-	def isBefore(_lastExecution, _date) {
-		return _lastExecution == null ? true : _lastExecution.isBefore(_date)
+	def isBetween(_from , _to, _date) {
+		return _from == null ? !_to.isBefore(_date) : _from.isBefore(_date) && !_to.isBefore(_date)
 	}
 }

@@ -87,13 +87,14 @@ public class BugzillaPushEventsCommand extends AbstractPushEventsCommand {
      */
     @Override
     protected void sendEvents(final IEventoryClientAPI _eventoryClientAPI,
-            final DateTime _lastExecution) throws ConnectionException, BugzillaException {
+            final DateTime _from, final DateTime _to) throws ConnectionException, BugzillaException {
         final BugzillaServerConfiguration configuration = new BugzillaServerConfiguration();
         configuration.setServerURL(bzUrl);
         configuration.setUser(bzUser);
         configuration.setPassword(bzPassword);
         configuration.setProject(bzProduct);
-        configuration.setSince(_lastExecution);
+        configuration.setSince(_from);
+        configuration.setTo(_to);
 
         final IEventStorage eventStorage = _eventoryClientAPI.getEventStorage();
         eventStorage.declareEventType(IBugTrackerAPI.EVENT_NEW_BUG);
