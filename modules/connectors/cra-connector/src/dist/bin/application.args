@@ -1,0 +1,8 @@
+-url
+http://localhost:8080/komea
+-in
+C:/temp/cra/CRA
+-out
+cra.csv
+-since
+01/01/2014

@@ -1,0 +1,11 @@
+apply plugin:'application'
+mainClassName = "org.komea.connectors.cra.launch.Launcher"
+dependencies {
+        compile LOGGING
+	compile project(":modules:connectors:connector-sdk")
+	compile "org.apache.poi:poi:${APACHE_POI}"
+	compile "org.apache.poi:poi-ooxml:${APACHE_POI}"
+	testCompile project(":core:shared:komea-db-viz")
+}
+
+
