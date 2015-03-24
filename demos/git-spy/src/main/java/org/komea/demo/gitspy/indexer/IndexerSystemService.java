@@ -7,6 +7,7 @@ import org.komea.demo.gitspy.configuration.GitSpyConfigurationBean;
 import org.komea.demo.gitspy.indexer.api.IIndexerSystemFacade;
 import org.komea.demo.gitspy.repository.dao.IRepositoryDAO;
 import org.komea.demo.gitspy.repository.domain.Repository;
+import org.ocpsoft.prettytime.PrettyTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class IndexerSystemService implements IIndexerSystemFacade {
 	public void requestSynchronization() {
 
 		for (final Repository repository : this.repositoryDAO.findAll()) {
-			LOGGER.info("Checking status of repository {}", repository.getName());
+			LOGGER.info("Checking status of repository {}<->{}", repository.getName(), repository.getLastExecution() == null ? "" : new PrettyTime().format(repository.getLastExecution()));
 			if (repository.isOutdated(this.configuration.getMinRefresh())) {
 				LOGGER.info("Repository is outdate {}", repository.getName());
 				this.repositoryIndexPool.submitJob(repository);

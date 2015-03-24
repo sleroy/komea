@@ -15,8 +15,8 @@ import org.komea.demo.gitspy.WicketWebApplication;
  * @author Sylvain Leroy
  *
  */
-public class Layout extends WebPage {
-	public Layout() {
+public class LayoutPage extends WebPage {
+	public LayoutPage() {
 		super();
 
 	}

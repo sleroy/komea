@@ -26,6 +26,7 @@ repositories { mavenCentral() }
 configurations { providedRuntime }
 
 dependencies {
+    compile project(":core:komea-events")
     compile project(":core:komea-sql")
     compile(project(":modules:event-message-producer"))
     

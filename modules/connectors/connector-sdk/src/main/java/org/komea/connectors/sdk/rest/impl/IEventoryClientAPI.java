@@ -21,7 +21,7 @@ public interface IEventoryClientAPI extends IRestClientAPI {
 
 	/**
 	 * Returns the event storage.
-	 * 
+	 *
 	 * @return
 	 */
 	public IEventStorage getEventStorage();

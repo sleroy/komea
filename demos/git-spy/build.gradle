@@ -35,20 +35,22 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-web")
 	//compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 	compile 'org.springframework.data:spring-data-rest-webmvc:2.2.2.RELEASE'
-	
-	
+
+
 	compile "org.apache.wicket:wicket:$WICKET"
 	compile "org.apache.wicket:wicket-bootstrap:0.17"
 	compile "org.apache.wicket:wicket-native-websocket-tomcat:$WICKET"
 	compile "org.apache.wicket:wicket-spring:$WICKET"
 	compile "org.apache.wicket:wicket-extensions:$WICKET"
 
-	
+
+	compile "org.ocpsoft.prettytime:prettytime:$PRETTY_TIME"
+
 	compile 'com.h2database:h2:1.4.185'
 	compile("joda-time:joda-time:2.4")
-	
+
 	compile project(":modules:connectors:git-connector")
-	
+
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 	testCompile("org.springframework.boot:spring-boot-starter-test")
 }

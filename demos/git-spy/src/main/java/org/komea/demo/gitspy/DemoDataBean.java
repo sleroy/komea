@@ -28,9 +28,9 @@ public class DemoDataBean {
 		this.redmineRepo();
 		this.josqlRepo();
 
+		this.scertifyRepo();
 
 	}
-
 	/**
 	 * @throws MalformedURLException
 	 */
@@ -43,6 +43,8 @@ public class DemoDataBean {
 		entity.setName("JoSQL");
 		this.repositoryDAO.save(entity);
 	}
+
+
 	/**
 	 * @throws MalformedURLException
 	 */
@@ -53,6 +55,18 @@ public class DemoDataBean {
 		entity.setUrl(new File("/home/sleroy/git/redmine/.git").toURI().toURL().toString());
 		entity.setType("git");
 		entity.setName("redmine");
+		this.repositoryDAO.save(entity);
+	}
+	/**
+	 * @throws MalformedURLException
+	 */
+	private void scertifyRepo() throws MalformedURLException {
+		final Repository entity = new Repository();
+		entity.setLogin("");
+		entity.setPassword("");
+		entity.setUrl(new File("/home/sleroy/git/scertify-frameworks/.git").toURI().toURL().toString());
+		entity.setType("git");
+		entity.setName("Scertify frameworks");
 		this.repositoryDAO.save(entity);
 	}
 }

@@ -49,13 +49,37 @@
 		<wicket:extend>
 			<!-- upper section -->
 			<div class="row">
-				<div class="col-sm-12">
-					<!-- column 2 -->
-					<h3>
-						<i class="glyphicon"></i> Dashboard
-					</h3>
-
-					<hr />
+				<div class="col-md-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2>Dashboard</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4>3</h4>
+							<label>Number of repositories</label>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3>TOP Commiters this week</h3>
+						</div>
+						<div wicket:id="topCommiterPanel"></div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2>Dashboard</h2>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="row">

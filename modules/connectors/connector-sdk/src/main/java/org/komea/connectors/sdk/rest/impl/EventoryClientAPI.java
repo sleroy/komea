@@ -10,7 +10,7 @@ import org.joda.time.DateTime;
 import org.komea.event.storage.IEventStorage;
 
 public class EventoryClientAPI extends AbstractClientAPI implements
-		IEventoryClientAPI {
+IEventoryClientAPI {
 
 	public EventoryClientAPI() {
 		super();
@@ -18,7 +18,7 @@ public class EventoryClientAPI extends AbstractClientAPI implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.komea.connectors.sdk.rest.impl.IEventoryClientAPI#countEvents(java
 	 * .lang.String)
@@ -30,9 +30,10 @@ public class EventoryClientAPI extends AbstractClientAPI implements
 		return this.get("/database/count", Integer.class, _eventType);
 	}
 
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.komea.connectors.sdk.rest.impl.IEventoryClientAPI#getEventStorage()
 	 */
@@ -44,7 +45,7 @@ public class EventoryClientAPI extends AbstractClientAPI implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.komea.connectors.sdk.rest.impl.IEventoryClientAPI#getLastEvent(java
 	 * .lang.String)
@@ -67,7 +68,7 @@ public class EventoryClientAPI extends AbstractClientAPI implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.komea.connectors.sdk.rest.impl.IEventoryClientAPI#testConnexion()
 	 */

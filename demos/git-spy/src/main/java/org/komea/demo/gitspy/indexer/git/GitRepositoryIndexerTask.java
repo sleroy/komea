@@ -15,7 +15,7 @@ import org.komea.connectors.git.utils.GitCloner;
 import org.komea.connectors.sdk.rest.impl.IEventoryClientAPI;
 import org.komea.demo.gitspy.cache.RepositoryCacheService;
 import org.komea.demo.gitspy.configuration.GitSpyConfigurationBean;
-import org.komea.demo.gitspy.eventory.EventoryConnectorService;
+import org.komea.demo.gitspy.eventory.api.IEventoryConnectorService;
 import org.komea.demo.gitspy.repository.dao.IRepositoryDAO;
 import org.komea.demo.gitspy.repository.domain.Repository;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ public class GitRepositoryIndexerTask implements Callable<Object> {
 	private final Repository			repository;
 
 	@Autowired
-	private EventoryConnectorService	eventoryConnectorService;
+	private IEventoryConnectorService	eventoryConnectorService;
 
 	@Autowired
 	private GitSpyConfigurationBean		configurationBean;

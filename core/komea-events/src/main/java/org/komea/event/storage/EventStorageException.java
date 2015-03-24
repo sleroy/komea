@@ -1,7 +1,5 @@
 package org.komea.event.storage;
 
-import java.sql.SQLException;
-
 import org.komea.core.exceptions.KomeaRuntimeException;
 
 public class EventStorageException extends KomeaRuntimeException {

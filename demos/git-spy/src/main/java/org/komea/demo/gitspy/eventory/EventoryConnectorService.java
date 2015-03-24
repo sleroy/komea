@@ -9,6 +9,7 @@ import java.net.URISyntaxException;
 import org.komea.connectors.sdk.rest.impl.EventoryClientAPI;
 import org.komea.connectors.sdk.rest.impl.IEventoryClientAPI;
 import org.komea.demo.gitspy.configuration.GitSpyConfigurationBean;
+import org.komea.demo.gitspy.eventory.api.IEventoryConnectorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,16 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
-public class EventoryConnectorService {
+public class EventoryConnectorService implements IEventoryConnectorService {
 	@Autowired
 	private GitSpyConfigurationBean configuration;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventoryConnectorService.class);
 
+	/* (non-Javadoc)
+	 * @see org.komea.demo.gitspy.eventory.IEventoryConnectorService#newConnection()
+	 */
+	@Override
 	public IEventoryClientAPI newConnection() {
 		final EventoryClientAPI eventoryClientAPI = new EventoryClientAPI();
 		try {
