@@ -1,0 +1,10 @@
+-url
+http://localhost:8081
+-git
+/my/git/repo
+-gitURL
+http://
+-commit
+-tag
+-s
+01/01/2015

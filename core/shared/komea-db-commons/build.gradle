@@ -1,0 +1,15 @@
+dependencies {
+    compile project(":core:komea-events")
+    compile "org.apache.commons:commons-lang3:$APACHE_COMMONLANG3"
+    compile "commons-io:commons-io:$APACHE_COMMONIO"
+    compile "com.google.guava:guava:$GUAVA"
+
+
+    compile "com.orientechnologies:orientdb-core:${ORIENTDB_VERSION}"
+    compile "com.orientechnologies:orientdb-graphdb:${ORIENTDB_VERSION}"
+    compile "com.orientechnologies:orientdb-client:${ORIENTDB_VERSION}"
+	
+    compile "org.springframework.data:orient-connector:${ORIENTDB_CONNECTOR}"
+    //	compile "org.springframework.data:spring-orient/${ORIENTDB_CONNECTOR}"
+	
+}

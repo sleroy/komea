@@ -1,0 +1,52 @@
+<set>
+  <string>IRIX</string>
+  <string>Mac System 8.6</string>
+  <string>Mac System 7</string>
+  <string>NetBSD</string>
+  <string>Windows Server 2008</string>
+  <string>Windows CE</string>
+  <string>All</string>
+  <string>OSF/1</string>
+  <string>Solaris</string>
+  <string>Windows Server 2003</string>
+  <string>Windows Server 2012</string>
+  <string>Windows XP</string>
+  <string>AIX</string>
+  <string>OS/2</string>
+  <string>OpenBSD</string>
+  <string>NetWare</string>
+  <string>BSD/OS</string>
+  <string>Windows ME</string>
+  <string>OpenVMS</string>
+  <string>Neutrino</string>
+  <string>Linux</string>
+  <string>BeOS</string>
+  <string>SunOS</string>
+  <string>Windows 2000</string>
+  <string>Mac OS X 10.8</string>
+  <string>other</string>
+  <string>Mac OS X 10.9</string>
+  <string>Mac OS X 10.6</string>
+  <string>FreeBSD</string>
+  <string>Mac System 7.6.1</string>
+  <string>Mac OS X 10.7</string>
+  <string>Mac OS X 10.4</string>
+  <string>Mac OS X 10.5</string>
+  <string>Mac OS X 10.2</string>
+  <string>Mac OS X 10.3</string>
+  <string>Mac OS X 10.0</string>
+  <string>Mac OS X 10.1</string>
+  <string>Mac System 9.x</string>
+  <string>Windows Vista</string>
+  <string>Windows 98</string>
+  <string>Mac System 7.5</string>
+  <string>Windows Server 2008 R2</string>
+  <string>Windows 95</string>
+  <string>Windows 3.1</string>
+  <string>Windows 8</string>
+  <string>HP-UX</string>
+  <string>Windows 7</string>
+  <string>Windows NT</string>
+  <string>Mac System 8.0</string>
+  <string>Mac System 8.5</string>
+</set>

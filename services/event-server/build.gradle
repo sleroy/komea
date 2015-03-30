@@ -1,0 +1,56 @@
+buildscript {
+    repositories { mavenCentral() }
+    dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
+}
+
+
+
+jettyRun.contextPath = "eventory"
+jettyRunWar.contextPath = "eventory"
+
+
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+apply plugin: 'war'
+apply plugin: 'groovy'
+
+
+war { baseName = 'eventory-server' }
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories { mavenCentral() }
+
+configurations { providedRuntime }
+
+dependencies {
+    compile project(":core:komea-sql")
+    compile(project(":modules:event-message-producer"))
+    
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}")	
+    compile("org.springframework:spring-jms:${SPRING_VERSION}")
+    compile("org.apache.activemq:activemq-kahadb-store:${ACTIVEMQ_VERSION}")
+    compile("org.apache.activemq:activemq-broker:${ACTIVEMQ_VERSION}")
+    compile ('org.apache.kafka:kafka_2.10:0.8.1.1') {
+        exclude module: 'log4j'
+    }
+    
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}")
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+    testCompile('org.skyscreamer:jsonassert:1.0.0')
+    testCompile('org.hamcrest:hamcrest-all:1.3')
+    
+}
+
+eclipse {
+    classpath {
+        containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+        containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7'
+    }
+}
+
+

@@ -1,0 +1,16 @@
+apply plugin:'application'
+mainClassName = "org.komea.connectors.git.launch.Launcher"
+
+
+dependencies{
+    compile project(":core:komea-events")
+    compile project(":modules:connectors:connector-sdk")
+	
+    compile LOGGING
+    compile "commons-io:commons-io:$APACHE_COMMONIO"
+    compile "org.eclipse.jgit:org.eclipse.jgit:3.3.2.201404171909-r"
+    compile 'joda-time:joda-time:2.6'
+    compile "com.googlecode.java-diff-utils:diffutils:1.3.0"
+    testCompile 'com.esotericsoftware.kryo:kryo:2.24.0'
+
+}	

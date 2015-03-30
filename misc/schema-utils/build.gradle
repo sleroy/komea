@@ -1,0 +1,9 @@
+dependencies {
+	compile (project (":core:shared:komea-db-commons"))
+	compile 'org.eclipse.emf:org.eclipse.emf.ecore:2.10.1'
+	compile 'org.eclipse.emf:org.eclipse.emf.common:2.10.1'
+	compile 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.10.1'
+	compile 'com.sun.codemodel:codemodel:2.6'
+	compile 'org.eclipse.xtend:org.eclipse.xtend.lib:2.7.3'
+	
+}

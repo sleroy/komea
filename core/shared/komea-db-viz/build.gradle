@@ -1,0 +1,7 @@
+dependencies {
+	compile (project (":core:shared:komea-db-commons"));
+	
+	compile 'commons-io:commons-io:2.4'
+	compile 'org.graphstream:gs-ui:1.2'
+
+}

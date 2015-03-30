@@ -1,0 +1,52 @@
+buildscript {
+	repositories { mavenCentral() }
+	dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
+}
+
+ext.H2_DB =  "com.h2database:h2:$H2_BASE";
+ext.MYBATIS = "org.mybatis:mybatis:$MYBATIS_VERSION"
+
+
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+apply plugin: 'war'
+apply plugin: 'groovy'
+
+
+war { baseName = 'eventory-server' }
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories { mavenCentral() }
+
+configurations { providedRuntime }
+
+dependencies {
+	compile("org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-hornetq:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}")
+	testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+
+	compile "org.mybatis:mybatis:$MYBATIS_VERSION"
+	compile('org.mybatis:mybatis-spring:1.2.2') { exclude group: 'org.springframwork' }
+	compile  H2_DB
+	compile "mysql:mysql-connector-java:5.1.30"
+	compile 'org.apache.commons:commons-lang3:3.3.2'
+	compile "joda-time:joda-time:$JODA_TIME"
+	compile "com.google.guava:guava:$GUAVA"
+	
+}
+
+eclipse {
+	classpath {
+		containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+		containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7'
+	}
+}
+
+

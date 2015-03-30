@@ -1,0 +1,15 @@
+apply plugin:'application'
+mainClassName = "org.komea.connectors.redmine.launch.Launcher"
+
+
+dependencies{
+	compile project(":core:komea-events")
+	compile project(":modules:connectors:connector-sdk")
+
+	compile LOGGING
+	compile "commons-io:commons-io:$APACHE_COMMONIO"
+	compile "com.taskadapter:redmine-java-api:2.0.0"
+	compile "org.codehaus.groovy.modules.http-builder:http-builder:0.7"
+	compile 'joda-time:joda-time:2.7'
+	compile 'org.codehaus.groovy:groovy-all:2.3.7'
+}

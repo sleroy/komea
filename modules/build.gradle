@@ -1,0 +1,3 @@
+dependencies {
+	testCompile project(":core:shared:komea-db-viz")
+}
