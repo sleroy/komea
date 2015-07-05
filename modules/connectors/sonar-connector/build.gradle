@@ -1,0 +1,12 @@
+apply plugin:'application'
+mainClassName = "org.komea.connectors.sonar.launch.Launcher"
+dependencies {
+    compile LOGGING
+	compile project(":modules:connectors:connector-sdk")        
+	compile "org.komea.product.backend:komea-rest-client:DEV"
+	compile "org.codehaus.sonar:sonar-ws-client:5.1"
+	compile "commons-httpclient:commons-httpclient:3.1"
+	testCompile project(":core:shared:komea-db-viz")
+}
+
+
