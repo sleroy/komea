@@ -22,11 +22,11 @@ public class SonarPushCommand implements IConnectorCommand {
     @Option(name = "-url", usage = "Url of Komea", required = true)
     private String komeaUrl;
 
-    @Option(name = "-sonar", usage = "Path of the directory of Cras", required = true)
+    @Option(name = "-sonar", usage = "Url of Sonar", required = true)
     private String sonarUrl;
 
-    @Option(name = "-clear", usage = "Clear measures of kpis", required = true)
-    private Boolean clear;
+    @Option(name = "-clear", usage = "Clear measures of kpis", required = false)
+    private Boolean clear = false;
 
     @Option(name = "-from", usage = "Date of beginning in format dd/MM/yyyy", required = false, handler = DateOptionHandler.class)
     private DateTime from;

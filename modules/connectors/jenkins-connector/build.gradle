@@ -1,0 +1,11 @@
+apply plugin:'application'
+mainClassName = "org.komea.connectors.jenkins.launch.Launcher"
+dependencies {
+    compile LOGGING
+	compile project(":modules:connectors:connector-sdk")        
+	compile "org.komea.product.backend:komea-rest-client:DEV"
+	compile "com.offbytwo.jenkins:jenkins-client:0.3.0"
+	testCompile project(":core:shared:komea-db-viz")
+}
+
+

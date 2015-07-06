@@ -120,8 +120,8 @@ public class Connector implements IConnector {
         final CmdLineParser parser = new CmdLineParser(commandTrigger);
 
         try {
-            commandTrigger.init();
             parser.parseArgument(Arrays.copyOfRange(args, 1, args.length));
+            commandTrigger.init();
             commandTrigger.run();
         } catch (final CmdLineException e) {
             System.err.println(e.getMessage());
