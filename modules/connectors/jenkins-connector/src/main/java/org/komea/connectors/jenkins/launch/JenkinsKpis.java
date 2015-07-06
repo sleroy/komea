@@ -52,7 +52,7 @@ public class JenkinsKpis {
         kpi.setDescription(description);
         kpi.setEntityType(EntityType.PROJECT);
         kpi.setEsperRequest(EmptyKpi.getFormula());
-        kpi.setGroupFormula(GroupFormula.COUNT);
+        kpi.setGroupFormula(GroupFormula.SUM_VALUE);
         kpi.setKpiKey(key);
         kpi.setName(name);
         kpi.setProviderType(ProviderType.CI_BUILD);
