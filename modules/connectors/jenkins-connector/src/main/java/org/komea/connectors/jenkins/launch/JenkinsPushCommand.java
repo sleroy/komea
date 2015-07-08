@@ -78,7 +78,7 @@ public class JenkinsPushCommand implements IConnectorCommand {
         for (final JobWithDetails job : projects.keySet()) {
             final Project project = projects.get(job);
             LOGGER.info("Calculate measures for project " + project.getKey() + " from Sonar");
-            final List<Measure> measures = jenkinsConnector.evaluateJob(job, project.getId());
+            final List<Measure> measures = jenkinsConnector.getMeasures(job, project.getId());
             LOGGER.info("Send " + measures.size() + " measures for project "
                     + project.getKey() + " to Komea ("
                     + (int) (100d * cpt / projects.size()) + "%)");

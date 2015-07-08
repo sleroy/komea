@@ -52,12 +52,15 @@ public class JenkinsConnector {
         return jobsWithDetails;
     }
 
-    public List<Measure> evaluateJob(final JobWithDetails job, final Integer entityId) throws IOException {
+    public List<Measure> getMeasures(final JobWithDetails job, final Integer entityId) throws IOException {
         final List<Measure> measures = new ArrayList<>();
         final List<Build> builds = job.getBuilds();
+        addMeasure(JenkinsKpis.JOBS, entityId, DateTime.now().toDate(), 1, measures);
         if (builds.isEmpty()) {
+            addMeasure(JenkinsKpis.JOBS_NOT_EXECUTED, entityId, DateTime.now().toDate(), 1, measures);
             return measures;
         }
+        addMeasure(JenkinsKpis.JOBS_EXECUTED, entityId, DateTime.now().toDate(), 1, measures);
         final List<BuildWithDetails> buildsWithDetails = new ArrayList<>(builds.size());
         for (final Build build : builds) {
             final BuildWithDetails buildWithDetails = build.details();
@@ -73,24 +76,38 @@ public class JenkinsConnector {
         final Iterator<BuildWithDetails> iterator = buildsWithDetails.iterator();
         DateTime date = toDayDate(buildsWithDetails.get(0).getTimestamp());
         BuildWithDetails next = iterator.next();
+        BuildResult lastResult = null;
+        DateTime lastFail = null;
         while (date.isBefore(DateTime.now())) {
             int failedBuilds = 0;
             int interruptedBuilds = 0;
             int successfulBuilds = 0;
             int unstableBuilds = 0;
             while (next != null && isSameDay(next, date)) {
+                final DateTime buildDate = new DateTime(next.getTimestamp());
                 final BuildResult result = next.getResult();
                 switch (result) {
                     case ABORTED:
+                        lastResult = result;
                         interruptedBuilds++;
                         break;
                     case FAILURE:
+                        lastResult = result;
                         failedBuilds++;
+                        lastFail = buildDate;
                         break;
                     case SUCCESS:
+                        lastResult = result;
                         successfulBuilds++;
+                        if (lastFail != null) {
+                            final long duration = buildDate.toDate().getTime() - lastFail.toDate().getTime();
+                            final double days = duration / (1000d * 60 * 60 * 24);
+                            addMeasure(JenkinsKpis.FIX_TIME, entityId, buildDate.toDate(), days, measures);
+                            lastFail = null;
+                        }
                         break;
                     case UNSTABLE:
+                        lastResult = result;
                         unstableBuilds++;
                         break;
                 }
@@ -103,6 +120,14 @@ public class JenkinsConnector {
             addMeasure(JenkinsKpis.BUILDS_TOTAL, entityId, date.toDate(), totalBuilds, measures);
             addMeasure(JenkinsKpis.BUILDS_UNSTABLE, entityId, date.toDate(), unstableBuilds, measures);
             date = date.plusDays(1);
+        }
+        if (BuildResult.FAILURE.equals(lastResult)) {
+            addMeasure(JenkinsKpis.LAST_BUILDS_FAILED, entityId, DateTime.now().toDate(), 1, measures);
+            final long duration = DateTime.now().toDate().getTime() - lastFail.toDate().getTime();
+            final double days = duration / (1000d * 60 * 60 * 24);
+            addMeasure(JenkinsKpis.FAILED_STATUS_DURATION, entityId, DateTime.now().toDate(), days, measures);
+        } else {
+            addMeasure(JenkinsKpis.FAILED_STATUS_DURATION, entityId, DateTime.now().toDate(), 0, measures);
         }
         return measures;
     }
