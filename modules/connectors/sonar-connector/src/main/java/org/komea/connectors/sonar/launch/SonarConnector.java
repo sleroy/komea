@@ -83,7 +83,7 @@ public class SonarConnector {
             final Measure measure = new Measure(KomeaConnector.ANALYZES_COUNT, project.getId(), date, 1d);
             measures.add(measure);
         }
-        measures.addAll(getActivatedRulesBySeverity(project));
+        measures.addAll(getActivatedRulesMeasures(project));
         return measures;
     }
 
@@ -91,7 +91,7 @@ public class SonarConnector {
         return profile.getLanguage() + ":" + profile.getName();
     }
 
-    private List<Measure> getActivatedRulesBySeverity(final Project project) {
+    private List<Measure> getActivatedRulesMeasures(final Project project) {
         final List<Measure> measures = new ArrayList<>(5);
         final ProfilesProjectQuery query = ProfilesProjectQuery.createWithProject(project.getKey());
         final List<Profile> profiles = sonar.findAll(query);
@@ -112,12 +112,16 @@ public class SonarConnector {
                 severities.put(severity, severities.get(severity) + 1);
             }
         }
+        double cpt = 0;
         for (final String severity : severities.keySet()) {
             final double value = severities.get(severity);
+            cpt += value;
             final String kpiKey = getSeverityKpiKey(severity);
             final Measure measure = new Measure(kpiKey, project.getId(), DateTime.now().toDate(), value);
             measures.add(measure);
         }
+        final Measure measure = new Measure("rules", project.getId(), DateTime.now().toDate(), cpt);
+        measures.add(measure);
         return measures;
     }
 

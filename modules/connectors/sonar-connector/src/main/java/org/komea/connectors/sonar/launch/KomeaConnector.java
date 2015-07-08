@@ -37,8 +37,9 @@ public class KomeaConnector {
     public List<Kpi> additionalKpis() {
         final List<Kpi> kpis = new ArrayList<>(6);
         kpis.add(getOrCreate(getAnalyzesCountKpi()));
+        kpis.add(getOrCreate(getRulesKpi()));
         for (final String severity : SonarConnector.SEVERITY_KEYS) {
-            kpis.add(getOrCreate(getRulesBySeverity(severity)));
+            kpis.add(getOrCreate(getRulesBySeverityKpi(severity)));
         }
         return kpis;
     }
@@ -62,17 +63,31 @@ public class KomeaConnector {
         kpi.setKpiKey(ANALYZES_COUNT);
         kpi.setName("SonarQube Analyzes");
         kpi.setProviderType(ProviderType.QUALITY);
-        kpi.setValueDirection(ValueDirection.BETTER);
+        kpi.setValueDirection(ValueDirection.NONE);
         kpi.setValueType(ValueType.INT);
         return kpi;
     }
 
-    private Kpi getRulesBySeverity(final String severity) {
+    private Kpi getRulesKpi() {
+        final Kpi kpi = new Kpi();
+        kpi.setDescription("Number of SonarQube rules activated per project.");
+        kpi.setEntityType(EntityType.PROJECT);
+        kpi.setEsperRequest(EmptyKpi.getFormula());
+        kpi.setGroupFormula(GroupFormula.AVG_VALUE);
+        kpi.setKpiKey("rules");
+        kpi.setName("Rules");
+        kpi.setProviderType(ProviderType.QUALITY);
+        kpi.setValueDirection(ValueDirection.NONE);
+        kpi.setValueType(ValueType.INT);
+        return kpi;
+    }
+
+    private Kpi getRulesBySeverityKpi(final String severity) {
         final Kpi kpi = new Kpi();
         kpi.setDescription("Number of SonarQube rules activated with severity " + severity + " per project.");
         kpi.setEntityType(EntityType.PROJECT);
         kpi.setEsperRequest(EmptyKpi.getFormula());
-        kpi.setGroupFormula(GroupFormula.LAST_VALUE);
+        kpi.setGroupFormula(GroupFormula.AVG_VALUE);
         kpi.setKpiKey(SonarConnector.getSeverityKpiKey(severity));
         kpi.setName("Rules " + severity);
         kpi.setProviderType(ProviderType.QUALITY);
