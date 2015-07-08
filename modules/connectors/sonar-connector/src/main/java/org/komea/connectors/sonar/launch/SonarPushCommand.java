@@ -57,7 +57,7 @@ public class SonarPushCommand implements IConnectorCommand {
     public void init() throws Exception {
         LOGGER.info("Komea URL : " + komeaUrl);
         LOGGER.info("Sonar URL : " + sonarUrl);
-        sonarConnector = new SonarConnector(sonarUrl);
+        sonarConnector = SonarConnector.create(sonarUrl);
         komeaConnector = KomeaConnector.create(komeaUrl);
     }
 
@@ -70,18 +70,20 @@ public class SonarPushCommand implements IConnectorCommand {
         LOGGER.info("Select metrics from Sonar");
         final List<Metric> metrics = sonarConnector.getMetrics(Arrays.asList(metricKeys));
         LOGGER.info("Select associated kpis from Komea (" + metrics.size() + ")");
-        final List<Kpi> kpis = komeaConnector.getKpis(metrics);
+        final List<Kpi> metricKpis = komeaConnector.toKpis(metrics);
+        final List<Kpi> allKpis = komeaConnector.additionalKpis();
+        allKpis.addAll(metricKpis);
 
         if (clear) {
-            LOGGER.info("Clear measures of " + kpis.size() + " kpi in Komea...");
+            LOGGER.info("Clear measures of " + allKpis.size() + " kpis in Komea...");
             int cpt = 0;
-            for (final Kpi kpi : kpis) {
+            for (final Kpi kpi : allKpis) {
                 LOGGER.info("Clear measures of kpi " + kpi.getKey() + " in Komea ("
-                        + (int) (100d * cpt / kpis.size()) + "%)");
+                        + (int) (100d * cpt / allKpis.size()) + "%)");
                 komeaConnector.clearMeasuresOfKpi(kpi.getKey());
                 cpt++;
             }
-            LOGGER.info("Clear measures of " + kpis.size() + " kpi in Komea done.");
+            LOGGER.info("Clear measures of " + allKpis.size() + " kpis in Komea done.");
         }
 
         LOGGER.info("Select measures from Sonar and send them to Komea...");
@@ -89,14 +91,14 @@ public class SonarPushCommand implements IConnectorCommand {
         for (final Project project : projects) {
             LOGGER.info("Select measures for project " + project.getKey() + " from Sonar");
             final List<Measure> measures = sonarConnector.getMeasuresOfProject(
-                    project, kpis, from, to);
+                    project, metricKpis, from, to);
             LOGGER.info("Send " + measures.size() + " measures for project "
                     + project.getKey() + " to Komea ("
                     + (int) (100d * cpt / projects.size()) + "%)");
             komeaConnector.pushMeasures(measures);
             cpt++;
         }
-        LOGGER.info("Select measures from Sonar and send them to Komea done...");
+        LOGGER.info("Select measures from Sonar and send them to Komea done.");
     }
 
 }

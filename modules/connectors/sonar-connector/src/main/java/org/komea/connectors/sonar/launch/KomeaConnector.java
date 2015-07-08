@@ -19,6 +19,8 @@ import org.sonar.wsclient.services.Resource;
 
 public class KomeaConnector {
 
+    public static final String ANALYZES_COUNT = "analyzes_count";
+
     public static KomeaConnector create(final String url) throws Exception {
         final KomeaConnector komeaConnector = new KomeaConnector();
         komeaConnector.init(url);
@@ -32,7 +34,16 @@ public class KomeaConnector {
     private KomeaConnector() {
     }
 
-    public List<Kpi> getKpis(final List<Metric> metrics) {
+    public List<Kpi> additionalKpis() {
+        final List<Kpi> kpis = new ArrayList<>(6);
+        kpis.add(getOrCreate(getAnalyzesCountKpi()));
+        for (final String severity : SonarConnector.SEVERITY_KEYS) {
+            kpis.add(getOrCreate(getRulesBySeverity(severity)));
+        }
+        return kpis;
+    }
+
+    public List<Kpi> toKpis(final List<Metric> metrics) {
         final List<Kpi> kpis = new ArrayList<>(metrics.size());
         for (final Metric metric : metrics) {
             Kpi kpi = metricToKpi(metric);
@@ -40,6 +51,34 @@ public class KomeaConnector {
             kpis.add(kpi);
         }
         return kpis;
+    }
+
+    private Kpi getAnalyzesCountKpi() {
+        final Kpi kpi = new Kpi();
+        kpi.setDescription("Number of SonarQube analyzes per project.");
+        kpi.setEntityType(EntityType.PROJECT);
+        kpi.setEsperRequest(EmptyKpi.getFormula());
+        kpi.setGroupFormula(GroupFormula.SUM_VALUE);
+        kpi.setKpiKey(ANALYZES_COUNT);
+        kpi.setName("SonarQube Analyzes");
+        kpi.setProviderType(ProviderType.QUALITY);
+        kpi.setValueDirection(ValueDirection.BETTER);
+        kpi.setValueType(ValueType.INT);
+        return kpi;
+    }
+
+    private Kpi getRulesBySeverity(final String severity) {
+        final Kpi kpi = new Kpi();
+        kpi.setDescription("Number of SonarQube rules activated with severity " + severity + " per project.");
+        kpi.setEntityType(EntityType.PROJECT);
+        kpi.setEsperRequest(EmptyKpi.getFormula());
+        kpi.setGroupFormula(GroupFormula.LAST_VALUE);
+        kpi.setKpiKey(SonarConnector.getSeverityKpiKey(severity));
+        kpi.setName("Rules " + severity);
+        kpi.setProviderType(ProviderType.QUALITY);
+        kpi.setValueDirection(ValueDirection.NONE);
+        kpi.setValueType(ValueType.INT);
+        return kpi;
     }
 
     private Kpi metricToKpi(final Metric metric) {
