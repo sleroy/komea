@@ -95,7 +95,9 @@ public class JenkinsConnector {
                         case FAILURE:
                             lastResult = result;
                             failedBuilds++;
-                            lastFail = buildDate;
+                            if (lastFail == null) {
+                                lastFail = buildDate;
+                            }
                             break;
                         case SUCCESS:
                             lastResult = result;
