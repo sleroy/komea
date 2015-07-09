@@ -86,30 +86,32 @@ public class JenkinsConnector {
             while (next != null && isSameDay(next, date)) {
                 final DateTime buildDate = new DateTime(next.getTimestamp());
                 final BuildResult result = next.getResult();
-                switch (result) {
-                    case ABORTED:
-                        lastResult = result;
-                        interruptedBuilds++;
-                        break;
-                    case FAILURE:
-                        lastResult = result;
-                        failedBuilds++;
-                        lastFail = buildDate;
-                        break;
-                    case SUCCESS:
-                        lastResult = result;
-                        successfulBuilds++;
-                        if (lastFail != null) {
-                            final long duration = buildDate.toDate().getTime() - lastFail.toDate().getTime();
-                            final double days = duration / (1000d * 60 * 60 * 24);
-                            addMeasure(JenkinsKpis.FIX_TIME, entityId, buildDate.toDate(), days, measures);
-                            lastFail = null;
-                        }
-                        break;
-                    case UNSTABLE:
-                        lastResult = result;
-                        unstableBuilds++;
-                        break;
+                if (result != null) {
+                    switch (result) {
+                        case ABORTED:
+                            lastResult = result;
+                            interruptedBuilds++;
+                            break;
+                        case FAILURE:
+                            lastResult = result;
+                            failedBuilds++;
+                            lastFail = buildDate;
+                            break;
+                        case SUCCESS:
+                            lastResult = result;
+                            successfulBuilds++;
+                            if (lastFail != null) {
+                                final long duration = buildDate.toDate().getTime() - lastFail.toDate().getTime();
+                                final double days = duration / (1000d * 60 * 60 * 24);
+                                addMeasure(JenkinsKpis.FIX_TIME, entityId, buildDate.toDate(), days, measures);
+                                lastFail = null;
+                            }
+                            break;
+                        case UNSTABLE:
+                            lastResult = result;
+                            unstableBuilds++;
+                            break;
+                    }
                 }
                 next = iterator.hasNext() ? iterator.next() : null;
             }
