@@ -1,5 +1,7 @@
 apply plugin:'application'
-mainClassName = "org.komea.connectors.jira.launch.Launcher"
+apply plugin: 'project-report'
+
+mainClassName = "org.komea.connectors.jira.launch.DemoLauncher"
 
 dependencies {
     compile project(":core:komea-events")
@@ -8,8 +10,20 @@ dependencies {
     
     compile LOGGING
     compile 'org.komea.jiraclient:jira-client:0.6.3'
-    
+    compile "org.komea.product.backend:komea-rest-client:DEV"
+    compile "commons-httpclient:commons-httpclient:3.1"
+    compile 'org.jboss.resteasy:resteasy-jackson-provider:3.0.11.Final'
+
     testCompile project(":core:shared:komea-db-viz")
     testCompile ("org.mockito:mockito-all:1.+")
 
+}
+
+
+
+
+run {
+    if(project.hasProperty('appArgs')){
+        args project.appArgs.split('\\s')
+    }
 }
